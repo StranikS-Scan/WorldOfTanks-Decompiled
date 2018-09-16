@@ -1,75 +1,42 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/actions_validator.py
+import logging
 import weakref
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import PREBATTLE_RESTRICTION
+import tutorial.loader as tutorialLoader
+_logger = logging.getLogger(__name__)
 
 class IActionsValidator(object):
-    """
-    Base interface class for actions validation.
-    """
 
     def canPlayerDoAction(self):
-        """
-        Can player pass all validations abstract method.
-        """
         raise NotImplementedError
 
 
 class NotSupportedActionsValidator(IActionsValidator):
-    """
-    Player cannot do any actions.
-    """
 
     def canPlayerDoAction(self):
         return ValidationResult(False)
 
 
 class BaseActionsValidator(IActionsValidator):
-    """
-    Base class for actions validation.
-    """
 
     def __init__(self, entity):
-        """
-        Default object initialization.
-        Args:
-            entity: prebattle entity
-        """
         super(BaseActionsValidator, self).__init__()
         self._entity = weakref.proxy(entity)
 
     def canPlayerDoAction(self, ignoreEnable=False):
-        """
-        Can player pass all validations for enabled validator.
-        Args:
-            ignoreEnable: override for enable check
-        
-        Returns:
-            validation result
-        """
         return self._validate() if ignoreEnable or self._isEnabled() else None
 
     def _validate(self):
-        """
-        Method that do all the job related to validation.
-        Returns:
-            validation result
-        """
         return None
 
     def _isEnabled(self):
-        """
-        Is this validator enabled.
-        """
         return True
 
 
 class CurrentVehicleActionsValidator(BaseActionsValidator):
-    """
-    Current vehicle status validator.
-    """
 
     def _validate(self):
         if g_currentPreviewVehicle.isPresent():
@@ -83,8 +50,6 @@ class CurrentVehicleActionsValidator(BaseActionsValidator):
                 return ValidationResult(False, PREBATTLE_RESTRICTION.CREW_NOT_FULL)
             if g_currentVehicle.isBroken():
                 return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_BROKEN)
-            if g_currentVehicle.isFalloutOnly():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_FALLOUT_ONLY)
             if g_currentVehicle.isDisabledInRoaming():
                 return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROAMING)
             if g_currentVehicle.isDisabledInPremIGR():
@@ -98,55 +63,39 @@ class CurrentVehicleActionsValidator(BaseActionsValidator):
         return super(CurrentVehicleActionsValidator, self)._validate()
 
 
+class TutorialActionsValidator(BaseActionsValidator):
+
+    def _validate(self):
+        if tutorialLoader.g_loader is not None:
+            tutorial = tutorialLoader.g_loader.tutorial
+            if tutorial is not None and not tutorial.isAllowedToFight():
+                return ValidationResult(False, PREBATTLE_RESTRICTION.TUTORIAL_NOT_FINISHED)
+        return super(TutorialActionsValidator, self)._validate()
+
+
 class ActionsValidatorComposite(BaseActionsValidator):
-    """
-    Validations composite.
-    """
 
     def __init__(self, entity, validators=None, warnings=None):
-        """
-        Default object initialization.
-        Args:
-            entity: prebattle entity
-            validators: validatros list
-            warnings: warners list
-        """
         super(ActionsValidatorComposite, self).__init__(entity)
         self.__validators = validators or []
         self.__warnings = warnings or []
 
     def addValidator(self, validator):
-        """
-        Pushes new validator.
-        Args:
-            validator: new validator to add
-        """
-        assert isinstance(validator, IActionsValidator)
-        self.__validators.append(validator)
+        if isinstance(validator, IActionsValidator):
+            self.__validators.append(validator)
+        else:
+            _logger.error('Validator should extends IActionsValidator: %r', validator)
 
     def removeValidator(self, validator):
-        """
-        Removes validator from chain.
-        Args:
-            validator: validator to extract
-        """
         self.__validators.remove(validator)
 
     def addWarning(self, warning):
-        """
-        Pushes new warning.
-        Args:
-            warning: new warning to add
-        """
-        assert isinstance(warning, IActionsValidator)
-        self.__warnings.append(warning)
+        if isinstance(warning, IActionsValidator):
+            self.__warnings.append(warning)
+        else:
+            _logger.error('Warning object should extends IActionsValidator: %r', warning)
 
     def removeWarning(self, warning):
-        """
-        Removes warning from chain.
-        Args:
-            warning: warning to extract
-        """
         self.__warnings.remove(warning)
 
     def _validate(self):
@@ -158,7 +107,8 @@ class ActionsValidatorComposite(BaseActionsValidator):
         for warning in self.__warnings:
             result = warning.canPlayerDoAction()
             if result is not None:
-                assert result.isValid, 'Warnings could not be invalid!'
+                if not result.isValid:
+                    raise UserWarning('Warnings could not be invalid!')
                 return result
 
         return super(ActionsValidatorComposite, self)._validate()

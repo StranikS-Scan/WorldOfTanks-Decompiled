@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/gzip.py
-"""Functions that read and write gzipped files.
-
-The user of the file doesn't have to worry about the compression,
-but random access is not allowed."""
 import struct, sys, time, os
 import zlib
 import io
@@ -25,61 +21,14 @@ def read32(input):
 
 
 def open(filename, mode='rb', compresslevel=9):
-    """Shorthand for GzipFile(filename, mode, compresslevel).
-    
-    The filename argument is required; mode defaults to 'rb'
-    and compresslevel defaults to 9.
-    
-    """
     return GzipFile(filename, mode, compresslevel)
 
 
 class GzipFile(io.BufferedIOBase):
-    """The GzipFile class simulates most of the methods of a file object with
-    the exception of the readinto() and truncate() methods.
-    
-    """
     myfileobj = None
     max_read_chunk = 10485760
 
     def __init__(self, filename=None, mode=None, compresslevel=9, fileobj=None, mtime=None):
-        """Constructor for the GzipFile class.
-        
-        At least one of fileobj and filename must be given a
-        non-trivial value.
-        
-        The new class instance is based on fileobj, which can be a regular
-        file, a StringIO object, or any other object which simulates a file.
-        It defaults to None, in which case filename is opened to provide
-        a file object.
-        
-        When fileobj is not None, the filename argument is only used to be
-        included in the gzip file header, which may includes the original
-        filename of the uncompressed file.  It defaults to the filename of
-        fileobj, if discernible; otherwise, it defaults to the empty string,
-        and in this case the original filename is not included in the header.
-        
-        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', or 'wb',
-        depending on whether the file will be read or written.  The default
-        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
-        Be aware that only the 'rb', 'ab', and 'wb' values should be used
-        for cross-platform portability.
-        
-        The compresslevel argument is an integer from 0 to 9 controlling the
-        level of compression; 1 is fastest and produces the least compression,
-        and 9 is slowest and produces the most compression. 0 is no compression
-        at all. The default is 9.
-        
-        The mtime argument is an optional numeric timestamp to be written
-        to the stream when compressing.  All gzip compressed streams
-        are required to contain a timestamp.  If omitted or None, the
-        current time is used.  This module ignores the timestamp when
-        decompressing; however, some programs, such as gunzip, make use
-        of it.  The format of the timestamp is the same as that of the
-        return value of time.time() and of the st_mtime member of the
-        object returned by os.stat().
-        
-        """
         if mode:
             mode = mode.replace('U', '')
         if mode and 'b' not in mode:
@@ -128,9 +77,6 @@ class GzipFile(io.BufferedIOBase):
         return '<gzip ' + s[1:-1] + ' ' + hex(id(self)) + '>'
 
     def _check_closed(self):
-        """Raises a ValueError if the underlying file object has been closed.
-        
-        """
         if self.closed:
             raise ValueError('I/O operation on closed file.')
 
@@ -326,16 +272,9 @@ class GzipFile(io.BufferedIOBase):
             self.fileobj.flush()
 
     def fileno(self):
-        """Invoke the underlying file object's fileno() method.
-        
-        This will raise AttributeError if the underlying file object
-        doesn't support fileno().
-        """
         return self.fileobj.fileno()
 
     def rewind(self):
-        """Return the uncompressed stream file position indicator to the
-        beginning of the file"""
         if self.mode != READ:
             raise IOError("Can't rewind in write mode")
         self.fileobj.seek(0)

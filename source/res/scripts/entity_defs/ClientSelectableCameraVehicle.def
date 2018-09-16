@@ -1,0 +1,20 @@
+<ClientSelectableCameraVehicle.def>
+  <Parent>	ClientSelectableCameraObject	</Parent>
+  <Properties>
+    <modelName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	false	</Editable>
+    </modelName>
+    <vehicleGunPitch>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </vehicleGunPitch>
+    <vehicleTurretYaw>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </vehicleTurretYaw>
+  </Properties>
+</ClientSelectableCameraVehicle.def>

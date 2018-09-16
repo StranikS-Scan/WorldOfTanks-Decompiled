@@ -2,13 +2,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/tank_carousel.py
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
-from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts, FilterSetupContext
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider
-from gui.Scaleform.daapi.view.lobby.hangar.filter_contexts import getFilterSetupContexts, FilterSetupContext
 from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
@@ -21,10 +20,6 @@ from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
 
 class TankCarousel(TankCarouselMeta):
-    """ Hangar carousel is a vehicle carousel with hangar-specific stuff
-    
-    Specifics consist of hot filters and variable rows count.
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
@@ -35,8 +30,6 @@ class TankCarousel(TankCarouselMeta):
         self.as_rowCountS(value)
 
     def buyTank(self):
-        """ Open store with the shop tab and 'vehicle' component set
-        """
         ctx = {'tabId': STORE_TYPES.SHOP,
          'component': STORE_CONSTANTS.VEHICLE}
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
@@ -45,20 +38,18 @@ class TankCarousel(TankCarouselMeta):
         self.__buySlot()
 
     def updateHotFilters(self):
-        """ This method is called from flash on resize in order to get actual state of filters.
-        """
         self.as_setCarouselFilterS({'hotFilters': [ self.filter.get(key) for key in self._usedFilters ]})
 
+    def getCarouselAlias(self):
+        return self.getAlias()
+
     def updateParams(self):
-        """ This method is called from Hangar in order to update
-        the stats of last two items (free slots, slot price)
-        """
         self._carouselDP.updateSupplies()
 
     def updateVehicles(self, vehicles=None, filterCriteria=None):
         super(TankCarousel, self).updateVehicles(vehicles, filterCriteria)
         if vehicles is None and filterCriteria is None:
-            self.as_initCarouselFilterS(self.__getInitialFilterVO(getFilterSetupContexts(self.itemsCache.items.shop.dailyXPFactor)))
+            self.as_initCarouselFilterS(self._getInitialFilterVO(getFilterSetupContexts(self.itemsCache.items.shop.dailyXPFactor)))
         return
 
     def updateAviability(self):
@@ -87,7 +78,7 @@ class TankCarousel(TankCarouselMeta):
         self.as_rowCountS(setting.getRowCount())
         setting = self.settingsCore.options.getSetting(settings_constants.GAME.DOUBLE_CAROUSEL_TYPE)
         self.as_setSmallDoubleCarouselS(setting.enableSmallCarousel())
-        self.as_initCarouselFilterS(self.__getInitialFilterVO(getFilterSetupContexts(self.itemsCache.items.shop.dailyXPFactor)))
+        self.as_initCarouselFilterS(self._getInitialFilterVO(getFilterSetupContexts(self.itemsCache.items.shop.dailyXPFactor)))
 
     def _dispose(self):
         g_playerEvents.onBattleResultsReceived -= self.__onFittingUpdate
@@ -107,7 +98,7 @@ class TankCarousel(TankCarouselMeta):
     def _getFiltersVisible(self):
         return True
 
-    def __getInitialFilterVO(self, contexts):
+    def _getInitialFilterVO(self, contexts):
         filters = self.filter.getFilters(self._usedFilters)
         filtersVO = {'mainBtn': {'value': getButtonsAssetPath('params'),
                      'tooltip': '#tank_carousel_filter:tooltip/params'},
@@ -118,6 +109,7 @@ class TankCarousel(TankCarouselMeta):
             filtersVO['hotFilters'].append({'id': entry,
              'value': getButtonsAssetPath(filterCtx.asset or entry),
              'selected': filters[entry],
+             'enabled': True,
              'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), _ms('#tank_carousel_filter:tooltip/{}/body'.format(entry), **filterCtx.ctx))})
 
         return filtersVO

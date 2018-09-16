@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_values.py
-"""
-A testcase which accesses *values* in a dll.
-"""
 import unittest
 from ctypes import *
 import _ctypes_test
@@ -22,11 +19,14 @@ class ValuesTestCase(unittest.TestCase):
         self.assertRaises(ValueError, c_int.in_dll, ctdll, 'Undefined_Symbol')
 
     class Win_ValuesTestCase(unittest.TestCase):
-        """This test only works when python itself is a dll/shared library"""
 
         def test_optimizeflag(self):
             opt = c_int.in_dll(pydll, 'Py_OptimizeFlag').value
-            self.assertEqual(opt, 0)
+            if ValuesTestCase.__doc__ is not None:
+                self.assertEqual(opt, 1)
+            else:
+                self.assertEqual(opt, 2)
+            return
 
         def test_frozentable(self):
 

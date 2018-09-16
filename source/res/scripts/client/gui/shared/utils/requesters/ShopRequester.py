@@ -34,33 +34,6 @@ _TradeInData.__new__.__defaults__ = (0,
  0)
 
 class _NamedGoodieData(GoodieData):
-    """
-    variety - GOODIE_VARIETY.BOOSTER or GOODIE_VARIETY.DISCOUNT
-    
-    target - (targetType, targetValue, limit) - denotes the type of the discountable/boostable entity
-             targetType - one of GOODIE_TARGET_TYPEs
-             targetValue - the name of the target (for example premium packet name)
-             limit - limits resource usage (for example 100% discount on free xp conversion, but no more than 20 gold)
-    
-    enabled - denotes whether a goodie of that type can be given
-    
-    lifetime - lifetime of a goodie [seconds]
-    
-    useby - time after which a goodie will no longer be valid and be lost [seconds]
-    
-    counter - denotes how many goodies will be given initially [deprecated]
-    
-    autostart - denotes whether to activate a goodie right after creation True or False
-    
-    condition - (conditionType, value) - denotes internal condition for a goodie (for example vehicle level)
-                conditionType - one of GOODIE_CONDITION_TYPEs
-                value - condition value (e.g. vehicle level)
-    
-    resource - (resourceType, value, isPercentage)
-               resourceType - one of GOODIE_RESOURCE_TYPEs
-               value - discount/booster value on that given resource
-               isPercentage - True if percentage, False otherwise
-    """
 
     @staticmethod
     def __new__(cls, variety, target, enabled, lifetime, useby, counter, autostart, condition, resource):
@@ -71,18 +44,9 @@ class _NamedGoodieData(GoodieData):
 
 
 class TradeInData(_TradeInData):
-    """
-    Trade in config data:
-        sellPriceFactor - multiplier for buy price, that player will receive during trade off
-        allowedVehicleLevels - vehicle levels that allowed to trade
-        forbiddenVehicles - vehicle int CDs that are forbidden to trade
-    """
 
     @property
     def isEnabled(self):
-        """
-        Trade in price factor greater then zero means that all trade in feature is enabled.
-        """
         return self.sellPriceFactor > 0
 
 
@@ -183,49 +147,28 @@ class ShopCommonStats(IShopCommonStats):
 
     @property
     def revision(self):
-        """
-        @return: shop revision value
-        """
         return self.getValue('rev', 0)
 
     @property
     def paidRemovalCost(self):
-        """
-        @return: cost of dismantling of non-removable optional
-                                devices for gold
-        """
         cost = self.getValue('paidRemovalCost', {})
         return cost.get(Currency.GOLD, 10)
 
     @property
     def paidDeluxeRemovalCost(self):
-        """
-        @return: cost of dismantling of non-removable Deluxe optional devices. It can be in any currency.
-        by default in crystals.
-        """
         cost = self.getValue('paidDeluxeRemovalCost', defaultValue={Currency.CRYSTAL: 100})
         return Money(**cost)
 
     @property
     def exchangeRate(self):
-        """
-        @return: rate of gold for credits exchanging
-        """
         return self.getValue('exchangeRate', _DEFAULT_EXCHANGE_RATE)
 
     @property
     def crystalExchangeRate(self):
-        """
-        @return: rate of crystals for credits exchanging
-        """
         return self.getValue('crystalExchangeRate', _DEFAULT_CRYSTAL_EXCHANGE_RATE)
 
     @property
     def exchangeRateForShellsAndEqs(self):
-        """
-        @return: rate of gold for credits exchanging for F2W
-                                premium shells and eqs action
-        """
         return self.getValue('exchangeRateForShellsAndEqs', _DEFAULT_EXCHANGE_RATE)
 
     @property
@@ -267,31 +210,18 @@ class ShopCommonStats(IShopCommonStats):
         return self.getValue('slotsPrices', (0, [300]))
 
     def getVehicleSlotsPrice(self, currentSlotsCount):
-        """
-        @param currentSlotsCount: current vehicle slots count
-        @return: new vehicle slot price
-        """
         return getNextSlotPrice(currentSlotsCount, self.slotsPrices)
 
     @property
     def dropSkillsCost(self):
-        """
-        @return: drop tankman skill cost
-        """
         return self.getValue('dropSkillsCost', {})
 
     @property
     def dailyXPFactor(self):
-        """
-        @return: daily experience multiplier
-        """
         return self.getValue('dailyXPFactor', 2)
 
     @property
     def winXPFactorMode(self):
-        """
-        @return: mode for applying daily XP factor
-        """
         return self.getValue('winXPFactorMode', WIN_XP_FACTOR_MODE.DAILY)
 
     @property
@@ -299,81 +229,40 @@ class ShopCommonStats(IShopCommonStats):
         return self.getValue('berthsPrices', (0, 1, [300]))
 
     def getTankmanBerthPrice(self, berthsCount):
-        """
-        @param berthsCount: current barrack's berths count
-        @return: (new berths pack price, pack berths count)
-        """
         prices = self.berthsPrices
         goldCost = getNextBerthPackPrice(berthsCount, prices)
         return (Money(gold=goldCost), prices[1])
 
     @property
     def isEnabledBuyingGoldShellsForCredits(self):
-        """
-        @return: is premium shells for credits action enabled
-        """
         return self.getValue('isEnabledBuyingGoldShellsForCredits', False)
 
     @property
     def isEnabledBuyingGoldEqsForCredits(self):
-        """
-        @return: is premium equipments for credits action enabled
-        """
         return self.getValue('isEnabledBuyingGoldEqsForCredits', False)
 
     @property
     def tankmanCost(self):
-        """
-        @return: tankman studying cost
-                        tmanCost -  ( tmanCostType, ), where
-                        tmanCostType = {
-                                        'roleLevel' : minimal role level after operation,
-                                        'credits' : cost in credits,
-                                        'gold' : cost in gold,
-                                        'baseRoleLoss' : float in [0, 1], fraction of role to drop,
-                                        'classChangeRoleLoss' : float in [0, 1], fraction of role to drop
-                                                additionally if
-                                                classes of self.vehicleTypeID and newVehicleTypeID are different,
-                                        'isPremium' : tankman becomes premium,
-                                        }.
-                                List is sorted by role level.
-        """
         return self.getValue('tankmanCost', tuple())
 
     @property
     def changeRoleCost(self):
-        """
-        @return: tankman change role cost in gold
-        """
         return self.getValue('changeRoleCost', 600)
 
     @property
     def freeXPConversion(self):
-        """
-        @return: free experience to vehicle xp exchange rate and cost
-                                ( discrecity, cost)
-        """
         return self.getValue('freeXPConversion', (25, 1))
 
     @property
     def passportChangeCost(self):
-        """
-        @return: tankman passport replace cost in gold
-        """
         return self.getValue('passportChangeCost', 50)
 
     @property
     def passportFemaleChangeCost(self):
-        """
-        @return: tankman passport replace cost in gold
-        """
         return self.getValue('femalePassportChangeCost', 500)
 
     @property
     def freeXPToTManXPRate(self):
-        """
-        @return: free experience to tankman experience exchange rate
-        """
         return self.getValue('freeXPToTManXPRate', 10)
 
     def getItemsData(self):
@@ -415,7 +304,7 @@ class ShopCommonStats(IShopCommonStats):
         return self.goodies.get(discountID, None)
 
     def getGoodiesByVariety(self, variety):
-        return dict(filter(lambda (goodieID, item): item.variety == variety, self.goodies.iteritems()))
+        return dict(((goodieID, item) for goodieID, item in self.goodies.iteritems() if item.variety == variety))
 
     @property
     def boosters(self):
@@ -484,9 +373,6 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
 
     @async
     def _requestCache(self, callback):
-        """
-        Overloaded method to request shop cache
-        """
         BigWorld.player().shop.getCache(lambda resID, value, rev: self._response(resID, value, callback))
 
     def _preprocessValidData(self, data):
@@ -509,24 +395,6 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
         return premiumCostWithDiscount
 
     def getTankmanCostWithDefaults(self):
-        """
-        @return: tankman studying cost
-                        tmanCost, action -  ( tmanCostType, ), ( actionData, ) where
-                        tmanCostType = {
-                                        'roleLevel' : minimal role level after operation,
-                                        'credits' : cost in credits,
-                                        'defCredits' : cost in credits,
-                                        'gold' : default cost in gold,
-                                        'defGold' : default cost in gold,
-                                        'baseRoleLoss' : float in [0, 1], fraction of role to drop,
-                                        'classChangeRoleLoss' : float in [0, 1], fraction of role to drop
-                                        additionally if
-                                                classes of self.vehicleTypeID and newVehicleTypeID are different,
-                                        'isPremium' : tankman becomes premium,
-                                        }.
-                                List is sorted by role level.
-                        actionData = Action data for each level of retraining
-        """
         from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
         from gui.shared.tooltips.formatters import packActionTooltipData
         shopPrices = self.tankmanCost
@@ -581,9 +449,6 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
 
     @property
     def isCreditsConversionActionActive(self):
-        """
-        @return: if rate of gold for credits exchanging not standard return True
-        """
         return self.exchangeRate != self.defaults.exchangeRate
 
     @property
@@ -604,25 +469,16 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
 
     @property
     def personalVehicleDiscounts(self):
-        """
-        Return personal vehicle discounts in account
-        """
         return self.__personalDiscountsByTarget(GOODIE_TARGET_TYPE.ON_BUY_VEHICLE)
 
     def getVehicleDiscountDescriptions(self):
-        """
-        Return vehicle discounts descriptions
-        """
         return self.__getDiscountsDescriptionsByTarget(GOODIE_TARGET_TYPE.ON_BUY_VEHICLE)
 
     def getPersonalVehicleDiscountPrice(self, typeCompDescr):
-        """
-        Return price with max discount for selected vehicle
-        """
         defaultPrice = self.defaults.getItemPrice(typeCompDescr)
         currency = defaultPrice.getCurrency()
         personalVehicleDiscountPrice = None
-        for discountID, discount in self.personalVehicleDiscounts.iteritems():
+        for _, discount in self.personalVehicleDiscounts.iteritems():
             if discount.getTargetValue() == typeCompDescr:
                 discountPrice = self.__getPriceWithDiscount(defaultPrice, discount.resource)
                 if discountPrice.isDefined() and (personalVehicleDiscountPrice is None or discountPrice.get(currency) < personalVehicleDiscountPrice.get(currency)):
@@ -638,10 +494,7 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
             return None
 
     def __getDiscountsDescriptionsByTarget(self, targetType):
-        """
-        Gets all possible discounts descriptions by targetType
-        """
-        return dict(filter(lambda (discountID, item): item.target.targetType == targetType and item.enabled, self.discounts.iteritems()))
+        return dict(((discountID, item) for discountID, item in self.discounts.iteritems() if item.target.targetType == targetType and item.enabled))
 
     def __applyGoodyToStudyCost(self, prices, goody):
 
@@ -654,17 +507,11 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
         return tuple(map(convert, prices))
 
     def __personalDiscountsByTarget(self, targetType):
-        """
-        Gets discounts by targetType in account
-        """
         discounts = self.__getDiscountsDescriptionsByTarget(targetType)
-        return dict(filter(lambda (discountID, item): discountID in self._goodies.goodies, discounts.iteritems()))
+        return dict(((discountID, item) for discountID, item in discounts.iteritems() if discountID in self._goodies.goodies))
 
     @staticmethod
     def __getPriceWithDiscount(price, resourceData):
-        """
-        Translates goodie value into the final price in Money
-        """
         resourceType, _, _ = resourceData
         if resourceType == GOODIE_RESOURCE_TYPE.CREDITS:
             return Money(credits=getPriceWithDiscount(price.credits, resourceData))
@@ -728,35 +575,20 @@ class DefaultShopRequester(ShopCommonStats):
 
     @property
     def paidRemovalCost(self):
-        """
-        @return: cost of dismantling of non-removable optional
-                                devices for gold
-        """
         cost = self.getValue('paidRemovalCost')
         return self.__proxy.paidRemovalCost if cost is None else cost.get(Currency.GOLD, 10)
 
     @property
     def paidDeluxeRemovalCost(self):
-        """
-        @return: cost of dismantling of non-removable Deluxe optional devices. It can be in any currency.
-        by default in crystals.
-        """
         cost = self.getValue('paidDeluxeRemovalCost')
         return self.__proxy.paidDeluxeRemovalCost if cost is None else Money(**cost)
 
     @property
     def exchangeRate(self):
-        """
-        @return: rate of gold for credits exchanging
-        """
         return self.getValue('exchangeRate', self.__proxy.exchangeRate)
 
     @property
     def exchangeRateForShellsAndEqs(self):
-        """
-        @return: rate of gold for credits exchanging for F2W
-                                premium shells and eqs action
-        """
         return self.getValue('exchangeRateForShellsAndEqs', self.__proxy.exchangeRateForShellsAndEqs)
 
     @property
@@ -769,9 +601,6 @@ class DefaultShopRequester(ShopCommonStats):
 
     @property
     def dropSkillsCost(self):
-        """
-        @return: drop tankman skill cost
-        """
         value = self.__proxy.dropSkillsCost
         defaults = self.getValue('dropSkillsCost')
         if defaults is None:
@@ -788,16 +617,10 @@ class DefaultShopRequester(ShopCommonStats):
 
     @property
     def dailyXPFactor(self):
-        """
-        @return: daily experience multiplier
-        """
         return self.getValue('dailyXPFactor', self.__proxy.dailyXPFactor)
 
     @property
     def winXPFactorMode(self):
-        """
-        @return: mode for applying daily XP factor
-        """
         return self.getValue('winXPFactorMode', self.__proxy.winXPFactorMode)
 
     @property
@@ -806,35 +629,14 @@ class DefaultShopRequester(ShopCommonStats):
 
     @property
     def isEnabledBuyingGoldShellsForCredits(self):
-        """
-        @return: is premium shells for credits action enabled
-        """
         return self.getValue('isEnabledBuyingGoldShellsForCredits', self.__proxy.isEnabledBuyingGoldShellsForCredits)
 
     @property
     def isEnabledBuyingGoldEqsForCredits(self):
-        """
-        @return: is premium equipments for credits action enabled
-        """
         return self.getValue('isEnabledBuyingGoldEqsForCredits', self.__proxy.isEnabledBuyingGoldEqsForCredits)
 
     @property
     def tankmanCost(self):
-        """
-        @return: tankman studying cost
-                        tmanCost -  ( tmanCostType, ), where
-                        tmanCostType = {
-                                        'roleLevel' : minimal role level after operation,
-                                        'credits' : cost in credits,
-                                        'gold' : cost in gold,
-                                        'baseRoleLoss' : float in [0, 1], fraction of role to drop,
-                                        'classChangeRoleLoss' : float in [0, 1], fraction of role to drop
-                                        additionally if
-                                                classes of self.vehicleTypeID and newVehicleTypeID are different,
-                                        'isPremium' : tankman becomes premium,
-                                        }.
-                                List is sorted by role level.
-        """
         value = self.__proxy.tankmanCost
         defaults = self.getValue('tankmanCost')
         if defaults is None:
@@ -851,38 +653,22 @@ class DefaultShopRequester(ShopCommonStats):
 
     @property
     def changeRoleCost(self):
-        """
-        @return: tankman change role cost in gold
-        """
         return self.getValue('changeRoleCost', self.__proxy.changeRoleCost)
 
     @property
     def freeXPConversion(self):
-        """
-        @return: free experience to vehicle xp exchange rate and cost
-                                ( discrecity, cost)
-        """
         return self.getValue('freeXPConversion', self.__proxy.freeXPConversion)
 
     @property
     def passportChangeCost(self):
-        """
-        @return: tankman passport replace cost in gold
-        """
         return self.getValue('passportChangeCost', self.__proxy.passportChangeCost)
 
     @property
     def passportFemaleChangeCost(self):
-        """
-        @return: tankman passport replace cost in gold
-        """
         return self.getValue('femalePassportChangeCost', self.__proxy.passportFemaleChangeCost)
 
     @property
     def freeXPToTManXPRate(self):
-        """
-        @return: free experience to tankman experience exchange rate
-        """
         return self.getValue('freeXPToTManXPRate', self.__proxy.freeXPToTManXPRate)
 
     def getItemsData(self):

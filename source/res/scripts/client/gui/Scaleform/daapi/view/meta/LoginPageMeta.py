@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/LoginPageMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.View import View
 
 class LoginPageMeta(View):
@@ -74,6 +70,9 @@ class LoginPageMeta(View):
     def musicFadeOut(self):
         self._printOverrideError('musicFadeOut')
 
+    def videoLoadingFailed(self):
+        self._printOverrideError('videoLoadingFailed')
+
     def as_setDefaultValuesS(self, loginName, pwd, rememberPwd, rememberPwdVisible, isIgrCredentialsReset, showRecoveryLink):
         return self.flashObject.as_setDefaultValues(loginName, pwd, rememberPwd, rememberPwdVisible, isIgrCredentialsReset, showRecoveryLink) if self._isDAAPIInited() else None
 
@@ -114,9 +113,6 @@ class LoginPageMeta(View):
         return self.flashObject.as_switchToAutoAndSubmit(key) if self._isDAAPIInited() else None
 
     def as_showSimpleFormS(self, isShow, socialList):
-        """
-        :param socialList: Represented by DataProvider.<SocialIconVo> (AS)
-        """
         return self.flashObject.as_showSimpleForm(isShow, socialList) if self._isDAAPIInited() else None
 
     def as_showSocialFormS(self, haveToken, userName, icoPath, socialId):

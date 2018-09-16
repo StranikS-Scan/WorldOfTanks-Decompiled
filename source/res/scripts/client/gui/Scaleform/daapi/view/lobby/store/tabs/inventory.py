@@ -13,11 +13,6 @@ from helpers.i18n import makeString
 class InventoryItemsTab(StoreItemsTab):
 
     def _getItemPrices(self, item):
-        """
-        For inventory tab return sellPrices (original and alt prices)
-        :param item: FittingItem instance
-        :return: ItemPrices
-        """
         return item.sellPrices
 
     def _getItemActionData(self, item):
@@ -120,26 +115,26 @@ class InventoryShellTab(InventoryItemsTab, StoreShellTab):
         fitsType = self._filterData['fitsType']
         if fitsType == 'myVehicleGun':
             vehicle = self._items.getItemByCD(int(self._filterData['vehicleCD']))
-            shellsList = map(lambda x: x.intCD, vehicle.gun.defaultAmmo)
+            shellsList = [ x.intCD for x in vehicle.gun.defaultAmmo ]
             requestCriteria |= REQ_CRITERIA.IN_CD_LIST(shellsList)
         elif fitsType == 'myVehiclesInventoryGuns':
             shellsList = set()
             myGuns = self._items.getItems(GUI_ITEM_TYPE.GUN, REQ_CRITERIA.INVENTORY).values()
             for gun in myGuns:
-                shellsList.update(map(lambda x: x.intCD, gun.defaultAmmo))
+                shellsList.update((x.intCD for x in gun.defaultAmmo))
 
             for vehicle in invVehicles:
-                shellsList.update(map(lambda x: x.intCD, vehicle.gun.defaultAmmo))
+                shellsList.update((x.intCD for x in vehicle.gun.defaultAmmo))
 
             requestCriteria |= REQ_CRITERIA.IN_CD_LIST(shellsList)
         else:
             shellsList = set()
             myGuns = self._items.getItems(GUI_ITEM_TYPE.GUN, REQ_CRITERIA.INVENTORY).values()
             for gun in myGuns:
-                shellsList.update(map(lambda x: x.intCD, gun.defaultAmmo))
+                shellsList.update((x.intCD for x in gun.defaultAmmo))
 
             for vehicle in invVehicles:
-                shellsList.update(map(lambda x: x.intCD, vehicle.gun.defaultAmmo))
+                shellsList.update((x.intCD for x in vehicle.gun.defaultAmmo))
 
             requestCriteria |= ~REQ_CRITERIA.IN_CD_LIST(shellsList)
         return requestCriteria

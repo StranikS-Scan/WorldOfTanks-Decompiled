@@ -145,16 +145,12 @@ class Test_TestResult(unittest.TestCase):
 
     @unittest.skipIf(sys.flags.optimize >= 2, 'Docstrings are omitted with -O2 and above')
     def testGetDescriptionWithOneLineDocstring(self):
-        """Tests getDescription() for a method with a docstring."""
         result = unittest.TextTestResult(None, True, 1)
         self.assertEqual(result.getDescription(self), 'testGetDescriptionWithOneLineDocstring (' + __name__ + '.Test_TestResult)\nTests getDescription() for a method with a docstring.')
         return
 
     @unittest.skipIf(sys.flags.optimize >= 2, 'Docstrings are omitted with -O2 and above')
     def testGetDescriptionWithMultiLineDocstring(self):
-        """Tests getDescription() for a method with a longer docstring.
-        The second line of the docstring.
-        """
         result = unittest.TextTestResult(None, True, 1)
         self.assertEqual(result.getDescription(self), 'testGetDescriptionWithMultiLineDocstring (' + __name__ + '.Test_TestResult)\nTests getDescription() for a method with a longer docstring.')
         return

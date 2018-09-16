@@ -8,9 +8,6 @@ from gui.prb_control.entities.base.requester import IPrbListRequester
 from gui.prb_control.items import prb_seqs
 
 class TrainingListRequester(IPrbListRequester):
-    """
-    Trainings list requests
-    """
     UPDATE_LIST_TIMEOUT = 5
 
     def __init__(self):
@@ -45,29 +42,15 @@ class TrainingListRequester(IPrbListRequester):
         self.__request()
 
     def __request(self):
-        """
-        Send request to get list of trainings available
-        """
         self.__callbackID = None
         if hasattr(BigWorld.player(), 'requestPrebattles'):
             BigWorld.player().requestPrebattles(PREBATTLE_TYPE.TRAINING, PREBATTLE_CACHE_KEY.CREATE_TIME, False, 0, 50)
         return
 
     def __setTimeout(self):
-        """
-        Sets operations timeout
-        """
         self.__callbackID = BigWorld.callback(self.UPDATE_LIST_TIMEOUT, self.__request)
 
     def __pe_onPrebattlesListReceived(self, prbType, count, prebattles):
-        """
-        Listener for event of trainings list receive
-        Args:
-            prbType: items prebattle type
-            count: items count
-            prebattles: items, which are list of (sort key, prebattle ID, prebattle cache data like
-                PREBATTLE_CACHE_KEY -> data
-        """
         if prbType != PREBATTLE_TYPE.TRAINING:
             return
         self.__callback(prb_seqs.PrbListIterator(prebattles))

@@ -8,10 +8,6 @@ from helpers import dependency
 from skeletons.gui.game_control import IBrowserController, IExternalLinksController
 
 class LobbyTicker(BaseTicker):
-    """
-    This class maintains RSS header in Lobby.
-    For internal browser - cache last browserID to show news in the same browser window.
-    """
     externalBrowser = dependency.descriptor(IExternalLinksController)
     internalBrowser = dependency.descriptor(IBrowserController)
 
@@ -38,18 +34,9 @@ class LobbyTicker(BaseTicker):
 
     @process
     def __showInternalBrowser(self, link):
-        """
-        Open (if not already opened) internal browser.
-        Also cache a browserID to open the clicked link in the same browser window.
-        :param link: URL link to open
-        """
         self.__browserID = yield self.internalBrowser.load(url=link, browserID=self.__browserID)
 
     def __showExternalBrowser(self, link):
-        """
-        Open the provided URL in an external browser
-        :param link: URL link to open
-        """
         if self.externalBrowser is not None:
             self.externalBrowser.open(link)
         else:

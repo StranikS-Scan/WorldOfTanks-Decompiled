@@ -128,7 +128,7 @@
       <userString>	#germany_vehicles:PzVI_Standardketten	</userString>
       <tags></tags>
       <level>	6	</level>
-      <price>	15000.0	</price>
+      <price>	15000	</price>
       <unlocks>
         <chassis>	PzVI_Vetstaerktketten	  <cost>	9705	</cost>
         </chassis>
@@ -166,7 +166,7 @@
         <segmentLength>	0.123	</segmentLength>
         <segmentOffset>	0.108	</segmentOffset>
         <segment2Offset>	0.000000	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -613,7 +613,7 @@
       <userString>	#germany_vehicles:PzVI_Vetstaerktketten	</userString>
       <tags></tags>
       <level>	7	</level>
-      <price>	21600.0	</price>
+      <price>	21600	</price>
       <armor>
         <leftTrack>	40	</leftTrack>
         <rightTrack>	40	</rightTrack>
@@ -647,7 +647,7 @@
         <segmentLength>	0.123	</segmentLength>
         <segmentOffset>	0.108	</segmentOffset>
         <segment2Offset>	0.000000	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1097,7 +1097,7 @@
       <shortUserString>	#germany_vehicles:PzVI_Anfangsturm_short	</shortUserString>
       <tags></tags>
       <level>	7	</level>
-      <price>	15820.0	</price>
+      <price>	15820	</price>
       <armor>
         <armor_1>	100	</armor_1>
         <armor_2>	100	</armor_2>
@@ -1324,7 +1324,7 @@
       <shortUserString>	#germany_vehicles:PzVI_Porsche_Turm_short	</shortUserString>
       <tags></tags>
       <level>	8	</level>
-      <price>	33220.0	</price>
+      <price>	33220	</price>
       <unlocks>
         <gun>	_88mm_KwK_43_L71	  <cost>	16500	</cost>
         </gun>
@@ -1653,12 +1653,12 @@
   </fuelTanks>
   <radios>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
+        <radio>	FuG7	  <cost>	1360	</cost>
         </radio>
       </unlocks>
     </FuG5>
     <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200.0	</cost>
+        <radio>	FuG12	  <cost>	7200	</cost>
         </radio>
       </unlocks>
     </FuG7>

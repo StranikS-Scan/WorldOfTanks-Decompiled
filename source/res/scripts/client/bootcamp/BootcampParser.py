@@ -72,6 +72,7 @@ class BootcampParser(object):
         xmlCtx = (None, filePath)
         flags = []
         BootcampParser._parseEntities(xmlCtx, section, flags, chapter)
+        _xml.clearCaches()
         return
 
     @staticmethod

@@ -16,9 +16,6 @@ from .actions_handler import BalancedSquadActionsHandler, RandomSquadActionsHand
 from .actions_validator import SPGForbiddenSquadActionsValidator, SPGForbiddenBalancedSquadActionsValidator
 
 class BalancedSquadDynamicRosterSettings(DynamicRosterSettings):
-    """
-    Dynamic roster settings for balanced squad
-    """
 
     def __init__(self, unit, lowerBound=0, upperBound=0):
         self._lowerBound = lowerBound
@@ -53,9 +50,6 @@ class BalancedSquadDynamicRosterSettings(DynamicRosterSettings):
 
 
 class RandomSquadEntryPoint(SquadEntryPoint):
-    """
-    Random squad entry point
-    """
 
     def __init__(self, accountsToInvite=None):
         super(RandomSquadEntryPoint, self).__init__(FUNCTIONAL_FLAG.RANDOM, accountsToInvite)
@@ -65,9 +59,6 @@ class RandomSquadEntryPoint(SquadEntryPoint):
 
 
 class RandomSquadEntity(SquadEntity):
-    """
-    Random squad entity class
-    """
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -125,15 +116,9 @@ class RandomSquadEntity(SquadEntity):
         super(RandomSquadEntity, self).doBattleQueue(ctx, callback)
 
     def isBalancedSquadEnabled(self):
-        """
-        Is balanced squad enabled on server side
-        """
         return self.eventsCache.isBalancedSquadEnabled()
 
     def getSquadLevelBounds(self):
-        """
-        Get balanced squad levels bounds
-        """
         return self.eventsCache.getBalancedSquadBounds()
 
     def hasSlotForSPG(self):
@@ -144,7 +129,7 @@ class RandomSquadEntity(SquadEntity):
         enableSPGCount = 0
         _, unit = self.getUnit()
         unitVehicles = unit.getVehicles()
-        for accDbID, vInfos in unitVehicles.iteritems():
+        for _, vInfos in unitVehicles.iteritems():
             for vInfo in vInfos:
                 if vInfo.vehClassIdx == VEHICLE_CLASS_INDICES['SPG']:
                     enableSPGCount += 1
@@ -200,7 +185,7 @@ class RandomSquadEntity(SquadEntity):
             elif self.isCommander(accountDbID):
                 return result
             elif spgDifferenceCount == 0:
-                _, unit = self.getUnit()
+                _, _ = self.getUnit()
                 vInfos = self.getVehiclesInfo()
                 for vInfo in vInfos:
                     if vInfo.vehClassIdx == VEHICLE_CLASS_INDICES['SPG']:
@@ -216,9 +201,6 @@ class RandomSquadEntity(SquadEntity):
         return super(RandomSquadEntity, self)._vehicleStateCondition(v)
 
     def _onServerSettingChanged(self, *args, **kwargs):
-        """
-        Listener for events cache/server settings updates
-        """
         balancedEnabled = self.isBalancedSquadEnabled()
         spgForbiddenChanged = self.getMaxSPGCount() != self._maxSpgCount
         if spgForbiddenChanged:
@@ -229,16 +211,9 @@ class RandomSquadEntity(SquadEntity):
         self.unit_onUnitRosterChanged()
 
     def _onInventoryVehiclesUpdated(self, diff):
-        """
-        Listener for inventory vehicles update
-        """
         self.invalidateVehicleStates()
 
     def _onUnitMemberVehiclesChanged(self, accoundDbID):
-        """
-        Routine that holds additional logic related to vehicles list change
-        for player
-        """
         self.invalidateVehicleStates()
         if self._isBalancedSquad and accoundDbID != account_helpers.getAccountDatabaseID():
             self.unit_onUnitRosterChanged()

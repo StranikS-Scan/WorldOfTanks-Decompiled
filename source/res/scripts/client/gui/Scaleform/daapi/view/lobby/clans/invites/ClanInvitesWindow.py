@@ -3,47 +3,46 @@
 import weakref
 from functools import partial
 import BigWorld
-from debug_utils import LOG_DEBUG
 import gui
-from gui.Scaleform.locale.WAITING import WAITING
-from gui.clans.clan_helpers import ClanListener
-from gui.clans import formatters
-from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, CLAN_INVITE_STATES
-from gui.clans.contexts import ClanApplicationsCtx, ClanInvitesCtx
-from gui.clans.items import formatField
+from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.ClanInvitesWindowMeta import ClanInvitesWindowMeta
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.WAITING import WAITING
+from gui.clans import formatters
 from gui.clans.clan_helpers import ClanInvitesPaginator
-from gui.shared.view_helpers.emblems import ClanEmblemsHelper
-from gui.shared.utils.functions import makeTooltip
+from gui.clans.clan_helpers import ClanListener
+from gui.clans.items import formatField
+from gui.clans.settings import CLAN_INVITE_STATES
 from gui.shared.event_dispatcher import showClanSendInviteWindow
-from gui.shared.formatters import text_styles
 from gui.shared.events import CoolDownEvent
+from gui.shared.formatters import text_styles
+from gui.shared.utils.functions import makeTooltip
 from gui.shared.view_helpers import CooldownHelper
+from gui.shared.view_helpers.emblems import ClanEmblemsHelper
+from gui.wgcg.clan.contexts import ClanApplicationsCtx, ClanInvitesCtx
+from gui.wgcg.settings import WebRequestDataType
 from helpers import dependency
 from helpers import i18n
 from helpers.i18n import makeString as _ms
-from skeletons.gui.clans import IClanController
+from skeletons.gui.web import IWebController
 
 class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
-    __coolDownRequests = [CLAN_REQUESTED_DATA_TYPE.CLAN_APPLICATIONS, CLAN_REQUESTED_DATA_TYPE.CLAN_INVITES]
+    __coolDownRequests = [WebRequestDataType.CLAN_APPLICATIONS, WebRequestDataType.CLAN_INVITES]
 
     def __init__(self, *args):
         super(ClanInvitesWindow, self).__init__()
         self.__actualRequestsCount = '0'
         self.__processedInvitesCount = '0'
-        self._cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.CLAN)
+        self._cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.WGCG)
         self.__clanDbID = self.clanProfile.getClanDbID()
-        self.__clanDossier = weakref.proxy(self.clansCtrl.getClanDossier(self.__clanDbID))
+        self.__clanDossier = weakref.proxy(self.webCtrl.getClanDossier(self.__clanDbID))
         self.__pagiatorsController = _PaginatorsController(self.__clanDbID)
 
-    def onClanStateChanged(self, oldStateID, newStateID):
-        if not self.clansCtrl.isEnabled():
+    def onClanEnableChanged(self, enabled):
+        if not enabled:
             self.onWindowClose()
-        if not self.clansCtrl.isAvailable():
-            pass
 
     def onAccountClanProfileChanged(self, profile):
         if not profile.isInClan() or not profile.getMyClanPermissions().canHandleClanInvites():
@@ -65,7 +64,7 @@ class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
 
     @property
     def clanProfile(self):
-        return self.clansCtrl.getAccountProfile()
+        return self.webCtrl.getAccountProfile()
 
     @property
     def paginatorsController(self):
@@ -118,30 +117,30 @@ class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
     def _onCooldownHandle(self, isInCooldown):
         self.showWaiting(isInCooldown)
 
-    def _onPaginatorListChanged(self, alias, filter, selectedID, isFullUpdate, isReqInCoolDown, result):
-        paginator = self.__pagiatorsController.getPanginator(alias, filter)
+    def _onPaginatorListChanged(self, alias, f, selectedID, isFullUpdate, isReqInCoolDown, result):
+        paginator = self.__pagiatorsController.getPanginator(alias, f)
         if alias == CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_ALIAS:
-            if filter == CLANS_ALIASES.INVITE_WINDOW_FILTER_ACTUAL:
+            if f == CLANS_ALIASES.INVITE_WINDOW_FILTER_ACTUAL:
                 self.__actualRequestsCount = self.formatInvitesCount(paginator)
                 self.__updateTabsState()
-            elif filter == CLANS_ALIASES.INVITE_WINDOW_FILTER_EXPIRED:
+            elif f == CLANS_ALIASES.INVITE_WINDOW_FILTER_EXPIRED:
                 pass
-            elif filter == CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED:
+            elif f == CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED:
                 pass
             else:
-                LOG_DEBUG('Unexpected behaviour: unknown filter {} for alias {}'.format(filter, alias))
+                LOG_DEBUG('Unexpected behaviour: unknown filter {} for alias {}'.format(f, alias))
         elif alias == CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS:
-            if filter == CLANS_ALIASES.INVITE_WINDOW_FILTER_ALL:
+            if f == CLANS_ALIASES.INVITE_WINDOW_FILTER_ALL:
                 pass
-            elif filter == CLANS_ALIASES.INVITE_WINDOW_FILTER_ACTUAL:
+            elif f == CLANS_ALIASES.INVITE_WINDOW_FILTER_ACTUAL:
                 pass
-            elif filter == CLANS_ALIASES.INVITE_WINDOW_FILTER_EXPIRED:
+            elif f == CLANS_ALIASES.INVITE_WINDOW_FILTER_EXPIRED:
                 pass
-            elif filter == CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED:
+            elif f == CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED:
                 self.__processedInvitesCount = self.formatInvitesCount(paginator)
                 self.__updateTabsState()
             else:
-                LOG_DEBUG('Unexpected behaviour: unknown filter {} for alias {}'.format(filter, alias))
+                LOG_DEBUG('Unexpected behaviour: unknown filter {} for alias {}'.format(f, alias))
         else:
             LOG_DEBUG('Unexpected behaviour: unknown view alias ', alias)
         self.showWaiting(False)
@@ -176,7 +175,7 @@ class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
 
 
 class _PaginatorsController(object):
-    clanCtrl = dependency.descriptor(IClanController)
+    clanCtrl = dependency.descriptor(IWebController)
 
     def __init__(self, clanDbID):
         super(_PaginatorsController, self).__init__()
@@ -184,8 +183,8 @@ class _PaginatorsController(object):
         self.__paginators = {}
         self.__setUpPaginators()
 
-    def getPanginator(self, viewAlias, filter):
-        return self.__paginators[viewAlias, filter]
+    def getPanginator(self, viewAlias, f):
+        return self.__paginators[viewAlias, f]
 
     def setCallback(self, callback):
         for k, v in self.__paginators.iteritems():
@@ -200,7 +199,7 @@ class _PaginatorsController(object):
             v.reset()
 
     def markPanginatorsAsUnSynced(self, viewAlias):
-        for (alias, filter), paginator in self.__paginators.iteritems():
+        for (alias, _), paginator in self.__paginators.iteritems():
             if alias == viewAlias:
                 paginator.markAsUnSynced()
 
@@ -222,5 +221,5 @@ class _PaginatorsController(object):
         self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED, ClanInvitesPaginator(self.clanCtrl, ClanInvitesCtx, self.__clanDbID, list(CLAN_INVITE_STATES.PROCESSED)))
         self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_ALL, ClanInvitesPaginator(self.clanCtrl, ClanInvitesCtx, self.__clanDbID, list(CLAN_INVITE_STATES.ALL)))
 
-    def __addPaginator(self, viewAlias, filter, panginator):
-        self.__paginators[viewAlias, filter] = panginator
+    def __addPaginator(self, viewAlias, f, panginator):
+        self.__paginators[viewAlias, f] = panginator

@@ -1,32 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_idioms.py
-"""Adjust some old Python 2 idioms to their modern counterparts.
-
-* Change some type comparisons to isinstance() calls:
-    type(x) == T -> isinstance(x, T)
-    type(x) is T -> isinstance(x, T)
-    type(x) != T -> not isinstance(x, T)
-    type(x) is not T -> not isinstance(x, T)
-
-* Change "while 1:" into "while True:".
-
-* Change both
-
-    v = list(EXPR)
-    v.sort()
-    foo(v)
-
-and the more general
-
-    v = EXPR
-    v.sort()
-    foo(v)
-
-into
-
-    v = sorted(EXPR)
-    foo(v)
-"""
 from .. import fixer_base
 from ..fixer_util import Call, Comma, Name, Node, BlankLine, syms
 CMP = "(n='!=' | '==' | 'is' | n=comp_op< 'is' 'not' >)"
@@ -93,10 +66,6 @@ class FixIdioms(fixer_base.BaseFix):
                 prefix_lines = (btwn.rpartition(u'\n')[0], next_stmt[0].prefix)
                 next_stmt[0].prefix = u'\n'.join(prefix_lines)
             else:
-                assert list_call.parent
-                assert list_call.next_sibling is None
                 end_line = BlankLine()
                 list_call.parent.append_child(end_line)
-                assert list_call.next_sibling is end_line
                 end_line.prefix = btwn.rpartition(u'\n')[0]
-        return

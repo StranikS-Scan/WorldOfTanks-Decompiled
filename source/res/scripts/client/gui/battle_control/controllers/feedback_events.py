@@ -45,10 +45,6 @@ _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackD
  _FET.VEHICLE_VISIBILITY_CHANGED: _unpackVisibility}
 
 def _getShellType(shellTypeID):
-    """
-    Returns shell type (see SHELL_TYPES) or None if shellTypeID == _BET.NONE_SHELL_TYPE.
-    :param shellTypeID: int, shell type index
-    """
     return None if shellTypeID == NONE_SHELL_TYPE else SHELL_TYPES_LIST[shellTypeID]
 
 
@@ -64,21 +60,12 @@ class _DamageExtra(object):
         self.__isShellGold = bool(shellIsGold)
 
     def getDamage(self):
-        """
-        Returns damage.
-        """
         return self.__damage
 
     def getAttackReasonID(self):
-        """
-        Return attack reason ID. For details please see ATTACK_REASONS.
-        """
         return self.__attackReasonID
 
     def getShellType(self):
-        """
-        Returns shell type (see SHELL_TYPES enum) or None, if shell type is not defined.
-        """
         return self.__shellType
 
     def isBurst(self):
@@ -129,15 +116,9 @@ class _CritsExtra(object):
         self.__isShellGold = bool(shellIsGold)
 
     def getCritsCount(self):
-        """
-        Returns count of damaged modules and tankmans.
-        """
         return self.__critsCount
 
     def getShellType(self):
-        """
-        Returns shell type (see SHELL_TYPES enum) or None, if shell type is not defined.
-        """
         return self.__shellType
 
     def isShellGold(self):
@@ -167,9 +148,6 @@ class _FeedbackEvent(object):
         self.__eventType = feedbackEventType
 
     def getType(self):
-        """
-        Returns type of feedback event. For details see FEEDBACK_EVENT_ID.
-        """
         return self.__eventType
 
     @staticmethod
@@ -181,8 +159,6 @@ class PlayerFeedbackEvent(_FeedbackEvent):
     __slots__ = ('__battleEventType', '__targetID', '__count', '__extra', '__attackReasonID', '__isBurst')
 
     def __init__(self, feedbackEventType, eventType, targetID, extra, count):
-        """
-        """
         super(PlayerFeedbackEvent, self).__init__(feedbackEventType)
         self.__battleEventType = eventType
         self.__targetID = targetID
@@ -204,28 +180,15 @@ class PlayerFeedbackEvent(_FeedbackEvent):
             return
 
     def getBattleEventType(self):
-        """
-        Returns type of battle event. For details see BATTLE_EVENT_TYPE.
-        """
         return self.__battleEventType
 
     def getTargetID(self):
-        """
-        Returns target vehicle ID.
-        """
         return self.__targetID
 
     def getExtra(self):
-        """
-        Returns an extra that depends on event type. For details see
-        PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS.
-        """
         return self.__extra
 
     def getCount(self):
-        """
-        Returns count of events aggregated on the server side.
-        """
         return self.__count
 
 

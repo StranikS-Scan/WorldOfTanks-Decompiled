@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xdrlib.py
-"""Implements (a subset of) Sun XDR -- eXternal Data Representation.
-
-See: RFC 1014
-
-"""
 import struct
 try:
     from cStringIO import StringIO as _StringIO
@@ -17,15 +12,6 @@ __all__ = ['Error',
  'ConversionError']
 
 class Error(Exception):
-    """Exception class for this module. Use:
-    
-    except xdrlib.Error, var:
-        # var has the Error instance for the exception
-    
-    Public ivars:
-        msg -- contains the message
-    
-    """
 
     def __init__(self, msg):
         self.msg = msg
@@ -42,7 +28,6 @@ class ConversionError(Error):
 
 
 class Packer:
-    """Pack various data representations into a buffer."""
 
     def __init__(self):
         self.reset()
@@ -125,7 +110,6 @@ class Packer:
 
 
 class Unpacker:
-    """Unpacks various data representations from the given buffer."""
 
     def __init__(self, data):
         self.reset(data)

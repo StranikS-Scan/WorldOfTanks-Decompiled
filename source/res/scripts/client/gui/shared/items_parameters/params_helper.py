@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/items_parameters/params_helper.py
 from collections import namedtuple
 import copy
-import time
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
@@ -155,11 +154,6 @@ def itemsComparator(currentItem, otherItem, vehicleDescr=None):
 
 @dependency.replace_none_kwargs(factory=IGuiItemsFactory)
 def camouflageComparator(vehicle, camo, factory=None):
-    """
-    :param vehicle: instance of  gui.shared.gui_items.Vehicle.Vehicle
-    :param camo: instance of gui.shared.gui_items.customization.c11n_items.Camouflage
-    :return: instance of VehiclesComparator
-    """
     currParams = params.VehicleParams(vehicle).getParamsDict()
     if camo:
         season = first(camo.seasons)
@@ -201,9 +195,6 @@ def shellComparator(shell, vehicle):
 
 
 def getGroupBonuses(groupName, comparator):
-    """
-    Gets set of bonuses for selected group
-    """
     bonuses = set()
     for paramName in PARAMS_GROUPS[groupName]:
         bonuses.update(comparator.getExtendedData(paramName).bonuses)
@@ -225,9 +216,6 @@ def getCommonParam(state, name):
 
 
 class SimplifiedBarVO(dict):
-    """
-        This class contains values for status bar and is used to send data to FE
-    """
 
     def __init__(self, **kwargs):
         super(SimplifiedBarVO, self).__init__(**kwargs)
@@ -243,13 +231,6 @@ class SimplifiedBarVO(dict):
 class VehParamsBaseGenerator(object):
 
     def getFormattedParams(self, comparator, expandedGroups=None, vehIntCD=None):
-        """
-        Provides list of parameters in predefined order for particular vehicle in proper format
-        :param comparator: instance gui.shared.items_parameters.comparator.ItemsComparator
-        :param expandedGroups: the list of groups which parameters have to be added into the result list
-        :param vehIntCD: intCD of target Vehicle
-        :return: list of formatted parameters
-        """
         result = []
         if GUI_SETTINGS.technicalInfo:
             for groupIdx, groupName in enumerate(RELATIVE_PARAMS):

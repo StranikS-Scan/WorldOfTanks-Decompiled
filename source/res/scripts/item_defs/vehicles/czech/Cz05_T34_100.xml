@@ -204,7 +204,7 @@
         <segmentLength>	0.347	</segmentLength>
         <segmentOffset>	0.069	</segmentOffset>
         <segment2Offset>	0.177	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -219,9 +219,6 @@
         <gravity>	-9	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -572,7 +569,7 @@
         <segmentLength>	0.347	</segmentLength>
         <segmentOffset>	0.069	</segmentOffset>
         <segment2Offset>	0.177	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -587,9 +584,6 @@
         <gravity>	-9	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>

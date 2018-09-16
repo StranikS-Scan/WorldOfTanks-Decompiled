@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/Vehicle.py
+import math
 import random
 from itertools import izip
 from operator import itemgetter
 import BigWorld
-import math
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
 from account_shared import LayoutIterator
@@ -29,7 +29,7 @@ from helpers import i18n, time_utils, dependency
 from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr
 from items.components.c11n_constants import SeasonType, CustomizationType
 from shared_utils import findFirst, CONST_CONTAINER
-from skeletons.gui.game_control import IFalloutController, IIGRController
+from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
@@ -82,7 +82,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     EVENT = 'event_battles'
     EXCLUDED_FROM_SANDBOX = 'excluded_from_sandbox'
     TELECOM = 'telecom'
-    FALLOUT = 'fallout'
     UNRECOVERABLE = 'unrecoverable'
     CREW_LOCKED = 'lockCrew'
     OUTFIT_LOCKED = 'lockOutfit'
@@ -93,7 +92,7 @@ class Vehicle(FittingItem, HasStrCD):
     NOT_FULL_AMMO_MULTIPLIER = 0.2
     MAX_RENT_MULTIPLIER = 2
 
-    class VEHICLE_STATE:
+    class VEHICLE_STATE(object):
         DAMAGED = 'damaged'
         EXPLODED = 'exploded'
         DESTROYED = 'destroyed'
@@ -111,11 +110,6 @@ class Vehicle(FittingItem, HasStrCD):
         GROUP_IS_NOT_READY = 'group_is_not_ready'
         NOT_PRESENT = 'notpresent'
         UNAVAILABLE = 'unavailable'
-        FALLOUT_ONLY = 'fallout_only'
-        FALLOUT_MIN = 'fallout_min'
-        FALLOUT_MAX = 'fallout_max'
-        FALLOUT_REQUIRED = 'fallout_required'
-        FALLOUT_BROKEN = 'fallout_broken'
         UNSUITABLE_TO_QUEUE = 'unsuitableToQueue'
         UNSUITABLE_TO_UNIT = 'unsuitableToUnit'
         CUSTOM = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT)
@@ -127,28 +121,18 @@ class Vehicle(FittingItem, HasStrCD):
      VEHICLE_STATE.CREW_NOT_FULL,
      VEHICLE_STATE.AMMO_NOT_FULL,
      VEHICLE_STATE.GROUP_IS_NOT_READY,
-     VEHICLE_STATE.FALLOUT_MIN,
-     VEHICLE_STATE.FALLOUT_MAX,
-     VEHICLE_STATE.FALLOUT_REQUIRED,
-     VEHICLE_STATE.FALLOUT_BROKEN,
-     VEHICLE_STATE.FALLOUT_ONLY,
      VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
      VEHICLE_STATE.UNSUITABLE_TO_UNIT,
      VEHICLE_STATE.ROTATION_GROUP_UNLOCKED,
      VEHICLE_STATE.ROTATION_GROUP_LOCKED]
-    GROUP_STATES = [VEHICLE_STATE.GROUP_IS_NOT_READY,
-     VEHICLE_STATE.FALLOUT_MIN,
-     VEHICLE_STATE.FALLOUT_MAX,
-     VEHICLE_STATE.FALLOUT_REQUIRED,
-     VEHICLE_STATE.FALLOUT_BROKEN]
+    GROUP_STATES = [VEHICLE_STATE.GROUP_IS_NOT_READY]
 
-    class VEHICLE_STATE_LEVEL:
+    class VEHICLE_STATE_LEVEL(object):
         CRITICAL = 'critical'
         INFO = 'info'
         WARNING = 'warning'
         RENTED = 'rented'
 
-    falloutCtrl = dependency.descriptor(IFalloutController)
     igrCtrl = dependency.descriptor(IIGRController)
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -157,7 +141,6 @@ class Vehicle(FittingItem, HasStrCD):
         if strCompactDescr is not None:
             vehDescr = vehicles.VehicleDescr(compactDescr=strCompactDescr)
         else:
-            assert typeCompDescr is not None
             _, nID, innID = vehicles.parseIntCompactDescr(typeCompDescr)
             vehDescr = vehicles.VehicleDescr(typeID=(nID, innID))
         self.__descriptor = vehDescr
@@ -257,11 +240,6 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def buyPrices(self):
-        """
-        Get vehicle buy prices.
-        If vehicle has personal discount and price with personal discount is less then its shop price with SSE actions
-        then use personal discount price else shop price.
-        """
         currency = self._buyPrices.itemPrice.price.getCurrency()
         if self._personalDiscountPrice is not None and self._personalDiscountPrice.get(currency) <= self._buyPrices.itemPrice.price.get(currency):
             currentPrice = self._personalDiscountPrice
@@ -382,10 +360,6 @@ class Vehicle(FittingItem, HasStrCD):
 
     @classmethod
     def _parseCustomOutfits(cls, compactDescr, proxy):
-        """
-        Custom outfits are the outfits user created thyself.
-        In the inventory these styles are stored under regular seasons (winter, summer, etc.)
-        """
         outfits = {}
         for season in SeasonType.SEASONS:
             outfitData = proxy.inventory.getOutfitData(compactDescr, season)
@@ -397,11 +371,6 @@ class Vehicle(FittingItem, HasStrCD):
 
     @classmethod
     def _parseStyledOutfits(cls, compactDescr, proxy):
-        """
-        Styled outfits are the outfits the comes from styles (i.e. they're predefined).
-        In the inventory these styles are stored under the ALL season since single style
-        contains outfits for all seasons.
-        """
         outfits = {}
         outfitData = proxy.inventory.getOutfitData(compactDescr, SeasonType.ALL)
         if not outfitData or not outfitData.isEnabled:
@@ -542,9 +511,6 @@ class Vehicle(FittingItem, HasStrCD):
 
     @gun.setter
     def gun(self, value):
-        """
-        This property can be set from cmp_view
-        """
         self._gun = value
 
     @property
@@ -553,9 +519,6 @@ class Vehicle(FittingItem, HasStrCD):
 
     @turret.setter
     def turret(self, value):
-        """
-        This property can be set from cmp_view
-        """
         self._turret = value
 
     @property
@@ -564,9 +527,6 @@ class Vehicle(FittingItem, HasStrCD):
 
     @engine.setter
     def engine(self, value):
-        """
-        This property can be set from cmp_view
-        """
         self._engine = value
 
     @property
@@ -575,9 +535,6 @@ class Vehicle(FittingItem, HasStrCD):
 
     @chassis.setter
     def chassis(self, value):
-        """
-        This property can be set from cmp_view
-        """
         self._chassis = value
 
     @property
@@ -586,9 +543,6 @@ class Vehicle(FittingItem, HasStrCD):
 
     @radio.setter
     def radio(self, value):
-        """
-        This property can be set from cmp_view
-        """
         self._radio = value
 
     @property
@@ -597,9 +551,6 @@ class Vehicle(FittingItem, HasStrCD):
 
     @fuelTank.setter
     def fuelTank(self, value):
-        """
-        This property can be set from cmp_view
-        """
         self._fuelTank = value
 
     @property
@@ -632,9 +583,6 @@ class Vehicle(FittingItem, HasStrCD):
 
     @crew.setter
     def crew(self, value):
-        """
-        Normally the property should not be changed outside, but params_helper.py does it.
-        """
         self._crew = value
 
     @property
@@ -785,7 +733,6 @@ class Vehicle(FittingItem, HasStrCD):
         return (ms, self.__getStateLevel(ms))
 
     def setCustomState(self, state):
-        assert state in Vehicle.VEHICLE_STATE.CUSTOM, 'State is not valid'
         self.__customState = state
 
     def getCustomState(self):
@@ -803,13 +750,8 @@ class Vehicle(FittingItem, HasStrCD):
                 return Vehicle.VEHICLE_STATE.DAMAGED
             if not self.isCrewFull:
                 return Vehicle.VEHICLE_STATE.CREW_NOT_FULL
-            groupIsReady, groupState = self.isGroupReady()
-            if self.isFalloutSelected and not groupIsReady:
-                return groupState
             if not self.isAmmoFull:
                 return Vehicle.VEHICLE_STATE.AMMO_NOT_FULL
-            if self.isFalloutOnly() and not self.__isFalloutEnabled():
-                return Vehicle.VEHICLE_STATE.FALLOUT_ONLY
             if not self.isRotationGroupLocked and self.rotationGroupNum != 0:
                 return Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED
         return state
@@ -818,37 +760,10 @@ class Vehicle(FittingItem, HasStrCD):
     def __getEventVehicles(cls):
         return cls.eventsCache.getEventVehicles()
 
-    def __getFalloutSelectedVehInvIDs(self):
-        return self.falloutCtrl.getSelectedSlots() if self.__isFalloutEnabled() else ()
-
-    def __getFalloutAvailableVehIDs(self):
-        return self.falloutCtrl.getConfig().allowedVehicles if self.__isFalloutEnabled() else ()
-
-    def __isFalloutEnabled(self):
-        return self.falloutCtrl.isSelected()
-
-    def isFalloutOnly(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.FALLOUT)
-
     def isRotationApplied(self):
         return self.rotationGroupNum != 0
 
     def isGroupReady(self):
-        if not self.falloutCtrl.isSelected():
-            return (True, '')
-        selectedVehicles = self.falloutCtrl.getSelectedVehicles()
-        selectedVehiclesCount = len(selectedVehicles)
-        config = self.falloutCtrl.getConfig()
-        if self.falloutCtrl.mustSelectRequiredVehicle():
-            return (False, Vehicle.VEHICLE_STATE.FALLOUT_REQUIRED)
-        if selectedVehiclesCount < config.minVehiclesPerPlayer:
-            return (False, Vehicle.VEHICLE_STATE.FALLOUT_MIN)
-        if selectedVehiclesCount > config.maxVehiclesPerPlayer:
-            return (False, Vehicle.VEHICLE_STATE.FALLOUT_MAX)
-        for v in selectedVehicles:
-            if v.isBroken or not v.isCrewFull or v.isInBattle or v.rentalIsOver or v.isDisabledInPremIGR:
-                return (False, Vehicle.VEHICLE_STATE.FALLOUT_BROKEN)
-
         return (True, '')
 
     def __getStateLevel(self, state):
@@ -894,14 +809,6 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def isEvent(self):
         return self.isOnlyForEventBattles and self in Vehicle.__getEventVehicles()
-
-    @property
-    def isFalloutSelected(self):
-        return self.invID in self.__getFalloutSelectedVehInvIDs()
-
-    @property
-    def isFalloutAvailable(self):
-        return not self.isOnlyForEventBattles and self.intCD in self.__getFalloutAvailableVehIDs()
 
     @property
     def isDisabledInRoaming(self):
@@ -1007,7 +914,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isCrewFull(self):
-        crew = map(lambda (role, tman): tman, self.crew)
+        crew = [ tman for _, tman in self.crew ]
         return None not in crew and len(crew)
 
     @property
@@ -1033,8 +940,6 @@ class Vehicle(FittingItem, HasStrCD):
     def isReadyToPrebattle(self, checkForRent=True):
         if checkForRent and self.rentalIsOver:
             return False
-        if self.isFalloutOnly() and not self.__isFalloutEnabled():
-            return False
         if not self.isGroupReady()[0]:
             return False
         result = not self.hasLockMode()
@@ -1044,11 +949,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isReadyToFight(self):
-        if self.__isFalloutEnabled() and not self.isFalloutSelected:
-            return True
         if self.rentalIsOver:
-            return False
-        if self.isFalloutOnly() and not self.__isFalloutEnabled():
             return False
         if not self.isGroupReady()[0]:
             return False
@@ -1082,9 +983,6 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isAutoRentStyle(self):
-        """
-        Check if the style user put on should be prolonged when expired.
-        """
         return bool(self.settings & VEHICLE_SETTINGS_FLAG.AUTO_RENT_CUSTOMIZATION)
 
     def isAutoLoadFull(self):
@@ -1116,22 +1014,11 @@ class Vehicle(FittingItem, HasStrCD):
         return self._isEnoughMoney(minRentPrice, money) if minRentPrice else (False, GUI_ITEM_ECONOMY_CODE.NO_RENT_PRICE)
 
     def mayRestore(self, money):
-        """
-        Check if vehicle may restore for money
-        :param money:<Money>
-        :return: tuple(mayRestore:<bool>, errorReason:<str>
-        """
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
             return (False, GUI_ITEM_ECONOMY_CODE.CENTER_UNAVAILABLE)
         return (False, GUI_ITEM_ECONOMY_CODE.RESTORE_DISABLED) if not self.isRestoreAvailable() or constants.IS_CHINA and self.rentalIsActive else self._isEnoughMoney(self.restorePrice, money)
 
     def mayRestoreWithExchange(self, money, exchangeRate):
-        """
-        Check if vehicle may restore with money exchange
-        :param money:<Money>
-        :param exchangeRate: <int> gold for credits exchange rate
-        :return:
-        """
         mayRestore, reason = self.mayRestore(money)
         if mayRestore:
             return mayRestore
@@ -1142,13 +1029,6 @@ class Vehicle(FittingItem, HasStrCD):
         return False
 
     def getRentPackage(self, days=None):
-        """
-        Returns rentPackage with min rent price if days is None, else return rentPackage
-        for selected daysPacket
-        :param days: dict ('days' : <int-type>, 'rentPrice' : <int-type>,
-                           'defaultRentPrice' : <int-type>)
-        :return: Rent package or None
-        """
         if days is not None:
             for package in self.rentPackages:
                 if package.get('days', None) == days:
@@ -1169,7 +1049,7 @@ class Vehicle(FittingItem, HasStrCD):
         return self.descriptor.type.autounlockedItems[:]
 
     def getAutoUnlockedItemsMap(self):
-        return dict(map(lambda nodeCD: (vehicles.getItemByCompactDescr(nodeCD).itemTypeName, nodeCD), self.descriptor.type.autounlockedItems))
+        return dict(((vehicles.getItemByCompactDescr(nodeCD).itemTypeName, nodeCD) for nodeCD in self.descriptor.type.autounlockedItems))
 
     def getUnlocksDescrs(self):
         for unlockIdx, data in enumerate(self.descriptor.type.unlocksDescrs):
@@ -1190,11 +1070,6 @@ class Vehicle(FittingItem, HasStrCD):
         return self.getCrewBySkillLevels(100)
 
     def getCrewWithoutSkill(self, skillName):
-        """
-        Gets crew without selected skill
-        if selected skill is last in tankman skills and its level less than MAX_SKILL_LEVEL,
-        then remove this skill and change tankman lastSkillLevel
-        """
         crewItems = list()
         crewRoles = self.descriptor.type.crewRoles
         for slotIdx, tman in self.crew:
@@ -1213,17 +1088,6 @@ class Vehicle(FittingItem, HasStrCD):
         return _sortCrew(crewItems, crewRoles)
 
     def getCrewBySkillLevels(self, defRoleLevel, skillsByIdxs=None, levelByIdxs=None, nativeVehsByIdxs=None):
-        """
-        Generate sorted list of tankmans with provided skills levels and provided skills
-        :param defRoleLevel: desired skills levels
-        :param skillsByIdxs: desired skills for particular members (index of member) or crew,
-        dict-{tankmanIndex: [skill, skill, ...], ...}
-        :param levelByIdxs: desired roleLevel for particular members (index of member) or crew,
-        dict-{tankmanIndex: roleLevel, ...}
-        :param nativeVehsByIdxs: desired native vehicles references for particular members (index of member) or crew,
-        dict-{tankmanIndex: nativeVehicleReference, ...}
-        :return: list of tuples [(role, gui_items.Tankman), (role, gui_items.Tankman), ...] sorted by tankmans roles
-        """
         skillsByIdxs = skillsByIdxs or {}
         levelByIdxs = levelByIdxs or {}
         nativeVehsByIdxs = nativeVehsByIdxs or {}
@@ -1246,10 +1110,6 @@ class Vehicle(FittingItem, HasStrCD):
         return _sortCrew(crewItems, crewRoles)
 
     def getOutfit(self, season):
-        """
-        Get an active outfit for a given season.
-        :param season: one of SeasonType.SEASONS
-        """
         outfit = self._styledOutfits.get(season) or self._customOutfits.get(season)
         if outfit and outfit.isEnabled:
             return outfit
@@ -1266,32 +1126,16 @@ class Vehicle(FittingItem, HasStrCD):
             self._styledOutfits[season] = fromVehicle.getStyledOutfit(season)
 
     def getCustomOutfit(self, season):
-        """
-        Get a custom outfit for a given season.
-        :param season: one of SeasonType.SEASONS
-        """
         return self._customOutfits.get(season)
 
     def getStyledOutfit(self, season):
-        """
-        Get a styled outfit for a given season.
-        :param season: one of SeasonType.SEASONS
-        """
         return self._styledOutfits.get(season)
 
     def hasOutfit(self, season):
-        """
-        Check if vehicle has an outfit for given season.
-        :param season: one of SeasonType.SEASONS
-        """
         outfit = self.getOutfit(season)
         return outfit is not None
 
     def hasOutfitWithItems(self, season):
-        """
-        Check if vehicle has an outfit for given season.
-        :param season: one of SeasonType.SEASONS
-        """
         outfit = self.getOutfit(season)
         return outfit is not None and not outfit.isEmpty()
 
@@ -1307,10 +1151,6 @@ class Vehicle(FittingItem, HasStrCD):
         return None
 
     def getAnyOutfitSeason(self):
-        """
-        Get any season of any active outfit.
-        If there's no active outfit, falls back to summer.
-        """
         activeSeasons = []
         for season in SeasonType.SEASONS:
             if self.hasOutfitWithItems(season):
@@ -1319,39 +1159,18 @@ class Vehicle(FittingItem, HasStrCD):
         return random.choice(activeSeasons) if activeSeasons else SeasonType.SUMMER
 
     def isRestorePossible(self):
-        """
-        Check the possibility of vehicle restore, right now or in future
-        :return: <bool>
-        """
         return self.restoreInfo.isRestorePossible() if not self.isPurchased and not self.isUnrecoverable and self.lobbyContext.getServerSettings().isVehicleRestoreEnabled() and self.restoreInfo is not None else False
 
     def isRestoreAvailable(self):
-        """
-        Check if vehicle restore is available right now
-        restore can be limited or unlimitid in time
-        :return: <bool>
-        """
         return self.isRestorePossible() and not self.restoreInfo.isInCooldown()
 
     def hasLimitedRestore(self):
-        """
-        Check if vehicle has limited in time restore and restore left time is not finished
-        :return: <bool>
-        """
         return self.isRestorePossible() and self.restoreInfo.isLimited() and self.restoreInfo.getRestoreTimeLeft() > 0
 
     def hasRestoreCooldown(self):
-        """
-        Check if vehicle restore is in cooldown
-        :return: <bool>
-        """
         return self.isRestorePossible() and self.restoreInfo.isInCooldown()
 
     def isRecentlyRestored(self):
-        """
-        Check if vehicle was already restored and restore cooldown is not finished
-        :return: <bool>
-        """
         return self.isPurchased and self.restoreInfo.isInCooldown() if self.restoreInfo is not None else False
 
     def __cmp__(self, other):
@@ -1531,11 +1350,6 @@ _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEH
  Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY}
 
 def getVehicleStateIcon(vState):
-    """
-    Gets status icon by vehicle state
-    :param vState: one of Vehicle.VEHICLE_STATE
-    :return: string(empty string means there is no icon for the state)
-    """
     if vState in _VEHICLE_STATE_TO_ICON:
         icon = _VEHICLE_STATE_TO_ICON[vState]
     else:

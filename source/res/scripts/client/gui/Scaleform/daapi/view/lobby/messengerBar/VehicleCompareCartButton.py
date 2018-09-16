@@ -23,10 +23,6 @@ class VehicleCompareCartButton(ButtonWithCounterMeta):
             self.destroy()
 
     def __onCountChanged(self, _):
-        """
-        gui.game_control.VehComparisonBasket.onChange event handler
-        :param _: instance of gui.game_control.veh_comparison_basket._ChangedData
-        """
         self.__changeCount(self.comparisonBasket.getVehiclesCount())
 
     def __changeCount(self, count):

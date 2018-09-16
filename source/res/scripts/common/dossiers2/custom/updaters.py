@@ -2715,7 +2715,6 @@ def __updateFromVehicleDossier69(compDescr):
         headerValues = updateCtx['header'][1:]
         sumAllValues = sum(headerValues)
         vehDossierCompDescrLen = len(compDescr) - updateCtx['headerLength']
-        assert vehDossierCompDescrLen == sumAllValues
     setVersion(updateCtx, 70)
     return (70, compDescr)
 

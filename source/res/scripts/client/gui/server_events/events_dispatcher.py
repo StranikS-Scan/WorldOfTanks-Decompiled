@@ -68,14 +68,6 @@ def hidePersonalMissionDetails():
 
 
 def showMission(eventID, eventType=None):
-    """ Open missions interface with given event's detailed view.
-    
-    Possible requests:
-        eventID is marathon's quest: open marathon tab with quest details;
-        eventID is main marathon quest: open marathon tab;
-        eventID is some othe quest: open categories tab with quest details;
-        eventID is personal mission: open old quest interface.
-    """
     eventsCache = dependency.instance(IEventsCache)
     quests = eventsCache.getQuests()
     quest = quests.get(eventID)

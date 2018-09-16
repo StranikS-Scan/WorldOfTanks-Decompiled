@@ -29,7 +29,7 @@ from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent, BootcampEvent
-from helpers import getFullClientVersion, dependency
+from helpers import getFullClientVersion, dependency, uniprof
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from helpers.time_utils import makeLocalServerTime
@@ -40,7 +40,7 @@ from skeletons.gui.login_manager import ILoginManager
 from skeletons.helpers.statistics import IStatisticsCollector
 from shared_utils import nextTick
 
-class INVALID_FIELDS:
+class INVALID_FIELDS(object):
     ALL_VALID = 0
     LOGIN_INVALID = 1
     PWD_INVALID = 2
@@ -58,25 +58,6 @@ _LOGIN_VIDEO_FILE = SCALEFORM_STARTUP_VIDEO_MASK % '_login.usm'
 _g__WGCloginEnabled = True
 
 class BackgroundMode(object):
-    """
-    This class responsible for changing graphics and sound states on login page.
-    It load and save last state of mode to preferences.xml
-    
-    Description of section with background mode data of login page in preferences.xml
-    <root>
-        ...
-        <scriptsPreferences>
-            ...
-            <videoBufferingTime/> - float(0.0-...), time for buffering of video, 0.0 - full streaming without buffering
-            <loginPage>
-                <lastBgMode/> - int(_BG_MODE_VIDEO=0/_BG_MODE_WALLPAPER=1),
-                <mute/> - bool(mute=true/unmute=false),
-                <showLoginWallpaper/> - bool(show=true/hide=false),
-                <lastLoginBgImage/> - string, name last showed wallpaper
-            </loginPage>
-        </scriptsPreferences>
-    </root>
-    """
 
     def __init__(self, view):
         self.__isSoundMuted = False
@@ -230,7 +211,7 @@ class LoginView(LoginPageMeta):
 
     def __wgcCheck(self):
         if BigWorld.WGC_processingState() == constants.WGC_STATE.WAITING_TOKEN_1:
-            nextTick(lambda : self.__wgcCheck())()
+            nextTick(self.__wgcCheck)()
         elif BigWorld.WGC_processingState() == constants.WGC_STATE.LOGIN_IN_PROGRESS:
             self.__wgcConnect()
         else:
@@ -297,12 +278,16 @@ class LoginView(LoginPageMeta):
     def musicFadeOut(self):
         self.__backgroundMode.fadeSound()
 
+    def videoLoadingFailed(self):
+        self.__backgroundMode.showWallpaper(False)
+
     def setMute(self, value):
         self.__backgroundMode.toggleMute(value)
 
     def onVideoLoaded(self):
         self.__backgroundMode.startVideoSound()
 
+    @uniprof.regionDecorator(label='offline.login', scope='enter')
     def _populate(self):
         View._populate(self)
         self._serversDP = ServersDataProvider()
@@ -326,6 +311,7 @@ class LoginView(LoginPageMeta):
         self._showForm()
         return
 
+    @uniprof.regionDecorator(label='offline.login', scope='exit')
     def _dispose(self):
         ScaleformFileLoader.disableStreaming()
         self.__backgroundMode.hide()
@@ -393,7 +379,7 @@ class LoginView(LoginPageMeta):
         if not self.__loginQueueDialogShown:
             self._clearLoginView()
             self.__loginQueueDialogShown = True
-            self.fireEvent(LoginEventEx(LoginEventEx.SET_LOGIN_QUEUE, View.alias, WAITING.TITLES_QUEUE, message, cancelBtnLbl, showAutoSearchBtn), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoginEventEx(LoginEventEx.SET_LOGIN_QUEUE, '', WAITING.TITLES_QUEUE, message, cancelBtnLbl, showAutoSearchBtn), EVENT_BUS_SCOPE.LOBBY)
             self.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self._onLoginQueueClosed, EVENT_BUS_SCOPE.LOBBY)
             self.addListener(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, self._onLoginQueueSwitched, EVENT_BUS_SCOPE.LOBBY)
         else:
@@ -446,8 +432,6 @@ class LoginView(LoginPageMeta):
         return
 
     def _dropLoginQueue(self, loginStatus):
-        """Safely drop login queue considering login status and current state of login queue.
-        """
         if loginStatus != LOGIN_STATUS.LOGIN_REJECTED_RATE_LIMITED and self.__loginRetryDialogShown:
             self.__closeLoginQueueDialog()
 
@@ -490,18 +474,18 @@ class LoginView(LoginPageMeta):
 
     def __showLoginRetryDialog(self, data):
         self._clearLoginView()
-        self.fireEvent(LoginEventEx(LoginEventEx.SET_AUTO_LOGIN, View.alias, data['waitingOpen'], data['message'], data['waitingClose'], False), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(LoginEventEx(LoginEventEx.SET_AUTO_LOGIN, '', data['waitingOpen'], data['message'], data['waitingClose'], False), EVENT_BUS_SCOPE.LOBBY)
         self.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__closeLoginRetryDialog, EVENT_BUS_SCOPE.LOBBY)
         self.__loginRetryDialogShown = True
 
     def __closeLoginRetryDialog(self, event=None):
         self.connectionMgr.stopRetryConnection()
-        self.fireEvent(LoginEvent(LoginEventEx.CANCEL_LGN_QUEUE, View.alias))
+        self.fireEvent(LoginEvent(LoginEventEx.CANCEL_LGN_QUEUE, ''))
         self.removeListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__closeLoginRetryDialog, EVENT_BUS_SCOPE.LOBBY)
         self.__loginRetryDialogShown = False
 
     def __closeLoginQueueDialog(self):
-        self.fireEvent(LoginEvent(LoginEvent.CANCEL_LGN_QUEUE, View.alias))
+        self.fireEvent(LoginEvent(LoginEvent.CANCEL_LGN_QUEUE, ''))
         g_preDefinedHosts.resetQueryResult()
         self.removeListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self._onLoginQueueClosed, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, self._onLoginQueueSwitched, EVENT_BUS_SCOPE.LOBBY)

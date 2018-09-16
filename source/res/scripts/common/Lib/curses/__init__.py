@@ -1,16 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/curses/__init__.py
-"""curses
-
-The main package for curses support for Python.  Normally used by importing
-the package, and perhaps a particular module inside it.
-
-   import curses
-   from curses import textpad
-   curses.initscr()
-   ...
-
-"""
 __revision__ = '$Id$'
 from _curses import *
 from curses.wrapper import wrapper

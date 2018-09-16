@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_xreadlines.py
-"""Fix "for x in f.xreadlines()" -> "for x in f".
-
-This fixer will also convert g(f.xreadlines) into g(f.__iter__)."""
 from .. import fixer_base
 from ..fixer_util import Name
 

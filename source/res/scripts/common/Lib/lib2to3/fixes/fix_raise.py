@@ -1,27 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_raise.py
-"""Fixer for 'raise E, V, T'
-
-raise         -> raise
-raise E       -> raise E
-raise E, V    -> raise E(V)
-raise E, V, T -> raise E(V).with_traceback(T)
-raise E, None, T -> raise E.with_traceback(T)
-
-raise (((E, E'), E''), E'''), V -> raise E(V)
-raise "foo", V, T               -> warns about string exceptions
-
-
-CAVEATS:
-1) "raise E, V" will be incorrectly translated if V is an exception
-   instance. The correct Python 3 idiom is
-
-        raise E from V
-
-   but since we can't detect instance-hood by syntax alone and since
-   any client code would have to be changed as well, we don't automate
-   this.
-"""
 from .. import pytree
 from ..pgen2 import token
 from .. import fixer_base

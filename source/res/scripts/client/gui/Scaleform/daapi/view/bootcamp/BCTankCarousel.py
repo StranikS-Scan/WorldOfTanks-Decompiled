@@ -2,9 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCTankCarousel.py
 from gui.Scaleform.daapi.view.lobby.hangar.carousels import TankCarousel
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import BCCarouselDataProvider
-from gui.Scaleform.daapi.view.lobby.vehicle_carousel.carousel_filter import CarouselFilter, CriteriesGroup
-from account_helpers.settings_core import settings_constants
-import BigWorld
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter, CriteriesGroup
 
 class BCCriteriesGroup(CriteriesGroup):
 
@@ -45,17 +43,3 @@ class BCTankCarousel(TankCarousel):
 
     def updateParams(self):
         pass
-
-    def selectVehicle(self, idx):
-        super(BCTankCarousel, self).selectVehicle(idx)
-        from bootcamp.BootcampGarage import g_bootcampGarage
-        g_bootcampGarage.checkSecondVehicleHintEnabled()
-
-    def _onCarouselSettingsChange(self, diff):
-        needRefreshHint = settings_constants.GAME.CAROUSEL_TYPE in diff or settings_constants.GAME.DOUBLE_CAROUSEL_TYPE in diff
-        if needRefreshHint:
-            from bootcamp.BootcampGarage import g_bootcampGarage
-            g_bootcampGarage.highlightLobbyHint('SecondTank', False, True)
-        super(BCTankCarousel, self)._onCarouselSettingsChange(diff)
-        if needRefreshHint:
-            BigWorld.callback(0.1, g_bootcampGarage.checkSecondVehicleHintEnabled)

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/__init__.py
-import nations
 from collections import defaultdict
+import nations
 from constants import IS_DEVELOPMENT
 from gui.GuiSettings import GuiSettings as _GuiSettings
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -113,12 +113,9 @@ class GUI_CTRL_MODE_FLAG(object):
 
 
 def getGuiServicesConfig(manager):
-    """ Configures services for package gui.
-    :param manager: helpers.dependency.DependencyManager
-    """
     from gui import battle_control
     from gui import battle_results
-    from gui import clans
+    from gui import wgcg
     from gui import customization
     from gui import event_boards
     from gui import game_control
@@ -131,13 +128,13 @@ def getGuiServicesConfig(manager):
     from gui import Scaleform as _sf
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(shared.getSharedServices)
-    manager.addConfig(server_events.getServerEventsConfig)
     manager.addConfig(game_control.getGameControllersConfig)
     manager.addConfig(_sf.getScaleformConfig)
     manager.addConfig(login.getLoginManagerConfig)
+    manager.addConfig(server_events.getServerEventsConfig)
     manager.addConfig(battle_control.getBattleSessionConfig)
     manager.addConfig(sounds.getSoundsConfig)
-    manager.addConfig(clans.getClanServicesConfig)
+    manager.addConfig(wgcg.getWebServicesConfig)
     manager.addConfig(event_boards.getEventServicesConfig)
     manager.addConfig(goodies.getGoodiesCacheConfig)
     manager.addConfig(battle_results.getBattleResultsServiceConfig)

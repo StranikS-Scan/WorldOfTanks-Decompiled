@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pgen2/token.py
-"""Token constants (from "token.h")."""
 ENDMARKER = 0
 NAME = 1
 NUMBER = 2

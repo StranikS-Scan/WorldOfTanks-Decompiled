@@ -1,44 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/zlib_codec.py
-""" Python 'zlib_codec' Codec - zlib compression encoding
-
-    Unlike most of the other codecs which target Unicode, this codec
-    will return Python string objects for both encode and decode.
-
-    Written by Marc-Andre Lemburg (mal@lemburg.com).
-
-"""
 import codecs
 import zlib
 
 def zlib_encode(input, errors='strict'):
-    """ Encodes the object input and returns a tuple (output
-        object, length consumed).
-    
-        errors defines the error handling to apply. It defaults to
-        'strict' handling which is the only currently supported
-        error handling for this codec.
-    
-    """
-    assert errors == 'strict'
     output = zlib.compress(input)
     return (output, len(input))
 
 
 def zlib_decode(input, errors='strict'):
-    """ Decodes the object input and returns a tuple (output
-        object, length consumed).
-    
-        input must be an object which provides the bf_getreadbuf
-        buffer slot. Python strings, buffer objects and memory
-        mapped files are examples of objects providing this slot.
-    
-        errors defines the error handling to apply. It defaults to
-        'strict' handling which is the only currently supported
-        error handling for this codec.
-    
-    """
-    assert errors == 'strict'
     output = zlib.decompress(input)
     return (output, len(input))
 
@@ -55,7 +25,6 @@ class Codec(codecs.Codec):
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
     def __init__(self, errors='strict'):
-        assert errors == 'strict'
         self.errors = errors
         self.compressobj = zlib.compressobj()
 
@@ -73,7 +42,6 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
     def __init__(self, errors='strict'):
-        assert errors == 'strict'
         self.errors = errors
         self.decompressobj = zlib.decompressobj()
 

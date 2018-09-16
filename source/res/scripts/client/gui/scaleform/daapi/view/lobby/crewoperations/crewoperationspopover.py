@@ -46,15 +46,15 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         crew = vehicle.crew
         if self.__isNoCrew(crew):
             return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'noCrew')
-        return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'alreadyRetrained') if self.__isTopCrew(crew) else self.__getInitCrewOperationObject(OPERATION_RETRAIN)
+        return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'alreadyRetrained') if self.__isTopCrew(crew, vehicle) else self.__getInitCrewOperationObject(OPERATION_RETRAIN)
 
     def __getReturnOperationData(self, vehicle):
         crew = vehicle.crew
         lastCrewIDs = vehicle.lastCrew
-        tankmen = self.itemsCache.items.getTankmen().values()
+        tmen = self.itemsCache.items.getTankmen().values()
         berths = self.itemsCache.items.stats.tankmenBerthsCount
         tankmenInBarracks = 0
-        for tankman in sorted(tankmen, TankmenComparator(self.itemsCache.items.getVehicle)):
+        for tankman in sorted(tmen, TankmenComparator(self.itemsCache.items.getVehicle)):
             if not tankman.isInTank:
                 tankmenInBarracks += 1
 
@@ -102,23 +102,23 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         else:
             return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_NOSPACE_TOOLTIP) if self.__isNotEnoughSpaceInBarrack(crew) else self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK)
 
-    def __isTopCrew(self, crew):
-        for slotIdx, tman in crew:
+    def __isTopCrew(self, crew, vehicle):
+        for _, tman in crew:
             if tman is not None:
-                if tman.efficiencyRoleLevel < tankmen.MAX_SKILL_LEVEL:
+                if tman.vehicleNativeDescr.type.compactDescr != vehicle.intCD or tman.efficiencyRoleLevel < tankmen.MAX_SKILL_LEVEL:
                     return False
 
         return True
 
     def __isNoCrew(self, crew):
-        for slotIdx, tman in crew:
+        for _, tman in crew:
             if tman is not None:
                 return False
 
         return True
 
     def __isNotEnoughSpaceInBarrack(self, crew):
-        berthsNeeded = len(filter(lambda (role, t): t is not None, crew))
+        berthsNeeded = len([ (role, t) for role, t in crew if t is not None ])
         barracksTmen = self.itemsCache.items.getTankmen(~REQ_CRITERIA.TANKMAN.IN_TANK | REQ_CRITERIA.TANKMAN.ACTIVE)
         tmenBerthsCount = self.itemsCache.items.stats.tankmenBerthsCount
         return berthsNeeded > 0 and berthsNeeded > tmenBerthsCount - len(barracksTmen)

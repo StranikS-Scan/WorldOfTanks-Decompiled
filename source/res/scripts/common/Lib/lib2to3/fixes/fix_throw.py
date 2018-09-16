@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_throw.py
-"""Fixer for generator.throw(E, V, T).
-
-g.throw(E)       -> g.throw(E)
-g.throw(E, V)    -> g.throw(E(V))
-g.throw(E, V, T) -> g.throw(E(V).with_traceback(T))
-
-g.throw("foo"[, V[, T]]) will warn about string exceptions."""
 from .. import pytree
 from ..pgen2 import token
 from .. import fixer_base

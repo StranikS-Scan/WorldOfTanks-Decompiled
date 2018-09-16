@@ -34,3 +34,12 @@ class FindUserLimits(IProtoLimits):
 
     def getRequestCooldown(self):
         return MESSENGER_LIMITS.FIND_USERS_BY_NAME_REQUEST_COOLDOWN_SEC
+
+    def getBroadcastCoolDown(self):
+        raise UserWarning('This method should not be reached in this context')
+
+    def getHistoryMaxLength(self):
+        raise UserWarning('This method should not be reached in this context')
+
+    def getMessageMaxLength(self):
+        raise UserWarning('This method should not be reached in this context')

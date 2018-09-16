@@ -214,7 +214,8 @@ class ExplosionBackAward(AwardAbstract):
 class AchievementsAward(AwardAbstract):
 
     def __init__(self, achieves):
-        assert hasattr(achieves, '__iter__')
+        if not hasattr(achieves, '__iter__'):
+            raise UserWarning('Received argument is not iterable', achieves)
         self.__achieves = achieves
 
     def getWindowTitle(self):

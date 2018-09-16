@@ -19,12 +19,11 @@ from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, ST
 from AvatarInputHandler.StrategicCamerasInterpolator import StrategicCamerasInterpolator
 from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCamera
 from PostmortemDelay import PostmortemDelay
-from ProjectileMover import collideDynamicAndStatic, getCollidableEntities
+from ProjectileMover import collideDynamicAndStatic
 from TriggersManager import TRIGGER_TYPE
 from constants import AIMING_MODE
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
-from helpers import dependency
-from post_processing import g_postProcessing
+from helpers import dependency, uniprof
 from skeletons.gui.battle_session import IBattleSessionProvider
 from constants import VEHICLE_SIEGE_STATE
 from gui import GUI_SETTINGS
@@ -57,7 +56,7 @@ class IControlMode(object):
     def setGunMarkerFlag(self, positive, bit):
         pass
 
-    def updateGunMarker(self, markerType, pos, dir, size, relaxTime, collData):
+    def updateGunMarker(self, markerType, pos, direction, size, relaxTime, collData):
         pass
 
     def resetGunMarkers(self):
@@ -146,6 +145,7 @@ class _GunControlMode(IControlMode):
         self.disable()
 
     def enable(self, **args):
+        uniprof.enterToRegion('avatar.control_mode.{}'.format(self._currentMode))
         self._isEnabled = True
         self._aimOffset = self._defaultOffset
         self._aimingMode = args.get('aimingMode', self._aimingMode)
@@ -155,6 +155,7 @@ class _GunControlMode(IControlMode):
         self._isEnabled = False
         self._cam.disable()
         self._gunMarker.disable()
+        uniprof.exitFromRegion('avatar.control_mode.{}'.format(self._currentMode))
 
     def destroy(self):
         self._gunMarker.destroy()
@@ -166,9 +167,8 @@ class _GunControlMode(IControlMode):
     def setGunMarkerFlag(self, positive, bit):
         self._gunMarker.setFlag(positive, bit)
 
-    def updateGunMarker(self, markerType, pos, dir, size, relaxTime, collData):
-        assert self._isEnabled
-        self._gunMarker.update(markerType, pos, dir, size, relaxTime, collData)
+    def updateGunMarker(self, markerType, pos, direction, size, relaxTime, collData):
+        self._gunMarker.update(markerType, pos, direction, size, relaxTime, collData)
 
     def setAimingMode(self, enable, mode):
         if enable:
@@ -180,7 +180,6 @@ class _GunControlMode(IControlMode):
         self._aimingMode = 0
 
     def getDesiredShotPoint(self, ignoreAimingMode=False):
-        assert self._isEnabled
         return self._cam.aimingSystem.getDesiredShotPoint() if self._aimingMode == 0 and self._cam is not None or ignoreAimingMode else None
 
     def getAimingMode(self, mode):
@@ -190,7 +189,6 @@ class _GunControlMode(IControlMode):
         self._gunMarker.onRecreateDevice()
 
     def updateShootingStatus(self, canShot):
-        assert self._isEnabled
         self._canShot = canShot
 
 
@@ -265,7 +263,6 @@ class VideoCameraControlMode(_GunControlMode):
             return False
 
     def teleport(self, index):
-        assert index > 0 and index <= len(self.__locationPoints), 'Out of range'
         self._cam.setViewMatrix(self.__locationPoints[index - 1].matrix)
 
     def teleportByName(self, name):
@@ -273,8 +270,6 @@ class VideoCameraControlMode(_GunControlMode):
             if point.name == name:
                 self._cam.setViewMatrix(point.matrix)
                 return
-
-        assert False, 'Location with name %s not found' % name
 
     def handleMouseEvent(self, dx, dy, dz):
         self._cam.handleMouseEvent(dx, dy, dz)
@@ -318,13 +313,11 @@ class DebugControlMode(IControlMode):
         self.__cam.enable(camMatrix)
         BigWorld.setWatcher('Client Settings/Strafe Rate', 50)
         BigWorld.setWatcher('Client Settings/Camera Mass', 1)
-        assert constants.HAS_DEV_RESOURCES
         import Cat
         Cat.Tasks.VideoEngineer.SetEnable(True)
         self.__videoControl = Cat.Tasks.VideoEngineer.VideoControl(self.__cam)
         self.__videoControl.setEnable(True)
         self.__isEnabled = True
-        g_postProcessing.enable('debug')
 
     def disable(self):
         self.__isEnabled = False
@@ -333,11 +326,9 @@ class DebugControlMode(IControlMode):
             self.__videoControl.destroy()
             self.__videoControl = None
         self.__cam.disable()
-        g_postProcessing.disable()
         return
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
-        assert self.__isEnabled
         if key == Keys.KEY_SYSRQ:
             return False
         if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.HAS_DEV_RESOURCES and isDown and key == Keys.KEY_F1:
@@ -346,16 +337,13 @@ class DebugControlMode(IControlMode):
         return True if self.__videoControl.handleKeyEvent(isDown, key, mods, event) else self.__cam.handleKey(event)
 
     def handleMouseEvent(self, dx, dy, dz):
-        assert self.__isEnabled
         GUI.mcursor().position = (0, 0)
         return self.__videoControl.handleMouseEvent(dx, dy, dz)
 
     def getDesiredShotPoint(self, ignoreAimingMode=False):
-        assert self.__isEnabled
         return None
 
     def updateShootingStatus(self, canShot):
-        assert self.__isEnabled
         return None
 
     def setCameraPosition(self, x, y, z):
@@ -423,14 +411,12 @@ class CatControlMode(IControlMode):
         return
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
-        assert self.__isEnabled
         if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.HAS_DEV_RESOURCES and isDown and key == Keys.KEY_F2:
             self.__aih.onControlModeChanged('arcade')
         self.__shellingControl.handleKeyEvent(isDown, key, mods, event)
         return self.__cam.handleKey(event)
 
     def handleMouseEvent(self, dx, dy, dz):
-        assert self.__isEnabled
         GUI.mcursor().position = (0, 0)
         return self.__cam.handleMouse(int(self.__sens[0] * dx), int(self.__sens[1] * dy), int(self.__sens[2] * dz))
 
@@ -489,17 +475,11 @@ class ArcadeControlMode(_GunControlMode):
         super(ArcadeControlMode, self).enable(**args)
         SoundGroups.g_instance.changePlayMode(0)
         self._cam.enable(args.get('preferredPos'), args.get('closesDist', False), turretYaw=args.get('turretYaw', 0.0), gunPitch=args.get('gunPitch', 0.0))
-        g_postProcessing.enable('arcade')
         player = BigWorld.player()
         if player.isObserver():
             player.updateObservedVehicleData()
 
-    def disable(self):
-        super(ArcadeControlMode, self).disable()
-        g_postProcessing.disable()
-
     def handleKeyEvent(self, isDown, key, mods, event=None):
-        assert self._isEnabled
         cmdMap = CommandMapping.g_instance
         if self._cam.handleKeyEvent(isDown, key, mods, event):
             return True
@@ -559,7 +539,6 @@ class ArcadeControlMode(_GunControlMode):
             return False
 
     def handleMouseEvent(self, dx, dy, dz):
-        assert self._isEnabled
         GUI.mcursor().position = self._aimOffset
         if not self._aih.isObserverFPV:
             self._cam.update(dx, dy, mathUtils.clamp(-1, 1, dz))
@@ -653,7 +632,6 @@ class _TrajectoryControlMode(_GunControlMode):
             self.__trajectoryDrawerClbk = BigWorld.callback(0.0, self.__updateTrajectoryDrawer)
         else:
             self.__updateTrajectoryDrawer()
-        g_postProcessing.enable(CTRL_MODE_NAME.STRATEGIC)
         self.__curVehicleID = args.get('curVehicleID')
         if self.__curVehicleID is None:
             self.__curVehicleID = BigWorld.player().getVehicleAttached()
@@ -665,14 +643,12 @@ class _TrajectoryControlMode(_GunControlMode):
         if self.__trajectoryDrawerClbk is not None:
             BigWorld.cancelCallback(self.__trajectoryDrawerClbk)
             self.__trajectoryDrawerClbk = None
-        g_postProcessing.disable()
         return
 
     def setObservedVehicle(self, vehicleID):
-        self.__trajectoryDrawer.setGetDynamicCollidersCallback(lambda start, end: [ e.collideSegment for e in getCollidableEntities((vehicleID,), start, end) ])
+        self.__trajectoryDrawer.setIgnoredID(vehicleID)
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
-        assert self._isEnabled
         cmdMap = CommandMapping.g_instance
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()
@@ -724,7 +700,6 @@ class _TrajectoryControlMode(_GunControlMode):
             return False
 
     def handleMouseEvent(self, dx, dy, dz):
-        assert self._isEnabled
         GUI.mcursor().position = self._aimOffset
         if not self._aih.isObserverFPV:
             self._cam.update(dx, dy, dz)
@@ -764,9 +739,9 @@ class _TrajectoryControlMode(_GunControlMode):
             R = self.camera.aimingSystem.getDesiredShotPoint()
             if R is None:
                 return
-            r0, v0, g0 = BigWorld.player().gunRotator.getShotParams(R, True)
+            r0, v0, _ = BigWorld.player().gunRotator.getShotParams(R, True)
             self.__trajectoryDrawer.update(R, r0, v0, self.__updateInterval)
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         return
@@ -782,7 +757,7 @@ class _TrajectoryControlMode(_GunControlMode):
         nonCollideVehicleID = player.playerVehicleID
         if player.getVehicleAttached() is not None:
             nonCollideVehicleID = player.getVehicleAttached().id
-        self.__trajectoryDrawer.setGetDynamicCollidersCallback(lambda start, end: [ e.collideSegment for e in getCollidableEntities((nonCollideVehicleID,), start, end) ])
+        self.__trajectoryDrawer.setIgnoredID(nonCollideVehicleID)
         self.__onGunShotChanged()
         return
 
@@ -800,14 +775,6 @@ class StrategicControlMode(_TrajectoryControlMode):
         self._nextControlMode = CTRL_MODE_NAME.ARTY
         self._cam = StrategicCamera.StrategicCamera(dataSection['camera'])
 
-    def enable(self, **args):
-        super(StrategicControlMode, self).enable(**args)
-        BigWorld.setFloraEnabled(False)
-
-    def disable(self):
-        super(StrategicControlMode, self).disable()
-        BigWorld.setFloraEnabled(True)
-
 
 class ArtyControlMode(_TrajectoryControlMode):
     _TRAJECTORY_UPDATE_INTERVAL = 0.05
@@ -820,12 +787,10 @@ class ArtyControlMode(_TrajectoryControlMode):
     def enable(self, **args):
         super(ArtyControlMode, self).enable(**args)
         self.strategicCamera = STRATEGIC_CAMERA.TRAJECTORY
-        BigWorld.setFloraEnabled(True)
 
     def disable(self):
         super(ArtyControlMode, self).disable()
         self.strategicCamera = STRATEGIC_CAMERA.AERIAL
-        BigWorld.setFloraEnabled(True)
 
 
 class SniperControlMode(_GunControlMode):
@@ -860,7 +825,7 @@ class SniperControlMode(_GunControlMode):
 
     def destroy(self):
         self.disable(True)
-        self.__binoculars.enabled = False
+        self.__binoculars.setEnabled(False)
         self.__binoculars.resetTextures()
         self._cam.writeUserPreferences()
         super(SniperControlMode, self).destroy()
@@ -869,9 +834,8 @@ class SniperControlMode(_GunControlMode):
         super(SniperControlMode, self).enable(**args)
         SoundGroups.g_instance.changePlayMode(1)
         self._cam.enable(args['preferredPos'], args['saveZoom'])
-        self.__binoculars.enabled = True
+        self.__binoculars.setEnabled(True)
         self.__binoculars.setEnableLensEffects(SniperControlMode._LENS_EFFECTS_ENABLED)
-        BigWorld.wg_setLowDetailedMode(True)
         BigWorld.wg_enableTreeHiding(True)
         BigWorld.wg_setTreeHidingRadius(15.0, 10.0)
         BigWorld.wg_havokSetSniperMode(True)
@@ -879,7 +843,6 @@ class SniperControlMode(_GunControlMode):
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.SNIPER_MODE)
         if BattleReplay.g_replayCtrl.isRecording:
             BattleReplay.g_replayCtrl.onSniperModeChanged(True)
-        g_postProcessing.enable('sniper')
         desc = BigWorld.player().getVehicleDescriptor()
         isHorizontalStabilizerAllowed = desc.gun.turretYawLimits is None
         self._cam.aimingSystem.enableHorizontalStabilizerRuntime(isHorizontalStabilizerAllowed)
@@ -890,11 +853,9 @@ class SniperControlMode(_GunControlMode):
 
     def disable(self, isDestroy=False):
         super(SniperControlMode, self).disable()
-        self.__binoculars.enabled = False
+        self.__binoculars.setEnabled(False)
         BigWorld.wg_havokSetSniperMode(False)
         BigWorld.wg_enableTreeHiding(False)
-        g_postProcessing.disable()
-        BigWorld.wg_setLowDetailedMode(False)
         if not BattleReplay.g_replayCtrl.isPlaying:
             if TriggersManager.g_manager is not None:
                 TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.SNIPER_MODE)
@@ -918,7 +879,6 @@ class SniperControlMode(_GunControlMode):
             return
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
-        assert self._isEnabled
         cmdMap = CommandMapping.g_instance
         isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
         isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
@@ -967,7 +927,6 @@ class SniperControlMode(_GunControlMode):
             return False
 
     def handleMouseEvent(self, dx, dy, dz):
-        assert self._isEnabled
         GUI.mcursor().position = self._aimOffset
         if not self._aih.isObserverFPV:
             self._cam.update(dx, dy, dz)
@@ -992,7 +951,6 @@ class SniperControlMode(_GunControlMode):
         return self.getPreferredAutorotationMode() is not False
 
     def onChangeControlModeByScroll(self, switchToClosestDist=True):
-        assert self._isEnabled
         if self._cam.getUserConfigValue('sniperModeByShift'):
             return
         self._aih.onControlModeChanged(CTRL_MODE_NAME.ARCADE, preferredPos=self.camera.aimingSystem.getDesiredShotPoint(), turretYaw=self._cam.aimingSystem.turretYaw, gunPitch=self._cam.aimingSystem.gunPitch, aimingMode=self._aimingMode, closesDist=switchToClosestDist)
@@ -1097,13 +1055,11 @@ class PostMortemControlMode(IControlMode):
                 self.__postmortemDelay.start()
             else:
                 self.__switchToVehicle(None)
-        g_postProcessing.enable('postmortem')
         arena = BigWorld.player().arena
         if arena is not None:
             arena.onVehicleKilled += self.__onArenaVehicleKilled
         if bool(args.get('respawn', False)):
             respawnCtrl = self.guiSessionProvider.dynamic.respawn
-            assert respawnCtrl is not None, 'When using respawn, the respawn controller must exist'
             self._targetCtrlModeAfterDelay = None if respawnCtrl.respawnInfo is None else CTRL_MODE_NAME.RESPAWN_DEATH
             respawnCtrl.onRespawnInfoUpdated += self.__onRespawnInfoUpdated
             if respawnCtrl.respawnInfo is not None:
@@ -1126,11 +1082,9 @@ class PostMortemControlMode(IControlMode):
         self.__cam.disable()
         self.__curVehicleID = None
         self.__selfVehicleID = None
-        g_postProcessing.disable()
         return
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
-        assert self.__isEnabled
         cmdMap = CommandMapping.g_instance
         guiCtrlEnabled = BigWorld.player().isForcedGuiControlMode()
         if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.HAS_DEV_RESOURCES and isDown and key == Keys.KEY_F1:
@@ -1169,7 +1123,6 @@ class PostMortemControlMode(IControlMode):
         return False
 
     def handleMouseEvent(self, dx, dy, dz):
-        assert self.__isEnabled
         GUI.mcursor().position = self.__aimOffset
         if self.__postmortemDelay is not None:
             return True
@@ -1244,7 +1197,6 @@ class PostMortemControlMode(IControlMode):
         if self.__postmortemDelay is not None:
             return
         else:
-            assert isinstance(toId, int)
             self.__doPreBind()
             self.guiSessionProvider.shared.viewPoints.selectViewPoint(toId)
             return
@@ -1253,7 +1205,6 @@ class PostMortemControlMode(IControlMode):
         if self.__postmortemDelay is not None:
             return
         else:
-            assert isinstance(isNext, bool)
             self.__doPreBind()
             self.guiSessionProvider.shared.viewPoints.switch(isNext)
             return
@@ -1262,7 +1213,6 @@ class PostMortemControlMode(IControlMode):
         if self.__postmortemDelay is not None:
             return
         else:
-            assert not toId or isinstance(toId, int) and toId >= 0
             self.__doPreBind()
             self.__changeVehicle(toId)
             self.guiSessionProvider.shared.viewPoints.selectVehicle(toId)
@@ -1272,7 +1222,7 @@ class PostMortemControlMode(IControlMode):
         if self.__curVehicleID is not None:
             vehicle = BigWorld.entity(self.__curVehicleID)
             if vehicle is not None:
-                self.__cam.removeVehicleToCollideWith(vehicle)
+                vehicle.removeCameraCollider()
         return
 
     def onSwitchViewpoint(self, vehicleID, cameraPos):
@@ -1285,13 +1235,6 @@ class PostMortemControlMode(IControlMode):
         return
 
     def __changeVehicle(self, vehicleID):
-        """
-        Do all the job to switch to another vehicle in postmortem:
-        - calls postmortem event
-        - sets vehicle in state controller and resets other controllers in guiSessionProvider
-        - calls camera update event
-        :param vehicleID: controlling vehicle ID
-        """
         self.__aih.onPostmortemVehicleChanged(vehicleID)
         self.guiSessionProvider.switchVehicle(vehicleID)
         if vehicleID in BigWorld.entities.keys():
@@ -1332,7 +1275,7 @@ class PostMortemControlMode(IControlMode):
             vehicle = BigWorld.player().vehicle
             if vehicle is None or self.__curVehicleID != vehicle.id or not vehicle.inWorld:
                 return
-            self.__cam.addVehicleToCollideWith(vehicle)
+            vehicle.addCameraCollider()
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 replayCtrl.setPlayerVehicleID(self.__curVehicleID)
@@ -1366,12 +1309,10 @@ class PostMortemControlMode(IControlMode):
 
     @altTargetMode.setter
     def altTargetMode(self, mode):
-        assert mode in CTRL_MODES or mode is None, 'Invalid control mode set as alternative target control mode.'
         self.__altTargetMode = mode
-        return
 
 
-class _ShellingControl():
+class _ShellingControl(object):
     __TARGET_MODEL_FILE_NAME = 'cat/models/position_gizmo.model'
     __TARGET_POINTER_FILE_NAME = 'cat/target_pointer.dds'
 
@@ -1476,7 +1417,7 @@ class _ShellingControl():
                 self.__targetModel.motors[0].signal = Math.Matrix(newMatrix)
             else:
                 nextCallbackInterval = 2.0
-        except:
+        except Exception:
             nextCallbackInterval = 2.0
             LOG_DEBUG('<_targetModelAutoUpdateCallbackFunc>: target model is not updated')
 
@@ -1550,7 +1491,7 @@ class _PlayerGunInformation(object):
         _PlayerGunInformation.updateMarkerDispersion(spgMarkerComponent, True)
 
 
-class _MouseVehicleRotator():
+class _MouseVehicleRotator(object):
     ROTATION_ACTIVITY_INTERVAL = 0.2
 
     def __init__(self):
@@ -1611,10 +1552,10 @@ class _MouseVehicleRotator():
 
 
 def getFocalPoint():
-    dir, start = cameras.getWorldRayAndPoint(0, 0)
-    end = start + dir.scale(100000.0)
+    direction, start = cameras.getWorldRayAndPoint(0, 0)
+    end = start + direction.scale(100000.0)
     point = collideDynamicAndStatic(start, end, (BigWorld.player().playerVehicleID,), 0)
-    return point[0] if point is not None else AimingSystems.shootInSkyPoint(start, dir)
+    return point[0] if point is not None else AimingSystems.shootInSkyPoint(start, direction)
 
 
 def _sign(val):

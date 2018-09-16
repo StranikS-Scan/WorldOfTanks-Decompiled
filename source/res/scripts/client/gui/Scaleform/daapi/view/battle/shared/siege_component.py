@@ -5,20 +5,9 @@ from gui.shared.utils.TimeInterval import TimeInterval
 from constants import VEHICLE_SIEGE_STATE
 
 class _ComponentUpdater(object):
-    """
-    This is a base updater class, it contains the common logic for updating Siege indicator.
-    """
     __slots__ = ('_parentObj', '_totalTime', '_timeLeft', '_siegeState', '_engineState', '_isSmooth')
 
     def __init__(self, parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth):
-        """
-        Constructor, initializes internal variables.
-        :param parentObj: reference on SiegeModeIndicator class
-        :param totalTime: time which is necessary to switch state (normal/siege)
-        :param timeLeft: time left to switch to a state
-        :param siegeState: integer, see constants for each constant
-        :param engineState: string, describing engine's state
-        """
         super(_ComponentUpdater, self).__init__()
         self._parentObj = parentObj
         self._totalTime = totalTime
@@ -46,10 +35,6 @@ class _ComponentUpdater(object):
 
 
 class _ActionScriptUpdater(_ComponentUpdater):
-    """
-    This updater is used only in real battle (non-replays) for performance reasons.
-    It will tell Flash about times and states. Animations(and ticks) are implemented on Flash side.
-    """
     __slots__ = ()
 
     def _startTick(self):
@@ -60,12 +45,6 @@ class _ActionScriptUpdater(_ComponentUpdater):
 
 
 class _PythonUpdater(_ComponentUpdater):
-    """
-    This updater is used only in REPLAYS.
-    It will use internal timer to tick every 0.05 second.
-    This solution is necessary to display actual timeLeft, states, etc correctly
-    during replay's timeWarp, rewind, start/stop, etc.
-    """
     __slots__ = ('_timeInterval', '_startTime', '_finishTime', '__weakref__')
 
     def __init__(self, parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth):
@@ -101,9 +80,6 @@ class _PythonUpdater(_ComponentUpdater):
 
 
 class _SiegeComponent(object):
-    """
-    This class maintains a componentUpdater class. It creates and shows an updater after any changes
-    """
     __slots__ = ('_componentUpdater', '_parentObj', '_clazz')
 
     def __init__(self, parentObj, clazz):
@@ -130,9 +106,6 @@ class _SiegeComponent(object):
 
 
 class _DefaultSiegeComponent(_SiegeComponent):
-    """
-    The component is used in real battles, it will use _ActionScriptUpdater.
-    """
     __slots__ = ()
 
     def __init__(self, parentObj):
@@ -140,9 +113,6 @@ class _DefaultSiegeComponent(_SiegeComponent):
 
 
 class _ReplaySiegeComponent(_SiegeComponent):
-    """
-    The component is used in Replays, it will use _PythonUpdater.
-    """
     __slots__ = ()
 
     def __init__(self, parentObj):

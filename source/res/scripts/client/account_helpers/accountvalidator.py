@@ -4,10 +4,11 @@ import BigWorld
 import constants
 from adisp import process, async
 from helpers import dependency
-from items import vehicles, tankmen, ITEM_TYPE_NAMES, parseIntCompactDescr
+from items import vehicles, tankmen, ITEM_TYPE_NAMES
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
 class ValidateException(Exception):
 
@@ -19,8 +20,9 @@ class ValidateException(Exception):
 
 class AccountValidator(object):
     itemsCache = dependency.descriptor(IItemsCache)
+    itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    class CODES:
+    class CODES(object):
         OK = 0
         INVENTORY_VEHICLE_MISMATCH = 1001
         INVENTORY_CHASSIS_MISMATCH = 1002
@@ -34,9 +36,7 @@ class AccountValidator(object):
         INVENTORY_SHELL_MISMATCH = 1010
         INVENTORY_EQ_MISMATCH = 1011
         INVENTORY_VEHICLE_CREW_MISMATCH = 1012
-        DOSSIER_CAMOUFLAGES_ERROR = 1013
-        DOSSIER_INSCRIPTIONS_ERROR = 1014
-        DOSSIER_EMBLEMS_ERROR = 1015
+        INVENTORY_OUTFIT_MISMATCH = 1013
         INVENTORY_BATTLE_BOOSTER_MISMATCH = 1016
 
     @classmethod
@@ -90,6 +90,16 @@ class AccountValidator(object):
             except Exception as e:
                 raise ValidateException(e.message, self.CODES.INVENTORY_TANKMEN_MISMATCH, self.__packItemData(GUI_ITEM_TYPE.TANKMAN, (invID, tmanCompDescr)))
 
+    def __validateInventoryOutfit(self):
+        c11nData = self.itemsCache.items.inventory.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+        for vehCD, outfitsData in c11nData.get(constants.CustomizationInvData.OUTFITS, {}).iteritems():
+            for outfitData in outfitsData.itervalues():
+                try:
+                    outfitCD, isEnabled = outfitData
+                    self.itemsFactory.createOutfit(outfitCD, isEnabled)
+                except Exception as e:
+                    raise ValidateException(e.message, self.CODES.INVENTORY_OUTFIT_MISMATCH, self.__packItemData(GUI_ITEM_TYPE.CUSTOMIZATION, (vehCD, outfitData)))
+
     def __validateInvItem(self, itemTypeID, errorCode):
         for intCompactDescr, itemData in self.itemsCache.items.inventory.getItemsData(itemTypeID).iteritems():
             try:
@@ -118,7 +128,8 @@ class AccountValidator(object):
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.BATTLE_BOOSTER, self.CODES.INVENTORY_BATTLE_BOOSTER_MISMATCH),
          self.__validateEliteVehicleCDs,
          self.__validateInventoryTankmen,
-         self.__validateInventoryVehicles]
+         self.__validateInventoryVehicles,
+         self.__validateInventoryOutfit]
         for handler in handlers:
             try:
                 handler()

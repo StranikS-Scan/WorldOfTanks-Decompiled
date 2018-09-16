@@ -1,29 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/SearchEngine.py
-"""Define SearchEngine for search dialogs."""
 import re
 from Tkinter import StringVar, BooleanVar, TclError
 import tkMessageBox
 
 def get(root):
-    """Return the singleton SearchEngine instance for the process.
-    
-    The single SearchEngine saves settings between dialog instances.
-    If there is not a SearchEngine already, make one.
-    """
     if not hasattr(root, '_searchengine'):
         root._searchengine = SearchEngine(root)
     return root._searchengine
 
 
 class SearchEngine:
-    """Handles searching a text widget for Find, Replace, and Grep."""
 
     def __init__(self, root):
-        """Initialize Variables that save search state.
-        
-        The dialogs bind these to the UI elements present in the dialogs.
-        """
         self.root = root
         self.patvar = StringVar(root, '')
         self.revar = BooleanVar(root, False)
@@ -54,7 +43,6 @@ class SearchEngine:
         return self.backvar.get()
 
     def setcookedpat(self, pat):
-        """Set pattern after escaping if re."""
         if self.isre():
             pat = re.escape(pat)
         self.setpat(pat)
@@ -68,7 +56,6 @@ class SearchEngine:
         return pat
 
     def getprog(self):
-        """Return compiled cooked search pattern."""
         pat = self.getpat()
         if not pat:
             self.report_error(pat, 'Empty regular expression')
@@ -98,22 +85,6 @@ class SearchEngine:
         tkMessageBox.showerror('Regular expression error', msg, master=self.root)
 
     def search_text(self, text, prog=None, ok=0):
-        """Return (lineno, matchobj) or None for forward/backward search.
-        
-        This function calls the right function with the right arguments.
-        It directly return the result of that call.
-        
-        Text is a text widget. Prog is a precompiled pattern.
-        The ok parameteris a bit complicated as it has two effects.
-        
-        If there is a selection, the search begin at either end,
-        depending on the direction setting and ok, with ok meaning that
-        the search starts with the selection. Otherwise, search begins
-        at the insert mark.
-        
-        To aid progress, the search functions do not return an empty
-        match at the starting position unless ok is True.
-        """
         if not prog:
             prog = self.getprog()
             if not prog:
@@ -184,14 +155,6 @@ class SearchEngine:
 
 
 def search_reverse(prog, chars, col):
-    """Search backwards and return an re match object or None.
-    
-        This is done by searching forwards until there is no match.
-        Prog: compiled re object with a search method returning a match.
-        Chars: line of text, without 
-    .
-        Col: stop index for the search; the limit for match.end().
-        """
     m = prog.search(chars)
     if not m:
         return
@@ -211,8 +174,6 @@ def search_reverse(prog, chars, col):
 
 
 def get_selection(text):
-    """Return tuple of 'line.col' indexes from selection or insert mark.
-    """
     try:
         first = text.index('sel.first')
         last = text.index('sel.last')
@@ -227,7 +188,6 @@ def get_selection(text):
 
 
 def get_line_col(index):
-    """Return (line, col) tuple of ints from 'line.col' string."""
     line, col = map(int, index.split('.'))
     return (line, col)
 

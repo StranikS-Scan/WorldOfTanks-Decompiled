@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_join.py
-"""TestCases for using the DB.join and DBCursor.join_item methods.
-"""
 import os
 import unittest
 from test_all import db, dbshelve, test_support, verbose, get_new_environment_path, get_new_database_path

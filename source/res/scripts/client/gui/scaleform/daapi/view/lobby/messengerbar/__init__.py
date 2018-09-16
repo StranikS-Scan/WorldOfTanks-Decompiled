@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.lobby.messengerBar.VehicleCompareCartButton import
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -37,4 +37,4 @@ class MessengerBarBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((VIEW_ALIAS.NOTIFICATIONS_LIST, self.loadViewByCtxEvent),)
-        super(MessengerBarBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+        super(MessengerBarBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

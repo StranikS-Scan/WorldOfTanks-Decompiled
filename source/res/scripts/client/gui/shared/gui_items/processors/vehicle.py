@@ -14,7 +14,7 @@ from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles
 from gui.shared.formatters import icons
 from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
-from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins, makeSuccess
+from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins as proc_plugs, makeSuccess
 from gui.shared.gui_items.vehicle_equipment import ShellLayoutHelper
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from helpers import time_utils, dependency
@@ -38,16 +38,8 @@ def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
 
 
 class VehicleReceiveProcessor(ItemProcessor):
-    """
-    Base processor to receive Vehicle
-    """
 
     def __init__(self, vehicle, buyShell=False, crewType=-1):
-        """
-        :param vehicle:  <Vehicle>
-        :param buyShell: <bool> flag if need to buy shells
-        :param crewType: <int> int flag, mean crew skill type
-        """
         self.item = vehicle
         self.buyShell = buyShell
         self.buyCrew = crewType != -1
@@ -56,60 +48,28 @@ class VehicleReceiveProcessor(ItemProcessor):
         super(VehicleReceiveProcessor, self).__init__(vehicle, self._getPluginsList())
 
     def _getPluginsList(self):
-        """
-        Gets plugins collection
-        :return: <tuple(ProcessorPlugin, ...)>
-        """
         raise NotImplementedError
 
     def _getPrice(self):
-        """
-        Gets item price for operation
-        :return: <Money>
-        """
         raise NotImplementedError
 
     def _getSysMsgType(self):
-        """
-        :return: <str> system message type
-        """
         raise NotImplementedError
 
 
 class VehicleBuyer(VehicleReceiveProcessor):
 
     def __init__(self, vehicle, buySlot, buyShell=False, crewType=-1):
-        """
-        Processor for vehicle buying
-        :param vehicle: <Vehicle>
-        :param buySlot: <bool> flag if need to buy slot
-        :param buyShell: <bool> flag if need to buy shells
-        :param crewType: <int> int flag, mean crew skill type
-        """
         self.buySlot = buySlot
         super(VehicleBuyer, self).__init__(vehicle, buyShell=buyShell, crewType=crewType)
 
     def _getPluginsList(self):
-        """
-        Gets plugins collection
-        :return: <tuple(ProcessorPlugin, ...)>
-        """
-        return (plugins.MoneyValidator(self.price), plugins.VehicleSlotsConfirmator(not self.buySlot), plugins.VehicleFreeLimitConfirmator(self.item, self.crewType))
+        return (proc_plugs.MoneyValidator(self.price), proc_plugs.VehicleSlotsConfirmator(not self.buySlot), proc_plugs.VehicleFreeLimitConfirmator(self.item, self.crewType))
 
     def _getPrice(self):
-        """
-        Gets common buy price with shells, slot, crew
-        :return: <Money>
-        """
         return getCrewAndShellsSumPrice(self.item.buyPrices.itemPrice.price, self.item, self.crewType, self.buyShell)
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        """
-        :param code: <int> server response code
-        :param errStr: <str> string error reason
-        :param ctx: <obj> localization context
-        :return: <ResultMsg> error message
-        """
         if not errStr:
             msg = 'vehicle_buy/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_buy/server_error_centerDown'
         else:
@@ -117,24 +77,12 @@ class VehicleBuyer(VehicleReceiveProcessor):
         return makeI18nError(msg, defaultSysMsgKey='vehicle_buy/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        """
-        :param code: <int> server response code
-        :param ctx: <obj> localization context
-        :return: <ResultMsg> success message
-        """
         return makeI18nSuccess('vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
 
     def _getSysMsgType(self):
-        """
-        :return: <str> system message type
-        """
         return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def _request(self, callback):
-        """
-        Sends buy vehicle request to server
-        :param callback: <function>
-        """
         LOG_DEBUG('Make request to buy vehicle', self.item, self.crewType, self.buyShell, self.price)
         BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
 
@@ -142,38 +90,17 @@ class VehicleBuyer(VehicleReceiveProcessor):
 class VehicleRenter(VehicleReceiveProcessor):
 
     def __init__(self, vehicle, rentPackage, buyShell=False, crewType=-1):
-        """
-        Vehicle rent processor
-        :param vehicle: <Vehicle>
-        :param rentPackage: <int> rent period
-        :param buyShell: <bool> flag if need to buy shells
-        :param crewType: <int> int flag, mean crew skill type
-        """
         self.rentPackage = rentPackage
         self.rentPrice = self.__getRentPrice(rentPackage, vehicle)
         super(VehicleRenter, self).__init__(vehicle, buyShell, crewType)
 
     def _getPluginsList(self):
-        """
-        Gets plugins collection
-        :return: <tuple(ProcessorPlugin, ...)>
-        """
-        return (plugins.MoneyValidator(self.price), plugins.VehicleFreeLimitConfirmator(self.item, self.crewType))
+        return (proc_plugs.MoneyValidator(self.price), proc_plugs.VehicleFreeLimitConfirmator(self.item, self.crewType))
 
     def _getPrice(self):
-        """
-        Gets common rent price with shells, slot, crew
-        :return: <Money>
-        """
         return getCrewAndShellsSumPrice(self.rentPrice, self.item, self.crewType, self.buyShell)
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        """
-        :param code: <int> server response code
-        :param errStr: <str> string error reason
-        :param ctx: <obj> localization context
-        :return: <ResultMsg> error message
-        """
         if not errStr:
             msg = 'vehicle_rent/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_rent/server_error_centerDown'
         else:
@@ -181,33 +108,16 @@ class VehicleRenter(VehicleReceiveProcessor):
         return makeI18nError(msg, defaultSysMsgKey='vehicle_rent/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        """
-        :param code: <int> server response code
-        :param ctx: <obj> localization context
-        :return: <ResultMsg> success message
-        """
         return makeI18nSuccess('vehicle_rent/success', vehName=self.item.userName, days=ctx.get('days', 0), price=formatPrice(self.price), type=self._getSysMsgType())
 
     def _request(self, callback):
-        """
-        Sends rent vehicle request to server
-        :param callback: <function>
-        """
         LOG_DEBUG('Make request to rent vehicle', self.item, self.crewType, self.buyShell, self.price)
         BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, self.rentPackage, lambda code: self._response(code, callback, ctx={'days': self.rentPackage}))
 
     def _getSysMsgType(self):
-        """
-        :return: <str> system message type
-        """
         return CURRENCY_TO_SM_TYPE.get(self.rentPrice.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def __getRentPrice(self, rentPackage, vehicle):
-        """
-        :param rentPackage: <int> rent period
-        :param vehicle: <Vehicle>
-        :return: <Money> rent package price
-        """
         for package in vehicle.rentPackages:
             if package['days'] == rentPackage:
                 return package['rentPrice']
@@ -218,19 +128,9 @@ class VehicleRenter(VehicleReceiveProcessor):
 class VehicleRestoreProcessor(VehicleBuyer):
 
     def _getPrice(self):
-        """
-        Gets common restore price with shells, slot, crew
-        :return: <Money>
-        """
         return getCrewAndShellsSumPrice(self.item.restorePrice, self.item, self.crewType, self.buyShell)
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        """
-        :param code: <int> server response code
-        :param errStr: <str> string error reason
-        :param ctx: <obj> localization context
-        :return: <ResultMsg> error message
-        """
         if not errStr:
             msg = 'vehicle_restore/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_restore/server_error_centerDown'
         else:
@@ -238,27 +138,15 @@ class VehicleRestoreProcessor(VehicleBuyer):
         return makeI18nError(msg, defaultSysMsgKey='vehicle_restore/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        """
-        :param code: <int> server response code
-        :param ctx: <obj> localization context
-        :return: <ResultMsg> success message
-        """
         return makeI18nSuccess('vehicle_restore/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
 
     def _getSysMsgType(self):
-        """
-        :return: <str> system message type
-        """
         return SM_TYPE.Restore
 
     def _getPluginsList(self):
-        return (plugins.MoneyValidator(self.price), plugins.VehicleSlotsConfirmator(not self.buySlot), plugins.IsLongDisconnectedFromCenter())
+        return (proc_plugs.MoneyValidator(self.price), proc_plugs.VehicleSlotsConfirmator(not self.buySlot), proc_plugs.IsLongDisconnectedFromCenter())
 
     def _request(self, callback):
-        """
-        Sends restore vehicle request to server
-        :param callback: <function>
-        """
         LOG_DEBUG('Make request to restore vehicle', self.item, self.crewType, self.buyShell, self.price)
         BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
 
@@ -266,43 +154,21 @@ class VehicleRestoreProcessor(VehicleBuyer):
 class VehicleTradeInProcessor(VehicleBuyer):
 
     def __init__(self, vehicleToBuy, vehicleToTradeOff, buySlot, buyShell=False, crewType=-1):
-        """
-        Processor for vehicle buying
-        :param vehicle: <Vehicle>
-        :param vehicleToTradeOff: <Vehicle>
-        :param buySlot: <bool> flag if need to buy slot
-        :param buyShell: <bool> flag if need to buy shells
-        :param crewType: <int> int flag, mean crew skill type
-        """
         self.itemToTradeOff = vehicleToTradeOff
         super(VehicleTradeInProcessor, self).__init__(vehicleToBuy, buySlot, buyShell=buyShell, crewType=crewType)
 
     def _getPluginsList(self):
-        """
-        Gets plugins collection
-        :return: <tuple(ProcessorPlugin, ...)>
-        """
-        barracksBerthsNeeded = len(filter(lambda (idx, item): item is not None, self.itemToTradeOff.crew))
-        return (plugins.VehicleValidator(self.itemToTradeOff, setAll=True),
-         plugins.VehicleTradeInValidator(self.item, self.itemToTradeOff),
-         plugins.VehicleSellValidator(self.itemToTradeOff),
-         plugins.MoneyValidator(self.price),
-         plugins.BarracksSlotsValidator(barracksBerthsNeeded))
+        barracksBerthsNeeded = len([ item for item in self.itemToTradeOff.crew if item[1] is not None ])
+        return (proc_plugs.VehicleValidator(self.itemToTradeOff, setAll=True),
+         proc_plugs.VehicleTradeInValidator(self.item, self.itemToTradeOff),
+         proc_plugs.VehicleSellValidator(self.itemToTradeOff),
+         proc_plugs.MoneyValidator(self.price),
+         proc_plugs.BarracksSlotsValidator(barracksBerthsNeeded))
 
     def _getPrice(self):
-        """
-        Gets common buy price with shells, slot, crew
-        :return: <Money>
-        """
         return super(VehicleTradeInProcessor, self)._getPrice() - self.itemToTradeOff.tradeOffPrice
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        """
-        :param code: <int> server response code
-        :param errStr: <str> string error reason
-        :param ctx: <obj> localization context
-        :return: <ResultMsg> error message
-        """
         if not errStr:
             msg = 'vehicle_trade_in/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_trade_in/server_error_centerDown'
         else:
@@ -310,24 +176,12 @@ class VehicleTradeInProcessor(VehicleBuyer):
         return makeI18nError(msg, vehName=self.item.userName, defaultSysMsgKey='vehicle_trade_in/server_error', tradeOffVehName=self.itemToTradeOff.userName)
 
     def _successHandler(self, code, ctx=None):
-        """
-        :param code: <int> server response code
-        :param ctx: <obj> localization context
-        :return: <ResultMsg> success message
-        """
         return makeI18nSuccess('vehicle_trade_in/success', vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName, price=formatPrice(self.price), type=self._getSysMsgType())
 
     def _getSysMsgType(self):
-        """
-        :return: <str> system message type
-        """
         return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def _request(self, callback):
-        """
-        Sends trade-in vehicle request to server
-        :param callback: <function>
-        """
         LOG_DEBUG('Make request to trade-in vehicle', self.item, self.itemToTradeOff, self.buyShell, self.buyCrew, self.crewType, self.price)
         BigWorld.player().shop.tradeInVehicle(self.itemToTradeOff.invID, self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, lambda code: self._response(code, callback))
 
@@ -344,7 +198,7 @@ class VehicleSlotBuyer(Processor):
         else:
             confirmationType = 'buySlotConfirmation'
             ctx = {'goldCost': text_styles.concatStylesWithSpace(text_styles.gold(str(slotCost.gold)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))}
-        super(VehicleSlotBuyer, self).__init__((plugins.MessageInformator('buySlotNotEnoughCredits', activeHandler=lambda : not plugins.MoneyValidator(slotCost).validate().success, isEnabled=showWarning), plugins.MessageConfirmator(confirmationType, isEnabled=showConfirm, ctx=ctx), plugins.MoneyValidator(slotCost)))
+        super(VehicleSlotBuyer, self).__init__((proc_plugs.MessageInformator('buySlotNotEnoughCredits', activeHandler=lambda : not proc_plugs.MoneyValidator(slotCost).validate().success, isEnabled=showWarning), proc_plugs.MessageConfirmator(confirmationType, isEnabled=showConfirm, ctx=ctx), proc_plugs.MoneyValidator(slotCost)))
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
@@ -382,7 +236,7 @@ class VehicleSeller(ItemProcessor):
         optDevs = optDevs or []
         inventory = inventory or []
         self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory)
-        barracksBerthsNeeded = len(filter(lambda (idx, item): item is not None, vehicle.crew))
+        barracksBerthsNeeded = len([ item for item in vehicle.crew if item[1] is not None ])
         bufferOverflowCtx = {}
         isBufferOverflowed = False
         if isCrewDismiss:
@@ -395,13 +249,13 @@ class VehicleSeller(ItemProcessor):
                 if countOfDeleted > 1:
                     bufferOverflowCtx['multiple'] = True
                     bufferOverflowCtx['extraCount'] = countOfDeleted - 1
-        super(VehicleSeller, self).__init__(vehicle, (plugins.VehicleValidator(vehicle, False, prop={'isBroken': True,
+        super(VehicleSeller, self).__init__(vehicle, (proc_plugs.VehicleValidator(vehicle, False, prop={'isBroken': True,
           'isLocked': True}),
-         plugins.VehicleSellValidator(vehicle),
-         plugins.MoneyValidator(self.spendMoney - self.gainMoney),
-         plugins.VehicleSellsLeftValidator(vehicle, not (vehicle.isRented and vehicle.rentalIsOver)),
-         plugins.BarracksSlotsValidator(barracksBerthsNeeded, isEnabled=not isCrewDismiss),
-         plugins.BufferOverflowConfirmator(bufferOverflowCtx, isEnabled=isBufferOverflowed),
+         proc_plugs.VehicleSellValidator(vehicle),
+         proc_plugs.MoneyValidator(self.spendMoney - self.gainMoney),
+         proc_plugs.VehicleSellsLeftValidator(vehicle, not (vehicle.isRented and vehicle.rentalIsOver)),
+         proc_plugs.BarracksSlotsValidator(barracksBerthsNeeded, isEnabled=not isCrewDismiss),
+         proc_plugs.BufferOverflowConfirmator(bufferOverflowCtx, isEnabled=isBufferOverflowed),
          _getUniqueVehicleSellConfirmator(vehicle)))
         self.vehicle = vehicle
         self.shells = shells
@@ -411,6 +265,7 @@ class VehicleSeller(ItemProcessor):
         self.isCrewDismiss = isCrewDismiss
         self.isDismantlingForMoney = len(self.__dismantlingForMoneyDevices(vehicle, optDevs)) > 0
         self.isRemovedAfterRent = vehicle.isRented
+        return
 
     def _errorHandler(self, code, errStr='', ctx=None):
         localKey = 'vehicle_sell/%s'
@@ -464,12 +319,6 @@ class VehicleSeller(ItemProcessor):
         BigWorld.player().inventory.sellVehicle(self.vehicle.invID, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory, lambda code: self._response(code, callback))
 
     def __dismantlingForMoneyDevices(self, vehicle, optDevicesToSell):
-        """
-        Return list of opt. devices which user wants to dismantle for Money(for gold, crystal or any other currency)
-        :param vehicle: gui_items.Vehicle
-        :param optDevicesToSell: list of opt.devices to sell
-        :return: list of opt. devices
-        """
         result = []
         if vehicle is None:
             return result
@@ -508,10 +357,10 @@ class VehicleSeller(ItemProcessor):
 
 class VehicleSettingsProcessor(ItemProcessor):
 
-    def __init__(self, vehicle, setting, value, plugins=list()):
+    def __init__(self, vehicle, setting, value, plugins=None):
         self._setting = setting
         self._value = value
-        super(VehicleSettingsProcessor, self).__init__(vehicle, plugins)
+        super(VehicleSettingsProcessor, self).__init__(vehicle, plugins or [])
 
     def _request(self, callback):
         LOG_DEBUG('Make server request for changing vehicle settings', self.item, self._setting, bool(self._value))
@@ -521,7 +370,7 @@ class VehicleSettingsProcessor(ItemProcessor):
 class VehicleTmenXPAccelerator(VehicleSettingsProcessor):
 
     def __init__(self, vehicle, value):
-        super(VehicleTmenXPAccelerator, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.XP_TO_TMAN, value, (plugins.MessageConfirmator('xpToTmenCheckbox', isEnabled=value),))
+        super(VehicleTmenXPAccelerator, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.XP_TO_TMAN, value, (proc_plugs.MessageConfirmator('xpToTmenCheckbox', isEnabled=value),))
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError('vehicle_tmenxp_accelerator/%s' % errStr, defaultSysMsgKey='vehicle_tmenxp_accelerator/server_error', vehName=self.item.userName)
@@ -567,18 +416,8 @@ class VehicleAutoStyleEquipProcessor(VehicleSettingsProcessor):
 
 
 class VehicleLayoutProcessor(Processor):
-    """
-    Apply equipments and shells layout
-    """
 
     def __init__(self, vehicle, shellsLayoutHelper=None, eqsLayoutHelper=None, skipConfirm=False):
-        """
-        Ctor.
-        
-        @param vehicle: gui_item.vehicle.Vehicle
-        @param shellsLayoutHelper: instance of ShellLayoutHelper
-        @param eqsLayoutHelper: instance of EquipmentLayoutHelper
-        """
         super(VehicleLayoutProcessor, self).__init__()
         self.vehicle = vehicle
         self.shellsLayoutHelper = shellsLayoutHelper
@@ -589,7 +428,7 @@ class VehicleLayoutProcessor(Processor):
         shellsPrice = self.getShellsLayoutPrice()
         eqsPrice = self.getEqsLayoutPrice()
         isWalletValidatorEnabled = bool(shellsPrice.gold or eqsPrice.gold)
-        self.addPlugins((plugins.VehicleLockValidator(self.vehicle), plugins.WalletValidator(isWalletValidatorEnabled), plugins.VehicleLayoutValidator(shellsPrice, eqsPrice)))
+        self.addPlugins((proc_plugs.VehicleLockValidator(self.vehicle), proc_plugs.WalletValidator(isWalletValidatorEnabled), proc_plugs.VehicleLayoutValidator(shellsPrice, eqsPrice)))
 
     def _request(self, callback):
         shellsRaw = self.shellsLayoutHelper.getRawLayout() if self.shellsLayoutHelper else None
@@ -630,9 +469,6 @@ class VehicleLayoutProcessor(Processor):
         return makeI18nError('layout_apply/%s' % msg, defaultSysMsgKey='layout_apply/server_error', vehName=self.vehicle.userName, type=SM_TYPE.Error)
 
     def getShellsLayoutPrice(self):
-        """
-        @return: price that should be paid to fill layout
-        """
         if self.shellsLayoutHelper is None:
             return MONEY_UNDEFINED
         else:
@@ -654,9 +490,6 @@ class VehicleLayoutProcessor(Processor):
             return price
 
     def getEqsLayoutPrice(self):
-        """
-        @return: price that should be paid to fill layout
-        """
         if self.eqsLayoutHelper is None:
             return MONEY_UNDEFINED
         else:
@@ -680,20 +513,13 @@ class VehicleLayoutProcessor(Processor):
 class VehicleBattleBoosterLayoutProcessor(VehicleLayoutProcessor):
 
     def __init__(self, vehicle, battleBooster, eqsLayout, skipConfirm=False):
-        """
-        Ctor.
-        
-        @param vehicle: gui_item.vehicle.Vehicle
-        @param battleBooster: instance of gui_items.artefacts.BattleBooster
-        @param eqsLayout: instance of EquipmentLayoutHelper
-        """
         self.battleBooster = battleBooster
         super(VehicleBattleBoosterLayoutProcessor, self).__init__(vehicle, None, eqsLayout, skipConfirm)
         return
 
     def _setupPlugins(self, skipConfirm):
         if self.battleBooster:
-            self.addPlugin(plugins.BattleBoosterConfirmator('confirmBattleBoosterInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster, isEnabled=not skipConfirm))
+            self.addPlugin(proc_plugs.BattleBoosterConfirmator('confirmBattleBoosterInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster, isEnabled=not skipConfirm))
 
     def _getEquipmentType(self):
         return EQUIPMENT_TYPES.battleBoosters
@@ -707,7 +533,7 @@ class BuyAndInstallBattleBoosterProcessor(VehicleBattleBoosterLayoutProcessor):
 
     def _setupPlugins(self, skipConfirm):
         itemPrice = self.battleBooster.buyPrices.getSum().price
-        self.addPlugins((plugins.MoneyValidator(itemPrice * self.count), plugins.BattleBoosterConfirmator('confirmBattleBoosterBuyAndInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster, isEnabled=not skipConfirm)))
+        self.addPlugins((proc_plugs.MoneyValidator(itemPrice * self.count), proc_plugs.BattleBoosterConfirmator('confirmBattleBoosterBuyAndInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster, isEnabled=not skipConfirm)))
 
     def _request(self, callback):
         BigWorld.player().shop.buy(self.battleBooster.itemTypeID, self.battleBooster.nationID, self.battleBooster.intCD, self.count, 0, lambda code: self._buyResponse(code, callback))
@@ -727,7 +553,7 @@ class VehicleRepairer(ItemProcessor):
 
     def __init__(self, vehicle):
         self._repairCost = Money(credits=vehicle.repairCost)
-        super(VehicleRepairer, self).__init__(vehicle, (plugins.MoneyValidator(self._repairCost),))
+        super(VehicleRepairer, self).__init__(vehicle, (proc_plugs.MoneyValidator(self._repairCost),))
 
     def _request(self, callback):
         BigWorld.player().inventory.repair(self.item.invID, lambda code: self._response(code, callback))
@@ -770,19 +596,14 @@ def tryToLoadDefaultShellsLayout(vehicle, callback=None):
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _getUniqueVehicleSellConfirmator(vehicle, lobbyContext=None):
-    """
-    return confirmation plugin for unique vehicle
-    :param vehicle: <Vehicle>
-    :return: <MessageConfirmator>
-    """
     sellForGold = vehicle.getSellPrice(preferred=True).getCurrency(byWeight=True) == Currency.GOLD
     if lobbyContext is not None and lobbyContext.getServerSettings().isVehicleRestoreEnabled():
         if not sellForGold and not vehicle.isUnrecoverable:
             if vehicle.isRecentlyRestored():
-                return plugins.MessageConfirmator('vehicleSell/restoreCooldown', ctx={'cooldown': formatTime(vehicle.restoreInfo.getRestoreCooldownTimeLeft(), time_utils.ONE_DAY)}, isEnabled=vehicle.isUnique)
+                return proc_plugs.MessageConfirmator('vehicleSell/restoreCooldown', ctx={'cooldown': formatTime(vehicle.restoreInfo.getRestoreCooldownTimeLeft(), time_utils.ONE_DAY)}, isEnabled=vehicle.isUnique)
             if vehicle.isPurchased:
-                return plugins.MessageConfirmator('vehicleSell/restoreUnlimited', isEnabled=vehicle.isUnique)
+                return proc_plugs.MessageConfirmator('vehicleSell/restoreUnlimited', isEnabled=vehicle.isUnique)
         dialogI18n = vehicle.isCrewLocked and 'vehicleSell/unique/crewLocked'
     else:
         dialogI18n = 'vehicleSell/unique'
-    return plugins.MessageConfirmator(dialogI18n, isEnabled=vehicle.isUnique)
+    return proc_plugs.MessageConfirmator(dialogI18n, isEnabled=vehicle.isUnique)

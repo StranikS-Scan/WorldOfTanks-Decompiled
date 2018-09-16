@@ -11,22 +11,30 @@
       <Flags>	CELL_PUBLIC	</Flags>
     </chunkID>
     <destroyedModules>
-      <Type>	ARRAY	  <of>	UINT16	</of>
+      <Type>	ARRAY	  <of>	TUPLE	  <of>	UINT8	</of>
+          <size>	3	</size>
+        </of>
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </destroyedModules>
     <destroyedFragiles>
-      <Type>	ARRAY	  <of>	UINT16	</of>
+      <Type>	ARRAY	  <of>	TUPLE	  <of>	UINT8	</of>
+          <size>	3	</size>
+        </of>
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </destroyedFragiles>
     <fallenColumns>
-      <Type>	ARRAY	  <of>	UINT16	</of>
+      <Type>	ARRAY	  <of>	TUPLE	  <of>	UINT8	</of>
+          <size>	3	</size>
+        </of>
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </fallenColumns>
     <fallenTrees>
-      <Type>	ARRAY	  <of>	UINT32	</of>
+      <Type>	ARRAY	  <of>	TUPLE	  <of>	UINT8	</of>
+          <size>	5	</size>
+        </of>
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </fallenTrees>
@@ -36,7 +44,7 @@
     </destructibles>
     <waters>
       <Type>	ARRAY	  <of>	TUPLE	  <of>	FLOAT32	</of>
-          <size>	6	</size>
+          <size>	5	</size>
         </of>
       </Type>
       <Flags>	CELL_PUBLIC	</Flags>

@@ -5,7 +5,7 @@ from notification.NotificationsCounter import NotificationsCounter
 from notification.NotificationsModel import NotificationsModel
 from notification.actions_handlers import NotificationsActionsHandlers
 
-class _NotificationMVC:
+class _NotificationMVC(object):
 
     def __init__(self):
         self.__model = None

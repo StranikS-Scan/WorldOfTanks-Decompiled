@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/respawn_ctrl.py
+from collections import namedtuple
 import BigWorld
 import Event
-from collections import namedtuple
 from constants import RESPAWN_TYPES
 from gui.battle_control.avatar_getter import getSoundNotifications
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -81,10 +81,6 @@ class RespawnsController(ViewComponentsController):
         return
 
     def setViewComponents(self, *components):
-        """
-        Sets view component.
-        :param panel: instance of view component.
-        """
         super(RespawnsController, self).setViewComponents(*components)
         if not self._viewComponents:
             return

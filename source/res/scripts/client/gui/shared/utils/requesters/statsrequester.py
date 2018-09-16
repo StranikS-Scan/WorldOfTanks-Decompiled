@@ -18,30 +18,18 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def mayConsumeWalletResources(self):
-        """
-        @return: Wallet resources available flag
-        """
         return bool(self.getCacheValue('mayConsumeWalletResources', 0))
 
     @property
     def credits(self):
-        """
-        @return: account credits balance as positive value
-        """
         return max(self.actualCredits, 0)
 
     @property
     def gold(self):
-        """
-        @return: account gold balance as positive value
-        """
         return max(self.actualGold, 0)
 
     @property
     def crystal(self):
-        """
-        @return: account crystals balance as positive value
-        """
         return max(self.actualCrystal, 0)
 
     @property
@@ -50,23 +38,14 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def actualCredits(self):
-        """
-        @return: account credits actual balance
-        """
         return self.getCacheValue(Currency.CREDITS, 0)
 
     @property
     def actualGold(self):
-        """
-        @return: account gold actual balance
-        """
         return self.getCacheValue(Currency.GOLD, 0) if self.mayConsumeWalletResources or not self.wallet.useGold else 0
 
     @property
     def actualCrystal(self):
-        """
-        @return: account crystals actual balance
-        """
         return self.getCacheValue(Currency.CRYSTAL, 0)
 
     @property
@@ -75,71 +54,38 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def freeXP(self):
-        """
-        @return: account free experience value greater then zero
-        """
         return max(self.actualFreeXP, 0)
 
     @property
     def actualFreeXP(self):
-        """
-        @return: account free experience value
-        """
         return self.getCacheValue('freeXP', 0) if self.mayConsumeWalletResources or not self.wallet.useFreeXP else 0
 
     @property
     def vehiclesXPs(self):
-        """
-        @return: vehicles experience. Dict format:
-                    { vehicle type int compact descriptor: xp value, }
-        """
         return self.getCacheValue('vehTypeXP', dict())
 
     @property
     def multipliedVehicles(self):
-        """
-        @return: current day already multiplied vehicles list. Format:
-                    [vehicle type int compact descriptor, ...]
-        """
         return self.getCacheValue('multipliedXPVehs', list())
 
     @property
     def eliteVehicles(self):
-        """
-        @return: elite vehicles list. Format:
-                    [vehicle type int compact descriptor, ...]
-        """
         return self.getCacheValue('eliteVehicles', list())
 
     @property
     def vehicleTypeLocks(self):
-        """
-        @return: vehicles locks. Now available only clan locks [1]. Format:
-            { vehicle type int compact descriptor: { 1: time to unlock in seconds }, }
-        """
         return self.getCacheValue('vehTypeLocks', dict())
 
     @property
     def globalVehicleLocks(self):
-        """
-        @return: vehicles locks. Now available only clan locks [1]. Format:
-            { 1: time to unlock in seconds, }
-        """
         return self.getCacheValue('globalVehicleLocks', dict())
 
     @property
     def attributes(self):
-        """
-        @return: account attributes. Bit combination of
-                    constants.ACCOUNT_ATTR.*
-        """
         return self.getCacheValue('attrs', 0)
 
     @property
     def premiumExpiryTime(self):
-        """
-        @return: account premiumExpiryTime. Timestamp
-        """
         return self.getCacheValue('premiumExpiryTime', 0)
 
     @property
@@ -197,38 +143,22 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def freeTankmenLeft(self):
-        """
-        @return: value of free tankmen recruit operations
-        of this day.
-        """
         return self.getCacheValue('freeTMenLeft', 0)
 
     @property
     def accountDossier(self):
-        """
-        @return: account dossier compact descriptor
-        """
         return self.getCacheValue('dossier', '')
 
     @property
     def denunciationsLeft(self):
-        """
-        @return: value of denunciations left this day.
-        """
         return self.getCacheValue('denunciationsLeft', 0)
 
     @property
     def freeVehiclesLeft(self):
-        """
-        @return: value of free Vehicles left this day.
-        """
         return self.getCacheValue('freeVehiclesLeft', '')
 
     @property
     def clanDBID(self):
-        """
-        @return: clan database id
-        """
         return self.getCacheValue('clanDBID', 0)
 
     @property
@@ -262,7 +192,4 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def oldVehInvIDs(self):
-        """
-        @return: Unit previously selected vehicles
-        """
         return self.getCacheValue('oldVehInvIDs', ())

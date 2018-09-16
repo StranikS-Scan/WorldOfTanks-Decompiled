@@ -22,15 +22,6 @@ def _fix_http_response_in_urllib2():
     from urllib2 import AbstractHTTPHandler, URLError
 
     def do_open(self, http_class, req, **http_conn_args):
-        """Return an addinfourl object for the request, using http_class.
-        
-        http_class must implement the HTTPConnection API from httplib.
-        The addinfourl return value is a file-like object.  It also
-        has methods and attributes including:
-            - info(): return a mimetools.Message object for the headers
-            - geturl(): return the original request URL
-            - code: HTTP status code
-        """
         host = req.get_host()
         if not host:
             raise URLError('no host given')
@@ -76,14 +67,8 @@ def _fix_ordered_dict():
         __slots__ = ('prev', 'next', 'key', '__weakref__')
 
     class OrderedDict(dict, MutableMapping):
-        """Dictionary that remembers insertion order"""
 
         def __init__(self, *args, **kwds):
-            """Initialize an ordered dictionary.  Signature is the same as for
-            regular dictionaries, but keyword arguments are not recommended
-            because their insertion order is arbitrary.
-            
-            """
             if len(args) > 1:
                 raise TypeError('expected at most 1 arguments, got %d' % len(args))
             try:
@@ -97,7 +82,6 @@ def _fix_ordered_dict():
             self.update(*args, **kwds)
 
         def __setitem__(self, key, value, dict_setitem=dict.__setitem__, proxy=_proxy, Link=_Link):
-            """od.__setitem__(i, y) <==> od[i]=y"""
             if key not in self:
                 self.__map[key] = link = Link()
                 root = self.__root
@@ -108,7 +92,6 @@ def _fix_ordered_dict():
             dict.__setitem__(self, key, value)
 
         def __delitem__(self, key, dict_delitem=dict.__delitem__):
-            """od.__delitem__(y) <==> del od[y]"""
             dict_delitem(self, key)
             link = self.__map.pop(key)
             link_prev = link.prev
@@ -117,7 +100,6 @@ def _fix_ordered_dict():
             link_next.prev = link_prev
 
         def __iter__(self):
-            """od.__iter__() <==> iter(od)"""
             root = self.__root
             curr = root.next
             while curr is not root:
@@ -133,7 +115,6 @@ def _fix_ordered_dict():
                 yield self[key]
 
         def __reversed__(self):
-            """od.__reversed__() <==> reversed(od)"""
             root = self.__root
             curr = root.prev
             while curr is not root:
@@ -141,7 +122,6 @@ def _fix_ordered_dict():
                 curr = curr.prev
 
         def __reduce__(self):
-            """Return state information for pickling"""
             items = [ [k, self[k]] for k in self ]
             tmp = (self.__map, self.__root)
             del self.__map
@@ -151,17 +131,12 @@ def _fix_ordered_dict():
             return (self.__class__, (items,), inst_dict) if inst_dict else (self.__class__, (items,))
 
         def clear(self):
-            """od.clear() -> None.  Remove all items from od."""
             root = self.__root
             root.prev = root.next = root
             self.__map.clear()
             dict.clear(self)
 
         def popitem(self, last=True):
-            """od.popitem() -> (k, v), return and remove a (key, value) pair.
-            Pairs are returned in LIFO order if last is true or FIFO order if false.
-            
-            """
             if not self:
                 raise KeyError('dictionary is empty')
             root = self.__root
@@ -181,12 +156,6 @@ def _fix_ordered_dict():
             return (key, value)
 
         def move_to_end(self, key, last=True):
-            """Move an existing element to the end (or beginning if last==False).
-            
-            Raises KeyError if the element does not exist.
-            When last=True, acts like a fast version of self[key]=self.pop(key).
-            
-            """
             link = self.__map[key]
             link_prev = link.prev
             link_next = link.next
@@ -214,19 +183,13 @@ def _fix_ordered_dict():
         __ne__ = MutableMapping.__ne__
 
         def __repr__(self):
-            """od.__repr__() <==> repr(od)"""
             return '%s()' % (self.__class__.__name__,) if not self else '%s(%r)' % (self.__class__.__name__, list(self.items()))
 
         def copy(self):
-            """od.copy() -> a shallow copy of od"""
             return self.__class__(self)
 
         @classmethod
         def fromkeys(cls, iterable, value=None):
-            """OD.fromkeys(S[, v]) -> New ordered dictionary with keys from S
-            and values equal to v (which defaults to None).
-            
-            """
             d = cls()
             for key in iterable:
                 d[key] = value
@@ -234,13 +197,13 @@ def _fix_ordered_dict():
             return d
 
         def __eq__(self, other):
-            """od.__eq__(y) <==> od==y.  Comparison to another OD is order-sensitive
-            while comparison to a regular mapping is order-insensitive.
-            
-            """
             return len(self) == len(other) and all((p == q for p, q in zip(self.items(), other.items()))) if isinstance(other, OrderedDict) else dict.__eq__(self, other)
 
     collections.OrderedDict = OrderedDict
+
+
+def _fixed_asdict(t):
+    return dict(zip(t._fields, t))
 
 
 def _fix_namedtuple():
@@ -248,10 +211,6 @@ def _fix_namedtuple():
     import sys as _sys
 
     def _fixed_namedtuple(*args, **kwargs):
-
-        def _fixed_asdict(t):
-            return dict(zip(t._fields, t))
-
         res = _orig_namedtuple(*args, **kwargs)
         res._asdict = _fixed_asdict
         try:

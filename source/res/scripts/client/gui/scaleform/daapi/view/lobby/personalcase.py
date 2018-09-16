@@ -32,7 +32,6 @@ from helpers import dependency
 from helpers import i18n, strcmp
 from items import tankmen
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.genConsts.PERSONALCASE_CONSTANTS import PERSONALCASE_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 
 class PersonalCase(PersonalCaseMeta, IGlobalListener):
@@ -241,9 +240,6 @@ class PersonalCaseDataProvider(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, tmanInvID):
-        """
-        @param tmanInvID: tankman inventory id
-        """
         self.tmanInvID = tmanInvID
 
     @async
@@ -264,7 +260,7 @@ class PersonalCaseDataProvider(object):
         td = tankman.descriptor
         changeRoleEnabled = tankmen.tankmenGroupCanChangeRole(td.nationID, td.gid, td.isPremium)
         if changeRoleEnabled:
-            tooltipChangeRole = ''
+            tooltipChangeRole = makeTooltip(TOOLTIPS.CREW_ROLECHANGE_HEADER, TOOLTIPS.CREW_ROLECHANGE_TEXT)
         else:
             tooltipChangeRole = makeTooltip(TOOLTIPS.CREW_ROLECHANGEFORBID_HEADER, TOOLTIPS.CREW_ROLECHANGEFORBID_TEXT)
         showDocumentTab = not td.getRestrictions().isPassportReplacementForbidden()
@@ -285,7 +281,7 @@ class PersonalCaseDataProvider(object):
         callback({'tankman': packTankman(tankman),
          'currentVehicle': packVehicle(currentVehicle) if currentVehicle is not None else None,
          'nativeVehicle': packVehicle(nativeVehicle),
-         'isOpsLocked': isLocked or g_currentVehicle.isLocked(),
+         'isOpsLocked': isLocked,
          'lockMessage': reason,
          'modifiers': modifiers,
          'enoughFreeXPForTeaching': enoughFreeXPForTeaching,
@@ -314,10 +310,6 @@ class PersonalCaseDataProvider(object):
 
     @async
     def getDossierData(self, callback):
-        """
-        Returns dict of dossier data: information stats blocks and
-        achievements list.
-        """
         tmanDossier = self.itemsCache.items.getTankmanDossier(self.tmanInvID)
         if tmanDossier is None:
             callback(None)

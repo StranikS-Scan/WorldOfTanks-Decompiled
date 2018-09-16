@@ -1,13 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_zip.py
-"""
-Fixer that changes zip(seq0, seq1, ...) into list(zip(seq0, seq1, ...)
-unless there exists a 'from future_builtins import zip' statement in the
-top-level namespace.
-
-We avoid the transformation if the zip() call is directly contained in
-iter(<>), list(<>), tuple(<>), sorted(<>), ...join(<>), or for V in <>:.
-"""
 from .. import fixer_base
 from ..fixer_util import Name, Call, in_special_context
 

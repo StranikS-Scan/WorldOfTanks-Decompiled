@@ -337,7 +337,6 @@ class BaseUnitRosterLimits(object):
      'vehicleTypes': (('<H', 2), ('<H2B', 4))}
 
     def __init__(self, **limitsDefs):
-        assert all((key in self._ROSTER_LIMIT_NAMES for key in limitsDefs.iterkeys()))
         limits = self.limits = {key:value for key, value in limitsDefs.iteritems() if value is not None}
         if not limits:
             self.mask = 0
@@ -416,7 +415,6 @@ class BaseUnitRosterLimits(object):
         return packed
 
     def get(self, limitName, defaultValue=None):
-        assert limitName in self._ROSTER_LIMIT_NAMES
         return defaultValue if self.mask == 0 else self.limits.get(limitName, defaultValue)
 
     def checkVehicleLevel(self, vehicleClassIdx, vehicleLevel):

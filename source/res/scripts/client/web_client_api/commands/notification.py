@@ -1,27 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/commands/notification.py
-from collections import namedtuple
-from command import SchemeValidator, CommandHandler, instantiateObject
-_NotificationCommand = namedtuple('_NotificationCommand', ('type', 'message', 'message_data', 'i18n_key', 'i18n_data', 'key', 'custom_parameters'))
-_NotificationCommand.__new__.__defaults__ = (None,
- None,
- {},
- None,
- {},
- None,
- {})
-_NotificationCommandScheme = {'required': (('type', basestring),),
- 'unions': (('message', basestring), ('i18n_key', basestring), ('key', basestring)),
- 'optional': (('message_data', dict), ('i18n_data', dict)),
- 'deprecated': (('key', 'prefer "i18n_key"'),)}
+from command import W2CSchema, Field, createCommandHandler
 
-class NotificationCommand(_NotificationCommand, SchemeValidator):
-    """
-    Represents web command for showing notification.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(NotificationCommand, self).__init__(_NotificationCommandScheme)
+class NotificationSchema(W2CSchema):
+    __unions__ = ('message', 'i18n_key', 'key')
+    type = Field(required=True, type=basestring)
+    message = Field(type=basestring)
+    message_data = Field(type=dict)
+    i18n_key = Field(type=basestring)
+    i18n_data = Field(type=dict)
+    key = Field(type=basestring, deprecated='prefer "i18n_key"')
 
     def hasKey(self):
         return self.key is not None
@@ -34,7 +22,4 @@ class NotificationCommand(_NotificationCommand, SchemeValidator):
 
 
 def createNotificationHandler(handlerFunc):
-    data = {'name': 'notification',
-     'cls': NotificationCommand,
-     'handler': handlerFunc}
-    return instantiateObject(CommandHandler, data)
+    return createCommandHandler('notification', NotificationSchema, handlerFunc)

@@ -18,10 +18,10 @@ class _PersonalMissionsSelect(Processor):
 
     @staticmethod
     def _getLockedByVehicleValidator(quests):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _getMessagePrefix(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _errorHandler(self, code, errStr='', ctx=None):
         errorI18nKey = '%s/server_error' % self._getMessagePrefix()
@@ -76,16 +76,6 @@ class RandomQuestSelect(PersonalMissionSelect):
         return plugins.PersonalMissionsLockedByVehicle(quests)
 
 
-class FalloutQuestSelect(PersonalMissionSelect):
-
-    def __init__(self, quest, events_cache):
-        super(FalloutQuestSelect, self).__init__(quest, events_cache, PM_BRANCH.FALLOUT)
-
-    @staticmethod
-    def _getLockedByVehicleValidator(quests):
-        return plugins.PersonalMissionsLockedByVehicle(quests, messageKeyPrefix='fallout/')
-
-
 class _PersonalMissionRefuse(_PersonalMissionsSelect):
 
     def __init__(self, quest, events_cache, questBranch):
@@ -114,16 +104,6 @@ class RandomQuestRefuse(_PersonalMissionRefuse):
     @staticmethod
     def _getLockedByVehicleValidator(quests):
         return plugins.PersonalMissionsLockedByVehicle(quests)
-
-
-class FalloutQuestRefuse(_PersonalMissionRefuse):
-
-    def __init__(self, quest, events_cache):
-        super(FalloutQuestRefuse, self).__init__(quest, events_cache, PM_BRANCH.FALLOUT)
-
-    @staticmethod
-    def _getLockedByVehicleValidator(quests):
-        return plugins.PersonalMissionsLockedByVehicle(quests, messageKeyPrefix='fallout/')
 
 
 class _PersonalMissionsGetReward(Processor):

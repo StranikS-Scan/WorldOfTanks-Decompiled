@@ -4,13 +4,10 @@ import items
 import items.vehicles as iv
 from items.components import shared_components
 from items.components.c11n_constants import ApplyArea, SeasonType, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType
-from constants import IS_CELLAPP, IS_BASEAPP
-if IS_CELLAPP or IS_BASEAPP:
-    from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar
-    Item = TypeVar('TypeVar')
+from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar
+Item = TypeVar('TypeVar')
 
 class BaseCustomizationItem(object):
-    """Base class for all customization related xml items"""
     __slots__ = ('id', 'tags', 'filter', 'parentGroup', 'season', 'historical', 'i18n', 'priceGroup', 'requiredToken', 'priceGroupTags')
     allSlots = __slots__
     itemType = 0
@@ -66,7 +63,6 @@ class BaseCustomizationItem(object):
 
 
 class PaintItem(BaseCustomizationItem):
-    """Item used for custom colorization of vehicle regions and camouflage elements"""
     itemType = CustomizationType.PAINT
     __slots__ = ('color', 'usageCosts', 'gloss', 'metallic', 'texture')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
@@ -80,11 +76,6 @@ class PaintItem(BaseCustomizationItem):
         super(PaintItem, self).__init__(parentGroup)
 
     def getAmount(self, parts):
-        """Calculate total amount of paint required to color given parts
-        
-        :param parts: int bitmask from ApplyArea
-        :returns: int value to use or None if paint can't be used for some of given parts
-        """
         result = 0
         for i in ApplyArea.RANGE:
             if parts & i:
@@ -96,7 +87,6 @@ class PaintItem(BaseCustomizationItem):
 
 
 class DecalItem(BaseCustomizationItem):
-    """Item which can be placed in the slot of the vehicle board: inscriptions, emblems, etc."""
     itemType = CustomizationType.DECAL
     __slots__ = ('type', 'isMirrored', 'texture')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
@@ -109,7 +99,6 @@ class DecalItem(BaseCustomizationItem):
 
 
 class CamouflageItem(BaseCustomizationItem):
-    """Static information about camouflage"""
     itemType = CustomizationType.CAMOUFLAGE
     __slots__ = ('palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'texture', 'tiling', 'scales')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
@@ -126,7 +115,6 @@ class CamouflageItem(BaseCustomizationItem):
 
 
 class ModificationItem(BaseCustomizationItem):
-    """Combination of effects applied to vehicle as single item: color quality, age, etc."""
     itemType = CustomizationType.MODIFICATION
     __slots__ = ('effects', 'texture')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
@@ -151,6 +139,9 @@ class StyleItem(BaseCustomizationItem):
         self.rentCount = 1
         self.texture = ''
         super(StyleItem, self).__init__(parentGroup)
+
+    def isVictim(self, color):
+        return '{}Victim'.format(color) in self.tags
 
 
 class ItemGroup(object):
@@ -192,12 +183,6 @@ class PriceGroup(object):
 
 
 class VehicleFilter(object):
-    """
-    Filter testing if VehicleDescriptor satisfies given condition.
-    
-    Condition is based on list of include and exclude predicates.
-    Vehicle must pass at least 1 include predicate and no exclude conditions
-    """
 
     class FilterNode(object):
         __slots__ = ('nations', 'levels', 'tags', 'vehicles')
@@ -261,9 +246,6 @@ class VehicleFilter(object):
 
 
 class CustomizationCache(object):
-    """
-    Class storing all data parsed from customization xml files.
-    """
     __slots__ = ('paints', 'camouflages', 'decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'styles', 'defaultColors', 'itemTypes', 'priceGroupTags')
 
     def __init__(self):
@@ -285,7 +267,6 @@ class CustomizationCache(object):
         super(CustomizationCache, self).__init__()
 
     def isVehicleBound(self, itemId):
-        """Check if item can be remounted to another vehicle."""
         if isinstance(itemId, int):
             itemType, inTypeId = splitIntDescr(itemId)
         else:
@@ -297,12 +278,10 @@ class CustomizationCache(object):
         return ItemTags.VEHICLE_BOUND in self.itemTypes[itemType][inTypeId].tags
 
     def splitByVehicleBound(self, itemsDict, vehType):
-        """Splits of selling items by vehicle bound tag and adds vehType where required """
         itemsToOperate = {k:(v, vehType if self.isVehicleBound(k) or v < 0 else 0) for k, v in itemsDict.iteritems() if v != 0}
         return itemsToOperate
 
     def validateOutfit(self, vehTypeDescr, outfitDescr, tokens=None, season=SeasonType.ALL):
-        """Validate if every item in customization outfit is compatible with vehicle"""
 
         def validateItem(name, storage, itemId):
             item = storage.get(itemId, None)
@@ -359,7 +338,6 @@ class CustomizationCache(object):
 
 
 def splitIntDescr(intDescr):
-    """Split int item descriptor to (customizationType, itemId) tuple."""
     itemType, customizationType, id = items.parseIntCompactDescr(intDescr)
     if itemType != 12 or customizationType not in CustomizationType.RANGE:
         raise ValueError('intDescr is not correct customization item int descriptor', intDescr)

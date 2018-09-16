@@ -4,7 +4,6 @@ from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.gui.Scaleform import effects_player
 from tutorial.gui.Scaleform.chains import settings
 from tutorial.gui.Scaleform.lobby.proxy import SfLobbyProxy
-from tutorial.gui.commands import GUICommandsFactory
 
 class SfChainsProxy(SfLobbyProxy):
 

@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_extras.py
+import random
+import weakref
+from functools import partial
 import BigWorld
 import Math
-import random
-from functools import partial
-import weakref
 from helpers.EffectsList import EffectsListPlayer
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from helpers import i18n
 from helpers.EntityExtra import EntityExtra
+import material_kinds
 
 def reload():
     modNames = (reload.__module__,)
@@ -21,6 +22,7 @@ def reload():
 
 
 class NoneExtra(EntityExtra):
+    __slots__ = ()
 
     def _start(self, data, args):
         LOG_CODEPOINT_WARNING()
@@ -28,6 +30,7 @@ class NoneExtra(EntityExtra):
 
 
 class ShowShooting(EntityExtra):
+    __slots__ = ()
 
     def _start(self, data, burstCount):
         vehicle = data['entity']
@@ -70,10 +73,9 @@ class ShowShooting(EntityExtra):
             avatar = BigWorld.player()
             if data['entity'].isPlayerVehicle or vehicle is avatar.getVehicleAttached():
                 avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, withShot)
-            if not vehicle.appearance.isInWater:
-                groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
-                if groundWaveEff is not None:
-                    self.__doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
+            groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
+            if groundWaveEff is not None:
+                self.__doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
             self.__doRecoil(vehicle, gunModel)
             if vehicle.isPlayerVehicle:
                 appearance = vehicle.appearance
@@ -100,16 +102,22 @@ class ShowShooting(EntityExtra):
             centerToGun.normalise()
             gunHeight = centerToGunDist * centerToGun.dot(upVec) / upVec.y
             gunPos.y -= gunHeight
-        testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, gunPos + Math.Vector3(0, 0.5, 0), gunPos - Math.Vector3(0, 1.5, 0), 128)
-        if testRes is None:
-            return
+        distanceToWater = BigWorld.wg_collideWater(gunPos, gunPos + Math.Vector3(0, 1, 0), False)
+        if distanceToWater > -1:
+            position = gunPos - Math.Vector3(0, distanceToWater, 0)
+            matKind = material_kinds.WATER_MATERIAL_KIND
         else:
-            position = testRes[0]
-            BigWorld.player().terrainEffects.addNew(position, groundWaveEff.effectsList, groundWaveEff.keyPoints, None, dir=gunDir, surfaceMatKind=testRes[2], start=position + Math.Vector3(0, 0.5, 0), end=position - Math.Vector3(0, 0.5, 0), entity_id=vehicle.id)
-            return
+            testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, gunPos + Math.Vector3(0, 0.5, 0), gunPos - Math.Vector3(0, 1.5, 0), 128)
+            if testRes is None:
+                return
+            position = testRes.closestPoint
+            matKind = testRes.matKind
+        BigWorld.player().terrainEffects.addNew(position, groundWaveEff.effectsList, groundWaveEff.keyPoints, None, dir=gunDir, surfaceMatKind=matKind, start=position + Math.Vector3(0, 0.5, 0), end=position - Math.Vector3(0, 0.5, 0), entity_id=vehicle.id)
+        return
 
 
 class DamageMarker(EntityExtra):
+    __slots__ = ('deviceUserString', 'sounds')
 
     def _readConfig(self, dataSection, containerName):
         self.deviceUserString = dataSection.readString('deviceUserString')
@@ -125,6 +133,7 @@ class DamageMarker(EntityExtra):
 
 
 class TrackHealth(DamageMarker):
+    __slots__ = ('__isLeft',)
 
     def _readConfig(self, dataSection, containerName):
         DamageMarker._readConfig(self, dataSection, containerName)
@@ -140,6 +149,7 @@ class TrackHealth(DamageMarker):
 
 
 class Fire(EntityExtra):
+    __slots__ = ('sounds',)
 
     def _readConfig(self, dataSection, containerName):
         self.sounds = {}

@@ -8,14 +8,12 @@ import items.vehicles as iv
 import items._xml as ix
 import items.components.c11n_components as cc
 import items.customizations as c11n
-from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, IS_WEB
+from constants import IS_CLIENT, IS_WEB
 from items.components.c11n_constants import SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags
-if IS_CELLAPP or IS_BASEAPP:
-    from typing import List, Dict, Type, Tuple, Any, TypeVar
-    _itemType = TypeVar('_itemType', bound=cc.BaseCustomizationItem)
+from typing import Dict, Type, Tuple, Any, TypeVar
+_itemType = TypeVar('_itemType', bound=cc.BaseCustomizationItem)
 
 class BaseCustomizationItemXmlReader(object):
-    """Base xml reader for all customization items."""
     __slots__ = ()
 
     def __init__(self):
@@ -176,7 +174,6 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
 
     @staticmethod
     def getDefaultNationId(target):
-        """ Support for legacy camouflages where nation is predefined in filter and tiling misses it"""
         return target.filter.include[0].nations[0] if target.filter and target.filter.include and target.filter.include[0].nations else nations.NONE_INDEX
 
 
@@ -217,7 +214,6 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
 
 
 def readCustomizationCacheFromXml(cache, folder):
-    """Fill customization cache with items read from folder."""
 
     def __readItemFolder(itemCls, folder, itemName, storage):
         itemsFileName = os.path.join(folder, itemName + 's', 'list.xml')
@@ -244,15 +240,6 @@ def readCustomizationCacheFromXml(cache, folder):
 
 
 def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage):
-    """Read items and corresponding item groups from xml.
-    
-    :param itemCls: Target item class
-    :param xmlCtx: Tuple with xml context used by ResMgr
-    :param section: Section pointing to xml element with item group collection
-    :param itemSectionName: tag of item element
-    :param storage: dict to store loaded values
-    :return: dictionary {id, item} of loaded items
-    """
     reader = __xmlReaders[itemCls]
     groupsDict = cache.priceGroups
     itemToGroup = cache.itemToPriceGroup
@@ -324,7 +311,6 @@ def _readDefaultColors(cache, xmlCtx, section, sectionName):
 
 
 def readFlagEnum(xmlCtx, section, subsectionName, enumClass, defaultValue=None):
-    """ Read string flag enum presentation from xml section and return int value."""
     result = 0
     if not section.has_key(subsectionName) and defaultValue is not None:
         return defaultValue
@@ -339,7 +325,6 @@ def readFlagEnum(xmlCtx, section, subsectionName, enumClass, defaultValue=None):
 
 
 def readEnum(xmlCtx, section, subsectionName, enumClass, defaultValue=None):
-    """ Read string enum presentation from xml section and return int value."""
     if not section.has_key(subsectionName) and defaultValue is not None:
         return defaultValue
     else:

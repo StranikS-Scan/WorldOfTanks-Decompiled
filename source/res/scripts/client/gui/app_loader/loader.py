@@ -54,10 +54,6 @@ class _AppLoader(object):
         self.onGUISpaceEntered = Event.Event()
 
     def init(self, appFactory):
-        """
-        Initialization.
-        :param appFactory: instance of IAppFactory.
-        """
         self.__appFactory = appFactory
         add = g_eventBus.addListener
         appEvent = events.AppLifeCycleEvent
@@ -68,9 +64,6 @@ class _AppLoader(object):
         add(spaceEvent.GO_NEXT, self.__onGoNextSpace)
 
     def fini(self):
-        """
-        Finalization.
-        """
         if self.__appFactory:
             self.__appFactory.destroy()
             self.__appFactory = None
@@ -102,20 +95,12 @@ class _AppLoader(object):
         return app
 
     def getDefLobbyApp(self):
-        """
-        It's shortcut for default lobby app.
-        :return: instance of application or None.
-        """
         app = None
         if self.__appFactory:
             app = self.__appFactory.getDefLobbyApp()
         return app
 
     def getDefBattleApp(self):
-        """
-        It's shortcut for default battle app.
-        :return: instance of application or None.
-        """
         app = None
         if self.__appFactory:
             app = self.__appFactory.getDefBattleApp()
@@ -155,12 +140,6 @@ class _AppLoader(object):
         return False if self.__ctx.dsnReason != _DSN_REASON.UNDEFINED else self.changeSpace(_SPACE_ID.WAITING)
 
     def goToLoginByRQ(self, forced=False):
-        """
-        Goes to login screen by player request - he clicks to button or exit
-        from login queue.
-        :param forced: bool.
-        :return: True if state is changed, otherwise - False.
-        """
         if self.__ctx.dsnReason != _DSN_REASON.REQUEST or forced:
             LOG_DEBUG('Disconnects from server by request')
             self.__ctx.dsnReason = _DSN_REASON.REQUEST
@@ -168,10 +147,6 @@ class _AppLoader(object):
         return self.showLogin()
 
     def goToLoginByEvent(self):
-        """
-        Goes to login screen by server event "disconnect".
-        :return: True if state is changed, otherwise - False.
-        """
         if self.__ctx.dsnReason not in (_DSN_REASON.REQUEST, _DSN_REASON.KICK):
             LOG_DEBUG('Disconnects from server by connection manager event')
             if self.__ctx.guiSpaceID != _SPACE_ID.LOGIN:
@@ -181,13 +156,6 @@ class _AppLoader(object):
             return False
 
     def goToLoginByKick(self, reason, isBan, expiryTime):
-        """
-        Goes to login screen by server event "kick".
-        :param reason: reason why player has been kicked.
-        :param isBan: True if player is banned.
-        :param expiryTime: ban expiry time. 0 - infinite ban.
-        :return: True if state is changed, otherwise - False.
-        """
         if self.__ctx.dsnReason != _DSN_REASON.KICK:
             LOG_DEBUG('Disconnects from server by kick')
             self.__ctx.dsnReason = _DSN_REASON.KICK
@@ -195,11 +163,6 @@ class _AppLoader(object):
         return self.showLogin()
 
     def goToLoginByError(self, reason):
-        """
-        Goes to login screen by client error.
-        :param reason: reason describing the error that occurred.
-        :return: True if state is changed, otherwise - False.
-        """
         LOG_DEBUG('Disconnects from server by client error')
         self.__ctx.dsnReason = _DSN_REASON.ERROR
         self.__ctx.dsnDesc = (reason, False, 0)

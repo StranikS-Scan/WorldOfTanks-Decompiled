@@ -1,16 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-riscos/rourl2path.py
-"""riscos specific module for conversion between pathnames and URLs.
-Based on macurl2path.
-Do not import directly, use urllib instead."""
 import string
 import urllib
 __all__ = ['url2pathname', 'pathname2url']
 __slash_dot = string.maketrans('/.', './')
 
 def url2pathname(url):
-    """OS-specific conversion from a relative URL of the 'file' scheme
-    to a file system path; not recommended for general use."""
     tp = urllib.splittype(url)[0]
     if tp and tp != 'file':
         raise RuntimeError, 'Cannot convert non-local URL to pathname'
@@ -43,8 +38,6 @@ def url2pathname(url):
 
 
 def pathname2url(pathname):
-    """OS-specific conversion from a file system path to a relative URL
-    of the 'file' scheme; not recommended for general use."""
     return urllib.quote('///' + pathname.translate(__slash_dot), '/$:')
 
 

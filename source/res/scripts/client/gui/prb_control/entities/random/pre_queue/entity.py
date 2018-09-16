@@ -16,9 +16,6 @@ from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 
 class RandomSubscriber(PreQueueSubscriber):
-    """
-    Random battles events subscriber
-    """
 
     def subscribe(self, entity):
         g_playerEvents.onEnqueuedRandom += entity.onEnqueued
@@ -38,18 +35,12 @@ class RandomSubscriber(PreQueueSubscriber):
 
 
 class RandomEntryPoint(PreQueueEntryPoint):
-    """
-    Random battle entry point
-    """
 
     def __init__(self):
         super(RandomEntryPoint, self).__init__(FUNCTIONAL_FLAG.RANDOM, QUEUE_TYPE.RANDOMS)
 
 
 class RandomEntity(PreQueueEntity):
-    """
-    Random battle entity
-    """
 
     def __init__(self):
         super(RandomEntity, self).__init__(FUNCTIONAL_FLAG.RANDOM, QUEUE_TYPE.RANDOMS, RandomSubscriber())
@@ -78,7 +69,8 @@ class RandomEntity(PreQueueEntity):
 
     def _makeQueueCtxByAction(self, action=None):
         invID = g_currentVehicle.invID
-        assert invID, 'Inventory ID of vehicle can not be zero'
+        if not invID:
+            raise UserWarning('Inventory ID of vehicle can not be zero')
         if action is not None:
             arenaTypeID = action.mapID
         else:

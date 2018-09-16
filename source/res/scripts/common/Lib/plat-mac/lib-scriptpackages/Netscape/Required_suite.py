@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Netscape/Required_suite.py
-"""Suite Required suite:
-Level 0, version 0
-
-Generated from /Volumes/Sap/Applications (Mac OS 9)/Netscape Communicator\xe2\x84\xa2 Folder/Netscape Communicator\xe2\x84\xa2
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'reqd'
@@ -14,10 +8,6 @@ from StdSuites.Required_Suite import *
 class Required_suite_Events(Required_Suite_Events):
 
     def open(self, _object, _attributes={}, **_arguments):
-        """open: Open the specified object(s)
-        Required argument: list of objects to open
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'aevt'
         _subcode = 'odoc'
         if _arguments:
@@ -29,10 +19,6 @@ class Required_suite_Events(Required_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def print_(self, _object, _attributes={}, **_arguments):
-        """print: Print the specified object(s)
-        Required argument: list of objects to print
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'aevt'
         _subcode = 'pdoc'
         if _arguments:
@@ -44,9 +30,6 @@ class Required_suite_Events(Required_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def quit(self, _no_object=None, _attributes={}, **_arguments):
-        """quit: Quit Navigator
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'aevt'
         _subcode = 'quit'
         if _arguments:
@@ -59,9 +42,6 @@ class Required_suite_Events(Required_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def run(self, _no_object=None, _attributes={}, **_arguments):
-        """run: Sent to an application when it is double-clicked
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'aevt'
         _subcode = 'oapp'
         if _arguments:

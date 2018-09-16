@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/CodeWarrior/Metrowerks_Shell_Suite.py
-"""Suite Metrowerks Shell Suite: Events supported by the Metrowerks Project Shell
-Level 1, version 1
-
-Generated from /Volumes/Sap/Applications (Mac OS 9)/Metrowerks CodeWarrior 7.0/Metrowerks CodeWarrior/CodeWarrior IDE 4.2.5
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'MMPR'
@@ -14,12 +8,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Add_Files = {'To_Segment': 'Segm'}
 
     def Add_Files(self, _object, _attributes={}, **_arguments):
-        """Add Files: Add the specified file(s) to the current project
-        Required argument: List of files to add
-        Keyword argument To_Segment: Segment number into which to add the file(s)
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Error code for each file added
-        """
         _code = 'MMPR'
         _subcode = 'AddF'
         aetools.keysubst(_arguments, self._argmap_Add_Files)
@@ -32,12 +20,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Check_Syntax = {'ExternalEditor': 'Errs'}
 
     def Check_Syntax(self, _object, _attributes={}, **_arguments):
-        """Check Syntax: Check the syntax of the specified file(s)
-        Required argument: List of files to check the syntax of
-        Keyword argument ExternalEditor: Should the contents of the message window be returned to the caller?
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Errors for each file whose syntax was checked
-        """
         _code = 'MMPR'
         _subcode = 'Chek'
         aetools.keysubst(_arguments, self._argmap_Check_Syntax)
@@ -48,9 +30,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Close_Project(self, _no_object=None, _attributes={}, **_arguments):
-        """Close Project: Close the current project
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'ClsP'
         if _arguments:
@@ -65,11 +44,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Close_Window = {'Saving': 'savo'}
 
     def Close_Window(self, _object, _attributes={}, **_arguments):
-        """Close Window: Close the windows showing the specified files
-        Required argument: The files to close
-        Keyword argument Saving: Whether to save changes to each file before closing its window
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'ClsW'
         aetools.keysubst(_arguments, self._argmap_Close_Window)
@@ -83,12 +57,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Compile = {'ExternalEditor': 'Errs'}
 
     def Compile(self, _object, _attributes={}, **_arguments):
-        """Compile: Compile the specified file(s)
-        Required argument: List of files to compile
-        Keyword argument ExternalEditor: Should the contents of the message window be returned to the caller?
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Errors for each file compiled
-        """
         _code = 'MMPR'
         _subcode = 'Comp'
         aetools.keysubst(_arguments, self._argmap_Compile)
@@ -101,11 +69,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Create_Project = {'from_stationery': 'Tmpl'}
 
     def Create_Project(self, _object, _attributes={}, **_arguments):
-        """Create Project: Create a new project file
-        Required argument: New project file specifier
-        Keyword argument from_stationery: undocumented, typecode 'alis'
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'NewP'
         aetools.keysubst(_arguments, self._argmap_Create_Project)
@@ -116,11 +79,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Get_Definition(self, _object, _attributes={}, **_arguments):
-        """Get Definition: Returns the location(s) of a globally scoped function or data object.
-        Required argument: undocumented, typecode 'TEXT'
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: undocumented, typecode 'FDef'
-        """
         _code = 'MMPR'
         _subcode = 'GDef'
         if _arguments:
@@ -132,10 +90,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Get_Open_Documents(self, _no_object=None, _attributes={}, **_arguments):
-        """Get Open Documents: Returns the list of open documents
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: The list of documents
-        """
         _code = 'MMPR'
         _subcode = 'GDoc'
         if _arguments:
@@ -151,12 +105,6 @@ class Metrowerks_Shell_Suite_Events():
      'from_panel': 'PNam'}
 
     def Get_Preferences(self, _no_object=None, _attributes={}, **_arguments):
-        """Get Preferences: Get the preferences for the current project
-        Keyword argument of: Names of requested preferences
-        Keyword argument from_panel: Name of the preference panel
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: The requested preferences
-        """
         _code = 'MMPR'
         _subcode = 'Gref'
         aetools.keysubst(_arguments, self._argmap_Get_Preferences)
@@ -170,12 +118,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Get_Project_File = {'Segment': 'Segm'}
 
     def Get_Project_File(self, _object, _attributes={}, **_arguments):
-        """Get Project File: Returns a description of a file in the project window.
-        Required argument: The index of the file within its segment.
-        Keyword argument Segment: The segment containing the file.
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: undocumented, typecode 'SrcF'
-        """
         _code = 'MMPR'
         _subcode = 'GFil'
         aetools.keysubst(_arguments, self._argmap_Get_Project_File)
@@ -186,10 +128,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Get_Project_Specifier(self, _no_object=None, _attributes={}, **_arguments):
-        """Get Project Specifier: Return the File Specifier for the current project
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: File Specifier for the current project
-        """
         _code = 'MMPR'
         _subcode = 'GetP'
         if _arguments:
@@ -202,10 +140,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Get_Segments(self, _no_object=None, _attributes={}, **_arguments):
-        """Get Segments: Returns a description of each segment in the project.
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: undocumented, typecode 'Seg '
-        """
         _code = 'MMPR'
         _subcode = 'GSeg'
         if _arguments:
@@ -218,11 +152,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Get_member_function_names(self, _object, _attributes={}, **_arguments):
-        """Get member function names: Returns a list containing the names of all the member functions of a class object
-        Required argument: must be a class object
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: undocumented, typecode 'list'
-        """
         _code = 'MMPR'
         _subcode = 'MbFN'
         if _arguments:
@@ -234,10 +163,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Get_nonsimple_classes(self, _no_object=None, _attributes={}, **_arguments):
-        """Get nonsimple classes: Returns an alphabetical list of classes with member functions, bases classes, or subclasses
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: undocumented, typecode 'list'
-        """
         _code = 'MMPR'
         _subcode = 'NsCl'
         if _arguments:
@@ -250,10 +175,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Goto_Function(self, _object, _attributes={}, **_arguments):
-        """Goto Function: Goto Specified Function Name
-        Required argument: undocumented, typecode 'TEXT'
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'GoFn'
         if _arguments:
@@ -265,10 +186,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Goto_Line(self, _object, _attributes={}, **_arguments):
-        """Goto Line: Goto Specified Line Number
-        Required argument: The requested source file line number
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'GoLn'
         if _arguments:
@@ -280,11 +197,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Is_In_Project(self, _object, _attributes={}, **_arguments):
-        """Is In Project: Whether or not the specified file(s) is in the current project
-        Required argument: List of files to check for project membership
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Result code for each file
-        """
         _code = 'MMPR'
         _subcode = 'FInP'
         if _arguments:
@@ -298,11 +210,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Make_Project = {'ExternalEditor': 'Errs'}
 
     def Make_Project(self, _no_object=None, _attributes={}, **_arguments):
-        """Make Project: Make the current project
-        Keyword argument ExternalEditor: Should the contents of the message window be returned to the caller?
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Errors that occurred while making the project
-        """
         _code = 'MMPR'
         _subcode = 'Make'
         aetools.keysubst(_arguments, self._argmap_Make_Project)
@@ -314,10 +221,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Open_browser(self, _object, _attributes={}, **_arguments):
-        """Open browser: Display a class, member function, or data member object in a single class browser window
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'Brow'
         if _arguments:
@@ -332,13 +235,6 @@ class Metrowerks_Shell_Suite_Events():
      'ExternalEditor': 'Errs'}
 
     def Precompile(self, _object, _attributes={}, **_arguments):
-        """Precompile: Precompile the specified file to the specified destination file
-        Required argument: File to precompile
-        Keyword argument Saving_As: Destination file for precompiled header
-        Keyword argument ExternalEditor: Should the contents of the message window be returned to the caller?
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Errors for the precompiled file
-        """
         _code = 'MMPR'
         _subcode = 'PreC'
         aetools.keysubst(_arguments, self._argmap_Precompile)
@@ -351,12 +247,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Preprocess = {'ExternalEditor': 'Errs'}
 
     def Preprocess(self, _object, _attributes={}, **_arguments):
-        """Preprocess: Preprocesses the specified file(s)
-        Required argument: undocumented, typecode 'alis'
-        Keyword argument ExternalEditor: undocumented, typecode 'bool'
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Errors for each preprocessed file
-        """
         _code = 'MMPR'
         _subcode = 'PreP'
         aetools.keysubst(_arguments, self._argmap_Preprocess)
@@ -367,9 +257,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Remove_Binaries(self, _no_object=None, _attributes={}, **_arguments):
-        """Remove Binaries: Remove the binary object code from the current project
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'RemB'
         if _arguments:
@@ -382,11 +269,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Remove_Files(self, _object, _attributes={}, **_arguments):
-        """Remove Files: Remove the specified file(s) from the current project
-        Required argument: List of files to remove
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Error code for each file removed
-        """
         _code = 'MMPR'
         _subcode = 'RemF'
         if _arguments:
@@ -398,9 +280,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Reset_File_Paths(self, _no_object=None, _attributes={}, **_arguments):
-        """Reset File Paths: Resets access paths for all files belonging to open project.
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'ReFP'
         if _arguments:
@@ -416,12 +295,6 @@ class Metrowerks_Shell_Suite_Events():
      'SourceDebugger': 'DeBg'}
 
     def Run_Project(self, _no_object=None, _attributes={}, **_arguments):
-        """Run Project: Run the current project
-        Keyword argument ExternalEditor: Should the contents of the message window be returned to the caller?
-        Keyword argument SourceDebugger: Run the application under the control of the source-level debugger
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Errors that occurred when running the project
-        """
         _code = 'MMPR'
         _subcode = 'RunP'
         aetools.keysubst(_arguments, self._argmap_Run_Project)
@@ -433,10 +306,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Save_Error_Window_As(self, _object, _attributes={}, **_arguments):
-        """Save Error Window As: Saves the Errors & Warnings window as a text file
-        Required argument: Destination file for Save Message Window As
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'SvMs'
         if _arguments:
@@ -448,10 +317,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Set_Current_Target(self, _object=None, _attributes={}, **_arguments):
-        """Set Current Target: Set the current target of a project
-        Required argument: Name of target
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'STrg'
         if _arguments:
@@ -463,10 +328,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Set_Default_Project(self, _object, _attributes={}, **_arguments):
-        """Set Default Project: Set the default project
-        Required argument: Name of project
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'SDfP'
         if _arguments:
@@ -480,12 +341,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Set_Modification_Date = {'to': 'MDat'}
 
     def Set_Modification_Date(self, _object, _attributes={}, **_arguments):
-        """Set Modification Date: Changes the internal modification date of the specified file(s)
-        Required argument: List of files
-        Keyword argument to: undocumented, typecode 'ldt '
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Error code for each modified file
-        """
         _code = 'MMPR'
         _subcode = 'SMod'
         aetools.keysubst(_arguments, self._argmap_Set_Modification_Date)
@@ -499,11 +354,6 @@ class Metrowerks_Shell_Suite_Events():
      'to': 'PRec'}
 
     def Set_Preferences(self, _no_object=None, _attributes={}, **_arguments):
-        """Set Preferences: Set the preferences for the current project
-        Keyword argument of_panel: Name of the preference panel
-        Keyword argument to: Preferences settings
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'Pref'
         aetools.keysubst(_arguments, self._argmap_Set_Preferences)
@@ -517,11 +367,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Set_Project_File = {'to': 'SrcS'}
 
     def Set_Project_File(self, _object, _attributes={}, **_arguments):
-        """Set Project File: Changes the settings for a given file in the project.
-        Required argument: The name of the file
-        Keyword argument to: The new settings for the file
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'SFil'
         aetools.keysubst(_arguments, self._argmap_Set_Project_File)
@@ -534,11 +379,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Set_Segment = {'to': 'Segm'}
 
     def Set_Segment(self, _object, _attributes={}, **_arguments):
-        """Set Segment: Changes the name and attributes of a segment.
-        Required argument: The segment to change
-        Keyword argument to: The new name and attributes for the segment.
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'MMPR'
         _subcode = 'SSeg'
         aetools.keysubst(_arguments, self._argmap_Set_Segment)
@@ -549,11 +389,6 @@ class Metrowerks_Shell_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def Touch(self, _object, _attributes={}, **_arguments):
-        """Touch: Force recompilation of the specified file(s)
-        Required argument: List of files to compile
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Error code for each file touched
-        """
         _code = 'MMPR'
         _subcode = 'Toch'
         if _arguments:
@@ -567,11 +402,6 @@ class Metrowerks_Shell_Suite_Events():
     _argmap_Update_Project = {'ExternalEditor': 'Errs'}
 
     def Update_Project(self, _no_object=None, _attributes={}, **_arguments):
-        """Update Project: Update the current project
-        Keyword argument ExternalEditor: Should the contents of the message window be returned to the caller?
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: Errors that occurred while updating the project
-        """
         _code = 'MMPR'
         _subcode = 'UpdP'
         aetools.keysubst(_arguments, self._argmap_Update_Project)
@@ -584,136 +414,113 @@ class Metrowerks_Shell_Suite_Events():
 
 
 class Browser_Coloring(aetools.ComponentItem):
-    """Browser Coloring - Colors for Browser symbols. """
     want = 'BRKW'
 
 
 class _Prop_Browser_Keywords(aetools.NProperty):
-    """Browser Keywords - Mark Browser symbols with color. """
     which = 'BW00'
     want = 'bool'
 
 
 class _Prop_Classes_Color(aetools.NProperty):
-    """Classes Color - The color for classes. """
     which = 'BW01'
     want = 'cRGB'
 
 
 class _Prop_Constants_Color(aetools.NProperty):
-    """Constants Color - The color for constants. """
     which = 'BW02'
     want = 'cRGB'
 
 
 class _Prop_Enums_Color(aetools.NProperty):
-    """Enums Color - The color for enums. """
     which = 'BW03'
     want = 'cRGB'
 
 
 class _Prop_Functions_Color(aetools.NProperty):
-    """Functions Color - Set color for functions. """
     which = 'BW04'
     want = 'cRGB'
 
 
 class _Prop_Globals_Color(aetools.NProperty):
-    """Globals Color - The color for globals """
     which = 'BW05'
     want = 'cRGB'
 
 
 class _Prop_Macros_Color(aetools.NProperty):
-    """Macros Color - The color for macros. """
     which = 'BW06'
     want = 'cRGB'
 
 
 class _Prop_Template_Commands_in_Menu(aetools.NProperty):
-    """Template Commands in Menu - Include template commands in context menus """
     which = 'BW10'
     want = 'bool'
 
 
 class _Prop_Templates_Color(aetools.NProperty):
-    """Templates Color - Set color for templates. """
     which = 'BW07'
     want = 'cRGB'
 
 
 class _Prop_Typedefs_Color(aetools.NProperty):
-    """Typedefs Color - The color for typedefs. """
     which = 'BW08'
     want = 'cRGB'
 
 
 class Build_Settings(aetools.ComponentItem):
-    """Build Settings - Build Settings preferences. """
     want = 'BSTG'
 
 
 class _Prop_Build_Before_Running(aetools.NProperty):
-    """Build Before Running - Build the target before running. """
     which = 'BX04'
     want = 'BXbr'
 
 
 class _Prop_Compiler_Thread_Stack_Size(aetools.NProperty):
-    """Compiler Thread Stack Size - Compiler Thread Stack Size """
     which = 'BX06'
     want = 'long'
 
 
 class _Prop_Completion_Sound(aetools.NProperty):
-    """Completion Sound - Play a sound when finished a Bring Up To Date or Make command. """
     which = 'BX01'
     want = 'bool'
 
 
 class _Prop_Failure_Sound(aetools.NProperty):
-    """Failure Sound - The sound CodeWarrior plays when it cannot finish a Bring Up To Date or Make command. """
     which = 'BX03'
     want = 'TEXT'
 
 
 class _Prop_Include_Cache_Size(aetools.NProperty):
-    """Include Cache Size - Include file cache size. """
     which = 'BX05'
     want = 'long'
 
 
 class _Prop_Save_Before_Building(aetools.NProperty):
-    """Save Before Building - Save open editor files before build operations """
     which = 'BX07'
     want = 'bool'
 
 
 class _Prop_Success_Sound(aetools.NProperty):
-    """Success Sound - The sound CodeWarrior plays when it successfully finishes a Bring Up To Date or Make command. """
     which = 'BX02'
     want = 'TEXT'
 
 
 class base_class(aetools.ComponentItem):
-    """base class - A base class or super class of a class """
     want = 'BsCl'
 
 
 class _Prop_access(aetools.NProperty):
-    """access -  """
     which = 'Acce'
     want = 'Acce'
 
 
 class _Prop_class_(aetools.NProperty):
-    """class - The class object corresponding to this base class """
     which = 'Clas'
     want = 'obj '
 
 
 class _Prop_virtual(aetools.NProperty):
-    """virtual -  """
     which = 'Virt'
     want = 'bool'
 
@@ -721,82 +528,68 @@ class _Prop_virtual(aetools.NProperty):
 base_classes = base_class
 
 class Custom_Keywords(aetools.ComponentItem):
-    """Custom Keywords -  """
     want = 'CUKW'
 
 
 class _Prop_Custom_Color_1(aetools.NProperty):
-    """Custom Color 1 - The color for the first set of custom keywords. """
     which = 'GH05'
     want = 'cRGB'
 
 
 class _Prop_Custom_Color_2(aetools.NProperty):
-    """Custom Color 2 - The color for the second set custom keywords. """
     which = 'GH06'
     want = 'cRGB'
 
 
 class _Prop_Custom_Color_3(aetools.NProperty):
-    """Custom Color 3 - The color for the third set of custom keywords. """
     which = 'GH07'
     want = 'cRGB'
 
 
 class _Prop_Custom_Color_4(aetools.NProperty):
-    """Custom Color 4 - The color for the fourth set of custom keywords. """
     which = 'GH08'
     want = 'cRGB'
 
 
 class browser_catalog(aetools.ComponentItem):
-    """browser catalog - The browser symbol catalog for the current project """
     want = 'Cata'
 
 
 class class_(aetools.ComponentItem):
-    """class - A class, struct, or record type in the current project. """
     want = 'Clas'
 
 
 class _Prop_all_subclasses(aetools.NProperty):
-    """all subclasses - the classes directly or indirectly derived from this class """
     which = 'SubA'
     want = 'Clas'
 
 
 class _Prop_declaration_end_offset(aetools.NProperty):
-    """declaration end offset - End of class declaration """
     which = 'DcEn'
     want = 'long'
 
 
 class _Prop_declaration_file(aetools.NProperty):
-    """declaration file - Source file containing the class declaration """
     which = 'DcFl'
     want = 'fss '
 
 
 class _Prop_declaration_start_offset(aetools.NProperty):
-    """declaration start offset - Start of class declaration source code """
     which = 'DcSt'
     want = 'long'
 
 
 class _Prop_language(aetools.NProperty):
-    """language - Implementation language of this class """
     which = 'Lang'
     want = 'Lang'
 
 
 class _Prop_name(aetools.NProperty):
-    """name -  """
     which = 'pnam'
     want = 'TEXT'
 
 
 class _Prop_subclasses(aetools.NProperty):
-    """subclasses - the immediate subclasses of this class """
     which = 'SubC'
     want = 'Clas'
 
@@ -804,212 +597,176 @@ class _Prop_subclasses(aetools.NProperty):
 classes = class_
 
 class Debugger_Display(aetools.ComponentItem):
-    """Debugger Display - Debugger Display preferences """
     want = 'DbDS'
 
 
 class _Prop_Default_Array_Size(aetools.NProperty):
-    """Default Array Size - Controls whether CodeWarrior uses its own integrated editor or an external application for editing text files. """
     which = 'Db08'
     want = 'shor'
 
 
 class _Prop_Show_As_Decimal(aetools.NProperty):
-    """Show As Decimal - Show variable values as decimal by default """
     which = 'Db10'
     want = 'bool'
 
 
 class _Prop_Show_Locals(aetools.NProperty):
-    """Show Locals - Show locals by default """
     which = 'Db09'
     want = 'bool'
 
 
 class _Prop_Show_Variable_Types(aetools.NProperty):
-    """Show Variable Types - Show variable types by default. """
     which = 'Db01'
     want = 'bool'
 
 
 class _Prop_Sort_By_Method(aetools.NProperty):
-    """Sort By Method - Sort functions by method. """
     which = 'Db02'
     want = 'bool'
 
 
 class _Prop_Threads_in_Window(aetools.NProperty):
-    """Threads in Window - Show threads in separate windows. """
     which = 'Db04'
     want = 'bool'
 
 
 class _Prop_Use_RTTI(aetools.NProperty):
-    """Use RTTI - Enable RunTime Type Information. """
     which = 'Db03'
     want = 'bool'
 
 
 class _Prop_Variable_Changed_Hilite(aetools.NProperty):
-    """Variable Changed Hilite - Variable changed hilite color. """
     which = 'Db07'
     want = 'cRGB'
 
 
 class _Prop_Variable_Hints(aetools.NProperty):
-    """Variable Hints - Show variable hints. """
     which = 'Db05'
     want = 'bool'
 
 
 class _Prop_Watchpoint_Hilite(aetools.NProperty):
-    """Watchpoint Hilite - Watchpoint hilite color. """
     which = 'Db06'
     want = 'cRGB'
 
 
 class Debugger_Global(aetools.ComponentItem):
-    """Debugger Global - Debugger Global preferences """
     want = 'DbGL'
 
 
 class _Prop_Auto_Target_Libraries(aetools.NProperty):
-    """Auto Target Libraries - Automatically target libraries when debugging """
     which = 'Dg11'
     want = 'bool'
 
 
 class _Prop_Cache_Edited_Files(aetools.NProperty):
-    """Cache Edited Files - Cache edit files between debug sessions """
     which = 'Dg12'
     want = 'bool'
 
 
 class _Prop_Confirm_Kill(aetools.NProperty):
-    """Confirm Kill - Confirm the \xd4killing\xd5 of the process. """
     which = 'Dg04'
     want = 'bool'
 
 
 class _Prop_Dont_Step_in_Runtime(aetools.NProperty):
-    """Dont Step in Runtime - Don\xd5t step into runtime code when debugging. """
     which = 'Dg07'
     want = 'bool'
 
 
 class _Prop_File_Cache_Duration(aetools.NProperty):
-    """File Cache Duration - Duration to keep files in cache (in days) """
     which = 'Dg13'
     want = 'shor'
 
 
 class _Prop_Ignore_Mod_Dates(aetools.NProperty):
-    """Ignore Mod Dates - Ignore modification dates of files. """
     which = 'Dg01'
     want = 'bool'
 
 
 class _Prop_Launch_Apps_on_Open(aetools.NProperty):
-    """Launch Apps on Open - Launch applications on the opening of sym files. """
     which = 'Dg03'
     want = 'bool'
 
 
 class _Prop_Open_All_Classes(aetools.NProperty):
-    """Open All Classes - Open all Java class files. """
     which = 'Dg02'
     want = 'bool'
 
 
 class _Prop_Select_Stack_Crawl(aetools.NProperty):
-    """Select Stack Crawl - Select the stack crawl. """
     which = 'Dg06'
     want = 'bool'
 
 
 class _Prop_Stop_at_Main(aetools.NProperty):
-    """Stop at Main - Stop to debug on the main() function. """
     which = 'Dg05'
     want = 'bool'
 
 
 class Debugger_Target(aetools.ComponentItem):
-    """Debugger Target - Debugger Target preferences """
     want = 'DbTG'
 
 
 class _Prop_Cache_symbolics(aetools.NProperty):
-    """Cache symbolics - Cache symbolics between runs when executable doesn\xd5t change, else release symbolics files after killing process. """
     which = 'Dt15'
     want = 'bool'
 
 
 class _Prop_Data_Update_Interval(aetools.NProperty):
-    """Data Update Interval - How often to update the data while running (in seconds) """
     which = 'Dt09'
     want = 'long'
 
 
 class _Prop_Log_System_Messages(aetools.NProperty):
-    """Log System Messages - Log all system messages while debugging. """
     which = 'Dt02'
     want = 'bool'
 
 
 class _Prop_Relocated_Executable_Path(aetools.NProperty):
-    """Relocated Executable Path - Path to location of relocated libraries, code resources or remote debugging folder """
     which = 'Dt10'
     want = 'RlPt'
 
 
 class _Prop_Stop_at_temp_breakpoint(aetools.NProperty):
-    """Stop at temp breakpoint - Stop at a temp breakpoint on program launch. Set breakpoint type in Temp Breakpoint Type AppleEvent. """
     which = 'Dt13'
     want = 'bool'
 
 
 class _Prop_Temp_Breakpoint_Type(aetools.NProperty):
-    """Temp Breakpoint Type - Type of temp breakpoint to set on program launch. """
     which = 'Dt16'
     want = 'TmpB'
 
 
 class _Prop_Temp_breakpoint_names(aetools.NProperty):
-    """Temp breakpoint names - Comma separated list of names to attempt to stop at on program launch. First symbol to resolve in list is the temp BP that will be set. """
     which = 'Dt14'
     want = 'ctxt'
 
 
 class _Prop_Update_Data_While_Running(aetools.NProperty):
-    """Update Data While Running - Should pause to update data while running """
     which = 'Dt08'
     want = 'bool'
 
 
 class Debugger_Windowing(aetools.ComponentItem):
-    """Debugger Windowing -  """
     want = 'DbWN'
 
 
 class _Prop_Debugging_Start_Action(aetools.NProperty):
-    """Debugging Start Action - What action to take when debug session starts """
     which = 'Dw01'
     want = 'DbSA'
 
 
 class _Prop_Do_Nothing_To_Projects(aetools.NProperty):
-    """Do Nothing To Projects - Suppress debugging start action for project windows """
     which = 'Dw02'
     want = 'bool'
 
 
 class data_member(aetools.ComponentItem):
-    """data member - A class data member or field """
     want = 'DtMb'
 
 
 class _Prop_static(aetools.NProperty):
-    """static -  """
     which = 'Stat'
     want = 'bool'
 
@@ -1017,321 +774,266 @@ class _Prop_static(aetools.NProperty):
 data_members = data_member
 
 class Editor(aetools.ComponentItem):
-    """Editor -  """
     want = 'EDTR'
 
 
 class _Prop_Background_Color(aetools.NProperty):
-    """Background Color - Color of the background of editor windows. """
     which = 'ED13'
     want = 'cRGB'
 
 
 class _Prop_Balance(aetools.NProperty):
-    """Balance - Flash the matching opening bracket when you type a closing bracket. """
     which = 'ED03'
     want = 'bool'
 
 
 class _Prop_Context_Popup_Delay(aetools.NProperty):
-    """Context Popup Delay - The amount of time, in sixtieths of a second, before the context popup is displayed if you click and hold on a browser symbol. """
     which = 'ED14'
     want = 'long'
 
 
 class _Prop_Default_Text_File_Format(aetools.NProperty):
-    """Default Text File Format - Default text file format (i.e. which type of line endings to use) """
     which = 'ED17'
     want = 'TxtF'
 
 
 class _Prop_Dynamic_Scroll(aetools.NProperty):
-    """Dynamic Scroll - Display a window\xd5s contents as you move the scroll box. """
     which = 'ED02'
     want = 'bool'
 
 
 class _Prop_Flash_Delay(aetools.NProperty):
-    """Flash Delay - The amount of time, in sixtieths of a second, the editor highlights a matching bracket. """
     which = 'ED01'
     want = 'long'
 
 
 class _Prop_Left_Margin_Line_Select(aetools.NProperty):
-    """Left Margin Line Select - Clicking in the left margin selects lines """
     which = 'ED16'
     want = 'bool'
 
 
 class _Prop_Main_Text_Color(aetools.NProperty):
-    """Main Text Color - Main, default, color for text. """
     which = 'ED12'
     want = 'cRGB'
 
 
 class _Prop_Relaxed_C_Popup_Parsing(aetools.NProperty):
-    """Relaxed C Popup Parsing - Relax the function parser for C source files """
     which = 'ED15'
     want = 'bool'
 
 
 class _Prop_Remember_Font(aetools.NProperty):
-    """Remember Font - Display a source file with its own font settings. """
     which = 'ED08'
     want = 'bool'
 
 
 class _Prop_Remember_Selection(aetools.NProperty):
-    """Remember Selection - Restore the previous selection in a file when you open it. """
     which = 'ED09'
     want = 'bool'
 
 
 class _Prop_Remember_Window(aetools.NProperty):
-    """Remember Window - Restore the last size and position for a source file window when you open it. """
     which = 'ED10'
     want = 'bool'
 
 
 class _Prop_Sort_Function_Popup(aetools.NProperty):
-    """Sort Function Popup -  """
     which = 'ED06'
     want = 'bool'
 
 
 class _Prop_Use_Drag__26__Drop_Editing(aetools.NProperty):
-    """Use Drag & Drop Editing - Use Drag & Drop text editing. """
     which = 'ED04'
     want = 'bool'
 
 
 class _Prop_Use_Multiple_Undo(aetools.NProperty):
-    """Use Multiple Undo -  """
     which = 'ED07'
     want = 'bool'
 
 
 class Environment_Variable(aetools.ComponentItem):
-    """Environment Variable - Environment variable for host OS """
     want = 'EnvV'
 
 
 class _Prop_value(aetools.NProperty):
-    """value - Value of the environment variable """
     which = 'Valu'
     want = 'TEXT'
 
 
 class Error_Information(aetools.ComponentItem):
-    """Error Information - Describes a single error or warning from the compiler or the linker. """
     want = 'ErrM'
 
 
 class _Prop_disk_file(aetools.NProperty):
-    """disk file - The file where the error occurred.  May not be returned for certain kinds of errors (eg, link errors). """
     which = 'file'
     want = 'fss '
 
 
 class _Prop_lineNumber(aetools.NProperty):
-    """lineNumber - The line in the file where the error occurred.  May not be returned for certain kinds of errors (eg, link errors). """
     which = 'ErrL'
     want = 'long'
 
 
 class _Prop_message(aetools.NProperty):
-    """message - The error or warning message. """
     which = 'ErrS'
     want = 'TEXT'
 
 
 class _Prop_messageKind(aetools.NProperty):
-    """messageKind - The type of error or warning. """
     which = 'ErrT'
     want = 'ErrT'
 
 
 class Function_Information(aetools.ComponentItem):
-    """Function Information - Describes the location of any function or global data definition within the current project. """
     want = 'FDef'
 
 
 class File_Mappings(aetools.ComponentItem):
-    """File Mappings - Mappings of extensions & file types to compilers """
     want = 'FLMP'
 
 
 class _Prop_Mappings(aetools.NProperty):
-    """Mappings -  """
     which = 'FMps'
     want = 'FMap'
 
 
 class File_Mapping(aetools.ComponentItem):
-    """File Mapping -  """
     want = 'FMap'
 
 
 class _Prop_Compiler(aetools.NProperty):
-    """Compiler -  """
     which = 'TA07'
     want = 'TEXT'
 
 
 class _Prop_Extension(aetools.NProperty):
-    """Extension -  """
     which = 'TA02'
     want = 'TEXT'
 
 
 class _Prop_File_Type(aetools.NProperty):
-    """File Type -  """
     which = 'PR04'
     want = 'TEXT'
 
 
 class _Prop_Ignored_by_Make(aetools.NProperty):
-    """Ignored by Make -  """
     which = 'TA06'
     want = 'bool'
 
 
 class _Prop_Launchable(aetools.NProperty):
-    """Launchable -  """
     which = 'TA05'
     want = 'bool'
 
 
 class _Prop_Precompiled(aetools.NProperty):
-    """Precompiled -  """
     which = 'TA03'
     want = 'bool'
 
 
 class _Prop_Resource_File(aetools.NProperty):
-    """Resource File -  """
     which = 'TA04'
     want = 'bool'
 
 
 class Global_Source_Trees(aetools.ComponentItem):
-    """Global Source Trees - Globally-defined source tree roots """
     want = 'GSTs'
 
 
 class _Prop_Source_Trees(aetools.NProperty):
-    """Source Trees - List of source tree roots """
     which = 'ST01'
     want = 'SrcT'
 
 
 class Extras(aetools.ComponentItem):
-    """Extras -  """
     want = 'GXTR'
 
 
 class _Prop_Automatic_Toolbar_Help(aetools.NProperty):
-    """Automatic Toolbar Help - Automatically show balloon help in toolbar after delay """
     which = 'EX19'
     want = 'bool'
 
 
 class _Prop_External_Reference(aetools.NProperty):
-    """External Reference - Which on-line function reference to use. """
     which = 'EX08'
     want = 'RefP'
 
 
 class _Prop_Full_Screen_Zoom(aetools.NProperty):
-    """Full Screen Zoom - Zoom windows to the full screen width. """
     which = 'EX07'
     want = 'bool'
 
 
 class _Prop_Recent_Editor_Count(aetools.NProperty):
-    """Recent Editor Count - Maximum number of editor documents to show in the \xd2Open Recent\xd3 menu """
     which = 'EX16'
     want = 'shor'
 
 
 class _Prop_Recent_Project_Count(aetools.NProperty):
-    """Recent Project Count - Maximum number of project documents to show in the \xd2Open Recent\xd3 menu """
     which = 'EX17'
     want = 'shor'
 
 
 class _Prop_Use_Editor_Extensions(aetools.NProperty):
-    """Use Editor Extensions - Controls the use of the Editor Extensions menu """
     which = 'EX10'
     want = 'bool'
 
 
 class _Prop_Use_External_Editor(aetools.NProperty):
-    """Use External Editor - Controls whether CodeWarrior uses its own integrated editor or an external application for editing text files. """
     which = 'EX11'
     want = 'bool'
 
 
 class _Prop_Use_Script_Menu(aetools.NProperty):
-    """Use Script Menu - Controls the use of the AppleScript menu """
     which = 'EX12'
     want = 'bool'
 
 
 class _Prop_Use_ToolServer_Menu(aetools.NProperty):
-    """Use ToolServer Menu - Controls the use of the ToolServer menu """
     which = 'EX18'
     want = 'bool'
 
 
 class Build_Extras(aetools.ComponentItem):
-    """Build Extras -  """
     want = 'LXTR'
 
 
 class _Prop_Browser_Active(aetools.NProperty):
-    """Browser Active - Allow the collection of browser information. """
     which = 'EX09'
     want = 'bool'
 
 
 class _Prop_Cache_Subproject_Data(aetools.NProperty):
-    """Cache Subproject Data -  """
     which = 'EX31'
     want = 'bool'
 
 
 class _Prop_Dump_Browser_Info(aetools.NProperty):
-    """Dump Browser Info -  """
     which = 'EX30'
     want = 'bool'
 
 
 class _Prop_Modification_Date_Caching(aetools.NProperty):
-    """Modification Date Caching -  """
     which = 'EX04'
     want = 'bool'
 
 
 class member_function(aetools.ComponentItem):
-    """member function - A class member function or method. """
     want = 'MbFn'
 
 
 class _Prop_implementation_end_offset(aetools.NProperty):
-    """implementation end offset - end of member function definition """
     which = 'DfEn'
     want = 'long'
 
 
 class _Prop_implementation_file(aetools.NProperty):
-    """implementation file - Source file containing the member function definition """
     which = 'DfFl'
     want = 'fss '
 
 
 class _Prop_implementation_start_offset(aetools.NProperty):
-    """implementation start offset - start of member function definition source code """
     which = 'DfSt'
     want = 'long'
 
@@ -1339,472 +1041,391 @@ class _Prop_implementation_start_offset(aetools.NProperty):
 member_functions = member_function
 
 class Access_Paths(aetools.ComponentItem):
-    """Access Paths - Contains the definitions of a project\xd5s access (search) paths. """
     want = 'PATH'
 
 
 class _Prop_Always_Full_Search(aetools.NProperty):
-    """Always Full Search - To force the compiler to search for system includes like it searches for user includes. """
     which = 'PA02'
     want = 'bool'
 
 
 class _Prop_Convert_Paths(aetools.NProperty):
-    """Convert Paths - Enables conversion of DOS & Unix-style relative paths when searching for files. """
     which = 'PA04'
     want = 'bool'
 
 
 class _Prop_Require_Framework_Includes(aetools.NProperty):
-    """Require Framework Includes - Causes the IDE to only look in the framework access paths if a Mac OS X framework style include (i.e. <Carbon/Carbon.h> ) is used. """
     which = 'PA05'
     want = 'bool'
 
 
 class _Prop_System_Paths(aetools.NProperty):
-    """System Paths - To add an access path for the include files. (Not supported in Pascal) """
     which = 'PA03'
     want = 'PInf'
 
 
 class _Prop_User_Paths(aetools.NProperty):
-    """User Paths - To add an access path for the source files. """
     which = 'PA01'
     want = 'PInf'
 
 
 class Path_Information(aetools.ComponentItem):
-    """Path Information - Contains all of the parameters that describe an access path. """
     want = 'PInf'
 
 
 class _Prop_format(aetools.NProperty):
-    """format - Format of the a """
     which = 'Frmt'
     want = 'PthF'
 
 
 class _Prop_framework(aetools.NProperty):
-    """framework - Is the path a Mac OS X framework style path?  (This flag is readable but not writeable from AppleScript.) """
     which = 'Frmw'
     want = 'bool'
 
 
 class _Prop_host_flags(aetools.NProperty):
-    """host flags - Bit fields enabling the access path for each host OS (1 = Mac OS, 2 = Windows) """
     which = 'HstF'
     want = 'long'
 
 
 class _Prop_origin(aetools.NProperty):
-    """origin -  """
     which = 'Orig'
     want = 'PPrm'
 
 
 class _Prop_recursive(aetools.NProperty):
-    """recursive - Will the path be searched recursively?  (Default is true) """
     which = 'Recu'
     want = 'bool'
 
 
 class _Prop_root(aetools.NProperty):
-    """root - Name of the root of the relative path. Pre-defined values are \xd2Absolute\xd3, \xd2Project\xd3, \xd2CodeWarrior\xd3, and  \xd2System\xd3. Anything else is a user-defined root. """
     which = 'Root'
     want = 'TEXT'
 
 
 class Plugin_Settings(aetools.ComponentItem):
-    """Plugin Settings - Settings for plugin tools """
     want = 'PSTG'
 
 
 class _Prop_Disable_Third_Party_COM_Plugins(aetools.NProperty):
-    """Disable Third Party COM Plugins - Disable COM plugins from third parties """
     which = 'PX02'
     want = 'bool'
 
 
 class _Prop_Plugin_Diagnostics_Level(aetools.NProperty):
-    """Plugin Diagnostics Level - Plugin Diagnostics Level is for those who are developing plugins for the IDE and need to debug them. """
     which = 'PX01'
     want = 'PXdg'
 
 
 class Runtime_Settings(aetools.ComponentItem):
-    """Runtime Settings - Runtime settings """
     want = 'RSTG'
 
 
 class _Prop_Command_Line_Arguments(aetools.NProperty):
-    """Command Line Arguments - Extra command line args to pass to executable """
     which = 'RS02'
     want = 'TEXT'
 
 
 class _Prop_Environment_Variables(aetools.NProperty):
-    """Environment Variables - Environment variables to use when running the executable """
     which = 'RS04'
     want = 'EnvV'
 
 
 class _Prop_Host_Application(aetools.NProperty):
-    """Host Application - Host application for running/debugging libraries and code resources """
     which = 'RS01'
     want = 'RlPt'
 
 
 class _Prop_Working_Directory(aetools.NProperty):
-    """Working Directory - Working directory to use when running the executable """
     which = 'RS03'
     want = 'TEXT'
 
 
 class Relative_Path(aetools.ComponentItem):
-    """Relative Path - Relative path from some root """
     want = 'RlPt'
 
 
 class Shielded_Folder(aetools.ComponentItem):
-    """Shielded Folder -  """
     want = 'SFit'
 
 
 class _Prop_Expression_To_Match(aetools.NProperty):
-    """Expression To Match - Regular expression which describes folders to skip """
     which = 'SF01'
     want = 'TEXT'
 
 
 class _Prop_Skip_Find_And_Compare_Operations(aetools.NProperty):
-    """Skip Find And Compare Operations - Matching folders will be skipped during find and compare operations """
     which = 'SF03'
     want = 'bool'
 
 
 class _Prop_Skip_Project_Operations(aetools.NProperty):
-    """Skip Project Operations - Matching folders will be skipped during project operations """
     which = 'SF02'
     want = 'bool'
 
 
 class Shielded_Folders(aetools.ComponentItem):
-    """Shielded Folders - Folders skipped when performing project and find-and-compare operations """
     want = 'SHFL'
 
 
 class _Prop_Shielded_Items(aetools.NProperty):
-    """Shielded Items -  """
     which = 'SFis'
     want = 'SFit'
 
 
 class Syntax_Coloring(aetools.ComponentItem):
-    """Syntax Coloring -  """
     want = 'SNTX'
 
 
 class _Prop_Comment_Color(aetools.NProperty):
-    """Comment Color - The color for comments. """
     which = 'GH02'
     want = 'cRGB'
 
 
 class _Prop_Keyword_Color(aetools.NProperty):
-    """Keyword Color - The color for language keywords. """
     which = 'GH03'
     want = 'cRGB'
 
 
 class _Prop_String_Color(aetools.NProperty):
-    """String Color - The color for strings. """
     which = 'GH04'
     want = 'cRGB'
 
 
 class _Prop_Syntax_Coloring(aetools.NProperty):
-    """Syntax Coloring - Mark keywords and comments with color. """
     which = 'GH01'
     want = 'bool'
 
 
 class Segment(aetools.ComponentItem):
-    """Segment - A segment or group in the project """
     want = 'Seg '
 
 
 class _Prop_filecount(aetools.NProperty):
-    """filecount -  """
     which = 'NumF'
     want = 'shor'
 
 
 class _Prop_seg_2d_locked(aetools.NProperty):
-    """seg-locked - Is the segment locked ? [68K only] """
     which = 'PLck'
     want = 'bool'
 
 
 class _Prop_seg_2d_preloaded(aetools.NProperty):
-    """seg-preloaded - Is the segment preloaded ? [68K only] """
     which = 'Prel'
     want = 'bool'
 
 
 class _Prop_seg_2d_protected(aetools.NProperty):
-    """seg-protected - Is the segment protected ? [68K only] """
     which = 'Prot'
     want = 'bool'
 
 
 class _Prop_seg_2d_purgeable(aetools.NProperty):
-    """seg-purgeable - Is the segment purgeable ? [68K only] """
     which = 'Purg'
     want = 'bool'
 
 
 class _Prop_seg_2d_system_heap(aetools.NProperty):
-    """seg-system heap - Is the segment loaded into the system heap ? [68K only] """
     which = 'SysH'
     want = 'bool'
 
 
 class ProjectFile(aetools.ComponentItem):
-    """ProjectFile - A file contained in a project """
     want = 'SrcF'
 
 
 class _Prop_codesize(aetools.NProperty):
-    """codesize - The size of this file\xd5s code. """
     which = 'CSiz'
     want = 'long'
 
 
 class _Prop_datasize(aetools.NProperty):
-    """datasize - The size of this file\xd5s data. """
     which = 'DSiz'
     want = 'long'
 
 
 class _Prop_filetype(aetools.NProperty):
-    """filetype - What kind of file is this ? """
     which = 'SrcT'
     want = 'SrcT'
 
 
 class _Prop_includes(aetools.NProperty):
-    """includes -  """
     which = 'IncF'
     want = 'fss '
 
 
 class _Prop_initialize_before(aetools.NProperty):
-    """initialize before - Initialize the shared library before the main application. """
     which = 'Bfor'
     want = 'bool'
 
 
 class _Prop_symbols(aetools.NProperty):
-    """symbols - Are debugging symbols generated for this file ? """
     which = 'SymG'
     want = 'bool'
 
 
 class _Prop_up_to_date(aetools.NProperty):
-    """up to date - Has the file been compiled since its last modification ? """
     which = 'UpTD'
     want = 'bool'
 
 
 class _Prop_weak_link(aetools.NProperty):
-    """weak link - Is this file imported weakly into the project ? [PowerPC only] """
     which = 'Weak'
     want = 'bool'
 
 
 class Source_Tree(aetools.ComponentItem):
-    """Source Tree - User-defined source tree root """
     want = 'SrcT'
 
 
 class _Prop_path(aetools.NProperty):
-    """path - path for the user-defined source tree root """
     which = 'Path'
     want = 'TEXT'
 
 
 class _Prop_path_kind(aetools.NProperty):
-    """path kind - kind of path """
     which = 'Kind'
     want = 'STKd'
 
 
 class Target_Settings(aetools.ComponentItem):
-    """Target Settings - Contains the definitions of a project\xd5s target. """
     want = 'TARG'
 
 
 class _Prop_Linker(aetools.NProperty):
-    """Linker - The name of the current linker. """
     which = 'TA01'
     want = 'TEXT'
 
 
 class _Prop_Output_Directory_Location(aetools.NProperty):
-    """Output Directory Location - Location of output directory """
     which = 'TA16'
     want = 'RlPt'
 
 
 class _Prop_Output_Directory_Origin(aetools.NProperty):
-    """Output Directory Origin - Origin of path to output directory. Usage of this property is deprecated. Use the \xd2Output Directory Location\xd3 property instead. """
     which = 'TA12'
     want = 'PPrm'
 
 
 class _Prop_Output_Directory_Path(aetools.NProperty):
-    """Output Directory Path - Path to output directory. Usage of this property is deprecated. Use the \xd2Output Directory Location\xd3 property instead. """
     which = 'TA11'
     want = 'TEXT'
 
 
 class _Prop_Post_Linker(aetools.NProperty):
-    """Post Linker -  """
     which = 'TA09'
     want = 'TEXT'
 
 
 class _Prop_Pre_Linker(aetools.NProperty):
-    """Pre Linker -  """
     which = 'TA13'
     want = 'TEXT'
 
 
 class _Prop_Target_Name(aetools.NProperty):
-    """Target Name -  """
     which = 'TA10'
     want = 'TEXT'
 
 
 class _Prop_Use_Relative_Paths(aetools.NProperty):
-    """Use Relative Paths - Save project entries using relative paths """
     which = 'TA15'
     want = 'bool'
 
 
 class Target_Source_Trees(aetools.ComponentItem):
-    """Target Source Trees - Target-specific user-defined source tree roots """
     want = 'TSTs'
 
 
 class VCS_Setup(aetools.ComponentItem):
-    """VCS Setup - The version control system preferences. """
     want = 'VCSs'
 
 
 class _Prop_Always_Prompt(aetools.NProperty):
-    """Always Prompt - Always show login dialog """
     which = 'VC07'
     want = 'bool'
 
 
 class _Prop_Auto_Connect(aetools.NProperty):
-    """Auto Connect - Automatically connect to database when starting. """
     which = 'VC05'
     want = 'bool'
 
 
 class _Prop_Connection_Method(aetools.NProperty):
-    """Connection Method - Name of Version Control System to use. """
     which = 'VC02'
     want = 'TEXT'
 
 
 class _Prop_Database_Path(aetools.NProperty):
-    """Database Path - Path to the VCS database. """
     which = 'VC09'
     want = 'RlPt'
 
 
 class _Prop_Local_Path(aetools.NProperty):
-    """Local Path - Path to the local root """
     which = 'VC10'
     want = 'RlPt'
 
 
 class _Prop_Mount_Volume(aetools.NProperty):
-    """Mount Volume - Attempt to mount the database volume if it isn't available. """
     which = 'VC08'
     want = 'bool'
 
 
 class _Prop_Password(aetools.NProperty):
-    """Password - The password for the VCS. """
     which = 'VC04'
     want = 'TEXT'
 
 
 class _Prop_Store_Password(aetools.NProperty):
-    """Store Password - Store the password. """
     which = 'VC06'
     want = 'bool'
 
 
 class _Prop_Use_Global_Settings(aetools.NProperty):
-    """Use Global Settings - Use the global VCS settings by default """
     which = 'VC11'
     want = 'bool'
 
 
 class _Prop_Username(aetools.NProperty):
-    """Username - The user name for the VCS. """
     which = 'VC03'
     want = 'TEXT'
 
 
 class _Prop_VCS_Active(aetools.NProperty):
-    """VCS Active - Use Version Control """
     which = 'VC01'
     want = 'bool'
 
 
 class Font(aetools.ComponentItem):
-    """Font -  """
     want = 'mFNT'
 
 
 class _Prop_Auto_Indent(aetools.NProperty):
-    """Auto Indent - Indent new lines automatically. """
     which = 'FN01'
     want = 'bool'
 
 
 class _Prop_Tab_Indents_Selection(aetools.NProperty):
-    """Tab Indents Selection - Tab indents selection when multiple lines are selected """
     which = 'FN03'
     want = 'bool'
 
 
 class _Prop_Tab_Inserts_Spaces(aetools.NProperty):
-    """Tab Inserts Spaces - Insert spaces instead of tab character """
     which = 'FN04'
     want = 'bool'
 
 
 class _Prop_Tab_Size(aetools.NProperty):
-    """Tab Size -  """
     which = 'FN02'
     want = 'shor'
 
 
 class _Prop_Text_Font(aetools.NProperty):
-    """Text Font - The font used in editing windows. """
     which = 'ptxf'
     want = 'TEXT'
 
 
 class _Prop_Text_Size(aetools.NProperty):
-    """Text Size - The size of the text in an editing window. """
     which = 'ptps'
     want = 'shor'
 

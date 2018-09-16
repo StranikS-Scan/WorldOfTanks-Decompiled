@@ -25,121 +25,41 @@ from gui.shared.utils.listeners_collection import ListenersCollection
 from prebattle_shared import decodeRoster
 
 class BaseLegacyEntity(BasePrbEntity):
-    """
-    Base class of legacy entity of prebattle.
-    It provides the following:
-    - adds/removes listener;
-    - get prebattle settings;
-    - operations with rosters;
-    - get team state;
-    - get player state;
-    - get player permissions;
-    - gets limits;
-    - processes action come from UI components;
-    - leave prebattle;
-    - send request to server to some actions. For example, send request
-       to server to assign player in team 1.
-    """
 
     def init(self, clientPrb=None, ctx=None):
-        """
-        Initialization.
-        Args:
-            clientPrb: system prebattle data
-            ctx: initialization context
-        
-        Returns:
-            initialization's flags
-        """
         return super(BaseLegacyEntity, self).init()
 
     def fini(self, clientPrb=None, ctx=None, woEvents=False):
-        """
-        Finalizer.
-        Args:
-            clientPrb: system prebattle data
-            ctx: finalization context
-            woEvents: invoke without any events
-        
-        Returns:
-            finalization's flags
-        """
         return super(BaseLegacyEntity, self).fini()
 
     def getCtrlType(self):
         return CTRL_ENTITY_TYPE.LEGACY
 
     def getSettings(self):
-        """
-        Build prebattle settings.
-        """
         return makePrebattleSettings()
 
     def getRosterKey(self, pID=None):
-        """
-        Gets bitmask containing player's roster.
-        Args:
-            pID: player's ID.
-        """
         return PREBATTLE_ROSTER.UNKNOWN
 
     def getRosters(self, keys=None):
-        """
-        Gets information of players in rosters. If keys is specified than
-        returns information for given rosters, otherwise - all information.
-        Args:
-            keys: list of rosters
-        """
         return dict.fromkeys(PREBATTLE_ROSTER.ALL, [])
 
     def getPlayerInfo(self, pID=None, rosterKey=None):
-        """
-        Gets player information in rosters.
-        Args:
-            pID: number containing player ID
-            rosterKey: number containing roster key
-        """
         return prb_items.PlayerPrbInfo(-1L)
 
     def getPlayerInfoByDbID(self, dbID):
-        """
-        Gets player information in rosters by database ID.
-        Args:
-            dbID: umber containing player database ID
-        """
         return prb_items.PlayerPrbInfo(-1L)
 
     def getPlayerTeam(self, pID=None):
-        """
-        Gets number of player's team. The 0 means player not found.
-        Args:
-            pID: number containing player ID
-        """
         pass
 
     def getTeamState(self, team=None):
-        """
-        Gets state of team. If team is not specified than gets state of team
-        for current player. The 0 means state of team not found.
-        Args:
-            team: team number
-        """
         return prb_items.TeamStateInfo(0)
 
     def getPlayersStateStats(self):
-        """
-        Get current player's state stats.
-        """
         return prb_items.PlayersStateStats(0, False, 0, 0)
 
     def getRoles(self, pDatabaseID=None, clanDBID=None, team=None):
-        """
-        Gets bitmask with player's roles.
-        Args:
-            pDatabaseID: number containing player's database ID
-            clanDBID: database ID of player's clan
-            team: team index
-        """
         pass
 
     def getPermissions(self, pID=None):
@@ -149,28 +69,16 @@ class BaseLegacyEntity(BasePrbEntity):
         return None
 
     def exitFromQueue(self):
-        """
-        Routine invokes when player is exiting from queue.
-        """
         return False
 
     def hasGUIPage(self):
-        """
-        Is prebattle UI shown.
-        """
         return False
 
     def isGUIProcessed(self):
-        """
-        Determine prebattle rules what GUI to load in init.
-        """
         return False
 
 
 class LegacyIntroEntryPoint(BasePrbEntryPoint):
-    """
-    Legacy entry point for intro entity.
-    """
 
     def __init__(self, modeFlags, prbType):
         super(LegacyIntroEntryPoint, self).__init__(entityFlags=FUNCTIONAL_FLAG.LEGACY_INTRO, modeFlags=modeFlags)
@@ -193,9 +101,6 @@ class LegacyIntroEntryPoint(BasePrbEntryPoint):
 
 
 class LegacyEntryPoint(BasePrbEntryPoint):
-    """
-    Legacy Entry point for room entity.
-    """
 
     def __init__(self, modeFlags):
         super(LegacyEntryPoint, self).__init__(entityFlags=FUNCTIONAL_FLAG.LEGACY, modeFlags=modeFlags)
@@ -218,9 +123,6 @@ class LegacyEntryPoint(BasePrbEntryPoint):
 
 
 class _LegacyEntity(BaseLegacyEntity, ListenersCollection):
-    """
-    Base class for legacy entity.
-    """
 
     def __init__(self, entityFlags, modeFlags, listenerClass, requestHandlers=None):
         super(_LegacyEntity, self).__init__(entityFlags=entityFlags, modeFlags=modeFlags)
@@ -249,9 +151,6 @@ class _LegacyEntity(BaseLegacyEntity, ListenersCollection):
 
 
 class LegacyIntroEntity(_LegacyEntity):
-    """
-    Entity for legacy intro.
-    """
 
     def __init__(self, modeFlags, prbType, listReq, requestHandlers=None):
         super(LegacyIntroEntity, self).__init__(FUNCTIONAL_FLAG.LEGACY_INTRO, modeFlags, ILegacyIntroListener, requestHandlers)
@@ -287,18 +186,10 @@ class LegacyIntroEntity(_LegacyEntity):
         return
 
     def _onListReceived(self, prebattles):
-        """
-        Legacy list requester listener.
-        Args:
-            prebattles: list of prebattles received
-        """
         self._invokeListeners('onLegacyListReceived', prebattles)
 
 
 class LegacyInitEntity(BaseLegacyEntity):
-    """
-    Entity that is placeholder for real entity.
-    """
 
     def __init__(self):
         super(LegacyInitEntity, self).__init__(FUNCTIONAL_FLAG.LEGACY_INIT, FUNCTIONAL_FLAG.UNDEFINED)
@@ -326,26 +217,16 @@ class LegacyInitEntity(BaseLegacyEntity):
         return super(LegacyInitEntity, self).fini(clientPrb=clientPrb, ctx=ctx, woEvents=woEvents)
 
     def prb_onSettingsReceived(self):
-        """
-        Listener for prebattle settings receive.
-        """
         LOG_DEBUG('prb_onSettingsReceived')
         self.__prbInitSteps |= PREBATTLE_INIT_STEP.SETTING_RECEIVED
         self.__isPrebattleInited()
 
     def prb_onRosterReceived(self):
-        """
-        Listener for prebattle rosters receive.
-        """
         LOG_DEBUG('prb_onRosterReceived')
         self.__prbInitSteps |= PREBATTLE_INIT_STEP.ROSTERS_RECEIVED
         self.__isPrebattleInited()
 
     def __isPrebattleInited(self):
-        """
-        Is current prebattle finaly inited and we could porecess
-        to full entity.
-        """
         result = False
         if self.__prbInitSteps is PREBATTLE_INIT_STEP.INITED:
             g_prbCtrlEvents.onLegacyInited()
@@ -355,9 +236,6 @@ class LegacyInitEntity(BaseLegacyEntity):
 
 
 class LegacyEntity(_LegacyEntity):
-    """
-    Legacy prebattle entity.
-    """
 
     def __init__(self, modeFlags, settings, permClass=None, limits=None, requestHandlers=None):
         super(LegacyEntity, self).__init__(FUNCTIONAL_FLAG.LEGACY, modeFlags, ILegacyListener, requestHandlers)
@@ -432,7 +310,7 @@ class LegacyEntity(_LegacyEntity):
     def hasLockedState(self):
         if g_playerEvents.isPlayerEntityChanging:
             return True
-        team, assigned = decodeRoster(self.getRosterKey())
+        _, assigned = decodeRoster(self.getRosterKey())
         return self.getTeamState().isInQueue() and self.getPlayerInfo().isReady() and assigned
 
     def getConfirmDialogMeta(self, ctx):
@@ -522,9 +400,6 @@ class LegacyEntity(_LegacyEntity):
             return result
 
     def getProps(self):
-        """
-        Getter for prebattle props data.
-        """
         return prb_items.PrbPropsInfo(**prb_getters.getPrebattleProps())
 
     def leave(self, ctx, callback=None):
@@ -546,12 +421,6 @@ class LegacyEntity(_LegacyEntity):
                 setNotReady(0)
 
     def assign(self, ctx, callback=None):
-        """
-        Sends request to assing player to some team.
-        Args:
-            ctx: assign context
-            callback: operation callback
-        """
         prevTeam, _ = decodeRoster(self.getRosterKey(pID=ctx.getPlayerID()))
         nextTeam, assigned = decodeRoster(ctx.getRoster())
         pPermissions = self.getPermissions()
@@ -579,12 +448,6 @@ class LegacyEntity(_LegacyEntity):
             return
 
     def setTeamState(self, ctx, callback=None):
-        """
-        Sets team state to ready/not ready.
-        Args:
-            ctx: set team state request context
-            callback: operation callback
-        """
         team = ctx.getTeam()
         if not self.getPermissions().canSetTeamState(team=team):
             LOG_ERROR('Player can not change state of team', team)
@@ -606,12 +469,6 @@ class LegacyEntity(_LegacyEntity):
             callback(True)
 
     def setPlayerState(self, ctx, callback=None):
-        """
-        Sets palyer state to ready/not ready.
-        Args:
-            ctx: set player state request context
-            callback: operation callback
-        """
         playerInfo = self.getPlayerInfo()
         if playerInfo is not None:
             playerIsReady = playerInfo.isReady()
@@ -629,12 +486,6 @@ class LegacyEntity(_LegacyEntity):
         return
 
     def kickPlayer(self, ctx, callback=None):
-        """
-        Kicks player from team.
-        Args:
-            ctx: kick player request context
-            callback: operation callback
-        """
         pID = ctx.getPlayerID()
         rosterKey = self.getRosterKey(pID=pID)
         team, assigned = decodeRoster(rosterKey)
@@ -654,12 +505,6 @@ class LegacyEntity(_LegacyEntity):
         BigWorld.player().prb_kick(ctx.getPlayerID(), ctx.onResponseReceived)
 
     def swapTeams(self, ctx, callback=None):
-        """
-        Swap players in teams.
-        Args:
-            ctx: swap teams request context
-            callback: operation callback
-        """
         if self._cooldown.validate(REQUEST_TYPE.SWAP_TEAMS):
             if callback:
                 callback(False)
@@ -675,12 +520,6 @@ class LegacyEntity(_LegacyEntity):
                 callback(False)
 
     def sendInvites(self, ctx, callback=None):
-        """
-        Sends invites in legacy to selected players.
-        Args:
-            ctx: send invites context
-            callback: operation callback
-        """
         if self._cooldown.validate(REQUEST_TYPE.SEND_INVITE):
             if callback:
                 callback(False)
@@ -697,19 +536,11 @@ class LegacyEntity(_LegacyEntity):
                 callback(False)
 
     def prb_onSettingUpdated(self, settingName):
-        """
-        Prebattle listener on settings updated.
-        Args:
-            settingName: setting name
-        """
         settingValue = self._settings[settingName]
         LOG_DEBUG('prb_onSettingUpdated', settingName, settingValue)
         self._invokeListeners('onSettingUpdated', self, settingName, settingValue)
 
     def prb_onTeamStatesReceived(self):
-        """
-        Prebattle listener on team states changed.
-        """
         team1State = self.getTeamState(team=1)
         team2State = self.getTeamState(team=2)
         LOG_DEBUG('prb_onTeamStatesReceived', team1State, team2State)
@@ -719,17 +550,11 @@ class LegacyEntity(_LegacyEntity):
         self._invokeListeners('onTeamStatesReceived', self, team1State, team2State)
 
     def prb_onPlayerStateChanged(self, pID, roster):
-        """
-        Prebattle listener on player states changed.
-        """
         accountInfo = self.getPlayerInfo(pID=pID)
         LOG_DEBUG('prb_onPlayerStateChanged', accountInfo)
         self._invokeListeners('onPlayerStateChanged', self, roster, accountInfo)
 
     def prb_onRosterReceived(self):
-        """
-        Prebattle listener on rosters data received.
-        """
         LOG_DEBUG('prb_onRosterReceived')
         rosters = self.getRosters()
         self._invokeListeners('onRostersChanged', self, rosters, True)
@@ -737,9 +562,6 @@ class LegacyEntity(_LegacyEntity):
         self._invokeListeners('onPlayerTeamNumberChanged', self, team)
 
     def prb_onPlayerRosterChanged(self, pID, prevRoster, roster, actorID):
-        """
-        Prebattle listener on player roster changed.
-        """
         LOG_DEBUG('prb_onPlayerRosterChanged', pID, prevRoster, roster, actorID)
         rosters = self.getRosters(keys=[prevRoster, roster])
         actorInfo = self.getPlayerInfo(pID=actorID)
@@ -756,9 +578,6 @@ class LegacyEntity(_LegacyEntity):
                 self._invokeListeners('onPlayerTeamNumberChanged', self, currentTeam)
 
     def prb_onPlayerAdded(self, pID, roster):
-        """
-        Prebattle listener on player added.
-        """
         LOG_DEBUG('prb_onPlayerAdded', pID, roster)
         rosters = self.getRosters(keys=[roster])
         playerInfo = self.getPlayerInfo(pID=pID, rosterKey=roster)
@@ -767,9 +586,6 @@ class LegacyEntity(_LegacyEntity):
             listener.onRostersChanged(self, rosters, False)
 
     def prb_onPlayerRemoved(self, pID, roster, name):
-        """
-        Prebattle listener on player added.
-        """
         LOG_DEBUG('prb_onPlayerRemoved', pID, roster, name)
         rosters = self.getRosters(keys=[roster])
         playerInfo = prb_items.PlayerPrbInfo(pID, name=name)
@@ -778,9 +594,6 @@ class LegacyEntity(_LegacyEntity):
             listener.onRostersChanged(self, rosters, False)
 
     def prb_onKickedFromQueue(self):
-        """
-        Prebattle listener for kick from queue.
-        """
         LOG_DEBUG('prb_onKickedFromQueue')
         message = messages.getPrbKickedFromQueueMessage(prb_getters.getPrebattleTypeName(self.getEntityType()))
         if message:
@@ -790,12 +603,6 @@ class LegacyEntity(_LegacyEntity):
         return LegacyActionsValidator(self)
 
     def _setTeamReady(self, ctx, callback=None):
-        """
-        Sets team state to ready.
-        Args:
-            ctx: set team state request context
-            callback: operation callback
-        """
         if prb_getters.isParentControlActivated():
             g_eventDispatcher.showParentControlNotification()
             if callback:
@@ -823,12 +630,6 @@ class LegacyEntity(_LegacyEntity):
             return
 
     def _setTeamNotReady(self, ctx, callback=None):
-        """
-        Sets team state to not ready.
-        Args:
-            ctx: set team state request context
-            callback: operation callback
-        """
         if self._cooldown.validate(REQUEST_TYPE.SET_TEAM_STATE):
             if callback:
                 callback(False)
@@ -838,12 +639,6 @@ class LegacyEntity(_LegacyEntity):
         self._cooldown.process(REQUEST_TYPE.SET_TEAM_STATE, coolDown=REQUEST_COOLDOWN.PREBATTLE_TEAM_NOT_READY)
 
     def _setPlayerNotReady(self, ctx, callback=None):
-        """
-        Sets palyer state to not ready.
-        Args:
-            ctx: set player state request context
-            callback: operation callback
-        """
         if self._cooldown.validate(REQUEST_TYPE.SET_PLAYER_STATE, REQUEST_COOLDOWN.PREBATTLE_NOT_READY):
             if callback:
                 callback(False)
@@ -860,12 +655,6 @@ class LegacyEntity(_LegacyEntity):
         self._cooldown.process(REQUEST_TYPE.SET_PLAYER_STATE, coolDown=REQUEST_COOLDOWN.PREBATTLE_NOT_READY)
 
     def _setPlayerReady(self, ctx, callback=None):
-        """
-        Sets player state to ready.
-        Args:
-            ctx: set player state request context
-            callback: operation callback
-        """
         if prb_getters.isParentControlActivated():
             g_eventDispatcher.showParentControlNotification()
             if callback:
@@ -901,11 +690,6 @@ class LegacyEntity(_LegacyEntity):
             return True
 
     def _getPlayersStateStats(self, rosterKey):
-        """
-        Get players state stats
-        Args:
-            rosterKey: roster key mask
-        """
         clientPrb = prb_getters.getClientPrebattle()
         notReadyCount = 0
         playersCount = 0

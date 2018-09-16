@@ -9,9 +9,6 @@ from gui.shared.formatters import text_styles, getMoneyVO
 DEFAULT_VALUE = 1
 
 class ConfirmBoosterDialog(ConfirmItemWindowMeta):
-    """
-    Basic implementation of window which provides operation with boosters.
-    """
 
     def __init__(self, meta, handler):
         super(ConfirmBoosterDialog, self).__init__()

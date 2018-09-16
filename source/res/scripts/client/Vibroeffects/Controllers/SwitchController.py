@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/Vibroeffects/Controllers/SwitchController.py
 from Vibroeffects import VibroManager
 
-class SwitchController:
+class SwitchController(object):
 
     def __init__(self, effectName):
         self.__effect = VibroManager.g_instance.getEffect(effectName)

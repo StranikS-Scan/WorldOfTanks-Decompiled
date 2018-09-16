@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/LightFx/LightEffect.py
 import BigWorld
-import weakref
 import Event
 ACTION_MORPH = 1
 ACTION_PULSE = 2
 ACTION_COLOR = 3
 
-class OneLightAction:
+class OneLightAction(object):
 
     def __init__(self, lightDescription, color, action):
         self.lightDescription = lightDescription
@@ -15,7 +14,7 @@ class OneLightAction:
         self.action = action
 
 
-class LightEffect:
+class LightEffect(object):
 
     def __init__(self, name, lightActions, duration=None):
         self.name = name

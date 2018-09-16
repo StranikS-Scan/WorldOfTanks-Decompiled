@@ -298,7 +298,6 @@ class Debugger():
         self.idb.clear_all_file_breaks(filename)
 
     def load_breakpoints(self):
-        """Load PyShellEditorWindow breakpoints into subprocess debugger"""
         pyshell_edit_windows = self.pyshell.flist.inversedict.keys()
         for editwin in pyshell_edit_windows:
             filename = editwin.io.filename
@@ -354,22 +353,18 @@ class StackViewer(ScrolledList):
         return
 
     def popup_event(self, event):
-        """override base method"""
         return ScrolledList.popup_event(self, event) if self.stack else None
 
     def fill_menu(self):
-        """override base method"""
         menu = self.menu
         menu.add_command(label='Go to source line', command=self.goto_source_line)
         menu.add_command(label='Show stack frame', command=self.show_stack_frame)
 
     def on_select(self, index):
-        """override base method"""
         if 0 <= index < len(self.stack):
             self.gui.show_frame(self.stack[index])
 
     def on_double(self, index):
-        """override base method"""
         self.show_source(index)
 
     def goto_source_line(self):

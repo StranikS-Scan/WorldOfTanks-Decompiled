@@ -8,13 +8,6 @@ from BootcampTransition import BootcampTransition
 from helpers import aop
 
 class _PointcutGameSessionControllerFix(aop.Pointcut):
-    """ Sending onAvatarBecomePlayer from ReloadLobbyHelper.reload interferes with GameSessionController logic.
-        This pointcut fixes it by preventing an extra notification on switching to/from bootcamp
-        (as if on exiting battle).
-    
-        NOTE: this is not in bootcamp/aop/common.py,
-              because ReloadLobbyHelper is used slightly outside the bootcamp scope.
-    """
 
     def __init__(self):
         super(_PointcutGameSessionControllerFix, self).__init__('gui.game_control.GameSessionController', 'GameSessionController', '_stop', aspects=(_AspectGameSessionControllerFix,))

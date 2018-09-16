@@ -14,14 +14,14 @@
   <batchingEnabled>	0	</batchingEnabled>
   <defaultGroundEffect>	None	</defaultGroundEffect>
   <wwmusicSetup>
-    <wwmusicLoading>	music_himmelsdorf	</wwmusicLoading>
-    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
-    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+    <wwmusicLoading>	music_lakeville_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_lakeville_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_lakeville_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_lakeville_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_lakeville_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_lakeville_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_spring_01	</wwambientSound>
   <wwDefaultReverb>
@@ -84,6 +84,54 @@
       </teamBasePositions>
     </assault2>
   </gameplayTypes>
-  <mapActivities></mapActivities>
   <roadMap></roadMap>
+  <mapActivities>
+    <scenario>
+      <startTime>	120.000000 330.000000	</startTime>
+      <possibility>	50.000000	</possibility>
+      <period>	0.000000	</period>
+      <trajectories>
+        <warplane>
+          <preset>	train	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+          <period>	200.000000	</period>
+        </warplane>
+        <warplane>
+          <preset>	train2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.600000 1.600000	</startTime>
+          <period>	200.000000	</period>
+        </warplane>
+        <warplane>
+          <preset>	train1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	2.550000 2.550000	</startTime>
+          <period>	200.000000	</period>
+        </warplane>
+        <warplane>
+          <preset>	train3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	3.500000 3.500000	</startTime>
+          <period>	200.000000	</period>
+        </warplane>
+        <warplane>
+          <preset>	train4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	4.450000 4.450000	</startTime>
+          <period>	200.000000	</period>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
 </07_lakeville.xml>

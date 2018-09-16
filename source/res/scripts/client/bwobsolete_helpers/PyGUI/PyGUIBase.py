@@ -158,7 +158,6 @@ class PyGUIBase(object, Listenable):
         for name, child in self.component.children:
             if not child.script:
                 child.script = PyGUIBase(child)
-            assert isinstance(child.script, PyGUIBase)
 
         self._bindEvents(self.__class__)
 
@@ -166,7 +165,6 @@ class PyGUIBase(object, Listenable):
         for name, function in cls.__dict__.iteritems():
             if hasattr(function, '_PyGUIEventHandler'):
                 for componentName, eventName, args, kargs in function._PyGUIEventHandler:
-                    assert callable(function)
                     component = self.component
                     for name in componentName.split('.'):
                         component = getattr(component, name, None)

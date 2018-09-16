@@ -16,8 +16,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 __bBattleLoadingShowed = False
 
 def isBattleLoadingShowed():
-    """is battle loading screen has been showed
-    """
     global __bBattleLoadingShowed
     return __bBattleLoadingShowed if BattleReplay.isPlaying() else False
 
@@ -54,17 +52,10 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
         self.as_setProgressS(progress)
 
     def invalidateArenaInfo(self):
-        arenaDP = self._battleCtx.getArenaDP()
         self._setTipsInfo()
 
     def arenaLoadCompleted(self):
-        if not BattleReplay.isPlaying():
-            BigWorld.wg_enableGUIBackground(False, True)
-        else:
-            BigWorld.wg_enableGUIBackground(False, False)
-
-    def isFalloutMode(self):
-        return False
+        BigWorld.wg_enableGUIBackground(False, False)
 
     def _populate(self):
         super(BattleLoading, self)._populate()
@@ -109,7 +100,7 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     def __makeVisualTipVO(self, arenaDP, tip=None):
         loadingInfo = settings_constants.GAME.BATTLE_LOADING_RANKED_INFO if self._arenaVisitor.gui.isRankedBattle() else settings_constants.GAME.BATTLE_LOADING_INFO
         setting = self.settingsCore.options.getSetting(loadingInfo)
-        settingID = setting.getSettingID(isVisualOnly=self._arenaVisitor.gui.isSandboxBattle() or self._arenaVisitor.gui.isEventBattle(), isFallout=self.isFalloutMode())
+        settingID = setting.getSettingID(isVisualOnly=self._arenaVisitor.gui.isSandboxBattle() or self._arenaVisitor.gui.isEventBattle())
         vo = {'settingID': settingID,
          'tipIcon': tip.icon if settingID == BattleLoadingTipSetting.OPTIONS.VISUAL else None,
          'arenaTypeID': self._arenaVisitor.type.getID(),
@@ -121,9 +112,6 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
         return vo
 
     def _getViewSettingByID(self, settingID):
-        """ Get settings for view by type
-        :return:
-        """
         result = {}
         if settingID == BattleLoadingTipSetting.OPTIONS.TEXT:
             result.update({'leftTeamTitleLeft': -410,

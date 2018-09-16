@@ -7,24 +7,10 @@ from gui.Scaleform.framework.entities.DisposableEntity import DisposableEntity
 from gui.Scaleform.framework import ScopeTemplates
 
 class ScopeControllerError(StandardError):
-    """
-    General class for all ScopeController-specific exceptions.
-    """
     pass
 
 
 class ScopeController(DisposableEntity):
-    """
-    The class provides functionality to manage views lifetime based on 'view scope' concept.
-    The controller holds references to views that are already loaded or are being loaded. It has a
-    hierarchical structure, where views are grouped by their scope. The controller can includes
-    sub controllers (it depends on scope hierarchy, for details see ScopeTemplates.py and
-    VIEW_TYPES_TO_SCOPES enum) with subviews.
-    Several views can belong to the same scope, but only one scope controller for a particular
-    scope can exist at runtime. The controller listens view's onDispose event to maintain
-    its own state (list of loading/loaded views) in actual state. If all views that are belong
-    to the same scope are destroyed, the scope controller is destroyed automatically too.
-    """
 
     def __init__(self, scope):
         super(ScopeController, self).__init__()
@@ -37,28 +23,12 @@ class ScopeController(DisposableEntity):
 
     @property
     def mainView(self):
-        """
-        Returns the reference to the main view or None if it has not been set.
-        Note: right now the main view is set by the global scope controller. Reason - unknown. Be carefully changing
-        the main view outside the global scope controller!
-        :return: View or None
-        """
         return self.__mainView
 
     def getCurrentType(self):
-        """
-        Returns controller's scope type (see SCOPE_TYPE enum).
-        """
         return self.__currentType
 
     def getViewByKey(self, key):
-        """
-        Finds a view with the given alias in the list of loaded views. If there is no view in
-        the inner list, tries to find it in sub controllers.
-        
-        :param key: View key represented by ViewKey
-        :return: Reference to view object or None if there is no view with the given alias.
-        """
         view = findFirst(lambda v: v.key == key, self.__views, None)
         if view is None:
             for c in self.__subControllers:
@@ -69,13 +39,6 @@ class ScopeController(DisposableEntity):
         return view
 
     def getLoadingViewByKey(self, key):
-        """
-        Finds a view with the given alias in the list of views being loaded now. If there is no
-        such view tries to find it in sub-controllers.
-        
-        :param key: View key represented by ViewKey
-        :return: Reference to view object or None if there is no view with the given alias.
-        """
         view = findFirst(lambda v: v.key == key, self.__loadingViews, None)
         if view is None:
             for c in self.__subControllers:
@@ -86,12 +49,6 @@ class ScopeController(DisposableEntity):
         return view
 
     def findViews(self, comparator):
-        """
-        Finds all views using the given comparator.
-        
-        :param comparer: callable that takes one argument (View) and returns bool
-        :return: list of found views
-        """
         views = [ v for v in self.__views if comparator(v) ]
         views.extend([ v for v in self.__loadingViews if comparator(v) ])
         for c in self.__subControllers:
@@ -100,12 +57,6 @@ class ScopeController(DisposableEntity):
         return views
 
     def getLoadingViewsByType(self, viewType):
-        """
-        Returns a set of views with the given view type that are being loaded in memory now.
-        
-        :param viewType: type of view. @see ViewTypes.
-        :return:  Set of View objects.
-        """
         views = {v for v in self.__loadingViews if v.settings.type == viewType}
         for scopeController in self.__subControllers:
             views.update(scopeController.getLoadingViewsByType(viewType))
@@ -113,13 +64,6 @@ class ScopeController(DisposableEntity):
         return views
 
     def getLoadingViewsByScope(self, scopeType=None):
-        """
-        Returns a set of views that belong to the given scope (child views) and are being loaded
-        in memory now.
-        
-        :param scopeType: Scope type.
-        :return: Set of View objects.
-        """
         views = set()
         ctrl = self.getScopeControllerForScopeType(scopeType)
         if ctrl is not None:
@@ -127,21 +71,11 @@ class ScopeController(DisposableEntity):
         return views
 
     def addSubController(self, scopeController):
-        """
-        Adds sub controller to the inner hierarchy based on its scope.
-        
-        :param scopeController: Reference to a scope controller
-        """
         if scopeController not in self.__subControllers:
             scopeController.onDispose += self.__handleSubControllerDispose
             self.__subControllers.append(scopeController)
 
     def removeSubScopeController(self, scopeType):
-        """
-        Finds sub controller with the given scope in the inner hierarchy and removes it.
-        
-        :param scopeType: Scope type (see SCOPE_TYPE enum).
-        """
         subControllers = self.__subControllers[:]
         for removingScopeController in subControllers:
             if removingScopeController.getCurrentType() == scopeType:
@@ -150,14 +84,6 @@ class ScopeController(DisposableEntity):
             removingScopeController.removeSubScopeController(scopeType)
 
     def isViewLoading(self, pyView=None, key=None):
-        """
-        Checks if the given view is being loaded now (check is preformed by all hierarchy,
-        including sub-controllers).
-        
-        :param pyView: Reference to a view objects.
-        :param key: View key represented by ViewKey to be used for an alternative search.
-        :return: True if the given view is in loading list, otherwise False.
-        """
         if pyView is not None:
             outcome = pyView in self.__loadingViews
             if not outcome:
@@ -174,14 +100,6 @@ class ScopeController(DisposableEntity):
             return
 
     def addView(self, pyView, addAsGlobal):
-        """
-        Adds the loaded view to the proper controller (or sub controller) based on view's
-        scope and removes it from the loading list.
-        
-        :param pyView: Reference to a view objects.
-        :param addAsGlobal: Flags indicating whether the given view should be added to the inner
-        views list, ignoring view's scope.
-        """
         if addAsGlobal:
             if pyView in self.__loadingViews:
                 self.__loadingViews.remove(pyView)
@@ -193,15 +111,6 @@ class ScopeController(DisposableEntity):
             controller.addView(pyView, True)
 
     def addLoadingView(self, pyView, addAsGlobal):
-        """
-        Adds view (being loaded now) into the proper controller (or sub controller)
-        based on view's scope.
-        
-        :param pyView: Reference to a view objects.
-        :param addAsGlobal: Flags indicating whether the given view should be added to the inner
-        loading list, ignoring view's scope.
-        :return:
-        """
         if pyView is None:
             raise ValueError('pyView can not be None!')
         if addAsGlobal:
@@ -214,12 +123,6 @@ class ScopeController(DisposableEntity):
         return
 
     def removeLoadingView(self, pyView):
-        """
-        Removes view from the loading list.
-        
-        :param pyView: Reference to a view objects.
-        :return: bool, True if the view has been removed, otherwise False..
-        """
         if pyView is not None:
             if pyView in self.__loadingViews:
                 pyView.onDispose -= self._handleViewDispose
@@ -234,12 +137,6 @@ class ScopeController(DisposableEntity):
         return False
 
     def switchMainView(self, pyView):
-        """
-        Switches the main view to the given one. Previous main view (and its sub views located in
-        the sub controllers) is destroyed. Sub controllers are destroyed too.
-        
-        :param pyView: Reference to a view objects.
-        """
         if self.__mainView != pyView:
             if self.__mainView is not None:
                 self.__removeAllSubControllers()
@@ -248,12 +145,6 @@ class ScopeController(DisposableEntity):
         return
 
     def getScopeControllerForScopeType(self, scopeType):
-        """
-        Finds a sub controller (or itself) with the given scope type.
-        
-        :param scopeType: Scope type (see SCOPE_TYPE enum).
-        :return: Reference to scope controller or None.
-        """
         if self.__currentType != scopeType:
             if self.__subControllers:
                 for scopeController in self.__subControllers:
@@ -267,7 +158,7 @@ class ScopeController(DisposableEntity):
             return
 
     @classmethod
-    def extractScopeFromView(self, pyView):
+    def extractScopeFromView(cls, pyView):
         scope = pyView.settings.scope
         return pyView.getCurrentScope() if scope.getScopeType() == ScopeTemplates.DYNAMIC_SCOPE.getScopeType() else scope
 
@@ -289,11 +180,6 @@ class ScopeController(DisposableEntity):
             self.destroy()
 
     def _getScopeControllerForScope(self, scope):
-        """
-        Returns scope, that currentScopeType == pyView.scopeType
-        
-        :param scope: scope, a SimpleScope derived instance
-        """
         scopeType = scope.getScopeType()
         existingScopeController = self.getScopeControllerForScopeType(scopeType)
         if existingScopeController is None:
@@ -306,10 +192,6 @@ class ScopeController(DisposableEntity):
             return
 
     def __getLoadingViews(self):
-        """
-        Returns all view (including subview in sub-controllers) that are being loaded now.
-        :return: set of views
-        """
         views = set()
         views.update(self.__loadingViews)
         for c in self.__subControllers:
@@ -355,18 +237,18 @@ class ScopeController(DisposableEntity):
         self.__clearViewsFrom(self.__loadingViews)
 
     @classmethod
-    def __destroyViewsFrom(self, views):
+    def __destroyViewsFrom(cls, views):
         while views:
             pyView = views.pop()
-            pyView.onDispose -= self._handleViewDispose
+            pyView.onDispose -= cls._handleViewDispose
             if not pyView.isDisposed():
                 pyView.destroy()
 
     @classmethod
-    def __clearViewsFrom(self, views):
+    def __clearViewsFrom(cls, views):
         while views:
             pyView = views.pop()
-            pyView.onDispose -= self._handleViewDispose
+            pyView.onDispose -= cls._handleViewDispose
 
     def __repr__(self):
         return '{}[{}]=[type=[{}], mainView=[{}], views=[{}], loadingViews=[{}], child=[{}]]'.format(self.__class__.__name__, hex(id(self)), self.__currentType, self.__mainView, self.__views, self.__loadingViews, self.__subControllers)
@@ -393,7 +275,7 @@ class GlobalScopeController(ScopeController):
                 mainScope = ScopeTemplates.VIEW_TYPES_TO_SCOPES[pyView.settings.type]
                 mainController = self._getScopeControllerForScope(mainScope)
                 mainController.switchMainView(pyView)
-            customScope = self.getScopeControllerForScopeType(pyView.alias)
+            customScope = self.getScopeControllerForScopeType(pyView.getAlias())
             if customScope is not None:
                 customScope.switchMainView(pyView)
         super(GlobalScopeController, self).addView(pyView, addAsGlobal)
@@ -405,7 +287,7 @@ class GlobalScopeController(ScopeController):
             mainController = self.getScopeControllerForScopeType(mainScope.getScopeType())
             if mainController is not None and mainController.mainView == pyView:
                 mainController.switchMainView(None)
-        self.__removeCustomScope(pyView, pyView.alias)
+        self.__removeCustomScope(pyView, pyView.getAlias())
         super(GlobalScopeController, self)._handleViewDispose(pyView)
         return
 

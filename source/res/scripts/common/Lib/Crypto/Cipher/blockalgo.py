@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Cipher/blockalgo.py
-"""Module with definitions common to all block ciphers."""
 import sys
 if sys.version_info[0] == 2 and sys.version_info[1] == 1:
     from Crypto.Util.py21compat import *
@@ -27,7 +26,6 @@ MODE_SIV = 10
 MODE_GCM = 11
 
 def _getParameter(name, index, args, kwargs, default=None):
-    """Find a parameter in tuple and dictionary arguments a function receives"""
     param = kwargs.get(name)
     if len(args) > index:
         if param:
@@ -60,16 +58,6 @@ class _CBCMAC(_SmoothMAC):
 
 
 class _GHASH(_SmoothMAC):
-    """GHASH function defined in NIST SP 800-38D, Algorithm 2.
-    
-    If X_1, X_2, .. X_m are the blocks of input data, the function
-    computes:
-    
-       X_1*H^{m} + X_2*H^{m-1} + ... + X_m*H
-    
-    in the Galois field GF(2^256) using the reducing polynomial
-    (x^128 + x^7 + x^2 + x + 1).
-    """
 
     def __init__(self, hash_subkey, block_size):
         _SmoothMAC.__init__(self, block_size, None, 0)
@@ -92,7 +80,6 @@ class _GHASH(_SmoothMAC):
 
 
 class BlockAlgo:
-    """Class modelling an abstract block cipher."""
 
     def __init__(self, factory, key, *args, **kwargs):
         self.mode = _getParameter('mode', 0, args, kwargs, default=MODE_ECB)
@@ -179,7 +166,6 @@ class BlockAlgo:
          self.verify]
 
     def _siv_ctr_cipher(self, tag):
-        """Create a new CTR cipher from the MAC in SIV mode"""
         tag_int = bytes_to_long(tag)
         init_counter = tag_int ^ tag_int & 9223372039002259456L
         ctr = Counter.new(self._factory.block_size * 8, initial_value=init_counter, allow_wraparound=True)
@@ -258,29 +244,6 @@ class BlockAlgo:
             return
 
     def update(self, assoc_data):
-        """Protect associated data
-        
-        When using an AEAD mode like CCM, EAX, GCM or SIV, and
-        if there is any associated data, the caller has to invoke
-        this function one or more times, before using
-        ``decrypt`` or ``encrypt``.
-        
-        By *associated data* it is meant any data (e.g. packet headers) that
-        will not be encrypted and will be transmitted in the clear.
-        However, the receiver is still able to detect any modification to it.
-        In CCM and GCM, the *associated data* is also called
-        *additional authenticated data* (AAD).
-        In EAX, the *associated data* is called *header*.
-        
-        If there is no associated data, this method must not be called.
-        
-        The caller may split associated data in segments of any size, and
-        invoke this method multiple times, each time with the next segment.
-        
-        :Parameters:
-          assoc_data : byte string
-            A piece of associated data. There are no restrictions on its size.
-        """
         if self.mode not in (MODE_CCM,
          MODE_EAX,
          MODE_SIV,
@@ -296,52 +259,6 @@ class BlockAlgo:
         return self._cipherMAC.update(assoc_data)
 
     def encrypt(self, plaintext):
-        """Encrypt data with the key and the parameters set at initialization.
-        
-        A cipher object is stateful: once you have encrypted a message
-        you cannot encrypt (or decrypt) another message using the same
-        object.
-        
-        For `MODE_SIV` (always) and `MODE_CCM` (when ``msg_len`` was not
-        passed at initialization), this method can be called only **once**.
-        
-        For all other modes, the data to encrypt can be broken up in two or
-        more pieces and `encrypt` can be called multiple times.
-        
-        That is, the statement:
-        
-            >>> c.encrypt(a) + c.encrypt(b)
-        
-        is equivalent to:
-        
-             >>> c.encrypt(a+b)
-        
-        That also means that you cannot reuse an object for encrypting
-        or decrypting other data with the same key.
-        
-        This function does not add any padding to the plaintext.
-        
-         - For `MODE_ECB` and `MODE_CBC`, *plaintext* length (in bytes) must be
-           a multiple of *block_size*.
-        
-         - For `MODE_CFB`, *plaintext* length (in bytes) must be a multiple
-           of *segment_size*/8.
-        
-         - For `MODE_OFB`, `MODE_CTR` and all AEAD modes
-           *plaintext* can be of any length.
-        
-         - For `MODE_OPENPGP`, *plaintext* must be a multiple of *block_size*,
-           unless it is the last chunk of the message.
-        
-        :Parameters:
-          plaintext : byte string
-            The piece of data to encrypt.
-        :Return:
-            the encrypted data, as a byte string. It is as long as
-            *plaintext* with one exception: when encrypting the first message
-            chunk with `MODE_OPENPGP`, the encypted IV is prepended to the
-            returned ciphertext.
-        """
         if self.mode == MODE_OPENPGP:
             padding_length = (self.block_size - len(plaintext) % self.block_size) % self.block_size
             if padding_length > 0:
@@ -392,52 +309,6 @@ class BlockAlgo:
             return ct
 
     def decrypt(self, ciphertext):
-        """Decrypt data with the key and the parameters set at initialization.
-        
-        A cipher object is stateful: once you have decrypted a message
-        you cannot decrypt (or encrypt) another message with the same
-        object.
-        
-        For `MODE_SIV` (always) and `MODE_CCM` (when ``msg_len`` was not
-        passed at initialization), this method can be called only **once**.
-        
-        For all other modes, the data to decrypt can be broken up in two or
-        more pieces and `decrypt` can be called multiple times.
-        
-        That is, the statement:
-        
-            >>> c.decrypt(a) + c.decrypt(b)
-        
-        is equivalent to:
-        
-             >>> c.decrypt(a+b)
-        
-        That also means that you cannot reuse an object for encrypting
-        or decrypting other data with the same key.
-        
-        This function does not remove any padding from the plaintext.
-        
-         - For `MODE_ECB` and `MODE_CBC`, *ciphertext* length (in bytes) must
-           be a multiple of *block_size*.
-        
-         - For `MODE_CFB`, *ciphertext* length (in bytes) must be a multiple
-           of *segment_size*/8.
-        
-         - For `MODE_OFB`, `MODE_CTR` and all AEAD modes
-           *ciphertext* can be of any length.
-        
-         - For `MODE_OPENPGP`, *plaintext* must be a multiple of *block_size*,
-           unless it is the last chunk of the message.
-        
-         - For `MODE_SIV`, *ciphertext* can be of any length, but it must also
-           include the MAC (concatenated at the end).
-        
-        :Parameters:
-          ciphertext : byte string
-            The piece of data to decrypt (plus the MAC, for `MODE_SIV` only).
-        
-        :Return: the decrypted data (byte string).
-        """
         if self.mode == MODE_OPENPGP:
             padding_length = (self.block_size - len(ciphertext) % self.block_size) % self.block_size
             if padding_length > 0:
@@ -479,16 +350,6 @@ class BlockAlgo:
             return pt
 
     def digest(self):
-        """Compute the *binary* MAC tag in an AEAD mode.
-        
-        When using an AEAD mode like CCM or EAX, the caller invokes
-        this function at the very end.
-        
-        This method returns the MAC that shall be sent to the receiver,
-        together with the ciphertext.
-        
-        :Return: the MAC, as a byte string.
-        """
         if self.mode not in (MODE_CCM,
          MODE_EAX,
          MODE_SIV,
@@ -500,7 +361,6 @@ class BlockAlgo:
         return self._compute_mac()
 
     def _compute_mac(self):
-        """Compute MAC without any FSM checks."""
         if self._tag:
             return self._tag
         else:
@@ -530,31 +390,9 @@ class BlockAlgo:
             return self._tag
 
     def hexdigest(self):
-        """Compute the *printable* MAC tag in an AEAD mode.
-        
-        This method is like `digest`.
-        
-        :Return: the MAC, as a hexadecimal string.
-        """
         return ''.join([ '%02x' % bord(x) for x in self.digest() ])
 
     def verify(self, mac_tag):
-        """Validate the *binary* MAC tag in an AEAD mode.
-        
-        When using an AEAD mode like CCM or EAX, the caller invokes
-        this function at the very end.
-        
-        This method checks if the decrypted message is indeed valid
-        (that is, if the key is correct) and it has not been
-        tampered with while in transit.
-        
-        :Parameters:
-          mac_tag : byte string
-            This is the *binary* MAC, as received from the sender.
-        :Raises ValueError:
-            if the MAC does not match. The message has been tampered with
-            or the key is incorrect.
-        """
         if self.mode not in (MODE_CCM,
          MODE_EAX,
          MODE_SIV,
@@ -571,47 +409,12 @@ class BlockAlgo:
             raise ValueError('MAC check failed')
 
     def hexverify(self, hex_mac_tag):
-        """Validate the *printable* MAC tag in an AEAD mode.
-        
-        This method is like `verify`.
-        
-        :Parameters:
-          hex_mac_tag : string
-            This is the *printable* MAC, as received from the sender.
-        :Raises ValueError:
-            if the MAC does not match. The message has been tampered with
-            or the key is incorrect.
-        """
         self.verify(unhexlify(hex_mac_tag))
 
     def encrypt_and_digest(self, plaintext):
-        """Perform encrypt() and digest() in one step.
-        
-        :Parameters:
-          plaintext : byte string
-            The piece of data to encrypt.
-        :Return:
-            a tuple with two byte strings:
-        
-            - the encrypted data
-            - the MAC
-        """
         return (self.encrypt(plaintext), self.digest())
 
     def decrypt_and_verify(self, ciphertext, mac_tag):
-        """Perform decrypt() and verify() in one step.
-        
-        :Parameters:
-          ciphertext : byte string
-            The piece of data to decrypt.
-          mac_tag : byte string
-            This is the *binary* MAC, as received from the sender.
-        
-        :Return: the decrypted data (byte string).
-        :Raises ValueError:
-            if the MAC does not match. The message has been tampered with
-            or the key is incorrect.
-        """
         if self.mode == MODE_SIV:
             if self.decrypt not in self._next:
                 raise TypeError('decrypt() can only be called after initialization or an update()')

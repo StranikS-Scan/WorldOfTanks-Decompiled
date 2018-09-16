@@ -74,8 +74,6 @@ class ParserGenerator(object):
                     return ilabel
             else:
                 itoken = getattr(token, label, None)
-                assert isinstance(itoken, int), label
-                assert itoken in token.tok_name, label
                 if itoken in c.tokens:
                     return c.tokens[itoken]
                 else:
@@ -83,7 +81,6 @@ class ParserGenerator(object):
                     c.tokens[itoken] = ilabel
                     return ilabel
         else:
-            assert label[0] in ('"', "'"), label
             value = eval(label)
             if value[0].isalpha():
                 if value in c.keywords:
@@ -163,8 +160,6 @@ class ParserGenerator(object):
         return (dfas, startsymbol)
 
     def make_dfa(self, start, finish):
-        assert isinstance(start, NFAState)
-        assert isinstance(finish, NFAState)
 
         def closure(state):
             base = {}
@@ -172,7 +167,6 @@ class ParserGenerator(object):
             return base
 
         def addclosure(state, base):
-            assert isinstance(state, NFAState)
             if state in base:
                 return
             else:
@@ -333,26 +327,17 @@ class NFAState(object):
         self.arcs = []
 
     def addarc(self, next, label=None):
-        assert label is None or isinstance(label, str)
-        assert isinstance(next, NFAState)
         self.arcs.append((label, next))
-        return
 
 
 class DFAState(object):
 
     def __init__(self, nfaset, final):
-        assert isinstance(nfaset, dict)
-        assert isinstance(iter(nfaset).next(), NFAState)
-        assert isinstance(final, NFAState)
         self.nfaset = nfaset
         self.isfinal = final in nfaset
         self.arcs = {}
 
     def addarc(self, next, label):
-        assert isinstance(label, str)
-        assert label not in self.arcs
-        assert isinstance(next, DFAState)
         self.arcs[label] = next
 
     def unifystate(self, old, new):
@@ -361,7 +346,6 @@ class DFAState(object):
                 self.arcs[label] = new
 
     def __eq__(self, other):
-        assert isinstance(other, DFAState)
         if self.isfinal != other.isfinal:
             return False
         if len(self.arcs) != len(other.arcs):

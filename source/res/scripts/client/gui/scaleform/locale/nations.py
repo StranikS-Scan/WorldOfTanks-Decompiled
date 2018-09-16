@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/NATIONS.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from debug_utils import LOG_WARNING
 
 class NATIONS(object):
@@ -17,6 +13,7 @@ class NATIONS(object):
     CHINA = '#nations:china'
     POLAND = '#nations:poland'
     SWEDEN = '#nations:sweden'
+    ITALY = '#nations:italy'
     ALL_ENUM = (USSR,
      GERMANY,
      USA,
@@ -26,7 +23,8 @@ class NATIONS(object):
      CZECH,
      CHINA,
      POLAND,
-     SWEDEN)
+     SWEDEN,
+     ITALY)
 
     @classmethod
     def all(cls, key0):

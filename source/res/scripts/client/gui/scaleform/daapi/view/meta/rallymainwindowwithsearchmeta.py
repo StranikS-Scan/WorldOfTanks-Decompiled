@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RallyMainWindowWithSearchMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyMainWindow import BaseRallyMainWindow
 
 class RallyMainWindowWithSearchMeta(BaseRallyMainWindow):
@@ -21,9 +17,6 @@ class RallyMainWindowWithSearchMeta(BaseRallyMainWindow):
         return self.flashObject.as_autoSearchEnableBtn(value) if self._isDAAPIInited() else None
 
     def as_changeAutoSearchStateS(self, value):
-        """
-        :param value: Represented by AutoSearchVO (AS)
-        """
         return self.flashObject.as_changeAutoSearchState(value) if self._isDAAPIInited() else None
 
     def as_changeAutoSearchBtnsStateS(self, waitingPlayers, searchEnemy):

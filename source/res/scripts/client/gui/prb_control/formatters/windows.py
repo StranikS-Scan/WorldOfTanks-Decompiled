@@ -109,3 +109,9 @@ class SwitchPeripheryRankedCtx(SwitchPeripheryCtx):
                     timeLeftList.append(timeLeft)
 
             return min(timeLeftList) if timeLeftList else 0
+
+    def _getAllowedPeripherieIDs(self):
+        return []
+
+    def _getForbiddenPeripherieIDs(self):
+        return []

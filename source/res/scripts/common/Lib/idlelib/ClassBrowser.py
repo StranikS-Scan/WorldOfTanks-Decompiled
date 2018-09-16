@@ -1,16 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ClassBrowser.py
-"""Class browser.
-
-XXX TO DO:
-
-- reparse when source changed (maybe just a button would be OK?)
-    (or recheck on window popup)
-- add popup menu with more options (e.g. doc strings, base classes, imports)
-- show function argument list? (have to do pattern matching on source)
-- should the classes and methods lists also be in the module's menu bar?
-- add base classes to class browser tree
-"""
 import os
 import sys
 import pyclbr

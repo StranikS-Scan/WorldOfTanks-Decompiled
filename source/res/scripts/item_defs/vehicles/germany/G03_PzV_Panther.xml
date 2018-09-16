@@ -119,6 +119,19 @@
         <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Chassis.model	</exploded>
       </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G03_PzV_Panther/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G03_PzV_Panther/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G03_PzV_Panther/track/left.track	</left>
+        <right>	vehicles/german/G03_PzV_Panther/track/right.track	</right>
+        <segmentLength>	0.157	</segmentLength>
+        <segmentOffset>	0.007	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
@@ -428,6 +441,19 @@
         <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Chassis.model	</exploded>
       </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G03_PzV_Panther/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G03_PzV_Panther/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G03_PzV_Panther/track/left.track	</left>
+        <right>	vehicles/german/G03_PzV_Panther/track/right.track	</right>
+        <segmentLength>	0.157	</segmentLength>
+        <segmentOffset>	0.007	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
@@ -1207,12 +1233,12 @@
   </fuelTanks>
   <radios>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
+        <radio>	FuG7	  <cost>	1360	</cost>
         </radio>
       </unlocks>
     </FuG5>
     <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200.0	</cost>
+        <radio>	FuG12	  <cost>	7200	</cost>
         </radio>
       </unlocks>
     </FuG7>

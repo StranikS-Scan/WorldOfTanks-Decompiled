@@ -40,10 +40,6 @@ def init(preloadEverything):
 
 
 def getSkillsConfig():
-    """Gets shared configuration containing information about tankmen skills and roles.
-        For more information about it see class tankmen_components.SkillsConfig.
-    :return: instance of SkillsConfig.
-    """
     global _g_skillsConfig
     if _g_skillsConfig is None:
         _g_skillsConfig = skills_readers.readSkillsConfig(ITEM_DEFS_PATH + 'tankmen/tankmen.xml')
@@ -61,11 +57,6 @@ def getSkillsMask(skills):
 ALL_SKILLS_MASK = getSkillsMask([ skill for skill in SKILL_NAMES if skill != 'reserved' ])
 
 def getNationConfig(nationID):
-    """Gets nation-specific configuration (names, ranks, etc.) of tankmen by ID of nation.
-        For more information about configuration see class tankmen_components.NationConfig.
-    :param nationID: integer containing ID of nation.
-    :return: instance of NationConfig.
-    """
     global _g_nationsConfig
     if _g_nationsConfig[nationID] is None:
         nationName = nations.NAMES[nationID]
@@ -121,12 +112,6 @@ def crewMemberPreviewProducer(nationID, isPremium=False, vehicleTypeID=None, rol
 
 
 def generateSkills(role, skillsMask):
-    """
-    builds skills list with all skills according to role or particular skills according to mask
-    :param role: string name of role, see ROLES
-    :param skillsMask: mask to add roles from SKILLS_BY_ROLES
-    :return: list containing subset of SKILLS_BY_ROLES[role]
-    """
     skills = []
     if skillsMask != 0:
         tankmanSkills = set()
@@ -159,7 +144,6 @@ def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, skills
 
 def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills=(), lastSkillLevel=MAX_SKILL_LEVEL, dossierCompactDescr='', freeSkills=()):
     pack = struct.pack
-    assert MIN_ROLE_LEVEL <= roleLevel <= MAX_SKILL_LEVEL
     nationID, isPremium, isFemale, firstNameID, lastNameID, iconID = passport
     header = ITEM_TYPES.tankman + (nationID << 4)
     cd = pack('4B', header, vehicleTypeID, SKILL_INDICES[role], roleLevel)
@@ -257,7 +241,6 @@ def commanderTutorXpBonusFactorForCrew(crew, ammo):
 def fixObsoleteNames(compactDescr):
     cd = compactDescr
     header = ord(cd[0])
-    assert header & 15 == ITEM_TYPES.tankman
     nationID = header >> 4 & 15
     conf = getNationConfig(nationID)
     namesOffset = ord(cd[4]) + 7
@@ -273,9 +256,6 @@ def fixObsoleteNames(compactDescr):
 
 
 class OperationsRestrictions(object):
-    """Class provides restrictions that must be checked in tankmen operations by:
-        - group tags if group is unique for tankman.
-    """
     __slots__ = ('__groupTags',)
 
     def __init__(self, tags=None):
@@ -334,14 +314,12 @@ class TankmanDescr(object):
 
     def efficiencyOnVehicle(self, vehicleDescr):
         _, nationID, _ = vehicles.parseIntCompactDescr(vehicleDescr.type.compactDescr)
-        assert nationID == self.nationID
         factor = self.efficiencyFactorOnVehicle(vehicleDescr.type)
         addition = vehicleDescr.miscAttrs['crewLevelIncrease']
         return (factor, addition)
 
     def battleXpGain(self, xp, vehicleType, tankmanHasSurvived, commanderTutorXpBonusFactor):
         nationID, vehicleTypeID = vehicleType.id
-        assert nationID == self.nationID
         if vehicleTypeID != self.vehicleTypeID:
             isPremium, isSameClass = self.__paramsOnVehicle(vehicleType)
             if isPremium:
@@ -409,7 +387,6 @@ class TankmanDescr(object):
         return True if self.lastSkillNumber == 1 + self.freeSkillsNumber and self.__lastSkillLevel == 0 else False
 
     def dropSkills(self, xpReuseFraction=0.0, throwIfNoChange=True):
-        assert 0.0 <= xpReuseFraction <= 1.0
         if len(self.__skills) == 0:
             if throwIfNoChange:
                 raise Exception('attempt to reset empty skills')
@@ -433,7 +410,6 @@ class TankmanDescr(object):
             self.addXP(int(xpReuseFraction * (prevTotalXP - self.totalXP())))
 
     def dropSkill(self, skillName, xpReuseFraction=0.0):
-        assert 0.0 <= xpReuseFraction <= 1.0
         idx = self.__skills.index(skillName)
         prevTotalXP = self.totalXP()
         numSkills = self.lastSkillNumber - self.freeSkillsNumber
@@ -451,9 +427,6 @@ class TankmanDescr(object):
             self.addXP(int(xpReuseFraction * (prevTotalXP - self.totalXP())))
 
     def respecialize(self, newVehicleTypeID, minNewRoleLevel, vehicleChangeRoleLevelLoss, classChangeRoleLevelLoss, becomesPremium):
-        assert 0 <= minNewRoleLevel <= MAX_SKILL_LEVEL
-        assert 0.0 <= vehicleChangeRoleLevelLoss <= 1.0
-        assert 0.0 <= classChangeRoleLevelLoss <= 1.0
         newVehTags = vehicles.g_list.getList(self.nationID)[newVehicleTypeID].tags
         roleLevelLoss = 0.0 if newVehicleTypeID == self.vehicleTypeID else vehicleChangeRoleLevelLoss
         isSameClass = len(self.__vehicleTags & newVehTags & vehicles.VEHICLE_CLASS_TAGS)
@@ -526,9 +499,6 @@ class TankmanDescr(object):
         self.iconID = iconID
 
     def getPassport(self):
-        """
-        Gets passport data: nationID, isPremium, isFemale, firstNameID, lastNameID, iconID
-        """
         return (self.nationID,
          self.isPremium,
          self.isFemale,
@@ -537,17 +507,10 @@ class TankmanDescr(object):
          self.iconID)
 
     def getRestrictions(self):
-        """Gets restrictions that must be checked in tankman operations.
-        :return: instance of OperationsRestrictions.
-        """
         return OperationsRestrictions(getGroupTags(*self.getPassport()))
 
     @property
     def group(self):
-        """
-        Returns tankman composite group.
-        TODO: add additional group range when implemented
-        """
         return int(self.isFemale) | int(self.isPremium) << 1 | int(self.gid) << 2
 
     def makeCompactDescr(self):
@@ -566,12 +529,6 @@ class TankmanDescr(object):
         return cd
 
     def isRestorable(self):
-        """
-        Tankman is restorable if he has at least one skill fully developed or
-        if his main speciality is 100% and he has enough free experience for one skill provided that
-        vehicle is recoverable and crew is not locked.
-        :return: bool
-        """
         vehicleTags = self.__vehicleTags
         return (len(self.skills) > 0 and self.skillLevel(self.skills[0]) == MAX_SKILL_LEVEL or self.roleLevel == MAX_SKILL_LEVEL and self.freeXP >= _g_totalFirstSkillXpCost) and not ('lockCrew' in vehicleTags and 'unrecoverable' in vehicleTags)
 
@@ -581,7 +538,6 @@ class TankmanDescr(object):
         try:
             header, self.vehicleTypeID, roleID, self.roleLevel, numSkills = unpack('5B', cd[:5])
             cd = cd[5:]
-            assert header & 15 == ITEM_TYPES.tankman
             nationID = header >> 4 & 15
             nations.NAMES[nationID]
             self.nationID = nationID
@@ -752,14 +708,6 @@ def ownVehicleHasTags(tankmanCD, tags=()):
 
 
 def hasTagInTankmenGroup(nationID, groupID, isPremium, tag):
-    """
-    Checks if tankmen group has specified tag.
-    :param nationID: int
-    :param groupID: int
-    :param isPremium: bool
-    :param tag: str
-    :return bool
-    """
     nationGroups = getNationGroups(nationID, isPremium)
     if groupID < 0 or groupID >= len(nationGroups):
         LOG_WARNING('tankmen.hasTagInTankmenGroup: wrong value of the groupID (index out of range)', groupID)
@@ -768,10 +716,6 @@ def hasTagInTankmenGroup(nationID, groupID, isPremium, tag):
 
 
 def unpackCrewParams(crewGroup):
-    """
-    :param crewGroup: int
-    :return tuple(groupID<int>, isFemale<bool>, isPremium<bool>)
-    """
     groupID = crewGroup >> 2
     isFemale = bool(crewGroup & 1)
     isPremium = bool(crewGroup & 2)
@@ -779,14 +723,6 @@ def unpackCrewParams(crewGroup):
 
 
 def tankmenGroupHasRole(nationID, groupID, isPremium, role):
-    """
-    Checks if tankmen group can have specified role.
-    :param nationID: int
-    :param groupID: int
-    :param isPremium: bool
-    :param role: str
-    :return bool
-    """
     nationGroups = getNationGroups(nationID, isPremium)
     if 0 <= groupID < len(nationGroups):
         return role in nationGroups[groupID].roles
@@ -795,14 +731,6 @@ def tankmenGroupHasRole(nationID, groupID, isPremium, role):
 
 
 def tankmenGroupCanChangeRole(nationID, groupID, isPremium):
-    """
-    Checks if tankmen group can change role.
-    :param nationID: int
-    :param groupID: int
-    :param isPremium: bool
-    :param role: str
-    :return bool
-    """
     nationGroups = getNationGroups(nationID, isPremium)
     if 0 <= groupID < len(nationGroups):
         return len(nationGroups[groupID].roles) > 1
@@ -811,24 +739,10 @@ def tankmenGroupCanChangeRole(nationID, groupID, isPremium):
 
 
 def getNationGroups(nationID, isPremium):
-    """Gets nation-specific configuration of tankmen.
-    :param nationID: integer containing ID of nation.
-    :param isPremium: if value equals True that gets premium groups, otherwise - normal.
-    :return: tuple containing nation-specific configuration.
-    """
     return getNationConfig(nationID).getGroups(isPremium)
 
 
 def findGroupsByIDs(groups, isFemale, firstNameID, secondNameID, iconID):
-    """Tries to find groups by the following criteria: ID of first name, ID of last name
-        and iconID. The first item has max. overlaps, and so on.
-    :param groups: integer containing ID of nation.
-    :param isFemale: boolean containing gender flag.
-    :param firstNameID: integer containing ID of first name.
-    :param secondNameID: integer containing ID of last name.
-    :param iconID: integer containing ID of icon.
-    :return: list where each item is tuple(ID/index of group, weight) and first item has max. overlaps.
-    """
     found = [(-1, 0)]
     for groupID, group in enumerate(groups):
         if isFemale != group.isFemales:
@@ -848,15 +762,6 @@ def findGroupsByIDs(groups, isFemale, firstNameID, secondNameID, iconID):
 
 
 def getGroupTags(nationID, isPremium, isFemale, firstNameID, secondNameID, iconID):
-    """ Gets tags of group if all ids equals desired, otherwise - empty value.
-    :param nationID: integer containing ID of nation.
-    :param isPremium: if value equals True that gets premium groups, otherwise - normal.
-    :param isFemale: boolean containing gender flag.
-    :param firstNameID: integer containing ID of first name.
-    :param secondNameID: integer containing ID of last name.
-    :param iconID: integer containing ID of icon.
-    :return: frozenset containing tags of group.
-    """
     groups = getNationGroups(nationID, isPremium)
     found = findGroupsByIDs(groups, isFemale, firstNameID, secondNameID, iconID)
     if found:

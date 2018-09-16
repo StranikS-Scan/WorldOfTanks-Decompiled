@@ -5,9 +5,6 @@ from skeletons.gui.server_events import IEventsCache
 __all__ = ('getServerEventsConfig',)
 
 def getServerEventsConfig(manager):
-    """ Configures services for package server_events.
-    :param manager: helpers.dependency.DependencyManager
-    """
     cache = _EventsCache()
     cache.init()
     manager.addInstance(IEventsCache, cache, finalizer='fini')

@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/dircache.py
-"""Read and cache directory listings.
-
-The listdir() routine returns a sorted list of the files in a directory,
-using a cache to avoid reading the directory more often than necessary.
-The annotate() routine appends slashes to directories."""
 from warnings import warnpy3k
 warnpy3k('the dircache module has been removed in Python 3.0', stacklevel=2)
 del warnpy3k
@@ -16,13 +11,11 @@ __all__ = ['listdir',
 cache = {}
 
 def reset():
-    """Reset the cache completely."""
     global cache
     cache = {}
 
 
 def listdir(path):
-    """List directory contents, using cache."""
     try:
         cached_mtime, list = cache[path]
         del cache[path]
@@ -40,7 +33,6 @@ def listdir(path):
 opendir = listdir
 
 def annotate(head, list):
-    """Add '/' suffixes to directories."""
     for i in range(len(list)):
         if os.path.isdir(os.path.join(head, list[i])):
             list[i] = list[i] + '/'

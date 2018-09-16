@@ -85,7 +85,6 @@ def mangle(name, klass):
 
 
 def set_filename(filename, tree):
-    """Set the filename attribute to filename on every node in tree"""
     worklist = [tree]
     while worklist:
         node = worklist.pop(0)

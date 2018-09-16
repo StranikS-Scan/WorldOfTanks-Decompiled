@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/VEHICLE_CUSTOMIZATION.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from debug_utils import LOG_WARNING
 
 class VEHICLE_CUSTOMIZATION(object):
@@ -32,6 +28,7 @@ class VEHICLE_CUSTOMIZATION(object):
     CAMOUFLAGE_NATION_FRANCE = '#vehicle_customization:camouflage/nation/france'
     CAMOUFLAGE_NATION_CZECH = '#vehicle_customization:camouflage/nation/czech'
     CAMOUFLAGE_NATION_SWEDEN = '#vehicle_customization:camouflage/nation/sweden'
+    CAMOUFLAGE_NATION_ITALY = '#vehicle_customization:camouflage/nation/italy'
     CUSTOMIZATION_STORED = '#vehicle_customization:customization/stored'
     TIMELEFT_TITLE = '#vehicle_customization:timeLeft/title'
     TIMELEFT_TEMPORAL_USED = '#vehicle_customization:timeLeft/temporal/used'
@@ -385,6 +382,7 @@ class VEHICLE_CUSTOMIZATION(object):
     EMBLEM_AUTO_CZECH_ROUND = '#vehicle_customization:emblem/auto/czech_round'
     EMBLEM_AUTO_POLAND_CHEKERS = '#vehicle_customization:emblem/auto/poland_chekers'
     EMBLEM_AUTO_SWEDISH_FLAG = '#vehicle_customization:emblem/auto/swedish_flag'
+    EMBLEM_AUTO_ITALIAN_FLAG = '#vehicle_customization:emblem/auto/italian_flag'
     EMBLEM_GROUP1_ANIMAL_1 = '#vehicle_customization:emblem/group1/animal_1'
     EMBLEM_GROUP1_ANIMAL_2 = '#vehicle_customization:emblem/group1/animal_2'
     EMBLEM_GROUP1_ANIMAL_3 = '#vehicle_customization:emblem/group1/animal_3'
@@ -507,6 +505,15 @@ class VEHICLE_CUSTOMIZATION(object):
     EMBLEM_GROUP20_SPECIAL_64 = '#vehicle_customization:emblem/group20/special_64'
     EMBLEM_GROUP21_SPECIAL_70 = '#vehicle_customization:emblem/group21/special_70'
     EMBLEM_GROUP21_SPECIAL_71 = '#vehicle_customization:emblem/group21/special_71'
+    EMBLEM_BATTLE_STICKER_80 = '#vehicle_customization:emblem/battle/sticker_80'
+    EMBLEM_BATTLE_STICKER_81 = '#vehicle_customization:emblem/battle/sticker_81'
+    EMBLEM_BATTLE_STICKER_82 = '#vehicle_customization:emblem/battle/sticker_82'
+    EMBLEM_BATTLE_STICKER_83 = '#vehicle_customization:emblem/battle/sticker_83'
+    EMBLEM_BATTLE_STICKER_84 = '#vehicle_customization:emblem/battle/sticker_84'
+    EMBLEM_BATTLE_STICKER_85 = '#vehicle_customization:emblem/battle/sticker_85'
+    EMBLEM_BATTLE_STICKER_86 = '#vehicle_customization:emblem/battle/sticker_86'
+    EMBLEM_BATTLE_STICKER_87 = '#vehicle_customization:emblem/battle/sticker_87'
+    EMBLEM_BATTLE_STICKER_88 = '#vehicle_customization:emblem/battle/sticker_88'
     EMBLEM_GROUP3_COOL_1 = '#vehicle_customization:emblem/group3/cool_1'
     EMBLEM_GROUP3_COOL_2 = '#vehicle_customization:emblem/group3/cool_2'
     EMBLEM_GROUP3_COOL_3 = '#vehicle_customization:emblem/group3/cool_3'
@@ -863,6 +870,26 @@ class VEHICLE_CUSTOMIZATION(object):
     INSCRIPTION_SPECIAL_SPECIAL_176 = '#vehicle_customization:inscription/special/special_176'
     INSCRIPTION_SPECIAL_SPECIAL_190 = '#vehicle_customization:inscription/special/special_190'
     INSCRIPTION_SPECIAL_SPECIAL_140 = '#vehicle_customization:inscription/special/special_140'
+    INSCRIPTION_ITALY_INSCRIPTION_01 = '#vehicle_customization:inscription/italy/inscription_01'
+    INSCRIPTION_ITALY_INSCRIPTION_02 = '#vehicle_customization:inscription/italy/inscription_02'
+    INSCRIPTION_ITALY_INSCRIPTION_03 = '#vehicle_customization:inscription/italy/inscription_03'
+    INSCRIPTION_ITALY_INSCRIPTION_04 = '#vehicle_customization:inscription/italy/inscription_04'
+    INSCRIPTION_ITALY_INSCRIPTION_05 = '#vehicle_customization:inscription/italy/inscription_05'
+    INSCRIPTION_ITALY_INSCRIPTION_07 = '#vehicle_customization:inscription/italy/inscription_07'
+    INSCRIPTION_ITALY_INSCRIPTION_08 = '#vehicle_customization:inscription/italy/inscription_08'
+    INSCRIPTION_ITALY_INSCRIPTION_09 = '#vehicle_customization:inscription/italy/inscription_09'
+    INSCRIPTION_ITALY_INSCRIPTION_10 = '#vehicle_customization:inscription/italy/inscription_10'
+    INSCRIPTION_ITALY_INSCRIPTION_11 = '#vehicle_customization:inscription/italy/inscription_11'
+    INSCRIPTION_ITALY_INSCRIPTION_12 = '#vehicle_customization:inscription/italy/inscription_12'
+    INSCRIPTION_ITALY_INSCRIPTION_13 = '#vehicle_customization:inscription/italy/inscription_13'
+    INSCRIPTION_ITALY_INSCRIPTION_14 = '#vehicle_customization:inscription/italy/inscription_14'
+    INSCRIPTION_ITALY_INSCRIPTION_15 = '#vehicle_customization:inscription/italy/inscription_15'
+    INSCRIPTION_ITALY_INSCRIPTION_16 = '#vehicle_customization:inscription/italy/inscription_16'
+    INSCRIPTION_ITALY_INSCRIPTION_17 = '#vehicle_customization:inscription/italy/inscription_17'
+    INSCRIPTION_ITALY_INSCRIPTION_18 = '#vehicle_customization:inscription/italy/inscription_18'
+    INSCRIPTION_ITALY_INSCRIPTION_19 = '#vehicle_customization:inscription/italy/inscription_19'
+    INSCRIPTION_ITALY_INSCRIPTION_20 = '#vehicle_customization:inscription/italy/inscription_20'
+    INSCRIPTION_ITALY_INSCRIPTION_21 = '#vehicle_customization:inscription/italy/inscription_21'
     INSCRIPTION_CHINA_PAIN = '#vehicle_customization:inscription/china/pain'
     INSCRIPTION_CHINA_LIGHT = '#vehicle_customization:inscription/china/light'
     INSCRIPTION_CHINA_HARM = '#vehicle_customization:inscription/china/harm'
@@ -1498,6 +1525,78 @@ class VEHICLE_CUSTOMIZATION(object):
     CAMOUFLAGE_POLAND_PL_WINTER_01_DESCRIPTION = '#vehicle_customization:camouflage/poland/PL_winter_01/description'
     CAMOUFLAGE_POLAND_PL_SUMMER_02_LABEL = '#vehicle_customization:camouflage/poland/PL_summer_02/label'
     CAMOUFLAGE_POLAND_PL_SUMMER_02_DESCRIPTION = '#vehicle_customization:camouflage/poland/PL_summer_02/description'
+    CAMOUFLAGE_VICTIM_USSR_BLACK_LABEL = '#vehicle_customization:camouflage/victim/ussr_black/label'
+    CAMOUFLAGE_VICTIM_USSR_BLACK_DESCRIPTION = '#vehicle_customization:camouflage/victim/ussr_black/description'
+    CAMOUFLAGE_VICTIM_USSR_RED_LABEL = '#vehicle_customization:camouflage/victim/ussr_red/label'
+    CAMOUFLAGE_VICTIM_USSR_RED_DESCRIPTION = '#vehicle_customization:camouflage/victim/ussr_red/description'
+    CAMOUFLAGE_VICTIM_USSR_GOLD_LABEL = '#vehicle_customization:camouflage/victim/ussr_gold/label'
+    CAMOUFLAGE_VICTIM_USSR_GOLD_DESCRIPTION = '#vehicle_customization:camouflage/victim/ussr_gold/description'
+    CAMOUFLAGE_VICTIM_USSR_SILVER_LABEL = '#vehicle_customization:camouflage/victim/ussr_silver/label'
+    CAMOUFLAGE_VICTIM_USSR_SILVER_DESCRIPTION = '#vehicle_customization:camouflage/victim/ussr_silver/description'
+    CAMOUFLAGE_VICTIM_GERMANY_BLACK_LABEL = '#vehicle_customization:camouflage/victim/germany_black/label'
+    CAMOUFLAGE_VICTIM_GERMANY_BLACK_DESCRIPTION = '#vehicle_customization:camouflage/victim/germany_black/description'
+    CAMOUFLAGE_VICTIM_GERMANY_RED_LABEL = '#vehicle_customization:camouflage/victim/germany_red/label'
+    CAMOUFLAGE_VICTIM_GERMANY_RED_DESCRIPTION = '#vehicle_customization:camouflage/victim/germany_red/description'
+    CAMOUFLAGE_VICTIM_GERMANY_GOLD_LABEL = '#vehicle_customization:camouflage/victim/germany_gold/label'
+    CAMOUFLAGE_VICTIM_GERMANY_GOLD_DESCRIPTION = '#vehicle_customization:camouflage/victim/germany_gold/description'
+    CAMOUFLAGE_VICTIM_GERMANY_SILVER_LABEL = '#vehicle_customization:camouflage/victim/germany_silver/label'
+    CAMOUFLAGE_VICTIM_GERMANY_SILVER_DESCRIPTION = '#vehicle_customization:camouflage/victim/germany_silver/description'
+    CAMOUFLAGE_VICTIM_USA_BLACK_LABEL = '#vehicle_customization:camouflage/victim/usa_black/label'
+    CAMOUFLAGE_VICTIM_USA_BLACK_DESCRIPTION = '#vehicle_customization:camouflage/victim/usa_black/description'
+    CAMOUFLAGE_VICTIM_USA_RED_LABEL = '#vehicle_customization:camouflage/victim/usa_red/label'
+    CAMOUFLAGE_VICTIM_USA_RED_DESCRIPTION = '#vehicle_customization:camouflage/victim/usa_red/description'
+    CAMOUFLAGE_VICTIM_USA_GOLD_LABEL = '#vehicle_customization:camouflage/victim/usa_gold/label'
+    CAMOUFLAGE_VICTIM_USA_GOLD_DESCRIPTION = '#vehicle_customization:camouflage/victim/usa_gold/description'
+    CAMOUFLAGE_VICTIM_USA_SILVER_LABEL = '#vehicle_customization:camouflage/victim/usa_silver/label'
+    CAMOUFLAGE_VICTIM_USA_SILVER_DESCRIPTION = '#vehicle_customization:camouflage/victim/usa_silver/description'
+    CAMOUFLAGE_VICTIM_CHINA_BLACK_LABEL = '#vehicle_customization:camouflage/victim/china_black/label'
+    CAMOUFLAGE_VICTIM_CHINA_BLACK_DESCRIPTION = '#vehicle_customization:camouflage/victim/china_black/description'
+    CAMOUFLAGE_VICTIM_CHINA_RED_LABEL = '#vehicle_customization:camouflage/victim/china_red/label'
+    CAMOUFLAGE_VICTIM_CHINA_RED_DESCRIPTION = '#vehicle_customization:camouflage/victim/china_red/description'
+    CAMOUFLAGE_VICTIM_CHINA_GOLD_LABEL = '#vehicle_customization:camouflage/victim/china_gold/label'
+    CAMOUFLAGE_VICTIM_CHINA_GOLD_DESCRIPTION = '#vehicle_customization:camouflage/victim/china_gold/description'
+    CAMOUFLAGE_VICTIM_CHINA_SILVER_LABEL = '#vehicle_customization:camouflage/victim/china_silver/label'
+    CAMOUFLAGE_VICTIM_CHINA_SILVER_DESCRIPTION = '#vehicle_customization:camouflage/victim/china_silver/description'
+    CAMOUFLAGE_VICTIM_FRANCE_BLACK_LABEL = '#vehicle_customization:camouflage/victim/france_black/label'
+    CAMOUFLAGE_VICTIM_FRANCE_BLACK_DESCRIPTION = '#vehicle_customization:camouflage/victim/france_black/description'
+    CAMOUFLAGE_VICTIM_FRANCE_RED_LABEL = '#vehicle_customization:camouflage/victim/france_red/label'
+    CAMOUFLAGE_VICTIM_FRANCE_RED_DESCRIPTION = '#vehicle_customization:camouflage/victim/france_red/description'
+    CAMOUFLAGE_VICTIM_FRANCE_GOLD_LABEL = '#vehicle_customization:camouflage/victim/france_gold/label'
+    CAMOUFLAGE_VICTIM_FRANCE_GOLD_DESCRIPTION = '#vehicle_customization:camouflage/victim/france_gold/description'
+    CAMOUFLAGE_VICTIM_FRANCE_SILVER_LABEL = '#vehicle_customization:camouflage/victim/france_silver/label'
+    CAMOUFLAGE_VICTIM_FRANCE_SILVER_DESCRIPTION = '#vehicle_customization:camouflage/victim/france_silver/description'
+    CAMOUFLAGE_VICTIM_UK_BLACK_LABEL = '#vehicle_customization:camouflage/victim/uk_black/label'
+    CAMOUFLAGE_VICTIM_UK_BLACK_DESCRIPTION = '#vehicle_customization:camouflage/victim/uk_black/description'
+    CAMOUFLAGE_VICTIM_UK_RED_LABEL = '#vehicle_customization:camouflage/victim/uk_red/label'
+    CAMOUFLAGE_VICTIM_UK_RED_DESCRIPTION = '#vehicle_customization:camouflage/victim/uk_red/description'
+    CAMOUFLAGE_VICTIM_UK_GOLD_LABEL = '#vehicle_customization:camouflage/victim/uk_gold/label'
+    CAMOUFLAGE_VICTIM_UK_GOLD_DESCRIPTION = '#vehicle_customization:camouflage/victim/uk_gold/description'
+    CAMOUFLAGE_VICTIM_UK_SILVER_LABEL = '#vehicle_customization:camouflage/victim/uk_silver/label'
+    CAMOUFLAGE_VICTIM_UK_SILVER_DESCRIPTION = '#vehicle_customization:camouflage/victim/uk_silver/description'
+    CAMOUFLAGE_VICTIM_JAPAN_BLACK_LABEL = '#vehicle_customization:camouflage/victim/japan_black/label'
+    CAMOUFLAGE_VICTIM_JAPAN_BLACK_DESCRIPTION = '#vehicle_customization:camouflage/victim/japan_black/description'
+    CAMOUFLAGE_VICTIM_JAPAN_RED_LABEL = '#vehicle_customization:camouflage/victim/japan_red/label'
+    CAMOUFLAGE_VICTIM_JAPAN_RED_DESCRIPTION = '#vehicle_customization:camouflage/victim/japan_red/description'
+    CAMOUFLAGE_VICTIM_JAPAN_GOLD_LABEL = '#vehicle_customization:camouflage/victim/japan_gold/label'
+    CAMOUFLAGE_VICTIM_JAPAN_GOLD_DESCRIPTION = '#vehicle_customization:camouflage/victim/japan_gold/description'
+    CAMOUFLAGE_VICTIM_JAPAN_SILVER_LABEL = '#vehicle_customization:camouflage/victim/japan_silver/label'
+    CAMOUFLAGE_VICTIM_JAPAN_SILVER_DESCRIPTION = '#vehicle_customization:camouflage/victim/japan_silver/description'
+    CAMOUFLAGE_VICTIM_CZECH_BLACK_LABEL = '#vehicle_customization:camouflage/victim/czech_black/label'
+    CAMOUFLAGE_VICTIM_CZECH_BLACK_DESCRIPTION = '#vehicle_customization:camouflage/victim/czech_black/description'
+    CAMOUFLAGE_VICTIM_CZECH_RED_LABEL = '#vehicle_customization:camouflage/victim/czech_red/label'
+    CAMOUFLAGE_VICTIM_CZECH_RED_DESCRIPTION = '#vehicle_customization:camouflage/victim/czech_red/description'
+    CAMOUFLAGE_VICTIM_CZECH_GOLD_LABEL = '#vehicle_customization:camouflage/victim/czech_gold/label'
+    CAMOUFLAGE_VICTIM_CZECH_GOLD_DESCRIPTION = '#vehicle_customization:camouflage/victim/czech_gold/description'
+    CAMOUFLAGE_VICTIM_CZECH_SILVER_LABEL = '#vehicle_customization:camouflage/victim/czech_silver/label'
+    CAMOUFLAGE_VICTIM_CZECH_SILVER_DESCRIPTION = '#vehicle_customization:camouflage/victim/czech_silver/description'
+    CAMOUFLAGE_VICTIM_SWEDEN_BLACK_LABEL = '#vehicle_customization:camouflage/victim/sweden_black/label'
+    CAMOUFLAGE_VICTIM_SWEDEN_BLACK_DESCRIPTION = '#vehicle_customization:camouflage/victim/sweden_black/description'
+    CAMOUFLAGE_VICTIM_SWEDEN_RED_LABEL = '#vehicle_customization:camouflage/victim/sweden_red/label'
+    CAMOUFLAGE_VICTIM_SWEDEN_RED_DESCRIPTION = '#vehicle_customization:camouflage/victim/sweden_red/description'
+    CAMOUFLAGE_VICTIM_SWEDEN_GOLD_LABEL = '#vehicle_customization:camouflage/victim/sweden_gold/label'
+    CAMOUFLAGE_VICTIM_SWEDEN_GOLD_DESCRIPTION = '#vehicle_customization:camouflage/victim/sweden_gold/description'
+    CAMOUFLAGE_VICTIM_SWEDEN_SILVER_LABEL = '#vehicle_customization:camouflage/victim/sweden_silver/label'
+    CAMOUFLAGE_VICTIM_SWEDEN_SILVER_DESCRIPTION = '#vehicle_customization:camouflage/victim/sweden_silver/description'
     BONUS_NAME_CAMOUFLAGE = '#vehicle_customization:bonus/name/camouflage'
     BONUS_NAME_EXTENDED_CAMOUFLAGE = '#vehicle_customization:bonus/name/extended/camouflage'
     BONUS_CONDITION_SEASON = '#vehicle_customization:bonus/condition/season'
@@ -1611,6 +1710,14 @@ class VEHICLE_CUSTOMIZATION(object):
     REPAINT_CZECH_COLOR_05 = '#vehicle_customization:repaint/czech_color_05'
     REPAINT_CZECH_COLOR_06 = '#vehicle_customization:repaint/czech_color_06'
     REPAINT_CZECH_COLOR_07 = '#vehicle_customization:repaint/czech_color_07'
+    REPAINT_ITALY_BASE_COLOR = '#vehicle_customization:repaint/italy_base_color'
+    REPAINT_ITALY_COLOR_01 = '#vehicle_customization:repaint/italy_color_01'
+    REPAINT_ITALY_COLOR_02 = '#vehicle_customization:repaint/italy_color_02'
+    REPAINT_ITALY_COLOR_03 = '#vehicle_customization:repaint/italy_color_03'
+    REPAINT_ITALY_COLOR_04 = '#vehicle_customization:repaint/italy_color_04'
+    REPAINT_ITALY_COLOR_05 = '#vehicle_customization:repaint/italy_color_05'
+    REPAINT_ITALY_COLOR_06 = '#vehicle_customization:repaint/italy_color_06'
+    REPAINT_ITALY_COLOR_07 = '#vehicle_customization:repaint/italy_color_07'
     REPAINT_CUSTOM_COLOR_01 = '#vehicle_customization:repaint/custom_color_01'
     REPAINT_CUSTOM_COLOR_02 = '#vehicle_customization:repaint/custom_color_02'
     REPAINT_CUSTOM_COLOR_03 = '#vehicle_customization:repaint/custom_color_03'
@@ -1632,7 +1739,6 @@ class VEHICLE_CUSTOMIZATION(object):
     REPAINT_CUSTOM_COLOR_17 = '#vehicle_customization:repaint/custom_color_17'
     REPAINT_CUSTOM_COLOR_18 = '#vehicle_customization:repaint/custom_color_18'
     REPAINT_CUSTOM_COLOR_19 = '#vehicle_customization:repaint/custom_color_19'
-    REPAINT_COLOR_GROUP_01 = '#vehicle_customization:repaint/color_group_01'
     REPAINT_COLOR_GROUP_05 = '#vehicle_customization:repaint/color_group_05'
     REPAINT_COLOR_GROUP_02 = '#vehicle_customization:repaint/color_group_02'
     REPAINT_COLOR_GROUP_03 = '#vehicle_customization:repaint/color_group_03'
@@ -1651,11 +1757,13 @@ class VEHICLE_CUSTOMIZATION(object):
     RENTED_STYLE_UK = '#vehicle_customization:rented_style/uk'
     RENTED_STYLE_USA = '#vehicle_customization:rented_style/usa'
     RENTED_STYLE_USSR = '#vehicle_customization:rented_style/ussr'
+    RENTED_STYLE_ITALY = '#vehicle_customization:rented_style/italy'
     GOLD_STYLE_GOLD_STYLE_01 = '#vehicle_customization:gold_style/gold_style_01'
     NY_STYLE_ASIAN_NY_STYLE_01 = '#vehicle_customization:ny_style/asian_ny_style_01'
     NY_STYLE_TRADITIONALWESTERN_NY_STYLE_01 = '#vehicle_customization:ny_style/traditionalWestern_ny_style_01'
     NY_STYLE_MODERNWESTERN_NY_STYLE_01 = '#vehicle_customization:ny_style/modernWestern_ny_style_01'
     NY_STYLE_SOVIET_NY_STYLE_01 = '#vehicle_customization:ny_style/soviet_ny_style_01'
+    VICTIM_STYLE_DEFAULT = '#vehicle_customization:victim_style/default'
     SPECIAL_STYLE_WGFEST_STYLE_01 = '#vehicle_customization:special_style/wgfest_style_01'
     SPECIAL_STYLE_ROSTELEKOM2018_STYLE_01 = '#vehicle_customization:special_style/rostelekom2018_style_01'
     CUSTOMIZATION_POPOVER_STYLE_WINTER = '#vehicle_customization:customization/popover/style/winter'
@@ -1697,10 +1805,6 @@ class VEHICLE_CUSTOMIZATION(object):
      SEASON_SELECTION_WINTER,
      SEASON_SELECTION_DESERT,
      SEASON_SELECTION_HEADER)
-    NY_STYLE_ALL_NY_STYLE_01_ENUM = (NY_STYLE_ASIAN_NY_STYLE_01,
-     NY_STYLE_TRADITIONALWESTERN_NY_STYLE_01,
-     NY_STYLE_MODERNWESTERN_NY_STYLE_01,
-     NY_STYLE_SOVIET_NY_STYLE_01)
 
     @classmethod
     def getShortBonusName(cls, bonusType):
@@ -1724,15 +1828,6 @@ class VEHICLE_CUSTOMIZATION(object):
     def getSeasonName(cls, season):
         outcome = '#vehicle_customization:season/selection/{}'.format(season)
         if outcome not in cls.SEASON_SELECTION_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def getStyleName(cls, style):
-        outcome = '#vehicle_customization:ny_style/{}_ny_style_01'.format(style)
-        if outcome not in cls.NY_STYLE_ALL_NY_STYLE_01_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

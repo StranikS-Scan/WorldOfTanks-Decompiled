@@ -4,7 +4,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates, GroupedViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -34,4 +34,4 @@ class EventBoardsPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((VIEW_ALIAS.LOBBY_EVENT_BOARDS_TABLE, self.loadViewByCtxEvent), (EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS, self.loadViewByCtxEvent), (EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS, self.loadViewByCtxEvent))
-        super(EventBoardsPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+        super(EventBoardsPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

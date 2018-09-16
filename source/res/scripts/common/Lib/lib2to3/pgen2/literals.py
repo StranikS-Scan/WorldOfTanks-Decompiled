@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pgen2/literals.py
-"""Safely evaluate Python string literals without using eval()."""
 import re
 simple_escapes = {'a': '\x07',
  'b': '\x08',
@@ -15,7 +14,6 @@ simple_escapes = {'a': '\x07',
 
 def escape(m):
     all, tail = m.group(0, 1)
-    assert all.startswith('\\')
     esc = simple_escapes.get(tail)
     if esc is not None:
         return esc
@@ -39,12 +37,9 @@ def escape(m):
 
 
 def evalString(s):
-    if not s.startswith("'"):
-        assert s.startswith('"'), repr(s[:1])
-        q = s[0]
-        q = s[:3] == q * 3 and q * 3
-    assert s.endswith(q), repr(s[-len(q):])
-    assert len(s) >= 2 * len(q)
+    q = s[0]
+    if s[:3] == q * 3:
+        q = q * 3
     s = s[len(q):-len(q)]
     return re.sub('\\\\(\\\'|\\"|\\\\|[abfnrtv]|x.{0,2}|[0-7]{1,3})', escape, s)
 

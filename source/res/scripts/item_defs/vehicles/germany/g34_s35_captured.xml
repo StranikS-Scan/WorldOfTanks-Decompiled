@@ -1,7 +1,6 @@
 <G34_S35_captured.xml>
   <crew>
     <commander>	gunner
-
 			loader	</commander>
     <driver></driver>
     <radioman></radioman>
@@ -97,7 +96,7 @@
       <userString>	#germany_vehicles:S-35ketten	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1730.0	</price>
+      <price>	1730	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	10	</leftTrack>
@@ -219,7 +218,7 @@
         <right>	vehicles/german/G34_S35_captured/track/right.track	</right>
         <segmentLength>	0.096	</segmentLength>
         <segmentOffset>	0.063	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -360,8 +359,8 @@
     <Somuaturm>
       <userString>	#germany_vehicles:Somuaturm	</userString>
       <tags></tags>
-      <level>	3.0	</level>
-      <price>	1350.0	</price>
+      <level>	3	</level>
+      <price>	1350	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	56	</armor_1>

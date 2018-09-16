@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Finder/Legacy_suite.py
-"""Suite Legacy suite: Operations formerly handled by the Finder, but now automatically delegated to other applications
-Level 1, version 1
-
-Generated from /System/Library/CoreServices/Finder.app
-AETE/AEUT resource version 0/144, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'fleg'
@@ -13,9 +7,6 @@ _code = 'fleg'
 class Legacy_suite_Events:
 
     def restart(self, _no_object=None, _attributes={}, **_arguments):
-        """restart: Restart the computer
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'fndr'
         _subcode = 'rest'
         if _arguments:
@@ -28,9 +19,6 @@ class Legacy_suite_Events:
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def shut_down(self, _no_object=None, _attributes={}, **_arguments):
-        """shut down: Shut Down the computer
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'fndr'
         _subcode = 'shut'
         if _arguments:
@@ -43,9 +31,6 @@ class Legacy_suite_Events:
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def sleep(self, _no_object=None, _attributes={}, **_arguments):
-        """sleep: Put the computer to sleep
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'fndr'
         _subcode = 'slep'
         if _arguments:
@@ -59,12 +44,10 @@ class Legacy_suite_Events:
 
 
 class application(aetools.ComponentItem):
-    """application - The Finder """
     want = 'capp'
 
 
 class _Prop_desktop_picture(aetools.NProperty):
-    """desktop picture - the desktop picture of the main monitor """
     which = 'dpic'
     want = 'file'
 
@@ -72,18 +55,15 @@ class _Prop_desktop_picture(aetools.NProperty):
 desktop_picture = _Prop_desktop_picture()
 
 class application_process(aetools.ComponentItem):
-    """application process - A process launched from an application file """
     want = 'pcap'
 
 
 class _Prop__3c_Inheritance_3e_(aetools.NProperty):
-    """<Inheritance> - inherits some of its properties from the process class """
     which = 'c@#^'
     want = 'prcs'
 
 
 class _Prop_application_file(aetools.NProperty):
-    """application file - the application file from which this process was launched """
     which = 'appf'
     want = 'appf'
 
@@ -91,12 +71,10 @@ class _Prop_application_file(aetools.NProperty):
 application_processes = application_process
 
 class desk_accessory_process(aetools.ComponentItem):
-    """desk accessory process - A process launched from a desk accessory file """
     want = 'pcda'
 
 
 class _Prop_desk_accessory_file(aetools.NProperty):
-    """desk accessory file - the desk accessory file from which this process was launched """
     which = 'dafi'
     want = 'obj '
 
@@ -104,72 +82,60 @@ class _Prop_desk_accessory_file(aetools.NProperty):
 desk_accessory_processes = desk_accessory_process
 
 class process(aetools.ComponentItem):
-    """process - A process running on this computer """
     want = 'prcs'
 
 
 class _Prop_accepts_high_level_events(aetools.NProperty):
-    """accepts high level events - Is the process high-level event aware (accepts open application, open document, print document, and quit)? """
     which = 'isab'
     want = 'bool'
 
 
 class _Prop_accepts_remote_events(aetools.NProperty):
-    """accepts remote events - Does the process accept remote events? """
     which = 'revt'
     want = 'bool'
 
 
 class _Prop_creator_type(aetools.NProperty):
-    """creator type - the OSType of the creator of the process (the signature) """
     which = 'fcrt'
     want = 'type'
 
 
 class _Prop_file(aetools.NProperty):
-    """file - the file from which the process was launched """
     which = 'file'
     want = 'obj '
 
 
 class _Prop_file_type(aetools.NProperty):
-    """file type - the OSType of the file type of the process """
     which = 'asty'
     want = 'type'
 
 
 class _Prop_frontmost(aetools.NProperty):
-    """frontmost - Is the process the frontmost process? """
     which = 'pisf'
     want = 'bool'
 
 
 class _Prop_has_scripting_terminology(aetools.NProperty):
-    """has scripting terminology - Does the process have a scripting terminology, i.e., can it be scripted? """
     which = 'hscr'
     want = 'bool'
 
 
 class _Prop_name(aetools.NProperty):
-    """name - the name of the process """
     which = 'pnam'
     want = 'itxt'
 
 
 class _Prop_partition_space_used(aetools.NProperty):
-    """partition space used - the number of bytes currently used in the process' partition """
     which = 'pusd'
     want = 'long'
 
 
 class _Prop_total_partition_size(aetools.NProperty):
-    """total partition size - the size of the partition with which the process was launched """
     which = 'appt'
     want = 'long'
 
 
 class _Prop_visible(aetools.NProperty):
-    """visible - Is the process' layer visible? """
     which = 'pvis'
     want = 'bool'
 

@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/CodeWarrior/Required.py
-"""Suite Required: Terms that every application should support
-Level 1, version 1
-
-Generated from /Volumes/Sap/Applications (Mac OS 9)/Metrowerks CodeWarrior 7.0/Metrowerks CodeWarrior/CodeWarrior IDE 4.2.5
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'reqd'
@@ -15,11 +9,6 @@ class Required_Events(Required_Suite_Events):
     _argmap_open = {'converting': 'Conv'}
 
     def open(self, _object, _attributes={}, **_arguments):
-        """open: Open the specified object(s)
-        Required argument: list of objects to open
-        Keyword argument converting: Whether to convert project to latest version (yes/no; default is ask).
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'aevt'
         _subcode = 'odoc'
         aetools.keysubst(_arguments, self._argmap_open)

@@ -1,30 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pprint.py
-"""Support to pretty-print lists, tuples, & dictionaries recursively.
-
-Very simple, but useful, especially in debugging data structures.
-
-Classes
--------
-
-PrettyPrinter()
-    Handle pretty-printing operations onto a stream using a configured
-    set of formatting parameters.
-
-Functions
----------
-
-pformat()
-    Format a Python object into a pretty-printed representation.
-
-pprint()
-    Pretty-print a Python object to a stream [default is sys.stdout].
-
-saferepr()
-    Generate a 'standard' repr()-like value, but protect against recursive
-    data structures.
-
-"""
 import sys as _sys
 import warnings
 try:
@@ -44,28 +19,23 @@ _len = len
 _type = type
 
 def pprint(object, stream=None, indent=1, width=80, depth=None):
-    """Pretty-print a Python object to a stream [default is sys.stdout]."""
     printer = PrettyPrinter(stream=stream, indent=indent, width=width, depth=depth)
     printer.pprint(object)
 
 
 def pformat(object, indent=1, width=80, depth=None):
-    """Format a Python object into a pretty-printed representation."""
     return PrettyPrinter(indent=indent, width=width, depth=depth).pformat(object)
 
 
 def saferepr(object):
-    """Version of repr() which can handle recursive data structures."""
     return _safe_repr(object, {}, None, 0)[0]
 
 
 def isreadable(object):
-    """Determine if saferepr(object) is readable by eval()."""
     return _safe_repr(object, {}, None, 0)[1]
 
 
 def isrecursive(object):
-    """Determine if object requires a recursive representation."""
     return _safe_repr(object, {}, None, 0)[2]
 
 
@@ -79,33 +49,13 @@ def _sorted(iterable):
 class PrettyPrinter:
 
     def __init__(self, indent=1, width=80, depth=None, stream=None):
-        """Handle pretty printing operations onto a stream using a set of
-        configured parameters.
-        
-        indent
-            Number of spaces to indent for each level of nesting.
-        
-        width
-            Attempted maximum number of columns in the output.
-        
-        depth
-            The maximum depth to print out nested structures.
-        
-        stream
-            The desired output stream.  If omitted (or false), the standard
-            output stream available at construction will be used.
-        
-        """
         indent = int(indent)
         width = int(width)
-        assert indent >= 0, 'indent must be >= 0'
-        if not depth is None:
-            assert depth > 0, 'depth must be > 0'
-            assert width, 'width must be != 0'
-            self._depth = depth
-            self._indent_per_level = indent
-            self._width = width
-            self._stream = stream is not None and stream
+        self._depth = depth
+        self._indent_per_level = indent
+        self._width = width
+        if stream is not None:
+            self._stream = stream
         else:
             self._stream = _sys.stdout
         return
@@ -219,10 +169,6 @@ class PrettyPrinter:
         return repr
 
     def format(self, object, context, maxlevels, level):
-        """Format object for a specific context, returning a string
-        and flags indicating whether the representation is 'readable'
-        and whether the object represents a recursive construct.
-        """
         return _safe_repr(object, context, maxlevels, level)
 
 

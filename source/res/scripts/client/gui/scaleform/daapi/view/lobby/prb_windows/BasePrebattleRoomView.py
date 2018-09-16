@@ -83,12 +83,12 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, ILegacyListener):
 
     def isReadyBtnEnabled(self):
         entity = self.prbEntity
-        team, assigned = decodeRoster(entity.getRosterKey())
+        _, assigned = decodeRoster(entity.getRosterKey())
         return g_currentVehicle.isReadyToPrebattle() and not (entity.getTeamState().isInQueue() and assigned)
 
     def isLeaveBtnEnabled(self):
         entity = self.prbEntity
-        team, assigned = decodeRoster(entity.getRosterKey())
+        _, assigned = decodeRoster(entity.getRosterKey())
         return not (entity.getTeamState().isInQueue() and entity.getPlayerInfo().isReady() and assigned)
 
     def startListening(self):

@@ -11,7 +11,7 @@ from gui.Scaleform.daapi.view.lobby.missions.personal.tank_girls_popover import 
 from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates, GroupedViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.server_events.pm_constants import FIRST_ENTRY_STATE as _FES
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
@@ -58,7 +58,7 @@ class PersonalMissionsPackageBusinessHandler(PackageBusinessHandler):
          (PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS, self.loadViewByCtxEvent),
          (PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS, self.loadViewByCtxEvent),
          (PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_AWARD_CONGRATULATION_VIEW_ALIAS, self.loadViewByCtxEvent))
-        super(PersonalMissionsPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+        super(PersonalMissionsPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
     def loadAwardsView(self, event):
         preloadOperationsPage = event.ctx.get('isBackEvent')

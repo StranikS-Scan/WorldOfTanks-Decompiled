@@ -98,7 +98,7 @@
       <shortUserString>	#germany_vehicles:VK3601H_henshelketten_short	</shortUserString>
       <tags></tags>
       <level>	5	</level>
-      <price>	9970.0	</price>
+      <price>	9970	</price>
       <unlocks>
         <chassis>	VK3601H_henshelketten_ausf_B	  <cost>	4935	</cost>
         </chassis>
@@ -215,7 +215,7 @@
         <right>	vehicles/german/G15_VK3601H/track/right.track	</right>
         <segmentLength>	0.113	</segmentLength>
         <segmentOffset>	0.041	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -422,7 +422,7 @@
       <shortUserString>	#germany_vehicles:VK3601H_henshelketten_ausf_B_short	</shortUserString>
       <tags></tags>
       <level>	6	</level>
-      <price>	15440.0	</price>
+      <price>	15440	</price>
       <armor>
         <leftTrack>	25	</leftTrack>
         <rightTrack>	25	</rightTrack>
@@ -535,7 +535,7 @@
         <right>	vehicles/german/G15_VK3601H/track/right.track	</right>
         <segmentLength>	0.113	</segmentLength>
         <segmentOffset>	0.041	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -744,7 +744,7 @@
       <shortUserString>	#germany_vehicles:VK3601H_Standardturm_short	</shortUserString>
       <tags></tags>
       <level>	5	</level>
-      <price>	9680.0	</price>
+      <price>	9680	</price>
       <armor>
         <armor_1>	80	</armor_1>
         <armor_2>	60	</armor_2>
@@ -962,7 +962,7 @@
       <shortUserString>	#germany_vehicles:VK3601H_Grosseturm_short	</shortUserString>
       <tags></tags>
       <level>	6	</level>
-      <price>	14560.0	</price>
+      <price>	14560	</price>
       <unlocks>
         <gun>	_88mm_KwK_36_L56	  <cost>	9500	</cost>
         </gun>
@@ -1236,12 +1236,12 @@
   </fuelTanks>
   <radios>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
+        <radio>	FuG7	  <cost>	1360	</cost>
         </radio>
       </unlocks>
     </FuG5>
     <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200.0	</cost>
+        <radio>	FuG12	  <cost>	7200	</cost>
         </radio>
       </unlocks>
     </FuG7>

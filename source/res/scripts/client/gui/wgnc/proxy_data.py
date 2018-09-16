@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/wgnc/proxy_data.py
 from account_helpers import getAccountDatabaseID
 from adisp import process
-from debug_utils import LOG_WARNING
 from gui.Scaleform.locale.MENU import MENU
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE

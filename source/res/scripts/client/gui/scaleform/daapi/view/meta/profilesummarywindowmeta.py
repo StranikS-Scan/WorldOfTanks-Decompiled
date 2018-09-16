@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileSummaryWindowMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.profile.ProfileSummary import ProfileSummary
 
 class ProfileSummaryWindowMeta(ProfileSummary):
@@ -12,9 +8,6 @@ class ProfileSummaryWindowMeta(ProfileSummary):
         self._printOverrideError('openClanStatistic')
 
     def as_setClanDataS(self, data):
-        """
-        :param data: Represented by ProfileGroupBlockVO (AS)
-        """
         return self.flashObject.as_setClanData(data) if self._isDAAPIInited() else None
 
     def as_setClanEmblemS(self, source):

@@ -56,16 +56,19 @@ class ItemsCache(IItemsCache):
         return self.__items
 
     @async
-    def update(self, updateReason, diff=None, callback=None):
+    def update(self, updateReason, diff=None, notify=True, callback=None):
         if diff is None or self.__syncFailed:
-            self.__invalidateFullData(updateReason, callback)
+            self.__invalidateFullData(updateReason, notify, callback)
         else:
-            self.__invalidateData(updateReason, diff, callback)
+            self.__invalidateData(updateReason, diff, notify, callback)
         return
 
     def clear(self):
         LOG_DEBUG('Clearing items cache.')
         return self.items.clear()
+
+    def request(self, callback):
+        raise UserWarning('This method should not be reached in this context')
 
     def _onResync(self, reason):
         if not self.__waitForSync:
@@ -74,7 +77,7 @@ class ItemsCache(IItemsCache):
     def _onCenterIsLongDisconnected(self, isLongDisconnected):
         self.items.dossiers.onCenterIsLongDisconnected(isLongDisconnected)
 
-    def __invalidateData(self, updateReason, diff, callback=lambda *args: None):
+    def __invalidateData(self, updateReason, diff, notify=True, callback=lambda *args: None):
         self.__waitForSync = True
         wasSyncFailed = self.__syncFailed
         self.__syncFailed = False
@@ -89,13 +92,13 @@ class ItemsCache(IItemsCache):
             if not self.isSynced():
                 self.__syncFailed = True
                 self.onSyncFailed(updateReason)
-            else:
+            elif notify:
                 self.onSyncCompleted(updateReason, invalidItems)
             callback(*args)
 
         self.__items.request()(cbWrapper)
 
-    def __invalidateFullData(self, updateReason, callback=lambda *args: None):
+    def __invalidateFullData(self, updateReason, notify=True, callback=lambda *args: None):
         self.__waitForSync = True
         wasSyncFailed = self.__syncFailed
         self.__syncFailed = False
@@ -111,7 +114,8 @@ class ItemsCache(IItemsCache):
                     invalidItems = self.__items.invalidateCache()
                 else:
                     invalidItems = {}
-                self.onSyncCompleted(updateReason, invalidItems)
+                if notify:
+                    self.onSyncCompleted(updateReason, invalidItems)
             callback(*args)
 
         self.__items.request()(cbWrapper)

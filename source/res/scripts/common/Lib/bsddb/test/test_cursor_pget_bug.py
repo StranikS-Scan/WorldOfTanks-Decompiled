@@ -5,7 +5,6 @@ import os, glob
 from test_all import db, test_support, get_new_environment_path, get_new_database_path
 
 class pget_bugTestCase(unittest.TestCase):
-    """Verify that cursor.pget works properly"""
     db_name = 'test-cursor_pget.db'
 
     def setUp(self):

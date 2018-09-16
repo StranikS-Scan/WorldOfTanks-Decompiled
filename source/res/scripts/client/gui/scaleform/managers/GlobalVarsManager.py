@@ -33,7 +33,7 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
     def isTutorialRunning(self, tutorialID):
         try:
             from tutorial.loader import isTutorialRunning
-        except:
+        except Exception:
 
             def isTutorialRunning(_):
                 return False

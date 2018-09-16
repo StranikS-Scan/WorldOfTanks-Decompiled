@@ -4,7 +4,7 @@ from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ScopeTemplat
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -59,4 +59,4 @@ class _ClanProfileBusinessHandler(PackageBusinessHandler):
          (CLANS_ALIASES.CLAN_PROFILE_SEND_INVITES_WINDOW_PY, self.loadViewByCtxEvent),
          (CLANS_ALIASES.CLAN_SEARCH_WINDOW_PY, self.loadViewByCtxEvent),
          (CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_PY, self.loadViewByCtxEvent))
-        super(_ClanProfileBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+        super(_ClanProfileBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

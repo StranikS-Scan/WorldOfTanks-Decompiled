@@ -5,7 +5,7 @@ from account_helpers.settings_core.settings_constants import GRAPHICS
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.meta.BattleMessageListMeta import BattleMessageListMeta
 from gui.Scaleform.genConsts.BATTLE_MESSAGES_CONSTS import BATTLE_MESSAGES_CONSTS
-from gui.app_loader.decorators import sf_battle
+from gui.app_loader import sf_battle
 from gui.doc_loaders import messages_panel_reader
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -23,10 +23,10 @@ class FadingMessages(BattleMessageListMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self, name, file):
+    def __init__(self, name, mFile):
         super(BattleMessageListMeta, self).__init__()
         self.__name = name
-        self.__settingsFilePath = _MESSAGES_SETTINGS_PATH.format(file)
+        self.__settingsFilePath = _MESSAGES_SETTINGS_PATH.format(mFile)
         self.__isColorBlind = self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND)
         self.__messages = {}
         self.__styles = None
@@ -35,8 +35,8 @@ class FadingMessages(BattleMessageListMeta):
     def __del__(self):
         LOG_DEBUG('{0} is deleted'.format(self.__name))
 
-    def setSettingFile(self, file):
-        self.__settingsFilePath = _MESSAGES_SETTINGS_PATH.format(file)
+    def setSettingFile(self, mFile):
+        self.__settingsFilePath = _MESSAGES_SETTINGS_PATH.format(mFile)
 
     @sf_battle
     def app(self):

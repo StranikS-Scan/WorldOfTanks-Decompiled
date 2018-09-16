@@ -31,9 +31,6 @@ def _new_value(type_):
 
 
 def RawValue(typecode_or_type, *args):
-    """
-    Returns a ctypes object allocated from shared memory
-    """
     type_ = typecode_to_type.get(typecode_or_type, typecode_or_type)
     obj = _new_value(type_)
     ctypes.memset(ctypes.addressof(obj), 0, ctypes.sizeof(obj))
@@ -42,9 +39,6 @@ def RawValue(typecode_or_type, *args):
 
 
 def RawArray(typecode_or_type, size_or_initializer):
-    """
-    Returns a ctypes array allocated from shared memory
-    """
     type_ = typecode_to_type.get(typecode_or_type, typecode_or_type)
     if isinstance(size_or_initializer, (int, long)):
         type_ = type_ * size_or_initializer
@@ -59,9 +53,6 @@ def RawArray(typecode_or_type, size_or_initializer):
 
 
 def Value(typecode_or_type, *args, **kwds):
-    """
-    Return a synchronization wrapper for a Value
-    """
     lock = kwds.pop('lock', None)
     if kwds:
         raise ValueError('unrecognized keyword argument(s): %s' % kwds.keys())
@@ -77,9 +68,6 @@ def Value(typecode_or_type, *args, **kwds):
 
 
 def Array(typecode_or_type, size_or_initializer, **kwds):
-    """
-    Return a synchronization wrapper for a RawArray
-    """
     lock = kwds.pop('lock', None)
     if kwds:
         raise ValueError('unrecognized keyword argument(s): %s' % kwds.keys())
@@ -101,7 +89,6 @@ def copy(obj):
 
 
 def synchronized(obj, lock=None):
-    assert not isinstance(obj, SynchronizedBase), 'object already synchronized'
     if isinstance(obj, ctypes._SimpleCData):
         return Synchronized(obj, lock)
     elif isinstance(obj, ctypes.Array):

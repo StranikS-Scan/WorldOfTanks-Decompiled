@@ -108,7 +108,7 @@
       <userString>	#usa_vehicles:chassisE1	</userString>
       <tags></tags>
       <level>	2	</level>
-      <price>	660.0	</price>
+      <price>	660	</price>
       <unlocks>
         <chassis>	chassisE2	  <cost>	355	</cost>
         </chassis>
@@ -258,7 +258,7 @@
         <segmentLength>	0.14	</segmentLength>
         <segmentOffset>	0.066	</segmentOffset>
         <segment2Offset>	0.072	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -350,7 +350,7 @@
       <userString>	#usa_vehicles:chassisE2	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1850.0	</price>
+      <price>	1850	</price>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
@@ -496,7 +496,7 @@
         <segmentLength>	0.14	</segmentLength>
         <segmentOffset>	0.066	</segmentOffset>
         <segment2Offset>	0.072	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -590,7 +590,7 @@
       <userString>	#usa_vehicles:D37812	</userString>
       <tags></tags>
       <level>	2	</level>
-      <price>	800.0	</price>
+      <price>	800	</price>
       <armor>
         <armor_1>	38.1	</armor_1>
         <armor_2>	0	</armor_2>
@@ -939,7 +939,7 @@
       </unlocks>
     </SCR_200>
     <SCR_210>	shared	  <unlocks>
-        <radio>	SCR_506	  <cost>	5600.0	</cost>
+        <radio>	SCR_506	  <cost>	5600	</cost>
         </radio>
       </unlocks>
     </SCR_210>

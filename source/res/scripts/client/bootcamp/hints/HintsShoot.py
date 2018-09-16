@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/hints/HintsShoot.py
 import time
-import TriggersManager
 import math
+import TriggersManager
 import Math
 import BigWorld
 from bootcamp.BootcampConstants import HINT_TYPE
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
-from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP, LOG_DEBUG_DEV_BOOTCAMP
+from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from HintsBase import HINT_COMMAND, HintBase
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -79,7 +79,6 @@ class HintShoot(HintBase):
 
     def onAction(self, actionId, actionParams):
         if actionId == BOOTCAMP_BATTLE_ACTION.PLAYER_HIT_VEHICLE:
-            assert actionParams
             vehicleId = actionParams[0]
             if vehicleId in self.__enemies:
                 self.__shootedEnemy = True
@@ -352,7 +351,6 @@ class HintTargetLock(HintBase):
 
     def onAction(self, actionId, actionParams):
         if actionId == BOOTCAMP_BATTLE_ACTION.PLAYER_HIT_VEHICLE:
-            assert actionParams
             vehicleId = actionParams[0]
             if vehicleId in self.__enemies:
                 self.__shootedEnemy = True

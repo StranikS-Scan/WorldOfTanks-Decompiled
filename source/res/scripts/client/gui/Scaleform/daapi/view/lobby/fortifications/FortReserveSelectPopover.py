@@ -1,15 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortReserveSelectPopover.py
-import BigWorld
-import itertools
-from gui.shared.events import CSReserveSelectEvent
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
-from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
-from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.entities.base.unit.listener import IUnitListener
-from gui.prb_control.dispatcher import g_prbLoader
+from gui.shared.events import CSReserveSelectEvent
 from gui.shared.formatters import text_styles
 
 class FortReserveSelectPopover(FittingSelectPopoverMeta, IUnitListener):

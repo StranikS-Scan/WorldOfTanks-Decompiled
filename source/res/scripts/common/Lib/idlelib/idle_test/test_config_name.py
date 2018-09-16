@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/idle_test/test_config_name.py
-"""Unit tests for idlelib.configSectionNameDialog"""
 import unittest
 from idlelib.idle_test.mock_tk import Var, Mbox
 from idlelib import configSectionNameDialog as name_dialog_module

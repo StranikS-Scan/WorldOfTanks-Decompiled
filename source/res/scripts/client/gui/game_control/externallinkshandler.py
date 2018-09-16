@@ -8,7 +8,6 @@ from gui.game_control.links import URLMarcos
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
 from skeletons.gui.game_control import IExternalLinksController
-from helpers.http.url_formatters import addParamsToUrlQuery
 _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.REGISTRATION: '_handleOpenRegistrationURL',
  OpenLinkEvent.RECOVERY_PASSWORD: '_handleOpenRecoveryPasswordURL',
@@ -25,9 +24,7 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.GLOBAL_MAP_CAP: '_handleGmCapURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO: '_handleGmPromoURL',
  OpenLinkEvent.PREM_SHOP: '_handleOpenPremShopURL',
- OpenLinkEvent.TOKEN_SHOP: '_handleTokenShopURL',
- OpenLinkEvent.NY18_SHOP: '_handleOpenNy18ShopURL',
- OpenLinkEvent.NY18_BUY_BOX: '_handleOpenNy18BuyBoxURL'}
+ OpenLinkEvent.TOKEN_SHOP: '_handleTokenShopURL'}
 
 class ExternalLinksHandler(IExternalLinksController):
 
@@ -139,9 +136,3 @@ class ExternalLinksHandler(IExternalLinksController):
 
     def _handleTokenShopURL(self, event):
         self.__openParsedUrl('tokenShopURL', event.params)
-
-    def _handleOpenNy18ShopURL(self, event):
-        self.__openParsedUrl(OpenLinkEvent.NY18_SHOP, event.params)
-
-    def _handleOpenNy18BuyBoxURL(self, event):
-        self.__openParsedUrl(OpenLinkEvent.NY18_BUY_BOX, event.params)

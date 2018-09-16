@@ -3,9 +3,10 @@
 import time
 import math
 import weakref
+from copy import copy
 from bootcamp.BootcampConstants import HINT_TYPE
 from HintsBase import HintBase, HINT_COMMAND
-from copy import copy
+from AvatarInputHandler import mathUtils
 
 class HintLobbyRotate(HintBase):
 
@@ -21,10 +22,10 @@ class HintLobbyRotate(HintBase):
     def update(self):
         if self._state == HintBase.STATE_INACTIVE or self._state == HintBase.STATE_COMPLETE:
             return
-        elif self.__hangarSpace is None:
+        elif self.__hangarSpace is None or self.__hangarSpace.space is None:
             return
         else:
-            camera = self.__hangarSpace.space.getCamera()
+            camera = self.__hangarSpace.space.camera
             if camera is None:
                 return
             elif self.__prevCameraDirection is None:
@@ -34,6 +35,7 @@ class HintLobbyRotate(HintBase):
             curDirection = copy(camera.direction)
             curDirection.normalise()
             cosAngle = self.__prevCameraDirection.dot(curDirection)
+            cosAngle = mathUtils.clamp(-1.0, 1.0, cosAngle)
             self.__curAngle += abs(math.acos(cosAngle))
             self.__prevCameraDirection = curDirection
             resultCommand = None

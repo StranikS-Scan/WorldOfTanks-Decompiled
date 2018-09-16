@@ -56,9 +56,6 @@ TARGET_TRANSLATION_MAPPING = {CHAT_COMMANDS.ATTACKENEMY: {ALLY_CUT: CHAT_COMMAND
  CHAT_COMMANDS.RELOADINGGUN: {ALLY_CUT: CHAT_COMMANDS.STOP}}
 
 class ChatCommandsController(IBattleController):
-    """Controller of chat commands in battle. It shows markers in minimap,
-    on vehicles. Also it sends chat commands to battle team channel.
-    """
     __slots__ = ('__arenaDP', '__feedback', '__ammo')
 
     def __init__(self, setup, feedback, ammo):
@@ -75,13 +72,11 @@ class ChatCommandsController(IBattleController):
         return BATTLE_CTRL_ID.CHAT_COMMANDS
 
     def startControl(self):
-        """Starts to controlling."""
         g_messengerEvents.channels.onCommandReceived += self.__me_onCommandReceived
         import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived += self.__me_onCommandReceived
 
     def stopControl(self):
-        """Stops to controlling."""
         self.__arenaDP = None
         self.__feedback = None
         self.__ammo = None

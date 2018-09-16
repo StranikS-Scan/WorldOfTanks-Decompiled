@@ -2,13 +2,13 @@
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/chains.py
 from items import _xml
 from tutorial.control.chains import triggers
-from tutorial.data import chapter, effects
+from tutorial.data import chapter as tutorial_chapter, effects
 from tutorial.doc_loader import sub_parsers
 from tutorial.doc_loader.sub_parsers import lobby
 
 def readHintSection(xmlCtx, section, flags):
     sectionInfo = sub_parsers.parseHint(xmlCtx, section)
-    hint = chapter.ChainHint(sectionInfo['hintID'], sectionInfo['itemID'], sectionInfo['text'], sectionInfo['hasBox'], sectionInfo['arrow'], sectionInfo['padding'])
+    hint = tutorial_chapter.ChainHint(sectionInfo['hintID'], sectionInfo['itemID'], sectionInfo['text'], sectionInfo['hasBox'], sectionInfo['arrow'], sectionInfo['padding'])
     hint.setActions(sub_parsers.parseActions(xmlCtx, _xml.getSubsection(xmlCtx, section, 'actions'), flags))
     return hint
 

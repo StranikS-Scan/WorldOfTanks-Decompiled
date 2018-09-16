@@ -523,12 +523,6 @@ class DynamicEquipment(Equipment):
             _xml.raiseWrongXml(xmlCtx, subsection.name, 'should be <params>')
 
     def getLevelIDForVehicle(self, vehicleDescr):
-        """
-        Returns index of params of equipment that suites for given vehicleDescr. Is used for
-        updateVehicleAttrFactorsForLevel.
-        :param vehicleDescr: VehicleDescriptor
-        :return: index of params in _config
-        """
         for levelID, (levelFilter, _) in enumerate(self._config):
             if levelFilter.checkCompatibility(vehicleDescr):
                 return levelID
@@ -536,11 +530,6 @@ class DynamicEquipment(Equipment):
         return None
 
     def getLevelParamsForDevice(self, optionalDevice):
-        """
-        Returns level params of equipment that suites for given optional device.
-        :param optionalDevice: optional device
-        :return: level params. Format of params depends from actual class of DynamicEquipment.
-        """
         for levelFilter, levelParams in self._config:
             if levelFilter.checkCompatibilityWithDevice(optionalDevice):
                 return levelParams
@@ -554,9 +543,6 @@ class DynamicEquipment(Equipment):
         return
 
     def updateVehicleAttrFactorsForLevel(self, factors, levelID):
-        """
-        Same as updateVehicleAttrFactors but uses params returned from getLevelIDForVehicle.
-        """
         _, levelParams = self._config[levelID]
         self._updateVehicleAttrFactorsImpl(factors, levelParams)
 
@@ -765,12 +751,6 @@ class _OptionalDeviceFilter(object):
             _xml.raiseWrongXml(xmlCtx, subsection.name, 'should be <required> or/and <incompatible>')
 
     def checkCompatibility(self, vehicleDescr):
-        """
-        Checks if any optional devices compatible with filter.
-        :param vehicleDescr: VehicleDescriptor.
-        :return: Returns True if all tags of optional devices is in <required> and none of them is
-        in <incompatible>
-        """
         for device in vehicleDescr.optionalDevices:
             if device is None:
                 continue
@@ -781,12 +761,6 @@ class _OptionalDeviceFilter(object):
         return False
 
     def checkCompatibilityWithDevice(self, optionalDevice):
-        """
-        Checks if optional device compatible with filter.
-        :param optionalDevice: optional device.
-        :return: Returns True if all tags of optional device is in <required> and none of them is
-        in <incompatible>
-        """
         tags = optionalDevice.tags
         return True if self.__requiredTags.issubset(tags) and len(self.__incompatibleTags.intersection(tags)) == 0 else False
 

@@ -157,7 +157,7 @@ class PropertySheetSeasonButtonsComponent(PropertySheetSeasonButtonsComponentMet
         if self.__isComponentValid():
             self.__refreshRenderers()
             renderers = []
-            for seasonIDX, rend in self._renderers.iteritems():
+            for rend in self._renderers.itervalues():
                 renderers.append(rend.asdict())
 
             self.as_setRendererDataS(PropertySheetSeasonButtonRenderers(renderers)._asdict())

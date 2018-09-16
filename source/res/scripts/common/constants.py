@@ -4,22 +4,18 @@ import math
 from time import time as timestamp
 try:
     import BigWorld
-    if BigWorld.component in ('web', 'Unknown'):
-        raise Exception
-except:
-    IS_CLIENT = False
-    IS_CELLAPP = False
-    IS_BASEAPP = False
-    IS_WEB = True
-    IS_BOT = False
-else:
-    IS_CLIENT = BigWorld.component == 'client'
-    IS_BOT = BigWorld.component == 'bot'
-    IS_CELLAPP = BigWorld.component == 'cell'
-    IS_BASEAPP = BigWorld.component in ('base', 'service')
-    IS_WEB = False
+except ImportError:
 
-CURRENT_REALM = 'RU'
+    class BigWorld:
+        component = 'unknown'
+
+
+IS_CLIENT = BigWorld.component == 'client'
+IS_BOT = BigWorld.component == 'bot'
+IS_CELLAPP = BigWorld.component == 'cell'
+IS_BASEAPP = BigWorld.component in ('base', 'service')
+IS_WEB = BigWorld.component == 'web'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -47,11 +43,8 @@ elif CURRENT_REALM == 'CT':
     AUTH_REALM = 'CT'
 elif CURRENT_REALM in ('RU', 'ST', 'QA', 'DEV', 'SB'):
     pass
-else:
-    assert False
 SPECIAL_OL_FILTER = IS_KOREA or IS_SINGAPORE
 IS_RENTALS_ENABLED = IS_CHINA
-assert sum([IS_CHINA, IS_KOREA, IS_SINGAPORE]) <= 1
 IS_SHOW_SERVER_STATS = not IS_CHINA
 IS_CAT_LOADED = False
 IS_TUTORIAL_ENABLED = True
@@ -94,6 +87,13 @@ class DOSSIER_TYPE:
     RATED7X7 = 16
     CLUB = 32
     CLAN = 64
+
+
+class WOT_GAMEPLAY:
+    BOOTCAMP = 'bootcamp'
+    USUAL = 'usual'
+    OFF = 0
+    ON = 1
 
 
 ARENA_GAMEPLAY_NAMES = ('ctf', 'domination', 'assault', 'nations', 'ctf2', 'domination2', 'assault2', 'fallout', 'fallout2', 'fallout3', 'fallout4', 'ctf30x30', 'domination30x30', 'sandbox', 'bootcamp')
@@ -179,6 +179,7 @@ class ARENA_BONUS_TYPE:
     BOOTCAMP = 23
     EPIC_RANDOM = 24
     EPIC_RANDOM_TRAINING = 25
+    EVENT_BATTLES_2 = 26
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -187,6 +188,7 @@ class ARENA_BONUS_TYPE:
      TUTORIAL,
      CYBERSPORT,
      EVENT_BATTLES,
+     EVENT_BATTLES_2,
      GLOBAL_MAP,
      TOURNAMENT_REGULAR,
      TOURNAMENT_CLAN,
@@ -529,7 +531,6 @@ class ACCOUNT_TYPE2:
     @staticmethod
     def getAttrs(cache, type):
         attrsDct = cache['primary'].get(ACCOUNT_TYPE2.getPrimaryGroup(type), None)
-        assert attrsDct is not None
         attrsPrimaryGroup = attrsDct['attributes']
         attrsDct = cache['secondary'].get(ACCOUNT_TYPE2.getSecondaryGroup(type), None)
         attrsSecondaryGroup = attrsDct and attrsDct['attributes'] or 0
@@ -682,9 +683,8 @@ class DEVELOPMENT_INFO:
     BONUSES = 3
     VISIBILITY = 4
     VEHICLE_ATTRS = 5
-    NAVIGATION_RESULT = 6
-    NAVIGATION_PATH = 7
-    EXPLOSION_RAY = 8
+    QUERY_RESULT = 6
+    EXPLOSION_RAY = 7
     ENABLE_SENDING_VEH_ATTRS_TO_CLIENT = False
 
 
@@ -1078,13 +1078,6 @@ class REQUEST_COOLDOWN:
     SEND_INVITATION_COOLDOWN = 1.0
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
-    NEW_YEAR_SLOT_FILL = 0.4
-    NEW_YEAR_CRAFT = 0.5
-    NEW_YEAR_BREAK_TOYS = 0.5
-    NEW_YEAR_OPEN_BOX = 1.0
-    NEW_YEAR_SEE_TOYS = 0.5
-    NEW_YEAR_SELECT_DISCOUNT = 1.0
-    NEW_YEAR_SELECT_TANKMAN = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1378,7 +1371,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  82: 'feedback damage indicator',
  83: 'feedback damage log',
  84: 'feedback battle events',
- 85: 'ui storage, used for preserving first entry flags etc',
+ 85: 'feedback border map',
+ 86: 'ui storage, used for preserving first entry flags etc',
  USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN: 'Hide marks on gun'}
 
 class WG_GAMES:
@@ -1499,7 +1493,6 @@ class EQUIP_TMAN_CODE:
 class CustomizationInvData(object):
     ITEMS = 1
     OUTFITS = 2
-    UNLOCKS = 3
 
 
 C11N_MAX_REGION_NUM = 3
@@ -1530,7 +1523,6 @@ class EVENT_CLIENT_DATA:
 
     @staticmethod
     def REVISION(id):
-        assert id % 2 == 1
         return id + 1
 
 
@@ -1791,4 +1783,3 @@ class TARGET_LOST_FLAGS:
 
 
 GIFT_TANKMAN_TOKEN_NAME = 'WOTD-95479_gift_tankman'
-ASIA_ACTION_ID_BOX_BUYING = 'boxbuying'

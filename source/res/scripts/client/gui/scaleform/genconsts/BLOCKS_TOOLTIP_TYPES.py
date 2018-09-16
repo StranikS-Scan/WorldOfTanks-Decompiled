@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/BLOCKS_TOOLTIP_TYPES.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class BLOCKS_TOOLTIP_TYPES(object):
     TOOLTIP_TEXT_BLOCK_LINKAGE = 'TooltipTextBlockUI'
@@ -34,10 +31,6 @@ class BLOCKS_TOOLTIP_TYPES(object):
     TOOLTIP_BADGE_INFO_BLOCK_LINKAGE = 'BadgeInfoBlockUI'
     TOOLTIP_BUILDUP_BLOCK_WIDE_AWARD_BIG_BG_LINKAGE = 'TooltipBuildUpBlockWideAwardBigBgUI'
     TOOLTIP_BUILDUP_BLOCK_WIDE_AWARD_SMALL_BG_LINKAGE = 'TooltipBuildUpBlockWideAwardSmallBgUI'
-    TOOLTIP_NY_PROGRESS_BLOCK_LINKAGE = 'NYProgressBlockUI'
-    TOOLTIP_NY_AWARDS_BLOCK_LINKAGE = 'NYAwardsBlockUI'
-    TOOLTIP_NY_COLLECTION_BONUS_CALCULATING_LINKAGE = 'NYCollectionBonusCalculatingUI'
-    TOOLTIP_NY_COLLECTION_BONUS_TABLE_LINKAGE = 'NYCollectionBonusTableUI'
     ALIGN_LEFT = 'left'
     ALIGN_RIGHT = 'right'
     ALIGN_CENTER = 'center'

@@ -7,113 +7,57 @@ from gui.prb_control.items.unit_items import UnitFlags
 from gui.shared.utils.decorators import ReprInjector
 
 class IUnitPermissions(IPrbPermissions):
-    """
-    Base unit permission interface.
-    """
 
     def canKick(self):
-        """
-        Can this player kick another one.
-        """
         return False
 
     def canChangeUnitState(self):
-        """
-        Can this player change unit state to ready/not ready
-        """
         return False
 
     def canChangeRosters(self):
-        """
-        Can this player change slots rosters
-        """
         return False
 
     def canSetVehicle(self):
-        """
-        Can this player select vehicle to participate
-        """
         return False
 
     def canSetReady(self):
-        """
-        Can this player set himself ready/not ready
-        """
         return False
 
     def canChangeClosedSlots(self):
-        """
-        Can this player open/close slots
-        """
         return False
 
     def canAssignToSlot(self, dbID):
-        """
-        Can this player with given ID assign to any slot
-        """
         return False
 
     def canReassignToSlot(self):
-        """
-        Can this player reassign to another slot
-        """
         return False
 
     def canChangeComment(self):
-        """
-        Can this player change unit's comment
-        """
         return False
 
     def canInvokeAutoSearch(self):
-        """
-        Can this player start auto search
-        """
         return True
 
     def canStartBattleQueue(self):
-        """
-        Can this player enqueue
-        """
         return False
 
     def canStopBattleQueue(self):
-        """
-        Can this player dequeue
-        """
         return False
 
     def canChangeLeadership(self):
-        """
-        Can this player change commander of this unit
-        """
         return False
 
     def canStealLeadership(self):
-        """
-        Can this player set himself unit's commander
-        """
         return False
 
     def canChangeConsumables(self):
-        """
-        Can this player set battle consumables
-        """
         return False
 
     def canLead(self):
-        """
-        Can this player take leadership
-        """
         return False
 
     @classmethod
     def isCommander(cls, roles):
-        """
-        Is player with given roles - unit's commander
-        Args:
-            roles: roles mask
-        """
         return False
 
 

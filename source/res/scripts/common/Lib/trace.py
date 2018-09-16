@@ -1,25 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/trace.py
-"""program/module to trace Python program or function execution
-
-Sample use, command line:
-  trace.py -c -f counts --ignore-dir '$prefix' spam.py eggs
-  trace.py -t --ignore-dir '$prefix' spam.py eggs
-  trace.py --trackcalls spam.py eggs
-
-Sample use, programmatically
-  import sys
-
-  # create a Trace object, telling it what to ignore, and whether to
-  # do tracing or line-counting or both.
-  tracer = trace.Trace(ignoredirs=[sys.prefix, sys.exec_prefix,], trace=0,
-                    count=1)
-  # run the new command using the given tracer
-  tracer.run('main()')
-  # make a report, placing output in /tmp
-  r = tracer.results()
-  r.write_results(show_missing=True, coverdir="/tmp")
-"""
 import linecache
 import os
 import re
@@ -100,14 +80,12 @@ class Ignore:
 
 
 def modname(path):
-    """Return a plausible module name for the patch."""
     base = os.path.basename(path)
     filename, ext = os.path.splitext(base)
     return filename
 
 
 def fullmodname(path):
-    """Return a plausible module name for the path."""
     comparepath = os.path.normcase(path)
     longest = ''
     for dir in sys.path:
@@ -155,7 +133,6 @@ class CoverageResults:
         return
 
     def update(self, other):
-        """Merge in the data from another CoverageResults"""
         counts = self.counts
         calledfuncs = self.calledfuncs
         callers = self.callers
@@ -172,9 +149,6 @@ class CoverageResults:
             callers[key] = 1
 
     def write_results(self, show_missing=True, summary=False, coverdir=None):
-        """
-        @param coverdir
-        """
         if self.calledfuncs:
             print
             print 'functions called:'
@@ -255,7 +229,6 @@ class CoverageResults:
         return
 
     def write_results_file(self, path, lines, lnotab, lines_hit):
-        """Return a coverage results file in path."""
         try:
             outfile = open(path, 'w')
         except IOError as err:
@@ -284,7 +257,6 @@ class CoverageResults:
 
 
 def find_lines_from_code(code, strs):
-    """Return dict where keys are lines in the line number table."""
     linenos = {}
     for _, lineno in dis.findlinestarts(code):
         if lineno not in strs:
@@ -294,7 +266,6 @@ def find_lines_from_code(code, strs):
 
 
 def find_lines(code, strs):
-    """Return lineno dict for all code objects reachable from code."""
     linenos = find_lines_from_code(code, strs)
     for c in code.co_consts:
         if inspect.iscode(c):
@@ -304,12 +275,6 @@ def find_lines(code, strs):
 
 
 def find_strings(filename):
-    """Return a dict of possible docstring positions.
-    
-    The dict maps line numbers to strings.  There is an entry for
-    line that contains only a string or a part of a triple-quoted
-    string.
-    """
     d = {}
     prev_ttype = token.INDENT
     f = open(filename)
@@ -328,7 +293,6 @@ def find_strings(filename):
 
 
 def find_executable_linenos(filename):
-    """Return dict where keys are line numbers in the line number table."""
     try:
         prog = open(filename, 'rU').read()
     except IOError as err:
@@ -343,23 +307,6 @@ def find_executable_linenos(filename):
 class Trace:
 
     def __init__(self, count=1, trace=1, countfuncs=0, countcallers=0, ignoremods=(), ignoredirs=(), infile=None, outfile=None, timing=False):
-        """
-        @param count true iff it should count number of times each
-                     line is executed
-        @param trace true iff it should print out each line that is
-                     being counted
-        @param countfuncs true iff it should just output a list of
-                     (filename, modulename, funcname,) for functions
-                     that were called at least once;  This overrides
-                     `count' and `trace'
-        @param ignoremods a list of the names of modules to ignore
-        @param ignoredirs a list of the names of directories to ignore
-                     all of the (recursive) contents of
-        @param infile file from which to read stored counts to be
-                     added into the results
-        @param outfile file in which to write the results
-        @param timing true iff timing information be displayed
-        """
         self.infile = infile
         self.outfile = outfile
         self.ignore = Ignore(ignoremods, ignoredirs)
@@ -450,30 +397,17 @@ class Trace:
         return (filename, modulename, funcname)
 
     def globaltrace_trackcallers(self, frame, why, arg):
-        """Handler for call events.
-        
-        Adds information about who called who to the self._callers dict.
-        """
         if why == 'call':
             this_func = self.file_module_function_of(frame)
             parent_func = self.file_module_function_of(frame.f_back)
             self._callers[parent_func, this_func] = 1
 
     def globaltrace_countfuncs(self, frame, why, arg):
-        """Handler for call events.
-        
-        Adds (filename, modulename, funcname) to the self._calledfuncs dict.
-        """
         if why == 'call':
             this_func = self.file_module_function_of(frame)
             self._calledfuncs[this_func] = 1
 
     def globaltrace_lt(self, frame, why, arg):
-        """Handler for call events.
-        
-        If the code block being entered is to be ignored, returns `None',
-        else returns self.localtrace.
-        """
         if why == 'call':
             code = frame.f_code
             filename = frame.f_globals.get('__file__', None)
@@ -620,7 +554,6 @@ def main(argv=None):
                 ignore_dirs.append(s)
 
             continue
-        assert 0, 'Should never get here'
 
     if listfuncs and (count or trace):
         _err_exit('cannot specify both --listfuncs and (--trace or --count)')

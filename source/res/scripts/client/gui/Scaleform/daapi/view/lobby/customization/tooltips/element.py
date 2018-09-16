@@ -28,10 +28,10 @@ from skeletons.gui.shared import IItemsCache
 
 class SimplifiedStatsBlockConstructor(object):
 
-    def __init__(self, stockParams, comparator, padding=formatters.packPadding(left=67, top=8)):
+    def __init__(self, stockParams, comparator, padding=None):
         self.__stockParams = stockParams
         self.__comparator = comparator
-        self.__padding = padding
+        self.__padding = padding or formatters.packPadding(left=67, top=8)
 
     def construct(self):
         blocks = []
@@ -40,14 +40,12 @@ class SimplifiedStatsBlockConstructor(object):
             value = parameter.value
             if delta > 0:
                 value -= delta
-            blocks.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name]), padding=self.__padding))
+            blocks.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simplifiedDeltaParameter(parameter), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name]), padding=self.__padding))
 
         return blocks
 
 
 class ElementTooltip(BlocksTooltipData):
-    """Tooltip data provider for the customization elements in customization windows.
-    """
     itemsCache = dependency.descriptor(IItemsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
 

@@ -10,11 +10,6 @@ from items.customizations import PaintComponent, CamouflageComponent, DecalCompo
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
 def pickPacker(itemTypeID):
-    """ Get a packer capable of packing/unpacking the given itemTypes.
-    
-    :param itemTypeID: int, one of GUI_ITEM_TYPE.
-    :return: an instance of CustomizationPacker.
-    """
     if itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
         return CamouflagePacker
     if itemTypeID == GUI_ITEM_TYPE.PAINT:
@@ -30,63 +25,26 @@ def pickPacker(itemTypeID):
 
 
 def isComponentComplex(component):
-    """ Check if component is complex object
-    
-    Some components are stored in a form of id only if they have
-    no configurable properties (e.g. modifications work that way)
-    """
     return True if component and not isinstance(component, int) else False
 
 
 class CustomizationPacker(object):
-    """ Packer can create gui customization items from serializable components
-    and pack these items back.
-    
-    Packer holds the knowledge:
-      - of unpacking:
-        - where items are stored in an outfit component;
-        - what items should be created.
-      - of packing:
-        - where items should be put in the outfit component.
-    """
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
     @staticmethod
     def pack(slot, component):
-        """ Fill the given component with the subcomponents stored in the given slot.
-        
-        :param slot: an instance of MultiSlot.
-        :param component: an instance of CustomizationOutfit.
-        """
         raise NotImplementedError
 
     @classmethod
     def unpack(cls, slot, component, proxy=None):
-        """ Carve up items applicable for the slot from the given component.
-        
-        :param slot: an instance of MultiSlot.
-        :param component: an instance of CustomizationOutfit.
-        :param proxy: an instance of ItemRequester.
-        """
         raise NotImplementedError
 
     @classmethod
     def invalidate(cls, slot):
-        """ Populate slot's components with proper data.
-        
-        :param slot: an instance of MultiSlot.
-        """
         raise NotImplementedError
 
     @classmethod
     def create(cls, component, cType, proxy=None):
-        """ Create a customization item from the given component.
-        
-        :param component: an instance of SerializableComponent or int.
-        :param cType: type of customization (one of CustomizationType).
-        :param proxy: an instance of ItemRequester.
-        :return: an instance of Customization.
-        """
         if isComponentComplex(component):
             componentID = component.id
         else:
@@ -96,8 +54,6 @@ class CustomizationPacker(object):
 
 
 class PaintPacker(CustomizationPacker):
-    """ Packer/unpacker for Paint items.
-    """
 
     @staticmethod
     def pack(slot, component):
@@ -122,8 +78,6 @@ class PaintPacker(CustomizationPacker):
 
 
 class CamouflagePacker(CustomizationPacker):
-    """ Packer/unpacker for Camouflage items.
-    """
 
     @staticmethod
     def pack(slot, component):
@@ -147,8 +101,6 @@ class CamouflagePacker(CustomizationPacker):
 
 
 class DecalPacker(CustomizationPacker):
-    """ Packer/unpacker for Decal items (both Emblems and Inscriptions).
-    """
 
     @staticmethod
     def pack(slot, component):
@@ -173,8 +125,6 @@ class DecalPacker(CustomizationPacker):
 
 
 class ModificationPacker(CustomizationPacker):
-    """ Packer/unpacker for Modification items.
-    """
 
     @staticmethod
     def pack(slot, component):

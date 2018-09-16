@@ -1,11 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/ValueTracker.py
-import functools
-import BigWorld
-import GUI
-import Math
 import math
-from Math import Vector3, Matrix
+import functools
+import GUI
 import constants
 from helpers.CallbackDelayer import CallbackDelayer
 

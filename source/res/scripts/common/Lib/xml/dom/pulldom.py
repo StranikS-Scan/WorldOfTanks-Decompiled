@@ -199,7 +199,6 @@ class PullDOM(xml.sax.ContentHandler):
         return
 
     def clear(self):
-        """clear(): Explicitly release parsing structures"""
         self.document = None
         return
 
@@ -276,25 +275,16 @@ class DOMEventStream:
         return rc
 
     def _slurp(self):
-        """ Fallback replacement for getEvent() using the
-            standard SAX2 interface, which means we slurp the
-            SAX events into memory (no performance gain, but
-            we are compatible to all SAX parsers).
-        """
         self.parser.parse(self.stream)
         self.getEvent = self._emit
         return self._emit()
 
     def _emit(self):
-        """ Fallback replacement for getEvent() that emits
-            the events that _slurp() read previously.
-        """
         rc = self.pulldom.firstEvent[1][0]
         self.pulldom.firstEvent[1] = self.pulldom.firstEvent[1][1]
         return rc
 
     def clear(self):
-        """clear(): Explicitly release parsing objects"""
         self.pulldom.clear()
         del self.pulldom
         self.parser = None

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/buildtools.py
-"""tools for BuildApplet and BuildApplication"""
 import warnings
 warnings.warnpy3k('the buildtools module is deprecated and is removed in 3.0', stacklevel=2)
 import sys
@@ -32,7 +31,6 @@ WRITE = 2
 RESOURCE_FORK_NAME = Carbon.File.FSGetResourceForkName()
 
 def findtemplate(template=None):
-    """Locate the applet template along sys.path"""
     if MacOS.runtimemodel == 'macho':
         return None
     else:

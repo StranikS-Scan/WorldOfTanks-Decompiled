@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/dbshelve.py
-"""Manage shelves of pickled objects using bsddb database files for the
-storage.
-"""
 import sys
 absolute_import = sys.version_info[0] >= 3
 if absolute_import:
@@ -37,18 +34,6 @@ else:
     MutableMapping = collections.MutableMapping
 
 def open(filename, flags=db.DB_CREATE, mode=432, filetype=db.DB_HASH, dbenv=None, dbname=None):
-    """
-    A simple factory function for compatibility with the standard
-    shleve.py module.  It can be used like this, where key is a string
-    and data is a pickleable object:
-    
-        from bsddb import dbshelve
-        db = dbshelve.open(filename)
-    
-        db[key] = data
-    
-        db.close()
-    """
     if type(flags) == type(''):
         sflag = flags
         if sflag == 'r':
@@ -73,9 +58,6 @@ class DBShelveError(db.DBError):
 
 
 class DBShelf(MutableMapping):
-    """A shelf to hold pickled objects, built upon a bsddb DB object.  It
-    automatically pickles/unpickles data objects going to/from the DB.
-    """
 
     def __init__(self, dbenv=None):
         self.db = db.DB(dbenv)
@@ -89,9 +71,6 @@ class DBShelf(MutableMapping):
         self.close()
 
     def __getattr__(self, name):
-        """Many methods we can just pass through to the DB object.
-        (See below)
-        """
         return getattr(self.db, name)
 
     def __len__(self):
@@ -199,8 +178,6 @@ class DBShelf(MutableMapping):
 
 
 class DBShelfCursor:
-    """
-    """
 
     def __init__(self, cursor):
         self.dbc = cursor
@@ -209,7 +186,6 @@ class DBShelfCursor:
         self.close()
 
     def __getattr__(self, name):
-        """Some methods we can just pass through to the cursor object.  (See below)"""
         return getattr(self.dbc, name)
 
     def dup(self, flags=0):

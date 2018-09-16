@@ -2,28 +2,28 @@
 # Embedded file name: scripts/client/gui/event_boards/event_boards_controller.py
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ELEN_NOTIFICATIONS
+from adisp import process, async
+from client_request_lib.exceptions import ResponseCodes
+from gui import SystemMessages
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
-from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE as _crdt
-from gui.event_boards.listener import IEventBoardsListener
-from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE
-from client_request_lib.exceptions import ResponseCodes
-from debug_utils import LOG_DEBUG
+from gui.event_boards.event_boards_items import EventBoardsSettings, HangarFlagData, LeaderBoard, MyInfoInLeaderBoard, SET_DATA_STATUS_CODE, EVENT_STATE, PLAYER_STATE_REASON as _psr
+from gui.event_boards.event_boards_items import EventSettings
+from gui.event_boards.listener import IEventBoardsListener
+from gui.shared.utils.requesters.abstract import Response
+from gui.wgcg import IWebController
+from gui.wgcg.elen.contexts import EventBoardsGetEventDataCtx, EventBoardsGetPlayerDataCtx, EventBoardsJoinEventCtx, EventBoardsLeaveEventCtx, EventBoardsGetMyEventTopCtx, EventBoardsGetMyLeaderboardPositionCtx, EventBoardsGetLeaderboardCtx, EventBoardsGetHangarFlagCtx
+from gui.wgcg.settings import WebRequestDataType as _crdt
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from adisp import process, async
-from gui.event_boards.contexts import EventBoardsGetEventDataCtx, EventBoardsGetPlayerDataCtx, EventBoardsJoinEventCtx, EventBoardsLeaveEventCtx, EventBoardsGetMyEventTopCtx, EventBoardsGetMyLeaderboardPositionCtx, EventBoardsGetLeaderboardCtx, EventBoardsGetHangarFlagCtx
-from gui.event_boards.event_boards_items import EventBoardsSettings, HangarFlagData, LeaderBoard, MyInfoInLeaderBoard, SET_DATA_STATUS_CODE, EVENT_STATE, EventSettings, PLAYER_STATE_REASON as _psr
-from gui.clans import IClanController
-from gui.shared.utils.requesters.abstract import Response
-from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.shared import IItemsCache
 SUCCESS_STATUSES = (200, 201, 304)
 
 class EventBoardsController(IEventBoardController, IEventBoardsListener):
-    clanController = dependency.descriptor(IClanController)
+    clanController = dependency.descriptor(IWebController)
     connectionMgr = dependency.descriptor(IConnectionManager)
     itemsCache = dependency.descriptor(IItemsCache)
 

@@ -128,8 +128,6 @@ class ToolTip(Window):
         self.component.position.z = zorder
 
     def getToolTipPosition(self, mousePos, infoArea, placement):
-        """Returns a position to place the ToolTip window in self.toolTipGUI so it is outside the info
-        area positioned according to placement's hint"""
         width, height = clipSize(self.component)
         if placement == ToolTip.PLACE_BELOW:
             position = [mousePos[0], infoArea[3] - ToolTip.GAP_SIZE - height / 2]
@@ -175,7 +173,6 @@ class ToolTipManager(object):
         self.infoAreaBottom = 0
         self.infoAreaRight = 0
         self.showToolTipCallback = None
-        assert ToolTipManager.instance == None
         ToolTipManager.instance = self
         return
 

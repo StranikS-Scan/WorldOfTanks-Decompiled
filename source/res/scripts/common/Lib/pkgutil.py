@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pkgutil.py
-"""Utilities to support packages."""
 import os
 import sys
 import imp
@@ -29,7 +28,6 @@ def read_code(stream):
 
 
 def simplegeneric(func):
-    """Make a trivial single-dispatch generic function"""
     registry = {}
 
     def wrapper(*args, **kw):
@@ -76,33 +74,6 @@ def simplegeneric(func):
 
 
 def walk_packages(path=None, prefix='', onerror=None):
-    """Yields (module_loader, name, ispkg) for all modules recursively
-    on path, or, if path is None, all accessible modules.
-    
-    'path' should be either None or a list of paths to look for
-    modules in.
-    
-    'prefix' is a string to output on the front of every module name
-    on output.
-    
-    Note that this function must import all *packages* (NOT all
-    modules!) on the given path, in order to access the __path__
-    attribute to find submodules.
-    
-    'onerror' is a function which gets called with one argument (the
-    name of the package which was being imported) if any exception
-    occurs while trying to import a package.  If no onerror function is
-    supplied, ImportErrors are caught and ignored, while all other
-    exceptions are propagated, terminating the search.
-    
-    Examples:
-    
-    # list all modules python can access
-    walk_packages()
-    
-    # list all submodules of ctypes
-    walk_packages(ctypes.__path__, ctypes.__name__+'.')
-    """
 
     def seen(p, m={}):
         if p in m:
@@ -132,15 +103,6 @@ def walk_packages(path=None, prefix='', onerror=None):
 
 
 def iter_modules(path=None, prefix=''):
-    """Yields (module_loader, name, ispkg) for all submodules on path,
-    or, if path is None, all top-level modules on sys.path.
-    
-    'path' should be either None or a list of paths to look for
-    modules in.
-    
-    'prefix' is a string to output on the front of every module name
-    on output.
-    """
     if path is None:
         importers = iter_importers()
     else:
@@ -162,15 +124,6 @@ def iter_importer_modules(importer, prefix=''):
 iter_importer_modules = simplegeneric(iter_importer_modules)
 
 class ImpImporter:
-    """PEP 302 Importer that wraps Python's "classic" import algorithm
-    
-    ImpImporter(dirname) produces a PEP 302 importer that searches that
-    directory.  ImpImporter(None) produces a PEP 302 importer that searches
-    the current sys.path, plus any modules that are frozen or built-in.
-    
-    Note that ImpImporter does not currently support being used by placement
-    on sys.meta_path.
-    """
 
     def __init__(self, path=None):
         self.path = path
@@ -232,8 +185,6 @@ class ImpImporter:
 
 
 class ImpLoader:
-    """PEP 302 Loader that wraps Python's "classic" import algorithm
-    """
     code = source = None
 
     def __init__(self, fullname, file, filename, etc):
@@ -358,18 +309,6 @@ except ImportError:
     pass
 
 def get_importer(path_item):
-    """Retrieve a PEP 302 importer for the given path item
-    
-    The returned importer is cached in sys.path_importer_cache
-    if it was newly created by a path hook.
-    
-    If there is no importer, a wrapper around the basic import
-    machinery is returned. This wrapper is never inserted into
-    the importer cache (None is inserted instead).
-    
-    The cache (or part of it) can be cleared manually if a
-    rescan of sys.path_hooks is necessary.
-    """
     try:
         importer = sys.path_importer_cache[path_item]
     except KeyError:
@@ -395,29 +334,6 @@ def get_importer(path_item):
 
 
 def iter_importers(fullname=''):
-    """Yield PEP 302 importers for the given module name
-    
-    If fullname contains a '.', the importers will be for the package
-    containing fullname, otherwise they will be importers for sys.meta_path,
-    sys.path, and Python's "classic" import machinery, in that order.  If
-    the named module is in a package, that package is imported as a side
-    effect of invoking this function.
-    
-    Non PEP 302 mechanisms (e.g. the Windows registry) used by the
-    standard import machinery to find files in alternative locations
-    are partially supported, but are searched AFTER sys.path. Normally,
-    these locations are searched BEFORE sys.path, preventing sys.path
-    entries from shadowing them.
-    
-    For this to cause a visible difference in behaviour, there must
-    be a module or package name that is accessible via both sys.path
-    and one of the non PEP 302 file system mechanisms. In this case,
-    the emulation will find the former version, while the builtin
-    import mechanism will find the latter.
-    
-    Items of the following types can be affected by this discrepancy:
-        imp.C_EXTENSION, imp.PY_SOURCE, imp.PY_COMPILED, imp.PKG_DIRECTORY
-    """
     if fullname.startswith('.'):
         raise ImportError('Relative module names not supported')
     if '.' in fullname:
@@ -439,18 +355,6 @@ def iter_importers(fullname=''):
 
 
 def get_loader(module_or_name):
-    """Get a PEP 302 "loader" object for module_or_name
-    
-    If the module or package is accessible via the normal import
-    mechanism, a wrapper around the relevant part of that machinery
-    is returned.  Returns None if the module cannot be found or imported.
-    If the named module is not already imported, its containing package
-    (if any) is imported, in order to establish the package __path__.
-    
-    This function uses iter_importers(), and is thus subject to the same
-    limitations regarding platform-specific special import locations such
-    as the Windows registry.
-    """
     if module_or_name in sys.modules:
         module_or_name = sys.modules[module_or_name]
     if isinstance(module_or_name, ModuleType):
@@ -465,13 +369,6 @@ def get_loader(module_or_name):
 
 
 def find_loader(fullname):
-    """Find a PEP 302 "loader" object for fullname
-    
-    If fullname contains dots, path must be the containing package's __path__.
-    Returns None if the module cannot be found or imported. This function uses
-    iter_importers(), and is thus subject to the same limitations regarding
-    platform-specific special import locations such as the Windows registry.
-    """
     for importer in iter_importers(fullname):
         loader = importer.find_module(fullname)
         if loader is not None:
@@ -481,37 +378,6 @@ def find_loader(fullname):
 
 
 def extend_path(path, name):
-    """Extend a package's path.
-    
-    Intended use is to place the following code in a package's __init__.py:
-    
-        from pkgutil import extend_path
-        __path__ = extend_path(__path__, __name__)
-    
-    This will add to the package's __path__ all subdirectories of
-    directories on sys.path named after the package.  This is useful
-    if one wants to distribute different parts of a single logical
-    package as multiple directories.
-    
-    It also looks for *.pkg files beginning where * matches the name
-    argument.  This feature is similar to *.pth files (see site.py),
-    except that it doesn't special-case lines starting with 'import'.
-    A *.pkg file is trusted at face value: apart from checking for
-    duplicates, all entries found in a *.pkg file are added to the
-    path, regardless of whether they are exist the filesystem.  (This
-    is a feature.)
-    
-    If the input path is not a list (as is the case for frozen
-    packages) it is returned unchanged.  The input path is not
-    modified; an extended copy is returned.  Items are only appended
-    to the copy at the end.
-    
-    It is assumed that sys.path is a sequence.  Items of sys.path that
-    are not (unicode or 8-bit) strings referring to existing
-    directories are ignored.  Unicode items of sys.path that cause
-    errors when used as filenames may cause this function to raise an
-    exception (in line with os.path.isdir() behavior).
-    """
     if not isinstance(path, list):
         return path
     pname = os.path.join(*name.split('.'))
@@ -545,26 +411,6 @@ def extend_path(path, name):
 
 
 def get_data(package, resource):
-    """Get a resource from a package.
-    
-    This is a wrapper round the PEP 302 loader get_data API. The package
-    argument should be the name of a package, in standard module format
-    (foo.bar). The resource argument should be in the form of a relative
-    filename, using '/' as the path separator. The parent directory name '..'
-    is not allowed, and nor is a rooted name (starting with a '/').
-    
-    The function returns a binary string, which is the contents of the
-    specified resource.
-    
-    For packages located in the filesystem, which have already been imported,
-    this is the rough equivalent of
-    
-        d = os.path.dirname(sys.modules[package].__file__)
-        data = open(os.path.join(d, resource), 'rb').read()
-    
-    If the package cannot be located or loaded, or it uses a PEP 302 loader
-    which does not support get_data(), then None is returned.
-    """
     loader = get_loader(package)
     if loader is None or not hasattr(loader, 'get_data'):
         return

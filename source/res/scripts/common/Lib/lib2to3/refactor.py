@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/refactor.py
-"""Refactoring framework.
-
-Used as a main program, this can refactor any number of files and/or
-recursively descend down directories.  Imported as a module, this
-provides infrastructure to write your own refactoring tool.
-"""
 from __future__ import with_statement
 __author__ = 'Guido van Rossum <guido@python.org>'
 import os
@@ -22,7 +16,6 @@ from . import btm_utils as bu
 from . import btm_matcher as bm
 
 def get_all_fix_names(fixer_pkg, remove_prefix=True):
-    """Return a sorted list of all available fix names in the given package."""
     pkg = __import__(fixer_pkg, [], [], ['*'])
     fixer_dir = os.path.dirname(pkg.__file__)
     fix_names = []
@@ -40,8 +33,6 @@ class _EveryNode(Exception):
 
 
 def _get_head_types(pat):
-    """ Accepts a pytree Pattern Node and returns a set
-    of the pattern types which will match first. """
     if isinstance(pat, (pytree.NodePattern, pytree.LeafPattern)):
         if pat.type is None:
             raise _EveryNode
@@ -63,8 +54,6 @@ def _get_head_types(pat):
 
 
 def _get_headnode_dict(fixer_list):
-    """ Accepts a list of fixers and returns a dictionary
-    of head node type --> fixer list.  """
     head_nodes = collections.defaultdict(list)
     every = []
     for fixer in fixer_list:
@@ -88,9 +77,6 @@ def _get_headnode_dict(fixer_list):
 
 
 def get_fixers_from_package(pkg_name):
-    """
-    Return the fully qualified names for fixers in the package pkg_name.
-    """
     return [ pkg_name + '.' + fix_name for fix_name in get_all_fix_names(pkg_name, False) ]
 
 
@@ -163,7 +149,6 @@ def _detect_future_features(source):
 
 
 class FixerError(Exception):
-    """A fixer could not be loaded."""
     pass
 
 
@@ -174,13 +159,6 @@ class RefactoringTool(object):
     FILE_PREFIX = 'fix_'
 
     def __init__(self, fixer_names, options=None, explicit=None):
-        """Initializer.
-        
-        Args:
-            fixer_names: a list of fixers to import
-            options: an dict with configuration.
-            explicit: a list of fixers to run even if they are explicit.
-        """
         self.fixers = fixer_names
         self.explicit = explicit or []
         self.options = self._default_options.copy()
@@ -214,13 +192,6 @@ class RefactoringTool(object):
         return
 
     def get_fixers(self):
-        """Inspects the options to load the requested patterns and handlers.
-        
-        Returns:
-          (pre_order, post_order), where pre_order is the list of fixers that
-          want a pre-order AST traversal, and post_order is the list that want
-          post-order traversal.
-        """
         pre_order_fixers = []
         post_order_fixers = []
         for fix_mod_path in self.fixers:
@@ -252,11 +223,9 @@ class RefactoringTool(object):
         return (pre_order_fixers, post_order_fixers)
 
     def log_error(self, msg, *args, **kwds):
-        """Called when an error occurs."""
         raise
 
     def log_message(self, msg, *args):
-        """Hook to log a message."""
         if args:
             msg = msg % args
         self.logger.info(msg)
@@ -267,24 +236,15 @@ class RefactoringTool(object):
         self.logger.debug(msg)
 
     def print_output(self, old_text, new_text, filename, equal):
-        """Called with the old version, new version, and filename of a
-        refactored file."""
         pass
 
     def refactor(self, items, write=False, doctests_only=False):
-        """Refactor a list of files and directories."""
         for dir_or_file in items:
             if os.path.isdir(dir_or_file):
                 self.refactor_dir(dir_or_file, write, doctests_only)
             self.refactor_file(dir_or_file, write, doctests_only)
 
     def refactor_dir(self, dir_name, write=False, doctests_only=False):
-        """Descends down a directory and refactor every Python file found.
-        
-        Python files are assumed to have a .py extension.
-        
-        Files and subdirectories starting with '.' are skipped.
-        """
         py_ext = os.extsep + 'py'
         for dirpath, dirnames, filenames in os.walk(dir_name):
             self.log_debug('Descending into %s', dirpath)
@@ -298,9 +258,6 @@ class RefactoringTool(object):
             dirnames[:] = [ dn for dn in dirnames if not dn.startswith('.') ]
 
     def _read_python_source(self, filename):
-        """
-        Do our best to decode a Python source file correctly.
-        """
         try:
             f = open(filename, 'rb')
         except IOError as err:
@@ -317,7 +274,6 @@ class RefactoringTool(object):
         return
 
     def refactor_file(self, filename, write=False, doctests_only=False):
-        """Refactors a file."""
         input, encoding = self._read_python_source(filename)
         if input is None:
             return
@@ -339,16 +295,6 @@ class RefactoringTool(object):
             return
 
     def refactor_string(self, data, name):
-        """Refactor a given input string.
-        
-        Args:
-            data: a string holding the code to be refactored.
-            name: a human-readable name for use in error/log messages.
-        
-        Returns:
-            An AST corresponding to the refactored input stream; None if
-            there were errors during the parse.
-        """
         features = _detect_future_features(data)
         if 'print_function' in features:
             self.driver.grammar = pygram.python_grammar_no_print_statement
@@ -384,20 +330,6 @@ class RefactoringTool(object):
                 self.log_debug('No changes in stdin')
 
     def refactor_tree(self, tree, name):
-        """Refactors a parse tree (modifying the tree in place).
-        
-        For compatible patterns the bottom matcher module is
-        used. Otherwise the tree is traversed node-to-node for
-        matches.
-        
-        Args:
-            tree: a pytree.Node instance representing the root of the tree
-                  to be refactored.
-            name: a human-readable name for this tree.
-        
-        Returns:
-            True if the tree was modified, False otherwise.
-        """
         for fixer in chain(self.pre_order, self.post_order):
             fixer.start_tree(tree, name)
 
@@ -442,17 +374,6 @@ class RefactoringTool(object):
         return tree.was_changed
 
     def traverse_by(self, fixers, traversal):
-        """Traverse an AST, applying a set of fixers to each node.
-        
-        This is a helper method for refactor_tree().
-        
-        Args:
-            fixers: a list of fixer instances.
-            traversal: a generator that yields AST nodes.
-        
-        Returns:
-            None
-        """
         if not fixers:
             return
         else:
@@ -468,9 +389,6 @@ class RefactoringTool(object):
             return
 
     def processed_file(self, new_text, filename, old_text=None, write=False, encoding=None):
-        """
-        Called when a file has been refactored and there may be changes.
-        """
         self.files.append(filename)
         if old_text is None:
             old_text = self._read_python_source(filename)[0]
@@ -489,12 +407,6 @@ class RefactoringTool(object):
         return
 
     def write_file(self, new_text, filename, old_text, encoding=None):
-        """Writes a string to a file.
-        
-        It first shows a unified diff between the old text and the new text, and
-        then rewrites the file; the latter is only done if the write option is
-        set.
-        """
         try:
             f = _open_with_encoding(filename, 'w', encoding=encoding)
         except os.error as err:
@@ -517,17 +429,6 @@ class RefactoringTool(object):
     PS2 = '... '
 
     def refactor_docstring(self, input, filename):
-        """Refactors a docstring, looking for doctests.
-        
-        This returns a modified version of the input string.  It looks
-        for doctests, which start with a ">>>" prompt, and may be
-        continued with "..." prompts, as long as the "..." is indented
-        the same as the ">>>".
-        
-        (Unfortunately we can't use the doctest module's parser,
-        since, like most parsers, it is not geared towards preserving
-        the original source.)
-        """
         result = []
         block = None
         block_lineno = None
@@ -555,13 +456,6 @@ class RefactoringTool(object):
         return u''.join(result)
 
     def refactor_doctest(self, block, lineno, indent, filename):
-        """Refactors one doctest.
-        
-        A doctest is given as a block of lines, the first of which starts
-        with ">>>" (possibly indented), while the remaining lines start
-        with "..." (identically indented).
-        
-        """
         try:
             tree = self.parse_block(block, lineno, indent)
         except Exception as err:
@@ -575,7 +469,6 @@ class RefactoringTool(object):
         if self.refactor_tree(tree, filename):
             new = unicode(tree).splitlines(True)
             clipped, new = new[:lineno - 1], new[lineno - 1:]
-            assert clipped == [u'\n'] * (lineno - 1), clipped
             if not new[-1].endswith(u'\n'):
                 new[-1] += u'\n'
             block = [indent + self.PS1 + new.pop(0)]
@@ -609,17 +502,11 @@ class RefactoringTool(object):
                 self.log_message(msg, *args, **kwds)
 
     def parse_block(self, block, lineno, indent):
-        """Parses a block into a tree.
-        
-        This is necessary to get correct line number / offset information
-        in the parser diagnostics and embedded into the parse tree.
-        """
         tree = self.driver.parse_tokens(self.wrap_toks(block, lineno, indent))
         tree.future_features = frozenset()
         return tree
 
     def wrap_toks(self, block, lineno, indent):
-        """Wraps a tokenize stream to systematically modify start/end."""
         tokens = tokenize.generate_tokens(self.gen_lines(block, indent).next)
         for type, value, (line0, col0), (line1, col1), line_text in tokens:
             line0 += lineno - 1
@@ -631,10 +518,6 @@ class RefactoringTool(object):
              line_text)
 
     def gen_lines(self, block, indent):
-        """Generates lines as expected by tokenize from a list of lines.
-        
-        This strips the first len(indent + self.PS1) characters off each line.
-        """
         prefix1 = indent + self.PS1
         prefix2 = indent + self.PS2
         prefix = prefix1

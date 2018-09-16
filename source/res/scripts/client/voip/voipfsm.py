@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VOIP/VOIPFsm.py
+import logging
 import Event
-from VOIPLog import LOG_VOIP_INT
+_logger = logging.getLogger(__name__)
 
 class VOIP_FSM_STATE(object):
     NONE = 0
@@ -18,7 +19,7 @@ class VOIP_FSM_STATE(object):
 _STATE = VOIP_FSM_STATE
 _STATE_NAMES = dict([ (v, k) for k, v in VOIP_FSM_STATE.__dict__.iteritems() if not k.startswith('_') ])
 
-class VOIPFsm:
+class VOIPFsm(object):
 
     def __init__(self):
         self.__state = _STATE.NONE
@@ -30,7 +31,7 @@ class VOIPFsm:
     def __setState(self, newState):
         if newState == self.__state:
             return
-        LOG_VOIP_INT('%s -> %s' % (_STATE_NAMES[self.__state], _STATE_NAMES[newState]))
+        _logger.debug('%s -> %s', _STATE_NAMES[self.__state], _STATE_NAMES[newState])
         oldState = self.__state
         self.__state = newState
         self.onStateChanged(oldState, newState)
@@ -67,4 +68,4 @@ class VOIPFsm:
         elif self.__state == _STATE.LEAVING_CHANNEL and not voip.getCurrentChannel():
             self.__setState(_STATE.LOGGED_IN)
         else:
-            LOG_VOIP_INT('%s not changed' % _STATE_NAMES[self.__state])
+            _logger.debug('%s not changed', _STATE_NAMES[self.__state])

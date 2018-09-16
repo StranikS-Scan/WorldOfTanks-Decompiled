@@ -91,16 +91,10 @@ def __get_openssl_constructor(name):
 
 
 def __py_new(name, string=''):
-    """new(name, string='') - Return a new hashing object using the named algorithm;
-    optionally initialized with a string.
-    """
     return __get_builtin_constructor(name)(string)
 
 
 def __hash_new(name, string=''):
-    """new(name, string='') - Return a new hashing object using the named algorithm;
-    optionally initialized with a string.
-    """
     try:
         return _hashlib.new(name, string)
     except ValueError:

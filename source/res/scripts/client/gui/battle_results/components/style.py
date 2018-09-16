@@ -83,7 +83,6 @@ def makeTankmenTooltipLabel(role):
 
 
 class StatRow(base.StatsItem):
-    """Base class to make row VO in the tab Details."""
     __slots__ = ('text', 'label', 'lineType', 'column1', 'column2', 'column3', 'column4')
 
     def __init__(self, text, label, lineType, column1=_LINE_FEED, column2=_LINE_FEED, column3=_LINE_FEED, column4=_LINE_FEED):
@@ -118,7 +117,6 @@ class EmptyStatRow(StatRow):
 
 
 def makeStatRow(label='', column1=None, column2=None, column3=None, column4=None, htmlKey=''):
-    """This function is deprecated, use sub-classes of StatRow. It will be removed in task WOTD-50622."""
     if column2 is not None:
         lineType = WIDE_STAT_ROW
     else:
@@ -130,7 +128,6 @@ def makeStatRow(label='', column1=None, column2=None, column3=None, column4=None
         else:
             label = i18nText
     else:
-        assert htmlKey, 'Can not find label'
         label = makeHtmlString('html_templates:lobby/battle_results', htmlKey)
         import re
         i18nText = re.sub('<[^<]+?>', '', label)
@@ -351,7 +348,6 @@ class TwoItemsWithSlashBlock(base.StatsBlock):
         self.addComponent(1, itemClass(''))
 
     def setRecord(self, result, reusable):
-        assert len(result) == 2
         for index, value in enumerate(result):
             self.getComponent(index).setRecord(value, reusable)
 

@@ -1,5 +1,58 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/_xml.py
+from functools import wraps, partial
+_g_floats = {'count': 0}
+_g_intTuples = {'count': 0}
+_g_floatTuples = {'count': 0}
+
+def cacheTuple(f, valueStorage, tupleStorage):
+
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        v = f(*args, **kwargs)
+        if not tupleStorage:
+            return v
+        else:
+            tupleStorage['count'] += 1
+            cached = tupleStorage.get(v, None)
+            if cached is not None:
+                return cached
+            cached = tuple([ valueStorage.setdefault(fl, fl) for fl in v ])
+            tupleStorage[cached] = cached
+            return cached
+
+    return wrapper
+
+
+def _cacheValue(f, storage):
+
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        v = f(*args, **kwargs)
+        if not storage:
+            return v
+        storage['count'] += 1
+        return storage.setdefault(v, v)
+
+    return wrapper
+
+
+cacheFloat = partial(_cacheValue, storage=_g_floats)
+cacheIntTuples = partial(_cacheValue, storage=_g_intTuples)
+cacheFloatTuples = partial(cacheTuple, valueStorage=_g_floats, tupleStorage=_g_floatTuples)
+
+@cacheFloat
+def cachedFloat(v):
+    return v
+
+
+def clearCaches():
+    global _g_floatTuples
+    global _g_floats
+    global _g_intTuples
+    _g_floats.clear()
+    _g_intTuples.clear()
+    _g_floatTuples.clear()
 
 
 def raiseWrongXml(xmlContext, subsectionName, msg):
@@ -16,10 +69,13 @@ def raiseWrongSection(xmlContext, subsectionName):
     raiseWrongXml(xmlContext, '', "subsection '%s' is missing or wrong" % subsectionName)
 
 
-def getChildren(xmlCtx, section, subsectionName):
+def getChildren(xmlCtx, section, subsectionName, throwIfMissing=True):
     subsection = section[subsectionName]
     if subsection is None:
-        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+        if throwIfMissing:
+            raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+        else:
+            return []
     return subsection.items()
 
 
@@ -34,24 +90,26 @@ def readString(xmlCtx, section, subsectionName):
     subsection = section[subsectionName]
     if subsection is None:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
-    return subsection.asString
+    return intern(subsection.asString)
 
 
 def readStringOrNone(xmlCtx, section, subsectionName):
     subsection = section[subsectionName]
-    return None if subsection is None else subsection.asString
+    return None if subsection is None else intern(subsection.asString)
 
 
 def readNonEmptyString(xmlCtx, section, subsectionName):
     v = section.readString(subsectionName)
     if not v:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
-    return v
+    return intern(v)
 
 
-def readBool(xmlCtx, section, subsectionName):
+def readBool(xmlCtx, section, subsectionName, default=None):
     subsection = section[subsectionName]
     if subsection is None:
+        if default is not None:
+            return default
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
     return subsection.asBool
 
@@ -87,6 +145,7 @@ def readIntOrNone(xmlCtx, section, subsectionName):
         return
 
 
+@cacheFloat
 def readFloat(xmlCtx, section, subsectionName, defaultValue=None):
     if defaultValue is not None and not section.has_key(subsectionName):
         return defaultValue
@@ -98,6 +157,7 @@ def readFloat(xmlCtx, section, subsectionName, defaultValue=None):
         return v
 
 
+@cacheFloat
 def readPositiveFloat(xmlCtx, section, subsectionName, defaultValue=None):
     if defaultValue is not None and not section.has_key(subsectionName):
         return defaultValue
@@ -108,6 +168,7 @@ def readPositiveFloat(xmlCtx, section, subsectionName, defaultValue=None):
         return v
 
 
+@cacheFloat
 def readNonNegativeFloat(xmlCtx, section, subsectionName, defaultValue=None):
     if defaultValue is not None and not section.has_key(subsectionName):
         return defaultValue
@@ -118,6 +179,7 @@ def readNonNegativeFloat(xmlCtx, section, subsectionName, defaultValue=None):
         return v
 
 
+@cacheFloat
 def readFraction(xmlCtx, section, subsectionName):
     v = section.readFloat(subsectionName, -1000000.0)
     if not 0.0 <= v <= 1.0:
@@ -149,6 +211,7 @@ def readVector3(xmlCtx, section, subsectionName):
     return v
 
 
+@cacheFloatTuples
 def readTupleOfFloats(xmlCtx, section, subsectionName, count=None):
     strings = getSubsection(xmlCtx, section, subsectionName).asString.split()
     if count is not None and len(strings) != count:
@@ -161,6 +224,7 @@ def readTupleOfFloats(xmlCtx, section, subsectionName, count=None):
     return
 
 
+@cacheFloatTuples
 def readTupleOfPositiveFloats(xmlCtx, section, subsectionName, count=None):
     floats = readTupleOfFloats(xmlCtx, section, subsectionName, count)
     if sum((1 for val in floats if val <= 0)):
@@ -168,6 +232,7 @@ def readTupleOfPositiveFloats(xmlCtx, section, subsectionName, count=None):
     return floats
 
 
+@cacheFloatTuples
 def readTupleOfNonNegativeFloats(xmlCtx, section, subsectionName, count=None):
     floats = readTupleOfFloats(xmlCtx, section, subsectionName, count)
     if sum((1 for val in floats if val < 0)):
@@ -175,6 +240,7 @@ def readTupleOfNonNegativeFloats(xmlCtx, section, subsectionName, count=None):
     return floats
 
 
+@cacheIntTuples
 def readTupleOfInts(xmlCtx, section, subsectionName, count=None):
     strings = getSubsection(xmlCtx, section, subsectionName).asString.split()
     if count is not None and len(strings) != count:
@@ -187,6 +253,7 @@ def readTupleOfInts(xmlCtx, section, subsectionName, count=None):
     return
 
 
+@cacheIntTuples
 def readTupleOfPositiveInts(xmlCtx, section, subsectionName, count=None):
     ints = readTupleOfInts(xmlCtx, section, subsectionName, count)
     if sum((1 for val in ints if val <= 0)):
@@ -194,6 +261,7 @@ def readTupleOfPositiveInts(xmlCtx, section, subsectionName, count=None):
     return ints
 
 
+@cacheIntTuples
 def readTupleOfNonNegativeInts(xmlCtx, section, subsectionName, count=None):
     ints = readTupleOfInts(xmlCtx, section, subsectionName, count)
     if sum((1 for val in ints if val < 0)):

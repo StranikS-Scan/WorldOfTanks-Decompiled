@@ -5,7 +5,7 @@ import Keys
 from account_helpers.settings_core.settings_constants import SOUND
 from constants import IS_CHINA
 from debug_utils import LOG_DEBUG
-from gui.app_loader.decorators import sf_battle
+from gui.app_loader import sf_battle
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -26,8 +26,6 @@ SQUAD_MEMBERS_COUNT = 2
 FULL_SQUAD_MEMBERS_COUNT = 3
 
 def _getVIOPState(key):
-    """Get the current state of VOIP in the client considering bind key, region and VOIP settings.
-    """
     if IS_CHINA:
         return 'withoutVOIP'
     if key == Keys.KEY_NONE:
@@ -298,8 +296,6 @@ class DynSquadFunctional(IArenaVehiclesController):
         return
 
     def updateVehiclesInfo(self, updated, arenaDP):
-        """Vehicle has been updated on arena. Updates required player's panel, frags panel.
-        """
         if updated:
             first = updated[0][1]
             self.__soundCtrl.process(first, arenaDP)

@@ -104,8 +104,6 @@ class _QuestCache(object):
 
 
 class QuestsController(IQuestsController):
-    """Handle mapping between vehicle->available quests
-    """
     __slots__ = ('__quests', 'eventsCache')
     eventsCache = dependency.descriptor(IEventsCache)
 

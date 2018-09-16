@@ -1,6 +1,6 @@
 <list.xml>
-  <xmlns:czech0>	http://bwt/xmlref	</xmlns:czech0>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech1>	http://bwt/xmlref	</xmlns:czech1>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
   <xmlns:china>	china	</xmlns:china>
@@ -1120,6 +1120,7 @@
           <vehicles>	ussr:R113_Object_730	</vehicles>
         </include>
       </vehicleFilter>
+      <historical>	true	</historical>
     </decal>
     <decal>
       <id>	15879	</id>
@@ -1130,6 +1131,7 @@
           <vehicles>	ussr:R113_Object_730	</vehicles>
         </include>
       </vehicleFilter>
+      <historical>	true	</historical>
     </decal>
   </itemGroup>
   <itemGroup>
@@ -1149,6 +1151,7 @@
           <vehicles>	usa:A92_M60	</vehicles>
         </include>
       </vehicleFilter>
+      <historical>	true	</historical>
     </decal>
   </itemGroup>
   <itemGroup>
@@ -1169,6 +1172,7 @@
           <vehicles>	germany:G92_VK7201	</vehicles>
         </include>
       </vehicleFilter>
+      <historical>	true	</historical>
     </decal>
   </itemGroup>
   <itemGroup>
@@ -1188,6 +1192,7 @@
           <vehicles>	usa:A95_T95_E6	</vehicles>
         </include>
       </vehicleFilter>
+      <historical>	true	</historical>
     </decal>
   </itemGroup>
   <itemGroup>
@@ -1428,6 +1433,7 @@
       <id>	15916	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_203.dds	</texture>
       <userString>	#vehicle_customization:emblem/group27/special_203	</userString>
+      <historical>	true	</historical>
     </decal>
     <decal>
       <id>	15917	</id>
@@ -1513,6 +1519,7 @@
           <vehicles>	usa:A118_M4_Thunderbolt	</vehicles>
         </include>
       </vehicleFilter>
+      <historical>	true	</historical>
     </decal>
   </itemGroup>
   <itemGroup>
@@ -1608,11 +1615,13 @@
       <id>	15936	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_270.dds	</texture>
       <userString>	#vehicle_customization:emblem/group34/special_270	</userString>
+      <historical>	true	</historical>
     </decal>
     <decal>
       <id>	15937	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_271.dds	</texture>
       <userString>	#vehicle_customization:emblem/group34/special_271	</userString>
+      <historical>	true	</historical>
     </decal>
   </itemGroup>
   <itemGroup>
@@ -1627,6 +1636,7 @@
       <id>	15938	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_280.dds	</texture>
       <userString>	#vehicle_customization:emblem/group35/special_280	</userString>
+      <historical>	true	</historical>
     </decal>
     <decal>
       <id>	15939	</id>
@@ -1711,7 +1721,7 @@
       </vehicleFilter>
     </decal>
   </itemGroup>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
   <xmlns:china>	china	</xmlns:china>
@@ -2619,7 +2629,7 @@
       <userString>	#vehicle_customization:emblem/group22/special_81	</userString>
     </decal>
   </itemGroup>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
   <xmlns:china>	china	</xmlns:china>
@@ -2643,7 +2653,7 @@
       <userString>	#vehicle_customization:emblem/group7/clan_content_08	</userString>
     </decal>
   </itemGroup>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
   <xmlns:china>	china	</xmlns:china>
@@ -2824,7 +2834,103 @@
       <mirror>	true	</mirror>
     </decal>
   </itemGroup>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <itemGroup>
+    <name>	italy	</name>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <priceGroup>	legacy emblems	</priceGroup>
+    <type>	EMBLEM	</type>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include></include>
+    </vehicleFilter>
+    <decal>
+      <id>	535	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_81.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_81	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	536	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_82.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_82	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	537	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_83.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_83	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	538	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_84.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_84	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	540	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_86.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_86	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	541	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_87.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_87	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <itemGroup>
+    <name>	italy	</name>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <priceGroup>	legacy emblems	</priceGroup>
+    <type>	EMBLEM	</type>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include></include>
+    </vehicleFilter>
+    <decal>
+      <id>	534	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_80.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_80	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	539	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_85.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_85	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	542	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_88.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_88	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+  </itemGroup>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
   <xmlns:china>	china	</xmlns:china>
@@ -5485,7 +5591,7 @@
       </vehicleFilter>
     </decal>
   </itemGroup>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
   <xmlns:china>	china	</xmlns:china>
@@ -5844,7 +5950,7 @@
       <userString>	#vehicle_customization:inscription/usa/inscription_17	</userString>
     </decal>
   </itemGroup>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
   <xmlns:china>	china	</xmlns:china>
@@ -6124,6 +6230,129 @@
       <id>	170	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_190.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_190	</userString>
+    </decal>
+  </itemGroup>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <itemGroup>
+    <name>	italy	</name>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <priceGroup>	legacy inscriptions italy	</priceGroup>
+    <historical>	true	</historical>
+    <type>	INSCRIPTION	</type>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	171	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_01.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_01	</userString>
+    </decal>
+    <decal>
+      <id>	172	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_02.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_02	</userString>
+    </decal>
+    <decal>
+      <id>	173	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_03.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_03	</userString>
+    </decal>
+    <decal>
+      <id>	174	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_04.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_04	</userString>
+    </decal>
+    <decal>
+      <id>	175	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_05.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_05	</userString>
+    </decal>
+    <decal>
+      <id>	177	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_07.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_07	</userString>
+    </decal>
+    <decal>
+      <id>	178	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_08.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_08	</userString>
+    </decal>
+    <decal>
+      <id>	179	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_09.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_09	</userString>
+    </decal>
+    <decal>
+      <id>	180	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_10.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_10	</userString>
+    </decal>
+    <decal>
+      <id>	181	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_11.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_11	</userString>
+    </decal>
+    <decal>
+      <id>	182	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_12.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_12	</userString>
+    </decal>
+    <decal>
+      <id>	183	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_13.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_13	</userString>
+    </decal>
+    <decal>
+      <id>	184	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_14.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_14	</userString>
+    </decal>
+    <decal>
+      <id>	185	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_15.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_15	</userString>
+    </decal>
+    <decal>
+      <id>	186	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_16.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_16	</userString>
+    </decal>
+    <decal>
+      <id>	187	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_17.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_17	</userString>
+    </decal>
+    <decal>
+      <id>	188	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_18.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_18	</userString>
+    </decal>
+    <decal>
+      <id>	189	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_19.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_19	</userString>
+    </decal>
+    <decal>
+      <id>	190	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_20.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_20	</userString>
+    </decal>
+    <decal>
+      <id>	191	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/italy/inscription_21.dds	</texture>
+      <userString>	#vehicle_customization:inscription/italy/inscription_21	</userString>
     </decal>
   </itemGroup>
 </list.xml>

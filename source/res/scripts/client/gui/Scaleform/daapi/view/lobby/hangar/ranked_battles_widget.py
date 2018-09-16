@@ -35,7 +35,7 @@ class _RankedWidgetSoundManager(object):
      SOUND.STEP_LOST_POST_BATTLE)
     _STEP_CHANGED_EVENTS = (RANKEDBATTLES_ALIASES.STEP_JUST_LOST_STATE, RANKEDBATTLES_ALIASES.STEP_JUST_RECEIVED_STATE, RANKEDBATTLES_ALIASES.STEP_NOT_RECEIVED_STATE)
 
-    class CALLER:
+    class CALLER(object):
         HANGAR = 'hangar'
         POST_BATTLE = 'post_battle'
 
@@ -130,11 +130,6 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
         return True
 
     def _getFirstRankReceiveStateData(self, currentRank):
-        """
-        Return First rank first time received VO
-        :param currentRank:
-        :return:
-        """
         state = RANKEDBATTLES_ALIASES.FIRST_RANK_RECEIVE_STATE
         steps = self._buildProgress(currentRank)
         infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_INITTEXT, battles=str(len(steps))))
@@ -143,14 +138,6 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
         return self._buildVO(state, infoText=infoText, rankLeftVO=rankLeftVO, steps=steps, nextInfoText=nextInfoText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank, True), steps=self._buildProgress(currentRank)))
 
     def _getFirstRankReachiveStateData(self, currentRank, nextRank, newStepsState=None, changeAcquired=False):
-        """
-        Return VO of first rank with was reachieved by player
-        :param currentRank:
-        :param nextRank:
-        :param newStepsState: newSteps state override
-        :param changeAcquired: apply newStepsState only to acquired steps
-        :return:
-        """
         state = RANKEDBATTLES_ALIASES.FIRST_RANK_REACHIVE_STATE
         steps = self._buildProgress(currentRank)
         infoText = ''
@@ -163,12 +150,6 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
         return self._buildVO(state, infoText=infoText, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, nextInfoText=nextInfoText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank, True), rankRightVO=self._buildRankVO(nextRank), steps=self._buildProgress(nextRank, newStepsState=newStepsState, changeAcquired=changeAcquired)))
 
     def _getRankReceiveForFirstTimeData(self, lastRank, currentRank):
-        """
-        Return VO of first time visited rank
-        :param lastRank:
-        :param currentRank:
-        :return:
-        """
         state = RANKEDBATTLES_ALIASES.RANK_RECEIVE_FOR_FIRST_TIME_STATE
         infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_NEWRANKCONGRAT))
         steps = self._buildProgress(currentRank)
@@ -177,16 +158,6 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
         return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, infoText=infoText, steps=steps, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(lastRank, True), rankRightVO=self._buildRankVO(currentRank), steps=self._buildProgress(currentRank)))
 
     def _getReachievedReceiveStateData(self, lastRank, currentRank, nextRank, stepsState=None, newStepsState=None, changeAcquired=False):
-        """
-        Show animation with rank changing WITHOUT the ability to click and receive awards
-        :param lastRank:
-        :param currentRank:
-        :param nextRank:
-        :param stepsState:
-        :param newStepsState: override for newSteps's state
-        :param changeAcquired: is newStepsState useful only for acquired steps
-        :return:
-        """
         state = RANKEDBATTLES_ALIASES.RANK_RECEIVE_STATE
         steps = self._buildProgress(currentRank, newStepsState=stepsState)
         rankLeftVO = self._buildRankVO(lastRank, True)
@@ -330,13 +301,6 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
         return buildRankVO(rank=rank, isEnabled=isEnabled, imageSize=RANKEDBATTLES_ALIASES.WIDGET_HUGE if self._isHuge() else RANKEDBATTLES_ALIASES.WIDGET_MEDIUM, hasTooltip=self._hasAdditionalRankInfo(), shieldStatus=self.rankedController.getShieldStatus(rank), shieldAnimated=True, showLadderPoints=showLadderPoints, ladderPoints=ladderPoints)
 
     def _buildProgress(self, rank, newStepsState=None, changeAcquired=False):
-        """
-        Build steps progress
-        :param rank:
-        :param newStepsState: override for rank's steps progress
-        :param changeAcquired: if not None then newStepsState applying only for acquired steps
-        :return:
-        """
         result = []
         progress = rank.getProgress()
         if progress is None:

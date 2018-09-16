@@ -30,7 +30,14 @@ class CommandArgsParser(object):
     def addArgs(self, values, converters=None):
         if converters is None:
             converters = []
-        parsed = map(lambda item: converters[item[0]](item[1]) if len(converters) > item[0] else item[1], enumerate(values))
+        parsed = []
+        for item in enumerate(values):
+            if len(converters) > item[0]:
+                value = converters[item[0]](item[1])
+            else:
+                value = item[1]
+            parsed.append(value)
+
         self.__responseArgs.extend(parsed)
         return
 

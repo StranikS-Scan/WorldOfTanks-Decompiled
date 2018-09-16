@@ -38,7 +38,7 @@ class TutorialQueueText(ContentQuery):
         if inMin < pointcuts[0]:
             minString = i18n.makeString('#battle_tutorial:labels/less_n_minutes', minutes=str(pointcuts[0]))
         else:
-            filtered = filter(lambda pointcut: pointcut >= inMin, pointcuts)
+            filtered = [ p for p in pointcuts if p >= inMin ]
             if filtered:
                 minString = i18n.makeString('#battle_tutorial:labels/minutes', units=str(filtered[0]))
             else:

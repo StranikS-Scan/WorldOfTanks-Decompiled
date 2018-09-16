@@ -75,7 +75,6 @@ class StaticDossierBlockDescr(object):
 
     def updateDossierCompDescr(self, dossierCompDescrArray, offset, size):
         if size == 0:
-            assert self.__isExpanded
             compDescrArray = array('c', struct.pack(self.__format, *self.__getValuesForPacking()))
             return (dossierCompDescrArray[:offset] + compDescrArray + dossierCompDescrArray[offset:], self.__blockSize)
         if self.__isExpanded:
@@ -442,7 +441,6 @@ class BinarySetDossierBlockDescr(object):
         return False if sizeDiff else bool(self.__unpackedData[byteNum] & bitMask)
 
     def __findSizeDiff(self, value):
-        assert value in self.__valueToPosition, 'The value should be present in the set value list'
         byteNum, bitMask = self.__valueToPosition[value]
         sizeRequired = byteNum + 1
         packedDataSize = len(self.__unpackedData)

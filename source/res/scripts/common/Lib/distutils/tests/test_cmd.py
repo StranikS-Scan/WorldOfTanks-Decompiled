@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_cmd.py
-"""Tests for distutils.cmd."""
 import unittest
 import os
 from test.test_support import captured_stdout, run_unittest

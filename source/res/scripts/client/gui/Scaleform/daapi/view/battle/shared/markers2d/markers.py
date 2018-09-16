@@ -3,7 +3,6 @@
 import Event
 
 class Marker(object):
-    """Base class which holds info for a Marker."""
 
     def __init__(self, markerID, active=True):
         super(Marker, self).__init__()
@@ -17,10 +16,6 @@ class Marker(object):
         return self._active
 
     def setActive(self, active):
-        """Sets marker is shown/hidden on the scene.
-        :param active: bool.
-        :return: True if property is changed, otherwise - False.
-        """
         if self._active != active:
             self._active = active
             return True
@@ -31,9 +26,6 @@ class Marker(object):
 
 
 class VehicleMarker(Marker):
-    """ The main purpose of this class is to correct handle situations when model, for which marker was
-    attached, changes its model. When that happens we replace the old marker's matrix with a new one.
-    """
 
     def __init__(self, markerID, vehicleID, vProxy=None, active=True):
         super(VehicleMarker, self).__init__(markerID, active)

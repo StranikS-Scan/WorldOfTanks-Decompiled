@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/gensuitemodule.py
-"""
-gensuitemodule - Generate an AE suite module from an aete/aeut resource
-
-Based on aete.py.
-
-Reading and understanding this code is left as an exercise to the reader.
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the gensuitemodule module is removed.', stacklevel=2)
 import MacOS
@@ -109,7 +102,6 @@ def main_interactive(interact=0, basepkgname='StdSuites'):
 
 
 def is_scriptable(application):
-    """Return true if the application is scriptable"""
     if os.path.isdir(application):
         plistfile = os.path.join(application, 'Contents', 'Info.plist')
         if not os.path.exists(plistfile):
@@ -130,7 +122,6 @@ def is_scriptable(application):
 
 
 def processfile_fromresource(fullname, output=None, basepkgname=None, edit_modnames=None, creatorsignature=None, dump=None, verbose=None):
-    """Process all resources in a single file"""
     if not is_scriptable(fullname) and verbose:
         print >> verbose, 'Warning: app does not seem scriptable: %s' % fullname
     cur = CurResFile()
@@ -170,7 +161,6 @@ def processfile_fromresource(fullname, output=None, basepkgname=None, edit_modna
 
 
 def processfile(fullname, output=None, basepkgname=None, edit_modnames=None, creatorsignature=None, dump=None, verbose=None):
-    """Ask an application for its terminology and process that"""
     if not is_scriptable(fullname) and verbose:
         print >> verbose, 'Warning: app does not seem scriptable: %s' % fullname
     if verbose:
@@ -211,7 +201,6 @@ def processfile(fullname, output=None, basepkgname=None, edit_modnames=None, cre
 
 
 def getappterminology(fullname, verbose=None):
-    """Get application terminology by sending an AppleEvent"""
     if not MacOS.WMAvailable():
         raise RuntimeError, 'Cannot send AppleEvents, no access to window manager'
     import Carbon.Evt
@@ -246,7 +235,6 @@ def dumpaetelist(aetelist, output):
 
 
 def decode(data, verbose=None):
-    """Decode a resource into a python data structure"""
     f = StringIO.StringIO(data)
     aete = generic(getaete, f)
     aete = simplify(aete)
@@ -259,7 +247,6 @@ def decode(data, verbose=None):
 
 
 def simplify(item):
-    """Recursively replace singleton tuples by their constituent item"""
     if type(item) is types.ListType:
         return map(simplify, item)
     elif type(item) == types.TupleType and len(item) == 2:
@@ -381,7 +368,6 @@ getaete = [(getword, 'major/minor version in BCD'),
  (getlist, 'suites', getsuite)]
 
 def compileaete(aete, resinfo, fname, output=None, basepkgname=None, edit_modnames=None, creatorsignature=None, verbose=None):
-    """Generate code for a full aete resource. fname passed for doc purposes"""
     version, language, script, suites = aete
     major, minor = divmod(version, 256)
     if not creatorsignature:
@@ -521,9 +507,6 @@ class SuiteCompiler():
         return
 
     def precompilesuite(self):
-        """Parse a single suite without generating the output. This step is needed
-        so we can resolve recursive references by suites to enums/comps/etc declared
-        in other suites"""
         name, desc, code, level, version, events, classes, comps, enums = self.suite
         modname = identify(name)
         if len(modname) > 28:
@@ -572,11 +555,9 @@ class SuiteCompiler():
             return (code, self.modname, precompinfo)
 
     def compilesuite(self, major, minor, language, script, fname, precompinfo):
-        """Generate code for a single suite"""
         name, desc, code, level, version, events, classes, comps, enums = self.suite
 
         def class_sorter(k1, k2):
-            """Sort classes by code, and make sure main class sorts before synonyms"""
             if k1[1] < k2[1]:
                 return -1
             if k1[1] > k2[1]:
@@ -639,7 +620,6 @@ class SuiteCompiler():
         return
 
     def compileclassheader(self):
-        """Generate class boilerplate"""
         classname = '%s_Events' % self.modname
         if self.basemodule:
             modshortname = string.split(self.basemodule.__name__, '.')[-1]
@@ -649,7 +629,6 @@ class SuiteCompiler():
             self.fp.write('class %s:\n\n' % classname)
 
     def compileevent(self, event):
-        """Generate code for a single event"""
         name, desc, code, subcode, returns, accepts, arguments = event
         fp = self.fp
         funcname = identify(name)
@@ -717,7 +696,6 @@ class SuiteCompiler():
         fp.write('\n')
 
     def findenumsinevent(self, event):
-        """Find all enums for a single event"""
         name, desc, code, subcode, returns, accepts, arguments = event
         for a in arguments:
             if is_enum(a[2]):
@@ -998,7 +976,6 @@ class ObjectCompiler():
         self.fp.write('    %r : %r,\t# %s\n' % (identify(name), code, ascii(desc)))
 
     def checkforenum(self, enum):
-        """This enum code is used by an event. Make sure it's available"""
         name, fullname, module = self.findcodename('enum', enum)
         if not name:
             if self.fp:
@@ -1086,7 +1063,6 @@ def compiledataflags(flags):
 
 
 def ascii(str):
-    """Return a string with all non-ascii characters hex-encoded"""
     if type(str) != type(''):
         return map(ascii, str)
     rv = ''
@@ -1099,11 +1075,6 @@ def ascii(str):
 
 
 def identify(str):
-    """Turn any string into an identifier:
-    - replace space by _
-    - replace other illegal chars by _xx_ (hex code)
-    - append _ if the result is a python keyword
-    """
     if not str:
         return 'empty_ae_name_'
     rv = ''

@@ -19,7 +19,7 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE, 
 from notification.settings import makePathToIcon
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from helpers import time_utils
-from skeletons.gui.clans import IClanController
+from skeletons.gui.web import IWebController
 
 def _makeShowTime():
     return BigWorld.time()
@@ -124,6 +124,10 @@ class _NotificationDecorator(object):
         else:
             vo['lifeTime'] = settings.mediumPriorityMsgLifeTime
             vo['hidingAnimationSpeed'] = settings.mediumPriorityMsgAlphaSpeed
+        if self._settings is not None:
+            overrideTimeout = getattr(self._settings.auxData, 'timeoutMS', 0)
+            if overrideTimeout > 0:
+                vo['lifeTime'] = self._settings.auxData.timeoutMS
         return vo
 
     def getButtonLayout(self):
@@ -338,7 +342,6 @@ class WGNCPopUpDecorator(_NotificationDecorator):
         self._make(item)
 
     def _make(self, item=None, settings=None):
-        assert item, 'Item is not defined'
         self._itemName = item.getName()
         if settings:
             self._settings = settings
@@ -369,7 +372,7 @@ class WGNCPopUpDecorator(_NotificationDecorator):
         layout = []
         states = {}
         seq = ['submit', 'cancel']
-        for idx, button in enumerate(item.getButtons()):
+        for _, button in enumerate(item.getButtons()):
             if not seq:
                 LOG_ERROR('Button is ignored to display', button)
                 continue
@@ -409,7 +412,7 @@ class _ClanBaseDecorator(_NotificationDecorator):
 
 
 class _ClanDecorator(_ClanBaseDecorator):
-    clanCtrl = dependency.descriptor(IClanController)
+    clanCtrl = dependency.descriptor(IWebController)
 
     def __init__(self, entityID, entity=None, settings=None):
         self._settings = None

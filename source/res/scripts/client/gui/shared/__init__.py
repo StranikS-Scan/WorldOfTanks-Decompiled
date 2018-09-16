@@ -9,9 +9,6 @@ __all__ = ('g_eventBus', 'getSharedServices', 'EVENT_BUS_SCOPE')
 g_eventBus = EventBus()
 
 def getSharedServices(manager):
-    """ Configures services for package game_control.
-    :param manager: instance of dependency manager.
-    """
     cache = ItemsCache()
     cache.init()
     manager.addInstance(IItemsCache, cache, finalizer='fini')

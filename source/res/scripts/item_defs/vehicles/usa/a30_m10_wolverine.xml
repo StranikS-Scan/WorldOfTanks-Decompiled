@@ -253,7 +253,7 @@
         <segmentLength>	0.145	</segmentLength>
         <segmentOffset>	0.026	</segmentOffset>
         <segment2Offset>	0.075	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -502,7 +502,7 @@
         <segmentLength>	0.145	</segmentLength>
         <segmentOffset>	0.026	</segmentOffset>
         <segment2Offset>	0.075	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1143,12 +1143,12 @@
   </turrets0>
   <engines>
     <Wright_Continental_R-975EC2>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C1	  <cost>	900.0	</cost>
+        <engine>	Wright_Continental_R-975C1	  <cost>	900	</cost>
         </engine>
       </unlocks>
     </Wright_Continental_R-975EC2>
     <Wright_Continental_R-975C1>	shared	  <unlocks>
-        <engine>	GMC_6046	  <cost>	1410.0	</cost>
+        <engine>	GMC_6046	  <cost>	1410	</cost>
         </engine>
       </unlocks>
     </Wright_Continental_R-975C1>

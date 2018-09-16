@@ -40,10 +40,6 @@ def getVehicleIndicatorType(vDesc):
 
 
 def getAutoRotationFlag(vDesc):
-    """ Gets auto rotation flag. Auto rotation means hull is tuned if yaw limit is reached.
-    :param vDesc: instance of vehicles.VehicleDescr.
-    :return: one of AUTO_ROTATION_FLAG.*.
-    """
     flag = AUTO_ROTATION_FLAG.IGNORE_IN_UI
     if hasYawLimits(vDesc):
         aih = avatar_getter.getInputHandler()
@@ -57,7 +53,7 @@ def getAutoRotationFlag(vDesc):
 def getCrewMainRolesWoIndexes(crewRoles):
     order = TANKMEN_ROLES_ORDER_DICT['plain']
     default = len(order)
-    return sorted(map(lambda roles: roles[0], crewRoles), key=lambda item: order.index(item) if item in order else default)
+    return sorted([ roles[0] for roles in crewRoles ], key=lambda item: order.index(item) if item in order else default)
 
 
 def getCrewMainRolesWithIndexes(crewRoles):

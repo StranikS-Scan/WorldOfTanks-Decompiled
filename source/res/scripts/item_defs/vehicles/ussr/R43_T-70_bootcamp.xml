@@ -418,8 +418,8 @@
       <gunPosition>	0.317169 0.303057 0.640564	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.660241 0.542761 -0.23603	</rayStart>
-          <rayEnd>	-0.182248 0.351495 -0.162957	</rayEnd>
+          <rayStart>	-0.659815 0.543047 -0.238158	</rayStart>
+          <rayEnd>	-0.181824 0.351782 -0.165086	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.18	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -431,13 +431,6 @@
           <size>	0.454	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
-        <player>
-          <rayStart>	0.660241 0.542761 -0.23603	</rayStart>
-          <rayEnd>	0.182248 0.351495 -0.162957	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.18	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
         <inscription>
           <rayStart>	0.664975 0.321511 -0.35684	</rayStart>
           <rayEnd>	0.297296 0.174387 -0.300631	</rayEnd>
@@ -445,6 +438,14 @@
           <size>	0.454	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
+        <player>
+          <rayStart>	0.659815 0.543047 -0.238158	</rayStart>
+          <rayEnd>	0.181824 0.351782 -0.165086	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.18	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.989 -0.088 1.000 0.003 0.377 0.451 1.000 0.634 0.321 0.500 0.321 0.500 0.179 0.992 0.135	</physicsShape>

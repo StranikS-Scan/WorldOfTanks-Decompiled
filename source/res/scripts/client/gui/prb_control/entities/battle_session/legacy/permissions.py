@@ -5,9 +5,6 @@ from gui.prb_control.entities.base.legacy.permissions import LegacyPermissions
 from gui.prb_control.entities.base.limits import TeamNoPlayersInBattle, MaxCount
 
 class BattleSessionPermissions(LegacyPermissions):
-    """
-    Battle session's permissions class
-    """
 
     def canSendInvite(self):
         return super(BattleSessionPermissions, self).canSendInvite() and self._canAddPlayers()
@@ -34,9 +31,6 @@ class BattleSessionPermissions(LegacyPermissions):
             return result
 
     def _canAddPlayers(self):
-        """
-        Can new player be added to team according to max limit
-        """
         clientPrb = prb_getters.getClientPrebattle()
         result = False
         if clientPrb is not None:

@@ -106,7 +106,7 @@ class ItemInInventoryTrigger(_VehicleTrigger):
 
     def isOn(self):
         getter = game_vars.getItemByIntCD
-        items = map(lambda intCD: getter(intCD), self.getIterVar())
+        items = map(getter, self.getIterVar())
         vehicle = self._getVehicle()
         for item in items:
             if item.isInInventory:
@@ -130,10 +130,13 @@ class ItemInstalledTrigger(_VehicleTrigger):
 
     def isOn(self, vehicle=None):
         getter = game_vars.getItemByIntCD
-        items = map(lambda intCD: getter(intCD), self.getIterVar())
+        items = map(getter, self.getIterVar())
         if vehicle is None:
             vehicle = self._getVehicle()
-        return False if vehicle is None else len(filter(lambda item: item.isInstalled(vehicle), items)) > 0
+        if vehicle is None:
+            return False
+        else:
+            return len([ item for item in items if item.isInstalled(vehicle) ]) > 0
 
     def _subscribe(self):
         diff = 'inventory.{0}.compDescr'.format(GUI_ITEM_TYPE.VEHICLE)

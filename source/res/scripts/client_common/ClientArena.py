@@ -1,16 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/ClientArena.py
+import cPickle
+import zlib
 import Math
 import BigWorld
 import ArenaType
 from items import vehicles
-import cPickle
-import zlib
 import Event
 from constants import ARENA_PERIOD, ARENA_UPDATE
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_ERROR
-from helpers.EffectsList import FalloutDestroyEffect
 import arena_component_system.client_arena_component_assembler as assembler
 
 class ClientArena(object):
@@ -105,7 +104,6 @@ class ClientArena(object):
         if indices:
             lenPos = len(positions)
             lenInd = len(indices)
-            assert lenPos == 2 * lenInd
             indexToId = self.__vehicleIndexToId
             for i in xrange(0, lenInd):
                 if indices[i] in indexToId:
@@ -114,8 +112,8 @@ class ClientArena(object):
 
         self.onPositionsUpdated()
 
-    def updateTeamHealthPercent(self, list):
-        self.onTeamHealthPercentUpdate(list)
+    def updateTeamHealthPercent(self, percents):
+        self.onTeamHealthPercentUpdate(percents)
 
     def collideWithArenaBB(self, start, end):
         if self.__arenaBBCollider is None:
@@ -133,35 +131,35 @@ class ClientArena(object):
         if BigWorld.wg_getSpaceBounds().length == 0.0:
             return False
         arenaBB = self.arenaType.boundingBox
-        spaceBB = _convertToList(BigWorld.wg_getSpaceBounds())
+        spaceBB = self.arenaType.spaceBoundingBox
         self.__arenaBBCollider = _BBCollider(arenaBB, (-500.0, 500.0))
         self.__spaceBBCollider = _BBCollider(spaceBB, (-500.0, 500.0))
         return True
 
     def __onVehicleListUpdate(self, argStr):
-        list = cPickle.loads(zlib.decompress(argStr))
-        LOG_DEBUG_DEV('__onVehicleListUpdate', list)
-        vehicles = self.__vehicles
-        vehicles.clear()
-        for infoAsTuple in list:
-            id, info = self.__vehicleInfoAsDict(infoAsTuple)
-            vehicles[id] = info
+        vehiclesList = cPickle.loads(zlib.decompress(argStr))
+        LOG_DEBUG_DEV('__onVehicleListUpdate', vehiclesList)
+        vehs = self.__vehicles
+        vehs.clear()
+        for infoAsTuple in vehiclesList:
+            vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
+            vehs[vehID] = info
 
         self.__rebuildIndexToId()
         self.onNewVehicleListReceived()
 
     def __onVehicleAddedUpdate(self, argStr):
         infoAsTuple = cPickle.loads(zlib.decompress(argStr))
-        id, info = self.__vehicleInfoAsDict(infoAsTuple)
-        self.__vehicles[id] = info
+        vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
+        self.__vehicles[vehID] = info
         self.__rebuildIndexToId()
-        self.onVehicleAdded(id)
+        self.onVehicleAdded(vehID)
 
     def __onVehicleUpdatedUpdate(self, argStr):
         infoAsTuple = cPickle.loads(zlib.decompress(argStr))
-        id, info = self.__vehicleInfoAsDict(infoAsTuple)
-        self.__vehicles[id] = info
-        self.onVehicleUpdated(id)
+        vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
+        self.__vehicles[vehID] = info
+        self.onVehicleUpdated(vehID)
 
     def __onPeriodInfoUpdate(self, argStr):
         self.__periodInfo = cPickle.loads(zlib.decompress(argStr))
@@ -248,8 +246,8 @@ class ClientArena(object):
         LOG_DEBUG_DEV('[RESPAWN] onInteractiveStats', stats)
 
     def __rebuildIndexToId(self):
-        vehicles = self.__vehicles
-        self.__vehicleIndexToId = dict(zip(range(len(vehicles)), sorted(vehicles.keys())))
+        vehs = self.__vehicles
+        self.__vehicleIndexToId = dict(zip(range(len(vehs)), sorted(vehs.keys())))
 
     def __vehicleInfoAsDict(self, info):
         getVehicleType = lambda cd: None if cd is None else vehicles.VehicleDescr(compactDescr=cd)
@@ -284,7 +282,7 @@ def _pointInBB(bottomLeft2D, upperRight2D, point3D, minMaxHeight):
     return bottomLeft2D[0] < point3D[0] < upperRight2D[0] and bottomLeft2D[1] < point3D[2] < upperRight2D[1] and minMaxHeight[0] < point3D[1] < minMaxHeight[1]
 
 
-class _BBCollider():
+class _BBCollider(object):
 
     def __init__(self, bb, heightLimits):
         self.__planes = list()
@@ -316,7 +314,7 @@ class _BBCollider():
             return
 
 
-class Plane():
+class Plane(object):
 
     def __init__(self, n, d):
         self.n = n

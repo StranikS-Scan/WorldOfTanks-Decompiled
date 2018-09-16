@@ -115,7 +115,7 @@
         <right>	vehicles/russian/R40_T-54/track/right.track	</right>
         <segmentLength>	0.13	</segmentLength>
         <segmentOffset>	0.126	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -411,7 +411,7 @@
         <right>	vehicles/russian/R40_T-54/track/right.track	</right>
         <segmentLength>	0.13	</segmentLength>
         <segmentOffset>	0.126	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1170,7 +1170,7 @@
   </turrets0>
   <engines>
     <V-2-54>	shared	  <unlocks>
-        <engine>	V-55U	  <cost>	27200.0	</cost>
+        <engine>	V-55U	  <cost>	27200	</cost>
         </engine>
       </unlocks>
     </V-2-54>
@@ -1181,7 +1181,7 @@
   </fuelTanks>
   <radios>
     <_9RM>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700.0	</cost>
+        <radio>	R113	  <cost>	8700	</cost>
         </radio>
       </unlocks>
     </_9RM>

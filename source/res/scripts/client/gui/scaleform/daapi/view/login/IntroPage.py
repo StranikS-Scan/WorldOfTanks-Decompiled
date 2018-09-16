@@ -1,24 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/IntroPage.py
+from collections import namedtuple
 import ScaleformFileLoader
 import Settings
 import SoundGroups
 import gui
-from collections import namedtuple
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform import getPathForFlash, DEFAULT_VIDEO_BUFFERING_TIME as _DEFAULT_BUFFERING
 from gui.Scaleform.daapi.view.meta.IntroPageMeta import IntroPageMeta
 from gui.doc_loaders.GuiDirReader import GuiDirReader
 from gui.shared import events
-from helpers import isIntroVideoSettingChanged, writeIntroVideoSetting
+from helpers import isIntroVideoSettingChanged, writeIntroVideoSetting, uniprof
 _VideoSettings = namedtuple('_VideoSettings', ['canBeSkipped'])
 
 def _getCompalsoryVideoSettings(path):
-    """
-    Checks is target path in compulsory videos list and returns additional settings for this video
-    :param path: str path to video file
-    :return: _VideoSettings obj if video is in list, otherwise None
-    """
     for settings in gui.GUI_SETTINGS.compulsoryIntroVideos:
         if settings['path'] == path:
             return _VideoSettings(settings.get('canBeSkipped', False))
@@ -52,6 +47,7 @@ class IntroPage(IntroPageMeta):
         self.__soundValue = ds.readFloat('masterVolume', SoundGroups.MASTER_VOLUME_DEFAULT) / 2
         self.__showMovie(self.__moviePath, True)
 
+    @uniprof.regionDecorator(label='offline.intro_video', scope='enter')
     def _populate(self):
         super(IntroPage, self)._populate()
         if self.__movieFiles:
@@ -61,6 +57,7 @@ class IntroPage(IntroPageMeta):
             self.__sendResult(False, 'There is no movie files for broadcast!')
         gui.g_guiResetters.add(self.onUpdateStage)
 
+    @uniprof.regionDecorator(label='offline.intro_video', scope='exit')
     def _dispose(self):
         gui.g_guiResetters.discard(self.onUpdateStage)
         ScaleformFileLoader.disableStreaming()
@@ -89,11 +86,6 @@ class IntroPage(IntroPageMeta):
          'canSkip': canSkip})
 
     def __sendResult(self, isSuccess, msg=''):
-        """
-        Call callback and send result of work
-        :param isSuccess: is result of current component working has no errors
-        :param msg: described reason of error
-        """
         if not isSuccess:
             LOG_ERROR(msg)
         if self.__writeSetting:

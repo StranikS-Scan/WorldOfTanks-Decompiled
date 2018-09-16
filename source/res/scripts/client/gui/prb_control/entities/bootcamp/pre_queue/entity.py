@@ -3,16 +3,14 @@
 from PlayerEvents import g_playerEvents
 from bootcamp.BootCampEvents import g_bootcampEvents
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
-from debug_utils import LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
 from gui.prb_control import prb_getters, prbDispatcherProperty
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
-from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
+from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.pre_queue.ctx import DequeueCtx
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
-from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite
-from gui.prb_control.entities.bootcamp.pre_queue.actions_validator import BootcampActionsValidator
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -24,9 +22,6 @@ from adisp import process
 from gui.prb_control.entities.base.pre_queue.ctx import QueueCtx
 
 class BootcampSubscriber(PreQueueSubscriber):
-    """
-    Bootcamp events subscriber
-    """
 
     def subscribe(self, entity):
         g_playerEvents.onBootcampEnqueued += entity.onEnqueued
@@ -50,18 +45,12 @@ class BootcampSubscriber(PreQueueSubscriber):
 
 
 class BootcampEntryPoint(PreQueueEntryPoint):
-    """
-    Bootcamp entry point
-    """
 
     def __init__(self):
         super(BootcampEntryPoint, self).__init__(FUNCTIONAL_FLAG.BOOTCAMP, QUEUE_TYPE.BOOTCAMP)
 
 
 class BootcampEntity(PreQueueEntity):
-    """
-    Bootcamp entity
-    """
     lobbyContext = dependency.descriptor(ILobbyContext)
     bootcampController = dependency.descriptor(IBootcampController)
 
@@ -101,10 +90,6 @@ class BootcampEntity(PreQueueEntity):
     def prbDispatcher(self):
         return None
 
-    def _createActionsValidator(self):
-        validators = [BootcampActionsValidator(self), super(BootcampEntity, self)._createActionsValidator()]
-        return ActionsValidatorComposite(self, validators)
-
     def _doQueue(self, ctx):
         self.bootcampController.enqueueBootcamp()
         LOG_DEBUG('Sends request to enqueue to the bootcamp battle')
@@ -138,11 +123,6 @@ class BootcampEntity(PreQueueEntity):
         self._exitFromQueueUI()
 
     def __onServerSettingChanged(self, diff):
-        """
-        Listener for server settings update
-        Args:
-            diff: settings diff
-        """
         if not self.lobbyContext.getServerSettings().isBootcampEnabled():
 
             def __leave(_=True):

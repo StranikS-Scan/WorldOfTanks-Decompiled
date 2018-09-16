@@ -9,8 +9,6 @@ _SOUND_EVENT_OVERRIDES = {'end_battle_last_kill': 'bc_end_battle_last_kill',
  'time_over': 'bc_end_battle_time_over'}
 
 class BCFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener):
-    """ This is functionality that moved from BootcampFinishSoundController
-    """
 
     def __init__(self):
         super(BCFinishSoundPlayer, self).__init__()

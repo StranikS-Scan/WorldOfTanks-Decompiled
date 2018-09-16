@@ -125,12 +125,6 @@ ACHIEVEMENT_CONDITIONS_EXT = {'warrior': {'minFrags': 8},
                         'maxKills': 12}}
 
 def getAchievementCondition(arenaBonusType, medal):
-    """
-    Returns condition for medal depending on arena bonus type.
-    :param arenaBonusType: arena bonus type.
-    :param medal: medal name.
-    :return: dict with medal conditions. See ACHIEVEMENT_CONDITIONS and other conditions.
-    """
     if BONUS_CAPS.checkAny(arenaBonusType, BONUS_CAPS.ACHIEVEMENT_CONDITIONS_EXT):
         if medal in ACHIEVEMENT_CONDITIONS_EXT:
             return ACHIEVEMENT_CONDITIONS_EXT[medal]

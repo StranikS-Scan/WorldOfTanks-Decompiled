@@ -58,42 +58,21 @@ class _StatsListener(_Listener):
         super(_StatsListener, self).stopListen()
 
     def _onCreditsUpdate(self, _):
-        """
-        Value of credits updated.
-        """
         self._page.invalidateCredits()
 
     def _onGoldUpdate(self, _):
-        """
-        Value of gold updated.
-        """
         self._page.invalidateGold()
 
     def _onFreeXPUpdate(self, _):
-        """
-        Value of free experience updated.
-        """
         self._page.invalidateFreeXP()
 
     def _onEliteVehiclesUpdate(self, elites):
-        """
-        Set of elite vehicles updated.
-        :param elites: set([<compactDescr>, ...])
-        """
         self._page.invalidateElites(elites)
 
     def _onVehiclesXPUpdate(self, xps):
-        """
-        Dict of vehicles experience updated.
-        :param xps: dict(<int:vehicle compact descriptor> : <XP>, ...)
-        """
         self._page.invalidateVTypeXP(xps)
 
     def _onUnlocksUpdate(self, unlocks):
-        """
-        Set of unlocks items updated.
-        :param unlocks: set([<int:compactDescr>, ...])
-        """
         self._page.invalidateUnlocks(unlocks)
 
 
@@ -143,11 +122,6 @@ class _ItemsCacheListener(_Listener):
                 self._page.invalidateVehLocks(vehLocks)
 
     def __items_onSyncCompleted(self, reason, invalidated):
-        """
-        Listener for event __ItemsCache.onSyncCompleted.
-        :param reason: CACHE_SYNC_REASON
-        :param invalidated: dict( <itemTypeID> : <int-type compact > )
-        """
         self.__invalidated = set()
         for itemTypeID, uniqueIDs in invalidated.iteritems():
             if itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES or itemTypeID == GUI_ITEM_TYPE.VEHICLE:
@@ -157,23 +131,13 @@ class _ItemsCacheListener(_Listener):
             self._page.redraw()
 
     def __center_onIsLongDisconnected(self, _):
-        """
-        Listener for event _PlayerEvents.onCenterIsLongDisconnected.
-        """
         self._page.redraw()
 
     def __onVehCompareBasketChanged(self, changedData):
-        """
-        gui.game_control.VehComparisonBasket.onChange event handler
-        :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData
-        """
         if changedData.isFullChanged:
             self._page.invalidateVehCompare()
 
     def __onVehCompareBasketSwitchChange(self):
-        """
-        gui.game_control.VehComparisonBasket.onSwitchChange event handler
-        """
         self._page.invalidateVehCompare()
 
 

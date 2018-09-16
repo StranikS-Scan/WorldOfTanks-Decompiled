@@ -48,7 +48,7 @@ class BaseRallyListDataProvider(SortableDAAPIDataProvider):
         return self.__mapping
 
     def requestUpdatedItemsHandler(self, indexes):
-        return filter(lambda item: item[0] in indexes, enumerate(self.__list))
+        return [ item for item in enumerate(self.__list) if item[0] in indexes ]
 
     def emptyItem(self):
         return None
@@ -78,4 +78,4 @@ class BaseRallyListDataProvider(SortableDAAPIDataProvider):
         return self._selectedIdx
 
     def rebuildIndexes(self):
-        self.__mapping = dict(map(lambda item: (item[1]['cfdUnitID'], item[0]), enumerate(self.__list)))
+        self.__mapping = dict(((item[1]['cfdUnitID'], item[0]) for item in enumerate(self.__list)))

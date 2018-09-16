@@ -239,7 +239,7 @@
         <right>	vehicles/german/G27_VK3001P/track/right.track	</right>
         <segmentLength>	0.147	</segmentLength>
         <segmentOffset>	0.105	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -472,7 +472,7 @@
         <right>	vehicles/german/G27_VK3001P/track/right.track	</right>
         <segmentLength>	0.147	</segmentLength>
         <segmentOffset>	0.105	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -582,7 +582,7 @@
       <level>	6	</level>
       <price>	16920	</price>
       <unlocks>
-        <turret>	VK3001P_Porsche_turm	  <cost>	7400.0	</cost>
+        <turret>	VK3001P_Porsche_turm	  <cost>	7400	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -1090,12 +1090,12 @@
   </fuelTanks>
   <radios>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
+        <radio>	FuG7	  <cost>	1360	</cost>
         </radio>
       </unlocks>
     </FuG5>
     <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200.0	</cost>
+        <radio>	FuG12	  <cost>	7200	</cost>
         </radio>
       </unlocks>
     </FuG7>

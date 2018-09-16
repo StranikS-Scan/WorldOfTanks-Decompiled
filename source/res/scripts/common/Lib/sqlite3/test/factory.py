@@ -90,21 +90,18 @@ class RowFactoryTests(unittest.TestCase):
         self.assertEqual(col2, 2, 'by index: wrong result for column 1')
 
     def CheckSqliteRowIter(self):
-        """Checks if the row object is iterable"""
         self.con.row_factory = sqlite.Row
         row = self.con.execute('select 1 as a, 2 as b').fetchone()
         for col in row:
             pass
 
     def CheckSqliteRowAsTuple(self):
-        """Checks if the row object can be converted to a tuple"""
         self.con.row_factory = sqlite.Row
         row = self.con.execute('select 1 as a, 2 as b').fetchone()
         t = tuple(row)
         self.assertEqual(t, (row['a'], row['b']))
 
     def CheckSqliteRowAsDict(self):
-        """Checks if the row object can be correctly converted to a dictionary"""
         self.con.row_factory = sqlite.Row
         row = self.con.execute('select 1 as a, 2 as b').fetchone()
         d = dict(row)
@@ -112,7 +109,6 @@ class RowFactoryTests(unittest.TestCase):
         self.assertEqual(d['b'], row['b'])
 
     def CheckSqliteRowHashCmp(self):
-        """Checks if the row object compares and hashes correctly"""
         self.con.row_factory = sqlite.Row
         row_1 = self.con.execute('select 1 as a, 2 as b').fetchone()
         row_2 = self.con.execute('select 1 as a, 2 as b').fetchone()

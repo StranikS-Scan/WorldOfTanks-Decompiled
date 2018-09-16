@@ -8,7 +8,7 @@ import nations
 from helpers import i18n
 from items import vehicles as veh_core
 from gui.shared.gui_items.fitting_item import FittingItem, ICONS_MASK
-from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP
+from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD
 from gui.shared.money import Currency
 MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
 MODULE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(MODULE_TYPES_ORDER)))
@@ -65,6 +65,9 @@ class VehicleChassis(VehicleModule):
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_CHASSIS
 
+    def getExtraIconInfo(self, _=None):
+        return RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON if self.isHydraulicChassis() else None
+
 
 class VehicleTurret(VehicleModule):
     __slots__ = ()
@@ -99,7 +102,7 @@ class VehicleGun(VehicleModule):
     def __init__(self, intCompactDescr, proxy=None, descriptor=None):
         super(VehicleGun, self).__init__(intCompactDescr, proxy, descriptor)
         self._defaultAmmo = self._getDefaultAmmo(proxy)
-        self._maxAmmo = self._getMaxAmmo(proxy)
+        self._maxAmmo = self._getMaxAmmo()
 
     def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.gun.intCD
@@ -115,16 +118,9 @@ class VehicleGun(VehicleModule):
         typeToCheck = GUN_CLIP if vehicleDescr is not None else GUN_CAN_BE_CLIP
         return self.getReloadingType(vehicleDescr) == typeToCheck
 
-    def _getDefaultAmmo(self, proxy):
-        result = []
-        shells = veh_core.getDefaultAmmoForGun(self.descriptor)
-        for i in range(0, len(shells), 2):
-            result.append(Shell(shells[i], defaultCount=shells[i + 1], proxy=proxy))
-
-        return result
-
-    def _getMaxAmmo(self, proxy):
-        return self.descriptor.maxAmmo
+    def isAutoReloadable(self, vehicleDescr=None):
+        typeToCheck = GUN_AUTO_RELOAD if vehicleDescr is not None else GUN_CAN_BE_AUTO_RELOAD
+        return self.getReloadingType(vehicleDescr) == typeToCheck
 
     def getInstalledVehicles(self, vehicles):
         result = set()
@@ -146,6 +142,23 @@ class VehicleGun(VehicleModule):
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_GUN
 
+    def getExtraIconInfo(self, vehDescr=None):
+        if self.isClipGun(vehDescr):
+            return RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON
+        else:
+            return RES_ICONS.MAPS_ICONS_MODULES_AUTOLOADERGUN if self.isAutoReloadable(vehDescr) else None
+
+    def _getMaxAmmo(self):
+        return self.descriptor.maxAmmo
+
+    def _getDefaultAmmo(self, proxy):
+        result = []
+        shells = veh_core.getDefaultAmmoForGun(self.descriptor)
+        for i in range(0, len(shells), 2):
+            result.append(Shell(shells[i], defaultCount=shells[i + 1], proxy=proxy))
+
+        return result
+
 
 class VehicleEngine(VehicleModule):
     __slots__ = ()
@@ -166,7 +179,7 @@ class VehicleEngine(VehicleModule):
         oldModuleId = vehicle.engine.intCD
         vehicle.descriptor.installComponent(self.intCD)
         for eq in vehicle.equipment.regularConsumables.getInstalledItems():
-            installPossible, reason = eq.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)
+            installPossible, _ = eq.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)
             if not installPossible:
                 conflictEqs.append(eq)
 
@@ -216,32 +229,15 @@ class Shell(FittingItem):
     __slots__ = ('_count', '_defaultCount')
 
     def __init__(self, intCompactDescr, count=0, defaultCount=0, proxy=None, isBoughtForCredits=False):
-        """
-        Ctor.
-        
-        @param intCompactDescr: item int compact descriptor
-        @param count: count of shells in ammo bay
-        @param defaultCount: count default shells in ammo bay
-        @param proxy: instance of ItemsRequester
-        """
         FittingItem.__init__(self, intCompactDescr, proxy, isBoughtForCredits)
         self._count = count
         self._defaultCount = defaultCount
 
     @property
     def level(self):
-        """Return 0 because shell has no level."""
         pass
 
     def _getAltPrice(self, buyPrice, proxy):
-        """
-        Returns an alternative price (right now in Currency.CREDITS) based on the original buy price and shells
-        gold-credits exchange rate defined in the shop.
-        
-        @param buyPrice: buy price in Money
-        @param proxy: shop stats proxy, see IShopCommonStats
-        @return: alternative price in Money (right now in credits)
-        """
         return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs) if Currency.GOLD in buyPrice else super(Shell, self)._getAltPrice(buyPrice, proxy)
 
     def _getFormatLongUserName(self, kind):
@@ -269,7 +265,6 @@ class Shell(FittingItem):
 
     @property
     def type(self):
-        """ Returns shells type string (`HOLLOW_CHARGE` etc.). """
         return self.descriptor.kind
 
     @property

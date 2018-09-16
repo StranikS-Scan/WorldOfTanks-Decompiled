@@ -127,7 +127,7 @@
         <segmentLength>	0.135	</segmentLength>
         <segmentOffset>	0.067	</segmentOffset>
         <segment2Offset>	0.063	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -408,7 +408,7 @@
         <segmentLength>	0.135	</segmentLength>
         <segmentOffset>	0.067	</segmentOffset>
         <segment2Offset>	0.063	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1309,12 +1309,12 @@
   </turrets0>
   <engines>
     <Ford_GAN>	shared	  <unlocks>
-        <engine>	Continental_AV-1790-1	  <cost>	10500.0	</cost>
+        <engine>	Continental_AV-1790-1	  <cost>	10500	</cost>
         </engine>
       </unlocks>
     </Ford_GAN>
     <Continental_AV-1790-1>	shared	  <unlocks>
-        <engine>	Continental_AV-1790-1M2	  <cost>	31000.0	</cost>
+        <engine>	Continental_AV-1790-1M2	  <cost>	31000	</cost>
         </engine>
       </unlocks>
     </Continental_AV-1790-1>

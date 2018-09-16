@@ -122,7 +122,7 @@
       <userString>	#germany_vehicles:JgPzV_Standardketten	</userString>
       <tags></tags>
       <level>	7	</level>
-      <price>	19390.0	</price>
+      <price>	19390	</price>
       <unlocks>
         <chassis>	JgPzV_Vetstaerktketten	  <cost>	14770	</cost>
         </chassis>
@@ -157,7 +157,7 @@
         <right>	vehicles/german/G18_JagdPanther/track/right.track	</right>
         <segmentLength>	0.157	</segmentLength>
         <segmentOffset>	0.121	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -478,7 +478,7 @@
         <right>	vehicles/german/G18_JagdPanther/track/right.track	</right>
         <segmentLength>	0.000000	</segmentLength>
         <segmentOffset>	0.000000	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -489,7 +489,7 @@
       <userString>	#germany_vehicles:JgPzV_Vetstaerktketten	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	32720.0	</price>
+      <price>	32720	</price>
       <armor>
         <leftTrack>	25	</leftTrack>
         <rightTrack>	25	</rightTrack>
@@ -520,7 +520,7 @@
         <right>	vehicles/german/G18_JagdPanther/track/right.track	</right>
         <segmentLength>	0.157	</segmentLength>
         <segmentOffset>	0.121	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1084,12 +1084,12 @@
   </fuelTanks>
   <radios>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
+        <radio>	FuG7	  <cost>	1360	</cost>
         </radio>
       </unlocks>
     </FuG5>
     <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200.0	</cost>
+        <radio>	FuG12	  <cost>	7200	</cost>
         </radio>
       </unlocks>
     </FuG7>

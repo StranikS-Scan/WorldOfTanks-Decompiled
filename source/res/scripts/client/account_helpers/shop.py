@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/Shop.py
-import AccountCommands
 import cPickle
 import zlib
-import items
 from math import ceil
 from itertools import izip
+import items
+import AccountCommands
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from items import vehicles, tankmen
 from AccountCommands import BUY_VEHICLE_FLAG
@@ -111,8 +111,9 @@ class Shop(object):
         self.__getValue('sellPriceModif', proxy)
 
     def getSellPrice(self, buyPrice, sellPriceModifiers, itemTypeID):
-        shopRev, exchangeRate, exchangeRateForShellsAndEqs, sellPriceModif, sellPriceFactor, sellForGold = sellPriceModifiers
-        assert shopRev == self.__getCacheRevision()
+        shopRev, exchangeRate, exchangeRateForShellsAndEqs, _, sellPriceFactor, sellForGold = sellPriceModifiers
+        if shopRev != self.__getCacheRevision():
+            raise UserWarning('Shop cache is not actual')
         if itemTypeID in (_SHELL, _EQUIPMENT):
             exchangeRate = exchangeRateForShellsAndEqs
         if sellForGold:
@@ -373,7 +374,7 @@ class Shop(object):
             self.__account._doCmdInt3(AccountCommands.CMD_VEH_APPLY_STYLE, self.__getCacheRevision(), vehInvID, styleID, proxy)
             return
 
-    def buyCustomizations(self, vehInvID, items, callback):
+    def buyCustomizations(self, vehInvID, itemsCount, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -384,7 +385,7 @@ class Shop(object):
             else:
                 proxy = None
             intArr = [self.__getCacheRevision(), vehInvID]
-            for intCD, count in items.iteritems():
+            for intCD, count in itemsCount.iteritems():
                 intArr.extend((intCD, count))
 
             self.__account._doCmdIntArr(AccountCommands.CMD_BUY_C11N_ITEMS, intArr, proxy)
@@ -403,7 +404,8 @@ class Shop(object):
             self.__account._doCmdInt4(AccountCommands.CMD_SELL_C11N_ITEMS, self.__getCacheRevision(), itemCD, count, vehInvID, proxy)
             return
 
-    def __onSyncResponse(self, syncID, resultID, ext={}):
+    def __onSyncResponse(self, syncID, resultID, ext=None):
+        ext = ext or {}
         if resultID == AccountCommands.RES_NON_PLAYER:
             return
         if syncID != self.__syncID:
@@ -449,11 +451,11 @@ class Shop(object):
 
     def __onGetItemsResponse(self, resultID, itemTypeIdx, nationIdx, callback):
         if resultID < 0:
-            items = None
+            result = None
         else:
-            items = self.__cache.get('items', {}).get(nationIdx, {}).get(itemTypeIdx, None)
+            result = self.__cache.get('items', {}).get(nationIdx, {}).get(itemTypeIdx, None)
         if callback is not None:
-            callback(resultID, items, self.__getCacheRevision())
+            callback(resultID, result, self.__getCacheRevision())
         return
 
     def __onGetValueResponse(self, resultID, key, callback):
@@ -631,10 +633,10 @@ class Shop(object):
 
     def __getSellPriceModifiersFromCache(self, typeCompDescr):
         cache = self.__cache
-        items = cache.get('items', {})
+        result = cache.get('items', {})
         sellPriceModif = cache.get('sellPriceModif', 0)
-        sellPriceFactors = items.get('vehicleSellPriceFactors', {})
-        sellForGold = items.get('vehiclesToSellForGold', {})
+        sellPriceFactors = result.get('vehicleSellPriceFactors', {})
+        sellForGold = result.get('vehiclesToSellForGold', {})
         return (self.__getCacheRevision(),
          cache.get('exchangeRate', 0),
          cache.get('exchangeRateForShellsAndEqs', 0),

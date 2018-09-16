@@ -10,6 +10,7 @@ from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import IBootcampController
 from tutorial.logger import LOG_ERROR
 from tutorial.data.conditions import CONDITION_STATE
 __all__ = ('getTutorialsCompleted', 'getRandomBattlesCount', 'getUnlockedItems', 'getFreeVehiclesSlots', 'getFreeXP', 'getItemByIntCD', 'getVehicleByIntCD', 'getVehiclesByLevel', 'getPremiumExpiryTime', 'getCurrentVehicleLevel', 'isCurrentVehiclePremium', 'getCurrentVehicleViewState', 'getTankmanCurrentPrice', 'getTankmanDefaultPrice', 'getItemStateGetter', 'getAttribute')
@@ -46,7 +47,7 @@ def getFreeXP(itemsCache=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getItemByIntCD(intCD, itemsCache=None):
-    if intCD is None or type(intCD) not in (types.IntType, types.LongType, types.FloatType):
+    if intCD is None or not isinstance(intCD, (types.IntType, types.LongType, types.FloatType)):
         return
     else:
         return itemsCache.items.getItemByCD(intCD) if itemsCache is not None else None
@@ -142,7 +143,7 @@ def _getNextToUnlockItemCD(intCD, itemsCache=None):
         items = g_techTreeDP.getAllPossibleItems2Unlock(vehicle, stats.unlocks)
         getter = itemsCache.items.getItemByCD
         result = []
-        for itemTypeCD, unlockProps in items.iteritems():
+        for itemTypeCD, _ in items.iteritems():
             item = getter(itemTypeCD)
             if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
                 continue
@@ -166,7 +167,7 @@ def _getNextToBuyItemCD(intCD, itemsCache=None):
         items = g_techTreeDP.getUnlockedVehicleItems(vehicle, stats.unlocks)
         getter = itemsCache.items.getItemByCD
         result = []
-        for itemTypeCD, unlockProps in items.iteritems():
+        for itemTypeCD, _ in items.iteritems():
             item = getter(itemTypeCD)
             if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
                 continue
@@ -230,6 +231,36 @@ def _getInventoryPremiumVehicleCD(itemsCache=None):
         return result
 
 
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def _getTankmanID(vehicleCD, tankmanRole, itemsCache=None):
+    if itemsCache is None:
+        return
+    else:
+        vehicle = getVehicleByIntCD(vehicleCD)
+        if vehicle is not None and vehicle.invID != -1:
+            for _, tman in vehicle.crew:
+                if tman.isInTank and tman.vehicleInvID != vehicle.invID:
+                    continue
+                if tman.descriptor.role == tankmanRole:
+                    return tman.invID
+
+        return
+
+
+@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController)
+def _getBootcampNationID(bootcampCtrl=None):
+    return None if bootcampCtrl is None else bootcampCtrl.nation
+
+
+@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController)
+def _getBootcampNationDataField(fieldName, bootcampCtrl=None):
+    if bootcampCtrl is None:
+        return
+    else:
+        nationData = bootcampCtrl.nationData
+        return None if nationData is None else nationData.get(fieldName, None)
+
+
 def _isItemSelected(intCD):
     if intCD is None:
         return False
@@ -247,6 +278,31 @@ def _isItemPremium(intCD):
 
 def _isItemUnlocked(intCD):
     return False if intCD is None else intCD in getUnlockedItems()
+
+
+def _isItemInInventory(intCD):
+    if intCD is None:
+        return False
+    else:
+        vehicle = getItemByIntCD(intCD)
+        return vehicle.invID != -1 if vehicle is not None else False
+
+
+def _isCrewSkillLearned(intCD, tankmanRole, skillName):
+    if intCD is None:
+        return False
+    else:
+        vehicle = getItemByIntCD(intCD)
+        if vehicle is not None and vehicle.invID != -1:
+            for _, tman in vehicle.crew:
+                if tman.isInTank and tman.vehicleInvID != vehicle.invID:
+                    continue
+                if tman.descriptor.role == tankmanRole:
+                    for skill in tman.skills:
+                        if skill.name == skillName:
+                            return True
+
+        return False
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -289,6 +345,21 @@ def _isItemMayInstall(itemCD, vehicleCD):
     return result
 
 
+def _isItemInstalled(itemCD, vehicleCD):
+    item = getItemByIntCD(itemCD)
+    vehicle = getVehicleByIntCD(vehicleCD)
+    if item is not None and vehicle is not None:
+        result = item.isInstalled(vehicle)
+    else:
+        result = False
+    return result
+
+
+def _vehicleHasRegularConsumables(vehicleCD):
+    vehicle = getVehicleByIntCD(vehicleCD)
+    return False if vehicle is None or vehicle.invID == -1 else bool(filter(None, vehicle.equipment.regularConsumables))
+
+
 def _isItemLevelEqual(itemCD, level):
     if level is None:
         return False
@@ -304,10 +375,14 @@ def _isItemLevelEqual(itemCD, level):
 _ITEM_STATES = {CONDITION_STATE.SELECTED: _isItemSelected,
  CONDITION_STATE.PREMIUM: _isItemPremium,
  CONDITION_STATE.UNLOCKED: _isItemUnlocked,
+ CONDITION_STATE.IN_INVENTORY: _isItemInInventory,
+ CONDITION_STATE.CREW_HAS_SKILL: _isCrewSkillLearned,
  CONDITION_STATE.XP_ENOUGH: _isItemXPEnough,
  CONDITION_STATE.MONEY_ENOUGH: _isItemMoneyEnough,
  CONDITION_STATE.LEVEL: _isItemLevelEqual,
- CONDITION_STATE.MAY_INSTALL: _isItemMayInstall}
+ CONDITION_STATE.MAY_INSTALL: _isItemMayInstall,
+ CONDITION_STATE.INSTALLED: _isItemInstalled,
+ CONDITION_STATE.HAS_REGULAR_CONSUMABLES: _vehicleHasRegularConsumables}
 
 def getItemStateGetter(state):
     if state in _ITEM_STATES:
@@ -323,7 +398,10 @@ _AVAILABLE_ATTRIBUTES = {'CurrentVehicleCD': _getCurrentVehicleCD,
  'EquipmentForCreditsCD': _getEquipmentForCreditsCD,
  'OptionalDeviceCD': _getOptionalDeviceCD,
  'InventoryVehicleCDByLevel': _getInventoryVehicleCDByLevel,
- 'PremiumVehicleCD': _getInventoryPremiumVehicleCD}
+ 'PremiumVehicleCD': _getInventoryPremiumVehicleCD,
+ 'TankmanID': _getTankmanID,
+ 'BootcampNationID': _getBootcampNationID,
+ 'BootcampNationDataField': _getBootcampNationDataField}
 
 def getAttribute(name, *args):
     if name in _AVAILABLE_ATTRIBUTES:

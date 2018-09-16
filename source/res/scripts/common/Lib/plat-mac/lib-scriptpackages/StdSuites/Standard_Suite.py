@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/StdSuites/Standard_Suite.py
-"""Suite Standard Suite: Common terms for most applications
-Level 1, version 1
-
-Generated from /Volumes/Sap/System Folder/Extensions/AppleScript
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'core'
@@ -15,12 +9,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
     _argmap_class_info = {'in_': 'wrcd'}
 
     def class_info(self, _object=None, _attributes={}, **_arguments):
-        """class info: (optional) Get information about an object class
-        Required argument: the object class about which information is requested
-        Keyword argument in_: the human language and script system in which to return information
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: a record containing the object\xd5s properties and elements
-        """
         _code = 'core'
         _subcode = 'qobj'
         aetools.keysubst(_arguments, self._argmap_class_info)
@@ -34,12 +22,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
      'saving_in': 'kfil'}
 
     def close(self, _object, _attributes={}, **_arguments):
-        """close: Close an object
-        Required argument: the object to close
-        Keyword argument saving: specifies whether changes should be saved before closing
-        Keyword argument saving_in: the file or alias in which to save the object
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'core'
         _subcode = 'clos'
         aetools.keysubst(_arguments, self._argmap_close)
@@ -53,12 +35,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
     _argmap_count = {'each': 'kocl'}
 
     def count(self, _object, _attributes={}, **_arguments):
-        """count: Return the number of elements of an object
-        Required argument: the object whose elements are to be counted
-        Keyword argument each: if specified, restricts counting to objects of this class
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: the number of elements
-        """
         _code = 'core'
         _subcode = 'cnte'
         aetools.keysubst(_arguments, self._argmap_count)
@@ -71,12 +47,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
     _argmap_data_size = {'as': 'rtyp'}
 
     def data_size(self, _object, _attributes={}, **_arguments):
-        """data size: (optional) Return the size in bytes of an object
-        Required argument: the object whose data size is to be returned
-        Keyword argument as: the data type for which the size is calculated
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: the size of the object in bytes
-        """
         _code = 'core'
         _subcode = 'dsiz'
         aetools.keysubst(_arguments, self._argmap_data_size)
@@ -87,10 +57,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def delete(self, _object, _attributes={}, **_arguments):
-        """delete: Delete an object from its container. Note this does not work on script variables, only on elements of application classes.
-        Required argument: the element to delete
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'core'
         _subcode = 'delo'
         if _arguments:
@@ -105,13 +71,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
      'with_properties': 'prdt'}
 
     def duplicate(self, _object, _attributes={}, **_arguments):
-        """duplicate: Duplicate one or more objects
-        Required argument: the object(s) to duplicate
-        Keyword argument to: the new location for the object(s)
-        Keyword argument with_properties: the initial values for properties of the new object that are to be different from the original
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: to the duplicated object(s)
-        """
         _code = 'core'
         _subcode = 'clon'
         aetools.keysubst(_arguments, self._argmap_duplicate)
@@ -124,12 +83,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
     _argmap_event_info = {'in_': 'wrcd'}
 
     def event_info(self, _object, _attributes={}, **_arguments):
-        """event info: (optional) Get information about the Apple events in a suite
-        Required argument: the event class of the Apple events for which to return information
-        Keyword argument in_: the human language and script system in which to return information
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: a record containing the events and their parameters
-        """
         _code = 'core'
         _subcode = 'gtei'
         aetools.keysubst(_arguments, self._argmap_event_info)
@@ -140,11 +93,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def exists(self, _object, _attributes={}, **_arguments):
-        """exists: Verify if an object exists
-        Required argument: the object in question
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: true if it exists, false if not
-        """
         _code = 'core'
         _subcode = 'doex'
         if _arguments:
@@ -156,11 +104,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def handleBreakpoint(self, _object, _attributes={}, **_arguments):
-        """handleBreakpoint: return true to stop at a breakpoint
-        Required argument: the call frame of the breakpoint
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: true to stop, false if not
-        """
         _code = 'core'
         _subcode = 'brak'
         if _arguments:
@@ -177,14 +120,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
      'with_properties': 'prdt'}
 
     def make(self, _no_object=None, _attributes={}, **_arguments):
-        """make: Make a new element
-        Keyword argument new: the class of the new element
-        Keyword argument at: the location at which to insert the element
-        Keyword argument with_data: the initial data for the element
-        Keyword argument with_properties: the initial values for the properties of the element
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: to the new object(s)
-        """
         _code = 'core'
         _subcode = 'crel'
         aetools.keysubst(_arguments, self._argmap_make)
@@ -198,12 +133,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
     _argmap_move = {'to': 'insh'}
 
     def move(self, _object, _attributes={}, **_arguments):
-        """move: Move object(s) to a new location
-        Required argument: the object(s) to move
-        Keyword argument to: the new location for the object(s)
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: to the object(s) after they have been moved
-        """
         _code = 'core'
         _subcode = 'move'
         aetools.keysubst(_arguments, self._argmap_move)
@@ -214,10 +143,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def open(self, _object, _attributes={}, **_arguments):
-        """open: Open the specified object(s)
-        Required argument: list of objects to open
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'aevt'
         _subcode = 'odoc'
         if _arguments:
@@ -229,10 +154,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def print_(self, _object, _attributes={}, **_arguments):
-        """print: Print the specified object(s)
-        Required argument: list of objects to print
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'aevt'
         _subcode = 'pdoc'
         if _arguments:
@@ -246,10 +167,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
     _argmap_quit = {'saving': 'savo'}
 
     def quit(self, _no_object=None, _attributes={}, **_arguments):
-        """quit: Quit an application
-        Keyword argument saving: specifies whether to save currently open documents
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'aevt'
         _subcode = 'quit'
         aetools.keysubst(_arguments, self._argmap_quit)
@@ -262,9 +179,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def reopen(self, _no_object=None, _attributes={}, **_arguments):
-        """reopen: Reactivate a running application.  Some applications will open a new untitled window if no window is open.
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'aevt'
         _subcode = 'rapp'
         if _arguments:
@@ -277,9 +191,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def run(self, _no_object=None, _attributes={}, **_arguments):
-        """run: Run an application.  Most applications will open an empty, untitled window.
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'aevt'
         _subcode = 'oapp'
         if _arguments:
@@ -295,12 +206,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
      'as': 'fltp'}
 
     def save(self, _object, _attributes={}, **_arguments):
-        """save: Save an object
-        Required argument: the object to save, usually a document or window
-        Keyword argument in_: the file or alias in which to save the object
-        Keyword argument as: the file type of the document in which to save the data
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'core'
         _subcode = 'save'
         aetools.keysubst(_arguments, self._argmap_save)
@@ -311,10 +216,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def select(self, _object, _attributes={}, **_arguments):
-        """select: Make a selection
-        Required argument: the object to select
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'misc'
         _subcode = 'slct'
         if _arguments:
@@ -328,12 +229,6 @@ class Standard_Suite_Events(builtin_Suite_Events):
     _argmap_suite_info = {'in_': 'wrcd'}
 
     def suite_info(self, _object, _attributes={}, **_arguments):
-        """suite info: (optional) Get information about event suite(s)
-        Required argument: the suite for which to return information
-        Keyword argument in_: the human language and script system in which to return information
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: a record containing the suites and their versions
-        """
         _code = 'core'
         _subcode = 'gtsi'
         aetools.keysubst(_arguments, self._argmap_suite_info)
@@ -345,12 +240,10 @@ class Standard_Suite_Events(builtin_Suite_Events):
 
 
 class alias(aetools.ComponentItem):
-    """alias - a file on a disk or server.  The file must exist when you check the syntax of your script. """
     want = 'alis'
 
 
 class _Prop_POSIX_path(aetools.NProperty):
-    """POSIX path - the POSIX path of the file """
     which = 'psxp'
     want = 'TEXT'
 
@@ -358,12 +251,10 @@ class _Prop_POSIX_path(aetools.NProperty):
 aliases = alias
 
 class application(aetools.ComponentItem):
-    """application - An application program """
     want = 'capp'
 
 
 class _Prop_clipboard(aetools.NProperty):
-    """clipboard - the contents of the clipboard for this application """
     which = 'pcli'
     want = '****'
 
@@ -371,7 +262,6 @@ class _Prop_clipboard(aetools.NProperty):
 clipboard = _Prop_clipboard()
 
 class _Prop_frontmost(aetools.NProperty):
-    """frontmost - Is this the frontmost application? """
     which = 'pisf'
     want = 'bool'
 
@@ -379,7 +269,6 @@ class _Prop_frontmost(aetools.NProperty):
 frontmost = _Prop_frontmost()
 
 class _Prop_name(aetools.NProperty):
-    """name - the name of the application """
     which = 'pnam'
     want = 'itxt'
 
@@ -387,7 +276,6 @@ class _Prop_name(aetools.NProperty):
 name = _Prop_name()
 
 class _Prop_selection(aetools.NProperty):
-    """selection - the selection visible to the user.  Use the \xd4select\xd5 command to set a new selection; use \xd4contents of selection\xd5 to get or change information in the document. """
     which = 'sele'
     want = 'csel'
 
@@ -395,7 +283,6 @@ class _Prop_selection(aetools.NProperty):
 selection = _Prop_selection()
 
 class _Prop_version(aetools.NProperty):
-    """version - the version of the application """
     which = 'vers'
     want = 'vers'
 
@@ -404,84 +291,70 @@ version = _Prop_version()
 applications = application
 
 class insertion_points(aetools.ComponentItem):
-    """insertion points -  """
     want = 'cins'
 
 
 insertion_point = insertion_points
 
 class selection_2d_object(aetools.ComponentItem):
-    """selection-object - A way to refer to the state of the current of the selection.  Use the \xd4select\xd5 command to make a new selection. """
     want = 'csel'
 
 
 class _Prop_contents(aetools.NProperty):
-    """contents - the information currently selected.  Use \xd4contents of selection\xd5 to get or change information in a document. """
     which = 'pcnt'
     want = '****'
 
 
 class window(aetools.ComponentItem):
-    """window - A window """
     want = 'cwin'
 
 
 class _Prop_bounds(aetools.NProperty):
-    """bounds - the boundary rectangle for the window """
     which = 'pbnd'
     want = 'qdrt'
 
 
 class _Prop_closeable(aetools.NProperty):
-    """closeable - Does the window have a close box? """
     which = 'hclb'
     want = 'bool'
 
 
 class _Prop_floating(aetools.NProperty):
-    """floating - Does the window float? """
     which = 'isfl'
     want = 'bool'
 
 
 class _Prop_index(aetools.NProperty):
-    """index - the number of the window """
     which = 'pidx'
     want = 'long'
 
 
 class _Prop_modal(aetools.NProperty):
-    """modal - Is the window modal? """
     which = 'pmod'
     want = 'bool'
 
 
 class _Prop_resizable(aetools.NProperty):
-    """resizable - Is the window resizable? """
     which = 'prsz'
     want = 'bool'
 
 
 class _Prop_titled(aetools.NProperty):
-    """titled - Does the window have a title bar? """
     which = 'ptit'
     want = 'bool'
 
 
 class _Prop_visible(aetools.NProperty):
-    """visible - Is the window visible? """
     which = 'pvis'
     want = 'bool'
 
 
 class _Prop_zoomable(aetools.NProperty):
-    """zoomable - Is the window zoomable? """
     which = 'iszm'
     want = 'bool'
 
 
 class _Prop_zoomed(aetools.NProperty):
-    """zoomed - Is the window zoomed? """
     which = 'pzum'
     want = 'bool'
 
@@ -489,12 +362,10 @@ class _Prop_zoomed(aetools.NProperty):
 windows = window
 
 class document(aetools.ComponentItem):
-    """document - A document of a scriptable application """
     want = 'docu'
 
 
 class _Prop_modified(aetools.NProperty):
-    """modified - Has the document been modified since the last save? """
     which = 'imod'
     want = 'bool'
 
@@ -502,7 +373,6 @@ class _Prop_modified(aetools.NProperty):
 documents = document
 
 class file(aetools.ComponentItem):
-    """file - a file on a disk or server """
     want = 'file'
 
 
@@ -543,42 +413,34 @@ file._privpropdict = {'POSIX_path': _Prop_POSIX_path}
 file._privelemdict = {}
 
 class _3c_(aetools.NComparison):
-    """< - Less than """
     pass
 
 
 class _3d_(aetools.NComparison):
-    """= - Equal """
     pass
 
 
 class _3e_(aetools.NComparison):
-    """> - Greater than """
     pass
 
 
 class contains(aetools.NComparison):
-    """contains - Contains """
     pass
 
 
 class ends_with(aetools.NComparison):
-    """ends with - Ends with """
     pass
 
 
 class starts_with(aetools.NComparison):
-    """starts with - Starts with """
     pass
 
 
 class _b2_(aetools.NComparison):
-    """\xb2 - Less than or equal to """
     pass
 
 
 class _b3_(aetools.NComparison):
-    """\xb3 - Greater than or equal to """
     pass
 
 

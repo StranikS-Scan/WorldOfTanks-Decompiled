@@ -5,7 +5,6 @@ import unittest
 from test_all import db, dbobj, test_support, get_new_environment_path, get_new_database_path
 
 class dbobjTestCase(unittest.TestCase):
-    """Verify that dbobj.DB and dbobj.DBEnv work properly"""
     db_name = 'test-dbobj.db'
 
     def setUp(self):

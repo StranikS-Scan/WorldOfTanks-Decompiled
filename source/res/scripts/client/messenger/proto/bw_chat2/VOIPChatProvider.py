@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/VOIPChatProvider.py
 from debug_utils import LOG_WARNING, LOG_NOTE
-from messenger.proto.bw_chat2 import errors, provider
+from messenger.proto.bw_chat2 import errors, provider as bw2_provider
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IVOIPChatProvider
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS, messageArgs
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
 _EMPTY_CHANNELS_PARAMS = ('', '')
 
-class VOIPChatProvider(provider.ResponseDictHandler, IVOIPChatProvider):
+class VOIPChatProvider(bw2_provider.ResponseDictHandler, IVOIPChatProvider):
 
     def __init__(self, provider):
         super(VOIPChatProvider, self).__init__(provider)

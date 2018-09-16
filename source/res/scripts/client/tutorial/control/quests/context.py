@@ -2,8 +2,6 @@
 # Embedded file name: scripts/client/tutorial/control/quests/context.py
 from tutorial.control import game_vars
 from tutorial.control.context import StartReqs
-from tutorial.settings import TUTORIAL_SETTINGS
-from tutorial import doc_loader
 
 class QuestsStartReqs(StartReqs):
 

@@ -32,10 +32,6 @@ class FILTER_STATE(BitmaskHelper):
 
 
 class BoostersWindow(BoostersWindowMeta):
-    """
-    Window which contains boosters tabs and filters.
-    :param ctx: context which contains tabID - tab index
-    """
     __metaclass__ = event_bus_handlers.EventBusListener
 
     def __init__(self, ctx=None):

@@ -6,6 +6,8 @@ class GUI_EVENT_TYPE(object):
     CLICK = 1
     CLICK_OUTSIDE = 2
     ESC = 3
+    ENABLE = 4
+    DISABLE = 5
 
 
 class _Event(HasTargetID):
@@ -37,3 +39,15 @@ class EscEvent(_Event):
 
     def __init__(self, targetID):
         super(EscEvent, self).__init__(GUI_EVENT_TYPE.ESC, targetID)
+
+
+class EnableEvent(_Event):
+
+    def __init__(self, targetID):
+        super(EnableEvent, self).__init__(GUI_EVENT_TYPE.ENABLE, targetID)
+
+
+class DisableEvent(_Event):
+
+    def __init__(self, targetID):
+        super(DisableEvent, self).__init__(GUI_EVENT_TYPE.DISABLE, targetID)

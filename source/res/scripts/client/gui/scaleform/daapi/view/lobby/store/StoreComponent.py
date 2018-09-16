@@ -17,7 +17,6 @@ from gui.shared import events, EVENT_BUS_SCOPE, event_dispatcher as shared_event
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
-from gui.shared.money import Currency
 from gui.shared.utils.functions import getViewName, makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
@@ -46,10 +45,6 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         return
 
     def getName(self):
-        """
-        Get component name
-        :return: <str>
-        """
         pass
 
     def onShowInfo(self, itemCD):
@@ -72,23 +67,12 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         self.comparisonBasket.addVehicle(int(itemCD))
 
     def requestFilterData(self, filterType):
-        """
-        Set full filters data to Flash by filterType
-        :param filterType: <str> tab ID
-        """
         self.__updateFilterOptions(filterType)
 
     def updateFilters(self):
-        """
-        Set filters to flash (may be called on switch from actions to store)
-        """
         self.__populateFilters()
 
     def _populate(self):
-        """
-        Prepare and set init data into Flash
-        Subscribe on account updates
-        """
         super(StoreComponent, self)._populate()
         self.__initFiltersData()
         g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryUpdate})
@@ -101,9 +85,6 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         self.as_completeInitS()
 
     def _dispose(self):
-        """
-        Clear attrs and subscriptions
-        """
         super(StoreComponent, self)._dispose()
         self.__clearTableData()
         while self.__nations:
@@ -124,36 +105,20 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         g_clientUpdateManager.removeObjectCallbacks(self)
         return
 
-    def _onInventoryUpdate(self, *args):
-        self.__invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
-
     def _update(self, *args):
         self.as_updateS()
         self.as_setVehicleCompareAvailableS(self.comparisonBasket.isEnabled())
 
-    def _getTabClass(self, type):
-        """
-        Get component tab class by type
-        :param type: <str> tab ID
-        :return:<StoreItemsTab>
-        """
+    def _getTabClass(self, tabType):
         raise NotImplementedError
 
-    def _setTableData(self, filter, nation, type, actionsSelected, itemCD):
-        """
-        Prepare and set data for selected tab, set dataProvider itemWrapper and values
-        set account credits and gold into Flash
-        :param type: <str> tab ID
-        :param nation: <int> gui nation
-        :param actionsSelected: <bool> discount's checkbox value
-        :param filter: <obj> filter data
-        """
+    def _setTableData(self, f, nation, tabType, actionsSelected, itemCD):
         nation = int(nation) if nation >= 0 else None
         if nation is not None:
             nation = getNationIndex(nation)
         self.__clearTableData()
-        cls = self._getTabClass(type)
-        self._currentTab = cls(nation, filter, actionsSelected, itemCD)
+        cls = self._getTabClass(tabType)
+        self._currentTab = cls(nation, f, actionsSelected, itemCD)
         self._table.setItemWrapper(self._currentTab.itemWrapper)
         dataProviderValues = self._currentTab.buildItems(self.__invVehicles)
         self._table.setDataProviderValues(dataProviderValues)
@@ -170,26 +135,14 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
-        """
-        Set table component after register
-        :param viewPy: <StoreTable>
-        :param alias: <str>
-        """
         self._table = viewPy
 
     def _onTableUpdate(self, *args):
-        """
-        Request table data after update
-        :param args:
-        """
         nation, itemType, actionsSelected = self.__getCurrentFilter()
-        filter = AccountSettings.getFilter('%s_%s' % (self.getName(), itemType))
-        self.requestTableData(nation, actionsSelected, itemType, filter)
+        f = AccountSettings.getFilter('%s_%s' % (self.getName(), itemType))
+        self.requestTableData(nation, actionsSelected, itemType, f)
 
     def __initFiltersData(self):
-        """
-        Set nations into Flash
-        """
         while self.__nations:
             self.__nations.pop()
 
@@ -207,10 +160,6 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         return self.tradeIn.isEnabled()
 
     def __populateFilters(self):
-        """
-        Set filters and subfilters init data into Flash,
-        call flash update and finalize populate
-        """
         vehicles = self.__invVehicles
         filterVehicle = None
         if g_currentVehicle.isPresent():
@@ -249,18 +198,10 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         return
 
     def __onInventoryUpdate(self, *args):
-        """
-        Update inventory vehicles
-        :param args:
-        """
         self.__invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        self.__populateFilters()
 
     def __updateFilterOptions(self, filterType):
-        """
-        Gets vo class name and filter data from AccountSettings by filterType
-        set this data into Flash and call _update
-        :param filterType: <str> tab ID
-        """
         voClassName, showExtra = self._getTabClass(filterType).getFilterInitData()
         filters = AccountSettings.getFilter('%s_%s' % (self.getName(), filterType))
         data = {'voClassName': voClassName,
@@ -286,17 +227,10 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         self._update()
 
     def __getCurrentFilter(self):
-        """
-        Get current tab filters from AccountSettings
-        :return tuple(nation:<int>, itemType:<str>, actionsSelected:<bool>)
-        """
         nation, itemType, actionsSelected = AccountSettings.getFilter(self.getName() + '_current')
         return (nation if nation < len(GUI_NATIONS) else -1, itemType, actionsSelected)
 
     def __clearTableData(self):
-        """
-        Clear table data
-        """
         if self._table is not None:
             self._table.clearStoreTableDataProvider()
         if self._currentTab is not None:
@@ -304,9 +238,6 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         return
 
     def __clearSubFilter(self):
-        """
-        Clear filters and subfilters fields
-        """
         dataProvider = self.__subFilter[self._DATA_PROVIDER]
         while dataProvider:
             dataProvider.pop().clear()
@@ -316,15 +247,8 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         return
 
     def __onVehCompareBasketChanged(self, changedData):
-        """
-        gui.game_control.VehComparisonBasket.onChange event handler
-        :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData
-        """
         if self._currentTab.getTableType() == STORE_CONSTANTS.VEHICLE and changedData.isFullChanged:
             self._update()
 
     def __onVehCompareBasketSwitchChange(self):
-        """
-        gui.game_control.VehComparisonBasket.onSwitchChange event handler
-        """
         self._update()

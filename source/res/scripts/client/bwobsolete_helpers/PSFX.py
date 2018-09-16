@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PSFX.py
-"""This module acts as a bank for particle system effects. All effects from
-this module are temporary effects that dissipate over time."""
 import BigWorld
 import Pixie
 import particles

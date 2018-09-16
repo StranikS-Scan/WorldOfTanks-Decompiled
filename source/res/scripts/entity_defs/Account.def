@@ -29,11 +29,11 @@
     <Interface>	AccountDebugger	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_92200>
+    <requiredVersion_92300>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_0.9.22_1	</Default>
-    </requiredVersion_92200>
+      <Default>	ct_0.9.23	</Default>
+    </requiredVersion_92300>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -337,6 +337,7 @@
       <Arg>	UINT64	</Arg>
     </onEntityCheckOutEnqueued>
     <onBootcampAccountMigrationComplete></onBootcampAccountMigrationComplete>
+    <chooseBootcampStart></chooseBootcampStart>
   </ClientMethods>
   <BaseMethods>
     <onEnqueued>

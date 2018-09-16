@@ -55,16 +55,10 @@ class SpecialBattle(_BattleTypeDisable):
         _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 6))
 
 
-class FalloutBattle(_BattleTypeDisable):
-
-    def __init__(self):
-        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_FALLOUT, PREBATTLE_ACTION_NAME.FALLOUT, 3))
-
-
 class StrongholdBattle(_BattleTypeDisable):
 
     def __init__(self):
-        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_FALLOUT, PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, 4))
+        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_STRONGHOLDS, PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, 4))
 
 
 class OnBattleTypeSelectorPopulate(aop.Aspect):

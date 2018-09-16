@@ -46,9 +46,6 @@ _MARKER_SMALL_SIZE_THRESHOLD = 0.1
 _MARKER_LARGE_SIZE_THRESHOLD = 0.3
 
 class _MARKER_TYPE(CONST_CONTAINER):
-    """
-    Types of damage indicator markers to be displayed on UI.
-    """
     HP_DAMAGE = 0
     HP_ALLAY_DAMAGE = 1
     BLOCKED_DAMAGE = 2
@@ -56,19 +53,12 @@ class _MARKER_TYPE(CONST_CONTAINER):
 
 
 class _MARKER_SIZE_TYPE(CONST_CONTAINER):
-    """
-    Types of sizes of extended damage indicator.
-    """
     SMALL = 0
     MEDIUM = 1
     LARGE = 2
 
 
 class DAMAGE_INDICATOR_TYPE(CONST_CONTAINER):
-    """
-    Types of damage indicator views. Note: values are correspond to possible settings
-    (see DAMAGE_INDICATOR.TYPE setting)
-    """
     STANDARD = 0
     EXTENDED = 1
 
@@ -238,28 +228,11 @@ class _ExtendedCriticalMarkerVOBuilder(_ExtendedMarkerVOBuilder):
 
     @staticmethod
     def _getCritType(mask):
-        """
-        Returns type of critical hit. Type is represented by string (see VEHICLE_DEVICE_TYPE_NAMES
-        and VEHICLE_TANKMAN_TYPE_NAMES, see critsParserGenerator description).
-        Note that if the given crit mask has a few bits set, method returns first bit set according
-        to priority rules (see critsParserGenerator description).
-        
-        :param mask: Crit bit mask: |destroyed tankmans|destroyed devices|critical devices|
-        :return: string type (from VEHICLE_DEVICE_TYPE_NAMES or VEHICLE_TANKMAN_TYPE_NAMES) or ''
-                 if mask is 0 or mask has unknown bit set
-        """
         for _, critType in critsParserGenerator(mask):
             return critType
 
     @staticmethod
     def _makeCritType(mask, isAlly):
-        """
-        Makes and return critical damage type string.
-        Also it checks if attacker is ally and adds prefix in this case
-        :param mask: Crit bit mask: |destroyed tankmans|destroyed devices|critical devices|
-        :param isAlly: boolean flag indicating was it ally shot
-        :return: critical damage type string type
-        """
         critType = _ExtendedCriticalMarkerVOBuilder._getCritType(mask)
         if critType and isAlly:
             critType = 'ally_' + critType
@@ -344,7 +317,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, hitsCount):
-        names = tuple(map(lambda i: _DAMAGE_INDICATOR_MC_NAME.format(i), xrange(hitsCount)))
+        names = tuple((_DAMAGE_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
         super(_DamageIndicator, self).__init__(_DAMAGE_INDICATOR_SWF, _DAMAGE_INDICATOR_COMPONENT, (names,), SCALEFORM_SWF_PATH_V3)
         self.__voBuilderFactory = None
         self.__updateMethod = None
@@ -521,11 +494,6 @@ class SixthSenseIndicator(SixthSenseMeta):
 
 
 class SiegeModeIndicator(SiegeModeIndicatorMeta):
-    """ Class responsible for siege mode state indication (enabled, disabled,
-    switching), displaying a special hint that helps players to understand how
-    to switch between siege modes, and also displaying damaged engine or chassis
-    (since siege mode mechanics depend on them).
-    """
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -594,10 +562,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         return
 
     def __updateIndicatorView(self, isSmooth=False):
-        """ Update indicator according to current siege state (enabled, disabled or switching).
-        
-        :param isSmooth: flag indication whether animation should be smooth.
-        """
         LOG_DEBUG('Updating siege mode: indicator')
         engineState = self._devices['engine']
         totalTime = self._switchTimeTable[self._siegeState][engineState]
@@ -605,8 +569,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self.__updateHintView()
 
     def __updateHintView(self):
-        """ Update hint according to current siege state.
-        """
         LOG_DEBUG('Updating siege mode: hint')
         if self._isInPostmortem or self._isObserver:
             return
@@ -618,8 +580,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             self._isHintShown = False
 
     def __updateDevicesView(self):
-        """ Update devices according to current siege state.
-        """
         LOG_DEBUG('Updating siege mode: devices')
         engine = self._devices['engine']
         leftTrack = self._devices['leftTrack']
@@ -770,7 +730,6 @@ class _DirectionIndicator(Flash, IDirectionIndicator):
         self.__isVisible = True
         self.component.relativeRadius = 0.5
         self._dObject = getattr(self.movie, _DIRECT_INDICATOR_MC_NAME, None)
-        self._dObject.init(i18n.makeString(INGAME_GUI.MARKER_METERS))
         return
 
     def __del__(self):
@@ -781,8 +740,9 @@ class _DirectionIndicator(Flash, IDirectionIndicator):
             self._dObject.setShape(shape)
 
     def setDistance(self, distance):
+        distanceFormat = '{}' + i18n.makeString(INGAME_GUI.MARKER_METERS)
         if self._dObject:
-            self._dObject.setDistance(distance)
+            self._dObject.setDistance(distanceFormat.format(distance))
 
     def setPosition(self, position):
         self.component.position3D = position

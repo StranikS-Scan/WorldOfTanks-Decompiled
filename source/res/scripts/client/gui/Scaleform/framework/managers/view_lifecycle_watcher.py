@@ -3,9 +3,6 @@
 import weakref
 
 class IViewLifecycleHandler(object):
-    """
-    Interface class of handler of view lifecycle events. Handlers are used together with ViewLifecycleWatcher.
-    """
 
     @property
     def monitoredViewKeys(self):
@@ -15,64 +12,25 @@ class IViewLifecycleHandler(object):
         self._monitoredViewKeys = monitoredViewKeys
 
     def onViewLoading(self, view):
-        """
-        Invoked when view is loading
-        :param view: view object (@see View)
-        :return: None
-        """
         pass
 
     def onViewLoaded(self, view):
-        """
-        Invoked when view has been loaded
-        :param view: view object (@see View)
-        :return: None
-        """
         pass
 
     def onViewCreated(self, view):
-        """
-        Invoked when view has been created (visible)
-        :param view: view object (@see View)
-        :return: None
-        """
         pass
 
     def onViewDestroyed(self, view):
-        """
-        Invoked when view has been destroyed
-        :param view: view object (@see View)
-        :return: None
-        """
         pass
 
     def onViewAlreadyLoaded(self, view):
-        """
-        Invoked  when view has been already loaded, but not created (visible)
-        :param view: view object (@see View)
-        :return: None
-        """
         pass
 
     def onViewAlreadyCreated(self, view):
-        """
-        Invoked  when view has been already loaded and created (visible)
-        :param view: view object (@see View)
-        :return: None
-        """
         pass
 
 
 class ViewLifecycleWatcher(object):
-    """
-    The class encapsulate the logic related to controlling of views lifecycle by calling corresponding callbacks.
-    The following events are provided:
-        - LOADING: view loading is asked by the user. The next possible states: LOADED or DESTROYED.
-                    onViewLoading() is called.
-        - LOADED: view has been loaded in memory but it is still invisible for the user. onViewLoaded() is called.
-        - CREATED: view has been loaded and created (shown for the user). onViewCreated() is called.
-        - DESTROYED: view has been destroyed. onViewDestroyed() is called.
-    """
 
     @property
     def monitoredViewKeys(self):

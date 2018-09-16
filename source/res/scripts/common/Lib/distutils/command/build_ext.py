@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/build_ext.py
-"""distutils.command.build_ext
-
-Implements the Distutils 'build_ext' command, for building extension
-modules (currently limited to C extensions, should accommodate C++
-extensions ASAP)."""
 __revision__ = '$Id$'
 import sys, os, string, re
 from types import *
@@ -194,15 +189,6 @@ class build_ext(Command):
             return
 
     def check_extensions_list(self, extensions):
-        """Ensure that the list of extensions (presumably provided as a
-        command option 'extensions') is valid, i.e. it is a list of
-        Extension objects.  We also support the old-style list of 2-tuples,
-        where the tuples are (ext_name, build_info), which are converted to
-        Extension instances here.
-        
-        Raise DistutilsSetupError if the structure is invalid anywhere;
-        just returns otherwise.
-        """
         if not isinstance(extensions, list):
             raise DistutilsSetupError, "'ext_modules' option must be a list of Extension instances"
         for i, ext in enumerate(extensions):
@@ -290,11 +276,6 @@ class build_ext(Command):
             return
 
     def swig_sources(self, sources, extension):
-        """Walk the list of source files in 'sources', looking for SWIG
-        interface (.i) files.  Run SWIG on all that are found, and
-        return a modified 'sources' list with SWIG source files replaced
-        by the generated C (or C++) files.
-        """
         new_sources = []
         swig_sources = []
         swig_targets = {}
@@ -331,10 +312,6 @@ class build_ext(Command):
         return new_sources
 
     def find_swig(self):
-        """Return the name of the SWIG executable.  On Unix, this is
-        just "swig" -- it should be in the PATH.  Tries a bit harder on
-        Windows.
-        """
         if os.name == 'posix':
             return 'swig'
         if os.name == 'nt':
@@ -351,11 +328,6 @@ class build_ext(Command):
             raise DistutilsPlatformError, "I don't know how to find (much less run) SWIG on platform '%s'" % os.name
 
     def get_ext_fullpath(self, ext_name):
-        """Returns the path of the filename for a given extension.
-        
-        The file is located in `build_lib` or directly in the package
-        (inplace option).
-        """
         all_dots = string.maketrans('/' + os.sep, '..')
         ext_name = ext_name.translate(all_dots)
         fullname = self.get_ext_fullname(ext_name)
@@ -371,9 +343,6 @@ class build_ext(Command):
         return os.path.join(package_dir, filename)
 
     def get_ext_fullname(self, ext_name):
-        """Returns the fullname of a given extension name.
-        
-        Adds the `package.` prefix"""
         if self.package is None:
             return ext_name
         else:
@@ -381,10 +350,6 @@ class build_ext(Command):
             return
 
     def get_ext_filename(self, ext_name):
-        r"""Convert the name of an extension (eg. "foo.bar") into the name
-        of the file from which it will be loaded (eg. "foo/bar.so", or
-        "foo\bar.pyd").
-        """
         from distutils.sysconfig import get_config_var
         ext_path = string.split(ext_name, '.')
         if os.name == 'os2':
@@ -393,21 +358,12 @@ class build_ext(Command):
         return os.path.join(*ext_path) + '_d' + so_ext if os.name == 'nt' and self.debug else os.path.join(*ext_path) + so_ext
 
     def get_export_symbols(self, ext):
-        """Return the list of symbols that a shared extension has to
-        export.  This either uses 'ext.export_symbols' or, if it's not
-        provided, "init" + module_name.  Only relevant on Windows, where
-        the .pyd file (DLL) must export the module "init" function.
-        """
         initfunc_name = 'init' + ext.name.split('.')[-1]
         if initfunc_name not in ext.export_symbols:
             ext.export_symbols.append(initfunc_name)
         return ext.export_symbols
 
     def get_libraries(self, ext):
-        """Return the list of libraries to link against when building a
-        shared extension.  On most platforms, this is just 'ext.libraries';
-        on Windows and OS/2, we add the Python library (eg. python20.dll).
-        """
         if sys.platform == 'win32':
             from distutils.msvccompiler import MSVCCompiler
             if not isinstance(self.compiler, MSVCCompiler):

@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/bdist.py
-"""distutils.command.bdist
-
-Implements the Distutils 'bdist' command (create a built [binary]
-distribution)."""
 __revision__ = '$Id$'
 import os
 from distutils.util import get_platform
@@ -11,8 +7,6 @@ from distutils.core import Command
 from distutils.errors import DistutilsPlatformError, DistutilsOptionError
 
 def show_formats():
-    """Print list of available formats (arguments to "--format" option).
-    """
     from distutils.fancy_getopt import FancyGetopt
     formats = []
     for format in bdist.format_commands:

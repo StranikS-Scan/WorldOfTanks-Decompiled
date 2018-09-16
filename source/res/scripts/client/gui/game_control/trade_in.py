@@ -13,25 +13,13 @@ class TradeInInfo(namedtuple('TradeInInfo', ['minDiscountVehicleCD',
  'minDiscountPrice',
  'maxDiscountVehicleCD',
  'maxDiscountPrice'])):
-    """
-    Vehicle trade in info:
-    - vehicle to trade off with min discount price
-    - vehicle to trade off with max discount price
-    """
 
     @property
     def hasMultipleTradeOffs(self):
-        """
-        Has this trade in info sever vehicles to trade off
-        """
         return self.minDiscountVehicleCD is not None and self.maxDiscountVehicleCD is not None and self.minDiscountVehicleCD != self.maxDiscountVehicleCD
 
 
 class TradeInController(ITradeInController):
-    """
-    Controller is used to store information about Trade In and
-    handle events from shop
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
@@ -62,11 +50,6 @@ class TradeInController(ITradeInController):
         self.__clearCache()
 
     def getTradeInInfo(self, vehicle):
-        """
-        Gets information about trade in for given vehicle.
-        :param vehicle: vehicle item
-        :return: trade in info
-        """
         if not vehicle.canTradeIn:
             return None
         else:
@@ -74,9 +57,6 @@ class TradeInController(ITradeInController):
             return self.__cache[level]
 
     def getTradeOffVehicles(self, level):
-        """
-        Gets vehicles available to trade off to given level.
-        """
         levels = self.__config.allowedVehicleLevels
         tradeInLevels = range(min(levels), level + 1)
         return self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.CAN_TRADE_OFF | REQ_CRITERIA.VEHICLE.LEVELS(tradeInLevels))
@@ -102,9 +82,6 @@ class TradeInController(ITradeInController):
         self.__cache = {}
 
     def __fillCache(self):
-        """
-        Fills cache with trade in infos by vehicle levels
-        """
         self.__clearCache()
         if self.isEnabled():
             for level in self.__config.allowedVehicleLevels:

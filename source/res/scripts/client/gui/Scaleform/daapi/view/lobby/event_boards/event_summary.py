@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_summary.py
-import BigWorld
 from helpers.time_utils import ONE_MINUTE
 from helpers import dependency
 from helpers import int2roman
@@ -13,7 +12,6 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.event_boards.event_boards_items import CALCULATION_METHODS as _cm, OBJECTIVE_PARAMETERS as _op, EVENT_TYPE as _et
-from gui.event_boards import event_boards_timer
 from skeletons.gui.shared import IItemsCache
 _PARAMETER_VALUE_GETTER = {_op.ORIGINALXP: 'getExp',
  _op.XP: 'getExp',

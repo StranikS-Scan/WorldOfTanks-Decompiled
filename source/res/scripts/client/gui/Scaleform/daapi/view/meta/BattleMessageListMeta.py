@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattleMessageListMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class BattleMessageListMeta(BaseDAAPIComponent):
@@ -12,9 +8,6 @@ class BattleMessageListMeta(BaseDAAPIComponent):
         self._printOverrideError('onRefreshComplete')
 
     def as_setupListS(self, data):
-        """
-        :param data: Represented by FadingMessageListSettingsVO (AS)
-        """
         return self.flashObject.as_setupList(data) if self._isDAAPIInited() else None
 
     def as_clearS(self):

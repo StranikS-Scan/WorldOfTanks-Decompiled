@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vibroeffects/Controllers/EngineController.py
+import time
 import BigWorld
 import Vibroeffects.VibroManager as VibroManager
 from Vibroeffects.EffectsSettings import EffectsSettings
-import time
 
-class EngineController:
+class EngineController(object):
     __SWAMP = 0
     __SAND = 1
     __OTHER_TERRAIN = 2

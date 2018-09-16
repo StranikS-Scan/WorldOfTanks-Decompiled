@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/__init__.py
 import time
-import BigWorld
 from datetime import datetime
+import BigWorld
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
 from gui.prb_control import prb_getters
 from helpers import html, i18n

@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/sax/saxutils.py
-"""A library of useful helper classes to the SAX classes, for the
-convenience of application and driver writers.
-"""
 import os, urlparse, urllib, types
 import io
 import sys
@@ -14,7 +11,6 @@ except AttributeError:
     _StringTypes = [types.StringType]
 
 def __dict_replace(s, d):
-    """Replace substrings of a string using a dictionary."""
     for key, value in d.items():
         s = s.replace(key, value)
 
@@ -22,12 +18,6 @@ def __dict_replace(s, d):
 
 
 def escape(data, entities={}):
-    """Escape &, <, and > in a string of data.
-    
-    You can escape other strings of data by passing a dictionary as
-    the optional entities parameter.  The keys and values must all be
-    strings; each key will be replaced with its corresponding value.
-    """
     data = data.replace('&', '&amp;')
     data = data.replace('>', '&gt;')
     data = data.replace('<', '&lt;')
@@ -37,12 +27,6 @@ def escape(data, entities={}):
 
 
 def unescape(data, entities={}):
-    """Unescape &amp;, &lt;, and &gt; in a string of data.
-    
-    You can unescape other strings of data by passing a dictionary as
-    the optional entities parameter.  The keys and values must all be
-    strings; each key will be replaced with its corresponding value.
-    """
     data = data.replace('&lt;', '<')
     data = data.replace('&gt;', '>')
     if entities:
@@ -51,16 +35,6 @@ def unescape(data, entities={}):
 
 
 def quoteattr(data, entities={}):
-    """Escape and quote an attribute value.
-    
-    Escape &, <, and > in a string of data, then quote it for use as
-    an attribute value.  The " character will be escaped as well, if
-    necessary.
-    
-    You can escape other strings of data by passing a dictionary as
-    the optional entities parameter.  The keys and values must all be
-    strings; each key will be replaced with its corresponding value.
-    """
     entities = entities.copy()
     entities.update({'\n': '&#10;',
      '\r': '&#13;',
@@ -115,7 +89,6 @@ class XMLGenerator(handler.ContentHandler):
         self._encoding = encoding
 
     def _qname(self, name):
-        """Builds a qualified name from a (ns_url, localname) pair"""
         if name[0]:
             if 'http://www.w3.org/XML/1998/namespace' == name[0]:
                 return 'xml:' + name[1]
@@ -180,12 +153,6 @@ class XMLGenerator(handler.ContentHandler):
 
 
 class XMLFilterBase(xmlreader.XMLReader):
-    """This class is designed to sit between an XMLReader and the
-    client application's event handlers.  By default, it does nothing
-    but pass requests up to the reader and events on to the handlers
-    unmodified, but subclasses can override specific methods to modify
-    the event stream or the configuration requests as they pass
-    through."""
 
     def __init__(self, parent=None):
         xmlreader.XMLReader.__init__(self)
@@ -278,8 +245,6 @@ class XMLFilterBase(xmlreader.XMLReader):
 
 
 def prepare_input_source(source, base=''):
-    """This function takes an InputSource and an optional base URL and
-    returns a fully resolved InputSource object ready for reading."""
     if type(source) in _StringTypes:
         source = xmlreader.InputSource(source)
     elif hasattr(source, 'read'):

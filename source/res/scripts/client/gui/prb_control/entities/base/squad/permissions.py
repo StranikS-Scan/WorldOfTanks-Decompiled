@@ -3,9 +3,6 @@
 from gui.prb_control.entities.base.unit.permissions import UnitPermissions
 
 class SquadPermissions(UnitPermissions):
-    """
-    Squad permission class
-    """
 
     def canChangeLeadership(self):
         return True

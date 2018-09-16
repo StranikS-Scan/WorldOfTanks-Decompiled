@@ -6,11 +6,9 @@ from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.money import MONEY_UNDEFINED, Currency
-from gui.shared.utils import CLIP_ICON_PATH, HYDRAULIC_ICON_PATH
 from helpers import i18n
 
 class BaseNode(object):
-    """This is class holds basic information about node in techtree."""
     __slots__ = ('nodeName', 'nodeCD', 'nationID', 'itemTypeID', 'isFound', 'isAnnouncement', 'order')
 
     def __init__(self, nodeName, nationID, itemTypeID, nodeCD, isFound=True, isAnnouncement=False, order=0):
@@ -25,8 +23,6 @@ class BaseNode(object):
 
 
 class ExposedNode(object):
-    """ This is class includes node information and some expanded information
-    to generate presentation information."""
     __slots__ = ('__nodeCD', '__earnedXP', '__state', '__unlockProps', '__guiPrice', '__displayInfo')
 
     def __init__(self, nodeCD, earnedXP, state, displayInfo, unlockProps=None, price=None):
@@ -39,132 +35,94 @@ class ExposedNode(object):
         self.__guiPrice = price or MONEY_UNDEFINED
 
     def clear(self):
-        """Clears node data."""
         self.__displayInfo = None
         self.__unlockProps = DEFAULT_UNLOCK_PROPS
         self.__guiPrice = MONEY_UNDEFINED
         return
 
     def getNodeCD(self):
-        """ Gets int-type compact descriptor of node. """
         return self.__nodeCD
 
     def getEarnedXP(self):
-        """ Gets earned XP for specified node. """
         return self.__earnedXP
 
     def getState(self):
-        """ Gets bitmask that contains flags from NODE_STATE_FLAGS. """
         return self.__state
 
     def setState(self, state):
-        """ Sets new state.
-        :param state: integer containing bitmask.
-        """
         self.__state = state
 
     def addStateFlag(self, flag):
-        """ Adds flag to bitmask.
-        :param flag: integer containing bit from NODE_STATE_FLAGS.
-        """
         self.__state |= flag
 
     def getDisplayInfo(self):
-        """Gets display information"""
         return self.__displayInfo
 
     def getUnlockTuple(self):
-        """ Gets tuple containing unlock information."""
         return self.__unlockProps.makeTuple()
 
     def getUnlockProps(self):
-        """ Gets instance of UnlockProps. """
         return self.__unlockProps
 
     def setUnlockProps(self, unlockProps):
-        """ Sets new instance of UnlockProps.
-        :param unlockProps: instance of UnlockProps.
-        """
         self.__unlockProps = unlockProps
 
     def getShopPrice(self):
-        """ Gets tuple containing shop prices: price in credits, price in gold
-        and action price."""
         return (self.__guiPrice.getSignValue(Currency.CREDITS), self.__guiPrice.getSignValue(Currency.GOLD), self.getActionPrice())
 
     def setGuiPrice(self, price):
-        """ Sets new GUI price.
-        :param price: instance of Money.
-        """
         self.__guiPrice = price
 
     def getTags(self):
-        """ Gets tags of vehicle or item. """
         raise NotImplementedError
 
     def getLevel(self):
-        """ Gets level of vehicle or item. """
         raise NotImplementedError
 
     def getTypeName(self):
-        """ Gets name of item type. """
         raise NotImplementedError
 
     def getShortUserName(self):
-        """ Gets short i18n name of item. """
         raise NotImplementedError
 
     def getLongUserName(self):
-        """ Gets long i18n name of item. """
         raise NotImplementedError
 
     def getIcon(self):
-        """ Gets relative path of item icon. """
         raise NotImplementedError
 
     def getSmallIcon(self):
-        """ Gets relative path of item small icon. """
         raise NotImplementedError
 
     def getActionPrice(self):
-        """ Gets action price if it has, otherwise - None. """
         raise NotImplementedError
 
     def isVehicle(self):
-        """ Is node vehicle. """
         raise NotImplementedError
 
     def isRented(self):
-        """ Is item rented. """
         raise NotImplementedError
 
     def isPremiumIGR(self):
-        """ Is item premium IGR. """
         raise NotImplementedError
 
     def isPreviewAllowed(self):
-        """ Is item preview allowed. """
         raise NotImplementedError
 
     def getPreviewLabel(self):
-        """ Gets label for preview button. """
         raise NotImplementedError
 
     def getStatus(self):
-        """ Gets current state of vehicle or empty string for other items. """
         raise NotImplementedError
 
     def getCompareData(self):
-        """ Gets comparative information for vehicle or empty dict for other items. """
         raise NotImplementedError
 
     def getExtraInfo(self, rootItem):
-        """ Gets exclusive information about item. """
         raise NotImplementedError
 
 
 class RealNode(ExposedNode):
-    """ This is class  is used to get some expanded information from GUI item."""
     __slots__ = ('__item',)
 
     def __init__(self, nodeCD, item, earnedXP, state, displayInfo, unlockProps=None, price=None):
@@ -252,17 +210,11 @@ class RealNode(ExposedNode):
             return {}
 
     def getExtraInfo(self, rootItem):
-        extraInfo = None
-        if self.__item.itemTypeID == GUI_ITEM_TYPE.GUN and self.__item.isClipGun(rootItem.descriptor):
-            extraInfo = CLIP_ICON_PATH
-        elif self.__item.itemTypeID == GUI_ITEM_TYPE.CHASSIS and self.__item.isHydraulicChassis():
-            extraInfo = HYDRAULIC_ICON_PATH
-        return extraInfo
+        descriptor = rootItem.descriptor if rootItem else None
+        return self.__item.getExtraIconInfo(descriptor)
 
 
 class AnnouncementNode(ExposedNode):
-    """ This is class  is used to get some expanded information from light object.
-    This light object contains short information about announcement vehicle."""
     __slots__ = ('__announcementInfo',)
 
     def __init__(self, nodeCD, info, state, displayInfo):

@@ -5,7 +5,7 @@ from client_request_lib.exceptions import ResponseCodes
 from gui import makeHtmlString
 from gui.shared.formatters.text_styles import standard as standard_text_style, alert as alert_text_style
 from helpers.i18n import doesTextExist, makeString
-from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE as REQUEST_TYPE
+from gui.wgcg.settings import WebRequestDataType as REQUEST_TYPE
 from gui.clans.settings import CLAN_MEMBERS
 ERROR_SYS_MSG_TPL = '#system_messages:clans/request/errors/%s'
 DUMMY_UNAVAILABLE_DATA = '--'

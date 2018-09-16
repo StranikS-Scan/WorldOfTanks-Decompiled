@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/decorators.py
 import time
+from string import join
 import adisp
 import BigWorld
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.Waiting import Waiting
-from debug_utils import LOG_WARNING
-from string import join
 
 class process(object):
 
@@ -166,7 +165,7 @@ class InternalRepresenter(object):
 
         def __repr__(self):
             formatedArgs = []
-            for attrMethName, reprName in attrMethNames:
+            for attrMethName, _ in attrMethNames:
                 attr = getattr(self, attrMethName, 'N/A')
                 if callable(attr):
                     attr = getattr(self, attrMethName, 'N/A')()

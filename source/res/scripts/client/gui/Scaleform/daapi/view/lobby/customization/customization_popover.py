@@ -8,12 +8,6 @@ class CustomizationPopover(CustomizationPopoverMeta):
     customizationService = dependency.descriptor(ICustomizationService)
 
     def popupClosed(self):
-        """Function gets called when the customization property sheet is closed
-        
-        To disable the selected tank region I turn off the highlighter. After turning it off,
-        I need to turn it back on otherwise the player is unable to select a new region.
-        The only reason I am doing this is because there is not a "resetHighlighter" function that I am aware of.
-        """
         if self.customizationService.getHightlighter():
             mode = self.customizationService.getSelectionMode()
             self.customizationService.stopHighlighter()

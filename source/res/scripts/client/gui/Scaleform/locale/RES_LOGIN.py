@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/RES_LOGIN.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class RES_LOGIN(object):
     MAPS_LOGIN_BACK_11_WITHOUT_SPARKS = '../maps/login/back_11_without_sparks.png'

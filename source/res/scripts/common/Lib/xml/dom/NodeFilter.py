@@ -3,9 +3,6 @@
 
 
 class NodeFilter:
-    """
-    This is the DOM2 NodeFilter interface. It contains only constants.
-    """
     FILTER_ACCEPT = 1
     FILTER_REJECT = 2
     FILTER_SKIP = 3

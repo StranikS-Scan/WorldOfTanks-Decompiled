@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/StdSuites/Text_Suite.py
-"""Suite Text Suite: A set of basic classes for text processing
-Level 1, version 1
-
-Generated from /Volumes/Sap/System Folder/Extensions/AppleScript
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'TEXT'
@@ -15,18 +9,15 @@ class Text_Suite_Events:
 
 
 class text_flow(aetools.ComponentItem):
-    """text flow - A contiguous block of text.  Page layout applications call this a \xd4story.\xd5 """
     want = 'cflo'
 
 
 class _Prop__3c_inheritance_3e_(aetools.NProperty):
-    """<inheritance> - inherits some of its properties from this class """
     which = 'c@#^'
     want = 'ctxt'
 
 
 class _Prop_name(aetools.NProperty):
-    """name - the name """
     which = 'pnam'
     want = 'itxt'
 
@@ -34,17 +25,14 @@ class _Prop_name(aetools.NProperty):
 text_flows = text_flow
 
 class character(aetools.ComponentItem):
-    """character - A character """
     want = 'cha '
 
 
 class line(aetools.ComponentItem):
-    """line - A line of text """
     want = 'clin'
 
 
 class _Prop_justification(aetools.NProperty):
-    """justification - the justification of the text """
     which = 'pjst'
     want = 'just'
 
@@ -52,79 +40,66 @@ class _Prop_justification(aetools.NProperty):
 lines = line
 
 class paragraph(aetools.ComponentItem):
-    """paragraph - A paragraph """
     want = 'cpar'
 
 
 paragraphs = paragraph
 
 class text(aetools.ComponentItem):
-    """text - Text """
     want = 'ctxt'
 
 
 class _Prop_color(aetools.NProperty):
-    """color - the color of the first character """
     which = 'colr'
     want = 'cRGB'
 
 
 class _Prop_font(aetools.NProperty):
-    """font - the name of the font of the first character """
     which = 'font'
     want = 'ctxt'
 
 
 class _Prop_quoted_form(aetools.NProperty):
-    """quoted form - the text in quoted form """
     which = 'strq'
     want = 'ctxt'
 
 
 class _Prop_size(aetools.NProperty):
-    """size - the size in points of the first character """
     which = 'ptsz'
     want = 'fixd'
 
 
 class _Prop_style(aetools.NProperty):
-    """style - the text style of the first character of the first character """
     which = 'txst'
     want = 'tsty'
 
 
 class _Prop_uniform_styles(aetools.NProperty):
-    """uniform styles - the text styles that are uniform throughout the text """
     which = 'ustl'
     want = 'tsty'
 
 
 class _Prop_writing_code(aetools.NProperty):
-    """writing code - the script system and language """
     which = 'psct'
     want = 'intl'
 
 
 class word(aetools.ComponentItem):
-    """word - A word """
     want = 'cwor'
 
 
 words = word
 
 class text_style_info(aetools.ComponentItem):
-    """text style info - On and Off styles of text run """
     want = 'tsty'
 
 
 class _Prop_off_styles(aetools.NProperty):
-    """off styles - the styles that are off for the text """
     which = 'ofst'
     want = 'styl'
 
 
 class _Prop_on_styles(aetools.NProperty):
-    """on styles - the styles that are on for the text """
     which = 'onst'
     want = 'styl'
 

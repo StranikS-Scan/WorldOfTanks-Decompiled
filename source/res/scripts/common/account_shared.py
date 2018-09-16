@@ -6,8 +6,7 @@ from items import vehicles, ITEM_TYPES
 from constants import FAIRPLAY_VIOLATIONS_NAMES, FAIRPLAY_VIOLATIONS_MASKS
 from items.components.c11n_constants import CustomizationType
 from debug_utils import *
-if IS_CELLAPP or IS_BASEAPP:
-    from typing import Union, Tuple
+from typing import Union, Tuple
 
 class AmmoIterator(object):
 
@@ -69,7 +68,7 @@ def getEquipmentsDiff(eqs1, eqs2):
 
 
 def currentWeekPlayDaysCount(curTime, newDayStart, newWeekStart):
-    curTime += newDayStart
+    curTime -= newDayStart
     wday = time.gmtime(curTime).tm_wday + 1
     curWeekPlayDaysCnt = wday - newWeekStart
     if newWeekStart >= 0:
@@ -96,10 +95,6 @@ def getFairPlayViolationName(violationsMask):
 
 
 def validateCustomizationItem(custData):
-    """Check customization data
-    
-    :returns: (False, reason) if validation failed or (True, customizationItem) if success
-    """
     custID = custData.get('id', None)
     custType = custData.get('custType', None)
     value = custData.get('value', None)
@@ -168,12 +163,6 @@ class NotificationItem(object):
 _VERSION_REGEXP = re.compile('^([a-z]{2,4}_)?(([0-9]+\\.){2,4}[0-9]+)(_[0-9]+)?$')
 
 def parseVersion(version):
-    """ Parses given version with formatter reg and returns realm code,
-    main and patch version
-    
-    :param version: Account.def/Properties/requiredVersion
-    :return: (realm_code, main_version, patch_version) or None
-    """
     result = _VERSION_REGEXP.search(version)
     if result is None:
         return

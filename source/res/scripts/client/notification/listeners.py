@@ -1,19 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/listeners.py
 import collections
-from collections import defaultdict
 import weakref
+from collections import defaultdict
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
-from gui.clans.contexts import GetClanInfoCtx
 from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
+from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import time_utils, i18n
@@ -271,17 +271,13 @@ class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
         super(_ClanNotificationsCommonListener, self).stop()
 
     def onAccountClanProfileChanged(self, profile):
-        """
-        Perform necessarily checking in case of user entrance into clan or leaving from clan
-        :param profile:
-        """
         pass
 
-    def onClanStateChanged(self, oldStateID, newStateID):
-        super(_ClanNotificationsCommonListener, self).onClanStateChanged(oldStateID, newStateID)
+    def onClanEnableChanged(self, enabled):
+        super(_ClanNotificationsCommonListener, self).onClanEnableChanged(enabled)
         model = self._model()
         if model:
-            if not self.clansCtrl.isEnabled():
+            if not self.webCtrl.isEnabled():
                 self._removeAllNotifications()
             else:
                 self._updateAllNotifications()
@@ -308,18 +304,9 @@ class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
             return False
 
     def _getStoredReceivedItems(self):
-        """
-        Gets items received when user was offline or during the battle session
-        :return: list of gui.wgnc.proxy_data._ProxyDataItem
-        """
         return self._getNotMarkedItemsByType(self._getNewReceivedItemType())
 
     def _getNotMarkedItemsByType(self, itemType):
-        """
-        Gets not marked items by required type and marks them
-        :param itemType: wgnc_settings.WGNC_DATA_PROXY_TYPE.*
-        :return: list of gui.wgnc.proxy_data._ProxyDataItem
-        """
         itemsByType = []
         for notification in g_wgncProvider.getNotMarkedNots():
             proxyDataItem = notification.getProxyItemByType(itemType)
@@ -343,7 +330,7 @@ class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
         raise NotImplementedError
 
     def _canBeShown(self):
-        return self.clansCtrl.isEnabled() and self.clansCtrl.getAccountProfile() is not None and self.settingsCore.getSetting('receiveClanInvitesNotifications')
+        return self.webCtrl.isEnabled() and self.webCtrl.getAccountProfile() is not None and self.settingsCore.getSetting('receiveClanInvitesNotifications')
 
     def _updateAllNotifications(self):
         pass
@@ -372,10 +359,6 @@ class _ClanAppsListener(_ClanNotificationsCommonListener, UsersInfoHelper):
         self.__updateNotificationState(appId, state)
 
     def onAccountClanProfileChanged(self, profile):
-        """
-        Perform necessarily checking in case of user entrance into clan or leaving from clan
-        :param profile:
-        """
         if not profile.isInClan() or not profile.getMyClanPermissions().canHandleClanInvites():
             model = self._model()
             for notification in model.collection.getListIterator((NOTIFICATION_TYPE.CLAN_APP, NOTIFICATION_TYPE.CLAN_APPS)):
@@ -429,13 +412,9 @@ class _ClanAppsListener(_ClanNotificationsCommonListener, UsersInfoHelper):
 
     @process
     def _addSingleNotification(self, item):
-        """
-        Adds notification with type wgnc_settings.WGNC_DATA_PROXY_TYPE.CLAN_APP only!
-        :param item: reference to gui.wgnc.proxy_data._ProxyDataItem
-        """
         ctx = GetClanInfoCtx(item.getAccountID())
         self.__addUserNotification(ClanSingleAppDecorator, (item.getID(), item), item)
-        accountResponse = yield self.clansCtrl.sendRequest(ctx)
+        accountResponse = yield self.webCtrl.sendRequest(ctx)
         if accountResponse.isSuccess():
             accountInfo = ctx.getDataObj(accountResponse.data)
             isInCooldown = isInClanEnterCooldown(accountInfo.getClanCooldownTill())
@@ -449,10 +428,10 @@ class _ClanAppsListener(_ClanNotificationsCommonListener, UsersInfoHelper):
 
     def _addMultiNotification(self, items, count=None):
         count = int(len(items) if items else count)
-        self._model().addNotification(ClanAppsDecorator(self.clansCtrl.getAccountProfile().getClanDbID(), count))
+        self._model().addNotification(ClanAppsDecorator(self.webCtrl.getAccountProfile().getClanDbID(), count))
 
     def _getMultiNotification(self):
-        return self._model().getNotification(NOTIFICATION_TYPE.CLAN_APPS, self.clansCtrl.getAccountProfile().getClanDbID())
+        return self._model().getNotification(NOTIFICATION_TYPE.CLAN_APPS, self.webCtrl.getAccountProfile().getClanDbID())
 
     def _updateAllNotifications(self):
         model = self._model()
@@ -464,16 +443,10 @@ class _ClanAppsListener(_ClanNotificationsCommonListener, UsersInfoHelper):
 
     def _canBeShown(self):
         canBeShown = super(_ClanAppsListener, self)._canBeShown()
-        profile = self.clansCtrl.getAccountProfile()
+        profile = self.webCtrl.getAccountProfile()
         return canBeShown and profile.isInClan() and profile.getMyClanPermissions().canHandleClanInvites()
 
     def __addUserNotification(self, clazz, args, item):
-        """
-        Adds notifications which requires user name requesting
-        :param clazz: class of decorator
-        :param args: arguments will be passed into constructor of clazz
-        :param item: reference to corresponded gui.wgnc.proxy_data._ProxyDataItem
-        """
         userDatabaseID = item.getAccountID()
         appId = item.getID()
         userName = self.getUserName(userDatabaseID)
@@ -502,15 +475,11 @@ class _ClanPersonalInvitesListener(_ClanNotificationsCommonListener):
     def onAccountWebVitalInfoChanged(self, fieldName, value):
         super(_ClanPersonalInvitesListener, self).onAccountWebVitalInfoChanged(fieldName, value)
         if SYNC_KEYS.CLAN_INFO == fieldName:
-            profile = self.clansCtrl.getAccountProfile()
+            profile = self.webCtrl.getAccountProfile()
             if not profile.isInClan():
                 self.__updateNotificationsByTypes((NOTIFICATION_TYPE.CLAN_INVITE,))
 
     def onAccountClanProfileChanged(self, profile):
-        """
-        Perform necessarily checking in case of user entrance into clan or leaving from clan
-        :param profile:
-        """
         if profile.isInClan():
             model = self._model()
             for notDecorator in model.collection.getListIterator((NOTIFICATION_TYPE.CLAN_INVITE, NOTIFICATION_TYPE.CLAN_INVITES)):
@@ -544,10 +513,10 @@ class _ClanPersonalInvitesListener(_ClanNotificationsCommonListener):
 
     def _addMultiNotification(self, items, count=None):
         count = int(len(items) if items else count)
-        self._model().addNotification(ClanInvitesDecorator(self.clansCtrl.getAccountProfile().getDbID(), count))
+        self._model().addNotification(ClanInvitesDecorator(self.webCtrl.getAccountProfile().getDbID(), count))
 
     def _getMultiNotification(self):
-        return self._model().getNotification(NOTIFICATION_TYPE.CLAN_INVITES, self.clansCtrl.getAccountProfile().getDbID())
+        return self._model().getNotification(NOTIFICATION_TYPE.CLAN_INVITES, self.webCtrl.getAccountProfile().getDbID())
 
     def _updateAllNotifications(self):
         self.__updateNotificationsByTypes((NOTIFICATION_TYPE.CLAN_INVITE, NOTIFICATION_TYPE.CLAN_INVITES))
@@ -562,7 +531,7 @@ class _ClanPersonalInvitesListener(_ClanNotificationsCommonListener):
 
     def _canBeShown(self):
         isCtrlrEnabled = super(_ClanPersonalInvitesListener, self)._canBeShown()
-        profile = self.clansCtrl.getAccountProfile()
+        profile = self.webCtrl.getAccountProfile()
         return isCtrlrEnabled and not profile.isInClan()
 
 

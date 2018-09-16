@@ -17,8 +17,7 @@ import Event
 import AreaDestructibles
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import GUI_CTRL_MODE_FLAG
-from gui.app_loader import g_appLoader
-from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
+from gui.app_loader import g_appLoader, settings
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
@@ -52,7 +51,7 @@ REPLAY_TIME_MARK_CURRENT_TIME = 2147483650L
 FAST_FORWARD_STEP = 20.0
 _BATTLE_SIMULATION_KEY_PATH = 'development/replayBattleSimulation'
 
-class BattleReplay():
+class BattleReplay(object):
     isPlaying = property(lambda self: self.__replayCtrl.isPlaying())
     isRecording = property(lambda self: self.__replayCtrl.isRecording)
     isClientReady = property(lambda self: self.__replayCtrl.isClientReady)
@@ -145,7 +144,7 @@ class BattleReplay():
         if constants.IS_DEVELOPMENT:
             try:
                 import development.replay_override
-            except:
+            except Exception:
                 pass
 
         return
@@ -201,7 +200,7 @@ class BattleReplay():
         try:
             if not os.path.isdir(self.__replayDir):
                 os.makedirs(self.__replayDir)
-        except:
+        except Exception:
             LOG_ERROR('Failed to create directory for replay files')
             return False
 
@@ -215,7 +214,7 @@ class BattleReplay():
                 os.remove(fileName)
                 success = True
                 break
-            except:
+            except Exception:
                 if useAutoFilename:
                     continue
                 else:
@@ -246,7 +245,7 @@ class BattleReplay():
                 f.close()
                 self.__playList = s.replace('\r\n', '\n').replace('\r', '\n').split('\n')
                 fileName = None
-            except:
+            except Exception:
                 pass
 
         if fileName is None:
@@ -409,7 +408,6 @@ class BattleReplay():
             return False
         if self.isTimeWarpInProgress:
             return True
-        player = BigWorld.player()
         if not isPlayerAvatar():
             return False
         if self.isControllingCamera:
@@ -423,25 +421,25 @@ class BattleReplay():
     def getGunRotatorTargetPoint(self):
         return self.__replayCtrl.gunRotatorTargetPoint
 
-    def setConsumablesPosition(self, pos, dir=Math.Vector3(1, 1, 1)):
+    def setConsumablesPosition(self, pos, direction=Math.Vector3(1, 1, 1)):
         self.__replayCtrl.gunMarkerPosition = pos
-        self.__replayCtrl.gunMarkerDirection = dir
+        self.__replayCtrl.gunMarkerDirection = direction
 
-    def setGunMarkerParams(self, diameter, pos, dir):
+    def setGunMarkerParams(self, diameter, pos, direction):
         controlMode = self.getControlMode()
         if controlMode != 'mapcase':
             self.__replayCtrl.gunMarkerDiameter = diameter
             self.__replayCtrl.gunMarkerPosition = pos
-            self.__replayCtrl.gunMarkerDirection = dir
+            self.__replayCtrl.gunMarkerDirection = direction
 
     def getGunMarkerParams(self, defaultPos, defaultDir):
         diameter = self.__replayCtrl.gunMarkerDiameter
-        dir = self.__replayCtrl.gunMarkerDirection
+        direction = self.__replayCtrl.gunMarkerDirection
         pos = self.__replayCtrl.gunMarkerPosition
-        if dir == Math.Vector3(0, 0, 0):
+        if direction == Math.Vector3(0, 0, 0):
             pos = defaultPos
-            dir = defaultDir
-        return (diameter, pos, dir)
+            direction = defaultDir
+        return (diameter, pos, direction)
 
     def getGunMarkerPos(self):
         return self.__replayCtrl.gunMarkerPosition
@@ -499,7 +497,8 @@ class BattleReplay():
         self.__replayCtrl.arenaLength = length
 
     def getArenaPeriod(self):
-        assert self.isPlaying
+        if not self.isPlaying:
+            raise UserWarning('Replay is not playing')
         ret = self.__replayCtrl.arenaPeriod
         if ret not in (constants.ARENA_PERIOD.IDLE,
          constants.ARENA_PERIOD.WAITING,
@@ -509,7 +508,8 @@ class BattleReplay():
         return ret
 
     def getArenaLength(self):
-        assert self.isPlaying
+        if not self.isPlaying:
+            raise UserWarning('Replay is not playing')
         return self.__replayCtrl.arenaLength
 
     def setPlayerVehicleID(self, vehicleID):
@@ -640,7 +640,7 @@ class BattleReplay():
             self.__serverSettings = dict()
             try:
                 self.__serverSettings = json.loads(self.__replayCtrl.getArenaInfoStr()).get('serverSettings')
-            except:
+            except Exception:
                 LOG_WARNING('There is problem while unpacking server settings from replay')
                 if constants.IS_DEVELOPMENT:
                     LOG_CURRENT_EXCEPTION()
@@ -746,7 +746,7 @@ class BattleReplay():
         g_appLoader.showLogin()
 
     def __onGUISpaceEntered(self, spaceID):
-        if spaceID != GUI_GLOBAL_SPACE_ID.LOGIN:
+        if spaceID != settings.GUI_GLOBAL_SPACE_ID.LOGIN:
             return
         g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
         from gui import DialogsInterface
@@ -933,11 +933,6 @@ class BattleReplay():
         return
 
     def __replayFinishedDlgCallback(self, shouldExit):
-        """
-        Callback for Dialog 'Replay is Finished'
-        :param shouldExit: If true, user pressed 'OK',
-                           false - 'Decline' or 'Close' button
-        """
         if shouldExit:
             BigWorld.callback(0.0, self.stop)
 
@@ -986,6 +981,7 @@ class BattleReplay():
         if self.__wasVideoBeforeRewind:
             BigWorld.player().inputHandler.onControlModeChanged('video', prevModeName='arcade', camMatrix=self.__videoCameraMatrix)
             self.__wasVideoBeforeRewind = False
+        BigWorld.restartSoundZoneManager()
         g_replayEvents.onTimeWarpFinish()
 
 

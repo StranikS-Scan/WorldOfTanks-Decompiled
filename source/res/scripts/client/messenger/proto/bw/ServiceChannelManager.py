@@ -99,7 +99,7 @@ class ServiceChannelManager(ChatActionsListener):
                     messagesListData = yield formatter.format(message)
                 else:
                     messagesListData = formatter.format(message)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
                 return
 
@@ -128,7 +128,7 @@ class ServiceChannelManager(ChatActionsListener):
         if formatter:
             try:
                 messagesListData = formatter.format(message, auxData)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
                 return
 

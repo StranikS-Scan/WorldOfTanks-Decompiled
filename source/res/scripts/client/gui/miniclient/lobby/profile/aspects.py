@@ -6,8 +6,8 @@ from helpers import aop
 
 class MakeClanBtnUnavailable(aop.Aspect):
 
-    def __init__(self, config={}):
-        self.__config = config
+    def __init__(self, config=None):
+        self.__config = config or {}
         aop.Aspect.__init__(self)
 
     def atReturn(self, cd):

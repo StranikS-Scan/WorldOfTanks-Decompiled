@@ -1,27 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/GarbageCollectionDebug.py
-"""
-This is an example of how to disable/enable garbage collection, and how to
-activate debugging. Debugging output is sent to stdout.
-
-By default, all components that use Python have its garbage collection disabled.
-However, script developers may find garbage collection to be useful to identify
-leaks due to cyclical memory references.
-
-More information about how the Python garbage collection facility works can be
-found in the Python documentation for the gc module.
-http://docs.python.org/library/gc.html
-
-More information about BigWorld Technology's use of Python and C can be found
-in bigworld/doc/python_and_c.pdf.
-
-This script can be used in the personality script (BaseApp, CellApp or client)
-to activate the functions on BigWorld component shutdown.
-
-It also imports things on demand instead of at the top of the file to try and
-minimise the number of imported modules (which may then import more modules)
-which would give false results when testing memory allocations.
-"""
 import re
 import sys
 import itertools
@@ -42,10 +20,6 @@ except ImportError:
     GC_DEBUG_FLAGS = 0
 
 def gcEnable():
-    """
-    Enable garbage collection. Raises a SystemError if garbage collection is
-    not supported.
-    """
     try:
         import gc
         gc.enable()
@@ -54,9 +28,6 @@ def gcEnable():
 
 
 def gcDisable():
-    """
-    Disable garbage collection.
-    """
     try:
         import gc
         gc.disable()
@@ -65,10 +36,6 @@ def gcDisable():
 
 
 def gcDebugEnable():
-    """
-    Call this function to enable garbage collection debugging. Prints a warning
-    message if there is no support for garbage collection.
-    """
     try:
         import gc
         gc.set_debug(GC_DEBUG_FLAGS)
@@ -77,9 +44,6 @@ def gcDebugEnable():
 
 
 def gcIsLeakDetect():
-    """
-    Check if leak detection is on.
-    """
     try:
         import gc
         if (gc.isenabled() and gc.get_debug() & gc.DEBUG_LEAK) > 0:
@@ -102,9 +66,6 @@ def gcWriteLog(file, s, isError=False):
 
 
 def get_all_unique_loops(edges):
-    """
-    clean out all leafs and left only graph cycles
-    """
     leafs = True
     while leafs:
         srcs = set()
@@ -125,9 +86,6 @@ def get_all_unique_loops(edges):
 
 
 def get_loops_graph(content):
-    """
-    clean objgraph graph and clean out all leaf nodes
-    """
     lines = content.split(';')
     g = re.compile('o\\d+')
     objs = [ g.findall(i) for i in lines ]
@@ -144,9 +102,6 @@ def get_loops_graph(content):
 
 
 def gcDump():
-    """
-    Performs a garbage collect and then log count of objects in garbage collected.
-    """
     try:
         import gc
     except ImportError:
@@ -271,15 +226,6 @@ def createTestLeaks():
 
 
 def createBasicLeak():
-    """
-    For testing if the garabage collection log works.
-    
-    Creates a circular reference with a self-referencing object.
-    
-    So there should be two items found in gc.garbage:
-    - the "ref" instance object
-    - the dictionary of "ref", which contains "selfref"
-    """
     DEBUG_MSG('Creating a simple test leak..')
     ref = TestLeak()
     ref.selfRef = ref
@@ -288,19 +234,6 @@ def createBasicLeak():
 
 
 def createComplexLeak():
-    """
-    For testing if the garabage collection log works.
-    
-    Creates a reference cycle with three objects.
-    
-    There should be six items found in gc.garbage:
-    - the "refChain" instance object
-    - the dictionary of "refChain", which contains "badRefStart"
-    - the "refLink1" instance object
-    - the dictionary of "refLink1", which contains "badRefMiddle"
-    - the "refLink2" instance object
-    - the dictionary of "refLink2", which contains "badRefEnd"
-    """
     DEBUG_MSG('Creating a complex test leak..')
     refChain = TestLeak()
     refLink1 = TestLeak()
@@ -317,11 +250,6 @@ def createComplexLeak():
 
 
 def getObjectData(obj, indent=''):
-    """
-    Get info about a given object.
-    Name, type etc.
-    Return as a string.
-    """
     result = ''
     result += '%sObject id %u\n' % (indent, id(obj))
     try:
@@ -347,9 +275,6 @@ def getObjectData(obj, indent=''):
 
 
 def getContents(obj, indent=''):
-    """
-    Get a string representing an object or the first few items in a sequence.
-    """
     result = ''
     try:
         import pprint
@@ -374,11 +299,6 @@ def getContents(obj, indent=''):
 
 
 def getObjectReferrers(obj, ignore):
-    """
-    Get info about what objects are referring to a given object.
-    Return info as a string.
-    Ignore referrers in the "ignore" list.
-    """
     result = ''
     try:
         refCount = sys.getrefcount(obj)

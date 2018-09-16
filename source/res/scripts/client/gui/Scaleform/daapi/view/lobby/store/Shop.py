@@ -30,35 +30,21 @@ class Shop(ShopMeta):
         else:
             ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_MODULE, dataCompactId)
 
-    def requestTableData(self, nation, actionsSelected, type, filter):
-        """
-        Request table data for selected tab
-        :param type: <str> tab ID
-        :param nation: <int> gui nation
-        :param actionsSelected: <bool> discount's checkbox value
-        :param filter: <obj> filter data
-        """
+    def requestTableData(self, nation, actionsSelected, tabType, f):
         Waiting.show('updateShop')
-        filter = flashObject2Dict(filter)
+        f = flashObject2Dict(f)
         itemCD = AccountSettings.getFilter('scroll_to_item')
-        AccountSettings.setFilter('shop_current', (nation, type, actionsSelected))
-        AccountSettings.setFilter('shop_' + type, flashObject2Dict(filter))
+        AccountSettings.setFilter('shop_current', (nation, tabType, actionsSelected))
+        AccountSettings.setFilter('shop_' + tabType, flashObject2Dict(f))
         AccountSettings.setFilter('scroll_to_item', None)
-        self._setTableData(filter, nation, type, actionsSelected, itemCD)
+        self._setTableData(f, nation, tabType, actionsSelected, itemCD)
         Waiting.hide('updateShop')
         return
 
     def getName(self):
-        """
-        Get component name
-        :return: <str>
-        """
         return STORE_TYPES.SHOP
 
     def _populate(self):
-        """
-        Prepares and set init data into Flash. Subscribes to account updates.
-        """
         super(Shop, self)._populate()
         g_clientUpdateManager.addMoneyCallback(self._onTableUpdate)
         g_clientUpdateManager.addCallbacks({'cache.mayConsumeWalletResources': self._onTableUpdate,
@@ -66,17 +52,9 @@ class Shop(ShopMeta):
         g_playerEvents.onCenterIsLongDisconnected += self._update
 
     def _dispose(self):
-        """
-        Clear attrs and subscriptions
-        """
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_playerEvents.onCenterIsLongDisconnected -= self._update
         super(Shop, self)._dispose()
 
-    def _getTabClass(self, type):
-        """
-        Get component tab class by type
-        :param type: <str> tab ID
-        :return:<ShopItemsTab>
-        """
-        return _SHOP_TABS[type]
+    def _getTabClass(self, tabType):
+        return _SHOP_TABS[tabType]

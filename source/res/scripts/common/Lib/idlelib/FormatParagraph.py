@@ -1,21 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/FormatParagraph.py
-"""Extension to format a paragraph or selection to a max width.
-
-Does basic, standard text formatting, and also understands Python
-comment blocks. Thus, for editing Python source code, this
-extension is really only suitable for reformatting these comment
-blocks or triple-quoted strings.
-
-Known problems with comment reformatting:
-* If there is a selection marked, and the first line of the
-  selection is not complete, the block will probably not be detected
-  as comments, and will have the normal "text formatting" rules
-  applied.
-* If a comment block has leading whitespace that mixes tabs and
-  spaces, they will not be considered part of the same block.
-* Fancy comments, like this bulleted list, aren't handled :-)
-"""
 import re
 from idlelib.configHandler import idleConf
 
@@ -30,17 +14,6 @@ class FormatParagraph:
         return
 
     def format_paragraph_event(self, event, limit=None):
-        """Formats paragraph to a max width specified in idleConf.
-        
-        If text is selected, format_paragraph_event will start breaking lines
-        at the max width, starting from the beginning selection.
-        
-        If no text is selected, format_paragraph_event uses the current
-        cursor location to determine the paragraph (lines of text surrounded
-        by blank lines) and formats it.
-        
-        The length limit parameter is for testing with a known value.
-        """
         if limit == None:
             limit = idleConf.GetOption('main', 'FormatParagraph', 'paragraph', type='int')
         text = self.editwin.text
@@ -68,11 +41,6 @@ class FormatParagraph:
 
 
 def find_paragraph(text, mark):
-    """Returns the start/stop indices enclosing the paragraph that mark is in.
-    
-    Also returns the comment format string, if any, and paragraph of text
-    between the start/stop indices.
-    """
     lineno, col = map(int, mark.split('.'))
     line = text.get('%d.0' % lineno, '%d.end' % lineno)
     while text.compare('%d.0' % lineno, '<', 'end') and is_all_white(line):
@@ -101,7 +69,6 @@ def find_paragraph(text, mark):
 
 
 def reformat_paragraph(data, limit):
-    """Return data reformatted to specified width (limit)."""
     lines = data.split('\n')
     i = 0
     n = len(lines)
@@ -138,7 +105,6 @@ def reformat_paragraph(data, limit):
 
 
 def reformat_comment(data, limit, comment_header):
-    """Return data reformatted to specified width with comment header."""
     lc = len(comment_header)
     data = '\n'.join((line[lc:] for line in data.split('\n')))
     format_width = max(limit - len(comment_header), 20)
@@ -152,22 +118,14 @@ def reformat_comment(data, limit, comment_header):
 
 
 def is_all_white(line):
-    """Return True if line is empty or all whitespace."""
     return re.match('^\\s*$', line) is not None
 
 
 def get_indent(line):
-    """Return the initial space or tab indent of line."""
     return re.match('^([ \\t]*)', line).group()
 
 
 def get_comment_header(line):
-    """Return string with leading whitespace and '#' from line or ''.
-    
-    A null return indicates that the line is not a comment line. A non-
-    null return, such as '    #', will be used to find the other lines of
-    a comment block with the same  indent.
-    """
     m = re.match('^([ \\t]*#*)', line)
     return '' if m is None else m.group(1)
 

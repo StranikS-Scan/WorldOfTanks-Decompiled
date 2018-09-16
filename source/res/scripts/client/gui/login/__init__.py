@@ -5,11 +5,8 @@ from skeletons.gui.login_manager import ILoginManager
 __all__ = ('getLoginManagerConfig',)
 
 def getLoginManagerConfig(manager):
-    """ Configures services for package login.
-    :param manager: instance of dependency manager.
-    """
     if GUI_SETTINGS.socialNetworkLogin['enabled']:
-        from social_networks import Manager, SOCIAL_NETWORKS
+        from social_networks import Manager
         instance = Manager()
     else:
         from Manager import Manager

@@ -271,7 +271,7 @@
         <segmentLength>	0.123	</segmentLength>
         <segmentOffset>	0.185	</segmentOffset>
         <segment2Offset>	0.063	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -520,7 +520,7 @@
         <segmentLength>	0.123	</segmentLength>
         <segmentOffset>	0.185	</segmentOffset>
         <segment2Offset>	0.063	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -647,7 +647,7 @@
       <circularVisionRadius>	260	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	45	</maxHealth>
-        <maxRegenHealth>	22.0	</maxRegenHealth>
+        <maxRegenHealth>	22	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>

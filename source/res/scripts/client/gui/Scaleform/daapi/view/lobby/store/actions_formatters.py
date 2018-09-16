@@ -77,17 +77,12 @@ class ActionCardFormatter(object):
         return
 
     def format(self, discount):
-        """Format action cards for view
-        :param discount:
-        :return: packed vo's
-        """
         self.discount = discount
         result = self._packGui()
         self.discount = None
         return result
 
     def _packGui(self):
-        assert self.discount
         data = {'id': self.discount.getID(),
          'title': self.discount.getTitle(),
          'time': self.discount.getActionTime(),
@@ -105,11 +100,9 @@ class ActionCardFormatter(object):
         return data
 
     def _getHeaderData(self):
-        assert self.discount
         return self.discount.getAutoDescription(useBigIco=True)
 
     def _getTableData(self):
-        assert self.discount
         return {'descr': self._getDescription(),
          'tableOffers': self.discount.getTableData(),
          'ttcDataVO': self.discount.getExtraData()}
@@ -143,7 +136,6 @@ class NormalCardFormatter(ActionCardFormatter):
 class SmallCardFormatter(ActionCardFormatter):
 
     def _getHeaderData(self):
-        assert self.discount
         return self.discount.getAutoDescription(useBigIco=False)
 
     def _getExtras(self, *args, **kwargs):
@@ -153,7 +145,6 @@ class SmallCardFormatter(ActionCardFormatter):
 class ComingSoonCardFormatter(ActionCardFormatter):
 
     def _getHeaderData(self):
-        assert self.discount
         return self.discount.getComingSoonDescription()
 
     def _getExtras(self, *args, **kwargs):
@@ -173,19 +164,6 @@ class ActionsBuilder(object):
 
     @classmethod
     def getAllVisibleDiscounts(cls, actions, entities, announced, sorting=False):
-        """
-        :param actions: actions list from server
-        :param entities: dict
-            {'actionsEntities': (index from 'actions', index from 'step', intersected actions (bool)),
-             'actions': (list of active actions),
-             'steps': (list of active steps),
-            }
-        :param announced: future actions
-        :param sorting: if vlaue equals True than each list of discounts should be sorted,
-            otherwise - don't sort list of discounts. For example, if number of discount is needed
-            only, sorting is pointless.
-        :return: dict of actions for view
-        """
         visibleCards = cls._getAllVisibleDiscounts(actions, entities, announced)
         if sorting:
             visibleCards[_VISIBLE_CARDS.ACTIONS] = sorted(visibleCards[_VISIBLE_CARDS.ACTIONS], key=methodcaller('getFinishTime'))
@@ -193,10 +171,6 @@ class ActionsBuilder(object):
         return visibleCards
 
     def createLayoutTemplate(self, allCards):
-        """Create template layout sorted by priority and view position
-        :param allCards: All action for view
-        :return: dict _LAYOUT_TEMPLATE
-        """
         template = _dumpLayoutSkeleton()
         cards = template[_ltf.CARDS]
         actionCards = allCards[_VISIBLE_CARDS.ACTIONS]
@@ -284,16 +258,6 @@ class ActionsBuilder(object):
 
     @classmethod
     def _getAllVisibleDiscounts(cls, actions, entities, announced):
-        """
-        :param actions: actions list from server
-        :param entities: dict
-            {'actionsEntities': (index from 'actions', index from 'step', intersected actions (bool)),
-             'actions': (list of active actions),
-             'steps': (list of active steps),
-            }
-        :param announced: future actions
-        :return: dict of actions for view
-        """
         composer = ActionComposer()
         visibleCards = {_VISIBLE_CARDS.ACTIONS: [],
          _VISIBLE_CARDS.ANNOUNCED: []}
@@ -328,7 +292,6 @@ class ActionsBuilder(object):
         return visibleCards
 
     def __setVisualPriority(self, items, priority):
-        """Set new visual priority according template rules"""
         for item in items:
             item.visualPriority = priority
 
@@ -343,4 +306,4 @@ def getActiveActions(eventsCache):
 
 
 def getNewActiveActions(eventsCache):
-    return filter(lambda info: info.getIsNew(), getActiveActions(eventsCache))
+    return [ info for info in getActiveActions(eventsCache) if info.getIsNew() ]

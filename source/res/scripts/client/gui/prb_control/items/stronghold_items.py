@@ -93,9 +93,6 @@ class StrongholdSettings(object):
         return self.__data.getHeader().isSortie()
 
     def getReserveOrder(self):
-        """
-            :return: reserve order
-        """
         return RESERVE_SORTIE_ORDER if self.isSortie() else RESERVE_STRONGHOLD_ORDER
 
     def __validateData(self, rawData):
@@ -171,51 +168,27 @@ class StrongholdData(object):
                 return self.__index
 
             def getClanId(self):
-                """
-                    :return: clan id
-                """
                 return self.__clan_owner_id
 
             def getMapId(self):
-                """
-                    :return: map id
-                """
                 return self.__map_id
 
             def getGeometryId(self):
-                """
-                    :return: geometry id
-                """
                 return self.__geometry_id
 
             def getGameplayId(self):
-                """
-                    :return: gameplay id
-                """
                 return self.__gameplay_id
 
             def getFirstClanId(self):
-                """
-                    :return: clan id on first (green) spawn point
-                """
                 return self.__first_resp_clan_id
 
             def getBattleReward(self):
-                """
-                    :return: reward for battle
-                """
                 return self.__battle_reward
 
             def getCurrentBattle(self):
-                """
-                    :return: is this battle current
-                """
                 return self.__current_battle
 
             def getAttacker(self):
-                """
-                    :return: attack or defence. For current battle only
-                """
                 return self.__attacker
 
         class StrongholdClanData(object):
@@ -409,59 +382,32 @@ class StrongholdData(object):
                 self.__production_elapsed = data['production_elapsed']
 
             def getId(self):
-                """
-                    :return: reserve id
-                """
                 return self.__id
 
             def getType(self):
-                """
-                    :return: reserve type
-                """
                 return self.__type
 
             def getGroupType(self):
-                """
-                    :return: reserve group type
-                """
                 for groupType, group in RESERVE_ITEMS.iteritems():
                     if self.__type in group:
                         return groupType
 
             def getLevel(self):
-                """
-                    :return: reserve level
-                """
                 return self.__level
 
             def getBonusPercent(self):
-                """
-                    :return: reserve bonus percent
-                """
                 return self.__bonus_percent
 
             def getDescription(self):
-                """
-                    :return: reserve description
-                """
                 return self.__description
 
             def getTitle(self):
-                """
-                    :return: reserve title
-                """
                 return self.__title
 
             def getProductionElapsed(self):
-                """
-                    :return: production elapsed
-                """
                 return self.__production_elapsed
 
             def isRequsition(self):
-                """
-                    :return: reserve is requisition
-                """
                 return self.getGroupType() == REQUISITION
 
             def __eq__(self, other):
@@ -501,9 +447,6 @@ class StrongholdData(object):
             return self.__requisition_bonus_percent
 
         def getReserveById(self, reserveId):
-            """
-                :return: find reserve by reserveId
-            """
             if reserveId is None or self.__available_reserves is None:
                 return
             else:
@@ -514,9 +457,6 @@ class StrongholdData(object):
                 return
 
         def getUniqueReservesByGroupType(self, groupType):
-            """
-                :return: unique and sorted reserves by choosen type
-            """
             reserves = []
             for rType in RESERVE_ITEMS[groupType]:
                 reserves.extend(self.__available_reserves[rType])
@@ -533,13 +473,10 @@ class StrongholdData(object):
             uniqueAndSorted = sorted(unique, cmp=lambda x, y: x.__cmp__(y))
             return uniqueAndSorted
 
-        def getReserveCount(self, type, level):
-            """
-                :return: reserves count by type and level
-            """
+        def getReserveCount(self, rType, level):
             count = 0
             for reserve in itertools.chain(*self.__available_reserves.itervalues()):
-                if reserve.getType() == type and reserve.getLevel() == level:
+                if reserve.getType() == rType and reserve.getLevel() == level:
                     count += 1
 
             return count

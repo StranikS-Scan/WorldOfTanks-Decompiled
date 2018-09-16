@@ -1,17 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/IntSettingsRequester.py
 import BigWorld
-import copy
 import constants
 from adisp import async, process
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.shared.utils import code2str
 
 class IntSettingsRequester(object):
-    """
-    Setting dictionary presenting int settings keys by section names.
-    Don't forget to duplicate new value in common.constanst.INT_USER_SETTINGS_KEYS
-    """
     __SETTINGS = {'VERSION': 0,
      'GAME': 1,
      'GRAPHICS': 2,
@@ -50,7 +45,8 @@ class IntSettingsRequester(object):
      'FEEDBACK_DAMAGE_INDICATOR': 82,
      'FEEDBACK_DAMAGE_LOG': 83,
      'FEEDBACK_BATTLE_EVENTS': 84,
-     'UI_STORAGE': 85}
+     'FEEDBACK_BORDER_MAP': 85,
+     'UI_STORAGE': 86}
 
     def __init__(self):
         self.__cache = dict()
@@ -58,21 +54,10 @@ class IntSettingsRequester(object):
     @async
     @process
     def request(self, callback=None):
-        """
-        Public request method. Validate player entity to request
-        possibility and itself as single callback argument.
-        """
         self.__cache = yield self._requestCache()
         callback(self)
 
     def getCacheValue(self, key, defaultValue=None):
-        """
-        Public interface method to get value from cache.
-        
-        @param key: value's key in cache
-        @param defaultValue: default value if key does not exist
-        @return: value
-        """
         return self.__cache.get(key, defaultValue)
 
     @process
@@ -92,14 +77,6 @@ class IntSettingsRequester(object):
         yield self._delIntSettings(settings)
 
     def _response(self, resID, value, callback):
-        """
-        Common server response method. Must be called ANYWAY after
-        server operation will complete.
-        
-        @param resID: request result id
-        @param value: requested value
-        @param callback: function to be called after operation will complete
-        """
         if resID < 0:
             LOG_ERROR('[class %s] There is error while getting data from cache: %s[%d]' % (self.__class__.__name__, code2str(resID), resID))
             return callback(dict())
@@ -107,9 +84,6 @@ class IntSettingsRequester(object):
 
     @async
     def _requestCache(self, callback=None):
-        """
-        Request data from server
-        """
         player = BigWorld.player()
         if player is not None and player.intUserSettings is not None:
             player.intUserSettings.getCache(lambda resID, value: self._response(resID, value, callback))

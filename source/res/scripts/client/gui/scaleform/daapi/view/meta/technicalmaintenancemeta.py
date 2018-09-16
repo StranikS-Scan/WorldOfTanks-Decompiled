@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/TechnicalMaintenanceMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class TechnicalMaintenanceMeta(AbstractWindowView):
@@ -27,17 +23,9 @@ class TechnicalMaintenanceMeta(AbstractWindowView):
         self._printOverrideError('updateEquipmentCurrency')
 
     def as_setDataS(self, data):
-        """
-        :param data: Represented by MaintenanceVO (AS)
-        """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setEquipmentS(self, installed, setup, modules):
-        """
-        :param installed: Represented by Array (AS)
-        :param setup: Represented by Array (AS)
-        :param modules: Represented by Array.<ModuleVO> (AS)
-        """
         return self.flashObject.as_setEquipment(installed, setup, modules) if self._isDAAPIInited() else None
 
     def as_setCreditsS(self, credits):

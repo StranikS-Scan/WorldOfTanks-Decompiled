@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/symtable.py
-"""Interface to the compiler's internal symbol tables"""
 import _symtable
 from _symtable import USE, DEF_GLOBAL, DEF_LOCAL, DEF_PARAM, DEF_IMPORT, DEF_BOUND, OPT_IMPORT_STAR, OPT_EXEC, OPT_BARE_EXEC, SCOPE_OFF, SCOPE_MASK, FREE, GLOBAL_IMPLICIT, GLOBAL_EXPLICIT, CELL, LOCAL
 import weakref
@@ -57,9 +56,7 @@ class SymbolTable(object):
             return 'module'
         if self._table.type == _symtable.TYPE_FUNCTION:
             return 'function'
-        if self._table.type == _symtable.TYPE_CLASS:
-            return 'class'
-        assert self._table.type in (1, 2, 3), 'unexpected type: {0}'.format(self._table.type)
+        return 'class' if self._table.type == _symtable.TYPE_CLASS else None
 
     def get_id(self):
         return self._table.id
@@ -80,11 +77,9 @@ class SymbolTable(object):
         return bool(self._table.children)
 
     def has_exec(self):
-        """Return true if the scope uses exec"""
         return bool(self._table.optimized & (OPT_EXEC | OPT_BARE_EXEC))
 
     def has_import_star(self):
-        """Return true if the scope uses import *"""
         return bool(self._table.optimized & OPT_IMPORT_STAR)
 
     def get_identifiers(self):
@@ -195,27 +190,12 @@ class Symbol(object):
         return bool(self.__flags & DEF_LOCAL)
 
     def is_namespace(self):
-        """Returns true if name binding introduces new namespace.
-        
-        If the name is used as the target of a function or class
-        statement, this will be true.
-        
-        Note that a single name can be bound to multiple objects.  If
-        is_namespace() is true, the name may also be bound to other
-        objects, like an int or list, that does not introduce a new
-        namespace.
-        """
         return bool(self.__namespaces)
 
     def get_namespaces(self):
-        """Return a list of namespaces bound to this name"""
         return self.__namespaces
 
     def get_namespace(self):
-        """Returns the single namespace bound to this name.
-        
-        Raises ValueError if the name is bound to multiple namespaces.
-        """
         if len(self.__namespaces) != 1:
             raise ValueError, 'name is bound to multiple namespaces'
         return self.__namespaces[0]

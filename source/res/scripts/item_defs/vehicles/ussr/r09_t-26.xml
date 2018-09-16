@@ -227,7 +227,7 @@
         <right>	vehicles/russian/R09_T-26/track/right.track	</right>
         <segmentLength>	0.084	</segmentLength>
         <segmentOffset>	0.066	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -487,7 +487,7 @@
         <right>	vehicles/russian/R09_T-26/track/right.track	</right>
         <segmentLength>	0.084	</segmentLength>
         <segmentOffset>	0.066	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -658,7 +658,7 @@
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_45mm_20K	  <cost>	125.0	</cost>
+            <gun>	_45mm_20K	  <cost>	125	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -693,7 +693,7 @@
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_37mm_ZiS-19	  <cost>	160.0	</cost>
+            <gun>	_37mm_ZiS-19	  <cost>	160	</cost>
             </gun>
             <vehicle>	R22_T-46	  <cost>	1400	</cost>
             </vehicle>

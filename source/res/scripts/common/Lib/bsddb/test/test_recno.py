@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_recno.py
-"""TestCases for exercising a Recno DB.
-"""
 import os, sys
 import errno
 from pprint import pprint
@@ -178,13 +176,6 @@ class SimpleRecnoTestCase(unittest.TestCase):
         return
 
     def test02_WithSource(self):
-        """
-               A Recno file that is given a "backing source file" is essentially a
-               simple ASCII file.  Normally each record is delimited by 
-        and so is
-               just a line in the file, but you can set a different record delimiter
-               if needed.
-               """
         homeDir = get_new_environment_path()
         self.homeDir = homeDir
         source = os.path.join(homeDir, 'test_recno.txt')

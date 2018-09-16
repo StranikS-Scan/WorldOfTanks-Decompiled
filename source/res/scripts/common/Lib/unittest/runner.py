@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/runner.py
-"""Running tests"""
 import sys
 import time
 from . import result
@@ -8,7 +7,6 @@ from .signals import registerResult
 __unittest = True
 
 class _WritelnDecorator(object):
-    """Used to decorate file-like objects with a handy 'writeln' method"""
 
     def __init__(self, stream):
         self.stream = stream
@@ -25,10 +23,6 @@ class _WritelnDecorator(object):
 
 
 class TextTestResult(result.TestResult):
-    """A test result class that can print formatted text results to a stream.
-    
-    Used by TextTestRunner.
-    """
     separator1 = '=' * 70
     separator2 = '-' * 70
 
@@ -116,11 +110,6 @@ class TextTestResult(result.TestResult):
 
 
 class TextTestRunner(object):
-    """A test runner class that displays results in textual form.
-    
-    It prints out the names of tests as they are run, errors as they
-    occur, and a summary of the results at the end of the test run.
-    """
     resultclass = TextTestResult
 
     def __init__(self, stream=sys.stderr, descriptions=True, verbosity=1, failfast=False, buffer=False, resultclass=None):
@@ -137,7 +126,6 @@ class TextTestRunner(object):
         return self.resultclass(self.stream, self.descriptions, self.verbosity)
 
     def run(self, test):
-        """Run the given test case or test suite."""
         result = self._makeResult()
         registerResult(result)
         result.failfast = self.failfast

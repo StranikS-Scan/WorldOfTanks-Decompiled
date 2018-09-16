@@ -44,13 +44,10 @@ class Table:
                 else:
                     tname = 'CHAR'
             elif dtype == type_short:
-                assert size == 2
                 tname = 'SHORT'
             elif dtype == type_long:
-                assert size == 4
                 tname = 'LONG'
             elif dtype == type_binary:
-                assert size == 0
                 tname = 'OBJECT'
             else:
                 tname = 'unknown'
@@ -81,7 +78,6 @@ class _Unspecified:
 
 
 def change_sequence(seq, action, seqno=_Unspecified, cond=_Unspecified):
-    """Change the sequence number of an action in a sequence list"""
     for i in range(len(seq)):
         if seq[i][0] == action:
             if cond is _Unspecified:
@@ -99,7 +95,6 @@ def add_data(db, table, values):
     count = v.GetColumnInfo(MSICOLINFO_NAMES).GetFieldCount()
     r = CreateRecord(count)
     for value in values:
-        assert len(value) == count, value
         for i in range(count):
             field = value[i]
             if isinstance(field, (int, long)):
@@ -177,7 +172,6 @@ def make_id(str):
     str = ''.join([ (c if c in identifier_chars else '_') for c in str ])
     if str[0] in string.digits + '.':
         str = '_' + str
-    assert re.match('^[A-Za-z_][A-Za-z0-9_.]*$', str), 'FILE' + str
     return str
 
 
@@ -233,14 +227,6 @@ _directories = set()
 class Directory:
 
     def __init__(self, db, cab, basedir, physical, _logical, default, componentflags=None):
-        """Create a new directory in the Directory table. There is a current component
-        at each point in time for the directory, which is either explicitly created
-        through start_component, or implicitly when files are added for the first
-        time. Files are added into the current component, and into the cab file.
-        To create a directory, a base directory object needs to be specified (can be
-        None), the path to the physical directory, and a logical directory name.
-        Default specifies the DefaultDir slot in the directory table. componentflags
-        specifies the default flags that new components get."""
         index = 1
         _logical = make_id(_logical)
         logical = _logical
@@ -269,11 +255,6 @@ class Directory:
         return
 
     def start_component(self, component=None, feature=None, flags=None, keyfile=None, uuid=None):
-        """Add an entry to the Component table, and make this component the current for this
-        directory. If no component name is given, the directory name is used. If no feature
-        is given, the current feature is used. If no flags are given, the directory's default
-        flags are used. If no keyfile is given, the KeyPath is left null in the Component
-        table."""
         if flags is None:
             flags = self.componentflags
         if uuid is None:
@@ -335,33 +316,24 @@ class Directory:
                 if file not in self.short_names:
                     break
                 pos += 1
-                assert pos < 10000
                 if pos in (10, 100, 1000):
                     prefix = prefix[:-1]
 
         self.short_names.add(file)
-        assert not re.search('[\\?|><:/*"+,;=\\[\\]]', file)
         return file
 
     def add_file(self, file, src=None, version=None, language=None):
-        """Add a file to the current component of the directory, starting a new one
-        if there is no current component. By default, the file name in the source
-        and the file table will be identical. If the src file is specified, it is
-        interpreted relative to the current directory. Optionally, a version and a
-        language can be specified for the entry in the File table."""
         if not self.component:
             self.start_component(self.logical, current_feature, 0)
         if not src:
             src = file
             file = os.path.basename(file)
         absolute = os.path.join(self.absolute, src)
-        assert not re.search('[\\?|><:/*]"', file)
         if file in self.keyfiles:
             logical = self.keyfiles[file]
         else:
             logical = None
         sequence, logical = self.cab.append(absolute, file, logical)
-        assert logical not in self.ids
         self.ids.add(logical)
         short = self.make_short(file)
         full = '%s|%s' % (short, file)
@@ -388,8 +360,6 @@ class Directory:
         return logical
 
     def glob(self, pattern, exclude=None):
-        """Add a list of files to the current component as specified in the
-        glob pattern. Individual files can be excluded in the exclude list."""
         files = glob.glob1(self.absolute, pattern)
         for f in files:
             if exclude and f in exclude:
@@ -399,7 +369,6 @@ class Directory:
         return files
 
     def remove_pyc(self):
-        """Remove .pyc/.pyo files on uninstall"""
         add_data(self.db, 'RemoveFile', [(self.component + 'c',
           self.component,
           '*.pyc',

@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/build_py.py
-"""distutils.command.build_py
-
-Implements the Distutils 'build_py' command."""
 __revision__ = '$Id$'
 import os
 import sys
@@ -47,7 +44,6 @@ class build_py(Command):
         if not isinstance(self.optimize, int):
             try:
                 self.optimize = int(self.optimize)
-                assert 0 <= self.optimize <= 2
             except (ValueError, AssertionError):
                 raise DistutilsOptionError('optimize must be 0, 1, or 2')
 
@@ -60,7 +56,6 @@ class build_py(Command):
         self.byte_compile(self.get_outputs(include_bytecode=0))
 
     def get_data_files(self):
-        """Generate list of '(package,src_dir,build_dir,filenames)' tuples"""
         data = []
         if not self.packages:
             return data
@@ -79,7 +74,6 @@ class build_py(Command):
         return data
 
     def find_data_files(self, package, src_dir):
-        """Return filenames for package's data files in 'src_dir'"""
         globs = self.package_data.get('', []) + self.package_data.get(package, [])
         files = []
         for pattern in globs:
@@ -89,7 +83,6 @@ class build_py(Command):
         return files
 
     def build_package_data(self):
-        """Copy data files into build directory"""
         for package, src_dir, build_dir, filenames in self.data_files:
             for filename in filenames:
                 target = os.path.join(build_dir, filename)
@@ -97,9 +90,6 @@ class build_py(Command):
                 self.copy_file(os.path.join(src_dir, filename), target, preserve_mode=False)
 
     def get_package_dir(self, package):
-        """Return the directory, relative to the top of the source
-        distribution, where package 'package' should be found
-        (at least according to the 'package_dir' option, if any)."""
         path = package.split('.')
         if not self.package_dir:
             if path:
@@ -163,14 +153,6 @@ class build_py(Command):
         return modules
 
     def find_modules(self):
-        """Finds individually-specified Python modules, ie. those listed by
-        module name in 'self.py_modules'.  Returns a list of tuples (package,
-        module_base, filename): 'package' is a tuple of the path through
-        package-space to the module; 'module_base' is the bare (no
-        packages, no dots) module name, and 'filename' is the path to the
-        ".py" file (relative to the distribution root) that implements the
-        module.
-        """
         packages = {}
         modules = []
         for module in self.py_modules:
@@ -196,11 +178,6 @@ class build_py(Command):
         return modules
 
     def find_all_modules(self):
-        """Compute the list of all modules that will be built, whether
-        they are specified one-module-at-a-time ('self.py_modules') or
-        by whole packages ('self.packages').  Return a list of tuples
-        (package, module, module_file), just like 'find_modules()' and
-        'find_package_modules()' do."""
         modules = []
         if self.py_modules:
             modules.extend(self.find_modules())
@@ -255,7 +232,6 @@ class build_py(Command):
             package_dir = self.get_package_dir(package)
             modules = self.find_package_modules(package, package_dir)
             for package_, module, module_file in modules:
-                assert package == package_
                 self.build_module(module, module_file, package)
 
     def byte_compile(self, files):

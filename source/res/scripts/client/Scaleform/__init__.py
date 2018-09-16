@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Scaleform/__init__.py
-"""Scaleform python module"""
 AVAILABLE = False
 try:
     from _Scaleform import *
@@ -9,7 +8,6 @@ except ImportError:
     print 'There is no module named _Scaleform.  The most likely cause of this \tis the client was built without Scaleform support.  Please check the \tdocumentation for further details on enabling Scaleform support.'
 
 def showCursor():
-    """not scaleform specific. show the bigworld mouse cursor"""
     import GUI
     import BigWorld
     c = GUI.mcursor()

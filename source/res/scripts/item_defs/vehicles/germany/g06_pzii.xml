@@ -96,7 +96,7 @@
       <shortUserString>	#germany_vehicles:PzII_ketten_Ausf_A_short	</shortUserString>
       <tags></tags>
       <level>	1	</level>
-      <price>	300.0	</price>
+      <price>	300	</price>
       <unlocks>
         <chassis>	PzII_ketten_Ausf_B	  <cost>	100	</cost>
         </chassis>
@@ -245,7 +245,7 @@
         <right>	vehicles/german/G06_PzII/track/right.track	</right>
         <segmentLength>	0.088	</segmentLength>
         <segmentOffset>	0.029	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -358,7 +358,7 @@
       <shortUserString>	#germany_vehicles:PzII_ketten_Ausf_B_short	</shortUserString>
       <tags></tags>
       <level>	2	</level>
-      <price>	600.0	</price>
+      <price>	600	</price>
       <armor>
         <leftTrack>	15	</leftTrack>
         <rightTrack>	15	</rightTrack>
@@ -503,7 +503,7 @@
         <right>	vehicles/german/G06_PzII/track/right.track	</right>
         <segmentLength>	0.088	</segmentLength>
         <segmentOffset>	0.029	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -608,7 +608,7 @@
       <shortUserString>	#germany_vehicles:PzII_Standartturm_short	</shortUserString>
       <tags>	cannotDetach	</tags>
       <level>	2	</level>
-      <price>	640.0	</price>
+      <price>	640	</price>
       <armor>
         <armor_1>	30	</armor_1>
         <armor_2>	15	</armor_2>

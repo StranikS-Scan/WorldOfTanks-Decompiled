@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/macostools.py
-"""macostools - Various utility functions for MacOS.
-
-mkalias(src, dst) - Create a finder alias 'dst' pointing to 'src'
-copy(src, dst) - Full copy of 'src' to 'dst'
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the macostools module is removed.', stacklevel=2)
 from Carbon import Res
@@ -22,7 +17,6 @@ BUFSIZ = 524288
 COPY_FLAGS = Files.kIsStationary | Files.kNameLocked | Files.kHasBundle | Files.kIsInvisible | Files.kIsAlias
 
 def mkalias(src, dst, relative=None):
-    """Create a finder alias"""
     srcfsr = File.FSRef(src)
     dstdir, dstname = os.path.split(dst)
     if not dstdir:
@@ -44,7 +38,6 @@ def mkalias(src, dst, relative=None):
 
 
 def mkdirs(dst):
-    """Make directories leading to 'dst' if they don't exist yet"""
     if dst == '' or os.path.exists(dst):
         return
     head, tail = os.path.split(dst)
@@ -59,13 +52,11 @@ def mkdirs(dst):
 
 
 def touched(dst):
-    """Tell the finder a file has changed. No-op on MacOSX."""
     import warnings
     warnings.warn('macostools.touched() has been deprecated', DeprecationWarning, 2)
 
 
 def touched_ae(dst):
-    """Tell the finder a file has changed"""
     pardir = os.path.split(dst)[0]
     if not pardir:
         pardir = os.curdir
@@ -75,7 +66,6 @@ def touched_ae(dst):
 
 
 def copy(src, dst, createpath=0, copydates=1, forcetype=None):
-    """Copy a file, including finder info, resource fork, etc"""
     src = File.pathname(src)
     dst = File.pathname(dst)
     if createpath:
@@ -116,7 +106,6 @@ def copy(src, dst, createpath=0, copydates=1, forcetype=None):
 
 
 def copytree(src, dst, copydates=1):
-    """Copy a complete file tree to a new destination"""
     if os.path.isdir(src):
         mkdirs(dst)
         files = os.listdir(src)

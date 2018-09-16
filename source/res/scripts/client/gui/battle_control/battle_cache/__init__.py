@@ -9,17 +9,6 @@ _RECORD_HEADER_FORMAT = 'HH'
 _RECORD_HEADER_SIZE = struct.calcsize(_RECORD_HEADER_FORMAT)
 
 class BattleClientCache(IBattleClientCache):
-    """
-    Represents wrapper over client cache stored on the server.
-    
-    Server provides ability to store client data per each battle (on the server side cache is a
-    part of avatar therefore cache lifetime is equal to avatar lifetime i.e. battle lifetime).
-    Take into account that cache size is limited (base/Avatar.py:__CLIENT_CTX_MAX_LENGTH) and
-    should be stored as binary array.
-    
-    On the client side cache represented by set of cached records. For details please see
-    AbstractCacheRecord class description and interface of BattleClientCache class.
-    """
 
     def __init__(self):
         super(BattleClientCache, self).__init__()
@@ -27,13 +16,6 @@ class BattleClientCache(IBattleClientCache):
         self.__records = {}
 
     def getRecord(self, recordClass):
-        """
-        Gets cached records with the given type.
-        :param recordClass: An AbstractCacheRecord derived class
-        
-        :return: An instance of AbstractCacheRecord derived class or None if there is no
-                 record with the given type.
-        """
         rID = recordClass.getRecordID()
         if rID not in self.__records:
             record = recordClass(self)
@@ -44,9 +26,6 @@ class BattleClientCache(IBattleClientCache):
         return record
 
     def clear(self):
-        """
-        Clear all records.
-        """
         for r in self.__records.itervalues():
             r.clear()
 
@@ -54,11 +33,6 @@ class BattleClientCache(IBattleClientCache):
         self.__records = {}
 
     def save(self):
-        """
-        Sends cached records to the server storage.
-        
-        :return: True if data has been cached on the server, False otherwise.
-        """
         for r in self.__records.itervalues():
             chunk = self._packRecord(r)
             if chunk:
@@ -78,11 +52,6 @@ class BattleClientCache(IBattleClientCache):
             return True
 
     def load(self):
-        """
-        Loads cached data from the server and updates local records.
-        
-        :return: True if data has been extracted from the server, False otherwise.
-        """
         player = BigWorld.player()
         if player is None or not hasattr(player, 'clientCtx'):
             LOG_DEBUG('Avatar.clientCtx not found', player)

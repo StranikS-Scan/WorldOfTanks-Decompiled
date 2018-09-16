@@ -47,7 +47,7 @@ class AbstractRallyWindow(AbstractRallyWindowMeta, IPrbListener):
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(AbstractRallyWindow, self)._onRegisterFlashComponent(viewPy, alias)
         if self._viewToLoad is not None:
-            flashAlias, pyAlias, itemID = self._viewToLoad
+            _, pyAlias, itemID = self._viewToLoad
             if pyAlias == alias:
                 viewPy.setData(itemID)
                 self._viewToLoad = None

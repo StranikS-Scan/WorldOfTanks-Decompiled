@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sre_compile.py
-"""Internal support module for sre"""
 import _sre, sys
 import sre_parse
 from sre_constants import *
-assert _sre.MAGIC == MAGIC, 'SRE module mismatch'
 if _sre.CODESIZE == 2:
     MAXCODE = 65535
 else:
@@ -324,7 +322,6 @@ def _optimize_unicode(charset, fixup):
         code = 'I'
     mapping = array.array('B', mapping).tostring()
     mapping = array.array(code, mapping)
-    assert mapping.itemsize == _sre.CODESIZE
     header = header + mapping.tolist()
     data[0:0] = header
     return [(BIGCHARSET, data)]

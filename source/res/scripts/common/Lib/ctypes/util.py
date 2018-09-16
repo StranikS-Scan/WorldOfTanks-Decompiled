@@ -4,11 +4,6 @@ import sys, os
 if os.name == 'nt':
 
     def _get_build_version():
-        """Return the version of MSVC that was used to build Python.
-        
-        For Python 2.3 and up, the version number is included in
-        sys.version.  For earlier versions, assume the compiler is MSVC 6.
-        """
         prefix = 'MSC v.'
         i = sys.version.find(prefix)
         if i == -1:
@@ -24,7 +19,6 @@ if os.name == 'nt':
 
 
     def find_msvcrt():
-        """Return the name of the VC runtime dll"""
         version = _get_build_version()
         if version is None:
             return

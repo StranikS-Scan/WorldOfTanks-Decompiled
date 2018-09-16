@@ -182,9 +182,6 @@ class _CmpVehArtefactLogicProvider(PopoverLogicProvider):
         return moduleData
 
     def _buildList(self):
-        """
-        Override 'removable' property fo each item, in CMP view any module can be removed
-        """
         moduleList = super(_CmpVehArtefactLogicProvider, self)._buildList()
         for item in moduleList:
             item['removable'] = True

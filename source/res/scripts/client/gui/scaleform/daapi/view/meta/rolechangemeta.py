@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RoleChangeMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class RoleChangeMeta(AbstractWindowView):
@@ -15,15 +11,9 @@ class RoleChangeMeta(AbstractWindowView):
         self._printOverrideError('changeRole')
 
     def as_setCommonDataS(self, data):
-        """
-        :param data: Represented by RoleChangeVO (AS)
-        """
         return self.flashObject.as_setCommonData(data) if self._isDAAPIInited() else None
 
     def as_setRolesS(self, roles):
-        """
-        :param roles: Represented by Array.<RoleChangeItemVO> (AS)
-        """
         return self.flashObject.as_setRoles(roles) if self._isDAAPIInited() else None
 
     def as_setPriceS(self, priceString, enoughGold):

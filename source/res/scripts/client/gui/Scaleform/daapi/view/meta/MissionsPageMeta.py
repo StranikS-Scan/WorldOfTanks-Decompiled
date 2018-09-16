@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/MissionsPageMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.View import View
 
 class MissionsPageMeta(View):
@@ -18,9 +14,6 @@ class MissionsPageMeta(View):
         self._printOverrideError('onClose')
 
     def as_setTabsDataProviderS(self, dataProvider):
-        """
-        :param dataProvider: Represented by DataProvider.<MissionTabVO> (AS)
-        """
         return self.flashObject.as_setTabsDataProvider(dataProvider) if self._isDAAPIInited() else None
 
     def as_showFilterS(self, visible):
@@ -33,7 +26,4 @@ class MissionsPageMeta(View):
         return self.flashObject.as_blinkFilterCounter() if self._isDAAPIInited() else None
 
     def as_setTabsCounterDataS(self, data):
-        """
-        :param data: Represented by Vector.<MissionTabCounterVO> (AS)
-        """
         return self.flashObject.as_setTabsCounterData(data) if self._isDAAPIInited() else None

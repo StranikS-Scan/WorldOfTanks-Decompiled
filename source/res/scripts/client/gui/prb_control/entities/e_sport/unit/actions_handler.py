@@ -12,9 +12,6 @@ from gui.prb_control.entities.base.unit.ctx import BattleQueueUnitCtx, AutoSearc
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 
 class ESportActionsHandler(UnitActionsHandler):
-    """
-    Base ESport actions handler
-    """
 
     def __init__(self, entity):
         super(ESportActionsHandler, self).__init__(entity)
@@ -56,7 +53,4 @@ class ESportActionsHandler(UnitActionsHandler):
         g_eventDispatcher.showUnitWindow(self._entity.getEntityType())
 
     def __onKickedFromQueue(self):
-        """
-        Listener for queue kick event. Is fix for for WOTD-43677
-        """
         SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)

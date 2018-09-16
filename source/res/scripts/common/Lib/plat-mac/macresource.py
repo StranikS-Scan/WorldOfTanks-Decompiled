@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/macresource.py
-"""macresource - Locate and open the resources needed for a script."""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the macresource module is removed.', stacklevel=2)
 from Carbon import Res
@@ -18,13 +17,6 @@ class ResourceFileNotFoundError(ImportError):
 
 
 def need(restype, resid, filename=None, modname=None):
-    """Open a resource file, if needed. restype and resid
-    are required parameters, and identify the resource for which to test. If it
-    is available we are done. If it is not available we look for a file filename
-    (default: modname with .rsrc appended) either in the same folder as
-    where modname was loaded from, or otherwise across sys.path.
-    
-    Returns the refno of the resource file opened (or None)"""
     if modname is None:
         if filename is None:
             raise ArgumentError, 'Either filename or modname argument (or both) must be given'
@@ -72,8 +64,6 @@ def need(restype, resid, filename=None, modname=None):
 
 
 def open_pathname(pathname, verbose=0):
-    """Open a resource file given by pathname, possibly decoding an
-    AppleSingle file"""
     try:
         refno = Res.FSOpenResourceFile(pathname, u'', 1)
     except Res.Error as arg:
@@ -87,9 +77,6 @@ def open_pathname(pathname, verbose=0):
 
 
 def resource_pathname(pathname, verbose=0):
-    """Return the pathname for a resource file (either DF or RF based).
-    If the pathname given already refers to such a file simply return it,
-    otherwise first decode it."""
     try:
         refno = Res.FSOpenResourceFile(pathname, u'', 1)
     except Res.Error as arg:
@@ -103,8 +90,6 @@ def resource_pathname(pathname, verbose=0):
 
 
 def open_error_resource():
-    """Open the resource file containing the error code to error message
-    mapping."""
     need('Estr', 1, filename='errors.rsrc', modname=__name__)
 
 

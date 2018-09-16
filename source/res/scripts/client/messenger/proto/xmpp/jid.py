@@ -21,7 +21,7 @@ class BareJID(object):
         tail = ''
         if not jid:
             self._node, self._domain = ('', '')
-        elif type(jid) in types.StringTypes:
+        elif isinstance(jid, types.StringTypes):
             if jid.find('@') + 1:
                 self._node, jid = jid.split('@', 1)
                 self._node = self._node.lower()
@@ -47,7 +47,7 @@ class BareJID(object):
     def setNode(self, node):
         if node is None:
             self._node = ''
-        if type(node) in types.StringTypes:
+        if isinstance(node, types.StringTypes):
             self._node = node.lower()
         else:
             self._node = node
@@ -57,7 +57,8 @@ class BareJID(object):
         return self._domain
 
     def setDomain(self, domain):
-        assert domain, 'Domain no empty'
+        if not domain:
+            raise UserWarning('Domain no empty')
         self._domain = domain.lower()
 
     def getResource(self):
@@ -169,12 +170,6 @@ def makeUserRoomJID(room=''):
 
 
 def makeSystemRoomJID(room='', channelType=XMPP_MUC_CHANNEL_TYPE.STANDARD):
-    """
-    create jid for system room
-    :param room: room name if exist
-    :param channelType: channel type (XMPP_MUC_CHANNEL_TYPE)
-    :return: system room jid
-    """
     jid = JID()
     service = g_settings.server.XMPP.getChannelByType(channelType)
     if not service or not service['hostname']:
@@ -198,11 +193,6 @@ def _getSystemChannelNameFormatter(service, connectionMgr=None):
 
 
 def makeClanRoomJID(clandDbId, channelType=XMPP_MUC_CHANNEL_TYPE.CLANS):
-    """
-    create jid for clan room
-    :param room: room name if exist
-    :return: clan room jid
-    """
     jid = JID()
     service = g_settings.server.XMPP.getChannelByType(channelType)
     if not service or not service['hostname']:

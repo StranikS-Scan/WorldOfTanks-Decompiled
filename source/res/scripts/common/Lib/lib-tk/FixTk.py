@@ -13,7 +13,6 @@ except (ImportError, AttributeError):
 else:
 
     def convert_path(s):
-        assert isinstance(s, str)
         udir = s.decode('mbcs')
         hdir = ctypes.windll.kernel32.CreateFileW(udir, 128, 1, None, 3, 33554432, None)
         if hdir == -1:

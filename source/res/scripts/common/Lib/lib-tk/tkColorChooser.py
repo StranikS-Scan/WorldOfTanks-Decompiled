@@ -3,7 +3,6 @@
 from tkCommonDialog import Dialog
 
 class Chooser(Dialog):
-    """Ask for a color"""
     command = 'tk_chooseColor'
 
     def _fixoptions(self):
@@ -23,7 +22,6 @@ class Chooser(Dialog):
 
 
 def askcolor(color=None, **options):
-    """Ask for a color"""
     if color:
         options = options.copy()
         options['initialcolor'] = color

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/remote_camera_sender.py
-import BigWorld
 import weakref
+import BigWorld
 from debug_utils import LOG_DEBUG_DEV
 from AvatarInputHandler.aih_constants import CTRL_MODES
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand

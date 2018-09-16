@@ -1,32 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_metaclass.py
-"""Fixer for __metaclass__ = X -> (metaclass=X) methods.
-
-   The various forms of classef (inherits nothing, inherits once, inherints
-   many) don't parse the same in the CST so we look at ALL classes for
-   a __metaclass__ and if we find one normalize the inherits to all be
-   an arglist.
-
-   For one-liner classes ('class X: pass') there is no indent/dedent so
-   we normalize those into having a suite.
-
-   Moving the __metaclass__ into the classdef can also cause the class
-   body to be empty so there is some special casing for that as well.
-
-   This fixer also tries very hard to keep original indenting and spacing
-   in all those corner cases.
-
-"""
 from .. import fixer_base
 from ..pygram import token
 from ..fixer_util import Name, syms, Node, Leaf
 
 def has_metaclass(parent):
-    """ we have to check the cls_node without changing it.
-        There are two possiblities:
-          1)  clsdef => suite => simple_stmt => expr_stmt => Leaf('__meta')
-          2)  clsdef => simple_stmt => expr_stmt => Leaf('__meta')
-    """
     for node in parent.children:
         if node.type == syms.suite:
             return has_metaclass(node)
@@ -41,9 +19,6 @@ def has_metaclass(parent):
 
 
 def fixup_parse_tree(cls_node):
-    """ one-line classes don't get a suite in the parse tree so we add
-        one to normalize the tree
-    """
     for node in cls_node.children:
         if node.type == syms.suite:
             return
@@ -65,10 +40,6 @@ def fixup_parse_tree(cls_node):
 
 
 def fixup_simple_stmt(parent, i, stmt_node):
-    """ if there is a semi-colon all the parts count as part of the same
-        simple_stmt.  We just want the __metaclass__ part so we move
-        everything after the semi-colon into its own simple_stmt node
-    """
     for semi_ind, node in enumerate(stmt_node.children):
         if node.type == token.SEMI:
             break
@@ -113,9 +84,6 @@ def find_metas(cls_node):
 
 
 def fixup_indent(suite):
-    """ If an INDENT is followed by a thing with a prefix then nuke the prefix
-        Otherwise we get in trouble when removing __metaclass__ at suite start
-    """
     kids = suite.children[::-1]
     while kids:
         node = kids.pop()
@@ -172,7 +140,6 @@ class FixMetaclass(fixer_base.BaseFix):
             else:
                 meta_txt.prefix = u''
             expr_stmt = last_metaclass.children[0]
-            assert expr_stmt.type == syms.expr_stmt
             expr_stmt.children[1].prefix = u''
             expr_stmt.children[2].prefix = u''
             arglist.append_child(last_metaclass)

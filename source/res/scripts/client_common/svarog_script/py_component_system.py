@@ -9,7 +9,6 @@ class ComponentDescriptor(AutoProperty):
         AutoProperty.__init__(self, fieldName)
 
     def __set__(self, instance, value):
-        assert isinstance(instance, ComponentSystem)
         prevValue = getattr(instance, self.fieldName, None)
         if prevValue is not None:
             instance.removeComponent(prevValue)

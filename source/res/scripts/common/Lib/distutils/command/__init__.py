@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/__init__.py
-"""distutils.command
-
-Package containing implementation of all the standard Distutils
-commands."""
 __revision__ = '$Id$'
 __all__ = ['build',
  'build_py',

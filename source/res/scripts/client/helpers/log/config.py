@@ -8,15 +8,32 @@ from . import hooks
 ENV_KEY = 'PY_LOGGING_CFG'
 XML_CFG_FILE = 'logging.xml'
 
+class LogConfigurator(logging.config.DictConfigurator):
+
+    def clear(self):
+        self.config.configurator = None
+        self._clearConvertor(self.config)
+        self.config.clear()
+        self.importer = None
+        return
+
+    @classmethod
+    def _clearConvertor(cls, convertor):
+        if isinstance(convertor, dict):
+            iterator = convertor.itervalues()
+        elif isinstance(convertor, (tuple, list)):
+            iterator = convertor
+        else:
+            return
+        for item in iterator:
+            cls._clearConvertor(item)
+            convertor.configurator = None
+            convertor.parent = None
+
+        return
+
+
 def setupFromXML(envKey=ENV_KEY, filename=XML_CFG_FILE, level=logging.WARNING):
-    """ Setups logging configuration from xml file.
-    :param envKey: string containing environment variable that contains
-        relative path to configuration file that is started from "res" directory.
-    :param filename: or string containing relative path to
-        configuration file that is started from "res" directory.
-    :param level: integer containing level of logging that will be applied
-        if configuration file is not found.
-    """
     value = os.getenv(envKey, '')
     if not value:
         value = filename
@@ -27,20 +44,15 @@ def setupFromXML(envKey=ENV_KEY, filename=XML_CFG_FILE, level=logging.WARNING):
     if config:
         if config.get('override_exception_hook', False):
             hooks.setupUserExceptionHook()
-        logging.config.dictConfig(config)
+        configurator = LogConfigurator(config)
+        configurator.configure()
+        configurator.clear()
     else:
         root = logging.getLogger()
         root.setLevel(level)
 
 
 def readXMLConfig(filename):
-    """ Reads XML file to load the logging configuration as dictionary.
-    Note: Here is no any validation, validation will be applied
-        if trying configure logging package.
-    :param filename: string containing relative path to
-          configuration file that is started from "res" directory.
-    :return: dictionary containing logging configuration.
-    """
     config = {}
     ctx, root = resource_helper.getRoot(filename, safe=False)
     if root is None:

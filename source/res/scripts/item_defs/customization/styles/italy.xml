@@ -1,0 +1,142 @@
+<italy.xml>
+  <itemGroup>
+    <priceGroup>	style gold	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+        <nations>	italy	</nations>
+      </include>
+      <include>
+        <levels>	10	</levels>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	41	</id>
+      <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
+      <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+      <outfits>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	515	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	256	</id>
+              <appliedTo>	30576	</appliedTo>
+            </item>
+            <item>
+              <id>	257	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	516	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	258	</id>
+              <appliedTo>	30576	</appliedTo>
+            </item>
+            <item>
+              <id>	259	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	517	</id>
+              <patternSize>	2	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	260	</id>
+              <appliedTo>	30576	</appliedTo>
+            </item>
+            <item>
+              <id>	261	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</italy.xml>

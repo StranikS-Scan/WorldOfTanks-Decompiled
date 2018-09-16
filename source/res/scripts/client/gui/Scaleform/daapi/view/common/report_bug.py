@@ -28,9 +28,9 @@ def getForumURL(accountId):
     links = GUI_SETTINGS.reportBugLinks
     url = None
     for region in links:
-        min = long(links[region]['min'])
-        max = long(links[region]['max'])
-        if min <= long(accountId) <= max:
+        minimum = long(links[region]['min'])
+        maximum = long(links[region]['max'])
+        if minimum <= long(accountId) <= maximum:
             url = links[region]['url']
             break
 

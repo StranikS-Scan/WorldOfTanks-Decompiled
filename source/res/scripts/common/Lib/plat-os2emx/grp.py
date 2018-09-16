@@ -1,51 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-os2emx/grp.py
-"""Replacement for grp standard extension module, intended for use on
-OS/2 and similar systems which don't normally have an /etc/group file.
-
-The standard Unix group database is an ASCII text file with 4 fields per
-record (line), separated by a colon:
-  - group name (string)
-  - group password (optional encrypted string)
-  - group id (integer)
-  - group members (comma delimited list of userids, with no spaces)
-
-Note that members are only included in the group file for groups that
-aren't their primary groups.
-(see the section 8.2 of the Python Library Reference)
-
-This implementation differs from the standard Unix implementation by
-allowing use of the platform's native path separator character - ';' on OS/2,
-DOS and MS-Windows - as the field separator in addition to the Unix
-standard ":".
-
-The module looks for the group database at the following locations
-(in order first to last):
-  - ${ETC_GROUP}              (or %ETC_GROUP%)
-  - ${ETC}/group              (or %ETC%/group)
-  - ${PYTHONHOME}/Etc/group   (or %PYTHONHOME%/Etc/group)
-
-Classes
--------
-
-None
-
-Functions
----------
-
-getgrgid(gid) -  return the record for group-id gid as a 4-tuple
-
-getgrnam(name) - return the record for group 'name' as a 4-tuple
-
-getgrall() -     return a list of 4-tuples, each tuple being one record
-                 (NOTE: the order is arbitrary)
-
-Attributes
-----------
-
-group_file -     the path of the group database file
-
-"""
 import os
 __group_path = []
 if os.environ.has_key('ETC_GROUP'):

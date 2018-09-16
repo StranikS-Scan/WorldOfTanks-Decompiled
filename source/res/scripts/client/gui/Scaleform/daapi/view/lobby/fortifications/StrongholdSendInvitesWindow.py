@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/StrongholdSendInvitesWindow.py
-import BigWorld
+from functools import partial
 from gui.prb_control.entities.stronghold.unit.ctx import SendInvitesUnitCtx
 from gui.Scaleform.daapi.view.lobby.SendInvitesWindow import SendInvitesWindow
 from gui.shared.utils.requesters.abstract import Response
@@ -8,7 +8,6 @@ from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from client_request_lib.exceptions import ResponseCodes
 from gui import SystemMessages
 from gui.Scaleform.locale.INVITES import INVITES
-from functools import partial
 
 class StrongholdSendInvitesWindow(SendInvitesWindow, UsersInfoHelper):
 

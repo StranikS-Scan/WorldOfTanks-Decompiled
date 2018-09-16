@@ -18,6 +18,7 @@ from items.readers import gun_readers
 from items.readers import shared_readers
 from items.readers import sound_readers
 from items import vehicle_items
+from items._xml import cachedFloat
 from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE, IS_DEVELOPMENT
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -124,10 +125,9 @@ _g_prices = None
 
 def init(preloadEverything, pricesToCollect):
     global g_cache
-    global _g_tiling
     global _g_prices
     global g_list
-    if IS_CLIENT or IS_CELLAPP:
+    if IS_CLIENT or IS_CELLAPP or IS_BOT:
         import vehicle_extras
     _g_prices = pricesToCollect
     g_list = VehicleList()
@@ -142,7 +142,6 @@ def init(preloadEverything, pricesToCollect):
                 g_cache.vehicle(nationID, vehicleTypeID)
 
         g_cache.customization20()
-        _g_tiling = {}
         _g_prices = None
     return
 
@@ -164,7 +163,6 @@ class VehicleDescriptor(object):
             if typeID is not None:
                 nationID, vehicleTypeID = typeID
             else:
-                assert typeName is not None
                 nationID, vehicleTypeID = g_list.getIDsByName(typeName)
             type = g_cache.vehicle(nationID, vehicleTypeID)
             turretDescr = type.turrets[0][0]
@@ -319,7 +317,6 @@ class VehicleDescriptor(object):
         if itemTypeName == 'vehicleGun':
             turretDescr, gunDescr = self.turrets[positionIndex]
             return (gunDescr, turretDescr.guns)
-        assert False
 
     def mayInstallTurret(self, turretCompactDescr, gunCompactDescr, positionIndex=0):
         selfType = self.type
@@ -463,8 +460,6 @@ class VehicleDescriptor(object):
         elif itemTypeName == 'vehicleFuelTank':
             attrName = 'fuelTank'
             compList = self.type.fuelTanks
-        else:
-            assert False
         prevDescr = getattr(self, attrName)
         newDescr = _descrByID(compList, compID)
         setattr(self, attrName, newDescr)
@@ -550,7 +545,6 @@ class VehicleDescriptor(object):
 
         optionalDevices = ''
         optionalDeviceSlots = 0
-        assert len(self.optionalDevices) == NUM_OPTIONAL_DEVICE_SLOTS
         for device in self.optionalDevices:
             optionalDeviceSlots <<= 1
             if device is not None:
@@ -690,7 +684,6 @@ class VehicleDescriptor(object):
         for elem in copy.copy(prereqs):
             if elem in g_cache.requestOncePrereqs:
                 prereqs.remove(elem)
-            g_cache.requestOncePrereqs.add(elem)
 
         return list(prereqs)
 
@@ -827,7 +820,7 @@ class VehicleDescriptor(object):
             self.type = type
             self.name = type.name
             self.level = type.level
-            if IS_CLIENT or IS_CELLAPP:
+            if IS_CLIENT or IS_CELLAPP or IS_BOT:
                 self.extras = type.extras
                 self.extrasDict = type.extrasDict
             chassisID, engineID, fuelTankID, radioID = unpack('<4H', components[:8])
@@ -1137,7 +1130,7 @@ class VehicleType(object):
          'firePenalty': _xml.readFraction(xmlCtx, section, 'invisibility/firePenalty')}
         self.crewRoles = _readCrew(xmlCtx, section, 'crew')
         commonConfig = g_cache.commonConfig
-        if IS_CLIENT or IS_CELLAPP:
+        if IS_CLIENT or IS_CELLAPP or IS_BOT:
             self.extras = commonConfig['extras']
             self.extrasDict = commonConfig['extrasDict']
             self.devices = commonConfig['_devices']
@@ -1442,10 +1435,6 @@ class Cache(object):
         return self.__getList(nationID, 'shellIDs')
 
     def customization20(self):
-        """
-        Lazy initialization of CustomizationCache instance.
-        :return:
-        """
         if self.__customization20 is None:
             from items.components.c11n_components import CustomizationCache
             from items.readers.c11n_readers import readCustomizationCacheFromXml
@@ -1540,10 +1529,6 @@ class Cache(object):
         return descr
 
     def getGunRecoilEffects(self, effectName):
-        """Gets desired configuration of recoil effect or None.
-        :param effectName: string containing name of effect.
-        :return: tuple(float containing backoff time, float containing return time) or None
-        """
         return self._gunRecoilEffects.get(effectName, None)
 
     @property
@@ -1760,8 +1745,6 @@ def getVehicleClassFromVehicleType(vehicleType):
     for vehClass in VEHICLE_CLASS_TAGS & vehicleType.tags:
         return vehClass
 
-    assert False
-
 
 def stripCustomizationFromVehicleCompactDescr(compactDescr, stripEmblems=True, stripInscriptions=True, stripCamouflages=True, keepInfinite=False):
     type, components, optionalDevicesSlots, optionalDevices, emblemSlots, emblems, inscriptions, camouflages = _splitVehicleCompactDescr(compactDescr)
@@ -1824,7 +1807,6 @@ def stripOptionalDevicesFromVehicleCompactDescr(compactDescr):
 
 def isShellSuitableForGun(shellCompactDescr, gunDescr):
     itemTypeID, nationID, shellTypeID = parseIntCompactDescr(shellCompactDescr)
-    assert itemTypeID == items.ITEM_TYPES.shell
     shellID = (nationID, shellTypeID)
     for shotDescr in gunDescr.shots:
         if shotDescr.shell.id == shellID:
@@ -2057,12 +2039,6 @@ def _readFakeGearBox(xmlCtx, section):
 
 
 def _readHull(xmlCtx, section):
-    """Reads information about hull configuration from xml section and store it in object.
-        For more information about chassis configuration see class vehicle_items.Hull.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :return: instance of Hull.
-    """
     item = vehicle_items.Hull()
     item.hitTester = _readHitTester(xmlCtx, section, 'hitTester')
     item.materials = _readArmor(xmlCtx, section, 'armor')
@@ -2129,7 +2105,6 @@ def __readTurretHardPoints(section, numTurrets):
     else:
         resultSeq = (intern(node.asString) for node in thpSection.values())
     result = tuple(resultSeq)
-    assert len(result) == numTurrets
     return result
 
 
@@ -2236,14 +2211,6 @@ def _readHullVariants(xmlCtx, section, defHull, chassis, turrets):
 
 
 def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
-    """Reads information about chassis configuration from xml section and store it in object.
-        For more information about chassis configuration see class vehicle_items.Chassis.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection
-    :param item: instance of Chassis
-    :param unlocksDescrs: sequence containing unlock info.
-    :param _: unused argument to make capability with other readers that are used in method _readInstallableComponents.
-    """
     item.tags = _readTags(xmlCtx, section, 'tags', 'vehicleChassis')
     item.level = _readLevel(xmlCtx, section)
     item.hullPosition = _xml.readVector3(xmlCtx, section, 'hullPosition')
@@ -2346,14 +2313,6 @@ def _readChassisLocals(xmlCtx, section, sharedItem, unlocksDescrs, _=None):
 
 
 def _readEngine(xmlCtx, section, item, unlocksDescrs=None, _=None):
-    """Reads information about engine configuration from xml section and store it in object.
-        For more information about engine configuration see class vehicle_items.Engine.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param item: instance of Engine.
-    :param unlocksDescrs: sequence containing unlock info.
-    :param _: unused argument to make capability with other readers that are used in method _readInstallableComponents.
-    """
     item.tags = _readTags(xmlCtx, section, 'tags', 'vehicleEngine')
     item.level = _readLevel(xmlCtx, section)
     item.power = _xml.readPositiveFloat(xmlCtx, section, 'power') * component_constants.HP_TO_WATTS
@@ -2383,14 +2342,6 @@ def _readEngineLocal(xmlCtx, section, sharedItem, unlocksDescrs, _=None):
 
 
 def _readFuelTank(xmlCtx, section, item, unlocksDescrs=None, _=None):
-    """Reads information about fuel tank configuration from xml section and store it in object.
-        For more information about engine configuration see class vehicle_items.FuelTank.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param item: instance of FuelTank.
-    :param unlocksDescrs: sequence containing unlock info.
-    :param _: unused argument to make capability with other readers that are used in method _readInstallableComponents.
-    """
     item.tags = _readTags(xmlCtx, section, 'tags', 'vehicleEngine')
     item.level = _readLevel(xmlCtx, section)
     item.weight = _xml.readPositiveFloat(xmlCtx, section, 'weight')
@@ -2402,14 +2353,6 @@ def _readFuelTank(xmlCtx, section, item, unlocksDescrs=None, _=None):
 
 
 def _readRadio(xmlCtx, section, item, unlocksDescrs=None, _=None):
-    """Reads information about radio configuration from xml section and store it in object.
-        For more information about engine configuration see class vehicle_items.FuelTank.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param item: instance of Radio.
-    :param unlocksDescrs: sequence containing unlock info.
-    :param _: unused argument to make capability with other readers that are used in method _readInstallableComponents.
-    """
     item.tags = _readTags(xmlCtx, section, 'tags', 'vehicleEngine')
     item.level = _readLevel(xmlCtx, section)
     item.weight = _xml.readNonNegativeFloat(xmlCtx, section, 'weight')
@@ -2430,7 +2373,7 @@ def _parseSectionList(ctx, section, listItemParser, listSubSectionTag=None):
     res = {}
     for name, sec in subsection.items():
         named_ctx = (ctx, name)
-        res[name] = listItemParser(named_ctx, sec)
+        res[intern(name)] = listItemParser(named_ctx, sec)
 
     return res
 
@@ -2588,14 +2531,6 @@ def _readXPhysicsClient(xmlCtx, section, subsectionName):
 
 
 def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
-    """Reads information about turret configuration from xml section and store it in object.
-        For more information about turret configuration see class vehicle_items.Turret.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param item: instance of Radio.
-    :param unlocksDescrs: sequence containing unlock info or None.
-    :param _: unused argument to make capability with other readers that are used in method _readInstallableComponents.
-    """
     item.tags = _readTags(xmlCtx, section, 'tags', 'vehicleTurret')
     item.level = _readLevel(xmlCtx, section)
     item.hitTester = _readHitTester(xmlCtx, section, 'hitTester')
@@ -2603,7 +2538,7 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.materials = _readArmor(xmlCtx, section, 'armor')
     item.weight = _xml.readNonNegativeFloat(xmlCtx, section, 'weight')
     item.healthParams = shared_components.DeviceHealth(_xml.readInt(xmlCtx, section, 'maxHealth', 1))
-    item.rotationSpeed = radians(_xml.readNonNegativeFloat(xmlCtx, section, 'rotationSpeed'))
+    item.rotationSpeed = cachedFloat(radians(_xml.readNonNegativeFloat(xmlCtx, section, 'rotationSpeed')))
     item.turretRotatorHealth = shared_readers.readDeviceHealthParams(xmlCtx, section, 'turretRotatorHealth')
     item.surveyingDeviceHealth = shared_readers.readDeviceHealthParams(xmlCtx, section, 'surveyingDeviceHealth')
     if not IS_CLIENT and not IS_BOT:
@@ -2625,7 +2560,7 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.models = shared_readers.readModels(xmlCtx, section, 'models')
         if section.has_key('camouflage'):
             item.camouflage = shared_readers.readCamouflage(xmlCtx, section, 'camouflage', default=shared_components.DEFAULT_CAMOUFLAGE)
-        item.turretRotatorSoundManual = section.readString('wwturretRotatorSoundManual')
+        item.turretRotatorSoundManual = _xml.readString(xmlCtx, section, 'wwturretRotatorSoundManual')
         item.AODecals = _readAODecals(xmlCtx, section, 'AODecals')
         commonConfig = g_cache.commonConfig
         item.turretDetachmentEffects = _readTurretDetachmentEffects(xmlCtx, section, 'turretDetachmentEffects', commonConfig['defaultTurretDetachmentEffects'])
@@ -2671,13 +2606,6 @@ def _readTurretLocals(xmlCtx, section, sharedItem, unlocksDescrs, _=None):
 
 
 def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
-    """Reads information about gun configuration from xml section and store it in object.
-        For more information about gun configuration see class vehicle_items.Turret.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param item: instance of Gun.
-    :param unlocksDescrs: sequence containing unlock info or None.
-    """
     item.tags = _readTags(xmlCtx, section, 'tags', 'vehicleGun')
     item.level = _readLevel(xmlCtx, section)
     item.rotationSpeed = radians(_xml.readNonNegativeFloat(xmlCtx, section, 'rotationSpeed'))
@@ -2738,6 +2666,10 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.healthParams = shared_readers.readDeviceHealthParams(xmlCtx, section)
     item.shotDispersionAngle = atan(_xml.readNonNegativeFloat(xmlCtx, section, 'shotDispersionRadius') / 100.0)
     item.shotDispersionFactors = _readGunShotDispersionFactors(xmlCtx, section, 'shotDispersionFactors')
+    if not section.has_key('autoreload'):
+        item.autoreload = component_constants.DEFAULT_GUN_AUTORELOAD
+    else:
+        item.autoreload = _readGunClipAutoreload(xmlCtx, section)
     if not section.has_key('burst'):
         item.burst = component_constants.DEFAULT_GUN_BURST
     else:
@@ -2748,11 +2680,17 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.clip = _readGunClipBurst(xmlCtx, section, 'clip')
     if item.burst[0] > item.clip[0] > 1:
         _xml.raiseWrongXml(xmlCtx, 'burst', 'burst/count is larger than clip/count')
+    if item.autoreload != component_constants.DEFAULT_GUN_AUTORELOAD and item.clip[0] <= 1:
+        _xml.raiseWrongXml(xmlCtx, 'autoreload', "'autoreload' section is redundant for non-clip items")
     tags = item.tags
     if item.clip[0] == 1:
         tags = tags.difference(('clip',))
     else:
         tags = tags.union(('clip',))
+    if item.autoreload == component_constants.DEFAULT_GUN_AUTORELOAD:
+        tags = tags.difference(('autoreload',))
+    else:
+        tags = tags.union(('autoreload',))
     item.tags = tags
     nationID = parseIntCompactDescr(item.compactDescr)[1]
     v = []
@@ -2776,7 +2714,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
         v = _xml.readVector2(xmlCtx, section, 'turretYawLimits')
         if v[0] > v[1]:
             _xml.raiseWrongSection(xmlCtx, 'turretYawLimits')
-        turretYawLimits = (radians(v[0]), radians(v[1])) if v[0] > -179.0 or v[1] < 179.0 else None
+        turretYawLimits = cachedFloatTuple((radians(v[0]), radians(v[1]))) if v[0] > -179.0 or v[1] < 179.0 else None
     if section.has_key('pitchLimits'):
         hasOverride = True
         pitchLimits = _readGunPitchLimits(xmlCtx, section['pitchLimits'], True)
@@ -2822,6 +2760,11 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
     else:
         hasOverride = True
         shotDispFactors = _readGunShotDispersionFactors(xmlCtx, section, 'shotDispersionFactors')
+    if not section.has_key('autoreload'):
+        autoreload = sharedItem.autoreload
+    else:
+        hasOverride = True
+        autoreload = _readGunClipAutoreload(xmlCtx, section)
     if not section.has_key('burst'):
         burst = sharedItem.burst
     else:
@@ -2834,6 +2777,8 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
         clip = _readGunClipBurst(xmlCtx, section, 'clip')
     if burst[0] > clip[0] > 1:
         _xml.raiseWrongXml(xmlCtx, 'burst', 'burst/count is larger than clip/count')
+    if autoreload != component_constants.DEFAULT_GUN_AUTORELOAD and clip[0] <= 1:
+        _xml.raiseWrongXml(xmlCtx, 'autoreload', "'autoreload' section is redundant for non-clip items")
     if not section.has_key('invisibilityFactorAtShot'):
         invisibilityFactorAtShot = sharedItem.invisibilityFactorAtShot
     else:
@@ -2937,6 +2882,14 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             else:
                 tags = tags.union(('clip',))
             item.tags = tags
+        if autoreload is not sharedItem.autoreload:
+            item.autoreload = autoreload
+            tags = item.tags
+            if autoreload == component_constants.DEFAULT_GUN_AUTORELOAD:
+                tags = tags.difference(('autoreload',))
+            else:
+                tags = tags.union(('autoreload',))
+            item.tags = tags
         if IS_CLIENT:
             item.models = models
             item.effects = effects
@@ -2973,7 +2926,7 @@ def _readGunPitchLimits(xmlCtx, section, isLocal):
 def _validatePitchLimits(xmlCtx, subsectionName, pitchLimits):
     minPitch = pitchLimits['minPitch']
     maxPitch = pitchLimits['maxPitch']
-    pitchLimits['absolute'] = (min([ key for _, key in minPitch ]), max([ key for _, key in maxPitch ]))
+    pitchLimits['absolute'] = cachedFloatTuple((min([ key for _, key in minPitch ]), max([ key for _, key in maxPitch ])))
     ok = _validateMinMaxPitchLimits(minPitch, maxPitch, False) and _validateMinMaxPitchLimits(maxPitch, minPitch, True)
     if not ok:
         _xml.raiseWrongSection(xmlCtx, subsectionName)
@@ -3014,13 +2967,21 @@ def _readGunPitchConstraints(xmlCtx, section, type):
         if points[index][0] >= points[index + 1][0]:
             _xml.raiseWrongSection(xmlCtx, type)
 
-    return tuple(points)
+    return cachedFloatTuple(points)
 
 
 def _readGunClipBurst(xmlCtx, section, type):
     count = _xml.readInt(xmlCtx, section, type + '/count', 1)
     interval = 60.0 / _xml.readPositiveFloat(xmlCtx, section, type + '/rate')
     return (count, interval if count > 1 else 0.0)
+
+
+def _readGunClipAutoreload(xmlCtx, section):
+    reloadTime = _xml.readTupleOfPositiveFloats(xmlCtx, section, 'autoreload/reloadTime')
+    if not len(reloadTime):
+        _xml.raiseWrongXml(xmlCtx, 'autoreload/reloadTime', "'reloadTime' must contain at least one value")
+    revertFraction = _xml.readFraction(xmlCtx, section, 'autoreload/revertFraction')
+    return component_constants.Autoreload(reloadTime=reloadTime, revertFraction=revertFraction)
 
 
 def _readShells(xmlPath, nationID):
@@ -3083,9 +3044,9 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
             shellType.piercingPowerLossFactorByDistance = 10.0 * _xml.readNonNegativeFloat(xmlCtx, section, 'piercingPowerLossFactorByDistance')
             shellType.ricochetAngleCos = cos(radians(_xml.readNonNegativeFloat(xmlCtx, section, 'ricochetAngle')))
     if kind == 'HIGH_EXPLOSIVE':
-        shellType.explosionRadius = section.readFloat('explosionRadius')
+        shellType.explosionRadius = cachedFloat(section.readFloat('explosionRadius'))
         if shellType.explosionRadius <= 0.0:
-            shellType.explosionRadius = shell.caliber * shell.caliber / 5555.0
+            shellType.explosionRadius = cachedFloat(shell.caliber * shell.caliber / 5555.0)
         explosionSettings = ('explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor')
         for f in explosionSettings:
             factor = section.readFloat(f)
@@ -3227,7 +3188,7 @@ def _readPrimaryArmor(xmlCtx, section, subsectionName, materials):
                 _xml.raiseWrongXml(xmlCtx, subsectionName, "unknown material kind name '%s'" % matKindName)
             res.append(materials.get(materialKind, shared_components.DEFAULT_MATERIAL_INFO).armor)
 
-        return tuple(res)
+        return cachedFloatTuple(res)
 
 
 def _readFakeTurretIndices(xmlCtx, section, subsectionName, numTurrets):
@@ -3459,7 +3420,7 @@ def _readChassisEffectGroups(xmlPath):
                 if len(matkindSection.keys()) > 0:
                     for idx, side in enumerate(('left', 'right', 'leftFront', 'rightFront')):
                         sideEffectName = _xml.readNonEmptyString((ctx, matkindName), matkindSection, side)
-                        effectNames.append(sideEffectName)
+                        effectNames.append(intern(sideEffectName))
 
                 else:
                     effectNames = _xml.readNonEmptyString((ctx, matkindName), matkindSection, '')
@@ -3650,8 +3611,9 @@ def _readAndRegisterDamageStickerTextureParams(xmlCtx, section, stickerName, rai
             _xml.raiseWrongXml(xmlCtx, section.name, 'texName for damage sticker is not specified')
         return
     else:
-        texName = _xml.readNonEmptyString(xmlCtx, section, 'texName')
-        bumpTexName = _xml.readNonEmptyString(xmlCtx, section, 'bumpTexName') if section.has_key('bumpTexName') else ''
+        texAM = _xml.readNonEmptyString(xmlCtx, section, 'texName')
+        texNM = _xml.readNonEmptyString(xmlCtx, section, 'bumpTexName') if section.has_key('bumpTexName') else ''
+        texGMM = _xml.readNonEmptyString(xmlCtx, section, 'smTexName') if section.has_key('smTexName') else ''
         randomYaw = True
         subsection = section['randomYaw']
         if subsection is not None:
@@ -3659,7 +3621,7 @@ def _readAndRegisterDamageStickerTextureParams(xmlCtx, section, stickerName, rai
         variation = section.readFloat('variation', 0.0)
         v = _xml.readPositiveVector2(xmlCtx, section, 'modelSizes')
         modelSizes = v.tuple()
-        return BigWorld.wg_registerDamageSticker(stickerName, texName, bumpTexName, modelSizes, variation, randomYaw)
+        return BigWorld.wg_registerDamageSticker(stickerName, texAM, texNM, texGMM, modelSizes, variation, randomYaw)
 
 
 def _readCommonConfig(xmlCtx, section):
@@ -3697,6 +3659,10 @@ def _readCommonConfig(xmlCtx, section):
          'ramming': _xml.readPositiveFloat(xmlCtx, section, effectVelPath + 'ramming')}
     elif IS_WEB:
         res['materials'], res['_autoDamageKindMaterials'] = _readMaterials(xmlCtx, section, 'materials', None)
+    if IS_BOT:
+        res['extras'], res['extrasDict'] = _readExtras(xmlCtx, section, 'extras')
+        res['deviceExtraIndexToTypeIndex'], res['tankmanExtraIndexToTypeIndex'] = _readDeviceTypes(xmlCtx, section, 'deviceExtras', res['extrasDict'])
+        res['_devices'] = frozenset((res['extras'][idx] for idx in res['deviceExtraIndexToTypeIndex'].iterkeys()))
     if IS_BASEAPP or IS_WEB:
         res['balanceByVehicleModule'] = _readVehicleModulesWeights(xmlCtx, section)
         res['balanceByComponentLevels'] = (None,) + _xml.readTupleOfFloats(xmlCtx, section, 'balance/byComponentLevels', 10)
@@ -3736,7 +3702,7 @@ def _readExtras(xmlCtx, section, subsectionName):
         if extrasDict.has_key(extraName):
             _xml.raiseWrongXml(ctx, '', 'name is not unique')
         clientName, sep, serverName = extraSection.asString.partition(':')
-        className = (clientName if IS_CLIENT else serverName).strip()
+        className = (clientName if IS_CLIENT or IS_BOT else serverName).strip()
         classObj = getattr(mod, className, None)
         if classObj is None:
             _xml.raiseWrongXml(ctx, '', "class '%s' is not found in '%s'" % (className, mod.__name__))
@@ -3916,7 +3882,7 @@ def _readCamouflage(xmlCtx, section, ids, groups, nationID, priceFactors, notInS
     kind = CAMOUFLAGE_KINDS.get(section.readString('kind'))
     if kind is None:
         _xml.raiseWrongSection(xmlCtx, 'kind')
-    groupName = _xml.readNonEmptyString(xmlCtx, section, 'group')
+    groupName = intern(_xml.readNonEmptyString(xmlCtx, section, 'group'))
     groupDescr = groups.get(groupName)
     if groupDescr is None:
         _xml.raiseWrongXml(xmlCtx, 'group', "unknown camouflage group name '%s'" % groupName)
@@ -3932,12 +3898,13 @@ def _readCamouflage(xmlCtx, section, ids, groups, nationID, priceFactors, notInS
      'deny': _readNationVehiclesByNames(xmlCtx, section, 'deny', nationID),
      'requiredToken': section.readString('requiredToken', '')}
     isNew = False
-    if IS_CLIENT:
-        isNew = section.readBool('isNew', False)
-        camouflage['isNew'] = isNew
+    if IS_CLIENT or IS_WEB:
         camouflage['description'] = section.readString('description')
         camouflage['texture'] = _xml.readNonEmptyString(xmlCtx, section, 'texture')
         camouflage['colors'] = _readColors(xmlCtx, section, 'colors', 4)
+    if IS_CLIENT:
+        isNew = section.readBool('isNew', False)
+        camouflage['isNew'] = isNew
         camouflage['tiling'] = _readCamouflageTilings(xmlCtx, section, 'tiling', nationID)
     groupDescr['ids'].append(id)
     if isNew:
@@ -3949,7 +3916,7 @@ def _readCamouflage(xmlCtx, section, ids, groups, nationID, priceFactors, notInS
 
 def _readColors(xmlCtx, section, sectionName, requiredSize=None):
     res = []
-    if not IS_CLIENT and not IS_BOT:
+    if not IS_CLIENT and not IS_BOT and not IS_WEB:
         for sname, subsection in _xml.getChildren(xmlCtx, section, sectionName):
             res.append(0)
 
@@ -4027,7 +3994,7 @@ def _readCamouflageTilings(xmlCtx, section, sectionName, defNationID):
         tiling = _xml.readTupleOfFloats(v.ctx, v.subsection, '', 4)
         if tiling[0] <= 0 or tiling[1] <= 0:
             _xml.raiseWrongSection(v.ctx, v.vehicle_name)
-        res[v.compact_descriptor] = _g_tiling.setdefault(tiling, tiling)
+        res[v.compact_descriptor] = tiling
 
     return res
 
@@ -4065,7 +4032,7 @@ def _readPlayerEmblems(xmlPath):
             emblemID = _xml.readInt(ctx, subsection, 'id', 1, 65535)
             if emblems.has_key(emblemID):
                 _xml.raiseWrongXml(ctx, '', 'emblem ID is not unique')
-            if IS_CLIENT:
+            if IS_CLIENT or IS_WEB:
                 emblemUserString = i18n.makeString('')
                 texName = _xml.readNonEmptyString(ctx, subsection, 'texName')
                 bumpSubsection = subsection['bumpTexName']
@@ -4136,7 +4103,7 @@ def _readPlayerInscriptions(xmlCtx, section, subsectionName, priceFactors, notIn
             tags = _xml.readStringOrNone(ctx, subsection, 'tags')
             tags = frozenset() if tags is None else frozenset(tags.split())
             qualifier = _xml.readStringOrNone(ctx, subsection, 'qualifier')
-            if IS_CLIENT:
+            if IS_CLIENT or IS_WEB:
                 texName = _xml.readNonEmptyString(ctx, subsection, 'texName')
                 bumpTexName = subsection.readString('bumpTexName', '')
                 inscrUserString = i18n.makeString(None)
@@ -4255,7 +4222,7 @@ if IS_CLIENT:
      'collisionVehicleHeavy2',
      'collisionVehicleHeavy3',
      'rammingCollisionLight',
-     'rammingCollisionHeavy'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction'])
+     'rammingCollisionHeavy'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction'] + ['dynamicCollision'])
     _damagedStateGroupEffectKindNames = ('ammoBayExplosion',
      'ammoBayBurnOff',
      'fuelExplosion',
@@ -4329,7 +4296,9 @@ def _extractNeededPrereqs(prereqs, resourceNames):
     res = []
     for name in resourceNames:
         try:
-            res.append(prereqs[name])
+            if name not in g_cache.requestOncePrereqs:
+                res.append(prereqs[name])
+                g_cache.requestOncePrereqs.add(name)
         except Exception:
             if name not in g_cache.requestOncePrereqs:
                 LOG_WARNING('Resource is not found: %s' % name)
@@ -4407,7 +4376,6 @@ def _summPriceDiff(price, priceAdd, priceSub):
 
 def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT):
     header = ord(compactDescr[0])
-    assert header & 15 == items.ITEM_TYPES.vehicle
     vehicleTypeID = ord(compactDescr[1])
     nationID = header >> 4 & 15
     type = g_cache.vehicle(nationID, vehicleTypeID, vehMode)
@@ -4423,11 +4391,9 @@ def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT):
             optionalDeviceSlots |= 1 << i
 
     optionalDevices = compactDescr[idx:idx + count * 2]
-    assert len(optionalDevices) % 2 == 0
     idx += count * 2
     if flags & 32:
         emblemPositions = ord(compactDescr[idx])
-        assert emblemPositions
         idx += 1
         count = 0
         for i in _RANGE_4:
@@ -4435,7 +4401,6 @@ def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT):
                 count += 1
 
         emblems = compactDescr[idx:idx + count * 6]
-        assert len(emblems) % 6 == 0
         idx += count * 6
         count = 0
         for i in _RANGE_4:
@@ -4443,7 +4408,6 @@ def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT):
                 count += 1
 
         inscriptions = compactDescr[idx:idx + count * 7]
-        assert len(inscriptions) % 7 == 0
         idx += count * 7
     else:
         emblemPositions = 0
@@ -4453,7 +4417,6 @@ def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT):
         idx += 1
     if flags & 128:
         camouflages = compactDescr[idx:]
-        assert len(camouflages) % 6 == 0
     else:
         camouflages = ''
     return (type,
@@ -4471,7 +4434,6 @@ def _combineVehicleCompactDescr(type, components, optionalDeviceSlots, optionalD
     vehicleTypeID = type.id[1]
     flags = optionalDeviceSlots
     if emblems or inscriptions:
-        assert emblemPositions
         flags |= 32
     if camouflages:
         flags |= 128
@@ -4512,15 +4474,19 @@ def _calculateGunCombinedPitchLimits(xmlCtx, hullAimingParams, inOutGuns):
             pitchLimits = gun.pitchLimits
             minPitch = tuple(((border, pitch + hullAimingPitchMin) for border, pitch in pitchLimits['minPitch']))
             maxPitch = tuple(((border, pitch + hullAimingPitchMax) for border, pitch in pitchLimits['maxPitch']))
-            combinedPitchLimits = {'minPitch': minPitch,
-             'maxPitch': maxPitch}
+            combinedPitchLimits = {'minPitch': cachedFloatTuple(minPitch),
+             'maxPitch': cachedFloatTuple(maxPitch)}
             _validatePitchLimits(xmlCtx, parameterName, combinedPitchLimits)
             gun.combinedPitchLimits = combinedPitchLimits
 
         return
 
 
-_g_tiling = {}
+@_xml.cacheFloatTuples
+def cachedFloatTuple(args):
+    return tuple(args)
+
+
 _EMPTY_INSCRIPTION = (None,
  _CUSTOMIZATION_EPOCH,
  0,

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pty.py
-"""Pseudo terminal utilities."""
 from select import select
 import os
 import tty
@@ -11,8 +10,6 @@ STDERR_FILENO = 2
 CHILD = 0
 
 def openpty():
-    """openpty() -> (master_fd, slave_fd)
-    Open a pty master/slave pair, using os.openpty() if possible."""
     try:
         return os.openpty()
     except (AttributeError, OSError):
@@ -24,9 +21,6 @@ def openpty():
 
 
 def master_open():
-    """master_open() -> (master_fd, slave_name)
-    Open a pty master and return the fd, and the filename of the slave end.
-    Deprecated, use openpty() instead."""
     try:
         master_fd, slave_fd = os.openpty()
     except (AttributeError, OSError):
@@ -40,8 +34,6 @@ def master_open():
 
 
 def _open_terminal():
-    """Open pty master and return (master_fd, tty_name).
-    SGI and generic BSD version, for when openpty() fails."""
     try:
         import sgi
     except ImportError:
@@ -68,10 +60,6 @@ def _open_terminal():
 
 
 def slave_open(tty_name):
-    """slave_open(tty_name) -> slave_fd
-    Open the pty slave and acquire the controlling terminal, returning
-    opened filedescriptor.
-    Deprecated, use openpty() instead."""
     result = os.open(tty_name, os.O_RDWR)
     try:
         from fcntl import ioctl, I_PUSH
@@ -88,8 +76,6 @@ def slave_open(tty_name):
 
 
 def fork():
-    """fork() -> (pid, master_fd)
-    Fork and make the child a session leader with a controlling terminal."""
     try:
         pid, fd = os.forkpty()
     except (AttributeError, OSError):
@@ -121,22 +107,16 @@ def fork():
 
 
 def _writen(fd, data):
-    """Write all the data to a descriptor."""
     while data != '':
         n = os.write(fd, data)
         data = data[n:]
 
 
 def _read(fd):
-    """Default read function."""
     return os.read(fd, 1024)
 
 
 def _copy(master_fd, master_read=_read, stdin_read=_read):
-    """Parent copy loop.
-    Copies
-            pty master -> standard output   (master_read)
-            standard input -> pty master    (stdin_read)"""
     fds = [master_fd, STDIN_FILENO]
     while True:
         rfds, wfds, xfds = select(fds, [], [])
@@ -155,7 +135,6 @@ def _copy(master_fd, master_read=_read, stdin_read=_read):
 
 
 def spawn(argv, master_read=_read, stdin_read=_read):
-    """Create a spawned process."""
     if type(argv) == type(''):
         argv = (argv,)
     pid, master_fd = fork()

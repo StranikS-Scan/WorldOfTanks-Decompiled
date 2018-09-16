@@ -12,11 +12,6 @@ from VehicleQualifiersApplier import VehicleQualifiersApplier
 from debug_utils import *
 
 def _makeDefaultVehicleFactors(sample):
-    """It's a simple analog of copy.deepcopy to make copy of default factors,
-    but too faster than copy.deepcopy.
-    :param sample: dict containing sample that should be copy.
-    :return: dict containing copy of sample.
-    """
     default = {}
     for key, value in sample.iteritems():
         if value is None:
@@ -34,7 +29,6 @@ def _makeDefaultVehicleFactors(sample):
 
 
 def makeDefaultVehicleAttributeFactors():
-    """Make copy of VEHICLE_ATTRIBUTE_FACTORS."""
     return _makeDefaultVehicleFactors(VEHICLE_ATTRIBUTE_FACTORS)
 
 
@@ -43,7 +37,6 @@ def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
 
 
 def generateDefaultCrew(vehicleType, level):
-    assert 0 <= level <= tankmen.MAX_SKILL_LEVEL
     nationID, vehicleTypeID = vehicleType.id
     skills = ()
     passport = (nationID,
@@ -94,6 +87,11 @@ def getReloadTime(vehicleDescr, factors):
     return vehicleDescr.gun.reloadTime * vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['gun/reloadTime'], 0.0)
 
 
+def getClipReloadTime(vehicleDescr, factors):
+    factor = vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['gun/reloadTime'], 0.0)
+    return tuple((reloadTime * factor for reloadTime in vehicleDescr.gun.autoreload.reloadTime))
+
+
 def getTurretRotationSpeed(vehicleDescr, factors):
     return vehicleDescr.turret.rotationSpeed * max(factors['turret/rotationSpeed'], 0.0)
 
@@ -120,7 +118,6 @@ if IS_CLIENT:
     CLIENT_VEHICLE_ATTRIBUTE_FACTORS.update(VEHICLE_ATTRIBUTE_FACTORS)
 
     def makeDefaultClientVehicleAttributeFactors():
-        """Make copy of CLIENT_VEHICLE_ATTRIBUTE_FACTORS."""
         return _makeDefaultVehicleFactors(CLIENT_VEHICLE_ATTRIBUTE_FACTORS)
 
 

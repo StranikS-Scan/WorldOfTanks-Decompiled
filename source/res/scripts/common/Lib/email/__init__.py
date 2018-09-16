@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/__init__.py
-"""A package for parsing, handling, and generating email messages."""
 __version__ = '4.0.3'
 __all__ = ['base64MIME',
  'Charset',
@@ -36,19 +35,11 @@ __all__ = ['base64MIME',
  'utils']
 
 def message_from_string(s, *args, **kws):
-    """Parse a string into a Message object model.
-    
-    Optional _class and strict are passed to the Parser constructor.
-    """
     from email.parser import Parser
     return Parser(*args, **kws).parsestr(s)
 
 
 def message_from_file(fp, *args, **kws):
-    """Read a file and parse its contents into a Message object model.
-    
-    Optional _class and strict are passed to the Parser constructor.
-    """
     from email.parser import Parser
     return Parser(*args, **kws).parse(fp)
 

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/effects_properties.py
-from gui.Scaleform.daapi.view.lobby.customization.anchor_properties import ANCHOR_TYPE
 from gui.Scaleform.daapi.view.lobby.customization.anchor_properties import AnchorDataVO
 from gui.Scaleform.daapi.view.meta.CustomizationEffectsPropertiesMeta import CustomizationEffectsPropertiesMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -10,9 +9,6 @@ class EffectsDataVO(AnchorDataVO):
 
 
 class EffectsAnchorProperties(CustomizationEffectsPropertiesMeta):
-
-    def _getAnchorType(self):
-        return ANCHOR_TYPE.EFFECT
 
     def _getData(self):
         itemData = self._getItemData()

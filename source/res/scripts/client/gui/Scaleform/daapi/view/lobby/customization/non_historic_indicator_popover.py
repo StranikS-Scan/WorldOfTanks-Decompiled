@@ -25,17 +25,11 @@ class NonHistoricItemsPopover(CustomizationNonHistoricPopoverMeta):
         self.destroy()
 
     def remove(self, intCD):
-        """ Remove an instance of the item from select tank.
-        """
         self._nonHistoricalItems[:] = [ x for x in self._nonHistoricalItems if x != intCD ]
         self._assignedDP.rebuildList(self._nonHistoricalItems)
         self.service.onRemoveItems(intCD)
 
     def removeAll(self):
-        """
-        Remove item from all applicable tanks
-        :return:
-        """
         self.service.onRemoveItems(*self._nonHistoricalItems)
         self.destroy()
 
@@ -99,8 +93,8 @@ class NonHistoricItemDataProvider(SortableDAAPIDataProvider):
 
     def _makeVO(self, item, numItems):
         imageIcon = ''
-        id = 0
+        intCD = 0
         if item is not None:
             imageIcon = item.icon
-            id = item.intCD
-        return NonHistoricItems(id, imageIcon, 'x' + str(numItems))._asdict()
+            intCD = item.intCD
+        return NonHistoricItems(intCD, imageIcon, 'x{}'.format(numItems))._asdict()

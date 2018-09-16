@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/event_boards/event_boards_timer.py
-import BigWorld
 import time
 import datetime
+import BigWorld
 from helpers import time_utils
 FORMAT_EMPTY_STR = ''
 FORMAT_DAY_STR = 'day'
@@ -17,9 +17,6 @@ def getTimeStampFromDate(strDate):
 
 
 def isPeripheryActiveAtCurrentMoment(primeTime):
-    """
-    Check is periphery active and return timestamp to start and end periphery activation
-    """
     currentTimeUTC = _getCurrentUTCTime()
     if primeTime.getStartTime() and primeTime.getEndTime():
         prStartTimeUTC, prEndTimeUTC = _calculatePeripheryTimeHelper(currentTimeUTC, primeTime)
@@ -37,10 +34,6 @@ def getPeripheryTime(primeTime):
 
 
 def isCurrentTimeInPeriod(strStartDate, strEndDate):
-    """
-    :param strStartDate: UTC date represents as string (2017-01-22T23:23:00)
-    :param strEndDate: UTC date represents as string (2017-01-22T23:23:00)
-    """
     if strStartDate and strEndDate:
         endDate = getTimeStampFromDate(strEndDate)
         startDate = getTimeStampFromDate(strStartDate)
@@ -50,13 +43,6 @@ def isCurrentTimeInPeriod(strStartDate, strEndDate):
 
 
 def isPeriodCloseToEnd(strStartDate, strEndDate, percents=0.1):
-    """
-    :param strStartDate: UTC date represents as string (2017-01-22T23:23:00)
-    :param strEndDate: UTC date represents as string (2017-01-22T23:23:00)
-    :param percents: percents to end value (1..100)
-    
-    according to confluence: https://confluence.wargaming.net/pages/viewpage.action?pageId=473439182
-    """
     if strStartDate and strEndDate:
         periodTime = getTimeStampFromDate(strEndDate) - getTimeStampFromDate(strStartDate)
         if periodTime >= 0:
@@ -71,14 +57,6 @@ def isPeriodCloseToEnd(strStartDate, strEndDate, percents=0.1):
 
 
 def getFormattedRemainingTime(strEndDate, isRoundUp=False):
-    """
-    :param strEndDate: UTC date represents as string (2017-01-22T23:23:00)
-    :param isRoundUp: round up time
-    based on time_utils.getTillTimeString()
-    get numeric data (days left, hours left etc) and string with id data (day, hour, minute)
-    according to confluence: https://confluence.wargaming.net/pages/viewpage.action?pageId=463366746
-    TLEL-02
-    """
     if strEndDate:
         endDate = _stringToStruct(strEndDate)
         endDate = time_utils.getTimestampFromUTC(endDate)
@@ -91,13 +69,6 @@ def getFormattedRemainingTime(strEndDate, isRoundUp=False):
 
 
 def getTimeStatus(strDate):
-    """
-    :param strDate: UTC date represents as string (2017-01-22T23:23:00)
-    
-    get numeric data (+days left, +hours left etc) if it before current time
-    or numeric data (-days left, -hours left etc) if it after current time
-    and string with id data (day, hour, minute)
-    """
     if strDate:
         value, txtid = getFormattedRemainingTime(strDate, False)
         if txtid:
@@ -115,13 +86,6 @@ def getTimeStatus(strDate):
 
 
 def getUpdateStatus_ts(tsUpdateDate):
-    """
-    get string with update status: 'today', 'yesterday' or 'tomorrow'
-    according to confluence: https://confluence.wargaming.net/display/WGCGK/Excel+View#ExcelView-5
-    paragraph 5
-    
-    :param tsUpdateDate: UTC date represents as timestamp (1259453)
-    """
     if tsUpdateDate is not None:
         currentTime = _getCurrentUTCTime()
         currentTimestamp = int(time_utils.getTimestampFromUTC(currentTime.timetuple()))
@@ -136,22 +100,12 @@ def getUpdateStatus_ts(tsUpdateDate):
 
 
 def getDayMonthYear(strDate):
-    """
-    get (day, month, year) from date ('2017-01-22T13:15:00' -> 22, 1, 2017)
-    
-    :param strDate : UTC date represents as string (2017-01-22T13:15:00)
-    """
     if strDate:
         dateLocal = time.localtime(getTimeStampFromDate(strDate))
         return (dateLocal.tm_mday, dateLocal.tm_mon, dateLocal.tm_year)
 
 
 def getShortTimeString(strDate):
-    """
-    get string with short time format (01:15 AM)
-    
-    :param strDate : UTC date represents as string (2017-01-22T13:15:00)
-    """
     if strDate:
         dateTimestamp = getTimeStampFromDate(strDate)
         return BigWorld.wg_getShortTimeFormat(dateTimestamp)
@@ -159,11 +113,6 @@ def getShortTimeString(strDate):
 
 
 def getShortTimeString_ts(tsDate):
-    """
-    get string with short time format (01:15 AM)
-    
-    :param tsDate : UTC date represents as timestamp (1000000)
-    """
     return BigWorld.wg_getShortTimeFormat(tsDate)
 
 
@@ -192,10 +141,6 @@ def _stringToStruct(strDate):
 
 
 def _calculatePeripheryTimeHelper(baseTimeUTC, primeTimes):
-    """
-    This function converts periphery string 'h:m' format data to datetime format based on baseTimeUTC
-    and return normalized to baseTimeUTC periphery start and end time
-    """
     peripheryStartTimeUTC = time.strptime(primeTimes.getStartTime(), '%H:%M:%S')
     peripheryEndTimeUTC = time.strptime(primeTimes.getEndTime(), '%H:%M:%S')
     peripheryStartTimeUTC = baseTimeUTC.replace(hour=peripheryStartTimeUTC.tm_hour, minute=peripheryStartTimeUTC.tm_min, second=0, microsecond=0)

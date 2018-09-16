@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/fitting_select_popover.py
 import BigWorld
-from bootcamp.BootCampEvents import g_bootcampEvents
 from gui import g_htmlTemplates
 from constants import MAX_VEHICLE_LEVEL
 from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
@@ -16,12 +15,12 @@ from gui.shared.gui_items.processors.vehicle import VehicleAutoBattleBoosterEqui
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import formatModuleParamName, formatParameter
-from gui.shared.utils import decorators, EXTRA_MODULE_INFO, CLIP_ICON_PATH, HYDRAULIC_ICON_PATH
+from gui.shared.utils import decorators, EXTRA_MODULE_INFO
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.event_dispatcher import showBattleBoosterBuyDialog
 from helpers import dependency, i18n
 from helpers.i18n import makeString as _ms
-from gui.shared.formatters import text_styles, getItemPricesVO, getItemPricesVOWithReason
+from gui.shared.formatters import text_styles, getItemPricesVOWithReason
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared import event_dispatcher as shared_events
@@ -29,7 +28,6 @@ from items import getTypeInfoByName
 from skeletons.gui.shared import IItemsCache
 from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HINT
 from skeletons.gui.game_control import IBootcampController
-from bootcamp.BootcampGarage import g_bootcampGarage
 from bootcamp.Bootcamp import g_bootcamp
 _PARAMS_LISTS = {GUI_ITEM_TYPE.RADIO: ('radioDistance',),
  GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxLoad'),
@@ -43,7 +41,6 @@ _POPOVER_OVERLAY_VEH_LVL_RANGE = range(4, MAX_VEHICLE_LEVEL)
 
 def _extendByModuleData(targetData, module, vehDescr):
     moduleType = module.itemTypeID
-    assert moduleType in GUI_ITEM_TYPE.VEHICLE_MODULES
     values, names = [], []
     paramsData = params_helper.getParameters(module)
     for paramName in _PARAMS_LISTS[moduleType]:
@@ -56,17 +53,11 @@ def _extendByModuleData(targetData, module, vehDescr):
     targetData['paramValues'] = '\n'.join(values)
     targetData['paramNames'] = '\n'.join(names)
     targetData['name'] = text_styles.middleTitle(module.userName)
-    if moduleType == GUI_ITEM_TYPE.GUN:
-        if module.isClipGun(vehDescr):
-            targetData[EXTRA_MODULE_INFO] = CLIP_ICON_PATH
-    elif moduleType == GUI_ITEM_TYPE.CHASSIS:
-        if module.isHydraulicChassis():
-            targetData[EXTRA_MODULE_INFO] = HYDRAULIC_ICON_PATH
+    targetData[EXTRA_MODULE_INFO] = module.getExtraIconInfo()
     return
 
 
 def _extendByArtefactData(targetData, module, slotIndex):
-    assert module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS
     targetData['slotIndex'] = slotIndex
     targetData['removable'] = module.isRemovable
     template = g_htmlTemplates['html_templates:lobby/popovers']['optionalDevice']
@@ -76,13 +67,11 @@ def _extendByArtefactData(targetData, module, slotIndex):
 
 
 def _extendByOptionalDeviceData(targetData, module):
-    assert module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE
     highlight = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if module.isDeluxe() else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
     _extendHighlightData(targetData, highlight)
 
 
 def _extendByBattleBoosterData(targetData, module, vehicle):
-    assert module.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER
     if module.isCrewBooster():
         skillLearnt = module.isAffectedSkillLearnt(vehicle)
         template = g_htmlTemplates['html_templates:lobby/popovers']['crewBattleBooster']
@@ -143,10 +132,6 @@ def _convertTarget(target, reason):
 
 
 class CommonFittingSelectPopover(FittingSelectPopoverMeta):
-    """
-    Class provides functionality for fitting select popover. Popover is created for particular fitting slot in
-    different places of client
-    """
     _TAB_IDX = 0
     _TABS = None
 
@@ -159,7 +144,7 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
         self.setCurrentTab(self._getInitialTabIndex())
 
     def showModuleInfo(self, itemCD):
-        if itemCD is not None and int(itemCD) > 0:
+        if self.__vehicle is not None and itemCD is not None and int(itemCD) > 0:
             shared_events.showModuleInfo(itemCD, self.__vehicle.descriptor)
         return
 
@@ -222,7 +207,7 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
             rendererDataClass = FITTING_TYPES.OPTIONAL_DEVICE_RENDERER_DATA_CLASS_NAME
             width = FITTING_TYPES.LARGE_POPOVER_WIDTH
         else:
-            title = _ms(MENU.MODULEFITS_TITLE, moduleName=getTypeInfoByName(self._slotType)['userString'], vehicleName=self.__vehicle.userName)
+            title = _ms(MENU.MODULEFITS_TITLE, moduleName=getTypeInfoByName(self._slotType)['userString'], vehicleName=self.__vehicle.userName if self.__vehicle is not None else '')
             rendererDataClass = FITTING_TYPES.MODULE_FITTING_RENDERER_DATA_CLASS_NAME
             if self._slotType in [FITTING_TYPES.VEHICLE_CHASSIS, FITTING_TYPES.VEHICLE_ENGINE]:
                 rendererName = FITTING_TYPES.ENGINE_CHASSIS_FITTING_ITEM_RENDERER
@@ -293,11 +278,13 @@ class OptionalDeviceSelectPopover(HangarFittingSelectPopover):
             self._saveTabIndex(_POPOVER_SECOND_TAB_IDX)
         if self.__initialLoad:
             self.__initialLoad = False
-            installedDevice = self._getVehicle().optDevices[self._getSlotIndex()]
-            if installedDevice:
-                if installedDevice.isDeluxe():
-                    return _POPOVER_SECOND_TAB_IDX
-                return _POPOVER_FIRST_TAB_IDX
+            vehicle = self._getVehicle()
+            if vehicle is not None:
+                installedDevice = self._getVehicle().optDevices[self._getSlotIndex()]
+                if installedDevice:
+                    if installedDevice.isDeluxe():
+                        return _POPOVER_SECOND_TAB_IDX
+                    return _POPOVER_FIRST_TAB_IDX
         return self.__class__._TAB_IDX
 
     def _prepareInitialData(self):
@@ -418,39 +405,34 @@ class PopoverLogicProvider(object):
 
     def _buildList(self):
         modulesList = []
-        typeId = GUI_ITEM_TYPE_INDICES[self._slotType]
-        data = self._getSuitableItems(typeId)
-        currXp = self.itemsCache.items.stats.vehiclesXPs.get(self._vehicle.intCD, 0)
-        stats = {'money': self.itemsCache.items.stats.money,
-         'exchangeRate': self.itemsCache.items.shop.exchangeRate,
-         'currXP': currXp,
-         'totalXP': currXp + self.itemsCache.items.stats.freeXP}
-        for idx, module in enumerate(data):
-            isInstalled = module.isInstalled(self._vehicle, self._slotIndex)
-            if isInstalled:
-                self._selectedIdx = idx
-            moduleData = self._buildModuleData(module, isInstalled, stats)
-            self.__extendByTypeSpecificData(moduleData, module)
-            modulesList.append(moduleData)
+        if self._vehicle is not None:
+            typeId = GUI_ITEM_TYPE_INDICES[self._slotType]
+            data = self._getSuitableItems(typeId)
+            currXp = self.itemsCache.items.stats.vehiclesXPs.get(self._vehicle.intCD, 0)
+            stats = {'money': self.itemsCache.items.stats.money,
+             'exchangeRate': self.itemsCache.items.shop.exchangeRate,
+             'currXP': currXp,
+             'totalXP': currXp + self.itemsCache.items.stats.freeXP}
+            for idx, module in enumerate(data):
+                isInstalled = module.isInstalled(self._vehicle, self._slotIndex)
+                if isInstalled:
+                    self._selectedIdx = idx
+                moduleData = self._buildModuleData(module, isInstalled, stats)
+                self.__extendByTypeSpecificData(moduleData, module)
+                modulesList.append(moduleData)
 
         return modulesList
 
     def _getSuitableItems(self, typeId):
-        """
-        Provides required data items by criteria
-        :param typeId: typeId of required items *.GUI_ITEM_TYPE
-        :return: list - [{moduleId: gui.shared.gui_items.FittingItem}, ...]
-        """
-        criteria = REQ_CRITERIA.VEHICLE.SUITABLE([self._vehicle], [typeId]) | self._getSpecificCriteria(typeId)
-        data = self.itemsCache.items.getItems(typeId, criteria).values()
-        data.sort(reverse=True)
-        return data
+        if self._vehicle is None:
+            return []
+        else:
+            criteria = REQ_CRITERIA.VEHICLE.SUITABLE([self._vehicle], [typeId]) | self._getSpecificCriteria(typeId)
+            data = self.itemsCache.items.getItems(typeId, criteria).values()
+            data.sort(reverse=True)
+            return data
 
     def _getSpecificCriteria(self, typeID):
-        """
-        returns criteria specific for current logic.
-        Current basic implementation is quite universal and suitable for hangar, preview and cmp optional devices
-        """
         if typeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
             criteria = REQ_CRITERIA.BATTLE_BOOSTER.OPTIONAL_DEVICE_EFFECT if self._tabIndex == _POPOVER_FIRST_TAB_IDX else REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT
         elif typeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
@@ -513,21 +495,23 @@ class _HangarLogicProvider(PopoverLogicProvider):
         inInventory = module.isInInventory
         isInstalled = module.isInstalled(self._vehicle)
         isBought = inInventory or isInstalled
-        reason = ''
-        if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not isInstalled and module.hasSimilarDevicesInstalled(self._vehicle):
+        isEnoughMoney, purchaseReason = module.mayPurchase(stats['money'])
+        if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not isInstalled and module.hasSimilarDevicesInstalled(self._vehicle) and isEnoughMoney:
             isFit, reason = False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_DUPLICATED
         elif isBought:
             isFit, reason = module.mayInstall(self._vehicle, self._slotIndex)
             if reason == 'already installed' or isFit:
                 isFit, reason = True, GUI_ITEM_ECONOMY_CODE.UNDEFINED
         else:
-            isFit, reason = module.mayPurchase(stats['money'])
+            isFit, reason = isEnoughMoney, purchaseReason
             if not isFit:
                 if GUI_ITEM_ECONOMY_CODE.isMoneyError(reason):
                     isFit = module.mayPurchaseWithExchange(stats['money'], stats['exchangeRate'])
-        if isFit and reason != GUI_ITEM_ECONOMY_CODE.UNLOCK_ERROR:
-            reason = _getInstallReason(module, self._vehicle, reason, self._slotIndex)
-        moduleData = self._buildCommonModuleData(module, reason)
+        if reason != GUI_ITEM_ECONOMY_CODE.UNLOCK_ERROR:
+            installReason = _getInstallReason(module, self._vehicle, reason, self._slotIndex)
+        else:
+            installReason = reason
+        moduleData = self._buildCommonModuleData(module, installReason)
         moduleData.update({'targetVisible': isBought,
          'showPrice': not isBought,
          'isSelected': isInstalledInSlot,
@@ -551,7 +535,7 @@ class _BootCampLogicProvider(_HangarLogicProvider):
         if self._slotType != FITTING_TYPES.OPTIONAL_DEVICE:
             return defaultModules
         else:
-            nationData = g_bootcampGarage.getNationData()
+            nationData = g_bootcamp.getNationData()
             optionalDeviceId = nationData['equipment']
             optionalDeviceValue = None
             for device in defaultModules:

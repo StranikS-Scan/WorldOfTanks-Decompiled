@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/bdist_msi.py
-"""
-Implements the bdist_msi command.
-"""
 import sys, os
 from sysconfig import get_python_version
 from distutils.core import Command
@@ -16,26 +13,16 @@ from msilib import schema, sequence, text
 from msilib import Directory, Feature, Dialog, add_data
 
 class PyDialog(Dialog):
-    """Dialog class with a fixed layout: controls at the top, then a ruler,
-    then a list of buttons: back, next, cancel. Optionally a bitmap at the
-    left."""
 
     def __init__(self, *args, **kw):
-        """Dialog(database, name, x, y, w, h, attributes, title, first,
-        default, cancel, bitmap=true)"""
         Dialog.__init__(self, *args)
         ruler = self.h - 36
         self.line('BottomLine', 0, ruler, self.w, 0)
 
     def title(self, title):
-        """Set the title text of the dialog at the top."""
         self.text('Title', 15, 10, 320, 60, 196611, '{\\VerdanaBold10}%s' % title)
 
     def back(self, title, next, name='Back', active=1):
-        """Add a back button with a given title, the tab-next button,
-        its name in the Control table, possibly initially disabled.
-        
-        Return the button, so that events can be associated"""
         if active:
             flags = 3
         else:
@@ -43,10 +30,6 @@ class PyDialog(Dialog):
         return self.pushbutton(name, 180, self.h - 27, 56, 17, flags, title, next)
 
     def cancel(self, title, next, name='Cancel', active=1):
-        """Add a cancel button with a given title, the tab-next button,
-        its name in the Control table, possibly initially disabled.
-        
-        Return the button, so that events can be associated"""
         if active:
             flags = 3
         else:
@@ -54,10 +37,6 @@ class PyDialog(Dialog):
         return self.pushbutton(name, 304, self.h - 27, 56, 17, flags, title, next)
 
     def next(self, title, next, name='Next', active=1):
-        """Add a Next button with a given title, the tab-next button,
-        its name in the Control table, possibly initially disabled.
-        
-        Return the button, so that events can be associated"""
         if active:
             flags = 3
         else:
@@ -65,11 +44,6 @@ class PyDialog(Dialog):
         return self.pushbutton(name, 236, self.h - 27, 56, 17, flags, title, next)
 
     def xbutton(self, name, title, next, xpos):
-        """Add a button with a given title, the tab-next button,
-        its name in the Control table, giving its x position; the
-        y-position is aligned with the other buttons.
-        
-        Return the button, so that events can be associated"""
         return self.pushbutton(name, int(self.w * xpos - 28), self.h - 27, 56, 17, 3, title, next)
 
 
@@ -165,7 +139,6 @@ class bdist_msi(Command):
         if self.distribution.has_ext_modules():
             target_version = self.target_version
             if not target_version:
-                assert self.skip_build, 'Should have already checked this'
                 target_version = sys.version[0:3]
             plat_specifier = '.%s-%s' % (self.plat_name, target_version)
             build = self.get_finalized_command('build')
@@ -270,15 +243,6 @@ class bdist_msi(Command):
         return
 
     def add_find_python(self):
-        r"""Adds code to the installer to compute the location of Python.
-        
-        Properties PYTHON.MACHINE.X.Y and PYTHON.USER.X.Y will be set from the
-        registry for each version of Python.
-        
-        Properties TARGETDIRX.Y will be set from PYTHON.USER.X.Y if defined,
-        else from PYTHON.MACHINE.X.Y.
-        
-        Properties PYTHONX.Y will be set to TARGETDIRX.Y\python.exe"""
         start = 402
         for ver in self.versions:
             install_path = 'SOFTWARE\\Python\\PythonCore\\%s\\InstallPath' % ver
@@ -319,7 +283,6 @@ class bdist_msi(Command):
             add_data(self.db, 'InstallUISequence', [(machine_action, machine_prop, start), (user_action, user_prop, start + 1), (exe_action, None, start + 2)])
             add_data(self.db, 'Condition', [('Python' + ver, 0, 'NOT TARGETDIR' + ver)])
             start += 4
-            assert start < 500
 
         return
 

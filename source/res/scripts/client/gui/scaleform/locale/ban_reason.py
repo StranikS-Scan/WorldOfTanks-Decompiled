@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/BAN_REASON.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class BAN_REASON(object):
     EDITING = '#ban_reason:editing'

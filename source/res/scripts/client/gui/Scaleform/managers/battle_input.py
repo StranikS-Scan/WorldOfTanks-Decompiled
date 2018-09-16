@@ -48,7 +48,8 @@ class BattleGameInputMgr(object):
         return False
 
     def registerGuiKeyHandler(self, handler):
-        assert isinstance(handler, BattleGUIKeyHandler)
+        if not isinstance(handler, BattleGUIKeyHandler):
+            raise UserWarning('Handler should extends BattleGUIKeyHandler')
         if handler not in self.__keyHandlers:
             self.__keyHandlers.append(handler)
 

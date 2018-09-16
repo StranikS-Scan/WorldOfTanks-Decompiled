@@ -169,7 +169,6 @@ class ExchangeBlock(IExternalExchangeComponent):
     __slots__ = ('_component', '_composer')
 
     def __init__(self, component, composer=None):
-        assert isinstance(component, ExchangeComponent), 'Exchange is invalid'
         self._component = component
         self._composer = composer or BiDirectionComposer()
         super(ExchangeBlock, self).__init__()
@@ -187,7 +186,6 @@ class ExchangeBlock(IExternalExchangeComponent):
         return
 
     def setCtx(self, ctx):
-        assert isinstance(ctx, ExchangeCtx), 'Context is invalid'
         self._component.setCtx(ctx)
 
     def get(self, forced=False):
@@ -359,7 +357,6 @@ class ExchangeBroker(object):
         return self._vehiclesInfo
 
     def setVehiclesInfoExchange(self, exchange):
-        assert isinstance(exchange, ExchangeBlock), 'Exchange is invalid'
         self._vehiclesInfo = exchange
         self._vehiclesInfo.setCtx(weakref.proxy(self._ctx))
 
@@ -369,7 +366,6 @@ class ExchangeBroker(object):
         return self._vehiclesStatus
 
     def setVehicleStatusExchange(self, exchange):
-        assert isinstance(exchange, ExchangeComponent), 'Exchange is invalid'
         self._vehiclesStatus = exchange
 
     def getVehiclesStatsExchange(self):
@@ -377,7 +373,6 @@ class ExchangeBroker(object):
         return self._vehiclesStats
 
     def setVehiclesStatsExchange(self, exchange):
-        assert isinstance(exchange, ExchangeBlock), 'Exchange is invalid'
         self._vehiclesStats = exchange
         self._vehiclesStats.setCtx(weakref.proxy(self._ctx))
 
@@ -387,7 +382,6 @@ class ExchangeBroker(object):
         return self._playerStatus
 
     def setPlayerStatusExchange(self, exchange):
-        assert isinstance(exchange, ExchangeComponent), 'Exchange is invalid'
         self._playerStatus = exchange
         self._playerStatus.setCtx(weakref.proxy(self._ctx))
 
@@ -396,7 +390,6 @@ class ExchangeBroker(object):
         return self._usersTags
 
     def setUsersTagsExchange(self, exchange):
-        assert isinstance(exchange, ExchangeBlock), 'Exchange is invalid'
         self._usersTags = exchange
         self._usersTags.setCtx(weakref.proxy(self._ctx))
 
@@ -410,6 +403,5 @@ class ExchangeBroker(object):
         return self._invitations
 
     def setInvitationsExchange(self, exchange):
-        assert isinstance(exchange, ExchangeBlock), 'Exchange is invalid'
         self._invitations = exchange
         self._invitations.setCtx(weakref.proxy(self._ctx))

@@ -35,7 +35,6 @@ def if_dl(s):
 class build_ext(_build_ext):
 
     def run(self):
-        """Build extensions in build directory, then copy if --inplace"""
         old_inplace, self.inplace = self.inplace, 0
         _build_ext.run(self)
         self.inplace = old_inplace
@@ -154,7 +153,6 @@ class build_ext(_build_ext):
             self.compiler = _compiler
 
     def links_to_dynamic(self, ext):
-        """Return true if 'ext' links to a dynamic lib in the same package"""
         libnames = dict.fromkeys([ lib._full_name for lib in self.shlibs ])
         pkg = '.'.join(ext._full_name.split('.')[:-1] + [''])
         for libname in ext.libraries:
@@ -222,10 +220,8 @@ else:
     libtype = 'static'
 
     def link_shared_object(self, objects, output_libname, output_dir=None, libraries=None, library_dirs=None, runtime_library_dirs=None, export_symbols=None, debug=0, extra_preargs=None, extra_postargs=None, build_temp=None, target_lang=None):
-        assert output_dir is None
         output_dir, filename = os.path.split(output_libname)
         basename, ext = os.path.splitext(filename)
         if self.library_filename('x').startswith('lib'):
             basename = basename[3:]
         self.create_static_lib(objects, basename, output_dir, debug, target_lang)
-        return

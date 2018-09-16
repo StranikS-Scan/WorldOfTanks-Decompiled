@@ -31,7 +31,7 @@ from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.clans import IClanController
+from skeletons.gui.web import IWebController
 from skeletons.gui.game_control import IGameStateTracker
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -56,7 +56,7 @@ class ServicesLocator(object):
     loginManager = dependency.descriptor(ILoginManager)
     eventsCache = dependency.descriptor(IEventsCache)
     soundCtrl = dependency.descriptor(ISoundsController)
-    clanCtrl = dependency.descriptor(IClanController)
+    webCtrl = dependency.descriptor(IWebController)
     settingsCache = dependency.descriptor(ISettingsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
     goodiesCache = dependency.descriptor(IGoodiesCache)
@@ -79,7 +79,7 @@ def onAccountShowGUI(ctx):
     global onCenterIsLongDisconnected
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
     ServicesLocator.lobbyContext.onAccountShowGUI(ctx)
-    yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
+    yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False)
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
     ServicesLocator.eventsCache.start()
     yield ServicesLocator.eventsCache.update()
@@ -96,6 +96,7 @@ def onAccountShowGUI(ctx):
     if code > 0:
         g_appLoader.goToLoginByError('#menu:disconnect/codes/%d' % code)
         return
+    ServicesLocator.itemsCache.onSyncCompleted(CACHE_SYNC_REASON.SHOW_GUI, {})
     ServicesLocator.settingsCore.serverSettings.applySettings()
     ServicesLocator.gameState.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
     accDossier = ServicesLocator.itemsCache.items.getAccountDossier()
@@ -107,11 +108,14 @@ def onAccountShowGUI(ctx):
         g_hangarSpace.init(premium)
     g_currentVehicle.init()
     g_currentPreviewVehicle.init()
-    ServicesLocator.clanCtrl.start()
+    ServicesLocator.webCtrl.start()
     ServicesLocator.soundCtrl.start()
     g_appLoader.showLobby()
     g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
-    if ServicesLocator.lobbyContext.getServerSettings().isElenEnabled():
+    serverSettings = ServicesLocator.lobbyContext.getServerSettings()
+    if serverSettings.wgcg.getLoginOnStart():
+        yield ServicesLocator.webCtrl.login()
+    if serverSettings.isElenEnabled():
         yield ServicesLocator.eventsController.getEvents(onlySettings=True, onLogin=True)
         yield ServicesLocator.eventsController.getHangarFlag(onLogin=True)
     g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
@@ -140,7 +144,7 @@ def onAvatarBecomePlayer():
     yield ServicesLocator.settingsCache.update()
     ServicesLocator.settingsCore.serverSettings.applySettings()
     ServicesLocator.soundCtrl.stop()
-    ServicesLocator.clanCtrl.stop(False)
+    ServicesLocator.webCtrl.stop(logout=False)
     ServicesLocator.eventsCache.stop()
     g_prbLoader.onAvatarBecomePlayer()
     ServicesLocator.gameState.onAvatarBecomePlayer()
@@ -230,14 +234,14 @@ def init(loadingScreenGUI=None):
     BigWorld.wg_setScreenshotNotifyCallback(onScreenShotMade)
     if HAS_DEV_RESOURCES:
         try:
-            from gui.development import init
+            from gui.development import init as dev_init
         except ImportError:
             LOG_ERROR('Development features not found.')
 
-            def init():
+            def dev_init():
                 pass
 
-        init()
+        dev_init()
     guiModsInit()
 
 
@@ -267,14 +271,14 @@ def fini():
     BigWorld.wg_setScreenshotNotifyCallback(None)
     if HAS_DEV_RESOURCES:
         try:
-            from gui.development import fini
+            from gui.development import fini as dev_fini
         except ImportError:
             LOG_ERROR('Development features not found.')
 
-            def fini():
+            def dev_fini():
                 pass
 
-        fini()
+        dev_fini()
     return
 
 
@@ -293,7 +297,7 @@ def onDisconnected():
     g_clanCache.onDisconnected()
     ServicesLocator.soundCtrl.stop(isDisconnected=True)
     ServicesLocator.gameState.onDisconnected()
-    ServicesLocator.clanCtrl.stop()
+    ServicesLocator.webCtrl.stop()
     ServicesLocator.eventsCache.personalMissions.stop()
     g_wgncProvider.clear()
     ServicesLocator.clear()

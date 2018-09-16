@@ -55,15 +55,11 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         return
 
     def selectItem(self, itemIdx):
-        """ ActionScript call for when an purchase item is checked.
-        """
         self._c11nView.soundManager.playInstantSound(SOUNDS.SELECT)
         selectCount, inventoryCount = self.__searchDP.setSelected(itemIdx, True)
         self.__setBuyButtonState(selectCount, inventoryCount)
 
     def deselectItem(self, itemIdx):
-        """ ActionScript call for when a purchase item is unchecked.
-        """
         self._c11nView.soundManager.playInstantSound(SOUNDS.SELECT)
         selectCount, inventoryCount = self.__searchDP.setSelected(itemIdx, False)
         self.__setBuyButtonState(selectCount, inventoryCount)
@@ -157,22 +153,11 @@ class PurchaseDataProvider(SortableDAAPIDataProvider):
 
     @property
     def items(self):
-        """ Get a collection of cart items excluding group headers.
-        
-        Group headers(e.g. "Camouflages:") are presented as regular items, but they
-        have a special key (titleMode) so they can be tracked and thrown out.
-        
-        :return: list
-        """
-        return filter(lambda item: not item['titleMode'], self._list)
+        return [ item for item in self._list if not item['titleMode'] ]
 
     @property
     def selectedItems(self):
-        """ Get only selected cart items.
-        
-        :return: list
-        """
-        return filter(lambda item: item['selected'], self.items)
+        return [ item for item in self.items if item['selected'] ]
 
     def buildList(self, purchaseItems):
         self.clear()

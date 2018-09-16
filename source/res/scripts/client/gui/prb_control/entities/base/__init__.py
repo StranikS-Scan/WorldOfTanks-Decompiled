@@ -4,14 +4,6 @@ from adisp import process
 from gui.shared.utils import functions
 
 def vehicleAmmoCheck(func):
-    """
-    Vehicle ammo loadout check decorator.
-    Args:
-        func: decorated function
-    
-    Returns:
-        wrapped function with ammo check
-    """
     from CurrentVehicle import g_currentVehicle
 
     @process

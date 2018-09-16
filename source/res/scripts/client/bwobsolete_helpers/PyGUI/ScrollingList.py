@@ -31,7 +31,6 @@ class ScrollingList(PyGUIBase):
         pass
 
     def createItem(self):
-        assert self.itemGuiName != ''
         g = GUI.load(self.itemGuiName)
         setattr(self.items, 'm%d' % (len(self.items.children),), g)
         g.script.doLayout(self)
@@ -240,7 +239,6 @@ class ScrollingList(PyGUIBase):
 
     def onLoad(self, section):
         self.itemGuiName = section.readString('itemGui', '')
-        assert self.itemGuiName != ''
 
     def onBound(self):
         PyGUIBase.onBound(self)

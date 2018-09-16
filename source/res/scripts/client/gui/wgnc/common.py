@@ -3,9 +3,6 @@
 from debug_utils import LOG_WARNING
 
 class WebHandlersContainer(object):
-    """
-    Allows to configure list of web-client handlers per-class externally
-    """
     _webHandlers = {}
 
     @classmethod

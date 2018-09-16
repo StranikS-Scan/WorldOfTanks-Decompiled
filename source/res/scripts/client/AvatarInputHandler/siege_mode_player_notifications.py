@@ -7,7 +7,7 @@ from constants import VEHICLE_SIEGE_STATE
 from svarog_script.py_component import Component
 from vehicle_systems.tankStructure import TankNodeNames
 
-class SOUND_NOTIFICATIONS:
+class SOUND_NOTIFICATIONS(object):
     START_TO_SIEGE_MODE = 'start_to_siege_mode_PC'
     START_TO_BASE_MODE = 'start_to_base_mode_PC'
     MOVEMENT_LIMITED_ON = 'strv_siege_mode_movement_limited_on'

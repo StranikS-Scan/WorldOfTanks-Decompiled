@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/utils.py
-"""Miscellaneous utilities."""
 __all__ = ['collapse_rfc2231_value',
  'decode_params',
  'decode_rfc2231',
@@ -42,30 +41,16 @@ def _identity(s):
 
 
 def _bdecode(s):
-    r"""Decodes a base64 string.
-    
-    This function is equivalent to base64.decodestring and it's retained only
-    for backward compatibility. It used to remove the last \n of the decoded
-    string, if it had any (see issue 7143).
-    """
     return s if not s else base64.decodestring(s)
 
 
 def fix_eols(s):
-    r"""Replace all line-ending characters with \r\n."""
     s = re.sub('(?<!\\r)\\n', CRLF, s)
     s = re.sub('\\r(?!\\n)', CRLF, s)
     return s
 
 
 def formataddr(pair):
-    """The inverse of parseaddr(), this takes a 2-tuple of the form
-    (realname, email_address) and returns the string value suitable
-    for an RFC 2822 From, To or Cc header.
-    
-    If the first element of pair is false, then the second element is
-    returned unmodified.
-    """
     name, address = pair
     if name:
         quotes = ''
@@ -80,7 +65,6 @@ def formataddr(pair):
 
 
 def getaddresses(fieldvalues):
-    """Return a list of (REALNAME, EMAIL) for each fieldvalue."""
     all = COMMASPACE.join(fieldvalues)
     a = _AddressList(all)
     return a.addresslist
@@ -89,21 +73,6 @@ def getaddresses(fieldvalues):
 ecre = re.compile('\n  =\\?                   # literal =?\n  (?P<charset>[^?]*?)   # non-greedy up to the next ? is the charset\n  \\?                    # literal ?\n  (?P<encoding>[qb])    # either a "q" or a "b", case insensitive\n  \\?                    # literal ?\n  (?P<atom>.*?)         # non-greedy up to the next ?= is the atom\n  \\?=                   # literal ?=\n  ', re.VERBOSE | re.IGNORECASE)
 
 def formatdate(timeval=None, localtime=False, usegmt=False):
-    """Returns a date string as specified by RFC 2822, e.g.:
-    
-    Fri, 09 Nov 2001 01:08:47 -0000
-    
-    Optional timeval if given is a floating point time value as accepted by
-    gmtime() and localtime(), otherwise the current time is used.
-    
-    Optional localtime is a flag that when True, interprets timeval, and
-    returns a date relative to the local timezone instead of UTC, properly
-    taking daylight savings time into account.
-    
-    Optional argument usegmt means that the timezone is written out as
-    an ascii string, not numeric one (so "GMT" instead of "+0000"). This
-    is needed for HTTP, and is only used when localtime==False.
-    """
     if timeval is None:
         timeval = time.time()
     if localtime:
@@ -152,13 +121,6 @@ def formatdate(timeval=None, localtime=False, usegmt=False):
 
 
 def make_msgid(idstring=None):
-    """Returns a string suitable for RFC 2822 compliant Message-ID, e.g:
-    
-    <20020201195627.33539.96671@nightshade.la.mastaler.com>
-    
-    Optional idstring if given is a string used to strengthen the
-    uniqueness of the message id.
-    """
     timeval = time.time()
     utcdate = time.strftime('%Y%m%d%H%M%S', time.gmtime(timeval))
     pid = os.getpid()
@@ -190,7 +152,6 @@ def parseaddr(addr):
 
 
 def unquote(str):
-    """Remove quotes from a string."""
     if len(str) > 1:
         if str.startswith('"') and str.endswith('"'):
             return str[1:-1].replace('\\\\', '\\').replace('\\"', '"')
@@ -200,18 +161,11 @@ def unquote(str):
 
 
 def decode_rfc2231(s):
-    """Decode string according to RFC 2231"""
     parts = s.split(TICK, 2)
     return (None, None, s) if len(parts) <= 2 else parts
 
 
 def encode_rfc2231(s, charset=None, language=None):
-    """Encode string according to RFC 2231.
-    
-    If neither charset nor language is given, then s is returned as-is.  If
-    charset is given but not language, the string is encoded using the empty
-    string for language.
-    """
     import urllib
     s = urllib.quote(s, safe='')
     if charset is None and language is None:
@@ -225,10 +179,6 @@ def encode_rfc2231(s, charset=None, language=None):
 rfc2231_continuation = re.compile('^(?P<name>\\w+)\\*((?P<num>[0-9]+)\\*?)?$')
 
 def decode_params(params):
-    """Decode parameters list according to RFC 2231.
-    
-    params is a sequence of 2-tuples containing (param name, string value).
-    """
     params = params[:]
     new_params = []
     rfc2231_params = {}

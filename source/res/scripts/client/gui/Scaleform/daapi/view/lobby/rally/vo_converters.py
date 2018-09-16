@@ -2,10 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/vo_converters.py
 import BigWorld
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
-from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES, QUEUE_TYPE
+from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES
 from gui import makeHtmlString
-from gui.Scaleform.settings import getBadgeIconPathByDimension
-from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency
 from gui.shared.utils.functions import getArenaShortName
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
@@ -22,13 +20,12 @@ from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED, Vehicle
 from gui.shared.utils.functions import makeTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE, AIRSTRIKE, ARTILLERY_STRIKE, REQUISITION, HIGH_CAPACITY_TRANSPORT
-from helpers import i18n, int2roman
+from helpers import i18n
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE, PROTO_TYPE, USER_TAG
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
-from skeletons.gui.game_control import IFalloutController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -97,7 +94,7 @@ def makeVehicleBasicVO(vehicle, levelsRange=None, vehicleTypes=None):
          'enabled': enabled,
          'tooltip': tooltip,
          'state': '',
-         'isFalloutVehicle': vehicle.isFalloutSelected}
+         'isFalloutVehicle': False}
 
 
 def makeVehicleVO(vehicle, levelsRange=None, vehicleTypes=None, isCurrentPlayer=True):
@@ -105,7 +102,7 @@ def makeVehicleVO(vehicle, levelsRange=None, vehicleTypes=None, isCurrentPlayer=
     if vehicleVO is None:
         return
     else:
-        vState, vStateLvl = vehicle.getState(isCurrentPlayer)
+        vState, _ = vehicle.getState(isCurrentPlayer)
         if not (vState == Vehicle.VEHICLE_STATE.UNDAMAGED or vState == Vehicle.VEHICLE_STATE.IN_PREBATTLE or vState in Vehicle.GROUP_STATES):
             vehicleVO['isReadyToFight'] = vehicle.isReadyToFight
             if vState == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY:
@@ -252,14 +249,6 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
     canTakeSlot = not pInfo.isLegionary()
     bwPlugin = proto_getter(PROTO_TYPE.BW_CHAT2)(None)
     isPlayerSpeaking = bwPlugin.voipController.isPlayerSpeaking
-    falloutCtrl = dependency.instance(IFalloutController)
-    isFallout = falloutCtrl.isEnabled()
-    if isFallout:
-        falloutBattleType = falloutCtrl.getBattleType()
-        falloutCfg = falloutCtrl.getConfig()
-    else:
-        falloutBattleType = QUEUE_TYPE.UNKNOWN
-        falloutCfg = None
     unit = fullData.unit
     makeVO = makePlayerVO
     rosterSlots = {}
@@ -288,7 +277,7 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
                 slotLevel = vehicle.vehLevel
                 if vehicle.vehTypeCompDescr:
                     vehicleVO = makeVehicleVO(vehicleGetter(vehicle.vehTypeCompDescr), levelsRange, isCurrentPlayer=isCurrentPlayer)
-        isRequired = falloutBattleType == QUEUE_TYPE.FALLOUT_MULTITEAM
+        isRequired = False
         slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, isRequired=isRequired)
         if unit.isPrebattlesSquad():
             playerStatus = getSquadPlayerStatus(slotState, player)
@@ -322,7 +311,7 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
          'selectedVehicle': vehicleVO,
          'selectedVehicleLevel': 1 if slotState.isClosed else slotLevel,
          'restrictions': restrictions,
-         'isFallout': isFallout,
+         'isFallout': False,
          'rating': rating,
          'isLegionaries': isLegionaries,
          'isLocked': isLocked,
@@ -378,31 +367,6 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
                 additionMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName=', '.join(vehiclesNames)))
             slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
              'additionalMsg': additionMsg})
-        if isFallout:
-            vehiclesNotify = [None, None, None]
-            selectedVehicles = [None, None, None]
-            if player is not None:
-                dbID = player.dbID
-                isCurrentPlayer = player.isCurrentPlayer()
-                if isCurrentPlayer:
-                    statusTemplate = None
-                    if falloutBattleType == QUEUE_TYPE.FALLOUT_MULTITEAM:
-                        minVehiclesPerPlayer = falloutCfg.minVehiclesPerPlayer
-                        if len(falloutCtrl.getSelectedVehicles()) < minVehiclesPerPlayer:
-                            statusTemplate = i18n.makeString(MESSENGER.DIALOGS_FALLOUTSQUADCHANNEL_VEHICLENOTIFYMULTITEAM)
-                    elif falloutCtrl.mustSelectRequiredVehicle():
-                        statusTemplate = i18n.makeString(MESSENGER.DIALOGS_FALLOUTSQUADCHANNEL_VEHICLENOTIFY, level=text_styles.main(int2roman(falloutCfg.vehicleLevelRequired)))
-                    else:
-                        statusTemplate = i18n.makeString(MESSENGER.DIALOGS_FALLOUTSQUADCHANNEL_VEHICLENOTIFYRANGE, level=text_styles.main(toRomanRangeString(list(falloutCfg.allowedLevels), 1)))
-                    if statusTemplate is not None:
-                        for slotIdx in range(falloutCfg.minVehiclesPerPlayer):
-                            vehiclesNotify[slotIdx] = statusTemplate
-
-                for idx, vehicle in enumerate(unit.getVehicles().get(dbID, ())):
-                    selectedVehicles[idx] = makeVehicleVO(vehicleGetter(vehicle.vehTypeCompDescr), falloutCfg.allowedLevels, isCurrentPlayer=isCurrentPlayer)
-
-            slot['vehiclesNotify'] = vehiclesNotify
-            slot['selectedVehicle'] = selectedVehicles
         slots.append(slot)
         playerCount += 1
 
@@ -515,7 +479,7 @@ def makeUnitRosterVO(unit, pInfo, index=None, levelsRange=None):
         vehiclesData = pInfo.getVehiclesToSlots().keys()
     else:
         vehiclesData = pInfo.getVehiclesToSlot(index)
-    vehicleVOs = map(lambda vehTypeCD: makeVehicleVO(vehicleGetter(vehTypeCD)), vehiclesData)
+    vehicleVOs = [ makeVehicleVO(vehicleGetter(vehTypeCD)) for vehTypeCD in vehiclesData ]
     roster = unit.getRoster()
     rosterSlots = roster.slots
     isDefaultSlot = roster.isDefaultSlot
@@ -672,9 +636,9 @@ def getReserveNameVO(name):
     return __typeMapVO.get(name, None)
 
 
-def makeReserveModuleData(id, moduleType, level, count, isSelected, paramValues, paramNames):
+def makeReserveModuleData(mID, moduleType, level, count, isSelected, paramValues, paramNames):
     moduleLabel = getReserveNameVO(moduleType)
-    return {'id': id,
+    return {'id': mID,
      'moduleLabel': moduleLabel,
      'level': level,
      'count': count,
@@ -711,16 +675,8 @@ def makeClanBattleTimerVO(deltaTime, htmlFormatter, alertHtmlFormatter, glowColo
      'state': hintState}
 
 
-__attack = ('attack1',
- 'attack2',
- 'attack3',
- 'attack4',
- 'attack5')
-__defense = ('defense1',
- 'defense2',
- 'defense3',
- 'defense4',
- 'defense5')
+__attack = ('attack1', 'attack2', 'attack3', 'attack4', 'attack5')
+__defense = ('defense1', 'defense2', 'defense3', 'defense4', 'defense5')
 
 def makeDirectionVO(buildIdx, isAttack, battleIdx):
     if buildIdx is None:

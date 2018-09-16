@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/actions_helpers.py
-import BigWorld
 import operator
 import time
+import BigWorld
 import constants
 import nations
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -44,8 +44,6 @@ _gold_bonus_list = ('slotsPrices',
  'premiumPacket360Cost')
 
 class ActionInfo(EventInfoModel):
-    """Data model for action card on action store view
-    """
 
     def __init__(self, event, actionData):
         super(ActionInfo, self).__init__(event)
@@ -60,71 +58,43 @@ class ActionInfo(EventInfoModel):
 
     @property
     def visualPriority(self):
-        """Visual priority for view
-        :return: int (1 - hero, 2 - normal, 3 - small)
-        """
         return self.priority
 
     @visualPriority.setter
     def visualPriority(self, value):
-        """Visual priority for view
-        """
         self.priority = value
 
     def getID(self):
-        """Unique id for action card
-        """
         if not self._id:
             self._id = '{}/{}/{}'.format(self.event.getID(), self.discount.getName(), self.discount.getParamName())
         return self._id
 
     def isAvailable(self):
-        """Dump method, used for self.getIsNew()
-        """
         return (True, None)
 
     def isCompleted(self):
-        """Dump method, used for self.getIsNew()
-        """
         return False
 
     def isOutOfDate(self):
-        """Dump method, used for self.getIsNew()
-        """
         return False
 
     def getStartTime(self):
-        """Return action start time
-        """
         return self.event.getStartTime()
 
     def getFinishTime(self):
-        """Return action finish time
-        """
         return self.event.getFinishTime()
 
     def getTitle(self):
-        """Return card title
-        """
         return self.event.getUserName()
 
     def getIsNew(self):
-        """Is card viewed before
-        """
         return quest_settings.isNewCommonEvent(self)
 
     def getAutoDescription(self, useBigIco=False):
-        """Automatic description for all cards
-        :param useBigIco: use big or small currency icons
-        :return: i18n formatted text
-        """
         discountValue = self._getAutoDescriptionData(useBigIco)
         return self._getShortDescription(self.discount.getParamName(), discount=discountValue)
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
-        """Additional description, automatically showed for hero card
-        on hover show for normal cards
-        """
         discount = self._getAdditionalDescriptionData(useBigIco)
         return self._getFullDescription(self.discount.getParamName(), discount, forHeroCard=forHeroCard)
 
@@ -132,8 +102,6 @@ class ActionInfo(EventInfoModel):
         pass
 
     def getTooltipInfo(self):
-        """Get str for card tooltip
-        """
         return self.event.getDescription()
 
     def isDiscountVisible(self):
@@ -145,31 +113,20 @@ class ActionInfo(EventInfoModel):
         return False
 
     def getDiscount(self):
-        """Returns string with discount or empty string if can't calculate
-        Is used on red label on action cards
-        """
         discount = self._getMaxDiscount()
         return formatStrDiscount(discount) if discount else ''
 
     def getBattleQuestsInfo(self):
-        """Get linked quests and format button text
-        """
         linkedQuests = self.event.linkedQuests
         return i18n.makeString(QUESTS.ACTION_LABEL_BATTLEQUESTS, count=len(linkedQuests)) if linkedQuests else ''
 
     def getLinkBtnLabel(self):
-        """Formatted web link text
-        """
         pass
 
     def getActionBtnLabel(self):
-        """Get formatted button text
-        """
         return self._getButtonName(self.discount.getParamName())
 
     def getPicture(self):
-        """Get img for action
-        """
         picture = getDecoration(self.uiDecoration)
         if picture:
             return {'isWeb': True,
@@ -181,14 +138,9 @@ class ActionInfo(EventInfoModel):
          'src': _PARAM_TO_IMG_DICT.get(paramName, '')}
 
     def getTriggerChainID(self):
-        """Gets chapter ID to run tutorial system for sales
-        :return: str
-        """
         raise NotImplementedError
 
     def getTableData(self):
-        """If card contains tabled data, format and return data
-        """
         return []
 
     def getActionTime(self):
@@ -201,9 +153,6 @@ class ActionInfo(EventInfoModel):
         self._compositionType = compositionType
 
     def getMaxDiscountValue(self):
-        """
-        Always returns int, if maxDiscount is None, 0 is returned
-        """
         maxDiscount = self._getMaxDiscount()
         return maxDiscount.discountValue if maxDiscount is not None else 0
 
@@ -211,71 +160,36 @@ class ActionInfo(EventInfoModel):
         return None
 
     def _showTimerIco(self):
-        """Show timer icon when action comes to end
-        :return:
-        """
         return self.event.getFinishTimeLeft() <= time_utils.ONE_DAY
 
     def _getActiveTimeDateText(self):
-        """
-        Gets formatted mission's active time
-        """
         timeStr = self._getActiveDateTimeString()
         return text_styles.stats(timeStr)
 
     def _getAutoDescription(self, stepName):
-        """Card description text
-        Used only for coming soon cards
-        :param stepName: step name
-        :return: i18n description string
-        """
         formatter = 'auto/{}'.format(self.__modifyName(stepName))
         return i18n.makeString(QUESTS.getActionDescription(formatter))
 
     def _getFullDescription(self, stepName, discount=None, forHeroCard=False):
         modifiedStepName = self.__modifyName(stepName)
         locKey = None
-        isSpecifiedAsianAction = constants.IS_SINGAPORE and modifiedStepName == constants.ASIA_ACTION_ID_BOX_BUYING
         if forHeroCard:
-            if isSpecifiedAsianAction:
-                formatter = 'asia/hero/full/{}'.format(modifiedStepName)
-            else:
-                formatter = 'hero/full/{}'.format(modifiedStepName)
-            locKey = QUESTS.getActionDescription(formatter)
+            locKey = QUESTS.getActionDescription('hero/full/{}'.format(modifiedStepName))
         if locKey is None:
-            if isSpecifiedAsianAction:
-                formatter = 'asia/full/{}'.format(modifiedStepName)
-            else:
-                formatter = 'full/{}'.format(modifiedStepName)
-            locKey = QUESTS.getActionDescription(formatter)
+            locKey = QUESTS.getActionDescription('full/{}'.format(modifiedStepName))
         return i18n.makeString(locKey, discount=discount)
 
     def _getShortDescription(self, stepName, **kwargs):
-        """Card description text
-        Used for small cards
-        :param stepName: step name
-        :param kwargs: dict params for text
-        :return: i18n description string
-        """
         formatter = 'short/{}'.format(self.__modifyName(stepName))
         return i18n.makeString(QUESTS.getActionDescription(formatter), **kwargs)
 
     @classmethod
     def _getButtonName(cls, stepName):
-        """Button text
-        :param stepName: step name
-        :return: i18n button text
-        """
         formatter = 'button/{}'.format(stepName)
         return i18n.makeString(QUESTS.getActionDescription(formatter))
 
     @classmethod
     def _formatPriceIcon(cls, item, useBigIco):
-        """Convert price to text with currency icon
-        :param item: vehicle, camuflage, etc...
-        :param useBigIco: show small or big icon format
-        :return: formatted price
-        """
         if hasattr(item, 'buyPrices'):
             sellGold = item.buyPrices.itemPrice.price.gold
             sellCredits = item.buyPrices.itemPrice.price.credits
@@ -290,11 +204,6 @@ class ActionInfo(EventInfoModel):
 
     @classmethod
     def _formatRentPriceIcon(cls, item, useBigIco):
-        """Convert price to text with currency icon
-        :param item: vehicle, camuflage, etc...
-        :param useBigIco: show small or big icon format
-        :return: formatted price
-        """
         if hasattr(item, 'minRentPrice'):
             rentPrice = item.minRentPrice.toDict()
             if rentPrice[Currency.GOLD]:
@@ -307,20 +216,11 @@ class ActionInfo(EventInfoModel):
                 return formatCreditPrice(rentPrice[Currency.CREDITS])
 
     def _getPackedDiscounts(self, sorting=False):
-        """Gather info about all discounts for card
-        :param sorting: if value equals True than list should be sorted,
-            otherwise - do not sort list of discounts. For example, if user finds
-            max discount, sorting is pointless.
-        :return: list of discounts
-        """
         if not self._packedDiscounts:
             self._packedDiscounts = self.discount.packDiscounts(sorting=sorting)
         return self._packedDiscounts
 
     def _getMaxDiscount(self):
-        """Get best discount value for action
-        :return: discount with max value
-        """
         if not self._maxDiscount:
             discounts = self._getPackedDiscounts(sorting=False)
             if discounts:
@@ -328,28 +228,16 @@ class ActionInfo(EventInfoModel):
         return self._maxDiscount
 
     def _getAutoDescriptionData(self, useBigIco=False):
-        """format string with auto description about action
-        :param useBigIco: big/small icon in text
-        :return: i18n string
-        """
         return self._getAdditionalDescriptionData(useBigIco)
 
     def _getAdditionalDescriptionData(self, useBigIco=False):
-        """format string with short description about action
-        :param useBigIco: big/small icon in text
-        :return: i18n string
-        """
         discount = self._getMaxDiscount()
         return formatPercentValue(discount.discountValue) if discount else None
 
     def _formatFinishTime(self):
-        """Format string with finish time for action
-        """
         return '{} {}'.format(text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_FINISH)), BigWorld.wg_getShortDateFormat(self.getFinishTime()))
 
     def _getActiveDateTimeString(self):
-        """Format time in 'hh mm' format
-        """
         if self.event.getFinishTimeLeft() <= time_utils.ONE_DAY:
             gmtime = time.gmtime(self.event.getFinishTimeLeft())
             if gmtime.tm_hour > 0:
@@ -366,13 +254,8 @@ class ActionInfo(EventInfoModel):
 
 
 class EconomicsActionsInfo(ActionInfo):
-    """Economics actions
-    """
 
     def getTriggerChainID(self):
-        """Gets chapter ID to run tutorial system for sales
-        :return: str
-        """
         return 'winXPFactorMode' if 'winXPFactorMode' in self.discount.getParamName() else self.discount.getParamName()
 
     def getDiscount(self):
@@ -385,8 +268,6 @@ class EconomicsActionsInfo(ActionInfo):
         return formatStrDiscount(discount) if discount else ''
 
     def getActionBtnLabel(self):
-        """Get formatted button text
-        """
         discountParamName = self.discount.getParamName()
         if discountParamName in ('clanCreationCost',):
             return ''
@@ -398,15 +279,9 @@ class EconomicsActionsInfo(ActionInfo):
         return super(EconomicsActionsInfo, self).getActionBtnLabel()
 
     def getLinkBtnLabel(self):
-        """Formatted web link text
-        """
         return self._getButtonName(self.discount.getParamName()) if self.discount.getParamName() == 'clanCreationCost' else ''
 
     def _getAutoDescriptionData(self, useBigIco=False):
-        """format string with auto description about action
-        :param useBigIco: big/small icon in text
-        :return: i18n string
-        """
         paramName = self.discount.getParamName()
         if 'exchangeRate' in paramName:
             discountValue = self.__getExchangeRateBonusIco(useBigIco)
@@ -418,10 +293,6 @@ class EconomicsActionsInfo(ActionInfo):
         return discountValue
 
     def _getAdditionalDescriptionData(self, useBigIco=False):
-        """format string with short description about action
-        :param useBigIco: big/small icon in text
-        :return: i18n string
-        """
         paramName = self.discount.getParamName()
         if paramName.endswith(_MULTIPLIER):
             paramName = paramName[:-len(_MULTIPLIER)]
@@ -457,13 +328,13 @@ class EconomicsActionsInfo(ActionInfo):
         return self.discount.handlerWinXPFactorMode()
 
     def __getExchangeRateBonusIco(self, useBigIco=False):
-        credits = getEconomicalStatsDict().get('exchangeRate')
+        credit = getEconomicalStatsDict().get('exchangeRate')
         if useBigIco:
             goldIcon = formatGoldPriceBig(1)
-            creditsIcon = formatCreditPriceBig(credits)
+            creditsIcon = formatCreditPriceBig(credit)
         else:
             goldIcon = formatGoldPrice(1)
-            creditsIcon = formatCreditPrice(credits)
+            creditsIcon = formatCreditPrice(credit)
         return i18n.makeString(QUESTS.ACTION_EXCHANGERATE_GOLD2CREDIT, gold=goldIcon, credits=creditsIcon)
 
 
@@ -472,16 +343,9 @@ class VehPriceActionInfo(ActionInfo):
     _DEFAULT_MARGIN_AFTER_SEPARATOR = 17
 
     def getTriggerChainID(self):
-        """Gets chapter ID to run tutorial system for sales
-        :return: str
-        """
         pass
 
     def getAutoDescription(self, useBigIco=False):
-        """Return card description
-        :param useBigIco: use big or small currency icon
-        :return: formatted text
-        """
         vehs = self._getAdditionalDescriptionData(useBigIco)
         vehsLen = len(vehs)
         if vehsLen > 1:
@@ -492,15 +356,10 @@ class VehPriceActionInfo(ActionInfo):
             return self._getShortDescription(paramName, **values)
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
-        """Format table description
-        :return: formatted text
-        """
         vehiclesCount = len(self._getPackedDiscounts())
         return i18n.makeString(QUESTS.ACTION_DISCOUNT_MORE, deviceName=i18n.makeString(QUESTS.ACTION_MORE_TYPE_VEHICLES), count=vehiclesCount - _MAX_ITEMS_IN_TABLE) if vehiclesCount > _MAX_ITEMS_IN_TABLE else ''
 
     def getTableData(self):
-        """If card contains tabled data, format and return data
-        """
         result = []
         for item in self._sortVehicles():
             veh = item.discountName
@@ -522,10 +381,6 @@ class VehPriceActionInfo(ActionInfo):
         return self.__getCardWithTTCForVehicle(items[0]) if len(items) == 1 else None
 
     def _getAdditionalDescriptionData(self, useBigIco=False, addVehInfo=False):
-        """format string with short description about action
-        :param useBigIco: big/small icon in text
-        :return: i18n string
-        """
         result = []
         for item in self._sortVehicles():
             veh = item.discountName
@@ -588,7 +443,7 @@ class VehPriceActionInfo(ActionInfo):
         return block
 
     def __getCommonStatsBlock(self, vehicle):
-        PARAMS = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'circularVisionRadius'),
+        _params = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'circularVisionRadius'),
          VEHICLE_CLASS_NAME.MEDIUM_TANK: ('avgDamagePerMinute', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed'),
          VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage', 'avgPiercingPower', 'hullArmor', 'turretArmor'),
          VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
@@ -597,7 +452,7 @@ class VehPriceActionInfo(ActionInfo):
         block = []
         paramsDict = params_helper.getParameters(vehicle)
         comparator = params_helper.idealCrewComparator(vehicle)
-        for paramName in PARAMS.get(vehicle.type, 'default'):
+        for paramName in _params.get(vehicle.type, 'default'):
             if paramName in paramsDict:
                 paramInfo = comparator.getExtendedData(paramName)
                 fmtValue = param_formatter.colorizedFormatParameter(paramInfo, param_formatter.BASE_SCHEME)
@@ -643,20 +498,12 @@ class VehPriceActionInfo(ActionInfo):
 class VehRentActionInfo(VehPriceActionInfo):
 
     def getTriggerChainID(self):
-        """Gets chapter ID to run tutorial system for sales
-        :return: str
-        """
         pass
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
-        """Format table description
-        :return: formatted text
-        """
         return self._getFullDescription(self.discount.getParamName(), forHeroCard=forHeroCard)
 
     def getTableData(self):
-        """If card contains tabled data, format and return data
-        """
         return None
 
     def _getPrice(self, veh, useBigIco):
@@ -699,7 +546,7 @@ class VehRentActionInfo(VehPriceActionInfo):
             return (dscnt, (veh.minRentPrice.gold, veh.minRentPrice.credits), veh.level)
 
         res = {}
-        for (intCD, rentDays), vehicle in self._getPackedDiscounts().items():
+        for (intCD, _), vehicle in self._getPackedDiscounts().items():
             res[intCD] = vehicle
 
         return sorted(sorted(res.values(), key=__sortByNameFunc), key=__sortByVehicleParams, reverse=True)[:3]
@@ -737,23 +584,16 @@ class VehRentActionInfo(VehPriceActionInfo):
 class EquipmentActionInfo(ActionInfo):
 
     def getTriggerChainID(self):
-        """Gets chapter ID to run tutorial system for sales
-        :return: str
-        """
         pass
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
-        """Format table description
-        """
         equipCount = len(self._getPackedDiscounts())
         return i18n.makeString(QUESTS.ACTION_DISCOUNT_MORE, deviceName=i18n.makeString(QUESTS.ACTION_MORE_TYPE_EQUIPMENT), count=equipCount - _MAX_ITEMS_IN_TABLE) if equipCount > _MAX_ITEMS_IN_TABLE else ''
 
     def getTableData(self):
-        """If card contains tabled data, format and return data
-        """
         items = self._getPackedDiscounts()
         res = []
-        for intCD, data in items.iteritems():
+        for _, data in items.iteritems():
             equip = data.discountName
             item = {'icon': '',
              'additionalIcon': '',
@@ -768,24 +608,16 @@ class EquipmentActionInfo(ActionInfo):
 class OptDeviceActionInfo(ActionInfo):
 
     def getTriggerChainID(self):
-        """Gets chapter ID to run tutorial system for sales
-        :return: str
-        """
         pass
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
-        """Format table description
-        :return: formatted text
-        """
         optDeviceCount = len(self._getPackedDiscounts())
         return i18n.makeString(QUESTS.ACTION_DISCOUNT_MORE, deviceName=i18n.makeString(QUESTS.ACTION_MORE_TYPE_OPTIONALDEVICES), count=optDeviceCount - _MAX_ITEMS_IN_TABLE) if optDeviceCount > _MAX_ITEMS_IN_TABLE else ''
 
     def getTableData(self):
-        """If card contains tabled data, format and return data
-        """
         items = self._getPackedDiscounts()
         res = []
-        for intCD, data in items.iteritems():
+        for _, data in items.iteritems():
             optDevice = data.discountName
             item = {'icon': '',
              'additionalIcon': '',
@@ -800,29 +632,19 @@ class OptDeviceActionInfo(ActionInfo):
 class ShellPriceActionInfo(ActionInfo):
 
     def getTriggerChainID(self):
-        """Gets chapter ID to run tutorial system for sales
-        :return: str
-        """
         pass
 
 
 class BoosterPriceActionInfo(ActionInfo):
 
     def getTriggerChainID(self):
-        """Gets chapter ID to run tutorial system for sales
-        :return: str
-        """
         pass
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
-        """Format table description
-        """
         boostersCount = len(self._getPackedDiscounts())
         return i18n.makeString(QUESTS.ACTION_DISCOUNT_MORE, deviceName=i18n.makeString(QUESTS.ACTION_MORE_TYPE_GOODIES), count=boostersCount - _MAX_ITEMS_IN_TABLE) if boostersCount > _MAX_ITEMS_IN_TABLE else ''
 
     def getTableData(self):
-        """If card contains tabled data, format and return data
-        """
         res = []
         for data in self.__sortBoosters():
             booster = data.discountName
@@ -855,27 +677,18 @@ class BoosterPriceActionInfo(ActionInfo):
 
 
 class C11nPriceGroupPriceActionInfo(ActionInfo):
-    """Action info for customization items
-    """
 
     def getTriggerChainID(self):
-        """Gets chapter ID to run tutorial system for sales
-        :return: str
-        """
         pass
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
-        """Format table description
-        """
         itemsCount = len(self._getPackedDiscounts())
         return i18n.makeString(QUESTS.ACTION_DISCOUNT_MORE, deviceName=i18n.makeString(QUESTS.ACTION_MORE_TYPE_CUSTOMIZATIONS), count=itemsCount - _MAX_ITEMS_IN_TABLE) if itemsCount > _MAX_ITEMS_IN_TABLE else ''
 
     def getTableData(self):
-        """If card contains tabled data, format and return data
-        """
         items = self._getPackedDiscounts()
         res = []
-        for intCD, data in items.iteritems():
+        for data in items.itervalues():
             c11n = data.discountName
             item = {'icon': '',
              'additionalIcon': '',
@@ -906,8 +719,6 @@ class C11nPriceGroupPriceActionInfo(ActionInfo):
 
 
 class ComingSoonActionInfo(ActionInfo):
-    """Future actions with limited fields to show
-    """
 
     def __init__(self, info):
         self.__name = info['name']
@@ -975,39 +786,16 @@ class ComingSoonActionInfo(ActionInfo):
         return text_styles.main(i18n.makeString(QUESTS.ACTION_COMINGSOON_TIME, startTime=startTimeStr)) if startTimeStr is not None else ''
 
     def _getParamName(self):
-        """Get step name for images, texts...
-        :return: str
-        """
         paramName = self.__name
         if 'Economics' in paramName or 'set_TradeInParams' in paramName:
             paramName = self.__params[0] if self.__params else ''
+        for cur in Currency.ALL:
+            if paramName.endswith(cur.capitalize()):
+                paramName = paramName[:-len(cur)]
+
         if paramName.endswith(_MULTIPLIER):
             paramName = paramName[:-len(_MULTIPLIER)]
         return paramName
-
-
-class CalendarActionInfo(ActionInfo):
-
-    def isDiscountVisible(self):
-        return True
-
-    def getTitle(self):
-        return i18n.makeString(QUESTS.ACTION_SHORT_CALENDAR)
-
-    def getTriggerChainID(self):
-        pass
-
-
-class NyBoxBuyingActionInfo(ActionInfo):
-
-    def isDiscountVisible(self):
-        return True
-
-    def getTitle(self):
-        return i18n.makeString(QUESTS.ACTION_SHORT_BOXBUYING)
-
-    def getTriggerChainID(self):
-        pass
 
 
 def getEconomicalStatsDict():
@@ -1032,8 +820,6 @@ def getEconomicalStatsDict():
 
 
 def getDecoration(uiDecoration):
-    """ Get external decoration for the discount.
-    """
     eventsCache = dependency.instance(IEventsCache)
     prefetcher = eventsCache.prefetcher
     return prefetcher.getMissionDecoration(uiDecoration, DECORATION_SIZES.DISCOUNT)
@@ -1092,9 +878,7 @@ _PARAM_TO_IMG_DICT = {'exchangeRate': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CONVE
  'set_GoodiePrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_RESERVE,
  'mul_GoodiePrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_RESERVE,
  'mul_GoodiePriceAll': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_RESERVE,
- 'tradeInSellPriceFactor': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TRADE_IN,
- 'calendar': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CALENDAR,
- 'boxbuying': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_BOXES}
+ 'tradeInSellPriceFactor': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TRADE_IN}
 _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'set_EconomicsParams': EconomicsActionsInfo,
  'mul_EconomicsPrices': EconomicsActionsInfo,
@@ -1112,9 +896,7 @@ _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'mul_PriceGroupPriceAll': C11nPriceGroupPriceActionInfo,
  'set_GoodiePrice': BoosterPriceActionInfo,
  'mul_GoodiePrice': BoosterPriceActionInfo,
- 'mul_GoodiePriceAll': BoosterPriceActionInfo,
- 'calendar': CalendarActionInfo,
- 'boxbuying': NyBoxBuyingActionInfo}
+ 'mul_GoodiePriceAll': BoosterPriceActionInfo}
 
 def getModifierObj(name, event, modifier):
     return _MODIFIERS_DICT[name](event, modifier) if name in _MODIFIERS_DICT else None

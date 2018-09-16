@@ -227,7 +227,7 @@
         <segmentLength>	0.334	</segmentLength>
         <segmentOffset>	0.018	</segmentOffset>
         <segment2Offset>	0.167	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -567,7 +567,7 @@
         <segmentLength>	0.334	</segmentLength>
         <segmentOffset>	0.018	</segmentOffset>
         <segment2Offset>	0.167	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -829,7 +829,7 @@
       <guns>
         <_45mm_20K>	shared	  <maxAmmo>	84	</maxAmmo>
           <unlocks>
-            <gun>	_23mm_VJA	  <cost>	140.0	</cost>
+            <gun>	_23mm_VJA	  <cost>	140	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -924,8 +924,8 @@
       <gunPosition>	0.000000 0.348709 0.69281	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.513337 0.337823 0.545789	</rayStart>
-          <rayEnd>	-0.381469 0.337728 0.395422	</rayEnd>
+          <rayStart>	-0.516635 0.337992 0.542907	</rayStart>
+          <rayEnd>	-0.384768 0.337897 0.39254	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -945,11 +945,12 @@
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	0.556391 0.338421 0.501231	</rayStart>
-          <rayEnd>	0.406024 0.338333 0.369362	</rayEnd>
+          <rayStart>	0.556805 0.333924 0.500765	</rayStart>
+          <rayEnd>	0.406438 0.333836 0.368897	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
@@ -1126,8 +1127,8 @@
       <gunPosition>	0.000000 0.341656 0.677612	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.657957 0.429712 0.355956	</rayStart>
-          <rayEnd>	-0.482637 0.387428 0.269498	</rayEnd>
+          <rayStart>	-0.658532 0.42751 0.355842	</rayStart>
+          <rayEnd>	-0.483212 0.385226 0.269384	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
@@ -1139,14 +1140,6 @@
           <size>	0.6	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
-        <player>
-          <rayStart>	0.657957 0.429712 0.355956	</rayStart>
-          <rayEnd>	0.482637 0.387428 0.269498	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
-        </player>
         <inscription>
           <rayStart>	0.536295 0.398833 -0.598024	</rayStart>
           <rayEnd>	0.480104 0.385119 -0.582071	</rayEnd>
@@ -1154,6 +1147,14 @@
           <size>	0.6	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
+        <player>
+          <rayStart>	0.658532 0.42751 0.355842	</rayStart>
+          <rayEnd>	0.483212 0.385226 0.269384	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 -0.067 1.011 0.000 0.544 0.080 0.804 0.627 0.452 0.536 0.183 0.500 0.188 0.595 0.000	</physicsShape>
@@ -1165,12 +1166,12 @@
   </turrets0>
   <engines>
     <M-17T>	shared	  <unlocks>
-        <engine>	M-17F	  <cost>	850.0	</cost>
+        <engine>	M-17F	  <cost>	850	</cost>
         </engine>
       </unlocks>
     </M-17T>
     <M-17F>	shared	  <unlocks>
-        <engine>	V-2	  <cost>	1250.0	</cost>
+        <engine>	V-2	  <cost>	1250	</cost>
         </engine>
       </unlocks>
     </M-17F>
@@ -1185,7 +1186,7 @@
   </fuelTanks>
   <radios>
     <_71-TK-3>	shared	  <unlocks>
-        <radio>	_12LL	  <cost>	5600.0	</cost>
+        <radio>	_12LL	  <cost>	5600	</cost>
         </radio>
       </unlocks>
     </_71-TK-3>

@@ -129,7 +129,7 @@ class ResearchModuleTrigger(Trigger):
         vehicles = self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT)
         unlocks = self.itemsCache.items.stats.unlocks
         unlockedItemsGetter = g_techTreeDP.getUnlockedVehicleItems
-        for vehCD, vehicle in vehicles.iteritems():
+        for _, vehicle in vehicles.iteritems():
             if unlockedItemsGetter(vehicle, unlocks):
                 return True
 
@@ -158,7 +158,7 @@ class InstallModuleTrigger(Trigger):
         vehicles = self.itemsCache.items.getVehicles(criteria=RESEARCH_CRITERIA.VEHICLE_TO_UNLOCK)
         unlocks = self.itemsCache.items.stats.unlocks
         unlockedItemsGetter = g_techTreeDP.getUnlockedVehicleItems
-        for vehCD, vehicle in vehicles.iteritems():
+        for _, vehicle in vehicles.iteritems():
             items = unlockedItemsGetter(vehicle, unlocks)
             for itemCD in items.iterkeys():
                 item = self.itemsCache.items.getItemByCD(itemCD)

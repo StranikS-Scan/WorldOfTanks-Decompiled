@@ -3,13 +3,9 @@
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.prb_control.settings import UNIT_RESTRICTION
-from gui.shared.formatters.ranges import toRomanRangeString
-from helpers import int2roman, dependency
-from skeletons.gui.game_control import IFalloutController
-_VALID_RESTRICTIONS = (UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED, UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS)
+_VALID_RESTRICTIONS = (UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED,)
 
 class SquadActionButtonStateVO(ActionButtonStateVO):
-    falloutCtrl = dependency.descriptor(IFalloutController)
 
     def _isEnabled(self, isValid, restriction):
         return isValid or restriction in _VALID_RESTRICTIONS
@@ -29,16 +25,3 @@ class SquadActionButtonStateVO(ActionButtonStateVO):
 
     def _getIdleStateStr(self):
         return (CYBERSPORT.SQUADWINDOW_WAITINGFORBATTLE, {})
-
-    def _getFalloutVehLevelStr(self):
-        config = self.falloutCtrl.getConfig()
-        requiredLevelStr = int2roman(config.vehicleLevelRequired)
-        return (CYBERSPORT.WINDOW_UNIT_MESSAGE_FALLOUTLEVEL, {'level': requiredLevelStr})
-
-    def _getFalloutVehMinStr(self):
-        config = self.falloutCtrl.getConfig()
-        allowedLevelsList = list(config.allowedLevels)
-        return (CYBERSPORT.WINDOW_UNIT_MESSAGE_FALLOUTMIN_LEVELRANGE, {'level': toRomanRangeString(allowedLevelsList, 1)}) if len(allowedLevelsList) > 1 else (CYBERSPORT.WINDOW_UNIT_MESSAGE_FALLOUTMIN_REQUIREDLEVEL, {'level': int2roman(config.vehicleLevelRequired)})
-
-    def _getFalloutVehBrokenStr(self):
-        return ('#cyberSport:window/unit/message/falloutGroupNotReady', {})

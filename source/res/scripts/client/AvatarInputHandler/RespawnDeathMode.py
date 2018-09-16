@@ -55,7 +55,6 @@ class RespawnDeathMode(IControlMode):
             ctrl.showUiAllowed = False
 
     def handleMouseEvent(self, dx, dy, dz):
-        assert self.__isEnabled
         GUI.mcursor().position = self.__aimOffset
         self.__cam.update(dx, dy, clamp(-1.0, 1.0, dz))
         return True

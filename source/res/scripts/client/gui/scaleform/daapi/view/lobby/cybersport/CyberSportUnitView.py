@@ -160,8 +160,8 @@ class CyberSportUnitView(CyberSportUnitMeta):
     def _populate(self):
         super(CyberSportUnitView, self)._populate()
         self.addListener(events.CSRosterSlotSettingsWindow.APPLY_SLOT_SETTINGS, self.__applyRosterSettings)
-        settings = self.prbEntity.getRosterSettings()
-        self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
+        rosterSettings = self.prbEntity.getRosterSettings()
+        self._updateVehiclesLabel(int2roman(rosterSettings.getMinLevel()), int2roman(rosterSettings.getMaxLevel()))
 
     def _dispose(self):
         self._destroyRelatedView(ViewTypes.TOP_WINDOW, CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY)

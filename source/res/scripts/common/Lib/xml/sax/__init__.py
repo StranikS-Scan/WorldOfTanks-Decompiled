@@ -1,25 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/sax/__init__.py
-"""Simple API for XML (SAX) implementation for Python.
-
-This module provides an implementation of the SAX 2 interface;
-information about the Java version of the interface can be found at
-http://www.megginson.com/SAX/.  The Python version of the interface is
-documented at <...>.
-
-This package contains the following modules:
-
-handler -- Base classes and constants which define the SAX 2 API for
-           the 'client-side' of SAX for Python.
-
-saxutils -- Implementation of the convenience classes commonly used to
-            work with SAX.
-
-xmlreader -- Base classes and constants which define the SAX 2 API for
-             the parsers used with SAX for Python.
-
-expatreader -- Driver that allows use of the Expat parser with SAX.
-"""
 from xmlreader import InputSource
 from handler import ContentHandler, ErrorHandler
 from _exceptions import SAXException, SAXNotRecognizedException, SAXParseException, SAXNotSupportedException, SAXReaderNotAvailable
@@ -61,12 +41,6 @@ if sys.platform[:4] == 'java' and sys.registry.containsKey(_key):
     default_parser_list = sys.registry.getProperty(_key).split(',')
 
 def make_parser(parser_list=[]):
-    """Creates and returns a SAX parser.
-    
-    Creates the first parser it is able to instantiate of the ones
-    given in the list created by doing parser_list +
-    default_parser_list.  The lists must contain the names of Python
-    modules containing both a SAX parser and a create_parser function."""
     for parser_name in parser_list + default_parser_list:
         try:
             return _create_parser(parser_name)

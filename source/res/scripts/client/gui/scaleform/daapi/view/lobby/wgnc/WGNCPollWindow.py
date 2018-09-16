@@ -11,7 +11,6 @@ class WGNCPollWindow(WGNCPollWindowMeta):
 
     def __init__(self, ctx=None):
         super(WGNCPollWindow, self).__init__()
-        assert ctx, 'Context can be defined'
         self.__notID = ctx['notID']
         self.__target = ctx['target']
 

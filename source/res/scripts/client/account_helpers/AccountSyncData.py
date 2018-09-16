@@ -102,7 +102,8 @@ class AccountSyncData(object):
             self.__syncController.request(self.__getNextSyncID(), None)
             return
 
-    def __onSyncResponse(self, syncID, resultID, ext={}):
+    def __onSyncResponse(self, syncID, resultID, ext=None):
+        ext = ext or {}
         if resultID == AccountCommands.RES_NON_PLAYER:
             return
         if syncID != self.__syncID:
@@ -143,7 +144,7 @@ class AccountSyncData(object):
             self.__syncID = 1
         return self.__syncID
 
-    def __sendSyncRequest(self, id, proxy):
+    def __sendSyncRequest(self, rqID, proxy):
         if self.__ignore:
             return
         crc = self.__persistentCache.getDescr()

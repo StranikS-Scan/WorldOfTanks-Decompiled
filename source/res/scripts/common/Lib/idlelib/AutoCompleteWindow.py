@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/AutoCompleteWindow.py
-"""
-An auto-completion window for IDLE, used by the AutoComplete extension
-"""
 from Tkinter import *
 from idlelib.MultiCall import MC_SHIFT
 from idlelib.AutoComplete import COMPLETE_FILES, COMPLETE_ATTRIBUTES
@@ -46,9 +43,6 @@ class AutoCompleteWindow:
         self.start = newstart
 
     def _binary_search(self, s):
-        """Find the first index in self.completions where completions[i] is
-        greater or equal to s, or the last index if there is no such
-        one."""
         i = 0
         j = len(self.completions)
         while j > i:
@@ -60,9 +54,6 @@ class AutoCompleteWindow:
         return min(i, len(self.completions) - 1)
 
     def _complete_string(self, s):
-        """Assuming that s is the prefix of a string in self.completions,
-        return the longest string which is a prefix of all the strings which
-        s is a prefix of them. If s is not a prefix of a string, return s."""
         first = self._binary_search(s)
         if self.completions[first][:len(s)] != s:
             return s
@@ -87,8 +78,6 @@ class AutoCompleteWindow:
         return first_comp[:i]
 
     def _selection_changed(self):
-        """Should be called when the selection of the Listbox has changed.
-        Updates the Listbox display and calls _change_start."""
         cursel = int(self.listbox.curselection()[0])
         self.listbox.see(cursel)
         lts = self.lasttypedstart
@@ -119,9 +108,6 @@ class AutoCompleteWindow:
         return
 
     def show_window(self, comp_lists, index, complete, mode, userWantsWin):
-        """Show the autocomplete list, bind events.
-        If complete is True, complete the text, and if there is exactly one
-        matching completion, don't open a list."""
         self.completions, self.morecompletions = comp_lists
         self.mode = mode
         self.startindex = self.widget.index(index)
@@ -253,12 +239,10 @@ class AutoCompleteWindow:
                 if keysym == 'Prior':
                     newsel = max(0, cursel - jump)
                 else:
-                    assert keysym == 'Next'
                     newsel = min(len(self.completions) - 1, cursel + jump)
             elif keysym == 'Up':
                 newsel = max(0, cursel - 1)
             else:
-                assert keysym == 'Down'
                 newsel = min(len(self.completions) - 1, cursel + 1)
             self.listbox.select_clear(cursel)
             self.listbox.select_set(newsel)

@@ -33,17 +33,11 @@ class TechTree(TechTreeMeta):
         self.as_refreshNationTreeDataS(SelectedNation.getName())
 
     def requestNationTreeData(self):
-        """
-        Overridden method of the class _Py_ScriptHandler.requestNationTreeData.
-        """
         self.as_setAvailableNationsS(g_techTreeDP.getAvailableNations())
         self.as_setSelectedNationS(SelectedNation.getName())
         return True
 
     def getNationTreeData(self, nationName):
-        """
-        Overridden method of the class _Py_ScriptHandler.getNationTreeData.
-        """
         if nationName not in nations.INDICES:
             LOG_ERROR('Nation not found', nationName)
             return {}
@@ -53,21 +47,12 @@ class TechTree(TechTreeMeta):
         return self._data.dump()
 
     def request4Unlock(self, unlockCD, vehCD, unlockIdx, xpCost):
-        """
-        Overridden method of the class ResearchViewMeta.request4Unlock.
-        """
         ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, int(unlockCD), int(vehCD), int(unlockIdx), int(xpCost))
 
     def request4Buy(self, itemCD):
-        """
-        Overridden method of the class ResearchViewMeta.request4Buy
-        """
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, int(itemCD))
 
     def request4VehCompare(self, vehCD):
-        """
-        :param vehCD: float
-        """
         self.cmpBasket.addVehicle(int(vehCD))
 
     def request4Restore(self, itemCD):
@@ -84,17 +69,10 @@ class TechTree(TechTreeMeta):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def invalidateVehLocks(self, locks):
-        """
-        Overridden method of the class ResearchView.invalidateVehLocks.
-        """
         if self._data.invalidateLocks(locks):
             self.redraw()
 
     def invalidateVTypeXP(self, xps):
-        """
-        Overridden method of the class ResearchView.invalidateVTypeXP.
-        Experience cost of some vehicles may changes if xps of vehicles has been updated, @see WOTD-12753.
-        """
         super(TechTree, self).invalidateVTypeXP(xps)
         result = self._data.invalidateXpCosts()
         if result:
@@ -156,9 +134,6 @@ class TechTree(TechTreeMeta):
             self.redraw()
 
     def __handleReloadData(self, event):
-        """
-        Redraw nation tree.
-        """
         if event.key is Keys.KEY_R:
             g_techTreeDP.load(isReload=True)
             self.redraw()

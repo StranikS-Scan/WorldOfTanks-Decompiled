@@ -43,8 +43,8 @@ class ExchangeWindow(ExchangeWindowMeta):
          'actionValue': self.itemsCache.items.shop.exchangeRate,
          'actionMode': True})
 
-    def __setCreditsCallBack(self, credits):
-        self.as_setSecondaryCurrencyS(credits)
+    def __setCreditsCallBack(self, credit):
+        self.as_setSecondaryCurrencyS(credit)
 
     def __setWalletCallback(self, status):
         self.as_setPrimaryCurrencyS(self.itemsCache.items.stats.actualGold)

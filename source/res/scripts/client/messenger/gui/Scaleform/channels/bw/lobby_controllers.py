@@ -60,7 +60,7 @@ class _ChannelController(LobbyLayout):
         self.proto.channels.sendMessage(self._channel.getID(), message)
 
     def _format(self, message, doFormatting=True):
-        isString = type(message) is types.StringType
+        isString = isinstance(message, types.StringType)
         if not doFormatting or isString:
             if isString:
                 return message

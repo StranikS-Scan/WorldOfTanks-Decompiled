@@ -113,7 +113,6 @@ class ChatSessionHistoryRequester(ClientHolder):
         return result
 
     def addHistory(self, message):
-        assert self.__state == _HISTORY_RQ_STATE.RESULT
         if message.body:
             self.__history.append(message)
         if message.isFinalInHistory:
@@ -172,7 +171,6 @@ class ChatSessionsProvider(ChatProvider):
 
     def startSession(self, jid, name):
         dbID = jid.getDatabaseID()
-        assert dbID > 0, "JID should be include account's database ID"
         created, exists = self._searchChannel(jid, name)
         if exists is None:
             self.__addSession(created, dbID, byAction=True)

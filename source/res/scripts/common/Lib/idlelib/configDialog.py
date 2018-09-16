@@ -1,16 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/configDialog.py
-"""IDLE Configuration Dialog: support user customization of IDLE by GUI
-
-Customize font faces, sizes, and colorization attributes.  Set indentation
-defaults.  Customize keybindings.  Colorization and keybindings can be
-saved as user defined sets.  Select startup options including shell/editor
-and default window size.  Define additional help sources.
-
-Note that tab width in IDLE is currently fixed at eight due to Tk issues.
-Refer to comments in EditorWindow autoindent code for details.
-
-"""
 from Tkinter import *
 import tkMessageBox, tkColorChooser, tkFont
 import string
@@ -787,7 +776,6 @@ class ConfigDialog(Toplevel):
         self.SetHelpListButtonStates()
 
     def UpdateUserHelpChangedItems(self):
-        """Clear and rebuild the HelpFiles section in self.changedItems"""
         self.changedItems['main']['HelpFiles'] = {}
         for num in range(1, len(self.userHelpList) + 1):
             self.AddChangedItem('main', 'HelpFiles', str(num), string.join(self.userHelpList[num - 1][:2], ';'))
@@ -883,10 +871,6 @@ class ConfigDialog(Toplevel):
         self.SetHelpListButtonStates()
 
     def LoadConfigs(self):
-        """
-        load configuration from default and user config files and populate
-        the widgets on the config dialog pages.
-        """
         self.LoadFontCfg()
         self.LoadTabCfg()
         self.LoadThemeCfg()
@@ -894,11 +878,6 @@ class ConfigDialog(Toplevel):
         self.LoadGeneralCfg()
 
     def SaveNewKeySet(self, keySetName, keySet):
-        """
-        save a newly created core key set.
-        keySetName - string, the name of the new key set
-        keySet - dictionary containing the new key set
-        """
         if not idleConf.userCfg['keys'].has_section(keySetName):
             idleConf.userCfg['keys'].add_section(keySetName)
         for event in keySet.keys():
@@ -906,11 +885,6 @@ class ConfigDialog(Toplevel):
             idleConf.userCfg['keys'].SetOption(keySetName, event, value)
 
     def SaveNewTheme(self, themeName, theme):
-        """
-        save a newly created theme.
-        themeName - string, the name of the new theme
-        theme - dictionary containing the new theme
-        """
         if not idleConf.userCfg['highlight'].has_section(themeName):
             idleConf.userCfg['highlight'].add_section(themeName)
         for element in theme.keys():
@@ -924,7 +898,6 @@ class ConfigDialog(Toplevel):
         return idleConf.userCfg[configType].SetOption(section, item, value)
 
     def SaveAllChangedConfigs(self):
-        """Save configuration changes to the user config file."""
         idleConf.userCfg['main'].Save()
         for configType in self.changedItems.keys():
             cfgTypeHasChanges = False
@@ -951,7 +924,6 @@ class ConfigDialog(Toplevel):
             instance.RemoveKeybindings()
 
     def ActivateConfigChanges(self):
-        """Dynamically apply configuration changes"""
         winInstances = self.parent.instance_dict.keys()
         for instance in winInstances:
             instance.ResetColorizer()

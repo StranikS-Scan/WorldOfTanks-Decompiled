@@ -93,7 +93,7 @@ def sendEventToServer(eventType, host, port, errorCode=0, errorDescr='', tries=1
              currentTime,
              errorCode,
              tries], [address, errorDescr])
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         return

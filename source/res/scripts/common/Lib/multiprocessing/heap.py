@@ -21,7 +21,6 @@ if sys.platform == 'win32':
             self.size = size
             self.name = 'pym-%d-%d' % (os.getpid(), Arena._counter.next())
             self.buffer = mmap.mmap(-1, self.size, tagname=self.name)
-            assert win32.GetLastError() == 0, 'tagname already in use'
             self._state = (self.size, self.name)
 
         def __getstate__(self):
@@ -31,7 +30,6 @@ if sys.platform == 'win32':
         def __setstate__(self, state):
             self.size, self.name = self._state = state
             self.buffer = mmap.mmap(-1, self.size, tagname=self.name)
-            assert win32.GetLastError() == win32.ERROR_ALREADY_EXISTS
 
 
 else:
@@ -135,7 +133,6 @@ class Heap(object):
             self._free(block)
 
     def free(self, block):
-        assert os.getpid() == self._lastpid
         if not self._lock.acquire(False):
             self._pending_free_blocks.append(block)
         else:
@@ -147,7 +144,6 @@ class Heap(object):
                 self._lock.release()
 
     def malloc(self, size):
-        assert 0 <= size < sys.maxint
         if os.getpid() != self._lastpid:
             self.__init__()
         self._lock.acquire()
@@ -169,7 +165,6 @@ class BufferWrapper(object):
     _heap = Heap()
 
     def __init__(self, size):
-        assert 0 <= size < sys.maxint
         block = BufferWrapper._heap.malloc(size)
         self._state = (block, size)
         Finalize(self, BufferWrapper._heap.free, args=(block,))
@@ -177,7 +172,6 @@ class BufferWrapper(object):
     def get_address(self):
         (arena, start, stop), size = self._state
         address, length = _multiprocessing.address_of_buffer(arena.buffer)
-        assert size <= length
         return address + start
 
     def get_size(self):

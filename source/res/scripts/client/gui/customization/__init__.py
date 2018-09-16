@@ -5,9 +5,6 @@ from skeletons.gui.customization import ICustomizationService
 __all__ = ('getCustomizationServiceConfig',)
 
 def getCustomizationServiceConfig(manager):
-    """ Configures services for customization package.
-    :param manager: helpers.dependency.DependencyManager
-    """
     instance = CustomizationService()
     instance.init()
     manager.addInstance(ICustomizationService, instance, finalizer='fini')

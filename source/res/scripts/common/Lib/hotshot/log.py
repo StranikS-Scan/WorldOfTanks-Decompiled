@@ -34,21 +34,9 @@ class LogReader:
         self._reader.close()
 
     def fileno(self):
-        """Return the file descriptor of the log reader's log file."""
         return self._reader.fileno()
 
     def addinfo(self, key, value):
-        """This method is called for each additional ADD_INFO record.
-        
-        This can be overridden by applications that want to receive
-        these events.  The default implementation does not need to be
-        called by alternate implementations.
-        
-        The initial set of ADD_INFO records do not pass through this
-        mechanism; this is only needed to receive notification when
-        new values are added.  Subclasses can inspect self._info after
-        calling LogReader.__init__().
-        """
         pass
 
     def get_filename(self, fileno):

@@ -1,14 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_unicode.py
-r"""Fixer for unicode.
-
-* Changes unicode to str and unichr to chr.
-
-* If "...\u..." is not unicode literal change it into "...\\u...".
-
-* Change u"..." into "...".
-
-"""
 from ..pgen2 import token
 from .. import fixer_base
 _mapping = {u'unichr': u'chr',

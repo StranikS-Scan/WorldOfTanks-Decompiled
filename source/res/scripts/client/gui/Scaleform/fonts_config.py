@@ -83,9 +83,9 @@ class FontConfigMap(object):
                 else:
                     raise Exception('You must specify the font library file')
                 if fontconfig.has_key('map'):
-                    map = fontconfig['map']
-                    for tag, alias in map.items():
-                        if tag == 'alias':
+                    fontmap = fontconfig['map']
+                    for t, alias in fontmap.items():
+                        if t == 'alias':
                             self.__readAliasSection(alias, aliases)
 
                 self.__configs[configName] = FontConfig(configName, fontlib, aliases)

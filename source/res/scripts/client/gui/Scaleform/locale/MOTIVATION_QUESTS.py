@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/MOTIVATION_QUESTS.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class MOTIVATION_QUESTS(object):
     GROUP = '#motivation_quests:group'

@@ -40,10 +40,10 @@ class SimpleCachedStorage(object):
         self.onRestoredFromCache(restored)
 
     def _getCachedData(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _setCachedData(self, data):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class RevCachedStorage(SimpleCachedStorage):

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/AuxiliaryFx/FxController.py
 
 
-class IAuxiliaryVehicleFx:
+class IAuxiliaryVehicleFx(object):
 
     def __init__(self, vehicle, fxManager):
         self._vehicle = vehicle
@@ -21,7 +21,7 @@ class IAuxiliaryVehicleFx:
         pass
 
 
-class AuxiliaryFxController:
+class AuxiliaryFxController(object):
 
     def __init__(self, fxControllers):
         self.__controllers = fxControllers

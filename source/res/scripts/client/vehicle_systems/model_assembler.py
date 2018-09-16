@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/model_assembler.py
+import math
+from collections import namedtuple
 from AvatarInputHandler import mathUtils
 import BigWorld
 from CustomEffectManager import CustomEffectManager
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
 import constants
 from helpers import gEffectsDisabled
-from vehicle_systems.tankStructure import getPartModelsFromDesc, TankNodeNames, TankPartNames
+from vehicle_systems.tankStructure import getPartModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes
 import Vehicular
 import DataLinks
 import WWISE
@@ -15,10 +17,8 @@ from vehicle_systems.components.suspension_controller import SuspensionControlle
 from items.components import shared_components, component_constants
 import debug_utils
 import material_kinds
-from collections import namedtuple
 import Math
 from helpers import DecalMap
-import math
 import WoT
 DEFAULT_MAX_LOD_PRIORITY = None
 
@@ -78,7 +78,7 @@ def createSuspension(compoundModel, vehicleDescriptor, lodStateLink):
     if not hasGroundNodes:
         return None
     else:
-        suspension = Vehicular.Suspension(compoundModel)
+        suspension = Vehicular.Suspension(compoundModel, TankPartIndexes.CHASSIS)
         for groundGroup in groundNodeGroups:
             nodes = _createNodeNameListByTemplate(groundGroup.startIndex, groundGroup.template, groundGroup.count)
             suspension.addGroundNodesGroup(nodes, groundGroup.isLeft, groundGroup.minOffset, groundGroup.maxOffset)
@@ -112,7 +112,7 @@ def assembleLeveredSuspensionIfNeed(appearance, lodStateLink):
     appearance.leveredSuspension = createLeveredSuspension(appearance.compoundModel, appearance.typeDescriptor, lodStateLink)
 
 
-def createWheelsAnimator(compoundModel, typeDescriptor, splineTracks, filter=None, lodStateLink=None):
+def createWheelsAnimator(compoundModel, typeDescriptor, splineTracks, f=None, lodStateLink=None):
     wheelsConfig = typeDescriptor.chassis.wheels
     wheelsAnimator = Vehicular.WheelsAnimator(compoundModel)
     for group in wheelsConfig.groups:
@@ -126,8 +126,8 @@ def createWheelsAnimator(compoundModel, typeDescriptor, splineTracks, filter=Non
         wheelsAnimator.setSplineTrackMovementData(splineTracks.left, splineTracks.right)
     wheelsAnimator.setLodLink(lodStateLink)
     wheelsAnimator.setLodSettings(shared_components.LodSettings(typeDescriptor.chassis.wheels.lodDist, DEFAULT_MAX_LOD_PRIORITY))
-    if filter is not None:
-        wheelsAnimator.setMovementInfo(filter.movementInfo)
+    if f is not None:
+        wheelsAnimator.setMovementInfo(f.movementInfo)
     return wheelsAnimator
 
 
@@ -154,7 +154,7 @@ def createTrackNodesAnimator(compoundModel, typeDescriptor, wheelsDataProvider=N
         return trackNodesAnimator
 
 
-def assembleVehicleTraces(appearance, filter, lodStateLink=None):
+def assembleVehicleTraces(appearance, f, lodStateLink=None):
     vehicleTraces = Vehicular.VehicleTraces()
     tracesConfig = appearance.typeDescriptor.chassis.traces
     textures = {}
@@ -163,14 +163,14 @@ def assembleVehicleTraces(appearance, filter, lodStateLink=None):
             for matKind in material_kinds.EFFECT_MATERIAL_IDS_BY_NAMES[matKindName]:
                 textures[matKind] = texId
 
-    vehicleTraces.setTrackTraces(tracesConfig.bufferPrefs, textures, tracesConfig.centerOffset, tracesConfig.size)
+    vehicleTraces.setTrackTraces(tracesConfig.bufferPrefs, textures, tracesConfig.centerOffset, tracesConfig.size, appearance.typeDescriptor.chassis.topRightCarryingPoint[1] * 2)
     vehicleTraces.setCompound(appearance.compoundModel)
     isLeftFlying = DataLinks.createBoolLink(appearance.flyingInfoProvider, 'isLeftSideFlying')
     isRightFlying = DataLinks.createBoolLink(appearance.flyingInfoProvider, 'isRightSideFlying')
     vehicleTraces.setFlyingInfo(isLeftFlying, isRightFlying)
     vehicleTraces.setLodLink(lodStateLink)
     vehicleTraces.setLodSettings(shared_components.LodSettings(tracesConfig.lodDist, DEFAULT_MAX_LOD_PRIORITY))
-    vehicleTraces.setMovementInfo(filter.movementInfo)
+    vehicleTraces.setMovementInfo(f.movementInfo)
     appearance.vehicleTraces = vehicleTraces
 
 
@@ -241,7 +241,7 @@ def assembleTerrainMatKindSensor(appearance, lodStateLink):
     scanLength = 4.0
     offset = Math.Vector3(0.0, scanLength * 0.5, 0.0)
     localPoints = (leftNodeMatrix.translation + offset, rightNodeMatrix.translation + offset, Math.Vector3(0.0, 0.0, 0.0) + offset)
-    sensor = appearance.terrainMatKindSensor = Vehicular.TerrainMatKindSensor(compoundModel.root, localPoints, scanLength)
+    sensor = appearance.terrainMatKindSensor = Vehicular.TerrainMatKindSensor(compoundModel.root, localPoints, scanLength, BigWorld.player().spaceID)
     sensor.setLodLink(lodStateLink)
     sensor.setLodSettings(shared_components.LodSettings(TERRAIN_MAT_KIND_SENSOR_LOD_DIST, TERRAIN_MAT_KIND_SENSOR_MAX_PRIORITY))
 
@@ -305,7 +305,7 @@ def setupVehicleFashion(fashion, vDesc, isCrashedTrack=False):
     isTrackFashionSet = False
     try:
         isTrackFashionSet = setupTracksFashion(fashion, vDesc, isCrashedTrack)
-    except:
+    except Exception:
         debug_utils.LOG_CURRENT_EXCEPTION()
 
     return isTrackFashionSet
@@ -391,7 +391,8 @@ def assembleWaterSensor(vehicleDesc, appearance, lodStateLink):
      trPoint,
      lightVelocityThreshold,
      heavyVelocityThreshold,
-     MIN_DEPTH_FOR_HEAVY_SPLASH)
+     MIN_DEPTH_FOR_HEAVY_SPLASH,
+     BigWorld.player().spaceID)
     sensor = Vehicular.WaterSensor(sensorConfig)
     sensor.sensorPlaneLink = appearance.compoundModel.root
     sensor.speedLink = DataLinks.createFloatLink(appearance.filter, 'averageSpeed')

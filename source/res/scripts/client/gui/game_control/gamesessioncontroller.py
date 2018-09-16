@@ -116,7 +116,7 @@ class GameSessionController(IGameSessionController, Notifiable):
     def isParentControlActive(self):
         playTimeLeft = min([self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft()])
         parentControl = self.isParentControlEnabled and playTimeLeft <= self.PLAY_TIME_LEFT_NOTIFY
-        notifyTime, _ = self.getCurfewBlockTime()
+        _, _ = self.getCurfewBlockTime()
         banTimeLeft = min(*self.__getBlockTimeLeft())
         curfewControl = self.__curfewBlockTime is not None and banTimeLeft <= self.PLAY_TIME_LEFT_NOTIFY
         return parentControl or curfewControl

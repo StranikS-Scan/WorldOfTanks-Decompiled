@@ -7,17 +7,18 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <file>	particles/Shells_Eff/trace_1.xml	</file>
+          <file>	particles/Shells_Eff/trace_auto.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
-          <dynamic>	True	</dynamic>
+          <type>	AP	</type>
           <endKey>	stopFlying	</endKey>
           <wwsoundNPC>	psb_auto_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_auto_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.06	</targetImpulse>
@@ -36,6 +37,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/groundHit_AP_1.xml	</file>
           <file>	particles/Shells_Eff/groundHit_AP_1_2.xml	</file>
           <file>	particles/Shells_Eff/groundHit_AP_1_3.xml	</file>
@@ -99,6 +101,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/sandHit_AP_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -160,6 +163,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/snowHit_AP_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -221,6 +225,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_auto.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -272,6 +277,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_auto.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -323,6 +329,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -385,6 +392,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -447,6 +455,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -781,9 +790,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	400	</shellMass>
+      <splashRadius>	2	</splashRadius>
+      <splashStrength>	3	</splashStrength>
     </physicsParams>
   </autoArmorPiercing>
   <autoAPCR>
@@ -794,17 +803,18 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <file>	particles/Shells_Eff/trace_APCR_1.xml	</file>
+          <file>	particles/Shells_Eff/trace_APCR_auto.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	APCR	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_auto_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_auto_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.06	</targetImpulse>
@@ -823,6 +833,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/groundHit_AP_CR_1.xml	</file>
           <file>	particles/Shells_Eff/groundHit_AP_CR_1_2.xml	</file>
           <file>	particles/Shells_Eff/groundHit_AP_CR_1_3.xml	</file>
@@ -886,7 +897,8 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
-          <file>	particles/Shells_Eff/sandHit_AP_CR_1.xml	</file>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/sandHit_AP_CR_1_1.xml	</file>
           <force>	1	</force>
         </pixie>
         <light>
@@ -947,7 +959,8 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
-          <file>	particles/Shells_Eff/snowHit_AP_CR_1.xml	</file>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/snowHit_AP_CR_1_1.xml	</file>
           <force>	1	</force>
         </pixie>
         <light>
@@ -1008,6 +1021,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_auto.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -1059,6 +1073,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_auto.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -1110,6 +1125,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_CR_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -1172,6 +1188,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_CR_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -1234,6 +1251,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_CR_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -1296,7 +1314,7 @@
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
           <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/woodHit_AP_CR_1.xml	</file>
+          <file>	particles/Shells_Eff/woodHit_AP_CR_1_1.xml	</file>
           <force>	1	</force>
         </pixie>
         <light>
@@ -1358,7 +1376,7 @@
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
           <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/stoneHit_AP_CR_1.xml	</file>
+          <file>	particles/Shells_Eff/stoneHit_AP_CR_1_1.xml	</file>
           <force>	1	</force>
         </pixie>
         <light>
@@ -1568,9 +1586,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	400	</shellMass>
+      <splashRadius>	1	</splashRadius>
+      <splashStrength>	2	</splashStrength>
     </physicsParams>
   </autoAPCR>
   <smallArmorPiercing>
@@ -1581,17 +1599,18 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <file>	particles/Shells_Eff/trace_2.xml	</file>
+          <file>	particles/Shells_Eff/trace_1.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	AP	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_small_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_small_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.24	</targetImpulse>
@@ -1610,6 +1629,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_AP_2.xml	</file>
           <force>	1	</force>
@@ -1672,6 +1692,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_AP_2.xml	</file>
           <force>	1	</force>
@@ -1734,6 +1755,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_AP_2.xml	</file>
           <force>	1	</force>
@@ -1796,6 +1818,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -1847,6 +1870,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -1898,6 +1922,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -1960,6 +1985,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -2022,6 +2048,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -2356,9 +2383,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	800	</shellMass>
+      <splashRadius>	3	</splashRadius>
+      <splashStrength>	4	</splashStrength>
     </physicsParams>
   </smallArmorPiercing>
   <smallHighExplosive>
@@ -2369,22 +2396,23 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <file>	particles/Shells_Eff/trace_2.xml	</file>
+          <file>	particles/Shells_Eff/trace_HE_1.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	HE	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_small_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_small_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.32	</targetImpulse>
     <targetStickers>
-      <armorResisted>	medium_hole_he	</armorResisted>
+      <armorResisted>	medium_ricochet_he	</armorResisted>
       <armorPierced>	medium_hole_he	</armorPierced>
     </targetStickers>
     <groundHit>
@@ -2398,6 +2426,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_HE_2.xml	</file>
           <force>	1	</force>
@@ -2460,6 +2489,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_HE_2.xml	</file>
           <force>	1	</force>
@@ -2522,6 +2552,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_HE_2.xml	</file>
           <force>	1	</force>
@@ -2584,6 +2615,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_HE_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -2646,6 +2678,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -2720,6 +2753,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -3054,9 +3088,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
+      <shellMass>	800	</shellMass>
       <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <splashStrength>	5	</splashStrength>
     </physicsParams>
   </smallHighExplosive>
   <smallHollowCharge>
@@ -3067,24 +3101,24 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
-          <endKey>	endpixie	</endKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <file>	particles/Shells_Eff/trace_HC_3.xml	</file>
+          <file>	particles/Shells_Eff/trace_HC_1.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	HC	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_small_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_small_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.24	</targetImpulse>
     <targetStickers>
       <armorResisted>	medium_ricochet	</armorResisted>
-      <armorPierced>	medium_hole_he	</armorPierced>
+      <armorPierced>	medium_hole_hc	</armorPierced>
     </targetStickers>
     <groundHit>
       <timeline>
@@ -3097,6 +3131,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/groundHit_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -3158,6 +3193,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/sandHit_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -3219,6 +3255,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/snowHit_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -3280,6 +3317,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -3331,6 +3369,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -3382,6 +3421,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -3444,6 +3484,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -3506,6 +3547,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -3830,9 +3872,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	800	</shellMass>
+      <splashRadius>	2	</splashRadius>
+      <splashStrength>	3	</splashStrength>
     </physicsParams>
   </smallHollowCharge>
   <smallAPCR>
@@ -3843,17 +3885,18 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <file>	particles/Shells_Eff/trace_APCR_2.xml	</file>
+          <file>	particles/Shells_Eff/trace_APCR_1.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	APCR	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_small_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_small_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.24	</targetImpulse>
@@ -3872,6 +3915,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/groundHit_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -3933,6 +3977,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/sandHit_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -3994,6 +4039,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/snowHit_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -4055,6 +4101,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -4106,6 +4153,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_1.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -4157,6 +4205,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -4219,6 +4268,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -4281,6 +4331,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -4615,9 +4666,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	800	</shellMass>
+      <splashRadius>	2	</splashRadius>
+      <splashStrength>	3	</splashStrength>
     </physicsParams>
   </smallAPCR>
   <mediumArmorPiercing>
@@ -4628,17 +4679,18 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_2.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	AP	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_main_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_main_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.24	</targetImpulse>
@@ -4657,6 +4709,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_AP_2.xml	</file>
           <force>	1	</force>
@@ -4719,6 +4772,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_AP_2.xml	</file>
           <force>	1	</force>
@@ -4781,6 +4835,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_AP_2.xml	</file>
           <force>	1	</force>
@@ -4843,6 +4898,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -4894,6 +4950,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -4945,6 +5002,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -5007,6 +5065,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -5069,6 +5128,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -5129,8 +5189,8 @@
         </decal>
         <pixie>
           <startKey>	start	</startKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/woodHit_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -5191,8 +5251,8 @@
         </decal>
         <pixie>
           <startKey>	start	</startKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/stoneHit_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -5243,8 +5303,8 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -5403,9 +5463,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
+      <shellMass>	1200	</shellMass>
       <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <splashStrength>	5	</splashStrength>
     </physicsParams>
   </mediumArmorPiercing>
   <mediumHighExplosive>
@@ -5416,23 +5476,23 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <endKey>	endpixie	</endKey>
-          <file>	particles/Shells_Eff/trace_2.xml	</file>
+          <file>	particles/Shells_Eff/trace_HE_2.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	HE	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_main_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_main_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.32	</targetImpulse>
     <targetStickers>
-      <armorResisted>	medium_hole_he	</armorResisted>
+      <armorResisted>	medium_ricochet_he	</armorResisted>
       <armorPierced>	medium_hole_he	</armorPierced>
     </targetStickers>
     <groundHit>
@@ -5445,8 +5505,9 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_HE_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -5507,8 +5568,9 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_HE_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -5569,8 +5631,9 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_HE_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -5632,6 +5695,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_HE_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -5694,6 +5758,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -5768,6 +5833,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -6102,9 +6168,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
+      <shellMass>	1200	</shellMass>
       <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <splashStrength>	8	</splashStrength>
     </physicsParams>
   </mediumHighExplosive>
   <mediumHollowCharge>
@@ -6115,23 +6181,24 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <file>	particles/Shells_Eff/trace_HC_3.xml	</file>
+          <file>	particles/Shells_Eff/trace_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	HC	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_main_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_main_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.24	</targetImpulse>
     <targetStickers>
       <armorResisted>	medium_ricochet	</armorResisted>
-      <armorPierced>	medium_hole_he	</armorPierced>
+      <armorPierced>	medium_hole_hc	</armorPierced>
     </targetStickers>
     <groundHit>
       <timeline>
@@ -6144,6 +6211,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/groundHit_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -6205,6 +6273,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/sandHit_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -6266,6 +6335,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/snowHit_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -6327,6 +6397,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -6378,6 +6449,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -6429,6 +6501,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -6491,6 +6564,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -6553,6 +6627,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -6613,8 +6688,8 @@
         </decal>
         <pixie>
           <startKey>	start	</startKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/woodHit_HC_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -6877,9 +6952,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	1200	</shellMass>
+      <splashRadius>	3	</splashRadius>
+      <splashStrength>	4	</splashStrength>
     </physicsParams>
   </mediumHollowCharge>
   <mediumAPCR>
@@ -6890,17 +6965,18 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_APCR_2.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	APCR	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_main_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_main_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.24	</targetImpulse>
@@ -6919,6 +6995,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/groundHit_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -6980,6 +7057,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/sandHit_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -7041,6 +7119,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/snowHit_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -7102,6 +7181,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -7153,6 +7233,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -7204,6 +7285,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -7266,6 +7348,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -7328,6 +7411,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_CR_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -7662,9 +7746,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	1200	</shellMass>
+      <splashRadius>	3	</splashRadius>
+      <splashStrength>	5	</splashStrength>
     </physicsParams>
   </mediumAPCR>
   <mainArmorPiercing>
@@ -7675,17 +7759,18 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_3.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	AP	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_main_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_main_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.46	</targetImpulse>
@@ -7704,6 +7789,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_AP_3.xml	</file>
           <force>	1	</force>
@@ -7766,6 +7852,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_AP_3.xml	</file>
           <force>	1	</force>
@@ -7828,6 +7915,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_AP_3.xml	</file>
           <force>	1	</force>
@@ -7890,6 +7978,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -7941,6 +8030,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -7992,6 +8082,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -8054,6 +8145,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -8116,6 +8208,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -8450,9 +8543,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	1800	</shellMass>
+      <splashRadius>	5	</splashRadius>
+      <splashStrength>	8	</splashStrength>
     </physicsParams>
   </mainArmorPiercing>
   <mainHighExplosive>
@@ -8463,22 +8556,23 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_HE_3.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	HE	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_main_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_main_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.56	</targetImpulse>
     <targetStickers>
-      <armorResisted>	main_hole_he	</armorResisted>
+      <armorResisted>	main_ricochet_he	</armorResisted>
       <armorPierced>	main_hole_he	</armorPierced>
     </targetStickers>
     <groundHit>
@@ -8492,6 +8586,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_HE_3.xml	</file>
           <force>	1	</force>
@@ -8554,6 +8649,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_HE_3.xml	</file>
           <force>	1	</force>
@@ -8616,6 +8712,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_HE_3.xml	</file>
           <force>	1	</force>
@@ -8678,6 +8775,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_HE_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -8740,6 +8838,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -8814,6 +8913,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -9148,9 +9248,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	750	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	8	</splashRadius>
-      <splashStrength>	400	</splashStrength>
+      <shellMass>	1800	</shellMass>
+      <splashRadius>	5	</splashRadius>
+      <splashStrength>	11	</splashStrength>
     </physicsParams>
   </mainHighExplosive>
   <mainHollowCharge>
@@ -9161,23 +9261,24 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_HC_3.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	HC	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_main_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_main_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.46	</targetImpulse>
     <targetStickers>
       <armorResisted>	main_ricochet	</armorResisted>
-      <armorPierced>	main_hole_he	</armorPierced>
+      <armorPierced>	main_hole_hc	</armorPierced>
     </targetStickers>
     <groundHit>
       <timeline>
@@ -9190,6 +9291,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/groundHit_HC_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -9251,6 +9353,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/sandHit_HC_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -9312,6 +9415,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/snowHit_HC_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -9373,6 +9477,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -9424,6 +9529,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -9475,6 +9581,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_HC_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -9537,6 +9644,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HC_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -9599,6 +9707,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HC_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -9923,9 +10032,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
+      <shellMass>	1800	</shellMass>
       <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <splashStrength>	5	</splashStrength>
     </physicsParams>
   </mainHollowCharge>
   <mainAPCR>
@@ -9936,17 +10045,18 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_APCR_3.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	APCR	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_main_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_main_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.46	</targetImpulse>
@@ -9965,6 +10075,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_AP_CR_3.xml	</file>
           <force>	1	</force>
@@ -10027,6 +10138,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_AP_CR_3.xml	</file>
           <force>	1	</force>
@@ -10089,6 +10201,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_AP_CR_3.xml	</file>
           <force>	1	</force>
@@ -10151,6 +10264,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -10202,6 +10316,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -10253,6 +10368,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_CR_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -10315,6 +10431,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_CR_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -10377,6 +10494,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_CR_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -10427,8 +10545,8 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/woodHit_AP_CR_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -10710,10 +10828,10 @@
       </effects>
     </deepWaterHit>
     <physicsParams>
-      <shellVelocity>	500	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	0.001	</splashRadius>
-      <splashStrength>	0	</splashStrength>
+      <shellVelocity>	900	</shellVelocity>
+      <shellMass>	1800	</shellMass>
+      <splashRadius>	4	</splashRadius>
+      <splashStrength>	5	</splashStrength>
     </physicsParams>
   </mainAPCR>
   <largeArmorPiercing>
@@ -10724,17 +10842,18 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_4.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	AP	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_large_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_large_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.7	</targetImpulse>
@@ -10753,6 +10872,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_AP_4.xml	</file>
           <force>	1	</force>
@@ -10815,6 +10935,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_AP_4.xml	</file>
           <force>	1	</force>
@@ -10877,6 +10998,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_AP_4.xml	</file>
           <force>	1	</force>
@@ -10939,6 +11061,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -10990,6 +11113,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -11041,6 +11165,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -11103,6 +11228,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -11165,6 +11291,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -11499,9 +11626,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	2200	</shellMass>
+      <splashRadius>	6	</splashRadius>
+      <splashStrength>	10	</splashStrength>
     </physicsParams>
   </largeArmorPiercing>
   <largeHighExplosive>
@@ -11512,23 +11639,24 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_HE_4.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	HE	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_large_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_large_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.88	</targetImpulse>
     <targetStickers>
-      <armorResisted>	main_hole_he	</armorResisted>
-      <armorPierced>	main_hole_he	</armorPierced>
+      <armorResisted>	large_ricochet_he	</armorResisted>
+      <armorPierced>	large_hole_he	</armorPierced>
     </targetStickers>
     <groundHit>
       <timeline>
@@ -11541,6 +11669,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_HE_4.xml	</file>
           <force>	1	</force>
@@ -11603,6 +11732,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_HE_4.xml	</file>
           <force>	1	</force>
@@ -11665,6 +11795,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_HE_4.xml	</file>
           <force>	1	</force>
@@ -11727,6 +11858,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_HE_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -11789,6 +11921,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -11863,6 +11996,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -12196,10 +12330,10 @@
       </effects>
     </deepWaterHit>
     <physicsParams>
-      <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellVelocity>	700	</shellVelocity>
+      <shellMass>	2200	</shellMass>
+      <splashRadius>	7	</splashRadius>
+      <splashStrength>	15	</splashStrength>
     </physicsParams>
   </largeHighExplosive>
   <largeHollowCharge>
@@ -12210,23 +12344,24 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <file>	particles/Shells_Eff/trace_HC_3.xml	</file>
+          <file>	particles/Shells_Eff/trace_HC_4.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	HC	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_large_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_large_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.7	</targetImpulse>
     <targetStickers>
       <armorResisted>	large_ricochet	</armorResisted>
-      <armorPierced>	large_hole_he	</armorPierced>
+      <armorPierced>	large_hole_hc	</armorPierced>
     </targetStickers>
     <groundHit>
       <timeline>
@@ -12239,6 +12374,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/groundHit_HC_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -12300,6 +12436,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/sandHit_HC_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -12361,6 +12498,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/snowHit_HC_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -12422,6 +12560,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -12473,6 +12612,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -12524,6 +12664,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_HC_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -12586,6 +12727,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HC_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -12648,6 +12790,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HC_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -12971,10 +13114,10 @@
       </effects>
     </deepWaterHit>
     <physicsParams>
-      <shellVelocity>	250	</shellVelocity>
-      <shellMass>	14	</shellMass>
-      <splashRadius>	0.1	</splashRadius>
-      <splashStrength>	50	</splashStrength>
+      <shellVelocity>	900	</shellVelocity>
+      <shellMass>	2200	</shellMass>
+      <splashRadius>	6	</splashRadius>
+      <splashStrength>	7	</splashStrength>
     </physicsParams>
   </largeHollowCharge>
   <largeAPCR>
@@ -12985,23 +13128,23 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_APCR_4.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	APCR	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_large_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_large_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.7	</targetImpulse>
     <targetStickers>
       <armorResisted>	large_ricochet	</armorResisted>
-      <armorPierced>	large_hole	</armorPierced>
       <armorPierced>	large_hole	</armorPierced>
     </targetStickers>
     <groundHit>
@@ -13015,6 +13158,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_AP_CR_4.xml	</file>
           <force>	1	</force>
@@ -13077,6 +13221,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_AP_CR_4.xml	</file>
           <force>	1	</force>
@@ -13139,6 +13284,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_AP_CR_4.xml	</file>
           <force>	1	</force>
@@ -13201,6 +13347,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -13252,6 +13399,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -13303,6 +13451,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_CR_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -13365,6 +13514,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_CR_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -13427,6 +13577,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_CR_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -13761,9 +13912,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	2200	</shellMass>
+      <splashRadius>	6	</splashRadius>
+      <splashStrength>	7	</splashStrength>
     </physicsParams>
   </largeAPCR>
   <hugeArmorPiercing>
@@ -13774,17 +13925,18 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_4.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	AP	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_large_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_large_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	1.04	</targetImpulse>
@@ -13803,6 +13955,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_AP_4.xml	</file>
           <force>	1	</force>
@@ -13865,6 +14018,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_AP_4.xml	</file>
           <force>	1	</force>
@@ -13927,6 +14081,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_AP_4.xml	</file>
           <force>	1	</force>
@@ -13989,6 +14144,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -14040,6 +14196,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -14091,6 +14248,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -14181,6 +14339,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -14215,6 +14374,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -14549,9 +14709,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	2500	</shellMass>
+      <splashRadius>	7	</splashRadius>
+      <splashStrength>	12	</splashStrength>
     </physicsParams>
   </hugeArmorPiercing>
   <hugeHighExplosive>
@@ -14562,22 +14722,23 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_HE_4.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	HE	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_large_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_large_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	1.28	</targetImpulse>
     <targetStickers>
-      <armorResisted>	large_ricochet	</armorResisted>
+      <armorResisted>	large_ricochet_he	</armorResisted>
       <armorPierced>	large_hole_he	</armorPierced>
     </targetStickers>
     <groundHit>
@@ -14591,6 +14752,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_HE_4.xml	</file>
           <force>	1	</force>
@@ -14653,6 +14815,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_HE_4.xml	</file>
           <force>	1	</force>
@@ -14715,6 +14878,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_HE_4.xml	</file>
           <force>	1	</force>
@@ -14777,6 +14941,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_HE_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -14839,6 +15004,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -14913,6 +15079,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -15246,10 +15413,10 @@
       </effects>
     </deepWaterHit>
     <physicsParams>
-      <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellVelocity>	650	</shellVelocity>
+      <shellMass>	2500	</shellMass>
+      <splashRadius>	8	</splashRadius>
+      <splashStrength>	20	</splashStrength>
     </physicsParams>
   </hugeHighExplosive>
   <hugeHollowCharge>
@@ -15260,23 +15427,24 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <file>	particles/Shells_Eff/trace_HC_3.xml	</file>
+          <file>	particles/Shells_Eff/trace_HC_4.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	HC	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_large_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_large_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	1.04	</targetImpulse>
     <targetStickers>
       <armorResisted>	large_ricochet	</armorResisted>
-      <armorPierced>	large_hole_he	</armorPierced>
+      <armorPierced>	large_hole_hc	</armorPierced>
     </targetStickers>
     <groundHit>
       <timeline>
@@ -15289,6 +15457,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/groundHit_HC_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -15350,6 +15519,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/sandHit_HC_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -15411,6 +15581,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/snowHit_HC_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -15472,6 +15643,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -15523,6 +15695,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -15574,6 +15747,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_HC_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -15636,6 +15810,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HC_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -15698,6 +15873,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HC_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -16022,9 +16198,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	2500	</shellMass>
+      <splashRadius>	6	</splashRadius>
+      <splashStrength>	7	</splashStrength>
     </physicsParams>
   </hugeHollowCharge>
   <hugeAPCR>
@@ -16035,17 +16211,18 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_APCR_4.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
+          <type>	APCR	</type>
           <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
           <wwsoundNPC>	psb_large_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_large_PC	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	1.04	</targetImpulse>
@@ -16064,6 +16241,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_AP_CR_4.xml	</file>
           <force>	1	</force>
@@ -16126,6 +16304,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_AP_CR_4.xml	</file>
           <force>	1	</force>
@@ -16188,6 +16367,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_AP_CR_4.xml	</file>
           <force>	1	</force>
@@ -16250,6 +16430,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -16301,6 +16482,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_shell_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -16352,6 +16534,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_CR_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -16414,6 +16597,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -16476,6 +16660,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_4.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -16810,9 +16995,9 @@
     </deepWaterHit>
     <physicsParams>
       <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellMass>	2500	</shellMass>
+      <splashRadius>	6	</splashRadius>
+      <splashStrength>	6	</splashStrength>
     </physicsParams>
   </hugeAPCR>
   <sportHighExplosive>
@@ -16823,17 +17008,17 @@
       <effects>
         <pixie>
           <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
           <file>	particles/Shells_Eff/trace_HE_3.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <tracerSound>
           <startKey>	flying	</startKey>
-          <endKey>	stopFlying	</endKey>
-          <dynamic>	True	</dynamic>
+          <type>	HE	</type>
           <wwsoundNPC>	tracer_main	</wwsoundNPC>
           <wwsoundPC>	tracer_main	</wwsoundPC>
-        </sound>
+        </tracerSound>
       </effects>
     </projectile>
     <targetImpulse>	0.56	</targetImpulse>
@@ -16852,6 +17037,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/groundHit_HE_3.xml	</file>
           <force>	1	</force>
@@ -16911,6 +17097,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/sandHit_HE_3.xml	</file>
           <force>	1	</force>
@@ -16970,6 +17157,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Shells_Eff/snowHit_HE_3.xml	</file>
           <force>	1	</force>
@@ -17029,6 +17217,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_sport.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -17091,6 +17280,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_sport.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -17153,6 +17343,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/ricochet_sport.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -17471,10 +17662,10 @@
       </effects>
     </deepWaterHit>
     <physicsParams>
-      <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellVelocity>	650	</shellVelocity>
+      <shellMass>	2500	</shellMass>
+      <splashRadius>	8	</splashRadius>
+      <splashStrength>	20	</splashStrength>
     </physicsParams>
   </sportHighExplosive>
   <ArtilleryPreparation>
@@ -17500,6 +17691,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -17562,6 +17754,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -17613,6 +17806,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -17656,10 +17850,10 @@
     <caliber>	125	</caliber>
     <targetImpulse>	0.88	</targetImpulse>
     <physicsParams>
-      <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellVelocity>	600	</shellVelocity>
+      <shellMass>	2500	</shellMass>
+      <splashRadius>	8	</splashRadius>
+      <splashStrength>	25	</splashStrength>
     </physicsParams>
     <artillery>
       <smoke_variation>	0.0	</smoke_variation>
@@ -17750,6 +17944,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -17812,6 +18007,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_HE_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -17863,6 +18059,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_HE_3.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -17906,10 +18103,10 @@
     <caliber>	125	</caliber>
     <targetImpulse>	0.88	</targetImpulse>
     <physicsParams>
-      <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellVelocity>	600	</shellVelocity>
+      <shellMass>	2500	</shellMass>
+      <splashRadius>	8	</splashRadius>
+      <splashStrength>	25	</splashStrength>
     </physicsParams>
     <artillery>
       <optimization>
@@ -18004,6 +18201,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -18066,6 +18264,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/armorHit_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -18117,6 +18316,7 @@
         <pixie>
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <file>	particles/Shells_Eff/shellFall_AP_2.xml	</file>
           <force>	1	</force>
         </pixie>
@@ -18160,10 +18360,10 @@
     <caliber>	125	</caliber>
     <targetImpulse>	0.88	</targetImpulse>
     <physicsParams>
-      <shellVelocity>	900	</shellVelocity>
-      <shellMass>	20	</shellMass>
-      <splashRadius>	4	</splashRadius>
-      <splashStrength>	200	</splashStrength>
+      <shellVelocity>	600	</shellVelocity>
+      <shellMass>	2500	</shellMass>
+      <splashRadius>	8	</splashRadius>
+      <splashStrength>	25	</splashStrength>
     </physicsParams>
     <airstrike>
       <optimization>	6	</optimization>

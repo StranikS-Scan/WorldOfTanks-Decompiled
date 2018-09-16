@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/items_manager.py
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import ExternalCriteria
-from gui.app_loader.decorators import sf_lobby
+from gui.app_loader import sf_lobby
 from tutorial.logger import LOG_WARNING
 
 class AttributeCriteria(ExternalCriteria):

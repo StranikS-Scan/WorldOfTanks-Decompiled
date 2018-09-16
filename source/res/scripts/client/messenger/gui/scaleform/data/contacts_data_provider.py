@@ -503,7 +503,7 @@ class _ContactsCategories(object):
                 self._cache[idx] = category.getData(self._pattern)
                 result = True
 
-        data = filter(lambda item: bool(item), self._cache)
+        data = filter(bool, self._cache)
         if len(data) == 1 and self.isEmpty():
             data = []
         return (result, data)
@@ -517,7 +517,7 @@ class _ContactsCategories(object):
                 self._cache[idx] = category.getData(self._pattern)
                 result = True
 
-        data = filter(lambda item: bool(item), self._cache)
+        data = filter(bool, self._cache)
         if len(data) == 1 and self.isEmpty():
             data = []
         return (result, data)
@@ -569,7 +569,7 @@ class _ContactsCategories(object):
                 result = True
                 break
 
-        data = filter(lambda item: bool(item), self._cache)
+        data = filter(bool, self._cache)
         if len(data) == 1 and self.isEmpty():
             data = []
         return (result, data)
@@ -586,7 +586,7 @@ class _ContactsCategories(object):
                 result = True
                 break
 
-        data = filter(lambda item: bool(item), self._cache)
+        data = filter(bool, self._cache)
         if len(data) == 1 and self.isEmpty():
             data = []
         return (result, data)
@@ -625,7 +625,7 @@ class _ContactsCategories(object):
         return len(self._categories) > 2
 
 
-class _OpenedTreeCreator():
+class _OpenedTreeCreator(object):
 
     def __init__(self):
         self.__openedTree = None

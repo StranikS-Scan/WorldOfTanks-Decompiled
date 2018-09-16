@@ -1,7 +1,6 @@
 <S16_Kranvagn.xml>
   <crew>
     <commander>	radioman
-
 			loader	</commander>
     <driver></driver>
     <gunner>	loader	</gunner>
@@ -220,7 +219,7 @@
         <right>	vehicles/sweden/S16_Kranvagn/track/right.track	</right>
         <segmentLength>	0.128	</segmentLength>
         <segmentOffset>	0.111	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>

@@ -7,9 +7,9 @@ from items import _xml
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.PixieNode import EffectNode
 from helpers import EffectsList
-gTemplates = None
-gNodes = None
-gConstantGroup = None
+gTemplates = {}
+gNodes = {}
+gConstantGroup = {}
 gEffectLists = dict()
 
 def getEffectList(name):
@@ -34,7 +34,7 @@ class RangeTable(object):
         return foundValue if idx == -1 or len(self.values) <= idx else self.values[idx]
 
 
-class SelectorDescFactory:
+class SelectorDescFactory(object):
 
     @staticmethod
     def initFactory(section):
@@ -45,23 +45,22 @@ class SelectorDescFactory:
 
     @staticmethod
     def releseFactory():
-        global gTemplates
         global gNodes
+        global gTemplates
         global gConstantGroup
-        gTemplates = dict()
-        gNodes = dict()
-        gConstantGroup = dict()
+        gTemplates.clear()
+        gNodes.clear()
+        gConstantGroup.clear()
 
     @staticmethod
     def readTemplates(dataSection):
-        global gTemplates
-        gTemplates = dict()
+        gTemplates.clear()
         try:
             section = dataSection['templates']
-            for template in section.items():
-                templateName = template[1].readString('name', '')
-                selectorTemplate = SelectorDescFactory.create(template[1]['selector'])
-                if selectorTemplate is not None and templateName != '':
+            for _, template in section.items():
+                templateName = template.readString('name')
+                selectorTemplate = SelectorDescFactory.create(template['selector'])
+                if selectorTemplate is not None and templateName:
                     gTemplates[templateName] = selectorTemplate
 
         except Exception:
@@ -86,8 +85,7 @@ class SelectorDescFactory:
 
     @staticmethod
     def readNodes(dataSection):
-        global gNodes
-        gNodes = dict()
+        gNodes.clear()
         try:
             section = dataSection['nodes']
             if section is None:
@@ -106,8 +104,7 @@ class SelectorDescFactory:
 
     @staticmethod
     def readConstants(dataSection):
-        global gConstantGroup
-        gConstantGroup = dict()
+        gConstantGroup.clear()
         try:
             section = dataSection['constants']
             for group in section.items():
@@ -119,7 +116,7 @@ class SelectorDescFactory:
                         value = constDesc[1].readString('value', '').strip()
                         try:
                             value = float(value)
-                        except:
+                        except Exception:
                             pass
 
                         groupValues[name] = value
@@ -131,7 +128,7 @@ class SelectorDescFactory:
 
     @staticmethod
     def create(selectorDesc, effects=None):
-        selectorType = selectorDesc.readString('type', '')
+        selectorType = selectorDesc.readString('type')
         selector = None
         if selectorType == 'discrete':
             selector = DiscreteSelectorDesc()
@@ -164,7 +161,7 @@ class SelectorDescFactory:
                             value = argumetSplit[1].strip()
                             try:
                                 value = float(value)
-                            except:
+                            except Exception:
                                 pass
 
                             templateArgsDict[name] = value
@@ -218,7 +215,7 @@ class DiscreteSelectorDesc(SelectorDesc):
                 value = selectorDesc[1]['key'].asString.strip()
                 try:
                     value = float(value)
-                except:
+                except Exception:
                     pass
 
                 self._selectors[value] = SelectorDescFactory.create(selectorDesc[1], effects)
@@ -278,7 +275,7 @@ class RangeSelectorDesc(SelectorDesc):
                 value = selectorDesc[1]['key'].asString.strip()
                 try:
                     value = float(value)
-                except:
+                except Exception:
                     pass
 
                 keys.append(value)
@@ -356,7 +353,7 @@ class EffectSelectorDesc(SelectorDesc):
         return
 
     def read(self, dataSection, effects):
-        self._variable = dataSection['name'].asString.strip()
+        self._variable = intern(dataSection['name'].asString.strip())
         self.__hardPoint = dataSection['effectHP']
         ttlSection = dataSection['ttl']
         if self.__hardPoint is not None:
@@ -365,7 +362,7 @@ class EffectSelectorDesc(SelectorDesc):
             ttlSection = ttlSection.asString.strip()
             try:
                 self.__ttl = float(ttlSection)
-            except:
+            except Exception:
                 pass
 
         if self.__hardPoint is not None:
@@ -379,7 +376,7 @@ class EffectSelectorDesc(SelectorDesc):
         self.__ttl = args.get(self.__ttl, self.__ttl)
         fileDesc = args.get('_fileDescriptor', '')
         if fileDesc:
-            self._variable = self._variable.format(fileDesc)
+            self._variable = intern(self._variable.format(fileDesc))
         if self.__hardPoint is not None:
             self.__hardPoint = args.get(self.__hardPoint, self.__hardPoint)
             self.__makeIdWithHP(effects)
@@ -445,6 +442,7 @@ class EffectListSelectorDesc(EffectSelectorDesc):
 
 
 class EffectDescriptorBase(object):
+    __slots__ = ('_selectorDesc',)
 
     def __init__(self):
         self._selectorDesc = None
@@ -455,10 +453,11 @@ class EffectDescriptorBase(object):
 
 
 class CustomEffectsDescriptor(EffectDescriptorBase):
+    __slots__ = ('__effects', '_selectorDesc')
 
     @staticmethod
     def getDescriptor(dataSection, customDescriptors, xmlCtx, name):
-        effectName = _xml.readNonEmptyString(xmlCtx, dataSection, name)
+        effectName = intern(_xml.readNonEmptyString(xmlCtx, dataSection, name))
         effectDesc = None
         if effectName is not None:
             effectDesc = customDescriptors.get(effectName, None)
@@ -491,12 +490,12 @@ class CustomEffectsDescriptor(EffectDescriptorBase):
 
 
 class ExhaustEffectDescriptor(EffectDescriptorBase):
+    __slots__ = ('__descriptors', 'nodes')
 
     def __init__(self, dataSection, xmlCtx, customDescriptors, name):
-        assert 'default' in customDescriptors
         super(ExhaustEffectDescriptor, self).__init__()
         self.__descriptors = customDescriptors
-        self.nodes = _xml.readNonEmptyString(xmlCtx, dataSection, name).split()
+        self.nodes = [ intern(node) for node in _xml.readNonEmptyString(xmlCtx, dataSection, name).split() ]
 
     def create(self, args):
         effectDescriptor = self.__descriptors['default']
@@ -512,7 +511,7 @@ class ExhaustEffectDescriptor(EffectDescriptorBase):
         raise AssertionError('This function should not be called by hand.')
 
 
-class EffectSettings:
+class EffectSettings(object):
     SETTINGS_NO = 0
     SETTING_DUST = 1
     SETTING_EXHAUST = 2
@@ -550,17 +549,20 @@ class MainSelectorBase(object):
         self._enabled = True
 
     def stop(self):
-        self._enabled = False
-        for effect in self._activeEffectId:
-            self.enable(effect, False)
+        if not self._enabled:
+            return
+        else:
+            self._enabled = False
+            for effect in self._activeEffectId:
+                self.enable(effect, False)
 
-        if self._effectNodes is not None:
-            for node in self._effectNodes.values():
-                if node is not None:
-                    node.deactivate()
+            if self._effectNodes is not None:
+                for node in self._effectNodes.values():
+                    if node is not None:
+                        node.deactivate()
 
-        self._activeEffectId = set()
-        return
+            self._activeEffectId = set()
+            return
 
     def update(self, args):
         if not self._enabled:
@@ -597,7 +599,7 @@ class MainCustomSelector(MainSelectorBase):
                 model.node(nodeName, Math.Matrix(node.localMatrix))
                 drawOrderBase = args.get('drawOrderBase', 0)
                 self._effectNodes[nodeDesc[0]] = EffectNode(model, node, nodeDesc[2], drawOrderBase + nodeDesc[3], nodeDesc[4])
-            except:
+            except Exception:
                 LOG_ERROR('Node %s is not found' % nodeName)
                 continue
 
@@ -626,7 +628,7 @@ class ExhaustMainSelector(MainSelectorBase):
                 model.node(nodeName, Math.Matrix(node.localMatrix))
                 drawOrderBase = args.get('drawOrderBase', 0)
                 self._effectNodes[nodeName] = EffectNode(model, node, False, drawOrderBase, self._effectSelector.effects)
-            except:
+            except Exception:
                 LOG_ERROR('Node %s is not found' % nodeName)
                 continue
 

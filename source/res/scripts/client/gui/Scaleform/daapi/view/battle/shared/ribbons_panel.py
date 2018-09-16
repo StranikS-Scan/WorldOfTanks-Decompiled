@@ -56,21 +56,10 @@ def _formatCounter(counter):
 
 
 def _baseRibbonFormatter(ribbon, arenaDP, updater):
-    """
-    Proxy to show BATTLE_EFFICIENCY_TYPES.CAPTURE or BATTLE_EFFICIENCY_TYPES.DEFENCE ribbon.
-    :param ribbon: An instance of _BaseRibbon derived class.
-    :param updater: Reference to view update method.
-    """
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=str(ribbon.getPoints()))
 
 
 def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater):
-    """
-    Proxy to show BATTLE_EFFICIENCY_TYPES.DETECTION ribbon.
-    
-    :param ribbon: An instance of _EnemyDetectionRibbon class.
-    :param updater: Reference to view update method.
-    """
     count = ribbon.getCount()
     if count > 1:
         updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=_formatCounter(count))
@@ -86,21 +75,11 @@ def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater):
 
 
 def _singleVehRibbonFormatter(ribbon, arenaDP, updater):
-    """
-    Proxy to show BATTLE_EFFICIENCY_TYPES.ARMOR or BATTLE_EFFICIENCY_TYPES.DAMAGE ribbon.
-    :param ribbon: An instance of _SingleVehicleDamageRibbon derived class.
-    :param updater: Reference to view update method.
-    """
     vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=BigWorld.wg_getIntegralFormat(ribbon.getExtraValue()))
 
 
 def _receivedRamRibbonFormatter(ribbon, arenaDP, updater):
-    """
-    Proxy to show caused BATTLE_EFFICIENCY_TYPES.ARMOR.
-    :param ribbon: An instance of _SingleVehicleDamageRibbon derived class.
-    :param updater: Reference to view update method.
-    """
     vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     if arenaDP.getPlayerVehicleID() == ribbon.getVehicleID():
         vehicleName = ''
@@ -109,21 +88,11 @@ def _receivedRamRibbonFormatter(ribbon, arenaDP, updater):
 
 
 def _criticalHitRibbonFormatter(ribbon, arenaDP, updater):
-    """
-    Proxy to show BATTLE_EFFICIENCY_TYPES.ARMOR or BATTLE_EFFICIENCY_TYPES.DAMAGE ribbon.
-    :param ribbon: An instance of _SingleVehicleDamageRibbon derived class.
-    :param updater: Reference to view update method.
-    """
     vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=_formatCounter(ribbon.getExtraValue()))
 
 
 def _receivedCriticalHitRibbonFormatter(ribbon, arenaDP, updater):
-    """
-    Proxy to show BATTLE_EFFICIENCY_TYPES.ARMOR or BATTLE_EFFICIENCY_TYPES.DAMAGE ribbon.
-    :param ribbon: An instance of _SingleVehicleDamageRibbon derived class.
-    :param updater: Reference to view update method.
-    """
     vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     if arenaDP.getPlayerVehicleID() == ribbon.getVehicleID():
         vehicleName = ''
@@ -131,11 +100,6 @@ def _receivedCriticalHitRibbonFormatter(ribbon, arenaDP, updater):
 
 
 def _killRibbonFormatter(ribbon, arenaDP, updater):
-    """
-    Proxy to show  BATTLE_EFFICIENCY_TYPES.DESTRUCTION ribbon.
-    :param ribbon: An instance of _EnemyKillRibbon class.
-    :param updater: Reference to view update method.
-    """
     vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     value = ribbon.getExtraValue()
     leftFieldStr = BigWorld.wg_getIntegralFormat(value) if value else ''
@@ -289,11 +253,6 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         return
 
     def __checkUserPreferences(self, ribbon):
-        """
-        Returns True if the user has enabled displaying of the given ribbon or there is no
-        setting for the given ribbon. Otherwise returns False.
-        :param ribbon: An instance of _Ribbon derived class.
-        """
         return self.__userPreferences.get(ribbon.getType(), True)
 
     def __setupView(self):

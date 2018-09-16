@@ -19,15 +19,10 @@ class _BaseModuleComparator(object):
         self._vehicle = vehicle
 
     def clear(self):
-        """Clear items"""
         self._items = None
         return
 
     def maxLvl(self, excludes=None):
-        """Return module with maximum level
-        :param excludes: module for exclude from search
-        :return: True, module with max lvl for tank or False, None
-        """
 
         def __key(item):
             return item.level
@@ -42,10 +37,6 @@ class _BaseModuleComparator(object):
             return (False, sortedItems[-1]) if sortedItems[-1].level == sortedItems[-2].level else (True, sortedItems[-1])
 
     def maxResearchCost(self, excludes=None):
-        """Return module with maximum research points cost
-        :param excludes: modules for exclude from search
-        :return: True, module with max research cost or (False, None)
-        """
         res = []
         for intCD, module in self._items.items():
             if excludes and module in excludes:
@@ -63,16 +54,12 @@ class _BaseModuleComparator(object):
             return (True, res[-1][1])
 
     def mostValuableParam(self, excludes=None):
-        """Return module with max valuable param (damage for gun, distance for radio, etc)
-        :param excludes: modules for exclude from search
-        :return: True, module with max valuable param or (False, None)
-        """
         pass
 
     def _getValuableParam(self, paramName, excludes=None):
         res = []
         getter = operator.attrgetter(paramName)
-        for intCD, module in self._items.items():
+        for _, module in self._items.items():
             if excludes and module in excludes:
                 continue
             maxLoad = getter(module.descriptor)
@@ -100,9 +87,6 @@ class TopModulesChecker(object):
         g_techTreeDP.load()
 
     def process(self):
-        """Check module for lvl, research cost, most valuable param
-        :return: top module for vehicle
-        """
         modules = []
         for comparator in self._comparators:
             for functor in (comparator.maxLvl, comparator.maxResearchCost, comparator.mostValuableParam):
@@ -114,13 +98,11 @@ class TopModulesChecker(object):
         return modules
 
     def clear(self):
-        """Clear items in comparators"""
         for comparator in self._comparators:
             comparator.clear()
 
     def __check(self, functor):
         excludes = []
-        assert callable(functor)
         while True:
             found, module = functor(excludes)
             if found:
@@ -161,7 +143,7 @@ class GunComparator(_BaseModuleComparator):
 
     def mostValuableParam(self, excludes=None):
         res = []
-        for intCD, module in self._items.items():
+        for _, module in self._items.items():
             if excludes and module in excludes:
                 continue
             gp = params.GunParams(module.descriptor, self._vehicle.descriptor)

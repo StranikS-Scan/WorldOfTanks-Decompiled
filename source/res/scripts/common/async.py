@@ -1,50 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/async.py
-"""This module is used for simplifying code based on callbacks, and can be used to write code
-like this:
-
-import BigWorld
-from async import *
-
-@async
-def notify(entityID):
-    entity = yield await(BigWorld.baseApp.lookUpBaseByDBID('Entity', entityID))
-    if not isinstance(entity, bool):
-        entity.notify()
-
-The @async function is invoked as usual, but it's execution may suspend at yield to wait when results
-are available to continue. @async function can be used in another @async function like this:
-@async
-def asyncFunction1():
-  yield await(asyncFunction2())
-
-Due to python 2.7 limitations, generators are not allowed to return value. If this is desired,
-@async functions can use raise AsyncReturn(value) statement to return value.
-
-This module is not safe to use in multithreaded environment. All callbacks are assumed to run
-in the same thread as async function calls.
-"""
 import sys
 import weakref
 from collections import deque
 import BigWorld
 from BWUtil import AsyncReturn
-from functools import wraps
+from functools import wraps, partial
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_DEBUG, LOG_DEBUG_DEV
 
 def async(func):
-    """
-    Decorator for indicating that function is executed asynchronously. It means that function has
-    certain points when execution is suspended and wait for some external event to continue.
-    Function must be implemented as generator, which yields Future objects. Future objects are
-    typically obtained from calls to other @async functions, or by using objects such as AsyncEvent.
-    The result of yield expression will be the result set to Future object on completion.
-    Result can also be an exception, which will thrown from yield.
-    yield can also throw BrokenPromiseException if the system detects that yielded Future cannot be
-    completed because owner lost reference to it.
-    @async function returns Future object, which is completed when function returns or throws.
-    """
 
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -58,29 +23,12 @@ def async(func):
 
 
 def await(future, timeout=None):
-    """
-    Should be used inside functions decorated with @async in yield expressions:
-    @async
-    def asyncFunction():
-        yield await(self.otherAsyncFunction(), timeout=10)
-    Timeout can be specified to limit time to execute invoked async function. TimoutError will be
-    raised if invoked function cannot complete in time.
-    Note, that timeout does not terminate other function execution. It may still complete, but the
-    result will not be delivered to the caller.
-    """
     if timeout is not None:
         future.set_timeout(timeout)
     return future
 
 
 def await_callback(func, timeout=None):
-    """
-    Similar to await, but can be used on functions that require callback parameter:
-        result = yield await_callback(self.otherAsyncFunction, timeout=10)(param1, param2)
-    It wraps function passed as a parameter and returns new function which does not require callback
-    parameter and returns Future object. Parameters passed to callback will be returned from yield
-    expression.
-    """
 
     def wrapper(*args, **kwargs):
         promise = _Promise()
@@ -98,15 +46,6 @@ def await_callback(func, timeout=None):
 
 
 def await_deferred(d):
-    """Similar to await, but for waiting functions returning twisted Deferred object.
-    Deferred is used in BigWorld's two way calls.
-    For example:
-        try:
-            type, value = yield await_deferred(remoteFind(key))
-        except MyException, e:
-            # this code is invoked in case errback is called on deferred
-            ...
-    """
     promise = _Promise()
 
     def callback(value):
@@ -115,7 +54,6 @@ def await_deferred(d):
     def errback(failure):
         try:
             failure.raiseException()
-            assert False
         except:
             promise.set_exception(*sys.exc_info())
 
@@ -131,12 +69,6 @@ def await_deferred(d):
 
 
 def resignTickIfRequired(timeout=0.1):
-    """Used inside @async functions together with yield to postpone execution to next tick
-    if it is required. Usage example:
-        yield resignTickIfRequired()
-    
-    Note: In case of using the function inside entity function you should check entity destruction.
-    """
     if BigWorld.isNextTickPending():
         return delay(timeout)
     else:
@@ -147,17 +79,14 @@ def resignTickIfRequired(timeout=0.1):
 
 
 def delay(timeout):
-    """
-    Note: In case of using the function inside entity function you should check entity destruction.
-    Allows to postpone execution on the specified time.
-    """
     promise = _Promise()
 
     def onTimer(timerID, userArg):
         promise.set_value(None)
         return
 
-    BigWorld.addTimer(onTimer, timeout)
+    timerID = BigWorld.addTimer(onTimer, timeout)
+    promise.set_cancel_handler(partial(BigWorld.delTimer, timerID))
     return promise.get_future()
 
 
@@ -168,9 +97,6 @@ def _isNextTickPending():
 def delayable(maxTicksToDelay=1, timeout=0.1):
 
     def decorator(func):
-        """
-        Wrapper for functions that can be delayed up to maxTicksDelay ticks if process is currently under heavy load.
-        """
 
         @wraps(func)
         @async
@@ -199,10 +125,6 @@ class BrokenPromiseError(Exception):
 
 
 class _Future(object):
-    """
-    Similar to BigWorld's internal PyFuture, but can be created in python code,
-    supports timeout and cancellation.
-    """
 
     def __init__(self, promise):
         self.__promise = weakref.proxy(promise)
@@ -225,10 +147,6 @@ class _Future(object):
         return
 
     def set_result(self, result):
-        """
-        Invoked by Promise when result for this Future is retrieved. Result object should have get
-        method to fetch actual value or raise exception.
-        """
         if self.__expired:
             try:
                 result.get()
@@ -238,7 +156,6 @@ class _Future(object):
             return
         else:
             self.__cancel_timeout()
-            assert not self.__result_set
             self.__result_set = True
             if self.__callback is not None:
                 callback = self.__callback
@@ -249,10 +166,6 @@ class _Future(object):
             return
 
     def then(self, callback):
-        """
-        Sets callback that will be invoked, when the result is ready.
-        """
-        assert not self.__callback_set
         self.__callback_set = True
         if self.__result_set:
             result = self.__result
@@ -263,13 +176,6 @@ class _Future(object):
         return
 
     def cancel(self):
-        """
-        Requests cancellation. Calling this function does not guarantee that execution
-        will be actually cancelled. It can still complete execution, for example,
-        in cases, when cancelling is not possible.
-        When cancelling generator based @async functions, generator should properly handle
-        GeneratorExit exceptions (they should not be caught).
-        """
         if self.__result_set:
             return
         self.__promise.cancel()
@@ -281,11 +187,8 @@ class _Future(object):
         return
 
     def set_timeout(self, timeout):
-        assert self.__timerID is None
-        assert timeout >= 0
         if not self.__result_set:
             self.__timerID = BigWorld.addTimer(self.__expire, timeout)
-        return
 
     def __cancel_timeout(self):
         if self.__timerID is not None:
@@ -302,9 +205,6 @@ class _Future(object):
 
 
 class _Promise(object):
-    """
-    Similar to BigWorld's internal PyPromise, but can be created in python code.
-    """
 
     def __init__(self):
         self.__value_set = self.__future_set = False
@@ -330,10 +230,6 @@ class _Promise(object):
         return
 
     def set_value(self, value):
-        """
-        Indicates that Promise has successfully completed with the specified value.
-        """
-        assert not self.__value_set
         self.__value_set = True
         self.__cancel = None
         future = self.__future
@@ -345,10 +241,6 @@ class _Promise(object):
         return
 
     def set_exception(self, type, value=None, traceback=None):
-        """
-        Indicates that Promise has failed with the specified exception.
-        """
-        assert not self.__value_set
         self.__value_set = True
         self.__cancel = None
         future = self.__future
@@ -361,21 +253,12 @@ class _Promise(object):
         return
 
     def set_cancel_handler(self, func):
-        """
-        Sets function that can cancel this promise, when requested by consumer.
-        func has a single parameter - promise which is being cancelled.
-        By default, cancelling does nothing.
-        """
         if not self.__value_set:
             self.__cancel = func
             if self.__cancelled:
                 self.cancel()
 
     def cancel(self):
-        """
-        Attempts to cancel Promise. Cancel handler should be set via set_cancel_handler, otherwise
-        this call will not have effect. See also Future.cancel.
-        """
         if self.__value_set:
             return
         self.__cancelled = True
@@ -388,10 +271,6 @@ class _Promise(object):
             traceback.print_stack()
 
     def get_future(self):
-        """
-        Returns Future object that can be used to retrieve result of the Promise.
-        """
-        assert not self.__future_set
         self.__future_set = True
         future = _Future(self)
         if self.__value_set:
@@ -430,10 +309,6 @@ class _BrokenPromiseResult(object):
 
 
 class _AsyncExecutor(object):
-    """
-    Executes generator code by resuming when necessary.
-    Special care should be taken here to avoid cyclic references or holding references unnecessarily.
-    """
 
     def __init__(self, gen, promise):
         self.__gen = gen
@@ -468,11 +343,6 @@ class _AsyncExecutor(object):
 
 
 class AsyncScope(object):
-    """
-    Provides scope for async primitives, such as semaphore.
-    If scope is destroyed or it's no longer referenced by any object, it will invalidate
-    all primitives, and fail all wait operations on them.
-    """
 
     def __init__(self):
         self.__objects = weakref.WeakSet()
@@ -494,39 +364,22 @@ class AsyncScope(object):
 
 
 class AsyncObject(object):
-    """
-    Base class for different async primitives, such as event, semaphore, etc.
-    """
 
     def __init__(self, scope=None):
         if scope:
             scope.registerObject(self)
 
     def _register_cancel(self, promise):
-        """
-        Registers cancellation routine in specified promise.
-        When promise is cancelled, _cancel will be invoked with the promise as argument.
-        """
         cancel = type(self)._cancel
         self_ref = weakref.ref(self)
         promise_ref = weakref.ref(promise)
         promise.set_cancel_handler(lambda : cancel(self_ref(), promise_ref()))
 
     def _cancel(self, promise):
-        """
-        Override in subclasses to perform cancellation for the specified promise.
-        _register_cancel must be called for promise to have _cancel called.
-        """
         pass
 
 
 class AsyncEvent(AsyncObject):
-    """
-    Event can be in two states: set and cleared. When event is set, then all wait requests are
-    satisfied, otherwise requests are enqueued and wait for setting an event.
-    Unlike in synchronous version of event, wait does not block. It always returns Future object,
-    and caller should rely on callback to ensure that event is set.
-    """
 
     def __init__(self, state=False, scope=None):
         super(AsyncEvent, self).__init__(scope)
@@ -566,15 +419,6 @@ class AsyncEvent(AsyncObject):
 
 
 class AsyncSemaphore(AsyncObject):
-    """
-    Semaphore provides tow operations:
-        release - increases internal counter.
-        acquire - decreases internal counter.
-    Internal counter cannot become below zero, so if acquire operation is requested when counter
-    is zero, it should wait for release operation performed somewhere else.
-    Unlike in synchronous version of semaphore, acquire does not block. It always returns Future object,
-    and caller should rely on callback to ensure that semaphore is in signaled state.
-    """
 
     def __init__(self, value=1, scope=None):
         super(AsyncSemaphore, self).__init__(scope)
@@ -608,13 +452,6 @@ class AsyncSemaphore(AsyncObject):
 
 
 class AsyncQueue(AsyncObject):
-    """
-    Provides enqueue and dequeue operations. If queue is empty, then dequeue operation may need
-    to wait. In addition to enqueue operation, throw operation is supported. When result of throw
-    operation is dequeued, Future returned by dequeue will throw an exception.
-    Unlike in synchronous version of queue, dequeue does not block. It always returns Future object,
-    and caller should rely on callback to wait for an enqueue operation.
-    """
 
     def __init__(self, scope=None):
         super(AsyncQueue, self).__init__(scope)

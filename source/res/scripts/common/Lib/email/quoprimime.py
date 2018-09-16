@@ -1,28 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/quoprimime.py
-"""Quoted-printable content transfer encoding per RFCs 2045-2047.
-
-This module handles the content transfer encoding method defined in RFC 2045
-to encode US ASCII-like 8-bit data called `quoted-printable'.  It is used to
-safely encode text that is in a character set similar to the 7-bit US ASCII
-character set, but that includes some 8-bit characters that are normally not
-allowed in email bodies or headers.
-
-Quoted-printable is very space-inefficient for encoding binary files; use the
-email.base64mime module for that instead.
-
-This module provides an interface to encode and decode both headers and bodies
-with quoted-printable encoding.
-
-RFC 2045 defines a method for including character set information in an
-`encoded-word' in a header.  This method is commonly used for 8-bit real names
-in To:/From:/Cc: etc. fields, as well as Subject: lines.
-
-This module does not do the line wrapping or end-of-line character
-conversion necessary for proper internationalized headers; it only
-does dumb encoding and decoding.  To deal with the various line
-wrapping issues, use the email.header module.
-"""
 __all__ = ['body_decode',
  'body_encode',
  'body_quopri_check',
@@ -47,17 +24,14 @@ hqre = re.compile('[^-a-zA-Z0-9!*+/ ]')
 bqre = re.compile('[^ !-<>-~\\t]')
 
 def header_quopri_check(c):
-    """Return True if the character should be escaped with header quopri."""
     return bool(hqre.match(c))
 
 
 def body_quopri_check(c):
-    """Return True if the character should be escaped with body quopri."""
     return bool(bqre.match(c))
 
 
 def header_quopri_len(s):
-    """Return the length of str when it is encoded with header quopri."""
     count = 0
     for c in s:
         if hqre.match(c):
@@ -68,7 +42,6 @@ def header_quopri_len(s):
 
 
 def body_quopri_len(str):
-    """Return the length of str when it is encoded with body quopri."""
     count = 0
     for c in str:
         if bqre.match(c):
@@ -88,7 +61,6 @@ def _max_append(L, s, maxlen, extra=''):
 
 
 def unquote(s):
-    """Turn a string in the form =AB to the ASCII character with value 0xab"""
     return chr(int(s[1:3], 16))
 
 
@@ -97,33 +69,6 @@ def quote(c):
 
 
 def header_encode(header, charset='iso-8859-1', keep_eols=False, maxlinelen=76, eol=NL):
-    r"""Encode a single header line with quoted-printable (like) encoding.
-    
-    Defined in RFC 2045, this `Q' encoding is similar to quoted-printable, but
-    used specifically for email header fields to allow charsets with mostly 7
-    bit characters (and some 8 bit) to remain more or less readable in non-RFC
-    2045 aware mail clients.
-    
-    charset names the character set to use to encode the header.  It defaults
-    to iso-8859-1.
-    
-    The resulting string will be in the form:
-    
-    "=?charset?q?I_f=E2rt_in_your_g=E8n=E8ral_dire=E7tion?\n
-      =?charset?q?Silly_=C8nglish_Kn=EEghts?="
-    
-    with each line wrapped safely at, at most, maxlinelen characters (defaults
-    to 76 characters).  If maxlinelen is None, the entire string is encoded in
-    one chunk with no splitting.
-    
-    End-of-line characters (\r, \n, \r\n) will be automatically converted
-    to the canonical email line separator \r\n unless the keep_eols
-    parameter is True (the default is False).
-    
-    Each line of the header will be terminated in the value of eol, which
-    defaults to "\n".  Set this to "\r\n" if you are using the result of
-    this function directly in email.
-    """
     if not header:
         return header
     else:
@@ -146,21 +91,6 @@ def header_encode(header, charset='iso-8859-1', keep_eols=False, maxlinelen=76, 
 
 
 def encode(body, binary=False, maxlinelen=76, eol=NL):
-    r"""Encode with quoted-printable, wrapping at maxlinelen characters.
-    
-    If binary is False (the default), end-of-line characters will be converted
-    to the canonical email end-of-line sequence \r\n.  Otherwise they will
-    be left verbatim.
-    
-    Each line of encoded text will end with eol, which defaults to "\n".  Set
-    this to "\r\n" if you will be using the result of this function directly
-    in an email.
-    
-    Each line will be wrapped at, at most, maxlinelen characters (defaults to
-    76 characters).  Long lines will have the `soft linefeed' quoted-printable
-    character "=" appended to them, so the decoded text will be identical to
-    the original text.
-    """
     if not body:
         return body
     else:
@@ -216,10 +146,6 @@ body_encode = encode
 encodestring = encode
 
 def decode(encoded, eol=NL):
-    r"""Decode a quoted-printable string.
-    
-    Lines are separated with eol, which defaults to \n.
-    """
     if not encoded:
         return encoded
     decoded = ''
@@ -256,17 +182,10 @@ body_decode = decode
 decodestring = decode
 
 def _unquote_match(match):
-    """Turn a match in the form =AB to the ASCII character with value 0xab"""
     s = match.group(0)
     return unquote(s)
 
 
 def header_decode(s):
-    """Decode a string encoded with RFC 2045 MIME header `Q' encoding.
-    
-    This function does not parse a full MIME header value encoded with
-    quoted-printable (like =?iso-8895-1?q?Hello_World?=) -- please use
-    the high level email.header class for that functionality.
-    """
     s = s.replace('_', ' ')
     return re.sub('=[a-fA-F0-9]{2}', _unquote_match, s)

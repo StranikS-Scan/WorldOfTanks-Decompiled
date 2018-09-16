@@ -4,19 +4,11 @@ from collections import namedtuple
 from debug_utils import LOG_ERROR
 from helpers import dependency
 from shared_utils import first
-from gui import nationCompareByIndex, getNationIndex
 from gui.shared.utils.decorators import ReprInjector
-from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES, compareByVehTableTypeName
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES as _QA
 from skeletons.gui.lobby_context import ILobbyContext
 _g_sortedVehs = {}
-VehiclesListProps = namedtuple('VehiclesListProps', ['disableChecker',
- 'nationIdx',
- 'vehTypeIdx',
- 'levelIdx',
- 'selectedBtn',
- 'sortDirect',
- 'checkbox'])
+VehiclesListProps = namedtuple('VehiclesListProps', ('disableChecker', 'nationIdx', 'vehTypeIdx', 'levelIdx', 'selectedBtn', 'sortDirect', 'checkbox'))
 
 def getVehiclesData(listID):
     return _g_sortedVehs.get(listID)
@@ -38,7 +30,7 @@ def updateVehiclesDataProps(listID, **kwargs):
         _g_sortedVehs[listID] = (vehs, props._replace(**kwargs))
 
 
-PQ_TABS = (_QA.SEASON_VIEW_TAB_RANDOM, _QA.SEASON_VIEW_TAB_FALLOUT)
+PQ_TABS = (_QA.SEASON_VIEW_TAB_RANDOM,)
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getEnabledPQTabs(lobbyContext=None):
@@ -46,8 +38,6 @@ def getEnabledPQTabs(lobbyContext=None):
         tabs = list(PQ_TABS)
         if not lobbyContext.getServerSettings().isRegularQuestEnabled():
             tabs.remove(_QA.SEASON_VIEW_TAB_RANDOM)
-        if not lobbyContext.getServerSettings().isFalloutQuestEnabled():
-            tabs.remove(_QA.SEASON_VIEW_TAB_FALLOUT)
     else:
         tabs = []
     return tabs
@@ -58,7 +48,6 @@ class QuestInfo(object):
 
     def __init__(self, *args):
         super(QuestInfo, self).__init__()
-        assert len(args) == len(self.__slots__)
         for idx, fieldName in enumerate(self.__slots__):
             object.__setattr__(self, fieldName, args[idx])
 
@@ -84,13 +73,12 @@ class PMInfo(QuestInfo):
     __slots__ = ('operationID', 'questID', 'filters')
 
 
-@ReprInjector.simple('tabID', 'random', 'falloutQuests')
+@ReprInjector.simple('tabID', 'random')
 class _NavigationInfo(object):
 
     def __init__(self):
         self.tabID = None
         self.random = PMInfo(None, None, None)
-        self.falloutQuests = PMInfo(None, None, None)
         self.__selectedPQType = _QA.SEASON_VIEW_TAB_RANDOM
         self._missionsTab = None
         self._vehicleSelectorFilters = {}
@@ -98,7 +86,7 @@ class _NavigationInfo(object):
 
     @property
     def selectedPQ(self):
-        return self.random if self.selectedPQType == _QA.SEASON_VIEW_TAB_RANDOM else self.falloutQuests
+        return self.random
 
     @property
     def selectedPQType(self):
@@ -116,7 +104,6 @@ class _NavigationInfo(object):
         if doResetNavInfo:
             if tabID == _QA.TAB_PERSONAL_QUESTS:
                 self.random.clear()
-                self.falloutQuests.clear()
         self.tabID = tabID
 
     def selectPersonalMission(self, operationID, questID=None):
@@ -129,32 +116,19 @@ class _NavigationInfo(object):
         self.random = self.random.update(operationID=operationID, questID=questID, filters=None)
         return
 
-    def selectFalloutQuest(self, operationID, questID=None):
-        self.tabID = _QA.TAB_PERSONAL_QUESTS
-        self.__selectedPQType = _QA.SEASON_VIEW_TAB_FALLOUT
-        self.falloutQuests = self.falloutQuests.update(operationID=operationID, questID=questID)
-
     def changePQFilters(self, *args):
         self.selectedPQ.update(filters=args)
 
     def getMissionsTab(self):
-        """ Get current missions tab for the current game session.
-        """
         return self._missionsTab
 
     def setMissionsTab(self, tabID):
-        """ Set current missions tab for the current game session.
-        """
         self._missionsTab = tabID
 
     def getVehicleSelectorFilters(self):
-        """ Get missions vehicle selector carousel's filters.
-        """
         return self._vehicleSelectorFilters
 
     def setVehicleSelectorFilters(self, filters):
-        """ Set missions vehicle selector carousel's filters.
-        """
         self._vehicleSelectorFilters = filters
 
 

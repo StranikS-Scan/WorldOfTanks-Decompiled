@@ -16,8 +16,6 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_MUC_CHANNEL_TYPE
 from messenger.storage import storage_getter
 
 class XmppClanListener(ClientHolder):
-    """Look for clan info and join to clan channel if we're in clan
-    """
     __slots__ = ('__channelCriteria', '__clanChannel', '__clanDBID', '__clanAbbrev')
 
     def __init__(self):
@@ -29,31 +27,17 @@ class XmppClanListener(ClientHolder):
 
     @storage_getter('users')
     def usersStorage(self):
-        """Gets users storage instance
-        :return: users storage instance
-        :rtype: UsersStorage
-        """
         return None
 
     @storage_getter('playerCtx')
     def playerCtx(self):
-        """Gets player context instance
-        :return: player context instance
-        :rtype: PlayerCtxStorage
-        """
         return None
 
     @storage_getter('channels')
     def channelsStorage(self):
-        """Gets channel storage instance
-        :return: channel storage instance
-        :rtype: ChannelsStorage
-        """
         return None
 
     def registerHandlers(self):
-        """Adds listeners to channels shared events.
-        """
         cEvents = g_messengerEvents.channels
         cEvents.onChannelInited += self.__ce_onChannelInited
         cEvents.onChannelDestroyed += self.__ce_onChannelDestroyed
@@ -61,8 +45,6 @@ class XmppClanListener(ClientHolder):
         self.playerCtx.onClanInfoChanged += self.__pc_onClanInfoChanged
 
     def unregisterHandlers(self):
-        """Removes listeners from channels shared events.
-        """
         cEvents = g_messengerEvents.channels
         cEvents.onChannelInited -= self.__ce_onChannelInited
         cEvents.onChannelDestroyed -= self.__ce_onChannelDestroyed
@@ -70,8 +52,6 @@ class XmppClanListener(ClientHolder):
         self.playerCtx.onClanInfoChanged -= self.__pc_onClanInfoChanged
 
     def clear(self):
-        """Clears current clan channel if it's exist.
-        """
         if self.__clanChannel is not None:
             self.__clanChannel.onMembersListChanged -= self.__ce_onMembersListChanged
             self.__clanChannel.clear()
@@ -84,8 +64,6 @@ class XmppClanListener(ClientHolder):
         return
 
     def __addClanChannelToStorage(self):
-        """Manually create clan channel entity and add it to the channel storage
-        """
         if self.client().isConnected():
             clanChannelConfig = g_settings.server.XMPP.getChannelByType(XMPP_MUC_CHANNEL_TYPE.CLANS)
             if clanChannelConfig:
@@ -94,15 +72,9 @@ class XmppClanListener(ClientHolder):
                     g_messengerEvents.channels.onChannelInited(clanChannelEntity)
 
     def __removeClanChannel(self):
-        """Fire event for channel controller close clan channel
-        """
         g_messengerEvents.channels.onChannelDestroyed(self.__clanChannel)
 
     def __initClanChannel(self, channel):
-        """Initialize clan channel
-        :param channel: channel name
-        :type channel: XmppClanChannelEntity
-        """
         if self.__clanChannel is not None:
             LOG_ERROR('Clan channel is defined', self.__clanChannel, channel)
             return
@@ -113,8 +85,6 @@ class XmppClanListener(ClientHolder):
             return
 
     def __refreshClanMembers(self):
-        """Refresh clan members and update their status
-        """
         getter = self.__clanChannel.getMember
         events = g_messengerEvents.users
         changed = False
@@ -137,29 +107,17 @@ class XmppClanListener(ClientHolder):
         return
 
     def __ce_onChannelInited(self, channel):
-        """ Listener for event _ChannelsSharedEvents.onClanInfoChanged.
-        :param channel: channel entity
-        :type channel: XmppClanListener
-        """
         if self.__channelCriteria.filter(channel):
             self.__initClanChannel(channel)
 
     def __ce_onChannelDestroyed(self, channel):
-        """ Listener for event _ChannelsSharedEvents.onChannelDestroyed.
-        :param channel: channel entity
-        :type channel: XmppClanListener
-        """
         if self.__channelCriteria.filter(channel):
             self.clear()
 
     def __ce_onMembersListChanged(self):
-        """Listener for event _ChannelEvents.onMembersListChanged.
-        """
         self.__refreshClanMembers()
 
     def __pe_onClanMembersListChanged(self):
-        """Listener for event _PlayerEvents.onClanMembersListChanged.
-        """
         clanMembers = getattr(BigWorld.player(), 'clanMembers', {})
         LOG_DEBUG('setClanMembersList', clanMembers)
         clanAbbrev = self.playerCtx.getClanAbbrev()
@@ -188,8 +146,6 @@ class XmppClanListener(ClientHolder):
         return
 
     def __pc_onClanInfoChanged(self):
-        """Listener for event UpdateManager.stats.clanInfo.
-        """
         self.__clanAbbrev = self.playerCtx.getClanAbbrev()
         self.__clanDBID = self.playerCtx.getClanDbID()
         if self.__clanAbbrev and self.__clanDBID:
@@ -203,15 +159,11 @@ class XmppClanListener(ClientHolder):
         g_messengerEvents.users.onClanMembersListChanged()
 
     def __checkForJoin(self):
-        """Try for join to clan channel
-        """
         if self.__clanChannel is None and self.__clanDBID != 0 and self.__clanAbbrev != '':
             self.__addClanChannelToStorage()
         return
 
     def __checkForLeave(self):
-        """Try to leave from clan channel
-        """
         if self.__clanChannel is not None:
             self.__removeClanChannel()
         return

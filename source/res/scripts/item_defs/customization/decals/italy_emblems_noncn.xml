@@ -1,0 +1,41 @@
+<italy_emblems_noncn.xml>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <itemGroup>
+    <name>	italy	</name>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <priceGroup>	legacy emblems	</priceGroup>
+    <type>	EMBLEM	</type>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include></include>
+    </vehicleFilter>
+    <decal>
+      <id>	534	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_80.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_80	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	539	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_85.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_85	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	542	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_88.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_88	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+  </itemGroup>
+</italy_emblems_noncn.xml>

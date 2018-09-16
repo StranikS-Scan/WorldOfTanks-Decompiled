@@ -1,17 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/fpformat.py
-"""General floating point formatting functions.
-
-Functions:
-fix(x, digits_behind)
-sci(x, digits_behind)
-
-Each takes a number or a string and a number of digits as arguments.
-
-Parameters:
-x:             number to be formatted; or a string resembling a number
-digits_behind: number of digits behind the decimal point
-"""
 from warnings import warnpy3k
 warnpy3k('the fpformat module has been removed in Python 3.0', stacklevel=2)
 del warnpy3k
@@ -28,11 +16,6 @@ except TypeError:
     NotANumber = 'fpformat.NotANumber'
 
 def extract(s):
-    """Return (sign, intpart, fraction, expo) or raise an exception:
-    sign is '+' or '-'
-    intpart is 0 or more digits beginning with a nonzero
-    fraction is 0 or more digits
-    expo is an integer"""
     res = decoder.match(s)
     if res is None:
         raise NotANumber, s
@@ -52,7 +35,6 @@ def extract(s):
 
 
 def unexpo(intpart, fraction, expo):
-    """Remove the exponent by changing intpart and fraction."""
     if expo > 0:
         f = len(fraction)
         intpart, fraction = intpart + fraction[:expo], fraction[expo:]
@@ -67,7 +49,6 @@ def unexpo(intpart, fraction, expo):
 
 
 def roundfrac(intpart, fraction, digs):
-    """Round or extend the fraction to size digs."""
     f = len(fraction)
     if f <= digs:
         return (intpart, fraction + '0' * (digs - f))
@@ -96,9 +77,6 @@ def roundfrac(intpart, fraction, digs):
 
 
 def fix(x, digs):
-    """Format x as [-]ddd.ddd with 'digs' digits after the point
-    and at least one digit before.
-    If digs <= 0, the point is suppressed."""
     if type(x) != type(''):
         x = repr(x)
     try:
@@ -120,9 +98,6 @@ def fix(x, digs):
 
 
 def sci(x, digs):
-    """Format x as [-]d.dddE[+-]ddd with 'digs' digits after the point
-    and exactly one digit before.
-    If digs is <= 0, one digit is kept and the point is suppressed."""
     if type(x) != type(''):
         x = repr(x)
     sign, intpart, fraction, expo = extract(x)
@@ -156,7 +131,6 @@ def sci(x, digs):
 
 
 def test():
-    """Interactive test run."""
     try:
         while 1:
             x, digs = input('Enter (x, digs): ')

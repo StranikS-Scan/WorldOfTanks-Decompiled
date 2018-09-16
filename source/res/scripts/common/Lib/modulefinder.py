@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/modulefinder.py
-"""Find modules used by a script, using introspection."""
 from __future__ import generators
 import dis
 import imp
@@ -129,7 +128,6 @@ class ModuleFinder():
                     level -= 1
                 if level == 0:
                     parent = self.modules[pname]
-                    assert parent is caller
                     self.msgout(4, 'determine_parent ->', parent)
                     return parent
                 if pname.count('.') < level:
@@ -140,14 +138,12 @@ class ModuleFinder():
                 return parent
             if caller.__path__:
                 parent = self.modules[pname]
-                assert caller is parent
                 self.msgout(4, 'determine_parent ->', parent)
                 return parent
             if '.' in pname:
                 i = pname.rfind('.')
                 pname = pname[:i]
                 parent = self.modules[pname]
-                assert parent.__name__ == pname
                 self.msgout(4, 'determine_parent ->', parent)
                 return parent
             self.msgout(4, 'determine_parent -> None')
@@ -466,9 +462,6 @@ class ModuleFinder():
         return imp.find_module(name, path)
 
     def report(self):
-        """Print a report to stdout, listing the found modules with their
-        paths, as well as modules that are missing, or seem to be missing.
-        """
         print
         print '  %-25s %s' % ('Name', 'File')
         print '  %-25s %s' % ('----', '----')
@@ -501,22 +494,10 @@ class ModuleFinder():
                 print '?', name, 'imported from', ', '.join(mods)
 
     def any_missing(self):
-        """Return a list of modules that appear to be missing. Use
-        any_missing_maybe() if you want to know which modules are
-        certain to be missing, and which *may* be missing.
-        """
         missing, maybe = self.any_missing_maybe()
         return missing + maybe
 
     def any_missing_maybe(self):
-        """Return two lists, one with modules that are certainly missing
-        and one with modules that *may* be missing. The latter names could
-        either be submodules *or* just global names in the package.
-        
-        The reason it can't always be determined is that it's impossible to
-        tell which names are imported when "from module import *" is done
-        with an extension module, short of actually importing it.
-        """
         missing = []
         maybe = []
         for name in self.badmodules:

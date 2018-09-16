@@ -523,7 +523,6 @@ def _updateArmorPiercer(dossierDescr, dossierBlockDescr, key, value, prevValue, 
 
 
 def _updateAimer(dossierDescr, dossierBlockDescr, key, value, prevValue, block='singleAchievements'):
-    assert value > prevValue, 'Try to store wrong value as max record'
     dossierDescr[block]['aimer'] = 1
 
 

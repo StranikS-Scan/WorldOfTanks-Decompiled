@@ -53,7 +53,7 @@ class _GUIItem(object):
         return self._buttons
 
     def getButtonsMap(self):
-        return map(lambda button: button._asdict(), self.getButtons())
+        return [ b._asdict() for b in self.getButtons() ]
 
     def getSubmitButton(self):
         return self._buttons[0] if self._buttons else None
@@ -104,7 +104,7 @@ class PopUpItem(_GUIItem):
         self._isNotify = isNotify
 
     def hideButtons(self):
-        self._buttons = map(lambda button: button._replace(visible=False), self._buttons)
+        self._buttons = [ button._replace(visible=False) for button in self._buttons ]
 
     def getType(self):
         return WGNC_GUI_TYPE.POP_UP
@@ -317,5 +317,5 @@ class GUIHolder(object):
             raise ValidationError('Combination of GUI items is not valid: {0}'.format(combination))
         if not actionsHolder:
             return
-        for itemType, item in self.__items.iteritems():
+        for _, item in self.__items.iteritems():
             item.validate(actionsHolder)

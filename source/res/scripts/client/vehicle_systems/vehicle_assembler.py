@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/vehicle_assembler.py
-import functools
-import weakref
 from vehicle_systems import model_assembler
 from vehicle_systems.CompoundAppearance import CompoundAppearance
 from vehicle_systems.components.peripherals_controller import PeripheralsController
@@ -11,10 +9,13 @@ from vehicle_systems.components.vehicle_audition_wwise import TrackCrashAudition
 from vehicle_systems.components.tutorial_mat_kinds_controller import TutorialMatKindsController
 import BigWorld
 from vehicle_systems.components.highlighter import Highlighter
+from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
 from helpers import gEffectsDisabled
 import Vehicular
 import DataLinks
 from vehicle_systems.tankStructure import TankPartNames
+from vehicle_systems.tankStructure import TankNodeNames
+from vehicle_systems.tankStructure import TankPartIndexes
 TANK_FRICTION_EVENT = 'collision_tank_friction_pc'
 VEHICLE_PRIORITY_GROUP = 1
 
@@ -28,10 +29,10 @@ class VehicleAssemblerAbstract(object):
     def __init__(self):
         pass
 
-    def prerequisites(self, typeDescriptor, id, health=1, isCrewActive=True, isTurretDetached=False):
+    def prerequisites(self, typeDescriptor, vID, health=1, isCrewActive=True, isTurretDetached=False):
         return None
 
-    def constructAppearance(self, isPlayer):
+    def constructAppearance(self, isPlayer, resourceRefs):
         return None
 
 
@@ -42,18 +43,25 @@ class _CompoundAssembler(VehicleAssemblerAbstract):
         VehicleAssemblerAbstract.__init__(self)
         self.__appearance = CompoundAppearance()
 
-    def prerequisites(self, typeDescriptor, id, health=1, isCrewActive=True, isTurretDetached=False, outfitCD=''):
-        assert 'pillbox' not in typeDescriptor.type.tags, 'Pillboxes are not supported and have never been'
-        prereqs = self.__appearance.prerequisites(typeDescriptor, id, health, isCrewActive, isTurretDetached, outfitCD)
+    def prerequisites(self, typeDescriptor, vID, health=1, isCrewActive=True, isTurretDetached=False, outfitCD=''):
+        prereqs = self.__appearance.prerequisites(typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD)
         compoundAssembler = prepareCompoundAssembler(typeDescriptor, self.__appearance.damageState.modelState, BigWorld.player().spaceID, isTurretDetached)
-        prereqs += [compoundAssembler]
+        if not isTurretDetached:
+            bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), typeDescriptor.chassis.hitTester.bspModelName),
+             (TankPartNames.getIdx(TankPartNames.HULL), typeDescriptor.hull.hitTester.bspModelName),
+             (TankPartNames.getIdx(TankPartNames.TURRET), typeDescriptor.turret.hitTester.bspModelName),
+             (TankPartNames.getIdx(TankPartNames.GUN), typeDescriptor.gun.hitTester.bspModelName))
+        else:
+            bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), typeDescriptor.chassis.hitTester.bspModelName), (TankPartNames.getIdx(TankPartNames.HULL), typeDescriptor.hull.hitTester.bspModelName))
+        collisionAssembler = BigWorld.CollisionAssembler(bspModels, BigWorld.player().spaceID)
+        prereqs += [compoundAssembler, collisionAssembler]
         return (compoundAssembler, prereqs)
 
-    def _assembleParts(self, vehicle, appearance):
+    def _assembleParts(self, vehicle, appearance, resourceRefs):
         pass
 
-    def constructAppearance(self, isPlayer):
-        self._assembleParts(isPlayer, self.__appearance)
+    def constructAppearance(self, isPlayer, resourceRefs):
+        self._assembleParts(isPlayer, self.__appearance, resourceRefs)
         return self.__appearance
 
 
@@ -91,7 +99,7 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
         appearance.trackNodesAnimator = model_assembler.createTrackNodesAnimator(appearance.compoundModel, appearance.typeDescriptor, appearance.wheelsAnimator, lodStateLink)
         model_assembler.assembleVehicleTraces(appearance, appearance.filter, lodStateLink)
 
-    def _assembleParts(self, isPlayer, appearance):
+    def _assembleParts(self, isPlayer, appearance, resourceRefs):
         appearance.filter = model_assembler.createVehicleFilter(appearance.typeDescriptor)
         if appearance.isAlive:
             appearance.detailedEngineState = model_assembler.assembleDetailedEngineState(appearance.compoundModel, appearance.filter, appearance.typeDescriptor, isPlayer)
@@ -106,6 +114,8 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
                 appearance.peripheralsController = PeripheralsController()
         self.__createTrackCrashControl(appearance)
         appearance.highlighter = Highlighter()
+        appearance.shadowManager = VehicleShadowManager(BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged)
+        compoundModel = appearance.compoundModel
         isLodTopPriority = isPlayer
         lodCalcInst = Vehicular.LodCalculator(DataLinks.linkMatrixTranslation(appearance.compoundModel.matrix), True, VEHICLE_PRIORITY_GROUP, isLodTopPriority)
         appearance.lodCalculator = lodCalcInst
@@ -114,6 +124,18 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
         isDamaged = appearance.damageState.isCurrentModelDamaged
         if not isDamaged:
             self.__assembleNonDamagedOnly(appearance, isPlayer, lodLink, lodStateLink)
+            dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in appearance.typeDescriptor.type.tags
+            fashions = appearance.fashions
+            if dirtEnabled and fashions is not None:
+                dirtHandlers = [BigWorld.PyDirtHandler(True, compoundModel.node(TankPartNames.CHASSIS).position.y),
+                 BigWorld.PyDirtHandler(False, compoundModel.node(TankPartNames.HULL).position.y),
+                 BigWorld.PyDirtHandler(False, compoundModel.node(TankPartNames.TURRET).position.y),
+                 BigWorld.PyDirtHandler(False, compoundModel.node(TankPartNames.GUN).position.y)]
+                modelHeight, _ = appearance.computeVehicleHeight()
+                appearance.dirtComponent = Vehicular.DirtComponent(dirtHandlers, modelHeight)
+                for fashionIdx, _ in enumerate(TankPartNames.ALL):
+                    fashions[fashionIdx].addMaterialHandler(dirtHandlers[fashionIdx])
+
         model_assembler.setupTurretRotations(appearance)
         if appearance.fashion is not None:
             appearance.fashion.movementInfo = appearance.filter.movementInfo
@@ -126,6 +148,7 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
             tutorialMatKindsController.terrainMatKindsLink = lambda : appearance.terrainMatKind
             appearance.addComponent(tutorialMatKindsController)
         self.__postSetupFilter(appearance)
+        compoundModel.setPartBoundingBoxAttachNode(TankPartIndexes.GUN, TankNodeNames.GUN_INCLINATION)
         return
 
 

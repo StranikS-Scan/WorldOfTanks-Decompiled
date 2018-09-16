@@ -13,4 +13,6 @@ class LoadViewEffect(FunctionalEffect):
         viewData = self.getTarget()
         if viewData is not None:
             g_eventBus.handleEvent(events.LoadViewEvent(viewData.getAlias(), ctx=viewData.getCtx()), scope=viewData.getScope())
-        return
+            return True
+        else:
+            return False

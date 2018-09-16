@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_queue.py
-"""
-TestCases for exercising a Queue DB.
-"""
 import os, string
 from pprint import pprint
 import unittest

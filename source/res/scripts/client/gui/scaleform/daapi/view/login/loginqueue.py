@@ -57,6 +57,6 @@ class LoginQueue(LoginQueueWindowMeta):
 
     def __onUpdateArgs(self, event):
         ctx = event.ctx
-        if event.alias == self.alias:
+        if event.alias == self.getAlias():
             self.__updateData(**ctx)
             self.__updateTexts()

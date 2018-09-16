@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/dossiers2/ui/achievements.py
 import resource_helper
 from debug_utils import LOG_CURRENT_EXCEPTION
+from constants import IS_WEB
 BATTLE_HERO_TEXTS = {'warrior': '#achievements:warrior',
  'invader': '#achievements:invader',
  'sniper': '#achievements:sniper',
@@ -108,10 +109,10 @@ ACHIEVEMENT_SECTIONS_ORDER = (_AS.BATTLE,
  _AS.CLASS,
  _AS.ACTION)
 ACHIEVEMENT_SECTIONS_INDICES = dict(((n, i) for i, n in enumerate(ACHIEVEMENT_SECTIONS_ORDER)))
-BATTLE_ACHIEVES_WITH_RIBBON = []
-BATTLE_ACHIEVES_RIGHT = []
-FORT_BATTLE_ACHIEVES_RIGHT = []
-BATTLE_APPROACHABLE_ACHIEVES = []
+BATTLE_ACHIEVES_WITH_RIBBON = ()
+BATTLE_ACHIEVES_RIGHT = ()
+FORT_BATTLE_ACHIEVES_RIGHT = ()
+BATTLE_APPROACHABLE_ACHIEVES = ()
 
 def getType(record):
     global ACHIEVEMENTS
@@ -135,7 +136,8 @@ def init(achievesMappingXmlPath):
     global BATTLE_ACHIEVES_WITH_RIBBON
     global BATTLE_ACHIEVES_RIGHT
     global FORT_BATTLE_ACHIEVES_RIGHT
-    assert achievesMappingXmlPath, 'Invalid achievements mapping file'
+    if IS_WEB:
+        return
     ctx, section = resource_helper.getRoot(achievesMappingXmlPath)
     for ctx, subSection in resource_helper.getIterator(ctx, section['achievements']):
         try:
@@ -163,3 +165,4 @@ def init(achievesMappingXmlPath):
     BATTLE_ACHIEVES_RIGHT = tuple(resource_helper.readList(ctx, section['battleResultsRight']).value)
     FORT_BATTLE_ACHIEVES_RIGHT = tuple(resource_helper.readList(ctx, section['fortBattleResultsRight']).value)
     BATTLE_APPROACHABLE_ACHIEVES = tuple(resource_helper.readList(ctx, section['approachableAchieves']).value)
+    resource_helper.purgeResource(achievesMappingXmlPath)

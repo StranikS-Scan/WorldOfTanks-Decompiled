@@ -10,9 +10,6 @@ from gui.prb_control.prb_getters import isInEventBattlesQueue
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 
 class EventBattleSubscriber(PreQueueSubscriber):
-    """
-    Event battle event subscriber
-    """
 
     def subscribe(self, entity):
         g_playerEvents.onEnqueuedEventBattles += entity.onEnqueued
@@ -32,18 +29,12 @@ class EventBattleSubscriber(PreQueueSubscriber):
 
 
 class EventBattleEntryPoint(PreQueueEntryPoint):
-    """
-    Event battle entry point class
-    """
 
     def __init__(self):
         super(EventBattleEntryPoint, self).__init__(FUNCTIONAL_FLAG.EVENT, QUEUE_TYPE.EVENT_BATTLES)
 
 
 class EventBattleEntity(PreQueueEntity):
-    """
-    Event battle entity class
-    """
 
     def __init__(self):
         super(EventBattleEntity, self).__init__(FUNCTIONAL_FLAG.EVENT, QUEUE_TYPE.EVENT_BATTLES, EventBattleSubscriber())

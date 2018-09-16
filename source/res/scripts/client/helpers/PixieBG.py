@@ -14,20 +14,22 @@ class PixieBG(object):
             try:
                 source = pixie.system(i).action(16)
                 source.MultRate(multiplier)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
-    def __init__(self, name, onLoadCallback, pixie=None, data=None):
-        if pixie is None:
-            self.__loader = stricted_loading.restrictBySpace(self.__onLoad)
-            self.__callback = onLoadCallback
-        else:
-            self.__loader = None
-            self.__callback = None
+    def __init__(self, name, onLoadCallback, pixie=None, data=None, modifiers=None):
         self.name = name
         self.pixie = pixie
         self.__data = data
-        Pixie.createBG(name, self.__loader)
+        if pixie is None:
+            self.__loader = stricted_loading.restrictBySpace(self.__onLoad)
+            self.__callback = onLoadCallback
+            Pixie.createBG(name, self.__loader, modifiers)
+        else:
+            self.__loader = None
+            self.__callback = None
+            if modifiers is not None:
+                self.pixie.applyModifiers(modifiers)
         return
 
     def __del__(self):

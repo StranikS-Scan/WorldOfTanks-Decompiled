@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pdb.py
-"""A Python debugger."""
 import sys
 import linecache
 import cmd
@@ -12,7 +11,6 @@ import pprint
 import traceback
 
 class Restart(Exception):
-    """Causes a debugger to be restarted for the debugged python program."""
     pass
 
 
@@ -127,8 +125,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
                     self.onecmd(line)
 
     def user_call(self, frame, argument_list):
-        """This method is called when there is the remote possibility
-        that we ever need to stop in this function."""
         if self._wait_for_mainpyfile:
             return
         else:
@@ -138,7 +134,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
             return
 
     def user_line(self, frame):
-        """This function is called when we stop or break at this line."""
         if self._wait_for_mainpyfile:
             if self.mainpyfile != self.canonic(frame.f_code.co_filename) or frame.f_lineno <= 0:
                 return
@@ -148,11 +143,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
         return
 
     def bp_commands(self, frame):
-        """Call every command that was set for the current active breakpoint
-        (if there is one).
-        
-        Returns True if the normal interaction function must be called,
-        False otherwise."""
         if getattr(self, 'currentbp', False) and self.currentbp in self.commands:
             currentbp = self.currentbp
             self.currentbp = 0
@@ -172,7 +162,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
             return 1
 
     def user_return(self, frame, return_value):
-        """This function is called when a return trap is set here."""
         if self._wait_for_mainpyfile:
             return
         else:
@@ -182,8 +171,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
             return
 
     def user_exception(self, frame, exc_info):
-        """This function is called if an exception occurs,
-        but only if we are to stop at or just below this level."""
         if self._wait_for_mainpyfile:
             return
         exc_type, exc_value, exc_traceback = exc_info
@@ -202,9 +189,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
         self.forget()
 
     def displayhook(self, obj):
-        """Custom displayhook for the exec in default(), which prevents
-        assignment of the _ variable in the builtins.
-        """
         if obj is not None:
             print repr(obj)
         return
@@ -238,7 +222,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
             print >> self.stdout, '***', exc_type_name + ':', v
 
     def precmd(self, line):
-        """Handle alias expansion and ';;' separator."""
         if not line.strip():
             return line
         args = line.split()
@@ -261,19 +244,12 @@ class Pdb(bdb.Bdb, cmd.Cmd):
         return line
 
     def onecmd(self, line):
-        """Interpret the argument as though it had been typed in response
-        to the prompt.
-        
-        Checks whether this line is typed at the normal prompt or in
-        a breakpoint command list definition.
-        """
         if not self.commands_defining:
             return cmd.Cmd.onecmd(self, line)
         else:
             return self.handle_command_def(line)
 
     def handle_command_def(self, line):
-        """Handles one command line during command list definition."""
         cmd, arg, line = self.parseline(line)
         if not cmd:
             return
@@ -301,10 +277,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
     do_h = cmd.Cmd.do_help
 
     def do_commands(self, arg):
-        """Defines a list of commands associated to a breakpoint.
-        
-        Those commands will be executed whenever the breakpoint causes
-        the program to stop execution."""
         if not arg:
             bnum = len(bdb.Breakpoint.bpbynumber) - 1
         else:
@@ -401,7 +373,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
             return
 
     def defaultFile(self):
-        """Produce a reasonable default."""
         filename = self.curframe.f_code.co_filename
         if filename == '<string>' and self.mainpyfile:
             filename = self.mainpyfile
@@ -441,11 +412,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
             return answer or failed
 
     def checkline(self, filename, lineno):
-        """Check whether specified line seems to be executable.
-        
-        Return `lineno` if it is, 0 if not (e.g. a docstring, comment, blank
-        line or EOF). Warning: testing is not comprehensive.
-        """
         globs = self.curframe.f_globals if hasattr(self, 'curframe') else None
         line = linecache.getline(filename, lineno, globs)
         if not line:
@@ -517,7 +483,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
         return
 
     def do_ignore(self, arg):
-        """arg is bp number followed by ignore count."""
         args = arg.split()
         try:
             bpnum = int(args[0].strip())
@@ -550,10 +515,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
                 print >> self.stdout, bpnum, 'is reached.'
 
     def do_clear(self, arg):
-        """Three possibilities, tried in this order:
-        clear -> clear all breaks, ask for confirmation
-        clear file:lineno -> clear all breaks at file:lineno
-        clear bpno bpno ... -> clear breakpoints by number"""
         if not arg:
             try:
                 reply = raw_input('Clear all breaks? ')
@@ -644,8 +605,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
     do_n = do_next
 
     def do_run(self, arg):
-        """Restart program by raising an exception to be caught in the main
-        debugger loop.  If arguments were given, set them in sys.argv."""
         if arg:
             import shlex
             argv0 = sys.argv[0:1]
@@ -1034,11 +993,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
         help()
 
     def lookupmodule(self, filename):
-        """Helper function for break/clear parsing -- may be overridden.
-        
-        lookupmodule() translates (possibly incomplete) file or module name
-        into an absolute file name.
-        """
         if os.path.isabs(filename) and os.path.exists(filename):
             return filename
         else:

@@ -1,10 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/stricted_loading.py
-import BigWorld
+import weakref
 import functools
 import inspect
+import BigWorld
 import debug_utils
-import weakref
+_MAX_PRIORITY = 96
+_HIGH_PRIORITY = 128
+
+def loadingPriority(vehicleID):
+    if not BigWorld.player().userSeesWorld():
+        priority = _HIGH_PRIORITY if vehicleID == BigWorld.player().playerVehicleID else _MAX_PRIORITY
+    else:
+        priority = _MAX_PRIORITY
+    return priority
+
 
 def restrictBySpace(callback, *args, **kwargs):
     return functools.partial(_restrictedLoadCall, BigWorld.player().spaceID, None, callback, args=args, kwargs=kwargs)
@@ -30,7 +40,6 @@ _LOG_LEAKS = False
 _LOG_MSG = 'Prevented possible leak of callback!'
 
 def makeCallbackWeak(callback, *args, **kwargs):
-    assert getattr(callback, '__call__', False)
     if inspect.ismethod(callback):
         if callback.im_self is not None:
             selfWeak = weakref.ref(callback.im_self)

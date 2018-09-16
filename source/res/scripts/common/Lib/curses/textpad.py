@@ -1,13 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/curses/textpad.py
-"""Simple textbox editing widget with Emacs-like keybindings."""
 import curses
 import curses.ascii
 
 def rectangle(win, uly, ulx, lry, lrx):
-    """Draw a rectangle with corners at the provided upper-left
-    and lower-right coordinates.
-    """
     win.vline(uly + 1, ulx, curses.ACS_VLINE, lry - uly - 1)
     win.hline(uly, ulx + 1, curses.ACS_HLINE, lrx - ulx - 1)
     win.hline(lry, ulx + 1, curses.ACS_HLINE, lrx - ulx - 1)
@@ -19,29 +15,6 @@ def rectangle(win, uly, ulx, lry, lrx):
 
 
 class Textbox:
-    """Editing widget using the interior of a window object.
-     Supports the following Emacs-like key bindings:
-    
-    Ctrl-A      Go to left edge of window.
-    Ctrl-B      Cursor left, wrapping to previous line if appropriate.
-    Ctrl-D      Delete character under cursor.
-    Ctrl-E      Go to right edge (stripspaces off) or end of line (stripspaces on).
-    Ctrl-F      Cursor right, wrapping to next line when appropriate.
-    Ctrl-G      Terminate, returning the window contents.
-    Ctrl-H      Delete character backward.
-    Ctrl-J      Terminate if the window is 1 line, otherwise insert newline.
-    Ctrl-K      If line is blank, delete it, otherwise clear to end of line.
-    Ctrl-L      Refresh screen.
-    Ctrl-N      Cursor down; move down one line.
-    Ctrl-O      Insert a blank line at cursor location.
-    Ctrl-P      Cursor up; move up one line.
-    
-    Move operations do nothing if the cursor is at an edge where the movement
-    is not possible.  The following synonyms are supported where possible:
-    
-    KEY_LEFT = Ctrl-B, KEY_RIGHT = Ctrl-F, KEY_UP = Ctrl-P, KEY_DOWN = Ctrl-N
-    KEY_BACKSPACE = Ctrl-h
-    """
 
     def __init__(self, win, insert_mode=False):
         self.win = win
@@ -55,8 +28,6 @@ class Textbox:
         return
 
     def _end_of_line(self, y):
-        """Go to the location of the first blank on the given line,
-        returning the index of the last non-blank character."""
         last = self.maxx
         while True:
             if curses.ascii.ascii(self.win.inch(y, last)) != curses.ascii.SP:
@@ -85,7 +56,6 @@ class Textbox:
                     self.win.move(backy, backx)
 
     def do_command(self, ch):
-        """Process a single editing command."""
         y, x = self.win.getyx()
         self.lastcmd = ch
         if curses.ascii.isprint(ch):
@@ -151,7 +121,6 @@ class Textbox:
                         self.win.move(y - 1, self._end_of_line(y - 1))
 
     def gather(self):
-        """Collect and return the contents of the window."""
         result = ''
         for y in range(self.maxy + 1):
             self.win.move(y, 0)
@@ -169,7 +138,6 @@ class Textbox:
         return result
 
     def edit(self, validate=None):
-        """Edit in the widget window and collect the results."""
         while 1:
             ch = self.win.getch()
             if validate:

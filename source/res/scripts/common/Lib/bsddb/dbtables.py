@@ -35,14 +35,12 @@ class TableAlreadyExists(TableDBError):
 
 
 class Cond:
-    """This condition matches everything"""
 
     def __call__(self, s):
         pass
 
 
 class ExactCond(Cond):
-    """Acts as an exact match condition function"""
 
     def __init__(self, strtomatch):
         self.strtomatch = strtomatch
@@ -52,7 +50,6 @@ class ExactCond(Cond):
 
 
 class PrefixCond(Cond):
-    """Acts as a condition function for matching a string prefix"""
 
     def __init__(self, prefix):
         self.prefix = prefix
@@ -62,7 +59,6 @@ class PrefixCond(Cond):
 
 
 class PostfixCond(Cond):
-    """Acts as a condition function for matching a string postfix"""
 
     def __init__(self, postfix):
         self.postfix = postfix
@@ -72,11 +68,6 @@ class PostfixCond(Cond):
 
 
 class LikeCond(Cond):
-    """
-    Acts as a function that will match using an SQL 'LIKE' style
-    string.  Case insensitive and % signs are wild cards.
-    This isn't perfect but it should work for the simple common cases.
-    """
 
     def __init__(self, likestr, re_flags=re.IGNORECASE):
         chars_to_escape = '.*+()[]?'
@@ -122,9 +113,6 @@ def _search_rowid_key(table):
 
 
 def contains_metastrings(s):
-    """Verify that the given string does not contain any
-    metadata strings that might interfere with dbtables database operation.
-    """
     if s.find(_table_names_key) >= 0 or s.find(_columns) >= 0 or s.find(_data) >= 0 or s.find(_rowid) >= 0:
         return 1
     else:
@@ -134,11 +122,6 @@ def contains_metastrings(s):
 class bsdTableDB:
 
     def __init__(self, filename, dbhome, create=0, truncate=0, mode=384, recover=0, dbflags=0):
-        """bsdTableDB(filename, dbhome, create=0, truncate=0, mode=0600)
-        
-        Open database name in the dbhome Berkeley DB directory.
-        Use keyword arguments when calling this constructor.
-        """
         self.db = None
         myflags = db.DB_THREAD
         if create:
@@ -255,7 +238,6 @@ class bsdTableDB:
         self.db.sync()
 
     def _db_print(self):
-        """Print the database to stdout for debugging"""
         print '******** Printing raw database for debugging ********'
         cur = self.db.cursor()
         try:
@@ -272,11 +254,6 @@ class bsdTableDB:
             cur.close()
 
     def CreateTable(self, table, columns):
-        """CreateTable(table, columns) - Create a new table in the database.
-        
-        raises TableDBError if it already exists or for other DB errors.
-        """
-        assert isinstance(columns, list)
         txn = None
         try:
             if contains_metastrings(table):
@@ -307,10 +284,6 @@ class bsdTableDB:
         return
 
     def ListTableColumns(self, table):
-        """Return a list of columns in the given table.
-        [] if the table doesn't exist.
-        """
-        assert isinstance(table, str)
         if contains_metastrings(table):
             raise ValueError, 'bad table name: contains reserved metastrings'
         columnlist_key = _columns_key(table)
@@ -323,7 +296,6 @@ class bsdTableDB:
             return []
 
     def ListTables(self):
-        """Return a list of tables in this database."""
         pickledtablelist = self.db.get_get(_table_names_key)
         if pickledtablelist:
             return pickle.loads(pickledtablelist)
@@ -331,15 +303,6 @@ class bsdTableDB:
             return []
 
     def CreateOrExtendTable(self, table, columns):
-        """CreateOrExtendTable(table, columns)
-        
-        Create a new table in the database.
-        
-        If a table of this name already exists, extend it to have any
-        additional columns present in the given list as well as
-        all of its current columns.
-        """
-        assert isinstance(columns, list)
         try:
             self.CreateTable(table, columns)
         except TableAlreadyExists:
@@ -374,7 +337,6 @@ class bsdTableDB:
         return
 
     def __load_column_info(self, table):
-        """initialize the self.__tablecolumns dict"""
         try:
             tcolpickles = getattr(self.db, 'get_bytes', self.db.get)(_columns_key(table))
         except db.DBNotFoundError:
@@ -385,7 +347,6 @@ class bsdTableDB:
         self.__tablecolumns[table] = pickle.loads(tcolpickles)
 
     def __new_rowid(self, table, txn):
-        """Create a new unique row identifier"""
         unique = 0
         while not unique:
             blist = []
@@ -405,9 +366,6 @@ class bsdTableDB:
         return newid
 
     def Insert(self, table, rowdict):
-        """Insert(table, datadict) - Insert a new row into the table
-        using the keys+values from rowdict as the column values.
-        """
         txn = None
         try:
             if not getattr(self.db, 'has_key')(_columns_key(table)):
@@ -438,16 +396,6 @@ class bsdTableDB:
         return
 
     def Modify(self, table, conditions={}, mappings={}):
-        """Modify(table, conditions={}, mappings={}) - Modify items in rows matching 'conditions' using mapping functions in 'mappings'
-        
-        * table - the table name
-        * conditions - a dictionary keyed on column names containing
-          a condition callable expecting the data string as an
-          argument and returning a boolean.
-        * mappings - a dictionary keyed on column names containing a
-          condition callable expecting the data string as an argument and
-          returning the new string for that column.
-        """
         try:
             matching_rowids = self.__Select(table, [], conditions)
             columns = mappings.keys()
@@ -482,13 +430,6 @@ class bsdTableDB:
         return
 
     def Delete(self, table, conditions={}):
-        """Delete(table, conditions) - Delete items matching the given
-        conditions from the table.
-        
-        * conditions - a dictionary keyed on column names containing
-          condition functions expecting the data string as an
-          argument and returning a boolean.
-        """
         try:
             matching_rowids = self.__Select(table, [], conditions)
             columns = self.__tablecolumns[table]
@@ -523,15 +464,6 @@ class bsdTableDB:
         return
 
     def Select(self, table, columns, conditions={}):
-        """Select(table, columns, conditions) - retrieve specific row data
-        Returns a list of row column->value mapping dictionaries.
-        
-        * columns - a list of which column data to return.  If
-          columns is None, all columns will be returned.
-        * conditions - a dictionary keyed on column names
-          containing callable conditions expecting the data string as an
-          argument and returning a boolean.
-        """
         try:
             if table not in self.__tablecolumns:
                 self.__load_column_info(table)
@@ -547,14 +479,6 @@ class bsdTableDB:
         return matching_rowids.values()
 
     def __Select(self, table, columns, conditions):
-        """__Select() - Used to implement Select and Delete (above)
-        Returns a dictionary keyed on rowids containing dicts
-        holding the row data for columns listed in the columns param
-        that match the given conditions.
-        * conditions is a dictionary keyed on column names
-        containing callable conditions expecting the data string as an
-        argument and returning a boolean.
-        """
         if table not in self.__tablecolumns:
             self.__load_column_info(table)
         if columns is None:
@@ -653,7 +577,6 @@ class bsdTableDB:
         return matching_rowids
 
     def Drop(self, table):
-        """Remove an entire table from the database"""
         txn = None
         try:
             txn = self.env.txn_begin()

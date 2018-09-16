@@ -25,7 +25,6 @@ _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['world_collision']: 'DEATH_FROM_WORLD_COLLISION',
  ATTACK_REASON_INDICES['death_zone']: 'DEATH_FROM_DEATH_ZONE',
  ATTACK_REASON_INDICES['drowning']: 'DEATH_FROM_DROWNING',
- ATTACK_REASON_INDICES['gas_attack']: 'DEATH_FROM_GAS_ATTACK',
  ATTACK_REASON_INDICES['overturn']: 'DEATH_FROM_WORLD_COLLISION'}
 
 class _ENTITIES_POSTFIX(object):
@@ -36,12 +35,6 @@ class _ENTITIES_POSTFIX(object):
 
 
 class _BasePostmortemPanel(PostmortemPanelMeta):
-    """
-    This is a base class for postmortem panel.
-    It reads messages from the xml, provided in _POSTMORTEM_PANEL_SETTINGS_PATH variable.
-    After receiving 'onShowVehicleMessageByCode' event we will try to search the message by code.
-    If the message is found, it will be stored in an internal variable.
-    """
     __slots__ = ('__messages', '__deathInfo')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -81,9 +74,6 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
         return
 
     def _deathInfoReceived(self):
-        """
-        Event for child class about receiving death info messages.
-        """
         pass
 
     def _prepareMessage(self, code, killerVehID, device=None):
@@ -115,11 +105,6 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
 
 
 class _SummaryPostmortemPanel(_BasePostmortemPanel):
-    """
-    This class extends Base postmortem panel and adds logic to process an event
-    from server after client-reconnect. The server will send killerID and death reason.
-    The class will map this info to message code and call appropriate parent method.
-    """
 
     def _addGameListeners(self):
         super(_SummaryPostmortemPanel, self)._addGameListeners()
@@ -170,12 +155,6 @@ class _SummaryPostmortemPanel(_BasePostmortemPanel):
 
 
 class PostmortemPanel(_SummaryPostmortemPanel):
-    """
-    This class maintains Postmortem panel in a battle.
-    The panel shows the next information:
-        - Death reason, killer Nickname and vehicle (in some cases without nick and vehicle)
-        - After switching on alive vehicle (in postmortem) - show player name, vehicle and health
-    """
     __slots__ = ('__playerInfo', '__isPlayerVehicle', '__maxHealth', '__healthPercent', '__isInPostmortem', '__deathAlreadySet', '__isColorBlind')
 
     def __init__(self):
@@ -316,13 +295,11 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         return reason
 
     def __showPlayerInfo(self):
-        assert self.__playerInfo is not None, 'Player info must be defined at first, see vehicle_state_ctrl'
         ctx = {'name': self.__playerInfo.playerFullName,
          'health': self.__healthPercent}
         template = 'other'
         msg = makeHtmlString('html_templates:battle/postmortemMessages', template, ctx=ctx)
         self.as_setPlayerInfoS(msg)
-        return
 
     def __onSettingsChanged(self, diff):
         if GRAPHICS.COLOR_BLIND in diff:

@@ -8,7 +8,7 @@ from helpers.i18n import makeString as _ms
 from helpers.time_utils import ONE_MINUTE
 from skeletons.gui.battle_session import IBattleSessionProvider
 
-class _WWISE_EVENTS:
+class _WWISE_EVENTS(object):
     APPEAR = 'time_buzzer_01'
 
 
@@ -17,9 +17,6 @@ _SWF_FILE_NAME = 'BattleEndWarningPanel.swf'
 _CALLBACK_NAME = 'battle.onLoadEndWarningPanel'
 
 class BattleEndWarningPanel(BattleEndWarningPanelMeta, IAbstractPeriodView):
-    """
-    Component which is responsible for showing large red warning that battle is ending (WOTD-62093).
-    """
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -53,11 +50,6 @@ class BattleEndWarningPanel(BattleEndWarningPanelMeta, IAbstractPeriodView):
             self.__isShown = False
 
     def _callWWISE(self, wwiseEventName):
-        """
-        Method is used to play or stop sounds.
-        
-        Pretected for testing purposes.
-        """
         WWISE.WW_eventGlobal(wwiseEventName)
 
     def __validateWarningTime(self):

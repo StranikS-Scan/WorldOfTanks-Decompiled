@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/Slider.py
-"""
-"""
 import BigWorld, GUI
 import Keys
 import math

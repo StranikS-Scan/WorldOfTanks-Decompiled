@@ -7,9 +7,6 @@ from tutorial.logger import LOG_MEMORY
 from tutorial.gui import GUIDispatcher
 
 class SfBattleDispatcher(GUIDispatcher):
-    """
-    There is GUIDispatcher class implementation for tutorial in the battle.
-    """
 
     def __del__(self):
         LOG_MEMORY('SfBattleDispatcher deleted')

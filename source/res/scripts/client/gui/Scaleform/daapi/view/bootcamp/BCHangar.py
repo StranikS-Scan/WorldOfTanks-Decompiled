@@ -6,33 +6,8 @@ from gui.Scaleform.framework import ViewTypes
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.shared import events
-from bootcamp.BootCampEvents import g_bootcampEvents
-from helpers import dependency
-from skeletons.gui.game_control import IBootcampController
 
 class BCHangar(Hangar):
-    bootcampCtrl = dependency.descriptor(IBootcampController)
-
-    def __init__(self, ctx=None):
-        super(BCHangar, self).__init__(ctx)
-        self._observer = None
-        return
-
-    def showNewElements(self, newElements):
-        list = newElements['keys']
-        if self._observer is not None:
-            self._observer.as_showAnimatedS(list)
-        self.ammoPanel.showNewElements(list)
-        return
-
-    def updateVisibleComponents(self, visibleSettings):
-        if visibleSettings is None:
-            visibleSettings = self.bootcampCtrl.getLobbySettings()
-        if self._observer is not None:
-            self._observer.as_setBootcampDataS(visibleSettings)
-        self.ammoPanel.updateVisibleComponents(visibleSettings)
-        self.headerComponent.updateVisibleComponents(visibleSettings)
-        return
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
@@ -41,23 +16,6 @@ class BCHangar(Hangar):
 
     def showHelpLayout(self):
         pass
-
-    def _onPopulateEnd(self):
-        g_bootcampEvents.onRequestChangeResearchButtonState += self.researchPanel.setNavigationEnabled
-
-    def _populate(self):
-        super(BCHangar, self)._populate()
-        self._observer = self.app.bootcampManager.getObserver('BCHangarObserver')
-        if self._observer is not None:
-            self._observer.as_setBootcampDataS(self.bootcampCtrl.getLobbySettings())
-        return
-
-    def _dispose(self):
-        g_bootcampEvents.onRequestChangeResearchButtonState -= self.researchPanel.setNavigationEnabled
-        g_bootcampEvents.onHangarDispose()
-        self._observer = None
-        super(BCHangar, self)._dispose()
-        return
 
     def __isViewOpenOrLoading(self, container, viewAlias):
         openView = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})

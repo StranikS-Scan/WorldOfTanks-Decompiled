@@ -1,20 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/DIALOGS.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from debug_utils import LOG_WARNING
 
 class DIALOGS(object):
     GATHERINGXPFORM_SORTBY_VEHICLE = '#dialogs:gatheringXPForm/sortBy/vehicle'
     GATHERINGXPFORM_SORTBY_XP = '#dialogs:gatheringXPForm/sortBy/xp'
+    GRAPHICSPRESETNOTINSTALLED = '#dialogs:graphicsPresetNotInstalled'
     GATHERINGXPFORM_SORTBY_SELECTION = '#dialogs:gatheringXPForm/sortBy/selection'
     TRADEINPOPOVER_SORTING_NATION = '#dialogs:tradeInPopover/sorting/nation'
     TRADEINPOPOVER_SORTING_VEHTYPE = '#dialogs:tradeInPopover/sorting/vehType'
     TRADEINPOPOVER_SORTING_VEHLVL = '#dialogs:tradeInPopover/sorting/vehLvl'
     TRADEINPOPOVER_SORTING_VEHNAME = '#dialogs:tradeInPopover/sorting/vehName'
     TRADEINPOPOVER_SORTING_SAVING = '#dialogs:tradeInPopover/sorting/saving'
+    MINIMAPALPHANOTIFICATION = '#dialogs:minimapAlphaNotification'
+    SOUNDMODEINVALID = '#dialogs:soundModeInvalid'
+    CONTROLSWRONGNOTIFICATION = '#dialogs:controlsWrongNotification'
     HOF_EXCLUDERATING = '#dialogs:hof/excludeRating'
     INTERVIEWQUIT_TITLE = '#dialogs:interviewQuit/title'
     INTERVIEWQUIT_MESSAGE = '#dialogs:interviewQuit/message'
@@ -234,6 +234,7 @@ class DIALOGS(object):
     RECRUITWINDOW_NATIONDROPDOWN_CZECH = '#dialogs:recruitWindow/nationDropdown/czech'
     RECRUITWINDOW_NATIONDROPDOWN_SWEDEN = '#dialogs:recruitWindow/nationDropdown/sweden'
     RECRUITWINDOW_NATIONDROPDOWN_POLAND = '#dialogs:recruitWindow/nationDropdown/poland'
+    RECRUITWINDOW_NATIONDROPDOWN_ITALY = '#dialogs:recruitWindow/nationDropdown/italy'
     RECRUITWINDOW_SPECIALIZATION = '#dialogs:recruitWindow/specialization'
     RECRUITWINDOW_VEHICLECLASS = '#dialogs:recruitWindow/vehicleClass'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL = '#dialogs:recruitWindow/vehicleClassDropdown/all'
@@ -449,6 +450,10 @@ class DIALOGS(object):
     CONTROLSWRONGNOTIFICATION_MESSAGE = '#dialogs:controlsWrongNotification/message'
     CONTROLSWRONGNOTIFICATION_SUBMIT = '#dialogs:controlsWrongNotification/submit'
     CONTROLSWRONGNOTIFICATION_CANCEL = '#dialogs:controlsWrongNotification/cancel'
+    MINIMAPALPHANOTIFICATION_TITLE = '#dialogs:minimapAlphaNotification/title'
+    MINIMAPALPHANOTIFICATION_MESSAGE = '#dialogs:minimapAlphaNotification/message'
+    MINIMAPALPHANOTIFICATION_SUBMIT = '#dialogs:minimapAlphaNotification/submit'
+    MINIMAPALPHANOTIFICATION_CANCEL = '#dialogs:minimapAlphaNotification/cancel'
     SOUNDMODEINVALID_TITLE = '#dialogs:soundModeInvalid/title'
     SOUNDMODEINVALID_MESSAGE = '#dialogs:soundModeInvalid/message'
     SOUNDMODEINVALID_SUBMIT = '#dialogs:soundModeInvalid/submit'
@@ -820,6 +825,10 @@ class DIALOGS(object):
     SOUNDSPEAKERSPRESETDOESNOTMATCH_MESSAGE = '#dialogs:soundSpeakersPresetDoesNotMatch/message'
     SOUNDSPEAKERSPRESETDOESNOTMATCH_SUBMIT = '#dialogs:soundSpeakersPresetDoesNotMatch/submit'
     SOUNDSPEAKERSPRESETDOESNOTMATCH_CANCEL = '#dialogs:soundSpeakersPresetDoesNotMatch/cancel'
+    SOUNDSPEAKERSPRESETRESET_TITLE = '#dialogs:soundSpeakersPresetReset/title'
+    SOUNDSPEAKERSPRESETRESET_MESSAGE = '#dialogs:soundSpeakersPresetReset/message'
+    SOUNDSPEAKERSPRESETRESET_SUBMIT = '#dialogs:soundSpeakersPresetReset/submit'
+    SOUNDSPEAKERSPRESETRESET_CANCEL = '#dialogs:soundSpeakersPresetReset/cancel'
     STRONGHOLD_LEAVE_TITLE = '#dialogs:stronghold/leave/title'
     STRONGHOLD_LEAVE_MESSAGE = '#dialogs:stronghold/leave/message'
     STRONGHOLD_LEAVEDEFEAT_TITLE = '#dialogs:stronghold/leaveDefeat/title'
@@ -875,10 +884,6 @@ class DIALOGS(object):
     HOFDISABLED_TITLE = '#dialogs:hofDisabled/title'
     HOFDISABLED_MESSAGE = '#dialogs:hofDisabled/message'
     HOFDISABLED_CANCEL = '#dialogs:hofDisabled/cancel'
-    CUSTOMIZATIONCONFIRMSELL_TITLE = '#dialogs:customizationConfirmSell/title'
-    CUSTOMIZATIONCONFIRMSELL_MESSAGE = '#dialogs:customizationConfirmSell/message'
-    CUSTOMIZATIONCONFIRMSELL_SUBMIT = '#dialogs:customizationConfirmSell/submit'
-    CUSTOMIZATIONCONFIRMSELL_CANCEL = '#dialogs:customizationConfirmSell/cancel'
     LEAVEEVENT_TITLE = '#dialogs:leaveEvent/title'
     LEAVEEVENT_MESSAGE = '#dialogs:leaveEvent/message'
     LEAVEEVENT_SUBMIT = '#dialogs:leaveEvent/submit'
@@ -887,18 +892,10 @@ class DIALOGS(object):
     LEAVESTARTEDEVENT_MESSAGE = '#dialogs:leaveStartedEvent/message'
     LEAVESTARTEDEVENT_SUBMIT = '#dialogs:leaveStartedEvent/submit'
     LEAVESTARTEDEVENT_CANCEL = '#dialogs:leaveStartedEvent/cancel'
-    CONFIRMAPPLYVEHICLEDISCOUNT_TITLE = '#dialogs:confirmApplyVehicleDiscount/title'
-    CONFIRMAPPLYVEHICLEDISCOUNT_MESSAGE = '#dialogs:confirmApplyVehicleDiscount/message'
-    CONFIRMAPPLYVEHICLEDISCOUNT_SUBMIT = '#dialogs:confirmApplyVehicleDiscount/submit'
-    CONFIRMAPPLYVEHICLEDISCOUNT_CANCEL = '#dialogs:confirmApplyVehicleDiscount/cancel'
-    CONFIRMTOYSBREAK_TITLE = '#dialogs:confirmToysBreak/title'
-    CONFIRMTOYSBREAK_MESSAGE = '#dialogs:confirmToysBreak/message'
-    CONFIRMTOYSBREAK_SUBMIT = '#dialogs:confirmToysBreak/submit'
-    CONFIRMTOYSBREAK_CANCEL = '#dialogs:confirmToysBreak/cancel'
-    CONFIRMHIGHLEVELTOYBREAK_TITLE = '#dialogs:confirmHighLevelToyBreak/title'
-    CONFIRMHIGHLEVELTOYBREAK_MESSAGE = '#dialogs:confirmHighLevelToyBreak/message'
-    CONFIRMHIGHLEVELTOYBREAK_SUBMIT = '#dialogs:confirmHighLevelToyBreak/submit'
-    CONFIRMHIGHLEVELTOYBREAK_CANCEL = '#dialogs:confirmHighLevelToyBreak/cancel'
+    GAMMADIALOG_TITLE = '#dialogs:gammaDialog/title'
+    GAMMADIALOG_MESSAGE_HEADER = '#dialogs:gammaDialog/message/header'
+    GAMMADIALOG_MESSAGE_DESCRIPTION = '#dialogs:gammaDialog/message/description'
+    GAMMADIALOG_CANCEL = '#dialogs:gammaDialog/cancel'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1128,6 +1125,7 @@ class DIALOGS(object):
      RECRUITWINDOW_NATIONDROPDOWN_CZECH,
      RECRUITWINDOW_NATIONDROPDOWN_SWEDEN,
      RECRUITWINDOW_NATIONDROPDOWN_POLAND,
+     RECRUITWINDOW_NATIONDROPDOWN_ITALY,
      RECRUITWINDOW_SPECIALIZATION,
      RECRUITWINDOW_VEHICLECLASS,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
@@ -1343,6 +1341,10 @@ class DIALOGS(object):
      CONTROLSWRONGNOTIFICATION_MESSAGE,
      CONTROLSWRONGNOTIFICATION_SUBMIT,
      CONTROLSWRONGNOTIFICATION_CANCEL,
+     MINIMAPALPHANOTIFICATION_TITLE,
+     MINIMAPALPHANOTIFICATION_MESSAGE,
+     MINIMAPALPHANOTIFICATION_SUBMIT,
+     MINIMAPALPHANOTIFICATION_CANCEL,
      SOUNDMODEINVALID_TITLE,
      SOUNDMODEINVALID_MESSAGE,
      SOUNDMODEINVALID_SUBMIT,
@@ -1714,6 +1716,10 @@ class DIALOGS(object):
      SOUNDSPEAKERSPRESETDOESNOTMATCH_MESSAGE,
      SOUNDSPEAKERSPRESETDOESNOTMATCH_SUBMIT,
      SOUNDSPEAKERSPRESETDOESNOTMATCH_CANCEL,
+     SOUNDSPEAKERSPRESETRESET_TITLE,
+     SOUNDSPEAKERSPRESETRESET_MESSAGE,
+     SOUNDSPEAKERSPRESETRESET_SUBMIT,
+     SOUNDSPEAKERSPRESETRESET_CANCEL,
      STRONGHOLD_LEAVE_TITLE,
      STRONGHOLD_LEAVE_MESSAGE,
      STRONGHOLD_LEAVEDEFEAT_TITLE,
@@ -1769,10 +1775,6 @@ class DIALOGS(object):
      HOFDISABLED_TITLE,
      HOFDISABLED_MESSAGE,
      HOFDISABLED_CANCEL,
-     CUSTOMIZATIONCONFIRMSELL_TITLE,
-     CUSTOMIZATIONCONFIRMSELL_MESSAGE,
-     CUSTOMIZATIONCONFIRMSELL_SUBMIT,
-     CUSTOMIZATIONCONFIRMSELL_CANCEL,
      LEAVEEVENT_TITLE,
      LEAVEEVENT_MESSAGE,
      LEAVEEVENT_SUBMIT,
@@ -1781,18 +1783,10 @@ class DIALOGS(object):
      LEAVESTARTEDEVENT_MESSAGE,
      LEAVESTARTEDEVENT_SUBMIT,
      LEAVESTARTEDEVENT_CANCEL,
-     CONFIRMAPPLYVEHICLEDISCOUNT_TITLE,
-     CONFIRMAPPLYVEHICLEDISCOUNT_MESSAGE,
-     CONFIRMAPPLYVEHICLEDISCOUNT_SUBMIT,
-     CONFIRMAPPLYVEHICLEDISCOUNT_CANCEL,
-     CONFIRMTOYSBREAK_TITLE,
-     CONFIRMTOYSBREAK_MESSAGE,
-     CONFIRMTOYSBREAK_SUBMIT,
-     CONFIRMTOYSBREAK_CANCEL,
-     CONFIRMHIGHLEVELTOYBREAK_TITLE,
-     CONFIRMHIGHLEVELTOYBREAK_MESSAGE,
-     CONFIRMHIGHLEVELTOYBREAK_SUBMIT,
-     CONFIRMHIGHLEVELTOYBREAK_CANCEL)
+     GAMMADIALOG_TITLE,
+     GAMMADIALOG_MESSAGE_HEADER,
+     GAMMADIALOG_MESSAGE_DESCRIPTION,
+     GAMMADIALOG_CANCEL)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

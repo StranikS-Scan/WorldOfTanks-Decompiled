@@ -296,7 +296,6 @@ class XMPPMucChannelEntity(_XMPPChannelEntity):
 
 
 class XmppSystemChannelEntity(XMPPMucChannelEntity):
-    """Describe system muc channels (common, ...)."""
 
     def __init__(self, mucChannelType=XMPP_MUC_CHANNEL_TYPE.UNKNOWN, name=''):
         jid = makeSystemRoomJID(channelType=mucChannelType)
@@ -305,8 +304,6 @@ class XmppSystemChannelEntity(XMPPMucChannelEntity):
 
 
 class XmppClanChannelEntity(XMPPMucChannelEntity):
-    """Describe clan channel entity
-    """
 
     def __init__(self, dbID=0, clanTag=''):
         jid = makeClanRoomJID(dbID, channelType=XMPP_MUC_CHANNEL_TYPE.CLANS)

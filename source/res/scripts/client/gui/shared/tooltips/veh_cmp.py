@@ -17,8 +17,6 @@ from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
 
 class VehCmpCustomizationTooltip(BlocksTooltipData):
-    """Tooltip data provider for the customization element in vehicle config view.
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
@@ -62,8 +60,6 @@ class VehCmpCustomizationTooltip(BlocksTooltipData):
 
 
 class VehCmpSkillsTooltip(BlocksTooltipData):
-    """Tooltip data provider for the skills block header in vehicle config view.
-    """
 
     def __init__(self, context):
         super(VehCmpSkillsTooltip, self).__init__(context, TOOLTIP_TYPE.VEH_CMP_CUSTOMIZATION)
@@ -89,7 +85,7 @@ class VehCmpSkillsTooltip(BlocksTooltipData):
 
         def __packSkill(crewRole, skills):
             skills = cmp_helpers.sortSkills(skills)
-            skillsStr = ' '.join(map(lambda skillType: icons.makeImageTag(getSkillSmallIconPath(skillType), 14, 14, 0, 0), skills))
+            skillsStr = ' '.join((icons.makeImageTag(getSkillSmallIconPath(skillType), 14, 14, 0, 0) for skillType in skills))
             return formatters.packCrewSkillsBlockData(text_styles.main(ITEM_TYPES.tankman_roles(crewRole)), skillsStr, getRoleWhiteIconPath(crewRole), padding={'left': -10})
 
         blocks = [formatters.packImageTextBlockData(title=text_styles.middleTitle(VEH_COMPARE.VEHCONF_TOOLTIPS_SKILLS_SKILLSLIST), padding={'bottom': 10})]
@@ -97,5 +93,5 @@ class VehCmpSkillsTooltip(BlocksTooltipData):
         configured_vehicle = configurator_view.getCurrentVehicle()
         skills_by_roles = cmp_helpers.getVehicleCrewSkills(configured_vehicle)
         skills_by_roles.sort(key=lambda (role, skillsSet): Tankman.TANKMEN_ROLES_ORDER[role])
-        blocks.extend(map(lambda data: __packSkill(*data), skills_by_roles))
+        blocks.extend((__packSkill(*data) for data in skills_by_roles))
         return formatters.packBuildUpBlockData(blocks, gap=0, padding={'bottom': -10})

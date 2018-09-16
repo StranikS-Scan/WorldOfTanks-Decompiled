@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/TEXT_MANAGER_STYLES.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class TEXT_MANAGER_STYLES(object):
     SUPER_PROMO_TITLE = 'superPromoTitle'

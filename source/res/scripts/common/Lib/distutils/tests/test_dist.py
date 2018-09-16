@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_dist.py
-"""Tests for distutils.dist."""
 import os
 import StringIO
 import sys
@@ -14,7 +13,6 @@ from test.test_support import TESTFN, captured_stdout, run_unittest
 from distutils.tests import support
 
 class test_dist(Command):
-    """Sample distutils extension command."""
     user_options = [('sample-option=', 'S', 'help text')]
 
     def initialize_options(self):
@@ -23,12 +21,6 @@ class test_dist(Command):
 
 
 class TestDistribution(Distribution):
-    """Distribution subclasses that avoids the default search for
-    configuration files.
-    
-    The ._config_files attribute must be set before
-    .parse_config_files() is called.
-    """
 
     def find_config_files(self):
         return self._config_files

@@ -13,7 +13,6 @@ from gui.battle_control.controllers import debug_ctrl
 from gui.battle_control.controllers import drr_scale_ctrl
 from gui.battle_control.controllers import dyn_squad_functional
 from gui.battle_control.controllers import feedback_adaptor
-from gui.battle_control.controllers import gas_attack_ctrl
 from gui.battle_control.controllers import hit_direction_ctrl
 from gui.battle_control.controllers import interfaces
 from gui.battle_control.controllers import msgs_ctrl
@@ -26,6 +25,7 @@ from gui.battle_control.controllers import vehicle_state_ctrl
 from gui.battle_control.controllers import view_points_ctrl
 from gui.battle_control.controllers import team_health_bar_ctrl
 from gui.battle_control.controllers import game_messages_ctrl
+from gui.battle_control.controllers import arena_border_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 
 class BattleSessionSetup(object):
@@ -48,30 +48,24 @@ class BattleSessionSetup(object):
 
     @property
     def battleCtx(self):
-        assert self.sessionProvider is not None
         return self.sessionProvider.getCtx()
 
     @property
     def arenaDP(self):
-        assert self.sessionProvider is not None
         return self.sessionProvider.getArenaDP()
 
     @property
     def arenaVisitor(self):
-        assert self.sessionProvider is not None
         return self.sessionProvider.arenaVisitor
 
     @property
     def arenaEntity(self):
-        assert self.avatar is not None
         return self.avatar.arena
 
     def registerArenaCtrl(self, controller):
-        assert self.sessionProvider is not None
         return self.sessionProvider.addArenaCtrl(controller)
 
     def registerViewComponentsCtrl(self, controller):
-        assert self.sessionProvider is not None
         return self.sessionProvider.registerViewComponentsCtrl(controller)
 
     def clear(self):
@@ -88,7 +82,6 @@ class _ControllersLocator(object):
     def __init__(self, repository=None):
         super(_ControllersLocator, self).__init__()
         if repository is not None:
-            assert isinstance(repository, interfaces.IBattleControllersRepository), 'Repository is not valid'
             self._repository = repository
         else:
             self._repository = _EmptyRepository()
@@ -186,12 +179,12 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.DYN_SQUADS)
 
     @property
-    def gasAttack(self):
-        return self._repository.getController(BATTLE_CTRL_ID.GAS_ATTACK)
-
-    @property
     def battleField(self):
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_FIELD_CTRL)
+
+    @property
+    def repair(self):
+        return self._repository.getController(BATTLE_CTRL_ID.REPAIR)
 
     @property
     def playerGameModeData(self):
@@ -216,7 +209,7 @@ class _EmptyRepository(interfaces.IBattleControllersRepository):
         return None
 
     def addController(self, ctrl):
-        raise NotImplementedError
+        pass
 
 
 class _ControllersRepository(interfaces.IBattleControllersRepository):
@@ -240,7 +233,6 @@ class _ControllersRepository(interfaces.IBattleControllersRepository):
         return self._ctrls[ctrlID] if ctrlID in self._ctrls else None
 
     def addController(self, ctrl):
-        assert isinstance(ctrl, interfaces.IBattleController), 'Controller is not valid'
         ctrlID = ctrl.getControllerID()
         if ctrlID in REUSABLE_BATTLE_CTRL_IDS:
             LOG_ERROR('Controller can not be added to repository, controllerID is not unique', ctrlID)
@@ -293,6 +285,7 @@ class SharedControllersRepository(_ControllersRepository):
             repository.addController(tmpIgnoreListCtrl)
         repository.addArenaController(bootcamp_ctrl.BootcampController(), setup)
         repository.addArenaController(view_points_ctrl.ViewPointsController(setup), setup)
+        repository.addArenaController(arena_border_ctrl.ArenaBorderController(), setup)
         repository.addArenaViewController(arena_load_ctrl.ArenaLoadController(), setup)
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
         repository.addViewController(hit_direction_ctrl.createHitDirectionController(setup), setup)
@@ -306,12 +299,9 @@ class _ControllersRepositoryByBonuses(_ControllersRepository):
     @classmethod
     def create(cls, setup):
         repository = super(_ControllersRepositoryByBonuses, cls).create(setup)
-        gasAttackMgr = setup.gasAttackMgr
         arenaVisitor = setup.arenaVisitor
         if arenaVisitor.hasRespawns():
             repository.addViewController(respawn_ctrl.RespawnsController(setup), setup)
-        if arenaVisitor.hasGasAttack() and gasAttackMgr is not None:
-            repository.addViewController(gas_attack_ctrl.GasAttackController(setup), setup)
         if arenaVisitor.hasHealthBar():
             repository.addViewController(team_health_bar_ctrl.TeamHealthBarController(setup), setup)
         return repository
@@ -327,14 +317,4 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
-        return repository
-
-
-class FalloutControllersRepository(_ControllersRepositoryByBonuses):
-    __slots__ = ()
-
-    @classmethod
-    def create(cls, setup):
-        repository = super(FalloutControllersRepository, cls).create(setup)
-        repository.addViewController(debug_ctrl.DebugController(), setup)
         return repository

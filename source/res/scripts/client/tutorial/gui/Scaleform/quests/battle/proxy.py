@@ -17,8 +17,8 @@ class BattleQuestsProxy(GUIProxy):
     def getSceneID(self):
         pass
 
-    def playEffect(self, effectName, args, itemRef=None, containerRef=None):
+    def playEffect(self, effectName, args):
         return False
 
-    def isEffectRunning(self, effectName, effectID=None):
+    def isEffectRunning(self, effectName, effectID=None, effectSubType=None):
         return False

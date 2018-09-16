@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/FrameWork.py
-"""A sort of application framework for the Mac"""
 DEBUG = 0
 from warnings import warnpy3k
 warnpy3k('In 3.x, the FrameWork module is removed.', stacklevel=2)
@@ -61,7 +60,6 @@ next_window_x = 16
 next_window_y = 44
 
 def windowbounds(width, height):
-    """Return sensible window bounds"""
     global next_window_x
     global next_window_y
     r, b = next_window_x + width, next_window_y + height
@@ -93,7 +91,6 @@ def setarrowcursor():
 
 
 class Application():
-    """Application framework -- your application should be a derived class"""
 
     def __init__(self, nomenubar=0):
         self._doing_asyncevents = 0
@@ -166,7 +163,6 @@ class Application():
                 MacOS.SchedParams(*saveparams)
 
     def dopendingevents(self, mask=everyEvent):
-        """dopendingevents - Handle all pending events"""
         while self.do1event(mask, wait=0):
             pass
 
@@ -211,7 +207,6 @@ class Application():
         handler(event)
 
     def asyncevents(self, onoff):
-        """asyncevents - Set asynchronous event handling on or off"""
         if MacOS.runtimemodel == 'macho':
             raise 'Unsupported in MachoPython'
         old = self._doing_asyncevents
@@ -416,16 +411,6 @@ class Application():
 
 
 class MenuBar():
-    """Represent a set of menus in a menu bar.
-    
-    Interface:
-    
-    - (constructor)
-    - (destructor)
-    - addmenu
-    - addpopup (normally used internally)
-    - dispatch (called from Application)
-    """
     nextid = 1
 
     def getnextid(self):
@@ -502,7 +487,6 @@ class MenuBar():
 
 
 class Menu():
-    """One menu."""
 
     def __init__(self, bar, title, after=0, id=None):
         self.bar = bar
@@ -716,7 +700,6 @@ class HelpMenu(Menu):
 
 
 class Window():
-    """A single window belonging to an application"""
 
     def __init__(self, parent):
         self.wid = None
@@ -732,7 +715,6 @@ class Window():
         return
 
     def do_postopen(self):
-        """Tell our parent we exist"""
         self.parent.appendwindow(self.wid, self)
 
     def close(self):
@@ -1051,7 +1033,6 @@ class ScrolledWindow(ControlsWindow):
 
 
 class DialogWindow(Window):
-    """A modeless dialog window"""
 
     def open(self, resid):
         self.dlg = GetNewDialog(resid, -1)
@@ -1074,7 +1055,6 @@ class DialogWindow(Window):
 
 
 def ostypecode(x):
-    """Convert a long int to the 4-character code it really is"""
     s = ''
     for i in range(4):
         x, c = divmod(x, 256)
@@ -1084,7 +1064,6 @@ def ostypecode(x):
 
 
 class TestApp(Application):
-    """This class is used by the test() function"""
 
     def makeusermenus(self):
         self.filemenu = m = Menu(self.menubar, 'File')
@@ -1121,7 +1100,6 @@ class TestApp(Application):
 
 
 def test():
-    """Test program"""
     app = TestApp()
     app.mainloop()
 

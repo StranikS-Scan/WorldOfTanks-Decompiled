@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/arena_component_system/client_arena_component_system.py
-from constants import ARENA_SYNC_OBJECTS, ARENA_UPDATE, ARENA_SYNC_OBJECT_NAMES
-import Event
 import cPickle
 import weakref
+from constants import ARENA_UPDATE, ARENA_SYNC_OBJECT_NAMES
+import Event
 from arena_sync_object import ArenaSyncObject
 from svarog_script.py_component import Component
 from svarog_script.py_component_system import ComponentSystem
@@ -44,7 +44,7 @@ class ClientArenaComponentSystem(ComponentSystem):
         self._onUpdate = {ARENA_UPDATE.SYNC_OBJECTS: self.__onFullSyncObjectReceived,
          ARENA_UPDATE.SYNC_OBJECTS_DIFF: self.__onSyncObjectUpdateReceived}
         self.__syncDataObjects = {}
-        for k, v in ARENA_SYNC_OBJECT_NAMES.iteritems():
+        for k, _ in ARENA_SYNC_OBJECT_NAMES.iteritems():
             self.__syncDataObjects[k] = ArenaSyncObject()
 
     def destroy(self):
@@ -78,9 +78,9 @@ class ClientArenaComponentSystem(ComponentSystem):
         return syncDataObject.getData(key) if syncDataObject is not None else None
 
     def __onFullSyncObjectReceived(self, argStr):
-        object = cPickle.loads(argStr)
+        o = cPickle.loads(argStr)
         for key, syncObject in self.__syncDataObjects.iteritems():
-            fullSyncData = object.get(key, None)
+            fullSyncData = o.get(key, None)
             if fullSyncData is not None:
                 syncObject.synchronize(True, fullSyncData)
 

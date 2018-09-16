@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/efficiency.py
-from constants import ARENA_GUI_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -59,9 +58,6 @@ class KillItemPacker(TermsItemPacker):
 
     def _packTerms(self, data):
         text = makeHtmlText('tooltip_terms_label', ms(self._termsAlias))
-        arenaType = data.get('arenaType', 0)
-        if arenaType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
-            text += '\n' + makeHtmlText('tooltip_terms_label', ms(self._termsAlias + '/gasAttack'))
         return [formatters.packTextBlockData(text)]
 
 
@@ -138,7 +134,7 @@ class CritsItemPacker(TermsItemPacker):
         if critWound:
             self.__addResultBlock(items, BATTLE_RESULTS.COMMON_TOOLTIP_CRITS_CRITWOUND, critWound)
         if data['isGarage']:
-            text = makeHtmlText('tooltip_add_info_label', ms(BATTLE_RESULTS.FALLOUT_UNIQUEDAMAGE))
+            text = makeHtmlText('tooltip_add_info_label', ms(BATTLE_RESULTS.GARAGE_UNIQUEDAMAGE))
             items.append(formatters.packTextBlockData(text))
         return items
 

@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BarracksMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.View import View
 
 class BarracksMeta(View):
@@ -33,15 +29,9 @@ class BarracksMeta(View):
         self._printOverrideError('openPersonalCase')
 
     def as_setTankmenS(self, data):
-        """
-        :param data: Represented by BarracksTankmenVO (AS)
-        """
         return self.flashObject.as_setTankmen(data) if self._isDAAPIInited() else None
 
     def as_updateTanksListS(self, provider):
-        """
-        :param provider: Represented by DataProvider (AS)
-        """
         return self.flashObject.as_updateTanksList(provider) if self._isDAAPIInited() else None
 
     def as_setTankmenFilterS(self, nation, role, tankType, location, nationID):

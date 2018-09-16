@@ -29,10 +29,6 @@ def passCensor(text):
 
 
 def isBattleChatEnabled(common=False):
-    """Get if battle chat enabled
-    :param common: check if common chat is enabled
-    :return: True if enabled
-    """
     result = True
     arena = getattr(BigWorld.player(), 'arena', None)
     if arena is None:

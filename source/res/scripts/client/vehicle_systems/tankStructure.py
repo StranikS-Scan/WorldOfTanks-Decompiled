@@ -2,13 +2,13 @@
 # Embedded file name: scripts/client/vehicle_systems/tankStructure.py
 from collections import namedtuple
 
-class ModelStates:
+class ModelStates(object):
     UNDAMAGED = 'undamaged'
     DESTROYED = 'destroyed'
     EXPLODED = 'exploded'
 
 
-class TankPartNames:
+class TankPartNames(object):
     CHASSIS = 'chassis'
     HULL = 'hull'
     TURRET = 'turret'
@@ -27,7 +27,7 @@ class TankPartNames:
         raise Exception('Invalid part name!')
 
 
-class DetachedTurretPartNames:
+class DetachedTurretPartNames(object):
     ALL = (TankPartNames.TURRET, TankPartNames.GUN)
 
     @staticmethod
@@ -39,7 +39,7 @@ class DetachedTurretPartNames:
         return None
 
 
-class DetachedTurretPartIndexes:
+class DetachedTurretPartIndexes(object):
     TURRET = 0
     GUN = 1
     ALL = (TURRET, GUN)
@@ -51,7 +51,7 @@ class DetachedTurretPartIndexes:
 
 VehiclePartsTuple = namedtuple('VehiclePartsTuple', TankPartNames.ALL)
 
-class TankPartIndexes:
+class TankPartIndexes(object):
     CHASSIS = 0
     HULL = 1
     TURRET = 2
@@ -66,7 +66,7 @@ class TankPartIndexes:
         return TankPartNames.ALL[idx]
 
 
-class TankNodeNames:
+class TankNodeNames(object):
     TRACK_LEFT_FRONT = 'HP_Track_LFront'
     TRACK_LEFT_REAR = 'HP_Track_LRear'
     TRACK_RIGHT_FRONT = 'HP_Track_RFront'
@@ -87,7 +87,7 @@ class TankNodeNames:
     CHASSIS_MID_TRAIL = 'DM_Mid_Trail'
 
 
-class TankSoundObjectsIndexes:
+class TankSoundObjectsIndexes(object):
     CHASSIS = 0
     ENGINE = 1
     GUN = 2
@@ -107,6 +107,18 @@ UNDAMAGED_SKELETON = VehiclePartsTuple(chassis=[('Tank', ''),
  (TankNodeNames.TRACK_RIGHT_UP_FRONT, ''),
  (TankNodeNames.TRACK_RIGHT_UP_REAR, '')], turret=[('HP_gunJoint', '')], gun=[(TankNodeNames.GUN_INCLINATION, ''), (TankNodeNames.GUN_RECOIL, TankNodeNames.GUN_INCLINATION), ('HP_gunFire', TankNodeNames.GUN_RECOIL)])
 CRASHED_SKELETON = VehiclePartsTuple(chassis=[('Tank', ''), ('V', 'Tank'), ('HP_gui', '')], hull=[('HP_Fire_1', '')], turret=[('HP_gunJoint', '')], gun=[])
+
+class ColliderTypes(object):
+    DYNAMIC_FLAG = 1
+    TANK_FLAG = 2
+    HANGAR_FLAG = 4
+    PLAYER_FLAG = 8
+    DYNAMIC_COLLIDER = DYNAMIC_FLAG
+    VEHICLE_COLLIDER = DYNAMIC_FLAG | TANK_FLAG
+    PLAYER_VEHICLE_COLLIDER = DYNAMIC_FLAG | TANK_FLAG | PLAYER_FLAG
+    HANGAR_VEHICLE_COLLIDER = DYNAMIC_FLAG | TANK_FLAG | HANGAR_FLAG
+    HANGAR_PLAYER_VEHICLE_COLLIDER = DYNAMIC_FLAG | TANK_FLAG | HANGAR_FLAG | PLAYER_FLAG
+
 
 def getCrashedSkeleton(vehicleDesc):
     turretJointNode = (vehicleDesc.hull.turretHardPoints[0], '')

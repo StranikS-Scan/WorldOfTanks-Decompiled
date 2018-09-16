@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/install.py
-"""distutils.command.install
-
-Implements the Distutils 'install' command."""
 from distutils import log
 __revision__ = '$Id$'
 import sys, os, string
@@ -300,8 +297,6 @@ class install(Command):
             setattr(self, attr, change_root(self.root, getattr(self, attr)))
 
     def create_home_path(self):
-        """Create directories under ~
-        """
         if not self.user:
             return
         home = convert_path(os.path.expanduser('~'))
@@ -363,8 +358,6 @@ class install(Command):
         return inputs
 
     def has_lib(self):
-        """Return true if the current distribution has any Python
-        modules to install."""
         return self.distribution.has_pure_modules() or self.distribution.has_ext_modules()
 
     def has_headers(self):

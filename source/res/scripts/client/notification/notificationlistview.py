@@ -13,14 +13,6 @@ from gui.shared.formatters import icons
 from helpers.i18n import makeString as _ms
 
 class NotificationListView(NotificationsListMeta, BaseNotificationView):
-    """
-    Represents notifications center popover.
-    Contains tabs with lists of grouped messages.
-    Listens notifications events and updates GUI.
-    
-    WARNING! This class uses ids mapping! It means that all ids coming outside should be maped with special method
-    from base class.
-    """
 
     def __init__(self, _):
         super(NotificationListView, self).__init__()
@@ -29,33 +21,17 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self.__countersLabels = [''] * 3
 
     def onClickAction(self, typeID, entityID, action):
-        """
-        Is called from AS on message button click.
-        Calls action processing.
-        """
         NotificationMVC.g_instance.handleAction(typeID, self._getNotificationID(entityID), action)
 
     def onGroupChange(self, groupIdx):
-        """
-        Is called from AS on tab idx change.
-        Set current group and calls gui update
-        """
         self.__currentGroup = NOTIFICATION_GROUP.ALL[groupIdx]
         self.__setNotificationList()
         self.__updateCounters()
 
     def getMessageActualTime(self, msTime):
-        """
-        Is called from AS.
-        Gets formatted actual message time.
-        """
         return TimeFormatter.getActualMsgTimeStr(msTime)
 
     def _populate(self):
-        """
-        Subscribes on notifications events.
-        Set init data and messages list for selected tab in AS.
-        """
         super(NotificationListView, self)._populate()
         self._model.onNotificationReceived += self.__onNotificationReceived
         self._model.onNotificationUpdated += self.__onNotificationUpdated
@@ -65,10 +41,6 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self.__updateCounters()
 
     def _dispose(self):
-        """
-        Set popup display state for notification center.
-        Unsubscribes on notifications events,  and calls cleanUp
-        """
         if self._model.getDisplayState() == NOTIFICATION_STATE.LIST:
             self._model.setPopupsDisplayState()
         else:
@@ -80,10 +52,6 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         super(NotificationListView, self)._dispose()
 
     def __setInitData(self):
-        """
-        Initialize current group
-        Prepare and set init data in AS
-        """
         if self._model.getNotifiedMessagesCount(NOTIFICATION_GROUP.INVITE) > 0:
             self.__currentGroup = NOTIFICATION_GROUP.INVITE
         else:
@@ -93,10 +61,6 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
          'tabsData': {'tabs': [self.__makeTabItemVO(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INFORMATION_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INFO), self.__makeTabItemVO(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INVITATIONS_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INVITES), self.__makeTabItemVO(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_GIFT_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_OFFERS)]}})
 
     def __updateCounters(self):
-        """
-        Gets unread messages count for each tab
-        and set this list in AS.
-        """
 
         def formatCount(count):
             return str(count) if count > 0 else ''
@@ -107,10 +71,6 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
             self.as_updateCountersS(counts)
 
     def __setNotificationList(self):
-        """
-        Gets notifications list for current tab and set this list in AS.
-        Reset current tab unread messages counter and updates all tabs counters
-        """
         messages = self.__getMessagesList()
         self.as_setMessagesListS({'messages': messages,
          'emptyListText': self.__getEmptyListMsg(len(messages) > 0),
@@ -118,25 +78,13 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self._model.resetNotifiedMessagesCount(self.__currentGroup)
 
     def __getMessagesList(self):
-        """
-        Gets list of messages VO for current tab
-        Selects a group of messages from all available
-        """
-        return map(self.__getListVO, filter(lambda item: item.getGroup() == self.__currentGroup, self._model.collection.getListIterator()))
+        filtered = [ item for item in self._model.collection.getListIterator() if item.getGroup() == self.__currentGroup ]
+        return [ self.__getListVO(item) for item in filtered ]
 
     def __getEmptyListMsg(self, hasMessages):
-        """
-        Gets formatted empty list message
-        """
         return _ms(MESSENGER.LISTVIEW_EMPTYLIST_TEMPLATE, listType=_ms(MESSENGER.listview_emptylist(self.__currentGroup))) if not hasMessages else ''
 
     def __onNotificationReceived(self, notification):
-        """
-        Is called on onNotificationReceived Event.
-        May show alert message dialog if notification is alert.
-        Append message to current tab list or update unread messages counter for notification's group.
-        Change tab to invite on invite received
-        """
         if notification.isAlert():
             NotificationMVC.g_instance.getAlertController().showAlertMessage(notification)
         if notification.getGroup() == self.__currentGroup:
@@ -149,11 +97,6 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self.__updateCounters()
 
     def __onNotificationUpdated(self, notification, isStateChanged):
-        """
-        Is called on onNotificationUpdated Event.
-        Updates single message or current tab notifications list
-        Change tab to invite on invite updated
-        """
         if notification.getGroup() == self.__currentGroup:
             if notification.isOrderChanged():
                 self.__setNotificationList()
@@ -167,10 +110,6 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self.__updateCounters()
 
     def __onNotificationRemoved(self, typeID, entityID, groupID):
-        """
-        Is called on onNotificationRemoved Event.
-        Updates current tab notifications list
-        """
         if groupID == self.__currentGroup:
             self.__setNotificationList()
         else:

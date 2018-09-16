@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/SoundEventChecker.py
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.app_loader.decorators import sf_lobby
+from gui.app_loader import sf_lobby
 from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from helpers import dependency
@@ -17,7 +17,6 @@ _SPEND_MULTI_SOUNDS = {(Currency.CREDITS, Currency.GOLD): SoundEffectsId.SPEND_C
 _EARN_MULTI_SOUNDS = {(Currency.CREDITS, Currency.GOLD): SoundEffectsId.EARN_CREDITS_GOLD}
 
 class SoundEventChecker(ISoundEventChecker):
-    """Client event checker. Plays sounds for some events type."""
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):

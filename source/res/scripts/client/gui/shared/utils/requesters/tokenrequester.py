@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/TokenRequester.py
+import time
 import cPickle
 from functools import partial
 import BigWorld
-import time
 from adisp import async, process
 from constants import REQUEST_COOLDOWN, TOKEN_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -19,11 +19,6 @@ def _getAccountRepository():
 _tokenRqs = {}
 
 def getTokenRequester(tokenType):
-    """
-    Creates and returns TokenRequester instance that has certain type
-    :param tokenType: - TOKEN_TYPE
-    :return: - instance of TokenRequester
-    """
     global _tokenRqs
     if tokenType not in _tokenRqs:
         _tokenRqs[tokenType] = TokenRequester(tokenType, cache=False)
@@ -31,9 +26,6 @@ def getTokenRequester(tokenType):
 
 
 def fini():
-    """
-    Clears TokenRequester instances that were created
-    """
     for requester in _tokenRqs.itervalues():
         requester.clear()
 
@@ -85,8 +77,8 @@ class TokenRequester(object):
     def request(self, timeout=None, callback=None, allowDelay=False):
 
         @async
-        def wait(time, callback):
-            BigWorld.callback(time, lambda : callback(None))
+        def wait(t, callback):
+            BigWorld.callback(t, lambda : callback(None))
 
         yield lambda callback: callback(True)
         requester = getattr(BigWorld.player(), 'requestToken', None)
@@ -128,8 +120,9 @@ class TokenRequester(object):
 
             self.__requestID = 0
             if self.__callback is not None:
-                self.__callback(self.__lastResponse)
+                callback = self.__callback
                 self.__callback = None
+                callback(self.__lastResponse)
             self.__lastRequestTime = time.time()
             return
 

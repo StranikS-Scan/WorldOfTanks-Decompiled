@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_replication.py
-"""TestCases for distributed transactions.
-"""
 import os
 import time
 import unittest

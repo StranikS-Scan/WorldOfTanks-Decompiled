@@ -12,9 +12,9 @@ def getMethod(name):
 
 class ROPropertyMeta(type):
 
-    def __new__(cls, className, bases, classDict):
+    def __new__(mcs, className, bases, classDict):
         readonly = classDict.get('__readonly__', {})
-        for name, default in readonly.items():
+        for name, _ in readonly.items():
             classDict[name] = property(getMethod(name))
 
-        return type.__new__(cls, className, bases, classDict)
+        return type.__new__(mcs, className, bases, classDict)

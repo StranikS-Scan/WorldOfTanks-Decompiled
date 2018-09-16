@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/plugins.py
 import math
 from collections import defaultdict
+from functools import partial
 import BigWorld
 import CommandMapping
 from AvatarInputHandler import gun_marker_ctrl
@@ -57,14 +58,11 @@ def createPlugins():
      'gunMarkersInvalidate': GunMarkersInvalidatePlugin,
      'shotResultIndicator': ShotResultIndicatorPlugin,
      'siegeMode': SiegeModePlugin,
-     'trajectoryViewHint': TrajectoryViewHintPlugin}
+     'trajectoryViewHint': TrajectoryViewHintPlugin,
+     'shotDone': ShotDonePlugin}
 
 
 def chooseSetting(viewID):
-    """ Choose appropriate setting for a view.
-    
-    If there are no special settings for a view - fall back to arcade settings.
-    """
     return viewID if viewID in _SETTINGS_VIEWS else _SETTINGS_KEY_TO_VIEW_ID[AIM.ARCADE]
 
 
@@ -92,24 +90,32 @@ def _makeSettingsVO(settingsCore, *keys):
 
 
 def _createAmmoSettings(gunSettings):
-    capacity = gunSettings.clip.size
+    clip = gunSettings.clip
     burst = gunSettings.burst.size
-    if capacity > 1:
-        state = _CassetteSettings(capacity, burst)
+    if clip.size > 1:
+        state = _CassetteSettings(clip, burst, gunSettings.hasAutoReload())
     else:
-        state = _AmmoSettings(capacity, burst)
+        state = _AmmoSettings(clip, burst)
     return state
 
 
 class _AmmoSettings(object):
 
-    def __init__(self, capacity, burst):
+    def __init__(self, clip, burst, hasAutoReload=False):
         super(_AmmoSettings, self).__init__()
-        self._capacity = capacity
+        self._clip = clip
         self._burst = burst
+        self.__hasAutoReload = hasAutoReload
+
+    @property
+    def hasAutoReload(self):
+        return self.__hasAutoReload
 
     def getClipCapacity(self):
-        return self._capacity
+        return self._clip.size
+
+    def getClipInterval(self):
+        return self._clip.interval
 
     def getBurstSize(self):
         return self._burst
@@ -122,12 +128,12 @@ class _CassetteSettings(_AmmoSettings):
 
     def getState(self, quantity, quantityInClip):
         isLow, state = super(_CassetteSettings, self).getState(quantity, quantityInClip)
-        isLow |= quantity <= self._capacity
+        isLow |= quantity <= self.getClipCapacity()
         if self._burst > 1:
-            total = math.ceil(self._capacity / float(self._burst))
+            total = math.ceil(self.getClipCapacity() / float(self._burst))
             current = math.ceil(quantityInClip / float(self._burst))
         else:
-            total = self._capacity
+            total = self.getClipCapacity()
             current = quantityInClip
         if current <= 0.5 * total:
             state = 'critical' if current == 1 else 'warning'
@@ -141,20 +147,16 @@ class CrosshairPlugin(IPlugin):
 
 
 class CorePlugin(CrosshairPlugin):
-    """Plugin listens changes of global descriptors that are provided by CrosshairDataProxy.
-    This plugin sets all geometry metrics of panel, switches panel to new view."""
     __slots__ = ()
 
     def start(self):
         ctrl = self.sessionProvider.shared.crosshair
-        assert ctrl is not None, 'Crosshair controller is not found'
         self.__setup(ctrl)
         ctrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
         ctrl.onCrosshairScaleChanged += self.__onCrosshairScaleChanged
         ctrl.onCrosshairSizeChanged += self.__onCrosshairSizeChanged
         ctrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
         ctrl.onCrosshairZoomFactorChanged += self.__onCrosshairZoomFactorChanged
-        return
 
     def stop(self):
         ctrl = self.sessionProvider.shared.crosshair
@@ -192,7 +194,6 @@ class CorePlugin(CrosshairPlugin):
 
 
 class SettingsPlugin(CrosshairPlugin):
-    """Plugin listens changes of settings and transfers desired settings to Action Script."""
     __slots__ = ()
 
     def start(self):
@@ -209,12 +210,6 @@ class SettingsPlugin(CrosshairPlugin):
 
 
 class EventBusPlugin(CrosshairPlugin):
-    """Plugin listens events of event bus and invokes next actions:
-        - toggle crosshair visibility if player press V (by default).
-        - toggle crosshair visibility in some special cases: CAPS + X (see tag "keys" in avatar_input_handler.xml).
-        - change view if player switches to video mode (CAPS + F3) and presses LShift + B or RShift + B (
-            see tag "videoMode/keyBindToVehicle" in avatar_input_handler.xml).
-    """
     __slots__ = ()
 
     def start(self):
@@ -240,44 +235,52 @@ class EventBusPlugin(CrosshairPlugin):
 
 
 class AmmoPlugin(CrosshairPlugin):
-    """Plugins listens all desired changes of ammo and updates UI panel if it needs."""
-    __slots__ = ('__guiSettings', '__burstSize')
+    __slots__ = ('__guiSettings', '__burstSize', '__shellsInClip', '__autoReloadCallbackID')
     bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, parentObj):
         super(AmmoPlugin, self).__init__(parentObj)
         self.__guiSettings = None
+        self.__shellsInClip = 0
+        self.__autoReloadCallbackID = None
         return
 
     def start(self):
         ctrl = self.sessionProvider.shared.ammo
-        assert ctrl is not None, 'Ammo controller is not found'
         self.__setup(ctrl, self.sessionProvider.isReplayPlaying)
         ctrl.onGunSettingsSet += self.__onGunSettingsSet
         ctrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
+        ctrl.onGunAutoReloadTimeSet += self.__onGunAutoReloadTimeSet
         ctrl.onShellsUpdated += self.__onShellsUpdated
         ctrl.onCurrentShellChanged += self.__onCurrentShellChanged
-        return
 
     def stop(self):
         ctrl = self.sessionProvider.shared.ammo
         if ctrl is not None:
             ctrl.onGunSettingsSet -= self.__onGunSettingsSet
+            ctrl.onGunAutoReloadTimeSet -= self.__onGunAutoReloadTimeSet
             ctrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
             ctrl.onShellsUpdated -= self.__onShellsUpdated
             ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
         return
 
+    def fini(self):
+        if self.__autoReloadCallbackID:
+            BigWorld.cancelCallback(self.__autoReloadCallbackID)
+        super(AmmoPlugin, self).fini()
+
     def __setup(self, ctrl, isReplayPlaying=False):
         if isReplayPlaying:
             self._parentObj.as_setReloadingCounterShownS(False)
-        self.__guiSettings = _createAmmoSettings(ctrl.getGunSettings())
-        self._parentObj.as_setClipParamsS(self.__guiSettings.getClipCapacity(), self.__guiSettings.getBurstSize())
+        self.__setupGuiSettings(ctrl.getGunSettings())
         quantity, quantityInClip = ctrl.getCurrentShells()
         if (quantity, quantityInClip) != (SHELL_QUANTITY_UNKNOWN,) * 2:
             isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
             self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
-        self.__setReloadingState(ctrl.getGunReloadingState())
+        reloadingState = ctrl.getGunReloadingState()
+        self.__setReloadingState(reloadingState)
+        if self.__guiSettings.hasAutoReload:
+            self._parentObj.as_autoloaderUpdateS(reloadingState.getActualValue(), reloadingState.getBaseValue(), isStun=False)
         if self.bootcampController.isInBootcamp():
             self._parentObj.as_setNetVisibleS(CROSSHAIR_CONSTANTS.VISIBLE_NET)
 
@@ -290,15 +293,41 @@ class AmmoPlugin(CrosshairPlugin):
             self._parentObj.as_setReloadingS(state.getActualValue(), state.getBaseValue(), state.getTimePassed(), state.isReloading())
 
     def __onGunSettingsSet(self, gunSettings):
-        self.__guiSettings = _createAmmoSettings(gunSettings)
-        self._parentObj.as_setClipParamsS(self.__guiSettings.getClipCapacity(), self.__guiSettings.getBurstSize())
+        self.__setupGuiSettings(gunSettings)
+
+    def __setupGuiSettings(self, gunSettings):
+        guiSettings = _createAmmoSettings(gunSettings)
+        self.__guiSettings = guiSettings
+        self._parentObj.as_setClipParamsS(guiSettings.getClipCapacity(), guiSettings.getBurstSize(), guiSettings.hasAutoReload)
 
     def __onGunReloadTimeSet(self, _, state):
         self.__setReloadingState(state)
+        if self.__guiSettings.hasAutoReload:
+            self.__notifyAutoLoader(state)
+
+    def __notifyAutoLoader(self, state):
+        if self.__shellsInClip == 0 and state.isReloading():
+            baseTime = actualTime = self.__guiSettings.getClipInterval()
+            self.__autoReloadCallbackID = BigWorld.callback(actualTime, partial(self.__autoReloadLastShotCallback, state.getBaseValue() - baseTime))
+            self._parentObj.as_autoloaderUpdateS(0, 0)
+        else:
+            actualTime = state.getActualValue()
+            baseTime = state.getBaseValue()
+        self._parentObj.as_setAutoloaderReloadingS(actualTime, baseTime)
+
+    def __autoReloadLastShotCallback(self, timeLeft):
+        self._parentObj.as_autoloaderUpdateS(timeLeft, timeLeft)
+        self.__autoReloadCallbackID = None
+        return
+
+    def __onGunAutoReloadTimeSet(self, timeLeft, baseTime, stunned):
+        if self.__shellsInClip > 0 or timeLeft == 0:
+            self._parentObj.as_autoloaderUpdateS(timeLeft, baseTime, isStun=stunned, isTimerOn=True)
 
     def __onShellsUpdated(self, _, quantity, quantityInClip, result):
         if not result & SHELL_SET_RESULT.CURRENT:
             return
+        self.__shellsInClip = quantityInClip
         isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
         self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
 
@@ -312,8 +341,6 @@ class AmmoPlugin(CrosshairPlugin):
 
 
 class VehicleStatePlugin(CrosshairPlugin):
-    """Plugin listens events of controlling vehicle and update information about given vehicle
-    (health, vehicles has no any ammo, etc.) in UI panel."""
     __slots__ = ('__playerInfo', '__isPlayerVehicle', '__maxHealth', '__healthPercent')
 
     def __init__(self, parentObj):
@@ -326,7 +353,6 @@ class VehicleStatePlugin(CrosshairPlugin):
 
     def start(self):
         ctrl = self.sessionProvider.shared.vehicleState
-        assert ctrl is not None, 'Vehicles state controller is not found'
         vehicle = ctrl.getControllingVehicle()
         if vehicle is not None:
             self.__setPlayerInfo(vehicle.id)
@@ -335,7 +361,6 @@ class VehicleStatePlugin(CrosshairPlugin):
         ctrl.onVehicleControlling += self.__onVehicleControlling
         ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
         ctrl = self.sessionProvider.shared.feedback
-        assert ctrl is not None, 'Feedback adaptor is not found'
         ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
         return
 
@@ -359,7 +384,6 @@ class VehicleStatePlugin(CrosshairPlugin):
 
     def __updateVehicleInfo(self):
         if self._parentObj.getViewID() == CROSSHAIR_VIEW_ID.POSTMORTEM:
-            assert self.__playerInfo is not None, 'Player info must be defined at first, see vehicle_state_ctrl'
             if self.__isPlayerVehicle:
                 ctx = {'type': self.__playerInfo.vehicleName}
                 template = 'personal'
@@ -370,7 +394,6 @@ class VehicleStatePlugin(CrosshairPlugin):
             self._parentObj.as_updatePlayerInfoS(makeHtmlString('html_templates:battle/postmortemMessages', template, ctx=ctx))
         else:
             self._parentObj.as_setHealthS(self.__healthPercent)
-        return
 
     def __onVehicleControlling(self, vehicle):
         self.__maxHealth = vehicle.typeDescriptor.maxHealth
@@ -408,9 +431,7 @@ class _DistancePlugin(CrosshairPlugin):
     def start(self):
         self._interval = TimeInterval(_TARGET_UPDATE_INTERVAL, self, '_update')
         ctrl = self.sessionProvider.shared.crosshair
-        assert ctrl is not None, 'Crosshair controller is not found'
         ctrl.onCrosshairViewChanged += self._onCrosshairViewChanged
-        return
 
     def stop(self):
         if self._interval is not None:
@@ -429,9 +450,6 @@ class _DistancePlugin(CrosshairPlugin):
 
 
 class TargetDistancePlugin(_DistancePlugin):
-    """Plugin keeps track of distance between player's vehicle position and target position
-    (it is vehicle in focus) when player is in arcade or sniper mode. It updates UI panel if distance is changed only,
-    and distance string is hidden if player switches to other mode or target is lost."""
     __slots__ = ('__trackID',)
 
     def __init__(self, parentObj):
@@ -441,9 +459,7 @@ class TargetDistancePlugin(_DistancePlugin):
     def start(self):
         super(TargetDistancePlugin, self).start()
         ctrl = self.sessionProvider.shared.feedback
-        assert ctrl is not None, 'Feedback adaptor is not found'
         ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
-        return
 
     def stop(self):
         super(TargetDistancePlugin, self).stop()
@@ -492,9 +508,6 @@ class TargetDistancePlugin(_DistancePlugin):
 
 
 class GunMarkerDistancePlugin(_DistancePlugin):
-    """Plugin keeps track of distance between player's vehicle position and gun maker position (avatar position)
-    when player switches to strategic mode. It updates UI panel if distance is changed only, and distance string
-    is hidden if player switches to other mode."""
     __slots__ = ()
 
     def _update(self):
@@ -513,24 +526,13 @@ class GunMarkerDistancePlugin(_DistancePlugin):
 
 
 class GunMarkersInvalidatePlugin(CrosshairPlugin):
-    """ Plugin listens events that can change set of gun markers and invokes method to invalidate them.
-    Also, this plugin creates first set of gun markers when it will be started.
-    
-    There are events that can change set of gun markers:
-        - player changes setting item "use server marker";
-        - player's vehicle has been changed (for example, from light tank to SPG);
-        - value of arena.period has been changed;
-        - some special mode is activated (arty equipment is activated to use).
-    """
     __slots__ = ()
 
     def start(self):
         ctrl = self.sessionProvider.shared.crosshair
-        assert ctrl is not None, 'Crosshair controller is not found'
         self.__setup(ctrl)
         ctrl.onGunMarkersSetChanged += self.__onGunMarkersSetChanged
         ctrl = self.sessionProvider.shared.vehicleState
-        assert ctrl is not None, 'Vehicle state controller is not found'
         ctrl.onVehicleControlling += self.__onVehicleControlling
         ctrl = self.sessionProvider.shared.ammo
         if ctrl is not None:
@@ -566,7 +568,7 @@ class GunMarkersInvalidatePlugin(CrosshairPlugin):
         if not repository.vehicleState.isInPostmortem and vehicle.isPlayerVehicle:
             self._parentObj.invalidateGunMarkers(repository.crosshair.getGunMarkersSetInfo(), self.__getVehicleInfo())
 
-    def __onGunSettingsSet(self, gunSettings):
+    def __onGunSettingsSet(self, _):
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
             markersInfo = ctrl.getGunMarkersSetInfo()
@@ -576,7 +578,6 @@ class GunMarkersInvalidatePlugin(CrosshairPlugin):
 
 
 class ShotResultIndicatorPlugin(CrosshairPlugin):
-    """ Plugin to show shot result (good pierced, ...) if desired setting is on."""
     __slots__ = ('__isEnabled', '__playerTeam', '__cache', '__colors', '__mapping', '__shotResultResolver')
 
     def __init__(self, parentObj):
@@ -591,7 +592,6 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
 
     def start(self):
         ctrl = self.sessionProvider.shared.crosshair
-        assert ctrl is not None, 'Crosshair controller is not found'
         ctrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
         ctrl.onGunMarkerStateChanged += self.__onGunMarkerStateChanged
         g_playerEvents.onTeamChanged += self.__onTeamChanged
@@ -600,7 +600,6 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         self.__setMapping(_SETTINGS_KEYS)
         self.__setEnabled(self._parentObj.getViewID())
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-        return
 
     def stop(self):
         ctrl = self.sessionProvider.shared.crosshair
@@ -626,8 +625,8 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
                 value = settings['gunTagType'] in _VIEW_CONSTANTS.GUN_TAG_SHOT_RESULT_TYPES
                 self.__mapping[_SETTINGS_KEY_TO_VIEW_ID[key]] = value
 
-    def __updateColor(self, markerType, position, collision, dir):
-        result = self.__shotResultResolver.getShotResult(position, collision, dir, excludeTeam=self.__playerTeam)
+    def __updateColor(self, markerType, position, collision, direction):
+        result = self.__shotResultResolver.getShotResult(position, collision, direction, excludeTeam=self.__playerTeam)
         if result in self.__colors:
             color = self.__colors[result]
             if self.__cache[markerType] != result and self._parentObj.setGunMarkerColor(markerType, color):
@@ -644,9 +643,9 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         else:
             self.__cache.clear()
 
-    def __onGunMarkerStateChanged(self, markerType, position, dir, collision):
+    def __onGunMarkerStateChanged(self, markerType, position, direction, collision):
         if self.__isEnabled:
-            self.__updateColor(markerType, position, collision, dir)
+            self.__updateColor(markerType, position, collision, direction)
 
     def __onCrosshairViewChanged(self, viewID):
         self.__setEnabled(viewID)
@@ -668,8 +667,6 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
 
 
 class SiegeModePlugin(CrosshairPlugin):
-    """ Class responsible for siege mode indication (shows or hides special crosshair).
-    """
     __slots__ = ('__siegeState',)
 
     def __init__(self, parentObj):
@@ -717,8 +714,6 @@ class SiegeModePlugin(CrosshairPlugin):
             self.__updateView()
 
     def __updateView(self):
-        """ Update view according to current siege state.
-        """
         if self.__siegeState == _SIEGE_STATE.ENABLED:
             self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.SIEGE_MODE)
         elif self.__siegeState == _SIEGE_STATE.DISABLED:
@@ -728,16 +723,9 @@ class SiegeModePlugin(CrosshairPlugin):
 
 
 class TrajectoryViewHintPlugin(CrosshairPlugin):
-    """The Plugin displays a hint for the new Trajectory View
-    in STRATEGIC crosshair view. The hint should not display if it was
-    already shown several times or it is a replay playing."""
     __slots__ = ('__hintsLeft', '__isHintShown', '__cachedHint', '__isObserver', '__isDestroyTimerDisplaying', '__isDeathZoneTimerDisplaying')
 
     def __init__(self, parentObj):
-        """
-        Constructor.
-        @param parentObj: CrosshairPanelContainer instance
-        """
         super(TrajectoryViewHintPlugin, self).__init__(parentObj)
         self.__hintsLeft = 0
         self.__isHintShown = False
@@ -749,11 +737,8 @@ class TrajectoryViewHintPlugin(CrosshairPlugin):
 
     def start(self):
         arenaDP = self.sessionProvider.getArenaDP()
-        assert arenaDP is not None, 'Arena DP is not found'
         crosshairCtrl = self.sessionProvider.shared.crosshair
-        assert crosshairCtrl is not None, 'Crosshair controller is not found'
         vehicleCtrl = self.sessionProvider.shared.vehicleState
-        assert vehicleCtrl is not None, 'Vehicle State controller is not found'
         vInfo = arenaDP.getVehicleInfo()
         self.__isObserver = vInfo.isObserver()
         crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
@@ -762,7 +747,6 @@ class TrajectoryViewHintPlugin(CrosshairPlugin):
         CommandMapping.g_instance.onMappingChanged += self.__onMappingChanged
         self.__hintsLeft = AccountSettings.getSettings(TRAJECTORY_VIEW_HINT_COUNTER)
         self.__setup(crosshairCtrl, vehicleCtrl)
-        return
 
     def stop(self):
         ctrl = self.sessionProvider.shared.crosshair
@@ -825,10 +809,7 @@ class TrajectoryViewHintPlugin(CrosshairPlugin):
             result = True
         else:
             ctrl = self.sessionProvider.shared.vehicleState
-            if ctrl is not None and ctrl.getStateValue(VEHICLE_VIEW_STATE.STUN) or ctrl.getStateValue(VEHICLE_VIEW_STATE.FIRE):
-                result = True
-            else:
-                result = False
+            result = ctrl is not None and ctrl.getStateValue(VEHICLE_VIEW_STATE.STUN) or ctrl.getStateValue(VEHICLE_VIEW_STATE.FIRE)
         return result
 
     def __onMappingChanged(self, *args):
@@ -870,3 +851,21 @@ class TrajectoryViewHintPlugin(CrosshairPlugin):
          hintTextRight,
          _TRAJECTORY_VIEW_HINT_POSITION[0],
          _TRAJECTORY_VIEW_HINT_POSITION[1])
+
+
+class ShotDonePlugin(CrosshairPlugin):
+    __slots__ = ()
+
+    def start(self):
+        feedbackCtrl = self.sessionProvider.shared.feedback
+        feedbackCtrl.onShotDone += self.__onShotDone
+
+    def stop(self):
+        feedbackCtrl = self.sessionProvider.shared.feedback
+        if feedbackCtrl is not None:
+            feedbackCtrl.onShotDone -= self.__onShotDone
+        return
+
+    def __onShotDone(self):
+        if self.sessionProvider.shared.ammo.getGunSettings().hasAutoReload():
+            self._parentObj.as_showShotS()

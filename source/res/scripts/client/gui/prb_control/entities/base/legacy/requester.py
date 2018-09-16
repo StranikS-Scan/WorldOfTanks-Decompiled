@@ -7,9 +7,6 @@ from gui.prb_control.entities.base.requester import IPrbListRequester
 from gui.prb_control.items.prb_seqs import RosterIterator
 
 class LegacyRosterRequester(IPrbListRequester):
-    """
-    Legacy entity roster requester.
-    """
 
     def __init__(self):
         self.__callback = None
@@ -39,12 +36,6 @@ class LegacyRosterRequester(IPrbListRequester):
         BigWorld.player().requestPrebattleRoster(self.__ctx.getPrbID())
 
     def __pe_onPrebattleRosterReceived(self, prebattleID, roster):
-        """
-        Roster received event listener.
-        Args:
-            prebattleID: prebattle ID for which we've received roster
-            roster: roster data
-        """
         self.__callback(prebattleID, RosterIterator(roster))
         if self.__ctx:
             self.__ctx.stopProcessing(True)

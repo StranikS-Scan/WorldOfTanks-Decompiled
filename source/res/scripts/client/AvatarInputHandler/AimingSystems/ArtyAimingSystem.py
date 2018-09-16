@@ -49,7 +49,7 @@ class ArtyAimingSystem(StrategicAimingSystem):
         hitPoint = BigWorld.wg_collideSegment(BigWorld.player().spaceID, self._planePosition + Vector3(0.0, 1000.0, 0.0), self._planePosition + Vector3(0.0, -250.0, 0.0), 128, 8)
         aimPoint = Vector3(self._planePosition)
         if hitPoint is not None:
-            aimPoint.y = hitPoint[0][1]
+            aimPoint.y = hitPoint.closestPoint[1]
         r0, v0, g0 = BigWorld.player().gunRotator.getShotParams(aimPoint, True)
         hitPoint = BigWorld.wg_simulateProjectileTrajectory(r0, v0, g0, SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT, 128)
         if hitPoint is not None:

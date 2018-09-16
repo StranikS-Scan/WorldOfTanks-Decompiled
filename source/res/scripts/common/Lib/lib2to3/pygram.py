@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pygram.py
-"""Export the Python grammar and symbols."""
 import os
 from .pgen2 import token
 from .pgen2 import driver
@@ -11,11 +10,6 @@ _PATTERN_GRAMMAR_FILE = os.path.join(os.path.dirname(__file__), 'PatternGrammar.
 class Symbols(object):
 
     def __init__(self, grammar):
-        """Initializer.
-        
-        Creates an attribute for each grammar symbol (nonterminal),
-        whose value is the symbol's type (an int >= 256).
-        """
         for name, symbol in grammar.symbol2number.iteritems():
             setattr(self, name, symbol)
 

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/webbrowser.py
-"""Interfaces for launching and remotely controlling Web browsers."""
 import os
 import shlex
 import sys
@@ -22,7 +21,6 @@ _browsers = {}
 _tryorder = []
 
 def register(name, klass, instance=None, update_tryorder=1):
-    """Register a browser connector and, optionally, connection."""
     _browsers[name.lower()] = [klass, instance]
     if update_tryorder > 0:
         _tryorder.append(name)
@@ -31,7 +29,6 @@ def register(name, klass, instance=None, update_tryorder=1):
 
 
 def get(using=None):
-    """Return a browser launcher instance appropriate for the environment."""
     if using is not None:
         alternatives = [using]
     else:
@@ -75,17 +72,6 @@ def open_new_tab(url):
 
 
 def _synthesize(browser, update_tryorder=1):
-    """Attempt to synthesize a controller base on existing controllers.
-    
-    This is useful to create a controller when a user specifies a path to
-    an entry in the BROWSER environment variable -- we can copy a general
-    controller to operate using a specific installation of the desired
-    browser in this way.
-    
-    If we can't create a controller in this way, or if there is no
-    executable for the requested browser, return [None, None].
-    
-    """
     cmd = browser.split()[0]
     if not _iscommand(cmd):
         return [None, None]
@@ -131,8 +117,6 @@ else:
 
 
 def _iscommand(cmd):
-    """Return True if cmd is executable or can be found on the executable
-    search path."""
     if _isexecutable(cmd):
         return True
     path = os.environ.get('PATH')
@@ -147,7 +131,6 @@ def _iscommand(cmd):
 
 
 class BaseBrowser(object):
-    """Parent class for all browsers. Do not use directly."""
     args = ['%s']
 
     def __init__(self, name=''):
@@ -165,8 +148,6 @@ class BaseBrowser(object):
 
 
 class GenericBrowser(BaseBrowser):
-    """Class for all browsers started with a command
-    and without remote functionality."""
 
     def __init__(self, name):
         if isinstance(name, basestring):
@@ -190,8 +171,6 @@ class GenericBrowser(BaseBrowser):
 
 
 class BackgroundBrowser(GenericBrowser):
-    """Class for all browsers which are to be started in the
-    background."""
 
     def open(self, url, new=0, autoraise=True):
         cmdline = [self.name] + [ arg.replace('%s', url) for arg in self.args ]
@@ -211,7 +190,6 @@ class BackgroundBrowser(GenericBrowser):
 
 
 class UnixBrowser(BaseBrowser):
-    """Parent class for all Unix browsers with remote functionality."""
     raise_opts = None
     remote_args = ['%action', '%s']
     remote_action = None
@@ -278,7 +256,6 @@ class UnixBrowser(BaseBrowser):
 
 
 class Mozilla(UnixBrowser):
-    """Launcher class for Mozilla/Netscape browsers."""
     raise_opts = ['-noraise', '-raise']
     remote_args = ['-remote', 'openURL(%s%action)']
     remote_action = ''
@@ -290,7 +267,6 @@ class Mozilla(UnixBrowser):
 Netscape = Mozilla
 
 class Galeon(UnixBrowser):
-    """Launcher class for Galeon/Epiphany browsers."""
     raise_opts = ['-noraise', '']
     remote_args = ['%action', '%s']
     remote_action = '-n'
@@ -299,7 +275,6 @@ class Galeon(UnixBrowser):
 
 
 class Chrome(UnixBrowser):
-    """Launcher class for Google Chrome browser."""
     remote_args = ['%action', '%s']
     remote_action = ''
     remote_action_newwin = '--new-window'
@@ -310,7 +285,6 @@ class Chrome(UnixBrowser):
 Chromium = Chrome
 
 class Opera(UnixBrowser):
-    """Launcher class for Opera browser."""
     raise_opts = ['-noraise', '']
     remote_args = ['-remote', 'openURL(%s%action)']
     remote_action = ''
@@ -320,7 +294,6 @@ class Opera(UnixBrowser):
 
 
 class Elinks(UnixBrowser):
-    """Launcher class for Elinks browsers."""
     remote_args = ['-remote', 'openURL(%s%action)']
     remote_action = ''
     remote_action_newwin = ',new-window'
@@ -330,11 +303,6 @@ class Elinks(UnixBrowser):
 
 
 class Konqueror(BaseBrowser):
-    """Controller for the KDE File Manager (kfm, or Konqueror).
-    
-    See the output of ``kfmclient --commands``
-    for more information on the Konqueror remote-control interface.
-    """
 
     def open(self, url, new=0, autoraise=True):
         if new == 2:
@@ -495,21 +463,11 @@ if sys.platform[:3] == 'win':
 if sys.platform == 'darwin':
 
     class MacOSX(BaseBrowser):
-        """Launcher class for Aqua browsers on Mac OS X
-        
-        Optionally specify a browser name on instantiation.  Note that this
-        will not work for Aqua browsers if the user has moved the application
-        package after installation.
-        
-        If no browser is specified, the default browser, as specified in the
-        Internet System Preferences panel, will be used.
-        """
 
         def __init__(self, name):
             self.name = name
 
         def open(self, url, new=0, autoraise=True):
-            assert "'" not in url
             if ':' not in url:
                 url = 'file:' + url
             new = int(bool(new))

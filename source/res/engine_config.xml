@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -26,7 +26,7 @@
     <gammaCorrectionOutside>	1.0	</gammaCorrectionOutside>
     <gammaCorrectionInside>	1.0	</gammaCorrectionInside>
     <gammaCorrectionSpeed>	0.2	</gammaCorrectionSpeed>
-    <maxFrameRate>	120	</maxFrameRate>
+    <maxFrameRate>	1000	</maxFrameRate>
     <reducedFrameRate>	60	</reducedFrameRate>
     <settings></settings>
     <useLatentOcclusionQueries>	true	</useLatentOcclusionQueries>
@@ -38,8 +38,15 @@
       <correctionBigStep>	0.1	</correctionBigStep>
       <minScale>	0.5	</minScale>
     </DRRAutoscaler>
-    <globalVBSize>	10485760	</globalVBSize>
-    <globalIBSize>	102400	</globalIBSize>
+    <globalVBSize>	12582912	</globalVBSize>
+    <globalIBSize>	131072	</globalIBSize>
+    <streaming>
+      <MAX>	1	</MAX>
+      <HIGH>	0.5	</HIGH>
+      <MEDIUM>	0.25	</MEDIUM>
+      <LOW>	0.25	</LOW>
+      <MIN>	0	</MIN>
+    </streaming>
   </renderer>
   <influx>
     <force_use_bw_collision>	true	</force_use_bw_collision>
@@ -47,7 +54,7 @@
     <control_point_grid_step>	1.0f	</control_point_grid_step>
   </influx>
   <animation>
-    <streamCacheSizeKB>	2048	</streamCacheSizeKB>
+    <streamCacheSizeKB>	51200	</streamCacheSizeKB>
   </animation>
   <screenShot>
     <extension>	jpg	</extension>
@@ -122,7 +129,8 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
+    <fullDump>	false	</fullDump>
+    <dxdiag>	true	</dxdiag>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
     <profilerBufferSize>	12582912	</profilerBufferSize>
@@ -163,7 +171,7 @@
       <soundRender>
         <use_config>	false	</use_config>
         <HDR_lower_threshold>	-50	</HDR_lower_threshold>
-        <max_voices>	110	</max_voices>
+        <max_voices>	120	</max_voices>
       </soundRender>
       <voice_soundbanks>
         <project>
@@ -176,6 +184,9 @@
         </project>
         <project>
           <name>	ambient.pck	</name>
+        </project>
+        <project>
+          <name>	ambient_2D.pck	</name>
         </project>
         <project>
           <name>	combat_atmosphere.pck	</name>
@@ -205,10 +216,10 @@
           <name>	explosive_objects.pck	</name>
         </project>
         <project>
-          <name>	ExternalMusicSources.pck	</name>
+          <name>	objects.pck	</name>
         </project>
         <project>
-          <name>	objects.pck	</name>
+          <name>	objects_generative.pck	</name>
         </project>
         <project>
           <name>	plane.pck	</name>
@@ -235,16 +246,16 @@
           <name>	gui.bnk	</name>
         </project>
         <project>
-          <name>	gui_ranked_battles.bnk	</name>
-        </project>
-        <project>
           <name>	gui_ranked_battles.pck	</name>
         </project>
         <project>
-          <name>	ExternalMusicSources.bnk	</name>
+          <name>	utility.bnk	</name>
         </project>
         <project>
-          <name>	utility.bnk	</name>
+          <name>	music_interactive.bnk	</name>
+        </project>
+        <project>
+          <name>	music_interactive.pck	</name>
         </project>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
@@ -255,6 +266,9 @@
           <name>	hangar_v2.bnk	</name>
         </project>
         <project>
+          <name>	gui_ranked_battles.bnk	</name>
+        </project>
+        <project>
           <name>	Personal_missions.bnk	</name>
         </project>
         <project>
@@ -263,10 +277,16 @@
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
         <project>
-          <name>	hangar_v2.bnk	</name>
+          <name>	loginscreen.bnk	</name>
         </project>
       </SFX_soundbanks_login>
       <SFX_soundbanks_arena>
+        <project>
+          <name>	ambient.bnk	</name>
+        </project>
+        <project>
+          <name>	ambient_2D.bnk	</name>
+        </project>
         <project>
           <name>	damage.bnk	</name>
         </project>
@@ -277,13 +297,13 @@
           <name>	objects.bnk	</name>
         </project>
         <project>
+          <name>	objects_generative.bnk	</name>
+        </project>
+        <project>
           <name>	plane.bnk	</name>
         </project>
         <project>
           <name>	turret.bnk	</name>
-        </project>
-        <project>
-          <name>	ambient.bnk	</name>
         </project>
         <project>
           <name>	combat_atmosphere.bnk	</name>
@@ -334,9 +354,6 @@
           <name>	gun_reload.bnk	</name>
         </project>
         <project>
-          <name>	tutorial_voice.bnk	</name>
-        </project>
-        <project>
           <name>	mechanisms.bnk	</name>
         </project>
       </SFX_soundbanks_arena>
@@ -346,6 +363,12 @@
         </project>
         <project>
           <name>	fort_area.bnk	</name>
+        </project>
+        <project>
+          <name>	objects.bnk	</name>
+        </project>
+        <project>
+          <name>	explosive_objects.bnk	</name>
         </project>
       </SFX_soundbanks_editor>
     </WWISE_adv_profile>

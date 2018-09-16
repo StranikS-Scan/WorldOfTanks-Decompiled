@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/SyncController.py
-import BigWorld
-import AccountCommands
 import cPickle
 import zlib
 from functools import partial
+import BigWorld
+import AccountCommands
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_CODEPOINT_WARNING, LOG_ERROR
 
-class SyncController:
+class SyncController(object):
     __STREAM_ERRORS_LIMIT = 3
 
     def __init__(self, account, sendSyncRequest, onSyncResponse, onSyncComplete):
@@ -35,13 +35,14 @@ class SyncController:
             self.__sendSyncRequest(syncID, partial(self.__onSyncResponse, syncID))
         return
 
-    def __onSyncResponse(self, syncID, requestID, resultID, errorStr, ext={}):
+    def __onSyncResponse(self, syncID, requestID, resultID, errorStr, ext=None):
+        ext = ext or {}
         if resultID != AccountCommands.RES_STREAM:
             self.__onOwnerSyncResponse(syncID, resultID, ext)
             for callback in self.__syncRequests.pop(syncID, []):
                 try:
                     callback(resultID, ext)
-                except:
+                except Exception:
                     LOG_CURRENT_EXCEPTION()
 
         else:
@@ -52,7 +53,7 @@ class SyncController:
             try:
                 data = zlib.decompress(data)
                 data = cPickle.loads(data)
-            except:
+            except Exception:
                 if data is None:
                     LOG_CODEPOINT_WARNING()
                 else:
@@ -70,7 +71,7 @@ class SyncController:
         for callback in self.__syncRequests.pop(syncID, []):
             try:
                 callback(AccountCommands.RES_STREAM, data)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
         return

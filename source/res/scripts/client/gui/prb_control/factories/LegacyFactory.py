@@ -25,9 +25,6 @@ _SUPPORTED_ENTITY = {PREBATTLE_TYPE.TRAINING: TrainingEntity,
 _SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingIntroEntity}
 
 class LegacyFactory(ControlFactory):
-    """
-    Creates entry point, ctx or entity for legacy control.
-    """
 
     def createEntry(self, ctx):
         if not ctx.getRequestType():
@@ -57,14 +54,6 @@ class LegacyFactory(ControlFactory):
         return LeaveLegacyCtx(waitingID='prebattle/leave', flags=flags, entityType=entityType)
 
     def __createByAccountState(self, ctx):
-        """
-        Tries to create entity by current account state.
-        Args:
-            ctx: creation request context.
-        
-        Returns:
-            new prebattle legacy entity
-        """
         clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
             if prb_getters.isPrebattleSettingsReceived(prebattle=clientPrb):
@@ -80,25 +69,9 @@ class LegacyFactory(ControlFactory):
         return self.__createByPrbType(ctx)
 
     def __createByFlags(self, ctx):
-        """
-        Tries to create entity by context flags.
-        Args:
-            ctx: creation request context.
-        
-        Returns:
-            new prebattle legacy entity
-        """
         return self.__createByAccountState(ctx) if not ctx.hasFlags(FUNCTIONAL_FLAG.LEGACY) else None
 
     def __createByPrbType(self, ctx):
-        """
-        Tries to create entity by prebattle type.
-        Args:
-            ctx: creation request context.
-        
-        Returns:
-            new prebattle legacy entity
-        """
         if ctx.getCtrlType() != CTRL_ENTITY_TYPE.LEGACY:
             return None
         else:

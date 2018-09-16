@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BasePrebattleRoomViewMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.rally.AbstractRallyView import AbstractRallyView
 
 class BasePrebattleRoomViewMeta(AbstractRallyView):
@@ -39,9 +35,6 @@ class BasePrebattleRoomViewMeta(AbstractRallyView):
         self._printOverrideError('getClientID')
 
     def as_setRosterListS(self, team, assigned, rosters):
-        """
-        :param rosters: Represented by DataProvider.<PlayerPrbInfoVO> (AS)
-        """
         return self.flashObject.as_setRosterList(team, assigned, rosters) if self._isDAAPIInited() else None
 
     def as_setPlayerStateS(self, team, assigned, data):

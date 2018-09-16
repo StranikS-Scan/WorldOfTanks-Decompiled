@@ -131,7 +131,7 @@ def LOG_CURRENT_EXCEPTION(tags=None, frame=1):
     BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, msg), None)
     extMsg = excepthook.extendedTracebackAsString(_src_file_trim_to, None, None, etype, value, tb)
     if extMsg:
-        BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, msg), None)
+        BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, extMsg), None)
     return
 
 
@@ -316,9 +316,6 @@ def disabled_if(checker, msg=''):
 
 
 def dump_garbage(source=False):
-    """
-    show us what's the garbage about
-    """
     import inspect
     import gc
     print '\nCollecting GARBAGE:'
@@ -402,7 +399,7 @@ def initMemoryLeaksLogging(repeatOffset=300):
 
 def verify(expression):
     try:
-        assert expression
+        pass
     except AssertionError:
         LOG_CURRENT_EXCEPTION()
 

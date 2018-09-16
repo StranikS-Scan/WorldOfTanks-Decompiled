@@ -1,17 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compileall.py
-"""Module/script to byte-compile all .py files to .pyc (or .pyo) files.
-
-When called as a script with arguments, this compiles the directories
-given as arguments recursively; the -l option prevents it from
-recursing into directories.
-
-Without arguments, if compiles all modules on sys.path, without
-recursing into subdirectories.  (Even though it should do so for
-packages -- for now, you'll have to deal with packages separately.)
-
-See module py_compile for details of the actual byte-compilation.
-"""
 import os
 import sys
 import py_compile
@@ -20,17 +8,6 @@ import imp
 __all__ = ['compile_dir', 'compile_file', 'compile_path']
 
 def compile_dir(dir, maxlevels=10, ddir=None, force=0, rx=None, quiet=0):
-    """Byte-compile all modules in the given directory tree.
-    
-    Arguments (only dir is required):
-    
-    dir:       the directory to byte-compile
-    maxlevels: maximum recursion level (default 10)
-    ddir:      the directory that will be prepended to the path to the
-               file as it is compiled into each byte-code file.
-    force:     if 1, force compilation, even if timestamps are up-to-date
-    quiet:     if 1, be quiet during compilation
-    """
     if not quiet:
         print 'Listing', dir, '...'
     try:
@@ -58,16 +35,6 @@ def compile_dir(dir, maxlevels=10, ddir=None, force=0, rx=None, quiet=0):
 
 
 def compile_file(fullname, ddir=None, force=0, rx=None, quiet=0):
-    """Byte-compile one file.
-    
-    Arguments (only fullname is required):
-    
-    fullname:  the file to byte-compile
-    ddir:      if given, the directory name compiled in to the
-               byte-code file.
-    force:     if 1, force compilation, even if timestamps are up-to-date
-    quiet:     if 1, be quiet during compilation
-    """
     success = 1
     name = os.path.basename(fullname)
     if ddir is not None:
@@ -112,15 +79,6 @@ def compile_file(fullname, ddir=None, force=0, rx=None, quiet=0):
 
 
 def compile_path(skip_curdir=1, maxlevels=0, force=0, quiet=0):
-    """Byte-compile all module on sys.path.
-    
-    Arguments (all optional):
-    
-    skip_curdir: if true, skip current directory (default true)
-    maxlevels:   max recursion level (default 0)
-    force: as for compile_dir() (default 0)
-    quiet: as for compile_dir() (default 0)
-    """
     success = 1
     for dir in sys.path:
         if (not dir or dir == os.curdir) and skip_curdir:
@@ -131,7 +89,6 @@ def compile_path(skip_curdir=1, maxlevels=0, force=0, quiet=0):
 
 
 def expand_args(args, flist):
-    """read names in flist and append to args"""
     expanded = args[:]
     if flist:
         try:
@@ -153,7 +110,6 @@ def expand_args(args, flist):
 
 
 def main():
-    """Script main program."""
     import getopt
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'lfqd:x:i:')

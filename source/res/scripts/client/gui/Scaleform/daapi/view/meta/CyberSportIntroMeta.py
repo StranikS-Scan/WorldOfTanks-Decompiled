@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CyberSportIntroMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyIntroView import BaseRallyIntroView
 
 class CyberSportIntroMeta(BaseRallyIntroView):
@@ -21,15 +17,9 @@ class CyberSportIntroMeta(BaseRallyIntroView):
         self._printOverrideError('showStaticTeamStaff')
 
     def as_setSelectedVehicleS(self, data):
-        """
-        :param data: Represented by IntroVehicleVO (AS)
-        """
         return self.flashObject.as_setSelectedVehicle(data) if self._isDAAPIInited() else None
 
     def as_setTextsS(self, data):
-        """
-        :param data: Represented by CSIntroViewTextsVO (AS)
-        """
         return self.flashObject.as_setTexts(data) if self._isDAAPIInited() else None
 
     def as_setNoVehiclesS(self, warnTooltip):

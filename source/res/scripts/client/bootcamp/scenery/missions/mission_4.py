@@ -7,9 +7,9 @@ class Mission4(AbstractMission):
     _combatMusicDelayTime = 3.0
 
     def __init__(self, assistant):
-        super(Mission4, self).__init__(assistant)
         self._combatMusicTriggered = False
         self._callbackID = None
+        super(Mission4, self).__init__(assistant)
         return
 
     def start(self):

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/InventoryRequester.py
-import time
 from collections import namedtuple, defaultdict
 import BigWorld
 from adisp import async
@@ -57,29 +56,12 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         return self.__makeVehicle(vehInvID)
 
     def getOutfitData(self, intCD, season):
-        """ Get an outfit data for the given vehicle intCD.
-        
-        :param intCD: int compact descr of a vehicle.
-        :param season: season of outfit
-        """
         return self.__makeOutfit(intCD, season)
 
     def getPreviousItem(self, itemTypeID, invDataIdx):
         return self.__itemsPreviousCache[itemTypeID].get(invDataIdx)
 
     def getItems(self, itemTypeIdx, dataIdx=None):
-        """
-        Returns inventory items data by given item type. If data index is
-        not specified - returns dictionary of items data, otherwise -
-        specific item data.
-        
-        @param itemTypeIdx: item type index from common.items.ITEM_TYPE_NAMES
-        @param dataIdx:optional  item data index in cache. Used to get data only for
-                                specific item. This index is different for each item type:
-                                        - for vehicles and tankmen: inventory id
-                                        - for the rest types: type compact descriptor (int)
-        @return: dict of items data or specific item data
-        """
         if itemTypeIdx == GUI_ITEM_TYPE.VEHICLE:
             return self.__getVehiclesData(dataIdx)
         if itemTypeIdx == GUI_ITEM_TYPE.TANKMAN:
@@ -104,14 +86,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         return
 
     def __getItemsData(self, itemTypeIdx, compactDescr=None):
-        """
-        Common items request handler. Returns all given type items
-        data or only one specific data by @compactDescr.
-        
-        @param itemTypeIdx: item type index from common.items.ITEM_TYPE_NAMES
-        @param compactDescr: item int compact descriptor
-        @return dictionary of all items data or one item data
-        """
         result = self.getCacheValue(itemTypeIdx)
         return result.get(compactDescr) if result is not None and compactDescr is not None else result
 
@@ -191,13 +165,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             return item
 
     def __getTankmenData(self, inventoryID=None):
-        """
-        Tankmen inventory data request handler. Returns all tankmen
-        data or specific tankman data by given inventory id.
-        
-        @param inventoryID: optional tankman inventory id
-        @return: all tankmen data or only specific tankmen data as dict
-        """
         tankmanItemsData = self.__getItemsData(vehicles._TANKMAN)
         if tankmanItemsData is None:
             return
@@ -211,14 +178,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             return result
 
     def __getTankmanData(self, tankmanItemsData, invID):
-        """
-        Helper-method to collect tankman data-dict from given raw
-        inventory data
-        
-        @param tankmanItemsData: raw tankman inventory data
-        @param invID: tankman inventory id
-        @return: tankman data-dict
-        """
         if invID not in tankmanItemsData['compDescr'].keys():
             return
         else:
@@ -231,13 +190,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             return result
 
     def __getVehiclesData(self, inventoryID=None):
-        """
-        Vehicles inventory data request handler. Returns all vehicles
-        data or specific vehicle data by given inventory id.
-        
-        @param inventoryID: optional vehicle inventory id
-        @return: all vehicles data or only specific vehicle data as dict
-        """
         vehItemsData = self.__getItemsData(vehicles._VEHICLE)
         if vehItemsData is None:
             return
@@ -251,14 +203,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             return result
 
     def __getVehicleData(self, vehItemsData, invID):
-        """
-        Helper-method to collect vehicle data-dict from given raw
-        inventory data
-        
-        @param vehItemsData: raw vehicle inventory data
-        @param invID: vehicle inventory id
-        @return: vehicle data-dict
-        """
         if invID not in vehItemsData['compDescr'].keys():
             return
         else:

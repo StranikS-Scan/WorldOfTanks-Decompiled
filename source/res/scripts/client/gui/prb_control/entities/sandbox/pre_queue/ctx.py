@@ -6,16 +6,10 @@ from gui.shared.utils.decorators import ReprInjector
 
 @ReprInjector.withParent(('getVehicleInventoryID', 'vInvID'), ('getWaitingID', 'waitingID'))
 class SandboxQueueCtx(QueueCtx):
-    """
-    Sandbox enqueue context
-    """
 
     def __init__(self, vInventoryID, waitingID=''):
         super(SandboxQueueCtx, self).__init__(entityType=QUEUE_TYPE.SANDBOX, waitingID=waitingID)
         self.__vInventoryID = vInventoryID
 
     def getVehicleInventoryID(self):
-        """
-        Gets the selected vehicle inventory ID
-        """
         return self.__vInventoryID

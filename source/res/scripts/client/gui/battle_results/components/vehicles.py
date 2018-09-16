@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/vehicles.py
-"""
-Module contains components that are included in information about vehicles: list of enemy vehicles,
-list of ally vehicles, detailed information about each vehicle.
-"""
 from constants import DEATH_REASON_ALIVE
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
@@ -32,24 +28,20 @@ class TeamPlayerNameBlock(shared.PlayerNameBlock):
 
 
 class RegularVehicleStatsBlock(base.StatsBlock):
-    """Block contains vehicle information to show in team list."""
-    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'badge', 'badgeIcon')
+    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'isTeamKiller', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'badge', 'badgeIcon')
 
     def __init__(self, meta=None, field='', *path):
         super(RegularVehicleStatsBlock, self).__init__(meta, field, *path)
         self._isObserver = False
         self.isPersonal = None
         self.isPersonalSquad = None
+        self.isTeamKiller = False
         self.vehicleSort = None
         self.badge = 0
         self.badgeIcon = None
         return
 
     def setRecord(self, result, reusable):
-        """Sets record of battle results to fetch required data.
-        :param result: instance of VehicleDetailedInfo or VehicleSummarizeInfo
-        :param reusable: instance of _ReusableInfo.
-        """
         player = result.player
         avatar = reusable.avatars.getAvatarInfo(player.dbID)
         noPenalties = not avatar.hasPenalties()
@@ -123,10 +115,17 @@ class RegularVehicleStatsBlock(base.StatsBlock):
                 self.addComponent(self.getNextComponentIndex(), block)
         else:
             self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_ALIVE)
+        self.isTeamKiller = result.isTeamKiller
 
 
 class RankedBattlesVehicleStatsBlock(RegularVehicleStatsBlock):
     __slots__ = ('rank', 'rankIcon')
+
+    def __init__(self, meta=None, field='', *path):
+        super(RankedBattlesVehicleStatsBlock, self).__init__(meta, field, *path)
+        self.rankIcon = None
+        self.rank = 0
+        return
 
     def setRecord(self, result, reusable):
         super(RankedBattlesVehicleStatsBlock, self).setRecord(result, reusable)
@@ -138,8 +137,6 @@ class RankedBattlesVehicleStatsBlock(RegularVehicleStatsBlock):
 
 
 class RegularVehicleStatValuesBlock(base.StatsBlock):
-    """Block contains detailed statistics of vehicle that are shown in separate view
-    when player click to some vehicle in team list."""
     __slots__ = ('_isPersonal', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'damageAssistedStun', 'stunNum', 'stunDuration', 'capturePoints', 'mileage', '__rawDamageAssistedStun', '__rawStunNum')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -147,10 +144,6 @@ class RegularVehicleStatValuesBlock(base.StatsBlock):
         self._isPersonal = flag
 
     def setRecord(self, result, reusable):
-        """Sets record of battle results to fetch required data.
-        :param result: instance of VehicleDetailedInfo or VehicleSummarizeInfo
-        :param reusable: instance of _ReusableInfo.
-        """
         self.__rawDamageAssistedStun = result.damageAssistedStun
         self.__rawStunNum = result.stunNum
         self.shots = style.getIntegralFormatIfNoEmpty(result.shots)
@@ -264,7 +257,6 @@ class TwoTeamsStatsBlock(shared.BiDiStatsBlock):
 
     def addComponent(self, index, component):
         super(TwoTeamsStatsBlock, self).addComponent(index, component)
-        assert isinstance(component, TeamStatsBlock), 'Component must be extended class TeamStatsBlock'
 
     def setRecord(self, result, reusable):
         allies, enemies = reusable.getBiDirectionTeamsIterator(result)
@@ -273,9 +265,6 @@ class TwoTeamsStatsBlock(shared.BiDiStatsBlock):
 
 
 class RankedResultsTeamStatsBlock(shared.BiDiStatsBlock):
-    """
-    This block is used in external RankedBattlesBattleResults view. Not in the regular Battle results window
-    """
     __slots__ = ()
 
     def setRecord(self, result, reusable):
@@ -285,16 +274,9 @@ class RankedResultsTeamStatsBlock(shared.BiDiStatsBlock):
 
 
 class RankedResultsTeamDataStatsBlock(base.StatsBlock):
-    """Block contains one Team data to show in team list for RankedBattlesBattleResults."""
     __slots__ = ('title', 'titleAlpha', 'teamList')
 
     def setRecord(self, result, reusable):
-        """
-        Set block record
-        :param result: list of VehicleSummarizeInfo
-        :param reusable: battleResult reusable info
-        :return: list of RankedResultsTeamPartDataStatsBlock.getVO()
-        """
         helper = common.RankInfoHelper(reusable)
         winTeam = reusable.common.winnerTeam
         playerTeam = reusable.personal.avatar.team
@@ -317,16 +299,17 @@ class RankedResultsTeamDataStatsBlock(base.StatsBlock):
             dataList = lists[listIdx]
             if lastListIdx != listIdx:
                 xpAtBorder = lastXP
+                lastListIdx = listIdx
             isTopList = dataList.isTopList()
             if isPlayer:
                 stepChanges = reusable.personal.getRankInfo().stepChanges
-                standoff = helper.getPlayerStandoff(team=playerTeam, position=idx, stepChanges=stepChanges)
+                standoffInfo = helper.getPlayerStandoff(team=playerTeam, position=idx, stepChanges=stepChanges)
                 if isTopList and not topListBlink:
                     topListBlink = True
                     dataList.setListBlink(True)
             else:
                 standoffInfo = helper.getStandoff(isTop=isTopList, xp=item.xp, xpToCompare=xpAtBorder, position=idx, isLoser=not isWon, lastStandoffInfo=standoffInfo)
-                standoff, _ = standoffInfo
+            standoff, _ = standoffInfo
             lastXP = item.xp
             listItem = RankedResultsListItemStatsBlock()
             listItem.setRecord((item, standoff), reusable)
@@ -366,11 +349,6 @@ class RankedResultsTeamDataStatsBlock(base.StatsBlock):
 
     @staticmethod
     def __fillIncompleteTeam(membersCount, maxCount, lists, listsSteps):
-        """
-        This method is necessary for development needs.
-        Both teams should be normally 15vs15, but in development case the number can be less.
-        We should fill with empty data to show layout correctly.
-        """
         for idx in range(membersCount, maxCount):
             listIndex = RankedResultsTeamDataStatsBlock.__getPlayerListIndex(playerIndex=idx, listsSteps=listsSteps)
             dataList = lists[listIndex]
@@ -404,7 +382,6 @@ class RankedResultsTeamDataStatsBlock(base.StatsBlock):
 
 
 class RankedResultsTeamPartDataStatsBlock(base.StatsBlock):
-    """Block contains one part of team data: Tops or Bottoms."""
     __slots__ = ('listData', 'backgroundType', 'backgroundBlink', 'icon', 'capacity', 'isColorBlind', 'iconType')
     settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -425,12 +402,6 @@ class RankedResultsTeamPartDataStatsBlock(base.StatsBlock):
         return len(self.listData)
 
     def setListResources(self, listInfo, isTopList=False):
-        """
-        Populate list resources
-        :param listInfo: tuple of capacity and resources info (see __getRankBounds())
-        :param isBlink: enable blink animation
-        :param isTopList: this is TOP list or not
-        """
         self.capacity, resources = listInfo
         self.iconType, self.backgroundType, iconMethod = resources
         self.icon = ''
@@ -450,8 +421,8 @@ class RankedResultsTeamPartDataStatsBlock(base.StatsBlock):
 
 
 class RankedResultsListItemStatsBlock(base.StatsBlock):
-    """Block contains one Item data for 'listData' in RankedResultsTeamPartDataStatsBlock."""
     __slots__ = ('nickName', 'points', 'selected', 'standoff', 'nickNameHuge', 'pointsHuge')
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def setRecord(self, result, reusable):
         item, standoff = result
@@ -460,4 +431,6 @@ class RankedResultsListItemStatsBlock(base.StatsBlock):
         self.points = style.makeRankedPointValue(item.xp)
         self.pointsHuge = style.makeRankedPointHugeValue(item.xp)
         self.selected = item.player.dbID == reusable.personal.avatar.accountDBID
+        if self.settingsCore.getSetting('isColorBlind') and standoff == RANKEDBATTLES_ALIASES.STANDOFF_MINUS:
+            standoff = RANKEDBATTLES_ALIASES.STANDOFF_MINUS_BLIND
         self.standoff = standoff

@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/awards_formatters.py
 from collections import namedtuple
-from debug_utils import LOG_WARNING
-from gui.Scaleform.locale.NY import NY
-from helpers.i18n import makeString
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -20,7 +17,6 @@ from helpers import time_utils, i18n, dependency
 from shared_utils import CONST_CONTAINER, findFirst
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.customization import ICustomizationService
-from skeletons.new_year import INewYearController
 
 class AWARDS_SIZES(CONST_CONTAINER):
     SMALL = 'small'
@@ -88,7 +84,7 @@ TEXT_ALIGNS = {'creditsFactor': LABEL_ALIGN.RIGHT,
 
 def getDefaultFormattersMap():
     simpleBonusFormatter = SimpleBonusFormatter()
-    tokenBonusFormatter = NY18BoxFormatter()
+    tokenBonusFormatter = TokenBonusFormatter()
     return {'strBonus': simpleBonusFormatter,
      Currency.GOLD: simpleBonusFormatter,
      Currency.CREDITS: simpleBonusFormatter,
@@ -684,86 +680,3 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
             result[size] = RES_ICONS.getBonusIcon(size, item.getGUIEmblemID())
 
         return result
-
-
-class Ny18ToysFormatter(SimpleBonusFormatter):
-    _newYearController = dependency.descriptor(INewYearController)
-
-    class XMassPreformattedBonus(PreformattedBonus):
-
-        def __init__(self, *args, **kwargs):
-            super(Ny18ToysFormatter.XMassPreformattedBonus, self).__init__(*args, **kwargs)
-            self.level = None
-            self.rank = None
-            self.setting = None
-            return
-
-    def _format(self, bonus):
-        outcome = []
-        for bId in bonus.getValue():
-            preformatted = self.XMassPreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(bonus), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bId), tooltip=bonus.getTooltip(), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus), specialAlias=TOOLTIPS_CONSTANTS.NY_DECORATION, specialArgs=[bId], isSpecial=True)
-            toyDesct = self._newYearController.toysDescrs.get(bId)
-            level = 1
-            rank = ''
-            setting = ''
-            if toyDesct:
-                level = toyDesct.rank
-                rank = 'rank{}'.format(toyDesct.rank)
-                setting = '../maps/icons/ny/setting/setting_{}.png'.format(toyDesct.setting)
-            else:
-                LOG_WARNING("Couldn't find toy descriptor by provided bonusID '{}'. Rank and setting are skipped".format(bId))
-            preformatted.level = level
-            preformatted.rank = rank
-            preformatted.setting = setting
-            outcome.append(preformatted)
-
-        return outcome
-
-    def _getImages(self, bonusId):
-        result = {}
-        toyDesct = self._newYearController.toysDescrs.get(bonusId)
-        if toyDesct:
-            result[AWARDS_SIZES.SMALL] = toyDesct.slotIcon
-            result[AWARDS_SIZES.BIG] = toyDesct.icon
-        else:
-            LOG_WARNING("Couldn't find toy descriptor by provided bonusID '{}'".format(bonusId))
-        return result
-
-
-class NY18DiscountFormatter(SimpleBonusFormatter):
-    _newYearController = dependency.descriptor(INewYearController)
-
-    def _format(self, bonus):
-        outcome = []
-        for bId in bonus.getValue():
-            if bId in self._newYearController.vehDiscountsStorage.getDescriptors():
-                outcome.append(self.__getVehiclePreformatted(bId))
-            if bId in self._newYearController.tankmanDiscountsStorage.getDescriptors():
-                outcome.append(self.__getTankmenPreformatted())
-            LOG_WARNING("Displaying of '{}' NY bonus has been skipped".format(bId))
-
-        return outcome
-
-    def __getVehiclePreformatted(self, bId):
-        intLevel = self._newYearController.vehDiscountsStorage.extractLevelFromDiscountID(bId)
-        vehLvlStr = makeString(TOOLTIPS.level(intLevel))
-        discount = self._newYearController.vehDiscountsStorage.extractDiscountValueByLevel(intLevel)
-        return PreformattedBonus(label=makeString(NY.DISCOUNT_FORMAT, discount=discount), labelFormatter=text_styles.stats, images={AWARDS_SIZES.BIG: RES_ICONS.MAPS_ICONS_NY_BONUSES_BIG_UNKNOWN_TANK,
-         AWARDS_SIZES.SMALL: ''}, tooltip=makeTooltip(makeString(NY.REWARDSSCREEN_TOOLTIP_VEHICLE_HEADER, level=vehLvlStr), makeString(NY.REWARDSSCREEN_TOOLTIP_VEHICLE_BODY, discount=discount, level=vehLvlStr)), align=LABEL_ALIGN.RIGHT, isCompensation=False, isSpecial=False)
-
-    def __getTankmenPreformatted(self):
-        return PreformattedBonus(images={AWARDS_SIZES.BIG: RES_ICONS.MAPS_ICONS_NY_BONUSES_BIG_TANK_WOMEN,
-         AWARDS_SIZES.SMALL: ''}, isCompensation=False, specialAlias=TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_NY_TANKWOMAN, isSpecial=True)
-
-
-class NY18BoxFormatter(TokenBonusFormatter):
-    _newYearController = dependency.descriptor(INewYearController)
-
-    def _format(self, bonus):
-        preformatted = super(NY18BoxFormatter, self)._format(bonus)
-        for tokenID, token in bonus.getTokens().iteritems():
-            if tokenID in self._newYearController.boxStorage.getDescriptors():
-                preformatted.append(PreformattedBonus(bonusName=bonus.getName(), images={AWARDS_SIZES.BIG: RES_ICONS.MAPS_ICONS_NY_BONUSES_BIG_BOX,
-                 AWARDS_SIZES.SMALL: RES_ICONS.MAPS_ICONS_NY_BONUSES_SMALL_BOX}, label=formatCountLabel(token.count), labelFormatter=self._getLabelFormatter(bonus), tooltip=makeTooltip(makeString(NY.HANGAR_BONUSINFO_TOOLTIP_HEADER), makeString(NY.HANGAR_BONUSINFO_TOOLTIP_BODY)), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
-
-        return preformatted

@@ -14,12 +14,12 @@ class StrategicCamerasInterpolator(CallbackDelayer):
         self.__totalInterpolationTime = max(0.01, _INTERPOLATION_TIME)
         self.__elapsedTime = 0.0
         self.__easingMethod = _EASING_METHOD
-        self.__cam = BigWorld.CursorCamera()
         self.__prevTime = 0.0
         self.__initialState = None
         self.__finalState = None
         self.__initialFov = 0.0
         self.__finalFov = 0.0
+        self.__cam = None
         return
 
     def enable(self, initialState, finalState, initialFov, finalFov):
@@ -35,6 +35,8 @@ class StrategicCamerasInterpolator(CallbackDelayer):
         self.delayCallback(0.0, self.__cameraUpdate)
 
     def __setupCamera(self):
+        if self.__cam is None:
+            self.__cam = BigWorld.CursorCamera()
         self.__cam.target = mathUtils.MatrixProviders.product(self.__finalState.target.a, Math.Matrix())
         self.__cam.source = Math.Matrix()
         self.__cam.pivotMaxDist = 0.0
@@ -45,12 +47,16 @@ class StrategicCamerasInterpolator(CallbackDelayer):
         self.__cam.wg_applyParams()
         BigWorld.camera(self.__cam)
         BigWorld.projection().fov = self.__initialFov
+        return
 
     def disable(self):
         self.__elapsedTime = 0.0
         self.stopCallback(self.__cameraUpdate)
-        BigWorld.camera(None)
+        self.stopCallback(self.disable)
         BigWorld.camera(self.__finalState)
+        self.__initialState = None
+        self.__finalState = None
+        self.__cam = None
         return
 
     def __cameraUpdate(self):
@@ -70,5 +76,5 @@ class StrategicCamerasInterpolator(CallbackDelayer):
         self.__cam.pivotPosition = mathUtils.lerp(iPivotPosition, fPivotPosition, interpolationCoefficient)
         BigWorld.projection().fov = mathUtils.lerp(self.__initialFov, self.__finalFov, interpolationCoefficient)
         if self.__elapsedTime > self.__totalInterpolationTime:
-            BigWorld.callback(0.0, self.disable)
+            self.delayCallback(0.0, self.disable)
             return 10.0

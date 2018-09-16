@@ -3,9 +3,6 @@
 from gui.prb_control.storages.local_storage import LocalStorage
 
 class StrongholdStorage(LocalStorage):
-    """
-    This storage holds active animation index.
-    """
     __slots__ = ('_animationIdx',)
 
     def __init__(self):

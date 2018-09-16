@@ -8,33 +8,23 @@ from items.components import component_constants
 from items.readers import shared_readers
 
 def readWheelsAndGroups(xmlCtx, section):
-    """Reads sections 'wheels/group' and 'wheels/wheel' for each chassis.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :return: tuple(sequence of groups, sequence of wheels).
-    """
     wheelGroups = []
     wheels = []
     defSyncAngle = section.readFloat('wheels/leadingWheelSyncAngle', 60)
     for sname, subsection in _xml.getChildren(xmlCtx, section, 'wheels'):
         if sname == 'group':
             ctx = (xmlCtx, 'wheels/group')
-            group = chassis_components.WheelGroup(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), template=_xml.readNonEmptyString(ctx, subsection, 'template'), count=_xml.readInt(ctx, subsection, 'count', 1), startIndex=subsection.readInt('startIndex', 0), radius=_xml.readPositiveFloat(ctx, subsection, 'radius'))
+            group = chassis_components.WheelGroup(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), template=intern(_xml.readNonEmptyString(ctx, subsection, 'template')), count=_xml.readInt(ctx, subsection, 'count', 1), startIndex=subsection.readInt('startIndex', 0), radius=_xml.readPositiveFloat(ctx, subsection, 'radius'))
             wheelGroups.append(group)
         if sname == 'wheel':
             ctx = (xmlCtx, 'wheels/wheel')
-            w = chassis_components.Wheel(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), radius=_xml.readPositiveFloat(ctx, subsection, 'radius'), nodeName=_xml.readNonEmptyString(ctx, subsection, 'name'), isLeading=subsection.readBool('isLeading', False), leadingSyncAngle=subsection.readFloat('syncAngle', defSyncAngle))
+            w = chassis_components.Wheel(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), radius=_xml.readPositiveFloat(ctx, subsection, 'radius'), nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeading=subsection.readBool('isLeading', False), leadingSyncAngle=subsection.readFloat('syncAngle', defSyncAngle))
             wheels.append(w)
 
     return (tuple(wheelGroups), tuple(wheels))
 
 
 def readGroundNodesAndGroups(xmlCtx, section):
-    """Reads section 'groundNodes' for each chassis if it has.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :return: tuple(sequence of groups, sequence of nodes).
-    """
     if section['groundNodes'] is None:
         return (component_constants.EMPTY_TUPLE, component_constants.EMPTY_TUPLE)
     else:
@@ -43,47 +33,47 @@ def readGroundNodesAndGroups(xmlCtx, section):
         for sname, subsection in _xml.getChildren(xmlCtx, section, 'groundNodes'):
             if sname == 'group':
                 ctx = (xmlCtx, 'groundNodes/group')
-                group = chassis_components.GroundNodeGroup(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'), template=_xml.readNonEmptyString(ctx, subsection, 'template'), count=_xml.readInt(ctx, subsection, 'count', 1), startIndex=subsection.readInt('startIndex', 0))
+                group = chassis_components.GroundNodeGroup(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'), template=intern(_xml.readNonEmptyString(ctx, subsection, 'template')), count=_xml.readInt(ctx, subsection, 'count', 1), startIndex=subsection.readInt('startIndex', 0))
                 groundGroups.append(group)
             if sname == 'node':
                 ctx = (xmlCtx, 'groundNodes/node')
-                groundNode = chassis_components.GroundNode(name=_xml.readNonEmptyString(ctx, subsection, 'name'), isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'))
+                groundNode = chassis_components.GroundNode(name=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'))
                 groundNodes.append(groundNode)
 
         return (tuple(groundGroups), tuple(groundNodes))
 
 
 def readTrackNodes(xmlCtx, section):
-    """Reads section 'trackNodes' for each chassis if it has.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :return: tuple containing TrackNode items.
-    """
     if section['trackNodes'] is None:
         return component_constants.EMPTY_TUPLE
     else:
-        xmlCtx = (xmlCtx, 'trackNodes')
+        defElasticity = _xml.readFloat(xmlCtx, section, 'trackNodes/elasticity', 1500.0)
+        defDamping = _xml.readFloat(xmlCtx, section, 'trackNodes/damping', 1.0)
+        defForwardElastK = _xml.readFloat(xmlCtx, section, 'trackNodes/forwardElastK', 1.0)
+        defBackwardElastK = _xml.readFloat(xmlCtx, section, 'trackNodes/backwardElastK', 1.0)
+        defOffset = _xml.readFloat(xmlCtx, section, 'trackNodes/offset', 0.0)
         trackNodes = []
-        defElasticity = section.readFloat('trackNodes/elasticity', 1500.0)
-        defDamping = section.readFloat('trackNodes/damping', 1.0)
-        defForwardElastK = section.readFloat('trackNodes/forwardElastK', 1.0)
-        defBackwardElastK = section.readFloat('trackNodes/backwardElastK', 1.0)
-        defOffset = section.readFloat('trackNodes/offset')
+        xmlCtx = (xmlCtx, 'trackNodes')
         for sname, subsection in _xml.getChildren(xmlCtx, section, 'trackNodes'):
             if sname == 'node':
                 ctx = (xmlCtx, 'trackNodes/node')
-                trackNode = chassis_components.TrackNode(name=_xml.readNonEmptyString(ctx, subsection, 'name'), isLeft=_xml.readBool(ctx, subsection, 'isLeft'), initialOffset=subsection.readFloat('offset', defOffset), leftNodeName=_xml.readStringOrNone(ctx, subsection, 'leftSibling'), rightNodeName=_xml.readStringOrNone(ctx, subsection, 'rightSibling'), damping=subsection.readFloat('damping', defDamping), elasticity=subsection.readFloat('elasticity', defElasticity), forwardElasticityCoeff=subsection.readFloat('forwardElastK', defForwardElastK), backwardElasticityCoeff=subsection.readFloat('backwardElastK', defBackwardElastK))
+                name = _xml.readStringOrNone(ctx, subsection, 'leftSibling')
+                if name is not None:
+                    leftNodeName = intern(name)
+                else:
+                    leftNodeName = None
+                name = _xml.readStringOrNone(ctx, subsection, 'rightSibling')
+                if name is not None:
+                    rightNodeName = intern(name)
+                else:
+                    rightNodeName = None
+                trackNode = chassis_components.TrackNode(name=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeft=_xml.readBool(ctx, subsection, 'isLeft'), initialOffset=_xml.readFloat(ctx, subsection, 'offset', defOffset), leftNodeName=leftNodeName, rightNodeName=rightNodeName, damping=_xml.readFloat(ctx, subsection, 'damping', defDamping), elasticity=_xml.readFloat(ctx, subsection, 'elasticity', defElasticity), forwardElasticityCoeff=_xml.readFloat(ctx, subsection, 'forwardElastK', defForwardElastK), backwardElasticityCoeff=_xml.readFloat(ctx, subsection, 'backwardElastK', defBackwardElastK))
                 trackNodes.append(trackNode)
 
         return tuple(trackNodes)
 
 
 def readTrackParams(xmlCtx, section):
-    """Reads section 'trackNodes' for each chassis if it has.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :return: instance of TrackParams or None.
-    """
     trackParams = None
     if section['trackNodes'] is not None:
         ctx = (xmlCtx, 'trackNodes')
@@ -94,33 +84,14 @@ def readTrackParams(xmlCtx, section):
 
 
 def readTraces(xmlCtx, section, centerOffset, cache):
-    """Reads section 'traces' for each chassis.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param centerOffset: float containing offset by x coordinate.
-    :param cache: instance of vehicles.Cache.
-    :return: instance of Traces.
-    """
-    return chassis_components.Traces(lodDist=shared_readers.readLodDist(xmlCtx, section, 'traces/lodDist', cache), bufferPrefs=_xml.readNonEmptyString(xmlCtx, section, 'traces/bufferPrefs'), textureSet=_xml.readNonEmptyString(xmlCtx, section, 'traces/textureSet'), centerOffset=centerOffset, size=_xml.readPositiveVector2(xmlCtx, section, 'traces/size'))
+    return chassis_components.Traces(lodDist=shared_readers.readLodDist(xmlCtx, section, 'traces/lodDist', cache), bufferPrefs=intern(_xml.readNonEmptyString(xmlCtx, section, 'traces/bufferPrefs')), textureSet=intern(_xml.readNonEmptyString(xmlCtx, section, 'traces/textureSet')), centerOffset=centerOffset, size=_xml.readPositiveVector2(xmlCtx, section, 'traces/size'))
 
 
 def readTrackMaterials(xmlCtx, section, cache):
-    """Reads section 'tracks' for each chassis to fetch configuration of materials.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param cache: instance of vehicles.Cache.
-    :return: instance of TrackMaterials.
-    """
-    return chassis_components.TrackMaterials(lodDist=shared_readers.readLodDist(xmlCtx, section, 'tracks/lodDist', cache), leftMaterial=_xml.readNonEmptyString(xmlCtx, section, 'tracks/leftMaterial'), rightMaterial=_xml.readNonEmptyString(xmlCtx, section, 'tracks/rightMaterial'), textureScale=_xml.readFloat(xmlCtx, section, 'tracks/textureScale'))
+    return chassis_components.TrackMaterials(lodDist=shared_readers.readLodDist(xmlCtx, section, 'tracks/lodDist', cache), leftMaterial=intern(_xml.readNonEmptyString(xmlCtx, section, 'tracks/leftMaterial')), rightMaterial=intern(_xml.readNonEmptyString(xmlCtx, section, 'tracks/rightMaterial')), textureScale=_xml.readFloat(xmlCtx, section, 'tracks/textureScale'))
 
 
 def readLeveredSuspension(xmlCtx, section, cache):
-    """Reads levered suspension section.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param cache: instance of vehicles.Cache.
-    :return: instance of SuspensionLever for levered suspension or None.
-    """
     leveredSection = section['leveredSuspension']
     if leveredSection is None:
         return
@@ -131,19 +102,13 @@ def readLeveredSuspension(xmlCtx, section, cache):
                 continue
             ctx = (xmlCtx, 'leveredSuspension/lever')
             limits = _xml.readVector2(ctx, subsection, 'limits')
-            lever = chassis_components.SuspensionLever(startNodeName=_xml.readNonEmptyString(ctx, subsection, 'startNode'), jointNodeName=_xml.readNonEmptyString(ctx, subsection, 'jointNode'), trackNodeName=_xml.readNonEmptyString(ctx, subsection, 'trackNode'), minAngle=math.radians(limits.x), maxAngle=math.radians(limits.y))
+            lever = chassis_components.SuspensionLever(startNodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'startNode')), jointNodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'jointNode')), trackNodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'trackNode')), minAngle=math.radians(limits.x), maxAngle=math.radians(limits.y))
             levers.append(lever)
 
         ctx = (xmlCtx, 'leveredSuspension')
-        leveredSuspensionConfig = chassis_components.LeveredSuspensionConfig(levers=levers, interpolationSpeedMul=leveredSection.readFloat('interpolationSpeedMul', 10.0), lodSettings=shared_readers.readLodSettings(ctx, leveredSection, cache))
+        leveredSuspensionConfig = chassis_components.LeveredSuspensionConfig(levers=levers, interpolationSpeedMul=_xml.readFloat(ctx, leveredSection, 'interpolationSpeedMul', 10.0), lodSettings=shared_readers.readLodSettings(ctx, leveredSection, cache))
         return leveredSuspensionConfig
 
 
 def readSplineConfig(xmlCtx, section, cache):
-    """Reads levered suspension section.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param cache: instance of vehicles.Cache.
-    :return: instance of SplineConfig or None.
-    """
-    return None if section['splineDesc'] is None else chassis_components.SplineConfig(segmentModelLeft=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelLeft'), segmentModelRight=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelRight'), segmentLength=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentLength'), leftDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/left'), rightDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/right'), lodDist=shared_readers.readLodDist(xmlCtx, section, 'splineDesc/lodDist', cache), segmentOffset=section.readFloat('splineDesc/segmentOffset', 0), segment2ModelLeft=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelLeft'), segment2ModelRight=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelRight'), segment2Offset=section.readFloat('splineDesc/segment2Offset', 0), atlasUTiles=section.readInt('splineDesc/atlas/UTiles', 1), atlasVTiles=section.readInt('splineDesc/atlas/VTiles', 1))
+    return None if section['splineDesc'] is None else chassis_components.SplineConfig(segmentModelLeft=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelLeft'), segmentModelRight=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelRight'), segmentLength=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentLength'), leftDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/left'), rightDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/right'), lodDist=shared_readers.readLodDist(xmlCtx, section, 'splineDesc/lodDist', cache), segmentOffset=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentOffset', 0), segment2ModelLeft=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelLeft'), segment2ModelRight=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelRight'), segment2Offset=_xml.readFloat(xmlCtx, section, 'splineDesc/segment2Offset', 0), atlasUTiles=section.readInt('splineDesc/atlas/UTiles', 1), atlasVTiles=section.readInt('splineDesc/atlas/VTiles', 1))

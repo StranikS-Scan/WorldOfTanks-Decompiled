@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/bootcamp_controller.py
-from copy import deepcopy
+import AccountCommands
 import BigWorld
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
-from bootcamp.BootcampSettings import getGarageDefaults
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -12,6 +11,8 @@ from gui.Scaleform.daapi.view.bootcamp.disabled_settings import BCDisabledSettin
 from bootcamp.BootCampEvents import g_bootcampEvents
 from PlayerEvents import g_playerEvents
 from bootcamp.Bootcamp import g_bootcamp
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from debug_utils import LOG_ERROR
 
 class BootcampController(IBootcampController):
@@ -22,13 +23,13 @@ class BootcampController(IBootcampController):
         self.__inBootcamp = False
         self.__automaticStart = False
         self.__inBootcampAccount = False
-        self.__currentLobbySettingsVisibility = None
         self.__disabledSettings = BCDisabledSettings()
         g_bootcampEvents.onBootcampBecomePlayer += self.__onBootcampBecomePlayer
         g_bootcampEvents.onBootcampBecomeNonPlayer += self.__onBootcampBecomeNonPlayer
         g_bootcampEvents.onBootcampStarted += self.__onEnterBootcamp
         g_bootcampEvents.onBootcampFinished += self.__onExitBootcamp
-        return
+        g_playerEvents.onBootcampStartChoice += self.__onBootcampStartChoice
+        g_bootcampEvents.onGameplayChoice += self.__onGameplayChoice
 
     def startBootcamp(self, inBattle):
         if g_playerEvents.isPlayerEntityChanging:
@@ -55,6 +56,10 @@ class BootcampController(IBootcampController):
     def replayCtrl(self):
         return g_bootcamp.replayCtrl
 
+    @property
+    def nationData(self):
+        return g_bootcamp.getNationData()
+
     def isInBootcamp(self):
         return self.__inBootcamp
 
@@ -75,6 +80,8 @@ class BootcampController(IBootcampController):
         g_bootcampEvents.onBootcampBecomeNonPlayer -= self.__onBootcampBecomeNonPlayer
         g_bootcampEvents.onBootcampStarted -= self.__onEnterBootcamp
         g_bootcampEvents.onBootcampFinished -= self.__onExitBootcamp
+        g_playerEvents.onBootcampStartChoice -= self.__onBootcampStartChoice
+        g_bootcampEvents.onGameplayChoice -= self.__onGameplayChoice
 
     def onLobbyInited(self, event):
         if self.__automaticStart:
@@ -100,24 +107,18 @@ class BootcampController(IBootcampController):
     def getLessonNum(self):
         return g_bootcamp.getLessonNum()
 
+    def getCheckpoint(self):
+        return g_bootcamp.getCheckpoint()
+
+    def saveCheckpoint(self, checkpoint):
+        g_bootcamp.saveCheckpoint(checkpoint)
+
     @property
     def nation(self):
         return g_bootcamp.nation
 
-    def getDefaultLobbySettings(self):
-        return deepcopy(getGarageDefaults()['panels'])
-
-    def getLobbySettings(self):
-        if not self.__currentLobbySettingsVisibility:
-            self.__currentLobbySettingsVisibility = self.getDefaultLobbySettings()
-        return self.__currentLobbySettingsVisibility
-
-    def setLobbySettings(self, value):
-        self.__currentLobbySettingsVisibility = value
-
-    def updateLobbySettingsVisibility(self, element, value):
-        if element in self.__currentLobbySettingsVisibility:
-            self.__currentLobbySettingsVisibility[element] = value
+    def changeNation(self, nationIndex):
+        g_bootcamp.changeNation(nationIndex)
 
     def getContext(self):
         return g_bootcamp.getContext()
@@ -127,6 +128,14 @@ class BootcampController(IBootcampController):
 
     def getDisabledSettings(self):
         return self.__disabledSettings.disabledSetting
+
+    def showFinalVideo(self, callback):
+        g_bootcamp.showFinalVideo(callback)
+
+    def finishBootcamp(self):
+        Waiting.show('login')
+        g_bootcampEvents.onGarageLessonFinished(self.getLessonNum())
+        g_bootcampEvents.onRequestBootcampFinish()
 
     def __onEnterBootcamp(self):
         self.__inBootcamp = True
@@ -146,3 +155,10 @@ class BootcampController(IBootcampController):
 
     def __onBootcampBecomeNonPlayer(self):
         self.__inBootcampAccount = False
+
+    def __onBootcampStartChoice(self):
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_INTRO, None, g_bootcamp.getIntroPageData()), EVENT_BUS_SCOPE.LOBBY)
+        return
+
+    def __onGameplayChoice(self, gameplayType, gameplayChoice):
+        BigWorld.player().base.doCmdIntStr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_GAMEPLAY_CHOICE, gameplayChoice, gameplayType)

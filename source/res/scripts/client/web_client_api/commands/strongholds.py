@@ -1,34 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/commands/strongholds.py
-from collections import namedtuple
-from command import SchemeValidator, CommandHandler, instantiateObject
-_StrongholdsBattleCommand = namedtuple('_StrongholdsBattleCommand', ('action', 'custom_parameters'))
-_StrongholdsBattleCommand.__new__.__defaults__ = (None, None)
-_StrongholdsBattleCommandScheme = {'required': (('action', basestring),)}
-_StrongholdsJoinBattleCommand = namedtuple('_StrongholdsJoinBattleCommand', ('unit_id', 'periphery_id'))
-_StrongholdsJoinBattleCommand.__new__.__defaults__ = (None, None)
-_StrongholdsJoinBattleScheme = {'required': (('unit_id', (int, long)), ('periphery_id', (int, long)))}
+from command import W2CSchema, createSubCommandsHandler, Field, SubCommand
 
-class StrongholdsBattleCommand(_StrongholdsBattleCommand, SchemeValidator):
-    """
-    Represents Strongholds specific web command.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(StrongholdsBattleCommand, self).__init__(_StrongholdsBattleCommandScheme)
+class StrongholdsBattleSchema(W2CSchema):
+    action = Field(required=True, type=basestring)
 
 
-class StrongholdsJoinBattleCommand(_StrongholdsJoinBattleCommand, SchemeValidator):
-    """
-    Represents web command for joining Strongholds battle.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(StrongholdsJoinBattleCommand, self).__init__(_StrongholdsJoinBattleScheme)
+class StrongholdsJoinBattleSchema(W2CSchema):
+    unit_id = Field(required=True, type=(int, long))
+    periphery_id = Field(required=True, type=(int, long))
 
 
-def createStrongholdsBattleHandler(handlerFunc):
-    data = {'name': 'strongholds_battle',
-     'cls': StrongholdsBattleCommand,
-     'handler': handlerFunc}
-    return instantiateObject(CommandHandler, data)
+def createStrongholdsBattleHandler(openListHandler=None, battleChosenHandler=None, joinBattleHandler=None):
+    subCommands = {'open_list': SubCommand(handler=openListHandler),
+     'battle_chosen': SubCommand(handler=battleChosenHandler),
+     'join_battle': SubCommand(subSchema=StrongholdsJoinBattleSchema, handler=joinBattleHandler)}
+    return createSubCommandsHandler('strongholds_battle', StrongholdsBattleSchema, 'action', subCommands)

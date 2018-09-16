@@ -19,10 +19,6 @@ BrowserFilterResult = namedtuple('BrowserFilterResult', 'stopNavigation closeBro
 BrowserFilterResult.__new__.__defaults__ = (False, False)
 
 def _onShowInExternalBrowser(url, tags):
-    """ Searches for custom tags 'external' and open given url in
-    the external system browser. Do not return routine to the
-    browser
-    """
     if 'external' in tags:
         LOG_DEBUG('Browser url has been processed', url)
         g_eventBus.handleEvent(OpenLinkEvent(OpenLinkEvent.SPECIFIED, url))
@@ -31,8 +27,6 @@ def _onShowInExternalBrowser(url, tags):
 
 
 def _onGoToHangar(url, tags):
-    """ Does exactly what's said in name of function when founds tag written just bellow
-    """
     if 'go_to_hangar' in tags:
         LOG_DEBUG('Browser url has been processed: going to hangar. Url: ', url)
         g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -41,8 +35,6 @@ def _onGoToHangar(url, tags):
 
 
 def _onGoToMissions(url, tags):
-    """ Triggers missions interface loading and closes promo screen.
-    """
     if 'go_to_missions' in tags:
         LOG_DEBUG('Browser url has been processed: going to missions. Url: ', url)
         g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.LOBBY_MISSIONS), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -51,8 +43,6 @@ def _onGoToMissions(url, tags):
 
 
 def _onGoToPersonalMissions(url, tags):
-    """ Triggers personal missions interface loading and closes promo screen.
-    """
     if 'go_to_campaigns' in tags:
         LOG_DEBUG('Browser url has been processed: going to personal missions. Url: ', url)
         g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS), scope=EVENT_BUS_SCOPE.LOBBY)

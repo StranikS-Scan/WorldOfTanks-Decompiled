@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattleDamageLogPanelMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class BattleDamageLogPanelMeta(BaseDAAPIComponent):
@@ -27,18 +23,12 @@ class BattleDamageLogPanelMeta(BaseDAAPIComponent):
         return self.flashObject.as_updateSummaryStunValue(value) if self._isDAAPIInited() else None
 
     def as_detailStatsTopS(self, isVisible, isShortMode, messages):
-        """
-        :param messages: Represented by Vector.<MessageRenderModel> (AS)
-        """
         return self.flashObject.as_detailStatsTop(isVisible, isShortMode, messages) if self._isDAAPIInited() else None
 
     def as_addDetailMessageTopS(self, value, actionTypeImg, vehicleTypeImg, vehicleName, shellTypeStr, shellTypeBG):
         return self.flashObject.as_addDetailMessageTop(value, actionTypeImg, vehicleTypeImg, vehicleName, shellTypeStr, shellTypeBG) if self._isDAAPIInited() else None
 
     def as_detailStatsBottomS(self, isVisible, isShortMode, messages):
-        """
-        :param messages: Represented by Vector.<MessageRenderModel> (AS)
-        """
         return self.flashObject.as_detailStatsBottom(isVisible, isShortMode, messages) if self._isDAAPIInited() else None
 
     def as_addDetailMessageBottomS(self, value, actionTypeImg, vehicleTypeImg, vehicleName, shellTypeStr, shellTypeBG):

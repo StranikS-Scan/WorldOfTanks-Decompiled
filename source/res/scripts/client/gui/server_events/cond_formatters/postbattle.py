@@ -8,7 +8,7 @@ from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.server_events import formatters
+from gui.server_events import formatters as events_fmts
 from gui.server_events.cond_formatters import CONDITION_ICON, POSSIBLE_BATTLE_RESUTLS_KEYS, BATTLE_RESULTS_KEYS, BATTLE_RESULTS_AGGREGATED_KEYS, FORMATTER_IDS, FormattableField, packDescriptionField, packSimpleTitle, TOP_RANGE_LOWEST, getResultsData
 from gui.server_events.cond_formatters.formatters import ConditionFormatter, ConditionsFormatter, SimpleMissionsFormatter, MissionsVehicleListFormatter, GroupFormatter, MissionsBattleConditionsFormatter
 from gui.server_events.conditions import GROUP_TYPE
@@ -23,8 +23,8 @@ def _packAchieveElement(achieveRecordID):
 
 def _packAchievementsList(achivementsIDs):
     result = []
-    for id in achivementsIDs:
-        block, achieveName = DB_ID_TO_RECORD[id]
+    for aID in achivementsIDs:
+        block, achieveName = DB_ID_TO_RECORD[aID]
         factory = factories.getAchievementFactory((block, achieveName))
         item = factory.create(value=0)
         result.append({'block': block,
@@ -43,12 +43,6 @@ def _makeKeyNegativeIf(key, cond):
 
 
 class MissionsPostBattleConditionsFormatter(MissionsBattleConditionsFormatter):
-    """
-    Conditions formatter for 'postbattle' conditions section.
-    Postbattle conditions must be complete in one battle.
-    Displayed in missions card GUI and detailed card view in the centre of card.
-    Visual representation has icon, title, description
-    """
 
     def __init__(self):
         super(MissionsPostBattleConditionsFormatter, self).__init__({'vehicleKills': VehiclesKillFormatter(),
@@ -65,10 +59,6 @@ class MissionsPostBattleConditionsFormatter(MissionsBattleConditionsFormatter):
 
 
 class _ClanKillsFormatter(SimpleMissionsFormatter):
-    """
-    Formatter for ClanKill condition.
-    Shows groups of players which player should kill to complete quest.
-    """
 
     def _getDescription(self, condition):
         camos = []
@@ -92,9 +82,6 @@ class _ClanKillsFormatter(SimpleMissionsFormatter):
 
 
 class _WinFormatter(SimpleMissionsFormatter):
-    """
-    Formatter for Win condition. Shows battles count, where player should win.
-    """
 
     def _getDescription(self, condition):
         return packDescriptionField('')
@@ -109,9 +96,6 @@ class _WinFormatter(SimpleMissionsFormatter):
 
 
 class _SurviveFormatter(SimpleMissionsFormatter):
-    """
-    Formatter for Survive condition. Shows battles count, where player should survive.
-    """
 
     def _getDescription(self, condition):
         return packDescriptionField('')
@@ -126,12 +110,9 @@ class _SurviveFormatter(SimpleMissionsFormatter):
 
 
 class _AchievementsFormatter(SimpleMissionsFormatter):
-    """
-    Formatter for Achievements condition. Shows which achievements player should get to complete quest.
-    """
 
     def _getDescription(self, condition):
-        key = formatters.getAchievementsConditionKey(condition)
+        key = events_fmts.getAchievementsConditionKey(condition)
         iconTexts = [ _packAchieveElement(idx) for idx in condition.getValue() ]
         description = '%s %s' % (i18n.makeString('#quests:details/conditions/%s' % key), ', '.join(iconTexts))
         return packDescriptionField(description)
@@ -142,7 +123,7 @@ class _AchievementsFormatter(SimpleMissionsFormatter):
 
     def _packGui(self, condition):
         achievementsList = _packAchievementsList(condition.getValue())
-        return formatters.packMissionIconCondition(self._getTitle(condition), MISSIONS_ALIASES.NONE, self._getDescription(condition), self._getIconKey(condition), conditionData={'data': {'rendererLinkage': MISSIONS_ALIASES.ACHIEVEMENT_RENDERER,
+        return events_fmts.packMissionIconCondition(self._getTitle(condition), MISSIONS_ALIASES.NONE, self._getDescription(condition), self._getIconKey(condition), conditionData={'data': {'rendererLinkage': MISSIONS_ALIASES.ACHIEVEMENT_RENDERER,
                   'list': achievementsList,
                   'icon': RES_ICONS.get90ConditionIcon(self._getIconKey()),
                   'description': i18n.makeString(QUESTS.DETAILS_CONDITIONS_ACHIEVEMENTS)}}, sortKey=self._getSortKey(condition))
@@ -153,9 +134,6 @@ class _AchievementsFormatter(SimpleMissionsFormatter):
 
 
 class VehiclesKillFormatter(MissionsVehicleListFormatter):
-    """
-    VehicleKill condition formatter. Shows how many vehicles player must kill in one battle to complete quest.
-    """
 
     @classmethod
     def _getIconKey(cls, condition=None):
@@ -169,9 +147,6 @@ class VehiclesKillFormatter(MissionsVehicleListFormatter):
 
 
 class VehiclesDamageFormatter(MissionsVehicleListFormatter):
-    """
-    VehicleDamage condition formatter. Shows how many damage player must shot in one battle to complete quest.
-    """
 
     @classmethod
     def _getIconKey(cls, condition=None):
@@ -193,9 +168,6 @@ class VehiclesDamageFormatter(MissionsVehicleListFormatter):
 
 
 class VehiclesStunFormatter(MissionsVehicleListFormatter):
-    """
-    VehicleStun condition formatter. Shows how many stuns player must do in one battle to complete quest.
-    """
 
     @classmethod
     def _getIconKey(cls, condition=None):
@@ -207,10 +179,6 @@ class VehiclesStunFormatter(MissionsVehicleListFormatter):
 
 
 class _MultiStunEventFormatter(SimpleMissionsFormatter):
-    """
-    Formatter for MultiStunEvent condition.
-    Shows how many enemies player simultaneously must stun in one battle to complete quest.
-    """
 
     @classmethod
     def _getDescription(cls, condition):
@@ -234,15 +202,11 @@ class _MultiStunEventFormatter(SimpleMissionsFormatter):
 
 
 class _BattleResultsFormatter(SimpleMissionsFormatter):
-    """
-    Formatter for Results and UnitResults conditions.
-    Shows battle result parameter value which player must get to complete quest.
-    """
 
     @classmethod
     def _getTitle(cls, condition):
-        label, relation, relationI18nType, value = getResultsData(condition)
-        topRangeUpper, topRangeLower = condition.getMaxRange()
+        _, relation, relationI18nType, value = getResultsData(condition)
+        _, topRangeLower = condition.getMaxRange()
         if topRangeLower < TOP_RANGE_LOWEST:
             return packSimpleTitle(i18n.makeString(QUESTS.DETAILS_CONDITIONS_TOP_TITLE, value=topRangeLower))
         elif value is None:
@@ -256,7 +220,7 @@ class _BattleResultsFormatter(SimpleMissionsFormatter):
 
     @classmethod
     def _getIconKey(cls, condition=None):
-        topRangeUpper, topRangeLower = condition.getMaxRange()
+        _, topRangeLower = condition.getMaxRange()
         aggregatedKeys = condition.getAggregatedKeys()
         if topRangeLower < TOP_RANGE_LOWEST:
             return CONDITION_ICON.TOP
@@ -277,11 +241,6 @@ class _BattleResultsFormatter(SimpleMissionsFormatter):
 
 
 class _UnitResultsFormatter(SimpleMissionsFormatter):
-    """
-    Formatter for UnitResults conditions.
-    Shows battle results parameters values which unit must get to complete quest.
-    UnitResults condition may contain several conditions inside.
-    """
 
     def _format(self, condition, event):
         result = []
@@ -316,10 +275,6 @@ class _UnitResultsFormatter(SimpleMissionsFormatter):
 
 
 class _CritFormatter(SimpleMissionsFormatter):
-    """
-    Formatter for single crit section in crits condition
-    Shows critical hit which player must do in battle
-    """
 
     @classmethod
     def _getTitle(cls, condition):
@@ -337,11 +292,6 @@ class _CritFormatter(SimpleMissionsFormatter):
 
 
 class _CritsFormatter(ConditionFormatter):
-    """
-    Formatter for CritsGroup condition
-    Shows critical hits which player must do in battle
-    Condition is compound and may contain several crits
-    """
 
     def _format(self, condition, event):
         result = []
@@ -355,9 +305,6 @@ class _CritsFormatter(ConditionFormatter):
 
 
 class PersonalMissionsConditionsFormatter(ConditionsFormatter):
-    """
-    Base conditions formatter for personal missions with custom group formatters
-    """
 
     def __init__(self, formatters):
         super(PersonalMissionsConditionsFormatter, self).__init__(formatters)
@@ -375,14 +322,17 @@ class PersonalMissionsConditionsFormatter(ConditionsFormatter):
             result.extend(groupFormatter.format(condition, event))
         return result
 
+    def _packCondition(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _getFormattedField(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _packConditions(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class PersonalMissionsPostBattleConditionsFormatter(PersonalMissionsConditionsFormatter):
-    """
-    Conditions formatter for 'postbattle' conditions section in personal missions.
-    Postbattle conditions must be complete in one battle.
-    Displayed in detailed personal mission view in the centre of card.
-    Visual representation has icon, title, description
-    """
 
     def __init__(self):
         super(PersonalMissionsPostBattleConditionsFormatter, self).__init__({'vehicleKills': VehiclesKillFormatter(),
@@ -401,13 +351,6 @@ class PersonalMissionsPostBattleConditionsFormatter(PersonalMissionsConditionsFo
 GroupResult = namedtuple('GroupResult', 'isOrGroup, results')
 
 class PersonalOrGroupFormatter(GroupFormatter):
-    """
-    Formatter for quests condition's groups 'OR' for personal missions.
-    Collect and format conditions from group recursive.
-    Some conditions are marked as hidden and not displayed in GUI
-    in that case we simplify groups which contains only one condition
-    OR group with only one visible condition transforms into single condition without group
-    """
 
     def _format(self, condition, event):
         totalResult = []
@@ -428,13 +371,6 @@ class PersonalOrGroupFormatter(GroupFormatter):
 
 
 class PersonalAndGroupFormatter(GroupFormatter):
-    """
-    Formatter for quests condition's groups 'AND' for personal missions.
-    Collect and format conditions from group recursive.
-    Some conditions are marked as hidden and not displayed in GUI
-    in that case we simplify groups which contains only one condition
-    AND group with only one visible condition transforms into single condition without group
-    """
 
     def _format(self, condition, event):
         result = []

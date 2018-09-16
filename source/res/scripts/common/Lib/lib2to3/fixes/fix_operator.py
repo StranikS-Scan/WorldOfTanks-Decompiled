@@ -1,15 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_operator.py
-"""Fixer for operator functions.
-
-operator.isCallable(obj)       -> hasattr(obj, '__call__')
-operator.sequenceIncludes(obj) -> operator.contains(obj)
-operator.isSequenceType(obj)   -> isinstance(obj, collections.Sequence)
-operator.isMappingType(obj)    -> isinstance(obj, collections.Mapping)
-operator.isNumberType(obj)     -> isinstance(obj, numbers.Number)
-operator.repeat(obj, n)        -> operator.mul(obj, n)
-operator.irepeat(obj, n)       -> operator.imul(obj, n)
-"""
 from lib2to3 import fixer_base
 from lib2to3.fixer_util import Call, Name, String, touch_import
 

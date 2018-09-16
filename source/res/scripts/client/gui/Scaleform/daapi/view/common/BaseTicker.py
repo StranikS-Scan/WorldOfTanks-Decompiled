@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/BaseTicker.py
-import BigWorld
 import time
+import BigWorld
 import constants
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.TickerMeta import TickerMeta
@@ -17,10 +17,6 @@ class BaseTicker(TickerMeta):
         self.__lastRSS = {}
 
     def showBrowser(self, entryID):
-        """
-        Showing browser with given @entryID.
-        @param entryID: <str> rss entry id
-        """
         entry = self.__findEntry(entryID)
         if entry is not None:
             link = entry.get('link', '')
@@ -47,14 +43,12 @@ class BaseTicker(TickerMeta):
         return
 
     def __clearCallback(self):
-        """ Clear news updating callback """
         if self.__updateCbID is not None:
             BigWorld.cancelCallback(self.__updateCbID)
             self.__updateCbID = None
         return
 
     def __updateCallback(self):
-        """ New updating interval handler """
         self.__update()
         self.__clearCallback()
         self.__updateCbID = BigWorld.callback(self.UPDATE_INTERVAL, self.__updateCallback)
@@ -73,16 +67,11 @@ class BaseTicker(TickerMeta):
             return
 
     def __rssDownloadReceived(self, rssFeed):
-        """ Rss data received handler """
         self.__lastRSS = rssFeed
         self.as_setItemsS(self.__getEntries(rssFeed))
 
     @classmethod
     def __getEntries(cls, rssFeed):
-        """
-        @return: <list of dict< 'id':<str>, 'title':<str>, 'summary':<str> >
-                list of rss entries data
-        """
         result = []
         for entry in rssFeed.get('entries', []):
             result.append({'id': entry.get('id'),
@@ -92,12 +81,6 @@ class BaseTicker(TickerMeta):
         return result
 
     def __findEntry(self, entryID):
-        """
-        Returns rss entry.
-        
-        @param entryID: <str> rss id to find
-        @return: <dict> entry data
-        """
         for entry in self.__lastRSS.get('entries', []):
             if entry.get('id') == entryID:
                 return entry

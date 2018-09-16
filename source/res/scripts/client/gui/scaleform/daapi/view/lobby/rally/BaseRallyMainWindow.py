@@ -1,12 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyMainWindow.py
 import BigWorld
-from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.BaseRallyMainWindowMeta import BaseRallyMainWindowMeta
 from gui.Scaleform.locale.WAITING import WAITING
-from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared.events import FocusEvent

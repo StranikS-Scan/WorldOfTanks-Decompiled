@@ -6,7 +6,7 @@ from connection_mgr import CONNECTION_METHOD
 from gui.login.Manager import Manager as CredentialsLoginManager
 from WebBridge import WebBridge
 
-class SOCIAL_NETWORKS:
+class SOCIAL_NETWORKS(object):
     FACEBOOK = 'facebook'
     GOOGLE = 'google'
     WGNI = 'wgni'

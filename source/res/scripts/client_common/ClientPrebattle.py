@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client_common/ClientPrebattle.py
 import cPickle
 import Event
-from constants import PREBATTLE_UPDATE, PREBATTLE_ACCOUNT_STATE, PREBATTLE_TEAM_STATE
+from constants import PREBATTLE_UPDATE, PREBATTLE_TEAM_STATE
 from debug_utils import LOG_DEBUG_DEV
 
 class ClientPrebattle(object):
@@ -49,8 +49,8 @@ class ClientPrebattle(object):
         return
 
     def __accInfoAsDict(self, accInfoAsTuple):
-        id, name, dbID, badges, roster, state, time, vehCompDescr, igrType, clanDBID, clanAbbrev = accInfoAsTuple
-        return (roster, id, {'name': name,
+        pID, name, dbID, badges, roster, state, time, vehCompDescr, igrType, clanDBID, clanAbbrev = accInfoAsTuple
+        return (roster, pID, {'name': name,
           'dbID': dbID,
           'badges': badges,
           'state': state,
@@ -64,42 +64,43 @@ class ClientPrebattle(object):
         rostersAsList = cPickle.loads(argStr)
         self.rosters.clear()
         for accInfoAsTuple in rostersAsList:
-            roster, id, accInfo = self.__accInfoAsDict(accInfoAsTuple)
-            self.rosters.setdefault(roster, {})[id] = accInfo
+            roster, pID, accInfo = self.__accInfoAsDict(accInfoAsTuple)
+            self.rosters.setdefault(roster, {})[pID] = accInfo
 
         self.onRosterReceived()
 
     def __onPlayerAdded(self, argStr):
         accInfoAsTuple = cPickle.loads(argStr)
-        roster, id, accInfo = self.__accInfoAsDict(accInfoAsTuple)
-        self.rosters.setdefault(roster, {})[id] = accInfo
-        self.onPlayerAdded(id, roster)
+        roster, pID, accInfo = self.__accInfoAsDict(accInfoAsTuple)
+        self.rosters.setdefault(roster, {})[pID] = accInfo
+        self.onPlayerAdded(pID, roster)
 
     def __onPlayerRemoved(self, argStr):
-        id, roster = cPickle.loads(argStr)
-        name = self.rosters.get(roster, {}).pop(id, {}).get('name', '')
-        self.onPlayerRemoved(id, roster, name)
+        pID, roster = cPickle.loads(argStr)
+        name = self.rosters.get(roster, {}).pop(pID, {}).get('name', '')
+        self.onPlayerRemoved(pID, roster, name)
 
     def __onPlayerStateChanged(self, argStr):
-        id, roster, state, vehCompDescr, igrType, clanDBID, clanAbbrev = cPickle.loads(argStr)
-        LOG_DEBUG_DEV('__onPlayerStateChanged', id, roster, state, vehCompDescr, igrType, clanDBID, clanAbbrev)
-        accInfo = self.rosters.get(roster, {}).get(id, None)
+        pID, roster, state, vehCompDescr, igrType, badges, clanDBID, clanAbbrev = cPickle.loads(argStr)
+        LOG_DEBUG_DEV('__onPlayerStateChanged', pID, roster, state, vehCompDescr, igrType, clanDBID, clanAbbrev)
+        accInfo = self.rosters.get(roster, {}).get(pID, None)
         if accInfo is None:
             return
         else:
             accInfo['state'] = state
             accInfo['vehCompDescr'] = vehCompDescr
             accInfo['igrType'] = igrType
+            accInfo['badges'] = badges
             accInfo['clanDBID'] = clanDBID
             accInfo['clanAbbrev'] = clanAbbrev
-            self.onPlayerStateChanged(id, roster)
+            self.onPlayerStateChanged(pID, roster)
             return
 
     def __onPlayerRosterChanged(self, argStr):
-        id, prevRoster, roster, actorID = cPickle.loads(argStr)
-        accInfo = self.rosters.get(prevRoster, {}).pop(id, None)
-        self.rosters.setdefault(roster, {})[id] = accInfo
-        self.onPlayerRosterChanged(id, prevRoster, roster, actorID)
+        pID, prevRoster, roster, actorID = cPickle.loads(argStr)
+        accInfo = self.rosters.get(prevRoster, {}).pop(pID, None)
+        self.rosters.setdefault(roster, {})[pID] = accInfo
+        self.onPlayerRosterChanged(pID, prevRoster, roster, actorID)
         return
 
     def __onTeamStatesReceived(self, argStr):

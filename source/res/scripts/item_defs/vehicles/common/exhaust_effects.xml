@@ -59,8 +59,8 @@
         <selector>
           <key>	1	</key>
           <type>	effect	</type>
-          <ttl>	0.7	</ttl>
-          <name>	particles/Tank/exhaust/{0}/gear_up.xml	</name>
+          <ttl>	0.05	</ttl>
+          <name>	particles/Tank/exhaust/{0}/rpm02_Load04.xml	</name>
         </selector>
       </selector>
     </template>
@@ -89,82 +89,77 @@
           <selector>
             <key>	0.00	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm2.xml	</name>
+            <name>	particles/Tank/exhaust/{0}/rpm01_Load01.xml	</name>
           </selector>
           <selector>
-            <key>	0.03	</key>
+            <key>	0.5	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm1.xml	</name>
+            <name>	particles/Tank/exhaust/{0}/rpm02_Load01.xml	</name>
           </selector>
           <selector>
-            <key>	0.20	</key>
+            <key>	0.9	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/idle.xml	</name>
-          </selector>
-          <selector>
-            <key>	1.05	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm4.xml	</name>
+            <name>	particles/Tank/exhaust/{0}/rpm03_Load01.xml	</name>
           </selector>
         </selector>
         <selector>
-          <key>	0.45	</key>
+          <key>	0.5	</key>
           <type>	range	</type>
           <variable>	_rpm	</variable>
           <selector>
             <key>	0.00	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm3.xml	</name>
+            <name>	particles/Tank/exhaust/{0}/rpm01_Load02.xml	</name>
           </selector>
           <selector>
-            <key>	0.10	</key>
+            <key>	0.5	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm2.xml	</name>
+            <name>	particles/Tank/exhaust/{0}/rpm02_Load02.xml	</name>
           </selector>
           <selector>
-            <key>	0.40	</key>
+            <key>	0.9	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm1.xml	</name>
-          </selector>
-          <selector>
-            <key>	1.05	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm4.xml	</name>
+            <name>	particles/Tank/exhaust/{0}/rpm03_Load02.xml	</name>
           </selector>
         </selector>
         <selector>
-          <key>	0.55	</key>
+          <key>	0.9	</key>
           <type>	range	</type>
           <variable>	_rpm	</variable>
           <selector>
             <key>	0.00	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm4.xml	</name>
+            <name>	particles/Tank/exhaust/{0}/rpm01_Load03.xml	</name>
           </selector>
           <selector>
-            <key>	0.30	</key>
+            <key>	0.5	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm3.xml	</name>
+            <name>	particles/Tank/exhaust/{0}/rpm02_Load03.xml	</name>
           </selector>
           <selector>
-            <key>	0.80	</key>
+            <key>	0.9	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm2.xml	</name>
-          </selector>
-          <selector>
-            <key>	1.05	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm4.xml	</name>
+            <name>	particles/Tank/exhaust/{0}/rpm03_Load03.xml	</name>
           </selector>
         </selector>
         <selector>
-          <key>	0.95	</key>
+          <key>	0.98	</key>
           <type>	range	</type>
           <variable>	_rpm	</variable>
           <selector>
             <key>	0.00	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm4.xml	</name>
+            <name>	particles/Tank/exhaust/{0}/rpm01_Load04.xml	</name>
+          </selector>
+          <selector>
+            <key>	0.5	</key>
+            <type>	effect	</type>
+            <name>	particles/Tank/exhaust/{0}/rpm02_Load04.xml	</name>
+          </selector>
+          <selector>
+            <key>	0.9	</key>
+            <type>	effect	</type>
+            <name>	particles/Tank/exhaust/{0}/rpm03_Load04.xml	</name>
           </selector>
         </selector>
       </selector>
@@ -177,7 +172,7 @@
         <selector>
           <key>	1	</key>
           <type>	effect	</type>
-          <name>	particles/Tank/exhaust/{0}/idle.xml	</name>
+          <name>	particles/Tank/exhaust/{0}/rpm01_Load01.xml	</name>
         </selector>
         <selector>
           <key>	2	</key>
@@ -194,9 +189,7 @@
           <type>	template	</type>
           <name>	ExhaustLoad	</name>
           <parameters>	_engine_load:engineLoad;
-
 				_physicLoad:physicLoad;
-
 				_rpm:RPM	</parameters>
         </selector>
         <selector>
@@ -227,7 +220,7 @@
             <selector>
               <key>	1	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/exhaust/{0}/idle.xml	</name>
+              <name>	particles/Tank/exhaust/{0}/rpm01_Load01.xml	</name>
             </selector>
             <selector>
               <key>	2	</key>
@@ -261,9 +254,7 @@
           <type>	template	</type>
           <name>	STRVLoad	</name>
           <parameters>	_engine_load:engineLoad;
-
 				_physicLoad:physicLoad;
-
 				_rpm:RPM	</parameters>
         </selector>
         <selector>

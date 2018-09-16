@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/IngameSoundNotifications.py
 from collections import namedtuple
+from functools import partial
 import BigWorld
 import ResMgr
 import BattleReplay
-from functools import partial
 import SoundGroups
 import WWISE
 from debug_utils import LOG_WARNING
@@ -89,7 +89,7 @@ class IngameSoundNotifications(object):
                                 SoundGroups.g_instance.playCameraOriented(soundDesc['sound'], eventPos)
                             else:
                                 SoundGroups.g_instance.playSound2D(soundDesc['sound'])
-                        except:
+                        except Exception:
                             pass
 
                         continue
@@ -175,7 +175,7 @@ class IngameSoundNotifications(object):
             queue = self.__soundQueues[category]
             time = BigWorld.time()
             while queue:
-                soundPath, timeout, minTimeBetweenEvents, vehicleIdToBind, checkFn, sndPos = queue[0]
+                soundPath, timeout, _, vehicleIdToBind, checkFn, sndPos = queue[0]
                 del queue[0]
                 if vehicleIdToBind is not None:
                     vehicles = BigWorld.player().arena.vehicles

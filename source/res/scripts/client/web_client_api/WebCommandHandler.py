@@ -1,16 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/WebCommandHandler.py
 import json
-from . import WebCommandException
-from commands import WebCommand, instantiateObject, CommandHandler
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from Event import Event
+from .commands import WebCommandSchema, instantiateCommand
+from . import WebCommandException
 
 class WebCommandHandler(object):
-    """
-    Purpose of this class is to receive json messages from Browser parse them,
-    create appropriate commands and handle created commands.
-    """
 
     def __init__(self, browserID, alias, browserView):
         self.__handlers = []
@@ -34,7 +30,7 @@ class WebCommandHandler(object):
         except (TypeError, ValueError) as exception:
             raise WebCommandException('Command parse failed! Description: %s' % exception)
 
-        command = instantiateObject(WebCommand, parsed)
+        command = instantiateCommand(WebCommandSchema, parsed)
         self.handleWebCommand(command)
 
     def addHandlers(self, handlers):
@@ -42,7 +38,6 @@ class WebCommandHandler(object):
             self.addHandler(handler)
 
     def addHandler(self, handler):
-        assert isinstance(handler, CommandHandler)
         if handler not in self.__handlers:
             self.__handlers.append(handler)
         else:
@@ -56,7 +51,7 @@ class WebCommandHandler(object):
         commandName = webCommand.command
         for handler in self.__handlers:
             if commandName == handler.name:
-                command = instantiateObject(handler.cls, webCommand.params)
+                command = instantiateCommand(handler.schema, webCommand.params)
                 handler.handler(command, self.__createCtx(commandName, webCommand.web_id))
                 return
 

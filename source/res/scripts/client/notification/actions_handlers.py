@@ -7,28 +7,26 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.battle_results import RequestResultsContext
-from gui.clans import contexts as clan_ctxs
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
-from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
 from gui.shared.utils import decorators
+from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
 from helpers import dependency
-from items.new_year_types import NY_STATE
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.clans import IClanController
 from skeletons.gui.game_control import IBrowserController, IRankedBattlesController
-from skeletons.new_year import INewYearController
+from skeletons.gui.web import IWebController
 
 class _ActionHandler(object):
 
@@ -37,11 +35,12 @@ class _ActionHandler(object):
         return NotImplementedError
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
-        assert action in self.getActions(), 'Handler does not handle action {0}'.format(action)
+        if action not in self.getActions():
+            raise UserWarning('Handler does not handle action {0}'.format(action))
 
 
 class _OpenEventBoardsHandler(_ActionHandler):
@@ -51,7 +50,7 @@ class _OpenEventBoardsHandler(_ActionHandler):
         return NOTIFICATION_TYPE.MESSAGE
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -103,7 +102,7 @@ class _ShowArenaResultHandler(_ActionHandler):
 class _ShowClanSettingsHandler(_ActionHandler):
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -133,7 +132,7 @@ class _ShowClanAppsHandler(_ActionHandler):
         return NOTIFICATION_TYPE.CLAN_APPS
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -148,7 +147,7 @@ class _ShowClanInvitesHandler(_ActionHandler):
         return NOTIFICATION_TYPE.CLAN_INVITES
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -157,7 +156,7 @@ class _ShowClanInvitesHandler(_ActionHandler):
 
 
 class _ClanAppHandler(_ActionHandler):
-    clanCtrl = dependency.descriptor(IClanController)
+    clanCtrl = dependency.descriptor(IWebController)
 
     def _getAccountID(self, model, entityID):
         return model.getNotification(self.getNotType(), entityID).getAccountID()
@@ -173,7 +172,7 @@ class _AcceptClanAppHandler(_ClanAppHandler):
         return NOTIFICATION_TYPE.CLAN_APP
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     @process
@@ -189,7 +188,7 @@ class _DeclineClanAppHandler(_ClanAppHandler):
         return NOTIFICATION_TYPE.CLAN_APP
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     @process
@@ -205,7 +204,7 @@ class _ShowClanAppUserInfoHandler(_ClanAppHandler):
         return NOTIFICATION_TYPE.CLAN_APP
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -220,7 +219,7 @@ class _ShowClanAppUserInfoHandler(_ClanAppHandler):
 
 
 class _ClanInviteHandler(_ActionHandler):
-    clanCtrl = dependency.descriptor(IClanController)
+    clanCtrl = dependency.descriptor(IWebController)
 
     def _getInviteID(self, model, entityID):
         return model.getNotification(self.getNotType(), entityID).getInviteID()
@@ -233,7 +232,7 @@ class _AcceptClanInviteHandler(_ClanInviteHandler):
         return NOTIFICATION_TYPE.CLAN_INVITE
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     @process
@@ -254,7 +253,7 @@ class _DeclineClanInviteHandler(_ClanInviteHandler):
         return NOTIFICATION_TYPE.CLAN_INVITE
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     @process
@@ -270,7 +269,7 @@ class _ShowClanProfileHandler(_ActionHandler):
         return NOTIFICATION_TYPE.CLAN_INVITE
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -279,31 +278,7 @@ class _ShowClanProfileHandler(_ActionHandler):
         shared_events.showClanProfileWindow(clan.getClanID(), clan.getClanAbbrev())
 
 
-class _OpenNYRewardsScreen(_ActionHandler):
-    _newYearController = dependency.descriptor(INewYearController)
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(self):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(_OpenNYRewardsScreen, self).handleAction(model, entityID, action)
-        ny_state = self._newYearController.state
-        if ny_state == NY_STATE.IN_PROGRESS or ny_state == NY_STATE.FINISHED:
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_NY_REWARDS, name=VIEW_ALIAS.LOBBY_NY_REWARDS, ctx={'previewAlias': VIEW_ALIAS.LOBBY_HANGAR}), scope=EVENT_BUS_SCOPE.LOBBY)
-        else:
-            BigWorld.callback(0.0, lambda : SystemMessages.pushI18nMessage('#ny:system_messages/state/error/notAvailable', type=SystemMessages.SM_TYPE.Warning))
-
-
 class ShowRankedSeasonCompleteHandler(_ActionHandler):
-    """
-    Handle player's click on more-info-button in a ranked battles season complete notification
-    Show RankedBattlesSeasonView one more time
-    """
     rankedController = dependency.descriptor(IRankedBattlesController)
 
     @classmethod
@@ -311,7 +286,7 @@ class ShowRankedSeasonCompleteHandler(_ActionHandler):
         return NOTIFICATION_TYPE.MESSAGE
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -339,7 +314,7 @@ class ShowBattleResultsHandler(_ShowArenaResultHandler):
         self._showI18nMessage('#battle_results:noData', SystemMessages.SM_TYPE.Warning)
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     @decorators.process('loadStats')
@@ -353,7 +328,7 @@ class ShowBattleResultsHandler(_ShowArenaResultHandler):
 class ShowFortBattleResultsHandler(_ShowArenaResultHandler):
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def _updateNotification(self, notification):
@@ -373,7 +348,7 @@ class ShowTutorialBattleHistoryHandler(_ShowArenaResultHandler):
     _lastHistoryID = TutorialGlobalStorage(TUTORIAL_GLOBAL_VAR.LAST_HISTORY_ID, 0)
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def _triggerEvent(self, _, arenaUniqueID):
@@ -398,7 +373,7 @@ class OpenPollHandler(_ActionHandler):
         return NOTIFICATION_TYPE.MESSAGE
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -433,7 +408,7 @@ class AcceptPrbInviteHandler(_ActionHandler):
         return NOTIFICATION_TYPE.INVITE
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     @process
@@ -468,7 +443,7 @@ class DeclinePrbInviteHandler(_ActionHandler):
         return NOTIFICATION_TYPE.INVITE
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -490,7 +465,7 @@ class ApproveFriendshipHandler(_ActionHandler):
         return NOTIFICATION_TYPE.FRIENDSHIP_RQ
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -509,7 +484,7 @@ class CancelFriendshipHandler(_ActionHandler):
         return NOTIFICATION_TYPE.FRIENDSHIP_RQ
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -539,7 +514,7 @@ class SecurityLinkHandler(_ActionHandler):
         return NOTIFICATION_TYPE.MESSAGE
 
     @classmethod
-    def getActions(self):
+    def getActions(cls):
         pass
 
     def handleAction(self, model, entityID, action):
@@ -567,8 +542,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _ShowClanSettingsFromInvitesHandler,
  _AcceptClanInviteHandler,
  _DeclineClanInviteHandler,
- _OpenEventBoardsHandler,
- _OpenNYRewardsScreen)
+ _OpenEventBoardsHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')
@@ -580,10 +554,10 @@ class NotificationsActionsHandlers(object):
         if not handlers:
             handlers = _AVAILABLE_HANDLERS
         for clazz in handlers:
-            actions = clazz.getActions()
-            if actions:
-                if len(actions) == 1:
-                    self.__single[clazz.getNotType(), actions[0]] = clazz
+            actionsList = clazz.getActions()
+            if actionsList:
+                if len(actionsList) == 1:
+                    self.__single[clazz.getNotType(), actionsList[0]] = clazz
                 else:
                     LOG_ERROR('Handler is not added to collection', clazz)
             self.__multi[clazz.getNotType()].add(clazz)

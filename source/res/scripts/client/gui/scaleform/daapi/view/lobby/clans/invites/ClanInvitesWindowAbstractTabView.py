@@ -5,25 +5,26 @@ from gui.Scaleform.daapi.view.meta.ClanInvitesWindowAbstractTabViewMeta import C
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
-from gui.clans.settings import CLAN_INVITE_STATES, CLAN_REQUESTED_DATA_TYPE
+from gui.clans.settings import CLAN_INVITE_STATES
+from gui.wgcg.settings import WebRequestDataType
 from gui.shared.events import CoolDownEvent
 from gui.shared.view_helpers import CooldownHelper
 from helpers.i18n import makeString as _ms
 from gui.shared.utils.functions import makeTooltip
 
 class _RefreshBtnStateController(object):
-    __coolDownRequests = [CLAN_REQUESTED_DATA_TYPE.CREATE_APPLICATIONS,
-     CLAN_REQUESTED_DATA_TYPE.CREATE_INVITES,
-     CLAN_REQUESTED_DATA_TYPE.ACCEPT_APPLICATION,
-     CLAN_REQUESTED_DATA_TYPE.ACCEPT_INVITE,
-     CLAN_REQUESTED_DATA_TYPE.DECLINE_APPLICATION,
-     CLAN_REQUESTED_DATA_TYPE.DECLINE_INVITE,
-     CLAN_REQUESTED_DATA_TYPE.DECLINE_INVITES]
+    __coolDownRequests = [WebRequestDataType.CREATE_APPLICATIONS,
+     WebRequestDataType.CREATE_INVITES,
+     WebRequestDataType.ACCEPT_APPLICATION,
+     WebRequestDataType.ACCEPT_INVITE,
+     WebRequestDataType.DECLINE_APPLICATION,
+     WebRequestDataType.DECLINE_INVITE,
+     WebRequestDataType.DECLINE_INVITES]
 
     def __init__(self, view):
         super(_RefreshBtnStateController, self).__init__()
         self.__view = weakref.proxy(view)
-        self.__cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.CLAN)
+        self.__cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.WGCG)
         self.__isEnabled = False
         self.__tooltip = None
         self.__isInCooldown = False

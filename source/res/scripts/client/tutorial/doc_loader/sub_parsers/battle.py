@@ -154,13 +154,13 @@ _MARKER_TYPES = {'aim': _readAimMarkerSection,
 
 def _readMarkerSection(xmlCtx, section, _):
     markerID = sub_parsers.parseID(xmlCtx, section, 'Specify a marker ID')
-    type = _xml.readString(xmlCtx, section, 'type')
+    mType = _xml.readString(xmlCtx, section, 'type')
     marker = None
-    if type in _MARKER_TYPES:
-        parser = _MARKER_TYPES[type]
+    if mType in _MARKER_TYPES:
+        parser = _MARKER_TYPES[mType]
         marker = parser(xmlCtx, section, markerID, _xml.readString(xmlCtx, section, 'var-ref'))
     else:
-        LOG_ERROR('Marker is not supported:', type)
+        LOG_ERROR('Marker is not supported:', mType)
     return marker
 
 
@@ -173,13 +173,13 @@ def _readChapterTaskSection(xmlCtx, section, _):
     return chapter.ChapterTask(taskID, text, flagID=flagID)
 
 
-def _readReplenishAmmoDialogSection(xmlCtx, section, _, dialogID, type, content):
+def _readReplenishAmmoDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
     content['_submitLabel'] = translation(_xml.readString(xmlCtx, section, 'submit-label'))
     content['_align'] = _xml.readString(xmlCtx, section, 'align')
     vector = _xml.readVector2(xmlCtx, section, 'offset')
     content['_popupOffsetX'] = vector.x
     content['_popupOffsetY'] = vector.y
-    return chapter.PopUp(dialogID, type, content)
+    return chapter.PopUp(dialogID, dialogType, content)
 
 
 def _readHintSection(xmlCtx, section, _):

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_archive_util.py
-"""Tests for distutils.archive_util."""
 __revision__ = '$Id$'
 import unittest
 import os
@@ -31,9 +30,6 @@ except ImportError:
     zlib = None
 
 def can_fs_encode(filename):
-    """
-    Return True if the filename can be saved in the file system.
-    """
     if os.path.supports_unicode_filenames:
         return True
     try:
@@ -264,27 +260,16 @@ class ArchiveUtilTestCase(support.TempdirManager, support.LoggingSilencer, unitt
 
     @unittest.skipUnless(zlib, 'requires zlib')
     def test_make_tarball_unicode(self):
-        """
-        Mirror test_make_tarball, except filename is unicode.
-        """
         self._make_tarball(u'archive')
 
     @unittest.skipUnless(zlib, 'requires zlib')
     @unittest.skipUnless(can_fs_encode(u'\xe5rchiv'), 'File system cannot handle this filename')
     def test_make_tarball_unicode_latin1(self):
-        """
-        Mirror test_make_tarball, except filename is unicode and contains
-        latin characters.
-        """
         self._make_tarball(u'\xe5rchiv')
 
     @unittest.skipUnless(zlib, 'requires zlib')
     @unittest.skipUnless(can_fs_encode(u'\u306e\u30a2\u30fc\u30ab\u30a4\u30d6'), 'File system cannot handle this filename')
     def test_make_tarball_unicode_extended(self):
-        """
-        Mirror test_make_tarball, except filename is unicode and contains
-        characters outside the latin charset.
-        """
         self._make_tarball(u'\u306e\u30a2\u30fc\u30ab\u30a4\u30d6')
 
 

@@ -8,6 +8,7 @@ import TriggersManager
 from TriggersManager import TRIGGER_TYPE
 from vehicle_systems import model_assembler
 from vehicle_systems.tankStructure import getPartModelsFromDesc, TankPartNames
+from vehicle_systems.stricted_loading import loadingPriority
 
 def testAllocate(spaceID):
     import items.vehicles
@@ -16,7 +17,7 @@ def testAllocate(spaceID):
     return CrashedTrackController(vehicleDesc, BigWorld.entity(entityId))
 
 
-class CrashedTrackController:
+class CrashedTrackController(object):
 
     def __init__(self, vehicleDesc, trackFashion=None):
         self.__vehicleDesc = vehicleDesc
@@ -86,7 +87,7 @@ class CrashedTrackController:
             trackAssembler = self.__setupTrackAssembler(self.__entity)
             if self.__model is None and not isFlying:
                 if not self.__loading:
-                    BigWorld.loadResourceListBG((trackAssembler,), self.__onModelLoaded)
+                    BigWorld.loadResourceListBG((trackAssembler,), self.__onModelLoaded, loadingPriority(self.__entity.id))
                     self.__loading = True
             else:
                 self.__setupTracksHiding()
@@ -110,7 +111,7 @@ class CrashedTrackController:
                 TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_TRACKS_DAMAGED)
             return
 
-    def receiveShotImpulse(self, dir, impulse):
+    def receiveShotImpulse(self, direction, impulse):
         pass
 
     def __reset(self):
@@ -156,6 +157,10 @@ class CrashedTrackController:
             self.__model = model
             self.__model.matrix = self.__entity.filter.groundPlacingMatrix
             self.__fashion = BigWorld.WGVehicleFashion(True)
+            matHandlers = self.__baseTrackFashion.getMaterialHandlers()
+            for handler in matHandlers:
+                self.__fashion.addMaterialHandler(handler)
+
             model_assembler.setupTracksFashion(self.__fashion, self.__vehicleDesc, True)
             self.__model.setupFashions([self.__fashion])
             rotationMProv = mathUtils.MatrixProviders.product(self.__entity.model.node('hull'), Math.MatrixInverse(self.__model.node('Tank')))

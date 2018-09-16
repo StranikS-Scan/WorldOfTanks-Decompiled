@@ -22,7 +22,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
         super(RetrainCrewWindow, self).__init__()
         self.__vehicle = g_currentVehicle.item
         self.__crew = []
-        for idx, tMan in self.__vehicle.crew:
+        for _, tMan in self.__vehicle.crew:
             if tMan is not None:
                 if tMan.vehicleNativeDescr.type.compactDescr != tMan.vehicleDescr.type.compactDescr:
                     self.__crew.append(tMan)
@@ -91,7 +91,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
         shopPrices = items.shop.tankmanCost
         currentSelection = shopPrices[operationId]
         crewInvIDs = []
-        for idx, tMan in vehicle.crew:
+        for _, tMan in vehicle.crew:
             if tMan is not None:
                 if tMan.vehicleNativeDescr.type.compactDescr != tMan.vehicleDescr.type.compactDescr:
                     crewInvIDs.append(tMan.invID)
@@ -113,7 +113,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
         shopPrices = items.shop.tankmanCost
         currentSelection = shopPrices[operationId]
         crewInfo = []
-        for idx, tMan in vehicle.crew:
+        for _, tMan in vehicle.crew:
             if tMan is not None:
                 if tMan.vehicleNativeDescr.type.compactDescr != tMan.vehicleDescr.type.compactDescr:
                     crewInfo.append(self.__getTankmanRoleInfo(tMan))

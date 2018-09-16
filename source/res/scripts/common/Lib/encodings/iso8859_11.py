@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/iso8859_11.py
-""" Python Character Mapping Codec iso8859_11 generated from 'MAPPINGS/ISO8859/8859-11.TXT' with gencodec.py.
-
-"""
 import codecs
 
 class Codec(codecs.Codec):

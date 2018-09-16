@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileMainWindow.py
 import weakref
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.clans.clan_profile_event import ClanProfileEvent
 from gui.clans.clan_helpers import ClanListener
 from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileBaseView import ClanProfileBaseView
@@ -27,18 +26,16 @@ class ClanProfileMainWindow(ClanProfileMainWindowMeta, ClanListener):
     def getClanDossier(self):
         return self.__clanDossier
 
-    def onClanStateChanged(self, oldStateID, newStateID):
-        if not self.clansCtrl.isEnabled():
+    def onClanEnableChanged(self, enabled):
+        if not enabled:
             self.onWindowClose()
-        if not self.clansCtrl.isAvailable():
-            pass
 
     def _populate(self):
         super(ClanProfileMainWindow, self)._populate()
         self.addListener(ClanProfileEvent.CLOSE_CLAN_PROFILE, self.__closeClanProfileHandler, scope=EVENT_BUS_SCOPE.LOBBY)
         self.startClanListening()
-        self.clansCtrl.getAccountProfile().resync()
-        self.__clanDossier = weakref.proxy(self.clansCtrl.getClanDossier(self.__clanDBID))
+        self.webCtrl.getAccountProfile().resync()
+        self.__clanDossier = weakref.proxy(self.webCtrl.getClanDossier(self.__clanDBID))
         self.as_setDataS({'waitingMsg': WAITING.LOADINGDATA,
          'tabDataProvider': [{'label': CLANS.CLANPROFILE_MAINWINDOWTAB_SUMMARY,
                               'linkage': CLANS_ALIASES.CLAN_PROFILE_SUMMARY_VIEW_LINKAGE},

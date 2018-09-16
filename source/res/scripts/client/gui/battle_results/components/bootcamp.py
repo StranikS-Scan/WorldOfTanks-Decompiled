@@ -111,9 +111,9 @@ class ShowRewardsFlag(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        credits = reusable.personal.getBaseCreditsRecords().getRecord('credits')
+        credit = reusable.personal.getBaseCreditsRecords().getRecord('credits')
         xp = reusable.personal.getBaseXPRecords().getRecord('xp')
-        return credits != 0 or xp != 0
+        return credit != 0 or xp != 0
 
 
 class PlayerVehicleBlock(base.StatsBlock):

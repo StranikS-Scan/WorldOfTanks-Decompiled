@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/factories.py
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 from gui.Scaleform.framework.entities.View import View
 from gui.shared.events import LoadViewEvent
@@ -53,6 +54,12 @@ class DAAPIModuleFactory(EntityFactory):
 
     def initialize(self, pyEntity, gfxEntity, extra=None):
         pyEntity.setFlashObject(gfxEntity, autoPopulate=False)
+        return pyEntity
+
+    def create(self, settings, *args, **kwargs):
+        pyEntity = super(DAAPIModuleFactory, self).create(settings, *args, **kwargs)
+        if pyEntity is not None and isinstance(pyEntity, BaseDAAPIComponent):
+            pyEntity.setAlias(settings.alias)
         return pyEntity
 
 

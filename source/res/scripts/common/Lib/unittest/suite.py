@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/suite.py
-"""TestSuite"""
 import sys
 from . import case
 from . import util
@@ -12,8 +11,6 @@ def _call_if_exists(parent, attr):
 
 
 class BaseTestSuite(object):
-    """A simple test suite that doesn't provide class or module shared fixtures.
-    """
 
     def __init__(self, tests=()):
         self._tests = []
@@ -65,20 +62,11 @@ class BaseTestSuite(object):
         return self.run(*args, **kwds)
 
     def debug(self):
-        """Run the tests without collecting errors in a TestResult"""
         for test in self:
             test.debug()
 
 
 class TestSuite(BaseTestSuite):
-    """A test suite is a composite test consisting of a number of TestCases.
-    
-    For use, create an instance of TestSuite, then add test case instances.
-    When all tests have been added, the suite can be passed to a test
-    runner, such as TextTestRunner. It will run the individual test cases
-    in the order in which they were added, aggregating the results. When
-    subclassing, do not forget to call the base class constructor.
-    """
 
     def run(self, result, debug=False):
         topLevel = False
@@ -105,7 +93,6 @@ class TestSuite(BaseTestSuite):
         return result
 
     def debug(self):
-        """Run the tests without collecting errors in a TestResult"""
         debug = _DebugResult()
         self.run(debug, True)
 
@@ -251,11 +238,6 @@ class TestSuite(BaseTestSuite):
 
 
 class _ErrorHolder(object):
-    """
-    Placeholder for a TestCase inside a result. As far as a TestResult
-    is concerned, this looks exactly like a unit test. Used to insert
-    arbitrary errors into a test suite run.
-    """
     failureException = None
 
     def __init__(self, description):
@@ -284,7 +266,6 @@ class _ErrorHolder(object):
 
 
 def _isnotsuite(test):
-    """A crude way to tell apart testcases and suites with duck-typing"""
     try:
         iter(test)
     except TypeError:
@@ -294,7 +275,6 @@ def _isnotsuite(test):
 
 
 class _DebugResult(object):
-    """Used by the TestSuite to hold previous class when running in debug."""
     _previousTestClass = None
     _moduleSetUpFailed = False
     shouldStop = False

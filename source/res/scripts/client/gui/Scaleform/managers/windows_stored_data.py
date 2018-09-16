@@ -53,8 +53,8 @@ class stored_window(object):
         super(stored_window, self).__init__()
         self.__dataType = dataType
         self.__targetID = targetID
-        if sideEffect is not None:
-            assert callable(sideEffect), 'Value of sideEffect is not callable'
+        if sideEffect is not None and not callable(sideEffect):
+            raise UserWarning('Value of sideEffect is not callable')
         self.__sideEffect = sideEffect
         return
 
@@ -281,10 +281,6 @@ class _WindowsStoredDataManager(object):
         return
 
     def start(self):
-        """ Starts to collect windows data. First invokes next operation:
-            - loads mask of stored targets.
-            - loads windows data.
-        """
         if self.__isStarted:
             return
         self.__isStarted = True
@@ -316,10 +312,6 @@ class _WindowsStoredDataManager(object):
                 LOG_ERROR('Invalid record', record)
 
     def stop(self):
-        """ Stops to collects windows data. Invokes next operations:
-                - store mask of stored targets to file.
-                - store windows data to file.
-        """
         if not self.__isStarted:
             return
         else:
@@ -345,16 +337,9 @@ class _WindowsStoredDataManager(object):
             return
 
     def isTargetEnabled(self, targetID):
-        """ Is given target enabled to store.
-        :param targetID: one of TARGET_ID.*.
-        :return: bool.
-        """
         return self.__isStarted and self.__targetMask & targetID > 0
 
     def addTarget(self, targetID):
-        """ Adds target to stored data.
-        :param targetID: one of TARGET_ID.*.
-        """
         if self.__targetMask & targetID > 0:
             return
         if not targetID & TARGET_ID.ALL:
@@ -362,9 +347,6 @@ class _WindowsStoredDataManager(object):
         self.__targetMask |= targetID
 
     def removeTarget(self, targetID):
-        """ Removes target from stored data.
-        :param targetID: one of TARGET_ID.*.
-        """
         if not self.__targetMask & targetID:
             return
         elif not targetID & TARGET_ID.ALL:
@@ -375,12 +357,6 @@ class _WindowsStoredDataManager(object):
             return
 
     def addData(self, targetID, dataType, window):
-        """ Adds stored data for given window.
-        :param targetID: one of TARGET_ID.*.
-        :param dataType: one of DATA_TYPE.*.
-        :param window: instance of AbstractWindowView.
-        :return: instance of WindowStoredData or None.
-        """
         if not self.isTargetEnabled(targetID):
             return
         elif dataType not in self.__supported:
@@ -396,11 +372,6 @@ class _WindowsStoredDataManager(object):
             return data
 
     def getData(self, targetID, window):
-        """ Gets stored data for given window if it exists.
-        :param targetID: one of TARGET_ID.*.
-        :param window: instance of AbstractWindowView.
-        :return: instance of WindowStoredData or None.
-        """
         if not self.isTargetEnabled(targetID):
             return
         else:
@@ -413,11 +384,6 @@ class _WindowsStoredDataManager(object):
             return result
 
     def getMap(self, targetID, dataType):
-        """ Gets data mapping for required type.
-        :param targetID: one of TARGET_ID.*.
-        :param dataType: one of DATA_TYPE.*.
-        :return: dict( <criteria> : <instance of data>, ... ).
-        """
         result = {}
         for item in self.__storedData[targetID]:
             if item.getDataType() == dataType:
@@ -426,11 +392,6 @@ class _WindowsStoredDataManager(object):
         return result
 
     def setTrustedCriteria(self, targetID, criteria):
-        """ Sets criteria to set data as trusted if data is defined or
-        new data that will be created.
-        :param targetID: one of TARGET_ID.*.
-        :param criteria: object containing criteria to find.
-        """
         self.__trustedCriteria[targetID].add(criteria)
         for item in self.__storedData[targetID]:
             if item.getFindCriteria() == criteria:

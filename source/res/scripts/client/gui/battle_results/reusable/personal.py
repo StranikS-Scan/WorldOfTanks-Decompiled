@@ -36,11 +36,6 @@ class _SquadBonusInfo(object):
         return levels[-1] - levels[0] if levels else -1
 
     def getSquadFlags(self, vehicleID, intCD):
-        """Gets flags to resolve wherever showing squad bonus and squad labels.
-        :param vehicleID: long containing player's vehicle ID
-        :param intCD: int containing int-type compact descriptor for player's vehicle.
-        :return: tuple(showSquadLabels, squadHasBonus).
-        """
         showSquadLabels = True
         squadHasBonus = False
         if self.eventsCache.isSquadXpFactorsEnabled() and self.__size > 1:
@@ -59,7 +54,6 @@ class _SquadBonusInfo(object):
 
 
 class _PersonalAvatarInfo(object):
-    """Class contains information about personal avatar."""
     __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards')
 
     def __init__(self, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, **kwargs):
@@ -75,52 +69,36 @@ class _PersonalAvatarInfo(object):
 
     @property
     def accountDBID(self):
-        """Gets personal account's database ID."""
         return self.__accountDBID
 
     @property
     def clanDBID(self):
-        """Gets personal clan database ID."""
         return self.__clanDBID
 
     @property
     def team(self):
-        """Gets number of personal team."""
         return self.__team
 
     @property
     def isPrematureLeave(self):
-        """Does player leave the battle while his vehicle is alive?"""
         return self.__isPrematureLeave
 
     @property
     def winnerIfDraw(self):
-        """Get winner id if draw."""
         return self.__winnerIfDraw
 
     @property
     def eligibleForCrystalRewards(self):
-        """Gets if crystals are awarded in this battle."""
         return self.__eligibleForCrystalRewards
 
     def getPersonalSquadFlags(self, vehicles):
-        """Gets flags to resolve wherever showing squad bonus and squad labels.
-        :param vehicles: instance of VehiclesInfo.
-        :return: tuple(showSquadLabels, squadHasBonus).
-        """
         vehicleID = vehicles.getVehicleID(self.__accountDBID)
         return self.__squadBonusInfo.getSquadFlags(vehicleID, vehicles.getVehicleInfo(vehicleID).intCD)
 
     def hasPenalties(self):
-        """Have fairplay penalties?
-        :return: bool.
-        """
         return self.__fairplayViolations.hasPenalties()
 
     def getPenaltyDetails(self):
-        """Gets penalty details if they have.
-        :return: tuple(name of penalty, value in percent).
-        """
         return self.__fairplayViolations.getPenaltyDetails()
 
 
@@ -128,27 +106,26 @@ class _AutoCompletionRecords(records.RawRecords):
     __slots__ = ()
 
     def __init__(self, results):
-        records = {}
+        rawRecords = {}
         if 'autoRepairCost' in results:
             cost = results['autoRepairCost']
             if cost is not None:
-                records['autoRepairCost'] = -cost
+                rawRecords['autoRepairCost'] = -cost
         if 'autoLoadCost' in results:
             cost = results['autoLoadCost']
             if cost is not None:
-                records['autoLoadCredits'] = -cost[0]
-                records['autoLoadGold'] = -cost[1]
+                rawRecords['autoLoadCredits'] = -cost[0]
+                rawRecords['autoLoadGold'] = -cost[1]
         if 'autoEquipCost' in results:
             cost = results['autoEquipCost']
             if cost is not None:
-                records['autoEquipCredits'] = -cost[0]
-                records['autoEquipGold'] = -cost[1]
-        super(_AutoCompletionRecords, self).__init__(records)
+                rawRecords['autoEquipCredits'] = -cost[0]
+                rawRecords['autoEquipGold'] = -cost[1]
+        super(_AutoCompletionRecords, self).__init__(rawRecords)
         return
 
 
 class _CreditsReplayRecords(records.ReplayRecords):
-    """Class contains values of credits from replay."""
     __slots__ = ()
 
     def __init__(self, replay, originalCreditsToDraw, achievementCredits):
@@ -164,7 +141,6 @@ class _CreditsReplayRecords(records.ReplayRecords):
 
 
 class _XPReplayRecords(records.ReplayRecords):
-    """Class contains values of XPs from replay."""
     __slots__ = ()
 
     def __init__(self, replay, isHighScope, achievementXP):
@@ -182,7 +158,6 @@ class _XPReplayRecords(records.ReplayRecords):
 
 
 class _FreeXPReplayRecords(records.ReplayRecords):
-    """Class contains values of free XPs from replay."""
     __slots__ = ()
 
     def __init__(self, replay, achievementFreeXP):
@@ -270,7 +245,7 @@ class _EconomicsRecordsChains(object):
     def _addXPResults(self, connector, results):
         if 'xpReplay' in results and results['xpReplay'] is not None:
             replay = ValueReplay(connector, recordName='xp', replay=results['xpReplay'])
-            isHighScope = RECORD_DB_IDS[('max15x15', 'maxXP')] in map(lambda (recordID, value): recordID, results.get('dossierPopUps', []))
+            isHighScope = RECORD_DB_IDS[('max15x15', 'maxXP')] in [ recordID for recordID, _ in results.get('dossierPopUps', []) ]
             if 'appliedPremiumXPFactor10' in replay:
                 replay['appliedPremiumXPFactor10'] = FACTOR_VALUE.BASE_XP_FACTOR
             self._baseXP.addRecords(_XPReplayRecords(replay, isHighScope, results['achievementXP']))
@@ -302,7 +277,7 @@ class _EconomicsRecordsChains(object):
 
     def _addCrystalDetails(self, replay):
         medalToken = 'eventCrystalList_'
-        for op, (appliedName, appliedValue), (_, finalValue) in replay:
+        for _, (appliedName, appliedValue), (_, _) in replay:
             if appliedName == 'originalCrystal' and appliedValue:
                 self._crystalDetails.insert(0, (appliedName, appliedValue))
             if appliedName.startswith(medalToken):
@@ -311,8 +286,6 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    """Class contains reusable personal information about player.
-    This information is fetched from battle_results['personal']"""
     __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '__economicsRecords', '__isPremium', '__questsProgress', '__rankInfo')
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -336,45 +309,28 @@ class PersonalInfo(shared.UnpackedInfo):
 
     @property
     def avatar(self):
-        """Gets extended information about avatar.
-        :return: instance of _PersonalAvatarInfo.
-        """
         return self.__avatar
 
     @property
     def isObserver(self):
-        """Was player observer in the battle."""
         return self.__isObserver
 
     @property
     def isPremium(self):
-        """Were premium factors applied in the battle results"""
         return self.__isPremium
 
     def getVehicleCDsIterator(self, result):
-        """Gets generator to iterate information about personal vehicles from the battle results.
-        :param result: dict containing results['personal'].
-        :return: generator containing all personal vehicles that are fetched from specified result.
-        """
         for intCD in self.__vehicles:
             if intCD not in result:
                 continue
             yield (intCD, result[intCD])
 
     def getVehicleItemsIterator(self):
-        """Gets generator to iterate GUI wrappers of vehicles that player used in the battle.
-        :return: generator containing all GUI wrappers of vehicles.
-        """
         getItemByCD = self.itemsCache.items.getItemByCD
         for intCD in self.__vehicles:
             yield (intCD, getItemByCD(intCD))
 
     def getAchievements(self, result):
-        """Gets sequence of personal achievements that was received in the battle.
-        :param result: dict containing results['personal'].
-        :return: tuple(achievements that are shown on the left side in the UI,
-            achievements that are shown on the right side in the UI).
-        """
         left = []
         right = []
         for intCD in self.__vehicles:
@@ -394,68 +350,48 @@ class PersonalInfo(shared.UnpackedInfo):
         return (left, sorted(right, key=sort_keys.AchievementSortKey))
 
     def getLifeTimeInfo(self):
-        """Gets personal information: was player killed,
-        how long player's vehicle spent in the battle alive."""
         return self.__lifeTimeInfo
 
     def getQuestsProgress(self):
-        """Gets union information about quests from avatar and personal vehicles
-        :return: dictionary containing information about quests.
-        """
         return self.__questsProgress
 
     def getRankInfo(self):
-        """Gets union information about rank changing from personal['avatar']
-        """
         return self.__rankInfo
 
     def getBaseCreditsRecords(self):
-        """Gets credits records without premium factor."""
         return self.__economicsRecords.getBaseCreditsRecords()
 
     def getPremiumCreditsRecords(self):
-        """Gets credits records with premium factor."""
         return self.__economicsRecords.getPremiumCreditsRecords()
 
     def getCreditsDiff(self):
-        """Gets difference between record "credits" with premium factor and
-        record "credits" without premium factor."""
         return self.__economicsRecords.getCreditsDiff()
 
     def getMoneyRecords(self):
-        """Gets money (credits and gold) records without/with premium factor."""
         return self.__economicsRecords.getMoneyRecords()
 
     def getCrystalRecords(self):
-        """Gets crystal records without premium factor."""
         return self.__economicsRecords.getCrystalRecords()
 
     def getBaseXPRecords(self):
-        """Gets XPs records without premium factor."""
         return self.__economicsRecords.getBaseXPRecords()
 
     def getPremiumXPRecords(self):
-        """Gets XPs records with premium factor."""
         return self.__economicsRecords.getPremiumXPRecords()
 
     def getXPRecords(self):
-        """Gets XPs (vehicle's XP and free XP) records without/with premium factor."""
         return self.__economicsRecords.getXPRecords()
 
     def getXPDiff(self):
-        """Gets difference between record "xp" with premium factor and
-        record "xp" without premium factor."""
         return self.__economicsRecords.getXPDiff()
 
     def getCrystalDetails(self):
-        """Gets info about crystal receiving.
-        :return: list of tuples, where each element is in format: (medal_name, value_in_crystals)
-        """
         return self.__economicsRecords.getCrystalDetails()
 
     def __collectRequiredData(self, info):
         getItemByCD = self.itemsCache.items.getItemByCD
-        items = sorted(map(getItemByCD, filter(lambda key: isinstance(key, (int, long, float)), info.keys())))
+        items = [ key for key in info.keys() if isinstance(key, (int, long, float)) ]
+        items = sorted((getItemByCD(item) for item in items))
         lifeTimes = []
         infoAvatar = info['avatar']
         if infoAvatar:
@@ -463,7 +399,6 @@ class PersonalInfo(shared.UnpackedInfo):
             self.__rankInfo = PostBattleRankInfo.fromDict(infoAvatar)
         for item in items:
             intCD = item.intCD
-            assert intCD in info
             data = info[intCD]
             if data is None:
                 self._addUnpackedItemID(intCD)

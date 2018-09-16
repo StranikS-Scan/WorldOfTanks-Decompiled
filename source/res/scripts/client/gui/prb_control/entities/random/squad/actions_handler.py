@@ -7,16 +7,10 @@ from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.prb_control.entities.base.squad.actions_handler import SquadActionsHandler
 
 class RandomSquadActionsHandler(SquadActionsHandler):
-    """
-    Random squad actions handler
-    """
     pass
 
 
 class BalancedSquadActionsHandler(RandomSquadActionsHandler):
-    """
-    Random balanced squad actions handler
-    """
 
     def execute(self):
         if self._entity.isCommander():

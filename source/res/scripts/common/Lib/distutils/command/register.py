@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/register.py
-"""distutils.command.register
-
-Implements the Distutils 'register' command (register with the repository).
-"""
 __revision__ = '$Id$'
 import urllib2
 import getpass
@@ -43,7 +39,6 @@ class register(PyPIRCCommand):
             self.send_metadata()
 
     def check_metadata(self):
-        """Deprecated API."""
         warn('distutils.command.register.check_metadata is deprecated,               use the check command instead', PendingDeprecationWarning)
         check = self.distribution.get_command_obj('check')
         check.ensure_finalized()
@@ -52,8 +47,6 @@ class register(PyPIRCCommand):
         check.run()
 
     def _set_config(self):
-        """ Reads the configuration file and set attributes.
-        """
         config = self._read_pypirc()
         if config != {}:
             self.username = config['username']
@@ -69,45 +62,14 @@ class register(PyPIRCCommand):
             self.has_config = False
 
     def classifiers(self):
-        """ Fetch the list of classifiers from the server.
-        """
         response = urllib2.urlopen(self.repository + '?:action=list_classifiers')
         log.info(response.read())
 
     def verify_metadata(self):
-        """ Send the metadata to the package index server to be checked.
-        """
         code, result = self.post_to_server(self.build_post_data('verify'))
         log.info('Server response (%s): %s' % (code, result))
 
     def send_metadata(self):
-        """ Send the metadata to the package index server.
-        
-            Well, do the following:
-            1. figure who the user is, and then
-            2. send the data as a Basic auth'ed POST.
-        
-            First we try to read the username/password from $HOME/.pypirc,
-            which is a ConfigParser-formatted file with a section
-            [distutils] containing username and password entries (both
-            in clear text). Eg:
-        
-                [distutils]
-                index-servers =
-                    pypi
-        
-                [pypi]
-                username: fred
-                password: sekrit
-        
-            Otherwise, to figure who the user is, we offer the user three
-            choices:
-        
-             1. use existing login,
-             2. register as a new user, or
-             3. set the password to a random string and email the user.
-        
-        """
         if self.has_config:
             choice = '1'
             username = self.username
@@ -212,8 +174,6 @@ class register(PyPIRCCommand):
         return data
 
     def post_to_server(self, data, auth=None):
-        """ Post a query to the server, and return a string response.
-        """
         if 'name' in data:
             self.announce('Registering %s to %s' % (data['name'], self.repository), log.INFO)
         boundary = '--------------GHSKFJDLGDS7543FJKLFHRE75642756743254'

@@ -1,33 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/rpc.py
-"""RPC Implemention, originally written for the Python Idle IDE
-
-For security reasons, GvR requested that Idle's Python execution server process
-connect to the Idle process, which listens for the connection.  Since Idle has
-only one client per server, this was not a limitation.
-
-   +---------------------------------+ +-------------+
-   | SocketServer.BaseRequestHandler | | SocketIO    |
-   +---------------------------------+ +-------------+
-                   ^                   | register()  |
-                   |                   | unregister()|
-                   |                   +-------------+
-                   |                      ^  ^
-                   |                      |  |
-                   | + -------------------+  |
-                   | |                       |
-   +-------------------------+        +-----------------+
-   | RPCHandler              |        | RPCClient       |
-   | [attribute of RPCServer]|        |                 |
-   +-------------------------+        +-----------------+
-
-The RPCServer handler class is expected to provide register/unregister methods.
-RPCHandler inherits the mix-in class SocketIO, which provides these methods.
-
-See the Idle run.main() docstring for further information on how this was
-accomplished in Idle.
-
-"""
 import sys
 import os
 import socket
@@ -44,12 +16,10 @@ import marshal
 
 def unpickle_code(ms):
     co = marshal.loads(ms)
-    assert isinstance(co, types.CodeType)
     return co
 
 
 def pickle_code(co):
-    assert isinstance(co, types.CodeType)
     ms = marshal.dumps(co)
     return (unpickle_code, (ms,))
 
@@ -67,30 +37,15 @@ class RPCServer(SocketServer.TCPServer):
         return
 
     def server_bind(self):
-        """Override TCPServer method, no bind() phase for connecting entity"""
         pass
 
     def server_activate(self):
-        """Override TCPServer method, connect() instead of listen()
-        
-        Due to the reversed connection, self.server_address is actually the
-        address of the Idle Client to which we are connecting.
-        
-        """
         self.socket.connect(self.server_address)
 
     def get_request(self):
-        """Override TCPServer method, return already connected socket"""
         return (self.socket, self.server_address)
 
     def handle_error(self, request, client_address):
-        """Override TCPServer method
-        
-        Error message goes to __stderr__.  No error message if exiting
-        normally or socket raised EOF.  Other exceptions not handled in
-        server code will cause os._exit.
-        
-        """
         try:
             raise
         except SystemExit:
@@ -135,7 +90,6 @@ class SocketIO(object):
         return
 
     def exithook(self):
-        """override for specific exit action"""
         os._exit(0)
 
     def debug(self, *args):
@@ -263,16 +217,9 @@ class SocketIO(object):
             return None
 
     def decode_interrupthook(self):
-        """"""
         raise EOFError
 
     def mainloop(self):
-        """Listen on socket until I/O not ready or EOF
-        
-        pollresponse() will loop looking for seq number None, which
-        never comes, and exit on EOFError.
-        
-        """
         try:
             self.getresponse(myseq=None, wait=0.05)
         except EOFError:
@@ -393,28 +340,6 @@ class SocketIO(object):
             return message
 
     def pollresponse(self, myseq, wait):
-        """Handle messages received on the socket.
-        
-        Some messages received may be asynchronous 'call' or 'queue' requests,
-        and some may be responses for other threads.
-        
-        'call' requests are passed to self.localcall() with the expectation of
-        immediate execution, during which time the socket is not serviced.
-        
-        'queue' requests are used for tasks (which may block or hang) to be
-        processed in a different thread.  These requests are fed into
-        request_queue by self.localcall().  Responses to queued requests are
-        taken from response_queue and sent across the link with the associated
-        sequence numbers.  Messages in the queues are (sequence_number,
-        request/response) tuples and code using this module removing messages
-        from the request_queue is responsible for returning the correct
-        sequence number in the response_queue.
-        
-        pollresponse() will loop until a response message with the myseq
-        sequence number is received, and will save other responses in
-        self.responses and notify the owning thread.
-        
-        """
         while 1:
             try:
                 qmsg = response_queue.get(0)
@@ -461,7 +386,6 @@ class SocketIO(object):
         return
 
     def handle_EOF(self):
-        """action taken upon link being closed by peer"""
         self.EOFhook()
         self.debug('handle_EOF')
         for key in self.cvars:
@@ -475,7 +399,6 @@ class SocketIO(object):
         return None
 
     def EOFhook(self):
-        """Classes using rpc client/server can override to augment EOF action"""
         pass
 
 
@@ -505,7 +428,6 @@ class RPCHandler(SocketServer.BaseRequestHandler, SocketIO):
         SocketServer.BaseRequestHandler.__init__(self, sock, addr, svr)
 
     def handle(self):
-        """handle() method required by SocketServer"""
         self.mainloop()
 
     def get_remote_proxy(self, oid):

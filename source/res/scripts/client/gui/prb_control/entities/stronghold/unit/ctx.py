@@ -10,9 +10,6 @@ _REQUEST_TYPE = settings.REQUEST_TYPE
 _UNDEFINED = settings.FUNCTIONAL_FLAG.UNDEFINED
 
 class SetReserveUnitCtx(UnitRequestCtx):
-    """
-    Context for join unit request.
-    """
     __slots__ = ('__reserveID', '__isRemove')
 
     def __init__(self, reserveID, waitingID='', flags=_UNDEFINED, entityType=0, isRemove=False):
@@ -31,9 +28,6 @@ class SetReserveUnitCtx(UnitRequestCtx):
 
 
 class UnsetReserveUnitCtx(UnitRequestCtx):
-    """
-    Context for join unit request.
-    """
     __slots__ = ('__reserveID', '__isRemove')
 
     def __init__(self, reserveID, waitingID='', flags=_UNDEFINED, entityType=0, isRemove=False):
@@ -53,9 +47,6 @@ class UnsetReserveUnitCtx(UnitRequestCtx):
 
 @ReprInjector.withParent(('getDatabaseIDs', 'databaseIDs'), ('getComment', 'comment'))
 class SendInvitesUnitCtx(PrbCtrlRequestCtx):
-    """
-    Context for send invitations request.
-    """
 
     def __init__(self, databaseIDs, comment, waitingID=''):
         super(SendInvitesUnitCtx, self).__init__(waitingID=waitingID)
@@ -90,9 +81,6 @@ class TimeoutCtx(UnitRequestCtx):
 
 @ReprInjector.withParent(('__rosterID', 'rosterID'))
 class CreateUnitCtx(TimeoutCtx):
-    """
-    Context for unit creation request.
-    """
     __slots__ = ('__rosterID',)
 
     def __init__(self, prbType, flags=_UNDEFINED, waitingID='', rosterID=0, onTimeoutCallback=None):
@@ -103,16 +91,10 @@ class CreateUnitCtx(TimeoutCtx):
         return _REQUEST_TYPE.CREATE
 
     def getRosterID(self):
-        """
-        Unit roster type ID.
-        """
         return self.__rosterID
 
 
 class JoinUnitCtx(TimeoutCtx):
-    """
-    Context for join unit request.
-    """
     __slots__ = ('__unitMgrID', '__onErrorCallback')
 
     def __init__(self, unitMgrID, prbType, onErrorCallback=None, waitingID=''):
@@ -134,9 +116,6 @@ class JoinUnitCtx(TimeoutCtx):
 
 @ReprInjector.withParent(('__databaseID', 'databaseID'))
 class GiveEquipmentCommanderCtx(UnitRequestCtx):
-    """
-    Context for giving equipment commandership to other player
-    """
     __slots__ = ('__databaseID',)
 
     def __init__(self, databaseID, waitingID=''):
@@ -147,7 +126,4 @@ class GiveEquipmentCommanderCtx(UnitRequestCtx):
         return _REQUEST_TYPE.SET_EQUIPMENT_COMMANDER
 
     def getPlayerID(self):
-        """
-        Getter for database ID of player to kick
-        """
         return self.__databaseID

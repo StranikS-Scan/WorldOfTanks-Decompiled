@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_config.py
-"""Tests for distutils.pypirc.pypirc."""
 import sys
 import os
 import unittest
@@ -19,7 +18,6 @@ WANTED = '[distutils]\nindex-servers =\n    pypi\n\n[pypi]\nusername:tarek\npass
 class PyPIRCCommandTestCase(support.TempdirManager, support.LoggingSilencer, support.EnvironGuard, unittest.TestCase):
 
     def setUp(self):
-        """Patches the environment."""
         super(PyPIRCCommandTestCase, self).setUp()
         self.tmp_dir = self.mkdtemp()
         os.environ['HOME'] = self.tmp_dir
@@ -40,7 +38,6 @@ class PyPIRCCommandTestCase(support.TempdirManager, support.LoggingSilencer, sup
         self.old_threshold = set_threshold(WARN)
 
     def tearDown(self):
-        """Removes the patch."""
         set_threshold(self.old_threshold)
         super(PyPIRCCommandTestCase, self).tearDown()
 

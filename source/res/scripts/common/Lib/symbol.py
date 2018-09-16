@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/symbol.py
-"""Non-terminal symbols of Python grammar (from "graminit.h")."""
 single_input = 256
 file_input = 257
 eval_input = 258

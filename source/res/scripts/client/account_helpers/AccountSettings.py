@@ -3,18 +3,19 @@
 import base64
 import copy
 import cPickle as pickle
+from copy import deepcopy
 import constants
 import BigWorld
 import CommandMapping
 import Settings
 import Event
+import WWISE
 from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
 from account_helpers import gameplay_ctx
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from copy import deepcopy
 KEY_FILTERS = 'filters'
 KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
@@ -28,7 +29,6 @@ PM_SELECTOR_FILTER = 'PM_SELECTOR_FILTER'
 RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
 RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
 RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
-NY_DECORATIONS_POPOVER_FILTER_1 = 'NY_DECORATIONS_POPOVER_FILTER_1'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
@@ -44,7 +44,6 @@ FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
-LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
@@ -55,6 +54,7 @@ TRAJECTORY_VIEW_HINT_COUNTER = 'trajectoryViewHintCounter'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
 ELEN_NOTIFICATIONS = 'elenNotifications'
+SPEAKERS_DEVICE = 'speakersDevice'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -65,11 +65,6 @@ DEFAULT_LEVELS_FILTERS = [False] * MAX_VEHICLE_LEVEL
 SHOW_OPT_DEVICE_HINT = 'showOptDeviceHint'
 LAST_BADGES_VISIT = 'lastBadgesVisit'
 ENABLE_RANKED_ANIMATIONS = 'enableRankedAnimations'
-CHRISTMAS_BOXES = 'christmasBoxes'
-CHRISTMAS_STARTED_AWARDS_SHOWN = 'christmasStartedAwardsShown'
-CHRISTMAS_FINISHED_AWARDS_SHOWN = 'christmasFinishedAwardsShown'
-CHRISTMAS_VEH_DISCOUNTS = 'christmasVehDiscounts'
-CHRISTMAS_TMANS_INV_IDS = 'christmasTmansInvIDs'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -142,6 +137,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'czech': False,
                                    'sweden': False,
                                    'poland': False,
+                                   'italy': False,
                                    'lightTank': False,
                                    'mediumTank': False,
                                    'heavyTank': False,
@@ -175,6 +171,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'czech': False,
                                           'sweden': False,
                                           'poland': False,
+                                          'italy': False,
                                           'lightTank': False,
                                           'mediumTank': False,
                                           'heavyTank': False,
@@ -199,7 +196,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'favorite': False,
                                           'bonus': False},
                RANKED_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
-               NY_DECORATIONS_POPOVER_FILTER_1: (0, 0),
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BARRACKS_FILTER: {'nation': -1,
@@ -211,7 +207,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                GUI_START_BEHAVIOR: {'isFreeXPInfoDialogShowed': False,
                                     'isRankedWelcomeViewShowed': False,
                                     'isRankedWelcomeViewStarted': False,
-                                    'isEpicRandomCheckboxClicked': False},
+                                    'isEpicRandomCheckboxClicked': False,
+                                    'isGammaDialogShowed': False},
                EULA_VERSION: {'version': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
@@ -240,11 +237,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                          'isMain': False,
                                          'level': -1,
                                          'compatibleOnly': True},
-               'ny_vehicle_discount_activation': {'nation': -1,
-                                                  'vehicleType': 'none',
-                                                  'isMain': False,
-                                                  'level': -1,
-                                                  'compatibleOnly': False},
                PROMO: {},
                AWARDS: {'vehicleResearchAward': -1,
                         'victoryAward': -1,
@@ -254,15 +246,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'selectedColumnSorting': 'descending',
                                    'isInHangarSelected': False},
                PROFILE_TECHNIQUE_MEMBER: {'selectedColumn': 4,
-                                          'selectedColumnSorting': 'descending'}},
+                                          'selectedColumnSorting': 'descending'},
+               SPEAKERS_DEVICE: 0},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
- KEY_SETTINGS: {CHRISTMAS_BOXES: {},
-                CHRISTMAS_STARTED_AWARDS_SHOWN: False,
-                CHRISTMAS_FINISHED_AWARDS_SHOWN: False,
-                CHRISTMAS_VEH_DISCOUNTS: {},
-                CHRISTMAS_TMANS_INV_IDS: {},
-                'unitWindow': {'selectedIntroVehicles': []},
+ KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': []},
                 'vehicleSellDialog': {'isOpened': False},
                 KNOWN_SELECTOR_BATTLES: set(),
                 'tankmanDropSkillIdx': 0,
@@ -358,11 +346,14 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'minimapViewRange': True,
                 'minimapMaxViewRange': True,
                 'minimapDrawRange': True,
+                'minimapAlphaEnabled': False,
                 'increasedZoom': True,
                 'sniperModeByShift': True,
                 'nationalVoices': False,
                 'enableVoIP': True,
                 'replayEnabled': 1,
+                'hangarCamPeriod': 1,
+                'hangarCamParallaxEnabled': True,
                 'players_panel': {'state': 2,
                                   'showLevels': True,
                                   'showTypes': True},
@@ -396,12 +387,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'fireExtinguisherInstalled': False,
                 'PveTriggerShown': False,
                 LAST_PROMO_PATCH_VERSION: '',
-                LAST_CALENDAR_SHOW_TIMESTAMP: '',
                 LAST_RESTORE_NOTIFICATION: None,
                 'dynamicRange': 0,
                 'soundDevice': 0,
                 'bassBoost': False,
-                'lowQualitySound': False,
+                'lowQualitySound': WWISE.WG_isMSR(),
                 'nightMode': False,
                 'bulbVoices': 'lightbulb',
                 PREVIEW_INFO_PANEL_IDX: 0,
@@ -409,10 +399,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'doubleCarouselType': 0,
                 'vehicleCarouselStats': True,
                 'siegeModeHintCounter': 10,
-                NEW_SETTINGS_COUNTER: {'FeedbackSettings': {'feedbackDamageLog': {'damageLogAssistStun': True},
-                                                            'feedbackBattleEvents': {'battleEventsEnemyAssistStun': True}},
-                                       'GameSettings': {'gameplay_epicStandard': True,
-                                                        'c11nHistoricallyAccurate': True}},
+                NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
+                                                        'c11nHistoricallyAccurate': True},
+                                       'GraphicSettings': {'gammaSetting': True}},
                 TRAJECTORY_VIEW_HINT_COUNTER: 10,
                 SHOW_OPT_DEVICE_HINT: True,
                 'c11nHistoricallyAccurate': True,
@@ -442,10 +431,11 @@ def _unpack(value):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 33
+    version = 34
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
+    __isCleanPC = False
 
     @staticmethod
     def clearCache():
@@ -482,17 +472,24 @@ class AccountSettings(object):
         return AccountSettings.__cache['section']
 
     @staticmethod
+    def isCleanPC():
+        return AccountSettings.__isCleanPC
+
+    @staticmethod
     def convert():
         ads = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_ACCOUNT_SETTINGS)
         currVersion = ads.readInt('version', 0)
         if currVersion != AccountSettings.version:
             if currVersion < 1:
+                AccountSettings.__isCleanPC = True
                 for key, section in ads.items()[:]:
                     newSection = ads.createSection('account')
                     newSection.copy(section)
                     newSection.writeString('login', key)
                     ads.deleteSection(key)
 
+            else:
+                AccountSettings.__isCleanPC = False
             if currVersion < 2:
                 MARKER_SETTINGS_MAP = {'showVehicleIcon': 'markerBaseIcon',
                  'showVehicleLevel': 'markerBaseLevel',
@@ -796,6 +793,12 @@ class AccountSettings(object):
                             newVersion['operationsVisited'] = newVersion.pop('tilesVisited')
                             accSettings.write('quests', _pack(quests))
 
+            if currVersion < 34:
+                import SoundGroups
+                maxVolume = max((SoundGroups.g_instance.getVolume(category) for category in ('vehicles', 'ambient', 'voice', 'gui', 'effects', 'music', 'music_hangar')))
+                SoundGroups.g_instance.setVolume('music', maxVolume)
+                SoundGroups.g_instance.setVolume('music_hangar', maxVolume)
+                SoundGroups.g_instance.savePreferences()
             ads.writeInt('version', AccountSettings.version)
         return
 
@@ -891,26 +894,27 @@ class AccountSettings(object):
         return finalDict
 
     @staticmethod
-    def __getValue(name, type):
-        if DEFAULT_VALUES[type].has_key(name):
-            fds = AccountSettings.__readSection(AccountSettings.__readUserSection(), type)
+    def __getValue(name, setting):
+        if DEFAULT_VALUES[setting].has_key(name):
+            fds = AccountSettings.__readSection(AccountSettings.__readUserSection(), setting)
             try:
                 if fds.has_key(name):
                     return pickle.loads(base64.b64decode(fds.readString(name)))
-            except:
+            except Exception:
                 if constants.IS_DEVELOPMENT:
                     LOG_CURRENT_EXCEPTION()
 
-            return copy.deepcopy(DEFAULT_VALUES[type][name])
+            return copy.deepcopy(DEFAULT_VALUES[setting][name])
         else:
             return None
 
     @staticmethod
-    def __setValue(name, value, type):
-        assert DEFAULT_VALUES[type].has_key(name)
-        if AccountSettings.__getValue(name, type) != value:
-            fds = AccountSettings.__readSection(AccountSettings.__readUserSection(), type)
-            if DEFAULT_VALUES[type][name] != value:
+    def __setValue(name, value, setting):
+        if name not in DEFAULT_VALUES[setting]:
+            raise UserWarning('Default value "{}" is not found in "{}"'.format(name, type))
+        if AccountSettings.__getValue(name, setting) != value:
+            fds = AccountSettings.__readSection(AccountSettings.__readUserSection(), setting)
+            if DEFAULT_VALUES[setting][name] != value:
                 fds.write(name, base64.b64encode(pickle.dumps(value)))
             else:
                 fds.deleteSection(name)
@@ -918,9 +922,6 @@ class AccountSettings(object):
 
     @staticmethod
     def __checkUserKeyBinding(key=None, command=None, commandSectionItems=None):
-        """
-        Method is used to check some user key binding
-        """
         if commandSectionItems is None:
             commandSection = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
             commandSectionItems = commandSection.items()[:]

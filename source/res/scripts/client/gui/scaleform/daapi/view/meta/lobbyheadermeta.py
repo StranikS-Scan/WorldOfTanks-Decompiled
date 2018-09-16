@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/LobbyHeaderMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class LobbyHeaderMeta(BaseDAAPIComponent):
@@ -38,16 +34,10 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def fightClick(self, mapID, actionName):
         self._printOverrideError('fightClick')
 
-    def as_updateNYVisibilityS(self, isShowMainMenu, isShowGlow, isShowMainMenuGlow):
-        return self.flashObject.as_updateNYVisibility(isShowMainMenu, isShowGlow, isShowMainMenuGlow) if self._isDAAPIInited() else None
-
     def as_setScreenS(self, alias):
         return self.flashObject.as_setScreen(alias) if self._isDAAPIInited() else None
 
     def as_updateWalletBtnS(self, btnID, data):
-        """
-        :param data: Represented by HBC_FinanceVo (AS)
-        """
         return self.flashObject.as_updateWalletBtn(btnID, data) if self._isDAAPIInited() else None
 
     def as_doDisableNavigationS(self):
@@ -66,9 +56,6 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
         return self.flashObject.as_updateSquad(isInSquad, tooltip, tooltipType, isEvent, icon) if self._isDAAPIInited() else None
 
     def as_nameResponseS(self, data):
-        """
-        :param data: Represented by AccountDataVo (AS)
-        """
         return self.flashObject.as_nameResponse(data) if self._isDAAPIInited() else None
 
     def as_setBadgeIconS(self, tID):
@@ -88,12 +75,6 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_updatePingStatusS(self, pingStatus, isColorBlind):
         return self.flashObject.as_updatePingStatus(pingStatus, isColorBlind) if self._isDAAPIInited() else None
-
-    def as_updateNYEnabledS(self, isNYEnabled):
-        return self.flashObject.as_updateNYEnabled(isNYEnabled) if self._isDAAPIInited() else None
-
-    def as_updateNYAvailableS(self, isNYAvailable):
-        return self.flashObject.as_updateNYAvailable(isNYAvailable) if self._isDAAPIInited() else None
 
     def as_setWalletStatusS(self, walletStatus):
         return self.flashObject.as_setWalletStatus(walletStatus) if self._isDAAPIInited() else None
@@ -120,9 +101,6 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
         return self.flashObject.as_initOnlineCounter(visible) if self._isDAAPIInited() else None
 
     def as_setHangarMenuDataS(self, data):
-        """
-        :param data: Represented by DataProvider.<HangarMenuTabItemVO> (AS)
-        """
         return self.flashObject.as_setHangarMenuData(data) if self._isDAAPIInited() else None
 
     def as_setButtonCounterS(self, btnAlias, value):
@@ -130,3 +108,6 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_removeButtonCounterS(self, btnAlias):
         return self.flashObject.as_removeButtonCounter(btnAlias) if self._isDAAPIInited() else None
+
+    def as_setHeaderButtonsS(self, data):
+        return self.flashObject.as_setHeaderButtons(data) if self._isDAAPIInited() else None

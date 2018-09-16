@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sysconfig.py
-"""Provide access to Python's configuration information.
-
-"""
 import sys
 import os
 from os.path import pardir, realpath
@@ -166,12 +163,6 @@ def _getuserbase():
 
 
 def _parse_makefile(filename, vars=None):
-    """Parse a Makefile-style file.
-    
-    A dictionary containing name/value pairs is returned.  If an
-    optional dictionary is passed in as the second argument, it is
-    used instead of a new dictionary.
-    """
     import re
     _variable_rx = re.compile('([a-zA-Z][a-zA-Z0-9_]+)\\s*=\\s*(.*)')
     _findvar1_rx = re.compile('\\$\\(([A-Za-z][A-Za-z0-9_]*)\\)')
@@ -244,7 +235,6 @@ def _get_makefile_filename():
 
 
 def _generate_posix_vars():
-    """Generate the Python module containing build-time variables."""
     import pprint
     vars = {}
     makefile = _get_makefile_filename()
@@ -292,13 +282,11 @@ def _generate_posix_vars():
 
 
 def _init_posix(vars):
-    """Initialize the module as appropriate for POSIX systems."""
     from _sysconfigdata import build_time_vars
     vars.update(build_time_vars)
 
 
 def _init_non_posix(vars):
-    """Initialize the module as appropriate for NT"""
     vars['LIBDEST'] = get_path('stdlib')
     vars['BINLIBDEST'] = get_path('platstdlib')
     vars['INCLUDEPY'] = get_path('include')
@@ -309,12 +297,6 @@ def _init_non_posix(vars):
 
 
 def parse_config_h(fp, vars=None):
-    """Parse a config.h-style file.
-    
-    A dictionary containing name/value pairs is returned.  If an
-    optional dictionary is passed in as the second argument, it is
-    used instead of a new dictionary.
-    """
     import re
     if vars is None:
         vars = {}
@@ -341,7 +323,6 @@ def parse_config_h(fp, vars=None):
 
 
 def get_config_h_filename():
-    """Returns the path of pyconfig.h."""
     if _PYTHON_BUILD:
         if os.name == 'nt':
             inc_dir = os.path.join(_PROJECT_BASE, 'PC')
@@ -353,23 +334,16 @@ def get_config_h_filename():
 
 
 def get_scheme_names():
-    """Returns a tuple containing the schemes names."""
     schemes = _INSTALL_SCHEMES.keys()
     schemes.sort()
     return tuple(schemes)
 
 
 def get_path_names():
-    """Returns a tuple containing the paths names."""
     return _SCHEME_KEYS
 
 
 def get_paths(scheme=_get_default_scheme(), vars=None, expand=True):
-    """Returns a mapping containing an install scheme.
-    
-    ``scheme`` is the install scheme name. If not provided, it will
-    return the default scheme for the current platform.
-    """
     if expand:
         return _expand_vars(scheme, vars)
     else:
@@ -377,23 +351,10 @@ def get_paths(scheme=_get_default_scheme(), vars=None, expand=True):
 
 
 def get_path(name, scheme=_get_default_scheme(), vars=None, expand=True):
-    """Returns a path corresponding to the scheme.
-    
-    ``scheme`` is the install scheme name.
-    """
     return get_paths(scheme, vars, expand)[name]
 
 
 def get_config_vars(*args):
-    """With no arguments, return a dictionary of all configuration
-    variables relevant for the current platform.
-    
-    On Unix, this means every variable defined in Python's installed Makefile;
-    On Windows and Mac OS it's a much smaller set.
-    
-    With arguments, return a list of values that result from looking up
-    each argument in the configuration variable dictionary.
-    """
     global _CONFIG_VARS
     import re
     if _CONFIG_VARS is None:
@@ -438,39 +399,10 @@ def get_config_vars(*args):
 
 
 def get_config_var(name):
-    """Return the value of a single variable using the dictionary returned by
-    'get_config_vars()'.
-    
-    Equivalent to get_config_vars().get(name)
-    """
     return get_config_vars().get(name)
 
 
 def get_platform():
-    """Return a string that identifies the current platform.
-    
-    This is used mainly to distinguish platform-specific build directories and
-    platform-specific built distributions.  Typically includes the OS name
-    and version and the architecture (as supplied by 'os.uname()'),
-    although the exact information included depends on the OS; eg. for IRIX
-    the architecture isn't particularly important (IRIX only runs on SGI
-    hardware), but for Linux the kernel version isn't particularly
-    important.
-    
-    Examples of returned values:
-       linux-i586
-       linux-alpha (?)
-       solaris-2.6-sun4u
-       irix-5.3
-       irix64-6.2
-    
-    Windows will return one of:
-       win-amd64 (64bit Windows on AMD64 (aka x86_64, Intel64, EM64T, etc)
-       win-ia64 (64bit Windows on Itanium)
-       win32 (all others - specifically, sys.platform is returned)
-    
-    For other non-POSIX platforms, currently just returns 'sys.platform'.
-    """
     import re
     if os.name == 'nt':
         prefix = ' bit ('
@@ -530,7 +462,6 @@ def _print_dict(title, data):
 
 
 def _main():
-    """Display all information sysconfig detains."""
     if '--generate-posix-vars' in sys.argv:
         _generate_posix_vars()
         return

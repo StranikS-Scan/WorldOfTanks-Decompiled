@@ -1,7 +1,6 @@
 <R10_AT-1.xml>
   <crew>
     <commander>	loader
-
 			radioman	</commander>
     <driver></driver>
     <gunner></gunner>
@@ -239,7 +238,7 @@
         <right>	vehicles/russian/R10_AT-1/track/right.track	</right>
         <segmentLength>	0.084	</segmentLength>
         <segmentOffset>	0.119	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -499,7 +498,7 @@
         <right>	vehicles/russian/R10_AT-1/track/right.track	</right>
         <segmentLength>	0.084	</segmentLength>
         <segmentOffset>	0.119	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -660,9 +659,9 @@
           </pitchLimits>
           <maxAmmo>	80	</maxAmmo>
           <unlocks>
-            <gun>	_76mm_L-10_S	  <cost>	400.0	</cost>
+            <gun>	_76mm_L-10_S	  <cost>	400	</cost>
             </gun>
-            <gun>	_57mm_ZiS-8_S	  <cost>	550.0	</cost>
+            <gun>	_57mm_ZiS-8_S	  <cost>	550	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -791,7 +790,7 @@
   </turrets0>
   <engines>
     <T-26>	shared	  <unlocks>
-        <engine>	T-26F	  <cost>	130.0	</cost>
+        <engine>	T-26F	  <cost>	130	</cost>
         </engine>
       </unlocks>
     </T-26>

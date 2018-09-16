@@ -104,7 +104,7 @@ class PyExtension(object):
     def _addChildToXPath(self, xPath, child, suffix=''):
         childPath = child.getXPath()
         if hasattr(childPath, '__iter__'):
-            xPath = '|'.join(map(lambda path: '/'.join((xPath, path)), childPath))
+            xPath = '|'.join([ '/'.join((xPath, path)) for path in childPath ])
         else:
             xPath = '/'.join((xPath, childPath))
         return self._addSuffixToXPath(xPath, suffix)

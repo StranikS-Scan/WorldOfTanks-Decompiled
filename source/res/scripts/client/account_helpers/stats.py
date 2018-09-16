@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/Stats.py
-import AccountCommands
-import items
 import cPickle
 from functools import partial
+import AccountCommands
+import items
 from debug_utils import LOG_DEBUG_DEV, LOG_WARNING, LOG_ERROR
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from items import vehicles
@@ -171,7 +171,7 @@ class Stats(object):
             self.__account.shop.waitForSync(partial(self.__berths_onShopSynced, callback))
             return
 
-    def setMoney(self, credits, gold=0, freeXP=0, crystal=0, callback=None):
+    def setMoney(self, credit, gold=0, freeXP=0, crystal=0, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -181,7 +181,7 @@ class Stats(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdInt4(AccountCommands.CMD_SET_MONEY, credits, gold, freeXP, crystal, proxy)
+            self.__account._doCmdInt4(AccountCommands.CMD_SET_MONEY, credit, gold, freeXP, crystal, proxy)
             return
 
     def addExperience(self, vehTypeName, xp, callback=None):

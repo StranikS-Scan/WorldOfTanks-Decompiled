@@ -5,14 +5,13 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.app_loader.loader import g_appLoader
-from gui.app_loader.settings import APP_NAME_SPACE as _SPACE
+from gui.app_loader import g_appLoader, settings as app_settings
 from AccountCommands import CMD_PRB_TEAM_READY
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
 
 def _getLobby():
-    return g_appLoader.getApp(_SPACE.SF_LOBBY)
+    return g_appLoader.getApp(app_settings.APP_NAME_SPACE.SF_LOBBY)
 
 
 _isConnecting = False
@@ -75,12 +74,12 @@ def startBattle():
 def _detectCurrentScreen():
     global _isConnecting
     if Waiting.isVisible():
-        BigWorld.callback(0.2, lambda : _detectCurrentScreen())
+        BigWorld.callback(0.2, _detectCurrentScreen)
         return
     else:
         lobby = _getLobby()
         if lobby is None or lobby.containerManager is None:
-            BigWorld.callback(0.2, lambda : _detectCurrentScreen())
+            BigWorld.callback(0.2, _detectCurrentScreen)
             return
         dialogsContainer = lobby.containerManager.getContainer(ViewTypes.TOP_WINDOW)
         if dialogsContainer is not None:
@@ -95,7 +94,7 @@ def _detectCurrentScreen():
         if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and connectionMgr.isDisconnected() and not _isConnecting:
             _isConnecting = True
             _connect()
-            BigWorld.callback(0.2, lambda : _detectCurrentScreen())
+            BigWorld.callback(0.2, _detectCurrentScreen)
             return
         view = lobby.containerManager.getView(ViewTypes.DEFAULT)
         if view is not None and view.settings.alias == 'lobby':
@@ -104,12 +103,12 @@ def _detectCurrentScreen():
             subView = lobby.containerManager.getView(ViewTypes.LOBBY_SUB)
             if subView.settings.alias == 'hangar':
                 _leaveDevRoom()
-                BigWorld.callback(0.2, lambda : _detectCurrentScreen())
+                BigWorld.callback(0.2, _detectCurrentScreen)
                 return
             if subView.settings.alias == 'trainingRoom':
                 _enterBattle()
                 return
-        BigWorld.callback(0.2, lambda : _detectCurrentScreen())
+        BigWorld.callback(0.2, _detectCurrentScreen)
         return
 
 

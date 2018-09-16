@@ -53,19 +53,10 @@ def moneyWithIcon(money, currType=None):
 
 
 def getMoneyVO(moneyObj):
-    """
-    Converts money to tuple that includes only set currencies.
-    AS3 expects money in this format.
-    :param moneyObj: Money instance
-    :return: tuple (MoneyVO)
-    """
     return tuple(((c, v) for c, v in moneyObj.iteritems()))
 
 
 def getMoneyVOWithReason(errorMsg, moneyObj):
-    """
-    Same as getMoneyVO but includes currency reason error
-    """
     result = []
     for c, v in moneyObj.iteritems():
         if errorMsg == GUI_ITEM_ECONOMY_CODE.getMoneyError(c):
@@ -76,19 +67,6 @@ def getMoneyVOWithReason(errorMsg, moneyObj):
 
 
 def getItemPricesVO(*itemPrices):
-    """
-    Builds ItemPricesVO, it is a list of dicts (for each price). The dict can be in two forms:
-    1) Full - includes 'price', 'defPrice' and 'action' fields, if an action is available
-    2) Short - no action, only one field 'price' will be packed.
-    Example (let it be two price, for original - an action is available, for alternative price - no action):
-    [ {'price': MoneyVO, 'defPrice': MoneyVO, 'action': MoneyVO}, {'price': MoneyVO} ]
-    
-    NOTE: MoneyVO is constructed in getMoneyVO function, see above
-    
-    For more information, see: tests/client/gui/shared/formatters/test_price_formatters.py
-    :param itemPrices: ItemPrice instances
-    :return: tuple of itemPrice VO
-    """
     resultVO = []
     for itemPrice in itemPrices:
         action = itemPrice.getActionPrcAsMoney()
@@ -103,11 +81,6 @@ def getItemPricesVO(*itemPrices):
 
 
 def getItemPricesVOWithReason(reason, *itemPrices):
-    """
-    Same as getItemPricesVO but includes currency reason error
-    :param itemPrices: ItemPrice instances
-    :return: tuple of itemPrice VO
-    """
     resultVO = []
     for itemPrice in itemPrices:
         action = itemPrice.getActionPrcAsMoney()

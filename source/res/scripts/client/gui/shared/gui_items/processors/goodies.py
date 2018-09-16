@@ -5,15 +5,15 @@ import AccountCommands
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared.formatters import formatPrice
-from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
+from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins as proc_plugs
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Currency
 from gui.shared.utils import code2str
 
 class BoosterProcessor(Processor):
 
-    def __init__(self, booster, opType, plugins=list()):
-        super(BoosterProcessor, self).__init__(plugins)
+    def __init__(self, booster, opType, plugins=None):
+        super(BoosterProcessor, self).__init__(plugins or [])
         self.booster = booster
         self.opType = opType
 
@@ -24,7 +24,7 @@ class BoosterProcessor(Processor):
         return callback(self._successHandler(code, ctx=ctx))
 
     def _getMsgCtx(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _formMessage(self, msg):
         LOG_DEBUG('Generating response for BoosterProcessor: ', self.opType, msg)
@@ -45,7 +45,7 @@ class BoosterProcessor(Processor):
 class BoosterActivator(BoosterProcessor):
 
     def __init__(self, booster):
-        super(BoosterActivator, self).__init__(booster, 'activate', [plugins.BoosterActivateValidator(booster)])
+        super(BoosterActivator, self).__init__(booster, 'activate', [proc_plugs.BoosterActivateValidator(booster)])
 
     def _getMsgCtx(self):
         return {'boosterName': self.booster.userName,
@@ -61,8 +61,8 @@ class BoosterActivator(BoosterProcessor):
 
 class BoosterTradeProcessor(BoosterProcessor):
 
-    def __init__(self, booster, count, opType, plugs=list()):
-        super(BoosterTradeProcessor, self).__init__(booster, opType, plugs)
+    def __init__(self, booster, count, opType, plugs=None):
+        super(BoosterTradeProcessor, self).__init__(booster, opType, plugs or [])
         self.count = count
 
     def _getMsgCtx(self):
@@ -71,28 +71,15 @@ class BoosterTradeProcessor(BoosterProcessor):
          'money': formatPrice(self._getOpPrice().price)}
 
     def _getOpPrice(self):
-        """
-        Returns specific price in ItemPrice.
-        :return: instance of ItemPrice
-        """
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class BoosterBuyer(BoosterTradeProcessor):
-    """
-    Booster buy processor/
-    """
 
     def __init__(self, booster, count, currency):
-        """
-        Ctr.
-        :param booster: booster <Booster>.
-        :param count: count of boosters <int>.
-        :param currency: desired currency for buying <string>, see Currency enum.
-        """
         super(BoosterBuyer, self).__init__(booster, count, 'buy')
         self.buyCurrency = currency
-        self.addPlugins((plugins.MoneyValidator(self._getOpPrice().price),))
+        self.addPlugins((proc_plugs.MoneyValidator(self._getOpPrice().price),))
 
     def _getOpPrice(self):
         minItemPrice = self.booster.buyPrices.getMinItemPriceByCurrency(self.buyCurrency)

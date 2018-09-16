@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/drone_music_player.py
+from functools import wraps, partial
+import time
 import BigWorld
 import WWISE
 import Event
 import SoundGroups
-from functools import wraps
 from constants import ARENA_GUI_TYPE_LABEL, ARENA_PERIOD
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.battle_control.controllers import team_bases_ctrl
@@ -21,7 +22,6 @@ def _delegate(func):
 
     @wraps(func)
     def __wrapper(self, *args, **kwargs):
-        assert isinstance(self, DroneMusicPlayer)
         self._delegateToConditions(func.__name__, *args, **kwargs)
         func(self, *args, **kwargs)
 
@@ -32,7 +32,6 @@ def _initCondition(func):
 
     @wraps(func)
     def __wrapper(self, *args, **kwargs):
-        assert isinstance(self, _Condition)
         self._initialized = True
         return func(self, *args, **kwargs)
 
@@ -101,11 +100,6 @@ class _Condition(IBattleFieldListener, IAbstractPeriodView, ITeamBasesListener):
         self.onValidChangedInternally.clear()
 
     def _updateValidValue(self, newValue):
-        """
-        Updates member field if received value is different
-        :param newValue: (bool) new value of field
-        :return: True if value has been changed, otherwise False
-        """
         if self.__isSatisfied != newValue:
             self.__isSatisfied = newValue
             return True
@@ -113,8 +107,6 @@ class _Condition(IBattleFieldListener, IAbstractPeriodView, ITeamBasesListener):
 
 
 class _TimeRemainedCondition(_Condition):
-    """ This condition goes off when critical time remained till battle end.
-    """
 
     def __init__(self, criticalValue):
         super(_TimeRemainedCondition, self).__init__(criticalValue, _Severity.MEDIUM)
@@ -141,8 +133,6 @@ class _TimeRemainedCondition(_Condition):
 
 
 class _DeadVehiclesCondition(_Condition):
-    """ The common implementation for conditions that go off when critical amount of alive vehicles remain in team.
-    """
 
     @_initCondition
     def updateDeadVehicles(self, aliveAllies, deadAllies, aliveEnemies, deadEnemies):
@@ -173,8 +163,6 @@ class _DeadEnemiesCondition(_DeadVehiclesCondition):
 
 
 class _TeamHPCondition(_Condition):
-    """ The common implementation for conditions that go off when critical amount of team heals remain.
-    """
 
     @_initCondition
     def updateTeamHealth(self, alliesHP, enemiesHP, totalAlliesHP, totalEnemiesHP):
@@ -206,9 +194,6 @@ class _EnemiesHPCondition(_TeamHPCondition):
 
 
 class _BaseCaptureCondition(_Condition):
-    """ The common implementation for conditions that go off when critical amount of team base points are captured.
-    This condition restores to init state after delay specified in settings after base capturing is stopped.
-    """
 
     def __init__(self, criticalValue, severity):
         super(_BaseCaptureCondition, self).__init__(criticalValue, severity)
@@ -229,7 +214,7 @@ class _BaseCaptureCondition(_Condition):
 
     @_initCondition
     def addCapturingTeamBase(self, clientID, playerTeam, points, rate, timeLeft, invadersCnt, capturingStopped):
-        baseTeam, baseID = team_bases_ctrl.parseClientTeamBaseID(clientID)
+        baseTeam, _ = team_bases_ctrl.parseClientTeamBaseID(clientID)
         if self._getValidBaseMask() == baseTeam ^ playerTeam:
             self.__pointsToBase[clientID] = points
             self.__setRtpcGlobal(points, invadersCnt)
@@ -271,21 +256,20 @@ class _BaseCaptureCondition(_Condition):
         criticalPointsCount, musicStopPredelay = self.criticalValue
         for points in self.__pointsToBase.itervalues():
             if self.__stopCapturingCooldown is not None and points:
-                assert self.isSatisfied(), 'Condition must be in the valid state while cooldown is working'
                 BigWorld.cancelCallback(self.__stopCapturingCooldown)
-                LOG_DEBUG('Base Capturing. Cooldown stopped')
+                LOG_DEBUG('[Drone] Base Capturing. Cooldown stopped')
                 self.__stopCapturingCooldown = None
                 return False
             if points >= criticalPointsCount:
                 return self._updateValidValue(True)
 
         if self.isSatisfied():
-            assert self.__stopCapturingCooldown is None, 'Cooldown must be set only once!'
-            LOG_DEBUG('Base Capturing. Stop music cooldown has been started')
-            self.__stopCapturingCooldown = BigWorld.callback(musicStopPredelay, self.__onCooldownOver)
+            LOG_DEBUG('[Drone] Base Capturing. Stop music cooldown has been started')
+            self.__stopCapturingCooldown = BigWorld.callback(musicStopPredelay, partial(self.__onCooldownOver, time.time()))
         return False
 
-    def __onCooldownOver(self):
+    def __onCooldownOver(self, startTime):
+        LOG_DEBUG('[Drone] Cooldown ended. {} seconds passed. Music will be stopped.'.format(time.time() - startTime))
         self.__stopCapturingCooldown = None
         if self._updateValidValue(False):
             self.onValidChangedInternally()
@@ -327,12 +311,6 @@ class _EnemyBaseCaptureCondition(_BaseCaptureCondition):
 
 
 class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesListener, IViewComponentsCtrlListener, IArenaLoadCtrlListener):
-    """ This is the consumer which launch the music in some important situations happening during the battle.
-    If our team in troubles it launches intensive music which motivates team member to try hard.
-    If enemy team is in troubles it launches relaxed music.
-    This situations describes in the list of conditions which handle data received from controllers.
-    Music can be stopped in some cases (base capturing is over for example).
-    """
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _SETTING_TO_CONDITION_MAPPING = {'vehiclesRemained': (lambda player: not player.sessionProvider.arenaVisitor.hasArenaFogOfWarHiddenVehicles(), (_DeadAlliesCondition, _DeadEnemiesCondition), lambda name, key, data: data[name][key]),
      'timeRemained': (lambda player: True, (_TimeRemainedCondition,), lambda name, key, data: data[name][key]),
@@ -408,11 +386,6 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
             condition.dispose()
 
     def _initializeMusicData(self, arenaType):
-        """
-        Extract music IDs from <wwmusicSetup/> section from .../arena_defs/_default_.xml
-        :param arenaType: ArenaType
-        :return: dict: key - settingName, value - settingValue
-        """
         wwSetup = arenaType.wwmusicSetup
         if wwSetup is None:
             return
@@ -427,11 +400,6 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
             return outcome
 
     def _initializeConditionsData(self, arena_type):
-        """Creates conditions and initializes them using extracted data
-        of <wwmusicDroneSetup/> section from .../arena_defs/_default_.xml
-        :param arena_type: ArenaType
-        :return: None
-        """
         wwmusicDroneSetup = arena_type.wwmusicDroneSetup
         outcome = []
         for settingName, conditionsData in self._SETTING_TO_CONDITION_MAPPING.iteritems():
@@ -462,7 +430,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
 
     def _launchEvent(self, soundType):
         soundID = self._musicSetup[soundType]
-        LOG_DEBUG('Attempt to launch Drone event "{}"'.format(soundID))
+        LOG_DEBUG('[Drone] Attempt to launch Drone event "{}"'.format(soundID))
         if soundID is not None:
             SoundGroups.g_instance.playSound2D(soundID)
         return
@@ -486,12 +454,8 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
             self.__validateConditions()
 
     def __validateConditions(self):
-        """
-        This method starts music playing if conditions list is not empty.
-        And stops music if there are no active conditions
-        """
         isPlaying = self.__isMusicCurrentlyPlaying()
-        satisfied = filter(lambda condition: condition.isSatisfied(), self._conditions)
+        satisfied = [ c for c in self._conditions if c.isSatisfied() ]
         if satisfied:
             if not isPlaying:
                 for condition in satisfied:
@@ -501,7 +465,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
                 else:
                     self.__playingMusicID = _MusicID.RELAXED
 
-                LOG_DEBUG('Satisfied Drone conditions: {}'.format(satisfied))
+                LOG_DEBUG('[Drone] Satisfied conditions: {}'.format(satisfied))
                 self.__playMusic()
         elif isPlaying:
             self.__stopMusic()
@@ -517,13 +481,13 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
         return self.__arenaPeriod == ARENA_PERIOD.BATTLE and self.__isArenaLoadingCompleted
 
     def __stopMusic(self):
-        LOG_DEBUG('Playing Drone music "{}" has been stopped'.format(self.__playingMusicID))
+        LOG_DEBUG('[Drone] Playing music "{}" has been stopped'.format(self.__playingMusicID))
         self._launchEvent(_MusicID.STOP)
         self.__playingMusicID = None
         return
 
     def __playMusic(self):
-        LOG_DEBUG('Drone music "{}" has been launched'.format(self.__playingMusicID))
+        LOG_DEBUG('[Drone] Music "{}" has been launched'.format(self.__playingMusicID))
         self._launchEvent(self.__playingMusicID)
 
     def __isMusicCurrentlyPlaying(self):

@@ -32,9 +32,6 @@ class IViewComponentsController(IBattleController):
 
 
 class ViewComponentsController(IViewComponentsController):
-    """
-    Container for view components related to current controller
-    """
     __slots__ = ('_viewComponents',)
 
     def __init__(self):
@@ -53,27 +50,6 @@ class ComponentsBridgeError(Exception):
 
 
 class _ComponentsBridge(object):
-    """
-    Class makes communication between controller and view components.
-    
-    There are steps to making communication:
-    
-        1. Registers controllers:
-            bridge = createComponentsBridge()
-            bridge.registerController(
-                BATTLE_CTRL.DEBUG, debugCtrl
-            )
-    
-        2. Sets configuration:
-            bridge.registerViewComponents(
-                (BATTLE_CTRL.DEBUG, 'debugPanel'), ...
-            )
-    
-        3. Adds view component when it is created.
-            bridge.addViewComponent(
-                'debugPanel', debugPanel
-            )
-    """
 
     def __init__(self):
         super(_ComponentsBridge, self).__init__()
@@ -83,20 +59,12 @@ class _ComponentsBridge(object):
         self.__componentToCrl = defaultdict(list)
 
     def clear(self):
-        """
-        Clears data.
-        """
         self.__components.clear()
         self.__ctrls.clear()
         self.__indexes.clear()
         self.__componentToCrl.clear()
 
     def registerViewComponents(self, *data):
-        """
-        Sets view component data to find that components in routines
-            addViewComponent, removeViewComponent.
-        :param data: tuple((BATTLE_CTRL.*, (componentID, ...)), ...).
-        """
         for item in data:
             if len(item) < 2:
                 raise ComponentsBridgeError('Item is invalid: {}'.format(item))
@@ -119,13 +87,6 @@ class _ComponentsBridge(object):
         return
 
     def addViewComponent(self, componentID, component, rule=VIEW_COMPONENT_RULE.PROXY):
-        """
-        View component has been created, try to find controller expecting
-            that component.
-        :param componentID: string containing unique component ID.
-        :param component: instance of component.
-        :param rule: one of VIEW_COMPONENT_RULE.
-        """
         if componentID not in self.__componentToCrl:
             return
         else:
@@ -140,7 +101,7 @@ class _ComponentsBridge(object):
                     components[index] = weakref.proxy(component)
                 else:
                     components[index] = component
-                if filter(lambda item: item is None, components):
+                if [ item for item in components if item is None ]:
                     continue
                 if ctrlID in self.__ctrls:
                     ctrl = self.__ctrls[ctrlID]
@@ -150,10 +111,6 @@ class _ComponentsBridge(object):
             return
 
     def removeViewComponent(self, componentID):
-        """
-        View component has been removed.
-        :param componentID: string containing unique component ID.
-        """
         if componentID not in self.__componentToCrl:
             return
         else:
@@ -170,7 +127,7 @@ class _ComponentsBridge(object):
                 if isinstance(viewComponent, IViewComponentsCtrlListener):
                     viewComponent.detachedFromCtrl(ctrlID)
                 components[index] = None
-                if filter(lambda item: item is not None, components):
+                if [ item for item in components if item is not None ]:
                     continue
                 if ctrlID in self.__ctrls:
                     ctrl = self.__ctrls[ctrlID]
@@ -179,20 +136,11 @@ class _ComponentsBridge(object):
             return
 
     def registerController(self, ctrl):
-        """
-        Registers controller in the bridge.
-        :param ctrl: instance of controller that must be extended
-            IViewComponentsController.
-        """
         if not isinstance(ctrl, IViewComponentsController):
             raise ComponentsBridgeError('Controller {0} is not extended IViewComponentsController'.format(ctrl))
         self.__ctrls[ctrl.getControllerID()] = weakref.proxy(ctrl)
 
     def registerControllers(self, *ctrls):
-        """
-        Registers controllers in the bridge.
-        :param ctrls: tuple(ctrl, ...)
-        """
         for ctrl in ctrls:
             self.registerController(ctrl)
 

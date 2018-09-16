@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/MusicControllerWWISE.py
 import BigWorld
 import ResMgr
-import SoundGroups
 import WWISE
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
@@ -95,7 +94,7 @@ def play(eventId):
 
 class MusicController(object):
 
-    class MusicEvent:
+    class MusicEvent(object):
 
         def __init__(self, event=None):
             self.__muted = False
@@ -103,21 +102,18 @@ class MusicController(object):
             self.__eventID = None
             return
 
-        def replace(self, event, eventId, playNew):
+        def replace(self, event, eventId):
             if self.__event is not None:
-                if self.__event.name == event.name and self.__event.isPlaying:
-                    playNew = False
+                if self.__event.name != event.name:
+                    self.__event.unlink()
                 else:
-                    self.stop()
-            self.__event = event
+                    self.__eventID = eventId
+                    if not self.__event.isPlaying:
+                        self.__event.play()
+                    return
             self.__eventID = eventId
-            if playNew is True:
-                self.play()
-            return
-
-        def play(self):
-            if self.__event is not None:
-                self.__event.play()
+            self.__event = event
+            self.__event.play()
             return
 
         def mute(self, isMute):
@@ -128,16 +124,6 @@ class MusicController(object):
                         self.__event.stop()
                     else:
                         self.__event.play()
-            return
-
-        def stop(self):
-            if self.__event is not None:
-                if self.__eventID == MUSIC_EVENT_COMBAT_LOADING:
-                    WWISE.WW_eventGlobalSync('ue_stop_loadscreen_music')
-                elif self.__eventID >= MUSIC_EVENT_COMBAT_VICTORY and self.__eventID <= MUSIC_EVENT_COMBAT_DRAW:
-                    WWISE.WW_eventGlobalSync('ue_events_hangar_stop_afterBattleMusic')
-                else:
-                    self.__event.stop()
             return
 
         def param(self, paramName):
@@ -151,7 +137,7 @@ class MusicController(object):
 
         def destroy(self):
             if self.__event is not None:
-                self.__event.stop()
+                self.__event.unlink()
                 self.__event = None
                 self.__eventID = None
             return
@@ -202,7 +188,7 @@ class MusicController(object):
             if newSoundEvent is None:
                 return
             musicEventId = MusicController._MUSIC_EVENT if eventId < AMBIENT_EVENT_NONE else MusicController._AMBIENT_EVENT
-            self.__musicEvents[musicEventId].replace(newSoundEvent, eventId, True)
+            self.__musicEvents[musicEventId].replace(newSoundEvent, eventId)
             if params is not None:
                 for paramName, paramValue in params.iteritems():
                     self.setEventParam(eventId, paramName, paramValue)
@@ -281,6 +267,7 @@ class MusicController(object):
                 self.stopAmbient()
                 MusicController.__lastBattleResultEventName = ''
                 if wwSetup is not None:
+                    import SoundGroups
                     SoundGroups.g_instance.playSound2D(wwSetup.get('wwmusicEndbattleStop', ''))
                 winnerTeam = arena.periodAdditionalInfo[0]
                 if winnerTeam == BigWorld.player().team:
@@ -311,7 +298,11 @@ class MusicController(object):
                     soundEventName = arenaType.wwmusicSetup.get('wwmusicLoading', None)
             elif eventId == AMBIENT_EVENT_COMBAT:
                 soundEventName = arenaType.ambientSound
-        return SoundGroups.g_instance.getSound2D(soundEventName) if soundEventName else None
+        if soundEventName:
+            import SoundGroups
+            return SoundGroups.g_instance.getSound2D(soundEventName)
+        else:
+            return
 
     def __loadConfig(self):
         eventNames = {}
@@ -333,37 +324,40 @@ class MusicController(object):
                 for key, const in FORT_MAPPING.iteritems():
                     eventNames[const] = (s.readString(key), s.readString(key))
 
-        fallbackEventNames = eventNames.copy()
         self.__overrideEvents(eventNames)
-        soundsByName = {}
         for eventId, names in eventNames.items():
-            lstEvents = []
             if not isinstance(names, tuple):
                 names = (names,)
-            fallbackNames = fallbackEventNames[eventId]
-            if not isinstance(fallbackNames, tuple):
-                fallbackNames = (fallbackNames,)
-            for i in xrange(len(names)):
-                eventName = names[i]
-                fallbackEventName = fallbackNames[i]
-                sound = soundsByName.get(eventName)
-                if sound is None:
-                    sound = SoundGroups.g_instance.getSound2D(eventName) if eventName != '' else None
-                    if sound is None:
-                        sound = SoundGroups.g_instance.getSound2D(fallbackEventName) if fallbackEventName != '' else None
-                soundsByName[eventName] = sound
-                lstEvents.append(sound)
-                if sound is not None:
-                    sound.stop()
+            soundNames = []
+            for eventName in names:
+                if eventName not in soundNames:
+                    soundNames.append(eventName)
 
-            prevList = self.__soundEvents.get(eventId, None)
-            if prevList is not None:
-                for event in prevList:
+            newSounds = []
+            prevSounds = self.__soundEvents.get(eventId, None)
+            for soundName in soundNames:
+                eventExist = False
+                if prevSounds is not None:
+                    for i in xrange(len(prevSounds)):
+                        event = prevSounds[i]
+                        if event is not None and event.name == soundName:
+                            newSounds.append(event)
+                            prevSounds[i] = None
+                            eventExist = True
+                            break
+
+                if not eventExist:
+                    import SoundGroups
+                    newSounds.append(SoundGroups.g_instance.getSound2D(soundName))
+
+            if prevSounds is not None:
+                for event in prevSounds:
                     if event is not None:
-                        event.stop()
+                        event.unlink()
 
-            self.__soundEvents[eventId] = lstEvents
+            self.__soundEvents[eventId] = newSounds
 
+        ResMgr.purge(xmlPath, True)
         return
 
     def __overrideEvents(self, eventNames):
@@ -469,7 +463,7 @@ class MusicController(object):
             self.play(musicEvent.getEventId())
 
     def __eraseOverridden(self, index):
-        for eventId, overriddenNames in self.__overriddenEvents.iteritems():
+        for eventId, _ in self.__overriddenEvents.iteritems():
             self.__overriddenEvents[eventId][index] = None
 
         return

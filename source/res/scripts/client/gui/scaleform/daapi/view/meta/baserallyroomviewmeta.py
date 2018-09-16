@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BaseRallyRoomViewMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyView import BaseRallyView
 
 class BaseRallyRoomViewMeta(BaseRallyView):
@@ -36,15 +32,9 @@ class BaseRallyRoomViewMeta(BaseRallyView):
         self._printOverrideError('showFAQWindow')
 
     def as_updateRallyS(self, rally):
-        """
-        :param rally: Represented by IRallyVO (AS)
-        """
         return self.flashObject.as_updateRally(rally) if self._isDAAPIInited() else None
 
     def as_setMembersS(self, hasRestrictions, slots):
-        """
-        :param slots: Represented by Array (AS)
-        """
         return self.flashObject.as_setMembers(hasRestrictions, slots) if self._isDAAPIInited() else None
 
     def as_setMemberStatusS(self, slotIndex, status):
@@ -54,15 +44,9 @@ class BaseRallyRoomViewMeta(BaseRallyView):
         return self.flashObject.as_setMemberOffline(slotIndex, isOffline) if self._isDAAPIInited() else None
 
     def as_setMemberVehicleS(self, slotIdx, slotCost, veh):
-        """
-        :param veh: Represented by VehicleVO (AS)
-        """
         return self.flashObject.as_setMemberVehicle(slotIdx, slotCost, veh) if self._isDAAPIInited() else None
 
     def as_setActionButtonStateS(self, data):
-        """
-        :param data: Represented by ActionButtonVO (AS)
-        """
         return self.flashObject.as_setActionButtonState(data) if self._isDAAPIInited() else None
 
     def as_setCommentS(self, value):
@@ -72,13 +56,7 @@ class BaseRallyRoomViewMeta(BaseRallyView):
         return self.flashObject.as_getCandidatesDP() if self._isDAAPIInited() else None
 
     def as_highlightSlotsS(self, slotsIdx):
-        """
-        :param slotsIdx: Represented by Array (AS)
-        """
         return self.flashObject.as_highlightSlots(slotsIdx) if self._isDAAPIInited() else None
 
     def as_setVehiclesTitleS(self, value, tooltip):
-        """
-        :param tooltip: Represented by TooltipDataVO (AS)
-        """
         return self.flashObject.as_setVehiclesTitle(value, tooltip) if self._isDAAPIInited() else None

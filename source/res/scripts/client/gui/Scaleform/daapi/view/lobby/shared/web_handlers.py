@@ -6,13 +6,12 @@ import nations
 from adisp import process
 from constants import TOKEN_TYPE
 from debug_utils import LOG_DEBUG
-from helpers import dependency
+from helpers import dependency, time_utils
 from items import vehicles
-from gui.clans.settings import AccessTokenData
-from helpers import time_utils
+from gui.wgcg.states import AccessTokenData
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.clans import IClanController
 from skeletons.gui.game_control import IBrowserController
+from skeletons.gui.web import IWebController
 from gui.SystemMessages import SM_TYPE
 from gui.SystemMessages import pushI18nMessage, pushMessage
 from gui.shared.utils.functions import getViewName
@@ -27,23 +26,16 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import CustomUserCMHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from web_client_api import WebCommandException
-from web_client_api.commands import instantiateObject
-from web_client_api.commands.context_menu import UserContextMenuCommand
-from web_client_api.commands.request import RequestAccessTokenCommand
-from web_client_api.commands.window_navigator import OpenBrowserCommand
 
 def handleNotificationCommand(command, ctx):
-    """
-    Shows notification according to command's parameters
-    """
-    type = SM_TYPE.lookup(command.type)
-    if type is None:
+    smType = SM_TYPE.lookup(command.type)
+    if smType is None:
         raise WebCommandException("Unknown notification's type: %s!" % command.type)
     if command.hasMessage():
-        pushMessage(command.message, type=type, messageData=command.message_data)
+        pushMessage(command.message, type=smType, messageData=command.message_data)
     elif command.hasI18nKey():
         parameters = command.i18n_data
-        params = {'type': type,
+        params = {'type': smType,
          'key': command.i18n_key,
          'messageData': command.message_data}
         for key, value in parameters.iteritems():
@@ -52,31 +44,23 @@ def handleNotificationCommand(command, ctx):
         pushI18nMessage(**params)
     elif command.hasKey():
         custom_parameters = command.custom_parameters
-        params = {'type': type,
+        params = {'type': smType,
          'key': command.key,
          'messageData': command.message_data}
         for key, value in custom_parameters.iteritems():
             params[key] = value
 
         pushI18nMessage(**params)
-    else:
-        raise WebCommandException("'i18n_key' or 'message' parameter are missing!")
     return
 
 
 def handleSoundCommand(command, ctx):
-    """
-    Plays sound effect by id
-    """
     app = g_appLoader.getApp()
     if app and app.soundManager:
         app.soundManager.playEffectSound(command.sound_id)
 
 
 def handleHangarSoundCommand(command, ctx):
-    """
-    Mutes/unmutes hangar sound
-    """
     if command.mute:
         SoundGroups.g_instance.playSound2D('ue_master_mute')
     else:
@@ -84,126 +68,31 @@ def handleHangarSoundCommand(command, ctx):
 
 
 def handleHangarSoundCommandFini():
-    """
-    Reverts handler
-    """
     SoundGroups.g_instance.playSound2D('ue_master_unmute')
 
 
-def createOpenWindowCommandHandler(subCommands):
-
-    def handleOpenWindowCommand(command, ctx):
-        """
-        Opens window by id
-        """
-        if command.window_id in subCommands:
-            cls, handler = subCommands[command.window_id]
-            if cls:
-                subCommand = instantiateObject(cls, command.custom_parameters)
-                handler(subCommand)
-            else:
-                handler()
-        else:
-            raise WebCommandException('Unknown window: %s!' % command.window_id)
-
-    return handleOpenWindowCommand
-
-
-def handleCloseWindowCommand(onBrowserClose, command, ctx, isWindow=True):
-    """
-    Closes window by id
-    """
-    if isWindow:
-        closeWindowSubCommands = {'browser': partial(_closeBrowserWindow, onBrowserClose)}
-    else:
-        closeWindowSubCommands = {'browser': _closeBrowserView}
-    if command.window_id in closeWindowSubCommands:
-        handler = closeWindowSubCommands[command.window_id]
-        handler(ctx)
-    else:
-        raise WebCommandException('Unknown window: %s!' % command.window_id)
-
-
-def handleOpenTabCommand(command, ctx):
-    """
-    Opens tab by id
-    """
-    if command.tab_id in OPEN_TAB_INFO:
-        tabId, elementsList = OPEN_TAB_INFO[command.tab_id]
-        ctx = None if not elementsList else elementsList.get(command.selected_id)
-        g_eventBus.handleEvent(events.LoadViewEvent(tabId, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
-    else:
-        raise WebCommandException('Unknown tab id: %s!' % command.tab_id)
+def _openTab(tabId, elementsList, command, ctx):
+    selectedCtx = None if not elementsList else elementsList.get(command.selected_id)
+    g_eventBus.handleEvent(events.LoadViewEvent(tabId, ctx=selectedCtx), scope=EVENT_BUS_SCOPE.LOBBY)
     return
 
 
-def handleRequestCommand(command, ctx):
-    """
-    Makes request according to request_id
-    """
-    if command.request_id in REQUEST_COMMANDS:
-
-        def onCallback(data):
-            data['request_id'] = command.request_id
-            callback = ctx.get('callback')
-            if callable(callback):
-                callback(data)
-
-        cls, handler = REQUEST_COMMANDS[command.request_id]
-        if cls is not None:
-            subCommand = instantiateObject(cls, command.custom_parameters)
-            handler(subCommand, onCallback)
-        else:
-            handler(onCallback)
-    else:
-        raise WebCommandException('Unknown request id: %s!' % command.request_id)
-    return
+def getOpenHangarTabHandler():
+    return partial(_openTab, VIEW_ALIAS.LOBBY_HANGAR, None)
 
 
-def handleContextMenuCommand(command, ctx):
-    """
-    Shows context menu by type
-    """
-    if command.menu_type in CONTEXT_MENU_TYPES:
-        subCommand, handler = CONTEXT_MENU_TYPES[command.menu_type]
-        subCommandInstance = instantiateObject(subCommand, command.custom_parameters)
-
-        def onCallback(data):
-            data['menu_type'] = command.menu_type
-            data['spa_id'] = subCommandInstance.spa_id
-            callback = ctx.get('callback')
-            if callable(callback):
-                callback(data)
-
-        handler(subCommandInstance, ctx, onCallback)
-    else:
-        raise WebCommandException('Unknown context menu type: %s!' % command.menu_type)
+def getOpenProfileTabHandler():
+    return partial(_openTab, VIEW_ALIAS.LOBBY_PROFILE, {'hof': {'selectedAlias': VIEW_ALIAS.PROFILE_HOF},
+     'technique': {'selectedAlias': VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE},
+     'summary': {'selectedAlias': VIEW_ALIAS.PROFILE_SUMMARY_PAGE}})
 
 
-def handleVehiclesCommand(command, ctx):
-    """
-    Returns vehicles info
-    """
-    if command.action in VEHICLES_ACTIONS:
-        handler = VEHICLES_ACTIONS[command.action]
-        handler(command, ctx.get('callback'))
-    else:
-        raise WebCommandException('Unknown vehicles action: %s!' % command.action)
-
-
-def _openBrowser(onBrowserOpen, handlersCreator, command):
-    """
-    Opens browser window
-    """
+def _openBrowser(onBrowserOpen, handlersCreator, command, ctx):
     _loadBrowser(onBrowserOpen, handlersCreator, command.url, command.title, command.width, command.height, command.is_modal, command.show_refresh, command.show_create_waiting)
 
 
 @process
 def _loadBrowser(onBrowserOpen, handlersCreator, url, title, width, height, isModal, showRefresh, showCreateWaiting):
-    """
-    Load browser and show window
-    Takes onBrowserOpen callback with str param: aliasId. Called after browser was created.
-    """
     browserCtrl = dependency.instance(IBrowserController)
     browserId = yield browserCtrl.load(url=url, title=title, browserSize=(width, height), isModal=isModal, showActionBtn=showRefresh, showCreateWaiting=showCreateWaiting, handlers=handlersCreator() if callable(handlersCreator) else None)
     browser = browserCtrl.getBrowser(browserId)
@@ -215,14 +104,11 @@ def _loadBrowser(onBrowserOpen, handlersCreator, url, title, width, height, isMo
     return
 
 
-def createOpenBrowserSubCommands(onBrowserOpen, handlersCreator):
-    return {'browser': (OpenBrowserCommand, partial(_openBrowser, onBrowserOpen, handlersCreator))}
+def getOpenBrowserHandler(onBrowserOpen, handlersCreator):
+    return partial(_openBrowser, onBrowserOpen, handlersCreator)
 
 
-def _closeBrowserWindow(onBrowserClose, ctx):
-    """
-    Closes current browser window
-    """
+def _handlerCloseBrowserWindow(onBrowserClose, command, ctx):
     if 'browser_id' in ctx:
         windowAlias = getViewName(ctx['browser_alias'], ctx['browser_id'])
         app = g_appLoader.getApp()
@@ -237,10 +123,11 @@ def _closeBrowserWindow(onBrowserClose, ctx):
     return
 
 
-def _closeBrowserView(ctx):
-    """
-    Closes current browser view
-    """
+def getCloseBrowserWindowHandler(onBrowserClose=None):
+    return partial(_handlerCloseBrowserWindow, onBrowserClose)
+
+
+def handleCloseBrowserView(command, ctx):
     app = g_appLoader.getApp()
     if app is not None and app.containerManager is not None:
         browserView = app.containerManager.getView(ViewTypes.LOBBY_SUB, criteria={POP_UP_CRITERIA.VIEW_ALIAS: ctx.get('browser_alias')})
@@ -251,21 +138,19 @@ def _closeBrowserView(ctx):
     return
 
 
-OPEN_TAB_INFO = {'hangar': (VIEW_ALIAS.LOBBY_HANGAR, None),
- 'profile': (VIEW_ALIAS.LOBBY_PROFILE, {'hof': {'selectedAlias': VIEW_ALIAS.PROFILE_HOF},
-              'technique': {'selectedAlias': VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE},
-              'summary': {'selectedAlias': VIEW_ALIAS.PROFILE_SUMMARY_PAGE}})}
-
-def _requestWgniToken(callback):
+def handleRequestWgniToken(command, ctx):
     tokenRqs = getTokenRequester(TOKEN_TYPE.WGNI)
+    callback = ctx.get('callback')
 
     def onCallback(response):
         if response and response.isValid():
-            callback({'spa_id': str(response.getDatabaseID()),
+            callback({'request_id': 'token1',
+             'spa_id': str(response.getDatabaseID()),
              'token': response.getToken()})
         else:
             coolDownExpiration = tokenRqs.getReqCoolDown() - tokenRqs.lastResponseDelta()
-            callback({'error': 'Unable to obtain token.',
+            callback({'request_id': 'token1',
+             'error': 'Unable to obtain token.',
              'cooldown': coolDownExpiration if coolDownExpiration > 0 else tokenRqs.getReqCoolDown()})
 
     if not tokenRqs.isInProcess():
@@ -275,44 +160,41 @@ def _requestWgniToken(callback):
     return
 
 
-def _requestGraphicsSettings(callback):
-    settings = {'CUSTOM_AA_MODE': graphics.getCustomAAMode(),
-     'MULTISAMPLING': graphics.getMultisamplingType()}
-    settingNames = ('TEXTURE_QUALITY', 'LIGHTING_QUALITY', 'SHADOWS_QUALITY', 'SNIPER_MODE_GRASS_ENABLED', 'EFFECTS_QUALITY', 'SNIPER_MODE_EFFECTS_QUALITY', 'FLORA_QUALITY', 'POST_PROCESSING_QUALITY', 'VEHICLE_DUST_ENABLED', 'RENDER_PIPELINE')
+def handlerRequestGraphicsSettings(command, ctx):
+    settings = {}
+    settingNames = ('TEXTURE_QUALITY', 'LIGHTING_QUALITY', 'SHADOWS_QUALITY', 'SNIPER_MODE_GRASS_ENABLED', 'EFFECTS_QUALITY', 'SNIPER_MODE_EFFECTS_QUALITY', 'FLORA_QUALITY', 'POST_PROCESSING_QUALITY', 'VEHICLE_DUST_ENABLED', 'CUSTOM_AA_MODE', 'MSAA_QUALITY', 'RENDER_PIPELINE')
     for settingName in settingNames:
         setting = graphics.getGraphicsSetting(settingName)
         if setting is not None:
             settings[settingName] = setting.value
         LOG_DEBUG('Settings "%s" not found!' % settingName)
 
-    callback({'settings': settings})
+    ctx['callback']({'request_id': 'graphics_settings',
+     'settings': settings})
     return
 
 
 @process
 @dependency.replace_none_kwargs(connectionMgr=IConnectionManager)
-def _requestAccessToken(command, callback, connectionMgr=None):
-    ctrl = dependency.instance(IClanController)
+def handleRequestAccessToken(command, ctx, connectionMgr=None):
+    ctrl = dependency.instance(IWebController)
     accessTokenData = yield ctrl.getAccessTokenData(force=command.force)
     if accessTokenData is not None:
-        callback({'spa_id': str(connectionMgr.databaseID),
+        ctx['callback']({'spa_id': str(connectionMgr.databaseID),
          'access_token': str(accessTokenData.accessToken),
          'expires_in': accessTokenData.expiresAt - time_utils.getCurrentTimestamp(),
          'periphery_id': str(connectionMgr.peripheryID)})
     else:
-        callback({'error': 'Unable to obtain access token.'})
+        ctx['callback']({'error': 'Unable to obtain access token.'})
     return
 
 
-REQUEST_COMMANDS = {'token1': (None, _requestWgniToken),
- 'graphics_settings': (None, _requestGraphicsSettings),
- 'access_token': (RequestAccessTokenCommand, _requestAccessToken)}
-
-def _showUserContextMenu(command, ctx, callback):
+def handleShowUserContextMenu(command, ctx):
     context = {'dbID': command.spa_id,
      'userName': command.user_name,
      'customItems': command.custom_items,
      'excludedItems': command.excluded_items}
+    callback = ctx.get('callback')
     browserView = ctx.get('browser_view')
     app = g_appLoader.getApp()
     try:
@@ -327,22 +209,22 @@ def _showUserContextMenu(command, ctx, callback):
 
         def onSelectedCallback(optionId):
             callback({'menu_type': 'user_menu',
-             'selected_item': optionId})
+             'selected_item': optionId,
+             'spa_id': command.spa_id})
             webBrowser.allowMouseWheel = True
 
         cmHandler.onSelected += onSelectedCallback
     else:
         callback({'menu_type': 'user_menu',
-         'selected_item': None})
+         'selected_item': None,
+         'spa_id': command.spa_id})
     return
 
 
-CONTEXT_MENU_TYPES = {'user_menu': (UserContextMenuCommand, _showUserContextMenu)}
-
-def _getVehicleInfo(command, callback):
+def handleGetVehicleInfo(command, ctx):
     try:
         vehicle = vehicles.getVehicleType(command.vehicle_id)
-    except:
+    except Exception:
         res = {'error': 'vehicle_id is invalid.'}
     else:
         res = {'vehicle': {'vehicle_id': vehicle.compactDescr,
@@ -354,7 +236,4 @@ def _getVehicleInfo(command, callback):
                      'tier': vehicle.level,
                      'is_premium': bool('premium' in vehicle.tags)}}
 
-    callback(res)
-
-
-VEHICLES_ACTIONS = {'vehicle_info': _getVehicleInfo}
+    ctx['callback'](res)

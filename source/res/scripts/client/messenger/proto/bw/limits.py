@@ -12,6 +12,9 @@ class BattleLimits(IProtoLimits):
     def getHistoryMaxLength(self):
         return MESSAGES_HISTORY_MAX_LEN
 
+    def getBroadcastCoolDown(self):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class LobbyLimits(IProtoLimits):
 
@@ -20,6 +23,9 @@ class LobbyLimits(IProtoLimits):
 
     def getHistoryMaxLength(self):
         return MESSAGES_HISTORY_MAX_LEN
+
+    def getBroadcastCoolDown(self):
+        raise UserWarning('This method should not be reached in this context')
 
 
 class CHANNEL_LIMIT(object):

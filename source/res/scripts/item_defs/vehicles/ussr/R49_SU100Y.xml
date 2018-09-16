@@ -84,18 +84,11 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <player>
-        <rayStart>	-1.41987 1.56879 -0.592474	</rayStart>
-        <rayEnd>	-1.01987 1.56879 -0.592474	</rayEnd>
+        <rayStart>	-1.41987 1.56656 -0.578352	</rayStart>
+        <rayEnd>	-1.01987 1.56656 -0.578352	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <player>
-        <rayStart>	1.41987 1.56879 -0.592474	</rayStart>
-        <rayEnd>	1.01987 1.56879 -0.592474	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.34	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
       </player>
       <inscription>
         <rayStart>	1.41987 1.52055 0.550798	</rayStart>
@@ -111,6 +104,14 @@
         <size>	0.86	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
+      <player>
+        <rayStart>	1.41987 1.56656 -0.578352	</rayStart>
+        <rayEnd>	1.01987 1.56656 -0.578352	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R49_SU100Y/SU100Y_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
@@ -250,7 +251,7 @@
         <right>	vehicles/russian/R49_SU100Y/track/right.track	</right>
         <segmentLength>	0.168	</segmentLength>
         <segmentOffset>	0.181	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>

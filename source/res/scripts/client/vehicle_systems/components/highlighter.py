@@ -3,7 +3,6 @@
 import BigWorld
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from svarog_script import auto_properties
 import svarog_script.py_component
 
 class Highlighter(svarog_script.py_component.Component):

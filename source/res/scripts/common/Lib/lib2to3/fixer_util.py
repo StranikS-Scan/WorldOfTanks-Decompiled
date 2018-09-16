@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixer_util.py
-"""Utility functions, node construction macros, etc."""
 from itertools import islice
 from .pgen2 import token
 from .pytree import Leaf, Node
@@ -20,7 +19,6 @@ def RParen():
 
 
 def Assign(target, source):
-    """Build an assignment statement"""
     if not isinstance(target, list):
         target = [target]
     if not isinstance(source, list):
@@ -30,27 +28,22 @@ def Assign(target, source):
 
 
 def Name(name, prefix=None):
-    """Return a NAME leaf"""
     return Leaf(token.NAME, name, prefix=prefix)
 
 
 def Attr(obj, attr):
-    """A node tuple for obj.attr"""
     return [obj, Node(syms.trailer, [Dot(), attr])]
 
 
 def Comma():
-    """A comma leaf"""
     return Leaf(token.COMMA, u',')
 
 
 def Dot():
-    """A period (.) leaf"""
     return Leaf(token.DOT, u'.')
 
 
 def ArgList(args, lparen=LParen(), rparen=RParen()):
-    """A parenthesised argument list, used by Call()"""
     node = Node(syms.trailer, [lparen.clone(), rparen.clone()])
     if args:
         node.insert_child(1, Node(syms.arglist, args))
@@ -58,7 +51,6 @@ def ArgList(args, lparen=LParen(), rparen=RParen()):
 
 
 def Call(func_name, args=None, prefix=None):
-    """A function call"""
     node = Node(syms.power, [func_name, ArgList(args)])
     if prefix is not None:
         node.prefix = prefix
@@ -66,12 +58,10 @@ def Call(func_name, args=None, prefix=None):
 
 
 def Newline():
-    """A newline literal"""
     return Leaf(token.NEWLINE, u'\n')
 
 
 def BlankLine():
-    """A blank line"""
     return Leaf(token.NEWLINE, u'')
 
 
@@ -80,20 +70,14 @@ def Number(n, prefix=None):
 
 
 def Subscript(index_node):
-    """A numeric or string subscript"""
     return Node(syms.trailer, [Leaf(token.LBRACE, u'['), index_node, Leaf(token.RBRACE, u']')])
 
 
 def String(string, prefix=None):
-    """A string leaf"""
     return Leaf(token.STRING, string, prefix=prefix)
 
 
 def ListComp(xp, fp, it, test=None):
-    """A list comprehension of the form [xp for fp in it if test].
-    
-    If test is None, the "if test" part is omitted.
-    """
     xp.prefix = u''
     fp.prefix = u' '
     it.prefix = u' '
@@ -115,8 +99,6 @@ def ListComp(xp, fp, it, test=None):
 
 
 def FromImport(package_name, name_leafs):
-    """ Return an import statement in the form:
-    from package import name_leafs"""
     for leaf in name_leafs:
         leaf.remove()
 
@@ -129,12 +111,10 @@ def FromImport(package_name, name_leafs):
 
 
 def is_tuple(node):
-    """Does the node represent a tuple literal?"""
     return True if isinstance(node, Node) and node.children == [LParen(), RParen()] else isinstance(node, Node) and len(node.children) == 3 and isinstance(node.children[0], Leaf) and isinstance(node.children[1], Node) and isinstance(node.children[2], Leaf) and node.children[0].value == u'(' and node.children[2].value == u')'
 
 
 def is_list(node):
-    """Does the node represent a list literal?"""
     return isinstance(node, Node) and len(node.children) > 1 and isinstance(node.children[0], Leaf) and isinstance(node.children[-1], Leaf) and node.children[0].value == u'[' and node.children[-1].value == u']'
 
 
@@ -154,19 +134,6 @@ consuming_calls = set(['sorted',
  'enumerate'])
 
 def attr_chain(obj, attr):
-    """Follow an attribute chain.
-    
-    If you have a chain of objects where a.foo -> b, b.foo-> c, etc,
-    use this to iterate over all objects in the chain. Iteration is
-    terminated by getattr(x, attr) is None.
-    
-    Args:
-        obj: the starting object
-        attr: the name of the chaining attribute
-    
-    Yields:
-        Each successive object in the chain.
-    """
     next = getattr(obj, attr)
     while next:
         yield next
@@ -179,11 +146,6 @@ p2 = "\npower<\n    ( 'sorted' | 'enumerate' )\n    trailer< '(' arglist<node=an
 pats_built = False
 
 def in_special_context(node):
-    """ Returns true if node is in an environment where all that is required
-    of it is being iterable (ie, it doesn't matter if it returns a list
-    or an iterator).
-    See test_map_nochange in test_fixers.py for some examples and tests.
-    """
     global p2
     global p0
     global p1
@@ -203,9 +165,6 @@ def in_special_context(node):
 
 
 def is_probably_builtin(node):
-    """
-    Check that something isn't an attribute or function name etc.
-    """
     prev = node.prev_sibling
     if prev is not None and prev.type == token.DOT:
         return False
@@ -219,7 +178,6 @@ def is_probably_builtin(node):
 
 
 def find_indentation(node):
-    """Find the indentation of *node*."""
     while node is not None:
         if node.type == syms.suite and len(node.children) > 2:
             indent = node.children[1]
@@ -242,7 +200,6 @@ def make_suite(node):
 
 
 def find_root(node):
-    """Find the top level namespace."""
     while node.type != syms.file_input:
         node = node.parent
         if not node:
@@ -252,22 +209,15 @@ def find_root(node):
 
 
 def does_tree_import(package, name, node):
-    """ Returns true if name is imported from package at the
-    top level of the tree which node belongs to.
-    To cover the case of an import like 'import foo', use
-    None for the package and 'foo' for the name. """
     binding = find_binding(name, find_root(node), package)
     return bool(binding)
 
 
 def is_import(node):
-    """Returns true if the node is an import statement."""
     return node.type in (syms.import_name, syms.import_from)
 
 
 def touch_import(package, name, node):
-    """ Works like `does_tree_import` but adds an import statement
-    if it was not imported. """
 
     def is_import_stmt(node):
         return node.type == syms.simple_stmt and node.children and is_import(node.children[0])
@@ -305,10 +255,6 @@ def touch_import(package, name, node):
 _def_syms = set([syms.classdef, syms.funcdef])
 
 def find_binding(name, node, package=None):
-    """ Returns the node which binds variable name, otherwise None.
-    If optional argument package is supplied, only imports will
-    be returned.
-    See test cases for examples."""
     for child in node.children:
         ret = None
         if child.type == syms.for_stmt:
@@ -365,9 +311,6 @@ def _find(name, node):
 
 
 def _is_import_binding(node, name, package=None):
-    """ Will reuturn node if node will import name, or node
-    will import * from package.  None is returned otherwise.
-    See test cases for examples. """
     if node.type == syms.import_name and not package:
         imp = node.children[1]
         if imp.type == syms.dotted_as_names:

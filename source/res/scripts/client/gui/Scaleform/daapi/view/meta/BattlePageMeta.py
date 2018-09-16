@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattlePageMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.View import View
 
 class BattlePageMeta(View):
@@ -15,10 +11,6 @@ class BattlePageMeta(View):
         return self.flashObject.as_setPostmortemTipsVisible(value) if self._isDAAPIInited() else None
 
     def as_setComponentsVisibilityS(self, visible, hidden):
-        """
-        :param visible: Represented by Vector.<String> (AS)
-        :param hidden: Represented by Vector.<String> (AS)
-        """
         return self.flashObject.as_setComponentsVisibility(visible, hidden) if self._isDAAPIInited() else None
 
     def as_isComponentVisibleS(self, componentKey):

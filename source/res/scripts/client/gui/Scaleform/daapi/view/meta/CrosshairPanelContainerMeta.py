@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CrosshairPanelContainerMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.meta.DAAPISimpleContainerMeta import DAAPISimpleContainerMeta
 
 class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
@@ -35,8 +31,8 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setAmmoStockS(self, quantity, quantityInClip, isLow, clipState, clipReloaded=False):
         return self.flashObject.as_setAmmoStock(quantity, quantityInClip, isLow, clipState, clipReloaded) if self._isDAAPIInited() else None
 
-    def as_setClipParamsS(self, clipCapacity, burst):
-        return self.flashObject.as_setClipParams(clipCapacity, burst) if self._isDAAPIInited() else None
+    def as_setClipParamsS(self, clipCapacity, burst, isAutoloader=False):
+        return self.flashObject.as_setClipParams(clipCapacity, burst, isAutoloader) if self._isDAAPIInited() else None
 
     def as_setDistanceS(self, dist):
         return self.flashObject.as_setDistance(dist) if self._isDAAPIInited() else None
@@ -73,3 +69,18 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_hideHintS(self):
         return self.flashObject.as_hideHint() if self._isDAAPIInited() else None
+
+    def as_autoloaderUpdateS(self, timeLeft, baseTime, isPause=False, isStun=False, isTimerOn=False):
+        return self.flashObject.as_autoloaderUpdate(timeLeft, baseTime, isPause, isStun, isTimerOn) if self._isDAAPIInited() else None
+
+    def as_setAutoloaderReloadingS(self, duration, baseTime):
+        return self.flashObject.as_setAutoloaderReloading(duration, baseTime) if self._isDAAPIInited() else None
+
+    def as_showShotS(self):
+        return self.flashObject.as_showShot() if self._isDAAPIInited() else None
+
+    def as_setAutoloaderReloadasPercentS(self, percent):
+        return self.flashObject.as_setAutoloaderReloadasPercent(percent) if self._isDAAPIInited() else None
+
+    def as_setAutoloaderPercentS(self, percent, sec, isTimerOn):
+        return self.flashObject.as_setAutoloaderPercent(percent, sec, isTimerOn) if self._isDAAPIInited() else None

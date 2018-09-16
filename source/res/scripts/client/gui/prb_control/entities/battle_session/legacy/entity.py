@@ -21,9 +21,6 @@ from helpers import i18n
 from skeletons.gui.lobby_context import ILobbyContext
 
 class BattleSessionListEntryPoint(LegacyEntryPoint):
-    """
-    Battle sessions browsers entry point
-    """
 
     def __init__(self):
         super(BattleSessionListEntryPoint, self).__init__(FUNCTIONAL_FLAG.BATTLE_SESSION)
@@ -44,9 +41,6 @@ class BattleSessionListEntryPoint(LegacyEntryPoint):
 
 
 class BattleSessionEntryPoint(LegacyEntryPoint):
-    """
-    Battle sessions room entry point
-    """
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
@@ -77,9 +71,6 @@ class BattleSessionEntryPoint(LegacyEntryPoint):
 
 
 class BattleSessionEntity(LegacyEntity):
-    """
-    Battle sessions entity
-    """
 
     def __init__(self, settings):
         requests = {REQUEST_TYPE.ASSIGN: self.assign,
@@ -165,8 +156,4 @@ class BattleSessionEntity(LegacyEntity):
         g_eventDispatcher.updateUI()
 
     def __handleCarouselInited(self, _):
-        """
-        Listener for carousel init event. It adds spec battles tab in
-        carousel.
-        """
         g_eventDispatcher.addSpecBattleToCarousel(self.getEntityType())

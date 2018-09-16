@@ -35,8 +35,6 @@ class EventBoardsDetailsContainerView(EventBoardsDetailsContainerViewMeta):
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSION_DETAILS_VIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleDetailsClose(self, _):
-        """ We may need to close details externally when it already open.
-        """
         self.destroy()
 
 

@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/BadgesPage.py
+import operator
 from collections import defaultdict
 import BigWorld
-import operator
 from helpers import dependency
 from account_helpers.AccountSettings import AccountSettings, LAST_BADGES_VISIT
 from helpers.time_utils import getServerUTCTime

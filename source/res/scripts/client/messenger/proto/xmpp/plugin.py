@@ -129,8 +129,4 @@ class XmppPlugin(IProtoPlugin):
 
     @classmethod
     def __getClanListener(cls):
-        """Gets ClanListener instance
-        :return: Instance of XmppClanListener, None if xmpp clan channels aren't enabled
-        :rtype XmppClanListener
-        """
         return XmppClanListener() if g_settings.server.isXmppClansEnabled() else None

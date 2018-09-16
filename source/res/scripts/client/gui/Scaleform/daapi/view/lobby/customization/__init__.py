@@ -7,7 +7,7 @@ from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import ShowDialogEvent
 
@@ -16,7 +16,6 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from gui.Scaleform.daapi.view.lobby.customization.anchor_properties import AnchorProperties
     from gui.Scaleform.daapi.view.lobby.customization.camo_anchor_properties import CamoAnchorProperties
     from gui.Scaleform.daapi.view.lobby.customization.customization_popover import CustomizationPopover
     from gui.Scaleform.daapi.view.lobby.customization.decal_anchor_properties import DecalAnchorProperties
@@ -59,14 +58,14 @@ class CustomizationPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, self.loadViewByCtxEvent), (VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, self.loadViewByCtxEvent), (VIEW_ALIAS.CUSTOMIZATION_NON_HISTORIC_ITEMS_POPOVER, self.loadViewByCtxEvent))
-        super(CustomizationPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+        super(CustomizationPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
 
 class CustomizationDialogPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((ShowDialogEvent.SHOW_CONFIRM_CUSTOMIZATION_ITEM_DIALOG, self.__confirmCustomizationItemHandler),)
-        super(CustomizationDialogPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.GLOBAL)
+        listeners = ((ShowDialogEvent.SHOW_CONFIRM_C11N_BUY_DIALOG, self.__confirmCustomizationItemHandler), (ShowDialogEvent.SHOW_CONFIRM_C11N_SELL_DIALOG, self.__confirmCustomizationItemHandler))
+        super(CustomizationDialogPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.GLOBAL)
 
     def __confirmCustomizationItemHandler(self, event):
         self.loadViewWithGenName(CUSTOMIZATION_ALIASES.CONFIRM_CUSTOMIZATION_ITEM_DIALOG, event.meta, event.handler)

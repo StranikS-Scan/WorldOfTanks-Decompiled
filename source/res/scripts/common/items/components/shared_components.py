@@ -3,6 +3,7 @@
 from collections import namedtuple
 from constants import IS_CLIENT, IS_WEB
 from items.components import component_constants
+from items.components import path_builder
 if IS_CLIENT:
     from helpers import i18n
 elif IS_WEB:
@@ -104,9 +105,6 @@ class DeviceHealth(object):
 
     @property
     def maxRepairCost(self):
-        """Maximum possible cost of repairing of the device component.
-        :return: float containing repair cost.
-        """
         return (self.maxHealth - self.maxRegenHealth) * self.repairCost
 
 
@@ -117,24 +115,24 @@ class ModelStatesPaths(object):
 
     def __init__(self, undamaged, destroyed, exploded):
         super(ModelStatesPaths, self).__init__()
-        self.__undamaged = undamaged
-        self.__destroyed = destroyed
-        self.__exploded = exploded
+        self.__undamaged = tuple(path_builder.makeIndexes(undamaged))
+        self.__destroyed = tuple(path_builder.makeIndexes(destroyed))
+        self.__exploded = tuple(path_builder.makeIndexes(exploded))
 
     def __repr__(self):
-        return 'ModelStatesPaths(undamaged={}, destroyed={}, exploded={})'.format(self.__undamaged, self.__destroyed, self.__exploded)
+        return 'ModelStatesPaths(undamaged={}, destroyed={}, exploded={})'.format(self.undamaged, self.destroyed, self.exploded)
 
     @property
     def undamaged(self):
-        return self.__undamaged
+        return path_builder.makePath(*self.__undamaged)
 
     @property
     def destroyed(self):
-        return self.__destroyed
+        return path_builder.makePath(*self.__destroyed)
 
     @property
     def exploded(self):
-        return self.__exploded
+        return path_builder.makePath(*self.__exploded)
 
     def getPathByStateName(self, stateName):
         path = getattr(self, stateName, None)

@@ -4,7 +4,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.gui_items.Tankman import isSkillLearnt
-from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY, ITEM_PRICES_EMPTY
+from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from items import artefacts
@@ -25,7 +25,6 @@ class VehicleArtefact(FittingItem):
 
     @property
     def level(self):
-        """Return 0 because equipments and optional devices have no level."""
         pass
 
     @property
@@ -33,11 +32,6 @@ class VehicleArtefact(FittingItem):
         return self.descriptor.icon[0]
 
     def formattedShortDescription(self, formatter):
-        """
-        Gets original description string and applies the formatter.
-        :param formatter: dict containing colorTagOpen and colorTagClose
-        :return: formatted description
-        """
         description = super(VehicleArtefact, self).shortDescription
         return description.format(**formatter)
 
@@ -46,30 +40,18 @@ class VehicleArtefact(FittingItem):
 
     @property
     def isForSale(self):
-        """
-        Some items can not be sold, they will have 'notForSale' tag in xml file.
-        After moving to Money 2.0 concept this property can be removed and sellPrice.isDefined() will
-        be used to replace this property.
-        :return: True if the item can be sold, False otherwise
-        """
         return _TAG_NOT_FOR_SALE not in self.tags
 
     @property
     def tags(self):
-        """
-        Returns list of tags, associated with this item.
-        :return: frozenset of tags(strings), defined in the equipment.xml for the item.
-        """
         return self.descriptor.tags
 
     @property
     def isStimulator(self):
-        """ Is item stimulator which can increase crew role levels. """
         return isinstance(self.descriptor, artefacts.Stimulator)
 
     @property
     def crewLevelIncrease(self):
-        """ Value of crew role levels increasing. """
         return 0.0 if not self.isStimulator else self.descriptor.crewLevelIncrease
 
     @property
@@ -81,14 +63,6 @@ class Equipment(VehicleArtefact):
     __slots__ = ()
 
     def _getAltPrice(self, buyPrice, proxy):
-        """
-        Returns an alternative price (right now in Currency.CREDITS) based on the original buy price and equipments
-        gold-credits exchange rate defined in the shop.
-        
-        @param buyPrice: buy price in Money
-        @param proxy: shop stats proxy, see IShopCommonStats
-        @return: alternative price in Money (right now in credits)
-        """
         return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs) if Currency.GOLD in buyPrice else super(Equipment, self)._getAltPrice(buyPrice, proxy)
 
     @property
@@ -188,17 +162,9 @@ class BattleBooster(Equipment):
         return GUI_ITEM_TYPE_NAMES[self.itemTypeID]
 
     def isCrewBooster(self):
-        """
-        Check whether it crew or opt.dev battle booster
-        :return: boolean result
-        """
         return _TAG_CREW_BATTLE_BOOSTER in self.tags
 
     def isAffectsOnVehicle(self, vehicle):
-        """
-        Determines if the vehicle has optional devices for which this booster has effects.
-        :param vehicle: vehicle to get optional devices
-        """
         if self.isCrewBooster():
             return True
         for device in vehicle.optDevices:
@@ -222,20 +188,9 @@ class BattleBooster(Equipment):
         return (True, None)
 
     def isOptionalDeviceCompatible(self, optionalDevice):
-        """
-        Check if the provided opt. device is suitable for this booster(it means the booster affects this device).
-        :param optionalDevice: instance of OptionalDevice Gui item
-        :return True if suitable, False otherwise
-        """
         return not self.isCrewBooster() and optionalDevice is not None and self.descriptor.getLevelParamsForDevice(optionalDevice.descriptor) is not None
 
     def getCrewBonus(self, vehicle):
-        """
-        Calculates crew bonus percent. For battle booster it is necessary to check each optional device on vehicle,
-        due to this percent can depend on type of opt. device.
-        :param vehicle: gui_items.Vehicle instances
-        :return: float value
-        """
         if self.isCrewBooster():
             return 0
         else:
@@ -248,28 +203,14 @@ class BattleBooster(Equipment):
             return 0
 
     def getAffectedSkillName(self):
-        """
-        Returns a skill name, for which booster has effect
-        :return: string or None
-        """
         return self.descriptor.skillName if self.isCrewBooster() else None
 
     def isAffectedSkillLearnt(self, vehicle=None):
-        """
-        Check whether descriptor.skillName is learnt if vehicle is provided.
-        :param vehicle: instance of gui_item.Vehicle
-        :return: boolean result
-        """
         return isSkillLearnt(self.getAffectedSkillName(), vehicle) if vehicle is not None else False
 
     def getCrewBoosterDescription(self, isPerkReplace, formatter=None):
-        """
-        Constructs crew booster description. There can be perk replace or perk boost text.
-        :param isPerkReplace: should 'perk replace' or 'perk boost' text be returned
-        :param formatter: pass function to format the result, None - without formatting
-        :return: formatted string
-        """
-        assert self.isCrewBooster(), 'This description is only for Crew Booster!'
+        if not self.isCrewBooster():
+            raise UserWarning('This description is only for Crew Booster!')
         action = i18n.makeString(ARTEFACTS.CREWBATTLEBOOSTER_DESCR_REPLACE if isPerkReplace else ARTEFACTS.CREWBATTLEBOOSTER_DESCR_BOOST)
         if self.getAffectedSkillName() in PERKS:
             skillOrPerk = i18n.makeString(ARTEFACTS.CREWBATTLEBOOSTER_DESCR_PERK)
@@ -284,25 +225,14 @@ class BattleBooster(Equipment):
         return formatted
 
     def getCrewBoosterAction(self, isPerkReplace):
-        """
-        Constructs 'action' description for crew booster. It is used in tooltip and booster
-        buy window. The text is little bit different than in 'getCrewBoosterDescription' method
-        :param isPerkReplace: should 'perk replace' or 'perk boost' text be returned
-        :return: string without formatting
-        """
-        assert self.isCrewBooster(), 'This action description is only for Crew Booster!'
+        if not self.isCrewBooster():
+            raise UserWarning('This action description is only for Crew Booster!')
         token = _TOKEN_CREW_PERK_REPLACE if isPerkReplace else _TOKEN_CREW_PERK_BOOST
         return i18n.makeString(ARTEFACTS.getCrewActionForBattleBooster(self.name, token))
 
     def getOptDeviceBoosterDescription(self, vehicle, valueFormatter=None):
-        """
-        Constructs booster description for an optional device.
-        The gain value is depending on type of opt. device: regular or deluxe
-        :param vehicle: information is gathered from this object.
-        :param valueFormatter: pass function to format the result, None - without formatting
-        :return: formatted string
-        """
-        assert not self.isCrewBooster(), 'This description is only for Opt. Dev. Booster!'
+        if self.isCrewBooster():
+            raise UserWarning('This description is only for Opt. Dev. Booster!')
         deviceType = _TOKEN_OPT_DEVICE_SIMPLE
         if vehicle is not None:
             for device in vehicle.optDevices:
@@ -318,14 +248,6 @@ class BattleBooster(Equipment):
         return self.getCrewBoosterDescription(isPerkReplace=False, formatter=None) if self.isCrewBooster() else self.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=None)
 
     def _getAltPrice(self, buyPrice, proxy):
-        """
-        Returns an alternative price based on the original buy price and equipments exchange rate defined in the shop.
-        Right now BattleBooster are not available for alternative price and can be bought only for Currency.CRYSTAL.
-        
-        @param buyPrice: buy price in Money
-        @param proxy: shop stats proxy, see IShopCommonStats
-        @return: alternative price in Money (right now in credits)
-        """
         return MONEY_UNDEFINED
 
 
@@ -334,18 +256,9 @@ class RemovableDevice(VehicleArtefact):
 
     @property
     def isRemovable(self):
-        """
-        Indicates whether the item can be removed from vehicle for free.
-        :return: bool
-        """
         return self.descriptor.removable
 
     def getRemovalPrice(self, proxy=None):
-        """
-        The price to remove this device from vehicle, by default - empty price (remove for free)
-        :param proxy: instance of ItemsRequester
-        :return: ItemPrice
-        """
         return ITEM_PRICE_EMPTY
 
 
@@ -361,9 +274,6 @@ class OptionalDevice(RemovableDevice):
 
     @property
     def shortDescription(self):
-        """
-        By default return the string without value formatting. See artefacts.po
-        """
         description = super(OptionalDevice, self).shortDescription
         return description.format(colorTagOpen='', colorTagClose='')
 
@@ -371,11 +281,6 @@ class OptionalDevice(RemovableDevice):
         return _TAG_OPT_DEVICE_DELUXE in self.tags
 
     def getRemovalPrice(self, proxy=None):
-        """
-        The price to remove this device from vehicle
-        :param proxy: instance of ItemsRequester
-        :return: ItemPrice
-        """
         if not self.isRemovable and proxy is not None:
             if self.isDeluxe():
                 cost = proxy.shop.paidDeluxeRemovalCost
@@ -404,13 +309,6 @@ class OptionalDevice(RemovableDevice):
         return super(OptionalDevice, self).isInstalled(vehicle, slotIdx)
 
     def hasSimilarDevicesInstalled(self, vehicle):
-        """
-        Check if similar(duplicated) device is already installed on the vehicle.
-        Deluxe(device+) optional device has the same effect as regular opt.Device
-        and they can not be installed together.
-        :param vehicle: instance of gui_item.Vehicle
-        :return: boolean value
-        """
         optDevs = vehicle.optDevices
         for device in optDevs:
             if device is not None and not self.descriptor.checkCompatibilityWithOther(device.descriptor):
@@ -419,11 +317,6 @@ class OptionalDevice(RemovableDevice):
         return False
 
     def isSimilarDevice(self, other):
-        """
-        Check if 'other' device is similar this, i.e. has the same effect as this device.
-        :param other: optional device
-        :return: boolean value
-        """
         return not self.descriptor.checkCompatibilityWithOther(other) if other is not None else False
 
     def mayInstall(self, vehicle, slotIdx=None):
@@ -440,7 +333,7 @@ class OptionalDevice(RemovableDevice):
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            installed = map(lambda x: x.intCD if x is not None else None, vehicle.optDevices)
+            installed = [ (x.intCD if x is not None else None) for x in vehicle.optDevices ]
             if self.intCD in installed:
                 result.add(vehicle)
 

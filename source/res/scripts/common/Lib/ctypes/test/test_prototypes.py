@@ -11,7 +11,6 @@ def positive_address(a):
     import struct
     num_bits = struct.calcsize('P') * 8
     a += 1L << num_bits
-    assert a >= 0
     return a
 
 

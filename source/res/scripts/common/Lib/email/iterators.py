@@ -1,16 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/iterators.py
-"""Various types of useful iterators and generators."""
 __all__ = ['body_line_iterator', 'typed_subpart_iterator', 'walk']
 import sys
 from cStringIO import StringIO
 
 def walk(self):
-    """Walk over the message tree, yielding each subpart.
-    
-    The walk is performed in depth-first order.  This method is a
-    generator.
-    """
     yield self
     if self.is_multipart():
         for subpart in self.get_payload():
@@ -19,10 +13,6 @@ def walk(self):
 
 
 def body_line_iterator(msg, decode=False):
-    """Iterate over the parts, returning string payloads line-by-line.
-    
-    Optional decode (default False) is passed through to .get_payload().
-    """
     for subpart in msg.walk():
         payload = subpart.get_payload(decode=decode)
         if isinstance(payload, basestring):
@@ -31,12 +21,6 @@ def body_line_iterator(msg, decode=False):
 
 
 def typed_subpart_iterator(msg, maintype='text', subtype=None):
-    """Iterate over the subparts with a given MIME type.
-    
-    Use `maintype' as the main MIME type to match against; this defaults to
-    "text".  Optional `subtype' is the MIME subtype to match against; if
-    omitted, only the main type is matched.
-    """
     for subpart in msg.walk():
         if subpart.get_content_maintype() == maintype:
             if subtype is None or subpart.get_content_subtype() == subtype:
@@ -46,7 +30,6 @@ def typed_subpart_iterator(msg, maintype='text', subtype=None):
 
 
 def _structure(msg, fp=None, level=0, include_default=False):
-    """A handy debugging aid"""
     if fp is None:
         fp = sys.stdout
     tab = ' ' * (level * 4)

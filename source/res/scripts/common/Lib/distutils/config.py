@@ -1,18 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/config.py
-"""distutils.pypirc
-
-Provides the PyPIRCCommand class, the base class for the command classes
-that uses .pypirc in the distutils.command package.
-"""
 import os
 from ConfigParser import ConfigParser
 from distutils.cmd import Command
 DEFAULT_PYPIRC = '[distutils]\nindex-servers =\n    pypi\n\n[pypi]\nusername:%s\npassword:%s\n'
 
 class PyPIRCCommand(Command):
-    """Base command that knows how to handle the .pypirc file
-    """
     DEFAULT_REPOSITORY = 'https://pypi.python.org/pypi'
     DEFAULT_REALM = 'pypi'
     repository = None
@@ -21,11 +14,9 @@ class PyPIRCCommand(Command):
     boolean_options = ['show-response']
 
     def _get_rc_file(self):
-        """Returns rc file path."""
         return os.path.join(os.path.expanduser('~'), '.pypirc')
 
     def _store_pypirc(self, username, password):
-        """Creates a default .pypirc file."""
         rc = self._get_rc_file()
         f = os.fdopen(os.open(rc, os.O_CREAT | os.O_WRONLY, 384), 'w')
         try:
@@ -34,7 +25,6 @@ class PyPIRCCommand(Command):
             f.close()
 
     def _read_pypirc(self):
-        """Reads the .pypirc file."""
         rc = self._get_rc_file()
         if os.path.exists(rc):
             self.announce('Using PyPI login from %s' % rc)
@@ -75,14 +65,12 @@ class PyPIRCCommand(Command):
         return {}
 
     def initialize_options(self):
-        """Initialize options."""
         self.repository = None
         self.realm = None
         self.show_response = 0
         return
 
     def finalize_options(self):
-        """Finalizes options."""
         if self.repository is None:
             self.repository = self.DEFAULT_REPOSITORY
         if self.realm is None:

@@ -94,10 +94,6 @@ class IDynamicControllersLocator(object):
         raise NotImplementedError
 
     @property
-    def gasAttack(self):
-        raise NotImplementedError
-
-    @property
     def battleField(self):
         raise NotImplementedError
 
@@ -156,9 +152,6 @@ class IClientArenaVisitor(object):
     def hasRespawns(self):
         raise NotImplementedError
 
-    def hasGasAttack(self):
-        raise NotImplementedError
-
     def hasHealthBar(self):
         raise NotImplementedError
 
@@ -172,9 +165,6 @@ class IClientArenaVisitor(object):
         raise NotImplementedError
 
     def getArenaIcon(self, iconKey):
-        raise NotImplementedError
-
-    def getGasAttackSettings(self):
         raise NotImplementedError
 
     def getTeamSpawnPoints(self, team):
@@ -481,18 +471,10 @@ class IBattleSessionProvider(object):
 
     @property
     def shared(self):
-        """ Returns reference to repository of shared controllers
-        that are created for all game sessions.
-        :return: instance of class that extends ISharedControllersLocator.
-        """
         raise NotImplementedError
 
     @property
     def dynamic(self):
-        """ Returns reference to repository of controllers
-        that are created for some game sessions.
-        :return: instance of class that extends IDynamicControllersLocator.
-        """
         raise NotImplementedError
 
     @property
@@ -569,7 +551,7 @@ class IBattleSessionProvider(object):
     def invalidateVehicleState(self, state, value, vehicleID=0):
         raise NotImplementedError
 
-    def setVehicleHealth(self, isPlayerVehicle, id, newHealth, attackerID, attackReasonID):
+    def setVehicleHealth(self, isPlayerVehicle, vehicleID, newHealth, attackerID, attackReasonID):
         raise NotImplementedError
 
     def repairPointAction(self, repairPointIndex, action, nextActionTime):

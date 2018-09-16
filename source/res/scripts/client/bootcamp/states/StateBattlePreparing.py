@@ -3,7 +3,6 @@
 import BigWorld
 import BattleReplay
 import SoundGroups
-import AccountCommands
 from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
 from PlayerEvents import g_playerEvents
 from bootcamp.BootCampEvents import g_bootcampEvents
@@ -15,14 +14,12 @@ from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from helpers import dependency, aop
 from skeletons.gui.sounds import ISoundsController
-from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.sounds.filters import WWISEFilteredBootcampArenaFilter as BCFilter
 from bootcamp.BootcampLobbyHintsConfig import g_bootcampHintsConfig
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
-from gui.app_loader import g_appLoader
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import g_appLoader, settings as app_settings
 from gui.Scaleform.daapi.view.bootcamp.BCBattleLoadingSpaceEnv import BCBattleLoadingSpaceEnv
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
@@ -51,28 +48,24 @@ class StateBattlePreparing(AbstractState):
         g_playerEvents.onAvatarReady += self.onAvatarReady
         g_playerEvents.onAvatarBecomePlayer += self.onAvatarBecomePlayer
         g_bootcampEvents.onIntroVideoStop += self.__onBCIntroVideoStop
-        g_bootcampEvents.onIntroVideoGoNext += self.__onIntroVideoGoNext
-        g_bootcampEvents.onIntroVideoAccept += self.__onIntroVideoAccept
-        g_bootcampEvents.onIntroVideoSkip += self.__onIntroVideoSkip
+        g_bootcampEvents.onBootcampGoNext += self.__onBootcampGoNext
         g_bootcampEvents.onArenaLoadCompleted += self.onArenaLoadCompleted
         self.__spaceLoadDelayed = False
         weave(self.__weaver, self)
         if self.isVideoPlayingLesson:
             self.__isIntroVideoFinished = False
             BigWorld.delaySpaceLoad(True)
-            self.__oldSpaceEnv = self.soundController.setEnvForSpace(_SPACE_ID.BATTLE_LOADING, BCBattleLoadingSpaceEnv)
+            self.__oldSpaceEnv = self.soundController.setEnvForSpace(app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING, BCBattleLoadingSpaceEnv)
 
     def deactivate(self):
         LOG_DEBUG_DEV_BOOTCAMP('StateBattlePreparing.deactivate')
         g_playerEvents.onAvatarReady -= self.onAvatarReady
         g_playerEvents.onAvatarBecomePlayer -= self.onAvatarBecomePlayer
         g_bootcampEvents.onIntroVideoStop -= self.__onBCIntroVideoStop
-        g_bootcampEvents.onIntroVideoGoNext -= self.__onIntroVideoGoNext
-        g_bootcampEvents.onIntroVideoAccept -= self.__onIntroVideoAccept
-        g_bootcampEvents.onIntroVideoSkip -= self.__onIntroVideoSkip
+        g_bootcampEvents.onBootcampGoNext -= self.__onBootcampGoNext
         g_bootcampEvents.onArenaLoadCompleted -= self.onArenaLoadCompleted
         if self.isVideoPlayingLesson and self.__oldSpaceEnv is not None:
-            self.soundController.setEnvForSpace(_SPACE_ID.BATTLE_LOADING, self.__oldSpaceEnv)
+            self.soundController.setEnvForSpace(app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING, self.__oldSpaceEnv)
         self.onAvatarBecomeNonPlayer()
         self.__weaver.clear()
         return
@@ -113,24 +106,14 @@ class StateBattlePreparing(AbstractState):
         return
 
     def getIntroVideoData(self):
-        from bootcamp.Bootcamp import g_bootcamp
         video = ''
         background = ''
         if self.isVideoPlayingLesson:
             video = 'video/_tutorialInitial.usm'
             background = RES_ICONS.MAPS_ICONS_BOOTCAMP_LOADING_INTROLOADING
-        bootcampParameters = g_bootcamp.getParameters()
-        autoStart = bootcampParameters.get('introAutoStart', False)
-        skipOption = g_bootcamp.getContext().get('skipBootcampOption', False)
-        if BattleReplay.isPlaying():
-            autoStart = True
-            skipOption = False
         introVideoData = {'backgroundImage': background,
          'video': video,
-         'autoStart': autoStart,
-         'lessonNumber': self.__lessonId,
-         'tutorialPages': g_bootcamp.getBattleLoadingPages(),
-         'skipOption': skipOption}
+         'showSkipOption': False}
         return introVideoData
 
     def onSpaceLoaded(self):
@@ -169,20 +152,17 @@ class StateBattlePreparing(AbstractState):
     def onBattleAction(self, actionId, actionArgs):
         pass
 
-    def __onIntroVideoGoNext(self):
-        LOG_DEBUG_DEV_BOOTCAMP('__onIntroVideoGoNext')
+    def _doDeactivate(self):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _doActivate(self):
+        raise UserWarning('This method should not be reached in this context')
+
+    def __onBootcampGoNext(self):
+        LOG_DEBUG_DEV_BOOTCAMP('__onBootcampGoNext')
         BigWorld.player().onSpaceLoaded()
         app = g_appLoader.getDefBattleApp()
         app.cursorMgr.resetMousePosition()
-
-    def __onIntroVideoAccept(self):
-        BigWorld.player().choiceRunBootcamp(True)
-        self.__onIntroVideoGoNext()
-
-    def __onIntroVideoSkip(self):
-        BigWorld.player().onSpaceLoaded()
-        self.__skipBootcamp = True
-        BigWorld.player().choiceRunBootcamp(False)
 
     def __onBCIntroVideoStop(self):
         from bootcamp.Bootcamp import g_bootcamp
@@ -200,5 +180,5 @@ class StateBattlePreparing(AbstractState):
         if self.__prereqs is not None:
             BigWorld.player().onEnterWorld(self.__prereqs)
             self.__prereqs = None
-        g_appLoader.attachCursor(APP_NAME_SPACE.SF_BATTLE, _CTRL_FLAG.GUI_ENABLED)
+        g_appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_BATTLE, _CTRL_FLAG.GUI_ENABLED)
         return

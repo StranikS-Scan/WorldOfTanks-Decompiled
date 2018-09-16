@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.battle.tutorial.tutorial_page import TutorialPage,
 from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -39,4 +39,4 @@ class _TutorialPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((VIEW_ALIAS.TUTORIAL_BATTLE_PAGE, self.loadViewBySharedEvent),)
-        super(_TutorialPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
+        super(_TutorialPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)

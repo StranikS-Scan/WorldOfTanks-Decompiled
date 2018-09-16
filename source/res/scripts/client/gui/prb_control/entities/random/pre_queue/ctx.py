@@ -6,9 +6,6 @@ from gui.shared.utils.decorators import ReprInjector
 
 @ReprInjector.withParent(('getVehicleInventoryID', 'vInvID'), ('getGamePlayMask', 'gamePlayMask'), ('getWaitingID', 'waitingID'))
 class RandomQueueCtx(QueueCtx):
-    """
-    Enqueue random request context
-    """
 
     def __init__(self, vInventoryID, arenaTypeID=0, gamePlayMask=0, waitingID=''):
         super(RandomQueueCtx, self).__init__(entityType=QUEUE_TYPE.RANDOMS, waitingID=waitingID)
@@ -17,19 +14,10 @@ class RandomQueueCtx(QueueCtx):
         self.__gamePlayMask = gamePlayMask
 
     def getVehicleInventoryID(self):
-        """
-        Gets selected vehicle inventory ID
-        """
         return self.__vInventoryID
 
     def getDemoArenaTypeID(self):
-        """
-        Gets map arena type ID
-        """
         return self.__arenaTypeID
 
     def getGamePlayMask(self):
-        """
-        Gets selected mode mask
-        """
         return self.__gamePlayMask

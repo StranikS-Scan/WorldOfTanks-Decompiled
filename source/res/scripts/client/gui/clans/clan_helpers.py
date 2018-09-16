@@ -1,34 +1,34 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/clan_helpers.py
-from datetime import datetime
 from collections import namedtuple
-from adisp import async, process
+from datetime import datetime
 import Event
+from adisp import async, process
 from client_request_lib.exceptions import ResponseCodes
+from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages, GUI_SETTINGS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.clans import interfaces, items, formatters
+from gui.clans.items import ClanInviteWrapper, ClanPersonalInviteWrapper
+from gui.clans.settings import CLAN_INVITE_STATES, DATA_UNAVAILABLE_PLACEHOLDER
+from gui.clans.settings import COUNT_THRESHOLD, PERSONAL_INVITES_COUNT_THRESHOLD
 from gui.shared.formatters import icons, text_styles
+from gui.shared.utils import getPlayerDatabaseID, getPlayerName
+from gui.shared.utils import sortByFields
+from gui.shared.utils.ListPaginator import ListPaginator
+from gui.shared.view_helpers import UsersInfoHelper
+from gui.wgcg.clan.contexts import ClansInfoCtx, AcceptInviteCtx, DeclineInviteCtx, DeclineInvitesCtx
+from gui.wgcg.clan.contexts import SearchClansCtx, GetRecommendedClansCtx, AccountInvitesCtx, ClanRatingsCtx
 from helpers import dependency
 from helpers import i18n
-from helpers.local_cache import FileLocalCache
-from gui.shared.utils import sortByFields
-from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
-from gui.clans import interfaces, items, formatters
-from gui.clans.contexts import SearchClansCtx, GetRecommendedClansCtx, AccountInvitesCtx, ClanRatingsCtx
-from gui.clans.contexts import ClansInfoCtx, AcceptInviteCtx, DeclineInviteCtx, DeclineInvitesCtx
-from gui.clans.items import ClanInviteWrapper, ClanPersonalInviteWrapper
-from gui.clans.settings import COUNT_THRESHOLD, PERSONAL_INVITES_COUNT_THRESHOLD
-from gui.clans.settings import CLAN_INVITE_STATES, DATA_UNAVAILABLE_PLACEHOLDER
-from gui.shared.utils.ListPaginator import ListPaginator
-from gui.shared.utils import getPlayerDatabaseID, getPlayerName
-from gui.shared.view_helpers import UsersInfoHelper
 from helpers import time_utils
+from helpers.local_cache import FileLocalCache
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.clans import IClanController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.web import IWebController
 _RequestData = namedtuple('_RequestData', ['pattern',
  'offset',
  'count',
@@ -64,14 +64,14 @@ def isInClanEnterCooldown(clanCooldownTill):
 
 
 class ClanListener(interfaces.IClanListener):
-    clansCtrl = dependency.descriptor(IClanController)
+    webCtrl = dependency.descriptor(IWebController)
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def startClanListening(self):
-        self.clansCtrl.addListener(self)
+        self.webCtrl.addListener(self)
 
     def stopClanListening(self):
-        self.clansCtrl.removeListener(self)
+        self.webCtrl.removeListener(self)
 
 
 class ClanFinder(ListPaginator, UsersInfoHelper):
@@ -179,8 +179,9 @@ class ClanFinder(ListPaginator, UsersInfoHelper):
 
 class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
 
-    def __init__(self, requester, contextClass, clanDbID, statuses=list(), offset=0, count=50):
+    def __init__(self, requester, contextClass, clanDbID, statuses=None, offset=0, count=50):
         super(ClanInvitesPaginator, self).__init__(requester, offset, count)
+        statuses = statuses or []
         self.__ctxClass = contextClass
         self.__clanDbID = clanDbID
         self.__statuses = statuses
@@ -419,10 +420,10 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
 
 class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
 
-    def __init__(self, requester, accountDbID, statuses=list(), offset=0, count=50):
+    def __init__(self, requester, accountDbID, statuses=None, offset=0, count=50):
         super(ClanPersonalInvitesPaginator, self).__init__(requester, offset, count)
         self.__accountDbID = accountDbID
-        self.__statuses = statuses
+        self.__statuses = statuses or []
         self.__invitesCache = []
         self.__cacheMapping = {}
         self.__lastStatus = True
@@ -737,7 +738,7 @@ def isStrongholdsEnabled(lobbyContext=None):
         try:
             settings = lobbyContext.getServerSettings()
             return settings.isStrongholdsEnabled()
-        except:
+        except Exception:
             return False
 
         return

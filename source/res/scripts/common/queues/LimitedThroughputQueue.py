@@ -26,7 +26,6 @@ class LimitedThroughputQueue:
         self.__timerID = 0
 
     def _job(self, timerID, _=0):
-        assert len(self.__queue) > 0
         for i in xrange(0, self.__actionsPerSecond / self.__maxActionsPerBatch):
             action = self.__queue.pop()
             action()

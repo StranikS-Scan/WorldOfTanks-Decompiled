@@ -46,7 +46,7 @@ def _getStyle(style, ctx=None):
 
 
 def _formatText(style, text=''):
-    if type(text) in types.StringTypes and i18n.isValidKey(text):
+    if isinstance(text, types.StringTypes) and i18n.isValidKey(text):
         text = i18n.makeString(text)
     return _getStyle(style, {'message': text})
 
@@ -125,10 +125,6 @@ def disabled(text):
 
 def promoTitle(text):
     return _formatText('promoTitle', text)
-
-
-def superPromoTitle(text):
-    return _formatText('superPromoTitle', text)
 
 
 def bonusLocalText(text):
@@ -256,6 +252,10 @@ def premiumVehicleName(text):
     return _formatText('premiumVehicleName', text)
 
 
+def superPromoTitle(text):
+    return _formatText('superPromoTitle', text)
+
+
 def highlightText(text):
     return _formatText('highlightText', text)
 
@@ -269,11 +269,11 @@ def missionStatusAvailable(text):
 
 
 def getRawStyles(names):
-    return dict(map(lambda name: (name, _getStyle(name)), names))
+    return dict(((name, _getStyle(name)) for name in names))
 
 
 def getStyles(names):
-    return dict(map(lambda name: (name, _formatText(name)), names))
+    return dict(((name, _formatText(name)) for name in names))
 
 
 def _processStyle(style):

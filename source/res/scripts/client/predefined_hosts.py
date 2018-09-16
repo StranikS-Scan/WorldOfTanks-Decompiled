@@ -93,16 +93,16 @@ def _CSISResponseParser(out, requestedIDs):
         itemsSec = root['items']
     if itemsSec is not None:
         for _, subSec in itemsSec.items():
-            type = subSec.readString('type')
+            rType = subSec.readString('type')
             name = subSec.readInt('name')
-            if type == 'periphery' and name:
+            if rType == 'periphery' and name:
                 result[name] = subSec.readInt('availability', HOST_AVAILABILITY.UNKNOWN)
 
     return result
 
 
 def _createDefaultCSISResponse(requestedIDs):
-    return dict(map(lambda reqID: (reqID, HOST_AVAILABILITY.UNKNOWN), requestedIDs))
+    return dict(((reqID, HOST_AVAILABILITY.UNKNOWN) for reqID in requestedIDs))
 
 
 class _CSISRequestWorker(threading.Thread):
@@ -148,7 +148,7 @@ class _CSISRequestWorker(threading.Thread):
     def _makeUrl(self):
         url = self.__url
         if self.__params:
-            data = urlencode(map(lambda param: ('periphery', param), self.__params))
+            data = urlencode([ ('periphery', param) for param in self.__params ])
             url = '{0:>s}?{1:>s}'.format(self.__url, data)
         return url
 
@@ -227,11 +227,11 @@ class _PingRequester(object):
         if _isReplay('Ping'):
             self.__updatePing([], PING_STATUSES.UNDEFINED)
             return
-        peripheries = map(lambda host: host.url, peripheries)
+        peripheries = [ host.url for host in peripheries ]
         if not self.__isRequestPingInProgress and peripheries:
             cooldownTime = _PING_FORCE_COOLDOWN_TIME if forced else _PING_COOLDOWN_TIME
             if time.time() - self.__lastUpdateTime >= cooldownTime:
-                pData = map(lambda periphery: (periphery, UNDEFINED_PING_VAL), peripheries)
+                pData = [ (periphery, UNDEFINED_PING_VAL) for periphery in peripheries ]
                 try:
                     LOG_DEBUG('Ping starting', peripheries)
                     self.__isRequestPingInProgress = True
@@ -346,10 +346,6 @@ class _PreDefinedHostList(object):
         return self.__pingRequester.result()
 
     def getHostPingData(self, host):
-        """
-        :param host: [str]
-        :return: [PingData]
-        """
         return self.getPingResult().get(host, _DEFAULT_PING_DATA)
 
     def autoLoginQuery(self, callback):
@@ -528,7 +524,7 @@ class _PreDefinedHostList(object):
             return None
 
     def peripheries(self):
-        return filter(lambda app: app.peripheryID, self._hosts)
+        return [ app for app in self._hosts if app.peripheryID ]
 
     def roamingHosts(self):
         p = BigWorld.player()
@@ -560,10 +556,10 @@ class _PreDefinedHostList(object):
     def _determineRecommendHost(self):
         defAvail = HOST_AVAILABILITY.NOT_AVAILABLE
         csisResGetter = self.__csisResponse.get
-        queryResult = map(lambda host: (host, self.getHostPingData(host.url).value, csisResGetter(host.peripheryID, defAvail)), self.peripheries())
-        self.__recommended = filter(lambda item: item[2] == HOST_AVAILABILITY.RECOMMENDED, queryResult)
+        queryResult = [ (host, self.getHostPingData(host.url).value, csisResGetter(host.peripheryID, defAvail)) for host in self.peripheries() ]
+        self.__recommended = [ item for item in queryResult if item[2] == HOST_AVAILABILITY.RECOMMENDED ]
         if not self.__recommended:
-            self.__recommended = filter(lambda item: item[2] == HOST_AVAILABILITY.NOT_RECOMMENDED, queryResult)
+            self.__recommended = [ item for item in queryResult if item[2] == HOST_AVAILABILITY.NOT_RECOMMENDED ]
         recommendLen = len(self.__recommended)
         if not recommendLen:
             if len(queryResult) > 1:
@@ -606,7 +602,7 @@ class _PreDefinedHostList(object):
                     self._isCSISQueryInProgress = True
                     self.onCsisQueryStart()
                     allHosts = self.hosts()
-                    peripheries = map(lambda host: host.peripheryID, allHosts)
+                    peripheries = [ host.peripheryID for host in allHosts if host.peripheryID ]
                     LOG_DEBUG('CSIS query sending', peripheries)
                     worker = _getCSISWorker(self.__csisUrl, self.__receiveCsisResponse, peripheries)
                     worker.start()
@@ -656,16 +652,16 @@ class _PreDefinedHostList(object):
 
     def __filterRecommendedByPing(self, recommended):
         result = recommended
-        filtered = filter(lambda item: item[1] > UNDEFINED_PING_VAL, recommended)
+        filtered = [ item for item in recommended if item[1] > UNDEFINED_PING_VAL ]
         if filtered:
             minPingTime = min(filtered, key=lambda item: item[1])[1]
             maxPingTime = 1.2 * minPingTime
-            result = filter(lambda item: item[1] < maxPingTime, filtered)
+            result = [ item for item in filtered if item[1] < maxPingTime ]
         return result
 
     def __choiceFromRecommended(self):
         recommended = random.choice(self.__recommended)
-        self.__recommended = filter(lambda item: item != recommended, self.__recommended)
+        self.__recommended = [ item for item in self.__recommended if item != recommended ]
         return recommended[0]
 
 

@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ParenMatch.py
-"""ParenMatch -- An IDLE extension for parenthesis matching.
-
-When you hit a right paren, the cursor should move briefly to the left
-paren.  Paren here is used generically; the matching applies to
-parentheses, square brackets, and curly braces.
-"""
 from idlelib.HyperParser import HyperParser
 from idlelib.configHandler import idleConf
 _openers = {')': '(',
@@ -14,31 +8,6 @@ _openers = {')': '(',
 CHECK_DELAY = 100
 
 class ParenMatch:
-    """Highlight matching parentheses
-    
-    There are three supported style of paren matching, based loosely
-    on the Emacs options.  The style is select based on the
-    HILITE_STYLE attribute; it can be changed used the set_style
-    method.
-    
-    The supported styles are:
-    
-    default -- When a right paren is typed, highlight the matching
-        left paren for 1/2 sec.
-    
-    expression -- When a right paren is typed, highlight the entire
-        expression from the left paren to the right paren.
-    
-    TODO:
-        - extend IDLE with configuration dialog to change options
-        - implement rest of Emacs highlight styles (see below)
-        - print mismatch warning in IDLE status window
-    
-    Note: In Emacs, there are several styles of highlight where the
-    matching paren is highlighted whenever the cursor is immediately
-    to the right of a right paren.  I don't know how to do that in Tk,
-    so I haven't bothered.
-    """
     menudefs = [('edit', [('Show surrounding parens', '<<flash-paren>>')])]
     STYLE = idleConf.GetOption('extensions', 'ParenMatch', 'style', default='expression')
     FLASH_DELAY = idleConf.GetOption('extensions', 'ParenMatch', 'flash-delay', type='int', default=500)
@@ -120,12 +89,10 @@ class ParenMatch:
             self.text.bell()
 
     def create_tag_default(self, indices):
-        """Highlight the single paren that matches"""
         self.text.tag_add('paren', indices[0])
         self.text.tag_config('paren', self.HILITE_CONFIG)
 
     def create_tag_expression(self, indices):
-        """Highlight the entire expression"""
         if self.text.get(indices[1]) in (')', ']', '}'):
             rightindex = indices[1] + '+1c'
         else:
@@ -134,8 +101,6 @@ class ParenMatch:
         self.text.tag_config('paren', self.HILITE_CONFIG)
 
     def set_timeout_none(self):
-        """Highlight will remain until user input turns it off
-        or the insert has moved"""
         self.counter += 1
 
         def callme(callme, self=self, c=self.counter, index=self.text.index('insert')):
@@ -147,6 +112,5 @@ class ParenMatch:
         self.editwin.text_frame.after(CHECK_DELAY, callme, callme)
 
     def set_timeout_last(self):
-        """The last highlight created will be removed after .5 sec"""
         self.counter += 1
         self.editwin.text_frame.after(self.FLASH_DELAY, lambda self=self, c=self.counter: self.handle_restore_timer(c))

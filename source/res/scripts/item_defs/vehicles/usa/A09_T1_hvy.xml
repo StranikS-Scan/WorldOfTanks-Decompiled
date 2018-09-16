@@ -269,7 +269,7 @@
         <segmentLength>	0.142	</segmentLength>
         <segmentOffset>	0.037	</segmentOffset>
         <segment2Offset>	0.074	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -543,7 +543,7 @@
         <segmentLength>	0.142	</segmentLength>
         <segmentOffset>	0.037	</segmentOffset>
         <segment2Offset>	0.074	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -659,7 +659,7 @@
       <userString>	#usa_vehicles:T1D5	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	4300.0	</price>
+      <price>	4300	</price>
       <armor>
         <armor_1>	101.6	</armor_1>
         <armor_2>	63.5	</armor_2>
@@ -768,7 +768,7 @@
       <userString>	#usa_vehicles:T1D6	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	11300.0	</price>
+      <price>	11300	</price>
       <unlocks>
         <gun>	_76mm_Gun_M1A1	  <cost>	4600	</cost>
         </gun>
@@ -929,7 +929,7 @@
   </fuelTanks>
   <radios>
     <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_538	  <cost>	3800.0	</cost>
+        <radio>	SCR_538	  <cost>	3800	</cost>
         </radio>
       </unlocks>
     </SCR_508>

@@ -13,17 +13,11 @@ from items.components.c11n_constants import SeasonType
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.shared import IItemsCache
 
-class C11N_MODE(CONST_CONTAINER):
-    """ Customization mode.
-    """
+class C11nMode(CONST_CONTAINER):
     STYLE, CUSTOM = range(2)
 
 
-class CUSTOMIZATION_TABS(CONST_CONTAINER):
-    """
-    Enumeration of customization item browser tabs.
-    The order of the ALL property corresponds to the order the tab names will appear in.
-    """
+class C11nTabs(CONST_CONTAINER):
     STYLE, PAINT, CAMOUFLAGE, EMBLEM, INSCRIPTION, EFFECT = range(6)
     AVAILABLE_REGIONS = (PAINT,
      CAMOUFLAGE,
@@ -46,12 +40,12 @@ class CUSTOMIZATION_TABS(CONST_CONTAINER):
      EFFECT: HighlightingMode.WHOLE_VEHICLE}
 
 
-TABS_ITEM_MAPPING = {CUSTOMIZATION_TABS.STYLE: GUI_ITEM_TYPE.STYLE,
- CUSTOMIZATION_TABS.PAINT: GUI_ITEM_TYPE.PAINT,
- CUSTOMIZATION_TABS.CAMOUFLAGE: GUI_ITEM_TYPE.CAMOUFLAGE,
- CUSTOMIZATION_TABS.EMBLEM: GUI_ITEM_TYPE.EMBLEM,
- CUSTOMIZATION_TABS.INSCRIPTION: GUI_ITEM_TYPE.INSCRIPTION,
- CUSTOMIZATION_TABS.EFFECT: GUI_ITEM_TYPE.MODIFICATION}
+TABS_ITEM_MAPPING = {C11nTabs.STYLE: GUI_ITEM_TYPE.STYLE,
+ C11nTabs.PAINT: GUI_ITEM_TYPE.PAINT,
+ C11nTabs.CAMOUFLAGE: GUI_ITEM_TYPE.CAMOUFLAGE,
+ C11nTabs.EMBLEM: GUI_ITEM_TYPE.EMBLEM,
+ C11nTabs.INSCRIPTION: GUI_ITEM_TYPE.INSCRIPTION,
+ C11nTabs.EFFECT: GUI_ITEM_TYPE.MODIFICATION}
 TYPE_TO_TAB_IDX = {v:k for k, v in TABS_ITEM_MAPPING.iteritems()}
 SEASON_IDX_TO_TYPE = {SEASONS_CONSTANTS.SUMMER_INDEX: SeasonType.SUMMER,
  SEASONS_CONSTANTS.WINTER_INDEX: SeasonType.WINTER,
@@ -102,10 +96,6 @@ class AdditionalPurchaseGroups(object):
 OutfitInfo = namedtuple('OutfitInfo', ('original', 'modified'))
 
 def getCustomPurchaseItems(outfitsInfo):
-    """ Builds and returns a list of PurchaseItems.  This list will only contain items that would be newly purchased.
-    This takes into account current inventory and what items are already available.
-    :return: list of PurcahseItem entries containing items that would require a new purchase.
-    """
     itemsCache = dependency.instance(IItemsCache)
     purchaseItems = []
     inventoryCount = Counter()
@@ -140,29 +130,25 @@ def getCustomPurchaseItems(outfitsInfo):
     return purchaseItems
 
 
-def getOutfitWithoutItem(outfitsInfo, intCD):
-    """ Get original outfit with one item put off.
-    """
+def getOutfitWithoutItems(outfitsInfo, intCD, count):
     for season, outfitCompare in outfitsInfo.iteritems():
         backward = outfitCompare.modified.diff(outfitCompare.original)
         for container in backward.containers():
             for slot in container.slots():
                 for idx in range(slot.capacity()):
                     item = slot.getItem(idx)
-                    if item and item.intCD == intCD:
+                    if item and item.intCD == intCD and count:
                         outfit = outfitCompare.original
                         season = season
                         container = outfit.getContainer(container.getAreaID())
                         slot = container.slotFor(item.itemTypeID)
                         slot.remove(idx)
-                        return (season, outfit)
+                        count -= 1
 
-    return (None, None)
+        yield (season, outfitCompare.original)
 
 
 def getStylePurchaseItems(styleInfo):
-    """ Get purchase items for the styles mode.
-    """
     purchaseItems = []
     original = styleInfo.original
     modified = styleInfo.modified
@@ -176,14 +162,11 @@ def getStylePurchaseItems(styleInfo):
 
 
 def getItemInventoryCount(item, outfitsInfo=None):
-    """ Gets the actual available inventory count of an item.
-    (including the items that had been put off but haven't been committed yet)
-    """
     inventoryCount = item.fullInventoryCount(g_currentVehicle.item)
     if not outfitsInfo:
         return inventoryCount
     intCD = item.intCD
-    for season, outfitCompare in outfitsInfo.iteritems():
+    for outfitCompare in outfitsInfo.itervalues():
         old = Counter((i.intCD for i in outfitCompare.original.items()))
         new = Counter((i.intCD for i in outfitCompare.modified.items()))
         inventoryCount += old[intCD] - new[intCD]
@@ -192,8 +175,6 @@ def getItemInventoryCount(item, outfitsInfo=None):
 
 
 def getStyleInventoryCount(item, styleInfo=None):
-    """ Gets the actual available inventory count of a style.
-    """
     inventoryCount = item.fullInventoryCount(g_currentVehicle.item)
     if not styleInfo:
         return inventoryCount
@@ -211,9 +192,6 @@ def getStyleInventoryCount(item, styleInfo=None):
 
 
 def getTotalPurchaseInfo(purchaseItems):
-    """ Get purchase info (total price that needs to be paid,
-    number of actually selected items and total number of items.
-    """
     totalPrice = ITEM_PRICE_EMPTY
     numSelectedItems = 0
     numApplyingItems = 0

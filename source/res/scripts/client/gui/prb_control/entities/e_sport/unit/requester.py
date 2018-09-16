@@ -12,13 +12,6 @@ from gui.prb_control.formatters import messages
 from helpers import time_utils
 
 class UnitAutoSearchHandler(object):
-    """
-    Unit auto search requester: it handles player's request to:
-    - start
-    - accept
-    - decline
-    - stop
-    """
 
     def __init__(self, entity):
         super(UnitAutoSearchHandler, self).__init__()
@@ -30,9 +23,6 @@ class UnitAutoSearchHandler(object):
         self.__lastErrorCode = UNIT_ERROR.OK
 
     def init(self):
-        """
-        Initialization of requester. Subscription to browser events.
-        """
         browser = prb_getters.getClientUnitBrowser()
         if browser:
             browser.onSearchSuccessReceived += self.unitBrowser_onSearchSuccessReceived
@@ -44,9 +34,6 @@ class UnitAutoSearchHandler(object):
         g_playerEvents.onEnqueuedUnitAssembler += self.pe_onEnqueuedUnitAssembler
 
     def fini(self):
-        """
-        Finalization of requester. Unsubscription from browser events.
-        """
         browser = prb_getters.getClientUnitBrowser()
         if browser:
             browser.onSearchSuccessReceived -= self.unitBrowser_onSearchSuccessReceived
@@ -60,9 +47,6 @@ class UnitAutoSearchHandler(object):
         return
 
     def initEvents(self, listener):
-        """
-        Initializes event listeners
-        """
         if self.__hasResult:
             browser = prb_getters.getClientUnitBrowser()
             if browser:
@@ -75,15 +59,9 @@ class UnitAutoSearchHandler(object):
             listener.onUnitAutoSearchStarted(self.getTimeLeftInSearch())
 
     def isInSearch(self):
-        """
-        Are we in search now
-        """
         return self.__isInSearch
 
     def getTimeLeftInSearch(self):
-        """
-        Get time that left in search
-        """
         if self.__startSearchTime > -1:
             timeLeft = int(BigWorld.time() - self.__startSearchTime)
         else:
@@ -91,19 +69,9 @@ class UnitAutoSearchHandler(object):
         return timeLeft
 
     def getAcceptDelta(self, acceptDeadlineUTC):
-        """
-        Get acceptance time delta
-        Args:
-            acceptDeadlineUTC: time when approval expires
-        """
         return max(0, int(time_utils.makeLocalServerTime(acceptDeadlineUTC) - time.time())) if acceptDeadlineUTC else 0
 
     def start(self, vTypeDescrs=None):
-        """
-        Start auto search with vehicles selected:
-        Args:
-            vTypeDescrs: list of selected vehicles intCDs
-        """
         if self.__isInSearch:
             LOG_ERROR('Auto search already started.')
             return False
@@ -120,9 +88,6 @@ class UnitAutoSearchHandler(object):
             return
 
     def stop(self):
-        """
-        Stops the auto search
-        """
         if not self.__isInSearch:
             LOG_DEBUG('Auto search did not start. Exits form search forced.')
             self.__exitFromQueue()
@@ -136,9 +101,6 @@ class UnitAutoSearchHandler(object):
             return False
 
     def accept(self):
-        """
-        Accepts the auto search result
-        """
         if not self.__hasResult:
             LOG_ERROR('First, sends request for search.')
             return False
@@ -151,9 +113,6 @@ class UnitAutoSearchHandler(object):
         return False
 
     def decline(self):
-        """
-        Declines the auto search result
-        """
         if not self.__hasResult:
             LOG_ERROR('First, sends request for search.')
             return False
@@ -166,24 +125,15 @@ class UnitAutoSearchHandler(object):
         return False
 
     def pe_onDequeuedUnitAssembler(self):
-        """
-        Listener for unit assembler dequeue event
-        """
         self.__exitFromQueue()
         g_eventDispatcher.updateUI()
 
     def pe_onKickedFromUnitAssembler(self):
-        """
-        Listener for unit assembler kick event
-        """
         self.__exitFromQueue()
         g_eventDispatcher.updateUI()
         SystemMessages.pushMessage(messages.getUnitKickedReasonMessage('KICKED_FROM_UNIT_ASSEMBLER'), type=SystemMessages.SM_TYPE.Warning)
 
     def pe_onEnqueuedUnitAssembler(self):
-        """
-        Listener for unit assembler enqueue event
-        """
         self.__isInSearch = True
         self.__startSearchTime = BigWorld.time()
         g_eventDispatcher.setUnitProgressInCarousel(self.__entity.getEntityType(), True)
@@ -195,12 +145,6 @@ class UnitAutoSearchHandler(object):
         g_eventDispatcher.updateUI()
 
     def unitBrowser_onSearchSuccessReceived(self, unitMgrID, acceptDeadlineUTC):
-        """
-        Listener for auto search succeed event
-        Args:
-            unitMgrID: unit manager ID
-            acceptDeadlineUTC: time when approval will expire
-        """
         self.__hasResult = True
         acceptDelta = self.getAcceptDelta(acceptDeadlineUTC)
         LOG_DEBUG('onUnitAutoSearchSuccess', acceptDelta, acceptDeadlineUTC)
@@ -213,12 +157,6 @@ class UnitAutoSearchHandler(object):
         g_eventDispatcher.updateUI()
 
     def unitBrowser_onErrorReceived(self, errorCode, errorStr):
-        """
-        Listener for auto search error event
-        Args:
-            errorCode: error code
-            errorStr: error message
-        """
         self.__isInSearch = False
         self.__lastErrorCode = errorCode
         if errorCode != UNIT_ERROR.OK:
@@ -228,9 +166,6 @@ class UnitAutoSearchHandler(object):
         g_eventDispatcher.updateUI()
 
     def __exitFromQueue(self):
-        """
-        Routine clears all information that is related to in search state
-        """
         self.__isInSearch = False
         self.__lastErrorCode = UNIT_ERROR.OK
         self.__hasResult = False

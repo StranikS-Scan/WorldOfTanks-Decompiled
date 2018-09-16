@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/PixieNode.py
+import weakref
 import BigWorld
 import Math
-import weakref
 from helpers.PixieBG import PixieBG
 from helpers.EffectsList import EffectsListPlayer
 
 class BaseNodeEffect(object):
+    __slots__ = ('__weakref__', '_enabled')
 
     @property
     def enabled(self):
@@ -23,7 +24,7 @@ class BaseNodeEffect(object):
 
 
 class PixieEffect(BaseNodeEffect):
-    __slots__ = ('__effectName', '__pixieRef', '__ttl', '__node', '__ttlCallback')
+    __slots__ = ('__effectName', '__pixieRef', '__ttl', '__node', '__ttlCallback', '_enabled')
 
     def __init__(self, name, node, ttl):
         super(PixieEffect, self).__init__()

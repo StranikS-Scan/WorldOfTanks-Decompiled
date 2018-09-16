@@ -21,7 +21,7 @@ from gui.Scaleform import getNationsFilterAssetPath
 from nations import AVAILABLE_NAMES
 from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getStatusTitleStyle
 
-class EVENT_BOARDS_GROUP_TYPES:
+class EVENT_BOARDS_GROUP_TYPES(object):
     GOLD = 1
     SILVER = 2
     BRONZE = 3
@@ -47,12 +47,12 @@ def _vehicleHeaderCreator(vehicleCDStr):
     return (title, iconPath, txtLevel)
 
 
-def makeTableViewHeaderVO(type, value, eventName, status=None, statusTooltip=None):
-    if type == EVENT_TYPE.VEHICLE:
+def makeTableViewHeaderVO(eType, value, eventName, status=None, statusTooltip=None):
+    if eType == EVENT_TYPE.VEHICLE:
         title, icon, level = _vehicleHeaderCreator(value)
         popoverAlias = EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS
     else:
-        _title, _icon = FORMATS[type]
+        _title, _icon = FORMATS[eType]
         title = _ms(_title.format(value))
         icon = _icon.format(value)
         level = None
@@ -66,13 +66,13 @@ def makeTableViewHeaderVO(type, value, eventName, status=None, statusTooltip=Non
      'statusTooltip': statusTooltip}
 
 
-_LEADERBOARD_BG_CREATORS = {EVENT_TYPE.NATION: lambda nationName: RES_ICONS.getEventBoardBg(nationName),
+_LEADERBOARD_BG_CREATORS = {EVENT_TYPE.NATION: RES_ICONS.getEventBoardBg,
  EVENT_TYPE.VEHICLE: lambda _: RES_ICONS.getEventBoardBg('vehicle'),
  EVENT_TYPE.LEVEL: lambda _: RES_ICONS.getEventBoardBg('level'),
  EVENT_TYPE.CLASS: lambda _: RES_ICONS.getEventBoardBg('class')}
 
-def makeTableViewBackgroundVO(type, value):
-    return _LEADERBOARD_BG_CREATORS[type](value)
+def makeTableViewBackgroundVO(eType, value):
+    return _LEADERBOARD_BG_CREATORS[eType](value)
 
 
 _OBJECTIVE_STRINGS = {_op.ORIGINALXP: 'exp',
@@ -148,7 +148,7 @@ def makeEventBoardsTableDataVO(rewardCategories, method):
 def makeParameterTooltipVO(method, amount, parameter):
     parametersWithTooltip = [_op.ORIGINALXP, _op.XP]
     maxOrSum = 'max' if method == _cm.MAX else 'sum'
-    return makeTooltip(body=_ms(EVENT_BOARDS.tooltip_top_description_all(maxOrSum, parameter), number=amount)) if parameter in parametersWithTooltip and amount is not None else None
+    return makeTooltip(header=_ms(EVENT_BOARDS.TOOLTIP_TOP_NOREWARDGROUP), body=_ms(EVENT_BOARDS.tooltip_top_description_all(maxOrSum, parameter), number=int(amount))) if parameter in parametersWithTooltip and amount is not None else None
 
 
 def makeEventBoardsTableViewStatusVO(title, tooltip, info, value1, value2, value3, showPoints, buttonLabel, buttonTooltip, buttonVisible, buttonEnabled, titleTooltip):
@@ -185,9 +185,9 @@ def makeAwardGroupDataTooltipVO(rewardCategories, enabledAncors):
 def makeFiltersVO(eventType, filters, selected=None, category=None):
     tooltip, value = FORMATS[eventType]
     data = [ {'id': str(lid),
-     'value': value.format(filter),
-     'tooltip': makeTooltip(tooltip.format(filter), '#event_boards:{0}/tooltip/{1}'.format(category, eventType)) if category else _ms(tooltip.format(filter)),
-     'selected': lid == selected} for lid, filter in filters ]
+     'value': value.format(f),
+     'tooltip': makeTooltip(tooltip.format(f), '#event_boards:{0}/tooltip/{1}'.format(category, eventType)) if category else _ms(tooltip.format(f)),
+     'selected': lid == selected} for lid, f in filters ]
     return data
 
 
@@ -219,11 +219,6 @@ def _makeCantJoinReasonTooltip(stateReasons, playerData, limits):
 
 
 def makeCantJoinReasonTextVO(event, playerData):
-    """
-    :param event: event's settings data
-    :param playerData: player's status in events
-    :return: reject reason text, tooltip text and visibility of join button
-    """
     playerState = playerData.getPlayerStateByEventId(event.getEventID())
     stateReasons = playerState.getPlayerStateReasons() if playerState else []
     stateReason = stateReasons[0] if stateReasons else None

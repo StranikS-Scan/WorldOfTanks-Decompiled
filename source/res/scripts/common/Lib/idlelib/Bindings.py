@@ -1,15 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/Bindings.py
-"""Define the menu contents, hotkeys, and event bindings.
-
-There is additional configuration information in the EditorWindow class (and
-subclasses): the menus are created there based on the menu_specs (class)
-variable, and menus not created are silently skipped in the code here.  This
-makes it possible, for example, to define a Debug menu which is only present in
-the PythonShell window, and a Format menu which is only present in the Editor
-windows.
-
-"""
 from idlelib.configHandler import idleConf
 menudefs = [('file', [('_New File', '<<open-new-window>>'),
    ('_Open...', '<<open-window-from-file>>'),

@@ -1,21 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/findertools.py
-"""Utility routines depending on the finder,
-a combination of code by Jack Jansen and erik@letterror.com.
-
-Most events have been captured from
-Lasso Capture AE and than translated to python code.
-
-IMPORTANT
-Note that the processes() function returns different values
-depending on the OS version it is running on. On MacOS 9
-the Finder returns the process *names* which can then be
-used to find out more about them. On MacOS 8.6 and earlier
-the Finder returns a code which does not seem to work.
-So bottom line: the processes() stuff does not work on < MacOS9
-
-Mostly written by erik@letterror.com
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the findertools module is removed.', stacklevel=2)
 import Finder
@@ -32,7 +16,6 @@ Error = 'findertools.Error'
 _finder_talker = None
 
 def _getfinder():
-    """returns basic (recyclable) Finder AE interface object"""
     global _finder_talker
     if not _finder_talker:
         _finder_talker = Finder.Finder()
@@ -41,21 +24,18 @@ def _getfinder():
 
 
 def launch(file):
-    """Open a file thru the finder. Specify file by name or fsspec"""
     finder = _getfinder()
     fss = Carbon.File.FSSpec(file)
     return finder.open(fss)
 
 
 def Print(file):
-    """Print a file thru the finder. Specify file by name or fsspec"""
     finder = _getfinder()
     fss = Carbon.File.FSSpec(file)
     return finder._print(fss)
 
 
 def copy(src, dstdir):
-    """Copy a file to a folder"""
     finder = _getfinder()
     if type(src) == type([]):
         src_fss = []
@@ -69,7 +49,6 @@ def copy(src, dstdir):
 
 
 def move(src, dstdir):
-    """Move a file to a folder"""
     finder = _getfinder()
     if type(src) == type([]):
         src_fss = []
@@ -83,25 +62,21 @@ def move(src, dstdir):
 
 
 def sleep():
-    """Put the mac to sleep"""
     finder = _getfinder()
     finder.sleep()
 
 
 def shutdown():
-    """Shut the mac down"""
     finder = _getfinder()
     finder.shut_down()
 
 
 def restart():
-    """Restart the mac"""
     finder = _getfinder()
     finder.restart()
 
 
 def reveal(file):
-    """Reveal a file in the finder. Specify file by name, fsref or fsspec."""
     finder = _getfinder()
     fsr = Carbon.File.FSRef(file)
     file_alias = fsr.FSNewAliasMinimal()
@@ -109,7 +84,6 @@ def reveal(file):
 
 
 def select(file):
-    """select a file in the finder. Specify file by name, fsref or fsspec."""
     finder = _getfinder()
     fsr = Carbon.File.FSRef(file)
     file_alias = fsr.FSNewAliasMinimal()
@@ -117,8 +91,6 @@ def select(file):
 
 
 def update(file):
-    """Update the display of the specified object(s) to match
-    their on-disk representation. Specify file by name, fsref or fsspec."""
     finder = _getfinder()
     fsr = Carbon.File.FSRef(file)
     file_alias = fsr.FSNewAliasMinimal()
@@ -126,7 +98,6 @@ def update(file):
 
 
 def comment(object, comment=None):
-    """comment: get or set the Finder-comment of the item, displayed in the 'Get Info' window."""
     object = Carbon.File.FSRef(object)
     object_alias = object.FSNewAliasMinimal()
     if comment is None:
@@ -164,7 +135,6 @@ def _getcomment(object_alias):
 
 
 def processes():
-    """processes returns a list of all active processes running on this computer and their creators."""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -213,7 +183,6 @@ class _process:
 
 
 def isactiveprocess(processname):
-    """Check of processname is active. MacOS9"""
     all = processes()
     ok = 0
     for n, c in all:
@@ -222,7 +191,6 @@ def isactiveprocess(processname):
 
 
 def processinfo(processname):
-    """Return an object with all process properties as attributes for processname. MacOS9"""
     p = _process()
     if processname == 'Finder':
         p.partition = None
@@ -241,7 +209,6 @@ def processinfo(processname):
 
 
 def _processproperty(processname, property):
-    """return the partition size and memory used for processname"""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -255,7 +222,6 @@ def _processproperty(processname, property):
 
 
 def openwindow(object):
-    """Open a Finder window for object, Specify object by name or fsspec."""
     finder = _getfinder()
     object = Carbon.File.FSRef(object)
     object_alias = object.FSNewAliasMinimal()
@@ -272,7 +238,6 @@ def openwindow(object):
 
 
 def closewindow(object):
-    """Close a Finder window for folder, Specify by path."""
     finder = _getfinder()
     object = Carbon.File.FSRef(object)
     object_alias = object.FSNewAliasMinimal()
@@ -289,15 +254,12 @@ def closewindow(object):
 
 
 def location(object, pos=None):
-    """Set the position of a Finder window for folder to pos=(w, h). Specify file by name or fsspec.
-    If pos=None, location will return the current position of the object."""
     object = Carbon.File.FSRef(object)
     object_alias = object.FSNewAliasMinimal()
     return _getlocation(object_alias) if not pos else _setlocation(object_alias, pos)
 
 
 def _setlocation(object_alias, (x, y)):
-    """_setlocation: Set the location of the icon for the object."""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -312,7 +274,6 @@ def _setlocation(object_alias, (x, y)):
 
 
 def _getlocation(object_alias):
-    """_getlocation: get the location of the icon for the object."""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -330,7 +291,6 @@ def _getlocation(object_alias):
 
 
 def label(object, index=None):
-    """label: set or get the label of the item. Specify file by name or fsspec."""
     object = Carbon.File.FSRef(object)
     object_alias = object.FSNewAliasMinimal()
     if index is None:
@@ -342,7 +302,6 @@ def label(object, index=None):
 
 
 def _getlabel(object_alias):
-    """label: Get the label for the object."""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -356,7 +315,6 @@ def _getlabel(object_alias):
 
 
 def _setlabel(object_alias, index):
-    """label: Set the label for the object."""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -373,18 +331,12 @@ def _setlabel(object_alias, index):
 
 
 def windowview(folder, view=None):
-    """windowview: Set the view of the window for the folder. Specify file by name or fsspec.
-    0 = by icon (default)
-    1 = by name
-    2 = by button
-    """
     fsr = Carbon.File.FSRef(folder)
     folder_alias = fsr.FSNewAliasMinimal()
     return _getwindowview(folder_alias) if view is None else _setwindowview(folder_alias, view)
 
 
 def _setwindowview(folder_alias, view=0):
-    """set the windowview"""
     attrs = {}
     args = {}
     if view == 1:
@@ -409,7 +361,6 @@ def _setwindowview(folder_alias, view=0):
 
 
 def _getwindowview(folder_alias):
-    """get the windowview"""
     attrs = {}
     args = {}
     finder = _getfinder()
@@ -429,10 +380,6 @@ def _getwindowview(folder_alias):
 
 
 def windowsize(folder, size=None):
-    """Set the size of a Finder window for folder to size=(w, h), Specify by path.
-    If size=None, windowsize will return the current size of the window.
-    Specify file by name or fsspec.
-    """
     fsr = Carbon.File.FSRef(folder)
     folder_alias = fsr.FSNewAliasMinimal()
     openwindow(fsr)
@@ -440,7 +387,6 @@ def windowsize(folder, size=None):
 
 
 def _setwindowsize(folder_alias, (w, h)):
-    """Set the size of a Finder window for folder to (w, h)"""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -459,7 +405,6 @@ def _setwindowsize(folder_alias, (w, h)):
 
 
 def _getwindowsize(folder_alias):
-    """Set the size of a Finder window for folder to (w, h)"""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -474,7 +419,6 @@ def _getwindowsize(folder_alias):
 
 
 def windowposition(folder, pos=None):
-    """Set the position of a Finder window for folder to pos=(w, h)."""
     fsr = Carbon.File.FSRef(folder)
     folder_alias = fsr.FSNewAliasMinimal()
     openwindow(fsr)
@@ -486,7 +430,6 @@ def windowposition(folder, pos=None):
 
 
 def _setwindowposition(folder_alias, (x, y)):
-    """Set the size of a Finder window for folder to (w, h)."""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -502,7 +445,6 @@ def _setwindowposition(folder_alias, (x, y)):
 
 
 def _getwindowposition(folder_alias):
-    """Get the size of a Finder window for folder, Specify by path."""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -517,17 +459,12 @@ def _getwindowposition(folder_alias):
 
 
 def icon(object, icondata=None):
-    """icon sets the icon of object, if no icondata is given,
-    icon will return an AE object with binary data for the current icon.
-    If left untouched, this data can be used to paste the icon on another file.
-    Development opportunity: get and set the data as PICT."""
     fsr = Carbon.File.FSRef(object)
     object_alias = fsr.FSNewAliasMinimal()
     return _geticon(object_alias) if icondata is None else _seticon(object_alias, icondata)
 
 
 def _geticon(object_alias):
-    """get the icondata for object. Binary data of some sort."""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -541,7 +478,6 @@ def _geticon(object_alias):
 
 
 def _seticon(object_alias, icondata):
-    """set the icondata for object, formatted as produced by _geticon()"""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -556,10 +492,6 @@ def _seticon(object_alias, icondata):
 
 
 def mountvolume(volume, server=None, username=None, password=None):
-    """mount a volume, local or on a server on AppleTalk.
-    Note: mounting a ASIP server requires a different operation.
-    server is the name of the server where the volume belongs
-    username, password belong to a registered user of the volume."""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -577,12 +509,10 @@ def mountvolume(volume, server=None, username=None, password=None):
 
 
 def unmountvolume(volume):
-    """unmount a volume that's on the desktop"""
     putaway(volume)
 
 
 def putaway(object):
-    """puth the object away, whereever it came from."""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -594,7 +524,6 @@ def putaway(object):
 
 
 def volumelevel(level):
-    """set the audio output level, parameter between 0 (silent) and 7 (full blast)"""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -610,7 +539,6 @@ def volumelevel(level):
 
 
 def OSversion():
-    """return the version of the system software"""
     finder = _getfinder()
     args = {}
     attrs = {}
@@ -623,10 +551,6 @@ def OSversion():
 
 
 def filesharing():
-    """return the current status of filesharing and whether it is starting up or not:
-    -1  file sharing is off and not starting up
-    0   file sharing is off and starting up
-    1   file sharing is on"""
     status = -1
     finder = _getfinder()
     args = {}
@@ -653,14 +577,12 @@ def filesharing():
 
 
 def movetotrash(path):
-    """move the object to the trash"""
     fss = Carbon.File.FSSpec(path)
     trashfolder = Carbon.Folder.FSFindFolder(fss.as_tuple()[0], 'trsh', 0)
     move(path, trashfolder)
 
 
 def emptytrash():
-    """empty the trash"""
     finder = _getfinder()
     args = {}
     attrs = {}

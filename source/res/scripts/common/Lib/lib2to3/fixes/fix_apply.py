@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_apply.py
-"""Fixer for apply().
-
-This converts apply(func, v, k) into (func)(*v, **k)."""
 from .. import pytree
 from ..pgen2 import token
 from .. import fixer_base
@@ -14,7 +11,6 @@ class FixApply(fixer_base.BaseFix):
 
     def transform(self, node, results):
         syms = self.syms
-        assert results
         func = results['func']
         args = results['args']
         kwds = results.get('kwds')

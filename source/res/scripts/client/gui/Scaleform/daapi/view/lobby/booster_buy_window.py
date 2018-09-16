@@ -23,7 +23,6 @@ class BoosterBuyWindow(BoosterBuyWindowMeta):
         super(BoosterBuyWindow, self).__init__()
         self.__item = self.itemsCache.items.getItemByCD(ctx['typeCompDescr'])
         self.__install = ctx['install']
-        assert self.__item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER
 
     def onWindowClose(self):
         self.destroy()

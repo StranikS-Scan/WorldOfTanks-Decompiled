@@ -13,7 +13,7 @@ def getLayout(layoutName):
 _HINTS_LAYOUT_FILE_PATH = 'gui/hints_layout.xml'
 
 def _convertHints(hintsList):
-    return map(lambda hint: setattr(hint, 'hintText', text_styles.tutorial(hint.get('hintText', ''))), hintsList)
+    return [ setattr(hint, 'hintText', text_styles.tutorial(hint.get('hintText', ''))) for hint in hintsList ]
 
 
 def _readHintsLayouts():

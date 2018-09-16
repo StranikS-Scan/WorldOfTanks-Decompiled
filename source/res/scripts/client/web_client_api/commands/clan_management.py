@@ -1,22 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/commands/clan_management.py
-from collections import namedtuple
-from command import SchemeValidator, CommandHandler, instantiateObject
-_ClanManagementCommand = namedtuple('_ClanManagementCommand', ('action', 'custom_parameters'))
-_ClanManagementCommand.__new__.__defaults__ = (None, {})
-_ClanManagementCommandScheme = {'required': (('action', basestring),)}
+from command import W2CSchema, Field, createSubCommandsHandler, SubCommand
 
-class ClanManagementCommand(_ClanManagementCommand, SchemeValidator):
-    """
-    Represents web command for clan management.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(ClanManagementCommand, self).__init__(_ClanManagementCommandScheme)
+class ClanManagementSchema(W2CSchema):
+    action = Field(required=True, type=basestring)
 
 
-def createClanManagementHandler(handlerFunc):
-    data = {'name': 'clan_management',
-     'cls': ClanManagementCommand,
-     'handler': handlerFunc}
-    return instantiateObject(CommandHandler, data)
+def createClanManagementHandler(membersOnlineHandler=None, membersStatusHandler=None, friendsStatusHandler=None):
+    subCommands = {'members_online': SubCommand(handler=membersOnlineHandler),
+     'members_status': SubCommand(handler=membersStatusHandler),
+     'friends_status': SubCommand(handler=friendsStatusHandler)}
+    return createSubCommandsHandler('clan_management', ClanManagementSchema, 'action', subCommands)

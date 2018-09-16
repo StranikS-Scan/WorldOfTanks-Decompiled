@@ -1,43 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/domreg.py
-"""Registration facilities for DOM. This module should not be used
-directly. Instead, the functions getDOMImplementation and
-registerDOMImplementation should be imported from xml.dom."""
 from xml.dom.minicompat import *
 well_known_implementations = {'minidom': 'xml.dom.minidom',
  '4DOM': 'xml.dom.DOMImplementation'}
 registered = {}
 
 def registerDOMImplementation(name, factory):
-    """registerDOMImplementation(name, factory)
-    
-    Register the factory function with the name. The factory function
-    should return an object which implements the DOMImplementation
-    interface. The factory function can either return the same object,
-    or a new one (e.g. if that implementation supports some
-    customization)."""
     registered[name] = factory
 
 
 def _good_enough(dom, features):
-    """_good_enough(dom, features) -> Return 1 if the dom offers the features"""
     for f, v in features:
         if not dom.hasFeature(f, v):
             return 0
 
 
 def getDOMImplementation(name=None, features=()):
-    """getDOMImplementation(name = None, features = ()) -> DOM implementation.
-    
-    Return a suitable DOM implementation. The name is either
-    well-known, the module name of a DOM implementation, or None. If
-    it is not None, imports the corresponding module and returns
-    DOMImplementation object if the import succeeds.
-    
-    If name is not given, consider the available implementations to
-    find one with the required feature set. If no implementation can
-    be found, raise an ImportError. The features list must be a sequence
-    of (feature, version) pairs which are passed to hasFeature."""
     import os
     creator = None
     mod = well_known_implementations.get(name)

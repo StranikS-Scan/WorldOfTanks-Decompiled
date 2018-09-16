@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/MiniAEFrame.py
-"""MiniAEFrame - A minimal AppleEvent Application framework.
-
-There are two classes:
-    AEServer -- a mixin class offering nice AE handling.
-    MiniApplication -- a very minimal alternative to FrameWork.py,
-        only suitable for the simplest of AppleEvent servers.
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the MiniAEFrame module is removed.', stacklevel=2)
 import traceback
@@ -24,7 +17,6 @@ import EasyDialogs
 kHighLevelEvent = 23
 
 class MiniApplication:
-    """A minimal FrameWork.Application-like class"""
 
     def __init__(self):
         self.quitting = 0
@@ -155,7 +147,6 @@ class AEServer:
 
 
 def code(x):
-    """Convert a long int to the 4-character code it really is"""
     s = ''
     for i in range(4):
         x, c = divmod(x, 256)
@@ -165,7 +156,6 @@ def code(x):
 
 
 class _Test(AEServer, MiniApplication):
-    """Mini test application, handles required events"""
 
     def __init__(self):
         MiniApplication.__init__(self)

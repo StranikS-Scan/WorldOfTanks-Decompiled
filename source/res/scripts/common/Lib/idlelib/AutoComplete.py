@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/AutoComplete.py
-"""AutoComplete.py - An IDLE extension for automatically completing names.
-
-This extension can complete either attribute names of file names. It can pop
-a window with all available names, for the user to select from.
-"""
 import os
 import sys
 import string
@@ -44,16 +39,9 @@ class AutoComplete:
         return
 
     def force_open_completions_event(self, event):
-        """Happens when the user really wants to open a completion list, even
-        if a function call is needed.
-        """
         self.open_completions(True, False, True)
 
     def try_open_completions_event(self, event):
-        """Happens when it would be nice to open a completion list, but not
-        really necessary, for example after an dot, so function
-        calls won't be made.
-        """
         lastchar = self.text.get('insert-1c')
         if lastchar == '.':
             self._open_completions_later(False, False, False, COMPLETE_ATTRIBUTES)
@@ -61,10 +49,6 @@ class AutoComplete:
             self._open_completions_later(False, False, False, COMPLETE_FILES)
 
     def autocomplete_event(self, event):
-        """Happens when the user wants to complete his word, and if necessary,
-        open a completion list after that (if there is more than one
-        completion)
-        """
         if hasattr(event, 'mc_state') and event.mc_state:
             return
         if self.autocompletewindow and self.autocompletewindow.is_active():
@@ -89,12 +73,6 @@ class AutoComplete:
             return
 
     def open_completions(self, evalfuncs, complete, userWantsWin, mode=None):
-        """Find the completions and create the AutoCompleteWindow.
-        Return True if successful (no syntax error or so found).
-        if complete is True, then if there's nothing to complete and no
-        start of completion, won't open completions and return False.
-        If mode is given, will open a completion list only in this mode.
-        """
         if self._delayed_completion_id is not None:
             self.text.after_cancel(self._delayed_completion_id)
             self._delayed_completion_id = None
@@ -139,17 +117,6 @@ class AutoComplete:
             return not self.autocompletewindow.show_window(comp_lists, 'insert-%dc' % len(comp_start), complete, mode, userWantsWin)
 
     def fetch_completions(self, what, mode):
-        """Return a pair of lists of completions for something. The first list
-        is a sublist of the second. Both are sorted.
-        
-        If there is a Python subprocess, get the comp. list there.  Otherwise,
-        either fetch_completions() is running in the subprocess itself or it
-        was called in an IDLE EditorWindow before any script had been run.
-        
-        The subprocess environment is that of the most recently run script.  If
-        two unrelated modules are being edited some calltips in the current
-        module may be inoperative if the module was not the last to run.
-        """
         try:
             rpcclt = self.editwin.flist.pyshell.interp.rpcclt
         except:
@@ -197,7 +164,6 @@ class AutoComplete:
             return
 
     def get_entity(self, name):
-        """Lookup name in a namespace spanning sys.modules and __main.dict__"""
         namespace = sys.modules.copy()
         namespace.update(__main__.__dict__)
         return eval(name, namespace)

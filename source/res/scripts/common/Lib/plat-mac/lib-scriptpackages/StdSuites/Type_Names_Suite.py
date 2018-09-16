@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/StdSuites/Type_Names_Suite.py
-"""Suite Type Names Suite: Terminology for Registry data types
-Level 1, version 1
-
-Generated from /Volumes/Sap/System Folder/Extensions/AppleScript
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'tpnm'
@@ -15,17 +9,14 @@ class Type_Names_Suite_Events:
 
 
 class PostScript_picture(aetools.ComponentItem):
-    """PostScript picture -  """
     want = 'EPS '
 
 
 class point(aetools.ComponentItem):
-    """point - point coordinates """
     want = 'QDpt'
 
 
 class string(aetools.ComponentItem):
-    """string - a string of characters """
     want = 'TEXT'
 
 
@@ -33,187 +24,150 @@ plain_text = string
 plain_text = string
 
 class TIFF_picture(aetools.ComponentItem):
-    """TIFF picture -  """
     want = 'TIFF'
 
 
 class application_dictionary(aetools.ComponentItem):
-    """application dictionary -  """
     want = 'aete'
 
 
 class system_dictionary(aetools.ComponentItem):
-    """system dictionary -  """
     want = 'aeut'
 
 
 class color_table(aetools.ComponentItem):
-    """color table -  """
     want = 'clrt'
 
 
 class menu_item(aetools.ComponentItem):
-    """menu item -  """
     want = 'cmen'
 
 
 class menu(aetools.ComponentItem):
-    """menu -  """
     want = 'cmnu'
 
 
 class double_integer(aetools.ComponentItem):
-    """double integer -  """
     want = 'comp'
 
 
 class type_element_info(aetools.ComponentItem):
-    """type element info -  """
     want = 'elin'
 
 
 class type_event_info(aetools.ComponentItem):
-    """type event info - information about an event """
     want = 'evin'
 
 
 class extended_real(aetools.ComponentItem):
-    """extended real -  """
     want = 'exte'
 
 
 class fixed(aetools.ComponentItem):
-    """fixed - a real number """
     want = 'fixd'
 
 
 class fixed_point(aetools.ComponentItem):
-    """fixed point -  """
     want = 'fpnt'
 
 
 class fixed_rectangle(aetools.ComponentItem):
-    """fixed rectangle -  """
     want = 'frct'
 
 
 class type_class_info(aetools.ComponentItem):
-    """type class info - information about properties and elements of a class """
     want = 'gcli'
 
 
 class location_reference(aetools.ComponentItem):
-    """location reference -  """
     want = 'insl'
 
 
 class long_fixed_point(aetools.ComponentItem):
-    """long fixed point -  """
     want = 'lfpt'
 
 
 class long_fixed_rectangle(aetools.ComponentItem):
-    """long fixed rectangle -  """
     want = 'lfrc'
 
 
 class long_fixed(aetools.ComponentItem):
-    """long fixed -  """
     want = 'lfxd'
 
 
 class long_point(aetools.ComponentItem):
-    """long point -  """
     want = 'lpnt'
 
 
 class long_rectangle(aetools.ComponentItem):
-    """long rectangle -  """
     want = 'lrct'
 
 
 class machine_location(aetools.ComponentItem):
-    """machine location -  """
     want = 'mLoc'
 
 
 class unsigned_integer(aetools.ComponentItem):
-    """unsigned integer -  """
     want = 'magn'
 
 
 class null(aetools.ComponentItem):
-    """null -  """
     want = 'null'
 
 
 class type_property_info(aetools.ComponentItem):
-    """type property info -  """
     want = 'pinf'
 
 
 class type_parameter_info(aetools.ComponentItem):
-    """type parameter info -  """
     want = 'pmin'
 
 
 class bounding_rectangle(aetools.ComponentItem):
-    """bounding rectangle - bounding rectangle """
     want = 'qdrt'
 
 
 class small_integer(aetools.ComponentItem):
-    """small integer -  """
     want = 'shor'
 
 
 class small_real(aetools.ComponentItem):
-    """small real -  """
     want = 'sing'
 
 
 class scrap_styles(aetools.ComponentItem):
-    """scrap styles -  """
     want = 'styl'
 
 
 class type_suite_info(aetools.ComponentItem):
-    """type suite info -  """
     want = 'suin'
 
 
 class target_id(aetools.ComponentItem):
-    """target id -  """
     want = 'targ'
 
 
 class dash_style(aetools.ComponentItem):
-    """dash style -  """
     want = 'tdas'
 
 
 class pixel_map_record(aetools.ComponentItem):
-    """pixel map record -  """
     want = 'tpmm'
 
 
 class RGB16_color(aetools.ComponentItem):
-    """RGB16 color -  """
     want = 'tr16'
 
 
 class RGB96_color(aetools.ComponentItem):
-    """RGB96 color -  """
     want = 'tr96'
 
 
 class rotation(aetools.ComponentItem):
-    """rotation -  """
     want = 'trot'
 
 
 class version(aetools.ComponentItem):
-    """version -  """
     want = 'vers'
 
 

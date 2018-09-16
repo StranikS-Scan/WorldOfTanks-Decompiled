@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Explorer/Standard_Suite.py
-"""Suite Standard Suite: Common terms for most applications
-Level 1, version 1
-
-Generated from /Applications/Internet Explorer.app
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = '****'
@@ -14,12 +8,6 @@ class Standard_Suite_Events:
     _argmap_get = {'as': 'rtyp'}
 
     def get(self, _object, _attributes={}, **_arguments):
-        """get:
-        Required argument: an AE object reference
-        Keyword argument as: undocumented, typecode 'type'
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'core'
         _subcode = 'getd'
         aetools.keysubst(_arguments, self._argmap_get)
@@ -31,12 +19,10 @@ class Standard_Suite_Events:
 
 
 class application(aetools.ComponentItem):
-    """application - An application program """
     want = 'capp'
 
 
 class _Prop_selected_text(aetools.NProperty):
-    """selected text - the selected text """
     which = 'stxt'
     want = 'TEXT'
 

@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/build_clib.py
-"""distutils.command.build_clib
-
-Implements the Distutils 'build_clib' command, to build a C/C++ library
-that is included in the module distribution and needed by an extension
-module."""
 __revision__ = '$Id$'
 import os
 from distutils.core import Command
@@ -74,15 +69,6 @@ class build_clib(Command):
             return
 
     def check_library_list(self, libraries):
-        """Ensure that the list of libraries is valid.
-        
-        `library` is presumably provided as a command option 'libraries'.
-        This method checks that it is a list of 2-tuples, where the tuples
-        are (library_name, build_info_dict).
-        
-        Raise DistutilsSetupError if the structure is invalid anywhere;
-        just returns otherwise.
-        """
         if not isinstance(libraries, list):
             raise DistutilsSetupError, "'libraries' option must be a list of tuples"
         for lib in libraries:

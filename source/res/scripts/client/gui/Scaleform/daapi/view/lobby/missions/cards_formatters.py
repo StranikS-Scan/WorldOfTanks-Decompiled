@@ -83,15 +83,6 @@ def _packAchievementsTooltipData(data):
 
 
 class CardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormatter):
-    """
-    Formatter for 'bonus' and 'postbattle' conditions sections for mission card in missions view.
-    Expand and mix all battle pre formatted conditions data in rows,
-    then format rows in mission card specific format.
-    Only one row of conditions is displayed in card,
-    others are replaced by 'ALTERNATIVE' merged conditions renderer.
-    Formatter slice and display only 3 first conditions in row,
-    others are replaced by merged 'ADDITIONAL' conditions renderer.
-    """
     MAX_CONDITIONS_IN_CARD = 3
     MAX_DESC_LINES = 3
     ALT_DESCR_LINES = 2
@@ -158,16 +149,6 @@ class CardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormatter):
 
 
 class DetailedCardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormatter):
-    """
-    Formatter for 'bonus' and 'postbattle' conditions sections for detailed mission card in detailed missions view.
-    Expand and mix all battle pre formatted conditions data in rows,
-    then format rows in mission card specific format.
-    Only two rows of conditions is displayed in card, UX requirement.
-    Others are not displayed. SSE should control quests xml. Only one 'OR' section is supported by GUI.
-    There are only 6 conditions are supported by GUI.
-    For example: all 6 in 'AND' section, UX requirement.
-    3 in first 'AND' row and 3 in second 'AND' row inside 'OR' section - 6 total
-    """
     MAX_CONDITIONS_IN_CARD = 6
     MAX_CONDITIONS_IN_ROW = 3
     MAX_OR_SECTIONS = 2
@@ -231,7 +212,7 @@ class DetailedCardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormat
 
     def __andFormat(self, result):
         components = []
-        for idx, condList in enumerate(result):
+        for _, condList in enumerate(result):
             size = CONDITION_SIZE.MINIMIZED if len(condList) > self.MAX_CONDITIONS_IN_ROW else CONDITION_SIZE.NORMAL
             components.append(self._packConditions(size, condList))
 
@@ -251,9 +232,6 @@ class DetailedCardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormat
 
 
 class CardTokenConditionFormatter(ConditionsFormatter):
-    """
-    Formatter for 'token' conditions sections for mission card in missions view.
-    """
     MAX_TOKENS_COUNT = 3
 
     def __init__(self):
@@ -324,11 +302,14 @@ class CardTokenConditionFormatter(ConditionsFormatter):
          'data': [self._packBattleCondition(_packNoGuiCondition(event))],
          'isDetailed': False}
 
+    def _packCondition(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _getFormattedField(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):
-    """
-    Formatter for 'token' conditions sections for detailed mission card in detailed missions view.
-    """
 
     @classmethod
     def _packBattleCondition(cls, preFormattedCondition):
@@ -359,9 +340,6 @@ class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):
 
 
 class PMCardConditionsFormatter(PersonalMissionConditionsFormatter):
-    """
-    Conditions formatter for personal mission, which are displayed in detailed personal mission's view
-    """
 
     def format(self, event, isMain=None):
         results = super(PMCardConditionsFormatter, self).format(event, isMain)

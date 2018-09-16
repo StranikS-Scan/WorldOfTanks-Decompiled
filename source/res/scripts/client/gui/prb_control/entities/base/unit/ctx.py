@@ -12,18 +12,12 @@ _UNDEFINED = settings.FUNCTIONAL_FLAG.UNDEFINED
 
 @ReprInjector.withParent(('getID', 'unitMgrID'))
 class UnitRequestCtx(PrbCtrlRequestCtx):
-    """
-    Base context for all unit requests.
-    """
     __slots__ = ()
 
     def __init__(self, **kwargs):
         super(UnitRequestCtx, self).__init__(ctrlType=_CTRL_ENTITY_TYPE.UNIT, **kwargs)
 
     def getID(self):
-        """
-        Getter for joined unit index.
-        """
         return prb_getters.getUnitMgrID()
 
     def getCooldown(self):
@@ -32,9 +26,6 @@ class UnitRequestCtx(PrbCtrlRequestCtx):
 
 @ReprInjector.withParent(('__rosterID', 'rosterID'))
 class CreateUnitCtx(UnitRequestCtx):
-    """
-    Context for unit creation request.
-    """
     __slots__ = ('__rosterID',)
 
     def __init__(self, prbType, flags=_UNDEFINED, waitingID='', rosterID=0):
@@ -45,33 +36,21 @@ class CreateUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.CREATE
 
     def getRosterID(self):
-        """
-        Unit roster type ID.
-        """
         return self.__rosterID
 
 
 class JoinUnitModeCtx(UnitRequestCtx):
-    """
-    Context for join unit mode request.
-    """
     __slots__ = ()
 
     def __init__(self, prbType, waitingID='', flags=_UNDEFINED):
         super(JoinUnitModeCtx, self).__init__(entityType=prbType, waitingID=waitingID, flags=flags)
 
     def getID(self):
-        """
-        Getter for current unit manager ID
-        """
         return prb_getters.getUnitMgrID()
 
 
 @ReprInjector.withParent(('__unitMgrID', 'unitMgrID'), ('__slotIdx', 'slotIdx'))
 class JoinUnitCtx(UnitRequestCtx):
-    """
-    Context for join unit request.
-    """
     __slots__ = ('__unitMgrID', '__slotIdx')
 
     def __init__(self, unitMgrID, prbType, slotIdx=None, waitingID=''):
@@ -83,22 +62,13 @@ class JoinUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.JOIN
 
     def getID(self):
-        """
-        Getter for unit manager ID of entity we're joining to.
-        """
         return self.__unitMgrID
 
     def getSlotIdx(self):
-        """
-        Getter for slot index that we're trying to get.
-        """
         return self.__slotIdx
 
 
 class LeaveUnitCtx(UnitRequestCtx):
-    """
-    Context for join unit request.
-    """
 
     def __init__(self, waitingID='', flags=_UNDEFINED, entityType=0):
         super(LeaveUnitCtx, self).__init__(waitingID=waitingID, flags=flags, entityType=entityType)
@@ -112,9 +82,6 @@ class LeaveUnitCtx(UnitRequestCtx):
 
 @ReprInjector.withParent(('__isLocked', 'isLocked'))
 class LockUnitCtx(UnitRequestCtx):
-    """
-    Unit lock/unlock request context.
-    """
     __slots__ = ('__isLocked',)
 
     def __init__(self, isLocked=True, waitingID=''):
@@ -125,17 +92,11 @@ class LockUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.LOCK
 
     def isLocked(self):
-        """
-        Lock state getter.
-        """
         return self.__isLocked
 
 
 @ReprInjector.withParent(('__slotIdx', 'slotIdx'), ('__isClosed', 'isClosed'))
 class CloseSlotUnitCtx(UnitRequestCtx):
-    """
-    Context for close/open slot request.
-    """
     __slots__ = ('__slotIdx', '__isClosed')
 
     def __init__(self, slotIdx, isClosed=True, waitingID=''):
@@ -147,23 +108,14 @@ class CloseSlotUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.CLOSE_SLOT
 
     def getSlotIdx(self):
-        """
-        Getter for slot index for operation
-        """
         return self.__slotIdx
 
     def isClosed(self):
-        """
-        Close/open flag getter
-        """
         return self.__isClosed
 
 
 @ReprInjector.withParent(('__vehTypeCD', 'vTypeCD'), ('__vehInvID', 'vehInvID'))
 class SetVehicleUnitCtx(UnitRequestCtx):
-    """
-    Context for setting unit vehicle request
-    """
     __slots__ = ('__vehTypeCD', '__vehInvID', 'setReady')
 
     def __init__(self, vTypeCD=0, vehInvID=0, waitingID=''):
@@ -176,23 +128,14 @@ class SetVehicleUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.SET_VEHICLE
 
     def getVehTypeCD(self):
-        """
-        Getter for selecting vehicle's compact descriptor
-        """
         return self.__vehTypeCD
 
     def getVehInvID(self):
-        """
-        Getter for selecting vehicle's inventory ID
-        """
         return self.__vehInvID
 
 
 @ReprInjector.withParent(('__isOpened', 'isOpened'))
 class ChangeOpenedUnitCtx(UnitRequestCtx):
-    """
-    Change opened/closed unit state context.
-    """
     __slots__ = ('__isOpened',)
 
     def __init__(self, isOpened, waitingID=''):
@@ -203,17 +146,11 @@ class ChangeOpenedUnitCtx(UnitRequestCtx):
         return settings.REQUEST_TYPE.CHANGE_OPENED
 
     def isOpened(self):
-        """
-        Is it opened or closed.
-        """
         return self.__isOpened
 
 
 @ReprInjector.withParent(('__comment', 'comment'))
 class ChangeCommentUnitCtx(UnitRequestCtx):
-    """
-    Context for changing unit's comment.
-    """
     __slots__ = ('__comment',)
 
     def __init__(self, comment, waitingID=''):
@@ -224,23 +161,14 @@ class ChangeCommentUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.CHANGE_COMMENT
 
     def getComment(self):
-        """
-        Obvious getter for comment itself.
-        """
         return self.__comment
 
     def isCommentChanged(self, unit):
-        """
-        Is this new comment or old one.
-        """
         return self.__comment != unit.getComment()
 
 
 @ReprInjector.withParent(('resetVehicle', 'resetVehicle'), ('__isReady', 'isReady'))
 class SetReadyUnitCtx(UnitRequestCtx):
-    """
-    Context for setting current player's state to ready/not ready.
-    """
     __slots__ = ('__isReady', 'resetVehicle')
 
     def __init__(self, isReady=True, waitingID=''):
@@ -252,17 +180,11 @@ class SetReadyUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.SET_PLAYER_STATE
 
     def isReady(self):
-        """
-        Is this player should become ready or not ready.
-        """
         return self.__isReady
 
 
 @ReprInjector.withParent(('__pID', 'pID'), ('__slotIdx', 'slotIdx'))
 class AssignUnitCtx(UnitRequestCtx):
-    """
-    Context for assigning player to some slot in unit
-    """
     __slots__ = ('__pID', '__slotIdx')
 
     def __init__(self, pID, slotIdx, waitingID=''):
@@ -274,15 +196,9 @@ class AssignUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.ASSIGN
 
     def getPlayerID(self):
-        """
-        Getter for player's ID
-        """
         return self.__pID
 
     def getSlotIdx(self):
-        """
-        Assigning slot index
-        """
         return self.__slotIdx
 
     def isRemove(self):
@@ -291,9 +207,6 @@ class AssignUnitCtx(UnitRequestCtx):
 
 @ReprInjector.withParent(('__action', 'action'), ('__vehTypes', 'vehTypes'))
 class AutoSearchUnitCtx(UnitRequestCtx):
-    """
-    Context to start or stop auto-search for solo-player
-    """
     __slots__ = ('__action', '__vehTypes')
 
     def __init__(self, waitingID='', action=1, vehTypes=None):
@@ -309,28 +222,16 @@ class AutoSearchUnitCtx(UnitRequestCtx):
         return self.__action
 
     def getActionName(self):
-        """
-        Getter for action's name.
-        """
         return 'start' if self.__action > 0 else 'stop'
 
     def isRequestToStart(self):
-        """
-        Is this requst to start or stop auto-search
-        """
         return self.__action > 0
 
     def getVehTypes(self):
-        """
-        Getter for prefered vehicle's intCD's
-        """
         return self.__vehTypes
 
 
 class AcceptSearchUnitCtx(UnitRequestCtx):
-    """
-    Context for auto-search accept request
-    """
     __slots__ = ()
 
     def getRequestType(self):
@@ -338,9 +239,6 @@ class AcceptSearchUnitCtx(UnitRequestCtx):
 
 
 class DeclineSearchUnitCtx(UnitRequestCtx):
-    """
-    Context for auto-search accept decline
-    """
     __slots__ = ()
 
     def getRequestType(self):
@@ -349,9 +247,6 @@ class DeclineSearchUnitCtx(UnitRequestCtx):
 
 @ReprInjector.withParent(('selectVehInvID', 'selectVehInvID'), ('getGamePlayMask', 'gamePlayMask'), ('getDemoArenaTypeID', 'getDemoArenaTypeID'))
 class BattleQueueUnitCtx(AutoSearchUnitCtx):
-    """
-    Context for enqueue unit request
-    """
     __slots__ = ('selectVehInvID', '__isActionStartBattle', 'mapID')
 
     def __init__(self, waitingID='', action=1, vehTypes=None):
@@ -363,23 +258,13 @@ class BattleQueueUnitCtx(AutoSearchUnitCtx):
         return _REQUEST_TYPE.BATTLE_QUEUE
 
     def getGamePlayMask(self):
-        """
-        Getter for selected gameplay mask.
-        """
         return gameplay_ctx.getMask()
 
     def getDemoArenaTypeID(self):
-        """
-        Gets map arena type ID
-        """
         return self.mapID
 
 
 class RosterSlotCtx(object):
-    """
-    Context for forward set rosters slots request which holds information about
-    roster restrictions set to proper slot.
-    """
 
     def __init__(self, vehTypeCD=None, nationNames=None, levels=None, vehClassNames=None):
         self.__vehTypeCD = vehTypeCD
@@ -388,9 +273,6 @@ class RosterSlotCtx(object):
         self.__vehClassNames = vehClassNames
 
     def getCriteria(self):
-        """
-        Getter for slot criteria.
-        """
         criteria = {}
         if self.__vehTypeCD:
             criteria['vehTypeID'] = self.__vehTypeCD
@@ -406,9 +288,6 @@ class RosterSlotCtx(object):
 
 @ReprInjector.withParent(('__items', 'rostersSlots'))
 class SetRostersSlotsUnitCtx(UnitRequestCtx):
-    """
-    Context for setting rosters in slots
-    """
     __slots__ = ('__items',)
 
     def __init__(self, waitingID=''):
@@ -419,26 +298,14 @@ class SetRostersSlotsUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.SET_ROSTERS_SLOTS
 
     def addRosterSlot(self, rosterSlotIdx, ctx):
-        """
-        Adds roster for given index.
-        Args:
-            rosterSlotIdx: slot index
-            ctx: roster slot context
-        """
         self.__items[rosterSlotIdx] = ctx.getCriteria()
 
     def getRosterSlots(self):
-        """
-        Getter for criteria in all slots provided.
-        """
         return self.__items.copy()
 
 
 @ReprInjector.withParent(('__databaseID', 'databaseID'))
 class KickPlayerUnitCtx(UnitRequestCtx):
-    """
-    Context for player's kick
-    """
     __slots__ = ('__databaseID',)
 
     def __init__(self, databaseID, waitingID=''):
@@ -449,17 +316,11 @@ class KickPlayerUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.KICK
 
     def getPlayerID(self):
-        """
-        Getter for database ID of player to kick
-        """
         return self.__databaseID
 
 
 @ReprInjector.withParent(('__databaseID', 'databaseID'))
 class GiveLeadershipUnitCtx(UnitRequestCtx):
-    """
-    Context for giving leadership from commander to other player
-    """
     __slots__ = ('__databaseID',)
 
     def __init__(self, databaseID, waitingID=''):
@@ -470,17 +331,11 @@ class GiveLeadershipUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.GIVE_LEADERSHIP
 
     def getPlayerID(self):
-        """
-        Getter for database ID of player to kick
-        """
         return self.__databaseID
 
 
 @ReprInjector.withParent(('__division', 'division'))
 class ChangeDivisionUnitCtx(UnitRequestCtx):
-    """
-    Context for changing unit's division
-    """
     __slots__ = ('__divisionID',)
 
     def __init__(self, divisionID, waitingID=''):
@@ -491,17 +346,11 @@ class ChangeDivisionUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.CHANGE_DIVISION
 
     def getDivisionID(self):
-        """
-        Getter for new division ID
-        """
         return self.__divisionID
 
 
 @ReprInjector.withParent(('__vehsList', 'vehsList'))
 class SetVehiclesUnitCtx(UnitRequestCtx):
-    """
-    Context for setting player's vehicles
-    """
     __slots__ = ('__vehsList',)
 
     def __init__(self, vehsList, waitingID=''):
@@ -515,7 +364,4 @@ class SetVehiclesUnitCtx(UnitRequestCtx):
         pass
 
     def getVehsList(self):
-        """
-        Getter for selected vehicles inventory IDs list
-        """
         return self.__vehsList

@@ -76,7 +76,7 @@ class UserDossier(object):
             self.__cache['account'] = dossiers2.getAccountDossierDescr(dossier)
             callback(self.__cache['account'])
 
-        self.__queue.append(lambda : BigWorld.player().requestAccountDossier(self.__cache['databaseID'], partial(lambda c, code, dossier: self.__processValueResponse(c, code, dossier), proxyCallback)))
+        self.__queue.append(lambda : BigWorld.player().requestAccountDossier(self.__cache['databaseID'], partial(self.__processValueResponse, proxyCallback)))
         self.__processQueue()
 
     def __requestVehicleDossier(self, vehCompDescr, callback):
@@ -85,15 +85,10 @@ class UserDossier(object):
             self.__cache['vehicles'][vehCompDescr] = dossiers2.getVehicleDossierDescr(dossier)
             callback(self.__cache['vehicles'][vehCompDescr])
 
-        self.__queue.append(lambda : BigWorld.player().requestVehicleDossier(self.__cache['databaseID'], vehCompDescr, partial(lambda c, code, dossier: self.__processValueResponse(c, code, dossier), proxyCallback)))
+        self.__queue.append(lambda : BigWorld.player().requestVehicleDossier(self.__cache['databaseID'], vehCompDescr, partial(self.__processValueResponse, proxyCallback)))
         self.__processQueue()
 
     def __requestClanInfo(self, callback):
-
-        def proxyCallback(value):
-            self.__cache['clan'] = value
-            callback(self.__cache['clan'])
-
         self.__queue.append(lambda : BigWorld.player().requestPlayerClanInfo(self.__cache['databaseID'], partial(lambda c, code, str, clanDBID, clanInfo: self.__processValueResponse(c, code, (clanDBID, clanInfo)), callback)))
         self.__processQueue()
 
@@ -147,11 +142,6 @@ class UserDossier(object):
 
     @async
     def getRankedInfo(self, callback):
-        """
-        Provides current ranked season info asynchronously
-        :param callback:
-        :return:
-        """
         if not self.isValid:
             callback({})
         if self.__cache.get('ranked') is None:
@@ -210,9 +200,6 @@ class DossierRequester(AbstractSyncDataRequester, IDossierRequester):
         return self.getCacheValue((constants.DOSSIER_TYPE.VEHICLE, vehTypeCompDescr), (0, ''))[1]
 
     def getVehDossiersIterator(self):
-        """ Returns iterator through all player's vehicle dossiers
-        :return: each call returns pair (veh_int_cd, dossier_str)
-        """
         for (dossierType, vehIntCD), records in self._data.iteritems():
             if dossierType == constants.DOSSIER_TYPE.VEHICLE:
                 yield (vehIntCD, records[1])
@@ -228,4 +215,4 @@ class DossierRequester(AbstractSyncDataRequester, IDossierRequester):
     def onCenterIsLongDisconnected(self, isLongDisconnected):
         if isLongDisconnected:
             return
-        self.__users = dict(filter(lambda item: item[1].isAvailable, self.__users.iteritems()))
+        self.__users = dict((item for item in self.__users.iteritems() if item[1].isAvailable))

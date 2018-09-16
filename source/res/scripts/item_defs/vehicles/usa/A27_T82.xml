@@ -61,8 +61,8 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <player>
-        <rayStart>	-1.27535 0.554217 -1.3926	</rayStart>
-        <rayEnd>	-1.07535 0.554217 -1.3926	</rayEnd>
+        <rayStart>	-1.27535 0.557237 -1.39092	</rayStart>
+        <rayEnd>	-1.07535 0.557237 -1.39092	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -74,13 +74,6 @@
         <size>	0.62	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
-      <player>
-        <rayStart>	1.27535 0.554217 -1.3926	</rayStart>
-        <rayEnd>	1.07535 0.554217 -1.3926	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.24	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
       <inscription>
         <rayStart>	1.2283 0.409335 1.23811	</rayStart>
         <rayEnd>	1.1483 0.409282 1.23811	</rayEnd>
@@ -88,6 +81,14 @@
         <size>	0.56	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
+      <player>
+        <rayStart>	1.27535 0.557237 -1.39092	</rayStart>
+        <rayEnd>	1.07535 0.557237 -1.39092	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/american/A27_T82/T82_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
@@ -245,7 +246,7 @@
         <segmentLength>	0.115	</segmentLength>
         <segmentOffset>	-0.023	</segmentOffset>
         <segment2Offset>	0.063	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -499,7 +500,7 @@
         <segmentLength>	0.115	</segmentLength>
         <segmentOffset>	-0.023	</segmentOffset>
         <segment2Offset>	0.063	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -778,7 +779,6 @@
   </turrets0>
   <crew>
     <commander>	gunner
-
 			radioman	</commander>
     <driver></driver>
     <gunner></gunner>

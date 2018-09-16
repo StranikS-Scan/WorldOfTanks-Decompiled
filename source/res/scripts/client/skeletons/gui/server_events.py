@@ -82,18 +82,15 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getActionEntities(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def getAnnouncedActions(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def getEventBattles(self):
         raise NotImplementedError
 
     def isEventEnabled(self):
-        raise NotImplementedError
-
-    def isGasAttackEnabled(self):
         raise NotImplementedError
 
     def getEventVehicles(self, itemsCache=None):
@@ -108,14 +105,8 @@ class IEventsCache(object):
     def getFutureEvents(self):
         raise NotImplementedError
 
-    def isFalloutEnabled(self):
-        raise NotImplementedError
-
-    def getFalloutConfig(self, queueType):
-        raise NotImplementedError
-
     def getAffectedAction(self, item):
-        raise NotImplemented
+        raise NotImplementedError
 
     def getItemAction(self, item, isBuying=True, forCredits=False):
         raise NotImplementedError
@@ -127,12 +118,6 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getEconomicsAction(self, name):
-        raise NotImplementedError
-
-    def getCamouflageAction(self, vehicleIntCD):
-        raise NotImplementedError
-
-    def getEmblemsAction(self, group):
         raise NotImplementedError
 
     def isBalancedSquadEnabled(self):

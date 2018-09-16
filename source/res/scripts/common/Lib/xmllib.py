@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xmllib.py
-"""A parser for XML, using the derived class as static DTD."""
 import re
 import string
 import warnings

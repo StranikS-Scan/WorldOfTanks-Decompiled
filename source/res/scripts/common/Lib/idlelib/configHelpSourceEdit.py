@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/configHelpSourceEdit.py
-"""Dialog to specify or edit the parameters for a user configured help source."""
 import os
 import sys
 from Tkinter import *
@@ -10,13 +9,6 @@ import tkFileDialog
 class GetHelpSourceDialog(Toplevel):
 
     def __init__(self, parent, title, menuItem='', filePath=''):
-        """Get menu entry and url/ local file location for Additional Help
-        
-        User selects a name for the Help resource and provides a web url
-        or a local file as its source.  The user can enter a url or browse
-        for the file.
-        
-        """
         Toplevel.__init__(self, parent)
         self.configure(borderwidth=5)
         self.resizable(height=FALSE, width=FALSE)
@@ -86,7 +78,6 @@ class GetHelpSourceDialog(Toplevel):
         return
 
     def MenuOk(self):
-        """Simple validity check for a sensible menu item name"""
         menuOk = True
         menu = self.menu.get()
         menu.strip()
@@ -101,7 +92,6 @@ class GetHelpSourceDialog(Toplevel):
         return menuOk
 
     def PathOk(self):
-        """Simple validity check for menu file path"""
         pathOk = True
         path = self.path.get()
         path.strip()

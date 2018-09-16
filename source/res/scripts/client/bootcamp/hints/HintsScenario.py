@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/hints/HintsScenario.py
+import time
+import math
+from functools import partial
 import BattleReplay
 import BigWorld
-import time
 import Math
-import math
 import TriggersManager
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from bootcamp.BootcampConstants import CONSUMABLE_ERROR_MESSAGES, HINT_TYPE
@@ -15,7 +16,6 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.account_helpers.settings_core import ISettingsCore
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
-from functools import partial
 from bootcamp.Bootcamp import g_bootcamp
 
 class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
@@ -56,7 +56,7 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
             model = resourceRefs[self.__modelName]
             if not self.__active:
                 return
-            if attachNode.isDangling:
+            if attachNode.isDangling or not self.__attaching:
                 return
             BigWorld.player().addModel(model)
             yawOnly = Math.WGYawOnlyTransform()
@@ -116,6 +116,7 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
 
     def attachModels(self):
         from vehicle_systems.tankStructure import TankPartNames
+        self.__attaching = True
         scale = Math.Vector3(4.0, 10.0, 10.0)
         offset = Math.Vector3(0.0, -6.5, 0.0)
         scaleMatrix = Math.Matrix()
@@ -133,6 +134,7 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
         return
 
     def detachModels(self):
+        self.__attaching = False
         for data in self.__models:
             data['model'].delMotor(data['servo'])
             BigWorld.player().delModel(data['model'])
@@ -188,7 +190,6 @@ class HintAllyShoot(HintBase):
         if self._state != HintBase.STATE_DEFAULT:
             return
         vehicleId = actionParams[0]
-        flags = actionParams[1]
         if vehicleId in self.__alliesIds and not self.__allyShooted:
             self.__allyShooted = True
 
@@ -574,7 +575,6 @@ class HintSniperOnDistance(HintBase, TriggersManager.ITriggerListener):
                 direction = position - playerPosition
                 direction.normalise()
                 cosAlpha = shootVector.dot(direction)
-                curDistance = playerPosition.flatDistTo(position)
                 if cosAlpha > math.cos(self.__angle) and playerPosition.flatDistTo(position) > self.__distance:
                     return True
 

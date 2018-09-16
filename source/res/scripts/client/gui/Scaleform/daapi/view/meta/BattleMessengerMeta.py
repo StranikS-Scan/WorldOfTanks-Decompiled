@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattleMessengerMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class BattleMessengerMeta(BaseDAAPIComponent):
@@ -45,15 +41,9 @@ class BattleMessengerMeta(BaseDAAPIComponent):
         return self.flashObject.as_showSelfMessage(message, messageID) if self._isDAAPIInited() else None
 
     def as_setupListS(self, data):
-        """
-        :param data: Represented by BattleMessengerSettingsVO (AS)
-        """
         return self.flashObject.as_setupList(data) if self._isDAAPIInited() else None
 
     def as_setReceiverS(self, data, isResetReceivers):
-        """
-        :param data: Represented by BattleMessengerReceiverVO (AS)
-        """
         return self.flashObject.as_setReceiver(data, isResetReceivers) if self._isDAAPIInited() else None
 
     def as_changeReceiverS(self, receiver):
@@ -72,9 +62,6 @@ class BattleMessengerMeta(BaseDAAPIComponent):
         return self.flashObject.as_setUserPreferences(tooltipStr) if self._isDAAPIInited() else None
 
     def as_setReceiversS(self, receivers):
-        """
-        :param receivers: Represented by Vector.<BattleMessengerReceiverVO> (AS)
-        """
         return self.flashObject.as_setReceivers(receivers) if self._isDAAPIInited() else None
 
     def as_enableToSendMessageS(self):

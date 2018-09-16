@@ -7,20 +7,6 @@ class HitData(object):
     __slots__ = ('__yaw', '__attackerID', '__damage', '__attackerVehName', '__attackerVehClassTag', '__playerVehMaxHP', '__hitFlags', '__critFlags', '__critsCount')
 
     def __init__(self, yaw=0, attackerID=0, attackerVehName='', attackerVehClassTag=None, playerVehMaxHP=0, damage=0, critFlags=0, isAlly=False, isBlocked=False, isHighExplosive=False):
-        """
-        Constructor.
-        
-        :param yaw: YAW.
-        :param attackerID: Attacker ID.
-        :param attackerVehName: Attacker vehicle name with IGR prefix.
-        :param attackerVehClassTag: Attacker vehicle class tag.
-        :param attackerVehMaxHP: Attacker vehicle max health points.
-        :param isEnemy: Indicates whether the attacker is enemy.
-        :param damage: Damage value (received or blocked).
-        :param isBlocked: Indicates whether the damage is blocked.
-        :param critFlags: Bit mask of critical damages (modules and crew).
-        :param isHighExplosive: Indicates whether the hit is caused by high explosive shell.
-        """
         super(HitData, self).__init__()
         self.__yaw = yaw
         self.__attackerID = attackerID

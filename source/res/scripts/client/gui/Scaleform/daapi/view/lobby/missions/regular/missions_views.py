@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_views.py
-from adisp import process
 from functools import partial
+from adisp import process
 from gui.Scaleform.daapi.view.lobby.event_boards.event_helpers import checkEventExist
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
 from skeletons.gui.game_control import IReloginController
@@ -29,26 +29,21 @@ from helpers import dependency
 from gui.server_events.events_dispatcher import hideMissionDetails
 
 class _GroupedMissionsView(MissionsGroupedViewMeta):
-    """ Missions tab for quests combined in groups.
-    """
 
     def clickActionBtn(self, actionID):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE, ctx={'tabId': STORE_CONSTANTS.STORE_ACTIONS}), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def expand(self, id, value):
-        settings.expandGroup(id, value)
+    def expand(self, gID, value):
+        settings.expandGroup(gID, value)
         if self._questsDP is not None:
             for blockData in self._questsDP.collection:
-                if blockData.get('blockId') == id:
-                    blockData['isCollapsed'] = settings.isGroupMinimized(id)
+                if blockData.get('blockId') == gID:
+                    blockData['isCollapsed'] = settings.isGroupMinimized(gID)
 
         return
 
 
 class MissionsMarathonsView(_GroupedMissionsView):
-    """ Missions tab for quests combined in marathons.
-        Marathon is a special group with a final prise.
-    """
 
     def dummyClicked(self, eventType):
         if eventType == 'OpenCategoriesEvent':
@@ -135,20 +130,17 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
         self.as_setWaitingVisibleS(False)
 
     @checkEventExist
-    def expand(self, id, value):
-        event = self.__eventsData.getEvent(id)
+    def expand(self, gID, value):
+        event = self.__eventsData.getEvent(gID)
         expandGroup(event, value)
         if self._questsDP is not None:
             for blockData in self._questsDP.collection:
-                if blockData.get('blockId') == id:
+                if blockData.get('blockId') == gID:
                     blockData['isCollapsed'] = isGroupMinimized(event)
 
         return
 
     def onRefresh(self):
-        """
-        Executes on maintenance refresh button click.
-        """
         self._onEventsUpdate()
 
     def _populate(self):
@@ -219,8 +211,6 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 
 
 class MissionsCategoriesView(_GroupedMissionsView):
-    """ Missions tab for quests that don't fall within the marathon criteria.
-    """
 
     @staticmethod
     def _getBackground():
@@ -231,8 +221,6 @@ class MissionsCategoriesView(_GroupedMissionsView):
 
 
 class CurrentVehicleMissionsView(CurrentVehicleMissionsViewMeta):
-    """ Missions tab for all quests from the other tabs that can be completed on the current vihicle.
-    """
 
     def setBuilder(self, builder, filters, eventId):
         super(CurrentVehicleMissionsView, self).setBuilder(builder, filters, eventId)

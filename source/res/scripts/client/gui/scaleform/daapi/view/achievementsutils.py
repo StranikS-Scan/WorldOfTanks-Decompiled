@@ -79,13 +79,13 @@ class AchievementsUtils(object):
          'iconAlpha': iconAlpha}
 
     @staticmethod
-    def getBattleResultAchievementData(achievement, type, customData, isUnique=False):
+    def getBattleResultAchievementData(achievement, aType, customData, isUnique=False):
         rank, i18nValue = (None, None)
         if achievement.getType() != ACHIEVEMENT_TYPE.SERIES:
             rank, i18nValue = achievement.getValue(), achievement.getI18nValue()
         icons = achievement.getIcons()
         specialIcon = icons.get(MarkOnGunAchievement.IT_95X85, None)
-        return {'type': type,
+        return {'type': aType,
          'block': achievement.getBlock(),
          'inactive': False,
          'icon': {'big': '',

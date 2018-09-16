@@ -1,7 +1,6 @@
 <G21_PanzerJager_I.xml>
   <crew>
     <commander>	radioman
-
 			loader	</commander>
     <driver></driver>
     <gunner></gunner>
@@ -122,7 +121,7 @@
       <userString>	#germany_vehicles:PzJgd_ketten_I	</userString>
       <tags></tags>
       <level>	1	</level>
-      <price>	280.0	</price>
+      <price>	280	</price>
       <unlocks>
         <chassis>	PzJgd_ketten_II	  <cost>	95	</cost>
         </chassis>
@@ -271,7 +270,7 @@
         <right>	vehicles/german/G21_PanzerJager_I/track/right.track	</right>
         <segmentLength>	0.088	</segmentLength>
         <segmentOffset>	0.07	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -377,7 +376,7 @@
       <userString>	#germany_vehicles:PzJgd_ketten_II	</userString>
       <tags></tags>
       <level>	2	</level>
-      <price>	570.0	</price>
+      <price>	570	</price>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
@@ -522,7 +521,7 @@
         <right>	vehicles/german/G21_PanzerJager_I/track/right.track	</right>
         <segmentLength>	0.088	</segmentLength>
         <segmentOffset>	0.07	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>

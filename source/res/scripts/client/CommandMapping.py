@@ -65,7 +65,7 @@ CMD_VOICECHAT_ENABLE = 57
 CMD_BLOCK_TRACKS = 58
 CMD_CM_TRAJECTORY_VIEW = 59
 
-class CommandMapping:
+class CommandMapping(object):
     __DEFAULT_CONFIG_FILE_NAME = 'scripts/command_mapping.xml'
     __USER_CONFIG_SECTION_NAME = 'commandMapping'
     onMappingChanged = Event.Event()
@@ -75,13 +75,14 @@ class CommandMapping:
         self.__dictCommand2CommandName = {}
         self.restoreUserConfig()
 
-    def add(self, commandName, fireKeyName, satelliteKeyNames=[], isDefault=False):
+    def add(self, commandName, fireKeyName, satelliteKeyNames=None, isDefault=False):
+        satelliteKeyNames = satelliteKeyNames or []
         try:
             command = int(self.getCommand(commandName))
             fireKey = int(Keys.__dict__.get(fireKeyName))
-            satelliteKeys = tuple(map(lambda x: int(Keys.__dict__.get(x)), satelliteKeyNames))
+            satelliteKeys = tuple((int(Keys.__dict__.get(x)) for x in satelliteKeyNames))
             keyInfo = (command, satelliteKeys, isDefault)
-        except:
+        except Exception:
             return False
 
         if not isDefault:
@@ -106,7 +107,7 @@ class CommandMapping:
                     if keyInfo[0] == command and not keyInfo[1]:
                         return fireKey
 
-        except:
+        except Exception:
             return None
 
         return None
@@ -115,9 +116,12 @@ class CommandMapping:
         try:
             delCommand = int(self.getCommand(commandName))
             delFireKey = None if fireKeyName is None else int(Keys.__dict__.get(fireKeyName))
-            delSatelliteKeys = None if satelliteKeyNames is None else tuple(map(lambda x: int(Keys.__dict__.get(x)), satelliteKeyNames))
+            if satelliteKeyNames is None:
+                delSatelliteKeys = None
+            else:
+                delSatelliteKeys = tuple((int(Keys.__dict__.get(x)) for x in satelliteKeyNames))
             delIsDefault = isDefault
-        except:
+        except Exception:
             return False
 
         delListFireKey = []
@@ -268,12 +272,6 @@ class CommandMapping:
             Settings.g_instance.save()
 
     def __checkUserKey(self, key):
-        """if Keys.KEY_1 <= key <= Keys.KEY_0: return True
-        if Keys.KEY_Q <= key <= Keys.KEY_P: return True
-        if Keys.KEY_A <= key <= Keys.KEY_L: return True
-        if Keys.KEY_Z <= key <= Keys.KEY_M: return True
-        if key == Keys.KEY_SPACE: return True
-        return False"""
         return True
 
     def __loadFromSection(self, section, bDelOldCmds=True, asDefault=False):

@@ -15,36 +15,24 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from gui.shared.utils.requesters import REQ_CRITERIA
 
 class ESportIntroEntry(UnitIntroEntryPoint):
-    """
-    ESport intro entry point
-    """
 
     def __init__(self):
         super(ESportIntroEntry, self).__init__(FUNCTIONAL_FLAG.E_SPORT, PREBATTLE_TYPE.E_SPORT_COMMON)
 
 
 class ESportBrowserEntryPoint(UnitBrowserEntryPoint):
-    """
-    Base ESport browser entry point
-    """
 
     def __init__(self, prbType):
         super(ESportBrowserEntryPoint, self).__init__(FUNCTIONAL_FLAG.E_SPORT, prbType)
 
 
 class ESportEntryPoint(UnitEntryPoint):
-    """
-    Base ESport entry point
-    """
 
     def __init__(self, accountsToInvite=None):
         super(ESportEntryPoint, self).__init__(FUNCTIONAL_FLAG.E_SPORT, accountsToInvite)
 
 
 class ESportIntroEntity(UnitIntroEntity):
-    """
-    ESport intro entity
-    """
 
     def __init__(self):
         RQ_TYPE = settings.REQUEST_TYPE
@@ -90,15 +78,6 @@ class ESportIntroEntity(UnitIntroEntity):
         return self._searchHandler and self._searchHandler.isInSearch()
 
     def getSelectedVehicles(self, section, useAll=True):
-        """
-        Returns list of intCD's of selected vehicles.
-        Args:
-            section: section in AccountSettings to store
-            useAll: should we use all vehicles
-        
-        Returns:
-            selected vehicles list
-        """
         accSettings = dict(AccountSettings.getSettings('unitWindow'))
         vehicles = accSettings.get(section, [])
         items = self.itemsCache.items
@@ -118,23 +97,11 @@ class ESportIntroEntity(UnitIntroEntity):
         return selectedVehicles
 
     def setSelectedVehicles(self, section, vehicles):
-        """
-        Sets the list of selected vehicles
-        Args:
-            section: section to store
-            vehicles: vehicles intCDs
-        """
-        settings = dict(AccountSettings.getSettings('unitWindow'))
-        settings[section] = vehicles
-        AccountSettings.setSettings('unitWindow', settings)
+        unitWindowSettings = dict(AccountSettings.getSettings('unitWindow'))
+        unitWindowSettings[section] = vehicles
+        AccountSettings.setSettings('unitWindow', unitWindowSettings)
 
     def doAutoSearch(self, ctx, callback=None):
-        """
-        Starts player's auto search
-        Args:
-            ctx: auto search request context
-            callback: operation callback
-        """
         if ctx.isRequestToStart():
             if self.isParentControlActivated(callback=callback):
                 return
@@ -145,23 +112,11 @@ class ESportIntroEntity(UnitIntroEntity):
             callback(result)
 
     def acceptSearch(self, ctx, callback=None):
-        """
-        Accepts player's auto search
-        Args:
-            ctx: accept auto search request context
-            callback: operation callback
-        """
         result = self._searchHandler.accept()
         if callback:
             callback(result)
 
     def declineSearch(self, ctx, callback=None):
-        """
-        Declines player's auto search
-        Args:
-            ctx: decline auto search request context
-            callback: operation callback
-        """
         result = self._searchHandler.decline()
         if callback:
             callback(result)
@@ -177,9 +132,6 @@ class ESportIntroEntity(UnitIntroEntity):
 
 
 class ESportBrowserEntity(UnitBrowserEntity):
-    """
-    Base ESport broweser entity
-    """
 
     def __init__(self, prbType):
         super(ESportBrowserEntity, self).__init__(FUNCTIONAL_FLAG.E_SPORT, prbType)
@@ -210,9 +162,6 @@ class ESportBrowserEntity(UnitBrowserEntity):
 
 
 class ESportEntity(UnitEntity):
-    """
-    Base ESport entity
-    """
 
     def __init__(self, prbType):
         super(ESportEntity, self).__init__(FUNCTIONAL_FLAG.E_SPORT, prbType)

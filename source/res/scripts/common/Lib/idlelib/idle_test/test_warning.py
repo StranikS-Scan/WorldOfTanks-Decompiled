@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/idle_test/test_warning.py
-"""Test warnings replacement in PyShell.py and run.py.
-
-This file could be expanded to include traceback overrides
-(in same two modules). If so, change name.
-Revise if output destination changes (http://bugs.python.org/issue18318).
-Make sure warnings module is left unaltered (http://bugs.python.org/issue18081).
-"""
 import unittest
 from test.test_support import captured_stderr
 import warnings

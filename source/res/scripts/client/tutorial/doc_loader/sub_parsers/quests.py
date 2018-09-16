@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/quests.py
 from items import _xml
 from tutorial.control.quests import triggers
-from tutorial.data import chapter
+from tutorial.data import chapter as tutorial_chapter
 from tutorial.data import effects
 from tutorial.doc_loader import sub_parsers
 from tutorial.doc_loader.sub_parsers import chains, readVarValue
@@ -91,14 +91,14 @@ def readTutorialSettingSection(xmlCtx, section, flags):
         settingValue = _xml.readBool(xmlCtx, section, 'setting-value')
     else:
         _xml.raiseWrongXml(xmlCtx, section.name, 'Specify a setting value')
-    return chapter.TutorialSetting(settingID, settingName, settingValue)
+    return tutorial_chapter.TutorialSetting(settingID, settingName, settingValue)
 
 
 def readQuestConditions(section):
     result = []
     valuesSec = section['quest-conditions']
     if valuesSec is not None:
-        for name, conditionsSection in valuesSec.items():
+        for _, conditionsSection in valuesSec.items():
             valueType, valueSec = conditionsSection.items()[0]
             result.append(readVarValue(valueType, valueSec))
 
@@ -113,17 +113,11 @@ def _readSimpleWindowProcessTriggerSection(xmlCtx, section, _, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.SimpleWindowProcessTrigger, validateUpdateOnly='validate-update-only' in section.keys())
 
 
-def _readSelectVehicleInHangarSection(xmlCtx, section, flags, conditions):
-    targetID = section.asString
-    return effects.HasTargetEffect(targetID, effects.EFFECT_TYPE.SELECT_VEHICLE_IN_HANGAR, conditions=conditions)
-
-
 def init():
     sub_parsers.setEffectsParsers({'save-setting': readSaveTutorialSettingSection,
      'save-account-setting': readSaveAccountSettingSection,
      'show-unlocked-chapter': chains.readShowUnlockedChapterSection,
-     'switch-to-random': lobby.readSwitchToRandomSection,
-     'select-in-hangar': _readSelectVehicleInHangarSection})
+     'switch-to-random': lobby.readSwitchToRandomSection})
     sub_parsers.setEntitiesParsers({'hint': chains.readHintSection,
      'tutorial-setting': readTutorialSettingSection})
     sub_parsers.setTriggersParsers({'bonus': lobby.readBonusTriggerSection,

@@ -12,20 +12,18 @@ _CHANNEL_LAZY_ORDER = {LAZY_CHANNEL.COMMON: 1,
 class SPECIAL_CLIENT_WINDOWS(CONST_CONTAINER):
     TRAINING_LIST = 1
     TRAINING_ROOM = 2
-    FALLOUT = 3
 
 
 _idGen = SequenceIDGenerator()
 _PRB_CLIENT_IDS = {}
 _PRB_CLIENT_COMBINED_IDS = {PREBATTLE_TYPE.SQUAD: PREBATTLE_TYPE.UNIT,
  PREBATTLE_TYPE.EVENT: PREBATTLE_TYPE.UNIT,
- PREBATTLE_TYPE.FALLOUT: PREBATTLE_TYPE.UNIT,
  PREBATTLE_TYPE.E_SPORT_COMMON: PREBATTLE_TYPE.UNIT}
-for idx, prbType in enumerate(PREBATTLE_TYPE.RANGE):
-    index = idx
-    if prbType in _PRB_CLIENT_COMBINED_IDS:
-        index = PREBATTLE_TYPE.RANGE.index(_PRB_CLIENT_COMBINED_IDS[prbType])
-    _PRB_CLIENT_IDS[prbType] = -(index + 1)
+for _idx, _prbType in enumerate(PREBATTLE_TYPE.RANGE):
+    index = _idx
+    if _prbType in _PRB_CLIENT_COMBINED_IDS:
+        index = PREBATTLE_TYPE.RANGE.index(_PRB_CLIENT_COMBINED_IDS[_prbType])
+    _PRB_CLIENT_IDS[_prbType] = -(index + 1)
 
 _LAZY_CLIENT_IDS = dict(((name, -(idx + 1 + 32)) for idx, name in enumerate(LAZY_CHANNEL.ALL)))
 _QUEUE_CLIENT_IDS = dict(((name, -(idx + 1 + 64)) for idx, name in enumerate(QUEUE_TYPE.ALL)))

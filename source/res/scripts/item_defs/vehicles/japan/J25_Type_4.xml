@@ -222,7 +222,7 @@
         <right>	vehicles/japan/J25_Type_4/track/right.track	</right>
         <segmentLength>	0.155	</segmentLength>
         <segmentOffset>	0.095	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -386,7 +386,7 @@
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	270	</maxHealth>
-      <maxRegenHealth>	202.0	</maxRegenHealth>
+      <maxRegenHealth>	202	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/japan/J25_Type_4/normal/lod0/Chassis.model	</undamaged>
@@ -496,7 +496,7 @@
         <right>	vehicles/japan/J25_Type_4/track/right.track	</right>
         <segmentLength>	0.155	</segmentLength>
         <segmentOffset>	0.095	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -678,7 +678,7 @@
       <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	115	</maxHealth>
-        <maxRegenHealth>	57.0	</maxRegenHealth>
+        <maxRegenHealth>	57	</maxRegenHealth>
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>

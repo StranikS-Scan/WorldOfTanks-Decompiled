@@ -4,14 +4,17 @@ import weakref
 import BigWorld
 from gui import DEPTH_OF_Battle
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
+from gui.Scaleform.daapi.settings.config import BATTLE_TOOLTIPS_BUILDERS_PATHS
 from gui.Scaleform.framework import ViewTypes
-from gui.Scaleform.framework.ToolTip import ToolTip
+from gui.Scaleform.framework.tooltip_mgr import ToolTip
 from gui.Scaleform.framework.application import SFApplication, DAAPIRootBridge
 from gui.Scaleform.framework.managers import LoaderManager, ContainerManager
 from gui.Scaleform.framework.managers.TutorialManager import TutorialManager
 from gui.Scaleform.framework.managers.containers import DefaultContainer
 from gui.Scaleform.framework.managers.containers import PopUpContainer
 from gui.Scaleform.framework.managers.context_menu import ContextMenuManager
+from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimizationManager, OptimizationSetting
+from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.managers.ColorSchemeManager import BattleColorSchemeManager
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
 from gui.Scaleform.managers.PopoverManager import PopoverManager
@@ -20,8 +23,9 @@ from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.battle_input import BattleGameInputMgr
 from gui.Scaleform.managers.voice_chat import BattleVoiceChatManager
-from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
+from helpers import uniprof
 
 class TopWindowContainer(PopUpContainer):
 
@@ -47,6 +51,9 @@ class TopWindowContainer(PopUpContainer):
         return result
 
 
+BATTLE_OPTIMIZATION_CONFIG = {BATTLE_VIEW_ALIASES.MINIMAP: OptimizationSetting('minimapAlphaEnabled', True),
+ BATTLE_VIEW_ALIASES.DAMAGE_PANEL: OptimizationSetting('minimapAlphaEnabled', True)}
+
 class BattleEntry(SFApplication):
 
     def __init__(self, appNS):
@@ -58,11 +65,13 @@ class BattleEntry(SFApplication):
     def cursorMgr(self):
         return self.__getCursorFromContainer()
 
+    @uniprof.regionDecorator(label='gui.battle', scope='enter')
     def afterCreate(self):
         super(BattleEntry, self).afterCreate()
         self.__input = BattleGameInputMgr()
         self.__input.start()
 
+    @uniprof.regionDecorator(label='gui.battle', scope='exit')
     def beforeDelete(self):
         if self.__input is not None:
             self.__input.stop()
@@ -100,10 +109,10 @@ class BattleEntry(SFApplication):
         return LoaderManager(weakref.proxy(self))
 
     def _createContainerManager(self):
-        return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), PopUpContainer(ViewTypes.WINDOW), TopWindowContainer(ViewTypes.TOP_WINDOW, weakref.proxy(self)), DefaultContainer(ViewTypes.SERVICE_LAYOUT))
+        return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), PopUpContainer(ViewTypes.WINDOW), TopWindowContainer(ViewTypes.TOP_WINDOW, weakref.proxy(self)), DefaultContainer(ViewTypes.SERVICE_LAYOUT), PopUpContainer(ViewTypes.OVERLAY))
 
     def _createToolTipManager(self):
-        tooltip = ToolTip(GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)
+        tooltip = ToolTip(BATTLE_TOOLTIPS_BUILDERS_PATHS, app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)
         tooltip.setEnvironment(self)
         return tooltip
 
@@ -128,14 +137,14 @@ class BattleEntry(SFApplication):
     def _createTutorialManager(self):
         return TutorialManager(None, False, {})
 
-    def _createBootcampManager(self):
-        return None
-
     def _createPopoverManager(self):
         return PopoverManager(EVENT_BUS_SCOPE.BATTLE)
 
     def _createTweenManager(self):
         return TweenManager()
+
+    def _createGraphicsOptimizationManager(self):
+        return GraphicsOptimizationManager(config=BATTLE_OPTIMIZATION_CONFIG)
 
     def _setup(self):
         self.component.wg_inputKeyMode = 1

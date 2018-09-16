@@ -5,8 +5,6 @@ from items.components import legacy_stuff
 RecoilEffect = namedtuple('RecoilEffect', ('lodDist', 'amplitude', 'backoffTime', 'returnTime'))
 
 class GunShot(legacy_stuff.LegacyStuff):
-    """Class contains configuration of gun shot. It's extended from LegacyStuff to make back capability
-    to dictionary-like access when it needs."""
     __slots__ = ('shell', 'defaultPortion', 'piercingPower', 'speed', 'gravity', 'maxDistance', 'maxHeight')
 
     def __init__(self, shell, defaultPortion, piercingPower, speed, gravity, maxDistance, maxHeight):

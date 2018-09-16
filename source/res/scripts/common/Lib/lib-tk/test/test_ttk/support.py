@@ -25,8 +25,6 @@ def root_withdraw():
 
 
 def simulate_mouse_click(widget, x, y):
-    """Generate proper events to click at the x, y position (tries to act
-    like an X server)."""
     widget.event_generate('<Enter>', x=0, y=0)
     widget.event_generate('<Motion>', x=x, y=y)
     widget.event_generate('<ButtonPress-1>', x=x, y=y)

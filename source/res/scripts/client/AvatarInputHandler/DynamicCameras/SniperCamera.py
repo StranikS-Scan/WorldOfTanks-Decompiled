@@ -3,8 +3,6 @@
 import BattleReplay
 import BigWorld
 import GUI
-import Keys
-import Math
 import Settings
 import constants
 from AvatarInputHandler import mathUtils, cameras, aih_global_binding
@@ -15,7 +13,7 @@ from AvatarInputHandler.DynamicCameras import CameraDynamicConfig
 from AvatarInputHandler.DynamicCameras import createCrosshairMatrix, createOscillatorFromSection, AccelerationSmoother
 from AvatarInputHandler.cameras import ICamera, readFloat, readVec3, ImpulseReason, FovExtended
 from Math import Vector2, Vector3, Matrix
-from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
+from debug_utils import LOG_WARNING, LOG_DEBUG
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -78,7 +76,7 @@ class SniperCamera(ICamera, CallbackDelayer):
                 self.__cfg['zoom'] = self.__zoom = self.__cfg['zooms'][:3][-1]
                 if self.camera is BigWorld.camera():
                     self.delayCallback(0.0, self.__applyZoom, self.__cfg['zoom'])
-        if 'fov' in diff and self.camera is BigWorld.camera():
+        if ('fov' in diff or 'dynamicFov' in diff) and self.camera is BigWorld.camera():
             self.delayCallback(0.01, self.__applyZoom, self.__cfg['zoom'])
 
     def create(self, onChangeControlMode=None):
@@ -120,7 +118,6 @@ class SniperCamera(ICamera, CallbackDelayer):
         return
 
     def disable(self):
-        BigWorld.camera(None)
         if self.__waitVehicleCallbackId is not None:
             BigWorld.cancelCallback(self.__waitVehicleCallbackId)
             self.__waitVehicleCallbackId = None

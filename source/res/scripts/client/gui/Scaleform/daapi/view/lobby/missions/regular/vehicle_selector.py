@@ -3,7 +3,7 @@
 from account_helpers.AccountSettings import MISSION_SELECTOR_FILTER, AccountSettings
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.view.lobby.missions.vehicle_selector import MissionVehicleSelector, MissionVehicleSelectorCarousel, SelectorCriteriesGroup
-from gui.Scaleform.daapi.view.lobby.vehicle_carousel.carousel_filter import CarouselFilter, EventCriteriesGroup
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter, EventCriteriesGroup
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events import caches
@@ -11,10 +11,6 @@ from gui.shared.formatters import text_styles
 from helpers.i18n import makeString as ms
 
 class RegularMissionVehicleSelector(MissionVehicleSelector):
-    """ Vehicle selector for a regular quest.
-    Vehicle selector is used to select vehicle among suitable for the quest
-    (based on vehicle requirements section in quest).
-    """
 
     def _getTitle(self):
         suitableVehiclesCount = self._carousel.getSuitableVehiclesCount()
@@ -35,8 +31,6 @@ class RegularMissionVehicleSelector(MissionVehicleSelector):
 
 
 class RegularVehicleSelectorCarousel(MissionVehicleSelectorCarousel):
-    """ Carousel for displaying suitable vehicles for a regular quest.
-    """
 
     def __init__(self):
         super(RegularVehicleSelectorCarousel, self).__init__()
@@ -53,11 +47,6 @@ class RegularVehicleSelectorCarousel(MissionVehicleSelectorCarousel):
 
 
 class _RegularCarouselFilter(CarouselFilter):
-    """ Carousel filter for missions vehicle selector.
-    
-    This filter utilizes same sections as hangar carousel, but has specific
-    saving and loading rules.
-    """
 
     def __init__(self):
         super(_RegularCarouselFilter, self).__init__()

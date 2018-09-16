@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattleSessionWindowMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattleWindow import PrebattleWindow
 
 class BattleSessionWindowMeta(PrebattleWindow):
@@ -30,9 +26,6 @@ class BattleSessionWindowMeta(PrebattleWindow):
         return self.flashObject.as_setInfo(wins, map, firstTeam, secondTeam, count, description, comment) if self._isDAAPIInited() else None
 
     def as_setNationsLimitsS(self, nations):
-        """
-        :param nations: Represented by DataProvider.<BSFlagRendererVO> (AS)
-        """
         return self.flashObject.as_setNationsLimits(nations) if self._isDAAPIInited() else None
 
     def as_setClassesLimitsS(self, vehicleLevels, classesLimitsAreIdentical):

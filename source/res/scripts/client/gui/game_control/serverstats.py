@@ -35,8 +35,6 @@ class ServerStats(IServerStatsController):
         self.__stop()
 
     def getFormattedStats(self):
-        """ Get stats formatted as a single string with applied style.
-        """
         clusterUsers, regionUsers, tooltipType = self.getStats()
         if tooltipType == STATS_TYPE.CLUSTER:
             statsStr = text_styles.stats(clusterUsers)
@@ -47,8 +45,6 @@ class ServerStats(IServerStatsController):
         return (statsStr, tooltipType)
 
     def getStats(self):
-        """ Get stats separately for cluster and region without style.
-        """
         clusterCCU = self.__stats.get('clusterCCU', 0)
         regionCCU = self.__stats.get('regionCCU', 0)
         if regionCCU:

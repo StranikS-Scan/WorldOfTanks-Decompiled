@@ -7,11 +7,13 @@ import math
 from constants import TREE_TAG, CUSTOM_DESTRUCTIBLE_TAGS
 import string
 from material_kinds import EFFECT_MATERIALS, EFFECT_MATERIAL_INDEXES_BY_NAMES
-from constants import IS_CLIENT, IS_DEVELOPMENT, DESTRUCTIBLE_MATKIND
+from constants import IS_CLIENT, IS_CELLAPP, IS_DEVELOPMENT, DESTRUCTIBLE_MATKIND
 from debug_utils import *
 import items
 if IS_CLIENT:
     from helpers import EffectsList
+if IS_CLIENT or IS_CELLAPP:
+    from WoT import packAngleToUint, unpackAngleFromUint
 SEARCH_AD_RADIUS = 5.0
 RADIUS_FOR_LOCATION_AD = SEARCH_AD_RADIUS - 0.5
 DESTRUCTIBLES_CONFIG_FILE = 'scripts/destructibles.xml'
@@ -27,9 +29,9 @@ DESTR_STATE_NAME_FALLEN = 'fallen'
 STATIC_OBSTACLE_ID = 10000
 _INV_CHUNK_RANGE = 0.01
 PI = math.pi
-PI_2 = 2.0 * PI
 FALLING_DESTRUCTIBLES_IGNORE_ANGLE = PI / 4.0
 FALLING_DESTRUCTIBLES_IGNORE_SIN = math.sin(FALLING_DESTRUCTIBLES_IGNORE_ANGLE)
+GLOBAL_CHUNK_ID = 127 + 127 << 8 | 127 + 127
 
 class DestructiblesCache():
 
@@ -112,7 +114,7 @@ class DestructiblesCache():
                 _readAndMapEffect(module, moduleSec, 'ramEffect', self.__effects['structures'], filename)
                 _readAndMapEffect(module, moduleSec, 'hitEffect', self.__effects['structures'], filename)
                 _readAndMapEffect(module, moduleSec, 'decayEffect', self.__effects['structures'], filename)
-                module['effectHP'] = moduleSec.readString('effectHP')
+                module['effectHP'] = intern(moduleSec.readString('effectHP'))
                 module['effectScale'] = moduleSec.readFloat('effectScale')
             ids.append(id)
             idMap[id] = (module, depends)
@@ -308,8 +310,8 @@ def _parseFragileMaterialName(matName, filename):
 def _parseMaterialName(matName, filename):
     try:
         arr = matName.split('_')
-        type = arr[0]
-        surface = filter(str.isalpha, arr[1])
+        type = intern(arr[0])
+        surface = intern(filter(str.isalpha, arr[1]))
         id = int(arr[2])
         depends = map(int, arr[3:])
         res = (type,
@@ -396,7 +398,6 @@ def _readProjectilePiercingPowerReduction(section):
         try:
             reductionFactor = float(val[0])
             minReduction = float(val[1])
-            assert reductionFactor >= 0.0 and minReduction >= 0.0
         except:
             raise Exception('Wrong of missing value of %s/%s' % (section.name, matName))
 
@@ -471,63 +472,55 @@ def areaDestructiblesPositionFromChunkID(chunkID):
     return Math.Vector3(pos.x + dx, 0, pos.z + dz)
 
 
-def encodeFallenColumn(destrIndex, fallYaw, fallSpeed):
-    fallSpeed = int(fallSpeed)
-    if fallSpeed < 0:
-        fallSpeed = 0
-    elif fallSpeed > 3:
-        fallSpeed = 3
-    discreteYaw = int(64.0 * (fallYaw + PI) / PI_2) % 64
-    params = discreteYaw << 2 | fallSpeed & 3
-    return destrIndex << 8 | params
+def encodeUint16(value):
+    return (value >> 8 & 255, value & 255)
 
 
-def decodeFallenColumn(data):
-    destrIndex = data >> 8
-    params = data & 255
-    fallYaw = (params >> 2) / 64.0 * PI_2 - PI
-    fallSpeed = params & 3
-    return (destrIndex, fallYaw, fallSpeed)
-
-
-def encodeFallenTree(destrIndex, fallYaw, fallPitchConstr, fallSpeed):
-    fallSpeed = int(fallSpeed)
-    if fallSpeed < 0:
-        fallSpeed = 0
-    elif fallSpeed > 3:
-        fallSpeed = 3
-    discreteYaw = int(64.0 * (fallYaw + PI) / PI_2) & 63
-    params = discreteYaw << 2 | fallSpeed & 3
-    b32 = destrIndex << 8 | params
-    discretePitchConstr = int(65536.0 * (fallPitchConstr + PI) / PI_2) & 65535
-    return b32 << 16 | discretePitchConstr
-
-
-def decodeFallenTree(data):
-    b32 = data >> 16
-    destrIndex = b32 >> 8
-    params = b32 & 255
-    fallYaw = (params >> 2) / 64.0 * PI_2 - PI
-    fallSpeed = params & 3
-    discretePitchConstr = data & 65535
-    fallPitchConstr = discretePitchConstr / 65536.0 * PI_2 - PI
-    return (destrIndex,
-     fallYaw,
-     fallPitchConstr,
-     fallSpeed)
+def decodeUint16(data):
+    return data[0] << 8 | data[1]
 
 
 def encodeDestructibleModule(destrID, matKind, isShotDamage):
-    return destrID << 8 | matKind << 1 | int(isShotDamage)
+    return encodeUint16(destrID) + ((matKind & 127) << 1 | int(isShotDamage),)
 
 
 def decodeDestructibleModule(data):
-    return (data >> 8, data >> 1 & 127, bool(data & 1))
+    return (decodeUint16(data[:2]), data[2] >> 1, bool(data[2] & 1))
 
 
 def encodeFragile(destrID, isShotDamage):
-    return destrID << 8 | int(isShotDamage)
+    return encodeUint16(destrID) + (int(isShotDamage),)
 
 
 def decodeFragile(data):
-    return (data >> 8, bool(data & 1))
+    return (decodeUint16(data[:2]), bool(data[2]))
+
+
+def encodeFallenColumn(destrID, fallYaw, fallSpeed):
+    params = packAngleToUint(fallYaw, 6) << 2 | max(0, min(int(fallSpeed), 3))
+    return encodeUint16(destrID) + (params,)
+
+
+def decodeFallenColumn(data):
+    destrID = decodeUint16(data[:2])
+    params = data[2]
+    fallYaw = unpackAngleFromUint(params >> 2, 6)
+    fallSpeed = float(params & 3)
+    return (destrID, fallYaw, fallSpeed)
+
+
+def encodeFallenTree(destrID, fallYaw, fallPitchConstr, fallSpeed):
+    params = packAngleToUint(fallYaw, 6) << 2 | max(0, min(int(fallSpeed), 3))
+    return encodeUint16(destrID) + encodeUint16(packAngleToUint(fallPitchConstr, 16)) + (params,)
+
+
+def decodeFallenTree(data):
+    destrID = decodeUint16(data[:2])
+    fallPitchConstr = unpackAngleFromUint(decodeUint16(data[2:4]), 16)
+    params = data[4]
+    fallYaw = unpackAngleFromUint(params >> 2, 6)
+    fallSpeed = float(params & 3)
+    return (destrID,
+     fallYaw,
+     fallPitchConstr,
+     fallSpeed)

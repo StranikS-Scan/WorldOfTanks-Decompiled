@@ -9,7 +9,7 @@ from adisp import async, process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.app_loader.decorators import sf_lobby
+from gui.app_loader import decorators as ap_decorators
 from gui.shared import event_dispatcher
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.utils import graphics
@@ -32,7 +32,7 @@ class NotifyController(INotifyController):
         self.__settings = _Settings(0, None)
         return
 
-    @sf_lobby
+    @ap_decorators.sf_lobby
     def app(self):
         return None
 
@@ -85,7 +85,7 @@ class NotifyController(INotifyController):
             event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SETTINGS_TAB_INDEX.GRAPHICS)
             isOk = yield self.__showI18nDialog('lowFpsWarning')
             if isOk:
-                BigWorld.callback(0.001, lambda : self.__downgradePresetIndex())
+                BigWorld.callback(0.001, self.__downgradePresetIndex)
             else:
                 self.__updateLowFpsDialogVersion()
         graphicsStatus.markProcessed()

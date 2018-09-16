@@ -10,7 +10,6 @@ from gui.shared.tooltips import getComplexStatus, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from gui.shared.gui_items.gui_item_economics import isItemBuyPriceAvailable
 from gui.shared.formatters import text_styles
-from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
@@ -159,7 +158,7 @@ class SimplifiedStatsBlockConstructor(ShellTooltipBlockConstructor):
                 value = parameter.value
                 if delta > 0:
                     value -= delta
-                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData={'value': value,
+                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simplifiedDeltaParameter(parameter), statusBarData={'value': value,
                  'delta': delta,
                  'minValue': 0,
                  'markerValue': stockParams.get(parameter.name, value),

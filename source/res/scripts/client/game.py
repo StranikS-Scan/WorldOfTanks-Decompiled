@@ -4,6 +4,8 @@ import cPickle
 import zlib
 import sys
 import asyncore
+import functools
+import locale
 import services_config
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_NOTE
 import AreaDestructibles
@@ -11,7 +13,6 @@ import BigWorld
 import constants
 import CommandMapping
 from helpers import dependency, log
-from post_processing import g_postProcessing
 import GUI
 from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler, GUI_SETTINGS
 from gui.Scaleform.game_loading import GameLoading
@@ -19,13 +20,12 @@ from gui.shared import personality as gui_personality
 from messenger import MessengerEntry
 import MusicControllerWWISE
 import TriggersManager
-from helpers import RSSDownloader, OfflineMode
+from helpers import RSSDownloader, OfflineMode, LightingGenerationMode
 import Settings
 from MemoryCriticalController import g_critMemHandler
 import VOIP
 import WebBrowser
 import SoundGroups
-from functools import reduce
 from skeletons.connection_mgr import IConnectionManager
 from bootcamp.Bootcamp import g_bootcamp
 tutorialLoaderInit = lambda : None
@@ -42,7 +42,6 @@ if constants.IS_TUTORIAL_ENABLED:
 
 loadingScreenClass = GameLoading
 __import__('__main__').GameLoading = loadingScreenClass
-import locale
 try:
     locale.setlocale(locale.LC_TIME, '')
 except locale.Error:
@@ -71,7 +70,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         import Event
         g_onBeforeSendEvent = Event.Event()
         BigWorld.wg_initCustomSettings()
-        g_postProcessing.init()
         Settings.g_instance = Settings.Settings(scriptConfig, engineConfig, userPreferences)
         CommandMapping.g_instance = CommandMapping.CommandMapping()
         from helpers import DecalMap
@@ -87,7 +85,7 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
             from Vibroeffects import VibroManager
             VibroManager.g_instance = VibroManager.VibroManager()
             VibroManager.g_instance.connect()
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         tutorialLoaderInit()
@@ -116,13 +114,14 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         MusicControllerWWISE.create()
         TriggersManager.init()
         RSSDownloader.init()
+        items.clearXMLCache()
         SoundGroups.loadLightSoundsDB()
         try:
             from LightFx import LightManager
             LightManager.g_instance = LightManager.LightManager()
             import AuxiliaryFx
             AuxiliaryFx.g_instance = AuxiliaryFx.AuxiliaryFxManager()
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         from AvatarInputHandler.cameras import FovExtended
@@ -140,6 +139,9 @@ def start():
     if OfflineMode.onStartup():
         LOG_DEBUG('OfflineMode')
         return
+    elif LightingGenerationMode.onStartup():
+        LOG_DEBUG('LightingGenerationMode')
+        return
     else:
         manager = dependency.instance(IConnectionManager)
         manager.onConnected += onConnected
@@ -156,9 +158,9 @@ def start():
                         try:
                             __import__('tests.' + scriptName)
                         except ImportError:
-                            __import__('cat.' + scriptName)
+                            __import__('Cat.' + scriptName)
 
-                except:
+                except Exception:
                     LOG_CURRENT_EXCEPTION()
                     BigWorld.wg_writeToStdOut('Failed to run scripted test, Python exception was thrown, see python.log')
                     BigWorld.quit()
@@ -172,7 +174,7 @@ def start():
                         TestArena2Object.startOffline(sys.argv[2], sys.argv[3])
                     else:
                         TestArena2Object.startOffline(sys.argv[2])
-                except:
+                except Exception:
                     LOG_DEBUG('Game start FAILED with:')
                     LOG_CURRENT_EXCEPTION()
 
@@ -183,7 +185,7 @@ def start():
                     targetDirectory = sys.argv[4] if len(sys.argv) > 4 else 'SpinTestResult'
                     LOG_DEBUG('starting offline test: %s %s %s', sys.argv[2], sys.argv[3], targetDirectory)
                     TestArena2Object.startOffline(sys.argv[2], mapName=sys.argv[3], targetDirectory=targetDirectory)
-                except:
+                except Exception:
                     LOG_DEBUG('Game start FAILED with:')
                     LOG_CURRENT_EXCEPTION()
 
@@ -195,7 +197,7 @@ def start():
                     if len(sys.argv) > 3 and sys.argv[3] is not None:
                         LOG_DEBUG('Setting default client inactivity timeout: %s' % sys.argv[3])
                         constants.CLIENT_INACTIVITY_TIMEOUT = int(sys.argv[3])
-                except:
+                except Exception:
                     LOG_DEBUG('Game start FAILED with:')
                     LOG_CURRENT_EXCEPTION()
 
@@ -203,7 +205,7 @@ def start():
             elif sys.argv[1] == 'replayTimeout':
                 try:
                     g_replayCtrl.replayTimeout = float(sys.argv[2])
-                except:
+                except Exception:
                     LOG_DEBUG('Game start FAILED with:')
                     LOG_CURRENT_EXCEPTION()
 
@@ -216,7 +218,7 @@ def start():
                         scenarioPlayer().initBot(sys.argv[3], sys.argv[2])
                     elif sys.argv[1] == 'botExecute':
                         scenarioPlayer().execute(sys.argv[3], sys.argv[2])
-                except:
+                except Exception:
                     LOG_DEBUG('BOTNET: Failed to start the client with:')
                     LOG_CURRENT_EXCEPTION()
 
@@ -227,7 +229,7 @@ def start():
         try:
             import Vibroeffects
             Vibroeffects.VibroManager.g_instance.start()
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         try:
@@ -237,7 +239,7 @@ def start():
             from AuxiliaryFx import g_instance
             if g_instance is not None:
                 g_instance.start()
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         return
@@ -254,10 +256,10 @@ def fini():
     LOG_DEBUG('fini')
     if OfflineMode.enabled():
         return
+    elif LightingGenerationMode.enabled():
+        return
     else:
         BigWorld.wg_setScreenshotNotifyCallback(None)
-        if g_postProcessing is None:
-            return
         g_critMemHandler.restore()
         g_critMemHandler.destroy()
         if constants.IS_CAT_LOADED:
@@ -270,7 +272,6 @@ def fini():
         manager.onConnected -= onConnected
         manager.onDisconnected -= onDisconnected
         MessengerEntry.g_instance.fini()
-        g_postProcessing.fini()
         from helpers import EdgeDetectColorController
         if EdgeDetectColorController.g_instance is not None:
             EdgeDetectColorController.g_instance.destroy()
@@ -305,7 +306,7 @@ def fini():
             g_replayCtrl = None
         voipRespHandler = VOIP.getVOIPManager()
         if voipRespHandler is not None:
-            VOIP.getVOIPManager().destroy()
+            voipRespHandler.destroy()
         SoundGroups.g_instance.destroy()
         Settings.g_instance.save()
         if g_scenario is not None:
@@ -328,10 +329,10 @@ def onRecreateDevice():
     gui_personality.onRecreateDevice()
 
 
-def onStreamComplete(id, desc, data):
+def onStreamComplete(streamID, desc, data):
     try:
         origPacketLen, origCrc32 = cPickle.loads(desc)
-    except:
+    except Exception:
         origPacketLen, origCrc32 = (-1, -1)
 
     packetLen = len(data)
@@ -344,9 +345,9 @@ def onStreamComplete(id, desc, data):
      crc32)
     player = BigWorld.player()
     if player is None:
-        LOG_ERROR('onStreamComplete: no player entity available for process stream (%d, %s) data' % (id, desc))
+        LOG_ERROR('onStreamComplete: no player entity available for process stream (%d, %s) data' % (streamID, desc))
     else:
-        player.onStreamComplete(id, desc, data)
+        player.onStreamComplete(streamID, desc, data)
     return
 
 
@@ -358,7 +359,8 @@ def onConnected():
 def onGeometryMapped(spaceID, path):
     SoundGroups.g_instance.unloadAll()
     LOG_NOTE('[SPACE] Loading space: ' + path)
-    SoundGroups.g_instance.preloadSoundGroups(path.split('/')[-1])
+    arenaName = path.split('/')[-1]
+    SoundGroups.g_instance.preloadSoundGroups(arenaName)
 
 
 def onDisconnected():
@@ -382,6 +384,8 @@ def handleAxisEvent(event):
 
 def handleKeyEvent(event):
     if OfflineMode.handleKeyEvent(event):
+        return True
+    elif LightingGenerationMode.handleKeyEvent(event):
         return True
     else:
         isDown, key, mods, isRepeat = convertKeyEvent(event)
@@ -427,8 +431,10 @@ def handleKeyEvent(event):
 def handleMouseEvent(event):
     if OfflineMode.handleMouseEvent(event):
         return True
+    elif LightingGenerationMode.handleMouseEvent(event):
+        return True
     else:
-        dx, dy, dz, cursorPos = convertMouseEvent(event)
+        dx, dy, dz, _ = convertMouseEvent(event)
         if constants.IS_CAT_LOADED:
             import Cat
             if Cat.handleMouseEvent(dx, dy, dz):
@@ -490,7 +496,7 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
 
 def expandMacros(line):
     import re
-    patt = '\\$(' + reduce(lambda x, y: x + '|' + y, _PYTHON_MACROS.iterkeys()) + ')(\\W|\\Z)'
+    patt = '\\$(' + functools.reduce(lambda x, y: x + '|' + y, _PYTHON_MACROS.iterkeys()) + ')(\\W|\\Z)'
 
     def repl(match):
         return _PYTHON_MACROS[match.group(1)] + match.group(2)
@@ -513,8 +519,8 @@ def wg_onChunkLoose(spaceID, chunkID, isOutside):
         AreaDestructibles.g_destructiblesManager.onChunkLoose(chunkID)
 
 
-def wg_playModuleDestructionAnimation(chunkID, destrIndex, moduleIndex, isShotDamage, isHavokVisible):
-    AreaDestructibles.g_destructiblesManager.onPlayModuleDestructionAnimation(chunkID, destrIndex, moduleIndex, isShotDamage, isHavokVisible)
+def wg_playModuleDestructionAnimation(chunkID, destrIndex, moduleIndex, isShotDamage, isHavokSpawnedDestructibles):
+    AreaDestructibles.g_destructiblesManager.onPlayModuleDestructionAnimation(chunkID, destrIndex, moduleIndex, isShotDamage, isHavokSpawnedDestructibles)
 
 
 def convertKeyEvent(event):
@@ -542,7 +548,7 @@ def onMemoryCritical():
 def asyncore_call():
     try:
         asyncore.loop(count=1)
-    except:
+    except Exception:
         LOG_CURRENT_EXCEPTION()
 
     BigWorld.callback(0.1, asyncore_call)

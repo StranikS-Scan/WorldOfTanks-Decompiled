@@ -89,11 +89,6 @@ def makeStrategicCameraMatrix():
 
 
 def makeArtyAimPointMatrix():
-    """Makes combined matrix where translation is position of aiming,
-    rotation and scale is camera position.
-    
-    :return: instance of Math.WGCombinedMP
-    """
     provider = Math.WGCombinedMP()
     rotationMatrix = Math.WGStrategicAreaViewMP()
     rotationMatrix.source = BigWorld.camera().invViewMatrix
@@ -113,10 +108,6 @@ def makeDefaultCameraMatrix():
 
 
 def makePostmortemCameraMatrix():
-    """Makes a camera matrix for postmortem mode, which position component is inferred from active vehicle and rotation
-    component matches the 3D camera orientation. If the active vehicle changes (for example, during a view switch, the
-    matrix is updated accordingly.
-    """
     matrix = Math.WGCombinedMP()
     translationSrc = Math.WGTranslationOnlyMP()
     translationSrc.source = BigWorld.player().consistentMatrices.attachedVehicleMatrix
@@ -126,13 +117,8 @@ def makePostmortemCameraMatrix():
 
 
 def makeAttachedVehicleMatrix():
-    """Makes a matrix which is consistent with active vehicle, if the vehicle changes (for example, during a view
-    switch), the matrix is updated accordingly.
-    """
     return BigWorld.player().consistentMatrices.attachedVehicleMatrix
 
 
 def makeOwnVehicleMatrix():
-    """Makes a matrix which is consistent with player vehicle, even if the vehicle itself is destroyed.
-    """
     return BigWorld.player().consistentMatrices.ownVehicleMatrix

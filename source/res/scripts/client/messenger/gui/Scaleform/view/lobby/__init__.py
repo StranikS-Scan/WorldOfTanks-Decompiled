@@ -5,7 +5,7 @@ from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getViewName
 ACCOUNT_NAME_MIN_CHARS_LENGTH = 2
@@ -69,7 +69,7 @@ class _MessengerPackageBusinessHandler(PackageBusinessHandler):
          (MESSENGER_VIEW_ALIAS.LOBBY_CHANNEL_WINDOW, self.__showLobbyChannelWindow),
          (MESSENGER_VIEW_ALIAS.CONNECT_TO_SECURE_CHANNEL_WINDOW, self.loadViewByCtxEvent),
          (CONTACTS_ALIASES.CONTACTS_POPOVER, self.loadViewByCtxEvent))
-        super(_MessengerPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+        super(_MessengerPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
     def __showLazyChannelWindow(self, event):
         alias = MESSENGER_VIEW_ALIAS.LAZY_CHANNEL_WINDOW

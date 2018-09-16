@@ -99,7 +99,6 @@ class TestRecursion(object):
         class EndlessJSONEncoder(self.json.JSONEncoder):
 
             def default(self, o):
-                """If check_circular is False, this will keep adding another list."""
                 return [o]
 
         with self.assertRaises(RuntimeError):

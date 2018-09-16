@@ -79,12 +79,12 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
             self.__updateDeadVehicles()
             vehicleId = vInfoVO.vehicleID
             if vehicleId in self._aliveEnemies:
-                currH, maxH = self._aliveEnemies[vehicleId]
+                currH, _ = self._aliveEnemies[vehicleId]
                 self.__enemiesHealth -= currH
                 del self._aliveEnemies[vehicleId]
                 self.__updateVehiclesHealth()
             elif vehicleId in self._aliveAllies:
-                currH, maxH = self._aliveAllies[vehicleId]
+                currH, _ = self._aliveAllies[vehicleId]
                 self.__alliesHealth -= currH
                 del self._aliveAllies[vehicleId]
                 self.__updateVehiclesHealth()
@@ -102,8 +102,6 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
         self.__updateVehiclesHealth()
 
     def __registerDeadVehicle(self, vInfoVO, arenaDP):
-        """ Store dead vehicle's id in its team registry.
-        """
         if arenaDP.isEnemyTeam(vInfoVO.team):
             self.__deadEnemies.add(vInfoVO.vehicleID)
         else:
@@ -134,18 +132,14 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
             viewCmp.updateDeadVehicles(set(self._aliveAllies.iterkeys()), self.__deadAllies, set(self._aliveEnemies.iterkeys()), self.__deadEnemies)
 
     def __changeVehicleHealth(self, vehicleID, newHealth):
-        """New health value is received
-        :param vehicleID: (int) vehicle ID
-        :param newHealth: (int) health value
-        """
         if vehicleID in self._aliveEnemies:
-            currH, maxH = self._aliveEnemies[vehicleID]
+            currH, _ = self._aliveEnemies[vehicleID]
             self.__enemiesHealth -= currH
             self.__enemiesHealth += newHealth
             self._aliveEnemies[vehicleID][0] = newHealth
             self.__updateVehiclesHealth()
         elif vehicleID in self._aliveAllies:
-            currH, maxH = self._aliveAllies[vehicleID]
+            currH, _ = self._aliveAllies[vehicleID]
             self.__alliesHealth -= currH
             self.__alliesHealth += newHealth
             self._aliveAllies[vehicleID][0] = newHealth

@@ -9,65 +9,54 @@ import warnings
 default_tip = ''
 
 class TC(object):
-    """doc"""
     tip = '(ai=None, *args)'
 
     def __init__(self, ai=None, *b):
-        """doc"""
         pass
 
     __init__.tip = '(self, ai=None, *args)'
 
     def t1(self):
-        """doc"""
         pass
 
     t1.tip = '(self)'
 
     def t2(self, ai, b=None):
-        """doc"""
         pass
 
     t2.tip = '(self, ai, b=None)'
 
     def t3(self, ai, *args):
-        """doc"""
         pass
 
     t3.tip = '(self, ai, *args)'
 
     def t4(self, *args):
-        """doc"""
         pass
 
     t4.tip = '(self, *args)'
 
     def t5(self, ai, b=None, *args, **kw):
-        """doc"""
         pass
 
     t5.tip = '(self, ai, b=None, *args, **kwds)'
 
     def t6(no, self):
-        """doc"""
         pass
 
     t6.tip = '(no, self)'
 
     def __call__(self, ci):
-        """doc"""
         pass
 
     __call__.tip = '(self, ci)'
 
     @classmethod
     def cm(cls, a):
-        """doc"""
         pass
 
     @staticmethod
     def sm(b):
-        """doc"""
         pass
 
 
@@ -79,7 +68,6 @@ class Get_signatureTest(unittest.TestCase):
     def test_builtins(self):
 
         class List(list):
-            """List() doc"""
             pass
 
         class SB:
@@ -122,31 +110,26 @@ class Get_signatureTest(unittest.TestCase):
     def test_functions(self):
 
         def t1():
-            """doc"""
             pass
 
         t1.tip = '()'
 
         def t2(a, b=None):
-            """doc"""
             pass
 
         t2.tip = '(a, b=None)'
 
         def t3(a, *args):
-            """doc"""
             pass
 
         t3.tip = '(a, *args)'
 
         def t4(*args):
-            """doc"""
             pass
 
         t4.tip = '(*args)'
 
         def t5(a, b=None, *args, **kwds):
-            """doc"""
             pass
 
         t5.tip = '(a, b=None, *args, **kwds)'

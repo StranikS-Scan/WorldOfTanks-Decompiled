@@ -11,10 +11,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
 class _PersonalMissionNavigationInfo(object):
-    """
-      Class which contains information about selected operation and chain in personal missions UI.
-      Is intended to be used as singleton object to maintain state during all game session.
-    """
 
     def __init__(self):
         self.__operationID = 1
@@ -34,9 +30,6 @@ class _PersonalMissionNavigationInfo(object):
 
 
 class PersonalMissionsNavigation(EventSystemEntity):
-    """
-      Class designed to share navigation info between personal missions UI components
-    """
     __navigationInfo = _PersonalMissionNavigationInfo()
     _eventsCache = dependency.descriptor(IEventsCache)
     _lobbyCtx = dependency.descriptor(ILobbyContext)

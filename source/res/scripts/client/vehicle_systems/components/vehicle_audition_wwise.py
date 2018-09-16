@@ -20,8 +20,8 @@ class SingleEvent(object):
     def __init__(self, name):
         self.__name = name
 
-    def play(self, object):
-        object.play(self.__name)
+    def play(self, o):
+        o.play(self.__name)
 
 
 class MultipleEvent(object):
@@ -30,9 +30,9 @@ class MultipleEvent(object):
     def __init__(self, names):
         self.__names = names
 
-    def play(self, object):
+    def play(self, o):
         for name in self.__names:
-            object.play(name)
+            o.play(name)
 
 
 _EFFECT_MATERIALS_HARDNESS_RTPC = {'ground': 0.1,
@@ -51,7 +51,6 @@ _ENABLE_SOUND_DEBUG = False
 class TrackCrashAuditionWWISE(TrackCrashAudition):
 
     def __init__(self, trackCenterMProvs):
-        """:type trackCenterMProvs: tuple """
         self.__trackCenterMProvs = trackCenterMProvs
 
     def deactivate(self):

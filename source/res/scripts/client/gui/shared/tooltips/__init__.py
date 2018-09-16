@@ -7,7 +7,7 @@ from shared_utils import CONST_CONTAINER
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.app_loader.decorators import sf_lobby
+from gui.app_loader import sf_lobby
 from gui.shared.formatters import icons
 from helpers.i18n import makeString
 from items import vehicles
@@ -44,7 +44,8 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     RANKED_RANK = 'rankedRank'
     RANKED_CALENDAR_DAY = 'rankedCalendarDayInfo'
     RANKED_SELECTOR_INFO = 'rankedSelectorInfo'
-    NY = 'ny'
+    VEHICLE_ELITE_BONUS = 'vehicleEliteBonus'
+    VEHICLE_HISTORICAL_REFERENCE = 'vehicleHistoricalReference'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -69,8 +70,6 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     BOOSTER = 'booster'
     RANK = 'ranked'
     RESERVE = 'reserve'
-    DECORATION = 'decoration'
-    NY_REWARDS = 'nyRewards'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):
@@ -91,6 +90,7 @@ class ACTION_TOOLTIPS_STATE(CONST_CONTAINER):
 class ToolTipBaseData(object):
 
     def __init__(self, context, toolTipType):
+        super(ToolTipBaseData, self).__init__()
         self._context = context
         self._toolTipType = toolTipType
 
@@ -101,6 +101,9 @@ class ToolTipBaseData(object):
     @property
     def context(self):
         return self._context
+
+    def isDynamic(self):
+        return False
 
     def getDisplayableData(self, *args, **kwargs):
         return None

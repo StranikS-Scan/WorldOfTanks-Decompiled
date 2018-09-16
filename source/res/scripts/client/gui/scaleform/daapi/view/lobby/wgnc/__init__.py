@@ -3,7 +3,7 @@
 from debug_utils import LOG_WARNING
 from gui.Scaleform.framework import ScopeTemplates, ViewSettings, ViewTypes, GroupedViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.wgnc import g_wgncProvider
 
@@ -35,7 +35,7 @@ class _WGNCPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((events.WGNCShowItemEvent.SHOW_BASIC_WINDOW, self.__showBasicWindow), (events.WGNCShowItemEvent.SHOW_POLL_WINDOW, self.__showPollWindow))
-        super(_WGNCPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+        super(_WGNCPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
     def __showBasicWindow(self, event):
         notID = event.getNotID()

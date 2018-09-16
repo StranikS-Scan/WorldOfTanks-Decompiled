@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/BATTLE_RESULTS.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class BATTLE_RESULTS(object):
     CYBERSPORT_BTNTOTEAMPROFILE = '#battle_results:cyberSport/btnToTeamProfile'
@@ -85,7 +82,6 @@ class BATTLE_RESULTS(object):
     COMMON_TOOLTIP_CAPTURE_TOTALPOINTS = '#battle_results:common/tooltip/capture/totalPoints'
     COMMON_TOOLTIP_KILL_HEADER = '#battle_results:common/tooltip/kill/header'
     COMMON_TOOLTIP_KILL_1_DESCRIPTION = '#battle_results:common/tooltip/kill-1/description'
-    COMMON_TOOLTIP_KILL_1_DESCRIPTION_GASATTACK = '#battle_results:common/tooltip/kill-1/description/gasAttack'
     COMMON_TOOLTIP_KILL0_DESCRIPTION = '#battle_results:common/tooltip/kill0/description'
     COMMON_TOOLTIP_KILL1_DESCRIPTION = '#battle_results:common/tooltip/kill1/description'
     COMMON_TOOLTIP_KILL2_DESCRIPTION = '#battle_results:common/tooltip/kill2/description'
@@ -232,10 +228,6 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_HEAVYTRUCKS = '#battle_results:details/calculations/heavyTrucks'
     DETAILS_CALCULATIONS_INTERMEDIATETOTAL = '#battle_results:details/calculations/intermediateTotal'
     DETAILS_CALCULATIONS_BASE = '#battle_results:details/calculations/base'
-    DETAILS_CALCULATIONS_BONUS_NEW_YEAR = '#battle_results:details/calculations/bonus_new_year'
-    DETAILS_CALCULATIONS_BONUS_CHRISTMAS = '#battle_results:details/calculations/bonus_christmas'
-    DETAILS_CALCULATIONS_BONUS_OLD_CHRISTMAS = '#battle_results:details/calculations/bonus_old_christmas'
-    DETAILS_CALCULATIONS_BONUS_EASTERN_NEW_YEAR = '#battle_results:details/calculations/bonus_eastern_new_year'
     DETAILS_CALCULATIONS_XPRECORD = '#battle_results:details/calculations/xpRecord'
     DETAILS_CALCULATIONS_NOPENALTY = '#battle_results:details/calculations/noPenalty'
     DETAILS_CALCULATIONS_EVENT = '#battle_results:details/calculations/event'
@@ -279,7 +271,7 @@ class BATTLE_RESULTS(object):
     FALLOUT_MULTITEAM_WIN_CAP = '#battle_results:fallout/multiteam/win/cap'
     FALLOUT_MULTITEAM_WIN_EXTERMINATION = '#battle_results:fallout/multiteam/win/extermination'
     FALLOUT_MULTITEAM_ENDED = '#battle_results:fallout/multiteam/ended'
-    FALLOUT_UNIQUEDAMAGE = '#battle_results:fallout/uniqueDamage'
+    GARAGE_UNIQUEDAMAGE = '#battle_results:garage/uniqueDamage'
     FALLOUT_MULTITEAM_NOPLAYERSELECTED = '#battle_results:fallout/multiteam/noPlayerSelected'
     PLAYERS_TEAMMATE_UNKNOWN = '#battle_results:players/teammate/unknown'
     PLAYERS_ENEMY_UNKNOWN = '#battle_results:players/enemy/unknown'

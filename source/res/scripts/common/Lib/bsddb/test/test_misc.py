@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_misc.py
-"""Miscellaneous bsddb module test cases
-"""
 import os, sys
 import unittest
 from test_all import db, dbshelve, hashopen, test_support, get_new_environment_path, get_new_database_path

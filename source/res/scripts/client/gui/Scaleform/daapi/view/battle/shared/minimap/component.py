@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/minimap/component.py
+import logging
 import weakref
 import GUI
 import Math
 import SoundGroups
-from debug_utils import LOG_WARNING
 from AvatarInputHandler import AvatarInputHandler
 from constants import IS_DEVELOPMENT
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins
@@ -15,6 +15,7 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 _IMAGE_PATH_FORMATTER = 'img://{}'
+_logger = logging.getLogger(__name__)
 
 class IMinimapComponent(object):
 
@@ -62,25 +63,35 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         return entryID
 
     def delEntry(self, entryID):
-        assert entryID in self.__ids, 'Entry is not added by given ID'
-        self.__component.delEntry(entryID)
-        self.__ids.discard(entryID)
+        if entryID in self.__ids:
+            self.__component.delEntry(entryID)
+            self.__ids.discard(entryID)
+        else:
+            _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
 
     def invoke(self, entryID, *signature):
-        assert entryID in self.__ids, 'Entry is not added by given ID'
-        self.__component.entryInvoke(entryID, signature)
+        if entryID in self.__ids:
+            self.__component.entryInvoke(entryID, signature)
+        else:
+            _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
 
     def move(self, entryID, container):
-        assert entryID in self.__ids, 'Entry is not added by given ID'
-        self.__component.moveEntry(entryID, container)
+        if entryID in self.__ids:
+            self.__component.moveEntry(entryID, container)
+        else:
+            _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
 
     def setMatrix(self, entryID, matrix):
-        assert entryID in self.__ids, 'Entry is not added by given ID'
-        self.__component.entrySetMatrix(entryID, matrix)
+        if entryID in self.__ids:
+            self.__component.entrySetMatrix(entryID, matrix)
+        else:
+            _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
 
     def setActive(self, entryID, active):
-        assert entryID in self.__ids, 'Entry is not added by given ID'
-        self.__component.entrySetActive(entryID, active)
+        if entryID in self.__ids:
+            self.__component.entrySetActive(entryID, active)
+        else:
+            _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
 
     def playSound2D(self, soundID):
         if soundID:
@@ -108,7 +119,7 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
                 self.__plugins.init(weakref.proxy(arenaVisitor), weakref.proxy(arenaDP))
                 self.__plugins.start()
         else:
-            LOG_WARNING('Could not create component due to data missing: sessionProvider={}, arenaVisitor={}, arenaDP={}'.format(sessionProvider, arenaVisitor, arenaDP))
+            _logger.error('Could not create component due to data missing: %r, %r, %r', sessionProvider, arenaVisitor, arenaDP)
         return
 
     def _dispose(self):
@@ -124,11 +135,6 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         return
 
     def _setupPlugins(self, arenaVisitor):
-        """
-        This method creates dict with minimap plugins.
-        Override this method in child subclasses to add or replace plugins.
-        :return: dict with plugins
-        """
         setup = {'equipments': plugins.EquipmentsPlugin,
          'vehicles': plugins.ArenaVehiclesPlugin,
          'personal': plugins.PersonalEntriesPlugin,
@@ -201,16 +207,7 @@ class MinimapPluginsCollection(PluginsCollection):
         self._invoke('applyNewSize', sizeIndex)
 
     def __onSettingsChanged(self, diff):
-        """
-        Listener of event "ISettingsCore.onSettingsChanged".
-        :param diff: dict containing pairs key-value that are changed.
-        """
         self._invoke('updateSettings', diff)
 
     def __onCameraChanged(self, mode, vehicleID=0):
-        """
-        Listener of event "AvatarInputHandler.onCameraChanged".
-        
-        Resolves camera matrix and view point matrix.
-        """
         self._invoke('updateControlMode', mode, vehicleID)

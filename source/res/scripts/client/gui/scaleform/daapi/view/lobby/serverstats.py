@@ -39,10 +39,6 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
             self.as_changePeripheryFailedS()
 
     def startListenCsisUpdate(self, startListen):
-        r"""
-        Invokes by DAAPI when user open\close dropdown menu
-        :param startListen: true - list has been opened, false - list has been closed
-        """
         if GUI_SETTINGS.csisRequestRate == REQUEST_RATE.ON_REQUEST:
             if startListen:
                 g_preDefinedHosts.startCSISUpdate()

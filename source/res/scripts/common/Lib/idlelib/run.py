@@ -22,10 +22,6 @@ LOCALHOST = '127.0.0.1'
 import warnings
 
 def idle_showwarning_subproc(message, category, filename, lineno, file=None, line=None):
-    """Show Idle-format warning after replacing warnings.showwarning.
-    
-    The only difference is the formatter called.
-    """
     if file is None:
         file = sys.stderr
     try:
@@ -39,7 +35,6 @@ def idle_showwarning_subproc(message, category, filename, lineno, file=None, lin
 _warnings_showwarning = None
 
 def capture_warnings(capture):
-    """Replace warning.showwarning with idle_showwarning_subproc, or reverse."""
     global _warnings_showwarning
     if capture:
         if _warnings_showwarning is None:
@@ -57,29 +52,11 @@ quitting = False
 interruptable = False
 
 def main(del_exitfunc=False):
-    """Start the Python execution server in a subprocess
-    
-    In the Python subprocess, RPCServer is instantiated with handlerclass
-    MyHandler, which inherits register/unregister methods from RPCHandler via
-    the mix-in class SocketIO.
-    
-    When the RPCServer 'server' is instantiated, the TCPServer initialization
-    creates an instance of run.MyHandler and calls its handle() method.
-    handle() instantiates a run.Executive object, passing it a reference to the
-    MyHandler object.  That reference is saved as attribute rpchandler of the
-    Executive instance.  The Executive methods have access to the reference and
-    can pass it on to entities that they command
-    (e.g. RemoteDebugger.Debugger.start_debugger()).  The latter, in turn, can
-    call MyHandler(SocketIO) register/unregister methods via the reference to
-    register and unregister themselves.
-    
-    """
     global no_exitfunc
     global exit_now
     global quitting
     no_exitfunc = del_exitfunc
     try:
-        assert len(sys.argv) > 1
         port = int(sys.argv[-1])
     except:
         print >> sys.stderr, 'IDLE Subprocess: no IP port passed in sys.argv.'
@@ -177,7 +154,6 @@ def print_exception():
 
 
 def cleanup_traceback(tb, exclude):
-    """Remove excluded traces from beginning/end of tb; get cached lines"""
     orig_tb = tb[:]
     while tb:
         for rpcfile in exclude:
@@ -223,12 +199,6 @@ def flush_stdout():
 
 
 def exit():
-    """Exit subprocess, possibly after first deleting sys.exitfunc
-    
-    If config-main.cfg/.def 'General' 'delete-exitfunc' is True, then any
-    sys.exitfunc will be removed before exiting.  (VPython support)
-    
-    """
     if no_exitfunc:
         try:
             del sys.exitfunc
@@ -242,11 +212,6 @@ def exit():
 class MyRPCServer(rpc.RPCServer):
 
     def handle_error(self, request, client_address):
-        """Override RPCServer method for IDLE
-        
-        Interrupt the MainThread and exit server if link is dropped.
-        
-        """
         global exit_now
         global quitting
         try:
@@ -273,7 +238,6 @@ class MyRPCServer(rpc.RPCServer):
 class MyHandler(rpc.RPCHandler):
 
     def handle(self):
-        """Override base method"""
         executive = Executive(self)
         self.register('exec', executive)
         self.console = self.get_remote_proxy('console')
@@ -286,17 +250,14 @@ class MyHandler(rpc.RPCHandler):
         return
 
     def exithook(self):
-        """override SocketIO method - wait for MainThread to shut us down"""
         time.sleep(10)
 
     def EOFhook(self):
-        """Override SocketIO method - terminate wait on callback and exit thread"""
         global quitting
         quitting = True
         thread.interrupt_main()
 
     def decode_interrupthook(self):
-        """interrupt awakened thread"""
         global quitting
         quitting = True
         thread.interrupt_main()
@@ -343,7 +304,6 @@ class Executive(object):
         return RemoteDebugger.start_debugger(self.rpchandler, gui_adap_oid)
 
     def stop_the_debugger(self, idb_adap_oid):
-        """Unregister the Idb Adapter.  Link objects and Idb then subject to GC"""
         self.rpchandler.unregister(idb_adap_oid)
 
     def get_the_calltip(self, name):

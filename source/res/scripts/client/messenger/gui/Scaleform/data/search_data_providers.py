@@ -82,7 +82,7 @@ class SearchChannelsDataProvider(SearchDataProvider):
 
     def onExcludeFromSearch(self, entity):
         channelID = entity.getID()
-        self._list = filter(lambda item: item['id'] != channelID, self._list)
+        self._list = [ item for item in self._list if item['id'] != channelID ]
         self.refresh()
 
 

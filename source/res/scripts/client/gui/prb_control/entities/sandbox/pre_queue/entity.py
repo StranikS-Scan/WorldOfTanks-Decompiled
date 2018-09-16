@@ -24,9 +24,6 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 
 class SandboxSubscriber(PreQueueSubscriber):
-    """
-    Sandbox events subscriber
-    """
 
     def subscribe(self, entity):
         g_playerEvents.onEnqueuedSandbox += entity.onEnqueued
@@ -46,18 +43,12 @@ class SandboxSubscriber(PreQueueSubscriber):
 
 
 class SandboxEntryPoint(PreQueueEntryPoint):
-    """
-    Sandbox entry point
-    """
 
     def __init__(self):
         super(SandboxEntryPoint, self).__init__(FUNCTIONAL_FLAG.SANDBOX, QUEUE_TYPE.SANDBOX)
 
 
 class SandboxEntity(PreQueueEntity):
-    """
-    Sandbox entity
-    """
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
@@ -67,9 +58,6 @@ class SandboxEntity(PreQueueEntity):
 
     @prequeue_storage_getter(QUEUE_TYPE.SANDBOX)
     def storage(self):
-        """
-        Prebattle storage getter property
-        """
         return None
 
     def init(self, ctx=None):
@@ -121,7 +109,8 @@ class SandboxEntity(PreQueueEntity):
 
     def _makeQueueCtxByAction(self, action=None):
         invID = g_currentVehicle.invID
-        assert invID, 'Inventory ID of vehicle can not be zero'
+        if not invID:
+            raise UserWarning('Inventory ID of vehicle can not be zero')
         return SandboxQueueCtx(invID, waitingID='prebattle/join')
 
     def _goToQueueUI(self):
@@ -132,11 +121,6 @@ class SandboxEntity(PreQueueEntity):
         g_eventDispatcher.unloadSandboxQueue()
 
     def __onServerSettingChanged(self, diff):
-        """
-        Listener for server settings update
-        Args:
-            diff: settings diff
-        """
         if not self.lobbyContext.getServerSettings().isSandboxEnabled():
 
             def __leave(_=True):

@@ -1,14 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/tankman.py
 import math
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from helpers import time_utils
 from helpers.i18n import makeString
-from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig, hasTagInTankmenGroup
+from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, moneyWithIcon
 from shared_utils import findFirst
@@ -27,7 +26,7 @@ class TankmanRoleLevelField(ToolTipDataField):
 
 class TankmanRoleBonusesField(ToolTipDataField):
 
-    class BONUSES:
+    class BONUSES(object):
         COMMANDER = 0
         BROTHERHOOD = 1
         EQUIPMENTS = 2
@@ -50,7 +49,6 @@ class TankmanRoleBonusesField(ToolTipDataField):
 
 
 class TankmanCurrentVehicleAttrField(ToolTipAttrField):
-    """Tankman current vehicle data field"""
     itemsCache = dependency.descriptor(IItemsCache)
 
     def _getItem(self):
@@ -59,7 +57,6 @@ class TankmanCurrentVehicleAttrField(ToolTipAttrField):
 
 
 class TankmanNativeVehicleAttrField(ToolTipAttrField):
-    """Tankman native vehicle data field."""
     itemsCache = dependency.descriptor(IItemsCache)
 
     def _getItem(self):
@@ -128,7 +125,6 @@ def getRecoveryStatusText(restoreInfo):
 
 
 class TankmanStatusField(ToolTipDataField):
-    """Tankman status data field."""
     itemsCache = dependency.descriptor(IItemsCache)
 
     def _getValue(self):

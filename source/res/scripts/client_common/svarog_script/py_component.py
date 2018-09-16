@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/svarog_script/py_component.py
-import Svarog
 from svarog_script.auto_properties import AutoPropertyInitMetaclass
 
 class Component(object):

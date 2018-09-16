@@ -84,7 +84,7 @@
       <userString>	#gb_vehicles:Chassis_GB03_Cruiser_Mk_I	</userString>
       <tags></tags>
       <level>	1	</level>
-      <price>	330.0	</price>
+      <price>	330	</price>
       <unlocks>
         <chassis>	Chassis_GB03_Cruiser_Mk_I_2	  <cost>	90	</cost>
         </chassis>
@@ -239,7 +239,7 @@
         <right>	vehicles/british/GB03_Cruiser_Mk_I/track/right.track	</right>
         <segmentLength>	0.136	</segmentLength>
         <segmentOffset>	0.127	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -516,7 +516,7 @@
         <right>	vehicles/british/GB03_Cruiser_Mk_I/track/right.track	</right>
         <segmentLength>	0.136	</segmentLength>
         <segmentOffset>	0.127	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -640,7 +640,7 @@
       <userString>	#gb_vehicles:Turret_1_GB03_Cruiser_Mk_I	</userString>
       <tags></tags>
       <level>	1	</level>
-      <price>	120.0	</price>
+      <price>	120	</price>
       <armor>
         <armor_1>	14	</armor_1>
         <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>

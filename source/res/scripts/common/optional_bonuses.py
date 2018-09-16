@@ -137,10 +137,6 @@ def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
             total['type'] = data['type']
 
 
-def __mergeNY18Toys(total, key, value, *args):
-    total.setdefault(key, []).extend(value)
-
-
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -160,10 +156,21 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'goodies': __mergeGoodies,
  'dossier': __mergeDossier,
  'tankmen': __mergeTankmen,
- 'customizations': __mergeCustomizations,
- 'ny18Toys': __mergeNY18Toys}
+ 'customizations': __mergeCustomizations}
 
-class BonusNodeAcceptor(object):
+class NodeAcceptor(object):
+
+    def accept(self, bonusValue):
+        raise NotImplementedError()
+
+
+class AllNodesAcceptor(NodeAcceptor):
+
+    def accept(self, bonusValue):
+        return True
+
+
+class BonusNodeAcceptor(NodeAcceptor):
 
     def __init__(self, account):
         self.__account = account
@@ -178,7 +185,25 @@ class BonusNodeAcceptor(object):
         return True
 
 
-class TrackVisitor(object):
+class NodeVisitor(object):
+
+    def onOneOf(self, bonus, value):
+        raise NotImplementedError()
+
+    def onAllOf(self, bonus, value):
+        raise NotImplementedError()
+
+    def onGroup(self, value):
+        raise NotImplementedError()
+
+    def onValue(self, bonus, name, value):
+        pass
+
+    def onMerge(self, bonus, name, value):
+        pass
+
+
+class TrackVisitor(NodeVisitor):
 
     def __init__(self, mergers, track, *args):
         self.__mergers = mergers
@@ -220,7 +245,7 @@ class TrackVisitor(object):
         return {}
 
 
-class ProbabilityVisitor(object):
+class ProbabilityVisitor(NodeVisitor):
 
     def __init__(self, mergers, nodeAcceptor, *args):
         self.__mergers = mergers
@@ -291,7 +316,7 @@ class ProbabilityVisitor(object):
         return {}
 
 
-class FilterVisitor(object):
+class FilterVisitor(NodeVisitor):
 
     def __init__(self, eventType=None):
         self.__eventType = eventType
@@ -325,15 +350,12 @@ class FilterVisitor(object):
             if 'boundToCurrentVehicle' in value:
                 raise Exception("Unsupported tag 'boundToCurrentVehicle' in 'like token' quests")
 
-    def onMerge(self, bonus, name, value):
-        pass
-
     @staticmethod
     def resultHolder(result):
         return result
 
 
-class StripVisitor(object):
+class StripVisitor(NodeVisitor):
 
     def onOneOf(self, bonus, value):
         result = []
@@ -362,12 +384,6 @@ class StripVisitor(object):
             deeper.append(bonusValue)
 
         return deeper
-
-    def onValue(self, bonus, name, value):
-        pass
-
-    def onMerge(self, bonus, name, value):
-        pass
 
     @staticmethod
     def resultHolder(result):

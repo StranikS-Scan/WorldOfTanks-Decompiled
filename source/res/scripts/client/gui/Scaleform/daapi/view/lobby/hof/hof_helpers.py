@@ -49,8 +49,8 @@ def getHofRatingUrlForVehicle(vehicleCD):
 
 def _calculateCounters(ids):
     count = 0
-    for id in ids:
-        if isHofButtonNew(id):
+    for cID in ids:
+        if isHofButtonNew(cID):
             count += 1
 
     return count

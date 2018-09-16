@@ -26,8 +26,6 @@ class TutorialMatKindsController(Component, CallbackDelayer):
         self.stopCallback(self.__onPeriodicTimer)
 
     def __onPeriodicTimer(self):
-        assert self.terrainMatKindsLink is not None
-        assert BigWorld.player().isInTutorial
         isOnSoftTerrain = False
         matKinds = self.terrainMatKindsLink()
         for matKind in matKinds:

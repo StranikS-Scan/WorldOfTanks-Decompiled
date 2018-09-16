@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/pre_queue/entity.py
 from constants import QUEUE_TYPE
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
 from gui.prb_control import prb_getters
@@ -19,57 +19,31 @@ from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared.utils.listeners_collection import ListenersCollection
 
 class BasePreQueueEntity(BasePrbEntity):
-    """
-    Base class which describes entityity of pre queue.
-    """
 
     def getCtrlType(self):
         return CTRL_ENTITY_TYPE.PREQUEUE
 
     def hasGUIPage(self):
-        """
-        Is prebattle has UI page.
-        """
         return False
 
     def exitFromQueue(self):
-        """
-        Routine invokes when player is exiting from queue.
-        """
         return False
 
 
 class PreQueueSubscriber(object):
-    """
-    Base class for pre queue events subscription.
-    """
     __slots__ = ()
 
     def subscribe(self, entity):
-        """
-        Do all the job about subscription.
-        Args:
-            entity: pre queue entity
-        """
         raise NotImplementedError
 
     def unsubscribe(self, entity):
-        """
-        Do all the job about subscription.
-        Args:
-            entity: pre queue entity
-        """
         raise NotImplementedError
 
 
 class PreQueueEntryPoint(BasePrbEntryPoint):
-    """
-    Pre queue entry point class.
-    """
 
     def __init__(self, modeFlags, queueType):
         super(PreQueueEntryPoint, self).__init__(entityFlags=FUNCTIONAL_FLAG.PRE_QUEUE, modeFlags=modeFlags)
-        assert queueType in QUEUE_TYPE.ALL or queueType == QUEUE_TYPE.UNKNOWN
         self.__queueType = queueType
 
     def makeDefCtx(self):
@@ -93,16 +67,10 @@ class PreQueueEntryPoint(BasePrbEntryPoint):
         self.join(ctx, callback)
 
     def _goToEntity(self):
-        """
-        Method that actually joins us to an entity.
-        """
         g_prbCtrlEvents.onPreQueueJoined(self.__queueType)
 
 
 class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
-    """
-    Pre queue entity class.
-    """
     __metaclass__ = EventVehicleMeta
 
     def __init__(self, modeFlags, queueType, subscriber):
@@ -144,7 +112,6 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
         return self._queueType
 
     def getPermissions(self, pID=None, **kwargs):
-        assert pID is None, 'Current player has no any player in that mode'
         return PreQueuePermissions(self.isInQueue())
 
     def getConfirmDialogMeta(self, ctx):
@@ -172,12 +139,6 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
         return
 
     def queue(self, ctx, callback=None):
-        """
-        Sends request to enqueue.
-        Args:
-            ctx: queue context
-            callback: operation callback
-        """
         if ctx is None:
             ctx = self._makeQueueCtxByAction()
         if self._requestCtx.isProcessing():
@@ -206,12 +167,6 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
             return
 
     def dequeue(self, ctx, callback=None):
-        """
-        Sends request to dequeue.
-        Args:
-            ctx: dequeue context
-            callback: operation callback
-        """
         if self._requestCtx.isProcessing():
             LOG_ERROR('Request is processing', self._requestCtx)
             if callback:
@@ -247,51 +202,33 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
             __leave()
 
     def onEnqueued(self, *args):
-        """
-        Routine must be invoked when player goes to queue.
-        """
         self._requestCtx.stopProcessing(True)
         self._invokeListeners('onEnqueued', self._queueType, *args)
         self._goToQueueUI()
 
     def onDequeued(self, *args):
-        """
-        Routine must be invoked when player leaves queue.
-        """
         self._requestCtx.stopProcessing(True)
         self._invokeListeners('onDequeued', self._queueType, *args)
         self._exitFromQueueUI()
 
     def onEnqueueError(self, errorCode, *args):
-        """
-        Routine must be invoked when player receives enqueue error.
-        """
         self._requestCtx.stopProcessing(True)
         self._invokeListeners('onEnqueueError', self._queueType, *args)
         self._exitFromQueueUI()
         SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
 
     def onKickedFromQueue(self, *args):
-        """
-        Routine must be invoked when player is kicked from queue.
-        """
         self._requestCtx.stopProcessing(True)
         self._invokeListeners('onKickedFromQueue', self._queueType, *args)
         self._exitFromQueueUI()
         SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)
 
     def onKickedFromArena(self, *args):
-        """
-        Routine must be invoked when player is kicked from arena.
-        """
         self._requestCtx.stopProcessing(True)
         self._invokeListeners('onKickedFromArena', self._queueType, *args)
         self._exitFromQueueUI()
 
     def onArenaJoinFailure(self, *args):
-        """
-        Routine must be invoked when player received an error during arena join process.
-        """
         self._invokeListeners('onArenaJoinFailure', self._queueType, *args)
         self._exitFromQueueUI()
 
@@ -299,52 +236,21 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
         return PreQueueActionsValidator(self)
 
     def _goToQueueUI(self):
-        """
-        Routine that must be invoked when UI should show proper queue component.
-        Returns:
-            functional flag of UI load action
-        """
         return FUNCTIONAL_FLAG.UNDEFINED
 
     def _exitFromQueueUI(self):
-        """
-        Routine that must be invoked when UI should hide proper queue component.
-        """
         pass
 
     def _doQueue(self, ctx):
-        """
-        Method that should send player into queue at system level.
-        Args:
-            ctx: queue request context
-        """
         raise NotImplementedError('Routine _doQueue must be overridden')
 
     def _doDequeue(self, ctx):
-        """
-        Method that should remove player from queue at system level.
-        Args:
-            ctx: dequeue request context
-        """
         raise NotImplementedError('Routine _doDequeue must be overridden')
 
     def _makeQueueCtxByAction(self, action=None):
-        """
-        Build queue context by prebattle aciton
-        Args:
-            action: prebattle action
-        
-        Returns:
-            queue context
-        """
         raise NotImplementedError('Routine _makeDefQueueCtx must be overridden')
 
     def _validateParentControl(self):
-        """
-        Validates parent control restrictions.
-        Returns:
-            has pre queue any restrictions
-        """
         result = prb_getters.isParentControlActivated()
         if result:
             g_eventDispatcher.showParentControlNotification()

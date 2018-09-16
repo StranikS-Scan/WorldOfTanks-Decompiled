@@ -36,7 +36,7 @@ class ChatActionWrapper(_ChatActionData):
 
     def __new__(cls, action=-1, channel=0, actionResponse=-1, group=0, originator=-1, originatorNickName='Unknown', requestID=-1, data=None, time=_time.time(), sentTime=_time.time(), flags=0, **kwargs):
         result = _ChatActionData.__new__(cls, action, channel, actionResponse, group, originator, unicode(originatorNickName, 'utf-8', errors='ignore'), requestID, time, sentTime, flags)
-        result.data = unicode(data, 'utf-8', errors='ignore') if type(data) in types.StringTypes else data
+        result.data = unicode(data, 'utf-8', errors='ignore') if isinstance(data, types.StringTypes) else data
         return result
 
 
@@ -53,9 +53,6 @@ _ServiceChannelData = namedtuple('_ServiceChannelData', ' '.join(['messageId',
  'data']))
 
 class ServiceChannelMessage(_ServiceChannelData):
-    """
-    Hold sysMessage and personalSysMessage actions data in chat system
-    """
 
     @staticmethod
     def __new__(cls, messageID=-1, user_id=-1, type=-1, importance=SYS_MESSAGE_IMPORTANCE.normal.index(), active=True, personal=False, sentTime=_time.time(), started_at=None, finished_at=None, created_at=None, data=None, **kwargs):

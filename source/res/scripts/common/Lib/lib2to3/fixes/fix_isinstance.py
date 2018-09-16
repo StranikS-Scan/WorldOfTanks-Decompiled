@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_isinstance.py
-"""Fixer that cleans up a tuple argument to isinstance after the tokens
-in it were fixed.  This is mainly used to remove double occurrences of
-tokens as a leftover of the long -> int / unicode -> str conversion.
-
-eg.  isinstance(x, (int, long)) -> isinstance(x, (int, int))
-       -> isinstance(x, int)
-"""
 from .. import fixer_base
 from ..fixer_util import token
 

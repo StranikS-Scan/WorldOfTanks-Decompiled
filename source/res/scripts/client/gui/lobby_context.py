@@ -14,7 +14,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 class LobbyContext(ILobbyContext):
-    """Player's context in lobby."""
     connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
@@ -57,44 +56,28 @@ class LobbyContext(ILobbyContext):
         return clientID
 
     def setCredentials(self, login, token):
-        """Set player credentials that required to accept invite form another periphery.
-        :param login: string containing login.
-        :param token: string containing token from last login.
-        """
         self.__credentials = (login, token)
 
     def getCredentials(self):
-        """Gets player credentials.
-        :return: tuple(login, token)
-        """
         return self.__credentials
 
     def getBattlesCount(self):
-        """Gets player battlesCount.
-        :return: integer containing number of battles that player took part in the game session.
-        """
         return self.__battlesCount
 
     def updateBattlesCount(self, battlesCount):
-        """Updates player's number of battles.
-        :param battlesCount: integer containing number of battles that player took part in the game session.
-        """
         self.__battlesCount = battlesCount
 
     def update(self, diff):
-        if self.__serverSettings and 'serverSettings' in diff:
-            self.__serverSettings.update(diff['serverSettings'])
+        if self.__serverSettings:
+            if 'serverSettings' in diff:
+                self.__serverSettings.update(diff['serverSettings'])
+            elif ('serverSettings', '_r') in diff:
+                self.__serverSettings.set(diff[('serverSettings', '_r')])
 
     def updateGuiCtx(self, ctx):
-        """Update previous context by new.
-        :param ctx: [dict] onAccountShowGUI context.
-        """
         self.__guiCtx.update(ctx)
 
     def getGuiCtx(self):
-        """Gets GUI context.
-        :return: [dict] onAccountShowGUI context.
-        """
         return self.__guiCtx
 
     @property
@@ -112,15 +95,6 @@ class LobbyContext(ILobbyContext):
         self.__serverSettings = ServerSettings(serverSettings)
 
     def getPlayerFullName(self, pName, clanInfo=None, clanAbbrev=None, regionCode=None, pDBID=None):
-        """Gets player's display name. The full name of the player consists of:
-            <player name> [<clanAbbrev>]*
-        :param pName: player's name
-        :param clanInfo: tuple containing information about clan or None.
-        :param clanAbbrev: string containing clan abbreviation.
-        :param regionCode: string player home region id.
-        :param pDBID: long containing account's database ID.
-        :return: string containing player's display name.
-        """
         fullName = pName
         if clanInfo and len(clanInfo) > 1:
             clanAbbrev = clanInfo[1]
@@ -133,10 +107,6 @@ class LobbyContext(ILobbyContext):
         return fullName
 
     def getClanAbbrev(self, clanInfo):
-        """Gets clan abbreviation by information that received from server.
-        :param clanInfo: tuple containing information about clan or None.
-        :return: string containing clan abbreviation.
-        """
         clanAbbrev = None
         if clanInfo and len(clanInfo) > 1:
             clanAbbrev = clanInfo[1]

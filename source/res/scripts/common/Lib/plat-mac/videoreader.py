@@ -233,7 +233,6 @@ class _Reader:
             return (self._videotime_to_ms(self.videocurtime), self._getpixmapcontent())
 
     def _getpixmapcontent(self):
-        """Shuffle the offscreen PixMap data, because it may have funny stride values"""
         rowbytes = Qdoffs.GetPixRowBytes(self.pixmap)
         width = self.videodescr['width']
         height = self.videodescr['height']

@@ -162,13 +162,6 @@ class BattleEntry(IGUIEntry):
         return result
 
     def __handleCTRLPressed(self, isLeftCtrl, isDown):
-        """
-        Handler of Ctrl button press event.
-        
-        :param isLeftCtrl: True if the event associated with the left Ctrl btn,
-                           False - if the right Ctrl btn.
-        :param isDown: True if the Ctrl btn is down, False if it is up.
-        """
         result = False
         view = self.__view()
         if view is not None:

@@ -71,9 +71,6 @@ class ResearchBaseDumper(_BaseDumper):
 
 
 class ResearchItemsObjDumper(ResearchBaseDumper):
-    """
-    Converts data of research items for given vehicle to list of objects.
-    """
 
     def clear(self, full=False):
         nodes = self._cache['top']
@@ -160,9 +157,6 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
 
 
 class NationObjDumper(_BaseDumper):
-    """
-    Converts data of nation tree to list of objects.
-    """
 
     def __init__(self, cache=None):
         if cache is None:
@@ -183,7 +177,7 @@ class NationObjDumper(_BaseDumper):
 
     def dump(self, data):
         self.clear()
-        self._cache['nodes'] = map(lambda node: self._getVehicleData(node), data.getNodes())
+        self._cache['nodes'] = map(self._getVehicleData, data.getNodes())
         self._cache['scrollIndex'] = data._scrollIndex
         self._cache['displaySettings'].update(g_techTreeDP.getDisplaySettings(SelectedNation.getIndex()))
         return self._cache

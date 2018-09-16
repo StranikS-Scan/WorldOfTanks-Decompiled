@@ -76,11 +76,11 @@ class StorageDecorator(object):
         self.__storageCache.read()
 
     def init(self):
-        for name, storage in self.__readonly__.iteritems():
+        for _, storage in self.__readonly__.iteritems():
             storage.init()
 
     def switch(self, scope):
-        for name, storage in self.__readonly__.iteritems():
+        for _, storage in self.__readonly__.iteritems():
             storage.switch(scope)
 
     def clear(self):

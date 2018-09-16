@@ -5,7 +5,6 @@ from adisp import process
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.rankedBattles.finish_awards_view import FinishAwardsView
 from gui.Scaleform.daapi.view.meta.RankedBattlesSeasonCompleteViewMeta import RankedBattlesSeasonCompleteViewMeta
-from gui.Scaleform.genConsts.COMPONENTS_ALIASES import COMPONENTS_ALIASES
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.ranked_battles import ranked_helpers
@@ -77,7 +76,7 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta, Finis
              'bgSource': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BG_RANK_BLUR,
              'leagueLabel': _ms(RANKED_BATTLES.SEASONCOMPLETE_UNDERLABEL)})
             self.as_setRewardsDataS({'ribbonType': 'ribbon2',
-             'rendererLinkage': COMPONENTS_ALIASES.RIBBON_AWARD_ANIM_RENDERER,
+             'rendererLinkage': 'RibbonAwardAnimUI',
              'gap': 20,
              'rendererWidth': 80,
              'rendererHeight': 80,

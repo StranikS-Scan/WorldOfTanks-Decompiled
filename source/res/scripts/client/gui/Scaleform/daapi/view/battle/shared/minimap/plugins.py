@@ -95,7 +95,6 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         for entryID, name, active in iterator:
             self.__cameraIDs[name] = entryID
             if active:
-                assert not self.__cameraID, 'One camera is activated at one time'
                 self.__cameraID = entryID
 
         self.__updateViewPointEntry()
@@ -346,7 +345,10 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             showDirectionLine = GUI_SETTINGS.showDirectionLine and getter(settings_constants.GAME.SHOW_VECTOR_ON_MAP)
             showYawLimit = GUI_SETTINGS.showSectorLines and getter(settings_constants.GAME.SHOW_SECTOR_ON_MAP)
             showCircles = getter(settings_constants.GAME.MINIMAP_DRAW_RANGE) or getter(settings_constants.GAME.MINIMAP_MAX_VIEW_RANGE) or getter(settings_constants.GAME.MINIMAP_VIEW_RANGE)
-            self.__showDirectionLine() if showDirectionLine else self.__hideDirectionLine()
+            if showDirectionLine:
+                self.__showDirectionLine()
+            else:
+                self.__hideDirectionLine()
             self.__clearYawLimit()
             if showYawLimit:
                 vInfo = self._arenaDP.getVehicleInfo(self._ctrlVehicleID)
@@ -916,9 +918,6 @@ class EquipmentsPlugin(common.IntervalPlugin):
 
 
 class AreaStaticMarkerPlugin(common.EntriesPlugin):
-    """
-    Any static marker on minimap corresponding to some position on terrain.
-    """
 
     def start(self):
         ctrl = self.sessionProvider.shared.feedback

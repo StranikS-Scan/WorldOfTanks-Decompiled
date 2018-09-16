@@ -19,6 +19,7 @@
     <notFoundMeshPSModel>	helpers/props/mesh_particles_standin.model	</notFoundMeshPSModel>
     <fontRoot>	system/fonts/	</fontRoot>
     <defaultFontName>	default_medium.font	</defaultFontName>
+    <streamingConfigXML>	streaming_config.xml	</streamingConfigXML>
     <consoleFonts>
       <font>	system_tiny.font	</font>
       <font>	system_small.font	</font>
@@ -62,6 +63,7 @@
     <graphicsSettingsXML>	system/data/graphics_settings.xml	</graphicsSettingsXML>
     <graphicsSettingsPresets>	system/data/graphics_settings_presets.xml	</graphicsSettingsPresets>
     <autoConfigSettings>	system/data/auto_config_settings.xml	</autoConfigSettings>
+    <havokDebugFx>	shaders/havok/havok_debug.fx	</havokDebugFx>
   </system>
   <environment>
     <materialKinds>	system/data/material_kinds.xml	</materialKinds>
@@ -72,7 +74,6 @@
     <floraMaterialMRT>	system/materials/flora_mrt.mfm	</floraMaterialMRT>
     <floraShadowMaterial>	system/materials/flora_shadows.mfm	</floraShadowMaterial>
     <wgFloraWithShadowMaterial>	system/materials/wg_flora_with_shadows.mfm	</wgFloraWithShadowMaterial>
-    <sunFlareMaterial>	system/materials/fx_sun_flare.mfm	</sunFlareMaterial>
     <sunSplitMaterial>	system/materials/fx_sun_split.mfm	</sunSplitMaterial>
     <skyDomeVisual>	system/models/fx_skydome.visual	</skyDomeVisual>
     <ZBufferOccluderFX>	shaders/environment/z_buffer_occluder.fx	</ZBufferOccluderFX>
@@ -86,9 +87,7 @@
     <moonMaskBmpName>	system/maps/moon_opacity.dds	</moonMaskBmpName>
     <moonBmpName>	system/maps/moon.dds	</moonBmpName>
     <moonMaterial>	system/materials/moon.mfm	</moonMaterial>
-    <sunFlareXML>	system/data/fx_sun.xml	</sunFlareXML>
     <sunVisibilityTestXML>	system/data/fx_sun_visibility_test.xml	</sunVisibilityTestXML>
-    <moonFlareXML>	system/data/fx_moon.xml	</moonFlareXML>
     <waterReflectBmpName>	system/maps/ref_bwclouds.dds	</waterReflectBmpName>
     <waterNormalMap>	system/maps/waves2.dds	</waterNormalMap>
     <waterScreenFadeMap>	system/maps/fadetoblack.dds	</waterScreenFadeMap>
@@ -120,6 +119,7 @@
   </selectionfx>
   <exporter>
     <defaultMaterial>	materials/template_mfms/lightonly.mfm	</defaultMaterial>
+    <defaultSkinnedMaterial>	materials/template_mfms/lightonly_skinned.mfm	</defaultSkinnedMaterial>
   </exporter>
   <editor>
     <textureDetailLevels>	helpers/tools_texture_details.xml	</textureDetailLevels>
@@ -152,4 +152,7 @@
     <path>	system/materials/	</path>
     <path>	shaders/	</path>
   </shaderPaths>
+  <gameplay>
+    <areaBorderModel>	system/models/fx_area_border.model	</areaBorderModel>
+  </gameplay>
 </resources.xml>

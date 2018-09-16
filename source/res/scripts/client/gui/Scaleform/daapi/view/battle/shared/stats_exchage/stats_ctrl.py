@@ -69,10 +69,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         return self._statsCollector
 
     def startControl(self, battleCtx, arenaVisitor):
-        """Starts to controlling data of arena.
-        :param battleCtx: proxy to battle context.
-        :param arenaVisitor: proxy to battle context.
-        """
         self._personalInfo = team_overrides.PersonalInfo()
         self._battleCtx = battleCtx
         self._arenaVisitor = arenaVisitor
@@ -95,16 +91,12 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         return team != self.__avatarTeam if self.__avatarTeam is not None else arenaDP.isEnemyTeam(team)
 
     def invalidateArenaInfo(self):
-        """Starts to invalidate information of arena."""
         self.__setArenaDescription()
         arenaDP = self._battleCtx.getArenaDP()
         self.invalidateVehiclesInfo(arenaDP)
         self.invalidateVehiclesStats(arenaDP)
 
     def invalidateVehiclesInfo(self, arenaDP):
-        """New list of vehicles has been received.
-        :param arenaDP: instance of ArenaDataProvider.
-        """
         self.__updatePersonalPrebattleID(arenaDP)
         self.__updateSquadRestrictions()
         exchange = self._exchangeBroker.getVehiclesInfoExchange()
@@ -122,9 +114,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_setVehiclesDataS(data)
 
     def invalidateVehiclesStats(self, arenaDP):
-        """New statistics has been received.
-        :param arenaDP: instance of ArenaDataProvider.
-        """
         exchange = self._exchangeBroker.getVehiclesStatsExchange()
         collection = vos_collections.VehiclesItemsCollection()
         for vos in collection.iterator(arenaDP):
@@ -143,10 +132,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_setFragsS(data)
 
     def addVehicleInfo(self, vo, arenaDP):
-        """New vehicle is added to arena.
-        :param vo: instance of VehicleArenaInfoVO that has been added.
-        :param arenaDP: instance of ArenaDataProvider.
-        """
         isEnemy, overrides = self.__getTeamOverrides(vo, arenaDP)
         exchange = self._exchangeBroker.getVehiclesInfoExchange()
         with exchange.getCollectedComponent(isEnemy) as item:
@@ -157,10 +142,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_addVehiclesInfoS(data)
 
     def updateVehiclesInfo(self, updated, arenaDP):
-        """Vehicle's information has been updated on arena.
-        :param updated: [(flags, VehicleArenaStatsVO), ...].
-        :param arenaDP: instance of ArenaDataProvider.
-        """
         shared = INVALIDATE_OP.NONE
         for f, _ in updated:
             shared |= f
@@ -186,11 +167,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_updateVehiclesInfoS(data)
 
     def invalidateVehicleStatus(self, flags, vo, arenaDP):
-        """Status of vehicle (isReady, isAlive, ...) has been updated on the arena.
-        :param flags: bitmask containing values from INVALIDATE_OP.
-        :param vo: instance of VehicleArenaInfoVO for that status updated.
-        :param arenaDP: instance of ArenaDataProvider.
-        """
         arenaTeamSwitched = False
         if self._battleCtx.isPlayerObserver():
             currentArenaTeam = arenaDP.getNumberOfTeam()
@@ -212,10 +188,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             arenaDP.switchCurrentTeam(currentArenaTeam)
 
     def updateVehiclesStats(self, updated, arenaDP):
-        """Statistics of vehicle has been updated on the arena.
-        :param updated: [(flags, VehicleArenaStatsVO), ...].
-        :param arenaDP: instance of ArenaDataProvider.
-        """
         exchange = self._exchangeBroker.getVehiclesStatsExchange()
         reusable = set()
         getVehicleInfo = arenaDP.getVehicleInfo
@@ -238,11 +210,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_updateVehiclesStatsS(data)
 
     def invalidatePlayerStatus(self, flags, vo, arenaDP):
-        """Status of player (isTeamKiller, ...) has been updated on arena.
-        :param flags: bitmask containing values from INVALIDATE_OP.
-        :param vo: instance of VehicleArenaInfoVO for that status updated.
-        :param arenaDP: instance of ArenaDataProvider.
-        """
         isEnemy, overrides = self.__getTeamOverrides(vo, arenaDP)
         exchange = self._exchangeBroker.getPlayerStatusExchange(isEnemy)
         exchange.setVehicleID(vo.vehicleID)
@@ -252,9 +219,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_updatePlayerStatusS(data)
 
     def invalidateUsersTags(self):
-        """New list of chat rosters has been received."""
         arenaDP = self._battleCtx.getArenaDP()
-        isEnemyTeam = arenaDP.isEnemyTeam
         exchange = self._exchangeBroker.getUsersTagsExchange()
         collection = vos_collections.VehiclesInfoCollection()
         for vInfoVO in collection.iterator(arenaDP):
@@ -266,9 +231,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_setUserTagsS(data)
 
     def invalidateUserTags(self, user):
-        """Contact's chat roster has been changed.
-        :param user: instance of UserEntity.
-        """
         accountDBID = user.getID()
         arenaDP = self._battleCtx.getArenaDP()
         vehicleID = arenaDP.getVehIDByAccDBID(accountDBID)
@@ -283,10 +245,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
                 self.as_updateUserTagsS(data)
 
     def invalidateInvitationsStatuses(self, vos, arenaDP):
-        """Invitations statues have been updated.
-        :param vos: list of VOs that are updated.
-        :param arenaDP: instance of ArenaDataProvider.
-        """
         exchange = self._exchangeBroker.getInvitationsExchange()
         for vo in vos:
             isEnemy, overrides = self.__getTeamOverrides(vo, arenaDP)
@@ -380,9 +338,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             overrides.clear()
 
     def __onSettingsChanged(self, diff):
-        """Listener for event ISettingsCore.onSettingsChanged.
-        :param diff: dict containing changes.
-        """
         added, removed = _makePersonalStatusFromSettingsDiff(diff)
         if (added, removed) != (PERSONAL_STATUS.DEFAULT,) * 2:
             self.__personalStatus |= added
@@ -390,10 +345,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_updatePersonalStatusS(added, removed)
 
     def __onVehicleStateUpdated(self, state, value):
-        """Listener for VehicleStateController.onVehicleStateUpdated.
-        :param state: integer containing code of state.
-        :param value: updated value.
-        """
         if state == VEHICLE_VIEW_STATE.PLAYER_INFO:
             arenaDP = self._battleCtx.getArenaDP()
             previousID = self._personalInfo.changeSelected(value)
@@ -402,8 +353,5 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
                 self.invalidatePlayerStatus(0, arenaDP.getVehicleInfo(value), arenaDP)
 
     def __onVOIPStateToggled(self, _):
-        """Listener for event VOIPManager.onVOIPStateToggled.
-        :param _: is voip enabled.
-        """
         arenaDP = self._battleCtx.getArenaDP()
         self.invalidatePlayerStatus(INVALIDATE_OP.PLAYER_STATUS, arenaDP.getVehicleInfo(), arenaDP)

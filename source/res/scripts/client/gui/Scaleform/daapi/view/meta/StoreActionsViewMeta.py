@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StoreActionsViewMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class StoreActionsViewMeta(BaseDAAPIComponent):
@@ -18,13 +14,7 @@ class StoreActionsViewMeta(BaseDAAPIComponent):
         self._printOverrideError('onActionSeen')
 
     def as_setDataS(self, storeActionsData):
-        """
-        :param storeActionsData: Represented by StoreActionsViewVo (AS)
-        """
         return self.flashObject.as_setData(storeActionsData) if self._isDAAPIInited() else None
 
     def as_actionTimeUpdateS(self, actionsTime):
-        """
-        :param actionsTime: Represented by Vector.<StoreActionTimeVo> (AS)
-        """
         return self.flashObject.as_actionTimeUpdate(actionsTime) if self._isDAAPIInited() else None

@@ -77,12 +77,6 @@ class SocialLoginView(LoginView):
         self.as_setErrorMessageS(initLoginError, INVALID_FIELDS.ALL_VALID)
 
     def __onLoggedOn(self, *args):
-        """Event handler that sets an actual last login type.
-        
-        Last login type should be set at the very end instead of beginning in order
-        to handle cases like choosing wrong social network, or misclicking on social
-        network and then typing wrong password using basic login.
-        """
         self.__lastLoginType = self.loginManager.getPreference('login_type')
 
     def __setSocialDataList(self, socialList):

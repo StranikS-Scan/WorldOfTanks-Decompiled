@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/os2emxpath.py
-"""Common pathname manipulations, OS/2 EMX version.
-
-Instead of importing this module directly, import os and refer to this
-module as os.path.
-"""
 import os
 import stat
 from genericpath import *
@@ -54,14 +49,10 @@ defpath = '.;C:\\bin'
 devnull = 'nul'
 
 def normcase(s):
-    """Normalize case of pathname.
-    
-    Makes all characters lowercase and all altseps into seps."""
     return s.replace('\\', '/').lower()
 
 
 def join(a, *p):
-    """Join two or more pathname components, inserting sep as needed"""
     path = a
     for b in p:
         if isabs(b):
@@ -74,13 +65,6 @@ def join(a, *p):
 
 
 def splitunc(p):
-    """Split a pathname into UNC mount point and relative path specifiers.
-    
-    Return a 2-tuple (unc, rest); either part may be empty.
-    If unc is not empty, it has the form '//host/mount' (or similar
-    using backslashes).  unc+rest is always the input path.
-    Paths containing drive letters never have an UNC part.
-    """
     if p[1:2] == ':':
         return ('', p)
     firstTwo = p[0:2]
@@ -97,19 +81,16 @@ def splitunc(p):
 
 
 def basename(p):
-    """Returns the final component of a pathname"""
     return split(p)[1]
 
 
 def dirname(p):
-    """Returns the directory component of a pathname"""
     return split(p)[0]
 
 
 lexists = exists
 
 def ismount(path):
-    """Test whether a path is a mount point (defined as root of drive)"""
     unc, rest = splitunc(path)
     if unc:
         return rest in ('', '/', '\\')
@@ -118,7 +99,6 @@ def ismount(path):
 
 
 def normpath(path):
-    """Normalize path, eliminating double slashes, etc."""
     path = path.replace('\\', '/')
     prefix, path = splitdrive(path)
     while path[:1] == '/':
@@ -143,7 +123,6 @@ def normpath(path):
 
 
 def abspath(path):
-    """Return the absolute version of a path"""
     if not isabs(path):
         if isinstance(path, unicode):
             cwd = os.getcwdu()

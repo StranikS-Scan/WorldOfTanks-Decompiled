@@ -36,7 +36,7 @@ class _ColorScheme(defaultdict):
         return self[key][self.__current]
 
     def getColors(self, key):
-        return map(lambda name: self[key][name], self.__colorsNames)
+        return [ self[key][name] for name in self.__colorsNames ]
 
     def setCurrent(self, name):
         result = False

@@ -4,11 +4,6 @@ from distutils.core import Extension as _Extension
 from distutils.core import Distribution as _Distribution
 
 def _get_unpatched(cls):
-    """Protect against re-patching the distutils if reloaded
-    
-    Also ensures that no other distutils extension monkeypatched the distutils
-    first.
-    """
     while cls.__module__.startswith('setuptools'):
         cls = cls.__bases__
 
@@ -27,7 +22,6 @@ else:
     have_pyrex = True
 
 class Extension(_Extension):
-    """Extension that uses '.c' files in place of '.pyx' files"""
     if not have_pyrex:
 
         def __init__(self, *args, **kw):
@@ -42,7 +36,6 @@ class Extension(_Extension):
 
 
 class Library(Extension):
-    """Just like a regular Extension, but built as a library instead"""
     pass
 
 

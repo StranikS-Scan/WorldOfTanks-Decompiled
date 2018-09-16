@@ -11,17 +11,11 @@ except OSError:
     ORIGINAL_DIR = None
 
 def current_process():
-    """
-    Return process object representing the current process
-    """
     global _current_process
     return _current_process
 
 
 def active_children():
-    """
-    Return list of process objects corresponding to live child processes
-    """
     _cleanup()
     return list(_current_process._children)
 
@@ -35,15 +29,9 @@ def _cleanup():
 
 
 class Process(object):
-    """
-    Process objects represent activity that is run in a separate process
-    
-    The class is analagous to `threading.Thread`
-    """
     _Popen = None
 
     def __init__(self, group=None, target=None, name=None, args=(), kwargs={}):
-        assert group is None, 'group argument must be None for now'
         count = _current_process._counter.next()
         self._identity = _current_process._identity + (count,)
         self._authkey = _current_process._authkey
@@ -58,19 +46,10 @@ class Process(object):
         return
 
     def run(self):
-        """
-        Method to be run in sub-process; can be overridden in sub-class
-        """
         if self._target:
             self._target(*self._args, **self._kwargs)
 
     def start(self):
-        """
-        Start child process
-        """
-        assert self._popen is None, 'cannot start a process twice'
-        assert self._parent_pid == os.getpid(), 'can only start a process object created by current process'
-        assert not _current_process._daemonic, 'daemonic processes are not allowed to have children'
         _cleanup()
         if self._Popen is not None:
             Popen = self._Popen
@@ -81,32 +60,20 @@ class Process(object):
         return
 
     def terminate(self):
-        """
-        Terminate process; sends SIGTERM signal or uses TerminateProcess()
-        """
         self._popen.terminate()
 
     def join(self, timeout=None):
-        """
-        Wait until child process terminates
-        """
-        assert self._parent_pid == os.getpid(), 'can only join a child process'
-        assert self._popen is not None, 'can only join a started process'
         res = self._popen.wait(timeout)
         if res is not None:
             _current_process._children.discard(self)
         return
 
     def is_alive(self):
-        """
-        Return whether process is alive
-        """
         if self is _current_process:
             return True
+        elif self._popen is None:
+            return False
         else:
-            assert self._parent_pid == os.getpid(), 'can only test a child process'
-            if self._popen is None:
-                return False
             self._popen.poll()
             return self._popen.returncode is None
 
@@ -116,24 +83,15 @@ class Process(object):
 
     @name.setter
     def name(self, name):
-        assert isinstance(name, basestring), 'name must be a string'
         self._name = name
 
     @property
     def daemon(self):
-        """
-        Return whether process is a daemon
-        """
         return self._daemonic
 
     @daemon.setter
     def daemon(self, daemonic):
-        """
-        Set whether process is a daemon
-        """
-        assert self._popen is None, 'process has already started'
         self._daemonic = daemonic
-        return
 
     @property
     def authkey(self):
@@ -141,23 +99,14 @@ class Process(object):
 
     @authkey.setter
     def authkey(self, authkey):
-        """
-        Set authorization key of process
-        """
         self._authkey = AuthenticationString(authkey)
 
     @property
     def exitcode(self):
-        """
-        Return exit code of process or `None` if it has yet to stop
-        """
         return self._popen if self._popen is None else self._popen.poll()
 
     @property
     def ident(self):
-        """
-        Return identifier (PID) of process or `None` if it has yet to start
-        """
         if self is _current_process:
             return os.getpid()
         else:

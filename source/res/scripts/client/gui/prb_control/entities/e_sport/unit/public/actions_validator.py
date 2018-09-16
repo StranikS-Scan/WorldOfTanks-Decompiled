@@ -6,9 +6,6 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import UNIT_RESTRICTION
 
 class ESportLevelsValidator(CommanderValidator):
-    """
-    ESport public levels validator
-    """
 
     def _validate(self):
         stats = self._entity.getStats()
@@ -41,9 +38,6 @@ class ESportLevelsValidator(CommanderValidator):
 
 
 class ESportSearchValidator(UnitLevelsValidator):
-    """
-    ESport search for players warning
-    """
 
     def _validate(self):
         return ValidationResult(True, UNIT_RESTRICTION.NEED_PLAYERS_SEARCH)
@@ -53,9 +47,6 @@ class ESportSearchValidator(UnitLevelsValidator):
 
 
 class ESportActionsValidator(UnitActionsValidator):
-    """
-    ESport actions validation class. Has additional warning checker.
-    """
 
     def __init__(self, entity):
         super(ESportActionsValidator, self).__init__(entity)

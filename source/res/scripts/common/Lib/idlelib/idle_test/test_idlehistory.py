@@ -11,7 +11,6 @@ line1 = 'a = 7'
 line2 = 'b = a'
 
 class StoreTest(unittest.TestCase):
-    """Tests History.__init__ and History.store with mock Text"""
 
     @classmethod
     def setUpClass(cls):
@@ -65,8 +64,6 @@ class TextWrapper:
 
 
 class FetchTest(unittest.TestCase):
-    """Test History.fetch with wrapped tk.Text.
-    """
 
     @classmethod
     def setUpClass(cls):

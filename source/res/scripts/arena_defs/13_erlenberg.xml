@@ -14,16 +14,16 @@
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <wwmusicSetup>
-    <wwmusicLoading>	music_himmelsdorf	</wwmusicLoading>
-    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
-    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+    <wwmusicLoading>	music_ruinberg_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_ruinberg_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_ruinberg_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
-  <wwambientSound>	ambient_wind_winter_01	</wwambientSound>
+  <wwambientSound>	amb_map_13_erlenberg_wind_winter	</wwambientSound>
   <water>
     <texScale>	0	</texScale>
     <freqX>	0	</freqX>
@@ -74,4 +74,48 @@
       <controlPoint>	-21.000046 -3.300049	</controlPoint>
     </domination>
   </gameplayTypes>
+  <mapActivities>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <period>	0	</period>
+      <trajectories>
+        <warplane>
+          <preset>	erlenberg_airplane_fly	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	erlenberg_airplane_explosion	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	47.799999 47.799999	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	erlenberg_attack_airplane	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	35.000000 35.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	erlenberg_attack_airplane2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	30.000000 30.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	erlenberg_attack_airplane3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	32.500000 32.500000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
 </13_erlenberg.xml>

@@ -10,9 +10,6 @@ from skeletons.gui.shared import IItemsCache
 _UPDATE_LOCKS_PERIOD = 60
 
 class ClanLockController(IClanLockController, Notifiable):
-    """ This controller handles occurrence of vehicle locks (global or by vehicle)
-     and fires a special event each minute util these locks exist.
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):

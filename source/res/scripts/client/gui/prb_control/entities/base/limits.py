@@ -7,25 +7,12 @@ from constants import PREBATTLE_ACCOUNT_STATE
 from gui.prb_control import prb_getters
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_RESTRICTION
-from helpers import dependency
 from items.vehicles import VehicleDescr, VEHICLE_CLASS_TAGS
 from prebattle_shared import isTeamValid, isVehicleValid
-from skeletons.gui.game_control import IFalloutController
 
 class IVehicleLimit(object):
-    """
-    Interface for vehicle limit.
-    """
 
     def check(self, teamLimits):
-        """
-        Checks that vehicle is acceptable by team limits.
-        Args:
-            teamLimits: dict data for team limits
-        
-        Returns:
-            validation result and restriction message
-        """
         return (True, '')
 
 
@@ -36,21 +23,12 @@ class ITeamLimit(object):
 
 
 class VehicleIsValid(IVehicleLimit):
-    """
-    Class for current vehicle validation. Validates:
-    - is mode valid
-    - is vehicle ready to fight
-    - and is it valid for team restrictions
-    """
-    falloutCtrl = dependency.descriptor(IFalloutController)
 
     def check(self, teamLimits):
         if not g_currentVehicle.isPresent():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT)
         if g_currentVehicle.isEvent():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
-        if g_currentVehicle.isFalloutOnly() and not self.falloutCtrl.isSelected():
-            return (False, PREBATTLE_RESTRICTION.VEHICLE_FALLOUT_ONLY)
         if g_currentVehicle.isRotationGroupLocked():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
         if not g_currentVehicle.isReadyToPrebattle():
@@ -64,20 +42,8 @@ class VehicleIsValid(IVehicleLimit):
 
 
 class AbstractTeamIsValid(ITeamLimit):
-    """
-    Base class for team validation.
-    """
 
     def _getAccountsInfo(self, rosters, team):
-        """
-        Getter for accounts info.
-        Args:
-            rosters: prebattle rosters data
-            team: team number
-        
-        Returns:
-            team accounts info
-        """
         rosterKey = None
         if team == 1:
             rosterKey = PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1
@@ -91,18 +57,12 @@ class AbstractTeamIsValid(ITeamLimit):
 
 
 class TeamIsValid(AbstractTeamIsValid):
-    """
-    Class for simple team validation.
-    """
 
     def check(self, rosters, team, teamLimits):
         return isTeamValid(self._getAccountsInfo(rosters, team), teamLimits)
 
 
 class TeamNoPlayersInBattle(ITeamLimit):
-    """
-    Checker for team that has no players in battle.
-    """
 
     def __init__(self, prbType):
         super(TeamNoPlayersInBattle, self).__init__()
@@ -118,25 +78,12 @@ class TeamNoPlayersInBattle(ITeamLimit):
         return (True, '')
 
     def __isPlayerInBattle(self, player):
-        """
-        Checks given player's state
-        Args:
-            player: player's data
-        """
         return player['state'] & PREBATTLE_ACCOUNT_STATE.IN_BATTLE != 0
 
 
 class MaxCount(ITeamLimit):
-    """
-    Player's maximum count limit.
-    """
 
     def __init__(self, assigned=True):
-        """
-        Default constructor.
-        Args:
-            assigned: check only assigned/unassigned player's
-        """
         super(MaxCount, self).__init__()
         self.__assigned = assigned
 
@@ -158,9 +105,6 @@ class MaxCount(ITeamLimit):
 
 
 class TotalMaxCount(ITeamLimit):
-    """
-    Total player's maximum count limit.
-    """
 
     def check(self, rosters, team, teamLimits):
         maxCount = sum(prb_getters.getMaxSizeLimits(teamLimits))
@@ -180,9 +124,6 @@ class TotalMaxCount(ITeamLimit):
 
 
 class VehiclesLevelLimit(ITeamLimit):
-    """
-    Vehicles min or max levels limit.
-    """
 
     def check(self, rosters, team, teamLimits):
         isValid, notValidReason = True, ''
@@ -207,14 +148,6 @@ class VehiclesLevelLimit(ITeamLimit):
         return (isValid, notValidReason)
 
     def __calculate(self, rosters):
-        """
-        Calculate total level of all vehicles from roster in prebattle entity.
-        Args:
-            rosters: team rosters data
-        
-        Returns:
-            total vehicle levels and class levels
-        """
         classLevels = defaultdict(lambda : 0)
         totalLevel = 0
         vehClassTags = set(VEHICLE_CLASS_TAGS)
@@ -235,9 +168,6 @@ class VehiclesLevelLimit(ITeamLimit):
 
 
 class LimitsCollection(object):
-    """
-    Limits collection class that unite limits.
-    """
 
     def __init__(self, entity, vehicleLimits, teamLimits):
         self.__entity = weakref.proxy(entity)
@@ -245,20 +175,12 @@ class LimitsCollection(object):
         self.__teamLimits = teamLimits
 
     def clear(self):
-        """
-        Clears data.
-        """
         self.__entity = None
         self.__vehicleLimits = ()
         self.__teamLimits = ()
         return
 
     def isVehicleValid(self):
-        """
-        Is vehicle valid for current limits.
-        Returns:
-            validation result
-        """
         settings = self.__entity.getSettings()
         teamLimits = settings.getTeamLimits(self.__entity.getPlayerTeam())
         for limit in self.__vehicleLimits:
@@ -267,11 +189,6 @@ class LimitsCollection(object):
                 return ValidationResult(result, errorCode)
 
     def isTeamValid(self, team=None):
-        """
-        Is team valid for current limits.
-        Returns:
-            validation result
-        """
         if team is None:
             team = self.__entity.getPlayerTeam()
         settings = self.__entity.getSettings()
@@ -285,11 +202,6 @@ class LimitsCollection(object):
         return
 
     def isTeamsValid(self):
-        """
-        Are all teams valid for current limits.
-        Returns:
-            validation result
-        """
         settings = self.__entity.getSettings()
         rosters = prb_getters.getPrebattleRosters()
         for team in [1, 2]:
@@ -300,22 +212,10 @@ class LimitsCollection(object):
                     return ValidationResult(result, errorCode)
 
     def isMaxCountValid(self, team, assigned):
-        """
-        Checks is players max count valid.
-        Args:
-            team: team nubmer
-            assigned: check only assigned/unassigned
-        
-        Returns:
-            validation result
-        """
         settings = self.__entity.getSettings()
         rosters = prb_getters.getPrebattleRosters()
         result, errorCode = MaxCount(assigned=assigned).check(rosters, team, settings.getTeamLimits(team))
         return ValidationResult(result, errorCode) if not result else None
 
     def _getEntity(self):
-        """
-        Entity getter.
-        """
         return self.__entity

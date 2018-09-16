@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/TriggersManager.py
+import math
 import BigWorld
 import Math
-import math
 import PlayerEvents
 from constants import ARENA_PERIOD
 from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers import isPlayerAvatar
 
-class TRIGGER_TYPE():
+class TRIGGER_TYPE(object):
     AIM = 0
     AREA = 1
     AIM_AT_VEHICLE = 3
@@ -39,7 +39,7 @@ class ITriggerListener(object):
         pass
 
 
-class TriggersManager():
+class TriggersManager(object):
     UPDATE_PERIOD = 0.1
     isActive = property(lambda self: self.__isEnabled and self.__isOnArena)
 
@@ -92,8 +92,8 @@ class TriggersManager():
         else:
             autoTriggers = self.__autoTriggers.copy()
             for k, v in autoTriggers.iteritems():
-                type = v['type']
-                if type != TRIGGER_TYPE.AIM and type != TRIGGER_TYPE.AREA:
+                tType = v['type']
+                if tType != TRIGGER_TYPE.AIM and tType != TRIGGER_TYPE.AREA:
                     del self.__autoTriggers[k]
                     self.__activeAutoTriggers.discard(k)
 
@@ -102,18 +102,18 @@ class TriggersManager():
             return
         self.__listeners.add(listener)
         if self.isActive:
-            for id in self.__activeAutoTriggers:
-                listener.onTriggerActivated(self.__autoTriggers[id])
+            for tID in self.__activeAutoTriggers:
+                listener.onTriggerActivated(self.__autoTriggers[tID])
 
-            for type, trigger in self.__activeManualTriggers.iteritems():
+            for _, trigger in self.__activeManualTriggers.iteritems():
                 listener.onTriggerActivated(trigger)
 
     def delListener(self, listener):
         self.__listeners.discard(listener)
 
-    def addTrigger(self, type, **params):
+    def addTrigger(self, tType, **params):
         params = dict(params) if params is not None else {}
-        params['type'] = type
+        params['type'] = tType
         self.__autoTriggers[self.__nextTriggerId] = params
         self.__nextTriggerId = self.__nextTriggerId + 1
         return self.__nextTriggerId - 1
@@ -123,12 +123,12 @@ class TriggersManager():
             del self.__autoTriggers[triggerID]
             self.__activeAutoTriggers.discard(triggerID)
 
-    def fireTrigger(self, type, **args):
+    def fireTrigger(self, tType, **args):
         params = dict(args) if args is not None else {}
-        params['type'] = type
-        if type not in self.__pendingManualTriggers:
-            self.__pendingManualTriggers[type] = []
-        self.__pendingManualTriggers[type].append((False, params))
+        params['type'] = tType
+        if tType not in self.__pendingManualTriggers:
+            self.__pendingManualTriggers[tType] = []
+        self.__pendingManualTriggers[tType].append((False, params))
         return
 
     def activateTrigger(self, triggerType, **args):
@@ -164,23 +164,23 @@ class TriggersManager():
             camDir = BigWorld.camera().direction
             vehicle = BigWorld.entities.get(player.playerVehicleID)
             try:
-                for type, data in self.__pendingManualTriggers.iteritems():
+                for tType, data in self.__pendingManualTriggers.iteritems():
                     for isTwoState, args in data:
                         params = dict(args)
-                        params['type'] = type
+                        params['type'] = tType
                         for listener in self.__listeners:
                             listener.onTriggerActivated(params)
 
                         if isTwoState:
-                            self.__activeManualTriggers[type] = params
+                            self.__activeManualTriggers[tType] = params
 
                 self.__pendingManualTriggers = {}
-                for id, params in self.__autoTriggers.iteritems():
-                    wasActive = id in self.__activeAutoTriggers
+                for tID, params in self.__autoTriggers.iteritems():
+                    wasActive = tID in self.__activeAutoTriggers
                     isActive = False
                     distance = -1.0
-                    type = params['type']
-                    if type == TRIGGER_TYPE.AREA and vehicle is not None:
+                    tType = params['type']
+                    if tType == TRIGGER_TYPE.AREA and vehicle is not None:
                         scale = Math.Vector3(params['scale'])
                         if scale == Math.Vector3(1, 1, 1):
                             triggerRadius = params['radius']
@@ -198,7 +198,7 @@ class TriggersManager():
                             offset = targetMatrix.applyPoint(offset)
                             originalSize = 5.0
                             isActive = -scale.x * originalSize < offset.x < scale.x * originalSize and -scale.z * originalSize < offset.z < scale.z * originalSize
-                    if type == TRIGGER_TYPE.AIM:
+                    if tType == TRIGGER_TYPE.AIM:
                         camToTrigger = Math.Vector3(params['position']) - camPos
                         vehicleToTrigger = Math.Vector3(params['position']) - vehicle.position
                         distance = camToTrigger.length
@@ -211,40 +211,40 @@ class TriggersManager():
                     params['distance'] = distance
                     if wasActive != isActive:
                         if isActive:
-                            self.__activeAutoTriggers.add(id)
+                            self.__activeAutoTriggers.add(tID)
                             for listener in self.__listeners:
                                 listener.onTriggerActivated(params)
 
                         else:
-                            self.__activeAutoTriggers.discard(id)
+                            self.__activeAutoTriggers.discard(tID)
                             for listener in self.__listeners:
                                 listener.onTriggerDeactivated(params)
 
                 self.__explodePoints = []
                 self.__shotPoints = []
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
             return
 
-    def getTriggerPosition(self, type, name):
+    def getTriggerPosition(self, tType, name):
         for params in self.__autoTriggers.itervalues():
-            if params['type'] == type and params['name'] == name:
+            if params['type'] == tType and params['name'] == name:
                 return params.get('position')
 
         return None
 
-    def getDistanceToTrigger(self, type, name):
+    def getDistanceToTrigger(self, tType, name):
         for params in self.__autoTriggers.itervalues():
-            if params['type'] == type and params['name'] == name:
+            if params['type'] == tType and params['name'] == name:
                 return params.get('distance')
 
         return None
 
-    def isAutoTriggerActive(self, type, name):
-        for id, params in self.__autoTriggers.iteritems():
-            if params['type'] == type and params['name'] == name:
-                return id in self.__activeAutoTriggers
+    def isAutoTriggerActive(self, tType, name):
+        for tID, params in self.__autoTriggers.iteritems():
+            if params['type'] == tType and params['name'] == name:
+                return tID in self.__activeAutoTriggers
 
         return None
 

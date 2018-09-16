@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/StdSuites/Macintosh_Connectivity_Clas.py
-"""Suite Macintosh Connectivity Classes: Classes relating to Apple Macintosh personal computer connectivity
-Level 1, version 1
-
-Generated from /Volumes/Sap/System Folder/Extensions/AppleScript
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'macc'
@@ -15,18 +9,15 @@ class Macintosh_Connectivity_Clas_Events:
 
 
 class ADB_address(aetools.ComponentItem):
-    """ADB address - Addresses a device connected via Apple Desktop Bus """
     want = 'cadb'
 
 
 class _Prop__3c_inheritance_3e_(aetools.NProperty):
-    """<inheritance> - inherits some of its properties from this class """
     which = 'c@#^'
     want = 'cadr'
 
 
 class _Prop_ID(aetools.NProperty):
-    """ID - the Apple Desktop Bus device ID """
     which = 'ID  '
     want = 'shor'
 
@@ -34,24 +25,20 @@ class _Prop_ID(aetools.NProperty):
 ADB_addresses = ADB_address
 
 class address_specification(aetools.ComponentItem):
-    """address specification - Unique designation of a device or service connected to this computer """
     want = 'cadr'
 
 
 class _Prop_conduit(aetools.NProperty):
-    """conduit - How the addressee is physically connected """
     which = 'pcon'
     want = 'econ'
 
 
 class _Prop_properties(aetools.NProperty):
-    """properties - property that allows getting and setting of multiple properties """
     which = 'pALL'
     want = 'reco'
 
 
 class _Prop_protocol(aetools.NProperty):
-    """protocol - How to talk to this addressee """
     which = 'pprt'
     want = 'epro'
 
@@ -59,24 +46,20 @@ class _Prop_protocol(aetools.NProperty):
 address_specifications = address_specification
 
 class AppleTalk_address(aetools.ComponentItem):
-    """AppleTalk address - Addresses a device or service connected via the AppleTalk protocol """
     want = 'cat '
 
 
 class _Prop_AppleTalk_machine(aetools.NProperty):
-    """AppleTalk machine - the machine name part of the address """
     which = 'patm'
     want = 'TEXT'
 
 
 class _Prop_AppleTalk_type(aetools.NProperty):
-    """AppleTalk type - the type part of the AppleTalk address """
     which = 'patt'
     want = 'TEXT'
 
 
 class _Prop_AppleTalk_zone(aetools.NProperty):
-    """AppleTalk zone - the zone part of the address """
     which = 'patz'
     want = 'TEXT'
 
@@ -84,25 +67,21 @@ class _Prop_AppleTalk_zone(aetools.NProperty):
 AppleTalk_addresses = AppleTalk_address
 
 class bus_slot(aetools.ComponentItem):
-    """bus slot - Addresses a PC, PCI, or NuBus card """
     want = 'cbus'
 
 
 bus_slots = bus_slot
 
 class device_specification(aetools.ComponentItem):
-    """device specification - A device connected to a computer """
     want = 'cdev'
 
 
 class _Prop_device_address(aetools.NProperty):
-    """device address - the address of the device """
     which = 'pdva'
     want = 'cadr'
 
 
 class _Prop_device_type(aetools.NProperty):
-    """device type - the kind of device """
     which = 'pdvt'
     want = 'edvt'
 
@@ -110,32 +89,27 @@ class _Prop_device_type(aetools.NProperty):
 device_specifications = device_specification
 
 class Ethernet_address(aetools.ComponentItem):
-    """Ethernet address - Addresses a device by its Ethernet address """
     want = 'cen '
 
 
 Ethernet_addresses = Ethernet_address
 
 class FireWire_address(aetools.ComponentItem):
-    """FireWire address - Addresses a device on the FireWire bus """
     want = 'cfw '
 
 
 FireWire_addresses = FireWire_address
 
 class IP_address(aetools.ComponentItem):
-    """IP address - Addresses a device or service via the Internet Protocol (IP) """
     want = 'cip '
 
 
 class _Prop_DNS_form(aetools.NProperty):
-    """DNS form - the address in the form "apple.com" """
     which = 'pdns'
     want = 'TEXT'
 
 
 class _Prop_port(aetools.NProperty):
-    """port - the port number of the service or client being addressed """
     which = 'ppor'
     want = 'TEXT'
 
@@ -143,24 +117,20 @@ class _Prop_port(aetools.NProperty):
 IP_addresses = IP_address
 
 class LocalTalk_address(aetools.ComponentItem):
-    """LocalTalk address - Addresses a device by its LocalTalk address """
     want = 'clt '
 
 
 class _Prop_network(aetools.NProperty):
-    """network - the LocalTalk network number """
     which = 'pnet'
     want = 'shor'
 
 
 class _Prop_node(aetools.NProperty):
-    """node - the LocalTalk node number """
     which = 'pnod'
     want = 'shor'
 
 
 class _Prop_socket(aetools.NProperty):
-    """socket - the LocalTalk socket number """
     which = 'psoc'
     want = 'shor'
 
@@ -168,18 +138,15 @@ class _Prop_socket(aetools.NProperty):
 LocalTalk_addresses = LocalTalk_address
 
 class SCSI_address(aetools.ComponentItem):
-    """SCSI address - Addresses a SCSI device """
     want = 'cscs'
 
 
 class _Prop_LUN(aetools.NProperty):
-    """LUN - the SCSI logical unit number """
     which = 'pslu'
     want = 'shor'
 
 
 class _Prop_SCSI_bus(aetools.NProperty):
-    """SCSI bus - the SCSI bus number """
     which = 'pscb'
     want = 'shor'
 
@@ -187,19 +154,16 @@ class _Prop_SCSI_bus(aetools.NProperty):
 SCSI_addresses = SCSI_address
 
 class Token_Ring_address(aetools.ComponentItem):
-    """Token Ring address - Addresses a device or service via the Token Ring protocol """
     want = 'ctok'
 
 
 Token_Ring_addresses = Token_Ring_address
 
 class USB_address(aetools.ComponentItem):
-    """USB address - Addresses a device on the Universal Serial Bus """
     want = 'cusb'
 
 
 class _Prop_name(aetools.NProperty):
-    """name - the USB device name """
     which = 'pnam'
     want = 'TEXT'
 

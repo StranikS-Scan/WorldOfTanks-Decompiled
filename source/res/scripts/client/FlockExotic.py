@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FlockExotic.py
-import BigWorld
 import math
 import random
+import BigWorld
 import Math
 import FlockManager
 from Flock import FlockLike
@@ -58,7 +58,6 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
                     LOG_ERROR('Failed to load flock model: %s' % modelId)
                     continue
                 model = prereqs[modelId]
-                model.outsideOnly = 1
                 model.moveAttachments = True
                 model.visible = False
                 self.__models.append(model)
@@ -80,11 +79,11 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
         if self.flightAngleMax < self.flightAngleMin:
             arc = 2 * math.pi - abs(arc)
         randAngle = random.uniform(self.flightAngleMin, self.flightAngleMin + arc)
-        dir = Math.Vector3(self.flightRadius * math.cos(randAngle), self.flightOffsetFromOrigin + randHeight, self.flightRadius * math.sin(randAngle)) + self.position
-        dir = dir - startPos
-        dir.normalise()
-        dir *= self.speed * self.lifeTime
-        return startPos + dir
+        direction = Math.Vector3(self.flightRadius * math.cos(randAngle), self.flightOffsetFromOrigin + randHeight, self.flightRadius * math.sin(randAngle)) + self.position
+        direction = direction - startPos
+        direction.normalise()
+        direction *= self.speed * self.lifeTime
+        return startPos + direction
 
     def onTrigger(self):
         flightTime = None
@@ -94,11 +93,11 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
             model.action('FlockAnimAction')()
             model.position = self.__getRandomSpawnPos()
             targetPos = self.__getRandomTargetPos(model.position)
-            dir = targetPos - model.position
-            dirLength = dir.length
+            direction = targetPos - model.position
+            dirLength = direction.length
             speed = self.speed * random.uniform(self.speedRandom[0], self.speedRandom[1])
             if dirLength > 0:
-                velocity = dir * speed / dirLength
+                velocity = direction * speed / dirLength
             else:
                 velocity = Math.Vector3(0, speed, 0)
             flightTime = dirLength / velocity.length

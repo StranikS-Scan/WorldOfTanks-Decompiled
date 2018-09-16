@@ -42,7 +42,7 @@ class BaseAssistant(object):
     def _update(self):
         try:
             self._hintSystem.update()
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION_BOOTCAMP()
 
         self._updateTimerId = BigWorld.callback(BaseAssistant.ASSISTANT_TICK_LENGTH, self._update)
@@ -100,7 +100,7 @@ class BattleAssistant(BaseAssistant):
         try:
             self._markerManager.update()
             g_bootcampEvents.onUIStateChanged(UI_STATE.UPDATE)
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION_BOOTCAMP()
 
     def _doStart(self):

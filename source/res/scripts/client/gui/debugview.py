@@ -3,7 +3,7 @@
 import GUI
 from gui import g_guiResetters
 
-class DebugView():
+class DebugView(object):
 
     def __init__(self, textureName='', parentGUI=None):
         self.__listKeynames = []
@@ -121,7 +121,7 @@ class DebugView():
             try:
                 newPos = self.__listKeynames.index(keyname)
                 self.removeItem(keyname)
-            except:
+            except Exception:
                 newPos = None
 
             if newPos is not None:
@@ -190,7 +190,7 @@ class DebugView():
             return
         try:
             ind = self.__listKeynames.index(keyname)
-        except:
+        except Exception:
             return
 
         if deltaLine < 0:
@@ -208,7 +208,7 @@ class DebugView():
         try:
             ind1 = self.__listKeynames.index(keyname1)
             ind2 = self.__listKeynames.index(keyname2)
-        except:
+        except Exception:
             return
 
         self.__listKeynames[ind1] = keyname2
@@ -286,7 +286,7 @@ class DebugView():
         self.rebuild()
 
 
-class DebugViewItem():
+class DebugViewItem(object):
 
     def __init__(self, name='', value='', divider=' = '):
         self.__name = str(name)
@@ -414,8 +414,6 @@ class DebugViewItem():
         self._guiValue.verticalAnchor = 'TOP'
 
     def __destroyGUI(self):
-        assert self._guiName.parent is None
-        assert self._guiValue.parent is None
         GUI.delRoot(self._guiName)
         self._guiName = None
         GUI.delRoot(self._guiValue)

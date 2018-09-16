@@ -19,7 +19,7 @@ class LobbyControlsFactory(ControlsFactory):
          EFFECT_TYPE.NEXT_CHAPTER: core_func.FunctionalNextChapterEffect,
          EFFECT_TYPE.RUN_TRIGGER: core_func.FunctionalRunTriggerEffect,
          EFFECT_TYPE.REQUEST_BONUS: core_func.FunctionalRequestBonusEffect,
-         EFFECT_TYPE.SET_ITEM_PROPS: core_func.FunctionalGuiItemSetPropertiesEffect,
+         EFFECT_TYPE.SET_ITEM_PROPS: core_func.FunctionalSetGuiItemPropertiesEffect,
          EFFECT_TYPE.FINISH_TRAINING: core_func.FunctionalFinishTrainingEffect,
          EFFECT_TYPE.INVOKE_GUI_CMD: core_func.FunctionalGuiCommandEffect,
          EFFECT_TYPE.SHOW_MESSAGE: core_func.FunctionalShowMessageEffect}
@@ -36,5 +36,5 @@ class LobbyControlsFactory(ControlsFactory):
     def createFuncScene(self, sceneModel):
         return core_func.FunctionalScene(sceneModel)
 
-    def createFuncInfo(self):
-        return functional.FunctionalLobbyChapterInfo()
+    def createFuncChapterCtx(self):
+        return functional.FunctionalLobbyChapterContext()

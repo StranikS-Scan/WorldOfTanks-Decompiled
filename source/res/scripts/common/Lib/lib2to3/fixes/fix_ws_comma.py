@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_ws_comma.py
-"""Fixer that changes 'a ,b' into 'a, b'.
-
-This also changes '{a :b}' into '{a: b}', but does not touch other
-uses of colons.  It does not touch other uses of whitespace.
-
-"""
 from .. import pytree
 from ..pgen2 import token
 from .. import fixer_base

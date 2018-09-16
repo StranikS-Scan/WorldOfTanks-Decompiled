@@ -1,15 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/__init__.py
-"""
-This package contains components that are used in vehicle's items, optional devices, equipment,
-tankman and so on.
-
-The following rules are applied to this package:
-
-1. A component shall not contain any other component.
-2. Namedtuple is created if the component is simple and does not include logic.
-3. Class + slots is created if the component includes a logic or has variability set of data.
-"""
 from items.components import c11n_constants
 from items.components import chassis_components
 from items.components import component_constants

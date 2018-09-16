@@ -31,7 +31,6 @@ from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
 _BATTLE_BOOSTER = 'battleBooster'
@@ -139,7 +138,7 @@ class BaseVehicleParametersTooltipData(BlocksTooltipData):
     def _getPenalties(self):
         result = []
         penalties = self._extendedData.penalties
-        actualPenalties, nullPenaltyTypes = _getNumNotNullPenaltyTankman(penalties)
+        actualPenalties, _ = _getNumNotNullPenaltyTankman(penalties)
         penaltiesLen = len(penalties)
         numNotNullPenaltyTankman = len(actualPenalties)
         if penaltiesLen > numNotNullPenaltyTankman:
@@ -271,7 +270,7 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
             img = RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL
         else:
             conditionsToActivate = set(self._extendedData.inactiveBonuses.values())
-            conditionsToActivate = map(lambda (bnsID, _): _ms(ITEM_TYPES.tankman_skills(bnsID)), conditionsToActivate)
+            conditionsToActivate = [ _ms(ITEM_TYPES.tankman_skills(bnsID)) for bnsID, _ in conditionsToActivate ]
             desc = text_styles.standard(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_INACTIVEDESCRIPTION, skillName=', '.join(conditionsToActivate)))
             img = RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_RED
         return [formatters.packImageTextBlockData(title='', desc=desc, img=img, imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=20))]
@@ -565,7 +564,7 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
      VEHICLE_CLASS_NAME.MEDIUM_TANK: ('avgDamagePerMinute', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed'),
      VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage', 'avgPiercingPower', 'hullArmor', 'turretArmor'),
      VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
-     VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime'),
+     VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchTime'),
      'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}
 
     def __init__(self, vehicle, configuration, valueWidth, leftPadding, rightPadding):
@@ -577,7 +576,6 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
         block = []
         comparator = params_helper.idealCrewComparator(self.vehicle)
         if self.configuration.params and not self.configuration.simplifiedOnly:
-            params = self.PARAMS.get(self.vehicle.type, 'default')
             for paramName in self.PARAMS.get(self.vehicle.type, 'default'):
                 if paramName in paramsDict:
                     paramInfo = comparator.getExtendedData(paramName)

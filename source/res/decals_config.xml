@@ -154,6 +154,45 @@
   </trace>
   <road>
     <anisotropy>	4	</anisotropy>
+    <type>
+      <name>	GBufferDecals	</name>
+      <atlas>
+        <width>	1024	</width>
+        <height>	1024	</height>
+        <format>	DXT5	</format>
+        <constrains>
+          <minWidth>	64	</minWidth>
+          <minHeight>	64	</minHeight>
+          <maxWidth>	1024	</maxWidth>
+          <maxHeight>	1024	</maxHeight>
+          <format>	DXT5	</format>
+        </constrains>
+      </atlas>
+      <atlas>
+        <width>	1024	</width>
+        <height>	1024	</height>
+        <format>	DXT5	</format>
+        <constrains>
+          <minWidth>	64	</minWidth>
+          <minHeight>	64	</minHeight>
+          <maxWidth>	1024	</maxWidth>
+          <maxHeight>	1024	</maxHeight>
+          <format>	DXT5	</format>
+        </constrains>
+      </atlas>
+      <atlas>
+        <width>	1024	</width>
+        <height>	1024	</height>
+        <format>	DXT5	</format>
+        <constrains>
+          <minWidth>	64	</minWidth>
+          <minHeight>	64	</minHeight>
+          <maxWidth>	1024	</maxWidth>
+          <maxHeight>	1024	</maxHeight>
+          <format>	DXT5	</format>
+        </constrains>
+      </atlas>
+    </type>
     <quality>
       <option>	MAX	  <mip>	0	</mip>
         <matTypeDownsample>	0 0	</matTypeDownsample>

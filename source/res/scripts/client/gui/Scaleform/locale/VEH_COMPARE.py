@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/VEH_COMPARE.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from debug_utils import LOG_WARNING
 
 class VEH_COMPARE(object):

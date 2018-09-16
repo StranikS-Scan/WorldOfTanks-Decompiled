@@ -1,15 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/config.py
-"""distutils.command.config
-
-Implements the Distutils 'config' command, a (mostly) empty command class
-that exists mainly to be sub-classed by specific module distributions and
-applications.  The idea is that while every "config" command is different,
-at least they're all named the same, and users always see "config" in the
-list of standard commands.  Also, this is a good place to put common
-configure-like tasks: "try to compile this C code", or "figure out where
-this header file lives".
-"""
 __revision__ = '$Id$'
 import os
 import re
@@ -62,9 +52,6 @@ class config(Command):
         pass
 
     def _check_compiler(self):
-        """Check that 'self.compiler' really is a CCompiler object;
-        if not, make it one.
-        """
         from distutils.ccompiler import CCompiler, new_compiler
         if not isinstance(self.compiler, CCompiler):
             self.compiler = new_compiler(compiler=self.compiler, dry_run=self.dry_run, force=1)
@@ -127,12 +114,6 @@ class config(Command):
                 pass
 
     def try_cpp(self, body=None, headers=None, include_dirs=None, lang='c'):
-        """Construct a source file from 'body' (a string containing lines
-        of C/C++ code) and 'headers' (a list of header files to include)
-        and run it through the preprocessor.  Return true if the
-        preprocessor succeeded, false if there were any errors.
-        ('body' probably isn't of much use, but what the heck.)
-        """
         from distutils.ccompiler import CompileError
         self._check_compiler()
         ok = 1
@@ -145,13 +126,6 @@ class config(Command):
         return ok
 
     def search_cpp(self, pattern, body=None, headers=None, include_dirs=None, lang='c'):
-        """Construct a source file (just like 'try_cpp()'), run it through
-        the preprocessor, and return true if any line of the output matches
-        'pattern'.  'pattern' should either be a compiled regex object or a
-        string containing a regex.  If both 'body' and 'headers' are None,
-        preprocesses an empty file -- which can be useful to determine the
-        symbols the preprocessor and compiler set by default.
-        """
         self._check_compiler()
         src, out = self._preprocess(body, headers, include_dirs, lang)
         if isinstance(pattern, str):
@@ -171,9 +145,6 @@ class config(Command):
         return match
 
     def try_compile(self, body, headers=None, include_dirs=None, lang='c'):
-        """Try to compile a source file built from 'body' and 'headers'.
-        Return true on success, false otherwise.
-        """
         from distutils.ccompiler import CompileError
         self._check_compiler()
         try:
@@ -187,10 +158,6 @@ class config(Command):
         return ok
 
     def try_link(self, body, headers=None, include_dirs=None, libraries=None, library_dirs=None, lang='c'):
-        """Try to compile and link a source file, built from 'body' and
-        'headers', to executable form.  Return true on success, false
-        otherwise.
-        """
         from distutils.ccompiler import CompileError, LinkError
         self._check_compiler()
         try:
@@ -204,10 +171,6 @@ class config(Command):
         return ok
 
     def try_run(self, body, headers=None, include_dirs=None, libraries=None, library_dirs=None, lang='c'):
-        """Try to compile, link to an executable, and run a program
-        built from 'body' and 'headers'.  Return true on success, false
-        otherwise.
-        """
         from distutils.ccompiler import CompileError, LinkError
         self._check_compiler()
         try:
@@ -222,19 +185,6 @@ class config(Command):
         return ok
 
     def check_func(self, func, headers=None, include_dirs=None, libraries=None, library_dirs=None, decl=0, call=0):
-        """Determine if function 'func' is available by constructing a
-        source file that refers to 'func', and compiles and links it.
-        If everything succeeds, returns true; otherwise returns false.
-        
-        The constructed source file starts out by including the header
-        files listed in 'headers'.  If 'decl' is true, it then declares
-        'func' (as "int func()"); you probably shouldn't supply 'headers'
-        and set 'decl' true in the same call, or you might get errors about
-        a conflicting declarations for 'func'.  Finally, the constructed
-        'main()' function either references 'func' or (if 'call' is true)
-        calls it.  'libraries' and 'library_dirs' are used when
-        linking.
-        """
         self._check_compiler()
         body = []
         if decl:
@@ -249,30 +199,14 @@ class config(Command):
         return self.try_link(body, headers, include_dirs, libraries, library_dirs)
 
     def check_lib(self, library, library_dirs=None, headers=None, include_dirs=None, other_libraries=[]):
-        """Determine if 'library' is available to be linked against,
-        without actually checking that any particular symbols are provided
-        by it.  'headers' will be used in constructing the source file to
-        be compiled, but the only effect of this is to check if all the
-        header files listed are available.  Any libraries listed in
-        'other_libraries' will be included in the link, in case 'library'
-        has symbols that depend on other libraries.
-        """
         self._check_compiler()
         return self.try_link('int main (void) { }', headers, include_dirs, [library] + other_libraries, library_dirs)
 
     def check_header(self, header, include_dirs=None, library_dirs=None, lang='c'):
-        """Determine if the system header file named by 'header_file'
-        exists and can be found by the preprocessor; return true if so,
-        false otherwise.
-        """
         return self.try_cpp(body='/* No body */', headers=[header], include_dirs=include_dirs)
 
 
 def dump_file(filename, head=None):
-    """Dumps a file content into log.info.
-    
-    If head is not None, will be dumped before the file content.
-    """
     if head is None:
         log.info('%s' % filename)
     else:

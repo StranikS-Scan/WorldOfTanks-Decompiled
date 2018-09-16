@@ -1,16 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/gettext.py
-"""Internationalization and localization support.
-
-This module provides internationalization (I18N) and localization (L10N)
-support for your Python programs by providing an interface to the GNU gettext
-message catalog library.
-
-I18N refers to the operation by which a program is made aware of multiple
-languages.  L10N refers to the adaptation of your program, once
-internationalized, to the local language and cultural habits.
-
-"""
 import locale, copy, os, re, struct, sys
 from errno import ENOENT
 __all__ = ['NullTranslations',
@@ -28,13 +17,6 @@ __all__ = ['NullTranslations',
 _default_localedir = os.path.join(sys.prefix, 'share', 'locale')
 
 def test(condition, true, false):
-    """
-    Implements the C expression:
-    
-      condition ? true : false
-    
-    Required to correctly interpret plural forms.
-    """
     if condition:
         return true
     else:
@@ -42,9 +24,6 @@ def test(condition, true, false):
 
 
 def c2py(plural):
-    """Gets a C expression as used in PO files for plural forms and returns a
-    Python lambda function that implements an equivalent expression.
-    """
     try:
         from cStringIO import StringIO
     except ImportError:
@@ -213,7 +192,6 @@ class GNUTranslations(NullTranslations):
     BE_MAGIC = 3725722773L
 
     def _parse(self, fp):
-        """Override this method to support alternative .mo formats."""
         unpack = struct.unpack
         filename = getattr(fp, 'name', '')
         self._catalog = catalog = {}

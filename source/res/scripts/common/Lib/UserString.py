@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/UserString.py
-"""A user-defined wrapper around string objects
-
-Note: string objects have grown methods in Python 1.6
-This module requires Python 1.6 or later.
-"""
 import sys
 import collections
 __all__ = ['UserString', 'MutableString']
@@ -213,20 +208,6 @@ class UserString(collections.Sequence):
 
 
 class MutableString(UserString, collections.MutableSequence):
-    """mutable string objects
-    
-    Python strings are immutable objects.  This has the advantage, that
-    strings may be used as dictionary keys.  If this property isn't needed
-    and you insist on changing string values in place instead, you may cheat
-    and use MutableString.
-    
-    But the purpose of this class is an educational one: to prevent
-    people from inventing their own mutable string class derived
-    from UserString and than forget thereby to remove (override) the
-    __hash__ method inherited from UserString.  This would lead to
-    errors that would be very hard to track down.
-    
-    A faster and better solution is to rewrite your program using lists."""
 
     def __init__(self, string=''):
         from warnings import warnpy3k

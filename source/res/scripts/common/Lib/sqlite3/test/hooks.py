@@ -62,10 +62,6 @@ class CollationTests(unittest.TestCase):
         self.assertEqual(result, [('c',), ('b',), ('a',)], msg='the expected order was not returned')
 
     def CheckCollationRegisterTwice(self):
-        """
-        Register two different collation functions under the same name.
-        Verify that the last one is actually used.
-        """
         con = sqlite.connect(':memory:')
         con.create_collation('mycoll', cmp)
         con.create_collation('mycoll', lambda x, y: -cmp(x, y))
@@ -74,10 +70,6 @@ class CollationTests(unittest.TestCase):
             self.fail('wrong collation function is used')
 
     def CheckDeregisterCollation(self):
-        """
-        Register a collation, then deregister it. Make sure an error is raised if we try
-        to use it.
-        """
         con = sqlite.connect(':memory:')
         con.create_collation('mycoll', cmp)
         con.create_collation('mycoll', None)
@@ -94,9 +86,6 @@ class CollationTests(unittest.TestCase):
 class ProgressTests(unittest.TestCase):
 
     def CheckProgressHandlerUsed(self):
-        """
-        Test that the progress handler is invoked once it is set.
-        """
         con = sqlite.connect(':memory:')
         progress_calls = []
 
@@ -109,9 +98,6 @@ class ProgressTests(unittest.TestCase):
         self.assertTrue(progress_calls)
 
     def CheckOpcodeCount(self):
-        """
-        Test that the opcode argument is respected.
-        """
         con = sqlite.connect(':memory:')
         progress_calls = []
 
@@ -130,9 +116,6 @@ class ProgressTests(unittest.TestCase):
         self.assertGreaterEqual(first_count, second_count)
 
     def CheckCancelOperation(self):
-        """
-        Test that returning a non-zero value stops the operation in progress.
-        """
         con = sqlite.connect(':memory:')
         progress_calls = []
 
@@ -145,9 +128,6 @@ class ProgressTests(unittest.TestCase):
         self.assertRaises(sqlite.OperationalError, curs.execute, 'create table bar (a, b)')
 
     def CheckClearHandler(self):
-        """
-        Test that setting the progress handler to None clears the previously set handler.
-        """
         con = sqlite.connect(':memory:')
         action = []
 

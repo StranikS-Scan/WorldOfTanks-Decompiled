@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/PixMapWrapper.py
-"""PixMapWrapper - defines the PixMapWrapper class, which wraps an opaque
-QuickDraw PixMap data structure in a handy Python class.  Also provides
-methods to convert to/from pixel data (from, e.g., the img module) or a
-Python Imaging Library Image object.
-
-J. Strout <joe@strout.net>  February 1999"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the PixMapWrapper module is removed.', stacklevel=2)
 from Carbon import Qd
@@ -54,9 +48,6 @@ _pmElemOffset = {'baseAddr': 0,
  'pmReserved': 46}
 
 class PixMapWrapper:
-    """PixMapWrapper -- wraps the QD PixMap object in a Python class,
-    with methods to easily get/set various pixmap fields.  Note: Use the
-    PixMap() method when passing to QD calls."""
 
     def __init__(self):
         self.__dict__['data'] = ''
@@ -111,13 +102,11 @@ class PixMapWrapper:
             return self.__dict__[attr]
 
     def PixMap(self):
-        """Return a QuickDraw PixMap corresponding to this data."""
         if not self.__dict__['_pm']:
             self.__dict__['_pm'] = Qd.RawBitMap(self._header)
         return self.__dict__['_pm']
 
     def blit(self, x1=0, y1=0, x2=None, y2=None, port=None):
-        """Draw this pixmap into the given (default current) grafport."""
         src = self.bounds
         dest = [x1,
          y1,
@@ -133,8 +122,6 @@ class PixMapWrapper:
         return
 
     def fromstring(self, s, width, height, format=imgformat.macrgb):
-        """Stuff this pixmap with raw pixel data from a string.
-        Supply width, height, and one of the imgformat specifiers."""
         if format != imgformat.macrgb and format != imgformat.macrgb16:
             raise 'NotImplementedError', 'conversion to macrgb or macrgb16'
         self.data = s
@@ -153,20 +140,17 @@ class PixMapWrapper:
         self.rowBytes = width * self.pixelSize / 8
 
     def tostring(self, format=imgformat.macrgb):
-        """Return raw data as a string in the specified format."""
         if format == imgformat.macrgb and self.pixelSize == 32 or format == imgformat.macrgb16 and self.pixelsize == 16:
             return self.data
             raise 'NotImplementedError', 'data format conversion'
 
     def fromImage(self, im):
-        """Initialize this PixMap from a PIL Image object."""
         if im.mode != 'RGBA':
             im = im.convert('RGBA')
         data = chr(0) + im.tostring()
         self.fromstring(data, im.size[0], im.size[1])
 
     def toImage(self):
-        """Return the contents of this PixMap as a PIL Image object."""
         import Image
         data = self.tostring()[1:] + chr(0)
         bounds = self.bounds

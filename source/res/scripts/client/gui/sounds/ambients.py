@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/sounds/ambients.py
-import weakref
 from collections import defaultdict
 import MusicControllerWWISE as _MC
 from Event import Event
@@ -9,8 +8,8 @@ from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import g_appLoader
-from gui.app_loader.decorators import sf_lobby
-from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID
+from gui.app_loader import settings as app_settings
+from gui.app_loader import sf_lobby
 from gui.battle_control.arena_info.interfaces import IArenaPeriodController
 from gui.battle_control.battle_constants import WinStatus
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -22,10 +21,6 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 def _getViewSoundEnv(view):
-    """Check if view has '__sound_env__' attribute and return it.
-    If view is modal window then we need to apply hangar sound filter,
-    so return ModalWindowEnv class as '__sound_env__' attribute.
-    """
     if hasattr(view, '__sound_env__'):
         return getattr(view, '__sound_env__')
     else:
@@ -33,11 +28,6 @@ def _getViewSoundEnv(view):
 
 
 class SoundEvent(Notifiable):
-    """
-    Sound event object. Contains of one sound event (music or ambient)
-    and playing addition parameters. Can check sound ending and fire
-    corresponded event according to the given ctor's flag @checkFinish
-    """
 
     def __init__(self, soundEventID, params=None, checkFinish=False):
         super(SoundEvent, self).__init__()
@@ -55,15 +45,9 @@ class SoundEvent(Notifiable):
         return self._soundEventID
 
     def isEmpty(self):
-        """Is sound empty or not
-        :return: bool
-        """
         return self._soundEventID is None
 
     def clearParams(self):
-        """Playing parameters can be changed during playing time, reset
-        them to the defaults
-        """
         self._params.clear()
 
     def start(self):
@@ -88,9 +72,6 @@ class SoundEvent(Notifiable):
             SOUND_DEBUG('Skip stopping, sound is already stopped', self._soundEventID)
 
     def clear(self):
-        """Clears all internal references when client is closed.
-        Note: separated method (instead to use method stop) was added
-        to avoid lag when some musics are switched."""
         self._doStop(notify=False)
 
     def isPlaying(self):
@@ -100,17 +81,10 @@ class SoundEvent(Notifiable):
         return _MC.g_musicController.isCompleted(self._soundEventID)
 
     def setParam(self, paramName, value):
-        """Setting sound event's playing parameter value
-        :param paramName: str, parameter name
-        :param value: parameter value
-        """
         self._params[paramName] = value
         _MC.g_musicController.setEventParam(self._soundEventID, paramName, int(value))
 
     def _getNotificationDelta(self):
-        """Is sound still playing or not, this helper is needed to check sound's ending
-        :return: int, seconds to delay checking handler
-        """
         return PLAYING_SOUND_CHECK_PERIOD if self._isStarted else 0
 
     def _onCheckAmbientNotification(self):
@@ -132,9 +106,6 @@ class SoundEvent(Notifiable):
 
 
 class EmptySound(SoundEvent):
-    """Empty sound event stub, used to mark environment sounds as
-    'pass-through'
-    """
 
     def __init__(self):
         super(EmptySound, self).__init__(soundEventID=None)
@@ -157,8 +128,6 @@ class EmptySound(SoundEvent):
 
 
 class NoMusic(EmptySound):
-    """Empty music event stub, used to stop any previous played music
-    """
 
     def start(self):
         self.stop()
@@ -175,8 +144,6 @@ class NoMusic(EmptySound):
 
 
 class NoAmbient(EmptySound):
-    """Empty ambient event stub, used to stop any previous played ambient
-    """
 
     def start(self):
         self.stop()
@@ -193,10 +160,6 @@ class NoAmbient(EmptySound):
 
 
 class SoundEnv(object):
-    """Root sound environment class. Contains of one music event and
-    one ambient event, also has bunch of filters, that can be applied to
-    the sound system at @start method
-    """
 
     def __init__(self, soundsCtrl, envId, music=None, ambient=None, filters=None):
         self._soundsCtrl = soundsCtrl
@@ -216,18 +179,12 @@ class SoundEnv(object):
         self._music.clear()
 
     def getMusicEvent(self):
-        """:return: SoundEvent object instance
-        """
         return self._music
 
     def getAmbientEvent(self):
-        """:return: SoundEvent object instance
-        """
         return self._ambient
 
     def getFilters(self):
-        """:return: list, filters ids
-        """
         return self._filters
 
     def _onChanged(self):
@@ -283,9 +240,6 @@ class BattleLoadingSpaceEnv(SoundEnv):
 
 
 class BattleSpaceEnv(SoundEnv, IArenaPeriodController):
-    """Simple battle space sound environment, has logic to stop music event
-    only after BEFOREBATTLE period on arena
-    """
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, soundsCtrl):
@@ -345,16 +299,12 @@ class ShopEnv(SoundEnv):
 
 
 class ModalWindowEnv(SoundEnv):
-    """Enable Hangar sound filter for modal window
-    """
 
     def __init__(self, soundsCtrl):
         super(ModalWindowEnv, self).__init__(soundsCtrl, 'modal', filters=(SoundFilters.FILTERED_HANGAR,))
 
 
 class StrongholdEnv(SoundEnv):
-    """This environment plays Stronghold specific ambient.
-    """
 
     def __init__(self, soundsCtrl):
         super(StrongholdEnv, self).__init__(soundsCtrl, 'stronghold', ambient=SoundEvent(_MC.AMBIENT_EVENT_LOBBY_FORT), filters=(SoundFilters.FORT_FILTER,))
@@ -375,12 +325,6 @@ class StrongholdEnv(SoundEnv):
 
 
 class BattleResultsEnv(SoundEnv):
-    """ After arena was finished there is last winner status in the BattleContext
-    object instance can be found. This environment is linked with battle results
-    window and trying to play battle-results-music according to saved winner status.
-    Directly after music has finished music event should be cleared to EmptySound to
-    avoid repeating of playing.
-    """
     _sounds = {WinStatus.WIN: SoundEvent(_MC.MUSIC_EVENT_COMBAT_VICTORY, checkFinish=True),
      WinStatus.DRAW: SoundEvent(_MC.MUSIC_EVENT_COMBAT_DRAW, checkFinish=True),
      WinStatus.LOSE: SoundEvent(_MC.MUSIC_EVENT_COMBAT_LOSE, checkFinish=True)}
@@ -412,27 +356,10 @@ class BattleResultsEnv(SoundEnv):
 
 
 class GuiAmbientsCtrl(object):
-    """All ambients in client (lobby and battle) packed on several layers with
-    different playing priority:
-    - there is space environment with the lowest priority, only one space environment
-    can be played in every moment of time; spaces are corresponded to the GUI spaces GUI_GLOBAL_SPACE_ID
-    - there are some additional environments layers corresponded to the top-window, window and
-    lobby-sub-view GUI containers;
-    
-    Sound environment can be attached to the any of view classes using '__sound_env__' attribute.
-    This controller catches view loading events and checks whether view has custom
-    environment, builds it and starts playing in success case. After view has been disposed
-    controller stops environment and removes it from queue.
-    
-    There are only two sound event can be played at one moment of time. But active opened
-    views can be more, though there is algo (@_restartSounds method) that collects music and
-    ambient events walking through all active environments from @__customEnvs in priority order.
-    Any ambient can fire onChanged event and starts restart this algo.
-    """
-    _spaces = {_SPACE_ID.LOGIN: LoginSpaceEnv,
-     _SPACE_ID.LOBBY: LobbySpaceEnv,
-     _SPACE_ID.BATTLE_LOADING: BattleLoadingSpaceEnv,
-     _SPACE_ID.BATTLE: BattleSpaceEnv}
+    _spaces = {app_settings.GUI_GLOBAL_SPACE_ID.LOGIN: LoginSpaceEnv,
+     app_settings.GUI_GLOBAL_SPACE_ID.LOBBY: LobbySpaceEnv,
+     app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING: BattleLoadingSpaceEnv,
+     app_settings.GUI_GLOBAL_SPACE_ID.BATTLE: BattleSpaceEnv}
 
     def __init__(self, soundsCtrl):
         self._spaceEnv = EmptySpaceEnv(soundsCtrl)
@@ -462,7 +389,7 @@ class GuiAmbientsCtrl(object):
         if self.app and self.app.loaderManager:
             self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         if isDisconnected:
-            if g_appLoader.getSpaceID() == _SPACE_ID.LOGIN:
+            if g_appLoader.getSpaceID() == app_settings.GUI_GLOBAL_SPACE_ID.LOGIN:
                 SOUND_DEBUG('Restart login space sound environment after banks reloading')
                 self._restartSounds()
 
@@ -547,11 +474,6 @@ class GuiAmbientsCtrl(object):
             self._restartSounds()
 
     def __onGUISpaceLeft(self, spaceID):
-        """ Explicitly clear custom sound environments when leaving space.
-        
-        We don't have to wait for an actual view disposal since it might be
-        delayed for a significant amount of time.
-        """
         SOUND_DEBUG('Leaving GUI space', spaceID, spaceID in self._spaces)
         if self.app is not None and self.app.containerManager is not None and spaceID in self._spaces:
             customViews = []

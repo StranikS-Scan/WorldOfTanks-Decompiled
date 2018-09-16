@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/WebBrowser.py
 import weakref
 import urlparse
-from functools import reduce
+import functools
 import BigWorld
 import Keys
 import helpers
@@ -63,17 +63,6 @@ class WebBrowser(object):
         self.__allowMouseWheel = value
 
     def __init__(self, browserID, uiObj, texName, size, url='about:blank', isFocused=False, handlers=None):
-        """
-        :param browserID: id of the browser will be created
-        :param uiObj: must be an object inherited from gui.Flash, which SWF should contain
-                      necessary callbacks (browserDown, browserUp, browserUp)
-        :param texName: name of exported texture from SWF attached to uiObj
-        :param size: tuple(width, height) of mapped texture in pixels
-        :param url: optioal initial URL to open
-        :param isFocused: initial value for isFocused attribute
-        :param handlers: list of callable functions that will be called for
-                         each URL clicked on the browser page
-        """
         self.__browserID = browserID
         self.__cbID = None
         self.__baseUrl = url
@@ -189,13 +178,13 @@ class WebBrowser(object):
               None,
               None,
               None,
-              lambda me, e: injectKeyDown(me, e)),
+              injectKeyDown),
              (None,
               False,
               None,
               None,
               None,
-              lambda me, e: injectKeyUp(me, e)))
+              injectKeyUp))
             self.__disableKeyHandlers = []
             return True
 
@@ -333,7 +322,7 @@ class WebBrowser(object):
         if self.useSpecialKeys:
             browserKeyHandlers = self.__specialKeyHandlers + browserKeyHandlers
         for values in browserKeyHandlers:
-            if reduce(lambda a, b: a and matches(b), izip(values, params), True):
+            if functools.reduce(lambda a, b: a and matches(b), izip(values, params), True):
                 return values[-1]
 
         return None
@@ -446,7 +435,7 @@ class WebBrowser(object):
                     LOG_DEBUG('Navigation filter triggered navigation stop:', handler)
                 if result.closeBrowser:
                     LOG_DEBUG('Navigation filter triggered browser close:', handler)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
         self.__isCloseTriggered = closeBrowser
@@ -461,11 +450,6 @@ class WebBrowser(object):
         self.__allowAutoLoadingScreenChange = enabled
 
     def changeTitle(self, title):
-        """
-        Changes title. Is used by BrowserController
-        @param title:
-        @return:
-        """
         self.onTitleChange(title)
 
     def __onLoadStart(self, url):
@@ -534,7 +518,7 @@ class WebBrowser(object):
             self.__browser.executeJavascript(script, frame)
 
 
-class EventListener():
+class EventListener(object):
     cursorType = property(lambda self: self.__cursorType)
 
     def __init__(self, browser):
@@ -604,13 +588,6 @@ class EventListener():
         pass
 
     def onFilterNavigation(self, url):
-        """
-        This event occurs before frame navigations. You can use this to
-        block or log navigations for each frame of a WebView.
-        
-        :param url: The URL that the frame wants to navigate to.
-        :return: True to block a navigation. Return False to let it continue.
-        """
         return self.__browserProxy.filterNavigation(url)
 
     def onWhitelistMiss(self, isMainFrame, failedURL):
@@ -623,7 +600,7 @@ class EventListener():
         LOG_BROWSER('onShowCreatedWebView', url, isPopup)
 
 
-class WebBrowserManager():
+class WebBrowserManager(object):
     first = property(lambda self: next(iter(self.__browsers)))
     len = property(lambda self: len(self.__browsers))
 
@@ -646,7 +623,7 @@ class WebBrowserManager():
 
 g_mgr = WebBrowserManager()
 
-class FLASH_STRINGS():
+class FLASH_STRINGS(object):
     BROWSER_DOWN = 'common.browserDown'
     BROWSER_UP = 'common.browserUp'
     BROWSER_MOVE = 'common.browserMove'
@@ -658,7 +635,7 @@ class FLASH_STRINGS():
     BROWSER_LOAD_END = 'common.browserLoadEnd'
 
 
-class LL_KEYS():
+class LL_KEYS(object):
     VK_CANCEL = 3
     VK_HELP = 6
     VK_BACK_SPACE = 8
@@ -686,7 +663,7 @@ class LL_KEYS():
     VK_DELETE = 46
 
 
-class CURSOR_TYPES():
+class CURSOR_TYPES(object):
     Pointer = 0
     Cross = 1
     Hand = 2

@@ -7,9 +7,6 @@ from gui.shared.utils.requesters import RequestCtx
 
 @ReprInjector.withParent(('getCtrlTypeName', 'ctrlType'), ('getEntityType', 'entityType'), ('getWaitingID', 'waitingID'), ('getFlagsToStrings', 'flags'), ('isForced', 'forced'))
 class PrbCtrlRequestCtx(RequestCtx):
-    """
-    Base prebattle request context.
-    """
     __slots__ = ('__ctrlType', '__entityType', '__entityID', '__isForced', '__flags')
 
     def __init__(self, **kwargs):
@@ -20,7 +17,6 @@ class PrbCtrlRequestCtx(RequestCtx):
         super(PrbCtrlRequestCtx, self).__init__(waitingID)
         if 'ctrlType' in kwargs:
             self.__ctrlType = kwargs['ctrlType']
-            assert self.__ctrlType in CTRL_ENTITY_TYPE_NAMES
         else:
             self.__ctrlType = CTRL_ENTITY_TYPE.UNKNOWN
         if 'entityType' in kwargs:
@@ -41,87 +37,46 @@ class PrbCtrlRequestCtx(RequestCtx):
             self.__flags = FUNCTIONAL_FLAG.UNDEFINED
 
     def getCtrlType(self):
-        """
-        Getter for control type: one from CTRL_ENTITY_TYPE
-        """
         return self.__ctrlType
 
     def getCtrlTypeName(self):
         return CTRL_ENTITY_TYPE_NAMES[self.__ctrlType] if self.__ctrlType in CTRL_ENTITY_TYPE_NAMES else 'CTRL_ENTITY_TYPE_{}'.format(self.__ctrlType)
 
     def getEntityType(self):
-        """
-        Getter for entity type: QUEUE_TYPE, PREBATTLE_TYPE, etc.
-        """
         return self.__entityType
 
     def getEnityID(self):
-        """
-        Getter for entity identifier: unit ID, prebattle ID
-        """
         return self.__entityID
 
     def setForced(self, flag):
-        """
-        Set this request to be forced.
-        Args:
-            flag: new flag value
-        """
         self.__isForced = flag
 
     def isForced(self):
         return self.__isForced
 
     def getFlags(self):
-        """
-        Getter for request functional flags: any combination of FUNCTIONA_FLAG
-        """
         return self.__flags
 
     def addFlags(self, flags):
-        """
-        Adds new flags to that already set.
-        Args:
-            flags: flags mask to add
-        """
         self.__flags |= flags
 
     def hasFlags(self, flags):
-        """
-        Checks flag mask total inclusion in current funcitonal flags.
-        Args:
-            flags: flags mask to check
-        """
         return self.__flags & flags == flags
 
     def removeFlags(self, flags):
-        """
-        Removes flags from context.
-        Args:
-            flags: flags to remove
-        """
         result = self.__flags & flags
         if result:
             self.__flags ^= result
 
     def clearFlags(self):
-        """
-        Sets functional flags to default.
-        """
         self.__flags = FUNCTIONAL_FLAG.UNDEFINED
 
     def getFlagsToStrings(self):
-        """
-        Converts flags into string representation.
-        """
         return ', '.join(convertFlagsToNames(self.__flags))
 
 
 @ReprInjector.simple('actionName', 'mapID', 'accountsToInvite')
 class PrbAction(object):
-    """
-    Class for player'r prebattle action data.
-    """
     __slots__ = ('actionName', 'mapID', 'accountsToInvite')
 
     def __init__(self, actionName, mapID=0, accountsToInvite=None):
@@ -133,9 +88,6 @@ class PrbAction(object):
 
 @ReprInjector.simple('isExit')
 class LeavePrbAction(object):
-    """
-    Class for player'r prebattle leave action data.
-    """
     __slots__ = ('isExit',)
 
     def __init__(self, isExit=True):
@@ -144,9 +96,6 @@ class LeavePrbAction(object):
 
 @ReprInjector.withParent(('getDatabaseIDs', 'databaseIDs'), ('getComment', 'comment'))
 class SendInvitesCtx(PrbCtrlRequestCtx):
-    """
-    Context for send invitations request.
-    """
 
     def __init__(self, databaseIDs, comment, waitingID=''):
         super(SendInvitesCtx, self).__init__(waitingID=waitingID)
@@ -174,9 +123,6 @@ class CreatePrbEntityCtx(PrbCtrlRequestCtx):
         self.__initCtx = initCtx
 
     def getInitCtx(self):
-        """
-        Reference to new prebattle init context.
-        """
         return self.__initCtx
 
     def clear(self):

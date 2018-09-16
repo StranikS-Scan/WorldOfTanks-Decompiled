@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/abstract.py
-import BigWorld
 from collections import namedtuple
+import BigWorld
 from AccountCommands import isCodeValid, RES_FAILURE, RES_SUCCESS
 from helpers import isPlayerAccount
 from ids_generators import Int32IDGenerator
@@ -124,15 +124,6 @@ class RequestCtx(object):
 
     def getCooldown(self):
         pass
-
-    def getWaiterID(self):
-        """
-        is used to handle separate waiters for requests of the same type.
-        If just getRequestType is used (as it was before) requests of the same type pop callback id from waiters list
-        which causes lost of possibility to stop such waiters.
-        It leads to appearance of "time out" messages in system channel for such lost requests
-        """
-        return self.getRequestType()
 
 
 class DataRequestCtx(RequestCtx):

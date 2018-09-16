@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/AvatarInputHandler/VideoCamera.py
 import math
 import time
-import BattleReplay
 import BigWorld
 import GUI
 import Keys
@@ -19,7 +18,7 @@ from helpers import isPlayerAvatar
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from skeletons.gui.battle_session import IBattleSessionProvider
 
-class KeySensor:
+class KeySensor(object):
 
     def __init__(self, keyMappings, sensitivity, sensitivityIncDecKeys=None, sensitivityAcceleration=None):
         self.keyMappings = keyMappings
@@ -47,7 +46,7 @@ class KeySensor:
         self.__currentKeys.clear()
 
     def handleKeyEvent(self, key, isDown):
-        for senseKey, acceleration in self.__sensitivityKeys.iteritems():
+        for senseKey, _ in self.__sensitivityKeys.iteritems():
             if senseKey == key:
                 if isDown:
                     self.__currentKeys.add(key)
@@ -55,7 +54,7 @@ class KeySensor:
                     self.__currentKeys.discard(key)
                 return True
 
-        for mappingKey, shift in self.keyMappings.iteritems():
+        for mappingKey, _ in self.keyMappings.iteritems():
             if mappingKey == key:
                 if isDown:
                     self.__currentKeys.add(key)
@@ -97,7 +96,7 @@ class _Inertia(object):
         return velocity + acc * delta
 
 
-class _AlignerToLand:
+class _AlignerToLand(object):
     MIN_HEIGHT = 0.5
     enabled = property(lambda self: self.__desiredHeightShift is not None)
     ignoreTerrain = property(lambda self: self.__ignoreTerrain)
@@ -135,7 +134,7 @@ class _AlignerToLand:
             downPoint = Math.Vector3(position)
             downPoint.y = -1000
             collideRes = BigWorld.wg_collideSegment(spaceID, upPoint, downPoint, 16, 8)
-            return None if collideRes is None else collideRes[0]
+            return None if collideRes is None else collideRes.closestPoint
 
     def getAlignedPosition(self, position):
         if self.__desiredHeightShift is None:
@@ -230,14 +229,14 @@ class _VehiclePicker(object):
     def pick(self):
         x, y = GUI.mcursor().position
         from AvatarInputHandler import cameras
-        dir, start = cameras.getWorldRayAndPoint(x, y)
-        end = start + dir.scale(100000.0)
+        direction, start = cameras.getWorldRayAndPoint(x, y)
+        end = start + direction.scale(100000.0)
         posColldata = collideDynamicAndStatic(start, end, (), 0)
         if posColldata is None:
             return (None, None)
         else:
             pos, collData = posColldata
-            return (None, None) if collData is None or not collData.isVehicle() else (collData[0], pos)
+            return (None, None) if collData is None or not collData.isVehicle() else (collData.entity, pos)
 
 
 class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
@@ -318,7 +317,6 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
     def disable(self):
         self.stopCallback(self.__update)
         BigWorld.projection().fov = self.__defaultFov
-        BigWorld.camera(None)
         self.__alignerToLand.disable()
         if isPlayerAvatar():
             BigWorld.player().positionControl.followCamera(False)

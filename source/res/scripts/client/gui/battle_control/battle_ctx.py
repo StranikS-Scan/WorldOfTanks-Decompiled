@@ -41,55 +41,20 @@ class BattleContext(IBattleContext):
         self.__playerFormatter = formatter
 
     def getVehicleInfo(self, vID=None, accID=None):
-        """
-        Gets vehicle info.
-        
-        :param vID: long containing vehicle's entity ID.
-        :param accID: long containing account's database ID
-        :return: an instance of VehicleArenaInfoVO.
-        """
         if vID is None:
             vID = self.getVehIDByAccDBID(accID)
         return self.__arenaDP.getVehicleInfo(vID)
 
     def getPlayerName(self, vID=None, accID=None):
-        """
-        Gets player name by vehicle id or account id. If both are None, returns name of
-        the current player.
-        
-        :param vID: long containing vehicle's entity ID.
-        :param accID: long containing account's database ID
-        :return: string.
-        """
         return self.getVehicleInfo(vID, accID).player.name
 
     def resetPlayerFullNameFormatter(self):
         self.__playerFormatter = player_format.PlayerFullNameFormatter()
 
     def createPlayerFullNameFormatter(self, showVehShortName=True, showClan=True, showRegion=True):
-        """
-        Creates configured player's name formatter.
-        :param showVehShortName: is vehicle's short name shown.
-        :param showClan: is player's clan shown.
-        :param showRegion: is player's region code shown.
-        :return: instance of PlayerFullNameFormatter.
-        """
         return self.__playerFormatter.create(showVehShortName and self.__isShowVehShortName, showClan, showRegion)
 
     def getPlayerFullNameParts(self, vID=None, accID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
-        """
-        Gets player display name and all parts of this name. The full name of the player consists of:
-            <player name>[<clanAbbrev>]* (<vehicle short name>)*
-                clanAbbrev if vData['clanAbbrev'] isn't empty
-                vehicle short name if given setting is enabled.
-        :param vID: long containing vehicle's entity ID.
-        :param accID: long containing account's database ID.
-        :param pName: string containing player's name.
-        :param showVehShortName: is vehicle's short name shown.
-        :param showClan: is player's region code shown.
-        :param showRegion: is player's region code shown.
-        :return: namedtuple with formatted full name and all parts, composing it.
-        """
         if vID is None:
             vID = self.__arenaDP.getVehIDByAccDBID(accID)
         vInfo = self.__arenaDP.getVehicleInfo(vID)
@@ -99,19 +64,6 @@ class BattleContext(IBattleContext):
         return self.__playerFormatter.format(vInfo, playerName=pName)
 
     def getPlayerFullName(self, vID=None, accID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
-        """
-        Gets player display name. The full name of the player consists of:
-            <player name>[<clanAbbrev>]* (<vehicle short name>)*
-                clanAbbrev if vData['clanAbbrev'] isn't empty
-                vehicle short name if given setting is enabled.
-        :param vID: long containing vehicle's entity ID.
-        :param accID: long containing account's database ID
-        :param pName: string containing player's name.
-        :param showVehShortName: is vehicle's short name shown.
-        :param showClan: is player's region code shown.
-        :param showRegion: is player's region code shown.
-        :return: string containing player's full name.
-        """
         return self.getPlayerFullNameParts(vID, accID, pName, showVehShortName, showClan, showRegion).playerFullName
 
     def isSquadMan(self, vID=None, accID=None, prebattleID=None):

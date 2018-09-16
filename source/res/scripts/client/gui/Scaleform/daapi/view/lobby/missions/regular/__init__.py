@@ -6,7 +6,7 @@ from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -14,7 +14,7 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from gui.Scaleform.daapi.view.lobby.hangar.filter_popover import VehiclesFilterPopover
+    from gui.Scaleform.daapi.view.common.filter_popover import VehiclesFilterPopover
     from gui.Scaleform.daapi.view.lobby.missions.regular.mission_details_container_view import MissionDetailsContainerView
     from gui.Scaleform.daapi.view.lobby.missions.regular.missions_filter_popover import MissionsFilterPopoverView
     from gui.Scaleform.daapi.view.lobby.missions.regular.missions_page import MissionsPage
@@ -65,4 +65,4 @@ class MissionsPackageBusinessHandler(PackageBusinessHandler):
          (EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_VEHICLES_VIEW, self.loadViewByCtxEvent),
          (EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_AWARDS_VIEW, self.loadViewByCtxEvent),
          (EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_BATTLE_VIEW, self.loadViewByCtxEvent))
-        super(MissionsPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+        super(MissionsPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/netrc.py
-"""An object-oriented interface to .netrc files."""
 import os, stat, shlex
 if os.name == 'posix':
     import pwd
 __all__ = ['netrc', 'NetrcParseError']
 
 class NetrcParseError(Exception):
-    """Exception raised on syntax errors in the .netrc file."""
 
     def __init__(self, msg, filename=None, lineno=None):
         self.filename = filename
@@ -108,7 +106,6 @@ class netrc:
         return
 
     def authenticators(self, host):
-        """Return a (user, account, password) tuple for given host."""
         if host in self.hosts:
             return self.hosts[host]
         elif 'default' in self.hosts:
@@ -118,7 +115,6 @@ class netrc:
             return None
 
     def __repr__(self):
-        """Dump the class data in the format of a .netrc file."""
         rep = ''
         for host in self.hosts.keys():
             attrs = self.hosts[host]

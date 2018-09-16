@@ -155,10 +155,6 @@ _g_skillConfigReaders = {'repair': _readRole,
  'radioman_retransmitter': _readRadiomanRetransmitterSkill}
 
 def readSkillsConfig(xmlPath):
-    """Reads shared configuration containing information about tankmen skills and roles.
-    :param xmlPath: string containing relative path to xml file.
-    :return: instance of SkillsConfig.
-    """
     xmlCtx = (None, xmlPath)
     section = ResMgr.openSection(xmlPath)
     if section is None:

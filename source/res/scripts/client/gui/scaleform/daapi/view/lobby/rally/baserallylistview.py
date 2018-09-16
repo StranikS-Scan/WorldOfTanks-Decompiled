@@ -35,7 +35,7 @@ class BaseRallyListView(BaseRallyListViewMeta):
         return
 
     def getRallyDetails(self, index):
-        cfdUnitID, vo = self._searchDP.getRally(index)
+        _, vo = self._searchDP.getRally(index)
         return vo
 
     def _updateVehiclesLabel(self, minVal, maxVal):

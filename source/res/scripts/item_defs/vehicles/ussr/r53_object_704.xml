@@ -254,7 +254,7 @@
         <right>	vehicles/russian/R53_Object_704/track/right.track	</right>
         <segmentLength>	0.149	</segmentLength>
         <segmentOffset>	0.086	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -512,7 +512,7 @@
         <right>	vehicles/russian/R53_Object_704/track/right.track	</right>
         <segmentLength>	0.149	</segmentLength>
         <segmentOffset>	0.086	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -645,7 +645,7 @@
       <userString>	#ussr_vehicles:Turret_1_Object_704	</userString>
       <tags>	cannotDetach	</tags>
       <level>	9	</level>
-      <price>	100.0	</price>
+      <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	0	</armor_1>
@@ -841,12 +841,12 @@
   </fuelTanks>
   <radios>
     <_10RK>	shared	  <unlocks>
-        <radio>	_12RT	  <cost>	5600.0	</cost>
+        <radio>	_12RT	  <cost>	5600	</cost>
         </radio>
       </unlocks>
     </_10RK>
     <_12RT>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700.0	</cost>
+        <radio>	R113	  <cost>	8700	</cost>
         </radio>
       </unlocks>
     </_12RT>

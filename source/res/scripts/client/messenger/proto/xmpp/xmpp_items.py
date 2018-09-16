@@ -8,9 +8,6 @@ from messenger.proto.xmpp.resources import ResourceDictionary
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 
 class ContactItem(object):
-    """
-    Base contact class. Represents a contact that is not friend, not blocked, etc.
-    """
     __slots__ = ('_jid', '_sub', '_tags', '_trusted', '_resources')
 
     def __init__(self, jid, trusted=False, tags=None, resources=None):
@@ -24,7 +21,7 @@ class ContactItem(object):
         return '{0}({1})'.format(self.__class__.__name__, self._jid)
 
     @classmethod
-    def getItemType(self):
+    def getItemType(cls):
         return XMPP_ITEM_TYPE.EMPTY_ITEM
 
     def clear(self):
@@ -116,9 +113,6 @@ _SUB_TO_TAGS = {(_SUB.OFF, _SUB.OFF): {_TAG.SUB_NONE},
  (_SUB.PENDING, _SUB.PENDING): {_TAG.SUB_PENDING_IN, _TAG.SUB_PENDING_OUT}}
 
 class RosterItem(ContactItem):
-    """
-    Represents a contact that is friend.
-    """
     __slots__ = ('_groups', '_sub')
 
     def __init__(self, jid, groups=None, sub=None, resources=None, trusted=True):
@@ -143,19 +137,6 @@ class RosterItem(ContactItem):
             self._updateSubTags()
 
     def replace(self, newItem):
-        """
-        Returns a new item that can replace the existing one based on the current state and the
-        desired (given) new state.
-        Note that the current item can be replaced with:
-            - RosterBlockItem - when the friendship is added.
-            - RosterTmpBlockItem - when the temporary block is added.
-            - ContactItem - when the friendship is canceled.
-        
-        :param newItem: an instance of TmpBlockItem class if temporary block should be added or
-                        an instance of BlockItem class if permanent block should be added or
-                        an instance of ContactItem or None if friendship should be canceled.
-        :return: RosterBlockItem, RosterTmpBlockItem or ContactItem.
-        """
         if newItem:
             if newItem.getItemType() == XMPP_ITEM_TYPE.BLOCK_ITEM:
                 return RosterBlockItem(self._jid, RosterItem(self._jid, sub=self._sub, groups=self._groups))
@@ -196,9 +177,6 @@ class RosterItem(ContactItem):
 
 
 class BlockItem(ContactItem):
-    """
-    Represents a contact that is blocked permanently (added to the permanent XMPP ignore list).
-    """
 
     def __init__(self, jid, trusted=True):
         super(BlockItem, self).__init__(jid, trusted, tags={_TAG.IGNORED})
@@ -222,9 +200,6 @@ class BlockItem(ContactItem):
 
 
 class TmpBlockItem(ContactItem):
-    """
-    Represents a contact that is temporary blocked (added to the temporary ignore list.)
-    """
 
     def __init__(self, jid, trusted=True):
         super(TmpBlockItem, self).__init__(jid, trusted, tags={_TAG.IGNORED_TMP})
@@ -245,9 +220,6 @@ class TmpBlockItem(ContactItem):
 
 
 class RosterBlockItem(BlockItem):
-    """
-    Represents a roster contact (friend) that is blocked permanently.
-    """
     __slots__ = ('_rosterItem',)
 
     def __init__(self, jid, rosterItem=None, trusted=True):
@@ -277,9 +249,6 @@ class RosterBlockItem(BlockItem):
 
 
 class RosterTmpBlockItem(TmpBlockItem):
-    """
-    Represents a roster contact (friend) that is temporary blocked.
-    """
     __slots__ = ('_rosterItem',)
 
     def __init__(self, jid, rosterItem=None, trusted=True):
@@ -306,17 +275,6 @@ class RosterTmpBlockItem(TmpBlockItem):
         self._rosterItem.update(**kwargs)
 
     def replace(self, newItem):
-        """
-        Returns a new item that can replace the existing one based on the current state and the
-        desired (given) new state.
-        Note that the current item can be replaced with:
-            - TmpBlockItem - when the friendship is canceled.
-            - RosterItem - when the temporary block is removed.
-        
-        :param newItem: None if temporary block should be removed or an instance of ContactItem
-                        if friendship should be canceled.
-        :return: TmpBlockItem or RosterItem item.
-        """
         if newItem is None:
             newItem = self._rosterItem
         elif newItem.getItemType() == XMPP_ITEM_TYPE.EMPTY_ITEM:
@@ -327,9 +285,6 @@ class RosterTmpBlockItem(TmpBlockItem):
 
 
 class SubPendingItem(ContactItem):
-    """
-    Represents a contact with an active friendship subscription(not approved friendship request).
-    """
     __slots__ = ('_receivedAt',)
 
     def __init__(self, jid, trusted=True, tags=None, receivedAt=None):
@@ -351,26 +306,10 @@ class SubPendingItem(ContactItem):
         return self._receivedAt
 
     def replace(self, newItem):
-        """
-        Returns a new item that can replace the existing one based on the current state and the
-        desired (given) new state.
-        Note that the current item can be replaced with:
-            - ContactItem - when the pending subscription is canceled.
-            - SubPendingTmpBlockItem - when the temporary block is added.
-        
-        :param newItem: an instance of TmpBlockItem class if temporary block should be added or
-                        an instance of ContactItem or None if pending subscription should be
-                        canceled.
-        :return: ContactItem or SubPendingTmpBlockItem item.
-        """
         return SubPendingTmpBlockItem(self._jid, SubPendingItem(self._jid, trusted=self.isTrusted(), tags=self.getTags(), receivedAt=self.receivedAt())) if newItem and newItem.getItemType() == XMPP_ITEM_TYPE.TMP_BLOCK_ITEM else super(SubPendingItem, self).replace(newItem)
 
 
 class SubPendingTmpBlockItem(TmpBlockItem):
-    """
-    Represents a contact with an active friendship subscription(not approved friendship request)
-    that is temporary blocked (added to the tmp ignore list).
-    """
     __slots__ = ('_pendingItem',)
 
     def __init__(self, jid, pendingItem=None, trusted=True):
@@ -395,17 +334,6 @@ class SubPendingTmpBlockItem(TmpBlockItem):
         self._pendingItem.update(**kwargs)
 
     def replace(self, newItem):
-        """
-        Returns a new item that can replace the existing one based on the current state and the
-        desired (given) new state.
-        Note that the current item can be replaced with:
-            - TmpBlockItem - when the pending subscription is canceled.
-            - SubPendingItem - when the temporary block is removed.
-        
-        :param newItem: None if temporary block should be removed or an instance of ContactItem
-                        if pending subscription should be canceled.
-        :return: TmpBlockItem or SubPendingItem item.
-        """
         if newItem is None:
             newItem = self._pendingItem
         elif newItem.getItemType() == XMPP_ITEM_TYPE.EMPTY_ITEM:

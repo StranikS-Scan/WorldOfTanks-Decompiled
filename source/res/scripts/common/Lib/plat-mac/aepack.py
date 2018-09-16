@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/aepack.py
-"""Tools for use in AppleEvent clients and servers:
-conversion between AE types and python types
-
-pack(x) converts a Python object to an AEDesc object
-unpack(desc) does the reverse
-coerce(x, wanted_sample) coerces a python object to another python object
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the aepack module is removed.', stacklevel=2)
 import struct
@@ -50,7 +43,6 @@ def packkey(ae, key, value):
 
 
 def pack(x, forcetype=None):
-    """Pack a python object into an AE descriptor"""
     if forcetype:
         if type(x) is StringType:
             return AE.AECreateDesc(forcetype, x)
@@ -100,7 +92,6 @@ def pack(x, forcetype=None):
 
 
 def unpack(desc, formodulename=''):
-    """Unpack an AE descriptor to a python object"""
     t = desc.type
     if t in unpacker_coercions:
         desc = desc.AECoerceDesc(unpacker_coercions[t])
@@ -202,7 +193,6 @@ def unpack(desc, formodulename=''):
 
 
 def coerce(data, egdata):
-    """Coerce a python object to another type using the AE coercers"""
     pdata = pack(data)
     pegdata = pack(egdata)
     pdata = pdata.AECoerceDesc(pegdata.type)
@@ -327,7 +317,6 @@ def mkobjectfrommodule(dict, modulename):
     classtype = codenamemapper.get(want, None)
     newobj = mkobject(dict)
     if classtype:
-        assert issubclass(classtype, ObjectSpecifier)
         newobj.__class__ = classtype
     return newobj
 

@@ -1,21 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/minidom.py
-"""Simple implementation of the Level 1 DOM.
-
-Namespaces and other minor Level 2 features are also supported.
-
-parse("foo.xml")
-
-parseString("<foo><bar/></foo>")
-
-Todo:
-=====
- * convenience methods for getting elements and text.
- * more testing
- * bring some of the writer and linearizer code into conformance with this
-        interface
- * SAX 2 namespaces
-"""
 import xml.dom
 from xml.dom import EMPTY_NAMESPACE, EMPTY_PREFIX, XMLNS_NAMESPACE, domreg
 from xml.dom.minicompat import *
@@ -274,7 +258,6 @@ def _in_document(node):
 
 
 def _write_data(writer, data):
-    """Writes datachars to writer."""
     if data:
         data = data.replace('&', '&amp;').replace('<', '&lt;').replace('"', '&quot;').replace('>', '&gt;')
         writer.write(data)
@@ -429,13 +412,6 @@ defproperty(Attr, 'localName', doc='Namespace-local name of this attribute.')
 defproperty(Attr, 'schemaType', doc='Schema type for this attribute.')
 
 class NamedNodeMap(object):
-    """The attribute list is a transient interface to the underlying
-    dictionaries.  Mutations here will change the underlying element's
-    dictionary.
-    
-    Ordering is imposed artificially and does not reflect the order of
-    attributes as found in an input document.
-    """
     __slots__ = ('_attrs', '_attrsNS', '_ownerElement')
 
     def __init__(self, attrs, attrsNS, ownerElement):
@@ -830,9 +806,6 @@ def _set_attribute_node(element, attr):
 
 
 class Childless():
-    """Mixin that makes childless-ness easy to implement and avoids
-    the complexity of the Node methods that deal with children.
-    """
     attributes = None
     childNodes = EmptyNodeList()
     firstChild = None
@@ -1167,7 +1140,6 @@ class ReadOnlySequentialNamedNodeMap(object):
 defproperty(ReadOnlySequentialNamedNodeMap, 'length', doc='Number of entries in the NamedNodeMap.')
 
 class Identified():
-    """Mix-in class that supports the publicId and systemId attributes."""
 
     def _identified_mixin_init(self, publicId, systemId):
         self.publicId = publicId
@@ -1346,13 +1318,6 @@ class DOMImplementation(DOMImplementationLS):
 
 
 class ElementInfo(object):
-    """Object that represents content-model information for an element.
-    
-    This implementation is not expected to be used in practice; DOM
-    builders should provide implementations which do the right thing
-    using information available to it.
-    
-    """
     __slots__ = ('tagName',)
 
     def __init__(self, name):
@@ -1368,16 +1333,12 @@ class ElementInfo(object):
         return False
 
     def isEmpty(self):
-        """Returns true iff this element is declared to have an EMPTY
-        content model."""
         return False
 
     def isId(self, aname):
-        """Returns true iff the named attribute is a DTD-style ID."""
         return False
 
     def isIdNS(self, namespaceURI, localName):
-        """Returns true iff the identified attribute is a DTD-style ID."""
         return False
 
     def __getstate__(self):
@@ -1500,12 +1461,10 @@ class Document(Node, DocumentLS):
             clone.version = self.version
             for n in self.childNodes:
                 childclone = _clone_node(n, deep, clone)
-                assert childclone.ownerDocument.isSameNode(clone)
                 clone.childNodes.append(childclone)
                 if childclone.nodeType == Node.DOCUMENT_NODE:
-                    assert clone.documentElement is None
+                    pass
                 elif childclone.nodeType == Node.DOCUMENT_TYPE_NODE:
-                    assert clone.doctype is None
                     clone.doctype = childclone
                 childclone.parentNode = clone
 
@@ -1698,10 +1657,6 @@ class Document(Node, DocumentLS):
 defproperty(Document, 'documentElement', doc='Top-level element of this document.')
 
 def _clone_node(node, deep, newOwnerDocument):
-    """
-    Clone a node and give it the new owner document.
-    Called by Node.cloneNode and Document.importNode
-    """
     if node.ownerDocument.isSameNode(newOwnerDocument):
         operation = xml.dom.UserDataHandler.NODE_CLONED
     else:
@@ -1738,7 +1693,6 @@ def _clone_node(node, deep, newOwnerDocument):
         clone.specified = True
         clone.value = node.value
     elif node.nodeType == Node.DOCUMENT_TYPE_NODE:
-        assert node.ownerDocument is not newOwnerDocument
         operation = xml.dom.UserDataHandler.NODE_IMPORTED
         clone = newOwnerDocument.implementation.createDocumentType(node.name, node.publicId, node.systemId)
         clone.ownerDocument = newOwnerDocument
@@ -1792,7 +1746,6 @@ def _do_pulldom_parse(func, args, kwargs):
 
 
 def parse(file, parser=None, bufsize=None):
-    """Parse a file into a DOM by filename or file object."""
     if parser is None and not bufsize:
         from xml.dom import expatbuilder
         return expatbuilder.parse(file)
@@ -1804,7 +1757,6 @@ def parse(file, parser=None, bufsize=None):
 
 
 def parseString(string, parser=None):
-    """Parse a file into a DOM from a string."""
     if parser is None:
         from xml.dom import expatbuilder
         return expatbuilder.parseString(string)

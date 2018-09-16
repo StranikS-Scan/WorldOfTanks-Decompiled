@@ -5,8 +5,6 @@ import types
 import chat_shared
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
-from gui.Scaleform.settings import getBadgeIconPathByDimension
-from gui.shared.formatters.icons import makeImageTag
 from gui.shared.utils import getPlayerDatabaseID
 from messenger.ext import passCensor
 from messenger.proto.entities import ChannelEntity, MemberEntity, ChatEntity
@@ -14,7 +12,6 @@ from messenger.proto.entities import UserEntity
 from messenger.m_constants import PROTO_TYPE, LAZY_CHANNEL, PRIMARY_CHANNEL_ORDER
 from messenger.proto.bw.wrappers import ChannelDataWrapper
 PREBATTLE_TYPE_CHAT_FLAG = {PREBATTLE_TYPE.SQUAD: chat_shared.CHAT_CHANNEL_SQUAD,
- PREBATTLE_TYPE.FALLOUT: chat_shared.CHAT_CHANNEL_SQUAD,
  PREBATTLE_TYPE.TRAINING: chat_shared.CHAT_CHANNEL_TRAINING,
  PREBATTLE_TYPE.CLAN: chat_shared.CHAT_CHANNEL_PREBATTLE_CLAN,
  PREBATTLE_TYPE.TOURNAMENT: chat_shared.CHAT_CHANNEL_TOURNAMENT,
@@ -25,7 +22,7 @@ class BWChannelEntity(ChannelEntity):
     __slots__ = ('_nameToInvalidate',)
 
     def __init__(self, data):
-        if type(data) is not types.DictType:
+        if not isinstance(data, types.DictType):
             LOG_ERROR('Invalid data', data)
             data = {}
         super(BWChannelEntity, self).__init__(ChannelDataWrapper(**data))
@@ -67,6 +64,9 @@ class BWChannelEntity(ChannelEntity):
 
     def isPrebattle(self):
         return self._data.flags & chat_shared.CHAT_CHANNEL_PREBATTLE != 0
+
+    def isClan(self):
+        return self._data.flags & chat_shared.CHAT_CHANNEL_CLAN != 0
 
     def getPrebattleType(self):
         if not self.isPrebattle():
@@ -136,7 +136,7 @@ class BWChannelLightEntity(ChatEntity):
 class BWMemberEntity(MemberEntity):
 
     def __init__(self, memberID, nickName='Unknown', status=None):
-        if nickName and type(nickName) is not types.UnicodeType:
+        if nickName and not isinstance(nickName, types.UnicodeType):
             nickName = unicode(nickName, 'utf-8', errors='ignore')
         super(BWMemberEntity, self).__init__(memberID, nickName, status)
 

@@ -37,10 +37,6 @@ def isValidVehicleForComparing(vehicle):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getSuitableChassis(vehicle, itemsCache=None):
-    """
-    :param vehicle: instance of vehicle
-    :return: list of chassis that is not installed and fit provided vehicle
-    """
     chassis = []
     for _, _, nodeCD, _ in vehicle.getUnlocksDescrs():
         itemTypeID = getTypeOfCompactDescr(nodeCD)
@@ -53,17 +49,12 @@ def getSuitableChassis(vehicle, itemsCache=None):
 
 
 def getInstalledModulesCDs(vehicle):
-    """
-    :param vehicle: instance of vehicle which modules have to be collected
-    :return: compact descriptors list of modules currently installed on provided vehicle
-    """
     outcome = []
-    assert vehicle, 'Instance of vehicle must be not None!'
     for guiItemType in GUI_ITEM_TYPE.VEHICLE_MODULES:
         if guiItemType == GUI_ITEM_TYPE.TURRET and not vehicle.hasTurrets:
             outcome.append(None)
-        cmp = vehicle.descriptor.getComponentsByType(ITEM_TYPE_NAMES[guiItemType])
-        outcome.append(cmp[0].compactDescr)
+        component = vehicle.descriptor.getComponentsByType(ITEM_TYPE_NAMES[guiItemType])
+        outcome.append(component[0].compactDescr)
 
     return outcome
 
@@ -81,18 +72,13 @@ def _removeVehicleCamouflages(vehicle):
 
 
 def _getVehicleEquipment(vehicle):
-    """
-    Provides list of equipment intCD installed on the vehicle
-    :param vehicle: gui.shared.gui_items.Vehicle
-    :return: list of int(or None)
-    """
     return vehicle.equipment.regularConsumables.getIntCDs(default=None)
 
 
 def _getCrewSkills(vehicle):
     availableSkills = set(PARAMS_AFFECTED_TANKMEN_SKILLS)
     currentSkills = set()
-    for roleIndex, tankman in vehicle.crew:
+    for _, tankman in vehicle.crew:
         if tankman is not None:
             currentSkills = currentSkills.union(set([ skill.name for skill in tankman.skills ]))
 
@@ -220,12 +206,14 @@ class _VehCompareData(object):
         self.__invVehStrCD = value
 
     def setCrewData(self, crewLvl, skills):
-        assert crewLvl in CREW_TYPES.ALL, 'Unsupported crew level type: {}'.format(crewLvl)
+        if crewLvl not in CREW_TYPES.ALL:
+            raise UserWarning('Unsupported crew level type: {}'.format(crewLvl))
         self.__crewLvl = crewLvl
         self.__crewSkills = skills
 
     def setInventoryCrewData(self, crewLvl, value):
-        assert crewLvl in CREW_TYPES.ALL, 'Unsupported crew level type: {}'.format(crewLvl)
+        if crewLvl not in CREW_TYPES.ALL:
+            raise UserWarning('Unsupported crew level type: {}'.format(crewLvl))
         self.__inventoryCrewSkills = value
         self.__inventoryCrewLvl = crewLvl
 
@@ -269,9 +257,6 @@ class _VehCompareData(object):
         return self.__battleBooster
 
     def getVehicleCD(self):
-        """
-        :return: int, vehicle intCD
-        """
         return self.__intCD
 
     def getStockCrewLvl(self):
@@ -298,21 +283,12 @@ class _VehCompareData(object):
         return cType
 
     def getVehicleStrCD(self):
-        """
-        :return: str, current basket vehicle string Compact Descriptor
-        """
         return self.__strCD
 
     def getInvVehStrCD(self):
-        """
-        :return: str, returns vehicle string Compact Descriptor inventory vehicle (None if vehicle is not in hangar)
-        """
         return self.__invVehStrCD
 
     def getStockVehStrCD(self):
-        """
-        :return: str, stock vehicle string Compact Descriptor
-        """
         return self.__stockVehStrCD
 
     def getCrewData(self):
@@ -337,10 +313,6 @@ class _VehCompareData(object):
         return self.__isInInventory
 
     def clone(self):
-        """
-        Create copy of current object
-        :return: _VehCompareData object which is copy of current
-        """
         dataClone = _VehCompareData(self.getVehicleCD(), self.getVehicleStrCD(), self.getStockVehStrCD())
         dataClone.setIsInInventory(self.isInInventory())
         dataClone.setInvVehStrCD(self.getInvVehStrCD())
@@ -410,15 +382,9 @@ class VehComparisonBasket(IVehicleComparisonBasket):
     @_ErrorNotification
     @_indexCanBePerformed
     def applyNewParameters(self, index, vehicle, crewLvl, crewSkills, selectedShellIndex=0):
-        """
-        :param index: int item index in self.__vehicles list
-        :param vehicle: gui.shared.gui_items.Vehicle
-        :param crewLvl: the common level of crew skill CREW_TYPES.*
-        :param crewSkills: set(), the set of crew skills affected on vehicle parameters
-        :param selectedShellIndex: the index of selected shell
-        """
         vehCompareData = self.__vehicles[index]
-        assert vehCompareData.getVehicleCD() == vehicle.intCD
+        if vehCompareData.getVehicleCD() != vehicle.intCD:
+            raise UserWarning('Int-type compact descriptor are different')
         isChanged = False
         copyVehicle = Vehicle(_makeStrCD(vehicle), proxy=self.itemsCache.items)
         copyVehicle.setOutfits(vehicle)
@@ -453,13 +419,8 @@ class VehComparisonBasket(IVehicleComparisonBasket):
 
     @_ErrorNotification
     def addVehicle(self, vehicleCompactDesr, initParameters=None):
-        """
-        Adds vehicle object into the basket
-        :param vehicleCompactDesr: vehicle intCD
-        :param initParameters: some additional parameters which vehicle should have while adding
-        :return: bool. True if vehicle successfully added, otherwise False
-        """
-        assert isinstance(vehicleCompactDesr, (int, float))
+        if not isinstance(vehicleCompactDesr, (int, float)):
+            raise UserWarning('Int-type compact descriptor is invalid: '.format(vehicleCompactDesr))
         if self.__canBeAdded():
             vehCmpData = self._createVehCompareData(vehicleCompactDesr, initParameters)
             if vehCmpData:
@@ -512,10 +473,6 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         return self.__isFull
 
     def isReadyToAdd(self, vehicle):
-        """
-        :param vehicle: instance of gui.shared.gui_items.Vehicle.Vehicle
-        :return: True if compare feature is available and basket is not full and valid for vehicle, otherwise - False.
-        """
         return not self.isLocked and self.isAvailable() and not self.isFull() and isValidVehicleForComparing(vehicle)
 
     @property
@@ -528,33 +485,21 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         self.onSwitchChange()
 
     def isAvailable(self):
-        """
-        GUI elements visible, but not available(e.g. miniclient)
-        :return: True if vehicle compare feature is available, otherwise - False.
-        """
         return True
 
     def isEnabled(self):
-        """
-        GUI elements not visible.
-        :return: True if vehicle compare feature is enabled on the server, otherwise - False.
-        """
         return self.__isEnabled
 
     @_ErrorNotification
     @_indexCanBePerformed
     def cloneVehicle(self, index):
-        """
-        Creates copy of vehicle which index has been provided and adds it at the end of list.
-        :param index: copied item index
-        """
         if self.__canBeAdded():
             target = self.__vehicles[index]
             self.__vehicles.append(target.clone())
             self.__applyChanges(addedIDXs=[len(self.__vehicles) - 1], addedCDs=[target.getVehicleCD()])
 
     def getVehiclesCDs(self):
-        return map(lambda vehCompareData: vehCompareData.getVehicleCD(), self.__vehicles)
+        return [ vehCompareData.getVehicleCD() for vehCompareData in self.__vehicles ]
 
     def getVehiclesPropertiesIter(self, getter):
         return imap(getter, self.__vehicles)
@@ -567,19 +512,10 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         return self.__vehicles[index]
 
     def writeCache(self):
-        """
-        Initiates comparison basket data saving
-        """
         if self.__cache:
             self.__cache.write()
 
     def _createVehCompareData(self, intCD, initParameters=None):
-        """
-        This method creates new vehicle data item for comparison basket
-        :param intCD: Vehicle intCD
-        :param initParameters: some additional parameters which new instance of data should have
-        :return _VehCompareData:
-        """
         vehCmpData = None
         initParameters = initParameters or {}
         defStrCD = initParameters.get('strCD')
@@ -624,7 +560,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
                 vehCmpData.setBattleBooster(None)
             if defShellIndex:
                 vehCmpData.setSelectedShellIndex(defShellIndex)
-        except:
+        except Exception:
             LOG_ERROR('Vehicle could not been added properly, intCD = {}'.format(intCD))
             LOG_CURRENT_EXCEPTION()
 
@@ -635,11 +571,6 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         return _VehCmpCache(databaseID, self._applyVehiclesFromCache, self._getVehiclesIterator) if databaseID is not None else None
 
     def _applyVehiclesFromCache(self, data):
-        """
-        Restores vehicle from cached data
-        :param data: tuple - (strCD, crewLvl)
-        :return:
-        """
         if not data:
             return
         vehCDs = []
@@ -747,7 +678,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
 
     def __onServerSettingChanged(self, diff):
         if 'isVehiclesCompareEnabled' in diff:
-            self.__isEnabled = diff['isVehiclesCompareEnabled']
+            self.__isEnabled = bool(diff['isVehiclesCompareEnabled'])
             self.onSwitchChange()
 
     def __canBeAdded(self):

@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/progress.py
+import math
 import operator
 import BigWorld
-import math
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.battle_results.components import base
@@ -53,7 +53,7 @@ class VehicleProgressHelper(object):
         vehiclesStats = self.itemsCache.items.getAccountDossier().getRandomStats().getVehicles()
         vehicleStats = vehiclesStats.get(vehTypeCompDescr, None)
         if vehicleStats is not None:
-            battlesCount, wins, xp = vehicleStats
+            battlesCount, _, xp = vehicleStats
             if battlesCount:
                 return xp / battlesCount
             return 0
@@ -102,7 +102,7 @@ class VehicleProgressHelper(object):
 
     def __getNewSkilledTankmen(self, tankmenXps):
         skilledTankmans = []
-        for slotIdx, tman in self.__vehicle.crew:
+        for _, tman in self.__vehicle.crew:
             if tman is not None and tman.hasSkillToLearn():
                 if not tman.isMaxRoleLevel:
                     continue

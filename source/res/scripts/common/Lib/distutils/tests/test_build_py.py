@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_build_py.py
-"""Tests for distutils.command.build_py."""
 import os
 import sys
 import StringIO
@@ -77,9 +76,6 @@ class BuildPyTestCase(support.TempdirManager, support.LoggingSilencer, unittest.
             sys.stdout = old_stdout
 
     def test_dir_in_package_data(self):
-        """
-        A directory in package_data should not be added to the filelist.
-        """
         sources = self.mkdtemp()
         pkg_dir = os.path.join(sources, 'pkg')
         os.mkdir(pkg_dir)

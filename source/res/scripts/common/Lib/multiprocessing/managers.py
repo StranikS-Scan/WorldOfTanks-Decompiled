@@ -28,9 +28,6 @@ ForkingPickler.register(array.array, reduce_array)
 view_types = [ type(getattr({}, name)()) for name in ('items', 'keys', 'values') ]
 
 class Token(object):
-    """
-    Type to uniquely indentify a shared object
-    """
     __slots__ = ('typeid', 'address', 'id')
 
     def __init__(self, typeid, address, id):
@@ -47,9 +44,6 @@ class Token(object):
 
 
 def dispatch(c, id, methodname, args=(), kwds={}):
-    """
-    Send a message to manager using connection `c` and return response
-    """
     c.send((id,
      methodname,
      args,
@@ -64,10 +58,8 @@ def convert_to_error(kind, result):
     if kind == '#ERROR':
         return result
     elif kind == '#TRACEBACK':
-        assert type(result) is str
         return RemoteError(result)
     elif kind == '#UNSERIALIZABLE':
-        assert type(result) is str
         return RemoteError('Unserializable message: %s\n' % result)
     else:
         return ValueError('Unrecognized message type')
@@ -80,9 +72,6 @@ class RemoteError(Exception):
 
 
 def all_methods(obj):
-    """
-    Return a list of names of methods of `obj`
-    """
     temp = []
     for name in dir(obj):
         func = getattr(obj, name)
@@ -93,16 +82,10 @@ def all_methods(obj):
 
 
 def public_methods(obj):
-    """
-    Return a list of names of methods of `obj` which do not start with '_'
-    """
     return [ name for name in all_methods(obj) if name[0] != '_' ]
 
 
 class Server(object):
-    """
-    Server class which runs in a process controlled by a manager object
-    """
     public = ['shutdown',
      'create',
      'accept_connection',
@@ -114,7 +97,6 @@ class Server(object):
      'decref']
 
     def __init__(self, registry, address, authkey, serializer):
-        assert isinstance(authkey, bytes)
         self.registry = registry
         self.authkey = AuthenticationString(authkey)
         Listener, Client = listener_client[serializer]
@@ -127,9 +109,6 @@ class Server(object):
         return
 
     def serve_forever(self):
-        """
-        Run the server forever
-        """
         current_process()._manager_server = self
         try:
             try:
@@ -151,16 +130,12 @@ class Server(object):
             self.listener.close()
 
     def handle_request(self, c):
-        """
-        Handle a new connection
-        """
         funcname = result = request = None
         try:
             connection.deliver_challenge(c, self.authkey)
             connection.answer_challenge(c, self.authkey)
             request = c.recv()
             ignore, funcname, args, kwds = request
-            assert funcname in self.public, '%r unrecognized' % funcname
             func = getattr(self, funcname)
         except Exception:
             msg = ('#TRACEBACK', format_exc())
@@ -188,9 +163,6 @@ class Server(object):
         return
 
     def serve_client(self, conn):
-        """
-        Handle requests from the proxies in a particular process/thread
-        """
         util.debug('starting server thread to service %r', threading.current_thread().name)
         recv = conn.recv
         send = conn.send
@@ -266,9 +238,6 @@ class Server(object):
         pass
 
     def debug_info(self, c):
-        """
-        Return some info --- useful to spot problems with refcounting
-        """
         self.mutex.acquire()
         try:
             result = []
@@ -283,15 +252,9 @@ class Server(object):
             self.mutex.release()
 
     def number_of_objects(self, c):
-        """
-        Number of shared objects
-        """
         return len(self.id_to_obj) - 1
 
     def shutdown(self, c):
-        """
-        Shutdown this process
-        """
         try:
             try:
                 util.debug('manager received shutdown message')
@@ -321,21 +284,16 @@ class Server(object):
         return
 
     def create(self, c, typeid, *args, **kwds):
-        """
-        Create a new shared object and return its id
-        """
         self.mutex.acquire()
         try:
             callable, exposed, method_to_typeid, proxytype = self.registry[typeid]
             if callable is None:
-                assert len(args) == 1 and not kwds
                 obj = args[0]
             else:
                 obj = callable(*args, **kwds)
             if exposed is None:
                 exposed = public_methods(obj)
             if method_to_typeid is not None:
-                assert type(method_to_typeid) is dict
                 exposed = list(exposed) + list(method_to_typeid)
             ident = '%x' % id(obj)
             util.debug('%r callable returned object with id %r', typeid, ident)
@@ -350,15 +308,9 @@ class Server(object):
         return
 
     def get_methods(self, c, token):
-        """
-        Return the methods of the shared object indicated by token
-        """
         return tuple(self.id_to_obj[token.id][1])
 
     def accept_connection(self, c, name):
-        """
-        Spawn a new thread to serve this connection
-        """
         threading.current_thread().name = name
         c.send(('#RETURN', None))
         self.serve_client(c)
@@ -374,7 +326,6 @@ class Server(object):
     def decref(self, c, ident):
         self.mutex.acquire()
         try:
-            assert self.id_to_refcount[ident] >= 1
             self.id_to_refcount[ident] -= 1
             if self.id_to_refcount[ident] == 0:
                 del self.id_to_obj[ident]
@@ -395,9 +346,6 @@ listener_client = {'pickle': (connection.Listener, connection.Client),
  'xmlrpclib': (connection.XmlListener, connection.XmlClient)}
 
 class BaseManager(object):
-    """
-    Base class for managers
-    """
     _registry = {}
     _Server = Server
 
@@ -416,16 +364,9 @@ class BaseManager(object):
         return (type(self).from_address, (self._address, self._authkey, self._serializer))
 
     def get_server(self):
-        """
-        Return server object with serve_forever() method and address attribute
-        """
-        assert self._state.value == State.INITIAL
         return Server(self._registry, self._address, self._authkey, self._serializer)
 
     def connect(self):
-        """
-        Connect manager object to the server process
-        """
         Listener, Client = listener_client[self._serializer]
         conn = Client(self._address, authkey=self._authkey)
         dispatch(conn, None, 'dummy')
@@ -433,10 +374,6 @@ class BaseManager(object):
         return
 
     def start(self, initializer=None, initargs=()):
-        """
-        Spawn a server process for this manager object
-        """
-        assert self._state.value == State.INITIAL
         if initializer is not None and not hasattr(initializer, '__call__'):
             raise TypeError('initializer must be a callable')
         reader, writer = connection.Pipe(duplex=False)
@@ -463,9 +400,6 @@ class BaseManager(object):
 
     @classmethod
     def _run_server(cls, registry, address, authkey, serializer, writer, initializer=None, initargs=()):
-        """
-        Create a server, report its address and run it
-        """
         if initializer is not None:
             initializer(*initargs)
         server = cls._Server(registry, address, authkey, serializer)
@@ -476,10 +410,6 @@ class BaseManager(object):
         return
 
     def _create(self, typeid, *args, **kwds):
-        """
-        Create a new shared object; return the token and exposed tuple
-        """
-        assert self._state.value == State.STARTED, 'server not yet started'
         conn = self._Client(self._address, authkey=self._authkey)
         try:
             id, exposed = dispatch(conn, None, 'create', (typeid,) + args, kwds)
@@ -489,15 +419,9 @@ class BaseManager(object):
         return (Token(typeid, self._address, id), exposed)
 
     def join(self, timeout=None):
-        """
-        Join the manager process (if it has been spawned)
-        """
         self._process.join(timeout)
 
     def _debug_info(self):
-        """
-        Return some info about the servers shared objects and connections
-        """
         conn = self._Client(self._address, authkey=self._authkey)
         try:
             return dispatch(conn, None, 'debug_info')
@@ -507,9 +431,6 @@ class BaseManager(object):
         return
 
     def _number_of_objects(self):
-        """
-        Return the number of shared objects
-        """
         conn = self._Client(self._address, authkey=self._authkey)
         try:
             return dispatch(conn, None, 'number_of_objects')
@@ -526,9 +447,6 @@ class BaseManager(object):
 
     @staticmethod
     def _finalize_manager(process, address, authkey, state, _Client):
-        """
-        Shutdown the manager process; will be registered as a finalizer
-        """
         if process.is_alive():
             util.info('sending shutdown message to manager')
             try:
@@ -562,9 +480,6 @@ class BaseManager(object):
 
     @classmethod
     def register(cls, typeid, callable=None, proxytype=None, exposed=None, method_to_typeid=None, create_method=True):
-        """
-        Register a typeid with the manager type
-        """
         if '_registry' not in cls.__dict__:
             cls._registry = cls._registry.copy()
         if proxytype is None:
@@ -573,8 +488,7 @@ class BaseManager(object):
         method_to_typeid = method_to_typeid or getattr(proxytype, '_method_to_typeid_', None)
         if method_to_typeid:
             for key, value in method_to_typeid.items():
-                assert type(key) is str, '%r is not a string' % key
-                assert type(value) is str, '%r is not a string' % value
+                pass
 
         cls._registry[typeid] = (callable,
          exposed,
@@ -605,9 +519,6 @@ class ProcessLocalSet(set):
 
 
 class BaseProxy(object):
-    """
-    A base for proxies of shared objects
-    """
     _address_to_local = {}
     _mutex = util.ForkAwareThreadLock()
 
@@ -650,9 +561,6 @@ class BaseProxy(object):
         return
 
     def _callmethod(self, methodname, args=(), kwds={}):
-        """
-        Try to call a method of the referrent and return a copy of the result
-        """
         try:
             conn = self._tls.connection
         except AttributeError:
@@ -680,9 +588,6 @@ class BaseProxy(object):
             return
 
     def _getvalue(self):
-        """
-        Get a copy of the value of the referent
-        """
         return self._callmethod('#GETVALUE')
 
     def _incref(self):
@@ -750,9 +655,6 @@ class BaseProxy(object):
         return '<%s object, typeid %r at %s>' % (type(self).__name__, self._token.typeid, '0x%x' % id(self))
 
     def __str__(self):
-        """
-        Return representation of the referent (or a fall-back if that fails)
-        """
         try:
             return self._callmethod('__repr__')
         except Exception:
@@ -760,11 +662,6 @@ class BaseProxy(object):
 
 
 def RebuildProxy(func, token, serializer, kwds):
-    """
-    Function used for unpickling proxy objects.
-    
-    If possible the shared object is returned, or otherwise a proxy for it.
-    """
     server = getattr(current_process(), '_manager_server', None)
     if server and server.address == token.address:
         return server.id_to_obj[token.id][0]
@@ -775,9 +672,6 @@ def RebuildProxy(func, token, serializer, kwds):
 
 
 def MakeProxyType(name, exposed, _cache={}):
-    """
-    Return an proxy type whose methods are given by `exposed`
-    """
     exposed = tuple(exposed)
     try:
         return _cache[name, exposed]
@@ -795,9 +689,6 @@ def MakeProxyType(name, exposed, _cache={}):
 
 
 def AutoProxy(token, serializer, manager=None, authkey=None, exposed=None, incref=True):
-    """
-    Return an auto-proxy for `token`
-    """
     _Client = listener_client[serializer][1]
     if exposed is None:
         conn = _Client(token.address, authkey=authkey)
@@ -1025,15 +916,6 @@ PoolProxy._method_to_typeid_ = {'apply_async': 'AsyncResult',
  'imap_unordered': 'Iterator'}
 
 class SyncManager(BaseManager):
-    """
-    Subclass of `BaseManager` which supports a number of shared object types.
-    
-    The types registered are those intended for the synchronization
-    of threads, plus `dict`, `list` and `Namespace`.
-    
-    The `multiprocessing.Manager()` function creates started instances of
-    this class.
-    """
     pass
 
 

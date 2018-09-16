@@ -101,8 +101,6 @@ class SimpleBonus(object):
         pass
 
     def getTooltip(self):
-        """ Get award's tooltip for award carousel.
-        """
         header = i18n.makeString(TOOLTIPS.getAwardHeader(self._name))
         body = i18n.makeString(TOOLTIPS.getAwardBody(self._name))
         return makeTooltip(header or None, body or None) if header or body else ''
@@ -134,10 +132,6 @@ class SimpleBonus(object):
         return iconName
 
     def getIconLabel(self):
-        """
-        returns label which is displayed near icon. Originally used in ranked battles
-        @return: styled label str
-        """
         return text_styles.hightlight('x{}'.format(self.getValue()))
 
     def hasIconFormat(self):
@@ -287,7 +281,7 @@ class TokensBonus(SimpleBonus):
         return result
 
     def getCount(self):
-        return sum(map(lambda v: v.get('count', 0), self._value.values()))
+        return sum((v.get('count', 0) for v in self._value.values()))
 
 
 class BattleTokensBonus(TokensBonus):
@@ -316,15 +310,6 @@ class BattleTokensBonus(TokensBonus):
 
 
 def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):
-    """
-    Personal missions factory, that defines which token object should be created.
-    Operation tokens will be converted to AwardSheet bonus object.
-    :param name: bonus name
-    :param value: bonus value
-    :param isCompensation: is this compensation bonus
-    :param ctx: context of creation
-    :return:
-    """
     from gui.server_events.finders import PERSONAL_MISSION_TOKEN
     completionTokenID = PERSONAL_MISSION_TOKEN % ctx['operationID']
     result = []
@@ -523,7 +508,7 @@ class VehiclesBonus(SimpleBonus):
 
     def formatValue(self):
         result = []
-        for item, vehInfo in self.getVehicles():
+        for item, _ in self.getVehicles():
             result.append(item.shortUserName)
 
         return ', '.join(result)
@@ -567,8 +552,6 @@ class VehiclesBonus(SimpleBonus):
         return result
 
     def compensation(self, vehicle):
-        """ Get compensation bonuses for the given vehicle.
-        """
         bonuses = []
         if not vehicle.isPurchased:
             return bonuses
@@ -614,8 +597,6 @@ class VehiclesBonus(SimpleBonus):
 
     @staticmethod
     def getRentDays(vehInfo):
-        """ Get rent days info from bonus if there is such info.
-        """
         if 'rent' not in vehInfo:
             return None
         else:
@@ -630,18 +611,10 @@ class VehiclesBonus(SimpleBonus):
 
     @staticmethod
     def getRentBattles(vehInfo):
-        """ Get rent battles info from bonus if there is such info.
-        
-        Rent battles means rent vehicle for a given number of battles.
-        """
         return vehInfo.get('rent', {}).get('battles')
 
     @staticmethod
     def getRentWins(vehInfo):
-        """ Get rent wins info from bonus if there is such info.
-        
-        Rent battles means rent vehicle for a given number of wins (lost battles don't count).
-        """
         return vehInfo.get('rent', {}).get('wins')
 
     def __getVehicleVO(self, vehicle, vehicleInfo, iconGetter):
@@ -670,8 +643,6 @@ class BadgesGroupBonus(SimpleBonus):
 class DossierBonus(SimpleBonus):
 
     def getRecords(self):
-        """ Returns dictionary of dossier records {(dossier_block, record_name): record_value), ....}
-        """
         records = {}
         if self._value is not None:
             for dossierType in self._value:
@@ -687,7 +658,7 @@ class DossierBonus(SimpleBonus):
     def getBadges(self):
         result = []
         badges = None
-        for (block, record), value in self.getRecords().iteritems():
+        for (block, record), _ in self.getRecords().iteritems():
             if _isBadge(block):
                 badgeID = int(record)
                 if badges is None:
@@ -704,13 +675,10 @@ class DossierBonus(SimpleBonus):
         return self.getAchievements()
 
     def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
-        """
-        Here we're supporting bonuses only that allowed in ranked battles
-        """
         result = []
         badgesIconSizes = {'big': BADGES_ICONS.X80,
          'small': BADGES_ICONS.X48}
-        for (block, record), value in self.getRecords().iteritems():
+        for (block, record), _ in self.getRecords().iteritems():
             if _isBadge(block):
                 header = i18n.makeString(BADGE.badgeName(record))
                 body = i18n.makeString(BADGE.badgeDescriptor(record))
@@ -775,15 +743,13 @@ class TankmenBonus(SimpleBonus):
         result = []
         if self._value is not None:
             for tankmanData in self._value:
-                if type(tankmanData) is str:
+                if isinstance(tankmanData, str):
                     result.append(self._makeTmanInfoByDescr(tankmen.TankmanDescr(compactDescr=tankmanData)))
                 result.append(makeTupleByDict(self._TankmanInfoRecord, tankmanData))
 
         return result
 
     def getTankmenGroups(self):
-        """ Create groups by vehicle.
-        """
         groups = {}
         for tmanInfo in self.getTankmenData():
             roleLevel = calculateRoleLevel(tmanInfo.roleLevel, tmanInfo.freeXP, typeID=(tmanInfo.nationID, tmanInfo.vehicleTypeID))
@@ -903,7 +869,7 @@ class BoxBonus(SimpleBonus):
     __rankedIconSizes = {'big': '100x88',
      'small': '48x48'}
 
-    class HANDLER_NAMES:
+    class HANDLER_NAMES(object):
         RANKED = 'ranked'
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
@@ -939,12 +905,6 @@ class BoxBonus(SimpleBonus):
         return RES_ICONS.getRankedBoxIcon(size, boxType, '', number)
 
 
-class NYToyBonuses(SimpleBonus):
-
-    def formatValue(self):
-        pass
-
-
 _BONUSES = {Currency.CREDITS: CreditsBonus,
  Currency.GOLD: GoldBonus,
  Currency.CRYSTAL: CrystalBonus,
@@ -977,8 +937,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'goodies': GoodiesBonus,
  'items': ItemsBonus,
  'oneof': BoxBonus,
- 'badgesGroup': BadgesGroupBonus,
- 'ny18Toys': NYToyBonuses}
+ 'badgesGroup': BadgesGroupBonus}
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
 
@@ -1000,13 +959,10 @@ def _getFromTree(tree, path):
             subTree = tree[key]
         elif 'default' in tree:
             subTree = tree['default']
-        return _getFromTree(subTree, path[1:]) if type(subTree) is dict else subTree
+        return _getFromTree(subTree, path[1:]) if isinstance(subTree, dict) else subTree
 
 
 def _initFromTree(key, name, value, isCompensation=False, ctx=None):
-    """
-    Gets bonuses from given quest by name from tree
-    """
     factory = _getFromTree(_BONUSES, key)
     if factory is not None:
         result = factory(name, value, isCompensation, ctx)
@@ -1018,9 +974,6 @@ def _initFromTree(key, name, value, isCompensation=False, ctx=None):
 
 
 def getBonuses(quest, name, value, isCompensation=False):
-    """
-    Gets bonuses from given quest by name
-    """
     questType = quest.getType()
     key = [name, questType]
     ctx = {}

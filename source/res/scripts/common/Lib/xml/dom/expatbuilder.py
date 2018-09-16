@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/expatbuilder.py
-"""Facility to use the Expat parser to load a minidom instance
-from a string or file.
-
-This avoids all the overhead of SAX and pulldom to gain performance.
-"""
 from xml.dom import xmlbuilder, minidom, Node
 from xml.dom import EMPTY_NAMESPACE, EMPTY_PREFIX, XMLNS_NAMESPACE
 from xml.parsers import expat
@@ -86,7 +81,6 @@ def _intern(builder, s):
 
 
 def _parse_ns_name(builder, name):
-    assert ' ' in name
     parts = name.split(' ')
     intern = builder._intern_setdefault
     if len(parts) == 3:
@@ -106,8 +100,6 @@ def _parse_ns_name(builder, name):
 
 
 class ExpatBuilder():
-    """Document builder that uses Expat to build a ParsedXML.DOM document
-    instance."""
 
     def __init__(self, options=None):
         if options is None:
@@ -123,11 +115,9 @@ class ExpatBuilder():
         return
 
     def createParser(self):
-        """Create a new parser object."""
         return expat.ParserCreate()
 
     def getParser(self):
-        """Return the parser object, creating a new one if needed."""
         if not self._parser:
             self._parser = self.createParser()
             self._intern_setdefault = self._parser.intern.setdefault
@@ -138,7 +128,6 @@ class ExpatBuilder():
         return self._parser
 
     def reset(self):
-        """Free all data structures used during DOM construction."""
         self.document = theDOMImplementation.createDocument(EMPTY_NAMESPACE, None, None)
         self.curNode = self.document
         self._elem_info = self.document._elem_info
@@ -146,7 +135,6 @@ class ExpatBuilder():
         return
 
     def install(self, parser):
-        """Install the callbacks needed to build the DOM into the parser."""
         parser.StartDoctypeDeclHandler = self.start_doctype_decl_handler
         parser.StartElementHandler = self.first_element_handler
         parser.EndElementHandler = self.end_element_handler
@@ -168,8 +156,6 @@ class ExpatBuilder():
         parser.AttlistDeclHandler = self.attlist_decl_handler
 
     def parseFile(self, file):
-        """Parse a document from a file object, returning the document
-        node."""
         parser = self.getParser()
         first_buffer = True
         try:
@@ -192,7 +178,6 @@ class ExpatBuilder():
         return doc
 
     def parseString(self, string):
-        """Parse a document from a string, returning the document node."""
         parser = self.getParser()
         try:
             parser.Parse(string, True)
@@ -206,7 +191,6 @@ class ExpatBuilder():
         return doc
 
     def _setup_subset(self, buffer):
-        """Load the internal subset if there might be one."""
         if self.document.doctype:
             extractor = InternalSubsetExtractor()
             extractor.parseString(buffer)
@@ -391,7 +375,6 @@ class ExpatBuilder():
         if info is None:
             self._elem_info[name] = ElementInfo(name, model)
         else:
-            assert info._model is None
             info._model = model
         return
 
@@ -423,8 +406,6 @@ class ExpatBuilder():
 _ALLOWED_FILTER_RETURNS = (FILTER_ACCEPT, FILTER_REJECT, FILTER_SKIP)
 
 class FilterVisibilityController(object):
-    """Wrapper around a DOMBuilderFilter which implements the checks
-    to make the whatToShow filter attribute work."""
     __slots__ = ('filter',)
 
     def __init__(self, filter):
@@ -535,13 +516,6 @@ _FRAGMENT_BUILDER_INTERNAL_SYSTEM_ID = 'http://xml.python.org/entities/fragment-
 _FRAGMENT_BUILDER_TEMPLATE = '<!DOCTYPE wrapper\n  %%s [\n  <!ENTITY fragment-builder-internal\n    SYSTEM "%s">\n%%s\n]>\n<wrapper %%s\n>&fragment-builder-internal;</wrapper>' % _FRAGMENT_BUILDER_INTERNAL_SYSTEM_ID
 
 class FragmentBuilder(ExpatBuilder):
-    """Builder which constructs document fragments given XML source
-    text and a context node.
-    
-    The context node is expected to provide information about the
-    namespace declarations which are in scope at the start of the
-    fragment.
-    """
 
     def __init__(self, context, options=None):
         if context.nodeType == DOCUMENT_NODE:
@@ -558,13 +532,9 @@ class FragmentBuilder(ExpatBuilder):
         return
 
     def parseFile(self, file):
-        """Parse a document fragment from a file object, returning the
-        fragment node."""
         return self.parseString(file.read())
 
     def parseString(self, string):
-        """Parse a document fragment from a string, returning the
-        fragment node."""
         self._source = string
         parser = self.getParser()
         doctype = self.originalDocument.doctype
@@ -590,11 +560,6 @@ class FragmentBuilder(ExpatBuilder):
         return fragment
 
     def _getDeclarations(self):
-        """Re-create the internal subset from the DocumentType node.
-        
-        This is only needed if we don't already have the
-        internalSubset as a string.
-        """
         doctype = self.context.ownerDocument.doctype
         s = ''
         if doctype:
@@ -649,25 +614,21 @@ class FragmentBuilder(ExpatBuilder):
 
 
 class Namespaces():
-    """Mix-in class for builders; adds support for namespaces."""
 
     def _initNamespaces(self):
         self._ns_ordered_prefixes = []
 
     def createParser(self):
-        """Create a new namespace-handling parser."""
         parser = expat.ParserCreate(namespace_separator=' ')
         parser.namespace_prefixes = True
         return parser
 
     def install(self, parser):
-        """Insert the namespace-handlers onto the parser."""
         ExpatBuilder.install(self, parser)
         if self._options.namespace_declarations:
             parser.StartNamespaceDeclHandler = self.start_namespace_decl_handler
 
     def start_namespace_decl_handler(self, prefix, uri):
-        """Push this namespace declaration on our storage."""
         self._ns_ordered_prefixes.append((prefix, uri))
 
     def start_element_handler(self, name, attributes):
@@ -720,20 +681,8 @@ class Namespaces():
 
         return
 
-    def end_element_handler(self, name):
-        curNode = self.curNode
-        if ' ' in name:
-            uri, localname, prefix, qname = _parse_ns_name(self, name)
-            assert curNode.namespaceURI == uri and curNode.localName == localname and curNode.prefix == prefix, 'element stack messed up! (namespace)'
-        else:
-            assert curNode.nodeName == name, 'element stack messed up - bad nodeName'
-            assert curNode.namespaceURI == EMPTY_NAMESPACE, 'element stack messed up - bad namespaceURI'
-        self.curNode = curNode.parentNode
-        self._finish_end_element(curNode)
-
 
 class ExpatBuilderNS(Namespaces, ExpatBuilder):
-    """Document builder that supports namespaces."""
 
     def reset(self):
         ExpatBuilder.reset(self)
@@ -741,15 +690,12 @@ class ExpatBuilderNS(Namespaces, ExpatBuilder):
 
 
 class FragmentBuilderNS(Namespaces, FragmentBuilder):
-    """Fragment builder that supports namespaces."""
 
     def reset(self):
         FragmentBuilder.reset(self)
         self._initNamespaces()
 
     def _getNSattrs(self):
-        """Return string of namespace attributes from this element and
-        ancestors."""
         attrs = ''
         context = self.context
         L = []
@@ -773,16 +719,13 @@ class FragmentBuilderNS(Namespaces, FragmentBuilder):
 
 
 class ParseEscape(Exception):
-    """Exception raised to short-circuit parsing in InternalSubsetExtractor."""
     pass
 
 
 class InternalSubsetExtractor(ExpatBuilder):
-    """XML processor which can rip out the internal document type subset."""
     subset = None
 
     def getSubset(self):
-        """Return the internal subset as a string."""
         return self.subset
 
     def parseFile(self, file):
@@ -820,10 +763,6 @@ class InternalSubsetExtractor(ExpatBuilder):
 
 
 def parse(file, namespaces=True):
-    """Parse a document, returning the resulting Document node.
-    
-    'file' may be either a file name or an open file object.
-    """
     if namespaces:
         builder = ExpatBuilderNS()
     else:
@@ -841,9 +780,6 @@ def parse(file, namespaces=True):
 
 
 def parseString(string, namespaces=True):
-    """Parse a document from a string, returning the resulting
-    Document node.
-    """
     if namespaces:
         builder = ExpatBuilderNS()
     else:
@@ -852,12 +788,6 @@ def parseString(string, namespaces=True):
 
 
 def parseFragment(file, context, namespaces=True):
-    """Parse a fragment of a document, given the context from which it
-    was originally extracted.  context should be the parent of the
-    node(s) which are in the fragment.
-    
-    'file' may be either a file name or an open file object.
-    """
     if namespaces:
         builder = FragmentBuilderNS(context)
     else:
@@ -875,10 +805,6 @@ def parseFragment(file, context, namespaces=True):
 
 
 def parseFragmentString(string, context, namespaces=True):
-    """Parse a fragment of a document from a string, given the context
-    from which it was originally extracted.  context should be the
-    parent of the node(s) which are in the fragment.
-    """
     if namespaces:
         builder = FragmentBuilderNS(context)
     else:
@@ -887,7 +813,6 @@ def parseFragmentString(string, context, namespaces=True):
 
 
 def makeBuilder(options):
-    """Create a builder based on an Options object."""
     if options.namespaces:
         return ExpatBuilderNS(options)
     else:

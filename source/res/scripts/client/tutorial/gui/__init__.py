@@ -9,9 +9,12 @@ class GUI_EFFECT_NAME(object):
     SHOW_HINT = 'ShowHint'
     UPDATE_CONTENT = 'UpdateContent'
     SET_CRITERIA = 'SetCriteria'
+    SET_VIEW_CRITERIA = 'SetViewCriteria'
     SET_TRIGGER = 'SetTrigger'
     SHOW_GREETING = 'ShowGreeting'
     NEXT_TASK = 'NextTask'
+    SET_ITEM_PROPS = 'SetItemProps'
+    PLAY_ANIMATION = 'PlayAnimation'
 
 
 class GUIProxy(object):
@@ -22,8 +25,11 @@ class GUIProxy(object):
         self.onGUILoaded = Event.Event(self.eManager)
         self.onGUIInput = Event.Event(self.eManager)
         self.onPageChanging = Event.Event(self.eManager)
+        self.onPageReady = Event.Event(self.eManager)
         self.onItemFound = Event.Event(self.eManager)
         self.onItemLost = Event.Event(self.eManager)
+        self.onViewLoaded = Event.Event(self.eManager)
+        self.onViewDisposed = Event.Event(self.eManager)
 
     def init(self):
         return True
@@ -55,13 +61,19 @@ class GUIProxy(object):
     def goToScene(self, sceneID):
         pass
 
-    def playEffect(self, effectName, args, itemRef=None, containerRef=None):
+    def isViewPresent(self, viewType, criteria):
         return False
 
-    def stopEffect(self, effectName, effectID):
+    def closeView(self, viewType, criteria):
         pass
 
-    def isEffectRunning(self, effectName, effectID=None):
+    def playEffect(self, effectName, args):
+        return False
+
+    def stopEffect(self, effectName, effectID, effectSubType=None):
+        pass
+
+    def isEffectRunning(self, effectName, effectID=None, effectSubType=None):
         return False
 
     def showWaiting(self, messageID, isSingle=False):
@@ -81,9 +93,6 @@ class GUIProxy(object):
 
     def getItemsOnScene(self):
         return set()
-
-    def setItemProps(self, itemRef, props, revert=False):
-        pass
 
     def closePopUps(self):
         pass

@@ -6,9 +6,6 @@ from messenger.proto import proto_getter
 from notification.settings import NOTIFICATION_GROUP
 
 class _GroupCounter(object):
-    """
-    Simple base counter with group ID
-    """
 
     def __init__(self):
         super(_GroupCounter, self).__init__()
@@ -76,7 +73,7 @@ class _CounterCollection(object):
 
     def __init__(self, seq):
         super(_CounterCollection, self).__init__()
-        self.__counters = dict(map(lambda counter: (counter.getGroupID(), counter), seq))
+        self.__counters = dict(((counter.getGroupID(), counter) for counter in seq))
 
     def clear(self):
         self.__counters.clear()

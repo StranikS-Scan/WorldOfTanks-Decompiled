@@ -43,21 +43,11 @@ SHORTCUTS = (Shortcut(title=_CMD_LOCALE_PFX + 'attack', action=CHAT_COMMANDS.ATT
  Shortcut(title=_CMD_LOCALE_PFX + 'supportMeWithFire', action=CHAT_COMMANDS.SUPPORTMEWITHFIRE, icon=BATTLE_ICONS_CONSTS.SUPPORT, groups=[SHORTCUT_STATES.ENEMY], indexInGroup=4),
  Shortcut(title=_CMD_LOCALE_PFX + 'attackEnemy', action=CHAT_COMMANDS.ATTACKENEMY, icon=BATTLE_ICONS_CONSTS.ATTACK_SPG, groups=[SHORTCUT_STATES.ENEMY_SPG], indexInGroup=4))
 SHORTCUT_SETS = {state:[None] * _SHORTCUTS_IN_GROUP for state in SHORTCUT_STATES.ALL}
-for shortcut in SHORTCUTS:
-    for group in shortcut.groups:
-        SHORTCUT_SETS[group][shortcut.indexInGroup] = shortcut
+for s in SHORTCUTS:
+    for group in s.groups:
+        SHORTCUT_SETS[group][s.indexInGroup] = s
 
 def getKeyFromAction(action, cut=SHORTCUT_STATES.DEFAULT):
-    """
-    Gets the key buy given chat action and shortcut. Target actions
-    use their base action.
-    Args:
-        action: chact action
-        cut: chat short cut
-    
-    Returns:
-        chat's Scaleform key
-    """
     if action in TARGET_ACTIONS and cut != SHORTCUT_STATES.DEFAULT:
         for targetAction, targeData in TARGET_TRANSLATION_MAPPING.iteritems():
             if cut in targeData and action == targeData[cut]:

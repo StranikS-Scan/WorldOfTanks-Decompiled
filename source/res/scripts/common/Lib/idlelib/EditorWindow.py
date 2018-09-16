@@ -22,7 +22,6 @@ from idlelib import macosxSupport
 TK_TABWIDTH_DEFAULT = 8
 
 def _sphinx_version():
-    """Format sys.version_info to produce the Sphinx version string used to install the chm docs"""
     major, minor, micro, level, serial = sys.version_info
     release = '%s%s' % (major, minor)
     if micro:
@@ -35,7 +34,6 @@ def _sphinx_version():
 
 
 def _find_module(fullname, path=None):
-    """Version of imp.find_module() that handles hierarchical module names"""
     file = None
     for tgt in fullname.split('.'):
         if file is not None:
@@ -74,13 +72,6 @@ class HelpDialog(object):
         return
 
     def display(self, parent, near=None):
-        """ Display the help dialog.
-        
-            parent - parent widget for the help window
-        
-            near - a Toplevel widget (e.g. EditorWindow or PyShell)
-                   to use as a reference for placing the help window
-        """
         if self.dlg is None:
             self.show_dialog(parent)
         if near:
@@ -304,7 +295,6 @@ class EditorWindow(object):
         text.bind('<<Highlight-FocusIn>>', lambda ev: highlight_fix('in'))
 
     def _filename_to_unicode(self, filename):
-        """convert filename to unicode in order to display it in Tk"""
         if isinstance(filename, unicode) or not filename:
             return filename
         try:
@@ -516,13 +506,6 @@ class EditorWindow(object):
         self.text.see('insert')
 
     def move_at_edge_if_selection(self, edge_index):
-        """Cursor move begins at start or end of selection
-        
-        When a left/right cursor key is pressed create and return to Tkinter a
-        function which causes a cursor move from the associated edge of the
-        selection.
-        
-        """
         self_text_index = self.text.index
         self_text_mark_set = self.text.mark_set
         edges_table = ('sel.first+1c', 'sel.last-1c')
@@ -676,7 +659,6 @@ class EditorWindow(object):
             return
 
     def ResetColorizer(self):
-        """Update the colour theme"""
         self._rmcolorizer()
         self._addcolorizer()
         theme = idleConf.GetOption('main', 'Theme', 'name')
@@ -686,14 +668,12 @@ class EditorWindow(object):
         self.text.config(foreground=normal_colors['foreground'], background=normal_colors['background'], insertbackground=cursor_color, selectforeground=select_colors['foreground'], selectbackground=select_colors['background'])
 
     def ResetFont(self):
-        """Update the text widgets' font if it is changed"""
         fontWeight = 'normal'
         if idleConf.GetOption('main', 'EditorWindow', 'font-bold', type='bool'):
             fontWeight = 'bold'
         self.text.config(font=(idleConf.GetOption('main', 'EditorWindow', 'font'), idleConf.GetOption('main', 'EditorWindow', 'font-size', type='int'), fontWeight))
 
     def RemoveKeybindings(self):
-        """Remove the keybindings before they are changed."""
         self.Bindings.default_keydefs = keydefs = idleConf.GetCurrentKeySet()
         for event, keylist in keydefs.items():
             self.text.event_delete(event, *keylist)
@@ -705,7 +685,6 @@ class EditorWindow(object):
                     self.text.event_delete(event, *keylist)
 
     def ApplyKeybindings(self):
-        """Update the keybindings after they are changed"""
         self.Bindings.default_keydefs = keydefs = idleConf.GetCurrentKeySet()
         self.apply_bindings()
         for extensionName in self.get_standard_extension_names():
@@ -742,12 +721,10 @@ class EditorWindow(object):
         return
 
     def set_notabs_indentwidth(self):
-        """Update the indentwidth if changed and not using tabs in this window"""
         if not self.usetabs:
             self.indentwidth = idleConf.GetOption('main', 'Indent', 'num-spaces', type='int')
 
     def reset_help_menu_entries(self):
-        """Update the additional help entries on the Help menu"""
         help_list = idleConf.GetAllExtraHelpSourcesList()
         helpmenu = self.menudict['help']
         helpmenu_length = helpmenu.index(END)
@@ -762,7 +739,6 @@ class EditorWindow(object):
         self.menudict['help'] = helpmenu
 
     def __extra_help_callback(self, helpfile):
-        """Create a callback with the helpfile value frozen at definition time"""
 
         def display_extra_help(helpfile=helpfile):
             if not helpfile.startswith(('www', 'http')):
@@ -779,7 +755,6 @@ class EditorWindow(object):
         return display_extra_help
 
     def update_recent_files_list(self, new_file=None):
-        """Load and update the recent files list and menus"""
         rf_list = []
         if os.path.exists(self.recent_files_path):
             with open(self.recent_files_path, 'r') as rf_list_file:
@@ -885,7 +860,6 @@ class EditorWindow(object):
         return int(float(text.index(mark)))
 
     def get_geometry(self):
-        """Return (width, height, x, y)"""
         geom = self.top.wm_geometry()
         m = re.match('(\\d+)x(\\d+)\\+(-?\\d+)\\+(-?\\d+)', geom)
         tuple = map(int, m.groups())
@@ -991,10 +965,6 @@ class EditorWindow(object):
         return
 
     def fill_menus(self, menudefs=None, keydefs=None):
-        """Add appropriate entries to the menus and submenus
-        
-        Menus that are absent or None in self.menudict are ignored.
-        """
         if menudefs is None:
             menudefs = self.Bindings.menudefs
         if keydefs is None:
@@ -1099,7 +1069,6 @@ class EditorWindow(object):
             return 'break'
         tabwidth = self.tabwidth
         have = len(chars.expandtabs(tabwidth))
-        assert have > 0
         want = (have - 1) // self.indentwidth * self.indentwidth
         if self.context_use_ps1:
             last_line_of_prompt = sys.ps1.split('\n')[-1]
@@ -1212,8 +1181,6 @@ class EditorWindow(object):
                         text.insert('insert', indent)
                     else:
                         self.reindent_to(y.compute_backslash_indent())
-                else:
-                    assert 0, 'bogus continuation type %r' % (c,)
                 return 'break'
             indent = y.get_base_indent_string()
             text.insert('insert', indent)

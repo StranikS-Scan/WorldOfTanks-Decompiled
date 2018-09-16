@@ -26,7 +26,6 @@ class _Dialog(Dialog):
 
 
 class Open(_Dialog):
-    """Ask for a filename to open"""
     command = 'tk_getOpenFile'
 
     def _fixresult(self, widget, result):
@@ -41,12 +40,10 @@ class Open(_Dialog):
 
 
 class SaveAs(_Dialog):
-    """Ask for a filename to save as"""
     command = 'tk_getSaveFile'
 
 
 class Directory(Dialog):
-    """Ask for a directory"""
     command = 'tk_chooseDirectory'
 
     def _fixresult(self, widget, result):
@@ -62,38 +59,24 @@ class Directory(Dialog):
 
 
 def askopenfilename(**options):
-    """Ask for a filename to open"""
     return Open(**options).show()
 
 
 def asksaveasfilename(**options):
-    """Ask for a filename to save as"""
     return SaveAs(**options).show()
 
 
 def askopenfilenames(**options):
-    """Ask for multiple filenames to open
-    
-    Returns a list of filenames or empty list if
-    cancel button selected
-    """
     options['multiple'] = 1
     return Open(**options).show()
 
 
 def askopenfile(mode='r', **options):
-    """Ask for a filename to open, and returned the opened file"""
     filename = Open(**options).show()
     return open(filename, mode) if filename else None
 
 
 def askopenfiles(mode='r', **options):
-    """Ask for multiple filenames and return the open file
-    objects
-    
-    returns a list of open file objects or an empty list if
-    cancel selected
-    """
     files = askopenfilenames(**options)
     if files:
         ofiles = []
@@ -105,13 +88,11 @@ def askopenfiles(mode='r', **options):
 
 
 def asksaveasfile(mode='w', **options):
-    """Ask for a filename to save as, and returned the opened file"""
     filename = SaveAs(**options).show()
     return open(filename, mode) if filename else None
 
 
 def askdirectory(**options):
-    """Ask for a directory, and return the file name"""
     return Directory(**options).show()
 
 

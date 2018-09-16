@@ -14,19 +14,19 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.helpers.statistics import IStatisticsCollector
 STATISTICS_VERSION = '0.0.2'
 
-class _STATISTICS_STATE:
+class _STATISTICS_STATE(object):
     STARTED = 0
     IN_PROGRESS = 1
     STOPPED = 2
 
 
-class HARDWARE_SCORE_PARAMS:
+class HARDWARE_SCORE_PARAMS(object):
     PARAM_GPU_SCORE = 1
     PARAM_VIRTUAL_MEMORY = 3
     PARAM_CPU_SCORE = 4
 
 
-class HANGAR_LOADING_STATE:
+class HANGAR_LOADING_STATE(object):
     LOGIN = 0
     CONNECTED = 1
     SHOW_GUI = 2

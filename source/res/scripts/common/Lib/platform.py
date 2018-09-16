@@ -1,13 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/platform.py
-""" This module tries to retrieve as much platform-identifying data as
-    possible. It makes this information available via function APIs.
-
-    If called from the command line, it prints the platform
-    information concatenated as single string to stdout. The output
-    format is useable as part of a filename.
-
-"""
 __copyright__ = '\n    Copyright (c) 1999-2000, Marc-Andre Lemburg; mailto:mal@lemburg.com\n    Copyright (c) 2000-2010, eGenix.com Software GmbH; mailto:info@egenix.com\n\n    Permission to use, copy, modify, and distribute this software and its\n    documentation for any purpose and without fee or royalty is hereby granted,\n    provided that the above copyright notice appear in all copies and that\n    both that copyright notice and this permission notice appear in\n    supporting documentation or portions thereof, including modifications,\n    that you make.\n\n    EGENIX.COM SOFTWARE GMBH DISCLAIMS ALL WARRANTIES WITH REGARD TO\n    THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND\n    FITNESS, IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL,\n    INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING\n    FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,\n    NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION\n    WITH THE USE OR PERFORMANCE OF THIS SOFTWARE !\n\n'
 __version__ = '1.0.7'
 import sys, string, os, re
@@ -22,19 +14,6 @@ except AttributeError:
 _libc_search = re.compile('(__libc_init)|(GLIBC_([0-9.]+))|(libc(_\\w+)?\\.so(?:\\.(\\d[0-9.]*))?)')
 
 def libc_ver(executable=sys.executable, lib='', version='', chunksize=2048):
-    """ Tries to determine the libc version that the file executable
-        (which defaults to the Python interpreter) is linked against.
-    
-        Returns a tuple of strings (lib,version) which default to the
-        given parameters in case the lookup fails.
-    
-        Note that the function has intimate knowledge of how different
-        libc versions add symbols to the executable and thus is probably
-        only useable for executables compiled using gcc.
-    
-        The file is read and scanned in chunks of chunksize bytes.
-    
-    """
     if hasattr(os.path, 'realpath'):
         executable = os.path.realpath(executable)
     f = open(executable, 'rb')
@@ -71,13 +50,6 @@ def libc_ver(executable=sys.executable, lib='', version='', chunksize=2048):
 
 
 def _dist_try_harder(distname, version, id):
-    """ Tries some special tricks to get the distribution
-        information in case the default method fails.
-    
-        Currently supports older SuSE Linux, Caldera OpenLinux and
-        Slackware Linux distributions.
-    
-    """
     if os.path.exists('/var/adm/inst-log/info'):
         info = open('/var/adm/inst-log/info').readlines()
         distname = 'SuSE'
@@ -139,25 +111,6 @@ def _parse_release_file(firstline):
 
 
 def linux_distribution(distname='', version='', id='', supported_dists=_supported_dists, full_distribution_name=1):
-    """ Tries to determine the name of the Linux OS distribution name.
-    
-        The function first looks for a distribution release file in
-        /etc and then reverts to _dist_try_harder() in case no
-        suitable files are found.
-    
-        supported_dists may be given to define the set of Linux
-        distributions to look for. It defaults to a list of currently
-        supported Linux distributions identified by their release file
-        name.
-    
-        If full_distribution_name is true (default), the full
-        distribution read from the OS is returned. Otherwise the short
-        name taken from supported_dists is used.
-    
-        Returns a tuple (distname,version,id) which default to the
-        args given as parameters.
-    
-    """
     try:
         etc = os.listdir('/etc')
     except os.error:
@@ -188,29 +141,10 @@ def linux_distribution(distname='', version='', id='', supported_dists=_supporte
 
 
 def dist(distname='', version='', id='', supported_dists=_supported_dists):
-    """ Tries to determine the name of the Linux OS distribution name.
-    
-        The function first looks for a distribution release file in
-        /etc and then reverts to _dist_try_harder() in case no
-        suitable files are found.
-    
-        Returns a tuple (distname,version,id) which default to the
-        args given as parameters.
-    
-    """
     return linux_distribution(distname, version, id, supported_dists=supported_dists, full_distribution_name=0)
 
 
 class _popen:
-    """ Fairly portable (alternative) popen implementation.
-    
-        This is mostly needed in case os.popen() is not available, or
-        doesn't work as advertised, e.g. in Win9X GUI programs like
-        PythonWin or IDLE.
-    
-        Writing to the pipe is currently not supported.
-    
-    """
     tmpfile = ''
     pipe = None
     bufsize = None
@@ -249,8 +183,6 @@ class _popen:
 
 
 def popen(cmd, mode='r', bufsize=None):
-    """ Portable popen() interface.
-    """
     popen = None
     if os.environ.get('OS', '') == 'Windows_NT':
         try:
@@ -279,9 +211,6 @@ def popen(cmd, mode='r', bufsize=None):
 
 
 def _norm_version(version, build=''):
-    """ Normalize the version and build strings and return a single
-        version string using the format major.minor.build (or patchlevel).
-    """
     l = string.split(version, '.')
     if build:
         l.append(build)
@@ -299,16 +228,6 @@ def _norm_version(version, build=''):
 _ver_output = re.compile('(?:([\\w ]+) ([\\w.]+) .*\\[.* ([\\d.]+)\\])')
 
 def _syscmd_ver(system='', release='', version='', supported_platforms=('win32', 'win16', 'dos', 'os2')):
-    """ Tries to figure out the OS version used and returns
-        a tuple (system,release,version).
-    
-        It uses the "ver" shell command for this which is known
-        to exists on Windows, DOS and OS/2. XXX Others too ?
-    
-        In case this fails, the given parameters are used as
-        defaults.
-    
-    """
     if sys.platform not in supported_platforms:
         return (system, release, version)
     else:
@@ -341,11 +260,6 @@ def _syscmd_ver(system='', release='', version='', supported_platforms=('win32',
 
 
 def _win32_getvalue(key, name, default=''):
-    """ Read a value for name from the registry key.
-    
-        In case this fails, default is returned.
-    
-    """
     try:
         from win32api import RegQueryValueEx
     except ImportError:
@@ -359,23 +273,6 @@ def _win32_getvalue(key, name, default=''):
 
 
 def win32_ver(release='', version='', csd='', ptype=''):
-    """ Get additional version information from the Windows Registry
-        and return a tuple (version,csd,ptype) referring to version
-        number, CSD level (service pack), and OS type (multi/single
-        processor).
-    
-        As a hint: ptype returns 'Uniprocessor Free' on single
-        processor NT machines and 'Multiprocessor Free' on multi
-        processor machines. The 'Free' refers to the OS version being
-        free of debugging code. It could also state 'Checked' which
-        means the OS version uses debugging code, i.e. code that
-        checks arguments, ranges, etc. (Thomas Heller).
-    
-        Note: this function works best with Mark Hammond's win32
-        package installed, but also on Python 2.3 and later. It
-        obviously only runs on Win32 compatible platforms.
-    
-    """
     try:
         import win32api
         from win32api import RegQueryValueEx, RegOpenKeyEx, RegCloseKey, GetVersionEx
@@ -510,13 +407,6 @@ def _bcd2str(bcd):
 
 
 def _mac_ver_gestalt():
-    """
-        Thanks to Mark R. Levinson for mailing documentation links and
-        code examples for this function. Documentation for the
-        gestalt() API is available online at:
-    
-           http://www.rgaros.nl/gestalt/
-    """
     try:
         import gestalt
         import MacOS
@@ -561,13 +451,6 @@ def _mac_ver_xml():
 
 
 def mac_ver(release='', versioninfo=('', '', ''), machine=''):
-    """ Get MacOS version information and return it as tuple (release,
-        versioninfo, machine) with versioninfo being a tuple (version,
-        dev_stage, non_release_version).
-    
-        Entries which cannot be determined are set to the parameter values
-        which default to ''. All tuple entries are strings.
-    """
     info = _mac_ver_xml()
     if info is not None:
         return info
@@ -590,16 +473,6 @@ def _java_getprop(name, default):
 
 
 def java_ver(release='', vendor='', vminfo=('', '', ''), osinfo=('', '', '')):
-    """ Version interface for Jython.
-    
-        Returns a tuple (release,vendor,vminfo,osinfo) with vminfo being
-        a tuple (vm_name,vm_release,vm_vendor) and osinfo being a
-        tuple (os_name,os_version,os_arch).
-    
-        Values which cannot be determined are set to the defaults
-        given as parameters (which all default to '').
-    
-    """
     try:
         import java.lang
     except ImportError:
@@ -627,13 +500,6 @@ def java_ver(release='', vendor='', vminfo=('', '', ''), osinfo=('', '', '')):
 
 
 def system_alias(system, release, version):
-    """ Returns (system,release,version) aliased to common
-        marketing names used for some systems.
-    
-        It also does some reordering of the information in some cases
-        where it would otherwise cause confusion.
-    
-    """
     if system == 'Rhapsody':
         return ('MacOS X Server', system + release, version)
     if system == 'SunOS':
@@ -666,9 +532,6 @@ def system_alias(system, release, version):
 
 
 def _platform(*args):
-    """ Helper to format the platform string in a filename
-        compatible format e.g. "system-version-machine".
-    """
     platform = string.join(map(string.strip, filter(len, args)), '-')
     replace = string.replace
     platform = replace(platform, ' ', '_')
@@ -693,8 +556,6 @@ def _platform(*args):
 
 
 def _node(default=''):
-    """ Helper to determine the node name of this machine.
-    """
     try:
         import socket
     except ImportError:
@@ -718,9 +579,6 @@ else:
     _abspath = os.path.abspath
 
 def _follow_symlinks(filepath):
-    """ In case filepath is a symlink, follow it until a
-        real file is reached.
-    """
     filepath = _abspath(filepath)
     while os.path.islink(filepath):
         filepath = os.path.normpath(os.path.join(os.path.dirname(filepath), os.readlink(filepath)))
@@ -729,8 +587,6 @@ def _follow_symlinks(filepath):
 
 
 def _syscmd_uname(option, default=''):
-    """ Interface to the system's uname command.
-    """
     if sys.platform in ('dos', 'win32', 'win16', 'os2'):
         return default
     try:
@@ -747,14 +603,6 @@ def _syscmd_uname(option, default=''):
 
 
 def _syscmd_file(target, default=''):
-    """ Interface to the system's file command.
-    
-        The function uses the -b option of the file command to have it
-        ommit the filename in its output and if possible the -L option
-        to have the command follow symlinks. It returns default in
-        case the command should fail.
-    
-    """
     import subprocess
     if sys.platform in ('dos', 'win32', 'win16', 'os2'):
         return default
@@ -778,25 +626,6 @@ _default_architecture = {'win32': ('', 'WindowsPE'),
 _architecture_split = re.compile('[\\s,]').split
 
 def architecture(executable=sys.executable, bits='', linkage=''):
-    """ Queries the given executable (defaults to the Python interpreter
-        binary) for various architecture information.
-    
-        Returns a tuple (bits,linkage) which contains information about
-        the bit architecture and the linkage format used for the
-        executable. Both values are returned as strings.
-    
-        Values that cannot be determined are returned as given by the
-        parameter presets. If bits is given as '', the sizeof(pointer)
-        (or sizeof(long) on Python version < 1.5.2) is used as
-        indicator for the supported pointer size.
-    
-        The function relies on the system's "file" command to do the
-        actual work. This is available on most if not all Unix
-        platforms. On some non-Unix platforms where the "file" command
-        does not exist and the executable is set to the Python interpreter
-        binary defaults from _default_architecture are used.
-    
-    """
     if not bits:
         import struct
         try:
@@ -843,16 +672,6 @@ def architecture(executable=sys.executable, bits='', linkage=''):
 _uname_cache = None
 
 def uname():
-    """ Fairly portable uname interface. Returns a tuple
-        of strings (system,node,release,version,machine,processor)
-        identifying the underlying platform.
-    
-        Note that unlike the os.uname function this also returns
-        possible processor information as an additional tuple entry.
-    
-        Entries which cannot be determined are set to ''.
-    
-    """
     global _uname_cache
     no_os_uname = 0
     if _uname_cache is not None:
@@ -951,60 +770,26 @@ def uname():
 
 
 def system():
-    """ Returns the system/OS name, e.g. 'Linux', 'Windows' or 'Java'.
-    
-        An empty string is returned if the value cannot be determined.
-    
-    """
     return uname()[0]
 
 
 def node():
-    """ Returns the computer's network name (which may not be fully
-        qualified)
-    
-        An empty string is returned if the value cannot be determined.
-    
-    """
     return uname()[1]
 
 
 def release():
-    """ Returns the system's release, e.g. '2.2.0' or 'NT'
-    
-        An empty string is returned if the value cannot be determined.
-    
-    """
     return uname()[2]
 
 
 def version():
-    """ Returns the system's release version, e.g. '#3 on degas'
-    
-        An empty string is returned if the value cannot be determined.
-    
-    """
     return uname()[3]
 
 
 def machine():
-    """ Returns the machine type, e.g. 'i386'
-    
-        An empty string is returned if the value cannot be determined.
-    
-    """
     return uname()[4]
 
 
 def processor():
-    """ Returns the (true) processor name, e.g. 'amdk6'
-    
-        An empty string is returned if the value cannot be
-        determined. Note that many platforms do not provide this
-        information or simply return the same value as for machine(),
-        e.g.  NetBSD does this.
-    
-    """
     return uname()[5]
 
 
@@ -1015,24 +800,6 @@ _pypy_sys_version_parser = re.compile('([\\w.+]+)\\s*\\(#?([^,]+),\\s*([\\w ]+),
 _sys_version_cache = {}
 
 def _sys_version(sys_version=None):
-    """ Returns a parsed version of Python's sys.version as tuple
-        (name, version, branch, revision, buildno, builddate, compiler)
-        referring to the Python implementation name, version, branch,
-        revision, build number, build date/time as string and the compiler
-        identification string.
-    
-        Note that unlike the Python sys.version, the returned value
-        for the Python version will always include the patchlevel (it
-        defaults to '.0').
-    
-        The function returns empty strings for tuple entries that
-        cannot be determined.
-    
-        sys_version may be given to parse an alternative version
-        string, e.g. if the version was read from a different Python
-        interpreter.
-    
-    """
     if sys_version is None:
         sys_version = sys.version
     result = _sys_version_cache.get(sys_version, None)
@@ -1092,101 +859,36 @@ def _sys_version(sys_version=None):
 
 
 def python_implementation():
-    """ Returns a string identifying the Python implementation.
-    
-        Currently, the following implementations are identified:
-          'CPython' (C implementation of Python),
-          'IronPython' (.NET implementation of Python),
-          'Jython' (Java implementation of Python),
-          'PyPy' (Python implementation of Python).
-    
-    """
     return _sys_version()[0]
 
 
 def python_version():
-    """ Returns the Python version as string 'major.minor.patchlevel'
-    
-        Note that unlike the Python sys.version, the returned value
-        will always include the patchlevel (it defaults to 0).
-    
-    """
     return _sys_version()[1]
 
 
 def python_version_tuple():
-    """ Returns the Python version as tuple (major, minor, patchlevel)
-        of strings.
-    
-        Note that unlike the Python sys.version, the returned value
-        will always include the patchlevel (it defaults to 0).
-    
-    """
     return tuple(string.split(_sys_version()[1], '.'))
 
 
 def python_branch():
-    """ Returns a string identifying the Python implementation
-        branch.
-    
-        For CPython this is the Subversion branch from which the
-        Python binary was built.
-    
-        If not available, an empty string is returned.
-    
-    """
     return _sys_version()[2]
 
 
 def python_revision():
-    """ Returns a string identifying the Python implementation
-        revision.
-    
-        For CPython this is the Subversion revision from which the
-        Python binary was built.
-    
-        If not available, an empty string is returned.
-    
-    """
     return _sys_version()[3]
 
 
 def python_build():
-    """ Returns a tuple (buildno, builddate) stating the Python
-        build number and date as strings.
-    
-    """
     return _sys_version()[4:6]
 
 
 def python_compiler():
-    """ Returns a string identifying the compiler used for compiling
-        Python.
-    
-    """
     return _sys_version()[6]
 
 
 _platform_cache = {}
 
 def platform(aliased=0, terse=0):
-    """ Returns a single string identifying the underlying platform
-        with as much useful information as possible (but no more :).
-    
-        The output is intended to be human readable rather than
-        machine parseable. It may look different on different
-        platforms and this is intended.
-    
-        If "aliased" is true, the function will use aliases for
-        various platforms that report system names which differ from
-        their common names, e.g. SunOS will be reported as
-        Solaris. The system_alias() function is used to implement
-        this.
-    
-        Setting terse to true causes the function to return only the
-        absolute minimum information needed to identify the platform.
-    
-    """
     result = _platform_cache.get((aliased, terse), None)
     if result is not None:
         return result

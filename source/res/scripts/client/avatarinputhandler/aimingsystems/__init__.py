@@ -19,9 +19,6 @@ class IAimingSystem(object):
 
     @property
     def aimMatrix(self):
-        """Returns reference of matrix that containing transformation of player aiming.
-        But it may not consider collision with game objects and camera transformation equals
-        aim transformation by default."""
         return self._matrix
 
     def destroy(self):
@@ -140,8 +137,8 @@ def _calculateGunPointOffsetFromHullCenter(vehicleTypeDescriptor, steadyMatrix, 
     return upVector * (upOffsetGunPitch + upOffsetHullPitch)
 
 
-def _getDesiredShotPointUncached(start, dir, onlyOnGround, isStrategicMode, terrainOnlyCheck):
-    end = start + dir.scale(10000.0)
+def _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode, terrainOnlyCheck):
+    end = start + direction.scale(10000.0)
     if isStrategicMode:
         if terrainOnlyCheck:
             return __collideTerrainOnly(start, end)
@@ -150,27 +147,27 @@ def _getDesiredShotPointUncached(start, dir, onlyOnGround, isStrategicMode, terr
         if point1 is None or point2 is None:
             point = None
         else:
-            dir = Math.Vector3(point2[0]) - Math.Vector3(point1[0])
-            point = (Math.Vector3(point1[0]) + dir.scale(0.5), None)
+            direction = Math.Vector3(point2[0]) - Math.Vector3(point1[0])
+            point = (Math.Vector3(point1[0]) + direction.scale(0.5), None)
     else:
         point = collideDynamicAndStatic(start, end, (BigWorld.player().playerVehicleID,), skipGun=isStrategicMode)
     if point is not None:
         return point[0]
     else:
-        return shootInSkyPoint(start, dir) if not onlyOnGround else None
+        return shootInSkyPoint(start, direction) if not onlyOnGround else None
 
 
 g_desiredShotPoint = Vector3(0)
 g_frameStamp = -1
 
-def getDesiredShotPoint(start, dir, onlyOnGround=False, isStrategicMode=False, terrainOnlyCheck=False):
+def getDesiredShotPoint(start, direction, onlyOnGround=False, isStrategicMode=False, terrainOnlyCheck=False):
     global g_desiredShotPoint
     global g_frameStamp
     currentFrameStamp = BigWorld.wg_getFrameTimestamp()
     if g_frameStamp == currentFrameStamp:
         return g_desiredShotPoint
     g_frameStamp = currentFrameStamp
-    g_desiredShotPoint = _getDesiredShotPointUncached(start, dir, onlyOnGround, isStrategicMode, terrainOnlyCheck)
+    g_desiredShotPoint = _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode, terrainOnlyCheck)
     return g_desiredShotPoint
 
 
@@ -186,8 +183,8 @@ def _trackcalls(func):
 
 
 @_trackcalls
-def shootInSkyPoint(startPos, dir):
-    dirFromCam = dir
+def shootInSkyPoint(startPos, direction):
+    dirFromCam = direction
     start = startPos
     dirFromCam.normalise()
     vehicle = BigWorld.player().vehicle
@@ -196,10 +193,10 @@ def shootInSkyPoint(startPos, dir):
         shotPos = Math.Vector3(compoundModel.node(TankPartNames.GUN).position)
         shotDesc = vehicle.typeDescriptor.shot
     else:
-        type = BigWorld.player().arena.vehicles[BigWorld.player().playerVehicleID]['vehicleType']
+        vType = BigWorld.player().arena.vehicles[BigWorld.player().playerVehicleID]['vehicleType']
         shotPos = BigWorld.player().getOwnVehiclePosition()
-        shotPos += type.hull.turretPositions[0] + type.turret.gunPosition
-        shotDesc = type.shot
+        shotPos += vType.hull.turretPositions[0] + vType.turret.gunPosition
+        shotDesc = vType.shot
     dirAtCam = shotPos - start
     dirAtCam.normalise()
     cosAngle = dirAtCam.dot(dirFromCam)
@@ -207,7 +204,7 @@ def shootInSkyPoint(startPos, dir):
     b = shotPos.distTo(start)
     try:
         dist = b * cosAngle + math.sqrt(b * b * (cosAngle * cosAngle - 1) + a * a)
-    except:
+    except Exception:
         dist = shotDesc.maxDistance
         LOG_CODEPOINT_WARNING()
 
@@ -226,7 +223,7 @@ def __collideTerrainOnly(start, end):
     if waterHeight != -1:
         resultWater = start - Math.Vector3(0, waterHeight, 0)
     testResTerrain = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 128, 8)
-    result = testResTerrain[0] if testResTerrain is not None else None
+    result = testResTerrain.closestPoint if testResTerrain is not None else None
     if resultWater is not None:
         distance = (result - start).length
         if distance - waterHeight < 0.2:
@@ -240,5 +237,5 @@ def __collideStaticOnly(startPoint, endPoint):
     res = None
     testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, startPoint, endPoint, 128)
     if testRes is not None:
-        res = (testRes[0], None)
+        res = (testRes.closestPoint, None)
     return res

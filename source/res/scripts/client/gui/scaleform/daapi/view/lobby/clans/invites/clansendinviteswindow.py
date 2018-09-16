@@ -6,10 +6,10 @@ from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.SendInvitesWindow import SendInvitesWindow
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.WAITING import WAITING
-from gui.clans import contexts as clan_ctx
 from gui.clans import formatters as clans_fmts
 from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
 from gui.shared.view_helpers import UsersInfoHelper
+from gui.wgcg.clan import contexts as clan_ctx
 from helpers import i18n
 from messenger.m_constants import USER_TAG
 
@@ -17,7 +17,6 @@ class ClanSendInvitesWindow(SendInvitesWindow, UsersInfoHelper, ClanListener):
 
     def __init__(self, ctx):
         super(ClanSendInvitesWindow, self).__init__(ctx)
-        assert 'clanDbID' in ctx
         self.__clanDbID = ctx['clanDbID']
 
     @process
@@ -26,7 +25,7 @@ class ClanSendInvitesWindow(SendInvitesWindow, UsersInfoHelper, ClanListener):
         accountsToInvite = [ int(userDbID) for userDbID in accountsToInvite ]
         ctx = clan_ctx.CreateInviteCtx(self.__clanDbID, accountsToInvite, comment)
         self.as_onReceiveSendInvitesCooldownS(ctx.getCooldown())
-        result = yield self.clansCtrl.sendRequest(ctx)
+        result = yield self.webCtrl.sendRequest(ctx)
         expectedCodes = (ResponseCodes.ACCOUNT_ALREADY_APPLIED, ResponseCodes.ACCOUNT_ALREADY_INVITED, ResponseCodes.NO_ERRORS)
         if result.getCode() in expectedCodes:
             successAccounts = [ item.getAccountDbID() for item in ctx.getDataObj(result.data) ]

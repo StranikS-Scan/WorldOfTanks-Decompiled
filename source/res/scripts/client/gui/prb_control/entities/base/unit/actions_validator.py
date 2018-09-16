@@ -6,9 +6,6 @@ from gui.prb_control.settings import UNIT_RESTRICTION
 from shared_utils import findFirst
 
 class UnitStateValidator(BaseActionsValidator):
-    """
-    Validator for unit's state
-    """
 
     def _validate(self):
         flags = self._entity.getFlags()
@@ -18,9 +15,6 @@ class UnitStateValidator(BaseActionsValidator):
 
 
 class UnitPlayerValidator(BaseActionsValidator):
-    """
-    Validator for unit's player
-    """
 
     def _validate(self):
         pInfo = self._entity.getPlayerInfo()
@@ -33,9 +27,6 @@ class UnitPlayerValidator(BaseActionsValidator):
 
 
 class UnitVehiclesValidator(BaseActionsValidator):
-    """
-    Validates unit selected vehicles by current player.
-    """
 
     def _validate(self):
         vInfos = self._getVehiclesInfo()
@@ -61,48 +52,28 @@ class UnitVehiclesValidator(BaseActionsValidator):
             return super(UnitVehiclesValidator, self)._validate()
 
     def _isValidMode(self, vehicle):
-        """
-        Is this mode valid for given vehicle
-        Args:
-            vehicle: vehicle to check mode
-        """
-        return not vehicle.isEvent and not vehicle.isFalloutOnly()
+        return not vehicle.isEvent
 
     def _isCheckForRent(self):
-        """
-        Should we check for rent
-        """
         return True
 
     def _getVehiclesInfo(self):
-        """
-        Getter for vehicles info
-        """
         return self._entity.getVehiclesInfo()
 
 
 class ExceptDevModeValidator(BaseActionsValidator):
-    """
-    Validator, that will be disabled in dev mode
-    """
 
     def _isEnabled(self):
         return not self._entity.getFlags().isDevMode()
 
 
 class CommanderValidator(ExceptDevModeValidator):
-    """
-    Validator, that only do check for commander
-    """
 
     def _isEnabled(self):
         return self._entity.isCommander() and super(CommanderValidator, self)._isEnabled()
 
 
 class UnitSlotsValidator(CommanderValidator):
-    """
-    Validates unit slots and players numbers
-    """
 
     def _validate(self):
         roster = self._entity.getRosterSettings()
@@ -113,9 +84,6 @@ class UnitSlotsValidator(CommanderValidator):
 
 
 class UnitLevelsValidator(ExceptDevModeValidator):
-    """
-    Validates unit vehicles levels
-    """
 
     def _validate(self):
         stats = self._entity.getStats()
@@ -134,16 +102,6 @@ class UnitLevelsValidator(ExceptDevModeValidator):
 
 
 class UnitActionsValidator(ActionsValidatorComposite):
-    """
-    Base actions validator for unit entity. It has several parts:
-    - state validation
-    - player validation
-    - vehicles validation
-    
-    And commander specific parts also:
-    - levels validation
-    - slots validation
-    """
 
     def __init__(self, entity):
         self._stateValidator = self._createStateValidator(entity)
@@ -159,67 +117,34 @@ class UnitActionsValidator(ActionsValidatorComposite):
         super(UnitActionsValidator, self).__init__(entity, validators)
 
     def getVehiclesValidator(self):
-        """
-        Getter for vehicles validator part of validation
-        """
         return self._vehiclesValidator
 
     def getPlayerValidator(self):
-        """
-        Getter for player validator part of validation
-        """
         return self._playerValidator
 
     def getStateValidator(self):
-        """
-        Getter for state validator part of validation
-        """
         return self._stateValidator
 
     def getLevelsValidator(self):
-        """
-        Getter for levels validator part of validation
-        """
         return self._levelsValidator
 
     def getSlotsValidator(self):
-        """
-        Getter for slots validator part of validation
-        """
         return self._slotsValidator
 
     def validateStateToStartBattle(self):
-        """
-        Validates can we start battle
-        """
         return ValidationResult()
 
     def _createVehiclesValidator(self, entity):
-        """
-        Part of template method to build vehicles validation part
-        """
         return UnitVehiclesValidator(entity)
 
     def _createPlayerValidator(self, entity):
-        """
-        Part of template method to build player validation part
-        """
         return UnitPlayerValidator(entity)
 
     def _createStateValidator(self, entity):
-        """
-        Part of template method to build state validation part
-        """
         return UnitStateValidator(entity)
 
     def _createLevelsValidator(self, entity):
-        """
-        Part of template method to build levels validation part
-        """
         return UnitLevelsValidator(entity)
 
     def _createSlotsValidator(self, entity):
-        """
-        Part of template method to build slots validation part
-        """
         return UnitSlotsValidator(entity)

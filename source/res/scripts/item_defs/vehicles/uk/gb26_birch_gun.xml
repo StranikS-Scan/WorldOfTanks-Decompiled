@@ -81,8 +81,8 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <player>
-        <rayStart>	-1.27806 0.387992 -1.08984	</rayStart>
-        <rayEnd>	-1.07806 0.387992 -1.08984	</rayEnd>
+        <rayStart>	-1.27806 0.385737 -1.09173	</rayStart>
+        <rayEnd>	-1.07806 0.385737 -1.09173	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -268,7 +268,7 @@
         <right>	vehicles/british/GB26_Birch_Gun/track/right.track	</right>
         <segmentLength>	0.172	</segmentLength>
         <segmentOffset>	0.129	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -508,7 +508,7 @@
         <right>	vehicles/british/GB26_Birch_Gun/track/right.track	</right>
         <segmentLength>	0.172	</segmentLength>
         <segmentOffset>	0.129	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -666,11 +666,12 @@
       <gunPosition>	-0.00035 0.317002 0.41837	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	0.495128 0.714675 1.32139	</rayStart>
-          <rayEnd>	0.495128 0.636472 1.13732	</rayEnd>
+          <rayStart>	0.491589 0.714835 1.32131	</rayStart>
+          <rayEnd>	0.491589 0.636635 1.13724	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.26	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>

@@ -3,30 +3,6 @@
 from compiler import ast
 
 class ASTVisitor:
-    """Performs a depth-first walk of the AST
-    
-    The ASTVisitor will walk the AST, performing either a preorder or
-    postorder traversal depending on which method is called.
-    
-    methods:
-    preorder(tree, visitor)
-    postorder(tree, visitor)
-        tree: an instance of ast.Node
-        visitor: an instance with visitXXX methods
-    
-    The ASTVisitor is responsible for walking over the tree in the
-    correct order.  For each node, it checks the visitor argument for
-    a method named 'visitNodeType' where NodeType is the name of the
-    node's class, e.g. Class.  If the method exists, it is called
-    with the node as its sole argument.
-    
-    The visitor method for a particular node type can control how
-    child nodes are visited during a preorder walk.  (It can't control
-    the order during a postorder walk, because it is called _after_
-    the walk has occurred.)  The ASTVisitor modifies the visitor
-    argument by adding a visit method to the visitor; this method can
-    be used to visit a child node of arbitrary type.
-    """
     VERBOSE = 0
 
     def __init__(self):
@@ -49,19 +25,12 @@ class ASTVisitor:
         return meth(node, *args)
 
     def preorder(self, tree, visitor, *args):
-        """Do preorder walk of tree using visitor"""
         self.visitor = visitor
         visitor.visit = self.dispatch
         self.dispatch(tree, *args)
 
 
 class ExampleASTVisitor(ASTVisitor):
-    """Prints examples of the nodes that aren't visited
-    
-    This visitor-driver is only useful for development, when it's
-    helpful to develop a visitor incrementally, and get feedback on what
-    you still have to do.
-    """
     examples = {}
 
     def dispatch(self, node, *args):

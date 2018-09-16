@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/ARTEFACTS.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from debug_utils import LOG_WARNING
 
 class ARTEFACTS(object):
@@ -195,6 +191,11 @@ class ARTEFACTS(object):
     RATION_SWEDEN_ONUSE = '#artefacts:ration_sweden/onUse'
     RATION_SWEDEN_ALWAYS = '#artefacts:ration_sweden/always'
     RATION_SWEDEN_RESTRICTION = '#artefacts:ration_sweden/restriction'
+    RATION_ITALY_NAME = '#artefacts:ration_italy/name'
+    RATION_ITALY_DESCR = '#artefacts:ration_italy/descr'
+    RATION_ITALY_ONUSE = '#artefacts:ration_italy/onUse'
+    RATION_ITALY_ALWAYS = '#artefacts:ration_italy/always'
+    RATION_ITALY_RESTRICTION = '#artefacts:ration_italy/restriction'
     RATION_POLAND_ALWAYS = '#artefacts:ration_poland/always'
     RATION_POLAND_RESTRICTION = '#artefacts:ration_poland/restriction'
     RATION_POLAND_NAME = '#artefacts:ration_poland/name'

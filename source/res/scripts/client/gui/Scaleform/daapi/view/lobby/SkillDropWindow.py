@@ -87,8 +87,8 @@ class SkillDropWindow(SkillDropMeta):
             self.__setData()
         return
 
-    def onCreditsChange(self, credits):
-        self.as_setCreditsS(credits)
+    def onCreditsChange(self, credit):
+        self.as_setCreditsS(credit)
 
     def onGoldChange(self, gold):
         self.as_setGoldS(self.itemsCache.items.stats.gold)
@@ -97,13 +97,6 @@ class SkillDropWindow(SkillDropMeta):
         self.destroy()
 
     def calcDropSkillsParams(self, tmanCompDescrPickle, xpReuseFraction):
-        """
-        Recalculates tankman skills by given skills reuse fraction
-        
-        @param tmanCompDescr: tankman string compact descriptor
-        @param xpReuseFraction: tankman experience reuse fraction
-        @return: (new skills count, last new skill level)
-        """
         tmanCompDescr = pickle.loads(tmanCompDescrPickle)
         tmanDescr = tankmen.TankmanDescr(tmanCompDescr)
         tmanDescr.dropSkills(xpReuseFraction)
@@ -112,10 +105,6 @@ class SkillDropWindow(SkillDropMeta):
 
     @decorators.process('deleting')
     def dropSkills(self, dropSkillCostIdx):
-        """
-        Drops all tankman skill using @dropSkillCostIdx modificator
-        @param dropSkillCostIdx: tankman experience modificator index
-        """
         tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         proc = TankmanDropSkills(tankman, dropSkillCostIdx)
         result = yield proc.request()

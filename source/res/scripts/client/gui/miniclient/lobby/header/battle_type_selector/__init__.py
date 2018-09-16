@@ -7,6 +7,5 @@ def configure_pointcuts():
     _pointcuts.CommandBattle()
     _pointcuts.TrainingBattle()
     _pointcuts.SpecialBattle()
-    _pointcuts.FalloutBattle()
     _pointcuts.OnBattleTypeSelectorPopulate()
     _pointcuts.StrongholdBattle()

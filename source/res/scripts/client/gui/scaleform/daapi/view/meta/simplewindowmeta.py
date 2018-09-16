@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SimpleWindowMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class SimpleWindowMeta(AbstractWindowView):
@@ -21,7 +17,4 @@ class SimpleWindowMeta(AbstractWindowView):
         return self.flashObject.as_setImage(imgPath, imgBottomMargin) if self._isDAAPIInited() else None
 
     def as_setButtonsS(self, buttonsList, align, btnWidth):
-        """
-        :param buttonsList: Represented by Vector.<SimpleWindowBtnVo> (AS)
-        """
         return self.flashObject.as_setButtons(buttonsList, align, btnWidth) if self._isDAAPIInited() else None

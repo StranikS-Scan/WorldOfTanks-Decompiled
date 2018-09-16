@@ -17,9 +17,6 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
         return self.__app
 
     def setEnvironment(self, app):
-        """Sets some required environment for instance of DAAPIModule.
-        :param app: instance of application.
-        """
         self.__app = app
 
     def setPyReloading(self, flag):
@@ -30,7 +27,7 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
             self.__isScriptSet = setScript
             try:
                 self.turnDAAPIon(setScript, movieClip)
-            except:
+            except Exception:
                 raise Exception('Can not initialize daapi in ' + str(self))
 
             if autoPopulate:
@@ -52,7 +49,7 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
             try:
                 if self.__isScriptSet and not self.__isPyReloading:
                     self.as_disposeS()
-            except:
+            except Exception:
                 LOG_ERROR('Error during %s flash disposing' % str(self))
 
             self.turnDAAPIoff(self.__isScriptSet)

@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/LobbyMenuMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.View import View
 
 class LobbyMenuMeta(View):
@@ -36,21 +32,12 @@ class LobbyMenuMeta(View):
         self._printOverrideError('onEscapePress')
 
     def as_setVersionMessageS(self, data):
-        """
-        :param data: Represented by VersionMessageVO (AS)
-        """
         return self.flashObject.as_setVersionMessage(data) if self._isDAAPIInited() else None
 
     def as_setCounterS(self, counters):
-        """
-        :param counters: Represented by Vector.<CountersVo> (AS)
-        """
         return self.flashObject.as_setCounter(counters) if self._isDAAPIInited() else None
 
     def as_removeCounterS(self, counters):
-        """
-        :param counters: Represented by Vector.<String> (AS)
-        """
         return self.flashObject.as_removeCounter(counters) if self._isDAAPIInited() else None
 
     def as_setBootcampButtonLabelS(self, label, icon):

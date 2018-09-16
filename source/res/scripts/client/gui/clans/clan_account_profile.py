@@ -2,19 +2,21 @@
 # Embedded file name: scripts/client/gui/clans/clan_account_profile.py
 import weakref
 from collections import namedtuple, defaultdict
+from account_helpers import getAccountDatabaseID
 from adisp import process
 from client_request_lib.exceptions import ResponseCodes
-from account_helpers import getAccountDatabaseID
+from debug_utils import LOG_DEBUG
 from gui.awards.event_dispatcher import showClanJoinAward
+from gui.clans import formatters as clans_fmts
+from gui.clans.clan_helpers import ClanCache, CachedValue, isInClanEnterCooldown
+from gui.clans.restrictions import ClanMemberPermissions, DefaultClanMemberPermissions
+from gui.clans.settings import CLAN_INVITE_STATES, INVITE_LIMITS_LIFE_TIME
+from gui.wgcg.clan.contexts import GetClanInfoCtx
+from gui.wgcg.settings import WebRequestDataType
+from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import dependency
 from messenger.ext import passCensor
 from shared_utils import CONST_CONTAINER
-from debug_utils import LOG_DEBUG
-from gui.clans import contexts, formatters as clans_fmts
-from gui.clans.restrictions import ClanMemberPermissions, DefaultClanMemberPermissions
-from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, CLAN_INVITE_STATES, INVITE_LIMITS_LIFE_TIME
-from gui.clans.clan_helpers import ClanCache, CachedValue, isInClanEnterCooldown
-from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from skeletons.gui.shared import IItemsCache
 
 class SYNC_KEYS(CONST_CONTAINER):
@@ -139,7 +141,7 @@ class ClanAccountProfile(object):
         if self.isSynced(SYNC_KEYS.CLAN_INFO) and not force:
             return
         self._waitForSync |= SYNC_KEYS.CLAN_INFO
-        ctx = contexts.GetClanInfoCtx(self._accountDbID)
+        ctx = GetClanInfoCtx(self._accountDbID)
         if self.isInClan():
             self._vitalWebInfo[SYNC_KEYS.CLAN_INFO] = ctx.getDefDataObj()
             self._syncState |= SYNC_KEYS.CLAN_INFO
@@ -186,7 +188,7 @@ class ClanAccountProfile(object):
     def processRequestResponse(self, ctx, response):
         requestType = ctx.getRequestType()
         if response.isSuccess():
-            if requestType == CLAN_REQUESTED_DATA_TYPE.CREATE_APPLICATIONS:
+            if requestType == WebRequestDataType.CREATE_APPLICATIONS:
                 apps = ctx.getDataObj(response.data)
                 if apps:
                     appsCount = self._vitalWebInfo[SYNC_KEYS.APPS] or 0
@@ -197,13 +199,13 @@ class ClanAccountProfile(object):
 
                     self._cache[_CACHE_KEYS.APPS] = cached
                     self.__changeWebInfo(SYNC_KEYS.APPS, appsCount, 'onAccountAppsReceived')
-            elif requestType == CLAN_REQUESTED_DATA_TYPE.DECLINE_INVITE:
+            elif requestType == WebRequestDataType.DECLINE_INVITE:
                 self.__changeInvitesState([ctx.getDataObj(response.data)], CLAN_INVITE_STATES.DECLINED)
-            elif requestType == CLAN_REQUESTED_DATA_TYPE.DECLINE_INVITES:
+            elif requestType == WebRequestDataType.DECLINE_INVITES:
                 self.__changeInvitesState(ctx.getDataObj(response.data), CLAN_INVITE_STATES.DECLINED)
-            elif requestType == CLAN_REQUESTED_DATA_TYPE.ACCEPT_INVITE:
+            elif requestType == WebRequestDataType.ACCEPT_INVITE:
                 self.__changeInvitesState([ctx.getDataObj(response.data)], CLAN_INVITE_STATES.ACCEPTED)
-            elif requestType == CLAN_REQUESTED_DATA_TYPE.ACCOUNT_INVITES:
+            elif requestType == WebRequestDataType.ACCOUNT_INVITES:
                 statuses = ctx.getStatuses() or []
                 if len(statuses) == 1 and statuses[0] == CLAN_INVITE_STATES.ACTIVE:
                     count = ctx.getTotalCount(response.data)
@@ -218,7 +220,7 @@ class ClanAccountProfile(object):
                     self._cache[_CACHE_KEYS.INVITES] = cached
                     if count is not None and count != self._vitalWebInfo[SYNC_KEYS.INVITES]:
                         self.__changeWebInfo(SYNC_KEYS.INVITES, count, 'onAccountInvitesReceived')
-            elif requestType == CLAN_REQUESTED_DATA_TYPE.GET_ACCOUNT_APPLICATIONS:
+            elif requestType == WebRequestDataType.GET_ACCOUNT_APPLICATIONS:
                 statuses = ctx.getStatuses() or []
                 if len(statuses) == 1 and statuses[0] == CLAN_INVITE_STATES.ACTIVE:
                     count = ctx.getTotalCount(response.data)
@@ -234,7 +236,7 @@ class ClanAccountProfile(object):
                     count = ctx.getTotalCount(response.data)
                     if count is not None and count != self._vitalWebInfo[SYNC_KEYS.APPS]:
                         self.__changeWebInfo(SYNC_KEYS.APPS, count, 'onAccountAppsReceived')
-        elif requestType == CLAN_REQUESTED_DATA_TYPE.CREATE_APPLICATIONS:
+        elif requestType == WebRequestDataType.CREATE_APPLICATIONS:
             code = response.getCode()
             if code == ResponseCodes.ACCOUNT_ALREADY_APPLIED:
                 cached = self._cache[_CACHE_KEYS.APPS] or set()
@@ -257,11 +259,6 @@ class ClanAccountProfile(object):
         return
 
     def processWgncNotification(self, notifID, item):
-        """
-        Method handles actions received trough WGNC
-        :param notifID:
-        :param item: instance of gui.wgnc.proxy_data._ProxyDataItem
-        """
 
         def __updateAfterAction():
             apps = self._cache[_CACHE_KEYS.APPS] or set()

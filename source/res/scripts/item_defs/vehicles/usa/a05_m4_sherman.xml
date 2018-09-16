@@ -105,7 +105,7 @@
       <userString>	#usa_vehicles:T41	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	4450.0	</price>
+      <price>	4450	</price>
       <unlocks>
         <chassis>	T42	  <cost>	2100	</cost>
         </chassis>
@@ -143,7 +143,7 @@
         <segmentLength>	0.13	</segmentLength>
         <segmentOffset>	0.127	</segmentOffset>
         <segment2Offset>	0.069	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -391,7 +391,7 @@
         <segmentLength>	0.13	</segmentLength>
         <segmentOffset>	0.127	</segmentOffset>
         <segment2Offset>	0.069	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -607,7 +607,7 @@
       <userString>	#usa_vehicles:D51066	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	4800.0	</price>
+      <price>	4800	</price>
       <armor>
         <armor_1>	76.2	</armor_1>
         <armor_2>	76.2	</armor_2>
@@ -974,12 +974,12 @@
   </turrets0>
   <engines>
     <Wright_Continental_R-975EC2>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C1	  <cost>	900.0	</cost>
+        <engine>	Wright_Continental_R-975C1	  <cost>	900	</cost>
         </engine>
       </unlocks>
     </Wright_Continental_R-975EC2>
     <Wright_Continental_R-975C1>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C4	  <cost>	1500.0	</cost>
+        <engine>	Wright_Continental_R-975C4	  <cost>	1500	</cost>
         </engine>
       </unlocks>
     </Wright_Continental_R-975C1>
@@ -990,7 +990,7 @@
   </fuelTanks>
   <radios>
     <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_506	  <cost>	5600.0	</cost>
+        <radio>	SCR_506	  <cost>	5600	</cost>
         </radio>
       </unlocks>
     </SCR_508>

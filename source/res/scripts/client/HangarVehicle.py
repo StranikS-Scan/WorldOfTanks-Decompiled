@@ -1,98 +1,57 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/HangarVehicle.py
-import BigWorld
 import Math
-from AvatarInputHandler import mathUtils
-from ModelHitTester import segmentMayHitVehicle, SegmentCollisionResult
+from hangar_camera_common import CameraMovementStates
+from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
+import WWISE
+from gui.shared.utils.HangarSpace import g_hangarSpace
 
-class HangarVehicle(BigWorld.Entity):
+class HangarVehicle(ClientSelectableCameraVehicle):
+    _SOUND_STATE_MAIN_TANK = '_main'
+    _SOUND_START_MOVING_TO_MAIN = 'hangar_premium_2018_camera_fly_backward'
+    _SOUND_GROUP_HANGAR_TANK_VIEW = 'STATE_hangar_tank_view'
 
     def __init__(self):
-        self.typeDescriptor = None
+        self.selectionId = ''
+        self.clickSoundName = ''
+        self.releaseSoundName = ''
+        self.mouseOverSoundName = ''
+        self.modelName = ''
+        self.cameraShift = Math.Vector3(0.0, 0.0, 0.0)
+        self.cameraPivot = Math.Vector3(0.0, 0.0, 0.0)
+        self.cameraYaw = 0.0
+        self.cameraPitch = 0.0
+        self.cameraObjectAspect = 1.0
+        self.enableYawLimits = False
+        self.yawLimits = None
+        self.pitchLimitMin = 0.0
+        self.pitchLimitMax = 0.0
+        self.vehicleGunPitch = 0.0
+        self.vehicleTurretYaw = 0.0
+        self.cameraBackwardDuration = 10.0
+        self.cameraUpcomingDuration = 10.0
+        super(HangarVehicle, self).__init__()
         return
 
     def prerequisites(self):
         return []
 
     def onEnterWorld(self, prereqs):
+        super(HangarVehicle, self).onEnterWorld(prereqs)
+        self.enable(False)
+        self.setState(CameraMovementStates.ON_OBJECT)
+        WWISE.WW_setState(self._SOUND_GROUP_HANGAR_TANK_VIEW, '{}{}'.format(self._SOUND_GROUP_HANGAR_TANK_VIEW, self._SOUND_STATE_MAIN_TANK))
+
+    def _onSpaceCreated(self):
+        super(HangarVehicle, self)._onSpaceCreated()
+        self.setState(CameraMovementStates.ON_OBJECT)
+        self.cameraPivot = g_hangarSpace.space.camera.pivotPosition
+
+    def _setStartValues(self):
         pass
 
-    def onLeaveWorld(self):
-        self.releaseBspModels()
+    def _getMovingSound(self):
+        return self._SOUND_START_MOVING_TO_MAIN
 
-    def setSelectable(self, flag):
-        """Include/exclude entity to select as target. Vehicle does not have any interaction
-            when player goes from hangar to other screen (for example, shop), because of
-            GUI overlaps model of vehicle and UI handles any selectable objects in hangar only.
-        :param flag: boolean.
-        """
-        if flag:
-            self.targetCaps = []
-        else:
-            self.targetCaps = [0]
-
-    def canDoHitTest(self, dotest):
-        self.icanDoHitTest = dotest
-
-    def releaseBspModels(self):
-        self.icanDoHitTest = False
-        if self.typeDescriptor is not None:
-            for compDescr, compMatrix in self.getComponents():
-                hitTester = compDescr.hitTester
-                if hitTester.isBspModelLoaded():
-                    hitTester.releaseBspModel()
-
-        return
-
-    def collideSegment(self, startPoint, endPoint, skipGun=False):
-        worldToVehMatrix = Math.Matrix(self.model.matrix)
-        worldToVehMatrix.invert()
-        startPoint = worldToVehMatrix.applyPoint(startPoint)
-        endPoint = worldToVehMatrix.applyPoint(endPoint)
-        res = None
-        for compDescr, compMatrix in self.getComponents():
-            if skipGun and compDescr.itemTypeName == 'vehicleGun':
-                continue
-            hitTester = compDescr.hitTester
-            if not hitTester.isBspModelLoaded():
-                hitTester.loadBspModel()
-            collisions = hitTester.localHitTest(compMatrix.applyPoint(startPoint), compMatrix.applyPoint(endPoint))
-            if collisions is None:
-                continue
-            for dist, _, hitAngleCos, matKind in collisions:
-                if res is None or res[0] >= dist:
-                    matInfo = compDescr.materials.get(matKind)
-                    res = SegmentCollisionResult(dist, hitAngleCos, matInfo.armor if matInfo is not None else 0)
-
-        return res
-
-    def segmentMayHitVehicle(self, startPoint, endPoint):
-        return segmentMayHitVehicle(self.typeDescriptor, startPoint, endPoint, self.position)
-
-    def getComponents(self):
-        res = []
-        vehicleDescr = self.typeDescriptor
-        m = Math.Matrix()
-        m.setIdentity()
-        res.append((vehicleDescr.chassis, m))
-        hullOffset = vehicleDescr.chassis.hullPosition
-        m = Math.Matrix()
-        offset = -hullOffset
-        m.setTranslate(offset)
-        res.append((vehicleDescr.hull, m))
-        m = Math.Matrix()
-        offset -= vehicleDescr.hull.turretPositions[0]
-        m.setTranslate(offset)
-        res.append((vehicleDescr.turret, m))
-        yaw = vehicleDescr.gun.staticTurretYaw
-        pitch = vehicleDescr.gun.staticPitch
-        offset -= vehicleDescr.turret.gunPosition
-        if yaw is None:
-            yaw = 0.0
-        if pitch is None:
-            pitch = 0.0
-        m = Math.Matrix()
-        gunMatrix = mathUtils.createRTMatrix(Math.Vector3(yaw, pitch, 0.0), offset)
-        gunMatrix.postMultiply(m)
-        res.append((vehicleDescr.gun, gunMatrix))
-        return res
+    def _getNextMusicState(self):
+        return self._SOUND_STATE_MAIN_TANK

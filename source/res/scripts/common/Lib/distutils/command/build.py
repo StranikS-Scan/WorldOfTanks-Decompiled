@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/build.py
-"""distutils.command.build
-
-Implements the Distutils 'build' command."""
 __revision__ = '$Id$'
 import sys, os
 from distutils.util import get_platform

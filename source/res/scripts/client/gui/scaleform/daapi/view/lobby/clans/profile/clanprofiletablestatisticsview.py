@@ -17,7 +17,7 @@ from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
 from helpers import time_utils
 from gui.clans import formatters
-from skeletons.gui.clans import IClanController
+from skeletons.gui.web import IWebController
 
 def _packColumn(columndID, label, buttonWidth, tooltip, enabled, icon='', sortOrder=-1, showSeparator=True, textAlign='left'):
     return {'id': columndID,
@@ -33,7 +33,7 @@ def _packColumn(columndID, label, buttonWidth, tooltip, enabled, icon='', sortOr
      'enabled': enabled}
 
 
-class _SORT_IDS:
+class _SORT_IDS(object):
     FRONT = 'front'
     PROVINCE = 'province'
     MAP = 'map'
@@ -43,7 +43,7 @@ class _SORT_IDS:
 
 
 class ClanProfileTableStatisticsView(ClanProfileTableStatisticsViewMeta):
-    clanCtrl = dependency.descriptor(IClanController)
+    clanCtrl = dependency.descriptor(IWebController)
 
     def __init__(self):
         super(ClanProfileTableStatisticsView, self).__init__()
@@ -141,8 +141,8 @@ class _ClanProfileProvinceDataProvider(SortableDAAPIDataProvider):
     def getSelectedIdx(self):
         return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1
 
-    def setSelectedID(self, id):
-        self.__selectedID = id
+    def setSelectedID(self, clanID):
+        self.__selectedID = clanID
 
     def getVO(self, index):
         vo = None
@@ -210,7 +210,7 @@ class _ClanProfileProvinceDataProvider(SortableDAAPIDataProvider):
         return province.getProvinceLocalizedName()
 
     def __getMap(self, province):
-        return formatField(getter=province.getArenaId, formatter=lambda arena_id: getI18ArenaById(arena_id))
+        return formatField(getter=province.getArenaId, formatter=getI18ArenaById)
 
     def __getPrimeTime(self, province):
         primeTime = province.getPrimeTime()

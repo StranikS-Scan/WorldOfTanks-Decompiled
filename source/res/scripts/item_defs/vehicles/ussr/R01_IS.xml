@@ -88,7 +88,7 @@
       <userString>	#ussr_vehicles:IS-1	</userString>
       <tags></tags>
       <level>	6	</level>
-      <price>	12990.0	</price>
+      <price>	12990	</price>
       <unlocks>
         <chassis>	IS-2M	  <cost>	8125	</cost>
         </chassis>
@@ -123,7 +123,7 @@
         <right>	vehicles/russian/R01_IS/track/right.track	</right>
         <segmentLength>	0.15	</segmentLength>
         <segmentOffset>	0.03	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -331,7 +331,7 @@
       <userString>	#ussr_vehicles:IS-2M	</userString>
       <tags></tags>
       <level>	7	</level>
-      <price>	18080.0	</price>
+      <price>	18080	</price>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -362,7 +362,7 @@
         <right>	vehicles/russian/R01_IS/track/right.track	</right>
         <segmentLength>	0.15	</segmentLength>
         <segmentOffset>	0.03	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -572,7 +572,7 @@
       <userString>	#ussr_vehicles:IS-85	</userString>
       <tags></tags>
       <level>	6	</level>
-      <price>	15000.0	</price>
+      <price>	15000	</price>
       <unlocks>
         <turret>	IS-122	  <cost>	12200	</cost>
         </turret>
@@ -615,7 +615,7 @@
           <unlocks>
             <gun>	_85mm_D5T-85BM	  <cost>	15500	</cost>
             </gun>
-            <gun>	_100mm_D10T	  <cost>	16500.0	</cost>
+            <gun>	_100mm_D10T	  <cost>	16500	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -807,7 +807,7 @@
       <level>	7	</level>
       <price>	26300	</price>
       <unlocks>
-        <gun>	_122-mm_D-25T_with_a_piston_shutter	  <cost>	17000.0	</cost>
+        <gun>	_122-mm_D-25T_with_a_piston_shutter	  <cost>	17000	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -1138,7 +1138,7 @@
   </fuelTanks>
   <radios>
     <_10RK>	shared	  <unlocks>
-        <radio>	_12RT	  <cost>	5600.0	</cost>
+        <radio>	_12RT	  <cost>	5600	</cost>
         </radio>
       </unlocks>
     </_10RK>

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/ScopeTemplates.py
 from gui.Scaleform.framework import ViewTypes
 
-class SCOPE_TYPE:
+class SCOPE_TYPE(object):
     GLOBAL = 'global'
     DYNAMIC = 'dynamic'
     VIEW = ViewTypes.VIEW

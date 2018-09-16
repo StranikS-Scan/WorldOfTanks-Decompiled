@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/admin_chat_cmd.py
+import types
 from debug_utils import LOG_WARNING
 from external_strings_utils import isAccountNameValid, normalizedAccountName
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
@@ -13,7 +14,6 @@ from messenger_common_chat2 import ADMIN_CHAT_COMMANDS_BY_NAMES as _COMMANDS_BY_
 from messenger_common_chat2 import messageArgs
 from messenger_common_chat2 import MESSENGER_ERRORS as _ERRORS
 from messenger.storage import storage_getter
-import types
 
 @ReprInjector.simple('id', 'args', 'tail')
 class _ParsingResult(object):
@@ -127,7 +127,7 @@ class _UserBanArgsParser(_UserBanUnBanArgsParser):
             return result
         else:
             banPeriod = result._next()
-            if banPeriod and type(banPeriod) in types.StringTypes:
+            if banPeriod and isinstance(banPeriod, types.StringTypes):
                 amount, multiplier, litter = (None, 1, None)
                 if banPeriod.isdigit():
                     amount = long(banPeriod)
@@ -157,7 +157,7 @@ class _UserBanArgsParser(_UserBanUnBanArgsParser):
 class _UserUnBanArgsParser(_UserBanUnBanArgsParser):
 
     def __init__(self):
-        super(_UserBanUnBanArgsParser, self).__init__(2)
+        super(_UserUnBanArgsParser, self).__init__(2)
 
 
 _AVAILABLE_PARSERS = {'USERBAN': _UserBanArgsParser,

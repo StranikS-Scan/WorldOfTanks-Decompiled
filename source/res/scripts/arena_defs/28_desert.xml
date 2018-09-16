@@ -11,14 +11,14 @@
   <vehicleCamouflageKind>	desert	</vehicleCamouflageKind>
   <maxPlayersInTeam>	15	</maxPlayersInTeam>
   <wwmusicSetup>
-    <wwmusicLoading>	music_rus_vilage	</wwmusicLoading>
-    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
-    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+    <wwmusicLoading>	music_ruinberg_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_ruinberg_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_ruinberg_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_desert_01	</wwambientSound>
   <umbraEnabled>	1	</umbraEnabled>
@@ -29,31 +29,13 @@
     <freqZ>	0	</freqZ>
   </water>
   <gameplayTypes>
-    <assault>
-      <winnerIfTimeout>	1	</winnerIfTimeout>
-      <teamSpawnPoints>
-        <team1>
-          <position>	25 -413	</position>
-          <position>	-398.151 -413	</position>
-        </team1>
-        <team2>
-          <position>	-91.257 423.693	</position>
-        </team2>
-      </teamSpawnPoints>
-      <teamBasePositions>
-        <team1>
-          <position1>	111.284286 -328.484772	</position1>
-        </team1>
-        <team2></team2>
-      </teamBasePositions>
-    </assault>
     <ctf>
       <teamBasePositions>
         <team1>
           <position1>	373.485199 -178.960999	</position1>
         </team1>
         <team2>
-          <position1>	-405.038452 137.526260	</position1>
+          <position1>	-405.038452 137.526245	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
@@ -68,10 +50,6 @@
           <position>	-437.991 244.365	</position>
         </team2>
       </teamSpawnPoints>
-      <teamBasePositions>
-        <team1></team1>
-        <team2></team2>
-      </teamBasePositions>
       <controlPoint>	-89.697029 -323.644165	</controlPoint>
     </domination>
     <assault2>
@@ -87,10 +65,9 @@
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	249.900955 -208.700165	</position1>
+          <position1>	249.900940 -208.700195	</position1>
           <position2>	116.863976 310.117004	</position2>
         </team1>
-        <team2></team2>
       </teamBasePositions>
     </assault2>
   </gameplayTypes>

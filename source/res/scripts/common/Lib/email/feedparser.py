@@ -1,21 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/feedparser.py
-"""FeedParser - An email feed parser.
-
-The feed parser implements an interface for incrementally parsing an email
-message, line by line.  This has advantages for certain applications, such as
-those reading email messages off a socket.
-
-FeedParser.feed() is the primary interface for pushing new data into the
-parser.  It returns when there's nothing more it can do with the available
-data.  When you have no more data to push into the parser, call .close().
-This completes the parsing and returns the root message object.
-
-The other advantage of this parser is that it will never raise a parsing
-exception.  Instead, when it finds something unexpected, it adds a 'defect' to
-the current message.  Defects are just instances that live on the message
-object's .defects attribute.
-"""
 __all__ = ['FeedParser']
 import re
 from email import errors
@@ -30,13 +14,6 @@ NL = '\n'
 NeedMoreData = object()
 
 class BufferedSubFile(object):
-    """A file-ish object that can have new data loaded into it.
-    
-    You can also push and pop line-matching predicates onto a stack.  When the
-    current predicate matches the current line, a false EOF response
-    (i.e. empty string) is returned instead.  This lets the parser adhere to a
-    simple abstraction -- it parses until EOF closes the current message.
-    """
 
     def __init__(self):
         self._partial = ''
@@ -69,11 +46,9 @@ class BufferedSubFile(object):
         return line
 
     def unreadline(self, line):
-        assert line is not NeedMoreData
         self._lines.append(line)
 
     def push(self, data):
-        """Push some new data into this object."""
         data, self._partial = self._partial + data, ''
         parts = NLCRE_crack.split(data)
         self._partial = parts.pop()
@@ -102,10 +77,8 @@ class BufferedSubFile(object):
 
 
 class FeedParser:
-    """A feed-style parser of email."""
 
     def __init__(self, _factory=message.Message):
-        """_factory is called with no arguments to create a new message obj"""
         self._factory = _factory
         self._input = BufferedSubFile()
         self._msgstack = []
@@ -119,7 +92,6 @@ class FeedParser:
         self._headersonly = True
 
     def feed(self, data):
-        """Push more data into the parser."""
         self._input.push(data)
         self._call_parse()
 
@@ -130,11 +102,9 @@ class FeedParser:
             pass
 
     def close(self):
-        """Parse all remaining data and return the root message object."""
         self._input.close()
         self._call_parse()
         root = self._pop_message()
-        assert not self._msgstack
         if root.get_content_maintype() == 'multipart' and not root.is_multipart():
             root.defects.append(errors.MultipartInvariantViolationDefect())
         return root
@@ -299,7 +269,6 @@ class FeedParser:
                     self._input.pop_eof_matcher()
                     self._pop_message()
                     self._last = self._cur
-                assert capturing_preamble
                 preamble.append(line)
 
             if capturing_preamble:

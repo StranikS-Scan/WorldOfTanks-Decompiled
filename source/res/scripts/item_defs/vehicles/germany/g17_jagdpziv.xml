@@ -124,7 +124,7 @@
       <userString>	#germany_vehicles:JagdPzIV_Ausf_1940	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	9610.0	</price>
+      <price>	9610	</price>
       <unlocks>
         <chassis>	JagdPzIV_Ausf_1943	  <cost>	4110	</cost>
         </chassis>
@@ -255,7 +255,7 @@
         <right>	vehicles/german/G17_JagdPzIV/track/right.track	</right>
         <segmentLength>	0.116	</segmentLength>
         <segmentOffset>	0.096	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -374,7 +374,7 @@
       <userString>	#germany_vehicles:JagdPzIV_Ausf_1943	</userString>
       <tags></tags>
       <level>	6	</level>
-      <price>	12860.0	</price>
+      <price>	12860	</price>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -501,7 +501,7 @@
         <right>	vehicles/german/G17_JagdPzIV/track/right.track	</right>
         <segmentLength>	0.116	</segmentLength>
         <segmentOffset>	0.096	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -819,7 +819,7 @@
   </fuelTanks>
   <radios>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
+        <radio>	FuG7	  <cost>	1360	</cost>
         </radio>
       </unlocks>
     </FuG5>

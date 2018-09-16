@@ -1,26 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/aetools.py
-"""Tools for use in AppleEvent clients and servers.
-
-pack(x) converts a Python object to an AEDesc object
-unpack(desc) does the reverse
-
-packevent(event, parameters, attributes) sets params and attrs in an AEAppleEvent record
-unpackevent(event) returns the parameters and attributes from an AEAppleEvent record
-
-Plus...  Lots of classes and routines that help representing AE objects,
-ranges, conditionals, logicals, etc., so you can write, e.g.:
-
-    x = Character(1, Document("foobar"))
-
-and pack(x) will create an AE object reference equivalent to AppleScript's
-
-    character 1 of document "foobar"
-
-Some of the stuff that appears to be exported from this module comes from other
-files: the pack stuff from aepack, the objects from aetypes.
-
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the aetools module is removed.', stacklevel=2)
 from types import *
@@ -102,7 +81,6 @@ def packevent(ae, parameters={}, attributes={}):
 
 
 def keysubst(arguments, keydict):
-    """Replace long name keys by their 4-char counterparts, and check"""
     ok = keydict.values()
     for k in arguments.keys():
         if k in keydict:
@@ -114,7 +92,6 @@ def keysubst(arguments, keydict):
 
 
 def enumsubst(arguments, key, edict):
-    """Substitute a single enum keyword argument, if it occurs"""
     if key not in arguments or edict is None:
         return
     else:
@@ -128,7 +105,6 @@ def enumsubst(arguments, key, edict):
 
 
 def decodeerror(arguments):
-    """Create the 'best' argument for a raise MacOS.Error"""
     errn = arguments['errn']
     err_a1 = errn
     if 'errs' in arguments:
@@ -143,7 +119,6 @@ def decodeerror(arguments):
 
 
 class TalkTo:
-    """An AE connection to an application"""
     _signature = None
     _moduleName = None
     _elemdict = {}
@@ -160,12 +135,6 @@ class TalkTo:
     __ensure_WMAvailable = classmethod(__ensure_WMAvailable)
 
     def __init__(self, signature=None, start=0, timeout=0):
-        """Create a communication channel with a particular application.
-        
-        Addressing the application is done by specifying either a
-        4-byte signature, an AEDesc or an object that will __aepack__
-        to an AEDesc.
-        """
         self.target_signature = None
         if signature is None:
             signature = self._signature
@@ -189,7 +158,6 @@ class TalkTo:
         return
 
     def _start(self):
-        """Start the application, if it is not running yet"""
         try:
             self.send('ascr', 'noop')
         except AE.Error:
@@ -205,17 +173,14 @@ class TalkTo:
                 time.sleep(1)
 
     def start(self):
-        """Deprecated, used _start()"""
         self._start()
 
     def newevent(self, code, subcode, parameters={}, attributes={}):
-        """Create a complete structure for an apple event"""
         event = AE.AECreateAppleEvent(code, subcode, self.target, AppleEvents.kAutoGenerateReturnID, AppleEvents.kAnyTransactionID)
         packevent(event, parameters, attributes)
         return event
 
     def sendevent(self, event):
-        """Send a pre-created appleevent, await the reply and unpack it"""
         if not self.__ensure_WMAvailable():
             raise RuntimeError, 'No window manager access, cannot send AppleEvent'
         reply = event.AESend(self.send_flags, self.send_priority, self.send_timeout)
@@ -223,19 +188,12 @@ class TalkTo:
         return (reply, parameters, attributes)
 
     def send(self, code, subcode, parameters={}, attributes={}):
-        """Send an appleevent given code/subcode/pars/attrs and unpack the reply"""
         return self.sendevent(self.newevent(code, subcode, parameters, attributes))
 
     def activate(self):
-        """Send 'activate' command"""
         self.send('misc', 'actv')
 
     def _get(self, _object, asfile=None, _attributes={}):
-        """_get: get data from an object
-        Required argument: the object
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: the data
-        """
         _code = 'core'
         _subcode = 'getd'
         _arguments = {'----': _object}
@@ -254,11 +212,6 @@ class TalkTo:
     _argmap_set = {'to': 'data'}
 
     def _set(self, _object, _attributes={}, **_arguments):
-        """set: Set an object's data.
-        Required argument: the object for the command
-        Keyword argument to: The new value.
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'core'
         _subcode = 'setd'
         keysubst(_arguments, self._argmap_set)
@@ -285,10 +238,6 @@ class TalkTo:
 class _miniFinder(TalkTo):
 
     def open(self, _object, _attributes={}, **_arguments):
-        """open: Open the specified object(s)
-        Required argument: list of objects to open
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'aevt'
         _subcode = 'odoc'
         if _arguments:
@@ -303,12 +252,10 @@ class _miniFinder(TalkTo):
 _finder = _miniFinder('MACS')
 
 def _launch(appfile):
-    """Open a file thru the finder. Specify file by name or fsspec"""
     _finder.open(_application_file(('ID  ', appfile)))
 
 
 class _application_file(ComponentItem):
-    """application file - An application's file on disk"""
     want = 'appf'
 
 

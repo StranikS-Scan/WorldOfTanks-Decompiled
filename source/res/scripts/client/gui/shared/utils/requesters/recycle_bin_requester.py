@@ -12,58 +12,24 @@ _VehicleRestoreInfo = namedtuple('_VehicleRestoreInfo', ('restoreType', 'changed
 class VehicleRestoreInfo(_VehicleRestoreInfo):
 
     def getRestoreTimeLeft(self):
-        """
-        Get restore left time in seconds for regular premium vehicles
-        :return: <int>
-        """
         return max(self.restoreDuration - self.__getTimeGone(), 0) if self.changedAt else 0
 
     def getRestoreCooldownTimeLeft(self):
-        """
-        Get restore cooldown left time in seconds for notInShop vehicles
-        :return: <int>
-        """
         return max(self.restoreCooldown - self.__getTimeGone(), 0) if self.changedAt else 0
 
     def isLimited(self):
-        """
-        Check if vehicle restore is limited in time,
-        only regular premium vehicles has limited restore
-        :return: <bool>
-        """
         return self.restoreType == RESTORE_VEHICLE_TYPE.PREMIUM and self.changedAt != 0
 
     def isInCooldown(self):
-        """
-        Check if vehicle restore is in cooldown,
-        only notInShop vehicles has restore cooldown
-        :return: <bool>
-        """
         return self.restoreType == RESTORE_VEHICLE_TYPE.ACTION and self.getRestoreCooldownTimeLeft() > 0 if self.changedAt else False
 
     def isUnlimited(self):
-        """
-        Check if vehicle restore is unlimited in time,
-        only notInShop vehicles has unlimited restore
-        :return: <bool>
-        """
         return self.restoreType == RESTORE_VEHICLE_TYPE.ACTION and self.changedAt == 0
 
     def isRestorePossible(self):
-        """
-        Check the possibility of vehicle restore, right now or in future
-        for notInShop vehicle in moment of sold return True
-        for regular premium vehicle check its restore left time
-        :return:<bool>
-        """
         return self.restoreType == RESTORE_VEHICLE_TYPE.ACTION or self.isLimited() and self.getRestoreTimeLeft() > 0
 
     def __getTimeGone(self):
-        """
-        Get time gone in seconds from last operation
-        (restore operation for notInShop vehicles or sell operation for regular premium vehicles)
-        :return: <int>
-        """
         return float(time_utils.getTimeDeltaTilNow(time_utils.makeLocalServerTime(self.changedAt))) if self.changedAt else 0
 
 
@@ -95,7 +61,7 @@ class RecycleBinRequester(AbstractSyncDataRequester, IRecycleBinRequester):
             if time_utils.getTimeDeltaTilNow(dismissedAt) < maxDuration:
                 filteredBuffer[tankmanId] = (strCD, dismissedAt)
 
-        return dict(map(lambda (k, v): (k * -1, v), filteredBuffer.iteritems()))
+        return dict(((k * -1, v) for k, v in filteredBuffer.iteritems()))
 
     def getTankman(self, invID, maxDuration):
         return self.getTankmen(maxDuration).get(invID)

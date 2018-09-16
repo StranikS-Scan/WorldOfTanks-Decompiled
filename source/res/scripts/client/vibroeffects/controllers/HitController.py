@@ -3,7 +3,7 @@
 from constants import VEHICLE_HIT_EFFECT as HIT_EFFECT
 from OnceController import OnceController
 
-class HitController:
+class HitController(object):
 
     def __init__(self, hitEffectCode):
         if hitEffectCode in (HIT_EFFECT.ARMOR_NOT_PIERCED, HIT_EFFECT.ARMOR_PIERCED_NO_DAMAGE):

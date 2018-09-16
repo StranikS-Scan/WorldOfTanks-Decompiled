@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/barracks/Barracks.py
 import BigWorld
-from AccountCommands import LOCK_REASON
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, BARRACKS_FILTER
 from debug_utils import LOG_ERROR
@@ -22,7 +21,7 @@ from gui.shared.gui_items import Tankman, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRestore
-from gui.shared.money import MONEY_UNDEFINED, Currency
+from gui.shared.money import Currency
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.tankman import getRecoveryStatusText, formatRecoveryLeftValue
@@ -88,11 +87,11 @@ def _packTankmanData(tankman, itemsCache=None):
 
 
 def _getTankmanLockMessage(invVehicle):
-    if invVehicle.lock == LOCK_REASON.ON_ARENA:
+    if invVehicle.isInBattle:
         return (True, i18n.makeString('#menu:tankmen/lockReason/inbattle'))
-    if invVehicle.repairCost > 0:
+    if invVehicle.isBroken:
         return (True, i18n.makeString('#menu:tankmen/lockReason/broken'))
-    return (True, i18n.makeString('#menu:tankmen/lockReason/prebattle')) if invVehicle.invID == g_currentVehicle.invID and g_currentVehicle.isInPrebattle() or g_currentVehicle.isInBattle() else (False, '')
+    return (True, i18n.makeString('#menu:tankmen/lockReason/prebattle')) if invVehicle.invID == g_currentVehicle.invID and (g_currentVehicle.isInPrebattle() or g_currentVehicle.isInBattle()) else (False, '')
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -249,7 +248,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         tankmen = self.itemsCache.items.getTankmen().values()
         tankmenInBarracks = 0
         tankmenList = [_packBuyBerthsSlot()]
-        for tankman in sorted(tankmen, TankmenComparator(self.itemsCache.items.getVehicle)):
+        for tankman in sorted(tankmen, cmp=TankmenComparator(self.itemsCache.items.getVehicle)):
             if not tankman.isInTank:
                 tankmenInBarracks += 1
             if not criteria(tankman):

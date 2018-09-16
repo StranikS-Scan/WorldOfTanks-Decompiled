@@ -9,7 +9,7 @@ _CLIENT_VERSION = helpers.getFullClientVersion()
 feedparser.PARSE_MICROFORMATS = 0
 feedparser.SANITIZE_HTML = 0
 
-class RSSDownloader:
+class RSSDownloader(object):
     UPDATE_INTERVAL = 0.1
     lastRSS = property(lambda self: self.__lastRSS)
     isBusy = property(lambda self: self.__thread is not None)
@@ -32,7 +32,6 @@ class RSSDownloader:
         return
 
     def download(self, callback, url):
-        assert callback is not None
         if self.__thread is not None:
             LOG_WARNING('Rss downloading in progress, skipping')
             return
@@ -55,7 +54,7 @@ class RSSDownloader:
             for callback in self.__onCompleteCallbacks:
                 try:
                     callback(self.__lastRSS)
-                except:
+                except Exception:
                     LOG_CURRENT_EXCEPTION()
 
             self.__onCompleteCallbacks = set()
@@ -76,7 +75,7 @@ class _WorkerThread(threading.Thread):
     def run(self):
         try:
             self.result = feedparser.parse(self.url, None, None, _CLIENT_VERSION)
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         return

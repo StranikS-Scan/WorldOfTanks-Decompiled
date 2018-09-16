@@ -25,15 +25,12 @@ from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.ranked_battles.constants import PRIME_TIME_STATUS
 from gui.shared.event_dispatcher import showRankedPrimeTimeWindow
-from helpers import dependency, i18n, time_utils
+from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.connection_mgr import IConnectionManager
 
 class RankedSubscriber(PreQueueSubscriber):
-    """
-    Ranked battles events subscriber
-    """
 
     def subscribe(self, entity):
         g_playerEvents.onEnqueuedRanked += entity.onEnqueued
@@ -53,9 +50,6 @@ class RankedSubscriber(PreQueueSubscriber):
 
 
 class RankedEntryPoint(PreQueueEntryPoint):
-    """
-    Ranked battle entry point
-    """
     connectionMgr = dependency.descriptor(IConnectionManager)
     rankedController = dependency.descriptor(IRankedBattlesController)
 
@@ -85,18 +79,12 @@ class RankedEntryPoint(PreQueueEntryPoint):
 
 
 class RankedForcedEntryPoint(RankedEntryPoint):
-    """
-    Ranked battle forced entry point
-    """
 
     def _getFilterStates(self):
         return (PRIME_TIME_STATUS.NOT_SET,)
 
 
 class RankedEntity(PreQueueEntity):
-    """
-    Ranked battle entity
-    """
     settingsCore = dependency.descriptor(ISettingsCore)
     rankedController = dependency.descriptor(IRankedBattlesController)
 
@@ -108,9 +96,6 @@ class RankedEntity(PreQueueEntity):
 
     @prequeue_storage_getter(QUEUE_TYPE.RANKED)
     def storage(self):
-        """
-        Prebattle storage getter property
-        """
         return None
 
     def init(self, ctx=None):
@@ -153,7 +138,6 @@ class RankedEntity(PreQueueEntity):
         return SelectResult(True) if name in (PREBATTLE_ACTION_NAME.RANKED, PREBATTLE_ACTION_NAME.RANKED_FORCED) else super(RankedEntity, self).doSelectAction(action)
 
     def getPermissions(self, pID=None, **kwargs):
-        assert pID is None, 'Current player has no any player in that mode'
         return RankedPermissions(self.isInQueue())
 
     def _createActionsValidator(self):
@@ -172,7 +156,8 @@ class RankedEntity(PreQueueEntity):
 
     def _makeQueueCtxByAction(self, action=None):
         invID = g_currentVehicle.invID
-        assert invID, 'Inventory ID of vehicle can not be zero'
+        if not invID:
+            raise UserWarning('Inventory ID of vehicle can not be zero')
         return RankedQueueCtx(invID, waitingID='prebattle/join')
 
     def _goToQueueUI(self):
@@ -183,10 +168,6 @@ class RankedEntity(PreQueueEntity):
         g_eventDispatcher.loadHangar()
 
     def __processWelcome(self):
-        """
-        Processes state and display welcome view if wasn't shown before
-        :return: process functional flag result
-        """
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
         filters = self.settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
         if not filters['isRankedWelcomeViewShowed']:

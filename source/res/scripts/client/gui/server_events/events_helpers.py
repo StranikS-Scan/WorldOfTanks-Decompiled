@@ -55,15 +55,15 @@ class EventInfoModel(object):
         return time_utils.getTillTimeString(timeValue, MENU.TIME_TIMEVALUE)
 
     @classmethod
-    def _getDailyProgressResetTimeOffset(cls):
+    def _getDailyProgressResetTimeUTC(cls):
         regionalSettings = BigWorld.player().serverSettings['regional_settings']
         if 'starting_time_of_a_new_game_day' in regionalSettings:
-            newDayOffset = regionalSettings['starting_time_of_a_new_game_day']
+            newDayUTC = regionalSettings['starting_time_of_a_new_game_day']
         elif 'starting_time_of_a_new_day' in regionalSettings:
-            newDayOffset = regionalSettings['starting_time_of_a_new_day']
+            newDayUTC = regionalSettings['starting_time_of_a_new_day']
         else:
-            newDayOffset = 0
-        return newDayOffset
+            newDayUTC = 0
+        return newDayUTC
 
     def _getActiveDateTimeString(self):
         i18nKey, args = None, {}
@@ -119,9 +119,9 @@ class QuestInfoModel(EventInfoModel):
 
     def _getDailyResetStatus(self, resetLabelKey, labeFormatter):
         if self.event.bonusCond.isDaily():
-            resetHourOffset = (time_utils.ONE_DAY - self._getDailyProgressResetTimeOffset()) / time_utils.ONE_HOUR
-            if resetHourOffset >= 0:
-                return labeFormatter(resetLabelKey) % {'time': time.strftime(i18n.makeString('#quests:details/conditions/postBattle/dailyReset/timeFmt'), time_utils.getTimeStructInLocal(time_utils.getTimeTodayForUTC(hour=resetHourOffset)))}
+            resetHourUTC = self._getDailyProgressResetTimeUTC() / time_utils.ONE_HOUR
+            if resetHourUTC >= 0:
+                return labeFormatter(resetLabelKey) % {'time': time.strftime(i18n.makeString('#quests:details/conditions/postBattle/dailyReset/timeFmt'), time_utils.getTimeStructInLocal(time_utils.getTimeTodayForUTC(hour=resetHourUTC)))}
 
     def _getCompleteDailyStatus(self, completeKey):
         return i18n.makeString(completeKey, time=self._getTillTimeString(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()))
@@ -140,8 +140,6 @@ def getMinutesRoundByTime(timeLeft):
 
 
 def missionsSortFunc(a, b):
-    """ Sort function for common quests (all except personal mission and motive).
-    """
     res = cmp(a.isAvailable()[0] and not a.isCompleted(), b.isAvailable()[0] and not b.isCompleted())
     if res:
         return res
@@ -159,15 +157,6 @@ def missionsSortFunc(a, b):
 
 
 def getConditionsDiffStructure(fullConditions, mainConditions):
-    """
-    Return conditions diff structure between fullConditions and mainConditions sections with parent tags
-    Diff doesn't contain unique mainConditions sections.
-    
-    example:
-    fullConditions: ((win, 1), (and, [(survive, 5), (kill, 3)])
-    mainConditions: ((win, 1), (and, [(kill, 3), (damage, 3)])
-    result: (and, [(survive, 5)])
-    """
     result = []
     if fullConditions == mainConditions:
         return result
@@ -242,8 +231,6 @@ def sortWithQuestType(items, key, questsType=None):
 @async
 @process('updating')
 def getPersonalMissionAward(quest, callback):
-    """ Display special tankwoman award window.
-    """
     from gui.server_events.events_dispatcher import showTankwomanAward
     tankman, isMainBonus = quest.getTankmanBonus()
     needToGetTankman = quest.needToGetAddReward() and not isMainBonus or quest.needToGetMainReward() and isMainBonus
@@ -260,8 +247,6 @@ def getPersonalMissionAward(quest, callback):
 
 
 def questsSortFunc(a, b):
-    """ Sort function for common quests (all except personal missions and motive).
-    """
     res = cmp(a.isCompleted(), b.isCompleted())
     if res:
         return res

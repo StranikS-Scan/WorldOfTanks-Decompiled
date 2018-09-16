@@ -778,8 +778,6 @@ class TreeBuilder(object):
         return
 
     def close(self):
-        assert len(self._elem) == 0, 'missing end tags'
-        assert self._last is not None, 'missing toplevel element'
         return self._last
 
     def _flush(self):
@@ -787,10 +785,8 @@ class TreeBuilder(object):
             if self._last is not None:
                 text = ''.join(self._data)
                 if self._tail:
-                    assert self._last.tail is None, 'internal error (tail)'
                     self._last.tail = text
                 else:
-                    assert self._last.text is None, 'internal error (text)'
                     self._last.text = text
             self._data = []
         return
@@ -810,7 +806,6 @@ class TreeBuilder(object):
     def end(self, tag):
         self._flush()
         self._last = self._elem.pop()
-        assert self._last.tag == tag, 'end tag mismatch (expected %s, got %s)' % (self._last.tag, tag)
         self._tail = 1
         return self._last
 
@@ -970,7 +965,6 @@ class XMLParser(object):
         return
 
     def doctype(self, name, pubid, system):
-        """This method of XMLParser is deprecated."""
         warnings.warn('This method of XMLParser is deprecated.  Define doctype() method on the TreeBuilder target.', DeprecationWarning)
 
     __doctype = doctype

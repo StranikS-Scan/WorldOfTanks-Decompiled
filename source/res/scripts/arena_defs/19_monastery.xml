@@ -12,14 +12,14 @@
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <wwmusicSetup>
-    <wwmusicLoading>	music_euro_vilage	</wwmusicLoading>
-    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
-    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+    <wwmusicLoading>	music_lakeville_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_lakeville_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_lakeville_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_lakeville_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_lakeville_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_lakeville_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
   <soundRemapping>
@@ -27,11 +27,6 @@
       <bank>	env_Mountain.bnk	</bank>
     </loadBanks>
   </soundRemapping>
-  <water>
-    <texScale>	0	</texScale>
-    <freqX>	0	</freqX>
-    <freqZ>	0	</freqZ>
-  </water>
   <gameplayTypes>
     <ctf>
       <teamBasePositions>
@@ -46,14 +41,14 @@
     </ctf>
     <bootcamp>
       <wwmusicSetup>
-        <wwmusicLoading>	music_euro_vilage	</wwmusicLoading>
+        <wwmusicLoading>	bc_music_loadingscreen	</wwmusicLoading>
         <wwmusicIntensive>	bc_music_mission_02	</wwmusicIntensive>
         <wwmusicRelaxed>	bc_music_mission_02	</wwmusicRelaxed>
-        <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-        <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-        <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-        <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-        <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+        <wwmusicStop>	music_dron_stop	</wwmusicStop>
+        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+        <wwmusicResultWin>	music_abbey_result_win	</wwmusicResultWin>
+        <wwmusicResultDrawn>	music_abbey_result_drawn	</wwmusicResultDrawn>
+        <wwmusicResultDefeat>	music_abbey_result_defeat	</wwmusicResultDefeat>
       </wwmusicSetup>
       <boundingBox>
         <bottomLeft>	-50.000000 -500.000000	</bottomLeft>
@@ -63,6 +58,4 @@
       <runDelay>	5	</runDelay>
     </bootcamp>
   </gameplayTypes>
-  <roadMap></roadMap>
-  <mapActivities></mapActivities>
 </19_monastery.xml>

@@ -1,16 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/wsgiref/simple_server.py
-"""BaseHTTPServer that implements the Python WSGI protocol (PEP 333, rev 1.21)
-
-This is both an example of how WSGI can be implemented, and a basis for running
-simple web applications on a local machine, such as might be done when testing
-or debugging an application.  It has not been reviewed for security issues,
-however, and we strongly recommend that you use a "real" web server for
-production use.
-
-For example usage, see the 'if __name__=="__main__"' block at the end of the
-module.  See also the BaseHTTPServer module docs for other API information.
-"""
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import urllib, sys
 from wsgiref.handlers import SimpleHandler
@@ -34,11 +23,9 @@ class ServerHandler(SimpleHandler):
 
 
 class WSGIServer(HTTPServer):
-    """BaseHTTPServer that implements the Python WSGI protocol"""
     application = None
 
     def server_bind(self):
-        """Override server_bind to store the server name."""
         HTTPServer.server_bind(self)
         self.setup_environ()
 
@@ -98,7 +85,6 @@ class WSGIRequestHandler(BaseHTTPRequestHandler):
         return sys.stderr
 
     def handle(self):
-        """Handle a single HTTP request"""
         self.raw_requestline = self.rfile.readline()
         if not self.parse_request():
             return
@@ -122,7 +108,6 @@ def demo_app(environ, start_response):
 
 
 def make_server(host, port, app, server_class=WSGIServer, handler_class=WSGIRequestHandler):
-    """Create a new WSGI server listening on `host` and `port` for `app`"""
     server = server_class((host, port), handler_class)
     server.set_app(app)
     return server

@@ -33,7 +33,7 @@ class ContactsListButton(ButtonWithCounterMeta):
         super(ContactsListButton, self)._dispose()
 
     def __setContactsCount(self):
-        self.__friends = dict(map(lambda friend: (friend.getID(), 1 if friend.isOnline() else 0), self.usersStorage.getList(FriendsFindCriteria())))
+        self.__friends = dict(((friend.getID(), 1 if friend.isOnline() else 0) for friend in self.usersStorage.getList(FriendsFindCriteria())))
         self.__showContactsCount()
 
     def __showContactsCount(self):

@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehiclePreviewMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.View import View
 
 class VehiclePreviewMeta(View):
@@ -24,28 +20,13 @@ class VehiclePreviewMeta(View):
         self._printOverrideError('onCompareClick')
 
     def as_setStaticDataS(self, data):
-        """
-        :param data: Represented by VehPreviewStaticDataVO (AS)
-        """
         return self.flashObject.as_setStaticData(data) if self._isDAAPIInited() else None
 
     def as_updateInfoDataS(self, data):
-        """
-        :param data: Represented by VehPreviewInfoPanelVO (AS)
-        """
         return self.flashObject.as_updateInfoData(data) if self._isDAAPIInited() else None
 
     def as_updateVehicleStatusS(self, status):
         return self.flashObject.as_updateVehicleStatus(status) if self._isDAAPIInited() else None
 
-    def as_updatePriceS(self, data):
-        """
-        :param data: Represented by VehPreviewPriceDataVO (AS)
-        """
-        return self.flashObject.as_updatePrice(data) if self._isDAAPIInited() else None
-
-    def as_updateBuyButtonS(self, data):
-        """
-        :param data: Represented by VehPreviewBuyButtonVO (AS)
-        """
-        return self.flashObject.as_updateBuyButton(data) if self._isDAAPIInited() else None
+    def as_updateBuyingPanelS(self, data):
+        return self.flashObject.as_updateBuyingPanel(data) if self._isDAAPIInited() else None

@@ -6,7 +6,6 @@ from helpers.CallbackDelayer import CallbackDelayer
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from items import vehicles
 import BigWorld
-import ResMgr
 from Math import Vector3
 import SoundGroups
 CurveControlPoint = namedtuple('CurveControlPoint', ['position', 'direction', 'time'])
@@ -74,7 +73,7 @@ class Bomber(object):
             try:
                 self.__sound = SoundGroups.g_instance.getSound3D(self.__model.root, self.__desc.soundEvent)
                 self.__sound.play()
-            except:
+            except Exception:
                 self.__sound = None
                 LOG_CURRENT_EXCEPTION()
 
@@ -192,7 +191,7 @@ class BombersWing(CallbackDelayer):
             zeroHeightPos.y = 0
             collRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, zeroHeightPos + (0, 1000, 0), zeroHeightPos + (0, -1000, 0), 18)
             if collRes is not None:
-                minFlightHeight = max(collRes[0].y + retreatHeight, minFlightHeight)
+                minFlightHeight = max(collRes.closestPoint.y + retreatHeight, minFlightHeight)
             else:
                 minFlightHeight = max(position.y, minFlightHeight)
             position.y = minFlightHeight
@@ -210,7 +209,7 @@ class BombersWing(CallbackDelayer):
         prevSpeed = defaultSpeed
         prevSpeedSq = prevSpeed * prevSpeed
         prevPointTime = bombingEndTime
-        for idx, position in enumerate(positions):
+        for _, position in enumerate(positions):
             distDelta = (position - prevPosition).length
             velocityDir = position - prevPosition
             velocityDir /= distDelta

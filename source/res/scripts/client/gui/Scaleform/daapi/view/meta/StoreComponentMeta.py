@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StoreComponentMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class StoreComponentMeta(BaseDAAPIComponent):
@@ -24,9 +20,6 @@ class StoreComponentMeta(BaseDAAPIComponent):
         self._printOverrideError('onAddVehToCompare')
 
     def as_initFiltersDataS(self, nations, actionsFilterName):
-        """
-        :param nations: Represented by Array (AS)
-        """
         return self.flashObject.as_initFiltersData(nations, actionsFilterName) if self._isDAAPIInited() else None
 
     def as_completeInitS(self):
@@ -36,21 +29,12 @@ class StoreComponentMeta(BaseDAAPIComponent):
         return self.flashObject.as_update() if self._isDAAPIInited() else None
 
     def as_setFilterTypeS(self, data):
-        """
-        :param data: Represented by ShopNationFilterDataVo (AS)
-        """
         return self.flashObject.as_setFilterType(data) if self._isDAAPIInited() else None
 
     def as_setSubFilterS(self, data):
-        """
-        :param data: Represented by ShopSubFilterData (AS)
-        """
         return self.flashObject.as_setSubFilter(data) if self._isDAAPIInited() else None
 
     def as_setFilterOptionsS(self, data):
-        """
-        :param data: Represented by FiltersDataVO (AS)
-        """
         return self.flashObject.as_setFilterOptions(data) if self._isDAAPIInited() else None
 
     def as_scrollPositionS(self, index):

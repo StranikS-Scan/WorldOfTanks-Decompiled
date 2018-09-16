@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/bcppcompiler.py
-"""distutils.bcppcompiler
-
-Contains BorlandCCompiler, an implementation of the abstract CCompiler class
-for the Borland C++ compiler.
-"""
 __revision__ = '$Id$'
 import os
 from distutils.errors import DistutilsExecError, CompileError, LibError, LinkError, UnknownFileError
@@ -14,9 +9,6 @@ from distutils.dep_util import newer
 from distutils import log
 
 class BCPPCompiler(CCompiler):
-    """Concrete class that implements an interface to the Borland C/C++
-    compiler, as defined by the CCompiler abstract class.
-    """
     compiler_type = 'bcpp'
     executables = {}
     _c_extensions = ['.c']

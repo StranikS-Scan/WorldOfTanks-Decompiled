@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/idle_test/test_grep.py
-""" !Changing this line will break Test_findfile.test_found!
-Non-gui unit tests for idlelib.GrepDialog methods.
-dummy_command calls grep_it calls findfiles.
-An exception raised in one method will fail callers.
-Otherwise, tests are mostly independent.
-*** Currently only test grep_it.
-"""
 import unittest
 from test.test_support import captured_stdout, findfile
 from idlelib.idle_test.mock_tk import Var
@@ -15,10 +8,6 @@ import re
 __file__ = findfile('idlelib/idle_test') + '/test_grep.py'
 
 class Dummy_searchengine:
-    """GrepDialog.__init__ calls parent SearchDiabolBase which attaches the
-    passed in SearchEngine instance as attribute 'engine'. Only a few of the
-    many possible self.engine.x attributes are needed here.
-    """
 
     def getpat(self):
         return self._pat

@@ -33,9 +33,6 @@ def _check_timeout(t):
 
 
 def arbitrary_address(family):
-    """
-    Return an arbitrary free address for the given family
-    """
     if family == 'AF_INET':
         return ('localhost', 0)
     if family == 'AF_UNIX':
@@ -46,11 +43,6 @@ def arbitrary_address(family):
 
 
 def address_type(address):
-    """
-    Return the types of the address
-    
-    This can be 'AF_INET', 'AF_UNIX', or 'AF_PIPE'
-    """
     if type(address) == tuple:
         return 'AF_INET'
     if type(address) is str and address.startswith('\\\\'):
@@ -61,12 +53,6 @@ def address_type(address):
 
 
 class Listener(object):
-    """
-    Returns a listener object.
-    
-    This is a wrapper for a bound socket which is 'listening' for
-    connections, or for a Windows named pipe.
-    """
 
     def __init__(self, address=None, family=None, backlog=1, authkey=None):
         family = family or address and address_type(address) or default_family
@@ -81,11 +67,6 @@ class Listener(object):
         return
 
     def accept(self):
-        """
-        Accept a connection on the bound socket or named pipe of `self`.
-        
-        Returns a `Connection` object.
-        """
         c = self._listener.accept()
         if self._authkey:
             deliver_challenge(c, self._authkey)
@@ -93,9 +74,6 @@ class Listener(object):
         return c
 
     def close(self):
-        """
-        Close the bound socket or named pipe of `self`.
-        """
         return self._listener.close()
 
     address = property(lambda self: self._listener._address)
@@ -103,9 +81,6 @@ class Listener(object):
 
 
 def Client(address, family=None, authkey=None):
-    """
-    Returns a connection to the address of a `Listener`
-    """
     family = family or address_type(address)
     if family == 'AF_PIPE':
         c = PipeClient(address)
@@ -122,9 +97,6 @@ def Client(address, family=None, authkey=None):
 if sys.platform != 'win32':
 
     def Pipe(duplex=True):
-        """
-        Returns pair of connection objects at either end of a pipe
-        """
         if duplex:
             s1, s2 = socket.socketpair()
             s1.setblocking(True)
@@ -144,9 +116,6 @@ else:
     from _multiprocessing import win32
 
     def Pipe(duplex=True):
-        """
-        Returns pair of connection objects at either end of a pipe
-        """
         address = arbitrary_address('AF_PIPE')
         if duplex:
             openmode = win32.PIPE_ACCESS_DUPLEX
@@ -171,9 +140,6 @@ else:
 
 
 class SocketListener(object):
-    """
-    Representation of a socket which is bound to an address and listening
-    """
 
     def __init__(self, address, family, backlog=1):
         self._socket = socket.socket(getattr(socket, family))
@@ -219,9 +185,6 @@ class SocketListener(object):
 
 
 def SocketClient(address):
-    """
-    Return a connection object connected to the socket given by `address`
-    """
     family = getattr(socket, address_type(address))
     t = _init_timeout()
     while 1:
@@ -250,9 +213,6 @@ def SocketClient(address):
 if sys.platform == 'win32':
 
     class PipeListener(object):
-        """
-        Representation of a named pipe
-        """
 
         def __init__(self, address, backlog=None):
             self._address = address
@@ -283,9 +243,6 @@ if sys.platform == 'win32':
 
 
     def PipeClient(address):
-        """
-        Return a connection object connected to the pipe given by `address`
-        """
         t = _init_timeout()
         while 1:
             try:
@@ -311,7 +268,6 @@ FAILURE = '#FAILURE#'
 
 def deliver_challenge(connection, authkey):
     import hmac
-    assert isinstance(authkey, bytes)
     message = os.urandom(MESSAGE_LENGTH)
     connection.send_bytes(CHALLENGE + message)
     digest = hmac.new(authkey, message).digest()
@@ -325,9 +281,7 @@ def deliver_challenge(connection, authkey):
 
 def answer_challenge(connection, authkey):
     import hmac
-    assert isinstance(authkey, bytes)
     message = connection.recv_bytes(256)
-    assert message[:len(CHALLENGE)] == CHALLENGE, 'message = %r' % message
     message = message[len(CHALLENGE):]
     digest = hmac.new(authkey, message).digest()
     connection.send_bytes(digest)

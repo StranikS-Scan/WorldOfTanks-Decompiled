@@ -1,40 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/smtpd.py
-"""An RFC 2821 smtp proxy.
-
-Usage: %(program)s [options] [localhost:localport [remotehost:remoteport]]
-
-Options:
-
-    --nosetuid
-    -n
-        This program generally tries to setuid `nobody', unless this flag is
-        set.  The setuid call will fail if this program is not run as root (in
-        which case, use this flag).
-
-    --version
-    -V
-        Print the version number and exit.
-
-    --class classname
-    -c classname
-        Use `classname' as the concrete SMTP proxy class.  Uses `PureProxy' by
-        default.
-
-    --debug
-    -d
-        Turn on debugging prints.
-
-    --help
-    -h
-        Print this message and exit.
-
-Version: %(__version__)s
-
-If localhost is not given then `localhost' is used, and if localport is not
-given then 8025 is used.  If remotehost is not given then `localhost' is used,
-and if remoteport is not given, then 25 is used.
-"""
 import sys
 import os
 import errno
@@ -265,27 +230,6 @@ class SMTPServer(asyncore.dispatcher):
         return
 
     def process_message(self, peer, mailfrom, rcpttos, data):
-        """Override this abstract method to handle messages from the client.
-        
-        peer is a tuple containing (ipaddr, port) of the client that made the
-        socket connection to our smtp port.
-        
-        mailfrom is the raw address the client claims the message is coming
-        from.
-        
-        rcpttos is a list of raw addresses the client wishes to deliver the
-        message to.
-        
-        data is a string containing the entire full text of the message,
-        headers (if supplied) and all.  It has been `de-transparencied'
-        according to RFC 821, Section 4.5.2.  In other words, a line
-        containing a `.' followed by other text has had the leading dot
-        removed.
-        
-        This function should return None, for a normal `250 Ok' response;
-        otherwise it returns the desired response string in RFC 821 format.
-        
-        """
         raise NotImplementedError
 
 

@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/group_packers.py
 import weakref
-import BigWorld
 from collections import namedtuple, defaultdict, OrderedDict
+import BigWorld
 from CurrentVehicle import g_currentVehicle
 from Event import EventManager, Event
 from constants import EVENT_TYPE
@@ -56,9 +56,6 @@ def _getMissionsCountLabel(completed, total):
 
 
 class _EventsBlockBuilder(object):
-    """
-    Base class to build and collect blocks with server events data for mission view tab
-    """
 
     def __init__(self):
         self._cache = defaultdict(dict)
@@ -92,14 +89,10 @@ class _EventsBlockBuilder(object):
         return result
 
     def markVisited(self):
-        """ Set quests of all the blocks as viewed.
-        """
         for groupInfo in self.__getBlocksInfos():
             groupInfo.markVisited()
 
     def getBlocksAdvisableEvents(self, events):
-        """ Get events that can be notified as new from the current block.
-        """
         result = []
         for groupInfo in self.__getBlocksInfos():
             result.extend(groupInfo.getBlockAdvisableEvents(events))
@@ -135,9 +128,6 @@ class _EventsBlockBuilder(object):
 
 
 class VehicleGroupFinder(_EventsBlockBuilder):
-    """
-    Build and collect block with server events data for current vehicle tab on mission page
-    """
 
     def __init__(self):
         super(VehicleGroupFinder, self).__init__()
@@ -161,9 +151,6 @@ class VehicleGroupFinder(_EventsBlockBuilder):
 
 
 class GroupedEventsBlocksFinder(_EventsBlockBuilder):
-    """
-    Base class to build and collect blocks with server events data by a specific group
-    """
     eventsCache = dependency.descriptor(IEventsCache)
 
     def clear(self):
@@ -201,12 +188,6 @@ class GroupedEventsBlocksFinder(_EventsBlockBuilder):
 
 
 class MarathonsGroupsFinder(GroupedEventsBlocksFinder):
-    """
-    Build and collect blocks with server events data for marathon tab on mission page
-    Each marathon is a separate block in GUI.
-    Marathon has header with reward and token conditions (main token quest) and missions cards.
-    Missions cards are colled by groupID inside marathon.
-    """
 
     def _createGroupedEventsBlock(self, group):
         return _MarathonQuestsBlockInfo(group)
@@ -216,13 +197,6 @@ class MarathonsGroupsFinder(GroupedEventsBlocksFinder):
 
 
 class QuestsGroupsFinder(GroupedEventsBlocksFinder):
-    """
-    Build and collect blocks with server events data for categories mission tab on mission page
-    Each categories is a separate block in GUI.
-    All quests that have groupID and don't belong to marathons are placed in group categories by groupID
-    All others quests are placed in non group categorie.
-    Categorie hasn't reward.
-    """
 
     def _getDefaultBlocks(self):
         return [_MotiveQuestsBlockInfo(), _UngroupedQuestsBlockInfo()]
@@ -288,13 +262,9 @@ class _EventsBlockInfo(object):
         return _EventsBlockData(len(self._events), len(self._suitableEvents), self._getVO())
 
     def getBlockAdvisableEvents(self, srvEvents):
-        """ Get events that can be notified as new from the current block.
-        """
         return self.findEvents(srvEvents)
 
     def markVisited(self):
-        """ Set events of the current block as viewed.
-        """
         settings.visitEventsGUI(self._suitableEvents)
 
     def clear(self):
@@ -400,6 +370,9 @@ class _GroupedEventsBlockInfo(_MinimizableEventsBlockInfo):
                     'label': text_styles.tutorial(QUESTS.MISSIONS_TAB_MARATHONS_HEADER_TITLE_ACTION),
                     'visible': linkedActionID is not None}}
 
+    def getDetailedTitle(self):
+        raise UserWarning('This method should not be reached in this context')
+
     def _getDescrBlock(self):
         minStartTime = min([ q.getStartTime() for q in self._suitableEvents ])
         maxFinishTime = max([ q.getFinishTime() for q in self._suitableEvents ])
@@ -452,6 +425,9 @@ class _MarathonQuestsBlockInfo(_GroupedEventsBlockInfo):
         self._mainQuest = None
         super(_MarathonQuestsBlockInfo, self).clear()
         return
+
+    def getDetailedTitle(self):
+        raise UserWarning('This method should not be reached in this context')
 
     def _findEvents(self, srvEvents):
         suitableEvents = self._group.getGroupContent(srvEvents)
@@ -525,15 +501,18 @@ class _UngroupedQuestsBlockInfo(_MinimizableEventsBlockInfo):
     def getTitleBlock(self):
         return {'title': self.getTitle()}
 
+    def getDetailedTitle(self):
+        raise UserWarning('This method should not be reached in this context')
+
     @classmethod
     def _getGuiLinkages(cls):
         return {'headerLinkage': QUESTS_ALIASES.MISSION_PACK_CATEGORY_HEADER_LINKAGE,
          'bodyLinkage': QUESTS_ALIASES.MISSION_PACK_MARATHON_BODY_LINKAGE}
 
     def _findEvents(self, srvEvents):
-        suitabaleQuests = filter(lambda q: q.getGroupID() == DEFAULTS_GROUPS.UNGROUPED_QUESTS and q.getType() != EVENT_TYPE.MOTIVE_QUEST, srvEvents.itervalues())
+        suitabaleQuests = [ q for q in srvEvents.itervalues() if q.getGroupID() == DEFAULTS_GROUPS.UNGROUPED_QUESTS and q.getType() != EVENT_TYPE.MOTIVE_QUEST ]
         self.__totalQuestsCount = len(suitabaleQuests)
-        self.__completedQuestsCount = len(filter(lambda q: q.isCompleted(), suitabaleQuests))
+        self.__completedQuestsCount = len([ q for q in suitabaleQuests if q.isCompleted() ])
         return suitabaleQuests
 
     def _getHeaderData(self):
@@ -566,13 +545,16 @@ class _MotiveQuestsBlockInfo(_MinimizableEventsBlockInfo):
     def getTitleBlock(self):
         return {'title': self.getTitle()}
 
+    def getDetailedTitle(self):
+        raise UserWarning('This method should not be reached in this context')
+
     @classmethod
     def _getGuiLinkages(cls):
         return {'headerLinkage': QUESTS_ALIASES.MISSION_PACK_CATEGORY_HEADER_LINKAGE,
          'bodyLinkage': QUESTS_ALIASES.MISSION_PACK_MARATHON_BODY_LINKAGE}
 
     def _findEvents(self, srvEvents):
-        suitabaleQuests = filter(lambda q: q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isCompleted() and q.isAvailable()[0], srvEvents.itervalues())
+        suitabaleQuests = [ q for q in srvEvents.itervalues() if q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isCompleted() and q.isAvailable()[0] ]
         return suitabaleQuests
 
     def _getHeaderData(self):
@@ -601,6 +583,9 @@ class _VehicleQuestsBlockInfo(_EventsBlockInfo):
         return {'title': self.getTitle(),
          'tankType': tankType,
          'tankInfo': tankInfo}
+
+    def getDetailedTitle(self):
+        raise UserWarning('This method should not be reached in this context')
 
     def _findEvents(self, srvEvents):
         return filter(self.__applyFilter, srvEvents.itervalues())
@@ -639,8 +624,17 @@ class _ElenBlockInfo(_EventsBlockInfo):
     def getTitleBlock(self):
         return {'title': self._event.getName()}
 
+    def getTitle(self):
+        raise UserWarning('This method should not be reached in this context')
+
+    def getDetailedTitle(self):
+        raise UserWarning('This method should not be reached in this context')
+
     def buildEventsBlockData(self, srvEvents, filterFunc):
         return _EventsBlockData(1, 1, self._getVO())
+
+    def _findEvents(self, srvEvents):
+        raise UserWarning('This method should not be reached in this context')
 
     def _getHeaderData(self):
         eventInfo = EventHeader(self._event, self._playerData)

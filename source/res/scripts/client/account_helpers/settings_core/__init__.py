@@ -5,9 +5,6 @@ from account_helpers.settings_core.SettingsCore import SettingsCore
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
 
 def getSettingsCoreConfig(manager):
-    """ Configures services for package gui.
-    :param manager: helpers.dependency.DependencyManager
-    """
     cache = SettingsCache()
     manager.addInstance(ISettingsCache, cache, finalizer='fini')
     core = SettingsCore()

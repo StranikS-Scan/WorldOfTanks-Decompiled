@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/pyassem.py
-"""A flow graph representation for Python bytecode"""
 import dis
 import types
 import sys
@@ -57,10 +56,6 @@ class FlowGraph():
         self.current.emit(inst)
 
     def getBlocksInOrder(self):
-        """Return the blocks in reverse postorder
-        
-        i.e. each node appears before all of its successors
-        """
         order = order_blocks(self.entry, self.exit)
         return order
 
@@ -68,7 +63,6 @@ class FlowGraph():
         return self.blocks.elements()
 
     def getRoot(self):
-        """Return nodes appropriate for use with dominator"""
         return self.entry
 
     def getContainedGraphs(self):
@@ -80,7 +74,6 @@ class FlowGraph():
 
 
 def order_blocks(start_block, exit_block):
-    """Order blocks so that they are emitted in the right order"""
     order = []
     remaining = set()
     todo = [start_block]
@@ -96,7 +89,7 @@ def order_blocks(start_block, exit_block):
     dominators = {}
     for b in remaining:
         if __debug__ and b.next:
-            assert b is b.next[0].prev[0], (b, b.next)
+            pass
         dominators.setdefault(b, set())
         for c in b.get_followers():
             while 1:
@@ -112,8 +105,6 @@ def order_blocks(start_block, exit_block):
                     break
             else:
                 return b
-
-        assert 0, 'circular dependency, cannot find next block'
 
     b = start_block
     while 1:
@@ -165,16 +156,11 @@ class Block():
 
     def addNext(self, block):
         self.next.append(block)
-        assert len(self.next) == 1, map(str, self.next)
         block.prev.append(self)
-        assert len(block.prev) == 1, map(str, block.prev)
 
     _uncond_transfer = ('RETURN_VALUE', 'RAISE_VARARGS', 'JUMP_ABSOLUTE', 'JUMP_FORWARD', 'CONTINUE_LOOP')
 
     def has_unconditional_transfer(self):
-        """Returns True if there is an unconditional transfer to an other block
-        at the end of this block. This means there is no risk for the bytecode
-        executer to go past this block's bytecode."""
         try:
             op, arg = self.insts[-1]
         except (IndexError, ValueError):
@@ -186,7 +172,6 @@ class Block():
         return list(self.outEdges) + self.next
 
     def get_followers(self):
-        """Get the whole list of followers, including the next block."""
         followers = set(self.next)
         for inst in self.insts:
             if inst[0] in PyFlowGraph.hasjrel:
@@ -195,11 +180,6 @@ class Block():
         return followers
 
     def getContainedGraphs(self):
-        """Return all graphs contained within this block.
-        
-        For example, a MAKE_FUNCTION block will contain a reference to
-        the graph for the function body.
-        """
         contained = []
         for inst in self.insts:
             if len(inst) == 1:
@@ -263,15 +243,10 @@ class PyFlowGraph(FlowGraph):
         self.cellvars = names
 
     def getCode(self):
-        """Get a Python code object"""
-        assert self.stage == RAW
         self.computeStackDepth()
         self.flattenGraph()
-        assert self.stage == FLAT
         self.convertArgs()
-        assert self.stage == CONV
         self.makeByteCode()
-        assert self.stage == DONE
         return self.newCodeObject()
 
     def dump(self, io=None):
@@ -293,12 +268,6 @@ class PyFlowGraph(FlowGraph):
             sys.stdout = save
 
     def computeStackDepth(self):
-        """Compute the max stack depth.
-        
-        Approach is to compute the stack effect of each basic block.
-        Then find the path through the code with the largest total
-        effect.
-        """
         depth = {}
         exit = None
         for b in self.getBlocks():
@@ -323,8 +292,6 @@ class PyFlowGraph(FlowGraph):
         return
 
     def flattenGraph(self):
-        """Arrange the blocks in order and resolve jumps"""
-        assert self.stage == RAW
         self.insts = insts = []
         pc = 0
         begin = {}
@@ -366,8 +333,6 @@ class PyFlowGraph(FlowGraph):
         hasjabs.add(dis.opname[i])
 
     def convertArgs(self):
-        """Convert arguments from symbolic to concrete form"""
-        assert self.stage == FLAT
         self.consts.insert(0, self.docstring)
         self.sort_cellvars()
         for i in range(len(self.insts)):
@@ -382,8 +347,6 @@ class PyFlowGraph(FlowGraph):
         return
 
     def sort_cellvars(self):
-        """Sort cellvars in the order of varnames and prune from freevars.
-        """
         cells = {}
         for name in self.cellvars:
             cells[name] = 1
@@ -396,14 +359,6 @@ class PyFlowGraph(FlowGraph):
         self.closure = self.cellvars + self.freevars
 
     def _lookupName(self, name, list):
-        """Return index of name in list, appending if necessary
-        
-        This routine uses a list instead of a dictionary, because a
-        dictionary can't store two different keys if the keys have the
-        same value but different types, e.g. 2 and 2L.  The compiler
-        must treat these two separately, so it does an explicit type
-        comparison before comparing the values.
-        """
         t = type(name)
         for i in range(len(list)):
             if t == type(list[i]) and list[i] == name:
@@ -475,7 +430,6 @@ class PyFlowGraph(FlowGraph):
     del opname
 
     def makeByteCode(self):
-        assert self.stage == CONV
         self.lnotab = lnotab = LineAddrTable()
         for t in self.insts:
             opname = t[0]
@@ -502,7 +456,6 @@ class PyFlowGraph(FlowGraph):
     del num
 
     def newCodeObject(self):
-        assert self.stage == DONE
         if self.flags & CO_NEWLOCALS == 0:
             nlocals = 0
         else:
@@ -513,11 +466,6 @@ class PyFlowGraph(FlowGraph):
         return types.CodeType(argcount, nlocals, self.stacksize, self.flags, self.lnotab.getCode(), self.getConsts(), tuple(self.names), tuple(self.varnames), self.filename, self.name, self.lnotab.firstline, self.lnotab.getTable(), tuple(self.freevars), tuple(self.cellvars))
 
     def getConsts(self):
-        """Return a tuple for the const slot of the code object
-        
-        Must convert references to code (MAKE_FUNCTION) to code
-        objects recursively.
-        """
         l = []
         for elt in self.consts:
             if isinstance(elt, PyFlowGraph):
@@ -532,7 +480,6 @@ def isJump(opname):
 
 
 class TupleArg():
-    """Helper for marking func defs with nested tuples in arglist"""
 
     def __init__(self, count, names):
         self.count = count
@@ -557,25 +504,10 @@ def getArgCount(args):
 
 
 def twobyte(val):
-    """Convert an int argument into high and low bytes"""
-    assert isinstance(val, int)
     return divmod(val, 256)
 
 
 class LineAddrTable():
-    """lnotab
-    
-    This class builds the lnotab, which is documented in compile.c.
-    Here's a brief recap:
-    
-    For each SET_LINENO instruction after the first one, two bytes are
-    added to lnotab.  (In some cases, multiple two-byte entries are
-    added.)  The first byte is the distance in bytes between the
-    instruction for the last SET_LINENO and the current SET_LINENO.
-    The second byte is offset in line numbers.  If either offset is
-    greater than 255, multiple two-byte entries are added -- see
-    compile.c for the delicate details.
-    """
 
     def __init__(self):
         self.code = []

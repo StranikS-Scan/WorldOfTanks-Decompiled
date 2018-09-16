@@ -45,7 +45,6 @@ warning_stream = sys.__stderr__
 import warnings
 
 def idle_formatwarning(message, category, filename, lineno, line=None):
-    """Format warnings the IDLE way."""
     s = '\nWarning (from warnings module):\n'
     s += '  File "%s", line %s\n' % (filename, lineno)
     if line is None:
@@ -58,12 +57,6 @@ def idle_formatwarning(message, category, filename, lineno, line=None):
 
 
 def idle_showwarning(message, category, filename, lineno, file=None, line=None):
-    """Show Idle-format warning (after replacing warnings.showwarning).
-    
-    The differences are the formatter called, the file=None replacement,
-    which can be None, the capture of the consequence AttributeError,
-    and the output of a hard-coded prompt.
-    """
     global warning_stream
     if file is None:
         file = warning_stream
@@ -79,7 +72,6 @@ def idle_showwarning(message, category, filename, lineno, file=None, line=None):
 _warnings_showwarning = None
 
 def capture_warnings(capture):
-    """Replace warning.showwarning with idle_showwarning, or reverse."""
     global _warnings_showwarning
     if capture:
         if _warnings_showwarning is None:
@@ -94,15 +86,6 @@ def capture_warnings(capture):
 capture_warnings(True)
 
 def extended_linecache_checkcache(filename=None, orig_checkcache=linecache.checkcache):
-    """Extend linecache.checkcache to preserve the <pyshell#...> entries
-    
-    Rather than repeating the linecache code, patch it to save the
-    <pyshell#...> entries, call the original linecache.checkcache()
-    (skipping them), and then restore the saved entries.
-    
-    orig_checkcache is bound at definition time to the original
-    method, allowing it to be patched.
-    """
     cache = linecache.cache
     save = {}
     for key in list(cache):
@@ -116,7 +99,6 @@ def extended_linecache_checkcache(filename=None, orig_checkcache=linecache.check
 linecache.checkcache = extended_linecache_checkcache
 
 class PyShellEditorWindow(EditorWindow):
-    """Regular text edit window in IDLE, supports breakpoints"""
 
     def __init__(self, *args):
         self.breakpoints = []
@@ -199,7 +181,6 @@ class PyShellEditorWindow(EditorWindow):
                 pass
 
     def store_file_breaks(self):
-        """Save breakpoints when file is saved"""
         breaks = self.breakpoints
         filename = self.io.filename
         try:
@@ -242,7 +223,6 @@ class PyShellEditorWindow(EditorWindow):
             return
 
     def update_breakpoints(self):
-        """Retrieves all the breakpoints in the current window"""
         text = self.text
         ranges = text.tag_ranges('BREAK')
         linenumber_list = self.ranges_to_linenumbers(ranges)
@@ -260,13 +240,11 @@ class PyShellEditorWindow(EditorWindow):
         return lines
 
     def _close(self):
-        """Extend base method - clear breaks when module is closed"""
         self.clear_file_breaks()
         EditorWindow._close(self)
 
 
 class PyShellFileList(FileList):
-    """Extend base class: IDLE supports a shell and breakpoints"""
     EditorWindow = PyShellEditorWindow
     pyshell = None
 
@@ -282,7 +260,6 @@ class PyShellFileList(FileList):
 
 
 class ModifiedColorDelegator(ColorDelegator):
-    """Extend base class: colorizer for the shell window itself"""
 
     def __init__(self):
         ColorDelegator.__init__(self)
@@ -309,7 +286,6 @@ class ModifiedColorDelegator(ColorDelegator):
 
 
 class ModifiedUndoDelegator(UndoDelegator):
-    """Extend base class: forbid insert/delete before the I/O mark"""
 
     def insert(self, index, chars, tags=None):
         try:
@@ -335,7 +311,6 @@ class ModifiedUndoDelegator(UndoDelegator):
 class MyRPCClient(rpc.RPCClient):
 
     def handle_EOF(self):
-        """Override the base class - just re-raise EOFError"""
         raise EOFError
 
 
@@ -364,7 +339,6 @@ class ModifiedInterpreter(InteractiveInterpreter):
         return
 
     def build_subprocess_arglist(self):
-        assert self.port != 0, 'Socket should have been assigned a port number.'
         w = [ '-W' + s for s in sys.warnoptions ]
         if 1 / 2 > 0:
             w.append('-Qnew')
@@ -477,7 +451,6 @@ class ModifiedInterpreter(InteractiveInterpreter):
         return
 
     def unix_terminate(self):
-        """UNIX: make sure subprocess is terminated and collect status"""
         if hasattr(os, 'kill'):
             try:
                 os.kill(self.rpcpid, SIGTERM)
@@ -545,15 +518,6 @@ class ModifiedInterpreter(InteractiveInterpreter):
         return self.debugger
 
     def open_remote_stack_viewer(self):
-        """Initiate the remote stack viewer from a separate thread.
-        
-        This method is called from the subprocess, and by returning from this
-        method we allow the subprocess to unblock.  After a bit the shell
-        requests the subprocess to open the remote stack viewer which returns a
-        static object looking at the last exception.  It is queried through
-        the RPC mechanism.
-        
-        """
         self.tkconsole.text.after(300, self.remote_stack_viewer)
 
     def remote_stack_viewer(self):
@@ -577,12 +541,10 @@ class ModifiedInterpreter(InteractiveInterpreter):
     gid = 0
 
     def execsource(self, source):
-        """Like runsource() but assumes complete exec source"""
         filename = self.stuffsource(source)
         self.execfile(filename, source)
 
     def execfile(self, filename, source=None):
-        """Execute an existing file"""
         if source is None:
             source = open(filename, 'r').read()
         try:
@@ -600,7 +562,6 @@ class ModifiedInterpreter(InteractiveInterpreter):
         return
 
     def runsource(self, source):
-        """Extend base class method: Stuff the source in the line cache first"""
         filename = self.stuffsource(source)
         self.more = 0
         self.save_warnings_filters = warnings.filters[:]
@@ -624,7 +585,6 @@ class ModifiedInterpreter(InteractiveInterpreter):
         return
 
     def stuffsource(self, source):
-        """Stuff source in the filename cache"""
         filename = '<pyshell#%d>' % self.gid
         self.gid = self.gid + 1
         lines = source.split('\n')
@@ -635,16 +595,9 @@ class ModifiedInterpreter(InteractiveInterpreter):
         return filename
 
     def prepend_syspath(self, filename):
-        """Prepend sys.path with file's directory if not already included"""
         self.runcommand('if 1:\n            _filename = %r\n            import sys as _sys\n            from os.path import dirname as _dirname\n            _dir = _dirname(_filename)\n            if not _dir in _sys.path:\n                _sys.path.insert(0, _dir)\n            del _filename, _sys, _dirname, _dir\n            \n' % (filename,))
 
     def showsyntaxerror(self, filename=None):
-        """Extend base class method: Add Colorizing
-        
-        Color the offending position instead of printing it and pointing at it
-        with a caret.
-        
-        """
         text = self.tkconsole.text
         stuff = self.unpackerror()
         if stuff:
@@ -686,7 +639,6 @@ class ModifiedInterpreter(InteractiveInterpreter):
             return None
 
     def showtraceback(self):
-        """Extend base class method to reset output properly"""
         self.tkconsole.resetoutput()
         self.checklinecache()
         InteractiveInterpreter.showtraceback(self)
@@ -700,7 +652,6 @@ class ModifiedInterpreter(InteractiveInterpreter):
                 del c[key]
 
     def runcommand(self, code):
-        """Run the code without invoking the debugger"""
         if self.tkconsole.executing:
             self.display_executing_dialog()
             return 0
@@ -710,7 +661,6 @@ class ModifiedInterpreter(InteractiveInterpreter):
             exec code in self.locals
 
     def runcode(self, code):
-        """Override base class method"""
         if self.tkconsole.executing:
             self.interp.restart_subprocess()
         self.checklinecache()
@@ -756,7 +706,6 @@ class ModifiedInterpreter(InteractiveInterpreter):
         return
 
     def write(self, s):
-        """Override base class method"""
         self.tkconsole.stderr.write(s)
 
     def display_port_binding_error(self):
@@ -887,18 +836,15 @@ class PyShell(OutputWindow):
         self.set_debugger_indicator()
 
     def beginexecuting(self):
-        """Helper for ModifiedInterpreter"""
         self.resetoutput()
         self.executing = 1
 
     def endexecuting(self):
-        """Helper for ModifiedInterpreter"""
         self.executing = 0
         self.canceled = 0
         self.showprompt()
 
     def close(self):
-        """Extend EditorWindow.close()"""
         if self.executing:
             response = tkMessageBox.askokcancel('Kill?', 'The program is still running!\n Do you want to kill it?', default='ok', parent=self.text)
             if response is False:
@@ -909,7 +855,6 @@ class PyShell(OutputWindow):
         return EditorWindow.close(self)
 
     def _close(self):
-        """Extend EditorWindow._close(), shut down debugger and execution server"""
         self.close_debugger()
         if use_subprocess:
             self.interp.kill_subprocess()
@@ -924,7 +869,6 @@ class PyShell(OutputWindow):
         return
 
     def ispythonsource(self, filename):
-        """Override EditorWindow method: never remove the colorizer"""
         return True
 
     def short_title(self):
@@ -1137,7 +1081,6 @@ class PyShell(OutputWindow):
         self.text.see('restart')
 
     def restart_shell(self, event=None):
-        """Callback for Run/Restart Shell Cntl-F6"""
         self.interp.restart_subprocess(with_cwd=True)
 
     def showprompt(self):

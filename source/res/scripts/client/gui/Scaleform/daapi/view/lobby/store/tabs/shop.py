@@ -18,11 +18,6 @@ class ShopItemsTab(StoreItemsTab):
     tradeIn = dependency.descriptor(ITradeInController)
 
     def _getItemPrices(self, item):
-        """
-        Return buyPrices (original and alt prices)
-        :param item: FittingItem instance
-        :return: ItemPrices
-        """
         return item.buyPrices
 
     def _getItemActionData(self, item):
@@ -62,9 +57,6 @@ class ShopItemsTab(StoreItemsTab):
         return item.buyPrices.itemPrice.isActionPrice()
 
     def _getComparator(self):
-        """
-         If filter discount percent is selected sort items from high to low discount
-        """
         if self._actionsSelected:
 
             def comparator(a, b):
@@ -206,16 +198,16 @@ class ShopShellTab(ShopItemsTab, StoreShellTab):
         fitsType = self._filterData['fitsType']
         if fitsType == 'myVehicleGun':
             vehicle = self._items.getItemByCD(int(self._filterData['vehicleCD']))
-            shellsList = map(lambda x: x.intCD, vehicle.gun.defaultAmmo)
+            shellsList = [ x.intCD for x in vehicle.gun.defaultAmmo ]
             requestCriteria |= REQ_CRITERIA.IN_CD_LIST(shellsList)
         elif fitsType != 'otherGuns':
             shellsList = set()
             myGuns = self._items.getItems(GUI_ITEM_TYPE.GUN, REQ_CRITERIA.INVENTORY).values()
             for gun in myGuns:
-                shellsList.update(map(lambda x: x.intCD, gun.defaultAmmo))
+                shellsList.update((x.intCD for x in gun.defaultAmmo))
 
             for vehicle in invVehicles:
-                shellsList.update(map(lambda x: x.intCD, vehicle.gun.defaultAmmo))
+                shellsList.update((x.intCD for x in vehicle.gun.defaultAmmo))
 
             requestCriteria |= REQ_CRITERIA.IN_CD_LIST(shellsList)
         return requestCriteria

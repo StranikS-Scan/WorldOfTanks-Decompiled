@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/ArtilleryEquipment.py
 from AvatarInputHandler import mathUtils
 import BigWorld
-from Math import Vector3
 
 class ArtilleryEquipment(BigWorld.UserDataObject):
     launchVelocity = property(lambda self: self.__launchVelocity)

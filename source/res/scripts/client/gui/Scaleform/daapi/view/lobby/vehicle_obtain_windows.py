@@ -298,7 +298,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
             if tradeOffVehicle.hasOptionalDevices:
                 operations.append('optionalDevices')
             if operations:
-                operationsStr = map(lambda o: i18n.makeString('#dialogs:%s/message/%s' % (confirmationType, o)), operations)
+                operationsStr = [ i18n.makeString('#dialogs:%s/message/%s' % (confirmationType, o)) for o in operations ]
                 addition = i18n.makeString('#dialogs:%s/message/addition' % confirmationType, operations=', '.join(operationsStr))
             ctx = {'vehName': neutral(tradeOffVehicle.userName),
              'addition': addition}
@@ -332,8 +332,8 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
     def __setGoldCallBack(self, gold):
         self.as_setGoldS(gold)
 
-    def __setCreditsCallBack(self, credits):
-        self.as_setCreditsS(credits)
+    def __setCreditsCallBack(self, credit):
+        self.as_setCreditsS(credit)
 
     def __setTradeOffVehicle(self, event):
         selectedVehCD = int(event.ctx)

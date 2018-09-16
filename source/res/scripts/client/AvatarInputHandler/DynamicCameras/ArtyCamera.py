@@ -142,7 +142,6 @@ class ArtyCamera(ICamera, CallbackDelayer):
         if self.__aimingSystem is not None:
             self.__aimingSystem.disable()
         self.stopCallback(self.__cameraUpdate)
-        BigWorld.camera(None)
         self.__positionOscillator.reset()
         return
 

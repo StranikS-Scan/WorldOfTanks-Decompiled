@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/bdist_wininst.py
-"""distutils.command.bdist_wininst
-
-Implements the Distutils 'bdist_wininst' command: create a windows installer
-exe-program."""
 __revision__ = '$Id$'
 import sys
 import os
@@ -92,7 +88,6 @@ class bdist_wininst(Command):
         if self.distribution.has_ext_modules():
             target_version = self.target_version
             if not target_version:
-                assert self.skip_build, 'Should have already checked this'
                 target_version = sys.version[0:3]
             plat_specifier = '.%s-%s' % (self.plat_name, target_version)
             build = self.get_finalized_command('build')

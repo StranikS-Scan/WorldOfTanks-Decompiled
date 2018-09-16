@@ -1,17 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CombatEquipmentManager.py
+import functools
+import math
 from AvatarInputHandler import mathUtils
 import BigWorld
 import Math
 from Math import Vector2, Vector3
-import functools
-import math
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 import BombersWing
 import Flock
 from constants import IS_DEVELOPMENT
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_WARNING, LOG_ERROR
+from debug_utils import LOG_DEBUG, LOG_ERROR
 import CombatSelectedArea
 from items import vehicles
 import items
@@ -46,7 +46,7 @@ class _DebugFrontLine(CallbackDelayer):
 class CombatEquipmentManager(object):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def testArtyStrike(self, id=33, offset=Vector3(0, 0, 0)):
+    def testArtyStrike(self, strikeID=33, offset=Vector3(0, 0, 0)):
         if not IS_DEVELOPMENT:
             return
         else:
@@ -55,10 +55,10 @@ class CombatEquipmentManager(object):
             collRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, p, p + d * 1000, 18, 8)
             if collRes is None:
                 return
-            strikePos = collRes[0]
+            strikePos = collRes.closestPoint
             vDir = Vector2(d.x, d.z)
             vDir.normalise()
-            self.setEquipmentApplicationPoint(id, strikePos + offset, vDir)
+            self.setEquipmentApplicationPoint(strikeID, strikePos + offset, vDir)
             return
 
     def __init__(self):
@@ -121,20 +121,20 @@ class CombatEquipmentManager(object):
             self.debugPolyLine.set(self.debugPoints)
         return
 
-    def showHittingArea(self, equipmentID, pos, dir, time):
+    def showHittingArea(self, equipmentID, pos, direction, time):
         if _ENABLE_DEBUG_LOG:
             LOG_DEBUG('===== showHittingArea =====')
             LOG_DEBUG(equipmentID)
-            LOG_DEBUG(pos, dir, time)
+            LOG_DEBUG(pos, direction, time)
         correctedCoords = tuple((int(x * 1000.0) for x in pos.tuple()))
         areaUID = (int(equipmentID), correctedCoords)
         if areaUID in self.__selectedAreas:
             return
         eq = vehicles.g_cache.equipments()[equipmentID]
         if BattleReplay.isPlaying():
-            BigWorld.callback(0.0, functools.partial(self.__showMarkerCallback, eq, pos, dir, time, areaUID))
+            BigWorld.callback(0.0, functools.partial(self.__showMarkerCallback, eq, pos, direction, time, areaUID))
         else:
-            self.__showMarkerCallback(eq, pos, dir, time, areaUID)
+            self.__showMarkerCallback(eq, pos, direction, time, areaUID)
 
     def __delayedAreaDestroy(self, areaUID):
         area = self.__selectedAreas.pop(areaUID, None)
@@ -142,19 +142,19 @@ class CombatEquipmentManager(object):
             area.destroy()
         return
 
-    def __showMarkerCallback(self, eq, pos, dir, time, areaUID):
+    def __showMarkerCallback(self, eq, pos, direction, time, areaUID):
         timer = round(time - BigWorld.serverTime())
         area = self.__selectedAreas.pop(areaUID, None)
         if area is not None:
             area.destroy()
-        self.__selectedAreas[areaUID] = self.createEquipmentSelectedArea(pos, dir, eq)
+        self.__selectedAreas[areaUID] = self.createEquipmentSelectedArea(pos, direction, eq)
         area = self.__selectedAreas[areaUID]
         if area is not None:
             area.setGUIVisible(self.__isGUIVisible)
         self.__callbackDelayer.delayCallback(timer, functools.partial(self.__delayedAreaDestroy, areaUID))
         ctrl = self.guiSessionProvider.shared.equipments
         if ctrl is not None:
-            ctrl.showMarker(eq, pos, dir, timer)
+            ctrl.showMarker(eq, pos, direction, timer)
         return
 
     def setGUIVisible(self, isVisible):
@@ -169,11 +169,11 @@ class CombatEquipmentManager(object):
         bombsPerLength = bombsPerWidth / coeff
         return (bombsPerWidth, bombsPerLength)
 
-    def showCarpetBombing(self, equipmentID, pos, dir, time):
+    def showCarpetBombing(self, equipmentID, pos, direction, time):
         if _ENABLE_DEBUG_LOG:
             LOG_DEBUG('===== showCarpetBombing =====')
             LOG_DEBUG(equipmentID)
-            LOG_DEBUG(pos, dir, time)
+            LOG_DEBUG(pos, direction, time)
         bombEquipment = vehicles.g_cache.equipments()[equipmentID]
         shellDescr = items.vehicles.getItemByCompactDescr(bombEquipment.shellCompactDescr)
         shotEffect = vehicles.g_cache.shotEffects[shellDescr.effectsIndex]
@@ -185,19 +185,19 @@ class CombatEquipmentManager(object):
             areaWidth, areaLength = bombEquipment.areaWidth, bombEquipment.areaLength
             if _ENABLE_DEBUG_LOG:
                 LOG_DEBUG('Ideal', areaWidth, areaLength)
-            beginExplosionPos = BigWorld.wg_collideSegment(BigWorld.player().spaceID, pos, pos + dir * 1000.0, 18)
+            beginExplosionPos = BigWorld.wg_collideSegment(BigWorld.player().spaceID, pos, pos + direction * 1000.0, 18)
             if beginExplosionPos is None:
                 return
-            beginExplosionPos = beginExplosionPos[0]
-            flatDir = Vector3(dir)
+            beginExplosionPos = beginExplosionPos.closestPoint
+            flatDir = Vector3(direction)
             flatDir.y = 0.0
             flatDir.normalise()
             endDropPoint = pos + flatDir * (areaLength * bombEquipment.waveFraction)
-            endExplosionPos = BigWorld.wg_collideSegment(BigWorld.player().spaceID, endDropPoint, endDropPoint + dir * 1000.0, 18)
+            endExplosionPos = BigWorld.wg_collideSegment(BigWorld.player().spaceID, endDropPoint, endDropPoint + direction * 1000.0, 18)
             if endExplosionPos is None:
                 endExplosionPos = beginExplosionPos + flatDir * (areaLength * bombEquipment.waveFraction)
             else:
-                endExplosionPos = endExplosionPos[0]
+                endExplosionPos = endExplosionPos.closestPoint
             areaLength = beginExplosionPos.flatDistTo(endExplosionPos)
             averageBombCount = bombEquipment.bombsNumber
             bombsPerWidth, bombsPerLength = CombatEquipmentManager.__calcBombsDistribution(averageBombCount, areaWidth, areaLength)
@@ -206,7 +206,7 @@ class CombatEquipmentManager(object):
             partialAirstrikeFunc = functools.partial(BigWorld.PyGroundEffectManager().playAirstrike, airstrikeID, beginExplosionPos, explosionVelocity, areaWidth, areaLength, math.ceil(bombsPerWidth), math.ceil(bombsPerLength))
             if _ENABLE_DEBUG_LOG:
                 LOG_DEBUG('delta', delay)
-                LOG_DEBUG('pos, dir', pos, dir)
+                LOG_DEBUG('pos, dir', pos, direction)
                 LOG_DEBUG('Params for artyStrike effect', airstrikeID, beginExplosionPos, flatDir, areaWidth, areaLength, bombsPerWidth, bombsPerLength)
             if delay < 0.0:
                 partialAirstrikeFunc()
@@ -229,7 +229,7 @@ class CombatEquipmentManager(object):
         return
 
     @staticmethod
-    def createEquipmentSelectedArea(pos, dir, equipment):
+    def createEquipmentSelectedArea(pos, direction, equipment):
         area = CombatSelectedArea.CombatSelectedArea()
         size = Math.Vector2(equipment.areaWidth, equipment.areaLength)
         visual = equipment.areaVisual
@@ -241,5 +241,5 @@ class CombatEquipmentManager(object):
             color = CombatSelectedArea.COLOR_WHITE
         if marker is None:
             pass
-        area.setup(pos, dir, size, visual, color, marker)
+        area.setup(pos, direction, size, visual, color, marker)
         return area

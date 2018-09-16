@@ -1,26 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_except.py
-"""Fixer for except statements with named exceptions.
-
-The following cases will be converted:
-
-- "except E, T:" where T is a name:
-
-    except E as T:
-
-- "except E, T:" where T is not a name, tuple or list:
-
-        except E as t:
-            T = t
-
-    This is done because the target of an "except" clause must be a
-    name.
-
-- "except E, T:" where T is a tuple or list literal:
-
-        except E as t:
-            T = t.args
-"""
 from .. import pytree
 from ..pgen2 import token
 from .. import fixer_base

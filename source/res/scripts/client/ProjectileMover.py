@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ProjectileMover.py
-from collections import namedtuple
 import BigWorld
 import Math
 import constants
@@ -34,7 +33,7 @@ class ProjectileMover(object):
     def __init__(self):
         self.__projectiles = dict()
         self.salvo = BigWorld.PySalvo(1000, 0, -100)
-        self.__ballistics = BigWorld.PyBallisticsSimulator(lambda start, end: BigWorld.player().arena.collideWithSpaceBB(start, end), self.__killProjectile, self.__deleteProjectile)
+        self.__ballistics = BigWorld.PyBallisticsSimulator(BigWorld.player().arena.collideWithSpaceBB, self.__killProjectile, self.__deleteProjectile)
         if self.__ballistics is not None:
             self.__ballistics.setFixedBallisticsParams(self.__PROJECTILE_HIDING_TIME, self.__PROJECTILE_TIME_AFTER_DEATH, self.__AUTO_SCALE_DISTANCE, constants.SERVER_TICK_LENGTH)
         player = BigWorld.player()
@@ -83,7 +82,7 @@ class ProjectileMover(object):
                 model.addMotor(projectileMotor)
                 model.visible = False
                 model.visibleAttachments = True
-                projEffects.attachTo(proj['model'], proj['effectsData'], 'flying', isPlayerVehicle=isOwnShoot, isArtillery=False)
+                projEffects.attachTo(proj['model'], proj['effectsData'], 'flying', isPlayerVehicle=isOwnShoot, isArtillery=False, attackerID=attackerID)
             self.__projectiles[shotID] = proj
             FlockManager.getManager().onProjectile(startPoint)
             return
@@ -149,7 +148,7 @@ class ProjectileMover(object):
         if waterDist > 0:
             waterY = p0.y - waterDist
             testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, p0, p1, 128)
-            staticY = testRes[0].y if testRes is not None else waterY
+            staticY = testRes.closestPoint.y if testRes is not None else waterY
             if staticY < waterY and position.y - waterY <= 0.1:
                 shallowWaterDepth, rippleDiameter = proj['effectsDescr']['waterParams']
                 if waterY - staticY < shallowWaterDepth:
@@ -162,14 +161,14 @@ class ProjectileMover(object):
         BigWorld.player().terrainEffects.addNew(position, effects, keyPoints, None, dir=velocityDir, start=position + velocityDir.scale(-1.0), end=position + velocityDir.scale(1.0), attackerID=proj['attackerID'])
         return
 
-    def __killProjectile(self, shotID, position, impactVelDir):
+    def __killProjectile(self, shotID, position, impactVelDir, deathType):
         proj = self.__projectiles.get(shotID)
         if proj is None:
             return
         else:
             effectsDescr = proj['effectsDescr']
             projEffects = effectsDescr['projectile'][2]
-            projEffects.detachFrom(proj['effectsData'], 'stopFlying')
+            projEffects.detachFrom(proj['effectsData'], 'stopFlying', deathType)
             if proj['showExplosion']:
                 self.__addExplosionEffect(position, proj, impactVelDir)
             return
@@ -204,81 +203,45 @@ class ProjectileMover(object):
         self.__ballistics.setBallisticsAutoScale(cameraName != 'sniper')
 
 
-class EntityCollisionData(namedtuple('collisionData', ('entity', 'hitAngleCos', 'armor'))):
+class EntityCollisionData(object):
+    __slots__ = ('hitAngleCos', 'armor', '__isVehicle', 'entity')
+
+    def __init__(self, entityID, partIndex, matKind, isVehicle=True):
+        self.hitAngleCos = 0.0
+        self.__isVehicle = isVehicle
+        if isVehicle:
+            self.entity = BigWorld.entity(entityID)
+            matInfo = self.entity.getMatinfo(partIndex, matKind)
+            self.armor = matInfo.armor if matInfo is not None else 0.0
+        else:
+            self.entity = None
+        return
 
     def isVehicle(self):
-        return self.entity.__class__.__name__ == 'Vehicle'
-
-
-def collideEntities(startPoint, endPoint, entities, skipGun=False):
-    res = None
-    dir = endPoint - startPoint
-    endDist = dir.length
-    dir.normalise()
-    for entity in entities:
-        collisionResult = entity.collideSegment(startPoint, endPoint, skipGun)
-        if collisionResult is None:
-            continue
-        dist = collisionResult[0]
-        if dist < endDist:
-            endPoint = startPoint + dir * dist
-            endDist = dist
-            res = (dist, EntityCollisionData(entity, collisionResult.hitAngleCos, collisionResult.armor))
-
-    return res
-
-
-def collideVehiclesAndStaticScene(startPoint, endPoint, vehicles, collisionFlags=128, skipGun=False):
-    testResStatic = BigWorld.wg_collideSegment(BigWorld.player().spaceID, startPoint, endPoint, collisionFlags)
-    testResDynamic = collideEntities(startPoint, endPoint if testResStatic is None else testResStatic[0], vehicles, skipGun)
-    if testResStatic is None and testResDynamic is None:
-        return
-    distDynamic = 1000000.0
-    if testResDynamic is not None:
-        distDynamic = testResDynamic[0]
-    distStatic = 1000000.0
-    if testResStatic is not None:
-        distStatic = (testResStatic[0] - startPoint).length
-    if distDynamic <= distStatic:
-        dir = endPoint - startPoint
-        dir.normalise()
-        return (startPoint + distDynamic * dir, testResDynamic[1])
-    else:
-        return (testResStatic[0], None)
-
-
-def segmentMayHitEntity(entity, startPoint, endPoint):
-    method = getattr(entity.filter, 'segmentMayHitEntity', lambda a, b: True)
-    return method(startPoint, endPoint, 1)
-
-
-def getCollidableEntities(exceptIDs, startPoint=None, endPoint=None):
-    segmentTest = startPoint is not None and endPoint is not None
-    vehicles = []
-    for vehicleID in BigWorld.player().arena.vehicles.iterkeys():
-        if vehicleID in exceptIDs:
-            continue
-        vehicle = BigWorld.entity(vehicleID)
-        if vehicle is None or not vehicle.isStarted:
-            continue
-        if segmentTest and not segmentMayHitEntity(vehicle, startPoint, endPoint):
-            continue
-        vehicles.append(vehicle)
-
-    for entity in ProjectileAwareEntities.entities:
-        if segmentTest and not segmentMayHitEntity(entity, startPoint, endPoint):
-            continue
-        vehicles.append(entity)
-
-    return vehicles
-
-
-def collideDynamic(startPoint, endPoint, exceptIDs, skipGun=False):
-    return collideEntities(startPoint, endPoint, getCollidableEntities(exceptIDs, startPoint, endPoint), skipGun)
+        return self.__isVehicle
 
 
 def collideDynamicAndStatic(startPoint, endPoint, exceptIDs, collisionFlags=128, skipGun=False):
-    return collideVehiclesAndStaticScene(startPoint, endPoint, getCollidableEntities(exceptIDs, startPoint, endPoint), collisionFlags, skipGun)
+    ignoreDynamicID = 0
+    if exceptIDs:
+        ignoreDynamicID = exceptIDs[0]
+    testRes = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, startPoint, endPoint, collisionFlags, ignoreDynamicID, skipGun)
+    if testRes is not None:
+        if testRes[1]:
+            return (testRes[0], EntityCollisionData(testRes[2], testRes[3], testRes[4], True))
+        return (testRes[0], None)
+    else:
+        return
+
+
+def collideDynamic(startPoint, endPoint, exceptIDs, skipGun=False):
+    ignoreID = 0
+    if exceptIDs:
+        ignoreID = exceptIDs[0]
+    res = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, startPoint, endPoint, ignoreID, -1 if skipGun else TankPartNames.getIdx(TankPartNames.GUN))
+    if res is not None:
+        res = (res[0], EntityCollisionData(res[3], res[4], res[5], res[2] == 0))
+    return res
 
 
 class ProjectileAwareEntities(object):

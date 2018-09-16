@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarObserver.py
+from collections import defaultdict
 import BigWorld
 import Vehicle
 import Math
-from collections import defaultdict
 from constants import VEHICLE_SETTING
 from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, CTRL_MODES
 from AvatarInputHandler.subfilters_constants import AVATAR_SUBFILTERS, FILTER_INTERPOLATION_TYPE
-from debug_utils import LOG_DEBUG_DEV, LOG_ERROR
+from debug_utils import LOG_DEBUG_DEV
 from helpers.CallbackDelayer import CallbackDelayer
 _STRATEGIC_VIEW = (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY)
 
@@ -90,8 +90,7 @@ class AvatarObserver(CallbackDelayer):
         def getFilterMethod(methodName):
             method = getattr(self.filter, methodName, None)
             if method is None:
-                LOG_ERROR('AvatarObserver.onEnterWorld(): filter does not have method %s' % methodName)
-                assert False
+                raise UserWarning('AvatarObserver.onEnterWorld(): filter does not have method', methodName)
             return method
 
         self.__filterSyncVector3 = getFilterMethod('syncVector3')
@@ -150,6 +149,9 @@ class AvatarObserver(CallbackDelayer):
         if self.isObserver():
             self.observedVehicleData[vehicleID].setReload(timeLeft, baseTime)
 
+    def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, stunned):
+        pass
+
     def updateVehicleOptionalDeviceStatus(self, vehicleID, deviceID, isOn):
         self.observedVehicleData[vehicleID].setOptionalDevice(deviceID, isOn)
 
@@ -185,7 +187,7 @@ class AvatarObserver(CallbackDelayer):
         vehicle = self.vehicle
         if vehicle is None:
             vehicle = BigWorld.entity(self.__observedVehicleID if self.__observedVehicleID else self.playerVehicleID)
-        return None if vehicle is None or not vehicle.inWorld or not vehicle.isStarted or not vehicle.isAlive() else vehicle
+        return None if vehicle is None or not vehicle.inWorld or not vehicle.isStarted or vehicle.isDestroyed else vehicle
 
     def getVehicleDescriptor(self):
         descr = self.vehicleTypeDescriptor

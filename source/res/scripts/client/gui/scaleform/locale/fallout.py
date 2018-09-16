@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/FALLOUT.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class FALLOUT(object):
     CHANNEL_LABEL = '#fallout:channel/label'
@@ -20,7 +17,6 @@ class FALLOUT(object):
     INFOPANEL_GARAGEMULTITEAM_HEAD = '#fallout:infoPanel/garageMultiteam/head'
     INFOPANEL_GARAGEMULTITEAM_DESCR = '#fallout:infoPanel/garageMultiteam/descr'
     INFOPANEL_GARAGE_POSTMORTEMBTNLBL = '#fallout:infoPanel/garage/postmortemBtnLbl'
-    INFOPANEL_GARAGE_GASATACK_RESPAWNINFO = '#fallout:infoPanel/garage/gasAtack/respawnInfo'
     INFOPANEL_SINGLEHELPTEXT_WINPOINTS_FLAGCAPTURE = '#fallout:infoPanel/singleHelpText/winPoints/flagCapture'
     INFOPANEL_SINGLEHELPTEXT_WINPOINTS_FLAGDESTROY = '#fallout:infoPanel/singleHelpText/winPoints/flagDestroy'
     INFOPANEL_SINGLEHELPTEXT_WINPOINTS_KILL = '#fallout:infoPanel/singleHelpText/winPoints/kill'
@@ -62,17 +58,6 @@ class FALLOUT(object):
     MULTISELECTIONSLOT_GROUPNOTREADY = '#fallout:multiselectionSlot/groupNotReady'
     FALLOUTBATTLESELECTORWINDOW_AUTOSQUAD_LABEL = '#fallout:falloutBattleSelectorWindow/autoSquad/label'
     SAFEZONE_MESSAGE = '#fallout:safeZone/message'
-    GASATTACKPANEL_START_TITLE = '#fallout:gasAttackPanel/start/title'
-    GASATTACKPANEL_START_MESSAGE = '#fallout:gasAttackPanel/start/message'
-    GASATTACKPANEL_GASATTACK_TITLE = '#fallout:gasAttackPanel/gasAttack/title'
-    GASATTACKPANEL_GASATTACK_MESSAGE = '#fallout:gasAttackPanel/gasAttack/message'
-    GASATTACKPANEL_INSIDE_TITLE = '#fallout:gasAttackPanel/inside/title'
-    GASATTACKPANEL_INSIDE_MESSAGE = '#fallout:gasAttackPanel/inside/message'
-    GASATTACKPANEL_SAFEZONE_TITLE = '#fallout:gasAttackPanel/safeZone/title'
-    GASATTACKPANEL_SAFEZONE_MESSAGE = '#fallout:gasAttackPanel/safeZone/message'
-    GASATTACK_POSTMORTEM_VEHICLEDESTROYED = '#fallout:gasAttack/postmortem/vehicleDestroyed'
-    GASATTACK_POSTMORTEM_RESPAWNINFO = '#fallout:gasAttack/postmortem/respawnInfo'
-    GASATTACK_DAMAGEPANEL_TANKDESTROYED = '#fallout:gasAttack/damagePanel/tankDestroyed'
     SAFEZONEDIRECTION_MESSAGE = '#fallout:safeZoneDirection/message'
     AWARDWINDOW_TITLE_1 = '#fallout:awardWindow/title/1'
     AWARDWINDOW_TITLE_2 = '#fallout:awardWindow/title/2'

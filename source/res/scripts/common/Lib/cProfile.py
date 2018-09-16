@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/cProfile.py
-"""Python interface for the 'lsprof' profiler.
-   Compatible with the 'profile' module.
-"""
 __all__ = ['run',
  'runctx',
  'help',
@@ -10,16 +7,6 @@ __all__ = ['run',
 import _lsprof
 
 def run(statement, filename=None, sort=-1):
-    """Run statement under profiler optionally saving results in filename
-    
-    This function takes a single argument that can be passed to the
-    "exec" statement, and an optional file name.  In all cases this
-    routine attempts to "exec" its first argument and gather profiling
-    statistics from the execution. If no file name is present, then this
-    function automatically prints a simple profiling report, sorted by the
-    standard name string (file/line/function-name) that is presented in
-    each line.
-    """
     prof = Profile()
     result = None
     try:
@@ -38,11 +25,6 @@ def run(statement, filename=None, sort=-1):
 
 
 def runctx(statement, globals, locals, filename=None, sort=-1):
-    """Run statement under profiler, supplying your own globals and locals,
-    optionally saving results in filename.
-    
-    statement and filename have the same semantics as profile.run
-    """
     prof = Profile()
     result = None
     try:
@@ -66,14 +48,6 @@ def help():
 
 
 class Profile(_lsprof.Profiler):
-    """Profile(custom_timer=None, time_unit=None, subcalls=True, builtins=True)
-    
-    Builds a profiler object using the specified timer function.
-    The default timer is a fast built-in one based on real time.
-    For custom timer functions returning integers, time_unit can
-    be a float specifying a scale (i.e. how long each integer unit
-    is, in seconds).
-    """
 
     def print_stats(self, sort=-1):
         import pstats

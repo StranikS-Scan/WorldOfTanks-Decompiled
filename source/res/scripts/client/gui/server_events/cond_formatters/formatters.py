@@ -7,16 +7,13 @@ from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.server_events import formatters
+from gui.server_events import formatters as events_fmts
 from gui.server_events.cond_formatters import FormattableField, FORMATTER_IDS, CONDITION_ICON, VEHICLE_TYPES, MAX_CONDITIONS_IN_OR_SECTION_SUPPORED, packSimpleTitle, packDescriptionField
 from gui.server_events.conditions import GROUP_TYPE
 from gui.shared.formatters import text_styles
 from helpers import i18n
 
 class ConditionsFormatter(object):
-    """
-    Formatters container to format defined quests conditions.
-    """
 
     def __init__(self, formatters=None):
         self.__formatters = formatters or {}
@@ -42,15 +39,8 @@ class ConditionsFormatter(object):
 
 
 class ConditionFormatter(object):
-    """
-    Formatter to format quest condition.
-    """
 
     def format(self, condition, event):
-        """
-        Gets list of formatted condition data to display quest condition.
-        One quest condition may have several visual representations.
-        """
         return self._format(condition, event)
 
     def _format(self, condition, event):
@@ -64,17 +54,11 @@ class CumulativableFormatter(ConditionFormatter):
 
     @classmethod
     def getGroupByValue(cls, condition):
-        """
-        Gets condition group progress key: one of ('nation', 'level', 'types', 'classes') or None
-        """
         bonusData = condition.getBonusData()
         return bonusData.getGroupByValue() if condition else condition
 
     @classmethod
     def formatByGroup(cls, condition, groupByKey, event):
-        """
-        Gets list of formatted condition data with its progress separated by group.
-        """
         return cls._formatByGroup(condition, groupByKey, event)
 
     @classmethod
@@ -83,25 +67,12 @@ class CumulativableFormatter(ConditionFormatter):
 
 
 class MissionFormatter(ConditionFormatter):
-    """
-    Base condition formatter for mission's GUI.
-    Gets pre formatted data list for condition (typing.List[PreFormattedCondition]) ,
-    which later used in cards formatter to get final view
-    """
 
     def getTitle(self, condition):
-        """
-        Gets condition's custom title if it is defined,
-        else return standard conditions title
-        """
         customTitle = condition.getCustomTitle()
         return packSimpleTitle(customTitle) if customTitle is not None else self._getTitle(condition)
 
     def getDescription(self, condition):
-        """
-        Gets condition's custom description if it is defined,
-        else return standard conditions description
-        """
         customDescription = condition.getCustomDescription()
         return packDescriptionField(customDescription) if customDescription is not None else self._getDescription(condition)
 
@@ -117,9 +88,6 @@ class MissionFormatter(ConditionFormatter):
         return CONDITION_ICON.FOLDER
 
     def _packGui(self, *args, **kwargs):
-        """
-        Gets pre formatted data object PreFormatted condition, which used as data holder for final formatting.
-        """
         raise NotImplementedError
 
 
@@ -132,7 +100,7 @@ class SimpleMissionsFormatter(MissionFormatter):
         return result
 
     def _packGui(self, condition):
-        return formatters.packMissionIconCondition(self.getTitle(condition), MISSIONS_ALIASES.NONE, self.getDescription(condition), self._getIconKey(condition), sortKey=self._getSortKey(condition))
+        return events_fmts.packMissionIconCondition(self.getTitle(condition), MISSIONS_ALIASES.NONE, self.getDescription(condition), self._getIconKey(condition), sortKey=self._getSortKey(condition))
 
 
 class MissionsVehicleListFormatter(MissionFormatter):
@@ -155,7 +123,7 @@ class MissionsVehicleListFormatter(MissionFormatter):
     def _getTitle(cls, condition):
         return FormattableField(FORMATTER_IDS.RELATION, (condition.relationValue,
          condition.relation,
-         formatters.RELATIONS_SCHEME.DEFAULT,
+         events_fmts.RELATIONS_SCHEME.DEFAULT,
          cls._getTitleKey(condition))) if condition.isAnyVehicleAcceptable() else FormattableField(FORMATTER_IDS.COMPLEX_RELATION, (condition.relationValue, condition.relation, cls._getTitleKey(condition)))
 
     @classmethod
@@ -168,11 +136,6 @@ class MissionsVehicleListFormatter(MissionFormatter):
         return packDescriptionField(labelKey)
 
     def _getConditionData(self, condition):
-        """
-        Gets detailed data about vehicle kill or vehicle damage condition description in a specific format,
-        Displayed in detailed card view layout on condition click
-        or in tooltip on card's condition rollover
-        """
         data = {'description': i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_HEADER),
          'list': []}
         if condition.isAnyVehicleAcceptable():
@@ -229,7 +192,7 @@ class MissionsVehicleListFormatter(MissionFormatter):
         return self._packGui(title, progressType, self.getDescription(condition), current=current, total=total, conditionData=self._getConditionData(condition), progressData=progressData, condition=condition)
 
     def _packGui(self, title, progressType, label, current=None, total=None, conditionData=None, progressData=None, condition=None):
-        return formatters.packMissionIconCondition(title, progressType, label, self._getIconKey(condition), current=current, total=total, conditionData=conditionData, progressData=progressData, sortKey=self._getSortKey(condition))
+        return events_fmts.packMissionIconCondition(title, progressType, label, self._getIconKey(condition), current=current, total=total, conditionData=conditionData, progressData=progressData, sortKey=self._getSortKey(condition))
 
     @staticmethod
     def __makeVehicleVO(vehicle):
@@ -241,11 +204,6 @@ class MissionsVehicleListFormatter(MissionFormatter):
 
 
 class GroupFormatter(ConditionFormatter):
-    """
-    Base formatter for quests condition's groups ('AND' and 'OR' ).
-    Collect and format conditions from group.
-    May format conditions recursive, has linkage on formatters container.
-    """
 
     def __init__(self, proxy):
         super(GroupFormatter, self).__init__()
@@ -256,12 +214,6 @@ class GroupFormatter(ConditionFormatter):
 
 
 class OrGroupFormatter(GroupFormatter):
-    """
-    Formatter for quests condition's groups 'OR' for base missions.
-    Collect and format conditions from group.
-    May format conditions recursive. Process only first depth of OR groups. Others ignores.
-    Has UX limit displayed conditions count number.
-    """
 
     def __init__(self, proxy):
         super(OrGroupFormatter, self).__init__(proxy)
@@ -293,12 +245,6 @@ class OrGroupFormatter(GroupFormatter):
 
 
 class AndGroupFormatter(GroupFormatter):
-    """
-    Formatter for quests condition's groups 'AND' for base missions.
-    Collect and format conditions from group. May format conditions recursive.
-    Has UX limit displayed conditions count number.
-    Format only first level of depth by itself, other groups levels formats by inner AND formatter
-    """
 
     def __init__(self, proxy):
         super(AndGroupFormatter, self).__init__(proxy)
@@ -350,6 +296,15 @@ class MissionsBattleConditionsFormatter(ConditionsFormatter):
         if groupFormatter:
             result.extend(groupFormatter.format(condition, event))
         return result
+
+    def _packCondition(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _getFormattedField(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _packConditions(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
 
 
 class _InnerAndGroupFormatter(GroupFormatter):

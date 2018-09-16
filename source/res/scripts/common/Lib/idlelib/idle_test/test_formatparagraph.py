@@ -7,7 +7,6 @@ from Tkinter import Tk, Text, TclError
 from test.test_support import requires
 
 class Is_Get_Test(unittest.TestCase):
-    """Test the is_ and get_ functions"""
     test_comment = '# This is a comment'
     test_nocomment = 'This is not a comment'
     trailingws_comment = '# This is a comment   '
@@ -36,14 +35,6 @@ class Is_Get_Test(unittest.TestCase):
 
 
 class FindTest(unittest.TestCase):
-    """Test the find_paragraph function in FormatParagraph.
-    
-    Using the runcase() function, find_paragraph() is called with 'mark' set at
-    multiple indexes before and inside the test paragraph.
-    
-    It appears that code with the same indentation as a quoted string is grouped
-    as part of the same paragraph, which is probably incorrect behavior.
-    """
 
     @classmethod
     def setUpClass(cls):
@@ -132,7 +123,6 @@ class FindTest(unittest.TestCase):
 
 
 class ReformatFunctionTest(unittest.TestCase):
-    """Test the reformat_paragraph function without the editor window."""
 
     def test_reformat_paragrah(self):
         Equal = self.assertEqual
@@ -154,7 +144,6 @@ class ReformatFunctionTest(unittest.TestCase):
 
 
 class ReformatCommentTest(unittest.TestCase):
-    """Test the reformat_comment function without the editor window."""
 
     def test_reformat_comment(self):
         Equal = self.assertEqual
@@ -202,11 +191,6 @@ class Editor:
 
 
 class FormatEventTest(unittest.TestCase):
-    """Test the formatting of text inside a Text widget.
-    
-    This is done with FormatParagraph.format.paragraph_event,
-    which calls functions in the module as appropriate.
-    """
     test_string = "    '''this is a test of a reformat for a triple quoted string will it reformat to less than 70 characters for me?'''\n"
     multiline_test_string = "    '''The first line is under the max width.\n    The second line's length is way over the max width. It goes on and on until it is over 100 characters long.\n    Same thing with the third line. It is also way over the max width, but FormatParagraph will fix it.\n    '''\n"
     multiline_test_comment = "# The first line is under the max width.\n# The second line's length is way over the max width. It goes on and on until it is over 100 characters long.\n# Same thing with the third line. It is also way over the max width, but FormatParagraph will fix it.\n# The fourth line is short like the first line."

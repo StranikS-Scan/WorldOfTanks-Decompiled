@@ -15,12 +15,18 @@ from messenger.proto import proto_getter
 from skeletons.helpers.statistics import IStatisticsCollector
 from tutorial.gui.commands import GUICommandsFactory
 from tutorial.logger import LOG_DEBUG, LOG_ERROR, LOG_WARNING
-from tutorial.data.events import ClickEvent, ClickOutsideEvent, EscEvent
+from tutorial.data.events import ClickEvent, ClickOutsideEvent, EscEvent, EnableEvent, DisableEvent
 from tutorial.doc_loader import gui_config
 from tutorial.gui import GUIProxy, GUI_EFFECT_NAME
 from tutorial.gui.Scaleform.items_manager import ItemsManager
-from gui.app_loader.decorators import sf_lobby
+from tutorial.gui.Scaleform.effects_player import GUIEffectScope
+from gui.app_loader import sf_lobby
 _TEvent = events.TutorialEvent
+_EventClassByTriggerType = {TUTORIAL_TRIGGER_TYPES.CLICK_TYPE: (ClickEvent, 'Player has clicked'),
+ TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE: (ClickOutsideEvent, 'Player has clicked outside'),
+ TUTORIAL_TRIGGER_TYPES.ESCAPE: (EscEvent, 'Player has pressed ESC'),
+ TUTORIAL_TRIGGER_TYPES.ENABLED: (EnableEvent, 'Button has been enabled'),
+ TUTORIAL_TRIGGER_TYPES.DISABLED: (DisableEvent, 'Button has been disabled')}
 
 class SfLobbyProxy(GUIProxy):
     statsCollector = dependency.descriptor(IStatisticsCollector)
@@ -57,6 +63,7 @@ class SfLobbyProxy(GUIProxy):
         addListener(_TEvent.ON_COMPONENT_FOUND, self.__onComponentFound, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(_TEvent.ON_COMPONENT_LOST, self.__onComponentLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(_TEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
+        addListener(_TEvent.ON_ANIMATION_COMPLETE, self.__onAnimationComplete, scope=EVENT_BUS_SCOPE.GLOBAL)
         if self.app is not None:
             proxy = weakref.proxy(self.app)
             for _, effect in self.effects.iterEffects():
@@ -64,6 +71,7 @@ class SfLobbyProxy(GUIProxy):
 
             loader = self.app.loaderManager
             loader.onViewLoadInit += self.__onViewLoadInit
+            loader.onViewLoaded += self.__onViewLoaded
             loader.onViewLoadError += self.__onViewLoadError
             addSettings = g_entitiesFactories.addSettings
             try:
@@ -85,6 +93,7 @@ class SfLobbyProxy(GUIProxy):
         if self.app is not None:
             loader = self.app.loaderManager
             loader.onViewLoadInit -= self.__onViewLoadInit
+            loader.onViewLoaded -= self.__onViewLoaded
             loader.onViewLoadError -= self.__onViewLoadError
             removeSettings = g_entitiesFactories.removeSettings
             for settings in self.getViewSettings():
@@ -94,6 +103,7 @@ class SfLobbyProxy(GUIProxy):
         removeListener(_TEvent.ON_COMPONENT_FOUND, self.__onComponentFound, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(_TEvent.ON_COMPONENT_LOST, self.__onComponentLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(_TEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
+        removeListener(_TEvent.ON_ANIMATION_COMPLETE, self.__onAnimationComplete, scope=EVENT_BUS_SCOPE.GLOBAL)
         return
 
     def clear(self):
@@ -129,14 +139,23 @@ class SfLobbyProxy(GUIProxy):
         if event:
             g_eventBus.handleEvent(events.LoadViewEvent(event), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def playEffect(self, effectName, args, itemRef=None, containerRef=None):
+    def isViewPresent(self, viewType, criteria):
+        return self.__findView(viewType, criteria) is not None
+
+    def closeView(self, viewType, criteria):
+        view = self.__findView(viewType, criteria)
+        if view is not None:
+            view.destroy()
+        return
+
+    def playEffect(self, effectName, args):
         return self.effects.play(effectName, args)
 
-    def stopEffect(self, effectName, effectID):
-        self.effects.stop(effectName, effectID)
+    def stopEffect(self, effectName, effectID, effectSubType=None):
+        self.effects.stop(effectName, effectID, effectSubType)
 
-    def isEffectRunning(self, effectName, effectID=None):
-        return self.effects.isStillRunning(effectName, effectID=effectID)
+    def isEffectRunning(self, effectName, effectID=None, effectSubType=None):
+        return self.effects.isStillRunning(effectName, effectID=effectID, effectSubType=effectSubType)
 
     def showWaiting(self, messageID, isSingle=False):
         Waiting.show('tutorial-{0:>s}'.format(messageID), isSingle=isSingle)
@@ -219,14 +238,31 @@ class SfLobbyProxy(GUIProxy):
         if pyEntity.settings.type is ViewTypes.LOBBY_SUB:
             pageName = pyEntity.settings.alias
             sceneID = self.config.getSceneID(pageName)
-            LOG_DEBUG('GUI.onPageChanging', sceneID)
+            prevSceneID = self.getSceneID()
+            LOG_DEBUG('GUI.onPageChanging', prevSceneID, '->', sceneID)
+            if prevSceneID is not None:
+                self.effects.cancel(GUIEffectScope.SCENE, prevSceneID)
             if sceneID is None:
                 self.clear()
                 LOG_WARNING('Scene alias not found, page:', pageName)
             else:
-                self.effects.stopAll()
                 self.onPageChanging(sceneID)
         return
+
+    def __onViewLoaded(self, pyEntity, _):
+        if pyEntity.settings.type is ViewTypes.LOBBY_SUB:
+            pageName = pyEntity.settings.alias
+            sceneID = self.config.getSceneID(pageName)
+            LOG_DEBUG('GUI.onPageReady', sceneID)
+            if sceneID is not None:
+                self.onPageReady(sceneID)
+        self.onViewLoaded(pyEntity.settings.alias)
+        pyEntity.onDispose += self.__onViewDisposed
+        return
+
+    def __onViewDisposed(self, pyEntity):
+        pyEntity.onDispose -= self.__onViewDisposed
+        self.onViewDisposed(pyEntity.settings.alias)
 
     def __onViewLoadError(self, key, msg, item):
         if item is not None:
@@ -249,28 +285,41 @@ class SfLobbyProxy(GUIProxy):
             LOG_ERROR('Key targetID is not defined in the event ON_COMPONENT_LOST')
             return
         itemID = event.targetID
-        for effect in self.effects.filterByName(GUI_EFFECT_NAME.SHOW_HINT):
-            effect.cancel(itemID)
-
+        self.effects.cancel(GUIEffectScope.COMPONENT, itemID)
         self.onItemLost(itemID)
 
     def __onTriggerActivated(self, event):
         if not event.targetID:
             LOG_ERROR('Key targetID is not defined in the event ON_TRIGGER_ACTIVATED')
             return
-        if not event.settingsID:
+        elif not event.settingsID:
             LOG_ERROR('Key settingsID is not defined in the event ON_TRIGGER_ACTIVATED')
             return
-        triggerType = event.settingsID
-        componentID = event.targetID
-        if triggerType == TUTORIAL_TRIGGER_TYPES.CLICK_TYPE:
-            LOG_DEBUG('Player has clicked', componentID)
-            self.onGUIInput(ClickEvent(componentID))
-        elif triggerType == TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE:
-            LOG_DEBUG('Player has clicked outside', componentID)
-            self.onGUIInput(ClickOutsideEvent(componentID))
-        elif triggerType == TUTORIAL_TRIGGER_TYPES.ESCAPE:
-            LOG_DEBUG('Player has pressed ESC', componentID)
-            self.onGUIInput(EscEvent(componentID))
         else:
-            LOG_ERROR('Type of event is not supported', triggerType)
+            triggerType = event.settingsID
+            componentID = event.targetID
+            eventClass, logMessage = _EventClassByTriggerType.get(triggerType, (None, None))
+            if eventClass is not None:
+                LOG_DEBUG(logMessage, componentID)
+                self.onGUIInput(eventClass(componentID))
+            else:
+                LOG_ERROR('Type of event is not supported', triggerType)
+            return
+
+    def __onAnimationComplete(self, event):
+        if not event.targetID:
+            LOG_ERROR('Key targetID is not defined in event ON_ANIMATION_COMPLETE')
+            return
+        if not event.settingsID:
+            LOG_ERROR('Key settingsID is not defined in event ON_ANIMATION_COMPLETE')
+            return
+        componentID, animID = event.targetID, event.settingsID
+        self.stopEffect(GUI_EFFECT_NAME.PLAY_ANIMATION, componentID, animID)
+
+    def __findView(self, viewType, criteria):
+        app = self.app
+        if app is None or app.containerManager is None:
+            return
+        else:
+            container = app.containerManager.getContainer(viewType)
+            return None if container is None else container.getView(criteria)

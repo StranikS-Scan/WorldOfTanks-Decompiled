@@ -20,6 +20,7 @@ class DescriptorParser(object):
         descriptor.setGuiFilePath(_xml.readString(xmlCtx, section, 'gui'))
         descriptor.setInitialChapterID(_xml.readString(xmlCtx, section, 'initial-chapter'))
         self.__parseChapterSummaries(xmlCtx, section, descriptor)
+        _xml.clearCaches()
         return descriptor
 
     def __parseChapterSummaries(self, xmlCtx, section, descriptor):
@@ -129,9 +130,11 @@ class ChapterParser(object):
         self._parseTriggers(xmlCtx, section, flags, chapter)
         self._parseVars(xmlCtx, section, flags, chapter)
         self._parseScenes(xmlCtx, section, chapter, flags, itemFlags, afterBattle, initial)
-        flags = filter(lambda flag: flag not in itemFlags, flags)
+        self._parseGlobalRuntimeEffects(xmlCtx, section, flags, chapter)
+        flags = [ flag for flag in flags if flag not in itemFlags ]
         chapter.setFlags(flags)
         chapter.setValid(True)
+        _xml.clearCaches()
         return chapter
 
     def _parseVars(self, xmlCtx, section, flags, chapter):
@@ -173,6 +176,18 @@ class ChapterParser(object):
 
         return
 
+    def _parseGlobalRuntimeEffects(self, xmlCtx, section, flags, chapter):
+        subSec = _xml.getSubsection(xmlCtx, section, 'global-runtime-effects', False)
+        if subSec is not None:
+            priorities = (('pre-scene', False), ('post-scene', True))
+            for tagName, isPostScene in priorities:
+                for _, effectSec in _xml.getChildren(xmlCtx, subSec, tagName, False):
+                    effect = sub_parsers._parseEffect(xmlCtx, effectSec, flags)
+                    if effect is not None:
+                        chapter.addGlobalEffect(effect, isPostScene)
+
+        return
+
 
 class GlobalRefParser(object):
 
@@ -191,6 +206,7 @@ class GlobalRefParser(object):
                 if varID in varIDs:
                     chapter.addVarSet(sub_parsers.parseVarSet(xmlCtx, subSec, flags))
 
+        _xml.clearCaches()
         return
 
 
@@ -207,6 +223,7 @@ class BonusRefParser(object):
             bonus = sub_parsers.parseBonus(xmlCtx, subSec)
             result[bonusID] = bonus
 
+        _xml.clearCaches()
         return result
 
 
@@ -225,4 +242,5 @@ class HintsParser(object):
             if hint['hintID'] not in excludedHints:
                 hints.addHint(hint)
 
+        _xml.clearCaches()
         return hints

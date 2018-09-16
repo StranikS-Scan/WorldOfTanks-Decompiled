@@ -1,5 +1,5 @@
 <customization.xml>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
   <xmlns:france>	france	</xmlns:france>
@@ -9,6 +9,7 @@
   <xmlns:china>	china	</xmlns:china>
   <xmlns:japan>	japan	</xmlns:japan>
   <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:italy>	italy	</xmlns:italy>
   <armorColor>	61 62 42 0	</armorColor>
   <inscriptions>
     <china>
@@ -193,32 +194,6 @@
         </inscription>
       </inscriptions>
     </special>
-    <WGChrisEvent1718_china>
-      <userString>	#vehicle_customization:inscription/special	</userString>
-      <priceFactor>	0.0	</priceFactor>
-      <notInShop>	true	</notInShop>
-      <nations>	china	</nations>
-      <inscriptions>
-        <inscription>
-          <id>	901	</id>
-          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_171.dds	</texName>
-          <userString>	#vehicle_customization:inscription/special/special_171	</userString>
-          <qualifier>	main_skill_all_crew	</qualifier>
-        </inscription>
-        <inscription>
-          <id>	902	</id>
-          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_173.dds	</texName>
-          <userString>	#vehicle_customization:inscription/special/special_173	</userString>
-          <qualifier>	main_skill_all_crew	</qualifier>
-        </inscription>
-        <inscription>
-          <id>	903	</id>
-          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_175.dds	</texName>
-          <userString>	#vehicle_customization:inscription/special/special_175	</userString>
-          <qualifier>	main_skill_all_crew	</qualifier>
-        </inscription>
-      </inscriptions>
-    </WGChrisEvent1718_china>
   </inscriptions>
   <insigniaOnGun>
     <insignia>
@@ -318,7 +293,7 @@
         <Ch37_WZ111G_FT>	6.5 6.5 0.8 2.3	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.7 2.7 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_01>
     <china_historical_02>
       <texture>	vehicles/chinese/Camouflage/china_historical_02.dds	</texture>
@@ -380,7 +355,7 @@
         <Ch37_WZ111G_FT>	6.8 6.8 0.4 0.2	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.4 2.4 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_02>
     <china_historical_03>
       <texture>	vehicles/chinese/Camouflage/china_historical_03.dds	</texture>
@@ -441,7 +416,7 @@
         <Ch37_WZ111G_FT>	6 6 1.1 1.1	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.4 2.9 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_03>
     <china_historical_04>
       <texture>	vehicles/chinese/Camouflage/china_historical_04.dds	</texture>
@@ -502,7 +477,7 @@
         <Ch37_WZ111G_FT>	5.7 5.7 1.5 3.8	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_04>
     <china_historical_05>
       <texture>	vehicles/chinese/Camouflage/china_historical_05.dds	</texture>
@@ -564,7 +539,7 @@
         <Ch37_WZ111G_FT>	8.9 8.9 0.000000 0.000000	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	3.9 3.9 0.8 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_05>
     <china_historical_06>
       <texture>	vehicles/chinese/Camouflage/china_historical_06.dds	</texture>
@@ -626,7 +601,7 @@
         <Ch37_WZ111G_FT>	7.8 7.8 0.4 0.5	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.1 2.1 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_06>
     <china_historical_07>
       <texture>	vehicles/chinese/Camouflage/china_historical_07.dds	</texture>
@@ -688,7 +663,7 @@
         <Ch37_WZ111G_FT>	7 7 2.6 1.3	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_07>
     <china_historical_08>
       <texture>	vehicles/chinese/Camouflage/china_historical_08.dds	</texture>
@@ -750,7 +725,7 @@
         <Ch37_WZ111G_FT>	5.3 5.3 0.3 2.5	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.3 2.3 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_08>
     <china_historical_09>
       <texture>	vehicles/chinese/Camouflage/china_historical_09.dds	</texture>
@@ -812,7 +787,7 @@
         <Ch37_WZ111G_FT>	5 5 1.9 0.7	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.8 2.8 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_09>
     <china_historical_10>
       <texture>	vehicles/chinese/Camouflage/china_historical_10.dds	</texture>
@@ -874,7 +849,7 @@
         <Ch37_WZ111G_FT>	6.2 6.2 1.1 2.4	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.7 2.7 1 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_10>
     <china_historical_11>
       <texture>	vehicles/chinese/Camouflage/china_historical_11.dds	</texture>
@@ -936,7 +911,7 @@
         <Ch37_WZ111G_FT>	5.2 5.2 0.5 1.5	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	3 3 0.000000 0.6	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_11>
     <china_historical_12>
       <texture>	vehicles/chinese/Camouflage/china_historical_12.dds	</texture>
@@ -998,7 +973,7 @@
         <Ch37_WZ111G_FT>	5.6 5.6 3.5 5.5	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.6 2.6 3.4 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_12>
     <china_historical_13>
       <texture>	vehicles/chinese/Camouflage/china_historical_13.dds	</texture>
@@ -1060,7 +1035,7 @@
         <Ch37_WZ111G_FT>	4.2 4.2 0.8 1	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.7 2.7 0.5 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_13>
     <china_historical_14>
       <texture>	vehicles/chinese/Camouflage/china_historical_14.dds	</texture>
@@ -1122,7 +1097,7 @@
         <Ch37_WZ111G_FT>	7 7 0.7 1.1	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_14>
     <china_historical_winter>
       <texture>	vehicles/chinese/Camouflage/china_historical_winter.dds	</texture>
@@ -1177,7 +1152,7 @@
         <Ch33_60G_FT>	2.3 2.3 3 6.4	</Ch33_60G_FT>
         <Ch37_WZ111G_FT>	4.5 4.5 0.000000 0.000000	</Ch37_WZ111G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_winter>
     <china_historical_winter_2>
       <texture>	vehicles/chinese/Camouflage/china_historical_winter_2.dds	</texture>
@@ -1240,7 +1215,7 @@
         <Ch37_WZ111G_FT>	7.1 7.1 0.6 0.4	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.1 2.1 0.000000 0.7	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_winter_2>
     <china_historical_desert>
       <texture>	vehicles/chinese/Camouflage/china_historical_desert.dds	</texture>
@@ -1302,7 +1277,7 @@
         <Ch37_WZ111G_FT>	3.6 3.6 2.2 1.8	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.1 2.1 0.5 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </china_historical_desert>
     <china_victim_yellow>
       <texture>	vehicles/chinese/Camouflage/china_gold.dds	</texture>
@@ -1310,7 +1285,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description></description>
       <id>	46	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
@@ -1372,7 +1347,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description></description>
       <id>	47	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
@@ -1434,7 +1409,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description></description>
       <id>	48	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
@@ -1496,7 +1471,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description></description>
       <id>	49	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
@@ -1559,7 +1534,7 @@
       <id>	64	</id>
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <colors>
         <c0>	70 68 64 255	</c0>
         <c1>	20 20 20 255	</c1>
@@ -1622,7 +1597,7 @@
       <id>	65	</id>
       <kind>	summer	</kind>
       <group>	IGRsummer	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <colors>
         <c0>	64 85 47 255	</c0>
         <c1>	172 167 124 255	</c1>
@@ -1685,7 +1660,7 @@
       <id>	66	</id>
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <colors>
         <c0>	158 115 46 255	</c0>
         <c1>	177 172 128 255	</c1>
@@ -1747,7 +1722,7 @@
       <id>	71	</id>
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <colors>
         <c0>	40 48 48 255	</c0>
         <c1>	82 74 54 255	</c1>
@@ -1810,7 +1785,7 @@
       <id>	73	</id>
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <colors>
         <c0>	113 83 66 255	</c0>
         <c1>	156 113 66 255	</c1>
@@ -1871,7 +1846,7 @@
       <id>	68	</id>
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <colors>
         <c0>	52 53 40 255	</c0>
         <c1>	89 79 57 255	</c1>
@@ -1934,7 +1909,7 @@
       <id>	69	</id>
       <kind>	summer	</kind>
       <group>	IGRsummer	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <colors>
         <c0>	65 86 60 255	</c0>
         <c1>	92 76 36 255	</c1>
@@ -1997,7 +1972,7 @@
       <id>	70	</id>
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <colors>
         <c0>	83 42 27 255	</c0>
         <c1>	111 100 64 255	</c1>
@@ -2057,7 +2032,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01	</description>
       <id>	74	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
@@ -2121,7 +2096,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02	</description>
       <id>	113	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <group>	winter	</group>
       <kind>	winter	</kind>
       <colors>
@@ -2185,7 +2160,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03	</description>
       <id>	114	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
@@ -2249,7 +2224,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04	</description>
       <id>	115	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
@@ -2368,7 +2343,7 @@
         <Ch37_WZ111G_FT>	4 4 0.5 0.3	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2 2 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </summer_camo>
     <Cracked_ice>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
@@ -2433,7 +2408,7 @@
         <Ch37_WZ111G_FT>	4.5 4.5 0.1 0.3	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2 2 0.000000 0.3	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </Cracked_ice>
     <Desert_camou>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
@@ -2497,7 +2472,7 @@
         <Ch37_WZ111G_FT>	7.3 7.3 0.000000 0.000000	</Ch37_WZ111G_FT>
         <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
     </Desert_camou>
     <Clan_camuflage_04_winter>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
@@ -2505,7 +2480,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter	</description>
       <id>	125	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <group>	winter	</group>
       <kind>	winter	</kind>
       <colors>
@@ -2568,7 +2543,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert	</description>
       <id>	126	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera Ch41_WZ_111_QL	</deny>
       <group>	desert	</group>
       <kind>	desert	</kind>
       <colors>

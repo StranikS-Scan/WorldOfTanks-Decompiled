@@ -1,23 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/rexec.py
-"""Restricted execution facilities.
-
-The class RExec exports methods r_exec(), r_eval(), r_execfile(), and
-r_import(), which correspond roughly to the built-in operations
-exec, eval(), execfile() and import, but executing the code in an
-environment that only exposes those built-in operations that are
-deemed safe.  To this end, a modest collection of 'fake' modules is
-created which mimics the standard modules by the same names.  It is a
-policy decision which built-in modules and operations are made
-available; this module provides a reasonable default, but derived
-classes can change the policies e.g. by overriding or extending class
-variables like ok_builtin_modules or methods like make_sys().
-
-XXX To do:
-- r_open should allow writing tmp dir
-- r_exec etc. with explicit globals/locals? (Use rexec("exec ... in ...")?)
-
-"""
 from warnings import warnpy3k
 warnpy3k('the rexec module has been removed in Python 3.0', stacklevel=2)
 del warnpy3k
@@ -114,18 +96,6 @@ RModuleLoader = ihooks.FancyModuleLoader
 RModuleImporter = ihooks.ModuleImporter
 
 class RExec(ihooks._Verbose):
-    """Basic restricted execution framework.
-    
-    Code executed in this restricted environment will only have access to
-    modules and functions that are deemed safe; you can subclass RExec to
-    add or remove capabilities as desired.
-    
-    The RExec class can prevent code from performing unsafe operations like
-    reading or writing disk files, or using TCP/IP sockets.  However, it does
-    not protect against code using extremely large amounts of memory or
-    processor time.
-    
-    """
     ok_path = tuple(sys.path)
     ok_builtin_modules = ('audioop', 'array', 'binascii', 'cmath', 'errno', 'imageop', 'marshal', 'math', 'md5', 'operator', 'parser', 'select', 'sha', '_sre', 'strop', 'struct', 'time', '_weakref')
     ok_posix_names = ('error', 'fstat', 'listdir', 'lstat', 'readlink', 'stat', 'times', 'uname', 'getpid', 'getppid', 'getcwd', 'getuid', 'getgid', 'geteuid', 'getegid')
@@ -134,33 +104,6 @@ class RExec(ihooks._Verbose):
     ok_file_types = (imp.C_EXTENSION, imp.PY_SOURCE)
 
     def __init__(self, hooks=None, verbose=0):
-        """Returns an instance of the RExec class.
-        
-        The hooks parameter is an instance of the RHooks class or a subclass
-        of it.  If it is omitted or None, the default RHooks class is
-        instantiated.
-        
-        Whenever the RExec module searches for a module (even a built-in one)
-        or reads a module's code, it doesn't actually go out to the file
-        system itself.  Rather, it calls methods of an RHooks instance that
-        was passed to or created by its constructor.  (Actually, the RExec
-        object doesn't make these calls --- they are made by a module loader
-        object that's part of the RExec object.  This allows another level of
-        flexibility, which can be useful when changing the mechanics of
-        import within the restricted environment.)
-        
-        By providing an alternate RHooks object, we can control the file
-        system accesses made to import a module, without changing the
-        actual algorithm that controls the order in which those accesses are
-        made.  For instance, we could substitute an RHooks object that
-        passes all filesystem requests to a file server elsewhere, via some
-        RPC mechanism such as ILU.  Grail's applet loader uses this to support
-        importing applets from a URL for a directory.
-        
-        If the verbose parameter is true, additional debugging output may be
-        sent to standard output.
-        
-        """
         raise RuntimeError, 'This code is not secure in Python 2.2 and later'
         ihooks._Verbose.__init__(self, verbose)
         self.hooks = hooks or RHooks(verbose)
@@ -270,67 +213,24 @@ class RExec(ihooks._Verbose):
         return m
 
     def r_exec(self, code):
-        """Execute code within a restricted environment.
-        
-        The code parameter must either be a string containing one or more
-        lines of Python code, or a compiled code object, which will be
-        executed in the restricted environment's __main__ module.
-        
-        """
         m = self.add_module('__main__')
         exec code in m.__dict__
 
     def r_eval(self, code):
-        """Evaluate code within a restricted environment.
-        
-        The code parameter must either be a string containing a Python
-        expression, or a compiled code object, which will be evaluated in
-        the restricted environment's __main__ module.  The value of the
-        expression or code object will be returned.
-        
-        """
         m = self.add_module('__main__')
         return eval(code, m.__dict__)
 
     def r_execfile(self, file):
-        """Execute the Python code in the file in the restricted
-        environment's __main__ module.
-        
-        """
         m = self.add_module('__main__')
         execfile(file, m.__dict__)
 
     def r_import(self, mname, globals={}, locals={}, fromlist=[]):
-        """Import a module, raising an ImportError exception if the module
-        is considered unsafe.
-        
-        This method is implicitly called by code executing in the
-        restricted environment.  Overriding this method in a subclass is
-        used to change the policies enforced by a restricted environment.
-        
-        """
         return self.importer.import_module(mname, globals, locals, fromlist)
 
     def r_reload(self, m):
-        """Reload the module object, re-parsing and re-initializing it.
-        
-        This method is implicitly called by code executing in the
-        restricted environment.  Overriding this method in a subclass is
-        used to change the policies enforced by a restricted environment.
-        
-        """
         return self.importer.reload(m)
 
     def r_unload(self, m):
-        """Unload the module.
-        
-        Removes it from the restricted environment's sys.modules dictionary.
-        
-        This method is implicitly called by code executing in the
-        restricted environment.  Overriding this method in a subclass is
-        used to change the policies enforced by a restricted environment.
-        
-        """
         return self.importer.unload(m)
 
     def make_delegate_files(self):
@@ -383,103 +283,24 @@ class RExec(ihooks._Verbose):
         return r
 
     def s_exec(self, *args):
-        """Execute code within a restricted environment.
-        
-        Similar to the r_exec() method, but the code will be granted access
-        to restricted versions of the standard I/O streams sys.stdin,
-        sys.stderr, and sys.stdout.
-        
-        The code parameter must either be a string containing one or more
-        lines of Python code, or a compiled code object, which will be
-        executed in the restricted environment's __main__ module.
-        
-        """
         return self.s_apply(self.r_exec, args)
 
     def s_eval(self, *args):
-        """Evaluate code within a restricted environment.
-        
-        Similar to the r_eval() method, but the code will be granted access
-        to restricted versions of the standard I/O streams sys.stdin,
-        sys.stderr, and sys.stdout.
-        
-        The code parameter must either be a string containing a Python
-        expression, or a compiled code object, which will be evaluated in
-        the restricted environment's __main__ module.  The value of the
-        expression or code object will be returned.
-        
-        """
         return self.s_apply(self.r_eval, args)
 
     def s_execfile(self, *args):
-        """Execute the Python code in the file in the restricted
-        environment's __main__ module.
-        
-        Similar to the r_execfile() method, but the code will be granted
-        access to restricted versions of the standard I/O streams sys.stdin,
-        sys.stderr, and sys.stdout.
-        
-        """
         return self.s_apply(self.r_execfile, args)
 
     def s_import(self, *args):
-        """Import a module, raising an ImportError exception if the module
-        is considered unsafe.
-        
-        This method is implicitly called by code executing in the
-        restricted environment.  Overriding this method in a subclass is
-        used to change the policies enforced by a restricted environment.
-        
-        Similar to the r_import() method, but has access to restricted
-        versions of the standard I/O streams sys.stdin, sys.stderr, and
-        sys.stdout.
-        
-        """
         return self.s_apply(self.r_import, args)
 
     def s_reload(self, *args):
-        """Reload the module object, re-parsing and re-initializing it.
-        
-        This method is implicitly called by code executing in the
-        restricted environment.  Overriding this method in a subclass is
-        used to change the policies enforced by a restricted environment.
-        
-        Similar to the r_reload() method, but has access to restricted
-        versions of the standard I/O streams sys.stdin, sys.stderr, and
-        sys.stdout.
-        
-        """
         return self.s_apply(self.r_reload, args)
 
     def s_unload(self, *args):
-        """Unload the module.
-        
-        Removes it from the restricted environment's sys.modules dictionary.
-        
-        This method is implicitly called by code executing in the
-        restricted environment.  Overriding this method in a subclass is
-        used to change the policies enforced by a restricted environment.
-        
-        Similar to the r_unload() method, but has access to restricted
-        versions of the standard I/O streams sys.stdin, sys.stderr, and
-        sys.stdout.
-        
-        """
         return self.s_apply(self.r_unload, args)
 
     def r_open(self, file, mode='r', buf=-1):
-        """Method called when open() is called in the restricted environment.
-        
-        The arguments are identical to those of the open() function, and a
-        file object (or a class instance compatible with file objects)
-        should be returned.  RExec's default behaviour is allow opening
-        any file for reading, but forbidding any attempt to write a file.
-        
-        This method is implicitly called by code executing in the
-        restricted environment.  Overriding this method in a subclass is
-        used to change the policies enforced by a restricted environment.
-        
-        """
         mode = str(mode)
         if mode not in ('r', 'rb'):
             raise IOError, "can't open files for writing in restricted mode"

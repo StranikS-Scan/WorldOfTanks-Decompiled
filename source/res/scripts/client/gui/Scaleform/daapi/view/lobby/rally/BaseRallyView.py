@@ -44,9 +44,6 @@ class BaseRallyView(BaseRallyViewMeta, IGlobalListener, MethodsRules):
 
     @MethodsRules.delayable('_populate')
     def _startListening(self):
-        """
-        Start listening should be delayed until complete populate will be executed
-        """
         self.startPrbListening()
         self.startGlobalListening()
         self.addListener(events.CoolDownEvent.PREBATTLE, self._handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)

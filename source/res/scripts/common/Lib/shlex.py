@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/shlex.py
-"""A lexical analyzer class for simple shell-like syntaxes."""
 import os.path
 import sys
 from collections import deque
@@ -12,7 +11,6 @@ except ImportError:
 __all__ = ['shlex', 'split']
 
 class shlex:
-    """A lexical analyzer class for simple shell-like syntaxes."""
 
     def __init__(self, instream=None, infile=None, posix=False):
         if isinstance(instream, basestring):
@@ -49,13 +47,11 @@ class shlex:
         return
 
     def push_token(self, tok):
-        """Push a token onto the stack popped by the get_token method"""
         if self.debug >= 1:
             print 'shlex: pushing token ' + repr(tok)
         self.pushback.appendleft(tok)
 
     def push_source(self, newstream, newfile=None):
-        """Push an input source onto the lexer's input source stack."""
         if isinstance(newstream, basestring):
             newstream = StringIO(newstream)
         self.filestack.appendleft((self.infile, self.instream, self.lineno))
@@ -70,7 +66,6 @@ class shlex:
         return
 
     def pop_source(self):
-        """Pop the input source stack."""
         self.instream.close()
         self.infile, self.instream, self.lineno = self.filestack.popleft()
         if self.debug:
@@ -78,7 +73,6 @@ class shlex:
         self.state = ' '
 
     def get_token(self):
-        """Get a token from the input stream (or from stack if it's nonempty)"""
         if self.pushback:
             tok = self.pushback.popleft()
             if self.debug >= 1:
@@ -230,7 +224,6 @@ class shlex:
         return result
 
     def sourcehook(self, newfile):
-        """Hook called on a filename to be sourced."""
         if newfile[0] == '"':
             newfile = newfile[1:-1]
         if isinstance(self.infile, basestring) and not os.path.isabs(newfile):
@@ -238,7 +231,6 @@ class shlex:
         return (newfile, open(newfile, 'r'))
 
     def error_leader(self, infile=None, lineno=None):
-        """Emit a C-compiler-like, Emacs-friendly error-message leader."""
         if infile is None:
             infile = self.infile
         if lineno is None:

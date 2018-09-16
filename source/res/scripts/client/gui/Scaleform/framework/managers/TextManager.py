@@ -24,7 +24,7 @@ class TextManager(TextManagerMeta):
         super(TextManager, self)._dispose()
 
 
-class TextIcons:
+class TextIcons(object):
     CHECKMARK_ICON = 'checkmark'
     NUT_ICON = 'nut'
     PERCENT_ICON = 'percent'

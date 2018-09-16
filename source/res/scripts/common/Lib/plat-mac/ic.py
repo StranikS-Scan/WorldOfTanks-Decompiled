@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/ic.py
-"""IC wrapper module, based on Internet Config 1.3"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the ic module is removed.', stacklevel=2)
 import icglue
@@ -27,7 +26,6 @@ icReadOnlyPerm = 1
 icReadWritePerm = 2
 
 class ICOpaqueData:
-    """An unparseable IC entry"""
 
     def __init__(self, data):
         self.data = data

@@ -7,9 +7,6 @@ from helpers import dependency
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
 class GUIItem(object):
-    """
-    Root gui items class. Provides common interface for serialization and deserialization.
-    """
     __slots__ = ()
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
@@ -21,20 +18,12 @@ class GUIItem(object):
 
 
 class HasIntCD(object):
-    """
-    Abstract class of items which contains int compact descriptor.
-    """
 
     def __init__(self, intCompactDescr):
         self.intCompactDescr = intCompactDescr
         self.itemTypeID, self.nationID, self.innationID = self._parseIntCompDescr(self.intCompactDescr)
 
     def _parseIntCompDescr(self, intCompactDescr):
-        """
-        Parses int compact descriptor. Will be overridden by inherited items classes.
-        :param intCompactDescr: int compact descriptor
-        :return: tuple(item type id, nation id, innation id)
-        """
         return vehicles.parseIntCompactDescr(intCompactDescr)
 
     @property
@@ -50,9 +39,6 @@ class HasIntCD(object):
         return nations.NAMES[self.nationID]
 
     def __cmp__(self, other):
-        """
-        Compares items by nation and types.
-        """
         if self is other:
             return 1
         res = nationCompareByIndex(self.nationID, other.nationID)
@@ -60,9 +46,6 @@ class HasIntCD(object):
 
 
 class HasStrCD(object):
-    """
-    Abstract class of items which contains string compact descriptor.
-    """
 
     def __init__(self, strCompactDescr):
         self.strCompactDescr = strCompactDescr

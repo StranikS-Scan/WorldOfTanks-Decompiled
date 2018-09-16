@@ -4,7 +4,6 @@ from items import ITEM_TYPE_NAMES
 from items.components import legacy_stuff, shared_components, component_constants
 
 class BasicItem(legacy_stuff.LegacyStuff):
-    """Class provides information about any item in this package."""
     __slots__ = ('typeID', 'id', 'name', 'compactDescr', 'tags', 'i18n')
 
     def __init__(self, typeID, itemID, itemName, compactDescr):

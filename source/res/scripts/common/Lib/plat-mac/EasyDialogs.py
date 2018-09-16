@@ -1,24 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/EasyDialogs.py
-"""Easy to use dialogs.
-
-Message(msg) -- display a message and an OK button.
-AskString(prompt, default) -- ask for a string, display OK and Cancel buttons.
-AskPassword(prompt, default) -- like AskString(), but shows text as bullets.
-AskYesNoCancel(question, default) -- display a question and Yes, No and Cancel buttons.
-GetArgv(optionlist, commandlist) -- fill a sys.argv-like list using a dialog
-AskFileForOpen(...) -- Ask the user for an existing file
-AskFileForSave(...) -- Ask the user for an output file
-AskFolder(...) -- Ask the user to select a folder
-bar = Progress(label, maxvalue) -- Display a progress bar
-bar.set(value) -- Set value
-bar.inc( *amount ) -- increment value by amount (default=1)
-bar.label( *newlabel ) -- get or set text label.
-
-More documentation in each function.
-This module uses DLOG resources 260 and on.
-Based upon STDWIN dialogs with the same names and functions.
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the EasyDialogs module is removed.', stacklevel=2)
 from Carbon.Dlg import GetNewDialog, SetDialogItemText, GetDialogItemText, ModalDialog
@@ -58,7 +39,6 @@ def _initialize():
 
 
 def _interact():
-    """Make sure the application is in the foreground"""
     AE.AEInteractWithUser(50000000)
 
 
@@ -77,12 +57,6 @@ def lf2cr(text):
 
 
 def Message(msg, id=260, ok=None):
-    """Display a MESSAGE string.
-    
-    Return when the user clicks the OK button or presses Return.
-    
-    The MESSAGE string can be at most 255 characters long.
-    """
     _initialize()
     _interact()
     d = GetNewDialog(id, -1)
@@ -107,17 +81,6 @@ def Message(msg, id=260, ok=None):
 
 
 def AskString(prompt, default='', id=261, ok=None, cancel=None):
-    """Display a PROMPT string and a text entry field with a DEFAULT string.
-    
-    Return the contents of the text entry field when the user clicks the
-    OK button or presses Return.
-    Return None when the user clicks the Cancel button.
-    
-    If omitted, DEFAULT is empty.
-    
-    The PROMPT and DEFAULT strings, as well as the return value,
-    can be at most 255 characters long.
-    """
     _initialize()
     _interact()
     d = GetNewDialog(id, -1)
@@ -152,18 +115,6 @@ def AskString(prompt, default='', id=261, ok=None, cancel=None):
 
 
 def AskPassword(prompt, default='', id=264, ok=None, cancel=None):
-    """Display a PROMPT string and a text entry field with a DEFAULT string.
-    The string is displayed as bullets only.
-    
-    Return the contents of the text entry field when the user clicks the
-    OK button or presses Return.
-    Return None when the user clicks the Cancel button.
-    
-    If omitted, DEFAULT is empty.
-    
-    The PROMPT and DEFAULT strings, as well as the return value,
-    can be at most 255 characters long.
-    """
     _initialize()
     _interact()
     d = GetNewDialog(id, -1)
@@ -200,17 +151,6 @@ def AskPassword(prompt, default='', id=264, ok=None, cancel=None):
 
 
 def AskYesNoCancel(question, default=0, yes=None, no=None, cancel=None, id=262):
-    """Display a QUESTION string which can be answered with Yes or No.
-    
-    Return 1 when the user clicks the Yes button.
-    Return 0 when the user clicks the No button.
-    Return -1 when the user clicks the Cancel button.
-    
-    When the user presses Return, the DEFAULT value is returned.
-    If omitted, this is 0 (No).
-    
-    The QUESTION string can be at most 255 characters.
-    """
     _initialize()
     _interact()
     d = GetNewDialog(id, -1)
@@ -296,12 +236,10 @@ class ProgressBar:
         del self.d
 
     def title(self, newstr=''):
-        """title(text) - Set title of progress window"""
         self.w.BringToFront()
         self.w.SetWTitle(newstr)
 
     def label(self, *newstr):
-        """label(text) - Set text in progress box"""
         self.w.BringToFront()
         if newstr:
             self._label = lf2cr(newstr[0])
@@ -339,7 +277,6 @@ class ProgressBar:
         return
 
     def set(self, value, max=None):
-        """set(value) - Set progress bar position"""
         if max is not None:
             self.maxval = max
             bar = self.d.GetDialogItemAsControl(3)
@@ -356,7 +293,6 @@ class ProgressBar:
         return
 
     def inc(self, n=1):
-        """inc(amt) - Increment progress bar position"""
         self.set(self.curval + n)
 
 
@@ -621,10 +557,6 @@ def SetDefaultEventProc(proc):
 
 
 def AskFileForOpen(message=None, typeList=None, version=None, defaultLocation=None, dialogOptionFlags=None, location=None, clientName=None, windowTitle=None, actionButtonLabel=None, cancelButtonLabel=None, preferenceKey=None, popupExtension=None, eventProc=_dummy_Nav_eventproc, previewProc=None, filterProc=None, wanted=None, multiple=None):
-    """Display a dialog asking the user for a file to open.
-    
-    wanted is the return type wanted: FSSpec, FSRef, unicode or string (default)
-    the other arguments can be looked up in Apple's Navigation Services documentation"""
     default_flags = 86
     args, tpwanted = _process_Nav_args(default_flags, version=version, defaultLocation=defaultLocation, dialogOptionFlags=dialogOptionFlags, location=location, clientName=clientName, windowTitle=windowTitle, actionButtonLabel=actionButtonLabel, cancelButtonLabel=cancelButtonLabel, message=message, preferenceKey=preferenceKey, popupExtension=popupExtension, eventProc=eventProc, previewProc=previewProc, filterProc=filterProc, typeList=typeList, wanted=wanted, multiple=multiple)
     _interact()
@@ -652,10 +584,6 @@ def AskFileForOpen(message=None, typeList=None, version=None, defaultLocation=No
 
 
 def AskFileForSave(message=None, savedFileName=None, version=None, defaultLocation=None, dialogOptionFlags=None, location=None, clientName=None, windowTitle=None, actionButtonLabel=None, cancelButtonLabel=None, preferenceKey=None, popupExtension=None, eventProc=_dummy_Nav_eventproc, fileType=None, fileCreator=None, wanted=None, multiple=None):
-    """Display a dialog asking the user for a filename to save to.
-    
-    wanted is the return type wanted: FSSpec, FSRef, unicode or string (default)
-    the other arguments can be looked up in Apple's Navigation Services documentation"""
     default_flags = 7
     args, tpwanted = _process_Nav_args(default_flags, version=version, defaultLocation=defaultLocation, dialogOptionFlags=dialogOptionFlags, location=location, clientName=clientName, windowTitle=windowTitle, actionButtonLabel=actionButtonLabel, cancelButtonLabel=cancelButtonLabel, savedFileName=savedFileName, message=message, preferenceKey=preferenceKey, popupExtension=popupExtension, eventProc=eventProc, fileType=fileType, fileCreator=fileCreator, wanted=wanted, multiple=multiple)
     _interact()
@@ -689,10 +617,6 @@ def AskFileForSave(message=None, savedFileName=None, version=None, defaultLocati
 
 
 def AskFolder(message=None, version=None, defaultLocation=None, dialogOptionFlags=None, location=None, clientName=None, windowTitle=None, actionButtonLabel=None, cancelButtonLabel=None, preferenceKey=None, popupExtension=None, eventProc=_dummy_Nav_eventproc, filterProc=None, wanted=None, multiple=None):
-    """Display a dialog asking the user for select a folder.
-    
-    wanted is the return type wanted: FSSpec, FSRef, unicode or string (default)
-    the other arguments can be looked up in Apple's Navigation Services documentation"""
     default_flags = 23
     args, tpwanted = _process_Nav_args(default_flags, version=version, defaultLocation=defaultLocation, dialogOptionFlags=dialogOptionFlags, location=location, clientName=clientName, windowTitle=windowTitle, actionButtonLabel=actionButtonLabel, cancelButtonLabel=cancelButtonLabel, message=message, preferenceKey=preferenceKey, popupExtension=popupExtension, eventProc=eventProc, filterProc=filterProc, wanted=wanted, multiple=multiple)
     _interact()

@@ -9,9 +9,6 @@ from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 
 class EventBattleSquadEntryPoint(SquadEntryPoint):
-    """
-    Event battle squad entry point
-    """
 
     def __init__(self, accountsToInvite=None):
         super(EventBattleSquadEntryPoint, self).__init__(FUNCTIONAL_FLAG.EVENT, accountsToInvite)
@@ -21,9 +18,6 @@ class EventBattleSquadEntryPoint(SquadEntryPoint):
 
 
 class EventBattleSquadEntity(SquadEntity):
-    """
-    Event battle squad entity
-    """
 
     def __init__(self):
         super(EventBattleSquadEntity, self).__init__(FUNCTIONAL_FLAG.EVENT, PREBATTLE_TYPE.EVENT)

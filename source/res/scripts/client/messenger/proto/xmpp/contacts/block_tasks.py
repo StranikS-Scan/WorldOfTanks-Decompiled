@@ -50,6 +50,9 @@ class _BlockItemTask(ContactTask):
     def sync(self, name, groups, sub=None, clanInfo=None):
         return self._result
 
+    def _doSync(self, name, groups=None, sub=None, clanInfo=None):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class BlockListResultTask(SeqTask):
 
@@ -171,3 +174,6 @@ class SyncBlockItemTask(IQTask):
                 return clazz(ContactJID(jid)).set(pyGlooxTag)
 
         return self._result
+
+    def _doRun(self, client):
+        raise UserWarning('This method should not be reached in this context')

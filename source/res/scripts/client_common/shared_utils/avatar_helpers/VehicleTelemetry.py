@@ -10,10 +10,9 @@ from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CODEPOINT_WARNING
 from constants import ENABLE_DEBUG_DYNAMICS_INFO
 from physics_shared import G
 
-class VehicleTelemetry:
+class VehicleTelemetry(object):
 
     def __init__(self, avatar):
-        assert avatar is not None
         self.avatar = avatar
         self.dynamicsLog = None
         self.dynamicsLogKey = None
@@ -92,7 +91,6 @@ class VehicleTelemetry:
             self.__closeDynamicsLog()
         name = VehicleTelemetry.NAME_DELIMITER.join((self.logName, key))
         self.logPath = os.path.join(VehicleTelemetry.DYNAMICS_LOG_DIR, name)
-        assert not os.path.exists(self.logPath)
         self.dynamicsLog = open(self.logPath, 'w')
         self.refTime = refTime
         self.refDist = refDist
@@ -185,9 +183,28 @@ class VehicleTelemetry:
             self.dynamicsLog.write(line)
             self.dynamicsLog.flush()
 
-    def receivePhysicsDebugInfo(self, info):
+    def receivePhysicsDebugInfo(self, info, modifDict):
         infoDict = cPickle.loads(zlib.decompress(info))
         cmd = infoDict['cmd']
+        nDict = {}
+        for key, value in modifDict.iteritems():
+            try:
+                index = infoDict['paramNamesMap'][key]
+                nDict[index] = value
+            except Exception:
+                pass
+
+        temp = []
+        ind = 0
+        for inValue in infoDict['snapshots'][0]:
+            mValue = nDict.get(ind, None)
+            if mValue is not None:
+                temp.append(mValue)
+            else:
+                temp.append(inValue)
+            ind += 1
+
+        infoDict['snapshots'][0] = temp
         if cmd == 'telemetry':
             if self.dynamicsLog:
                 self.__logDynamics(infoDict['paramNamesMap'], infoDict['snapshots'])
@@ -204,3 +221,4 @@ class VehicleTelemetry:
             self.__onStop()
         else:
             LOG_ERROR('Invalid PhysicsDebugInfo has been received:', infoDict)
+        return

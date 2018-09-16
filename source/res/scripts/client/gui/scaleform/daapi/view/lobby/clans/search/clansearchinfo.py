@@ -4,19 +4,19 @@ import weakref
 import BigWorld
 from adisp import process
 from gui import SystemMessages
-from gui.clans import formatters as clans_fmts
-from gui.clans.contexts import CreateApplicationCtx
-from gui.clans.clan_helpers import ClanListener
-from gui.clans.items import formatField
-from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS, MAX_CLAN_MEMBERS_COUNT
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import HeaderItemsTypes, ProfileUtils
 from gui.Scaleform.daapi.view.meta.ClanSearchInfoMeta import ClanSearchInfoMeta
 from gui.Scaleform.locale.CLANS import CLANS
+from gui.clans import formatters as clans_fmts
+from gui.clans.clan_helpers import ClanListener
+from gui.clans.items import formatField
+from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS, MAX_CLAN_MEMBERS_COUNT
+from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.view_helpers import ClanEmblemsHelper
+from gui.wgcg.base.contexts import CreateApplicationCtx
 from helpers.i18n import makeString as _ms
-from gui.shared import event_dispatcher as shared_events
 
 def _packItemData(text, description, tooltip, icon):
     return {'type': HeaderItemsTypes.COMMON,
@@ -48,7 +48,7 @@ class ClanSearchInfo(ClanSearchInfoMeta, ClanListener, ClanEmblemsHelper):
     def sendRequest(self):
         self.as_setWaitingVisibleS(True)
         context = CreateApplicationCtx([self.__selectedClan.getClanDbID()])
-        result = yield self.clansCtrl.sendRequest(context, allowDelay=True)
+        result = yield self.webCtrl.sendRequest(context, allowDelay=True)
         if result.isSuccess():
             SystemMessages.pushMessage(clans_fmts.getAppSentSysMsg(self.__selectedClan.getClanName(), self.__selectedClan.getClanAbbrev()))
         self._updateSetaledState()
@@ -90,7 +90,7 @@ class ClanSearchInfo(ClanSearchInfoMeta, ClanListener, ClanEmblemsHelper):
         sendRequestBtnVisible = True
         sendRequestBtnEnabled = True
         sendRequestTooltip = None
-        reason = self.clansCtrl.getLimits().canSendApplication(_ClanAdapter(self.__selectedClan)).reason
+        reason = self.webCtrl.getLimits().canSendApplication(_ClanAdapter(self.__selectedClan)).reason
         if reason == CLIENT_CLAN_RESTRICTIONS.NO_RESTRICTIONS:
             pass
         elif reason == CLIENT_CLAN_RESTRICTIONS.OWN_CLAN:

@@ -49,7 +49,7 @@ class ChannelsManagementWindow(ChannelsManagementWindowMeta, ISearchHandler):
             return
         else:
             if usePassword:
-                pwd, error = validator.validateUserRoomPwdPair(password, retype)
+                _, error = validator.validateUserRoomPwdPair(password, retype)
                 if error is not None:
                     g_messengerEvents.onErrorReceived(error)
                     return

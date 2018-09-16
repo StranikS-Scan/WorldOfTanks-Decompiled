@@ -20,7 +20,6 @@ class ClientChat(object):
     __actionHandlers = {CHAT_ACTIONS.receiveInvite.index(): '_ClientChat__onReceiveInvite'}
 
     def __init__(self):
-        assert isinstance(self, BigWorld.Entity)
         self.__chatActionCallbacks = {}
         self._idGen = SequenceIDGenerator()
 
@@ -212,7 +211,7 @@ class ClientChat(object):
         try:
             data = zlib.decompress(data)
             chatMessages = cPickle.loads(data)
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
             failed = True
 
@@ -230,7 +229,7 @@ class ClientChat(object):
         self.__baseChatCommand(CHAT_COMMANDS.initAck, int64Arg=streamID, int16Arg=failed)
 
     def __baseChannelChatCommand(self, channelID, command, int64Arg=0, int16Arg=0, stringArg1='', stringArg2='', ignoreCooldown=True):
-        if 0 == channelID:
+        if channelID == 0:
             LOG_ERROR('Can`t execute chat channel command for channelId: %s' % (channelID,))
         else:
             if chat_shared.isOperationInCooldown(chat_shared.g_chatCooldownData, command):

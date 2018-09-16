@@ -22,7 +22,6 @@ class BitCoder:
         return tuple(res)
 
     def emplace(self, *fields):
-        assert len(fields) == len(self.fieldDescriptor)
         res = 0
         shift = self.dimension
         for i, f in enumerate(fields):

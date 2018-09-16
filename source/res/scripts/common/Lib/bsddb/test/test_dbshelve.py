@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_dbshelve.py
-"""
-TestCases for checking dbShelve objects.
-"""
 import os, string, sys
 import random
 import unittest
@@ -41,7 +38,6 @@ class DBShelveTestCase(unittest.TestCase):
         test_support.unlink(self.filename)
 
     def mk(self, key):
-        """Turn key into an appropriate key type for this db"""
         if sys.version_info[0] < 3:
             return key
         else:

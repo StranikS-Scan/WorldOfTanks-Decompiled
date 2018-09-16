@@ -33,12 +33,6 @@ class SpecialBattle(_BattleItemSelector):
         _BattleItemSelector.__init__(self, '_addSpecialBattleType', (aspects.SpecialBattle,))
 
 
-class FalloutBattle(_BattleItemSelector):
-
-    def __init__(self):
-        _BattleItemSelector.__init__(self, '_addFalloutBattleType', (aspects.FalloutBattle,))
-
-
 class StrongholdBattle(_BattleItemSelector):
 
     def __init__(self):

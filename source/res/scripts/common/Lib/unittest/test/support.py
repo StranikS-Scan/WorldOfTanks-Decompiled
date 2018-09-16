@@ -3,7 +3,6 @@
 import unittest
 
 class TestHashing(object):
-    """Used as a mixin for TestCase"""
 
     def test_hash(self):
         for obj_1, obj_2 in self.eq_pairs:
@@ -26,7 +25,6 @@ class TestHashing(object):
 
 
 class TestEquality(object):
-    """Used as a mixin for TestCase"""
 
     def test_eq(self):
         for obj_1, obj_2 in self.eq_pairs:
@@ -87,7 +85,6 @@ class LoggingResult(unittest.TestResult):
 
 
 class ResultWithNoStartTestRunStopTestRun(object):
-    """An object honouring TestResult before startTestRun/stopTestRun."""
 
     def __init__(self):
         self.failures = []

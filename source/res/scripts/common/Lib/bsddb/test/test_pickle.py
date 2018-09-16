@@ -15,7 +15,6 @@ import unittest
 from test_all import db, test_support, get_new_environment_path, get_new_database_path
 
 class pickleTestCase(unittest.TestCase):
-    """Verify that DBError can be pickled and unpickled"""
     db_name = 'test-dbobj.db'
 
     def setUp(self):

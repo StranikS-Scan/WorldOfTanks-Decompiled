@@ -1,23 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ScriptBinding.py
-"""Extension to execute code outside the Python shell window.
-
-This adds the following commands:
-
-- Check module does a full syntax check of the current module.
-  It also runs the tabnanny to catch any inconsistent tabs.
-
-- Run module executes the module's code in the __main__ namespace.  The window
-  must have been saved previously. The module is added to sys.modules, and is
-  also added to the __main__ namespace.
-
-XXX GvR Redesign this interface (yet again) as follows:
-
-- Present a dialog box for ``Run Module''
-
-- Allow specify command line arguments in the dialog box
-
-"""
 import os
 import re
 import string
@@ -113,14 +95,6 @@ class ScriptBinding:
         text.see(pos)
 
     def run_module_event(self, event):
-        """Run the module after setting up the environment.
-        
-        First check the syntax.  If OK, make sure the shell is active and
-        then transfer the arguments, set the run environment's working
-        directory to the directory of the module being executed and also
-        add that directory to its sys.path if not already included.
-        
-        """
         filename = self.getfilename()
         if not filename:
             return 'break'
@@ -144,16 +118,6 @@ class ScriptBinding:
             self.editwin.text_frame.after(200, lambda : self.editwin.text_frame.event_generate('<<run-module-event-2>>'))
 
     def getfilename(self):
-        """Get source filename.  If not saved, offer to save (or create) file
-        
-        The debugger requires a source file.  Make sure there is one, and that
-        the current version of the source buffer has been saved.  If the user
-        declines to save or cancels the Save As dialog, return None.
-        
-        If the user has configured IDLE for Autosave, the file will be
-        silently saved if it already exists and is dirty.
-        
-        """
         filename = self.editwin.io.filename
         if not self.editwin.get_saved():
             autosave = idleConf.GetOption('main', 'General', 'autosave', type='bool')

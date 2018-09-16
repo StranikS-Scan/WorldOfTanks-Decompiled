@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ContactInfo.py
-import BigWorld
 import Settings
 
-class ContactInfo:
+class ContactInfo(object):
     KEY_USER = 'user'
     KEY_HOST = 'host'
     KEY_EMAIL = 'email'

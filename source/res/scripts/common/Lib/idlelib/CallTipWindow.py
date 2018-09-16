@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/CallTipWindow.py
-"""A CallTip window class for Tkinter/IDLE.
-
-After ToolTip.py, which uses ideas gleaned from PySol
-Used by the CallTips IDLE extension.
-
-"""
 from Tkinter import *
 HIDE_VIRTUAL_EVENT_NAME = '<<calltipwindow-hide>>'
 HIDE_SEQUENCES = ('<Key-Escape>', '<FocusOut>')
@@ -26,7 +20,6 @@ class CallTip:
         return
 
     def position_window(self):
-        """Check if needs to reposition the window, and if so - do it."""
         curline = int(self.widget.index('insert').split('.')[0])
         if curline == self.lastline:
             return
@@ -45,8 +38,6 @@ class CallTip:
         self.tipwindow.wm_geometry('+%d+%d' % (x, y))
 
     def showtip(self, text, parenleft, parenright):
-        """Show the calltip, bind events which will close it and reposition it.
-        """
         self.text = text
         if self.tipwindow or not self.text:
             return

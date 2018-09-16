@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/invites.py
-from UnitBase import UNIT_MGR_FLAGS
-from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE, QUEUE_TYPE
+from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
 from constants import QUEUE_TYPE_NAMES
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
@@ -83,14 +82,11 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=Non
     if funcState.doLeaveToAcceptInvite(invitePrbType):
         if funcState.isInLegacy() or funcState.isInUnit():
             entityName = getPrbName(funcState.entityTypeID)
+        elif funcState.isInPreQueue():
+            entityName = getPreQueueName(funcState.entityTypeID)
         else:
-            if funcState.isInFallout():
-                return ''
-            if funcState.isInPreQueue():
-                entityName = getPreQueueName(funcState.entityTypeID)
-            else:
-                LOG_ERROR('Can not resolve name of entity', funcState)
-                return ''
+            LOG_ERROR('Can not resolve name of entity', funcState)
+            return ''
         if isAnotherPeriphery:
             key = I18N_INVITES.invites_note_change_and_leave(entityName)
             kwargs = {'host': lobbyContext.getPeripheryName(peripheryID) or ''}
@@ -187,27 +183,8 @@ class PrbExternalBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
         return '' if not comment else makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': html.escape(comment)})
 
 
-class FalloutInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
-
-    def getTitle(self, invite):
-        if invite.senderFullName:
-            creatorName = makeHtmlString('html_templates:lobby/prebattle', 'inviteTitleCreatorName', ctx={'name': invite.senderFullName})
-        else:
-            creatorName = ''
-        unitMgrFlags = invite.getExtraData().get('unitMgrFlags', 0)
-        queueType = QUEUE_TYPE.UNKNOWN
-        if unitMgrFlags & UNIT_MGR_FLAGS.FALLOUT_CLASSIC:
-            queueType = QUEUE_TYPE.FALLOUT_CLASSIC
-        elif unitMgrFlags & UNIT_MGR_FLAGS.FALLOUT_MULTITEAM:
-            queueType = QUEUE_TYPE.FALLOUT_MULTITEAM
-        return makeHtmlString('html_templates:lobby/prebattle', 'inviteTitle', ctx={'sender': creatorName,
-         'battleType': i18n.makeString('#invites:invites/text/FALLOUT/%s' % getPreQueueName(queueType))}, sourceKey='FALLOUT')
-
-
 def getPrbInviteHtmlFormatter(invite):
-    if invite.type == PREBATTLE_TYPE.EXTERNAL:
-        return PrbExternalBattleInviteHtmlTextFormatter()
-    return FalloutInviteHtmlTextFormatter() if invite.type == PREBATTLE_TYPE.FALLOUT else PrbInviteHtmlTextFormatter()
+    return PrbExternalBattleInviteHtmlTextFormatter() if invite.type == PREBATTLE_TYPE.EXTERNAL else PrbInviteHtmlTextFormatter()
 
 
 class PrbInviteTitleFormatter(InviteFormatter):

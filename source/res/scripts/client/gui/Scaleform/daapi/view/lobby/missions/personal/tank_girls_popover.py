@@ -30,12 +30,12 @@ class TankgirlsPopover(TankgirlsPopoverMeta):
 
     def __update(self):
         tankwomenQuests = []
-        for oID, o in sorted(events_helpers.getPersonalMissionsCache().getOperations().iteritems(), key=operator.itemgetter(0)):
+        for _, o in sorted(events_helpers.getPersonalMissionsCache().getOperations().iteritems(), key=operator.itemgetter(0)):
             if o.isUnlocked():
                 operationName = _ms('#personal_missions:operations/title%d' % o.getID())
                 for vehicleType in VEHICLE_TYPES_ORDER:
                     _, quests = o.getChainByVehicleType(vehicleType)
-                    for qID, q in sorted(quests.iteritems(), key=operator.itemgetter(0)):
+                    for _, q in sorted(quests.iteritems(), key=operator.itemgetter(0)):
                         tankman, isMainBonus = q.getTankmanBonus()
                         needToGetTankman = q.needToGetAddReward() and not isMainBonus or q.needToGetMainReward() and isMainBonus
                         if needToGetTankman and tankman is not None:

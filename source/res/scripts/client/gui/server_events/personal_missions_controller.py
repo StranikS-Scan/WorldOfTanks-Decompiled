@@ -106,9 +106,6 @@ class PersonalMissionsController(object):
         return result
 
     def hasVehicleForQuests(self):
-        """
-        Has this player required vehicle for any quest
-        """
         return self.isEnabled() and any(self.__vehRequirementsCache.itervalues())
 
     def hasQuestsForSelect(self):
@@ -138,7 +135,7 @@ class PersonalMissionsController(object):
             self.__hasQuestsForSelect = False
             self.__hasQuestsForReward = False
             freeSlotsCount = self.questsProgress.getPersonalMissionsFreeSlots()
-            for qID, quest in self.__quests.iteritems():
+            for _, quest in self.__quests.iteritems():
                 quest.updateProgress(self.questsProgress)
 
             selectedQuests = self.questsProgress.getSelectedPersonalMissionsIDs()
@@ -147,7 +144,7 @@ class PersonalMissionsController(object):
                 if questID in self.__quests:
                     selectedChains.add(self.__quests[questID].getChainID())
 
-            for qID, quest in self.__quests.iteritems():
+            for _, quest in self.__quests.iteritems():
                 if not self.__hasQuestsForSelect and freeSlotsCount and quest.canBeSelected() and quest.getChainID() not in selectedChains:
                     self.__hasQuestsForSelect = True
                 if not self.__hasQuestsForReward and quest.needToGetReward():
@@ -192,10 +189,6 @@ class PersonalMissionsController(object):
         return result
 
     def getIncompleteOperation(self):
-        """
-        return operation which is unlocked and with unachieved vehicle reward.
-        If all operation are complete, return last operation
-        """
         operations = self.getOperations()
         for operation in operations.values():
             if operation.isUnlocked() and not operation.isAwardAchieved():
@@ -244,9 +237,6 @@ class PersonalMissionsController(object):
         return quest
 
     def __cacheQuestRequirement(self, q, invVehicles):
-        """
-        Pre-cache info about required vehicles presence in players inventory inside operation's chain
-        """
         types = tuple(q.getVehicleClasses())
         level = q.getVehMinLevel()
         key = (q.getOperationID(),
@@ -268,9 +258,6 @@ class PersonalMissionsController(object):
         return False
 
     def __updateVehRequirementsCache(self, *_):
-        """
-        Update info about required vehicles presence in players inventory inside operation's chains
-        """
         invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
         for key, value in self.__vehRequirementsCache.iteritems():
             operationID, chainID, types, level = key

@@ -151,7 +151,6 @@ class ConnectToPeriphery(Action):
         return super(ConnectToPeriphery, self).isRunning()
 
     def invoke(self):
-        p = BigWorld.WGC_processingState()
         self.__wgcLogin = BigWorld.WGC_processingState() == WGC_STATE.READY_TO_LOGIN
         if self.__host and (self.__credentials or self.__wgcLogin):
             if not self.__wgcLogin:
@@ -254,10 +253,7 @@ class WaitFlagActivation(Action):
         self._isActive = False
 
     def invoke(self):
-        if not self._isActive:
-            self._running = True
-        else:
-            self._completed = True
+        self._running = not self._isActive
 
     def isRunning(self):
         if self._isActive:

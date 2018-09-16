@@ -45,11 +45,6 @@ class BuyBoosterMeta(I18nConfirmDialogMeta):
         return
 
     def getMaxAvailableItemsCount(self):
-        """
-        Returns tuple that contains max counts of booster that the user can buy for the current balance. Currency
-        index in the tuple corresponds to the default order (see Currency.ALL).
-        :return: CurrencyCollection(namedtuple)
-        """
         buyPrice = self.__boosterBuyPricesSum.price
         return CurrencyCollection(*(self.__getMaxCount(buyPrice, currency) for currency in Currency.ALL))
 
@@ -57,20 +52,9 @@ class BuyBoosterMeta(I18nConfirmDialogMeta):
         return packActionTooltipData(ACTION_TOOLTIPS_TYPE.BOOSTER, str(self.__booster.boosterID), True, self.__boosterBuyPricesSum.price, self.__boosterBuyPricesSum.defPrice) if self.__boosterBuyPricesSum.isActionPrice() else None
 
     def getCurrency(self):
-        """
-        Returns the original buy currency, see Currency enum.
-        :return: string
-        """
         return self.__booster.getBuyPrice(preferred=True).getCurrency(byWeight=True)
 
     def getPrices(self):
-        """
-        Returns all set currencies(prices) for buying the booster.
-        Right now booster's price can be defined only in one currency (in the same time any booster can have an
-        alternative price). So sum the original and the alternative price to have all set currencies in one place.
-        Note that such logic will not work with compound prices (multi-currency price).
-        :return: ItemPrices
-        """
         return self.__booster.buyPrices
 
     @process('buyItem')

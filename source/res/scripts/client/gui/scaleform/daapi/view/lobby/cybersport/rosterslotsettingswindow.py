@@ -23,9 +23,8 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
 
     def __init__(self, ctx=None):
         super(RosterSlotSettingsWindow, self).__init__()
-        assert 'section' in ctx, 'Section is required to show selector popup'
         self._levelsRange = ctx.get('levelsRange', self._levelsRange)
-        self.__section = ctx.get('section')
+        self.__section = ctx['section']
         self.__levelsLimits = self.__convertLevelsRange(self._levelsRange)
         self.__vehicleTypes = ctx.get('vehicleTypes', None)
         self.__flashSlots = ctx.get('settings')
@@ -47,7 +46,6 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
         filters = AccountSettings.getFilter(self.__section)
         filters['isMain'] = False
         result = self._initFilter(**filters)
-        result.update({'compatibleOnlyLabel': CYBERSPORT.WINDOW_VEHICLESELECTOR_FILTERS_MATCHES})
         self.as_updateVehicleFiltersS(result)
 
     def submitButtonHandler(self, value):
@@ -104,8 +102,8 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
 
     def __packTabsData(self):
         data = []
-        for id in TAB_ORDER:
-            linkage, label = TAB_DATA_MAP[id]
+        for tabID in TAB_ORDER:
+            linkage, label = TAB_DATA_MAP[tabID]
             data.append({'label': label,
              'linkage': linkage})
 

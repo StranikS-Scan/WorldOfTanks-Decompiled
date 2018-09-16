@@ -201,7 +201,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
             model = self.__createAutoUpdateModel(self.__currentState, acceptDelta, '', [])
         elif self.__currentState == CYBER_SPORT_ALIASES.AUTO_SEARCH_WAITING_PLAYERS_STATE:
             model = self.__createAutoUpdateModel(self.__currentState, timeLeft, '', self.prbEntity.getReadyStates())
-            idx, unit = self.prbEntity.getUnit()
+            _, unit = self.prbEntity.getUnit()
             if unit and unit.isRosterSet(ignored=CREATOR_ROSTER_SLOT_INDEXES):
                 model['extraData'] = {'showAlert': True,
                  'alertTooltip': TOOLTIPS.CYBERSPORT_WAITINGPLAYERS_CONFIGALERT,

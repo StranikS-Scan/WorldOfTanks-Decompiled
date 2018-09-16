@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/loader.py
-"""Loading unittests."""
 import os
 import re
 import sys
@@ -32,17 +31,12 @@ def _make_failed_test(classname, methodname, exception, suiteClass):
 
 
 class TestLoader(object):
-    """
-    This class is responsible for loading tests according to various criteria
-    and returning them wrapped in a TestSuite
-    """
     testMethodPrefix = 'test'
     sortTestMethodsUsing = cmp
     suiteClass = suite.TestSuite
     _top_level_dir = None
 
     def loadTestsFromTestCase(self, testCaseClass):
-        """Return a suite of all tests cases contained in testCaseClass"""
         if issubclass(testCaseClass, suite.TestSuite):
             raise TypeError('Test cases should not be derived from TestSuite. Maybe you meant to derive from TestCase?')
         testCaseNames = self.getTestCaseNames(testCaseClass)
@@ -52,7 +46,6 @@ class TestLoader(object):
         return loaded_suite
 
     def loadTestsFromModule(self, module, use_load_tests=True):
-        """Return a suite of all tests cases contained in the given module"""
         tests = []
         for name in dir(module):
             obj = getattr(module, name)
@@ -70,14 +63,6 @@ class TestLoader(object):
         return tests
 
     def loadTestsFromName(self, name, module=None):
-        """Return a suite of all tests cases given a string specifier.
-        
-        The name may resolve either to a module, a test case class, a
-        test method within a test case class, or a callable object which
-        returns a TestCase or TestSuite instance.
-        
-        The method optionally resolves the names relative to a given module.
-        """
         parts = name.split('.')
         if module is None:
             parts_copy = parts[:]
@@ -118,15 +103,10 @@ class TestLoader(object):
             return
 
     def loadTestsFromNames(self, names, module=None):
-        """Return a suite of all tests cases found using the given sequence
-        of string specifiers. See 'loadTestsFromName()'.
-        """
         suites = [ self.loadTestsFromName(name, module) for name in names ]
         return self.suiteClass(suites)
 
     def getTestCaseNames(self, testCaseClass):
-        """Return a sorted sequence of method names found within testCaseClass
-        """
 
         def isTestMethod(attrname, testCaseClass=testCaseClass, prefix=self.testMethodPrefix):
             return attrname.startswith(prefix) and hasattr(getattr(testCaseClass, attrname), '__call__')
@@ -137,26 +117,6 @@ class TestLoader(object):
         return testFnNames
 
     def discover(self, start_dir, pattern='test*.py', top_level_dir=None):
-        """Find and return all test modules from the specified start
-        directory, recursing into subdirectories to find them. Only test files
-        that match the pattern will be loaded. (Using shell style pattern
-        matching.)
-        
-        All test modules must be importable from the top level of the project.
-        If the start directory is not the top level directory then the top
-        level directory must be specified separately.
-        
-        If a test package name (directory with '__init__.py') matches the
-        pattern then the package will be checked for a 'load_tests' function. If
-        this exists then it will be called with loader, tests, pattern.
-        
-        If load_tests exists then discovery does  *not* recurse into the package,
-        load_tests is responsible for loading all tests in the package.
-        
-        The pattern is deliberately not stored as a loader attribute so that
-        packages can continue discovery themselves. top_level_dir is stored so
-        load_tests does not need to pass this argument in to loader.discover().
-        """
         set_implicit_top = False
         if top_level_dir is None and self._top_level_dir is not None:
             top_level_dir = self._top_level_dir
@@ -201,8 +161,6 @@ class TestLoader(object):
     def _get_name_from_path(self, path):
         path = os.path.splitext(os.path.normpath(path))[0]
         _relpath = os.path.relpath(path, self._top_level_dir)
-        assert not os.path.isabs(_relpath), 'Path must be within the project'
-        assert not _relpath.startswith('..'), 'Path must be within the project'
         name = _relpath.replace(os.path.sep, '.')
         return name
 
@@ -214,7 +172,6 @@ class TestLoader(object):
         return fnmatch(path, pattern)
 
     def _find_tests(self, start_dir, pattern):
-        """Used by discovery. Yields test suites it loads."""
         paths = os.listdir(start_dir)
         for path in paths:
             full_path = os.path.join(start_dir, path)

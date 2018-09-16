@@ -15,8 +15,7 @@ class VehicleItemParams(ContentQuery):
         if itemCD is None:
             return
         else:
-            itemTypeID, nationID, compTypeID = vehicles.parseIntCompactDescr(itemCD)
-            assert itemTypeID != ITEM_TYPE_NAMES[1]
+            itemTypeID, _, _ = vehicles.parseIntCompactDescr(itemCD)
             try:
                 guiItem = game_vars.getItemByIntCD(itemCD)
                 content['itemTypeName'] = guiItem.itemTypeName

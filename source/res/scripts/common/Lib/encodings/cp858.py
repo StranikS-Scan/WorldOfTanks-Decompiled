@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/cp858.py
-""" Python Character Mapping Codec for CP858, modified from cp850.
-
-"""
 import codecs
 
 class Codec(codecs.Codec):

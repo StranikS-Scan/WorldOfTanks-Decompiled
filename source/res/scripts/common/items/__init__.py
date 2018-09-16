@@ -145,8 +145,6 @@ def init(preloadEverything, pricesToCollect=None):
     tankmen.init(preloadEverything)
     from . import qualifiers
     qualifiers.init()
-    from . import new_year_types
-    new_year_types.init()
     return
 
 
@@ -176,8 +174,6 @@ def getTypeOfCompactDescr(compactDescr):
 
 
 def makeIntCompactDescrByID(itemTypeName, nationID, itemID):
-    assert 0 <= itemID <= 65535, itemID
-    assert 0 <= nationID <= 15, nationID
     itemTypeID = ITEM_TYPES[itemTypeName]
     if itemTypeID <= 15:
         header = itemTypeID + (nationID << 4)
@@ -185,7 +181,6 @@ def makeIntCompactDescrByID(itemTypeName, nationID, itemID):
     if itemTypeID <= 255:
         header = 0 + (nationID << 4)
         return (itemTypeID << 24) + (itemID << 8) + header
-    assert False
 
 
 def parseIntCompactDescr(compactDescr):
@@ -193,6 +188,10 @@ def parseIntCompactDescr(compactDescr):
     if itemTypeID == 0:
         itemTypeID = compactDescr >> 24 & 255
     return (itemTypeID, compactDescr >> 4 & 15, compactDescr >> 8 & 65535)
+
+
+def clearXMLCache():
+    _xml.clearCaches()
 
 
 def _readItemTypes():

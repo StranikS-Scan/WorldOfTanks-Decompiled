@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/avatar_respawn_mechanic.py
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
-from skeletons.gui.battle_session import IBattleSessionProvider
-from helpers.EffectsList import FalloutDestroyEffect
+from helpers.EffectsList import RespawnDestroyEffect
 from debug_utils import LOG_DEBUG_DEV
 
 class AvatarRespawnMechanic(object):
@@ -61,7 +60,7 @@ class AvatarRespawnMechanic(object):
             return
 
     def explodeVehicleBeforeRespawn(self, vehID):
-        FalloutDestroyEffect.play(vehID)
+        RespawnDestroyEffect.play(vehID)
 
     def updatePlayerLives(self, lives):
         LOG_DEBUG_DEV('updatePlayerLives', lives)

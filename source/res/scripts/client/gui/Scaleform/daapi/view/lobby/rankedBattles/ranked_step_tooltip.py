@@ -44,7 +44,7 @@ class RankedStepTooltip(BlocksTooltipData):
 
     def _packReceivedBlock(self, winEarnedCount, loseEarnedCount):
         block = []
-        block.append(self._getConditionHeaderBlock(str=RANKED_BATTLES.TOOLTIP_STEP_CONDITIONS_HEADER))
+        block.append(self._getConditionHeaderBlock(strValue=RANKED_BATTLES.TOOLTIP_STEP_CONDITIONS_HEADER))
         if winEarnedCount > 0:
             winIcon = RES_ICONS.getRankedTooltipTopIcon(winEarnedCount)
             block.append(formatters.packImageTextBlockData(desc=text_styles.main(_ms(RANKED_BATTLES.TOOLTIP_STEP_CONDITIONS, battlesNum=winEarnedCount, team=text_styles.statInfo(RANKED_BATTLES.TOOLTIP_STEP_WINNERS))), img=winIcon, txtPadding=formatters.packPadding(left=17)))
@@ -60,7 +60,7 @@ class RankedStepTooltip(BlocksTooltipData):
             return None
         else:
             blocks = []
-            blocks.append(self._getConditionHeaderBlock(str=RANKED_BATTLES.TOOLTIP_STEP_NOTCHARGED_HEADER))
+            blocks.append(self._getConditionHeaderBlock(strValue=RANKED_BATTLES.TOOLTIP_STEP_NOTCHARGED_HEADER))
             if winNotReceivedCount > 0:
                 blocks.append(self._getConditionBlock(topValue=winEarnedCount, placesCount=winNotReceivedCount, condition=RANKED_BATTLES.TOOLTIP_STEP_DECOMMISSIONWIN_DESCRIPTION, conditionTop=RANKED_BATTLES.TOOLTIP_STEP_NOTCHARGED_DESCRIPTION))
             if winNotReceivedCount > 0 and loseNotReceivedCount > 0:
@@ -74,7 +74,7 @@ class RankedStepTooltip(BlocksTooltipData):
         if winLostCount > 0 or loseLostCount > 0:
             winTop = totalPlayers - winLostCount + 1
             loseTop = totalPlayers - loseLostCount + 1
-            blocks.append(self._getConditionHeaderBlock(str=RANKED_BATTLES.TOOLTIP_STEP_DECOMMISSION_HEADER))
+            blocks.append(self._getConditionHeaderBlock(strValue=RANKED_BATTLES.TOOLTIP_STEP_DECOMMISSION_HEADER))
             if winLostCount > 0:
                 blocks.append(self._getConditionBlock(fromPlaceValue=winTop, placesCount=winLostCount, condition=RANKED_BATTLES.TOOLTIP_STEP_DECOMMISSIONWIN_DESCRIPTION))
             if winLostCount > 0 and loseLostCount > 0:
@@ -84,32 +84,32 @@ class RankedStepTooltip(BlocksTooltipData):
         blocks.append(formatters.packTextBlockData(text_styles.standard(RANKED_BATTLES.TOOLTIP_STEP_DECOMMISSION_BEFORERANK)))
         return formatters.packBuildUpBlockData(blocks, 0)
 
-    def _getConditionStr(self, str, topValue, fromPlace, tillPlace):
+    def _getConditionStr(self, strValue, topValue, fromPlace, tillPlace):
         fromTill = self._getFromTillPlaceStr(formatter=text_styles.standard, fromPlace=fromPlace, tillPlace=tillPlace)
         if topValue > 0:
-            resultStr = _ms(str, battlesNum=topValue, fromTill=fromTill)
+            resultStr = _ms(strValue, battlesNum=topValue, fromTill=fromTill)
         else:
-            resultStr = _ms(str, fromTill=fromTill)
+            resultStr = _ms(strValue, fromTill=fromTill)
         return resultStr
 
     def _getFromTillPlaceStr(self, formatter, fromPlace, tillPlace):
-        str = fromPlace
+        strValue = fromPlace
         if fromPlace != tillPlace:
-            str = _ms(RANKED_BATTLES.TOOLTIP_STEP_FROMTILL, fromPlace=fromPlace, tillPlace=tillPlace)
-        return formatter(str)
+            strValue = _ms(RANKED_BATTLES.TOOLTIP_STEP_FROMTILL, fromPlace=fromPlace, tillPlace=tillPlace)
+        return formatter(strValue)
 
     def _getConditionBlock(self, topValue=0, fromPlaceValue=1, placesCount=0, condition='', conditionTop=''):
         if topValue > 0:
-            str = conditionTop
+            strValue = conditionTop
             fromPlace = topValue + 1
         else:
-            str = condition
+            strValue = condition
             fromPlace = fromPlaceValue
         tillPlace = fromPlace + placesCount - 1
-        return formatters.packTextBlockData(text_styles.standard(self._getConditionStr(str=str, topValue=topValue, fromPlace=fromPlace, tillPlace=tillPlace)))
+        return formatters.packTextBlockData(text_styles.standard(self._getConditionStr(strValue=strValue, topValue=topValue, fromPlace=fromPlace, tillPlace=tillPlace)))
 
-    def _getConditionHeaderBlock(self, str):
-        return formatters.packTextBlockData(text_styles.middleTitle(str), padding=formatters.packPadding(bottom=7))
+    def _getConditionHeaderBlock(self, strValue):
+        return formatters.packTextBlockData(text_styles.middleTitle(strValue), padding=formatters.packPadding(bottom=7))
 
     def _getOrBlock(self, padding=None):
         return formatters.packTextBlockData(text_styles.hightlight(RANKED_BATTLES.TOOLTIP_STEP_OR), padding=padding)

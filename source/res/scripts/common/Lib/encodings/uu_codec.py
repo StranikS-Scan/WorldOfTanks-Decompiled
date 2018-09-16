@@ -1,27 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/uu_codec.py
-""" Python 'uu_codec' Codec - UU content transfer encoding
-
-    Unlike most of the other codecs which target Unicode, this codec
-    will return Python string objects for both encode and decode.
-
-    Written by Marc-Andre Lemburg (mal@lemburg.com). Some details were
-    adapted from uu.py which was written by Lance Ellinghouse and
-    modified by Jack Jansen and Fredrik Lundh.
-
-"""
 import codecs, binascii
 
 def uu_encode(input, errors='strict', filename='<data>', mode=438):
-    """ Encodes the object input and returns a tuple (output
-        object, length consumed).
-    
-        errors defines the error handling to apply. It defaults to
-        'strict' handling which is the only currently supported
-        error handling for this codec.
-    
-    """
-    assert errors == 'strict'
     from cStringIO import StringIO
     from binascii import b2a_uu
     infile = StringIO(str(input))
@@ -39,22 +20,6 @@ def uu_encode(input, errors='strict', filename='<data>', mode=438):
 
 
 def uu_decode(input, errors='strict'):
-    """ Decodes the object input and returns a tuple (output
-        object, length consumed).
-    
-        input must be an object which provides the bf_getreadbuf
-        buffer slot. Python strings, buffer objects and memory
-        mapped files are examples of objects providing this slot.
-    
-        errors defines the error handling to apply. It defaults to
-        'strict' handling which is the only currently supported
-        error handling for this codec.
-    
-        Note: filename and file mode information in the input data is
-        ignored.
-    
-    """
-    assert errors == 'strict'
     from cStringIO import StringIO
     from binascii import a2b_uu
     infile = StringIO(str(input))

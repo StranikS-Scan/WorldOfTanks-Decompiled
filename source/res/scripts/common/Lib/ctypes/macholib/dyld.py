@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/macholib/dyld.py
-"""
-dyld emulation
-"""
 import os
 from framework import framework_info
 from dylib import dylib_info
@@ -21,7 +18,6 @@ DEFAULT_LIBRARY_FALLBACK = [os.path.expanduser('~/lib'),
  '/usr/lib']
 
 def ensure_utf8(s):
-    """Not all of PyObjC and Python understand unicode paths very well yet"""
     return s.encode('utf8') if isinstance(s, unicode) else s
 
 
@@ -55,7 +51,6 @@ def dyld_fallback_library_path(env=None):
 
 
 def dyld_image_suffix_search(iterator, env=None):
-    """For a potential path iterator, add DYLD_IMAGE_SUFFIX semantics"""
     suffix = dyld_image_suffix(env)
     if suffix is None:
         return iterator
@@ -114,9 +109,6 @@ def dyld_default_search(name, env=None):
 
 
 def dyld_find(name, executable_path=None, env=None):
-    """
-    Find a library or framework using dyld semantics
-    """
     name = ensure_utf8(name)
     executable_path = ensure_utf8(executable_path)
     for path in dyld_image_suffix_search(chain(dyld_override_search(name, env), dyld_executable_path_search(name, executable_path), dyld_default_search(name, env)), env):
@@ -127,14 +119,6 @@ def dyld_find(name, executable_path=None, env=None):
 
 
 def framework_find(fn, executable_path=None, env=None):
-    """
-    Find a framework using dyld semantics in a very loose manner.
-    
-    Will take input such as:
-        Python
-        Python.framework
-        Python.framework/Versions/Current
-    """
     try:
         return dyld_find(fn, executable_path=executable_path, env=env)
     except ValueError as e:
@@ -153,8 +137,6 @@ def framework_find(fn, executable_path=None, env=None):
 
 def test_dyld_find():
     env = {}
-    assert dyld_find('libSystem.dylib') == '/usr/lib/libSystem.dylib'
-    assert dyld_find('System.framework/System') == '/System/Library/Frameworks/System.framework/System'
 
 
 if __name__ == '__main__':

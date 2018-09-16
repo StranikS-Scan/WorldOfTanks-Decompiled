@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/utf_32_be.py
-"""
-Python 'utf-32-be' Codec
-"""
 import codecs
 encode = codecs.utf_32_be_encode
 

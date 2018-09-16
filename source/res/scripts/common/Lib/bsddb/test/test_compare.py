@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_compare.py
-"""
-TestCases for python DB duplicate and Btree key comparison function.
-"""
 import sys, os, re
 import test_all
 from cStringIO import StringIO
@@ -203,11 +200,6 @@ class BtreeExceptionsTestCase(AbstractBtreeKeyCompareTestCase):
         self.finishTest()
 
     def verifyStderr(self, method, successRe):
-        """
-        Call method() while capturing sys.stderr output internally and
-        call self.fail() if successRe.search() does not match the stderr
-        output.  This is used to test for uncatchable exceptions.
-        """
         stdErr = sys.stderr
         sys.stderr = StringIO()
         try:
@@ -383,11 +375,6 @@ class DuplicateExceptionsTestCase(AbstractDuplicateCompareTestCase):
         self.finishTest()
 
     def verifyStderr(self, method, successRe):
-        """
-        Call method() while capturing sys.stderr output internally and
-        call self.fail() if successRe.search() does not match the stderr
-        output.  This is used to test for uncatchable exceptions.
-        """
         stdErr = sys.stderr
         sys.stderr = StringIO()
         try:

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/header.py
-"""Header encoding and decoding functionality."""
 __all__ = ['Header', 'decode_header', 'make_header']
 import re
 import binascii
@@ -22,16 +21,6 @@ _embeded_header = re.compile('\\n[^ \\t]+:')
 _max_append = email.quoprimime._max_append
 
 def decode_header(header):
-    """Decode a message header value without converting charset.
-    
-    Returns a list of (decoded_string, charset) pairs containing each of the
-    decoded parts of the header.  Charset is None for non-encoded parts of the
-    header, otherwise a lower-case string containing the name of the character
-    set specified in the encoded string.
-    
-    An email.errors.HeaderParseError may be raised when certain decoding error
-    occurs (e.g. a base64 decoding exception).
-    """
     header = str(header)
     if not ecre.search(header):
         return [(header, None)]
@@ -77,16 +66,6 @@ def decode_header(header):
 
 
 def make_header(decoded_seq, maxlinelen=None, header_name=None, continuation_ws=' '):
-    """Create a Header from a sequence of pairs as returned by decode_header()
-    
-    decode_header() takes a header value string and returns a sequence of
-    pairs of the format (decoded_string, charset) where charset is the string
-    name of the character set.
-    
-    This function takes one of those sequence of pairs and returns a Header
-    instance.  Optional maxlinelen, header_name, and continuation_ws are as in
-    the Header constructor.
-    """
     h = Header(maxlinelen=maxlinelen, header_name=header_name, continuation_ws=continuation_ws)
     for s, charset in decoded_seq:
         if charset is not None and not isinstance(charset, Charset):
@@ -99,31 +78,6 @@ def make_header(decoded_seq, maxlinelen=None, header_name=None, continuation_ws=
 class Header():
 
     def __init__(self, s=None, charset=None, maxlinelen=None, header_name=None, continuation_ws=' ', errors='strict'):
-        """Create a MIME-compliant header that can contain many character sets.
-        
-        Optional s is the initial header value.  If None, the initial header
-        value is not set.  You can later append to the header with .append()
-        method calls.  s may be a byte string or a Unicode string, but see the
-        .append() documentation for semantics.
-        
-        Optional charset serves two purposes: it has the same meaning as the
-        charset argument to the .append() method.  It also sets the default
-        character set for all subsequent .append() calls that omit the charset
-        argument.  If charset is not provided in the constructor, the us-ascii
-        charset is used both as s's initial charset and as the default for
-        subsequent .append() calls.
-        
-        The maximum line length can be specified explicit via maxlinelen.  For
-        splitting the first line to a shorter value (to account for the field
-        header which isn't included in s, e.g. `Subject') pass in the name of
-        the field in header_name.  The default maxlinelen is 76.
-        
-        continuation_ws must be RFC 2822 compliant folding whitespace (usually
-        either a space or a hard tab) which will be prepended to continuation
-        lines.
-        
-        errors is passed through to the .append() call.
-        """
         if charset is None:
             charset = USASCII
         if not isinstance(charset, Charset):
@@ -144,11 +98,9 @@ class Header():
         return
 
     def __str__(self):
-        """A synonym for self.encode()."""
         return self.encode()
 
     def __unicode__(self):
-        """Helper for the built-in unicode function."""
         uchunks = []
         lastcs = None
         for s, charset in self._chunks:
@@ -172,26 +124,6 @@ class Header():
         return not self == other
 
     def append(self, s, charset=None, errors='strict'):
-        """Append a string to the MIME header.
-        
-        Optional charset, if given, should be a Charset instance or the name
-        of a character set (which will be converted to a Charset instance).  A
-        value of None (the default) means that the charset given in the
-        constructor is used.
-        
-        s may be a byte string or a Unicode string.  If it is a byte string
-        (i.e. isinstance(s, str) is true), then charset is the encoding of
-        that byte string, and a UnicodeError will be raised if the string
-        cannot be decoded with that charset.  If s is a Unicode string, then
-        charset is a hint specifying the character set of the characters in
-        the string.  In this case, when producing an RFC 2822 compliant header
-        using RFC 2047 rules, the Unicode string will be encoded using the
-        following charsets in order: us-ascii, the charset hint, utf-8.  The
-        first character set not to provoke a UnicodeError is used.
-        
-        Optional `errors' is passed as the third argument to any unicode() or
-        ustr.encode() call.
-        """
         if charset is None:
             charset = self._charset
         elif not isinstance(charset, Charset):
@@ -210,9 +142,6 @@ class Header():
                         break
                     except UnicodeError:
                         pass
-
-                else:
-                    assert False, 'utf-8 conversion failed'
 
         self._chunks.append((s, charset))
         return
@@ -261,27 +190,6 @@ class Header():
         return joiner.join(chunks)
 
     def encode(self, splitchars=';, '):
-        """Encode a message header into an RFC-compliant format.
-        
-        There are many issues involved in converting a given string for use in
-        an email header.  Only certain character sets are readable in most
-        email clients, and as header strings can only contain a subset of
-        7-bit ASCII, care must be taken to properly convert and encode (with
-        Base64 or quoted-printable) header strings.  In addition, there is a
-        75-character length limit on any given encoded header field, so
-        line-wrapping must be performed, even with double-byte character sets.
-        
-        This method will do its best to convert the string to the correct
-        character set used in email, and encode and line wrap it safely with
-        the appropriate scheme for that character set.
-        
-        If the given charset is not known or an error occurs during
-        conversion, this function will return the header untouched.
-        
-        Optional splitchars is a string containing characters to split long
-        ASCII lines on, in rough support of RFC 2822's `highest level
-        syntactic breaks'.  This doesn't affect RFC 2047 encoded lines.
-        """
         newchunks = []
         maxlinelen = self._firstlinelen
         lastlen = 0

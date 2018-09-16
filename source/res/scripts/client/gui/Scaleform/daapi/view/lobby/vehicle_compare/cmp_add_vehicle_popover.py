@@ -42,14 +42,14 @@ class VehicleCompareAddVehiclePopover(VehicleCompareAddVehiclePopoverMeta, Vehic
     def initFilters(self):
         filters = self._initFilter(nation=-1, vehicleType='none', isMain=False, level=-1, compatibleOnly=False)
         self._updateFilter(filters['nation'], filters['vehicleType'], filters['isMain'], filters['level'], filters['compatibleOnly'])
-        filters.update({'compatibleOnlyLabel': VEH_COMPARE.ADDVEHPOPOVER_SHOWONLYMYVAHICLES})
         return filters
 
     def applyFilters(self, nation, vehicleType, level, isMain, hangarOnly):
         self._updateFilter(nation, vehicleType, isMain, level, hangarOnly)
         self.updateData()
 
-    def updateData(self, allVehicles=[]):
+    def updateData(self, allVehicles=None):
+        allVehicles = allVehicles or []
         if not allVehicles:
             allVehicles.append(self.itemsCache.items.getVehicles(getVehicleCriteriaForComparing()))
         vehicles = self._updateData(allVehicles[0], compatiblePredicate=lambda vo: vo['inHangar'])
@@ -78,7 +78,6 @@ class VehicleCompareAddVehiclePopover(VehicleCompareAddVehiclePopoverMeta, Vehic
 
     def addButtonClicked(self):
         vehicles = self._vehDP.getSelected()
-        assert vehicles
         self.comparisonBasket.addVehicles(vehicles)
         self.onWindowClose()
 
@@ -124,7 +123,6 @@ class VehicleCompareAddVehiclePopover(VehicleCompareAddVehiclePopoverMeta, Vehic
 
     def __updateSortField(self):
         sort = self._vehDP.getLastSortMethod()
-        assert sort
         order = 'ascending' if sort[0][1] else 'descending'
         self.as_updateTableSortFieldS(sortField=sort[0][0], sortDirection=order)
 

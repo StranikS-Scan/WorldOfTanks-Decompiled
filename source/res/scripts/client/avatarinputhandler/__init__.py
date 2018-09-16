@@ -35,13 +35,12 @@ from gui.app_loader import g_appLoader, settings
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from post_processing.post_effect_controllers import g_postProcessingEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBootcampController
 from svarog_script.py_component_system import ComponentSystem, ComponentDescriptor
 _INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 
-class _CTRL_TYPE():
+class _CTRL_TYPE(object):
     USUAL = 0
     OPTIONAL = 1
     DEVELOPMENT = 2
@@ -274,11 +273,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         return None if self.__isDetached else self.__curCtrl.updateShootingStatus(canShoot)
 
     def getDesiredShotPoint(self, ignoreAimingMode=False):
-        if self.__isDetached:
-            return None
-        else:
-            g_postProcessingEvents.onFocalPlaneChanged()
-            return self.__curCtrl.getDesiredShotPoint(ignoreAimingMode)
+        return None if self.__isDetached else self.__curCtrl.getDesiredShotPoint(ignoreAimingMode)
 
     def getMarkerPoint(self):
         point = None
@@ -300,13 +295,11 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             replayCtrl = BattleReplay.g_replayCtrl
             replayCtrl.setUseServerAim(isShown)
 
-    def updateGunMarker(self, pos, dir, size, relaxTime, collData):
-        """ Updates client's gun marker."""
-        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.CLIENT, pos, dir, size, relaxTime, collData)
+    def updateGunMarker(self, pos, direction, size, relaxTime, collData):
+        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.CLIENT, pos, direction, size, relaxTime, collData)
 
-    def updateGunMarker2(self, pos, dir, size, relaxTime, collData):
-        """ Updates server's gun marker."""
-        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.SERVER, pos, dir, size, relaxTime, collData)
+    def updateGunMarker2(self, pos, direction, size, relaxTime, collData):
+        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.SERVER, pos, direction, size, relaxTime, collData)
 
     def setAimingMode(self, enable, mode):
         self.__curCtrl.setAimingMode(enable, mode)
@@ -341,7 +334,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
 
         try:
             params = self.__curCtrl.postmortemCamParams
-        except:
+        except Exception:
             params = None
 
         onPostmortemActivation = getattr(self.__curCtrl, 'onPostmortemActivation', None)
@@ -349,24 +342,6 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             onPostmortemActivation(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=True, respawn=isRespawn)
         else:
             self.onControlModeChanged(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=True, respawn=isRespawn)
-        return
-
-    def addVehicleToCameraCollider(self, vehicle):
-        cams = (self.ctrls['arcade'].camera, self.ctrls['postmortem'].camera)
-        for camera in cams:
-            if camera is None:
-                continue
-            camera.addVehicleToCollideWith(vehicle)
-
-        return
-
-    def removeVehicleFromCameraCollider(self, vehicle):
-        cams = (self.ctrls['arcade'].camera, self.ctrls['postmortem'].camera)
-        for camera in cams:
-            if camera is None:
-                continue
-            camera.removeVehicleToCollideWith(vehicle)
-
         return
 
     def deactivatePostmortem(self):
@@ -390,8 +365,9 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         for control in self.__ctrls.itervalues():
             control.create()
 
+        avatar = BigWorld.player()
         if not self.__curCtrl.isManualBind():
-            BigWorld.player().positionControl.bindToVehicle(True)
+            avatar.positionControl.bindToVehicle(True)
         self.__curCtrl.enable()
         self.onCameraChanged('arcade')
         tmp = self.__curCtrl.getPreferredAutorotationMode()
@@ -401,17 +377,17 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         else:
             self.__isAutorotation = True
             self.__prevModeAutorotation = None
-        BigWorld.player().enableOwnVehicleAutorotation(self.__isAutorotation)
+        avatar.enableOwnVehicleAutorotation(self.__isAutorotation)
         self.__targeting.enable(True)
         self.__isStarted = True
         self.__isGUIVisible = True
         self.__killerVehicleID = None
-        arena = BigWorld.player().arena
+        arena = avatar.arena
         arena.onPeriodChange += self.__onArenaStarted
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-        BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged += self.__onVehicleChanged
+        avatar.consistentMatrices.onVehicleMatrixBindingChanged += self.__onVehicleChanged
         self.__onArenaStarted(arena.period)
-        if not BigWorld.player().isObserver() and arena.hasObservers:
+        if not avatar.isObserver() and arena.hasObservers:
             self.__remoteCameraSender = RemoteCameraSender(self)
         return
 
@@ -719,7 +695,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         self.__dynamicCameraSettings = DynamicCameraSettings(sec['dynamicCameraCommon'])
         try:
             self.__ctrls['sniper'].camera.aimingSystem.reloadConfig(sec['sniperMode']['camera'])
-        except:
+        except Exception:
             pass
 
     def _readCfg(self):
@@ -749,14 +725,14 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
                             self.__ctrls[name] = classType(section[desc[1]] if desc[1] else None, self)
                             break
 
-            except Exception as e:
+            except Exception:
                 LOG_DEBUG('Error while setting ctrls', name, desc, constants.HAS_DEV_RESOURCES)
                 LOG_CURRENT_EXCEPTION()
 
         return
 
     def __checkSections(self, section):
-        for name, desc in _CTRLS_DESC_MAP.items():
+        for _, desc in _CTRLS_DESC_MAP.items():
             if desc[1] is None or desc[2] == _CTRL_TYPE.OPTIONAL or desc[2] == _CTRL_TYPE.DEVELOPMENT and not constants.HAS_DEV_RESOURCES:
                 continue
             if not section.has_key(desc[1]):
@@ -787,7 +763,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         return
 
 
-class _Targeting():
+class _Targeting(object):
 
     def __init__(self):
         target = BigWorld.target
@@ -834,7 +810,7 @@ class _VertScreenshotCamera(object):
         self.__savedWatchers = {}
         self.__nearPlane = 0.0
         self.__farPlane = 0.0
-        self.__watcherNames = ('Render/Fov', 'Render/Near Plane', 'Render/Far Plane', 'Render/Objects Far Plane/Enabled', 'Render/Shadows/qualityPreset', 'Visibility/Draw tanks', 'Visibility/Control Points', 'Visibility/GUI', 'Visibility/particles', 'Visibility/Sky', 'Client Settings/Script tick')
+        self.__watcherNames = ('Render/Fov', 'Render/Near Plane', 'Render/Far Plane', 'Render/Objects Far Plane/Enabled', 'Render/Shadows/qualityPreset', 'Visibility/Draw tanks', 'Visibility/Control Points', 'Visibility/GUI', 'Visibility/particles', 'Visibility/Sky', 'Client Settings/Script tick', 'Render/Terrain/AdaptiveMesh/cascades enabled', 'Render/Water/out land water')
         return
 
     def destroy(self):
@@ -855,15 +831,17 @@ class _VertScreenshotCamera(object):
             BigWorld.projection().nearPlane = self.__nearPlane
             BigWorld.projection().farPlane = self.__farPlane
             BigWorld.setWatcher('Render/Fog/enabled', True)
-            BigWorld.setWatcher('Occlusion Culling/Disable distance culling', False)
+            BigWorld.setWatcher('Occlusion Culling/Enabled', True)
+            BigWorld.setWatcher('Render/Terrain/AdaptiveMesh/cascades enabled', True)
+            BigWorld.setWatcher('Render/Water/out land water', True)
             LOG_DEBUG('Vertical screenshot camera is disabled')
             return
         self.__isEnabled = True
         self.__savedCamera = BigWorld.camera()
         FovExtended.instance().enabled = False
-        arenaBB = BigWorld.wg_getSpaceBounds()
-        centerXZ = Math.Vector2(0.5 * (arenaBB[0] + arenaBB[2]), 0.5 * (arenaBB[1] + arenaBB[3]))
-        halfSizesXZ = Math.Vector2(0.5 * (arenaBB[2] - arenaBB[0]), 0.5 * (arenaBB[3] - arenaBB[1]))
+        arenaBB = BigWorld.player().arena.arenaType.spaceBoundingBox
+        centerXZ = Math.Vector2(0.5 * (arenaBB[0][0] + arenaBB[1][0]), 0.5 * (arenaBB[0][1] + arenaBB[1][1]))
+        halfSizesXZ = Math.Vector2(0.5 * (arenaBB[1][0] - arenaBB[0][0]), 0.5 * (arenaBB[1][1] - arenaBB[0][1]))
         camFov = math.radians(15.0)
         camPos = Math.Vector3(centerXZ.x, 0, centerXZ.z)
         aspectRatio = BigWorld.getAspectRatio()
@@ -893,5 +871,7 @@ class _VertScreenshotCamera(object):
         BigWorld.projection().farPlane = camPos.y + 1000
         BigWorld.setWatcher('Render/Shadows/qualityPreset', 7)
         BigWorld.setWatcher('Client Settings/Script tick', False)
-        BigWorld.setWatcher('Occlusion Culling/Disable distance culling', True)
+        BigWorld.setWatcher('Occlusion Culling/Enabled', False)
+        BigWorld.setWatcher('Render/Terrain/AdaptiveMesh/cascades enabled', False)
+        BigWorld.setWatcher('Render/Water/out land water', False)
         LOG_DEBUG('Vertical screenshot camera is enabled')

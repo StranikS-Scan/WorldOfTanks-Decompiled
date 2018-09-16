@@ -1,14 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/transformer.py
-"""Parse tree transformation module.
-
-Transforms Python source code into an abstract syntax tree (AST)
-defined in the ast module.
-
-The simplest ways to invoke this module are via parse and parseFile.
-parse(buf) -> AST
-parseFile(path) -> AST
-"""
 from compiler.ast import *
 import parser
 import symbol
@@ -77,14 +68,6 @@ def Node(*args):
 
 
 class Transformer():
-    """Utility object for transforming Python parse trees.
-    
-    Exposes the following methods:
-        tree = transform(ast_tree)
-        tree = parsesuite(text)
-        tree = parseexpr(text)
-        tree = parsefile(fileob | filename)
-    """
 
     def __init__(self):
         self._dispatch = {}
@@ -104,21 +87,17 @@ class Transformer():
         return
 
     def transform(self, tree):
-        """Transform an AST into a modified parse tree."""
         if not (isinstance(tree, tuple) or isinstance(tree, list)):
             tree = parser.st2tuple(tree, line_info=1)
         return self.compile_node(tree)
 
     def parsesuite(self, text):
-        """Return a modified parse tree for the given suite text."""
         return self.transform(parser.suite(text))
 
     def parseexpr(self, text):
-        """Return a modified parse tree for the given expression text."""
         return self.transform(parser.expr(text))
 
     def parsefile(self, file):
-        """Return a modified parse tree for the contents of the given file."""
         if type(file) == type(''):
             file = open(file)
         return self.parsesuite(file.read())
@@ -165,25 +144,17 @@ class Transformer():
 
     def decorator_name(self, nodelist):
         listlen = len(nodelist)
-        assert listlen >= 1 and listlen % 2 == 1
         item = self.atom_name(nodelist)
         i = 1
         while i < listlen:
-            assert nodelist[i][0] == token.DOT
-            assert nodelist[i + 1][0] == token.NAME
             item = Getattr(item, nodelist[i + 1][1])
             i += 2
 
         return item
 
     def decorator(self, nodelist):
-        assert len(nodelist) in (3, 5, 6)
-        assert nodelist[0][0] == token.AT
-        assert nodelist[-1][0] == token.NEWLINE
-        assert nodelist[1][0] == symbol.dotted_name
         funcname = self.decorator_name(nodelist[1][1:])
         if len(nodelist) > 3:
-            assert nodelist[2][0] == token.LPAR
             expr = self.com_call_function(funcname, nodelist[3])
         else:
             expr = funcname
@@ -192,13 +163,11 @@ class Transformer():
     def decorators(self, nodelist):
         items = []
         for dec_nodelist in nodelist:
-            assert dec_nodelist[0] == symbol.decorator
             items.append(self.decorator(dec_nodelist[1:]))
 
         return Decorators(items)
 
     def decorated(self, nodelist):
-        assert nodelist[0][0] == symbol.decorators
         if nodelist[1][0] == symbol.funcdef:
             n = [nodelist[0]] + list(nodelist[1][1:])
             return self.funcdef(n)
@@ -211,10 +180,8 @@ class Transformer():
 
     def funcdef(self, nodelist):
         if len(nodelist) == 6:
-            assert nodelist[0][0] == symbol.decorators
             decorators = self.decorators(nodelist[0][1:])
         else:
-            assert len(nodelist) == 5
             decorators = None
         lineno = nodelist[-4][2]
         name = nodelist[-4][1]
@@ -227,8 +194,6 @@ class Transformer():
         doc = self.get_docstring(nodelist[-1])
         code = self.com_node(nodelist[-1])
         if doc is not None:
-            assert isinstance(code, Stmt)
-            assert isinstance(code.nodes[0], Discard)
             del code.nodes[0]
         return Function(decorators, name, names, defaults, flags, doc, code, lineno=lineno)
 
@@ -254,8 +219,6 @@ class Transformer():
             bases = self.com_bases(nodelist[3])
         code = self.com_node(nodelist[-1])
         if doc is not None:
-            assert isinstance(code, Stmt)
-            assert isinstance(code.nodes[0], Discard)
             del code.nodes[0]
         return Class(name, bases, doc, code, lineno=nodelist[1][2])
 
@@ -323,7 +286,6 @@ class Transformer():
             start = 1
             dest = None
         elif nodelist[1][0] == token.RIGHTSHIFT:
-            assert len(nodelist) == 3 or nodelist[3][0] == token.COMMA
             dest = self.com_node(nodelist[2])
             start = 4
         else:
@@ -376,14 +338,12 @@ class Transformer():
         return Raise(expr1, expr2, expr3, lineno=nodelist[0][2])
 
     def import_stmt(self, nodelist):
-        assert len(nodelist) == 1
         return self.com_node(nodelist[0])
 
     def import_name(self, nodelist):
         return Import(self.com_dotted_as_names(nodelist[1]), lineno=nodelist[0][2])
 
     def import_from(self, nodelist):
-        assert nodelist[0][1] == 'from'
         idx = 1
         while nodelist[idx][1] == '.':
             idx += 1
@@ -394,7 +354,6 @@ class Transformer():
             idx += 1
         else:
             fromname = ''
-        assert nodelist[idx][1] == 'import'
         if nodelist[idx + 1][0] == token.STAR:
             return From(fromname, [('*', None)], level, lineno=nodelist[0][2])
         else:
@@ -488,7 +447,6 @@ class Transformer():
     exprlist = testlist
 
     def testlist_comp(self, nodelist):
-        assert nodelist[0][0] == symbol.test
         if len(nodelist) == 2 and nodelist[1][0] == symbol.comp_for:
             test = self.com_node(nodelist[0])
             return self.com_generator_expression(test, nodelist[1])
@@ -499,9 +457,6 @@ class Transformer():
             return self.lambdef(nodelist[0])
         then = self.com_node(nodelist[0])
         if len(nodelist) > 1:
-            assert len(nodelist) == 5
-            assert nodelist[1][1] == 'if'
-            assert nodelist[3][1] == 'else'
             test = self.com_node(nodelist[2])
             else_ = self.com_node(nodelist[4])
             return IfExp(test, then, else_, lineno=nodelist[1][2])
@@ -716,18 +671,11 @@ class Transformer():
         return name[:-1]
 
     def com_dotted_as_name(self, node):
-        assert node[0] == symbol.dotted_as_name
         node = node[1:]
         dot = self.com_dotted_name(node[0][1:])
-        if len(node) == 1:
-            return (dot, None)
-        else:
-            assert node[1][1] == 'as'
-            assert node[2][0] == token.NAME
-            return (dot, node[2][1])
+        return (dot, None) if len(node) == 1 else (dot, node[2][1])
 
     def com_dotted_as_names(self, node):
-        assert node[0] == symbol.dotted_as_names
         node = node[1:]
         names = [self.com_dotted_as_name(node[0])]
         for i in range(2, len(node), 2):
@@ -736,18 +684,10 @@ class Transformer():
         return names
 
     def com_import_as_name(self, node):
-        assert node[0] == symbol.import_as_name
         node = node[1:]
-        assert node[0][0] == token.NAME
-        if len(node) == 1:
-            return (node[0][1], None)
-        else:
-            assert node[1][1] == 'as', node
-            assert node[2][0] == token.NAME
-            return (node[0][1], node[2][1])
+        return (node[0][1], None) if len(node) == 1 else (node[0][1], node[2][1])
 
     def com_import_as_names(self, node):
-        assert node[0] == symbol.import_as_names
         node = node[1:]
         names = [self.com_import_as_name(node[0])]
         for i in range(2, len(node), 2):
@@ -810,14 +750,9 @@ class Transformer():
         return With(expr, var, body, lineno=lineno)
 
     def com_augassign_op(self, node):
-        assert node[0] == symbol.augassign
         return node[1]
 
     def com_augassign(self, node):
-        """Return node suitable for lvalue of augmented assignment
-        
-        Names, slices, and attributes are the only allowable nodes.
-        """
         l = self.com_node(node)
         if l.__class__ in (Name,
          Slice,
@@ -883,7 +818,6 @@ class Transformer():
             if i + 1 < len(node):
                 if node[i + 1][0] == symbol.list_for:
                     raise SyntaxError, "can't assign to list comprehension"
-                assert node[i + 1][0] == token.COMMA, node[i + 1]
             assigns.append(self.com_assign(node[i], assigning))
 
         return AssList(assigns, lineno=extractLineNo(node))
@@ -905,7 +839,6 @@ class Transformer():
         return AssAttr(primary, node[1], assigning, lineno=node[-1])
 
     def com_binary(self, constructor, nodelist):
-        """Compile 'NODE (OP NODE)*' into (type, [ node1, ..., nodeN ])."""
         l = len(nodelist)
         if l == 1:
             n = nodelist[0]
@@ -919,23 +852,19 @@ class Transformer():
 
     def com_stmt(self, node):
         result = self.lookup_node(node)(node[1:])
-        assert result is not None
         return result if isinstance(result, Stmt) else Stmt([result])
 
     def com_append_stmt(self, stmts, node):
         result = self.lookup_node(node)(node[1:])
-        assert result is not None
         if isinstance(result, Stmt):
             stmts.extend(result.nodes)
         else:
             stmts.append(result)
-        return
 
     def com_list_constructor(self, nodelist):
         values = []
         for i in range(1, len(nodelist)):
             if nodelist[i][0] == symbol.list_for:
-                assert len(nodelist[i:]) == 1
                 return self.com_list_comprehension(values[0], nodelist[i])
             if nodelist[i][0] == token.COMMA:
                 continue
@@ -986,11 +915,9 @@ class Transformer():
             return
 
     def com_list_iter(self, node):
-        assert node[0] == symbol.list_iter
         return node[1]
 
     def com_comp_iter(self, node):
-        assert node[0] == symbol.comp_iter
         return node[1]
 
     def com_generator_expression(self, expr, node):
@@ -1021,7 +948,6 @@ class Transformer():
         return GenExpr(GenExprInner(expr, fors), lineno=lineno)
 
     def com_dictorsetmaker(self, nodelist):
-        assert nodelist[0] == symbol.dictorsetmaker
         nodelist = nodelist[1:]
         if len(nodelist) == 1 or nodelist[1][0] == token.COMMA:
             items = []
@@ -1033,7 +959,6 @@ class Transformer():
             expr = self.com_node(nodelist[0])
             return self.com_comprehension(expr, None, nodelist[1], 'set')
         elif len(nodelist) > 3 and nodelist[3][0] == symbol.comp_for:
-            assert nodelist[1][0] == token.COLON
             key = self.com_node(nodelist[0])
             value = self.com_node(nodelist[2])
             return self.com_comprehension(key, value, nodelist[3], 'dict')

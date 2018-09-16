@@ -3,24 +3,36 @@
 from abc import ABCMeta, abstractmethod
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_control import IBootcampController
 from tutorial.control import TutorialProxyHolder
 from tutorial.logger import LOG_MEMORY, LOG_ERROR
+import SoundGroups
 __all__ = ('StartReqs', 'BonusesRequester', 'SoundPlayer', 'GlobalStorage')
 
 class StartReqs(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __del__(self):
         LOG_MEMORY('StartReqs deleted: {0:>s}'.format(self))
 
     def isEnabled(self):
-        return self.lobbyContext.getServerSettings().isTutorialEnabled()
+        isBootcampTutorial = self._isBootcamp()
+        isInBootcamp = self.bootcampController.isInBootcamp()
+        if isBootcampTutorial:
+            return isInBootcamp
+        isTutorialEnabled = self.lobbyContext.getServerSettings().isTutorialEnabled()
+        isBootcampEnabled = self.lobbyContext.getServerSettings().isBootcampEnabled()
+        return isTutorialEnabled and not isBootcampEnabled and not isInBootcamp
 
     def prepare(self, ctx):
         raise NotImplementedError
 
     def process(self, descriptor, ctx):
         raise NotImplementedError
+
+    def _isBootcamp(self):
+        return False
 
 
 class BonusesRequester(TutorialProxyHolder):
@@ -50,11 +62,13 @@ class BonusesRequester(TutorialProxyHolder):
         pass
 
 
-class SOUND_EVENT:
+class SOUND_EVENT(object):
     TASK_FAILED = 0
     TASK_COMPLETED = 1
     NEXT_CHAPTER = 2
     SPEAKING = 3
+    HINT_SHOWN = 4
+    ANIMATION_STARTED = 5
 
 
 class SoundPlayer(object):
@@ -96,6 +110,19 @@ class NoSound(SoundPlayer):
 
     def play(self, event, sndID=None):
         pass
+
+    def stop(self):
+        pass
+
+
+class SimpleSoundPlayer(SoundPlayer):
+
+    def play(self, _, sndID=None):
+        if sndID is not None:
+            SoundGroups.g_instance.playSound2D(sndID)
+        else:
+            LOG_ERROR('No sound event specified for SimpleSoundPlayer')
+        return
 
     def stop(self):
         pass

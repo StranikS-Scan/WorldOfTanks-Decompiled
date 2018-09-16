@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/func_utils.py
+from functools import partial
 from time import sleep
 import BigWorld
-from functools import partial
 from debug_utils import LOG_DEBUG
 
 def callback(delay, obj, methodName, *args):

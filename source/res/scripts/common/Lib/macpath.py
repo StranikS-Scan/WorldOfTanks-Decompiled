@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/macpath.py
-"""Pathname and path-related operations for the Macintosh."""
 import os
 import warnings
 from stat import *
@@ -53,11 +52,6 @@ def normcase(path):
 
 
 def isabs(s):
-    """Return true if a path is absolute.
-    On the Mac, relative paths begin with a colon,
-    but as a special case, paths with no colons at all are also relative.
-    Anything else is absolute (the string up to the first colon is the
-    volume name)."""
     return ':' in s and s[0] != ':'
 
 
@@ -79,9 +73,6 @@ def join(s, *p):
 
 
 def split(s):
-    """Split a pathname into two parts: the directory leading up to the final
-    bit, and the basename (the filename, without colons, in that directory).
-    The result (s, t) is such that join(s, t) yields the original argument."""
     if ':' not in s:
         return ('', s)
     colon = 0
@@ -102,11 +93,6 @@ def splitext(p):
 splitext.__doc__ = genericpath._splitext.__doc__
 
 def splitdrive(p):
-    """Split a pathname into a drive specification and the rest of the
-    path.  Useful on DOS/Windows/NT; on the Mac, the drive is always
-    empty (don't use the volume name -- it doesn't have the same
-    syntactic and semantic oddities as DOS drive letters, such as there
-    being a separate current directory per drive)."""
     return ('', p)
 
 
@@ -126,7 +112,6 @@ def ismount(s):
 
 
 def islink(s):
-    """Return true if the pathname refers to a symbolic link."""
     try:
         import Carbon.File
         return Carbon.File.ResolveAliasFile(s, 0)[2]
@@ -135,7 +120,6 @@ def islink(s):
 
 
 def lexists(path):
-    """Test whether a path exists.  Returns True for broken symbolic links"""
     try:
         st = os.lstat(path)
     except os.error:
@@ -145,23 +129,18 @@ def lexists(path):
 
 
 def expandvars(path):
-    """Dummy to retain interface-compatibility with other operating systems."""
     return path
 
 
 def expanduser(path):
-    """Dummy to retain interface-compatibility with other operating systems."""
     return path
 
 
 class norm_error(Exception):
-    """Path cannot be normalized"""
     pass
 
 
 def normpath(s):
-    """Normalize a pathname.  Will return the same result for
-    equivalent paths."""
     if ':' not in s:
         return ':' + s
     comps = s.split(':')
@@ -182,19 +161,6 @@ def normpath(s):
 
 
 def walk(top, func, arg):
-    """Directory tree walk with callback function.
-    
-    For each directory in the directory tree rooted at top (including top
-    itself, but excluding '.' and '..'), call func(arg, dirname, fnames).
-    dirname is the name of the directory, and fnames a list of the names of
-    the files and subdirectories in dirname (excluding '.' and '..').  func
-    may modify the fnames list in-place (e.g. via del or slice assignment),
-    and walk will only recurse into the subdirectories whose names remain in
-    fnames; this can be used to implement a filter, or to impose a specific
-    order of visiting.  No semantics are defined for, or required of, arg,
-    beyond that arg is always passed to func.  It can be used, e.g., to pass
-    a filename pattern, or a mutable object designed to accumulate
-    statistics.  Passing None for arg is common."""
     warnings.warnpy3k('In 3.x, os.path.walk is removed in favor of os.walk.', stacklevel=2)
     try:
         names = os.listdir(top)
@@ -209,7 +175,6 @@ def walk(top, func, arg):
 
 
 def abspath(path):
-    """Return an absolute path."""
     if not isabs(path):
         if isinstance(path, unicode):
             cwd = os.getcwdu()

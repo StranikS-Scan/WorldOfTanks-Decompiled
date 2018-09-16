@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/install_lib.py
-"""distutils.command.install_lib
-
-Implements the Distutils 'install_lib' command
-(install all Python modules)."""
 __revision__ = '$Id$'
 import os
 import sys
@@ -111,10 +107,6 @@ class install_lib(Command):
         return bytecode_files
 
     def get_outputs(self):
-        """Return the list of files that would be installed if this command
-        were actually run.  Not affected by the "dry-run" flag or whether
-        modules have actually been built yet.
-        """
         pure_outputs = self._mutate_outputs(self.distribution.has_pure_modules(), 'build_py', 'build_lib', self.install_dir)
         if self.compile:
             bytecode_outputs = self._bytecode_filenames(pure_outputs)
@@ -124,11 +116,6 @@ class install_lib(Command):
         return pure_outputs + bytecode_outputs + ext_outputs
 
     def get_inputs(self):
-        """Get the list of files that are input to this command, ie. the
-        files that get installed as they are named in the build tree.
-        The files in this list correspond one-to-one to the output
-        filenames returned by 'get_outputs()'.
-        """
         inputs = []
         if self.distribution.has_pure_modules():
             build_py = self.get_finalized_command('build_py')

@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/arena_load_ctrl.py
 import BigWorld
-import constants
 from gui.app_loader import g_appLoader
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.view_components import ViewComponentsController
-from helpers import dependency
+from helpers import dependency, uniprof
 from skeletons.gui.game_control import IGameSessionController
 
 class IArenaLoadCtrlListener(object):
@@ -37,8 +36,8 @@ class ArenaLoadController(IArenaVehiclesController, ViewComponentsController):
     def setViewComponents(self, *components):
         super(ArenaLoadController, self).setViewComponents(*components)
         if self._viewComponents and self.__isCompleted:
-            for cmp in self._viewComponents:
-                cmp.arenaLoadCompleted()
+            for component in self._viewComponents:
+                component.arenaLoadCompleted()
 
     def spaceLoadStarted(self):
         self.gameSession.incBattlesCounter()
@@ -58,7 +57,9 @@ class ArenaLoadController(IArenaVehiclesController, ViewComponentsController):
         from messenger import MessengerEntry
         MessengerEntry.g_instance.onAvatarShowGUI()
         BigWorld.enableLoadingTimer(False)
+        uniprof.exitFromRegion('avatar.arena.loading')
+        uniprof.enterToRegion('avatar.arena.battle')
         BigWorld.wg_clearTextureReuseList()
         if self._viewComponents:
-            for cmp in self._viewComponents:
-                cmp.arenaLoadCompleted()
+            for component in self._viewComponents:
+                component.arenaLoadCompleted()

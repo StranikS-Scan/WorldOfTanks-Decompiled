@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/battle/__init__.py
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates
@@ -83,7 +83,7 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
          (BootcampEvent.HINT_HIDE, self.onHide),
          (BootcampEvent.HINT_CLOSE, self.onCloseHint),
          (BootcampEvent.CLOSE_PREBATTLE, self.onClosePrebattle))
-        super(BootcampPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
+        super(BootcampPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
 
     def onShowIntro(self, event):
         LOG_DEBUG_DEV_BOOTCAMP('onShowIntro', event.name, event.ctx)

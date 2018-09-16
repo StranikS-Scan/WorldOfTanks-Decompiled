@@ -116,7 +116,6 @@ class SeasonType(object):
 
     @staticmethod
     def fromArenaKind(arenaKind):
-        """Convert season from arena type camouflage kind. see vehicles.CAMOUFLAGE_KINDS"""
         if arenaKind == 0:
             return SeasonType.WINTER
         if arenaKind == 1:

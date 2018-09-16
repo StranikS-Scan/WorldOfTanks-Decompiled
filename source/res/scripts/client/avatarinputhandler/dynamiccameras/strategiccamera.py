@@ -48,6 +48,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__dynamicCfg = CameraDynamicConfig()
         self.__readCfg(dataSec)
         self.__cam = BigWorld.CursorCamera()
+        self.__cam.isHangar = False
         self.__curSense = self.__cfg['sensitivity']
         self.__onChangeControlMode = None
         self.__aimingSystem = None
@@ -104,7 +105,6 @@ class StrategicCamera(ICamera, CallbackDelayer):
         if self.__aimingSystem is not None:
             self.__aimingSystem.disable()
         self.stopCallback(self.__cameraUpdate)
-        BigWorld.camera(None)
         positionControl = BigWorld.player().positionControl
         if positionControl is not None:
             positionControl.followCamera(False)
@@ -156,12 +156,12 @@ class StrategicCamera(ICamera, CallbackDelayer):
         dirsPos = [ getWorldRayAndPoint(point.x, point.y) for point in points ]
         planeXZ = Plane(Math.Vector3(0, 1, 0), 0)
         collisionPoints = []
-        for dir, begPos in dirsPos:
-            endPos = begPos + dir * 1000
+        for direction, begPos in dirsPos:
+            endPos = begPos + direction * 1000
             testResult = BigWorld.wg_collideSegment(BigWorld.player().spaceID, begPos, endPos, 3)
             collPoint = Math.Vector3(0, 0, 0)
             if collPoint is not None:
-                collPoint = testResult[0]
+                collPoint = testResult.closestPoint
             else:
                 collPoint = planeXZ.intersectSegment(begPos, endPos)
             collisionPoints.append(collPoint)

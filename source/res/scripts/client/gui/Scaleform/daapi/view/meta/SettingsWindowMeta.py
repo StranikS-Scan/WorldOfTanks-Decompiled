@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SettingsWindowMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class SettingsWindowMeta(AbstractWindowView):
@@ -47,13 +43,13 @@ class SettingsWindowMeta(AbstractWindowView):
     def canSelectAcousticType(self, index):
         self._printOverrideError('canSelectAcousticType')
 
+    def openGammaWizard(self, x, y, size):
+        self._printOverrideError('openGammaWizard')
+
     def as_setDataS(self, settingsData):
         return self.flashObject.as_setData(settingsData) if self._isDAAPIInited() else None
 
     def as_setCaptureDevicesS(self, captureDeviceIdx, devicesData):
-        """
-        :param devicesData: Represented by DataProvider (AS)
-        """
         return self.flashObject.as_setCaptureDevices(captureDeviceIdx, devicesData) if self._isDAAPIInited() else None
 
     def as_onVibroManagerConnectS(self, isConnect):
@@ -78,9 +74,6 @@ class SettingsWindowMeta(AbstractWindowView):
         return self.flashObject.as_isPresetApplied() if self._isDAAPIInited() else None
 
     def as_setCountersDataS(self, countersData):
-        """
-        :param countersData: Represented by Vector.<SettingsNewCountersVo> (AS)
-        """
         return self.flashObject.as_setCountersData(countersData) if self._isDAAPIInited() else None
 
     def as_onSoundSpeakersPresetApplyS(self, isApply):
@@ -88,3 +81,6 @@ class SettingsWindowMeta(AbstractWindowView):
 
     def as_disableControlS(self, tabId, controlID, subTabId):
         return self.flashObject.as_disableControl(tabId, controlID, subTabId) if self._isDAAPIInited() else None
+
+    def as_setInitDataS(self, isWinXP):
+        return self.flashObject.as_setInitData(isWinXP) if self._isDAAPIInited() else None

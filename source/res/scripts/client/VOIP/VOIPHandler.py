@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VOIP/VOIPHandler.py
-from VOIPLog import LOG_VOIP_INT
+import logging
 from wotdecorators import noexcept
+_logger = logging.getLogger(__name__)
 MESSAGE_IDS = {}
 MSG_VOIP_INITED = 0
 MESSAGE_IDS[MSG_VOIP_INITED] = 'MSG_VOIP_INITED'
@@ -80,9 +81,11 @@ class VOIPHandler(object):
         pass
 
     @noexcept
-    def __call__(self, message, data={}):
+    def __call__(self, message, data=None):
+        if data is None:
+            data = {}
         if message is not MSG_PARTICIPANT_UPDATED:
-            LOG_VOIP_INT('Message: %d [%s], Data: %s' % (message, MESSAGE_IDS[message], data))
+            _logger.debug('Message: %d [%s], Data: %s', message, MESSAGE_IDS[message], data)
         if message == MSG_VOIP_INITED:
             self.onVoipInited(data)
         elif message == MSG_VOIP_DESTROYED:
@@ -111,3 +114,4 @@ class VOIPHandler(object):
             self.onParticipantRemoved(data)
         elif message == MSG_PARTICIPANT_UPDATED:
             self.onParticipantUpdated(data)
+        return

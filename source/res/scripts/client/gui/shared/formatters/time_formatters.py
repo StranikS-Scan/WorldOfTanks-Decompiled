@@ -12,22 +12,10 @@ def defaultFormatter(key, countType, count, ctx=None):
 
 
 def formatDate(dateFormat, timestamp):
-    """
-    @param dateFormat: can be string of format or localization key
-    @param timestamp: timestamp
-    @return: formated date as string
-    """
     return time.strftime(i18n.makeString(dateFormat), time_utils.getTimeStructInLocal(timestamp))
 
 
 def formatTime(timeLeft, divisor, timeStyle=None):
-    """
-    Time left function formatter, which return integral left periods
-    :param timeLeft: <int> time left in seconds
-    :param divisor: <int> time periods unit,
-    :param timeStyle: <function> str formatting function
-    :return: <str> formatted integral left periods
-    """
     formattedTime = str(int(math.ceil(float(timeLeft) / divisor)))
     if timeStyle:
         formattedTime = timeStyle(formattedTime)
@@ -35,11 +23,6 @@ def formatTime(timeLeft, divisor, timeStyle=None):
 
 
 def getTimeLeftInfo(timeLeft, timeStyle=None):
-    """
-    :param timeLeft:<int> time left in seconds
-    :param timeStyle:<function> str formatting function
-    :return: tuple(timeLocalizationKey<str>, formattedTime<str>)
-    """
     if timeLeft > 0 and timeLeft != float('inf'):
         if timeLeft > time_utils.ONE_DAY:
             return ('days', formatTime(timeLeft, time_utils.ONE_DAY, timeStyle))
@@ -47,14 +30,6 @@ def getTimeLeftInfo(timeLeft, timeStyle=None):
 
 
 def getTimeLeftStr(localization, timeLeft, timeStyle=None, ctx=None, formatter=None):
-    """
-    :param localization: <str> localization key
-    :param timeLeft: <int> time left in seconds
-    :param timeStyle: <function> txt formatter
-    :param ctx: <obj> localization context
-    :param formatter: <function> txt formatter
-    :return: <str> composed of time ceiled to closest HOUR or DAY and proper i18n string
-    """
     if ctx is None:
         ctx = {}
     if formatter is None:

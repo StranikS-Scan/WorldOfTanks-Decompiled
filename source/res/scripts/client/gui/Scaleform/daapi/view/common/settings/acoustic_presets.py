@@ -28,7 +28,6 @@ _PRESETS = {ACOUSTICS.TYPE_HEADPHONES: (PresetItem((ACOUSTICS.SPEAKER_ID_LEFT,),
                               PresetItem((ACOUSTICS.SPEAKER_ID_RIGHT,), 'multichanel_test_SR'))}
 
 class AcousticPresetsPlayer(object):
-    """Class to play sounds from specified speakers preset."""
 
     def __init__(self, view, items):
         super(AcousticPresetsPlayer, self).__init__()
@@ -42,7 +41,6 @@ class AcousticPresetsPlayer(object):
         return
 
     def clear(self):
-        """Clears data."""
         self.__clearCallback()
         self.__stopSound()
         self.__view = None
@@ -51,14 +49,12 @@ class AcousticPresetsPlayer(object):
         return
 
     def setupInitState(self):
-        """Selects firsts item that can be played at first."""
         self.__cursor = 0
         self.__view.setPauseEnabled(False)
         if self.__items:
             self.__view.setItemsSelected(self.__items[0].speakerIDs)
 
     def play(self):
-        """Plays sounds in order that is defined in specified speakers preset."""
         if self.__isPlaying:
             LOG_WARNING('Player is already running')
             return
@@ -68,7 +64,6 @@ class AcousticPresetsPlayer(object):
             self.__lockView()
 
     def pause(self):
-        """Set pause to play sounds."""
         if not self.__isPlaying:
             LOG_WARNING('Player is not running')
             return
@@ -78,7 +73,6 @@ class AcousticPresetsPlayer(object):
         self.__isPlaying = False
 
     def reset(self):
-        """Stops to play sounds and selects firsts item that can be played at first."""
         self.__clearCallback()
         self.__stopSound()
         self.__unlockView()
@@ -87,7 +81,6 @@ class AcousticPresetsPlayer(object):
         self.setupInitState()
 
     def click(self, speakerID):
-        """Play single sound for speaker that is selected by player."""
         if self.__isPlaying:
             LOG_WARNING('Player is already running', speakerID)
             return
@@ -173,11 +166,6 @@ class AcousticPresetsPlayer(object):
 
 
 def createPlayer(view, acousticType):
-    """Create AcousticPresetsPlayer by specified type of acoustic.
-    :param view: instance of view.
-    :param acousticType: string containing
-    :return: instance of AcousticPresetsPlayer or None.
-    """
     if acousticType in _PRESETS:
         return AcousticPresetsPlayer(view, _PRESETS[acousticType])
     else:

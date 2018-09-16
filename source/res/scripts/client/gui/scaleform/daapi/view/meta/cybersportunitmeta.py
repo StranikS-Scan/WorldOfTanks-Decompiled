@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CyberSportUnitMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyRoomView import BaseRallyRoomView
 
 class CyberSportUnitMeta(BaseRallyRoomView):
@@ -27,9 +23,6 @@ class CyberSportUnitMeta(BaseRallyRoomView):
         self._printOverrideError('lockSlotRequest')
 
     def as_updateSlotSettingsS(self, value):
-        """
-        :param value: Represented by Array (AS)
-        """
         return self.flashObject.as_updateSlotSettings(value) if self._isDAAPIInited() else None
 
     def as_closeSlotS(self, slotIdx, cost, slotsLabel):
@@ -39,9 +32,6 @@ class CyberSportUnitMeta(BaseRallyRoomView):
         return self.flashObject.as_openSlot(slotIdx, canBeTaken, slotsLabel, compatibleVehiclesCount) if self._isDAAPIInited() else None
 
     def as_lockUnitS(self, isLocked, slotsLabel):
-        """
-        :param slotsLabel: Represented by Array (AS)
-        """
         return self.flashObject.as_lockUnit(isLocked, slotsLabel) if self._isDAAPIInited() else None
 
     def as_setOpenedS(self, isOpened, statusLabel):

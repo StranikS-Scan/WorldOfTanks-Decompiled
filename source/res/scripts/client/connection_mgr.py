@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/connection_mgr.py
 import hashlib
+import json
 import ResMgr
 import BigWorld
 import constants
-import json
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_NOTE
 from shared_utils import nextTick
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL
-from helpers import getClientLanguage
+from helpers import getClientLanguage, uniprof
 from account_shared import isValidClientVersion
 from account_helpers import pwd_token
 from skeletons.connection_mgr import IConnectionManager
@@ -18,13 +18,13 @@ _MIN_RECONNECTION_TIMEOUT = 5
 _RECONNECTION_TIMEOUT_INCREMENT = 5
 _MAX_RECONNECTION_TIMEOUT = 20
 
-class CONNECTION_METHOD:
+class CONNECTION_METHOD(object):
     BASIC = 'basic'
     TOKEN = 'token'
     TOKEN2 = 'token2'
 
 
-class LOGIN_STATUS:
+class LOGIN_STATUS(object):
     NOT_SET = 'NOT_SET'
     LOGGED_ON = 'LOGGED_ON'
     LOGGED_ON_OFFLINE = 'LOGGED_ON_OFFLINE'
@@ -104,6 +104,7 @@ class ConnectionManager(IConnectionManager):
             self.__retryConnectionCallbackID = None
         return
 
+    @uniprof.regionDecorator(label='offline.connect', scope='enter')
     def __connect(self):
         self.__retryConnectionCallbackID = None
         if constants.IS_DEVELOPMENT:
@@ -121,6 +122,7 @@ class ConnectionManager(IConnectionManager):
 
         return
 
+    @uniprof.regionDecorator(label='offline.connect', scope='exit')
     def __serverResponseHandler(self, stage, status, responseDataJSON):
         if constants.IS_DEVELOPMENT:
             LOG_DEBUG('Received server response with stage: {0}, status: {1}, responseData: {2}'.format(stage, status, responseDataJSON))
@@ -142,6 +144,7 @@ class ConnectionManager(IConnectionManager):
                 status_ = self.__connectionStatus
                 if responseData.get('errorMessage', '') == _INVALID_PASSWORD_TOKEN2_EXPIRED:
                     status_ = LOGIN_STATUS.SESSION_END
+                    BigWorld.WGC_onToken2Expired()
                 self.onRejected(status_, responseData)
             if status == LOGIN_STATUS.LOGIN_REJECTED_RATE_LIMITED:
                 self.__reconnect()

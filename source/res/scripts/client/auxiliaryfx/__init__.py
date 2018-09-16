@@ -5,7 +5,7 @@ from AuxiliaryFx.Roccat import RoccatFxManager
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
 
-class IAuxiliaryFxManager:
+class IAuxiliaryFxManager(object):
 
     def isEnabled(self):
         return False
@@ -19,7 +19,7 @@ class IAuxiliaryFxManager:
 
 g_instance = None
 
-class AuxiliaryFxManager:
+class AuxiliaryFxManager(object):
 
     def __init__(self):
         self.__fxManagers = [(RoccatFxManager.RoccatFxManager(), RoccatFxManager.RoccatVehicleFx)]
@@ -61,7 +61,7 @@ from messenger.proto.events import g_messengerEvents
 from messenger.m_constants import PROTO_TYPE
 from messenger.ext.player_helpers import isCurrentPlayer
 
-class _ChatActionsHandler:
+class _ChatActionsHandler(object):
     connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):

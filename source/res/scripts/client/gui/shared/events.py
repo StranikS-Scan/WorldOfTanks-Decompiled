@@ -51,6 +51,8 @@ class GameEvent(HasCtxEvent):
     NEXT_PLAYERS_PANEL_MODE = 'game/nextPlayersPanelMode'
     PLAYING_TIME_ON_ARENA = 'game/playingTimeOnArena'
     CHANGE_APP_RESOLUTION = 'game/changeAppResolution'
+    SHOW_EXTERNAL_COMPONENTS = 'game/showExternalComponents'
+    HIDE_EXTERNAL_COMPONENTS = 'game/hideExternalComponents'
     BATTLE_LOADING = 'game/battleLoading'
 
 
@@ -113,17 +115,8 @@ class _ViewEvent(HasCtxEvent):
 
 
 class DirectLoadViewEvent(_ViewEvent):
-    """
-    Event to load, initialize and show a view by the given params. Alternative to LoadViewEvent.
-    """
 
     def __init__(self, loadParams, *args, **kwargs):
-        """
-        Ctr.
-        :param loadParams: load params, see ViewLoadParams
-        :param args: args to be passed to view constructor
-        :param kwargs: kwargs to be passed to view constructor
-        """
         super(DirectLoadViewEvent, self).__init__(ViewEventType.LOAD_VIEW, loadParams.viewKey.alias, loadParams.viewKey.name)
         self.loadParams = loadParams
         self.args = args
@@ -131,51 +124,22 @@ class DirectLoadViewEvent(_ViewEvent):
 
 
 class LoadViewsChainEvent(_ViewEvent):
-    """
-    Event to load, initialize and show a view by the given params. Alternative to LoadViewEvent.
-    """
 
     def __init__(self, viewLoadEvents):
-        """
-        Ctr.
-        :param viewLoadEvents: a list of DirectLoadViewEvent instances.
-        """
         super(LoadViewsChainEvent, self).__init__(ViewEventType.LOAD_VIEWS_CHAIN, None, None)
         self.viewLoadEvents = viewLoadEvents
         return
 
 
 class PreLoadViewEvent(_ViewEvent):
-    """
-    Event to load view in memory without showing it to the user. Be aware that pre-loaded view is not coupled
-    with existing views, container and scopes and should be destroyed via DestroyViewEvent if it is not been
-    showed for the user.
-    To show pre-loaded view later use LoadViewEvent or DirectLoadViewEvent. If pre-loaded view has been showed
-    for the user via these events, there is no need to destroy it manually (you should not do that!), the
-    containers manager takes care of that.
-    """
 
     def __init__(self, alias, name=None, ctx=None):
-        """
-        Ctr.
-        :param alias: string, alias of the view to be destroyed
-        :param name: string, name of the view to be destroyed (can be None, see class description above)
-        """
         super(PreLoadViewEvent, self).__init__(ViewEventType.PRELOAD_VIEW, alias, name, ctx)
 
 
 class DestroyViewEvent(_ViewEvent):
-    """
-    Event to destroy a view by its alias and name. To destroy a particular view it is required to specify
-    both alias and name. To destroy several view with the same alias (like awards windows) name should be set to None.
-    """
 
     def __init__(self, alias, name=None):
-        """
-        Ctr.
-        :param alias: string, alias of the view to be destroyed
-        :param name: string, name of the view to be destroyed (can be None, see class description above)
-        """
         super(DestroyViewEvent, self).__init__(ViewEventType.DESTROY_VIEW, alias, name)
 
 
@@ -202,7 +166,9 @@ class ShowDialogEvent(SharedEvent):
     SHOW_DESERTER_DLG = 'showDeserterDialog'
     SHOW_EXECUTION_CHOOSER_DIALOG = 'showExecutionChooserDialog'
     SHOW_USE_AWARD_SHEET_DIALOG = 'useAwardSheetDialog'
-    SHOW_CONFIRM_CUSTOMIZATION_ITEM_DIALOG = 'showConfirmCustomizationItemDialog'
+    SHOW_CONFIRM_C11N_BUY_DIALOG = 'showConfirmC11nBuyDialog'
+    SHOW_CONFIRM_C11N_SELL_DIALOG = 'showConfirmC11nSellDialog'
+    SHOW_GAMMA_DIALOG = 'showGammaDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(meta.getEventType())
@@ -334,11 +300,6 @@ class FightButtonEvent(LobbySimpleEvent):
     FIGHT_BUTTON_UPDATE = 'updateFightButton'
 
 
-class FaderEvent(LobbySimpleEvent):
-    FADE_IN = 'fadeIn'
-    FADE_OUT = 'fadeOut'
-
-
 class SkillDropEvent(SharedEvent):
     SKILL_DROPPED_SUCCESSFULLY = 'skillDroppedSuccess'
 
@@ -361,7 +322,7 @@ class CoolDownEvent(SharedEvent):
     BW_CHAT2 = 'bwChat2CoolDown'
     XMPP = 'xmppCoolDown'
     BATTLE = 'battleCoolDown'
-    CLAN = 'clan'
+    WGCG = 'wgcg'
     STRONGHOLD = 'stronghold'
 
     def __init__(self, eventType=None, requestID=0, coolDown=5.0):
@@ -377,8 +338,13 @@ class TutorialEvent(SharedEvent):
     ON_COMPONENT_FOUND = 'onComponentFound'
     ON_COMPONENT_LOST = 'onComponentLost'
     ON_TRIGGER_ACTIVATED = 'onTriggerActivated'
+    ON_ANIMATION_COMPLETE = 'onAnimationComplete'
     SIMPLE_WINDOW_CLOSED = 'simpleWindowClosed'
     SIMPLE_WINDOW_PROCESSED = 'simpleWindowProcessed'
+    OVERRIDE_HANGAR_MENU_BUTTONS = 'overrideHangarMenuButtons'
+    OVERRIDE_HEADER_MENU_BUTTONS = 'overrideHeaderMenuButtons'
+    SET_HANGAR_HEADER_ENABLED = 'setHangarHeaderEnabled'
+    OVERRIDE_BATTLE_SELECTOR_HINT = 'overrideBattleSelectorHint'
 
     def __init__(self, eventType, settingsID='', targetID='', reloadIfRun=False, initialChapter=None, restoreIfRun=False, isStopForced=False, isAfterBattle=False):
         super(TutorialEvent, self).__init__(eventType)
@@ -405,7 +371,6 @@ class BootcampEvent(SharedEvent):
     HINT_CLOSE = 'HintClose'
     SHOW_SECONDARY_HINT = 'ShowSecondaryHint'
     HIDE_SECONDARY_HINT = 'HideSecondaryHint'
-    SET_VISIBLE_ELEMENTS = 'SetVisibleElements'
     SHOW_NEW_ELEMENTS = 'showNewElements'
     ADD_HIGHLIGHT = 'ShowHighlight'
     REMOVE_HIGHLIGHT = 'RemoveHighlight'
@@ -521,8 +486,6 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_PROMO = 'globalMapPromo'
     PREM_SHOP = 'premShopURL'
     TOKEN_SHOP = 'tokenShopUrl'
-    NY18_SHOP = 'ny18ShopUrl'
-    NY18_BUY_BOX = 'ny18BoxBaseURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -590,7 +553,6 @@ class VehicleBuyEvent(HasCtxEvent):
     VEHICLE_SELECTED = 'vehicleBuyEvent/vehicleSelected'
 
 
-class NewYearEvent(HasCtxEvent):
-    CLOSE_LEVEL_UP_VIEW = 'newYear/closeLevelUpView'
-    ON_PLACE_GROUND_LIGHTS = 'newYear/onPlaceGroundLights'
-    ON_REMOVE_GROUND_LIGHTS = 'newYear/onRemoveGroundLights'
+class HangarVehicleEvent(HasCtxEvent):
+    ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
+    ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'

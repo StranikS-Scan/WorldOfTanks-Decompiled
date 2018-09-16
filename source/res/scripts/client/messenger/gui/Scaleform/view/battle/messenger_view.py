@@ -67,22 +67,6 @@ def _makeSettingsVO(arenaVisitor):
 
 
 def _makeReceiverVO(clientID, settings, isChatEnabled):
-    """
-    Makes receiver VO.
-    
-    :param clientID: number containing unique ID that is generated on client.
-    :param settings: settings of receiver or None.
-    :param isChatEnabled: is chat with given receiver enabled.
-    :return: tuple(vo, reset) where are:
-        vo is dictionary containing:
-            clientID - client indentificator.
-            labelStr - string containing i18n name of receiver.
-            orderIndex - number containing order to show receiver in the view.
-            isByDefault - is receiver selected (boolean).
-            inputColor - string containing color of input text for given
-                receiver.
-            isEnabled - is receiver enabled (boolean).
-    """
     if settings is not None:
         name = settings.name
         getter = g_settings.getColorScheme
@@ -150,11 +134,6 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         return BATTLE_CTRL_ID.GUI
 
     def startControl(self, battleCtx, arenaVisitor):
-        """Starts to controlling data of arena.
-        
-        :param battleCtx: proxy to battle context.
-        :param arenaVisitor: proxy to arena visitor.
-        """
         self._battleCtx = battleCtx
         self._arenaVisitor = arenaVisitor
 
@@ -164,12 +143,6 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         return
 
     def getToxicStatus(self, accountDbID):
-        """
-        Invoked by the view at runtime to get VO of buttons panel.
-        
-        :param accountDbID: Message ID that corresponds to player database ID.
-        :return: dict
-        """
         vo = None
         accountDbID = long(accountDbID)
         if 0 < accountDbID != self._accDbID:
@@ -182,14 +155,6 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self.as_updateToxicPanelS(accountDbID, self.__buildToxicStateVO(accountDbID))
 
     def onToxicButtonClicked(self, accountDbID, actionID):
-        """
-        Callback on user's action. Note that the same callback is invoked for all 'toxic' buttons.
-        To determine which button is pressed, action ID is used. Action ID corresponds to the
-        following constants from BATTLE_MESSAGES_CONSTS enum.
-        
-        :param accountDbID: Message ID that corresponds to player database ID.
-        :param actionID: Action ID.
-        """
         accDbID = long(accountDbID)
         if accDbID > 0:
             needUpdateUI = True
@@ -205,38 +170,20 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
                 self._invalidateToxicPanel(accDbID)
 
     def onToxicPanelClosed(self, messageID):
-        """
-        Callback on toxic panel close event.
-        
-        :param messageID: Message ID that corresponds to player database ID.
-        """
         if 0 < self._toxicPanelMsgID == messageID:
             self._toxicPanelMsgID = 0
 
     def invalidateUsersTags(self):
-        """
-        New list of chat rosters has been received.
-        """
         self._invalidateToxicPanel(self._toxicPanelMsgID)
         for msgID in self._addedMsgIDs:
             self._invalidatePlayerMessages(msgID)
 
     def invalidateUserTags(self, user):
-        """
-        Contact's chat roster has been changed.
-        
-        :param user: instance of UserEntity.
-        """
         accDbID = user.getID()
         self._invalidatePlayerMessages(accDbID)
         self._invalidateToxicPanel(accDbID)
 
     def invalidateInvitationsStatuses(self, vos, arenaDP):
-        """
-        An invitation has been received.
-        :param vos: invitations represented by list of VehicleArenaInfoVO objects.
-        :param arenaDP: Reference to ArenaDataProvider
-        """
         if self._toxicPanelMsgID > 0:
             for vInfo in vos:
                 if vInfo.player.accountDBID == self._toxicPanelMsgID:
@@ -254,12 +201,6 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         return True
 
     def handleCTRLPressed(self, _, isDown):
-        """
-        Handler of Ctrl button press event.
-        
-        :param _: True if the event associated with the left Ctrl btn, False - if the right Ctrl.
-        :param isDown: True if the Ctrl btn is down, False if it is up.
-        """
         if self.app.isModalViewShown() or self.app.hasGuiControlModeConsumers(*_CONSUMERS_LOCK_ENTER):
             return False
         self.as_toggleCtrlPressFlagS(isDown)
@@ -375,9 +316,6 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
             self._addedMsgIDs.add(accountDBID)
 
     def isToxicPanelAvailable(self):
-        """
-        Returns True if the toxic panel is available, otherwise returns false.
-        """
         return not BattleReplay.g_replayCtrl.isPlaying and self._arenaVisitor is not None and not self._arenaVisitor.gui.isTrainingBattle()
 
     def _populate(self):
@@ -418,11 +356,6 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         return
 
     def _invalidateToxicPanel(self, msgID):
-        """
-        Updates toxic panel if it is visible for the given message.
-        
-        :param msgID: Message ID that corresponds to player database ID.
-        """
         if 0 < self._toxicPanelMsgID == msgID:
             self.updateToxicStatus(msgID)
 
@@ -441,24 +374,12 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self._invalidateToxicPanel(self._toxicPanelMsgID)
 
     def __buildToxicStateVO(self, accountDbID):
-        """
-        Builds vo related to the toxic panel.
-        
-        :param accountDbID: long representing account's database ID
-        :return: dict
-        """
         contact = self.usersStorage.getUser(accountDbID)
         return {'messageID': accountDbID,
          'vehicleID': self._battleCtx.getVehIDByAccDBID(accountDbID),
          'blackList': self.__buildBlackListVO(contact)}
 
     def __buildBlackListVO(self, contact):
-        """
-        Builds vo related to the Black List button.
-        
-        :param contact: an instance of UserEntity
-        :return: dict
-        """
         isEnabled = not self._ignoreActionCooldown.isInCooldown()
         if contact:
             if contact.isTemporaryIgnored():
@@ -537,8 +458,6 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
             self.app.leaveGuiControlMode('chat')
 
     def __restoreLastReceiverInBattle(self):
-        """ WOTD-71200 Restore last receiver in battle
-        """
         if g_settings.userPrefs.storeReceiverInBattle:
             for idx, receiver in enumerate(self.__receivers):
                 if g_settings.battle.lastReceiver == receiver[1].name:
@@ -547,7 +466,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
                     break
 
     def __findReceiverIndexByModifiers(self):
-        for idx, (clientID, settings, _) in enumerate(self.__receivers):
+        for idx, (_, settings, _) in enumerate(self.__receivers):
             modifiers = settings.bwModifiers
             for modifier in modifiers:
                 if BigWorld.isKeyDown(modifier):
@@ -559,12 +478,6 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self.__invalidateReceiverIndex()
 
     def __invalidateReceiverIndex(self):
-        """
-        Try to find an available receiver if the current one is not available and update
-        current receiver index.
-        
-        :return: True if current receiver index has been changed; otherwise - False.
-        """
         return self.__findNextReceiverIndex() if not self.__isReceiverAvailable(self.__receiverIndex) else False
 
     def __findNextReceiverIndex(self):

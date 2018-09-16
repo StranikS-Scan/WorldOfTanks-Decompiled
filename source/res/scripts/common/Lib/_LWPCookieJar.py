@@ -1,26 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/_LWPCookieJar.py
-"""Load / save to libwww-perl (LWP) format files.
-
-Actually, the format is slightly extended from that used by LWP's
-(libwww-perl's) HTTP::Cookies, to avoid losing some RFC 2965 information
-not recorded by LWP.
-
-It uses the version string "2.0", though really there isn't an LWP Cookies
-2.0 format.  This indicates that there is extra information in here
-(domain_dot and # port_spec) while still being compatible with
-libwww-perl, I hope.
-
-"""
 import time, re
 from cookielib import _warn_unhandled_exception, FileCookieJar, LoadError, Cookie, MISSING_FILENAME_TEXT, join_header_words, split_header_words, iso2time, time2isoz
 
 def lwp_cookie_str(cookie):
-    """Return string representation of Cookie in an the LWP cookie file format.
-    
-    Actually, the format is extended a bit -- see module docstring.
-    
-    """
     h = [(cookie.name, cookie.value), ('path', cookie.path), ('domain', cookie.domain)]
     if cookie.port is not None:
         h.append(('port', cookie.port))
@@ -50,24 +33,8 @@ def lwp_cookie_str(cookie):
 
 
 class LWPCookieJar(FileCookieJar):
-    """
-    The LWPCookieJar saves a sequence of "Set-Cookie3" lines.
-    "Set-Cookie3" is the format used by the libwww-perl libary, not known
-    to be compatible with any browser, but which is easy to read and
-    doesn't lose information about RFC 2965 cookies.
-    
-    Additional methods
-    
-    as_lwp_str(ignore_discard=True, ignore_expired=True)
-    
-    """
 
     def as_lwp_str(self, ignore_discard=True, ignore_expires=True):
-        r"""Return cookies as a string of "\n"-separated "Set-Cookie3" headers.
-        
-        ignore_discard and ignore_expires: see docstring for FileCookieJar.save
-        
-        """
         now = time.time()
         r = []
         for cookie in self:

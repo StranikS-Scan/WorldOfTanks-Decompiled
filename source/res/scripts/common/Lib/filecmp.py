@@ -1,15 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/filecmp.py
-"""Utilities for comparing files and directories.
-
-Classes:
-    dircmp
-
-Functions:
-    cmp(f1, f2, shallow=1) -> int
-    cmpfiles(a, b, common) -> ([], [], [])
-
-"""
 import os
 import stat
 from itertools import ifilter, ifilterfalse, imap, izip
@@ -18,25 +8,6 @@ _cache = {}
 BUFSIZE = 8192
 
 def cmp(f1, f2, shallow=1):
-    """Compare two files.
-    
-    Arguments:
-    
-    f1 -- First file name
-    
-    f2 -- Second file name
-    
-    shallow -- Just check stat signature (do not read the files).
-               defaults to 1.
-    
-    Return value:
-    
-    True if the files are the same, False otherwise.
-    
-    This function uses a cache for past comparisons and the results,
-    with a cache invalidation mechanism relying on stale signatures.
-    
-    """
     s1 = _sig(os.stat(f1))
     s2 = _sig(os.stat(f2))
     if s1[0] != stat.S_IFREG or s2[0] != stat.S_IFREG:
@@ -76,38 +47,6 @@ def _do_cmp(f1, f2):
 
 
 class dircmp:
-    """A class that manages the comparison of 2 directories.
-    
-    dircmp(a,b,ignore=None,hide=None)
-      A and B are directories.
-      IGNORE is a list of names to ignore,
-        defaults to ['RCS', 'CVS', 'tags'].
-      HIDE is a list of names to hide,
-        defaults to [os.curdir, os.pardir].
-    
-    High level usage:
-      x = dircmp(dir1, dir2)
-      x.report() -> prints a report on the differences between dir1 and dir2
-       or
-      x.report_partial_closure() -> prints report on differences between dir1
-            and dir2, and reports on common immediate subdirectories.
-      x.report_full_closure() -> like report_partial_closure,
-            but fully recursive.
-    
-    Attributes:
-     left_list, right_list: The files in dir1 and dir2,
-        filtered by hide and ignore.
-     common: a list of names in both dir1 and dir2.
-     left_only, right_only: names only in dir1, dir2.
-     common_dirs: subdirectories in both dir1 and dir2.
-     common_files: files in both dir1 and dir2.
-     common_funny: names in both dir1 and dir2 where the type differs between
-        dir1 and dir2, or the name is not stat-able.
-     same_files: list of identical files.
-     diff_files: list of filenames which differ.
-     funny_files: list of files which could not be compared.
-     subdirs: a dictionary of dircmp objects, keyed by names in common_dirs.
-     """
 
     def __init__(self, a, b, ignore=None, hide=None):
         self.left = a
@@ -228,18 +167,6 @@ class dircmp:
 
 
 def cmpfiles(a, b, common, shallow=1):
-    """Compare common files in two directories.
-    
-    a, b -- directory names
-    common -- list of file names found in both directories
-    shallow -- if true, do comparison based solely on stat() information
-    
-    Returns a tuple of three lists:
-      files that compare equal
-      files that are different
-      filenames that aren't regular files.
-    
-    """
     res = ([], [], [])
     for x in common:
         ax = os.path.join(a, x)

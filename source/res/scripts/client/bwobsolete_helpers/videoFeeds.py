@@ -209,7 +209,6 @@ class VideoFeed(PyGUIBase):
         if self.isActive:
             if camera:
                 self.camera = camera
-            assert self.camera
             s_videoFeeds.add(self)
         else:
             s_videoFeeds.rem(self)

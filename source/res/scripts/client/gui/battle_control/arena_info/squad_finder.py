@@ -98,7 +98,7 @@ class TeamScopeNumberingFinder(_SquadFinder):
         squadRange = settings.SQUAD_RANGE_TO_SHOW
         for teamID, team in self._prbStats.iteritems():
             squadIndices = self._teamsSquadIndices[teamID]
-            squads = filter(lambda item: len(item[1]) in squadRange, team.iteritems())
+            squads = [ item for item in team.iteritems() if len(item[1]) in squadRange ]
             if not squads:
                 continue
             squads = sorted(squads, key=lambda item: item[0])
@@ -114,7 +114,7 @@ class TeamScopeNumberingFinder(_SquadFinder):
         squadRange = settings.SQUAD_RANGE_TO_SHOW
         for teamID, team in self._prbStats.iteritems():
             squadIndices = self._teamsSquadIndices[teamID]
-            squads = filter(lambda item: len(item[1]) in squadRange, team.iteritems())
+            squads = [ item for item in team.iteritems() if len(item[1]) in squadRange ]
             if not squads:
                 continue
             squads = sorted(squads, key=lambda item: item[0])
@@ -144,7 +144,7 @@ class ContinuousNumberingFinder(_SquadFinder):
 
     def findSquads(self):
         squadRange = settings.SQUAD_RANGE_TO_SHOW
-        for teamID, team in self._prbStats.iteritems():
+        for _, team in self._prbStats.iteritems():
             for prebattleID, vehiclesIDs in team.iteritems():
                 if not vehiclesIDs or len(vehiclesIDs) not in squadRange:
                     continue
@@ -163,9 +163,9 @@ class ContinuousNumberingFinder(_SquadFinder):
 def createSquadFinder(arenaVisitor):
     teams = arenaVisitor.type.getTeamsOnArenaRange()
     guiVisitor = arenaVisitor.gui
-    if guiVisitor.isRandomBattle() or guiVisitor.isEventBattle() or guiVisitor.isFalloutClassic():
+    if guiVisitor.isRandomBattle() or guiVisitor.isEventBattle():
         finder = TeamScopeNumberingFinder(teams)
-    elif guiVisitor.isFalloutMultiTeam():
+    elif guiVisitor.isMultiTeam():
         finder = ContinuousNumberingFinder(teams)
     else:
         finder = EmptySquadFinder()

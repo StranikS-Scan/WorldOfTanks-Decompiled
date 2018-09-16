@@ -86,8 +86,8 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
       <player>
-        <rayStart>	-0.984753 0.489051 -0.509361	</rayStart>
-        <rayEnd>	-0.584753 0.489051 -0.509361	</rayEnd>
+        <rayStart>	-0.984808 0.491161 -0.503436	</rayStart>
+        <rayEnd>	-0.584808 0.49116 -0.503436	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -100,11 +100,12 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
       <player>
-        <rayStart>	0.984753 0.489051 -0.509361	</rayStart>
-        <rayEnd>	0.584753 0.489051 -0.509361	</rayEnd>
+        <rayStart>	0.984808 0.491161 -0.503436	</rayStart>
+        <rayEnd>	0.584808 0.49116 -0.503436	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
       </player>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F21_Lorraine39_L_AM/Lorraine39_L_AM_HangarShadowMap.dds	</hangarShadowTexture>
@@ -617,7 +618,7 @@
       <tags>	cannotDetach gunCarriage	</tags>
       <level>	3	</level>
       <notInShop>	true	</notInShop>
-      <price>	120.0	</price>
+      <price>	120	</price>
       <armor>
         <armor_1>	9	</armor_1>
         <armor_2>	9	</armor_2>

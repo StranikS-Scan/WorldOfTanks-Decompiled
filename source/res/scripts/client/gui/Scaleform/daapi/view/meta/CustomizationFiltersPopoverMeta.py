@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CustomizationFiltersPopoverMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
 class CustomizationFiltersPopoverMeta(SmartPopOverView):
@@ -24,9 +20,6 @@ class CustomizationFiltersPopoverMeta(SmartPopOverView):
         self._printOverrideError('onFilterChange')
 
     def as_setDataS(self, data):
-        """
-        :param data: Represented by FiltersPopoverVO (AS)
-        """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_enableDefBtnS(self, value):

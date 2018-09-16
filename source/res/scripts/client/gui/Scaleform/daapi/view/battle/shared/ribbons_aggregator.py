@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_aggregator.py
+from collections import defaultdict
 import Event
 import BattleReplay
 from ids_generators import SequenceIDGenerator
 from debug_utils import LOG_UNEXPECTED
-from collections import defaultdict
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
@@ -15,11 +15,6 @@ class _Ribbon(object):
     __slots__ = ('_id',)
 
     def __init__(self, ribbonID):
-        """
-        Constructor. Creates a new ribbon from the given event feedback.
-        
-        :param ribbonID: Ribbon ID.
-        """
         super(_Ribbon, self).__init__()
         self._id = ribbonID
 
@@ -28,15 +23,9 @@ class _Ribbon(object):
         raise NotImplementedError
 
     def getType(self):
-        """
-        Returns efficiency type (see BATTLE_EFFICIENCY_TYPES)
-        """
         raise NotImplementedError
 
     def getID(self):
-        """
-        Returns ribbon's ID.
-        """
         return self._id
 
     def aggregate(self, ribbon):
@@ -49,10 +38,6 @@ class _Ribbon(object):
         pass
 
     def _canAggregate(self, ribbon):
-        """
-        Returns True if ribbon can aggregated data from the given one. False - otherwise.
-        :param ribbon: An instance of _Ribbon derived class
-        """
         return self.getType() == ribbon.getType()
 
 
@@ -71,9 +56,6 @@ class _BasePointsRibbon(_Ribbon):
         raise NotImplementedError
 
     def getPoints(self):
-        """
-        Returns base points represented by int.
-        """
         return self._points
 
     def _aggregate(self, ribbon):
@@ -134,13 +116,6 @@ class _SingleVehicleRibbon(_Ribbon):
 
     @classmethod
     def _extractExtraValue(cls, event):
-        """
-        Extracts extra data from the given event. Note that the type of returned value
-        should support operation +. Otherwise required to override _aggregate method.
-        
-        :param event:
-        :return: An object supporting + operation.
-        """
         raise NotImplementedError
 
     def _canAggregate(self, ribbon):
@@ -423,7 +398,6 @@ class ATTACK_REASON(object):
     WORLD_COLLISION = 'world_collision'
     DEATH_ZONE = 'death_zone'
     DROWNING = 'drowning'
-    GAS_ATTACK = 'gas_attack'
     OVERTURN = 'overturn'
 
 
@@ -525,48 +499,25 @@ class RibbonsAggregator(object):
         return
 
     def getRibbon(self, ribbonID):
-        """
-        Gets ribbon by the given ID.
-        :param ribbonID: Ribbon ID.
-        :return: ribbon or None.
-        """
         return self.__cache.get(ribbonID, None)
 
     def resetRibbonData(self, ribbonID):
-        """
-        Reset ribbon's data by the given ID.
-        :param ribbonID: ribbon ID
-        """
         ribbon = self.__cache.pop(ribbonID)
         if ribbon is not None and ribbon.getType() in _ACCUMULATED_RIBBON_TYPES:
             self.__accumulatedRibbons.add(ribbon)
         return
 
     def clearRibbonsData(self):
-        """
-        Clears all cached ribbons.
-        """
         self.__cache.clear()
         self.__accumulatedRibbons.clear()
 
     def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
-        """
-        Callback on switching to the postmortem mode  (see VehicleStateController).
-        """
         self.__isInPostmortemMode = True
 
     def __onRespawnBaseMoving(self):
-        """
-        Callback on switching to alive state (see VehicleStateController).
-        """
         self.__isInPostmortemMode = False
 
     def _onPlayerFeedbackReceived(self, events):
-        """
-        Callback on player feedback event (see BattleFeedbackAdaptor).
-        
-        :param events: list of PlayerFeedbackEvent
-        """
 
         def _ribbonsGenerator(events):
             for e in events:
@@ -579,16 +530,6 @@ class RibbonsAggregator(object):
         self._aggregateRibbons(_ribbonsGenerator(events))
 
     def _aggregateRibbons(self, ribbons):
-        """
-        Aggregates ribbons according to some rules and converts them to appropriate battle
-        efficiency events (see _FEEDBACK_EVENT_TO_RIBBON_CLS). Puts ribbons to the inner cache
-        and triggers appropriate RibbonsAggregator events.
-        
-        Note that knowledge about aggregation is kept in each ribbon type/class (see canAggregate
-        method).
-        
-        :param ribbons: list of Ribbon derived instances
-        """
         aggregatedRibbons = {}
         for ribbon in ribbons:
             if self.__isSuspended and ribbon.getType() not in _ACCUMULATED_RIBBON_TYPES:
@@ -661,27 +602,8 @@ class RibbonsAggregator(object):
         return ribbons
 
     def __getSortedList(self, ribbons):
-        """
-        Sort events according to the following rules:
-        1. Enemy kill ribbon should appear at the end of the list.
-        2. Enemy detection ribbon should appear at the top of the list.
-        
-        NOTE: according to aggregation rules, the output ribbons don't contain duplicates of
-        ribbons with the same type). If there are a few ribbons with the same type in the
-        server response, use the last one.
-        
-        :param ribbons: dict of ribbons to be resorted according to rules described above
-                        and converted to the list without duplicates.
-        
-        :return: Sorted ribbons list.
-        """
 
         def _sortKey(ribbon):
-            """
-            Routine to be used for sorting ribbons by time. Ribbon ID is used for comparing because
-            it grows with time.
-            :param ribbon: _Ribbon derived instance.
-            """
             return ribbon.getID()
 
         sortedRibons = []

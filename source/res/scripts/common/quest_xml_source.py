@@ -28,7 +28,7 @@ class XMLNode(object):
     __slots__ = ('name', 'value', 'questClientConditions', 'relatedGroup', 'info', 'bonus', 'bonusDelayed', 'groupContent')
 
     def __init__(self, name=''):
-        self.name = name
+        self.name = intern(name)
         self.value = []
         self.questClientConditions = []
         self.relatedGroup = ''
@@ -423,8 +423,7 @@ class Source(object):
          'vehicle',
          'dossier',
          'tankmen',
-         'customizations',
-         'ny18Toy'}
+         'customizations'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         return bonusTypes
@@ -492,7 +491,7 @@ class Source(object):
                 continue
             subNode = XMLNode(name)
             if name in ('greater', 'equal', 'less', 'lessOrEqual', 'greaterOrEqual'):
-                subNode.relatedGroup = 'operator'
+                subNode.relatedGroup = intern('operator')
             conditionReaders[name](conditionReaders, sub, subNode)
             node.addChild(subNode)
 

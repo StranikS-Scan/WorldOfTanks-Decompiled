@@ -25,8 +25,3 @@ def initDevBonusTypes():
 def __validateDevBonusTypeDefinitions():
     names = [ definition.name for definition in _DEV_BONUS_TYPE_DEFS ]
     bonusTypes = [ definition.bonusType for definition in _DEV_BONUS_TYPE_DEFS ]
-    assert all([ count == 1 for count in Counter(names).itervalues() ]), 'Duplicate names'
-    assert all([ count == 1 for count in Counter(bonusTypes).itervalues() ]), 'Dev game mode duplicate bonusTypes'
-    assert all([ -128 <= bonusType < 128 for bonusType in bonusTypes ]), 'Dev game mode bonusType must be INT8'
-    assert all([ bonusType not in ARENA_BONUS_TYPE.RANGE for bonusType in bonusTypes ]), 'Dev game mode bonusType clash with existing bonus type'
-    assert all([ not hasattr(ARENA_BONUS_TYPE, name) and not hasattr(ARENA_BONUS_TYPE_CAPS, name) for name in names ]), 'Dev game mode name clash with existing bonus type (bonus type cap)'

@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/wgm_balance_info_requester.py
+from functools import partial
 import BigWorld
 import AccountCommands
-from functools import partial
 from adisp import async, process
 from gui.shared.utils.requesters.common import RequestProcessor
 from gui.shared.money import Currency
@@ -23,9 +23,6 @@ CREDITS_PURCHASED = _TOKEN_CREDITS + _ACTION_PURCHASED
 CREDITS_EARNED = _TOKEN_CREDITS + _ACTION_EARNED
 
 class WGMBalanceInfoRequester(object):
-    """
-    Requester for WGM Balance Info.
-    """
 
     def __init__(self):
         self.__request = None

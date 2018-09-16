@@ -19,15 +19,9 @@ class StrongholdPermissions(UnitPermissions):
         self._isFreezed = isFreezed
 
     def isNotFreezed(self):
-        """
-        isFreezed means that WGSH service is not ready yet to process any actions with Unit
-        """
         return not self._isFreezed
 
     def isInIdle(self):
-        """
-        isInIdle means that UNIT is in one of MODAL states (on arena, on queue, in search)
-        """
         return self._isInIdle
 
     def isClanLead(self):

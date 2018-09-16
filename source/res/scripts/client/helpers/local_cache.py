@@ -62,7 +62,7 @@ def _open_file(fileName, mode='r'):
         try:
             try:
                 yield (fd, None)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
         finally:
@@ -181,6 +181,12 @@ class _AsyncIO(RedirectIO):
         t = Thread(target=_writeWorker, args=(self._uniqueID, self._redirect, dst))
         t.start()
 
+    def _doWrite(self, dst):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _doRead(self, src):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class PickleIO(RedirectIO):
 
@@ -243,13 +249,13 @@ def makeFileLocalCachePath(space, tags, fileFormat='.dat'):
     try:
         if not os.path.isdir(dirPath):
             os.makedirs(dirPath)
-    except:
+    except Exception:
         LOG_CURRENT_EXCEPTION()
         return ''
 
     tagsType = type(tags)
     if tagsType is types.TupleType:
-        fileName = ';'.join(map(lambda item: str(item), tags))
+        fileName = ';'.join(map(str, tags))
     elif tagsType in types.StringTypes:
         fileName = tags
     else:
@@ -264,11 +270,12 @@ def makeFileLocalCachePath(space, tags, fileFormat='.dat'):
 
 class FileLocalCache(object):
     __internal = {}
-    __slots__ = ('_io', 'onRead')
+    __slots__ = ('_io', '_ioEnabled', 'onRead')
 
     def __init__(self, space, tags, io=None, async=False):
         super(FileLocalCache, self).__init__()
         filePath = makeFileLocalCachePath(space, tags)
+        self._ioEnabled = True
         if io:
             self._io = _FileIO(filePath, io)
         else:
@@ -279,15 +286,18 @@ class FileLocalCache(object):
         self.onRead = Event.Event()
 
     def clear(self):
-        self._io.clear()
+        if self._ioEnabled:
+            self._io.clear()
         self.onRead.clear()
 
     def read(self):
-        self._onRead(self._io.read(None))
+        if self._ioEnabled:
+            self._onRead(self._io.read(None))
         return
 
     def write(self):
-        self._io.write(self._getCache())
+        if self._ioEnabled:
+            self._io.write(self._getCache())
 
     def _onRead(self, src):
         if src:
@@ -295,10 +305,10 @@ class FileLocalCache(object):
             BigWorld.callback(0, self.onRead)
 
     def _getCache(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _setCache(self, data):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class ShelfLocalCache(object):
@@ -331,6 +341,12 @@ class ShelfLocalCache(object):
     def write(self):
         self._io.write(None)
         return
+
+    def _doWrite(self, dst):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _doRead(self, src):
+        raise UserWarning('This method should not be reached in this context')
 
     def _onRead(self, src):
         if src is not None:

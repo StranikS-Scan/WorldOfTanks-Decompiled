@@ -15,9 +15,6 @@ def isSituationalBonus(bonusName):
 _SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope')
 
 def _removeCamouflageModifier(vehicle, bonusID):
-    """
-    remove camouflage from vehicle copy
-    """
     if bonusID == EXTRAS_CAMOUFLAGE:
         for season in SeasonType.SEASONS:
             outfit = vehicle.getOutfit(season)
@@ -28,9 +25,6 @@ def _removeCamouflageModifier(vehicle, bonusID):
 
 
 def _removeSkillModifier(vehicle, skillName):
-    """
-    set new crew in vehicle copy without selected skill
-    """
     vehicle.crew = vehicle.getCrewWithoutSkill(skillName)
     return vehicle
 
@@ -42,9 +36,6 @@ def _removeBattleBoosterModifier(vehicle, boosterName):
 
 
 def _removeOptionalDeviceModifier(vehicle, optDevName):
-    """
-    remove selected optional device from vehicle copy
-    """
     for slotIdx, optDev in enumerate(vehicle.optDevices):
         if optDev and optDev.name == optDevName:
             vehicle.descriptor.removeOptionalDevice(slotIdx)
@@ -54,9 +45,6 @@ def _removeOptionalDeviceModifier(vehicle, optDevName):
 
 
 def _removeEquipmentModifier(vehicle, eqName):
-    """
-    remove selected equipment device from vehicle copy
-    """
     for slotIdx, equipment in enumerate(vehicle.equipment.regularConsumables):
         if equipment and equipment.name == eqName:
             vehicle.equipment.regularConsumables[slotIdx] = None
@@ -101,9 +89,6 @@ class BonusExtractor(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicle, bonuses, paramName):
-        """
-        step by step remove bonus influence factors from vehicle
-        """
         self.__vehicle = self.itemsCache.items.getVehicleCopy(vehicle)
         self.__paramName = paramName
         self.__bonuses = _BonusSorter(self.__paramName).sort(bonuses)
@@ -115,10 +100,6 @@ class BonusExtractor(object):
             yield (bnsGroup, bnsId, self.extractBonus(bnsGroup, bnsId))
 
     def extractBonus(self, bonusGroup, bonusID):
-        """
-        Remove bonus influence factor by vehicle modification and save previous params,
-        return _ParameterInfo which contains parameters diffs
-        """
         oldValue = self.__currValue
         self.__vehicle = _VEHICLE_MODIFIERS[bonusGroup](self.__vehicle, bonusID)
         if bonusGroup == 'extra' and bonusID == EXTRAS_CAMOUFLAGE:
@@ -137,7 +118,4 @@ class _CustomizedVehicleParams(VehicleParams):
         super(_CustomizedVehicleParams, self).__init__(vehicle)
 
     def _getVehicleDescriptor(self, vehicle):
-        """
-        removeCamouflage mean that we dont need use customized vehicle descriptor with camouflages influence
-        """
         return vehicle.descriptor if self.__removeCamouflage else super(_CustomizedVehicleParams, self)._getVehicleDescriptor(vehicle)

@@ -11,7 +11,8 @@ class AcousticPopover(AcousticPopoverMeta):
 
     def __init__(self, ctx=None):
         super(AcousticPopover, self).__init__(ctx)
-        assert ctx is not None, 'Context is required'
+        if ctx is None:
+            raise UserWarning('Context is required')
         self.__acousticType = ctx.get('data', ACOUSTICS.TYPE_ACOUSTIC_20)
         self.__player = acoustic_presets.createPlayer(self, self.__acousticType)
         return

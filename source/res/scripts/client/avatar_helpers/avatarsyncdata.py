@@ -28,7 +28,8 @@ class AvatarSyncData(object):
             self.__subscribers.append(callback)
         return
 
-    def __onSyncResponse(self, syncID, resultID, ext={}):
+    def __onSyncResponse(self, syncID, resultID, ext=None):
+        ext = ext or {}
         self.__isSynchronized = True
         subscribers = self.__subscribers
         self.__subscribers = []

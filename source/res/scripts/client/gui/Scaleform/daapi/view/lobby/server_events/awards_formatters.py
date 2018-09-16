@@ -1,17 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/awards_formatters.py
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters
 from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer
-from helpers import dependency
-from skeletons.new_year import INewYearController
 SIMPLE_BONUSES_MAX_ITEMS = 5
 
 class OldStyleBonusFormatter(object):
-    """"
-    Bonus formatter for old UX quest bonuses representation's
-    Should be replaced on standard missions representations in future
-    """
 
     def __init__(self):
         self._result = []
@@ -104,9 +97,9 @@ class OldStyleAwardsPacker(AwardsPacker):
                 if formatter:
                     formatter.accumulateBonuses(b)
 
-        formatters = [self.__defaultFormatter]
-        formatters.extend(sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()))
-        for formatter in formatters:
+        fmts = [self.__defaultFormatter]
+        fmts.extend(sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()))
+        for formatter in fmts:
             formattedBonuses.extend(formatter.extractFormattedBonuses())
 
         return formattedBonuses

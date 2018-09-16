@@ -8,7 +8,7 @@ from ClientUnit import ClientUnit
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from UnitBase import UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_ROLE
-from constants import PREBATTLE_TYPE, REQUEST_COOLDOWN, VEHICLE_CLASS_INDICES
+from constants import REQUEST_COOLDOWN, VEHICLE_CLASS_INDICES
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
 from gui.prb_control import prb_getters, settings
@@ -20,7 +20,7 @@ from gui.prb_control.entities.base.entity import BasePrbEntity, BasePrbEntryPoin
 from gui.prb_control.entities.base.unit.actions_handler import UnitActionsHandler
 from gui.prb_control.entities.base.unit.actions_validator import UnitActionsValidator
 from gui.prb_control.entities.base.unit.cooldown import UnitCooldownManager
-from gui.prb_control.entities.base.unit.ctx import JoinUnitModeCtx, SetVehicleUnitCtx, SetVehiclesUnitCtx, SetReadyUnitCtx
+from gui.prb_control.entities.base.unit.ctx import JoinUnitModeCtx, SetVehicleUnitCtx, SetReadyUnitCtx
 from gui.prb_control.entities.base.unit.listener import IUnitListener, IUnitIntroListener
 from gui.prb_control.entities.base.unit.permissions import IUnitPermissions, UnitIntroPermissions, UnitPermissions
 from gui.prb_control.entities.base.unit.requester import UnitRequestProcessor
@@ -38,25 +38,11 @@ from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 
 class BaseUnitEntity(BasePrbEntity):
-    """
-    Base class for unit entity.
-    """
 
     def init(self, ctx=None):
-        """
-        Initializes unit entity with init context.
-        Args:
-            ctx: init request context
-        """
         return super(BaseUnitEntity, self).init()
 
     def fini(self, ctx=None, woEvents=False):
-        """
-        Finalizes unit entity with init context.
-        Args:
-            ctx: init request context
-            woEvents: without any events flag
-        """
         return super(BaseUnitEntity, self).fini()
 
     def getCtrlType(self):
@@ -66,193 +52,73 @@ class BaseUnitEntity(BasePrbEntity):
         return IUnitPermissions()
 
     def initEvents(self, listener):
-        """
-        Initializes event listeners
-        """
         pass
 
     def getUnit(self, unitMgrID=None, safe=False):
-        """
-        Getter for unit data by unit index in unit manager.
-        Args:
-            unitMgrID: unit manager ID or None.
-            safe: should it be safe getter
-        
-        Returns:
-            unit manager ID and client unit object
-        """
         return (0, None)
 
     def getExtra(self, unitMgrID=None):
-        """
-        Getter for unit extra data by unit index in unit manager.
-        Args:
-            unitMgrID: unit manager ID
-        """
         return None
 
     def getUnitFullData(self, unitMgrID=None):
-        """
-        Gets unit full data that required to gui.
-        Args:
-            unitMgrID: unit manager ID
-        """
         return unit_items.UnitFullData()
 
     def getRosterSettings(self):
-        """
-        Returns unit roster settings object.
-        """
         return unit_items.UnitRosterSettings()
 
     def getPlayerInfo(self, dbID=None, unitMgrID=None):
-        """
-        Getter for player's info object
-        Args:
-            dbID: player's database ID
-            unitMgrID: unit manager ID in which player is
-        """
         return unit_items.PlayerUnitInfo(-1L, 0, None)
 
     def getReadyStates(self, unitMgrID=None):
-        """
-        Returns list of player's ready states by slots. None for no player.
-        Args:
-            unitMgrID: unit manager ID
-        """
         return []
 
     def getSlotState(self, slotIdx, unitMgrID=None):
-        """
-        Getter for slot state info
-        Args:
-            slotIdx: slot index
-            unitMgrID: unit manager ID
-        """
         return unit_items.SlotState()
 
     def getSlotsIterator(self, unitMgrID, unit):
-        """
-        Returns slots iterator for given unit
-        Args:
-            unitMgrID: unit manager ID
-            unit: client unit instance
-        """
         return (unit_items.SlotInfo(-1, self.getSlotState(-1)),)
 
     def getPlayers(self, unitMgrID=None):
-        """
-        Returns all players that are in unit.
-        Args:
-            unitMgrID: unit manager ID
-        
-        Returns:
-            dictionary with players info to databases IDs mapping
-        """
         return {}
 
     def getCandidates(self, unitMgrID=None):
-        """
-        Returns all candidates to unit.
-        Args:
-            unitMgrID: unit manager ID
-        
-        Returns:
-            dictionary with players info to databases IDs mapping
-        """
         return {}
 
     def getRosterType(self, unitMgrID=None):
-        """
-        Getter for unit roster type
-        Args:
-            unitMgrID: unit manager ID
-        """
         return None
 
     def getRoster(self, unitMgrID=None):
-        """
-        Getter for unit roster
-        Args:
-            unitMgrID: unit manager ID
-        """
         return None
 
     def getVehiclesInfo(self, dbID=None, unitMgrID=None):
-        """
-        Gets vehicles info for some player
-        Args:
-            dbID: player database ID
-            unitMgrID: unit manager ID
-        """
         return (unit_items.VehicleInfo(),)
 
     def invalidateSelectedVehicles(self, vehCDs):
-        """
-        Invalidates current player's selected vehicles
-        Args:
-            vehCDs: list of currently selected vehicle intCD's
-        
-        Returns:
-            set vehicles request context
-        """
         return None
 
     def getFlags(self, unitMgrID=None):
-        """
-        Getter for unit flags
-        Args:
-            unitMgrID: unit manager ID
-        """
         return unit_items.UnitFlags(0)
 
     def getStats(self, unitMgrID=None):
-        """
-        Getter for unit stats
-        Args:
-            unitMgrID: unit manager ID
-        """
         return unit_items.UnitStats()
 
     def getComment(self, unitMgrID=None):
-        """
-        Returns unit's comments
-        Args:
-            unitMgrID: unit manager ID
-        """
         pass
 
     def getCensoredComment(self, unitMgrID=None):
-        """
-        Returns unit's censored comments
-        Args:
-            unitMgrID: unit index
-        """
         pass
 
     def getShowLeadershipNotification(self):
-        """
-        Returns should we show give leadership notification
-        """
         return False
 
     def doLeadershipNotificationShown(self):
-        """
-        Routine should be called after leadership notification shown
-        """
         pass
 
     def validateLevels(self):
-        """
-        Additional validation of unit levels selection
-        """
         return ValidationResult()
 
 
 class _UnitIntroEntryPoint(BasePrbEntryPoint):
-    """
-    Base class for unit intro entry point
-    """
 
     def __init__(self, entityFlags, modeFlags, prbType):
         super(_UnitIntroEntryPoint, self).__init__(entityFlags=entityFlags, modeFlags=modeFlags)
@@ -280,27 +146,18 @@ class _UnitIntroEntryPoint(BasePrbEntryPoint):
 
 
 class UnitIntroEntryPoint(_UnitIntroEntryPoint):
-    """
-    Class for unit intro entry point
-    """
 
     def __init__(self, modeFlags, prbType):
         super(UnitIntroEntryPoint, self).__init__(FUNCTIONAL_FLAG.UNIT_INTRO, modeFlags, prbType)
 
 
 class UnitBrowserEntryPoint(_UnitIntroEntryPoint):
-    """
-    Class for unit browser entry point
-    """
 
     def __init__(self, modeFlags, prbType):
         super(UnitBrowserEntryPoint, self).__init__(FUNCTIONAL_FLAG.UNIT_BROWSER, modeFlags, prbType)
 
 
 class UnitEntryPoint(BasePrbEntryPoint):
-    """
-    Class for unit entry point
-    """
 
     def __init__(self, modeFlags, accountsToInvite=None):
         super(UnitEntryPoint, self).__init__(entityFlags=FUNCTIONAL_FLAG.UNIT, modeFlags=modeFlags)
@@ -341,30 +198,13 @@ class UnitEntryPoint(BasePrbEntryPoint):
         self._accountsToInvite = accountsToInvite
 
     def _doCreate(self, unitMgr, ctx):
-        """
-        Routine must be invoked to create entity at system level
-        Args:
-            unitMgr: unit manager object
-            ctx: create request context
-        """
         unitMgr.create()
 
 
 class _UnitEntity(BaseUnitEntity, ListenersCollection):
-    """
-    Base class for unit entity
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, entityFlags, modeFlags, requestHandlers, listenerClass, prbType):
-        """
-        Args:
-            entityFlags: entity specific flags
-            modeFlags: mode specific flags
-            requestHandlers: dict of supported requests
-            listenerClass: unit listener class
-            prbType: prebattle type ID
-        """
         super(_UnitEntity, self).__init__(entityFlags=entityFlags, modeFlags=modeFlags)
         self._prbType = prbType
         self._setListenerClass(listenerClass)
@@ -394,12 +234,7 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
                 else:
                     newVehicleIDs.append(vInfo.vehInvID)
 
-        if hasInvalidation:
-            if self._prbType == PREBATTLE_TYPE.FALLOUT:
-                return SetVehiclesUnitCtx(newVehicleIDs, waitingID='prebattle/change_settings')
-            return SetVehicleUnitCtx(waitingID='prebattle/change_settings')
-        else:
-            return
+        return SetVehicleUnitCtx(waitingID='prebattle/change_settings') if hasInvalidation else None
 
     def request(self, ctx, callback=None):
         requestType = ctx.getRequestType()
@@ -424,7 +259,6 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
         players = unit.getPlayers()
         members = unit.getMembers()
         vehicles = unit.getVehicles()
-        isPlayerReady = unit.isPlayerReadyInSlot
         isSlotClosed = unit.isSlotClosed
         isSlotFree = unit.isSlotFree
         isSlotDisabled = unit.isSlotDisabled
@@ -451,11 +285,6 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
         return UnitPermissions.isCommander(unit.getPlayers().get(dbID, {}).get('role', 0))
 
     def isParentControlActivated(self, callback=None):
-        """
-        Is parent control now activated
-        Args:
-            callback: operation callback
-        """
         if prb_getters.isParentControlActivated():
             g_eventDispatcher.showParentControlNotification()
             if callback:
@@ -467,15 +296,6 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
         return unit_items.UnitRosterSettings()
 
     def _buildPlayerInfo(self, unitMgrID, unit, dbID, slotIdx=-1, data=None):
-        """
-        Builds player info based on unit data
-        Args:
-            unitMgrID: unit manager ID
-            unit: client unit object
-            dbID: player database ID
-            slotIdx: slot index
-            data: player's unit data
-        """
         if data is None:
             data = {}
         if slotIdx != -1:
@@ -487,12 +307,6 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
         return unit_items.PlayerUnitInfo(dbID, unitMgrID, unit, isReady=isReady, isInSlot=isInSlot, slotIdx=slotIdx, **data)
 
     def _buildStats(self, unitMgrID, unit):
-        """
-        Builds unit stats
-        Args:
-            unitMgrID: unit manager ID
-            unit: client unit object
-        """
         readyCount = 0
         occupiedSlotsCount = 0
         openedSlotsCount = 0
@@ -524,18 +338,10 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
         return unit_items.UnitStats(readyCount, occupiedSlotsCount, openedSlotsCount, freeSlotsCount, curTotalLevel, levelsSeq)
 
     def _buildFlags(self, unit):
-        """
-        Builds unit entity flags
-        Args:
-            unit: client unit instance
-        """
         return unit_items.UnitFlags(unit.getFlags(), isReady=unit.arePlayersReady(ignored=[settings.CREATOR_SLOT_INDEX]))
 
 
 class _UnitIntroEntity(_UnitEntity):
-    """
-    Base class for unit intro entity
-    """
 
     def __init__(self, entityFlags, modeFlags, requestHandlers, listenerClass, prbType):
         super(_UnitIntroEntity, self).__init__(entityFlags, modeFlags, requestHandlers or {}, listenerClass, prbType)
@@ -593,48 +399,25 @@ class _UnitIntroEntity(_UnitEntity):
         return NotSupportedActionsValidator()
 
     def _getUnit(self, unitMgrID=None):
-        """
-        Inner part that incapsulates real part of unit getting
-        in intro mode
-        Args:
-            unitMgrID: unit manager ID
-        """
         return (0, None)
 
     def _showWindow(self):
-        """
-        Routine that should be invoked when its needed to show unit intro window
-        """
         raise NotImplementedError
 
     def _loadUnit(self):
-        """
-        Routine that should be invoked when its needed to load unit intro tab
-        in channels carousel and load unit intro window
-        """
         raise NotImplementedError
 
     def _unloadUnit(self):
-        """
-        Routine that should be invoked when its needed to unload unit intro tab
-        in channels carousel and close unit intro window
-        """
         raise NotImplementedError
 
 
 class UnitIntroEntity(_UnitIntroEntity):
-    """
-    Unit intro entity class: is welcome view
-    """
 
     def __init__(self, modeFlags, requestHandlers, listenerClass, prbType):
         super(UnitIntroEntity, self).__init__(FUNCTIONAL_FLAG.UNIT_INTRO, modeFlags, requestHandlers or {}, listenerClass, prbType)
 
 
 class UnitBrowserEntity(_UnitIntroEntity):
-    """
-    Unit browser entity class: is list of available rooms to join
-    """
 
     def __init__(self, modeFlags, prbType):
         super(UnitBrowserEntity, self).__init__(FUNCTIONAL_FLAG.UNIT_BROWSER, modeFlags, {}, IUnitIntroListener, prbType)
@@ -648,16 +431,10 @@ class UnitBrowserEntity(_UnitIntroEntity):
             callback(True)
 
     def getBrowser(self):
-        """
-        Getter for units browser instance
-        """
         raise NotImplementedError
 
 
 class UnitEntity(_UnitEntity):
-    """
-    Class for unit entity
-    """
 
     def __init__(self, modeFlags, prbType):
         handlers = self._getRequestHandlers()
@@ -843,7 +620,10 @@ class UnitEntity(_UnitEntity):
             dbID = account_helpers.getAccountDatabaseID()
         _, unit = self.getUnit(unitMgrID=unitMgrID)
         vehicles = unit.getVehicles()
-        return map(lambda vehicle: unit_items.VehicleInfo(**vehicle._asdict()), vehicles[dbID]) if dbID in vehicles else super(UnitEntity, self).getVehiclesInfo(dbID, unitMgrID)
+        if dbID in vehicles:
+            return [ unit_items.VehicleInfo(**vehicle._asdict()) for vehicle in vehicles[dbID] ]
+        else:
+            return super(UnitEntity, self).getVehiclesInfo(dbID, unitMgrID)
 
     def getSlotState(self, slotIdx, unitMgrID=None):
         _, unit = self.getUnit(unitMgrID=unitMgrID)
@@ -902,12 +682,6 @@ class UnitEntity(_UnitEntity):
         unitMgr.leave()
 
     def assign(self, ctx, callback=None):
-        """
-        Assigns player to prebattle.
-        Args:
-            ctx: assign request context
-            callback: operation callback
-        """
         slotIdx = ctx.getSlotIdx()
         dbID = ctx.getPlayerID()
         pInfo = self.getPlayerInfo(dbID=dbID)
@@ -942,12 +716,6 @@ class UnitEntity(_UnitEntity):
                 self._assign(ctx, callback=callback)
 
     def invite(self, ctx, callback=None):
-        """
-        Invites the list of players into prebattle.
-        Args:
-            ctx: invite request context
-            callback: operation callback
-        """
         pPermissions = self.getPermissions()
         if not pPermissions.canSendInvite():
             LOG_ERROR('Player can not send invites', pPermissions)
@@ -958,12 +726,6 @@ class UnitEntity(_UnitEntity):
         self._cooldown.process(settings.REQUEST_TYPE.SEND_INVITE, coolDown=REQUEST_COOLDOWN.PREBATTLE_INVITES)
 
     def kick(self, ctx, callback=None):
-        """
-        Kick some player from unit.
-        Args:
-            ctx: kick request context
-            callback: operation callback
-        """
         pPermissions = self.getPermissions()
         if not pPermissions.canKick():
             LOG_ERROR('Player can not can another players', pPermissions)
@@ -973,12 +735,6 @@ class UnitEntity(_UnitEntity):
         self._requestsProcessor.doRequest(ctx, 'kick', ctx.getPlayerID(), callback=callback)
 
     def setVehicle(self, ctx, callback=None):
-        """
-        Sets vehicle for current user
-        Args:
-            ctx: set vehicle request context
-            callback: operation callback
-        """
         pPermissions = self.getPermissions()
         if not pPermissions.canSetVehicle():
             LOG_ERROR('Player can not set vehicle', pPermissions)
@@ -994,12 +750,6 @@ class UnitEntity(_UnitEntity):
         raise NotImplementedError()
 
     def setVehicleList(self, ctx, callback=None):
-        """
-        Sets vehicle list for current user
-        Args:
-            ctx: set vehicle list request context
-            callback: operation callback
-        """
         if self._isInCoolDown(settings.REQUEST_TYPE.SET_VEHICLE_LIST, coolDown=ctx.getCooldown()):
             return
         else:
@@ -1023,12 +773,6 @@ class UnitEntity(_UnitEntity):
             return
 
     def setPlayerReady(self, ctx, callback=None):
-        """
-        Sets vehicle for current user
-        Args:
-            ctx: set vehicle request context
-            callback: operation callback
-        """
         isReady = ctx.isReady()
         pInfo = self.getPlayerInfo()
         if isReady and self.isParentControlActivated(callback=callback):
@@ -1064,12 +808,6 @@ class UnitEntity(_UnitEntity):
         self._cooldown.process(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown())
 
     def closeSlot(self, ctx, callback=None):
-        """
-        Closes/opens given slot
-        Args:
-            ctx: close slot request context
-            callback: operation callback
-        """
         if self._isInCoolDown(settings.REQUEST_TYPE.CLOSE_SLOT, coolDown=ctx.getCooldown()):
             return
         slotIdx = ctx.getSlotIdx()
@@ -1112,12 +850,6 @@ class UnitEntity(_UnitEntity):
         self._cooldown.process(settings.REQUEST_TYPE.CLOSE_SLOT, coolDown=ctx.getCooldown())
 
     def changeOpened(self, ctx, callback=None):
-        """
-        Closes/opens unit room
-        Args:
-            ctx: close request context
-            callback: operation callback
-        """
         isOpened = self.getFlags().isOpened()
         if isOpened is ctx.isOpened():
             LOG_DEBUG('Unit already is opened/closed', ctx)
@@ -1136,12 +868,6 @@ class UnitEntity(_UnitEntity):
         self._cooldown.process(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown())
 
     def changeComment(self, ctx, callback=None):
-        """
-        Changes comment in unit room
-        Args:
-            ctx: change comment request context
-            callback: operation callback
-        """
         _, unit = self.getUnit()
         if not ctx.isCommentChanged(unit):
             if callback:
@@ -1159,12 +885,6 @@ class UnitEntity(_UnitEntity):
         self._cooldown.process(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown())
 
     def lock(self, ctx, callback=None):
-        """
-        Locks/unlocks unit
-        Args:
-            ctx: lock request context
-            callback: operation callback
-        """
         isLocked = self.getFlags().isLocked()
         if isLocked is ctx.isLocked():
             LOG_DEBUG('Unit already is locked/unlocked', ctx)
@@ -1183,12 +903,6 @@ class UnitEntity(_UnitEntity):
         self._cooldown.process(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown())
 
     def setRostersSlots(self, ctx, callback=None):
-        """
-        Sets rosters for slots
-        Args:
-            ctx: roster slots request context
-            callback: operation callback
-        """
         pPermissions = self.getPermissions()
         if not pPermissions.canChangeRosters():
             LOG_ERROR('Player can not change rosters', pPermissions)
@@ -1198,19 +912,13 @@ class UnitEntity(_UnitEntity):
         self._requestsProcessor.doRequest(ctx, 'setAllRosterSlots', ctx.getRosterSlots(), callback=callback)
 
     def doAutoSearch(self, ctx, callback=None):
-        """
-        Do autosearch for team/team members
-        Args:
-            ctx: autosearch request context
-            callback: operation callback
-        """
         pPermissions = self.getPermissions()
         if not pPermissions.canInvokeAutoSearch():
             LOG_ERROR('Player can not start/stop auto search', pPermissions)
             if callback:
                 callback(False)
             return
-        _, unit = self.getUnit()
+        _, _ = self.getUnit()
         flags = self.getFlags()
         if ctx.isRequestToStart():
             if self.isParentControlActivated(callback=callback):
@@ -1244,12 +952,6 @@ class UnitEntity(_UnitEntity):
             self._requestsProcessor.doRequest(ctx, 'stopAutoSearch', callback=callback)
 
     def doBattleQueue(self, ctx, callback=None):
-        """
-        Do battle enqueue/dequeue
-        Args:
-            ctx: battle queue request context
-            callback: operation callback
-        """
         pPermissions = self.getPermissions()
         flags = self.getFlags()
         if ctx.isRequestToStart():
@@ -1301,12 +1003,6 @@ class UnitEntity(_UnitEntity):
                 self._requestsProcessor.doRequest(ctx, 'stopBattle', callback=callback)
 
     def giveLeadership(self, ctx, callback=None):
-        """
-        Give leadership to selected player
-        Args:
-            ctx: give leadership request context
-            callback: operation callback
-        """
         pPermissions = self.getPermissions()
         if not pPermissions.canChangeLeadership():
             LOG_ERROR('Player can not give leadership to player players', pPermissions)
@@ -1322,12 +1018,6 @@ class UnitEntity(_UnitEntity):
         self._requestsProcessor.doRequest(ctx, 'giveLeadership', ctx.getPlayerID(), callback=callback)
 
     def changeDivision(self, ctx, callback=None):
-        """
-        Change unit division
-        Args:
-            ctx: change division request context
-            callback: operation callback
-        """
         if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_DIVISION, coolDown=ctx.getCooldown()):
             return
         pPermissions = self.getPermissions()
@@ -1341,14 +1031,6 @@ class UnitEntity(_UnitEntity):
 
     @vehicleAmmoCheck
     def togglePlayerReadyAction(self, launchChain=False):
-        """
-        Toggles current player ready state.
-        launchChain determines chain of the following servers methods have to be launched:
-        1. If player not ready selectVehicle and setReady after
-        2. If player ready setNotReady and deSelectVehicle after
-        Args:
-            launchChain: should we proceed to next chain
-        """
         notReady = not self.getPlayerInfo().isReady
         if notReady:
             waitingID = 'prebattle/player_ready'
@@ -1370,41 +1052,20 @@ class UnitEntity(_UnitEntity):
             self.setPlayerReady(ctx)
 
     def isVehiclesReadyToBattle(self):
-        """
-        Check for vehicle validation
-        """
         result = self._actionsValidator.getVehiclesValidator().canPlayerDoAction()
         return result is None or result.isValid
 
     def isDynamic(self):
-        """
-        Is this entity for dynamically created unit from battle
-        (squad actually)
-        """
         _, unit = self.getUnit()
         return unit.isDynamic()
 
     def getCooldownTime(self, rqTypeID):
-        """
-        Getter for cooldown for operation time
-        Args:
-            rqTypeID: request type ID
-        """
         return self._cooldown.getTime(rqTypeID)
 
     def exitFromQueue(self):
-        """
-        Routine must be invoked to exit from the queue
-        """
         self._actionsHandler.exitFromQueue()
 
     def unit_onUnitFlagsChanged(self, prevFlags, nextFlags):
-        """
-        Listener for client unit flags changed event
-        Args:
-            prevFlags: previous flags
-            nextFlags: new flags
-        """
         unitMgrID, unit = self.getUnit()
         isReady = unit.arePlayersReady(ignored=[settings.CREATOR_SLOT_INDEX])
         flags = unit_items.UnitFlags(nextFlags, prevFlags, isReady)
@@ -1437,13 +1098,6 @@ class UnitEntity(_UnitEntity):
         g_eventDispatcher.updateUI()
 
     def unit_onUnitVehicleChanged(self, dbID, vehInvID, vehTypeCD):
-        """
-        Listener for client unit vehicle changed event
-        Args:
-            dbID: player database ID
-            vehInvID: new vehicle inventory ID
-            vehTypeCD: new vehicle intCD
-        """
         if vehTypeCD:
             _, nationID, itemID = core_vehicles.parseIntCompactDescr(vehTypeCD)
             vehicleTypeDescr = core_vehicles.g_cache.vehicle(nationID, itemID)
@@ -1463,12 +1117,6 @@ class UnitEntity(_UnitEntity):
         return
 
     def unit_onUnitVehiclesChanged(self, dbID, vehicles):
-        """
-        Listener for client unit vehicles changed event
-        Args:
-            dbID: player database ID
-            vehicles: new vehicles list
-        """
         vInfos = []
         for vehInvID, vehTypeCD in vehicles:
             if vehTypeCD:
@@ -1492,12 +1140,6 @@ class UnitEntity(_UnitEntity):
         return
 
     def unit_onUnitReadyMaskChanged(self, prevMask, nextMask):
-        """
-        Listener for client unit ready mask changed event
-        Args:
-            prevMask: previous ready mask
-            nextMask: new ready mask
-        """
         unitMgrID, unit = self.getUnit()
         isReadyInSlot = unit.isPlayerReadyInSlot
         members = unit.getMembers()
@@ -1522,13 +1164,6 @@ class UnitEntity(_UnitEntity):
         g_eventDispatcher.updateUI()
 
     def unit_onUnitPlayerRoleChanged(self, playerID, prevRoleFlags, nextRoleFlags):
-        """
-        Listener for client unit ready mask changed event
-        Args:
-            playerID: player database ID
-            prevRoleFlags: previous role flags
-            nextRoleFlags: new role flags
-        """
         pInfo = self.getPlayerInfo(dbID=playerID)
         pPermissions = self.getPermissions(dbID=playerID)
         diff = prevRoleFlags ^ nextRoleFlags
@@ -1553,52 +1188,25 @@ class UnitEntity(_UnitEntity):
         g_eventDispatcher.updateUI()
 
     def unit_onUnitPlayerAdded(self, playerID, playerData):
-        """
-        Listener for client unit player added event
-        Args:
-            playerID: player database ID
-            playerData: player added data
-        """
         unitMgrID, unit = self.getUnit()
         pInfo = self._buildPlayerInfo(unitMgrID, unit, playerID, unit.getPlayerSlotIdx(playerID), playerData)
         self._invokeListeners('onUnitPlayerAdded', pInfo)
 
     def unit_onUnitPlayerInfoChanged(self, playerID, playerData):
-        """
-        Listener for client unit player changed event
-        Args:
-            playerID: player database ID
-            playerData: player changed data
-        """
         unitMgrID, unit = self.getUnit()
         pInfo = self._buildPlayerInfo(unitMgrID, unit, playerID, unit.getPlayerSlotIdx(playerID), playerData)
         self._invokeListeners('onUnitPlayerInfoChanged', pInfo)
         self._actionsHandler.setPlayerInfoChanged()
 
     def unit_onUnitPlayerRemoved(self, playerID, playerData):
-        """
-        Listener for client unit player removed event
-        Args:
-            playerID: player database ID
-            playerData: player data
-        """
         unitMgrID, unit = self.getUnit()
         pInfo = self._buildPlayerInfo(unitMgrID, unit, playerID, -1, playerData)
         self._invokeListeners('onUnitPlayerRemoved', pInfo)
 
     def unit_onUnitSettingChanged(self, opCode, value):
-        """
-        Listener for client unit settings update event
-        Args:
-            opCode: operation code form UNIT_OP
-            value: new value
-        """
         self._invokeListeners('onUnitSettingChanged', opCode, value)
 
     def unit_onUnitRosterChanged(self):
-        """
-        Listener for client unit roster update event
-        """
         rosterSettings = self._createRosterSettings()
         if rosterSettings != self._rosterSettings:
             self._rosterSettings = rosterSettings
@@ -1606,35 +1214,19 @@ class UnitEntity(_UnitEntity):
         self._invokeListeners('onUnitRosterChanged')
 
     def unit_onUnitMembersListChanged(self):
-        """
-        Listener for client unit members updated event
-        """
         self._invokeListeners('onUnitMembersListChanged')
         g_eventDispatcher.updateUI()
 
     def unit_onUnitPlayersListChanged(self):
-        """
-        Listener for client unit players updated event
-        """
         self._actionsHandler.setPlayersChanged()
         self._invokeListeners('onUnitPlayersListChanged')
 
     def unit_onUnitPlayerVehDictChanged(self, playerID):
-        """
-        Listener for client unit player's available vehicles update event
-        Args:
-            playerID: player database ID
-        """
         unitMgrID, unit = self.getUnit()
         pInfo = self._buildPlayerInfo(unitMgrID, unit, playerID, unit.getPlayerSlotIdx(playerID), unit.getPlayer(playerID))
         self._invokeListeners('onUnitPlayerVehDictChanged', pInfo)
 
     def unit_onUnitExtraChanged(self, extras):
-        """
-        Listener for client unit extra data update event
-        Args:
-            extras: new extra data
-        """
         self._invokeListeners('onUnitExtraChanged', extras)
 
     def _createActionsValidator(self):
@@ -1645,29 +1237,12 @@ class UnitEntity(_UnitEntity):
         return DynamicRosterSettings(unit)
 
     def _switchRosterSettings(self):
-        """
-        Refreshes state of current roster settings
-        """
         self._rosterSettings = self._createRosterSettings()
 
     def _buildPermissions(self, roles, flags, isCurrentPlayer=False, isPlayerReady=False, hasLockedState=False):
-        """
-        Builds permissions object for given players' data
-        Args:
-            roles: roles mask from UNIT_ROLE
-            flags: flags mask from UNIT_FLAGS
-            isCurrentPlayer: is this current player
-            isPlayerReady: is he ready
-            hasLockedState: and has unit any locked state
-        """
         return UnitPermissions(roles, flags, isCurrentPlayer, isPlayerReady)
 
     def _getRequestHandlers(self):
-        """
-        Getter for available unit's requests
-        Returns:
-            mapping of request type ID to opertaion
-        """
         RQ_TYPE = settings.REQUEST_TYPE
         return {RQ_TYPE.ASSIGN: self.assign,
          RQ_TYPE.LOCK: self.lock,
@@ -1686,39 +1261,21 @@ class UnitEntity(_UnitEntity):
          RQ_TYPE.SET_VEHICLE_LIST: self.setVehicleList}
 
     def _createActionsHandler(self):
-        """
-        Creates unit's actions handler object.
-        """
         return UnitActionsHandler(self)
 
     def _switchActionsValidator(self):
-        """
-        Refreshes state of current actions handler
-        """
         self._actionsValidator = self._createActionsValidator()
 
     def _createCooldownManager(self):
-        """
-        Creates unit's cooldown manager object.
-        """
         return UnitCooldownManager()
 
     def _createRequestProcessor(self):
-        """
-        Creates unit's requests processor object.
-        """
         return UnitRequestProcessor(self)
 
     def _createVehicelsWatcher(self):
-        """
-        Creates unit's vehicles watcher object.
-        """
         return UnitVehiclesWatcher(self)
 
     def _addClientUnitListeners(self):
-        """
-        Adds client unit subscriptions
-        """
         unit = prb_getters.getUnit()
         unit.onUnitFlagsChanged += self.unit_onUnitFlagsChanged
         unit.onUnitReadyMaskChanged += self.unit_onUnitReadyMaskChanged
@@ -1736,9 +1293,6 @@ class UnitEntity(_UnitEntity):
         unit.onUnitExtraChanged += self.unit_onUnitExtraChanged
 
     def _removeClientUnitListeners(self):
-        """
-        Removes client unit subscriptions
-        """
         unit = prb_getters.getUnit(safe=True)
         if unit:
             unit.onUnitFlagsChanged -= self.unit_onUnitFlagsChanged
@@ -1757,12 +1311,6 @@ class UnitEntity(_UnitEntity):
             unit.onUnitExtraChanged -= self.unit_onUnitExtraChanged
 
     def _unassign(self, ctx, callback=None):
-        """
-        Unassigns player from prebattle.
-        Args:
-            ctx: assign request context
-            callback: operation callback
-        """
         slotIdx = ctx.getSlotIdx()
         dbID = ctx.getPlayerID()
         pPermissions = self.getPermissions()
@@ -1779,12 +1327,6 @@ class UnitEntity(_UnitEntity):
         self._requestsProcessor.doRequest(ctx, 'unassign', dbID, callback=callback)
 
     def _assign(self, ctx, callback=None):
-        """
-        Assigns player to prebattle.
-        Args:
-            ctx: assign request context
-            callback: operation callback
-        """
         slotIdx = ctx.getSlotIdx()
         dbID = ctx.getPlayerID()
         pPermissions = self.getPermissions()
@@ -1796,12 +1338,6 @@ class UnitEntity(_UnitEntity):
         self._requestsProcessor.doRequest(ctx, 'assign', dbID, slotIdx, callback=callback)
 
     def _reassign(self, ctx, callback=None):
-        """
-        Reassigns player to the same prebattle but in different slot.
-        Args:
-            ctx: assign request context
-            callback: operation callback
-        """
         slotIdx = ctx.getSlotIdx()
         dbID = ctx.getPlayerID()
         pPermissions = self.getPermissions()
@@ -1815,12 +1351,6 @@ class UnitEntity(_UnitEntity):
                 callback(False)
 
     def _setVehicle(self, ctx, callback=None):
-        """
-        Sets vehicle for current user
-        Args:
-            ctx: set vehicle request context
-            callback: operation callback
-        """
         vehTypeCD = ctx.getVehTypeCD()
         vehInvID = ctx.getVehInvID()
         invVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
@@ -1858,12 +1388,6 @@ class UnitEntity(_UnitEntity):
             return
 
     def _clearVehicle(self, ctx, callback=None):
-        """
-        Clears vehicle for current user
-        Args:
-            ctx: set vehicle request context
-            callback: operation callback
-        """
         vInfos = self.getVehiclesInfo()
         if findFirst(lambda vInfo: vInfo.vehInvID, vInfos) is None:
             LOG_DEBUG('There is not vehicle in slot', ctx)
@@ -1875,9 +1399,6 @@ class UnitEntity(_UnitEntity):
             return
 
     def _getTimeLeftInIdle(self):
-        """
-        Gets time left value in search for enemy team
-        """
         _, unit = self.getUnit()
         result = 0
         if unit:
@@ -1887,9 +1408,6 @@ class UnitEntity(_UnitEntity):
         return result
 
     def _isInCoolDown(self, requestType, callback=None, coolDown=None):
-        """
-        Is given request in cooldonw now
-        """
         if self._cooldown.validate(requestType, coolDown):
             if callback:
                 callback(False)

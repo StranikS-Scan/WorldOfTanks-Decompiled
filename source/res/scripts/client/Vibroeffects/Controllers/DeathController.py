@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/Vibroeffects/Controllers/DeathController.py
 from OnceController import OnceController
 
-class DeathController:
+class DeathController(object):
     __wasVehicleAlive = None
 
     def update(self, isVehicleAlive):

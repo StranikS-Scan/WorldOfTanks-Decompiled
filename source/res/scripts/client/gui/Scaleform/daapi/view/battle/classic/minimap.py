@@ -57,14 +57,11 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         if self.__sizeIndex != newSize:
             self.__sizeIndex = newSize
             self._parentObj.as_setSizeS(self.__sizeIndex)
-        value = int(self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_ALPHA))
-        if value:
-            self._parentObj.as_setAlphaS(1 - value / 100.0)
+        self.__updateAlpha()
 
     def updateSettings(self, diff):
-        if settings_constants.GAME.MINIMAP_ALPHA in diff:
-            value = int(diff[settings_constants.GAME.MINIMAP_ALPHA])
-            self._parentObj.as_setAlphaS(1 - value / 100.0)
+        if settings_constants.GAME.MINIMAP_ALPHA in diff or settings_constants.GAME.MINIMAP_ALPHA_ENABLED in diff:
+            self.__updateAlpha()
 
     def applyNewSize(self, sizeIndex):
         LOG_DEBUG('Size index of minimap is changed', sizeIndex)
@@ -72,11 +69,6 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         self.__saveSettings()
 
     def _changeSizeSettings(self, newSizeSettings):
-        """
-        we can have different settings for minimap size
-        :param newSizeSettings: new name of settings
-        :return: current name of settings
-        """
         if newSizeSettings == self.__currentSizeSettings:
             return newSizeSettings
         previousSettings = self.__currentSizeSettings
@@ -117,6 +109,13 @@ class GlobalSettingsPlugin(common.SimplePlugin):
     def __handleMinimapCmd(self, event):
         self.__handleKey(event.ctx['key'])
 
+    def __updateAlpha(self):
+        if self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_ALPHA_ENABLED):
+            value = int(self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_ALPHA))
+        else:
+            value = 0.0
+        self._parentObj.as_setAlphaS(1 - value / 100.0)
+
 
 class TeamsOrControlsPointsPlugin(common.SimplePlugin):
     __slots__ = ('__personalTeam', '__entries')
@@ -136,7 +135,9 @@ class TeamsOrControlsPointsPlugin(common.SimplePlugin):
         super(TeamsOrControlsPointsPlugin, self).stop()
 
     def restart(self):
-        [ self._delEntry(x) for x in self.__entries ]
+        for x in self.__entries:
+            self._delEntry(x)
+
         self.__entries = []
         self.__personalTeam = self._arenaDP.getNumberOfTeam()
         self.__addTeamSpawnPoints()

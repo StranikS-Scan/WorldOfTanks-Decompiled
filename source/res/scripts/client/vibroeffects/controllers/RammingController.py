@@ -4,7 +4,7 @@ import BigWorld
 from OnceController import OnceController
 from constants import DESTRUCTIBLE_MATKIND
 
-class RammingController:
+class RammingController(object):
     RAMMING_EXECUTION_DELAY = 2.5
     MIN_IMPACT_SPEED = 3
     __executionForbidden = None

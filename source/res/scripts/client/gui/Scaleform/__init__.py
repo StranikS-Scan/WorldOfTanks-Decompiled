@@ -53,22 +53,10 @@ def getNecessaryArenaFrameName(arenaSubType, hasBase=None):
 
 
 def getPathForFlash(path, base=SCALEFORM_SWF_PATH_V3):
-    """
-    Converts resource path to relative one, which can be used in flash
-    Example:
-    gui/maps/icons/map/screen/86_himmelsdorf_winter.dds -> ../maps/icons/map/screen/86_himmelsdorf_winter.dds
-    
-    :param path: relative path which is relative to resources folder (res/wot)
-    :param base: path which should be used as starting point
-    :return: relative path from specified starting point
-    """
     return os.path.relpath(path, base)
 
 
 def getScaleformConfig(manager):
-    """ Configures services for package Scaleform.
-    :param manager: helpers.dependency.DependencyManager
-    """
     from gui.Scaleform.SystemMessagesInterface import SystemMessagesInterface
     messages = SystemMessagesInterface()
     messages.init()

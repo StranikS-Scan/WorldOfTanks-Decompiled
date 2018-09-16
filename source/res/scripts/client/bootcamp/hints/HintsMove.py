@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/hints/HintsMove.py
-import BigWorld
 import math
 import time
+import BigWorld
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.BootcampConstants import HINT_TYPE
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION

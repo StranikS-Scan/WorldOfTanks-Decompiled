@@ -6,112 +6,56 @@ from gui.prb_control.items.prb_items import TeamStateInfo
 from gui.shared.utils.decorators import ReprInjector
 
 class ILegacyPermissions(IPrbPermissions):
-    """
-    Base legacy prebattle permission interface.
-    """
 
     def canKick(self, team=1):
-        """
-        Can current player kick player from given team.
-        Args:
-            team: team to check permission
-        """
         return False
 
     def canAssignToTeam(self, team=1):
-        """
-        Can current player assign player to given team.
-        Args:
-            team: team to check permission
-        """
         return False
 
     def canChangePlayerTeam(self):
-        """
-        Can current player change player's team.
-        """
         return False
 
     def canSetTeamState(self, team=1):
-        """
-        Can current player change state of given team.
-        Args:
-            team: team to check permission
-        """
         return False
 
     def canMakeOpenedClosed(self):
-        """
-        Can current player change room's open state.
-        """
         return False
 
     def canChangeComment(self):
-        """
-        Can current player change room's comment.
-        """
         return False
 
     def canChangeArena(self):
-        """
-        Can current player change room's map.
-        """
         return False
 
     def canChangeArenaVOIP(self):
-        """
-        Can current player change voice chat availability setting.
-        """
         return False
 
     def canChangeDivision(self):
-        """
-        Can current player change division for legacy.
-        """
         return False
 
     def canChangeGamePlayMask(self):
-        """
-        Can current player change room's gameplay mode.
-        """
         return False
 
     def canChangeSetting(self):
-        """
-        Can current player change room's setting.
-        """
         return False
 
     def canStartBattle(self):
-        """
-        Can current player start battle.
-        """
         return False
 
     @classmethod
     def isCreator(cls, roles):
-        """
-        Is player with given role - room's creator.
-        Args:
-            roles: roles mask to check
-        """
         return False
 
 
 class LegacyIntroPermissions(ILegacyPermissions):
 
     def canCreateSquad(self):
-        """
-        Can current player create squad
-        """
         return True
 
 
 @ReprInjector.simple(('_roles', 'roles'), ('_pState', 'pState'), ('_teamState', 'teamState'))
 class LegacyPermissions(ILegacyPermissions):
-    """
-    Class for legacy room permissions.
-    """
 
     def __init__(self, roles=0, pState=PREBATTLE_ACCOUNT_STATE.UNKNOWN, teamState=None, hasLockedState=False):
         super(LegacyPermissions, self).__init__()

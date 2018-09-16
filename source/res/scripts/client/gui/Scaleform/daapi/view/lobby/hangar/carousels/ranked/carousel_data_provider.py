@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/ranked/carousel_data_provider.py
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
-from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.functions import makeTooltip
 

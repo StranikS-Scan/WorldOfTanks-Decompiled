@@ -1,19 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/RareAchievementsCache.py
+import re
 from functools import partial
 import ResMgr
-import re
 import Event
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from helpers import i18n, getClientLanguage
 from account_helpers.rare_achievements import getRareAchievementImage, getRareAchievementImageBig, getRareAchievementText
 
-class IMAGE_TYPE:
+class IMAGE_TYPE(object):
     IT_67X71 = 1
     IT_180X180 = 2
 
 
-class IMAGE_PATH:
+class IMAGE_PATH(object):
     IT_67X71 = 'gui/maps/icons/achievement/'
     IT_180X180 = 'gui/maps/icons/achievement/big/'
 
@@ -35,8 +35,10 @@ class _RaresCache(object):
         rareIcons67x71 = ResMgr.openSection(IMAGE_PATH.IT_67X71)
         rareIcons180x180 = ResMgr.openSection(IMAGE_PATH.IT_180X180)
         listOfIcons = set()
-        listOfIcons.update(filter(iconPattern.match, rareIcons67x71.keys()))
-        listOfIcons.update(filter(iconPattern.match, rareIcons180x180.keys()))
+        if rareIcons67x71 is not None:
+            listOfIcons.update(filter(iconPattern.match, rareIcons67x71.keys()))
+        if rareIcons180x180 is not None:
+            listOfIcons.update(filter(iconPattern.match, rareIcons180x180.keys()))
         for icon in listOfIcons:
             rareName = achieveIDPattern.search(icon).group()
             rareID = self.__getRareAchievementID(rareName)
@@ -44,13 +46,13 @@ class _RaresCache(object):
             achieveData = self.__cache[rareID] = {'image': {}}
             try:
                 achieveData['image'][IMAGE_TYPE.IT_67X71] = rareIcons67x71[icon].asBinary
-            except:
+            except Exception:
                 LOG_WARNING('Cannot load rare achievement local file', icon)
                 LOG_CURRENT_EXCEPTION()
 
             try:
                 achieveData['image'][IMAGE_TYPE.IT_180X180] = rareIcons180x180[icon].asBinary
-            except:
+            except Exception:
                 LOG_WARNING('Cannot load rare achievement local file', icon)
 
             achieveData['title'] = i18n.makeString('#achievements:%s' % rareName)
@@ -63,6 +65,10 @@ class _RaresCache(object):
             condMsg = i18n.makeString('#achievements:%s' % condKey)
             if condMsg != condKey:
                 achieveData['conditions'] = condMsg
+
+        ResMgr.purge(IMAGE_PATH.IT_67X71, True)
+        ResMgr.purge(IMAGE_PATH.IT_180X180, True)
+        return
 
     def request(self, listOfIds):
         LOG_DEBUG('Request action achievements data', listOfIds)

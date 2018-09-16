@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/string_escape.py
-""" Python 'escape' Codec
-
-
-Written by Martin v. L\xf6wis (martin@v.loewis.de).
-
-"""
 import codecs
 
 class Codec(codecs.Codec):

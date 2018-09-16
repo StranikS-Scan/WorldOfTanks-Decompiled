@@ -6,16 +6,13 @@ from gui.Scaleform.daapi.view.meta.ConfirmItemWindowMeta import ConfirmItemWindo
 from gui.Scaleform.genConsts.CONFIRM_DIALOG_ALIASES import CONFIRM_DIALOG_ALIASES
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.shared.formatters import getMoneyVO
-from gui.shared.utils import CLIP_ICON_PATH, EXTRA_MODULE_INFO, FIELD_HIGHLIGHT_TYPE
+from gui.shared.utils import EXTRA_MODULE_INFO, FIELD_HIGHLIGHT_TYPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
 class ConfirmModuleDialog(ConfirmItemWindowMeta):
-    """
-    Basic implementation of window which provides operation with modules.
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, meta, handler):
@@ -51,10 +48,6 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
         self._prepareAndSendData()
 
     def _prepareAndSendData(self):
-        """
-        Create necessary object which expects flash component and
-        pass it through DAAPI
-        """
         items = self.itemsCache.items
         item = items.getItemByCD(self.meta.getTypeCompDescr())
         if item is not None:
@@ -70,9 +63,7 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
                 elif item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
                     hasAlternativePrice = shop.isEnabledBuyingGoldEqsForCredits
             icon = self.__getIcon(item)
-            extraData = None
-            if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun():
-                extraData = CLIP_ICON_PATH
+            extraData = item.getExtraIconInfo()
             action = None
             if actualPrices != defaultPrices:
                 action = self.meta.getActionVO(item)
@@ -99,13 +90,6 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
 
     @staticmethod
     def __getIcon(item):
-        """
-        @param item: target module received by int compact descriptor
-        @return: For shells, option devices, equipment the value of icon
-                                is the path to an icon file in the directory,
-                                for vehicle modules the value of icon is the level of
-                                particular module
-        """
         return str(item.level) if item.itemTypeID not in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.SHELL, GUI_ITEM_TYPE.EQUIPMENT) else item.icon
 
     @staticmethod

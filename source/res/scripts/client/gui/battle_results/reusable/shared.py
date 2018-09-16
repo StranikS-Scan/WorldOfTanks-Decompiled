@@ -28,7 +28,7 @@ def makeAchievementFromPersonal(results):
                     try:
                         nationID = vehicles_core.parseIntCompactDescr(results['typeCompDescr'])[1]
                         achievement.setVehicleNationID(nationID)
-                    except:
+                    except Exception:
                         LOG_CURRENT_EXCEPTION()
 
                 if 'damageRating' in results:
@@ -56,10 +56,6 @@ def makeMarkOfMasteryFromPersonal(results):
 
 
 def makeCritsInfo(value):
-    """Creates a dict with info about critical damages for one vehicle.
-    :param value: value from 'crits' key for one enemy in 'details' section
-    :return: a dict with results
-    """
     rv = {CRIT_MASK_SUB_TYPES.DESTROYED_DEVICES: [],
      CRIT_MASK_SUB_TYPES.CRITICAL_DEVICES: [],
      CRIT_MASK_SUB_TYPES.DESTROYED_TANKMENS: []}
@@ -104,7 +100,6 @@ class ItemInfo(object):
 
     @property
     def wasInBattle(self):
-        """Is information about item corresponding to desired battle."""
         return self.__wasInBattle
 
 
@@ -155,7 +150,6 @@ class TeamBasesInfo(object):
 
 
 class _VehicleInfo(object):
-    """Abstract class that contains information about vehicle."""
     __slots__ = ('_vehicleID', '_vehicle', '_player', '_deathReason')
 
     def __init__(self, vehicleID, player, deathReason=DEATH_REASON_ALIVE):
@@ -166,182 +160,150 @@ class _VehicleInfo(object):
 
     @property
     def vehicleID(self):
-        """Gets long containing unique ID of vehicle on the arena."""
         return self._vehicleID
 
     @property
     def vehicle(self):
-        """Get gui wrapper of vehicle."""
         raise NotImplementedError
 
     @property
     def killerID(self):
-        """Get killer account's database ID or 0 if player wasn't killed."""
         raise NotImplementedError
 
     @property
     def player(self):
-        """Get information about player"""
         return self._player
 
     @property
     def deathReason(self):
-        """Gets vehicle's death reason (see ATTACK_REASONS). -1 if it wasn't killed."""
         return self._deathReason
 
     @property
     def achievementsIDs(self):
-        """Gets received "in-battle" achievements IDs"""
         raise NotImplementedError
 
     @property
     def spotted(self):
-        """Gets number of spotted vehicles."""
         raise NotImplementedError
 
     @property
     def piercings(self):
-        """Gets number of direct hits vehicle made that caused damage to target's health or devices."""
         raise NotImplementedError
 
     @property
     def piercingsReceived(self):
-        """Gets number of direct hits received that caused damage to vehicle's health or devices."""
         raise NotImplementedError
 
     @property
     def damageDealt(self):
-        """Gets total damage dealt to the target by vehicle."""
         raise NotImplementedError
 
     @property
     def tdamageDealt(self):
-        """Gets team damage dealt."""
         raise NotImplementedError
 
     @property
     def sniperDamageDealt(self):
-        """Gets damage dealt from sniper distance."""
         raise NotImplementedError
 
     @property
     def kills(self):
-        """Gets total number of kills that vehicle made."""
         raise NotImplementedError
 
     @property
     def tkills(self):
-        """Gets number of team kills that vehicle made."""
         raise NotImplementedError
 
     @property
     def targetKills(self):
-        """Gets number of target kills (for respawn mechanics) by actor."""
         raise NotImplementedError
 
     @property
     def noDamageDirectHitsReceived(self):
-        """Gets number of direct hits received that caused no damage."""
         raise NotImplementedError
 
     @property
     def damageBlockedByArmor(self):
-        """Gets damage that might be received if there were piercings."""
         raise NotImplementedError
 
     @property
     def rickochetsReceived(self):
-        """Gets number of rickochets received."""
         raise NotImplementedError
 
     @property
     def damageAssistedTrack(self):
-        """Gets damage dealt with the vehicle track assistant."""
         raise NotImplementedError
 
     @property
     def damageAssistedRadio(self):
-        """Gets damage dealt with the vehicle radio assistant.."""
         raise NotImplementedError
 
     @property
     def damageAssisted(self):
-        """Gets sum of properties damageAssistedTrack and damageAssistedRadio."""
         raise NotImplementedError
 
     @property
     def damageAssistedStun(self):
-        """Gets damage dealt with the SPG stun assistant."""
         raise NotImplementedError
 
     @property
     def stunNum(self):
-        """Gets number for SPG stuns."""
         raise NotImplementedError
 
     @property
     def stunDuration(self):
-        """Gets sum duration for SPG stuns."""
         raise NotImplementedError
 
     @property
     def critsInfo(self):
-        """ Gets critical information that personal vehicle(s) according to enemy."""
         raise NotImplementedError
 
     @property
     def critsCount(self):
-        """Gets number of critical damages that personal vehicle(s) according to enemy."""
         raise NotImplementedError
 
     @property
     def shots(self):
-        """ Gets number of shots made (may lead to direct hit, explosion hit, or miss)."""
         raise NotImplementedError
 
     @property
     def explosionHits(self):
-        """Gets number of explosion hits received (with and without damage)."""
         raise NotImplementedError
 
     @property
     def directHits(self):
-        """Gets number of direct hits made to another vehicles (with and without damage)."""
         raise NotImplementedError
 
     @property
     def directHitsReceived(self):
-        """Gets number of direct hits received (with and without damage)."""
         raise NotImplementedError
 
     @property
     def explosionHitsReceived(self):
-        """Gets number of explosion hits received (with and without damage)."""
         raise NotImplementedError
 
     @property
     def damaged(self):
-        """Gets number of vehicle damaged."""
         raise NotImplementedError
 
     @property
     def mileage(self):
-        """Gets mileage for the battle."""
         raise NotImplementedError
 
     @property
     def capturePoints(self):
-        """Gets team base capture points."""
         raise NotImplementedError
 
     @property
     def droppedCapturePoints(self):
-        """Gets dropped team base capture points."""
         raise NotImplementedError
 
     @property
     def xp(self):
-        """Gets value of total XP according to vehicles without achievements XP."""
+        raise NotImplementedError
+
+    @property
+    def isTeamKiller(self):
         raise NotImplementedError
 
     def getOrderByClass(self):
@@ -349,11 +311,7 @@ class _VehicleInfo(object):
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    """Class that contains detailed information about one vehicle.
-    This class can be used for vehicle and comments of properties related to this vehicle.
-    Also this class can be used for enemies in the efficiency block and
-    comments of properties related to some personal vehicle."""
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -389,6 +347,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._droppedCapturePoints = 0
         self._xp = 0
         self._fire = 0
+        self._isTeamKiller = False
 
     @property
     def vehicle(self):
@@ -522,17 +481,22 @@ class VehicleDetailedInfo(_VehicleInfo):
     def xp(self):
         return self._xp
 
+    @property
+    def isTeamKiller(self):
+        return self._isTeamKiller
+
     def haveInteractionDetails(self):
         return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0
 
     @classmethod
     @no_key_error
-    def makeForEnemy(cls, vehicleID, vehicle, player, detailsRecords, deathReason=DEATH_REASON_ALIVE):
+    def makeForEnemy(cls, vehicleID, vehicle, player, detailsRecords, deathReason=DEATH_REASON_ALIVE, isTeamKiller=False):
         info = cls(vehicleID, vehicle, player, deathReason=deathReason)
         info._critsInfo = makeCritsInfo(detailsRecords['crits'])
         info._rickochetsReceived = detailsRecords['rickochetsReceived']
         info._targetKills = detailsRecords['targetKills']
         info._fire = detailsRecords['fire']
+        info._isTeamKiller = isTeamKiller
         cls._setSharedRecords(info, detailsRecords)
         return info
 
@@ -561,6 +525,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._capturePoints = vehicleRecords['capturePoints']
         info._droppedCapturePoints = vehicleRecords['droppedCapturePoints']
         info._xp = vehicleRecords['xp'] - vehicleRecords['achievementXP']
+        info._isTeamKiller = vehicleRecords['isTeamKiller']
         cls._setSharedRecords(info, vehicleRecords)
         return info
 
@@ -582,7 +547,6 @@ class VehicleDetailedInfo(_VehicleInfo):
 
 
 class VehicleSummarizeInfo(_VehicleInfo):
-    """Class that contains detailed information about all vehicles that are use one player."""
     __slots__ = ('__avatar', '__vehicles')
 
     def __init__(self, vehicleID, player):
@@ -594,6 +558,10 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def vehicle(self):
         return self.__vehicles[0].vehicle if self.__vehicles else None
+
+    @property
+    def isTeamKiller(self):
+        return findFirst(lambda value: value, self.__getAtrributeGenerator('isTeamKiller'), default=False)
 
     @property
     def killerID(self):
@@ -738,39 +706,27 @@ class VehicleSummarizeInfo(_VehicleInfo):
         return self.__accumulate('xp')
 
     def addVehicleInfo(self, info):
-        """Adds detailed information about vehicle.
-        :param info: instance of VehicleDetailedInfo.
-        """
         self.__vehicles.append(info)
 
     def addAvatarInfo(self, avatar):
-        """Adds information about avatar.
-        :param avatar: instance of AvatarInfo.
-        """
         self.__avatar = avatar
 
     def getVehiclesIterator(self):
-        """Returns generator where each item is _VehicleInfo.
-        Note: first item is summarize data for all vehicles.
-        
-        :return: generator.
-        """
         yield self
         for vehicle in self.__vehicles:
             yield vehicle
 
     def getAchievements(self):
-        """Gets list of received "in-battle" achievements that are reviced by player's vehicles."""
-        achievements = []
+        result = []
         for achievementID in self.achievementsIDs:
             record = DB_ID_TO_RECORD[achievementID]
             factory = getAchievementFactory(record)
             if factory is not None and layouts.isAchievementRegistered(record):
                 achievement = factory.create(value=0)
                 if not achievement.isApproachable():
-                    achievements.append((achievement, True))
+                    result.append((achievement, True))
 
-        return sorted(achievements, key=sort_keys.AchievementSortKey)
+        return sorted(result, key=sort_keys.AchievementSortKey)
 
     def __getAtrributeGenerator(self, attr):
         getter = operator.attrgetter(attr)
@@ -806,7 +762,6 @@ class VehicleSummarizeInfo(_VehicleInfo):
 
 
 class FairplayViolationsInfo(object):
-    """Class holds information about fairplay violations"""
     __slots__ = ('_warningsMask', '_penaltiesMask', '_violationsMask', '_penaltiesInPercent')
 
     def __init__(self, warningsMask=0, penaltiesMask=0, violationsMask=0, penaltiesInPercent=-100):
@@ -817,43 +772,22 @@ class FairplayViolationsInfo(object):
         self._penaltiesInPercent = penaltiesInPercent
 
     def hasWarnings(self):
-        """Have fairplay warnings?
-        :return: bool.
-        """
         return self._warningsMask != 0
 
     def hasPenalties(self):
-        """Have fairplay penalties?
-        :return: bool.
-        """
         return self._penaltiesMask != 0
 
     def hasViolations(self):
-        """Have fairplay penalties?
-        :return: bool.
-        """
         return self._violationsMask != 0
 
     def getWarningName(self):
-        """Gets first name of warning.
-        :return: string containing one of FAIRPLAY_VIOLATIONS_NAMES value or None.
-        """
         return getFairPlayViolationName(self._warningsMask)
 
     def getPenaltyName(self):
-        """Gets first name of penalty.
-        :return: string containing one of FAIRPLAY_VIOLATIONS_NAMES value or None.
-        """
         return getFairPlayViolationName(self._penaltiesMask)
 
     def getViolationName(self):
-        """Gets first name of violations.
-        :return: string containing one of FAIRPLAY_VIOLATIONS_NAMES value or None.
-        """
         return getFairPlayViolationName(self._violationsMask)
 
     def getPenaltyDetails(self):
-        """Gets penalty details if they have.
-        :return: tuple(name of penalty, value in percent).
-        """
         return (self.getPenaltyName(), self._penaltiesInPercent) if self.hasPenalties() else None

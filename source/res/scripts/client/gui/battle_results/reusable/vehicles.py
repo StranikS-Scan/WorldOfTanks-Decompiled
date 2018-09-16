@@ -6,11 +6,12 @@ from constants import DEATH_REASON_ALIVE
 from gui.battle_results.reusable import shared
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
-_VehicleShortInfo = namedtuple('_ShortVehicleInfo', ('intCD', 'team', 'accountDBID', 'deathReason'))
+_VehicleShortInfo = namedtuple('_ShortVehicleInfo', ('intCD', 'team', 'accountDBID', 'deathReason', 'isTeamKiller'))
 _VehicleShortInfo.__new__.__defaults__ = (0,
  0,
  0,
- DEATH_REASON_ALIVE)
+ DEATH_REASON_ALIVE,
+ False)
 
 def _getVehiclesGenerator(vehicles):
     for vehicleID, data in vehicles.iteritems():
@@ -27,7 +28,7 @@ def _getVehiclesGenerator(vehicles):
             intCD = item['typeCompDescr']
             if not intCD:
                 continue
-            info = _VehicleShortInfo(intCD, item.get('team', 0), accountDBID, item.get('deathReason', DEATH_REASON_ALIVE))
+            info = _VehicleShortInfo(intCD, item.get('team', 0), accountDBID, item.get('deathReason', DEATH_REASON_ALIVE), item.get('isTeamKiller', False))
             items.append(info)
 
         yield (vehicleID, accountDBID, items)
@@ -36,8 +37,6 @@ def _getVehiclesGenerator(vehicles):
 
 
 class VehiclesInfo(shared.UnpackedInfo):
-    """Class contains reusable information about vehicles.
-    This information is fetched from battle_results['vehicles']"""
     __slots__ = ('__vehicles', '__vehicleToAccountID', '__accountToVehicleID', '__details')
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -64,10 +63,6 @@ class VehiclesInfo(shared.UnpackedInfo):
                 self.__accountToVehicleID[accountDBID] = vehicleID
 
     def getAccountDBID(self, vehicleID):
-        """Gets account's database ID by specified vehicle's ID.
-        :param vehicleID: long containing vehicle's ID.
-        :return: long containing account's database ID.
-        """
         if vehicleID in self.__vehicleToAccountID:
             accountDBID = self.__vehicleToAccountID[vehicleID]
         else:
@@ -75,10 +70,6 @@ class VehiclesInfo(shared.UnpackedInfo):
         return accountDBID
 
     def getVehicleID(self, accountDBID):
-        """Gets vehicle's ID by specified account's database ID.
-        :param accountDBID: long containing account's database ID.
-        :return: long containing vehicle's ID.
-        """
         if accountDBID in self.__accountToVehicleID:
             vehicleID = self.__accountToVehicleID[accountDBID]
         else:
@@ -86,10 +77,6 @@ class VehiclesInfo(shared.UnpackedInfo):
         return vehicleID
 
     def getVehicleInfo(self, vehicleID):
-        """Gets short information about first vehicle by given ID of vehicle.
-        :param vehicleID: long containing vehicle's ID.
-        :return: instance of _VehicleShortInfo.
-        """
         if vehicleID in self.__vehicles and self.__vehicles[vehicleID]:
             info = self.__vehicles[vehicleID][0]
         else:
@@ -97,11 +84,6 @@ class VehiclesInfo(shared.UnpackedInfo):
         return info
 
     def getVehicleSummarizeInfo(self, player, result):
-        """Gets information about all vehicles by specified account's database ID.
-        :param player: instance of PlayerInfo.
-        :param result: dictionary containing battle_results['vehicles'].
-        :return: instance of VehicleSummarizeInfo.
-        """
         dbID = player.dbID
         if dbID in self.__accountToVehicleID:
             vehicleID = self.__accountToVehicleID[dbID]

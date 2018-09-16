@@ -9,14 +9,14 @@
   <winnerIfExtermination>	0	</winnerIfExtermination>
   <artilleryPreparationChance>	0.0	</artilleryPreparationChance>
   <wwmusicSetup>
-    <wwmusicLoading>	music_main_menu	</wwmusicLoading>
-    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
-    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+    <wwmusicLoading>	music_ruinberg_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_ruinberg_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_ruinberg_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
   <umbraEnabled>	1	</umbraEnabled>
@@ -27,19 +27,86 @@
   <wwbattleCountdownTimerSound>	timer	</wwbattleCountdownTimerSound>
   <waypoints></waypoints>
   <battleScenarios></battleScenarios>
-  <wwmusicSetup></wwmusicSetup>
   <wwmusicDroneSetup>
     <timeRemained>
       <value>	180	</value>
     </timeRemained>
+    <timeRemained>
+      <value>	0	</value>
+      <arena_type_label>	special	</arena_type_label>
+    </timeRemained>
+    <timeRemained>
+      <value>	0	</value>
+      <arena_type_label>	epic_random_training	</arena_type_label>
+    </timeRemained>
+    <timeRemained>
+      <value>	0	</value>
+      <arena_type_label>	training	</arena_type_label>
+    </timeRemained>
+    <timeRemained>
+      <value>	180	</value>
+      <arena_type_label>	epic_random	</arena_type_label>
+    </timeRemained>
     <hpPercentRemained>
-      <value>	99	</value>
+      <value>	15	</value>
+    </hpPercentRemained>
+    <hpPercentRemained>
+      <value>	0	</value>
+      <arena_type_label>	special	</arena_type_label>
+    </hpPercentRemained>
+    <hpPercentRemained>
+      <value>	0	</value>
+      <arena_type_label>	epic_random_training	</arena_type_label>
+    </hpPercentRemained>
+    <hpPercentRemained>
+      <value>	0	</value>
+      <arena_type_label>	training	</arena_type_label>
+    </hpPercentRemained>
+    <hpPercentRemained>
+      <value>	20	</value>
+      <arena_type_label>	epic_random	</arena_type_label>
     </hpPercentRemained>
     <vehiclesRemained>
-      <value>	15	</value>
+      <value>	5	</value>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	10	</value>
+      <arena_type_label>	epic_random	</arena_type_label>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	3	</value>
+      <arena_type_label>	ranked	</arena_type_label>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	2	</value>
+      <arena_type_label>	team7x7	</arena_type_label>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	0	</value>
+      <arena_type_label>	special	</arena_type_label>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	0	</value>
+      <arena_type_label>	epic_random_training	</arena_type_label>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	0	</value>
+      <arena_type_label>	training	</arena_type_label>
     </vehiclesRemained>
     <capturedPoints>
-      <value>	99	</value>
+      <value>	15	</value>
+    </capturedPoints>
+    <capturedPoints>
+      <value>	101	</value>
+      <arena_type_label>	epic_random_training	</arena_type_label>
+    </capturedPoints>
+    <capturedPoints>
+      <value>	101	</value>
+      <arena_type_label>	training	</arena_type_label>
+    </capturedPoints>
+    <capturedPoints>
+      <value>	20	</value>
+      <arena_type_label>	epic_random	</arena_type_label>
     </capturedPoints>
     <musicStopPredelay>
       <value>	10	</value>

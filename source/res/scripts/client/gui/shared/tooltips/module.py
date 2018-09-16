@@ -229,8 +229,13 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
         if module.itemTypeID == GUI_ITEM_TYPE.GUN:
             vehicle = self.configuration.vehicle
             vDescr = vehicle.descriptor if vehicle is not None else None
-            if module.isClipGun(vDescr):
-                block.append(formatters.packImageTextBlockData(title=text_styles.standard(MENU.MODULEINFO_CLIPGUNLABEL), desc='', img=RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON, imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
+            extraInfo = module.getExtraIconInfo(vDescr)
+            if extraInfo:
+                if module.isClipGun(vDescr):
+                    titleKey = MENU.MODULEINFO_CLIPGUNLABEL
+                else:
+                    titleKey = MENU.MODULEINFO_AUTORELOADGUNLABEL
+                block.append(formatters.packImageTextBlockData(title=text_styles.standard(titleKey), desc='', img=extraInfo, imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
         elif module.itemTypeID == GUI_ITEM_TYPE.CHASSIS:
             if module.isHydraulicChassis():
                 block.append(formatters.packImageTextBlockData(title=text_styles.standard(MENU.MODULEINFO_HYDRAULICCHASSISLABEL), desc='', img=RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON, imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
@@ -256,7 +261,6 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
     def construct(self):
         block = []
         module = self.module
-        slotIdx = self.configuration.slotIdx
         vehicle = self.configuration.vehicle
         sellPrice = self.configuration.sellPrice
         buyPrice = self.configuration.buyPrice
@@ -287,7 +291,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
             leftPadding = 92
             if unlockPrice and not isEqOrDev:
                 parentCD = vehicle.intCD if vehicle is not None else None
-                isAvailable, cost, need = getUnlockPrice(module.intCD, parentCD)
+                _, cost, need = getUnlockPrice(module.intCD, parentCD)
                 neededValue = None
                 if not isUnlocked and isNextToUnlock and need > 0:
                     neededValue = need
@@ -433,15 +437,12 @@ class SimplifiedStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 value = parameter.value
                 if delta > 0:
                     value -= delta
-                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter, self.__isSituational), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name], isOptional=self.__isSituational), padding=formatters.packPadding(left=105, top=8)))
+                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simplifiedDeltaParameter(parameter, self.__isSituational), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name], isOptional=self.__isSituational), padding=formatters.packPadding(left=105, top=8)))
 
         return block
 
 
 class SimilarOptionalDeviceBlockConstructor(ModuleTooltipBlockConstructor):
-    """
-    Notification if the vehicle has an optional device with the same effect
-    """
 
     def construct(self):
         block = list()
@@ -527,7 +528,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
             isFit, reason = module.mayInstall(vehicle, slotIdx)
             vehicle.equipment.setRegularConsumables(currentVehicleEqs)
         inventoryVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
-        totalInstalledVehicles = map(lambda x: x.shortUserName, module.getInstalledVehicles(inventoryVehicles))
+        totalInstalledVehicles = [ x.shortUserName for x in module.getInstalledVehicles(inventoryVehicles) ]
         installedVehicles = totalInstalledVehicles[:self.MAX_INSTALLED_LIST_LEN]
         tooltipHeader = None
         tooltipText = None

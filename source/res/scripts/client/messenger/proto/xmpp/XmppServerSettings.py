@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/XmppServerSettings.py
+import random
 import types
 from debug_utils import LOG_ERROR
 from gui.shared.utils import getPlayerDatabaseID
 from messenger.proto.interfaces import IProtoSettings
 from messenger.proto.xmpp.gloox_constants import CONNECTION_IMPL_TYPE
 from messenger.proto.xmpp.jid import ContactJID
-import random
 _NUMBER_OF_ITEMS_IN_SAMPLE = 2
 
 def _makeSample(*args):
@@ -136,7 +136,8 @@ class XmppServerSettings(IProtoSettings):
     def getFullJID(self, databaseID=None):
         if databaseID is None:
             databaseID = getPlayerDatabaseID()
-        assert databaseID, "Player's databaseID can not be empty"
+        if not databaseID:
+            raise UserWarning("Player's databaseID can not be empty")
         jid = ContactJID()
         jid.setNode(databaseID)
         jid.setDomain(self.domain)
@@ -150,12 +151,6 @@ class XmppServerSettings(IProtoSettings):
         return iterator
 
     def isMucServiceAllowed(self, service='', hostname=''):
-        """
-        Return if muc service allowed in server config
-        :param service: service type
-        :param hostname: service hostname
-        :return: True if exist in server config
-        """
         if not self.enabled:
             return False
         for serviceType, serviceData in self.mucServices.iteritems():
@@ -165,9 +160,4 @@ class XmppServerSettings(IProtoSettings):
         return len(self.mucServices) > 0
 
     def getChannelByType(self, channelType):
-        """
-        Return channel config by type
-        :param channelType: XMPP_MUC_CHANNEL_TYPE channel type (standard/users/clan...)
-        :return: channel config (dict), None if channel config not found
-        """
         return self.mucServices[channelType] if channelType in self.mucServices else None

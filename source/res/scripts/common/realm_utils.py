@@ -6,15 +6,6 @@ import ResMgr as rmgr
 from constants import CURRENT_REALM, IS_CLIENT
 
 class ResMgr(object):
-    """
-    A replacement of traditional ResMgr to support knowledge of current realm
-    without modification of ResMgr code.
-    Class alters openSection and purge methods as follows:
-     2 phase open section: open region specific version first if exist, then loads default file;
-     two purge attempts: first file supplied then regional file
-    Regional version of the file must reside at the same path and having *.realm.xml instead of just
-    *.xml
-    """
 
     class __metaclass__(type):
 

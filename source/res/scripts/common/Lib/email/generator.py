@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/generator.py
-"""Classes to generate plain text from a message object tree."""
 __all__ = ['Generator', 'DecodedGenerator']
 import re
 import sys
@@ -24,29 +23,8 @@ def _is8bitstring(s):
 
 
 class Generator():
-    """Generates output from a Message object tree.
-    
-    This basic generator writes the message to the given file object as plain
-    text.
-    """
 
     def __init__(self, outfp, mangle_from_=True, maxheaderlen=78):
-        """Create the generator for message flattening.
-        
-        outfp is the output file-like object for writing the message to.  It
-        must have a write() method.
-        
-        Optional mangle_from_ is a flag that, when True (the default), escapes
-        From_ lines in the body of the message by putting a `>' in front of
-        them.
-        
-        Optional maxheaderlen specifies the longest length for a non-continued
-        header.  When a header line is longer (in characters, with tabs
-        expanded to 8 spaces) than maxheaderlen, the header will split as
-        defined in the Header class.  Set maxheaderlen to zero to disable
-        header wrapping.  The default is 78, as recommended (but not required)
-        by RFC 2822.
-        """
         self._fp = outfp
         self._mangle_from_ = mangle_from_
         self._maxheaderlen = maxheaderlen
@@ -55,16 +33,6 @@ class Generator():
         self._fp.write(s)
 
     def flatten(self, msg, unixfrom=False):
-        """Print the message object tree rooted at msg to the output file
-        specified when the Generator instance was created.
-        
-        unixfrom is a flag that forces the printing of a Unix From_ delimiter
-        before the first object in the message tree.  If the original message
-        has no From_ delimiter, a `standard' one is crafted.  By default, this
-        is False to inhibit the printing of any From_ delimiter.
-        
-        Note that for subobjects, no From_ line is printed.
-        """
         if unixfrom:
             ufrom = msg.get_unixfrom()
             if not ufrom:
@@ -73,7 +41,6 @@ class Generator():
         self._write(msg)
 
     def clone(self, fp):
-        """Clone this generator with the exact same options."""
         return self.__class__(fp, self._mangle_from_, self._maxheaderlen)
 
     def _write(self, msg):
@@ -211,34 +178,8 @@ class Generator():
 _FMT = '[Non-text (%(type)s) part of message omitted, filename %(filename)s]'
 
 class DecodedGenerator(Generator):
-    """Generates a text representation of a message.
-    
-    Like the Generator base class, except that non-text parts are substituted
-    with a format string representing the part.
-    """
 
     def __init__(self, outfp, mangle_from_=True, maxheaderlen=78, fmt=None):
-        """Like Generator.__init__() except that an additional optional
-        argument is allowed.
-        
-        Walks through all subparts of a message.  If the subpart is of main
-        type `text', then it prints the decoded payload of the subpart.
-        
-        Otherwise, fmt is a format string that is used instead of the message
-        payload.  fmt is expanded with the following keywords (in
-        %(keyword)s format):
-        
-        type       : Full MIME type of the non-text part
-        maintype   : Main MIME type of the non-text part
-        subtype    : Sub-MIME type of the non-text part
-        filename   : Filename of the non-text part
-        description: Description associated with the non-text part
-        encoding   : Content transfer encoding of the non-text part
-        
-        The default value for fmt is None, meaning
-        
-        [Non-text (%(type)s) part of message omitted, filename %(filename)s]
-        """
         Generator.__init__(self, outfp, mangle_from_, maxheaderlen)
         if fmt is None:
             self._fmt = _FMT

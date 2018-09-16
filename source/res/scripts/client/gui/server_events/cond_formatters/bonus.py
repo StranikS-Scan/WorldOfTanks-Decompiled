@@ -58,12 +58,6 @@ GROUP_BY_FORMATTERS_DATA = {'vehicle': (packMissionVehicleProgress, MISSIONS_ALI
  'class': (packMissionClassProgress, MISSIONS_ALIASES.GROUPBY_VEH_TYPE_RENDERER)}
 
 class MissionsBonusConditionsFormatter(MissionsBattleConditionsFormatter):
-    """
-    Conditions formatter for 'bonus' conditions section.
-    Bonus conditions have cumulative effect.
-    Displayed in missions card GUI and detailed card view in the centre of card,
-    Visual representation has icon, title, description and progress bar
-    """
 
     def __init__(self):
         super(MissionsBonusConditionsFormatter, self).__init__({'vehicleKillsCumulative': _VehicleKillsCumulativeFormatter(),
@@ -74,9 +68,6 @@ class MissionsBonusConditionsFormatter(MissionsBattleConditionsFormatter):
 
 
 class _CumulativableFormatter(MissionFormatter, CumulativableFormatter):
-    """
-    Base cumulative conditions formatter which accumulate progress between battles.
-    """
 
     def _format(self, condition, event):
         if self.getGroupByValue(condition) is None:
@@ -115,9 +106,6 @@ class _CumulativableFormatter(MissionFormatter, CumulativableFormatter):
 
 
 class _CumulativeResultFormatter(_CumulativableFormatter):
-    """
-    Formatter for Results and UnitResults conditions. Shows accumulate battle results progress by selected key.
-    """
 
     def _groupedByFormat(self, condition, event, progressData):
         result = []
@@ -171,9 +159,6 @@ class _CumulativeResultFormatter(_CumulativableFormatter):
 
 
 class _VehicleCumulativeFormatter(_CumulativableFormatter, MissionsVehicleListFormatter):
-    """
-    Base cumulative formatter for vehicle kill and vehicle damage conditions
-    """
 
     def _cumulativeFormat(self, condition, event):
         result = []
@@ -212,23 +197,14 @@ class _VehicleCumulativeFormatter(_CumulativableFormatter, MissionsVehicleListFo
 
 
 class _VehicleKillsCumulativeFormatter(_VehicleCumulativeFormatter, VehiclesKillFormatter):
-    """
-    Cumulative vehicle kill condition formatter. Shows how many vehicles player must kill to complete quest.
-    """
     pass
 
 
 class _VehicleDamageCumulativeFormatter(_VehicleCumulativeFormatter, VehiclesDamageFormatter):
-    """
-    Cumulative vehicle damage condition formatter. Shows how many damage player must shot to complete quest.
-    """
     pass
 
 
 class _VehicleStunCumulativeFormatter(_VehicleCumulativeFormatter, VehiclesStunFormatter):
-    """
-    Cumulative vehicle stun condition formatter. Shows how many stun player must shot to complete quest.
-    """
 
     @classmethod
     def _getLabelKey(cls, condition=None):
@@ -240,14 +216,6 @@ class _VehicleStunCumulativeFormatter(_VehicleCumulativeFormatter, VehiclesStunF
 
 
 class BattlesCountFormatter(_CumulativeResultFormatter):
-    """
-    Battles count condition formatter.
-    Has specific display logic depends on postbattle conditions, upperLimits and inRow section.
-    Shows how many battles player has to complete quest if has 'upperLimits' section.
-    Shows battles series in which player must complete all others conditions if quest has 'inRow' section.
-    Shows battles count in which player should complete all others conditions if hasPostBattleConditions
-    Else shows battles count to complete quest.
-    """
 
     def __init__(self, hasPostBattleConditions):
         self.__hasPostBattleConditions = hasPostBattleConditions

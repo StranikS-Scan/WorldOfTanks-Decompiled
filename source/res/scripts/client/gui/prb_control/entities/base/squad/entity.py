@@ -12,9 +12,6 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
 
 class SquadEntryPoint(UnitEntryPoint):
-    """
-    Squad base entry point
-    """
 
     def makeDefCtx(self):
         return SquadSettingsCtx(waitingID='prebattle/create', accountsToInvite=self._accountsToInvite)
@@ -27,9 +24,6 @@ class SquadEntryPoint(UnitEntryPoint):
 
 
 class SquadEntity(UnitEntity):
-    """
-    Squad base entity class
-    """
 
     def init(self, ctx=None):
         self.invalidateVehicleStates()
@@ -61,11 +55,6 @@ class SquadEntity(UnitEntity):
         self._actionsHandler.setUnitChanged()
 
     def invalidateVehicleStates(self, vehicles=None):
-        """
-        Invalidates given vehicles states
-        Args:
-            vehicles: dict of items cache request result: intCD -> vehicle item
-        """
         state = Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT
         if vehicles:
             criteria = REQ_CRITERIA.IN_CD_LIST(vehicles)
@@ -86,22 +75,9 @@ class SquadEntity(UnitEntity):
         return SquadActionsValidator(self)
 
     def _vehicleStateCondition(self, v):
-        """
-        Checker for vehicle state
-        Args:
-            v: vehicle item
-        """
         return True
 
     def _updateVehicleState(self, vehicle, state):
-        """
-        Sets given state if vehicle is not valid for current entity, deletes any custom state otherwise
-        Args:
-            vehicle: vehicle item
-            state: new state
-        Returns:
-            True if vehicle state was change, False otherwise
-        """
         invalid = not self._vehicleStateCondition(vehicle)
         stateSet = vehicle.getCustomState() == state
         if invalid and not stateSet:
@@ -112,9 +88,6 @@ class SquadEntity(UnitEntity):
         return changed
 
     def __clearCustomVehicleStates(self):
-        """
-        Removes all custom states in inventory vehicles
-        """
         vehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
         updatedVehicles = []
         for intCD, v in vehicles.iteritems():

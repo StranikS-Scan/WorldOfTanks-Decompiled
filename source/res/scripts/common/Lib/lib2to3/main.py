@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/main.py
-"""
-Main program for 2to3.
-"""
 from __future__ import with_statement
 import sys
 import os
@@ -13,41 +10,14 @@ import optparse
 from . import refactor
 
 def diff_texts(a, b, filename):
-    """Return a unified diff of two strings."""
     a = a.splitlines()
     b = b.splitlines()
     return difflib.unified_diff(a, b, filename, filename, '(original)', '(refactored)', lineterm='')
 
 
 class StdoutRefactoringTool(refactor.MultiprocessRefactoringTool):
-    """
-    A refactoring tool that can avoid overwriting its input files.
-    Prints output to stdout.
-    
-    Output files can optionally be written to a different directory and or
-    have an extra file suffix appended to their name for use in situations
-    where you do not want to replace the input files.
-    """
 
     def __init__(self, fixers, options, explicit, nobackups, show_diffs, input_base_dir='', output_dir='', append_suffix=''):
-        """
-        Args:
-            fixers: A list of fixers to import.
-            options: A dict with RefactoringTool configuration.
-            explicit: A list of fixers to run even if they are explicit.
-            nobackups: If true no backup '.bak' files will be created for those
-                files that are being refactored.
-            show_diffs: Should diffs of the refactoring be printed to stdout?
-            input_base_dir: The base directory for all input files.  This class
-                will strip this path prefix off of filenames before substituting
-                it with output_dir.  Only meaningful if output_dir is supplied.
-                All files processed by refactor() must start with this path.
-            output_dir: If supplied, all converted files will be written into
-                this directory tree instead of input_base_dir.
-            append_suffix: If supplied, all files output by this tool will have
-                this appended to their filename.  Useful for changing .py to
-                .py3 for example by passing append_suffix='3'.
-        """
         self.nobackups = nobackups
         self.show_diffs = show_diffs
         if input_base_dir and not input_base_dir.endswith(os.sep):
@@ -125,15 +95,6 @@ def warn(msg):
 
 
 def main(fixer_pkg, args=None):
-    """Main program.
-    
-    Args:
-        fixer_pkg: the name of a package where the fixers are located.
-        args: optional; a list of command line arguments. If omitted,
-              sys.argv[1:] is used.
-    
-    Returns a suggested exit status (0, 1, 2).
-    """
     parser = optparse.OptionParser(usage='2to3 [options] file|dir ...')
     parser.add_option('-d', '--doctests_only', action='store_true', help='Fix up doctests only')
     parser.add_option('-f', '--fix', action='append', default=[], help='Each FIX specifies a transformation; default: all')
@@ -213,7 +174,6 @@ def main(fixer_pkg, args=None):
             try:
                 rt.refactor(args, options.write, options.doctests_only, options.processes)
             except refactor.MultiprocessingUnsupported:
-                assert options.processes > 1
                 print >> sys.stderr, "Sorry, -j isn't supported on this platform."
                 return 1
 

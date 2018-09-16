@@ -3,7 +3,7 @@
 import Event
 g_instance = None
 
-class _InputHandler:
+class _InputHandler(object):
     onKeyDown = Event.Event()
     onKeyUp = Event.Event()
 

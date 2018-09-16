@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/persistent_caches.py
 import weakref
-import BigWorld
 import cPickle
 import os
 import base64
+import BigWorld
 import constants
 
 class SimpleCache(object):
@@ -21,7 +21,7 @@ class SimpleCache(object):
             fileName = self.getFileName()
             self.__memcache.pop(fileName, None)
             os.remove(fileName)
-        except:
+        except Exception:
             pass
 
         return
@@ -33,7 +33,8 @@ class SimpleCache(object):
         return self.__account
 
     def getFileName(self):
-        assert self.__account is not None
+        if self.__account is None:
+            raise UserWarning('Account is not defined')
         return cacheFileName(self.__account, self.__cacheType, self.__cacheName)
 
     def get(self):
@@ -65,7 +66,6 @@ class SimpleCache(object):
         return (None, None)
 
     def save(self, descr, data):
-        assert self.__account is not None
         if self.__account is None:
             return
         else:
@@ -88,11 +88,11 @@ def cacheFileName(account, cacheType, cacheName):
     cacheDir = p.join(p.dirname(prefsFilePath), cacheType)
     if not os.path.isdir(cacheDir):
         os.makedirs(cacheDir)
-    cacheFileName = p.join(cacheDir, base64.b32encode('%s_%s_%s_%s' % (constants.AUTH_REALM,
+    cache = p.join(cacheDir, base64.b32encode('%s_%s_%s_%s' % (constants.AUTH_REALM,
      account.name,
      account.__class__.__name__,
      cacheName)) + '.dat')
-    return cacheFileName
+    return cache
 
 
 def readFile(filename):

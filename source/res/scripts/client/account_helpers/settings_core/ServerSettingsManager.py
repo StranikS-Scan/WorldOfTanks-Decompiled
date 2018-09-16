@@ -39,6 +39,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     DAMAGE_INDICATOR = 'FEEDBACK_DAMAGE_INDICATOR'
     DAMAGE_LOG = 'FEEDBACK_DAMAGE_LOG'
     BATTLE_EVENTS = 'FEEDBACK_BATTLE_EVENTS'
+    BATTLE_BORDER_MAP = 'FEEDBACK_BORDER_MAP'
     ENCYCLOPEDIA_RECOMMENDATIONS_1 = 'ENCYCLOPEDIA_RECOMMENDATIONS_1'
     ENCYCLOPEDIA_RECOMMENDATIONS_2 = 'ENCYCLOPEDIA_RECOMMENDATIONS_2'
     ENCYCLOPEDIA_RECOMMENDATIONS_3 = 'ENCYCLOPEDIA_RECOMMENDATIONS_3'
@@ -57,12 +58,12 @@ class ServerSettingsManager(object):
     DAMAGE_INDICATOR = settings_constants.DAMAGE_INDICATOR
     DAMAGE_LOG = settings_constants.DAMAGE_LOG
     BATTLE_EVENTS = settings_constants.BATTLE_EVENTS
+    BATTLE_BORDER_MAP = settings_constants.BATTLE_BORDER_MAP
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
                               GAME.STORE_RECEIVER_IN_BATTLE: 3,
                               GAME.PLAYERS_PANELS_SHOW_LEVELS: 4,
-                              GAME.ENABLE_POSTMORTEM: 5,
                               GAME.DYNAMIC_CAMERA: 6,
                               GAME.ENABLE_POSTMORTEM_DELAY: 7,
                               GAME.ENABLE_SERVER_AIM: 8,
@@ -86,11 +87,13 @@ class ServerSettingsManager(object):
                                        GAME.CAROUSEL_TYPE: 12,
                                        GAME.DOUBLE_CAROUSEL_TYPE: 13,
                                        GAME.VEHICLE_CAROUSEL_STATS: 14,
+                                       GAME.MINIMAP_ALPHA_ENABLED: 15,
+                                       GAME.HANGAR_CAM_PARALLAX_ENABLED: 16,
                                        GAME.C11N_HISTORICALLY_ACCURATE: 17}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
-                                       GAME.BATTLE_LOADING_RANKED_INFO: Offset(15, 98304)}),
+                                       GAME.BATTLE_LOADING_RANKED_INFO: Offset(15, 98304),
+                                       GAME.HANGAR_CAM_PERIOD: Offset(17, 917504)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
-     SETTINGS_SECTIONS.GRAPHICS: Section(masks={GRAPHICS.FPS_PERFOMANCER: 0,
-                                  GAME.LENS_EFFECT: 1}, offsets={}),
+     SETTINGS_SECTIONS.GRAPHICS: Section(masks={GAME.LENS_EFFECT: 1}, offsets={}),
      SETTINGS_SECTIONS.SOUND: Section(masks={}, offsets={SOUND.ALT_VOICES: Offset(0, 255)}),
      SETTINGS_SECTIONS.CONTROLS: Section(masks={CONTROLS.MOUSE_HORZ_INVERSION: 0,
                                   CONTROLS.MOUSE_VERT_INVERSION: 1,
@@ -131,6 +134,7 @@ class ServerSettingsManager(object):
                                            'czech': 7,
                                            'sweden': 8,
                                            'poland': 9,
+                                           'italy': 10,
                                            'lightTank': 15,
                                            'mediumTank': 16,
                                            'heavyTank': 17,
@@ -163,6 +167,7 @@ class ServerSettingsManager(object):
                                                   'czech': 7,
                                                   'sweden': 8,
                                                   'poland': 9,
+                                                  'italy': 10,
                                                   'lightTank': 15,
                                                   'mediumTank': 16,
                                                   'heavyTank': 17,
@@ -189,7 +194,8 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={'isFreeXPInfoDialogShowed': 0,
                                             'isRankedWelcomeViewShowed': 1,
                                             'isRankedWelcomeViewStarted': 2,
-                                            'isEpicRandomCheckboxClicked': 3}, offsets={}),
+                                            'isEpicRandomCheckboxClicked': 3,
+                                            'isGammaDialogShowed': 4}, offsets={}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
@@ -243,6 +249,8 @@ class ServerSettingsManager(object):
                                        BATTLE_EVENTS.RECEIVED_DAMAGE: 15,
                                        BATTLE_EVENTS.RECEIVED_CRITS: 16,
                                        BATTLE_EVENTS.ENEMY_ASSIST_STUN: 17}, offsets={}),
+     SETTINGS_SECTIONS.BATTLE_BORDER_MAP: Section(masks={}, offsets={BATTLE_BORDER_MAP.MODE_SHOW_BORDER: Offset(0, 3),
+                                           BATTLE_BORDER_MAP.TYPE_BORDER: Offset(2, 12)}),
      SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1: Section(masks={'hasNew': 15}, offsets={'item_1': Offset(0, 36863),
                                                         'item_2': Offset(16, 2415853568L)}),
      SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2: Section(masks={}, offsets={'item_3': Offset(0, 36863),

@@ -24,14 +24,6 @@ def isInEventBattlesQueue():
     return getattr(BigWorld.player(), 'isInEventBattles', False)
 
 
-def isInFalloutClassic():
-    return getattr(BigWorld.player(), 'isInFalloutClassic', False)
-
-
-def isInFalloutMultiteam():
-    return getattr(BigWorld.player(), 'isInFalloutMultiteam', False)
-
-
 def isInSandboxQueue():
     return getattr(BigWorld.player(), 'isInSandboxQueue', False)
 
@@ -51,10 +43,6 @@ def getQueueType():
         queueType = QUEUE_TYPE.RANDOMS
     elif isInEventBattlesQueue():
         queueType = QUEUE_TYPE.EVENT_BATTLES
-    elif isInFalloutClassic():
-        queueType = QUEUE_TYPE.FALLOUT_CLASSIC
-    elif isInFalloutMultiteam():
-        queueType = QUEUE_TYPE.FALLOUT_MULTITEAM
     elif isInTutorialQueue():
         queueType = QUEUE_TYPE.TUTORIAL
     elif isInBootcampQueue():
@@ -144,8 +132,6 @@ _ARENA_GUI_TYPE_BY_PRB_TYPE = {PREBATTLE_TYPE.SQUAD: ARENA_GUI_TYPE.RANDOM,
  PREBATTLE_TYPE.EVENT: ARENA_GUI_TYPE.EVENT_BATTLES}
 _ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
  QUEUE_TYPE.EVENT_BATTLES: ARENA_GUI_TYPE.EVENT_BATTLES,
- QUEUE_TYPE.FALLOUT_CLASSIC: ARENA_GUI_TYPE.FALLOUT_CLASSIC,
- QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_GUI_TYPE.FALLOUT_MULTITEAM,
  QUEUE_TYPE.RANKED: ARENA_GUI_TYPE.RANKED}
 
 def getArenaGUIType(prbType=None, queueType=None):
@@ -287,9 +273,4 @@ def hasModalEntity():
 
 
 def getTrainingBattleRoundLimits(accountAttrs):
-    """Returns training battle round limits in seconds.
-    They depend on account attributes. See base/Prebattle.py
-    
-    @return: (min_length, max_length)
-    """
     return (60, 14400) if accountAttrs & ACCOUNT_ATTR.DAILY_BONUS_1 else (300, 1800)

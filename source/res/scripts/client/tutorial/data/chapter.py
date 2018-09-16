@@ -28,6 +28,8 @@ class Chapter(HasID):
         self.__triggers = {}
         self.__varSets = []
         self.__predefinedVars = predefinedVars or []
+        self.__effectsPostScene = []
+        self.__effectsPreScene = []
         self.__valid = False
         return
 
@@ -116,10 +118,17 @@ class Chapter(HasID):
     def getVarSets(self):
         return self.__varSets + self.__predefinedVars
 
+    def addGlobalEffect(self, effect, isPostScene):
+        self.__getEffectsList(isPostScene).append(effect)
+
+    def getGlobalEffects(self, isPostScene):
+        return self.__getEffectsList(isPostScene)[:]
+
     def clear(self):
         self.__valid = False
         self.__flags = []
         self.__varSets = []
+        self.__effects = []
         self.__sceneMap.clear()
         while self.__scenes:
             self.__scenes.pop().clear()
@@ -137,6 +146,9 @@ class Chapter(HasID):
 
     def setValid(self, flag):
         self.__valid = flag
+
+    def __getEffectsList(self, isPostScene):
+        return self.__effectsPostScene if isPostScene else self.__effectsPreScene
 
 
 class Scene(HasID):
@@ -306,12 +318,10 @@ class ActionsHolder(HasID):
         return self.__actions.values()
 
     def setActions(self, actions):
-        self.__actions = dict(map(lambda action: ((action.getType(), action.getTargetID()), action), actions))
+        self.__actions = dict((((action.getType(), action.getTargetID()), action) for action in actions))
 
     def clear(self):
-        while self.__actions:
-            _, action = self.__actions.popitem()
-            action.clear()
+        self.__actions.clear()
 
 
 class Message(HasID):
@@ -475,18 +485,11 @@ class PopUp(ActionsHolder):
 
 class GuiItemRef(HasTargetID):
 
-    def __init__(self, targetID, props, conditions=None):
+    def __init__(self, targetID, conditions=None):
         super(GuiItemRef, self).__init__(targetID=targetID)
-        self.__props = props
         self.__conditions = conditions
         self.__notOnSceneEffects = []
         self.__onSceneEffects = []
-
-    def getProps(self):
-        return self.__props.copy()
-
-    def getLifeCycle(self):
-        raise NotImplementedError('GuiItemRef.getLifeCycle not implemented')
 
     def getConditions(self):
         return self.__conditions
@@ -504,7 +507,6 @@ class GuiItemRef(HasTargetID):
         return self.__onSceneEffects[:]
 
     def clear(self):
-        self.__props.clear()
         if self.__conditions is not None:
             self.__conditions.clear()
         while self.__notOnSceneEffects:
@@ -521,6 +523,20 @@ class GuiItemCriteria(HasIDAndTarget):
     def __init__(self, entityID, targetID, value):
         super(GuiItemCriteria, self).__init__(entityID=entityID, targetID=targetID)
         self.__value = value
+
+    def getValue(self):
+        return self.__value
+
+
+class GuiItemViewCriteria(HasID):
+
+    def __init__(self, entityID, componentIDs, value):
+        super(GuiItemViewCriteria, self).__init__(entityID=entityID)
+        self.__componentIDs = componentIDs
+        self.__value = value
+
+    def getComponentIDs(self):
+        return self.__componentIDs
 
     def getValue(self):
         return self.__value

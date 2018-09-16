@@ -11,14 +11,14 @@ class ShowGreetingEffect(ComponentEffect):
         self._greetingID = None
         return
 
-    def isStillRunning(self, effectID=None):
+    def isStillRunning(self, effectID=None, effectSubType=None):
         if effectID is not None:
             result = self._greetingID == effectID
         else:
             result = self._greetingID is not None
         return result
 
-    def stop(self, effectID=None):
+    def stop(self, effectID=None, effectSubType=None):
         if effectID is not None and effectID != self._greetingID:
             LOG_DEBUG('Greeting is not added', effectID)
             return

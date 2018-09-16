@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/settings.py
 import time
-from gui.shared import utils, events, g_eventBus
-_LAST_PQ_INTRO_VERSION = 'fallout'
+from gui.shared import utils, events as gui_events, g_eventBus
 
 class _PMSettings(utils.SettingRecord):
 
-    def __init__(self, introShown=False, operationsVisited=set(), headerAlert=False):
-        super(_PMSettings, self).__init__(introShown=introShown, operationsVisited=operationsVisited, headerAlert=headerAlert)
+    def __init__(self, introShown=False, operationsVisited=None, headerAlert=False):
+        super(_PMSettings, self).__init__(introShown=introShown, operationsVisited=operationsVisited or set(), headerAlert=headerAlert)
 
     def markOperationAsVisited(self, operationID):
         self.update(operationsVisited=self.operationsVisited | {operationID})
@@ -15,8 +14,8 @@ class _PMSettings(utils.SettingRecord):
 
 class _QuestSettings(utils.SettingRootRecord):
 
-    def __init__(self, lastVisitTime=-1, visited=set(), naVisited=set(), minimized=set(), personalMissions=None):
-        super(_QuestSettings, self).__init__(lastVisitTime=lastVisitTime, visited=visited, naVisited=naVisited, minimized=minimized, personalMissions=_PMSettings(**(personalMissions or {})))
+    def __init__(self, lastVisitTime=-1, visited=None, naVisited=None, minimized=None, personalMissions=None):
+        super(_QuestSettings, self).__init__(lastVisitTime=lastVisitTime, visited=visited or set(), naVisited=naVisited or set(), minimized=minimized or set(), personalMissions=_PMSettings(**(personalMissions or {})))
 
     def updateVisited(self, visitSettingName, eventID):
         settingsValue = set(self[visitSettingName])
@@ -69,10 +68,8 @@ def isGroupMinimized(groupID, settings=None):
 
 
 def getNewCommonEvents(events):
-    """ Acquire subset of not viewed events from the given events.
-    """
     settings = get()
-    return filter(lambda e: isNewCommonEvent(e, settings), events)
+    return [ e for e in events if isNewCommonEvent(e, settings) ]
 
 
 def visitEventGUI(event):
@@ -87,13 +84,11 @@ def visitEventGUI(event):
             isVisitedChanged = False
         if isNaVisitedChanged or isVisitedChanged:
             s.save()
-            g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.EVENTS_UPDATED))
+            g_eventBus.handleEvent(gui_events.LobbySimpleEvent(gui_events.LobbySimpleEvent.EVENTS_UPDATED))
         return
 
 
 def visitEventsGUI(events):
-    """ Mark given events as viewed.
-    """
     for event in events:
         visitEventGUI(event)
 
@@ -118,10 +113,6 @@ def _updatePMSettings(**kwargs):
     settings = get()
     settings.personalMissions.update(**kwargs)
     settings.save()
-
-
-def markPQIntroAsShown():
-    _updatePMSettings(introShown=_LAST_PQ_INTRO_VERSION)
 
 
 def isPMOperationNew(operationID, pmSettings=None):

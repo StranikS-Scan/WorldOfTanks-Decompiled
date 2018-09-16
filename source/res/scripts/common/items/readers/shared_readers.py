@@ -8,12 +8,6 @@ from items.components import shared_components
 _ALLOWED_EMBLEM_SLOTS = component_constants.ALLOWED_EMBLEM_SLOTS
 
 def readEmblemSlots(xmlCtx, section, subsectionName):
-    """Reads section 'emblemSlots' to fetch sequence of emblem slots if they exist.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param subsectionName: string containing name of section to find slots configuration.
-    :return: tuple containing EmblemSlot items.
-    """
     slots = []
     for sname, subsection in _xml.getChildren(xmlCtx, section, subsectionName):
         if sname not in component_constants.ALLOWED_EMBLEM_SLOTS:
@@ -38,44 +32,18 @@ def readLodSettings(xmlCtx, section, cache):
 
 
 def readSwingingSettings(xmlCtx, section, cache):
-    """Reads section 'swinging' for each hull.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param cache: instance of vehicles.Cache.
-    :return: instance of SwingingSettings.
-    """
     return shared_components.SwingingSettings(readLodDist(xmlCtx, section, 'swinging/lodDist', cache), _xml.readNonNegativeFloat(xmlCtx, section, 'swinging/sensitivityToImpulse'), _xml.readTupleOfFloats(xmlCtx, section, 'swinging/pitchParams', 6), _xml.readTupleOfFloats(xmlCtx, section, 'swinging/rollParams', 7))
 
 
 def readModels(xmlCtx, section, subsectionName):
-    """Reads section with name 'subsectionName' to fetch paths of models
-        for each hull, chassis, turret and gun.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param subsectionName: string containing name of desired section.
-    :return: instance of ModelStatesPaths.
-    """
     return shared_components.ModelStatesPaths(_xml.readNonEmptyString(xmlCtx, section, subsectionName + '/undamaged'), _xml.readNonEmptyString(xmlCtx, section, subsectionName + '/destroyed'), _xml.readNonEmptyString(xmlCtx, section, subsectionName + '/exploded'))
 
 
 def readUserText(section):
-    """Reads i18n information that contains user-friendly name, description of item.
-    :param section: instance of DataSection.
-    :return: instance of I18nComponent.
-    """
     return shared_components.I18nComponent(section.readString('userString'), section.readString('description'), section.readString('shortUserString'))
 
 
 def readDeviceHealthParams(xmlCtx, section, subsectionName='', withHysteresis=True):
-    """Reads health parameter for each device.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param subsectionName: string containing name of desired section or empty string
-        if desired section is already exist.
-    :param withHysteresis: if value equals True than read section 'hysteresisHealth',
-        otherwise - do nothing.
-    :return: instance of DeviceHealth.
-    """
     if subsectionName:
         section = _xml.getSubsection(xmlCtx, section, subsectionName)
         xmlCtx = (xmlCtx, subsectionName)
@@ -98,13 +66,6 @@ def readDeviceHealthParams(xmlCtx, section, subsectionName='', withHysteresis=Tr
 
 
 def readCamouflage(xmlCtx, section, sectionName, default=None):
-    """Reads camouflage configuration of vehicle's item on client-side only.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param sectionName:  string containing name of section.
-    :param default: None or instance of Camouflage that is used as default.
-    :return: instance of shared_components.Camouflage.
-    """
     tilingKey = sectionName + '/tiling'
     if default is None or section.has_key(tilingKey):
         tiling = _xml.readTupleOfFloats(xmlCtx, section, tilingKey, 4)

@@ -1,112 +1,56 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/commands/window_navigator.py
-from collections import namedtuple
-from command import SchemeValidator, CommandHandler, instantiateObject
-_OpenWindowCommand = namedtuple('_OpenWindowCommand', ('window_id', 'custom_parameters'))
-_OpenWindowCommand.__new__.__defaults__ = (None, None)
-_OpenWindowCommandScheme = {'required': (('window_id', basestring),)}
-_OpenClanCardCommand = namedtuple('_OpenClanCardCommand', ('clan_dbid', 'clan_abbrev'))
-_OpenClanCardCommand.__new__.__defaults__ = (None, None)
-_OpenClanCardScheme = {'required': (('clan_dbid', (int, long)), ('clan_abbrev', basestring))}
-_OpenProfileCommand = namedtuple('_OpenProfileCommand', ('database_id', 'user_name'))
-_OpenProfileCommand.__new__.__defaults__ = (None, None)
-_OpenProfileScheme = {'required': (('database_id', (int, long)), ('user_name', basestring))}
-_OpenBrowserCommand = namedtuple('_OpenBrowserCommand', ('url', 'title', 'is_modal', 'show_refresh', 'show_create_waiting', 'width', 'height', 'is_solid_border'))
-_OpenBrowserCommand.__new__.__defaults__ = (None,
- None,
- False,
- True,
- False,
- None,
- None,
- False)
-_OpenBrowserScheme = {'required': (('url', basestring),
-              ('title', basestring),
-              ('width', (int, long)),
-              ('height', (int, long))),
- 'optional': (('is_modal', bool),
-              ('show_refresh', bool),
-              ('show_create_waiting', bool),
-              ('is_solid_border', bool))}
-_CloseWindowCommand = namedtuple('_CloseWindowCommand', ('window_id',))
-_CloseWindowCommand.__new__.__defaults__ = (None,)
-_CloseWindowCommandScheme = {'required': (('window_id', basestring),)}
-_CloseBrowserScheme = {}
-_OpenTabCommand = namedtuple('_OpenTabCommand', ('tab_id', 'selected_id'))
-_OpenTabCommand.__new__.__defaults__ = (None, None)
-_OpenTabCommandScheme = {'required': (('tab_id', basestring),),
- 'optional': (('selected_id', basestring),)}
+from command import W2CSchema, Field, createSubCommandsHandler, SubCommand
 
-class OpenWindowCommand(_OpenWindowCommand, SchemeValidator):
-    """
-    Represents web command for opening window by id.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(OpenWindowCommand, self).__init__(_OpenWindowCommandScheme)
+class OpenWindowSchema(W2CSchema):
+    window_id = Field(required=True, type=basestring)
 
 
-class OpenClanCardCommand(_OpenClanCardCommand, SchemeValidator):
-    """
-    Represents web command for opening window by id.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(OpenClanCardCommand, self).__init__(_OpenClanCardScheme)
+class OpenClanCardSchema(W2CSchema):
+    clan_dbid = Field(required=True, type=(int, long))
+    clan_abbrev = Field(required=True, type=basestring)
 
 
-class OpenProfileCommand(_OpenProfileCommand, SchemeValidator):
-    """
-    Represents web command for opening window by id.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(OpenProfileCommand, self).__init__(_OpenProfileScheme)
+class OpenProfileSchema(W2CSchema):
+    database_id = Field(required=True, type=(int, long))
+    user_name = Field(required=True, type=basestring)
 
 
-class OpenBrowserCommand(_OpenBrowserCommand, SchemeValidator):
-    """
-    Represents web command for opening window by id.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(OpenBrowserCommand, self).__init__(_OpenBrowserScheme)
-
-
-def createOpenWindowHandler(handlerFunc):
-    data = {'name': 'open_window',
-     'cls': OpenWindowCommand,
-     'handler': handlerFunc}
-    return instantiateObject(CommandHandler, data)
+class OpenBrowserSchema(W2CSchema):
+    url = Field(required=True, type=basestring)
+    title = Field(required=True, type=basestring)
+    width = Field(required=True, type=(int, long))
+    height = Field(required=True, type=(int, long))
+    is_modal = Field(type=bool, default=False)
+    show_refresh = Field(type=bool, default=True)
+    show_create_waiting = Field(type=bool, default=False)
+    is_solid_border = Field(type=bool, default=False)
 
 
-class CloseWindowCommand(_CloseWindowCommand, SchemeValidator):
-    """
-    Represents web command for closing window by id.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(CloseWindowCommand, self).__init__(_CloseWindowCommandScheme)
-
-
-def createCloseWindowHandler(handlerFunc):
-    data = {'name': 'close_window',
-     'cls': CloseWindowCommand,
-     'handler': handlerFunc}
-    return instantiateObject(CommandHandler, data)
+def createOpenWindowHandler(profileHandler=None, clanCardHandler=None, clanInvitesHandler=None, clanSearchHandler=None, browserHandler=None):
+    subCommands = {'profile_window': SubCommand(subSchema=OpenProfileSchema, handler=profileHandler),
+     'clan_card_window': SubCommand(subSchema=OpenClanCardSchema, handler=clanCardHandler),
+     'clan_invites_window': SubCommand(handler=clanInvitesHandler),
+     'clan_search_window': SubCommand(handler=clanSearchHandler),
+     'browser': SubCommand(subSchema=OpenBrowserSchema, handler=browserHandler)}
+    return createSubCommandsHandler('open_window', OpenWindowSchema, 'window_id', subCommands)
 
 
-class OpenTabCommand(_OpenTabCommand, SchemeValidator):
-    """
-    Represents web command for opening tab by id.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(OpenTabCommand, self).__init__(_OpenTabCommandScheme)
+class CloseWindowSchema(W2CSchema):
+    window_id = Field(required=True, type=basestring)
 
 
-def createOpenTabHandler(handlerFunc):
-    data = {'name': 'open_tab',
-     'cls': OpenTabCommand,
-     'handler': handlerFunc}
-    return instantiateObject(CommandHandler, data)
+def createCloseWindowHandler(browserHandler):
+    subCommands = {'browser': SubCommand(handler=browserHandler)}
+    return createSubCommandsHandler('close_window', CloseWindowSchema, 'window_id', subCommands)
+
+
+class OpenTabSchema(W2CSchema):
+    tab_id = Field(required=True, type=basestring)
+    selected_id = Field(type=basestring)
+
+
+def createOpenTabHandler(hangarHandler=None, profileHandler=None):
+    subCommands = {'hangar': SubCommand(handler=hangarHandler),
+     'profile': SubCommand(handler=profileHandler)}
+    return createSubCommandsHandler('open_tab', OpenTabSchema, 'tab_id', subCommands)

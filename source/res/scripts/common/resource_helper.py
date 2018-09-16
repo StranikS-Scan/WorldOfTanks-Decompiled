@@ -26,10 +26,6 @@ class RESOURCE_ITEM_TYPE(object):
 class ResourceError(Exception):
 
     def __init__(self, ctx, message):
-        """
-        Class for resource configuration error. That received next arguments:
-        resource context (@see ResourceCtx), message of error.
-        """
         super(ResourceError, self).__init__()
         self.ctx = ctx
         self.message = message
@@ -41,9 +37,6 @@ class ResourceError(Exception):
 class ResourceCtx(object):
 
     def __init__(self, filePath, xpath=None):
-        """
-        Class for resource context that holds path to resource file + current xpath.
-        """
         super(ResourceCtx, self).__init__()
         self.__filePath = filePath
         if xpath is None:
@@ -85,11 +78,6 @@ def purgeResource(filePath):
 
 @contextmanager
 def root_generator(filePath):
-    """
-    Uses:
-        with root_generator(path) as (ctx, section):
-            <to read subsections>
-    """
     try:
         ctx, section = getRoot(filePath)
     except ResourceError as error:
@@ -180,9 +168,9 @@ def readFloatItem(xmlCtx, section):
 
 def readStringItem(xmlCtx, section):
     if 'value' in section.keys():
-        value = section.readString('value')
+        value = intern(section.readString('value'))
     else:
-        value = section.asString
+        value = intern(section.asString)
     return ResourceItem(RESOURCE_ITEM_TYPE.STRING, readItemName(xmlCtx, section), value)
 
 
@@ -284,7 +272,6 @@ def readItem(ctx, section, name='item'):
     name = readItemName(ctx, section, keys=keys)
     if itemType in _ITEM_VALUE_READERS:
         reader = _ITEM_VALUE_READERS[itemType]
-        assert reader, 'Reader of type {0} must be defined'.format(itemType)
         item = reader(ctx, section)
     else:
         raise ResourceError(ctx, '"{0}: type {1} is invalid.'.format(name, itemType))

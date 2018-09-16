@@ -1,9 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/component_constants.py
-"""
-This module contains default value for some data to unify those and
-holds one instance of default value in memory for some types.
-"""
+import collections
+Autoreload = collections.namedtuple('Autoreload', 'reloadTime revertFraction')
 UNDEFINED_ITEM_TYPE_ID = 0
 ZERO_FLOAT = 0.0
 ZERO_INT = 0
@@ -12,6 +10,7 @@ EMPTY_TUPLE = ()
 EMPTY_TAGS = frozenset()
 LEVEL = 1
 DEFAULT_ARMOR_HOMOGENIZATION = 1.0
+DEFAULT_GUN_AUTORELOAD = Autoreload(reloadTime=(0.0,), revertFraction=0.0)
 DEFAULT_GUN_BURST = (1, 0.0)
 DEFAULT_GUN_CLIP = (1, 0.0)
 DEFAULT_FAKE_TURRETS = {'lobby': (),

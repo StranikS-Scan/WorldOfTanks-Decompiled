@@ -25,7 +25,6 @@ class NotificationsCollection(object):
 
     def addItem(self, item):
         result = True
-        assert isinstance(item, _NotificationDecorator)
         typeID, itemID = item.getType(), item.getID()
         if typeID in self.__received:
             notifications = self.__received[typeID]

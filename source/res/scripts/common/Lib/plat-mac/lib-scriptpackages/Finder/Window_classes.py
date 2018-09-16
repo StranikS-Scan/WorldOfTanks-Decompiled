@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Finder/Window_classes.py
-"""Suite Window classes: Classes representing windows
-Level 1, version 1
-
-Generated from /System/Library/CoreServices/Finder.app
-AETE/AEUT resource version 0/144, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'fndr'
@@ -15,36 +9,30 @@ class Window_classes_Events:
 
 
 class Finder_window(aetools.ComponentItem):
-    """Finder window - A file viewer window """
     want = 'brow'
 
 
 class _Prop__3c_Inheritance_3e_(aetools.NProperty):
-    """<Inheritance> - inherits some of its properties from the window class """
     which = 'c@#^'
     want = 'cwin'
 
 
 class _Prop_current_view(aetools.NProperty):
-    """current view - the current view for the container window """
     which = 'pvew'
     want = 'ecvw'
 
 
 class _Prop_icon_view_options(aetools.NProperty):
-    """icon view options - the icon view options for the container window """
     which = 'icop'
     want = 'icop'
 
 
 class _Prop_list_view_options(aetools.NProperty):
-    """list view options - the list view options for the container window """
     which = 'lvop'
     want = 'lvop'
 
 
 class _Prop_target(aetools.NProperty):
-    """target - the container at which this file viewer is targeted """
     which = 'fvtg'
     want = 'obj '
 
@@ -52,102 +40,85 @@ class _Prop_target(aetools.NProperty):
 Finder_windows = Finder_window
 
 class window(aetools.ComponentItem):
-    """window - A window """
     want = 'cwin'
 
 
 class _Prop_bounds(aetools.NProperty):
-    """bounds - the boundary rectangle for the window """
     which = 'pbnd'
     want = 'qdrt'
 
 
 class _Prop_closeable(aetools.NProperty):
-    """closeable - Does the window have a close box? """
     which = 'hclb'
     want = 'bool'
 
 
 class _Prop_collapsed(aetools.NProperty):
-    """collapsed - Is the window collapsed """
     which = 'wshd'
     want = 'bool'
 
 
 class _Prop_floating(aetools.NProperty):
-    """floating - Does the window have a title bar? """
     which = 'isfl'
     want = 'bool'
 
 
 class _Prop_id(aetools.NProperty):
-    """id - the unique id for this window """
     which = 'ID  '
     want = 'magn'
 
 
 class _Prop_index(aetools.NProperty):
-    """index - the number of the window in the front-to-back layer ordering """
     which = 'pidx'
     want = 'long'
 
 
 class _Prop_modal(aetools.NProperty):
-    """modal - Is the window modal? """
     which = 'pmod'
     want = 'bool'
 
 
 class _Prop_name(aetools.NProperty):
-    """name - the name of the window """
     which = 'pnam'
     want = 'utxt'
 
 
 class _Prop_position(aetools.NProperty):
-    """position - the upper left position of the window """
     which = 'posn'
     want = 'QDpt'
 
 
 class _Prop_properties(aetools.NProperty):
-    """properties - every property of a window """
     which = 'pALL'
     want = 'reco'
 
 
 class _Prop_resizable(aetools.NProperty):
-    """resizable - Is the window resizable? """
     which = 'prsz'
     want = 'bool'
 
 
 class _Prop_titled(aetools.NProperty):
-    """titled - Does the window have a title bar? """
     which = 'ptit'
     want = 'bool'
 
 
 class _Prop_visible(aetools.NProperty):
-    """visible - Is the window visible (always true for open Finder windows)? """
     which = 'pvis'
     want = 'bool'
 
 
 class _Prop_zoomable(aetools.NProperty):
-    """zoomable - Is the window zoomable? """
     which = 'iszm'
     want = 'bool'
 
 
 class _Prop_zoomed(aetools.NProperty):
-    """zoomed - Is the window zoomed? """
     which = 'pzum'
     want = 'bool'
 
 
 class _Prop_zoomed_full_size(aetools.NProperty):
-    """zoomed full size - Is the window zoomed to the full size of the screen? (can only be set, not read) """
     which = 'zumf'
     want = 'bool'
 
@@ -155,31 +126,26 @@ class _Prop_zoomed_full_size(aetools.NProperty):
 windows = window
 
 class information_window(aetools.ComponentItem):
-    """information window - An inspector window (opened by \xd2Show Info\xd3) """
     want = 'iwnd'
 
 
 class _Prop_current_panel(aetools.NProperty):
-    """current panel - the current panel in the information window """
     which = 'panl'
     want = 'ipnl'
 
 
 class _Prop_item(aetools.NProperty):
-    """item - the item from which this window was opened """
     which = 'cobj'
     want = 'obj '
 
 
 class clipping_window(aetools.ComponentItem):
-    """clipping window - The window containing a clipping """
     want = 'lwnd'
 
 
 clipping_windows = clipping_window
 
 class preferences_window(aetools.ComponentItem):
-    """preferences window - (NOT AVAILABLE YET) The Finder Preferences window """
     want = 'pwnd'
 
 

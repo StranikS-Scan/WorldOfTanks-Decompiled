@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/anchor_properties.py
 from abc import ABCMeta, abstractmethod
-from collections import namedtuple
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
 from gui.Scaleform.daapi.view.lobby.customization.shared import TABS_ITEM_MAPPING
 from gui.Scaleform.daapi.view.meta.CustomizationAnchorPropertiesMeta import CustomizationAnchorPropertiesMeta
@@ -14,15 +13,6 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
 
-class ANCHOR_TYPE(object):
-    NONE = 0
-    STYLE = 1
-    PAINT = 2
-    CAMO = 3
-    DECAL = 4
-    EFFECT = 5
-
-
 class AnchorDataVO(object):
     __slots__ = ('name', 'desc', 'isEmpty', 'itemRendererVO')
 
@@ -33,10 +23,6 @@ class AnchorDataVO(object):
         self.itemRendererVO = itemRendererVO
 
     def asDict(self):
-        """
-        Creates a dictionary with the class' relevant data.
-        :return: data object
-        """
         return {'name': self.name,
          'desc': self.desc,
          'isEmpty': self.isEmpty,
@@ -65,14 +51,8 @@ class AnchorProperties(CustomizationAnchorPropertiesMeta):
         self._sendData(self._getData())
 
     def refreshData(self):
-        """
-        Collects property data and sends to UI
-        """
         self._extractDataFromElement()
         self._sendData(self._getData())
-
-    def _getAnchorType(self):
-        return ANCHOR_TYPE.NONE
 
     @abstractmethod
     def _getData(self):
@@ -104,10 +84,6 @@ class AnchorProperties(CustomizationAnchorPropertiesMeta):
         self.as_setPopoverDataS(data)
 
     def _getItemData(self):
-        """
-        generates data for the carousel item renderer
-        :return: carousel item renderer VO
-        """
         rendererVO = None
         if self._item is not None:
             rendererVO = buildCustomizationItemDataVO(self._item, count=self._c11nView.getItemInventoryCount(self._item) if self._item.isRentable else None)

@@ -88,7 +88,7 @@
       <userString>	#ussr_vehicles:Chassis_IS4	</userString>
       <tags></tags>
       <level>	10	</level>
-      <price>	61350.0	</price>
+      <price>	61350	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
@@ -234,7 +234,7 @@
         <right>	vehicles/russian/R90_IS_4M/track/right.track	</right>
         <segmentLength>	0.158	</segmentLength>
         <segmentOffset>	0.059	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -332,10 +332,10 @@
       <userString>	#ussr_vehicles:Turret_710_mod_5	</userString>
       <tags></tags>
       <level>	10	</level>
-      <price>	61100.0	</price>
+      <price>	61100	</price>
       <notInShop>	true	</notInShop>
       <unlocks>
-        <gun>	_122mm_M62-T2	  <cost>	59300.0	</cost>
+        <gun>	_122mm_M62-T2	  <cost>	59300	</cost>
         </gun>
       </unlocks>
       <armor>

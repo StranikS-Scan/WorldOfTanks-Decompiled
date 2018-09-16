@@ -16,11 +16,10 @@ from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, Camer
 from AvatarInputHandler.VideoCamera import KeySensor
 from AvatarInputHandler.cameras import ICamera, readFloat, readVec2, ImpulseReason, FovExtended
 from Math import Vector2, Vector3, Vector4, Matrix
-from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR
+from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from skeletons.account_helpers.settings_core import ISettingsCore
-from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 
 def getCameraAsSettingsHolder(settingsDataSec):
     return ArcadeCamera(settingsDataSec, None)
@@ -143,7 +142,6 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__curSense = 0
         self.__curScrollSense = 0
         self.__postmortemMode = False
-        self.__vehiclesToCollideWith = set()
         self.__focalPointDist = 1.0
         self.__autoUpdateDxDyDz = Vector3(0.0)
         self.__updatedByKeyboard = False
@@ -210,33 +208,11 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
     def setPivotSettings(self, heightAboveBase, focusRadius):
         self.__aimingSystem.setPivotSettings(heightAboveBase, focusRadius)
 
-    def addVehicleToCollideWith(self, vehicle):
-        self.__vehiclesToCollideWith.add(vehicle)
-        self.__setModelsToCollideWith(self.__vehiclesToCollideWith)
-
-    def removeVehicleToCollideWith(self, vehicle):
-        lengthBefore = len(self.__vehiclesToCollideWith)
-        self.__vehiclesToCollideWith = set([ v for v in self.__vehiclesToCollideWith if v.id != vehicle.id ])
-        if lengthBefore != len(self.__vehiclesToCollideWith):
-            self.__setModelsToCollideWith(self.__vehiclesToCollideWith)
-
-    def clearVehicleToCollideWith(self):
-        self.__vehiclesToCollideWith = set()
-        self.__setModelsToCollideWith(self.__vehiclesToCollideWith)
-
-    def __setModelsToCollideWith(self, vehicles):
-        colliders = []
-        for vehicle in vehicles:
-            vehicleAppearance = vehicle.appearance
-            compound = vehicleAppearance.compoundModel
-            if not vehicle.isTurretDetached:
-                colliders.append((compound.node(TankPartNames.TURRET), compound.getBoundsForPart(TankPartIndexes.TURRET), compound.getPartGeometryLink(TankPartIndexes.TURRET)))
-            colliders.append((compound.node(TankPartNames.HULL), compound.getBoundsForPart(TankPartIndexes.HULL), compound.getPartGeometryLink(TankPartIndexes.HULL)))
-
+    def __setDynamicCollisions(self, enable):
         if self.__cam is not None:
-            self.__cam.setDynamicColliders(colliders)
+            self.__cam.setDynamicCollisions(enable)
         if self.__aimingSystem is not None:
-            self.__aimingSystem.setDynamicColliders(colliders)
+            self.__aimingSystem.setDynamicCollisions(enable)
         return
 
     def focusOnPos(self, preferredPos):
@@ -284,7 +260,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         else:
             self.__inputInertia.teleport(self.__calcRelativeDist())
         self.vehicleMProv = vehicleMProv
-        self.__setModelsToCollideWith(self.__vehiclesToCollideWith)
+        self.__setDynamicCollisions(True)
         BigWorld.camera(self.__cam)
         self.__aimingSystem.enable(preferredPos, turretYaw, gunPitch)
         self.__aimingSystem.aimMatrix = self.__calcAimMatrix()
@@ -326,9 +302,8 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         from gui import g_guiResetters
         if self.__onRecreateDevice in g_guiResetters:
             g_guiResetters.remove(self.__onRecreateDevice)
-        self.__setModelsToCollideWith([])
+        self.__setDynamicCollisions(False)
         self.__cam.speedTreeTarget = None
-        BigWorld.camera(None)
         if self.__shiftKeySensor is not None:
             self.__shiftKeySensor.reset(Math.Vector3())
         self.stopCallback(self.__cameraUpdate)
@@ -434,8 +409,6 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
     def __cameraUpdate(self):
         if not (self.__autoUpdateDxDyDz.x == 0.0 and self.__autoUpdateDxDyDz.y == 0.0 and self.__autoUpdateDxDyDz.z == 0.0):
             self.__update(self.__autoUpdateDxDyDz.x, self.__autoUpdateDxDyDz.y, self.__autoUpdateDxDyDz.z)
-        player = BigWorld.player()
-        vehicle = player.getVehicleAttached()
         inertDt = deltaTime = self.measureDeltaTime()
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:

@@ -11,38 +11,22 @@ from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
 class SandboxVehiclesWatcher(object):
-    """
-    Sandbox vehicles watcher class: listens for proper events
-    and updates the states of vehicles selected
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def start(self):
-        """
-        Starts listening for events
-        """
         self.__setUnsuitableState()
         g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryChanged})
 
     def stop(self):
-        """
-        Stops listening for events
-        """
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__clearUnsuitableState()
 
     def __getUnsuitableVehicles(self):
-        """
-        Gets all unsupported vehicles
-        """
         vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(SANDBOX_MAX_VEHICLE_LEVEL + 1, MAX_VEHICLE_LEVEL + 1))).itervalues()
         eventVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE).itervalues()
         return chain(vehs, eventVehs)
 
     def __setUnsuitableState(self):
-        """
-        Sets to all unsupported vehicles custom state
-        """
         vehicles = self.__getUnsuitableVehicles()
         intCDs = set()
         for vehicle in vehicles:
@@ -53,9 +37,6 @@ class SandboxVehiclesWatcher(object):
             g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
 
     def __clearUnsuitableState(self):
-        """
-        Unsets to all unsupported vehicles custom state
-        """
         vehicles = self.__getUnsuitableVehicles()
         intCDs = set()
         for vehicle in vehicles:
@@ -66,9 +47,4 @@ class SandboxVehiclesWatcher(object):
             g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
 
     def __onInventoryChanged(self, diff):
-        """
-        Listener for inventory update envent
-        Args:
-            diff: inventory update diff
-        """
         self.__setUnsuitableState()

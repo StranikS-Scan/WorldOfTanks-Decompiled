@@ -15,7 +15,6 @@ class RankedBattlesAwardsView(RankedBattlesAwardsViewMeta):
 
     def __init__(self, ctx=None):
         super(RankedBattlesAwardsView, self).__init__()
-        assert 'rankID' in ctx
         self.__rankID = ctx['rankID']
         self.__vehicle = ctx.get('vehicle')
         self.__awards = ctx.get('awards')

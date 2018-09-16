@@ -53,18 +53,11 @@ class _ShallowCopyWrapper(object):
 
 
 def add_shallow_copy(*exclude):
-    """Decorator wraps method "copy" of desired class. This method returns new object and
-    then inserts references into it to the objects found in the original
-    by iterating __slots__ in wrapped class only.
-    :param exclude: sequence of properties that are excluded in copy process.
-    :return: instance of _ShallowCopyWrapper.
-    """
     return _ShallowCopyWrapper(*exclude)
 
 
 @add_shallow_copy('status')
 class VehicleItem(BasicItem):
-    """Class provides basic information about vehicle/its component."""
     __slots__ = ('level', 'status')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1, status=VEHICLE_ITEM_STATUS.UNDEFINED):
@@ -78,7 +71,6 @@ class VehicleItem(BasicItem):
 
 @add_shallow_copy('unlocks')
 class InstallableItem(VehicleItem):
-    """Class provides configuration of installable vehicle's item."""
     __slots__ = ('weight', 'models', 'materials', 'hitTester', 'unlocks', 'armorHomogenization', 'camouflage', 'healthParams', 'sounds', 'emblemSlots')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -130,7 +122,6 @@ class InstallableItem(VehicleItem):
 
 @add_shallow_copy()
 class Chassis(InstallableItem):
-    """Class provides configuration of vehicle's chassis."""
     __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'maxLoad', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'traces', 'tracks', 'wheels', 'groundNodes', 'trackNodes', 'trackParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -168,7 +159,6 @@ class Chassis(InstallableItem):
 
 @add_shallow_copy()
 class Engine(InstallableItem):
-    """Class provides configuration of vehicle's engine."""
     __slots__ = ('power', 'fireStartingChance', 'minFireStartingDamage', 'rpm_min', 'rpm_max')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -181,7 +171,6 @@ class Engine(InstallableItem):
 
 
 class FuelTank(InstallableItem):
-    """Class provides configuration of vehicle's fuel tanks."""
     __slots__ = ()
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -190,7 +179,6 @@ class FuelTank(InstallableItem):
 
 @add_shallow_copy()
 class Radio(InstallableItem):
-    """Class provides configuration of vehicle's radio."""
     __slots__ = ('distance',)
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -200,7 +188,6 @@ class Radio(InstallableItem):
 
 @add_shallow_copy()
 class Turret(InstallableItem):
-    """Class provides configuration of vehicle's turret."""
     __slots__ = ('gunPosition', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -229,8 +216,7 @@ class Turret(InstallableItem):
 
 @add_shallow_copy()
 class Gun(InstallableItem):
-    """Class provides configuration of vehicle's gun."""
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'drivenJoints', 'combinedPitchLimits')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'drivenJoints', 'combinedPitchLimits')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -245,6 +231,7 @@ class Gun(InstallableItem):
         self.staticPitch = None
         self.shotDispersionAngle = component_constants.ZERO_FLOAT
         self.shotDispersionFactors = None
+        self.autoreload = component_constants.DEFAULT_GUN_AUTORELOAD
         self.burst = component_constants.DEFAULT_GUN_BURST
         self.clip = component_constants.DEFAULT_GUN_CLIP
         self.shots = component_constants.EMPTY_TUPLE
@@ -260,8 +247,6 @@ class Gun(InstallableItem):
 
 @add_shallow_copy('variantName')
 class Hull(BasicItem):
-    """Class contains configuration of hull for each vehicle separately.
-    This class is extended from BasicItem to unify access to properties."""
     __slots__ = ('variantName', 'hitTester', 'materials', 'weight', 'maxHealth', 'ammoBayHealth', 'armorHomogenization', 'turretPositions', 'turretHardPoints', 'variantMatch', 'fakeTurrets', 'emblemSlots', 'models', 'swinging', 'customEffects', 'AODecals', 'camouflage', 'hangarShadowTexture', 'primaryArmor')
 
     def __init__(self):
@@ -292,7 +277,6 @@ class Hull(BasicItem):
 
 
 class Shell(BasicItem):
-    """Class provides configuration of vehicle's shell."""
     __slots__ = ('caliber', 'isTracer', 'damage', 'damageRandomization', 'piercingPowerRandomization', 'icon', 'isGold', 'type', 'stun', 'effectsIndex')
 
     def __init__(self, typeID, componentID, componentName, compactDescr):
@@ -311,12 +295,10 @@ class Shell(BasicItem):
 
     @property
     def kind(self):
-        """Gets kind of shell. Available values of kind are in SHELL_TYPES_LIST."""
         return self.type.name
 
     @property
     def hasStun(self):
-        """Does shell have stun effect?"""
         return self.stun is not None
 
     @property
@@ -332,13 +314,6 @@ _TYPE_ID_TO_CLASS = {ITEM_TYPES.vehicleChassis: Chassis,
  ITEM_TYPES.vehicleRadio: Radio}
 
 def createInstallableItem(itemTypeID, nationID, itemID, name):
-    """ Creates vehicle's item by ID of type.
-    :param itemTypeID: integer containing index of ITEM_TYPE.
-    :param nationID: integer containing ID of nation.
-    :param itemID: integer containing unique ID of item in nation scope.
-    :param name: string containing name of component.
-    :return: instance of item.
-    """
     if itemTypeID in _TYPE_ID_TO_CLASS:
         clazz = _TYPE_ID_TO_CLASS[itemTypeID]
         return clazz(itemTypeID, (nationID, itemID), name, makeIntCompactDescrByID(ITEM_TYPE_NAMES[itemTypeID], nationID, itemID))
@@ -346,70 +321,28 @@ def createInstallableItem(itemTypeID, nationID, itemID, name):
 
 
 def createChassis(nationID, componentID, name):
-    """ Creates vehicle's chassis.
-    :param nationID: integer containing ID of nation.
-    :param componentID: integer containing ID of chassis in nation scope.
-    :param name: string containing name of chassis.
-    :return: instance of Chassis.
-    """
     return createInstallableItem(ITEM_TYPES.vehicleChassis, nationID, componentID, name)
 
 
 def createTurret(nationID, componentID, name):
-    """ Creates vehicle's chassis.
-    :param nationID: integer containing ID of nation.
-    :param componentID: integer containing ID of turret in nation scope.
-    :param name: string containing name of turret.
-    :return: instance of Turret.
-    """
     return createInstallableItem(ITEM_TYPES.vehicleTurret, nationID, componentID, name)
 
 
 def createGun(nationID, componentID, name):
-    """ Creates vehicle's gun.
-    :param nationID: integer containing ID of nation.
-    :param componentID: integer containing ID of gun in nation scope.
-    :param name: string containing name of gun.
-    :return: instance of Gun.
-    """
     return createInstallableItem(ITEM_TYPES.vehicleGun, nationID, componentID, name)
 
 
 def createEngine(nationID, componentID, name):
-    """ Creates vehicle's engine.
-    :param nationID: integer containing ID of nation.
-    :param componentID: integer containing ID of engine in nation scope.
-    :param name: string containing name of engine.
-    :return: instance of Engine.
-    """
     return createInstallableItem(ITEM_TYPES.vehicleEngine, nationID, componentID, name)
 
 
 def createFuelTank(nationID, componentID, name):
-    """ Creates vehicle's fuel tanks.
-    :param nationID: integer containing ID of nation.
-    :param componentID: integer containing ID of fuel tanks in nation scope.
-    :param name: string containing name of engine.
-    :return: instance of FuelTank.
-    """
     return createInstallableItem(ITEM_TYPES.vehicleFuelTank, nationID, componentID, name)
 
 
 def createRadio(nationID, componentID, name):
-    """ Creates vehicle's radio.
-    :param nationID: integer containing ID of nation.
-    :param componentID: integer containing ID of radio in nation scope.
-    :param name: string containing name of radio.
-    :return: instance of Radio.
-    """
     return createInstallableItem(ITEM_TYPES.vehicleRadio, nationID, componentID, name)
 
 
 def createShell(nationID, componentID, name):
-    """Creates vehicle's shell.
-    :param nationID: integer containing ID of nation.
-    :param componentID: integer containing ID of shell in nation scope.
-    :param name: string containing name of shell.
-    :return: instance of Shell.
-    """
     return Shell(ITEM_TYPES.shell, (nationID, componentID), name, makeIntCompactDescrByID('shell', nationID, componentID))

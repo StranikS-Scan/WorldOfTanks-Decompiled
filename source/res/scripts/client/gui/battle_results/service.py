@@ -140,7 +140,7 @@ class BattleResultsService(IBattleResultsService):
         if arenaUniqueID:
             try:
                 self.__showResults(context.RequestResultsContext(arenaUniqueID))
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
             battleCtx.lastArenaUniqueID = None
@@ -148,9 +148,7 @@ class BattleResultsService(IBattleResultsService):
 
     def __onPremiumBought(self, event):
         ctx = event.ctx
-        assert 'arenaUniqueID' in ctx
         arenaUniqueID = event.ctx['arenaUniqueID']
-        assert 'becomePremium' in ctx
         becomePremium = event.ctx['becomePremium']
         if becomePremium and arenaUniqueID:
             self.__buy.add(arenaUniqueID)

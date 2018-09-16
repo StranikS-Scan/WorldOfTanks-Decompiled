@@ -11,7 +11,6 @@ from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHan
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.clans.clan_helpers import showClanInviteSystemMsg
-from gui.clans.contexts import CreateInviteCtx
 from gui.prb_control import prbDispatcherProperty, prbEntityProperty
 from gui.prb_control.entities.base.ctx import PrbAction, SendInvitesCtx
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -19,17 +18,18 @@ from gui.shared import event_dispatcher as shared_events, utils
 from gui.shared.ClanCache import ClanInfo
 from gui.shared.denunciator import LobbyDenunciator, DENUNCIATIONS, DENUNCIATIONS_MAP
 from gui.shared.utils.functions import showSentInviteMessage
+from gui.wgcg.clan.contexts import CreateInviteCtx
 from helpers import i18n, dependency
 from helpers.i18n import makeString
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE, USER_TAG
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
-from skeletons.gui.clans import IClanController
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.web import IWebController
 
 class _EXTENDED_OPT_IDS(object):
     VEHICLE_COMPARE = 'userVehicleCompare'
@@ -59,7 +59,7 @@ class USER(object):
 class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     itemsCache = dependency.descriptor(IItemsCache)
     eventsCache = dependency.descriptor(IEventsCache)
-    clanCtrl = dependency.descriptor(IClanController)
+    clanCtrl = dependency.descriptor(IWebController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, cmProxy, ctx=None):
@@ -197,7 +197,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             try:
                 clanAbbrev = ctx.clanAbbrev
                 userCMInfo.hasClan = bool(clanAbbrev)
-            except:
+            except Exception:
                 LOG_DEBUG('ctx has no property "clanAbbrev"')
 
         options = [self._makeItem(USER.INFO, MENU.contextmenu(USER.INFO))]
@@ -279,7 +279,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return options
 
     def _addInviteClanInfo(self, options, userCMInfo):
-        if self.lobbyContext.getServerSettings().clanProfile.isEnabled() and not userCMInfo.hasClan:
+        if self.lobbyContext.getServerSettings().clanProfile.isEnabled() and userCMInfo.user is not None and not userCMInfo.hasClan:
             profile = self.clanCtrl.getAccountProfile()
             canHandleClanInvites = profile.getMyClanPermissions().canHandleClanInvites()
             if profile.isInClan() and canHandleClanInvites:
@@ -415,21 +415,13 @@ class UserVehicleCMHandler(AppealCMHandler):
 
 
 class CustomUserCMHandler(BaseUserCMHandler):
-    """
-    Class for user menu with custom items.
-    Creation context should contain list of custom items ('customItems').
-    Each item should have 3-elements length (id, label, enabled).
-    Context also should contain list of IDs for base-items that must be excluded ('excludedItems').
-    """
 
     def __init__(self, cmProxy, ctx=None):
         super(CustomUserCMHandler, self).__init__(cmProxy, ctx=ctx)
-        assert ctx is not None and hasattr(ctx, 'customItems') and hasattr(ctx, 'excludedItems')
         self.__customOptions = ctx.customItems
         self.__excludedOptions = ctx.excludedItems
         self.__optionSelected = False
         self.onSelected = Event(self._eManager)
-        return
 
     def fini(self):
         if not self.__optionSelected:
@@ -452,8 +444,8 @@ class CustomUserCMHandler(BaseUserCMHandler):
     def _addCustomInfo(self, options):
         customOptions = []
         if self.__customOptions:
-            for id, label, enabled in self.__customOptions:
-                customOptions.append(self._makeItem(id, label, optInitData={'enabled': enabled}))
+            for optID, label, enabled in self.__customOptions:
+                customOptions.append(self._makeItem(optID, label, optInitData={'enabled': enabled}))
 
             customOptions.append(self._makeSeparator())
         return customOptions + options

@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ConsumablesPanelMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class ConsumablesPanelMeta(BaseDAAPIComponent):
@@ -15,9 +11,6 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
         self._printOverrideError('onPopUpClosed')
 
     def as_setKeysToSlotsS(self, slots):
-        """
-        :param slots: Represented by Array (AS)
-        """
         return self.flashObject.as_setKeysToSlots(slots) if self._isDAAPIInited() else None
 
     def as_setItemQuantityInSlotS(self, idx, quantity):
@@ -51,9 +44,6 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
         return self.flashObject.as_showEquipmentSlots(show) if self._isDAAPIInited() else None
 
     def as_expandEquipmentSlotS(self, idx, slots):
-        """
-        :param slots: Represented by Array (AS)
-        """
         return self.flashObject.as_expandEquipmentSlot(idx, slots) if self._isDAAPIInited() else None
 
     def as_collapseEquipmentSlotS(self):

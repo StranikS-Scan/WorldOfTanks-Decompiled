@@ -1,12 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/future.py
-"""Parser for future statements
-
-"""
 from compiler import ast, walk
 
 def is_future(stmt):
-    """Return true if statement is a well-formed future statement"""
     if not isinstance(stmt, ast.From):
         return 0
     elif stmt.modname == '__future__':
@@ -38,12 +34,10 @@ class FutureParser:
             return 1
 
     def get_features(self):
-        """Return list of features enabled by future statements"""
         return self.found.keys()
 
 
 class BadFutureParser:
-    """Check for invalid future statements"""
 
     def visitFrom(self, node):
         if hasattr(node, 'valid_future'):

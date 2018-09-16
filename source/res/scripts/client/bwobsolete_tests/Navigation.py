@@ -1,20 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_tests/Navigation.py
-"""
-This module checks client side navigation by calculating and drawing paths.
-Paths are calculated and drawn as a line of boxes.
-
-Example usage, typed into the Python console:
-import Tests.Navigation
-test = Tests.Navigation.Navigation()
-target = $p.position+(5,0,0)
-test.testPath($p, target)
-
-Note: you need client side enabled in the space.settings
-<clientNavigation>
-        <enable>        true    </enable>
-</clientNavigation>
-"""
 import BigWorld
 from bwdebug import *
 
@@ -40,12 +25,6 @@ class Navigation:
         self._cleanupNavPathModels()
 
     def _calculatePath(self, startPosition, targetPosition):
-        """
-        Calculate path from start to position.
-        @param startPosition the start of the path.
-        @param targetPosition the goal/end of path.
-        @return a list of points along the path to take.
-        """
         path = []
         try:
             path = BigWorld.navigatePathPoints(startPosition, targetPosition)
@@ -60,10 +39,6 @@ class Navigation:
         return path
 
     def _attachDebugModels(self):
-        """
-        Attach a for each path point to the player.
-        @param player the player to attach the models to.
-        """
         for pathPoint in self._moveNavPath:
             m = BigWorld.Model(Navigation.DEBUG_MODEL_NAME)
             m.scale = (1, 1, 1)
@@ -72,10 +47,6 @@ class Navigation:
             self._debugNavPathModels.append(m)
 
     def _cleanupNavPathModels(self):
-        """
-        Remove any debug models attached to the player.
-        @param player the player to clean up
-        """
         if self._player is not None:
             for m in self._debugNavPathModels:
                 self._player.delModel(m)

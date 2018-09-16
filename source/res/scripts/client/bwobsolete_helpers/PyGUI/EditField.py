@@ -258,10 +258,6 @@ class EditField(PyGUIBase):
             return
 
     def screenToCharacterIndex(self, clipPos):
-        """
-                Given a screen clip space position, this will calculate
-                the closest index into the edit field text.
-        """
         oldWidthMode = self.component.widthMode
         self.component.widthMode = 'PIXEL'
         locPos = self.component.screenToLocal(clipPos)
@@ -283,10 +279,6 @@ class EditField(PyGUIBase):
         return self.__allowAutoDefocus
 
     def _insertString(self, s):
-        """
-                Inserts the given string at the cursor position. Moves the cursor position
-                along to the end of the inserted string.
-        """
         c = self.component.text
         curLen = len(c.text)
         s = s[:max(self.maxLength - curLen, 0)]
@@ -295,10 +287,6 @@ class EditField(PyGUIBase):
         self._updateCursor()
 
     def _updateCursor(self):
-        """
-                Updates the cursor position, clamping it to a valid index range.
-                The visual cursor representation is positioned.
-        """
         text = self._getText()
         textLen = len(text.text)
         self.cursorIndex = max(self.cursorIndex, 0)
@@ -309,9 +297,6 @@ class EditField(PyGUIBase):
         self.cursor.enable(self.enabled and not gotComposition() and isFocusedComponent(self.component))
 
     def _scrollIntoView(self):
-        """
-                Makes sure the cursor is visible by applying an appropriate scroll amount.
-        """
         hratio = getHPixelScalar()
         textArea = self.component
         widthMode = textArea.widthMode
@@ -337,9 +322,6 @@ class EditField(PyGUIBase):
         self._applyScroll()
 
     def _applyScroll(self):
-        """
-                Takes the internal scrollInPixels and applies it to the textArea.
-        """
         scrollX = -self.scrollInPixels / (GUI.screenResolution()[0] * 0.5)
         scrollX = scrollX * getHPixelScalar()
         self.component.scroll = (scrollX, 0.0)

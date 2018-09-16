@@ -57,8 +57,8 @@ class PeripheralsController(Component):
         self.__vibrationsCtrl.executeCriticalHitVibrations(vehicle, extrasName)
 
     def update(self, vehicle, crashedTrackCtrl):
-        assert crashedTrackCtrl is not None
-        self.__vibrationsCtrl.update(vehicle, crashedTrackCtrl.isLeftTrackBroken(), crashedTrackCtrl.isRightTrackBroken())
+        if self.__vibrationsCtrl is not None:
+            self.__vibrationsCtrl.update(vehicle, crashedTrackCtrl.isLeftTrackBroken(), crashedTrackCtrl.isRightTrackBroken())
         if self.__lightFxCtrl is not None:
             self.__lightFxCtrl.update(vehicle)
         if self.__auxiliaryFxCtrl is not None:

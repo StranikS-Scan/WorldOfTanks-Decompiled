@@ -26,16 +26,13 @@ def _readBadges(xmlPath):
                 value['type'] = 0
             value['name'] = item.name
             result[value['id']] = value
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
     return result
 
 
 class BadgesRequester(AbstractSyncDataRequester, IBadgesRequester):
-    """
-    Requester for data of account badges.
-    """
 
     def __init__(self):
         super(BadgesRequester, self).__init__()
@@ -43,18 +40,10 @@ class BadgesRequester(AbstractSyncDataRequester, IBadgesRequester):
 
     @property
     def available(self):
-        """
-        List of all available badges
-        :return: (badgeData, ...)
-        """
         return self.__availableBadges
 
     @property
     def selected(self):
-        """
-        List of player badges currently selected for display.
-        :return: (badgeID, ...)
-        """
         return self.getCacheValue('badges', ())
 
     @async

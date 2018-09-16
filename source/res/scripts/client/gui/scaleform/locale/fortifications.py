@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/FORTIFICATIONS.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class FORTIFICATIONS(object):
     SORTIE_INTROVIEW_TITLE = '#fortifications:sortie/introView/title'

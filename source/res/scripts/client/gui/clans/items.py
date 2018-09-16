@@ -79,7 +79,7 @@ def fmtUnavailableValue(fields=tuple(), dummy=clans_fmts.DUMMY_UNAVAILABLE_DATA)
                 return _isAvailable(fields)
             doFmt = kwargs.get('doFmt', False)
             placeholder = kwargs.get('dummy', dummy) or dummy
-            formatter = kwargs.get('formatter', None)
+            f = kwargs.get('formatter', None)
             if doFmt and not _isAvailable(fields):
                 return placeholder
             try:
@@ -90,7 +90,7 @@ def fmtUnavailableValue(fields=tuple(), dummy=clans_fmts.DUMMY_UNAVAILABLE_DATA)
             if value is None:
                 return placeholder
             else:
-                return formatter(value) if formatter is not None else value
+                return f(value) if f is not None else value
 
         return wrapper
 
@@ -149,11 +149,11 @@ def fmtDelegat(path, dummy=clans_fmts.DUMMY_UNAVAILABLE_DATA):
             checkAvailability = kwargs.pop('checkAvailability', False)
             doFmt = kwargs.pop('doFmt', False)
             placeholder = kwargs.pop('dummy', dummy) or dummy
-            formatter = kwargs.pop('formatter', None)
+            f = kwargs.pop('formatter', None)
             if checkAvailability:
                 return _getGetter(path)(checkAvailability=checkAvailability)
             else:
-                return _getGetter(path)(doFmt=doFmt, dummy=placeholder, formatter=formatter) if doFmt else func(self, *args, **kwargs)
+                return _getGetter(path)(doFmt=doFmt, dummy=placeholder, formatter=f) if doFmt else func(self, *args, **kwargs)
 
         return wrapper
 
@@ -502,7 +502,7 @@ class ClanStrongholdInfoData(_ClanStrongholdInfoData, FieldsCheckerMixin):
         for b in self.buildings:
             try:
                 result.append(makeTupleByDict(Building, b))
-            except:
+            except Exception:
                 LOG_WARNING('There is error while collecting Buildings list', self.buildings)
 
         return result
@@ -1140,9 +1140,6 @@ class ClanInviteWrapper(object):
 
     def getDbID(self):
         return self.__invite.getDbID()
-
-    def getClanDbID(self):
-        return self.__invite.getClanDbID()
 
     @fmtDelegat(path='invite.getClanDbID')
     def getClanDbID(self):

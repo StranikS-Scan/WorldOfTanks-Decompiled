@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RibbonsPanelMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class RibbonsPanelMeta(BaseDAAPIComponent):
@@ -18,9 +14,6 @@ class RibbonsPanelMeta(BaseDAAPIComponent):
         self._printOverrideError('onHide')
 
     def as_setupS(self, items, isExtendedAnim, isVisible, isWithRibbonName, isWithVehName):
-        """
-        :param items: Represented by Array (AS)
-        """
         return self.flashObject.as_setup(items, isExtendedAnim, isVisible, isWithRibbonName, isWithVehName) if self._isDAAPIInited() else None
 
     def as_resetS(self):

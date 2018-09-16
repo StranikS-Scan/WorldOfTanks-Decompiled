@@ -26,36 +26,18 @@ def _getClientArena(avatar=None):
 
 
 def createByAvatar(avatar=None):
-    """Creates visitor on getting arena from avatar.
-    :param avatar: instance of PlayerAvatar or None.
-    :return: instance of _ClientArenaVisitor.
-    """
     return _ClientArenaVisitor.createByArena(arena=_getClientArena(avatar=avatar))
 
 
 def createByArena(arena=None):
-    """Creates visitor.
-    :param arena: instance of ClientArena or None.
-    :return: instance of _ClientArenaVisitor.
-    """
     return _ClientArenaVisitor.createByArena(arena=arena)
 
 
 def createSkeleton(arenaType=None, guiType=_GUI_TYPE.UNKNOWN, bonusType=_BONUS_TYPE.UNKNOWN):
-    """Creates visitor from some parts of information about arena.
-    :param arenaType: instance of ArenaType or None.
-    :param guiType: one of ARENA_GUI_TYPE
-    :param bonusType: one of ARENA_BONUS_TYPE.
-    :return: instance of _ClientArenaVisitor or None.
-    """
     return _ClientArenaVisitor.createSkeleton(arenaType=arenaType, guiType=guiType, bonusType=bonusType)
 
 
 class catch_attribute_exception(object):
-    """
-    Uses direct access to attributes that are wrapped to try ... except AttributeError,
-    because it's more faster than getattr, but it's slower if attribute is not found.
-    """
 
     def __init__(self, default=None):
         super(catch_attribute_exception, self).__init__()
@@ -109,7 +91,6 @@ class _ArenaTypeSkeleton(object):
     squadTeamNumbers = []
     boundingBox = ((0, 0), (0, 0))
     minimap = ''
-    gasAttackSettings = None
     winPointsSettings = None
     battleCountdownTimerSound = ''
     roundLength = 0
@@ -150,7 +131,7 @@ class _ArenaTypeVisitor(IArenaVisitor):
     def getTeamBasePositionsIterator(self):
         positions = self.getTeamBasePositions() or []
         for team, teamBasePoints in enumerate(positions, 1):
-            for index, (base, point) in enumerate(teamBasePoints.items(), 1):
+            for index, (_, point) in enumerate(teamBasePoints.items(), 1):
                 if len(teamBasePoints) > 1:
                     number = index
                 else:
@@ -241,10 +222,6 @@ class _ArenaTypeVisitor(IArenaVisitor):
     def getMinimapTexture(self):
         return self._arenaType.minimap
 
-    @catch_attribute_exception(default=_ArenaTypeSkeleton.gasAttackSettings)
-    def getGasAttackSettings(self):
-        return self._arenaType.gasAttackSettings
-
     @catch_attribute_exception(default=_ArenaTypeSkeleton.winPointsSettings)
     def getWinPointsSettings(self):
         return self._arenaType.winPointsSettings
@@ -290,13 +267,7 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isEventBattle(self):
         return self._guiType == _GUI_TYPE.EVENT_BATTLES
 
-    def isFalloutBattle(self):
-        return self._guiType in _GUI_TYPE.FALLOUT_RANGE
-
-    def isFalloutClassic(self):
-        return self._guiType == _GUI_TYPE.FALLOUT_CLASSIC
-
-    def isFalloutMultiTeam(self):
+    def isMultiTeam(self):
         return self._guiType == _GUI_TYPE.FALLOUT_MULTITEAM
 
     def isSandboxBattle(self):
@@ -345,9 +316,6 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def hasRespawns(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.RESPAWN)
-
-    def hasGasAttack(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.GAS_ATTACK_MECHANICS)
 
     def isSquadSupported(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.SQUADS)
@@ -489,9 +457,6 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def hasRespawns(self):
         return self._bonus.hasRespawns()
 
-    def hasGasAttack(self):
-        return self._bonus.hasGasAttack()
-
     def hasHealthBar(self):
         return self._bonus.hasHealthBar()
 
@@ -502,17 +467,13 @@ class _ClientArenaVisitor(IClientArenaVisitor):
         return self._arena.arenaType.numPlayerGroups > 0
 
     def isSoloTeam(self, team):
-        return self._type.isSoloTeam(team) if self._gui.isFalloutMultiTeam() else False
+        return False
 
     def getArenaIconKey(self):
-        arenaIcon = self._type.getGeometryName()
-        return '%s_fallout' % arenaIcon if self._gui.isFalloutBattle() else arenaIcon
+        return self._type.getGeometryName()
 
     def getArenaIcon(self, iconKey):
         return iconKey % self.getArenaIconKey()
-
-    def getGasAttackSettings(self):
-        return self._type.getGasAttackSettings() if self.hasGasAttack() else None
 
     def getTeamSpawnPoints(self, team):
         other = team - 1
@@ -574,10 +535,6 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     @catch_attribute_exception(default=_ClientArenaSkeleton.extraData)
     def getArenaExtraData(self):
         return self._arena.extraData
-
-    @catch_attribute_exception(default=_ClientArenaSkeleton.positions)
-    def getArenaPositions(self):
-        return self._arena.positions
 
     @catch_attribute_exception(default=_ClientArenaSkeleton.vehicles)
     def getArenaVehicles(self):

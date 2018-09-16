@@ -40,17 +40,13 @@ class ProfileSection(ProfileSectionMeta):
         self.invokeUpdate()
 
     def onSectionActivated(self):
-        """
-        Calls when current section was activated.
-        Override in child classes.
-        """
         pass
 
     def _dataProviderEntryAutoTranslate(self, key):
         return self._dataProviderEntry(key, i18n.makeString(PROFILE.profile_dropdown_labels(key)))
 
     @classmethod
-    def _dataProviderEntry(self, key, label):
+    def _dataProviderEntry(cls, key, label):
         return {'key': key,
          'label': label}
 

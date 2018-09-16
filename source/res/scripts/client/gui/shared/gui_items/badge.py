@@ -4,7 +4,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_BADGES_VISIT
 from dossiers2.ui.achievements import BADGES_BLOCK
 from gui.Scaleform.locale.BADGE import BADGE
-from gui.Scaleform.settings import getBadgeIconPath, getBadgeHighlightIconPath, BADGES_ICONS, BADGES_HIGHLIGHTS
+from gui.Scaleform.settings import getBadgeIconPath, getBadgeHighlightIconPath, BADGES_ICONS
 from gui.shared.gui_items.gui_item import GUIItem
 from helpers import i18n
 from shared_utils import CONST_CONTAINER
@@ -15,10 +15,6 @@ class BADGE_TYPES(CONST_CONTAINER):
 
 
 class Badge(GUIItem):
-    """
-    Badge gui item object, that stores server date and defines whether it is selected, achieved and etc.
-    Also has all necessary gui methods for representation in GUI.
-    """
     __slots__ = ('badgeID', 'data', 'isSelected', 'isAchieved', 'achievedAt', 'group')
 
     def __init__(self, data, proxy=None):
@@ -38,12 +34,6 @@ class Badge(GUIItem):
         return
 
     def __cmp__(self, other):
-        """
-        Standard comparision method that compares two badges by:
-        - is it achieved
-        - if both - by achievement date (latest first)
-        - otherwise by weight
-        """
         if self.achievedAt == other.achievedAt:
             return cmp(self.getWeight(), other.getWeight())
         elif self.achievedAt is None:
@@ -55,10 +45,6 @@ class Badge(GUIItem):
         return self.data.get('class', 0)
 
     def getName(self):
-        """
-        Gets name of badge from it's data.
-        Could be used to differ badges by type or smth.
-        """
         return self.data['name']
 
     def getWeight(self):
@@ -95,19 +81,10 @@ class Badge(GUIItem):
         return i18n.makeString(key)
 
     def getHighlightIcon(self):
-        if self.getName().startswith('ranked'):
-            return getBadgeHighlightIconPath(BADGES_HIGHLIGHTS.RED)
-        if self.getName().startswith('personal_missions'):
-            return getBadgeHighlightIconPath(BADGES_HIGHLIGHTS.VIOLET)
-        if self.getName().startswith('event_boards'):
-            return getBadgeHighlightIconPath(BADGES_HIGHLIGHTS.GREEN)
-        return getBadgeHighlightIconPath(BADGES_HIGHLIGHTS.GOLD) if self.getName().startswith('global_map') else ''
+        highlight = self.data.get('highlight', '')
+        return highlight and getBadgeHighlightIconPath(highlight)
 
     def isNew(self):
-        """
-        Indicate that player is haven't see the badge yet
-        :return: bool
-        """
         result = False
         if self.isAchieved:
             lastBadgesVisit = AccountSettings.getSettings(LAST_BADGES_VISIT)

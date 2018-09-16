@@ -1,18 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MapActivities.py
 import sys
-import BigWorld
-import ResMgr
-from collections import namedtuple
-import PlayerEvents
 import math
 import random
+import BigWorld
+import ResMgr
+import PlayerEvents
 import SoundGroups
 from constants import ARENA_PERIOD
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.PixieBG import PixieBG
 
-class Timer:
+class Timer(object):
     __timeMethod = None
 
     @staticmethod
@@ -27,7 +26,7 @@ class Timer:
         return Timer.__timeMethod()
 
 
-class IMapActivity:
+class IMapActivity(object):
 
     def create(self, settings, startTime):
         pass
@@ -58,14 +57,12 @@ class IMapActivity:
 
 
 class MapActivities(object):
-    NamedActivitySettings = namedtuple('NamedActivitySettings', ('activityType', 'xmlSettings'))
 
     def __init__(self):
         self.__cbID = None
         self.__isOnArena = False
         self.__pendingActivities = []
         self.__currActivities = []
-        self.__namedActivitiesSettings = {}
         PlayerEvents.g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         PlayerEvents.g_playerEvents.onAvatarBecomeNonPlayer += self._onAvatarBecomeNonPlayer
         PlayerEvents.g_playerEvents.onAvatarReady += self.__onAvatarReady
@@ -81,18 +78,9 @@ class MapActivities(object):
         return
 
     def start(self, name):
-        activitySettings = self.__namedActivitiesSettings[name] if name in self.__namedActivitiesSettings else None
-        if activitySettings is None:
-            return
-        else:
-            activity = _createActivity(activitySettings.activityType)
-            if activity is None:
-                return
-            curTime = Timer.getTime()
-            if activity.create(activitySettings.xmlSettings, curTime):
-                activity.setStartTime(curTime)
-                self.__pendingActivities.append(activity)
-            return activity
+        for activity in self.__pendingActivities:
+            if activity.name() == name:
+                activity.setStartTime(Timer.getTime())
 
     def stop(self):
         for activity in self.__currActivities:
@@ -139,10 +127,6 @@ class MapActivities(object):
             for activityType, activityXML in settings.items():
                 i += 1
                 startTime = startTimes[i]
-                activityName = activityXML.readString('name', '')
-                if activityName:
-                    namedActivitySettings = MapActivities.NamedActivitySettings(activityType, activityXML)
-                    self.__namedActivitiesSettings[activityName] = namedActivitySettings
                 activity = _createActivity(activityType)
                 if activity is not None:
                     if activity.create(activityXML, startTime):
@@ -171,8 +155,6 @@ class MapActivities(object):
         isOnArena = period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.BATTLE)
         if isOnArena and not self.__isOnArena:
             self.generateArenaActivities(periodAdditionalInfo)
-        elif not isOnArena and self.__isOnArena:
-            self.stop()
         self.__isOnArena = isOnArena
 
     def __onAvatarReady(self):
@@ -396,7 +378,7 @@ class WarplaneActivity(IMapActivity):
                 self.__sound = SoundGroups.g_instance.WWgetSoundObject(objectName, self.__model.root)
                 self.__sound.play(soundName)
                 self.__sound.volume = 0.0
-            except:
+            except Exception:
                 self.__sound = None
                 LOG_CURRENT_EXCEPTION()
 
@@ -549,7 +531,7 @@ class ExplosionActivity(IMapActivity):
                 self.__sound = SoundGroups.g_instance.getSound3D(self.__model.root, self.__soundName)
                 self.__sound.setCallback(self.__endEventCallback)
                 self.__sound.play()
-            except:
+            except Exception:
                 self.__sound = None
                 LOG_CURRENT_EXCEPTION()
 
@@ -655,7 +637,7 @@ def _createActivity(typeName):
 
 def startActivity(name):
     global g_mapActivities
-    return g_mapActivities.start(name)
+    g_mapActivities.start(name)
 
 
 g_mapActivities = MapActivities()

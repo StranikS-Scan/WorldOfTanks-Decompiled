@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/DossierCache.py
-import BigWorld
-import AccountCommands
 import cPickle
 import os
 import base64
+import BigWorld
+import AccountCommands
 from SyncController import SyncController
 from PlayerEvents import g_playerEvents as events
 from constants import DOSSIER_TYPE
@@ -101,7 +101,8 @@ class DossierCache(object):
             self.__syncController.request(self.__syncID, proxy)
             return
 
-    def __onSyncResponse(self, syncID, resultID, ext={}):
+    def __onSyncResponse(self, syncID, resultID, ext=None):
+        ext = ext or {}
         if resultID == AccountCommands.RES_NON_PLAYER:
             return
         if syncID != self.__syncID:
@@ -167,10 +168,10 @@ class DossierCache(object):
                 return
             fileHandler = open(self.__cacheFileName, 'rb')
             self.__version, self.__cache = cPickle.load(fileHandler)
-            for changeTime, dossierCompDescr in self.__cache.itervalues():
+            for changeTime, _ in self.__cache.itervalues():
                 self.__maxChangeTime = max(self.__maxChangeTime, changeTime)
 
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         if fileHandler is not None:
@@ -184,7 +185,7 @@ class DossierCache(object):
                 os.makedirs(self.__cacheDir)
             fileHandler = open(self.__cacheFileName, 'wb')
             cPickle.dump((self.__version, self.__cache), fileHandler, -1)
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         if fileHandler is not None:

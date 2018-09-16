@@ -4,7 +4,7 @@
 
 class IClanListener(object):
 
-    def onClanStateChanged(self, oldStateID, newStateID):
+    def onClanEnableChanged(self, enabled):
         pass
 
     def onClanInvitesCountReceived(self, clanDbID, invitesCount):

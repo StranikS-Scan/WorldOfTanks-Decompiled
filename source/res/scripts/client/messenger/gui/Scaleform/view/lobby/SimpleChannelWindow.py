@@ -89,13 +89,9 @@ class SimpleChannelWindow(ChannelWindowMeta):
         self.as_setTitleS(channel.getFullName())
 
     def __ce_onConnectStateChanged(self, _):
-        """Channel status updated (connected/disconnected)
-        """
         self.__checkConnectStatus()
 
     def __checkConnectStatus(self):
-        """Hide waiting if we've been joined or show waiting if we've been disconnected
-        """
         if self._controller.getChannel().isJoined():
             self.as_hideWaitingS()
         else:

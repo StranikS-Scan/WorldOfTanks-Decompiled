@@ -1,15 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/macurl2path.py
-"""Macintosh-specific module for conversion between pathnames and URLs.
-
-Do not import directly; use urllib instead."""
 import urllib
 import os
 __all__ = ['url2pathname', 'pathname2url']
 
 def url2pathname(pathname):
-    """OS-specific conversion from a relative URL of the 'file' scheme
-    to a file system path; not recommended for general use."""
     tp = urllib.splittype(pathname)[0]
     if tp and tp != 'file':
         raise RuntimeError, 'Cannot convert non-local URL to pathname'
@@ -42,8 +37,6 @@ def url2pathname(pathname):
 
 
 def pathname2url(pathname):
-    """OS-specific conversion from a file system path to a relative URL
-    of the 'file' scheme; not recommended for general use."""
     if '/' in pathname:
         raise RuntimeError, 'Cannot convert pathname containing slashes'
     components = pathname.split(':')

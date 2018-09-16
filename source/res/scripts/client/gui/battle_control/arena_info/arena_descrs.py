@@ -5,7 +5,6 @@ import weakref
 import BattleReplay
 from constants import IS_DEVELOPMENT
 from gui.Scaleform import getNecessaryArenaFrameName
-from gui.Scaleform.locale.ARENAS import ARENAS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.locale.MENU import MENU
 from gui.battle_control.arena_info import settings
@@ -258,22 +257,6 @@ class ArenaWithL10nDescription(IArenaGuiDescription):
         return self._decorated.makeQuestInfo()
 
 
-class FalloutBattlesDescription(ArenaWithLabelDescription):
-    __slots__ = ()
-
-    def getWinString(self, isInBattle=True):
-        return i18n.makeString(ARENAS.TYPE_FALLOUTMUTLITEAM_DESCRIPTION) if isInBattle and self._visitor.gui.isFalloutMultiTeam() else i18n.makeString('#arenas:type/{}/description'.format(functions.getArenaSubTypeName(self._visitor.type.getID())))
-
-    def getGuiEventType(self):
-        pass
-
-    def isQuestEnabled(self):
-        return True
-
-    def makeQuestInfo(self, vo):
-        return _QuestInfo(i18n.makeString(INGAME_GUI.PERSONALMISSIONS_TIP_NOQUESTS_BATTLETYPE), '', '')
-
-
 class BootcampBattleDescription(ArenaWithLabelDescription):
     __slots__ = ()
 
@@ -291,8 +274,6 @@ def createDescription(arenaVisitor):
         description = ArenaWithBasesDescription(arenaVisitor)
     elif guiVisitor.isTutorialBattle():
         description = TutorialBattleDescription(arenaVisitor)
-    elif guiVisitor.isFalloutBattle():
-        description = FalloutBattlesDescription(arenaVisitor)
     elif guiVisitor.isBootcampBattle():
         description = BootcampBattleDescription(arenaVisitor)
     elif guiVisitor.hasLabel():

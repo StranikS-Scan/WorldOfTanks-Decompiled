@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/poplib.py
-"""A POP3 client class.
-
-Based on the J. Myers POP3 draft, Jan. 96
-"""
 import re, socket
 __all__ = ['POP3', 'error_proto']
 
@@ -18,45 +14,6 @@ LF = '\n'
 CRLF = CR + LF
 
 class POP3():
-    """This class supports both the minimal and optional command sets.
-    Arguments can be strings or integers (where appropriate)
-    (e.g.: retr(1) and retr('1') both work equally well.
-    
-    Minimal Command Set:
-            USER name               user(name)
-            PASS string             pass_(string)
-            STAT                    stat()
-            LIST [msg]              list(msg = None)
-            RETR msg                retr(msg)
-            DELE msg                dele(msg)
-            NOOP                    noop()
-            RSET                    rset()
-            QUIT                    quit()
-    
-    Optional Commands (some servers support these):
-            RPOP name               rpop(name)
-            APOP name digest        apop(name, digest)
-            TOP msg n               top(msg, n)
-            UIDL [msg]              uidl(msg = None)
-    
-    Raises one exception: 'error_proto'.
-    
-    Instantiate with:
-            POP3(hostname, port=110)
-    
-    NB:     the POP protocol locks the mailbox from user
-            authorization until QUIT, so be sure to get in, suck
-            the messages, and quit, each time you access the
-            mailbox.
-    
-            POP is a line-based protocol, which means large mail
-            messages consume lots of python cycles reading them
-            line-by-line.
-    
-            If it's available on your mail server, use IMAP4
-            instead, it doesn't suffer from the two problems
-            above.
-    """
 
     def __init__(self, host, port=POP3_PORT, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
         self.host = host
@@ -126,26 +83,12 @@ class POP3():
         self._debugging = level
 
     def user(self, user):
-        """Send user name, return response
-        
-        (should indicate password required).
-        """
         return self._shortcmd('USER %s' % user)
 
     def pass_(self, pswd):
-        """Send password, return response
-        
-        (response includes message count, mailbox size).
-        
-        NB: mailbox is locked by server from here to 'quit()'
-        """
         return self._shortcmd('PASS %s' % pswd)
 
     def stat(self):
-        """Get mailbox status.
-        
-        Result is tuple of 2 ints (message count, mailbox size)
-        """
         retval = self._shortcmd('STAT')
         rets = retval.split()
         if self._debugging:
@@ -155,43 +98,21 @@ class POP3():
         return (numMessages, sizeMessages)
 
     def list(self, which=None):
-        """Request listing, return result.
-        
-        Result without a message number argument is in form
-        ['response', ['mesg_num octets', ...], octets].
-        
-        Result when a message number argument is given is a
-        single response: the "scan listing" for that message.
-        """
         return self._shortcmd('LIST %s' % which) if which is not None else self._longcmd('LIST')
 
     def retr(self, which):
-        """Retrieve whole message number 'which'.
-        
-        Result is in form ['response', ['line', ...], octets].
-        """
         return self._longcmd('RETR %s' % which)
 
     def dele(self, which):
-        """Delete message number 'which'.
-        
-        Result is 'response'.
-        """
         return self._shortcmd('DELE %s' % which)
 
     def noop(self):
-        """Does nothing.
-        
-        One supposes the response indicates the server is alive.
-        """
         return self._shortcmd('NOOP')
 
     def rset(self):
-        """Unmark all messages marked for deletion."""
         return self._shortcmd('RSET')
 
     def quit(self):
-        """Signoff: commit changes on server, unlock mailbox, close connection."""
         try:
             resp = self._shortcmd('QUIT')
         except error_proto as val:
@@ -204,22 +125,11 @@ class POP3():
         return resp
 
     def rpop(self, user):
-        """Not sure what this does."""
         return self._shortcmd('RPOP %s' % user)
 
     timestamp = re.compile('\\+OK.*(<[^>]+>)')
 
     def apop(self, user, secret):
-        """Authorisation
-        
-        - only possible if server has supplied a timestamp in initial greeting.
-        
-        Args:
-                user    - mailbox user;
-                secret  - secret shared between client and server.
-        
-        NB: mailbox is locked by server from here to 'quit()'
-        """
         m = self.timestamp.match(self.welcome)
         if not m:
             raise error_proto('-ERR APOP not supported by server')
@@ -229,20 +139,9 @@ class POP3():
         return self._shortcmd('APOP %s %s' % (user, digest))
 
     def top(self, which, howmuch):
-        """Retrieve message header of message number 'which'
-        and first 'howmuch' lines of message body.
-        
-        Result is in form ['response', ['line', ...], octets].
-        """
         return self._longcmd('TOP %s %s' % (which, howmuch))
 
     def uidl(self, which=None):
-        """Return message digest (unique id) list.
-        
-        If 'which', result contains unique id for that message
-        in the form 'response mesgnum uid', otherwise result is
-        the list ['response', ['mesgnum uid', ...], octets]
-        """
         return self._shortcmd('UIDL %s' % which) if which is not None else self._longcmd('UIDL')
 
 
@@ -253,17 +152,6 @@ except ImportError:
 else:
 
     class POP3_SSL(POP3):
-        """POP3 client class over SSL connection
-        
-        Instantiate with: POP3_SSL(hostname, port=995, keyfile=None, certfile=None)
-        
-               hostname - the hostname of the pop3 over ssl server
-               port - port number
-               keyfile - PEM formatted file that contains your private key
-               certfile - PEM formatted certificate chain file
-        
-            See the methods of the parent class POP3 for more documentation.
-        """
 
         def __init__(self, host, port=POP3_SSL_PORT, keyfile=None, certfile=None):
             self.host = host
@@ -330,7 +218,6 @@ else:
                 bytes = bytes - sent
 
         def quit(self):
-            """Signoff: commit changes on server, unlock mailbox, close connection."""
             try:
                 resp = self._shortcmd('QUIT')
             except error_proto as val:

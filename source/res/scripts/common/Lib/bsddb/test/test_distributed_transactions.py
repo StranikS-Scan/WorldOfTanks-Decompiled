@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_distributed_transactions.py
-"""TestCases for distributed transactions.
-"""
 import os
 import unittest
 from test_all import db, test_support, get_new_environment_path, get_new_database_path

@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileHofMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
 
 class ProfileHofMeta(ProfileSection):
@@ -24,9 +20,6 @@ class ProfileHofMeta(ProfileSection):
         return self.flashObject.as_setBackground(source) if self._isDAAPIInited() else None
 
     def as_setBtnCountersS(self, counters):
-        """
-        :param counters: Represented by Vector.<CountersVo> (AS)
-        """
         return self.flashObject.as_setBtnCounters(counters) if self._isDAAPIInited() else None
 
     def as_showServiceViewS(self, header, description):

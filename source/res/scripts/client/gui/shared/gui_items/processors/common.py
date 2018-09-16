@@ -127,8 +127,6 @@ class BattleResultsGetter(Processor):
 
 
 class OutfitApplier(Processor):
-    """ Outfit buyer and applier.
-    """
 
     def __init__(self, vehicle, outfit, season):
         super(OutfitApplier, self).__init__()
@@ -149,8 +147,6 @@ class OutfitApplier(Processor):
 
 
 class StyleApplier(Processor):
-    """ Style buyer and applier.
-    """
 
     def __init__(self, vehicle, style=None):
         super(StyleApplier, self).__init__()
@@ -174,8 +170,6 @@ class StyleApplier(Processor):
 
 
 class CustomizationsBuyer(Processor):
-    """ Customizations buyer.
-    """
 
     def __init__(self, vehicle, item, count):
         super(CustomizationsBuyer, self).__init__()
@@ -219,8 +213,6 @@ class CustomizationsBuyer(Processor):
 
 
 class CustomizationsSeller(Processor):
-    """ Customizations buyer.
-    """
 
     def __init__(self, vehicle, item, count=1):
         super(CustomizationsSeller, self).__init__()
@@ -264,10 +256,6 @@ class CustomizationsSeller(Processor):
 class BadgesSelector(Processor):
 
     def __init__(self, badges=None):
-        """
-        Processor that selects or removes badges.
-        :param badges: list of badges IDs (None for removal)
-        """
         if badges is None:
             plugs = ()
             badges = ()

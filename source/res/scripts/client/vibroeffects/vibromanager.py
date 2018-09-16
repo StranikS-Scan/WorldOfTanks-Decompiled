@@ -10,9 +10,9 @@ from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG
 g_instance = None
 
-class VibroManager:
+class VibroManager(object):
 
-    class GroupSettings:
+    class GroupSettings(object):
         pass
 
     def __init__(self):
@@ -46,8 +46,8 @@ class VibroManager:
         g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
 
     def __onGUISpaceEntered(self, spaceID):
-        from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
-        if spaceID == GUI_GLOBAL_SPACE_ID.LOGIN:
+        from gui.app_loader import settings
+        if spaceID == settings.GUI_GLOBAL_SPACE_ID.LOGIN:
             self.stopAllEffects()
 
     def __onAccountShowGUI(self, ctx):

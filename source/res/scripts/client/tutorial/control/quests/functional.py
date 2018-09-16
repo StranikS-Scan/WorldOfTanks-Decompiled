@@ -20,10 +20,10 @@ class SaveTutorialSettingEffect(FunctionalEffect):
         setting = self.getTarget()
         if setting is None:
             LOG_ERROR('Tutorial setting is not found', self._effect.getTargetID())
-            return
+            return False
         else:
             self.settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.TUTORIAL, {setting.getSettingName(): setting.getSettingValue()})
-            return
+            return True
 
 
 class SaveAccountSettingEffect(FunctionalEffect):
@@ -32,10 +32,10 @@ class SaveAccountSettingEffect(FunctionalEffect):
         setting = self.getTarget()
         if setting is None:
             LOG_ERROR('Tutorial setting is not found', self._effect.getTargetID())
-            return
+            return False
         else:
             AccountSettings.setSettings(setting.getSettingName(), setting.getSettingValue())
-            return
+            return True
 
 
 class SelectVehicleInHangar(FunctionalEffect):
@@ -45,7 +45,7 @@ class SelectVehicleInHangar(FunctionalEffect):
         vehicleCriteria = self._tutorial.getVars().get(self.getTargetID())
         if vehicleCriteria is None:
             LOG_ERROR('Tutorial setting is not found', self._effect.getTargetID())
-            return
+            return False
         else:
             minLvl, maxLvl = vehicleCriteria.get('levelsRange', (1, 10))
             criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(minLvl, maxLvl)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
@@ -53,7 +53,7 @@ class SelectVehicleInHangar(FunctionalEffect):
             vehicle = findFirst(None, vehicles)
             if vehicle is not None:
                 event_dispatcher.selectVehicleInHangar(vehicle.intCD)
-            return
+            return True
 
 
 class ShowSharedWindowEffect(FunctionalShowWindowEffect):

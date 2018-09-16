@@ -182,7 +182,7 @@ class _EquipmentItem(object):
         return self._descriptor.name.split('_')[0]
 
     def getEquipmentID(self):
-        nationID, innationID = self._descriptor.id
+        _, innationID = self._descriptor.id
         return innationID
 
     def isAvatar(self):
@@ -412,7 +412,6 @@ class EquipmentsController(IBattleController):
         tag = _getSupportedTag(descriptor)
         if tag:
             clazz = _EQUIPMENT_TAG_TO_ITEM[tag]
-            assert clazz
             item = clazz(descriptor, quantity, stage, timeRemaining, tag)
         else:
             item = _EquipmentItem(descriptor, quantity, stage, timeRemaining)
@@ -435,19 +434,9 @@ class EquipmentsController(IBattleController):
             return False
 
     def hasEquipment(self, intCD):
-        """Does player go to a arena with desired equipment.
-        :param intCD: integer containing compact descriptor of equipment.
-        :return: bool.
-        """
         return intCD in self._equipments
 
     def iterEquipmentsByTag(self, tag, condition=None):
-        """
-        All desired equipment by tag and condition that player have on arena.
-        :param tag: string tag of equipment.
-        :param condition: function that check is item appropriate
-        :return: generator
-        """
         return ((intCD, item) for intCD, item in self._equipments.iteritems() if item.getTag() == tag and (condition is None or condition(item)))
 
     def getEquipment(self, intCD):
@@ -515,7 +504,7 @@ class EquipmentsController(IBattleController):
             return (False, None)
         else:
             result, error = True, None
-            for intCD, item in self._equipments.iteritems():
+            for _, item in self._equipments.iteritems():
                 if item.getTag() == tag and item.isAvailableToUse:
                     result, error = self.__doChangeSetting(item, entityName, avatar)
                     break
@@ -683,7 +672,6 @@ class EquipmentsReplayPlayer(EquipmentsController):
         tag = _getSupportedTag(descriptor)
         if tag:
             clazz = _REPLAY_EQUIPMENT_TAG_TO_ITEM[tag]
-            assert clazz
             item = clazz(descriptor, quantity, stage, timeRemaining, tag)
         else:
             item = _ReplayItem(descriptor, quantity, timeRemaining, stage)

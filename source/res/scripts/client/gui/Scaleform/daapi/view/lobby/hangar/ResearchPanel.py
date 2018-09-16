@@ -68,10 +68,10 @@ class ResearchPanel(ResearchPanelMeta):
         self.__onIgrTypeChanged()
 
     def __onIgrTypeChanged(self, *args):
-        type = self.igrCtrl.getRoomType()
-        icon = makeHtmlString('html_templates:igr/iconBig', 'premium' if type == IGR_TYPE.PREMIUM else 'basic', {})
+        igrType = self.igrCtrl.getRoomType()
+        icon = makeHtmlString('html_templates:igr/iconBig', 'premium' if igrType == IGR_TYPE.PREMIUM else 'basic', {})
         label = text_styles.main(i18n.makeString(MENU.IGR_INFO, igrIcon=icon))
-        self.as_setIGRLabelS(type != IGR_TYPE.NONE, label)
+        self.as_setIGRLabelS(igrType != IGR_TYPE.NONE, label)
         self.__updateVehIGRStatus()
 
     def __updateVehIGRStatus(self):
@@ -98,10 +98,6 @@ class ResearchPanel(ResearchPanelMeta):
                 self.as_setEliteS(True)
 
     def __onCompareBasketChanged(self, changedData):
-        """
-        gui.game_control.VehComparisonBasket.onChange event handler
-        :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData
-        """
         if changedData.isFullChanged:
             self.onCurrentVehicleChanged()
 

@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/RES_TUTORIAL.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class RES_TUTORIAL(object):
     MAPS_TUTORIAL_BATTLE_HINT_00 = '../maps/tutorial/battle-hint-00.png'

@@ -1,14 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/fortifications.py
-from gui.shared.formatters import icons, text_styles
-from gui.shared.items_parameters import formatters as params_formatters
-from gui.shared.tooltips import TOOLTIP_TYPE
-from gui.shared.tooltips import formatters
-from gui.shared.tooltips.common import ToolTipBaseData, BlocksTooltipData
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared.tooltips import TOOLTIP_TYPE
+from gui.shared.tooltips.common import ToolTipBaseData
 from helpers.i18n import makeString as _ms
 __buildsDirectionMap = {'A': FORTIFICATIONS.STRONGHOLDBUILDS_DIRECTION_A,
  'B': FORTIFICATIONS.STRONGHOLDBUILDS_DIRECTION_B,
@@ -70,7 +65,6 @@ class ToolTipRefSysDirects(ToolTipBaseData):
     def getDisplayableData(self, *args, **kwargs):
         import ArenaType
         from gui.prb_control.dispatcher import g_prbLoader
-        from gui.shared.ClanCache import g_clanCache
         from gui.prb_control.items.stronghold_items import isEnemyBattleIndex
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is None:

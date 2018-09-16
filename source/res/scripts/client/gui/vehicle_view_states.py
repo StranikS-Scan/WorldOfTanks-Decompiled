@@ -50,6 +50,9 @@ class NoPresentViewState(IVehicleViewState):
     def isOptionalDevicesOpsEnabled(self):
         return False
 
+    def getCustomizationTooltip(self):
+        pass
+
 
 class SelectedViewState(IVehicleViewState):
     __slots__ = ('_locked', '_isInHangar', '_isBroken', '_isDisabledInRent', '_isOnlyForEventBattles', '_isOutfitLocked')
@@ -88,7 +91,7 @@ class SelectedViewState(IVehicleViewState):
         return True
 
     def isCrewOpsEnabled(self):
-        return not self._locked and self._isInHangar
+        return not self._locked
 
     def isMaintenanceEnabled(self):
         return not self._locked and self._isInHangar

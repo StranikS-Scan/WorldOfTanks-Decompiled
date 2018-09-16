@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_register.py
-"""Tests for distutils.command.register."""
 import os
 import unittest
 import getpass
@@ -20,7 +19,6 @@ PYPIRC_NOPASSWORD = '[distutils]\n\nindex-servers =\n    server1\n\n[server1]\nu
 WANTED_PYPIRC = '[distutils]\nindex-servers =\n    pypi\n\n[pypi]\nusername:tarek\npassword:password\n'
 
 class RawInputs(object):
-    """Fakes user inputs."""
 
     def __init__(self, *answers):
         self.answers = answers
@@ -34,7 +32,6 @@ class RawInputs(object):
 
 
 class FakeOpener(object):
-    """Fakes a PyPI server"""
 
     def __init__(self):
         self.reqs = []

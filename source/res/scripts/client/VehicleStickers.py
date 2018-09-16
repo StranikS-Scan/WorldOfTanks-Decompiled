@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/VehicleStickers.py
 from collections import namedtuple
 import math
-import Account
 import BigWorld
 from AvatarInputHandler import mathUtils
 import items
@@ -16,16 +15,22 @@ from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames, TankNo
 from vehicle_systems.tankStructure import DetachedTurretPartIndexes, DetachedTurretPartNames
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.outfit import Outfit
+
+def _getAccountRepository():
+    import Account
+    return Account.g_accountRepository
+
+
 TextureParams = namedtuple('TextureParams', ('textureName', 'bumpTextureName', 'mirror'))
 
-class StickerAttributes():
+class StickerAttributes(object):
     IS_INSCRIPTION = 1
     DOUBLESIDED = 2
     IS_MIRRORED = 4
     IS_UV_PROPORTIONAL = 8
 
 
-class SlotTypes():
+class SlotTypes(object):
     CLAN = 'clan'
     PLAYER = 'player'
     INSCRIPTION = 'inscription'
@@ -34,7 +39,7 @@ class SlotTypes():
     FIXED_INSCRIPTION = 'fixedInscription'
 
 
-class ModelStickers():
+class ModelStickers(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, vDesc, emblemSlots, decals, onHull=True, insigniaRank=0):
@@ -70,7 +75,6 @@ class ModelStickers():
                 self.__texParamsBySlotType[slotType] = [TextureParams('', '', False)]
                 continue
             descIdx = len(self.__slotsByType[slotType]) - 1
-            emblemsDesc = None
             emblemsCache = None
             emblemID = None
             if slotType in (SlotTypes.PLAYER, SlotTypes.INSCRIPTION):
@@ -80,6 +84,7 @@ class ModelStickers():
                     if sticker:
                         texParams = TextureParams(sticker.texture, '', sticker.isMirrored)
                         self.__texParamsBySlotType[slotType].append(texParams)
+                        continue
                     elif slotType == SlotTypes.PLAYER:
                         emblemsCache = playerEmblemsCache
                         emblemID = vDesc.type.defaultPlayerEmblemID
@@ -92,10 +97,6 @@ class ModelStickers():
             elif slotType == SlotTypes.FIXED_INSCRIPTION:
                 emblemsCache = inscriptionsCache
                 emblemID = slot.emblemId
-            if emblemsDesc is None and emblemID is None:
-                continue
-            if emblemID is None:
-                emblemID = emblemsDesc[descIdx][0]
             if emblemID is None:
                 self.__texParamsBySlotType[slotType].append(None)
                 continue
@@ -125,35 +126,35 @@ class ModelStickers():
         self.__stickerModel.setupSuperModel(self.__model, self.__toPartRootMatrix)
         self.__parentNode.attach(self.__stickerModel)
         replayCtrl = BattleReplay.g_replayCtrl
-        for slotType, slots in self.__slotsByType.iteritems():
-            if slotType != SlotTypes.CLAN or self.__clanID == 0 or replayCtrl.isPlaying and replayCtrl.isOffline:
-                if slotType != SlotTypes.CLAN:
-                    self.__doAttachStickers(slotType)
-            if slotType == SlotTypes.CLAN:
-                serverSettings = self.lobbyContext.getServerSettings()
-                if serverSettings is not None and serverSettings.roaming.isInRoaming() or self.__isLoadingClanEmblems:
-                    continue
-                self.__isLoadingClanEmblems = True
-                accountRep = Account.g_accountRepository
-                if accountRep is None:
-                    LOG_ERROR('Failed to attach stickers to the vehicle - account repository is not initialized')
-                    continue
-                fileCache = accountRep.customFilesCache
-                fileServerSettings = accountRep.fileServerSettings
-                clan_emblems = fileServerSettings.get('clan_emblems')
-                if clan_emblems is None:
-                    continue
-                url = None
-                try:
-                    url = clan_emblems['url_template'] % self.__clanID
-                except:
-                    LOG_ERROR('Failed to attach stickers to the vehicle - server returned incorrect url format: %s' % clan_emblems['url_template'])
-                    continue
+        accountRep = _getAccountRepository()
+        if not accountRep:
+            LOG_ERROR('Failed to attach stickers to the vehicle - account repository is not initialized')
+            return
+        else:
+            for slotType, _ in self.__slotsByType.iteritems():
+                if slotType != SlotTypes.CLAN or self.__clanID == 0 or replayCtrl.isPlaying and replayCtrl.isOffline:
+                    if slotType != SlotTypes.CLAN:
+                        self.__doAttachStickers(slotType)
+                if slotType == SlotTypes.CLAN:
+                    serverSettings = self.lobbyContext.getServerSettings()
+                    if serverSettings is not None and serverSettings.roaming.isInRoaming() or self.__isLoadingClanEmblems:
+                        continue
+                    self.__isLoadingClanEmblems = True
+                    fileCache = accountRep.customFilesCache
+                    fileServerSettings = accountRep.fileServerSettings
+                    clanEmblems = fileServerSettings.get('clan_emblems')
+                    if clanEmblems is None:
+                        continue
+                    try:
+                        url = clanEmblems['url_template'] % self.__clanID
+                    except Exception:
+                        LOG_ERROR('Failed to attach stickers to the vehicle - server returned incorrect url format: %s' % clanEmblems['url_template'])
+                        continue
 
-                clanCallback = stricted_loading.makeCallbackWeak(self.__onClanEmblemLoaded)
-                fileCache.get(url, clanCallback)
+                    clanCallback = stricted_loading.makeCallbackWeak(self.__onClanEmblemLoaded)
+                    fileCache.get(url, clanCallback)
 
-        return
+            return
 
     def detachStickers(self):
         if self.__model is None:
@@ -350,11 +351,10 @@ class VehicleStickers(object):
 
         return
 
-    def addDamageSticker(self, code, componentName, stickerID, segStart, segEnd):
-        componentStickers = self.__stickers[componentName]
+    def addDamageSticker(self, code, componentIdx, stickerID, segStart, segEnd):
+        componentStickers = self.__stickers[TankPartIndexes.getName(componentIdx)]
         if componentStickers.damageStickers.has_key(code):
             return
-        desc = items.vehicles.g_cache.damageStickers['descrs'][stickerID]
         segment = segEnd - segStart
         segLen = segment.lengthSquared
         if segLen != 0:

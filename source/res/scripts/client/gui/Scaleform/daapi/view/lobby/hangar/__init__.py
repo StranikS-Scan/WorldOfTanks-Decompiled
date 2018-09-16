@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/__init__.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates, ConditionalViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
-from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride
 
 def getContextMenuHandlers():
     from gui.Scaleform.daapi.view.lobby.hangar import hangar_cm_handlers
@@ -27,7 +27,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.TechnicalMaintenance import TechnicalMaintenance
     from gui.Scaleform.daapi.view.lobby.hangar.TmenXpPanel import TmenXpPanel
     from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehicleParameters
-    from gui.Scaleform.daapi.view.lobby.hangar.filter_popover import TankCarouselFilterPopover
+    from gui.Scaleform.daapi.view.common.filter_popover import TankCarouselFilterPopover
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import TankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import RankedTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.academy import Academy
@@ -43,7 +43,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.ranked_battles_widget import RankedBattlesWidget
     from gui.Scaleform.daapi.view.lobby.hangar.alert_message_block import AlertMessageBlock
     from gui.Scaleform.daapi.view.bootcamp.BCResearchPanel import BCResearchPanel
-    from gui.Scaleform.daapi.view.bootcamp.BCAmmunitionPanel import BCAmmunitionPanel
     from gui.Scaleform.daapi.view.bootcamp.BCTankCarousel import BCTankCarousel
     from gui.Scaleform.daapi.view.bootcamp.BCHangarHeader import BCHangarHeader
     from gui.Scaleform.daapi.view.bootcamp.BCCrew import BCCrew
@@ -62,7 +61,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.BOOSTER_CMP_SELECT_POPOVER, VehCmpBattleBoosterSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.BOOSTER_CMP_SELECT_POPOVER, VIEW_ALIAS.BOOSTER_CMP_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BOOSTER_SELECT_POPOVER, BattleBoosterSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.BOOSTER_SELECT_POPOVER, VIEW_ALIAS.BOOSTER_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.OPT_DEVICES_SELECT_POPOVER, OptionalDeviceSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.OPT_DEVICES_SELECT_POPOVER, VIEW_ALIAS.OPT_DEVICES_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
-     ConditionalViewSettings(HANGAR_ALIASES.AMMUNITION_PANEL, BootcampComponentOverride(AmmunitionPanel, BCAmmunitionPanel), None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.AMMUNITION_PANEL, AmmunitionPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(HANGAR_ALIASES.RESEARCH_PANEL, BootcampComponentOverride(ResearchPanel, BCResearchPanel), None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(HANGAR_ALIASES.HEADER, BootcampComponentOverride(HangarHeader, BCHangarHeader), None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.SWITCH_MODE_PANEL, SwitchModePanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -96,7 +95,7 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.BOOSTER_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.OPT_DEVICES_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLES_FILTER_POPOVER, self.loadViewByCtxEvent))
-        super(HangarPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+        super(HangarPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
     def loadAcademy(self, event):
         view = self.findViewByAlias(ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_ACADEMY)

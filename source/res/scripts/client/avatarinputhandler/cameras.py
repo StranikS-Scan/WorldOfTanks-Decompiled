@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/cameras.py
-import BigWorld
-import GUI
-import Math
 import math
-import Event
+import BigWorld
+import Math
 from AvatarInputHandler import mathUtils
 
-class ImpulseReason:
+class ImpulseReason(object):
     MY_SHOT = 0
     ME_HIT = 1
     OTHER_SHOT = 2
@@ -60,7 +58,7 @@ class ICamera(object):
         pass
 
 
-class FreeCamera:
+class FreeCamera(object):
     camera = property(lambda self: self.__cam)
 
     def __init__(self):
@@ -77,11 +75,11 @@ class FreeCamera:
         if camMat is not None:
             self.__cam.set(camMat)
         BigWorld.camera(self.__cam)
+        BigWorld.enableFreeCameraModeForShadowManager(True)
         return
 
     def disable(self):
-        BigWorld.camera(None)
-        return
+        BigWorld.enableFreeCameraModeForShadowManager(False)
 
     def setWorldMatrix(self, matrix):
         matrix = Math.Matrix(matrix)
@@ -162,26 +160,6 @@ def isPointOnScreen(point):
     return posInClip.w != 0 and -1 <= posInClip.x / posInClip.w <= 1 and (True if -1 <= posInClip.y / posInClip.w <= 1 else False)
 
 
-def worldToScreenPos(worldPos):
-    """
-    Converts world position coordinates to screen space coordinates.
-    """
-    screenWidth, screenHeight = GUI.screenResolution()
-    viewProjMatrix = getViewProjectionMatrix()
-    clipPos = viewProjMatrix.applyV4Point(Math.Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0))
-    if clipPos.w <= 0.0:
-        return (None, None)
-    else:
-        ndcPos = Math.Vector2()
-        ndcPos.x = clipPos.x / clipPos.w
-        ndcPos.y = clipPos.y / clipPos.w
-        halfScreenWidth = screenWidth / 2.0
-        halfScreenHeight = screenHeight / 2.0
-        screenPosX = halfScreenWidth * (ndcPos.x + 1.0)
-        screenPosY = halfScreenHeight * (1.0 - ndcPos.y)
-        return (screenPosX, screenPosY)
-
-
 def projectPoint(point):
     posInClip = Math.Vector4(point.x, point.y, point.z, 1)
     posInClip = getViewProjectionMatrix().applyV4Point(posInClip)
@@ -226,21 +204,15 @@ def overrideCameraMatrix(position, direction):
 
 
 def get2DAngleFromCamera(vector):
-    """
-    Calculates the angle between the provided vector and the camera vector in the x-z plane
-    
-    :param vector: Vector to measure with the camera angle
-    :return: The angle in radians between the provided vector and the camera vector
-    """
     modifiedVector = Math.Vector3(vector.x, 0, vector.z)
-    dir = Math.Vector3(BigWorld.camera().direction)
-    dir.y = 0
-    if dir.length and modifiedVector.length:
-        dir.normalise()
+    direction = Math.Vector3(BigWorld.camera().direction)
+    direction.y = 0
+    if direction.length and modifiedVector.length:
+        direction.normalise()
         modifiedVector.normalise()
     else:
         return math.pi
-    dot = max(min(dir.dot(modifiedVector), 1), -1)
+    dot = max(min(direction.dot(modifiedVector), 1), -1)
     return math.acos(dot)
 
 
@@ -300,8 +272,6 @@ class FovExtended(object):
         self.__isHorizontalFovFixed = getScreenAspectRatio() > FovExtended.__TO_HORIZONTAL_THRESHOLD
         self.__multiplier = 1.0
         self.__enabled = True
-        self.onSetFovSettingEvent = Event.Event()
-        self.onRefreshFovEvent = Event.Event()
         initialVerticalFov = math.radians(60)
         self.defaultHorizontalFov = initialVerticalFov * getScreenAspectRatio()
         from gui import g_guiResetters
@@ -330,13 +300,6 @@ class FovExtended(object):
     def refreshFov(self):
         self.__isHorizontalFovFixed = getScreenAspectRatio() > FovExtended.__TO_HORIZONTAL_THRESHOLD
         self.setFovByMultiplier(self.__multiplier)
-        self.onRefreshFovEvent()
-
-    def applyHorizontalFovSetting(self, horizontalFov, needToReset):
-        if needToReset:
-            self.resetFov()
-        self.defaultHorizontalFov = horizontalFov
-        self.onSetFovSettingEvent()
 
 
 def _clampPoint2DInBox2D(bottomLeft, upperRight, point):

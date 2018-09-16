@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_set_literal.py
-"""
-Optional fixer to transform set() calls to set literals.
-"""
 from lib2to3 import fixer_base, pytree
 from lib2to3.fixer_util import token, syms
 

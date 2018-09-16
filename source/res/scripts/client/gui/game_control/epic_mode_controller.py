@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/epic_mode_controller.py
-import weakref
 from account_helpers.settings_core.settings_constants import GAME
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR
@@ -65,6 +64,7 @@ class EpicModeController(IEpicModeController):
         self.settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
 
     def __validateEpicRandomUsage(self):
+        return
         recomPreset = BigWorld.detectGraphicsPresetFromSystemSettings()
         currentVirtualMemory = BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_VIRTUAL_MEMORY)
         epicCtfEnabled = self.settingsCore.getSetting(GAME.GAMEPLAY_EPIC_STANDARD)

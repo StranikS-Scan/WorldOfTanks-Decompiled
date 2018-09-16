@@ -18,7 +18,7 @@ _PLAYER_STATUS = settings.PLAYER_STATUS
 _DELIVERY_STATUS = settings.INVITATION_DELIVERY_STATUS
 _DEFAULT_PLAYER_GROUP = 1
 
-class EPIC_RANDOM_KEYS():
+class EPIC_RANDOM_KEYS(object):
     PLAYER_GROUP = 'playerGroup'
 
     @staticmethod
@@ -110,7 +110,7 @@ class PlayerInfoVO(object):
 
     def __getPersonaMissionIDs(self, pQuests):
         try:
-            return map(lambda qID: pQuests[qID], self.personaMissionIDs)
+            return [ pQuests[qID] for qID in self.personaMissionIDs ]
         except KeyError as e:
             LOG_ERROR('Key error trying to get personal mission: no key in cache', e)
             return []
@@ -418,7 +418,6 @@ class VehicleArenaInteractiveStatsVO(object):
 
 
 class VehicleArenaStatsVO(object):
-    """Value object containing statistics that are related to vehicles."""
     __slots__ = ('vehicleID', '__frags', '__interactive', '__gameModeSpecific')
 
     def __init__(self, vehicleID, frags=0, **kwargs):
@@ -484,7 +483,6 @@ class VehicleArenaStatsVO(object):
 
 
 class PlayerRankedInfoVO(object):
-    """Value object containing information about player rank."""
     __slots__ = ('rank', 'rankStep', 'badges', 'selectedBadge')
 
     def __init__(self, rank=None, badges=None):
@@ -509,9 +507,6 @@ class VehicleArenaStatsDict(defaultdict):
 
 
 class VehicleActions(object):
-    """
-    Represent vehicleActionMarker convertion action to bitMask
-    """
     __ACTIONS = {'hunting': 1}
 
     @staticmethod

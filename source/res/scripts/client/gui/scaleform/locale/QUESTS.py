@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/QUESTS.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from debug_utils import LOG_WARNING
 
 class QUESTS(object):
@@ -1103,6 +1099,7 @@ class QUESTS(object):
     TOKEN_DEFAULT_CHINA = '#quests:token/default/china'
     TOKEN_DEFAULT_JAPAN = '#quests:token/default/japan'
     TOKEN_DEFAULT_SWEDEN = '#quests:token/default/sweden'
+    TOKEN_DEFAULT_ITALY = '#quests:token/default/italy'
     TOKEN_DEFAULT_WOT = '#quests:token/default/wot'
     TOKEN_DEFAULT_LIGHTTANK = '#quests:token/default/lightTank'
     TOKEN_DEFAULT_MEDIUMTANK = '#quests:token/default/mediumTank'
@@ -1165,18 +1162,6 @@ class QUESTS(object):
     BONUSNAME_COMPLETIONTOKENS_4_3 = '#quests:bonusName/completionTokens_4_3'
     BONUSNAME_COMPLETIONTOKENS_4_4 = '#quests:bonusName/completionTokens_4_4'
     BONUSNAME_COMPLETIONTOKENS_4_5 = '#quests:bonusName/completionTokens_4_5'
-    ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
-    ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
-    ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
-    ACTION_BUTTON_CALENDAR = '#quests:action/button/calendar'
-    ACTION_SHORT_CALENDAR = '#quests:action/short/calendar'
-    ACTION_AUTO_BOXBUYING = '#quests:action/auto/boxbuying'
-    ACTION_FULL_BOXBUYING = '#quests:action/full/boxbuying'
-    ACTION_HERO_FULL_BOXBUYING = '#quests:action/hero/full/boxbuying'
-    ACTION_ASIA_FULL_BOXBUYING = '#quests:action/asia/full/boxbuying'
-    ACTION_ASIA_HERO_FULL_BOXBUYING = '#quests:action/asia/hero/full/boxbuying'
-    ACTION_BUTTON_BOXBUYING = '#quests:action/button/boxbuying'
-    ACTION_SHORT_BOXBUYING = '#quests:action/short/boxbuying'
     ACTION_AUTO_EXCHANGERATE = '#quests:action/auto/exchangeRate'
     ACTION_FULL_EXCHANGERATE = '#quests:action/full/exchangeRate'
     ACTION_HERO_FULL_EXCHANGERATE = '#quests:action/hero/full/exchangeRate'
@@ -1449,6 +1434,7 @@ class QUESTS(object):
      TOKEN_DEFAULT_CHINA,
      TOKEN_DEFAULT_JAPAN,
      TOKEN_DEFAULT_SWEDEN,
+     TOKEN_DEFAULT_ITALY,
      TOKEN_DEFAULT_WOT,
      TOKEN_DEFAULT_LIGHTTANK,
      TOKEN_DEFAULT_MEDIUMTANK,
@@ -1511,19 +1497,7 @@ class QUESTS(object):
      BONUSNAME_COMPLETIONTOKENS_4_3,
      BONUSNAME_COMPLETIONTOKENS_4_4,
      BONUSNAME_COMPLETIONTOKENS_4_5)
-    ACTION_ENUM = (ACTION_AUTO_CALENDAR,
-     ACTION_FULL_CALENDAR,
-     ACTION_HERO_FULL_CALENDAR,
-     ACTION_BUTTON_CALENDAR,
-     ACTION_SHORT_CALENDAR,
-     ACTION_AUTO_BOXBUYING,
-     ACTION_FULL_BOXBUYING,
-     ACTION_HERO_FULL_BOXBUYING,
-     ACTION_ASIA_FULL_BOXBUYING,
-     ACTION_ASIA_HERO_FULL_BOXBUYING,
-     ACTION_BUTTON_BOXBUYING,
-     ACTION_SHORT_BOXBUYING,
-     ACTION_AUTO_EXCHANGERATE,
+    ACTION_ENUM = (ACTION_AUTO_EXCHANGERATE,
      ACTION_FULL_EXCHANGERATE,
      ACTION_HERO_FULL_EXCHANGERATE,
      ACTION_SHORT_EXCHANGERATE,

@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/ranked_battles_controller.py
+import operator
 from collections import defaultdict
 from operator import itemgetter
 import BigWorld
-import operator
 import Event
 import constants
 import ranked_common
@@ -29,7 +29,7 @@ from optional_bonuses import TrackVisitor, BONUS_MERGERS, walkBonuses
 from shared_utils import first, findFirst, collapseIntervals
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.clans import IClanController
+from skeletons.gui.web import IWebController
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -42,7 +42,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
     itemsCache = dependency.descriptor(IItemsCache)
     battleResultsService = dependency.descriptor(IBattleResultsService)
     connectionMgr = dependency.descriptor(IConnectionManager)
-    clansController = dependency.descriptor(IClanController)
+    clansController = dependency.descriptor(IWebController)
 
     def __init__(self):
         super(RankedBattlesController, self).__init__()
@@ -148,7 +148,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
             return None
 
     def getSeason(self, seasonID):
-        assert isinstance(seasonID, int)
         seasonData = self.__getSettings().seasons.get(seasonID, {})
         if seasonData:
             cycleInfo = (None,
@@ -160,15 +159,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
             return
 
     def getRank(self, rankID, vehicle=None):
-        """
-        Selected rank.
-        """
         return self.getAllRanksChain(vehicle)[rankID]
 
     def getCurrentRank(self, vehicle=None):
-        """
-        Current account rank.
-        """
         if vehicle is not None:
             result = findFirst(operator.methodcaller('isCurrent'), self.getVehicleRanksChain(vehicle))
             if result is not None:
@@ -176,9 +169,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return findFirst(operator.methodcaller('isCurrent'), self.getRanksChain())
 
     def getMaxRank(self, vehicle=None):
-        """
-        Current account max rank.
-        """
         if vehicle is not None:
             result = findFirst(operator.methodcaller('isMax'), self.getVehicleRanksChain(vehicle))
             if result is not None:
@@ -186,11 +176,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return findFirst(operator.methodcaller('isMax'), self.getRanksChain())
 
     def getMaxRankForCycle(self, cycleID):
-        """
-        returns maximum rank achieved in given cycle.
-        Only cycles in current season are acceptable
-        Returns maximum rank or VehicleRank if info found, None otherwise
-        """
         season = self.getCurrentSeason()
         if season is None:
             return
@@ -215,9 +200,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
             return
 
     def getLastRank(self, vehicle=None):
-        """
-        Last rank for which client animation was shown.
-        """
         if vehicle is not None:
             result = findFirst(operator.methodcaller('isLastSeenByPlayer'), self.getVehicleRanksChain(vehicle))
             if result is not None:
@@ -225,9 +207,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return findFirst(operator.methodcaller('isLastSeenByPlayer'), self.getRanksChain())
 
     def setLastRank(self, vehicle=None):
-        """
-        Set last rank for which client animation was shown.
-        """
         currentProgress = self.itemsCache.items.ranked.accRank
         lastProgress = self.itemsCache.items.ranked.clientRank
         if currentProgress != lastProgress:
@@ -298,9 +277,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return len(self.__getSettings().accSteps)
 
     def isAccountMastered(self):
-        """
-        Has this account reached last available account rank.
-        """
         currentRank, _ = self.itemsCache.items.ranked.accRank
         return currentRank == self.getAccRanksTotal()
 
@@ -308,18 +284,12 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return first(self.eventsCache.getRankedQuests(lambda q: not q.isHidden()).values())
 
     def getRanksChain(self):
-        """
-        Builds chain from all available account ranks.
-        """
         currentProgress = self.itemsCache.items.ranked.accRank
         maxProgress = self.itemsCache.items.ranked.maxRank
         lastProgress = self.itemsCache.items.ranked.clientRank
         return self.buildRanksChain(currentProgress, maxProgress, lastProgress)
 
     def getVehicleRanksChain(self, vehicle):
-        """
-        Builds chain from all available vehicle ranks for given vehicle.
-        """
         rankedStats = self.itemsCache.items.ranked
         vehCD = vehicle.intCD if vehicle is not None else None
         currentProgress = rankedStats.vehRanks.get(vehCD, (0, 0))
@@ -328,25 +298,13 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return self.buildVehicleRanksChain(currentProgress, maxProgress, lastProgress, vehicle)
 
     def getAllRanksChain(self, vehicle=None):
-        """
-        Builds chain from all available ranks:
-        - account ranks
-        - vehicle ranks (if vehicle was given)
-        """
         result = self.getRanksChain()
         if vehicle is not None:
             result.extend(self.getVehicleRanksChain(vehicle))
         return result
 
     def buildRanksChain(self, currentProgress, maxProgress, lastProgress):
-        """
-        Builds account ranks chain by given data:
-        :param currentProgress: current account progress
-        :param maxProgress: max achieved account progress
-        :param lastProgress: max account progress seen by player
-        :return: ranks chain
-        """
-        currentRank, _ = currentProgress
+        _, _ = currentProgress
         settings = self.__getSettings()
         stepsToProgress = settings.accSteps
         unburnableRanks = settings.unburnableRanks
@@ -361,14 +319,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return result
 
     def buildVehicleRanksChain(self, currentProgress, maxProgress, lastProgress, vehicle):
-        """
-        Builds account ranks chain by given data:
-        :param currentProgress: current account progress
-        :param maxProgress: max achieved account progress
-        :param lastProgress: max account progress seen by player
-        :param vehicle: vehicle object for which we should build this chain
-        :return: ranks chain
-        """
         currentRank, _ = currentProgress
         settings = self.__getSettings()
         vehStepsToProgress = settings.vehSteps
@@ -392,11 +342,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return result
 
     def runQuests(self, quests):
-        """
-        Start quests completion process
-        :param quests: list of gui.sever_events.event_items.RankedQuest
-        :return:
-        """
         notCompletedQuests = []
         for quest in quests:
             if not quest.isCompleted():
@@ -476,9 +421,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return state
 
     def getPrimeTimes(self):
-        """
-        Gets dict with all available peripheries and prime times set for them.
-        """
         lobbyContext = dependency.instance(ILobbyContext)
         rankedBattlesConfig = lobbyContext.getServerSettings().rankedBattles
         primeTimes = rankedBattlesConfig.primeTimes
@@ -525,11 +467,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return serversPeriodsMapping
 
     def getPrimeTimeStatus(self, peripheryID=None):
-        """
-        Is this periphery (or current by default) has the prime time now.
-        :param peripheryID: periphery ID or current
-        :return: (prime time status, time left til end/start)
-        """
         if not self.isEnabled():
             return (PRIME_TIME_STATUS.DISABLED, 0)
         else:
@@ -547,9 +484,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
             return (PRIME_TIME_STATUS.AVAILABLE, timeLeft) if isNow else (PRIME_TIME_STATUS.NOT_AVAILABLE, timeLeft)
 
     def hasAnyPeripheryWithPrimeTime(self):
-        """
-        Is there any periphery available right now
-        """
         if not self.isAvailable():
             return False
         currentSeason = self.getCurrentSeason()
@@ -564,9 +498,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return False
 
     def getCycleRewards(self, cycleID):
-        """
-        return rewards received for maximum rank in cycle. Is supposed to be used for past cycles only
-        """
         result = []
         maxRank = self.__getDossierForCycle(cycleID).rank
         quest = first(self.eventsCache.getRankedQuests(lambda q: q.getRank() == maxRank and q.getCycleID() == cycleID and q.isProcessedAtCycleEnd()).values())
@@ -584,9 +515,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return result
 
     def getAllAwardsForCycle(self, cycleID):
-        """
-        return all rewards received in a cycle. Is supposed to be used for past cycles only
-        """
         resultDict = {}
         maxRank = self.__getDossierForCycle(cycleID).rank
         questsIterator = self.eventsCache.getRankedQuests(lambda q: q.getRank() == maxRank and q.getCycleID() == cycleID and q.isProcessedAtCycleEnd()).itervalues()
@@ -743,17 +671,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return generalSettings
 
     def __buildRank(self, rankID, stepsCount, currentProgress, maxProgress, lastProgress, unburnableRanks, unburnableStepRanks, points):
-        """
-        Builds rank object with current state calculation and progress.
-        :param rankID: rank ID
-        :param stepsCount: total count of steps to achieve
-        :param currentProgress: current player's progress
-        :param maxProgress: max player's progress
-        :param lastProgress: last player's progress
-        :param unburnableRanks: list of unburnable ranks
-        :param unburnableStepRanks: list of ranks which steps are unburnable
-        :return: (rankID, rankState, rank progress object, quest object)
-        """
         currentRank, _ = currentProgress
         maxRank, _ = maxProgress
         lastRank, _ = lastProgress
@@ -793,16 +710,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
          progress)
 
     def __buildProgress(self, rankID, stepsCount, currentProgress, maxProgress, lastProgress, unburnableStepRanks):
-        """
-        Builds progress object for rank by steps.
-        :param rankID: rank ID
-        :param stepsCount: total count of steps to achieve
-        :param currentProgress: current player's progress
-        :param maxProgress: max player's progress
-        :param lastProgress: last player's progress
-        :param unburnableStepRanks: list of ranks which steps are unburnable
-        :return: rank progress object
-        """
         result = []
         for stepID in xrange(1, stepsCount + 1):
             stepState = RANK_STATE.UNDEFINED
@@ -879,9 +786,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
             self.__resetTimer()
 
     def __getTimer(self):
-        """
-        Gets the prime time update time
-        """
         _, timeLeft = self.getPrimeTimeStatus()
         return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
 

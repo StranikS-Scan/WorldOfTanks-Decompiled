@@ -53,9 +53,6 @@ def sub_warning(msg, *args):
 
 
 def get_logger():
-    """
-    Returns logger used by multiprocessing
-    """
     global _logger
     import logging, atexit
     logging._acquireLock()
@@ -78,9 +75,6 @@ def get_logger():
 
 
 def log_to_stderr(level=None):
-    """
-    Turn on logging and add a handler which prints to stderr
-    """
     global _log_to_stderr
     import logging
     logger = get_logger()
@@ -125,16 +119,10 @@ _finalizer_registry = {}
 _finalizer_counter = itertools.count()
 
 class Finalize(object):
-    """
-    Class which supports object finalization using weakrefs
-    """
 
     def __init__(self, obj, callback, args=(), kwargs=None, exitpriority=None):
-        if not exitpriority is None:
-            assert type(exitpriority) is int
-            self._weakref = obj is not None and weakref.ref(obj, self)
-        else:
-            assert exitpriority is not None
+        if obj is not None:
+            self._weakref = weakref.ref(obj, self)
         self._callback = callback
         self._args = args
         self._kwargs = kwargs or {}
@@ -144,9 +132,6 @@ class Finalize(object):
         return
 
     def __call__(self, wr=None):
-        """
-        Run the callback unless it has already been called or cancelled
-        """
         try:
             del _finalizer_registry[self._key]
         except KeyError:
@@ -164,9 +149,6 @@ class Finalize(object):
         return
 
     def cancel(self):
-        """
-        Cancel finalization of the object
-        """
         try:
             del _finalizer_registry[self._key]
         except KeyError:
@@ -177,9 +159,6 @@ class Finalize(object):
         return
 
     def still_active(self):
-        """
-        Return whether this finalizer is still waiting to invoke callback
-        """
         return self._key in _finalizer_registry
 
     def __repr__(self):
@@ -202,12 +181,6 @@ class Finalize(object):
 
 
 def _run_finalizers(minpriority=None):
-    """
-    Run all finalizers whose exit priority is not None and at least minpriority
-    
-    Finalizers with highest priority are called first; finalizers with
-    the same priority will be called in reverse order of creation.
-    """
     if _finalizer_registry is None:
         return
     else:
@@ -231,9 +204,6 @@ def _run_finalizers(minpriority=None):
 
 
 def is_exiting():
-    """
-    Returns true if the process is shutting down
-    """
     global _exiting
     return _exiting or _exiting is None
 

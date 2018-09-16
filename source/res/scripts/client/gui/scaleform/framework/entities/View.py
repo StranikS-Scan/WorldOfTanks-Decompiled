@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/View.py
-import WWISE
 from collections import namedtuple
+import WWISE
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 import SoundGroups
 from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractViewMeta
@@ -10,10 +10,6 @@ from gui.shared.events import FocusEvent
 _ViewKey = namedtuple('_ViewKey', ['alias', 'name'])
 
 class ViewKey(_ViewKey):
-    """
-    Represents View unique key. Consists of view alias and view name. Allows to distinguish views of the same type
-    (with the same alias)
-    """
 
     @staticmethod
     def __new__(cls, alias, name=None):
@@ -29,20 +25,12 @@ class ViewKey(_ViewKey):
 
 
 class ViewKeyDynamic(ViewKey):
-    """
-    View key matcher based on alias only. Used for matching keys
-    with dynamically generated names (like dialogs).
-    """
 
     def __eq__(self, other):
         return self.alias == other.alias if isinstance(other, ViewKey) else False
 
 
 class _ViewSoundsManager(object):
-    """
-    Represents sound manager that tracks all sounds emitted through it and stops them when the view is destroyed.
-    Currently allows to play 2D sounds.
-    """
 
     def __init__(self):
         super(_ViewSoundsManager, self).__init__()
@@ -87,11 +75,7 @@ class _ViewSoundsManager(object):
         if sound and sound.isPlaying:
             sound.stop()
 
-    @staticmethod
-    def playInstantSound(eventName):
-        """ Plays sound immediately, without checking is it already playing or not. Can cause overlapping of sounds.
-        Is intended to be used for short sounds like control clicks
-        """
+    def playInstantSound(self, eventName):
         SoundGroups.g_instance.playSound2D(eventName)
 
     @staticmethod
@@ -150,11 +134,6 @@ class _ViewSoundsManager(object):
             self.setState(stateName, stateValue)
 
     def __invalidatePriority(self, eventName):
-        """
-        Check priorities for given eventName.
-        Stop all currently playing inferior sounds.
-        If given eventName is blocked by superior playing sounds, return False, otherwise True
-        """
         if self.__soundSpaceSettings and eventName in self.__soundSpaceSettings.priorities:
             checkingSuperior = False
             for soundName in self.__soundSpaceSettings.priorities:
@@ -172,10 +151,6 @@ class _ViewSoundsManager(object):
 CommonSoundSpaceSettings = namedtuple('CommonSoundSpaceSettings', ('name', 'entranceStates', 'exitStates', 'persistentSounds', 'stoppableSounds', 'priorities', 'autoStart'))
 
 class View(AbstractViewMeta):
-    """
-    Base class for all visual modules. Introduces config fields used to identify and construct view both in
-    Python and Flash
-    """
     _COMMON_SOUND_SPACE = None
     __commonSoundManagers = {}
 
@@ -197,80 +172,37 @@ class View(AbstractViewMeta):
 
     @property
     def settings(self):
-        """
-        Gets view settings.
-        :return: an instance of GroupedViewSettings or a derived from it class.
-        """
         return self.__settings
 
     @property
     def key(self):
-        """
-        Gets view key.
-        :return: ViewKey instance
-        """
         return self.__key
 
     @property
     def alias(self):
-        """
-        Gets view alias.
-        :return: string
-        """
         return self.__key.alias
 
     @property
     def uniqueName(self):
-        """
-        Gets view name.
-        :return: string
-        """
         return self.__key.name
 
     @property
     def soundManager(self):
-        """
-        Gets reference to view's sound manager, that allows to play 2D sounds and to track them. For details please
-        see _ViewSoundsManager class description.
-        :return: _ViewSoundsManager instance
-        """
         return self.__commonSoundManagers.get(self._COMMON_SOUND_SPACE.name) if self._COMMON_SOUND_SPACE else self.__soundsManager
 
     def isViewModal(self):
-        """
-        Returns True if view is opened in the model state; otherwise returns False.
-        :return: bool
-        """
         return self.__settings.isModal
 
     def getUniqueName(self):
-        """
-        Gets view name.
-        :return: string
-        """
         return self.__key.name
 
     def getSubContainersSettings(self):
-        """
-        Called by container manager to create and register supported sub containers at runtime.
-        
-        :return: Tuples of ContainerSettings or an empty tuple if the view has no sub containers.
-        """
         return self.settings.containers or ()
 
     def getCurrentScope(self):
-        """
-        Returns view scope. See ScopeTemplates
-        :return:  an instance of SimpleScope or a derived from it class.
-        """
         return self.__scope
 
     def setCurrentScope(self, scope):
-        """
-        Sets current view scope if the view supports run-time scope change (see ScopeTemplates.DYNAMIC_SCOPE).
-        
-        :param scope: an instance of SimpleScope or a derived from it class.
-        """
         from gui.Scaleform.framework import ScopeTemplates
         if self.__settings is not None:
             if self.__settings.scope == ScopeTemplates.DYNAMIC_SCOPE:
@@ -285,11 +217,6 @@ class View(AbstractViewMeta):
         return
 
     def setSettings(self, settings):
-        """
-        Allays new view settings.
-        
-        :param settings: new settings (see GroupedViewSettings and derived classes).
-        """
         from gui.Scaleform.framework import ScopeTemplates
         if settings is not None:
             self.__settings = settings.toImmutableSettings()
@@ -297,14 +224,10 @@ class View(AbstractViewMeta):
                 self.__scope = self.__settings.scope
             self.__key = ViewKey(self.__settings.alias, self.uniqueName)
         else:
-            LOG_DEBUG('View settings cannot be set to None', self)
+            LOG_DEBUG('settings can`t be None!')
         return
 
     def setUniqueName(self, name):
-        """
-        Sets view name.
-        :param name: string, cannot be None.
-        """
         if name is not None:
             self.__key = ViewKey(self.alias, name)
         else:
@@ -312,28 +235,19 @@ class View(AbstractViewMeta):
         return
 
     def setupContextHints(self, hintID):
-        """
-        Sets up on FE side a context hint with the given ID.
-        :param hintID: hint id, represented by string.
-        """
         if hintID is not None:
-            hintsData = dict(hints_layout.getLayout(hintID))
+            hintsData = hints_layout.getLayout(hintID)
             if hintsData is not None:
-                builder = hintsData.pop('builderLnk', '')
-                self.as_setupContextHintBuilderS(builder, hintsData)
+                tutorialManager = self.app.tutorialManager if self.app is not None else None
+                if tutorialManager is not None:
+                    viewTutorialID = tutorialManager.getViewTutorialID(self.__key.name)
+                    tutorialManager.setupViewContextHints(viewTutorialID, hintsData)
             else:
                 LOG_ERROR('Hint layout is nor defined', hintID)
         return
 
     def onFocusIn(self, alias):
-        """
-        Sends FocusEvent when the view receives focus. Triggered from FE side.
-        :param alias: view alias represented by string.
-        """
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED))
-
-    def delaySwitchTo(self, viewAlias, freezeCbk, unfreezeCbk):
-        return False
 
     def _populate(self):
         super(View, self)._populate()

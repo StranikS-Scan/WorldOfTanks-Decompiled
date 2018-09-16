@@ -16,12 +16,6 @@ ICON_SIZE = 24
 VERTICAL_SPACE = -9
 
 class MissionsPreBattleConditionsFormatter(MissionsBattleConditionsFormatter):
-    """
-    Conditions formatter for 'prebattle' conditions section.
-    Prebattle conditions shows requirements for battle.
-    Displayed in detailed card view under main conditions and upper awards ribbon.
-    Has slim visual representation which has icon and description
-    """
 
     def __init__(self):
         super(MissionsPreBattleConditionsFormatter, self).__init__({'bonusTypes': _BattleBonusTypeFormatter(),
@@ -41,12 +35,17 @@ class MissionsPreBattleConditionsFormatter(MissionsBattleConditionsFormatter):
 
         return result
 
+    def _packCondition(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _getFormattedField(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _packConditions(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class _BattleBonusTypeFormatter(ConditionFormatter):
-    """
-    Formatter for BattleBonusType condition.
-    Shows battle types in which player can complete quest.
-    """
 
     def _format(self, condition, event):
         result = []
@@ -54,22 +53,18 @@ class _BattleBonusTypeFormatter(ConditionFormatter):
             bonusTypes = condition.getValue()
             labelKey = QUESTS.MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE
             data = formatters.packMissionBonusTypeElements(bonusTypes)
-            icons = ''.join([ iconData.icon for iconData in data ])
+            iconsList = ''.join([ iconData.icon for iconData in data ])
             if len(bonusTypes) == 1 and findFirst(None, bonusTypes) in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.RANKED):
                 label = text_styles.main(data[0].iconLabel)
             else:
                 label = text_styles.main(labelKey)
             bTypes = ', '.join([ iconData.iconLabel for iconData in data ])
             tooltipBody = i18n.makeString(QUESTS.MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE_BODY, battleBonusTypes=bTypes)
-            result.append(formatters.packMissionPrebattleCondition(label, icons, makeTooltip(labelKey, tooltipBody)))
+            result.append(formatters.packMissionPrebattleCondition(label, iconsList, makeTooltip(labelKey, tooltipBody)))
         return result
 
 
 class _BattleSquadFormatter(ConditionFormatter):
-    """
-    Formatter for BattleSquad condition.
-    Shows ability to complete quest in squad.
-    """
 
     def _format(self, condition, event):
         result = []
@@ -85,10 +80,6 @@ class _BattleSquadFormatter(ConditionFormatter):
 
 
 class _BattleClanMembershipFormatter(ConditionFormatter):
-    """
-    Formatter for BattleClanMembership condition.
-    Shows ability to complete quest if player is a clanMember.
-    """
 
     def _format(self, condition, event):
         result = []
@@ -101,10 +92,6 @@ class _BattleClanMembershipFormatter(ConditionFormatter):
 
 
 class _BattleCamouflageFormatter(ConditionFormatter):
-    """
-    Formatter for BattleCamouflage condition.
-    Shows maps types in which player can complete quest.
-    """
 
     def _format(self, condition, event):
         result = []
@@ -122,20 +109,16 @@ class _BattleCamouflageFormatter(ConditionFormatter):
                 tooltip = makeTooltip(mapsTypesStr, tooltipBody)
                 if len(camos) > 1:
                     label = text_styles.main('#quests:missionDetails/conditions/mapsType')
-                    icons = ''.join([ iconData.icon for iconData in camos ])
+                    iconsData = ''.join([ iconData.icon for iconData in camos ])
                 else:
                     iconData = findFirst(None, camos)
                     label = text_styles.main(iconData.iconLabel)
-                    icons = iconData.icon
-                result.append(formatters.packMissionPrebattleCondition(label, icons=icons, tooltip=tooltip))
+                    iconsData = iconData.icon
+                result.append(formatters.packMissionPrebattleCondition(label, icons=iconsData, tooltip=tooltip))
         return result
 
 
 class _BattleMapFormatter(ConditionFormatter):
-    """
-    Formatter for BattleMap condition.
-    Shows maps names in which player can complete quest.
-    """
 
     def _format(self, condition, event):
         result = []
@@ -166,11 +149,6 @@ class _BattleMapFormatter(ConditionFormatter):
 
 
 class _InstalledModulesGroupFormatter(ConditionFormatter):
-    """
-    Formatter for InstalledModulesOnVehicle condition
-    Shows modules which must be installed on players vehicle in battle
-    Condition is a compound and may contain several installed modules
-    """
 
     def _format(self, condition, event):
         result = []
@@ -183,10 +161,6 @@ class _InstalledModulesGroupFormatter(ConditionFormatter):
 
 
 class _InstalledItemsConditionFormatter(SimpleMissionsFormatter):
-    """
-    Formatter for InstalledItemCondition condition
-    Shows modules with same type which must be installed on players vehicle in battle
-    """
 
     @classmethod
     def _getTitle(cls, condition):
@@ -205,10 +179,6 @@ class _InstalledItemsConditionFormatter(SimpleMissionsFormatter):
 
 
 class _CorrespondedCamouflageFormatter(SimpleMissionsFormatter):
-    """
-    Formatter for CorrespondedCamouflage condition.
-    Shows that camouflage must be installed on vehicle
-    """
 
     def _getDescription(self, condition):
         key = 'installedCamouflage' if condition.getValue() else 'noInstalledCamouflage'
@@ -224,10 +194,6 @@ class _CorrespondedCamouflageFormatter(SimpleMissionsFormatter):
 
 
 class PersonalMissionsVehicleConditionsFormatter(PersonalMissionsConditionsFormatter):
-    """
-    Formatter for vehicle requirements which are displayed in detailed personal mission view
-    Formatted vehicle reqs looks like battle condtitions and are displayed in same UI component.
-    """
 
     def __init__(self):
         super(PersonalMissionsVehicleConditionsFormatter, self).__init__({'installedModules': _InstalledModulesGroupFormatter(),

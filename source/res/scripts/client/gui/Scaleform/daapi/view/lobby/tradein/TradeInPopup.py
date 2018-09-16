@@ -121,7 +121,7 @@ class _TradeInDataProvider(SortableDAAPIDataProvider):
         self.refresh()
 
     def __rebuildMapping(self):
-        self.__mapping = dict(map(lambda (idx, item): (item['intCD'], idx), enumerate(self.sortedCollection)))
+        self.__mapping = dict([ (item['intCD'], idx) for idx, item in enumerate(self.sortedCollection) ])
 
     def __makeVO(self, vehicle):
         vehicleVO = makeVehicleBasicVO(vehicle)
@@ -130,7 +130,7 @@ class _TradeInDataProvider(SortableDAAPIDataProvider):
         else:
             vehicleVO['price'] = vehicle.tradeOffPrice.getSignValue(Currency.GOLD)
             vehicleVO['actionPrice'] = self._getItemPriceActionData(vehicle)
-            vState, vStateLvl = vehicle.getState()
+            vState, _ = vehicle.getState()
             if vState in (Vehicle.VEHICLE_STATE.DAMAGED,
              Vehicle.VEHICLE_STATE.EXPLODED,
              Vehicle.VEHICLE_STATE.DESTROYED,

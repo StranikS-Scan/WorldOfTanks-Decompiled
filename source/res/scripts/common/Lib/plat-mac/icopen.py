@@ -1,43 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/icopen.py
-"""icopen patch
-
-OVERVIEW
-
-icopen patches MacOS Python to use the Internet Config file mappings to select
-the type and creator for a file.
-
-Version 1 released to the public domain 3 November 1999
-by Oliver Steele (steele@cs.brandeis.edu).
-
-DETAILS
-
-This patch causes files created by Python's open(filename, 'w') command (and
-by functions and scripts that call it) to set the type and creator of the file
-to the type and creator associated with filename's extension (the
-portion of the filename after the last period), according to Internet Config.
-Thus, a script that creates a file foo.html will create one that opens in whatever
-browser you've set to handle *.html files, and so on.
-
-Python IDE uses its own algorithm to select the type and creator for saved
-editor windows, so this patch won't effect their types.
-
-As of System 8.6 at least, Internet Config is built into the system, and the
-file mappings are accessed from the Advanced pane of the Internet control
-panel.  User Mode (in the Edit menu) needs to be set to Advanced in order to
-access this pane.
-
-INSTALLATION
-
-Put this file in your Python path, and create a file named {Python}:sitecustomize.py
-that contains:
-        import icopen
-
-(If {Python}:sitecustomizer.py already exists, just add the 'import' line to it.)
-
-The next time you launch PythonInterpreter or Python IDE, the patch will take
-effect.
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the icopen module is removed.', stacklevel=2)
 import __builtin__

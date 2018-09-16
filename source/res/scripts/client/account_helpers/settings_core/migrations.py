@@ -23,8 +23,7 @@ def _initializeDefaultSettings(core, data, initialized):
      GAME.ENABLE_SERVER_AIM: core.getSetting(GAME.ENABLE_SERVER_AIM),
      GAME.SHOW_VEHICLES_COUNTER: core.getSetting(GAME.SHOW_VEHICLES_COUNTER),
      GAME.MINIMAP_ALPHA: core.getSetting(GAME.MINIMAP_ALPHA),
-     GAME.PLAYERS_PANELS_SHOW_LEVELS: core.getSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS),
-     GAME.ENABLE_POSTMORTEM: core.getSetting(GAME.ENABLE_POSTMORTEM)}
+     GAME.PLAYERS_PANELS_SHOW_LEVELS: core.getSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS)}
     data['gameExtData'][GAME.CHAT_CONTACTS_LIST_ONLY] = options.getSetting(GAME.CHAT_CONTACTS_LIST_ONLY).getDefaultValue()
     gameplayData = data['gameplayData'] = {GAME.GAMEPLAY_MASK: AccountSettings.getSettingsDefault('gameplayMask')}
     aimData = data['aimData'] = {'arcade': core.getSetting('arcade'),
@@ -57,7 +56,7 @@ def _initializeDefaultSettings(core, data, initialized):
                 gameData[GAME.REPLAY_ENABLED] = 2
             elif value is not None:
                 gameData[GAME.REPLAY_ENABLED] = 0
-        except:
+        except Exception:
             LOG_DEBUG('Replay preferences is not available.')
 
         gameData[GAME.ENABLE_SERVER_AIM] = AccountSettings.getSettings('useServerAim')
@@ -69,15 +68,13 @@ def _initializeDefaultSettings(core, data, initialized):
         sniper = AccountSettings.getSettings('sniper')
         aimData['arcade'] = core.options.getSetting('arcade').fromAccountSettings(arcade)
         aimData['sniper'] = core.options.getSetting('sniper').fromAccountSettings(sniper)
-        from post_processing import g_postProcessing
-        gameData[GAME.ENABLE_POSTMORTEM] = g_postProcessing.getSetting('mortem_post_effect')
         if section.has_key(Settings.KEY_CONTROL_MODE):
             ds = section[Settings.KEY_CONTROL_MODE]
             try:
                 controlsData[CONTROLS.MOUSE_HORZ_INVERSION] = ds['arcadeMode'].readBool('horzInvert', False)
                 controlsData[CONTROLS.MOUSE_VERT_INVERSION] = ds['arcadeMode'].readBool('vertInvert', False)
                 controlsData[CONTROLS.MOUSE_VERT_INVERSION] = ds['arcadeMode'].readBool('backDraftInvert', False)
-            except:
+            except Exception:
                 LOG_DEBUG('Controls preferences is not available.')
 
     data['markersData'] = AccountSettings.getSettings('markers')
@@ -357,7 +354,9 @@ def __migrateMaskValue(currentVal, mask, offset):
 
 def _migrateTo36(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, 0)
+    from account_helpers.AccountSettings import AccountSettings
+    default = AccountSettings.getSettingsDefault(GAME.GAMEPLAY_MASK)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, default)
     currentMask = storedValue & 65535
     import ArenaType
     newMask = currentMask | ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName('ctf30x30'))
@@ -371,7 +370,9 @@ def _migrateTo37(core, data, initialized):
 
 def _migrateTo38(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, 0)
+    from account_helpers.AccountSettings import AccountSettings
+    default = AccountSettings.getSettingsDefault(GAME.GAMEPLAY_MASK)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, default)
     currentGameplayMask = storedValue & 65535
     import ArenaType
     epicCtfEnabled = bool(currentGameplayMask & 1 << ArenaType.getGameplayIDForName('ctf30x30'))
@@ -379,10 +380,17 @@ def _migrateTo38(core, data, initialized):
     if not epicCtfEnabled or not dominationEnabled:
         currentGameplayMask &= ~ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName('domination30x30'))
     data['gameplayData'][GAME.GAMEPLAY_MASK] = currentGameplayMask
+    data['gameData'][GAME.MINIMAP_ALPHA] = 0
+    data['gameExtData'][GAME.MINIMAP_ALPHA_ENABLED] = False
 
 
 def _migrateTo39(core, data, initialized):
     data['gameExtData'][GAME.C11N_HISTORICALLY_ACCURATE] = True
+
+
+def _migrateTo40(core, data, initialized):
+    data['gameExtData'][GAME.HANGAR_CAM_PERIOD] = 0
+    data['gameExtData'][GAME.HANGAR_CAM_PARALLAX_ENABLED] = True
 
 
 _versions = ((1,
@@ -535,6 +543,10 @@ _versions = ((1,
   False),
  (39,
   _migrateTo39,
+  False,
+  False),
+ (40,
+  _migrateTo40,
   False,
   False))
 

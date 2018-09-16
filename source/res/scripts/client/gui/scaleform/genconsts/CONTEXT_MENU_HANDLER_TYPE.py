@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/CONTEXT_MENU_HANDLER_TYPE.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class CONTEXT_MENU_HANDLER_TYPE(object):
     CREW = 'crew'
@@ -26,6 +23,3 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     CUSTOM_USER = 'customUser'
     CUSTOMIZATION_ITEM = 'customizationItem'
     STRONGHOLD_USER = 'strongholdUser'
-    NY_TOY = 'nyToy'
-    NY_CURRENT_TOY = 'nyCurrentToy'
-    NY_TOY_SLOT = 'nyToySlot'

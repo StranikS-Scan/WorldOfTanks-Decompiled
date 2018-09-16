@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_sdist.py
-"""Tests for distutils.command.sdist."""
 import os
 import tarfile
 import unittest
@@ -49,7 +48,6 @@ class SDistTestCase(PyPIRCCommandTestCase):
         super(SDistTestCase, self).tearDown()
 
     def get_cmd(self, metadata=None):
-        """Returns a cmd"""
         if metadata is None:
             metadata = {'name': 'fake',
              'version': '1.0',
@@ -118,10 +116,6 @@ class SDistTestCase(PyPIRCCommandTestCase):
 
     @unittest.skipUnless(zlib, 'requires zlib')
     def test_unicode_metadata_tgz(self):
-        """
-        Unicode name or version should not break building to tar.gz format.
-        Reference issue #11638.
-        """
         dist, cmd = self.get_cmd({'name': u'fake',
          'version': u'1.0'})
         cmd.formats = ['gztar']

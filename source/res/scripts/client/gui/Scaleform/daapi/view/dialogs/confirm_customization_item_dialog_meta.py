@@ -17,7 +17,7 @@ from items.components.c11n_constants import MAX_ITEMS_FOR_BUY_OPERATION
 from skeletons.gui.shared import IItemsCache
 from helpers import dependency
 
-class ConfirmCustomizationItemMeta(IDialogMeta):
+class ConfirmC11nBuyMeta(IDialogMeta):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, itemCD, title=DIALOGS.BUYCONFIRMATION_TITLE, submitBtn=DIALOGS.BUYCONFIRMATION_SUBMIT, cancelBtn=DIALOGS.BUYCONFIRMATION_CANCEL):
@@ -36,7 +36,7 @@ class ConfirmCustomizationItemMeta(IDialogMeta):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def getEventType(self):
-        return events.ShowDialogEvent.SHOW_CONFIRM_CUSTOMIZATION_ITEM_DIALOG
+        return events.ShowDialogEvent.SHOW_CONFIRM_C11N_BUY_DIALOG
 
     def getTitle(self):
         return i18n.makeString(self.__title)
@@ -80,3 +80,34 @@ class ConfirmCustomizationItemMeta(IDialogMeta):
         if modulePrice.get(currency, 0) > 0:
             result = math.floor(balance.get(currency, 0) / modulePrice.get(currency))
         return min(result, MAX_ITEMS_FOR_BUY_OPERATION)
+
+
+class ConfirmC11nSellMeta(ConfirmC11nBuyMeta):
+
+    def __init__(self, itemCD, count, handler, title=DIALOGS.SELLMODULECONFIRMATION_TITLE, submitBtn=DIALOGS.SELLMODULECONFIRMATION_SUBMIT, cancelBtn=DIALOGS.SELLMODULECONFIRMATION_CANCEL):
+        super(ConfirmC11nSellMeta, self).__init__(itemCD, title, submitBtn, cancelBtn)
+        self.__count = count
+        self.__handler = handler
+
+    def getEventType(self):
+        return events.ShowDialogEvent.SHOW_CONFIRM_C11N_SELL_DIALOG
+
+    def getMaxAvailableItemsCount(self, _):
+        return CurrencyCollection(*(self.__count for _ in Currency.ALL))
+
+    def getDefaultValue(self, _):
+        return self.__count
+
+    def getActualPrices(self, item):
+        return item.sellPrices.getSum().price
+
+    def getDefaultPrices(self, item):
+        return item.sellPrices.getSum().defPrice
+
+    def submit(self, item, count, _):
+        self.__handler(item.intCD, count)
+
+    def getActionVO(self, item):
+        prices = self.getActualPrices(item)
+        defaultPrices = self.getDefaultPrices(item)
+        return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(item.intCD), False, prices, defaultPrices)

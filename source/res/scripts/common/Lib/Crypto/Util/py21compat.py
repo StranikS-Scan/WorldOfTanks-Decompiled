@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Util/py21compat.py
-"""Compatibility code for Python 2.1
-
-Currently, this just defines:
-    - True and False
-    - object
-    - isinstance
-"""
 __revision__ = '$Id$'
 __all__ = []
 import sys

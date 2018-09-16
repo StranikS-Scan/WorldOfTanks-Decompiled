@@ -251,7 +251,7 @@
         <right>	vehicles/american/A107_T1_HMC/track/right.track	</right>
         <segmentLength>	0.132	</segmentLength>
         <segmentOffset>	0.203	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -478,7 +478,7 @@
         <right>	vehicles/american/A107_T1_HMC/track/right.track	</right>
         <segmentLength>	0.132	</segmentLength>
         <segmentOffset>	0.088	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -653,7 +653,6 @@
   </turrets0>
   <crew>
     <commander>	gunner
-
 			radioman	</commander>
     <driver></driver>
     <gunner></gunner>

@@ -1,18 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Flock.py
+import math
+import random
 from AvatarInputHandler import mathUtils
 import BigWorld
 import Math
 import ResMgr
-import math
-import random
 import BattleReplay
 import SoundGroups
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from Math import Vector3
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/environment_effects.xml'
 
-class DebugGizmo:
+class DebugGizmo(object):
 
     def __init__(self, modelName='helpers/models/position_gizmo.model'):
         self.model = BigWorld.Model(modelName)
@@ -82,7 +82,7 @@ class DebugPolyLine(object):
             idx += 1
 
 
-class FlockLike:
+class FlockLike(object):
     __SoundNames = None
     MAX_DIST_SQ = 10000
 
@@ -104,14 +104,14 @@ class FlockLike:
         return
 
     def _getModelsToLoad(self):
-        list = []
+        result = []
         modelNames = [self.modelName]
         if self.modelName2 != '':
             modelNames.append(self.modelName2)
-        for i in xrange(0, self.modelCount):
-            list.append(random.choice(modelNames))
+        for _ in xrange(0, self.modelCount):
+            result.append(random.choice(modelNames))
 
-        return list
+        return result
 
     def _loadModels(self, prereqs):
         try:
@@ -120,7 +120,6 @@ class FlockLike:
                     LOG_ERROR('Failed to load flock model: %s' % modelId)
                     continue
                 model = prereqs[modelId]
-                model.outsideOnly = 1
                 model.moveAttachments = True
                 self.addModel(model)
                 if self.__sound is None:
@@ -183,7 +182,7 @@ class Flock(BigWorld.Entity, FlockLike):
         return self._getModelsToLoad()
 
     def onEnterWorld(self, prereqs):
-        if BattleReplay.g_replayCtrl.isPlaying:
+        if BattleReplay.g_replayCtrl.isPlaying or BigWorld.isForwardPipeline():
             return
         self._loadModels(prereqs)
         if self.models:

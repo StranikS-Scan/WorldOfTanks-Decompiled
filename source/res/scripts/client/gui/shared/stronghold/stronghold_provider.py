@@ -15,11 +15,6 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 
 class ClientStrongholdProvider(IGlobalListener):
-    """
-    Handle strongholds events
-    Check server settings for isStrongholdsEnabled flag change
-    and if flag disabled - leave unit and show info popup if possible
-    """
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
@@ -51,11 +46,6 @@ class ClientStrongholdProvider(IGlobalListener):
         self.__checkSwitch()
 
     def __onServerSettingChanged(self, diff):
-        """
-        Check isStrongholdsEnabled flag for change.
-        If true - leave from Strongholds Tab(if active) and
-        if unit not created - close battle room window and show info popup
-        """
         if 'strongholdSettings' in diff and 'isStrongholdsEnabled' in diff['strongholdSettings']:
             enabled = diff['strongholdSettings']['isStrongholdsEnabled']
             if not enabled:
@@ -71,10 +61,6 @@ class ClientStrongholdProvider(IGlobalListener):
         yield self.prbDispatcher.doLeaveAction(LeavePrbAction())
 
     def __checkSwitch(self):
-        """
-        Check for unit change.
-        Show info popup if on unit leave isStrongholdsEnabled flag is disabled
-        """
         entity = self.prbEntity
         flags = entity.getFunctionalFlags()
         entityActive = flags & FUNCTIONAL_FLAG.STRONGHOLD > 0

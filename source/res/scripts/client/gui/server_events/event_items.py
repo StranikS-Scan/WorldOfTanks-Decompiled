@@ -6,7 +6,7 @@ from abc import ABCMeta
 from collections import namedtuple
 import constants
 import nations
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
+from debug_utils import LOG_ERROR
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.ranked_battles import ranked_helpers
@@ -41,8 +41,6 @@ class CONTITIONS_SCOPE(object):
 
 
 class TOKEN_SHOP(object):
-    """ Possible states of the token's sale availability.
-    """
     SHOW = 'show'
     HIDE = 'hide'
     WEB = 'web'
@@ -67,7 +65,9 @@ class ServerEventAbstract(object):
         return self._data.get('weekDays', set())
 
     def getActiveTimeIntervals(self):
-        return map(lambda (l, h): (l[0] * 3600 + l[1] * 60, h[0] * 3600 + h[1] * 60), self._data['activeTimeIntervals']) if 'activeTimeIntervals' in self._data else []
+        if 'activeTimeIntervals' in self._data:
+            return [ (l[0] * 3600 + l[1] * 60, h[0] * 3600 + h[1] * 60) for l, h in self._data['activeTimeIntervals'] ]
+        return []
 
     def getID(self):
         return self._id
@@ -121,14 +121,10 @@ class ServerEventAbstract(object):
         return False
 
     def isTokensOnSale(self):
-        """ Returns true if tokens are always statically on sale, false otherwise.
-        """
         state = self._getTokenSaleState()
         return state == TOKEN_SHOP.SHOW
 
     def isTokensOnSaleDynamic(self):
-        """ Returns true if the state of tokens availability on shop is dynamic.
-        """
         return self._getTokenSaleState() == TOKEN_SHOP.WEB
 
     def getNearestActivityTimeLeft(self):
@@ -164,15 +160,10 @@ class ServerEventAbstract(object):
         return ValidationResult(False, 'requirements') if not self._checkConditions() else ValidationResult(True, '')
 
     def isAvailableForVehicle(self, vehicle):
-        """ Check if quest is available for provided vehicle.
-        """
         result, error = self.isAvailable()
         return ValidationResult(False, 'requirement') if result and not self._checkVehicleConditions(vehicle) else ValidationResult(result, error)
 
     def isValidVehicleCondition(self, vehicle):
-        """
-        Check if quest's vehicle condition is available for provided vehicle.
-        """
         return self._checkVehicleConditions(vehicle)
 
     def getBonuses(self, bonusName=None, isCompensation=False):
@@ -188,8 +179,6 @@ class ServerEventAbstract(object):
         return True
 
     def _checkVehicleConditions(self, vehicle):
-        """ Check conditions with relation to provided vehicle.
-        """
         return True
 
     def _getTokenSaleState(self):
@@ -205,8 +194,6 @@ class Group(ServerEventAbstract):
         return self._data.get('groupContent', [])
 
     def getGroupContent(self, srvEvents):
-        """ Isolate quests of the current group from the given events.
-        """
         groupQuests = []
         for questID in self.getGroupEvents():
             quest = srvEvents.get(questID)
@@ -219,19 +206,13 @@ class Group(ServerEventAbstract):
         return isMarathon(self.getID())
 
     def getLinkedAction(self, actions):
-        """
-        Gets linked action ID
-        """
         return getLinkedActionID(self.getID(), actions)
 
     def getMainQuest(self, events):
-        """ Get marathon's main quest (quest with special prefix)
-        """
         if not self.isMarathon():
             LOG_ERROR('Trying to find main quest in non-marathon group', self.getID())
             return None
         else:
-            tokenQuests = []
             for quest in events:
                 if isMarathon(quest.getID()):
                     return quest
@@ -352,13 +333,6 @@ class Quest(ServerEventAbstract):
         return self._progress or {}
 
     def getBonuses(self, bonusName=None, isCompensation=False, bonusData=None):
-        """ Get quest's bonuses.
-        
-        :param bonusName: str, bonus name to be find
-        :param isCompensation: bool, treat returned bonuses as compensation
-        :param bonusData: dict, formed quest bonus dict section, wrap bonus data for existing bonus dict
-        :return: list with found bonuses
-        """
         result = []
         bonusData = bonusData or self._data.get('bonus', {})
         if bonusName is None:
@@ -373,15 +347,6 @@ class Quest(ServerEventAbstract):
         return sorted(result, cmp=compareBonuses, key=operator.methodcaller('getName'))
 
     def getCompensation(self):
-        """ Get possible compensation for the token.
-        
-        This method is only makes sense for the compensation quest, i.e.
-        a special token quest that consumes extra tokens and gives bonuses instead.
-        
-        This extra bonuses are needed in case of marathon, when the main token
-        quest is already completed, but still player can complete battle quests
-        and get some rewards.
-        """
         compensatedToken = findFirst(lambda t: t.isDisplayable(), self.accountReqs.getTokens())
         return {compensatedToken.getID(): self.getBonuses(isCompensation=True)} if compensatedToken else {}
 
@@ -400,10 +365,6 @@ class Quest(ServerEventAbstract):
         return self.vehicleReqs.getSuitableVehicles()
 
     def _bonusDecorator(self, bonus):
-        """
-            allows to do some additional bonus configuration when they are created in getBonuses.
-            Originally is used in RankedQuest to set BoxBonus icon configuration
-        """
         if self.getType() == constants.EVENT_TYPE.TOKEN_QUEST and bonus.getName() == 'oneof':
             if ranked_helpers.isRankedQuestID(self.getID()):
                 _, cohort, _ = ranked_helpers.getRankedDataFromTokenQuestID(self.getID())
@@ -427,11 +388,6 @@ class Quest(ServerEventAbstract):
 
 
 class TokenQuest(Quest):
-    """ Quest without battle conditions (only consumes tokens from other quests).
-    
-    The key difference is that we don't check token requirements availability
-    when checking overall quest availability (see WOTD-81694)
-    """
 
     def __init__(self, qID, data, progress=None):
         super(TokenQuest, self).__init__(qID, data, progress)
@@ -553,9 +509,9 @@ class Action(ServerEventAbstract):
                 continue
             modifiers = m.splitModifiers()
             for modifier in modifiers:
-                if modifier.getName() in result:
-                    result[modifier.getName()].extend([ActionData(modifier, priority, uiDecoration)])
-                result[modifier.getName()] = [ActionData(modifier, priority, uiDecoration)]
+                if mName in result:
+                    result[mName].extend([ActionData(modifier, priority, uiDecoration)])
+                result[mName] = [ActionData(modifier, priority, uiDecoration)]
 
         return result
 
@@ -566,9 +522,9 @@ class Action(ServerEventAbstract):
             m = getModifierObj(mName, stepData.get('params'))
             if m is None:
                 continue
-            if m.getName() in result:
-                result[m.getName()].update(m)
-            result[m.getName()] = m
+            if mName in result:
+                result[mName].update(m)
+            result[mName] = m
 
         return sorted(result.itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
 
@@ -903,51 +859,26 @@ class PersonalMission(Quest):
         return self.__strConditionsFormatter.format(self, False)
 
     def getMainConditions(self):
-        """
-        Return unformatted conditions data from main quest
-        """
         return dict(self.__pmType.mainQuestInfo.get('conditions'))
 
     def getAdditionalConditions(self):
-        """
-        Return unformatted conditions diff data between additional and main quest.
-        Additional quest contain all conditions: main and additional.
-        To get pure additional conditions we subtract main quest conditions from additional quest conditions
-        """
         mainQuestConds = self.__pmType.mainQuestInfo.get('conditions')
         addQuestConds = self.__pmType.addQuestInfo.get('conditions')
         return dict(events_helpers.getConditionsDiffStructure(addQuestConds, mainQuestConds))
 
     def getAllConditions(self):
-        """
-        Return unformatted conditions data from additional quest.
-        Data contains conditions from both quests (look in quests xml structure)
-        """
         return dict(self.__pmType.addQuestInfo.get('conditions'))
 
     def getConditions(self, isMain=None):
-        """
-        Return unformatted conditions data or conditions diff data depends on scope
-        """
         if isMain is None:
             return self.getAllConditions()
         else:
             return self.getMainConditions() if isMain else self.getAdditionalConditions()
 
     def getPostBattleConditions(self, isMain=None):
-        """
-        :param scope: [str] one of CONTITIONS_SCOPE constant
-        :return: [PostBattleConditions] postBattle conditions parser which depends on preBattle section
-        Conditions parser support logical operations with and/or groups sections
-        """
         return PostBattleConditions(self.getConditions(isMain=isMain).get('postBattle', []), self.preBattleCond)
 
     def getVehicleRequirements(self, isMain=None):
-        """
-        :param scope: [str] one of CONTITIONS_SCOPE constant
-        :return: [VehicleRequirements] vehicle requirements/conditions parser
-        Conditions parser support logical operations with and/or groups sections
-        """
         preBattle = dict(self.getConditions(isMain=isMain).get('preBattle', [('account', []), ('vehicle', []), ('battle', [])]))
         return VehicleRequirements(preBattle.get('vehicle', []))
 
@@ -1099,46 +1030,6 @@ class MotiveQuest(Quest):
     def getRequirementsStr(self):
         return getLocalizedData(self._data, 'requirements')
 
-
-class FalloutConfig(namedtuple('FalloutConfig', ['allowedVehicles',
- 'allowedLevels',
- 'additionalTags',
- 'minVehiclesPerPlayer',
- 'maxVehiclesPerPlayer',
- 'vehicleLevelRequired'])):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def getAllowedVehicles(self):
-        result = []
-        for v in self.allowedVehicles:
-            try:
-                item = self.itemsCache.items.getItemByCD(v)
-            except KeyError:
-                LOG_CURRENT_EXCEPTION()
-                item = None
-
-            if item is not None and item.isInInventory:
-                result.append(item)
-
-        return sorted(result)
-
-    def hasRequiredVehicles(self):
-        allowedVehicles = self.getAllowedVehicles()
-        if len(allowedVehicles) < self.minVehiclesPerPlayer:
-            return False
-        for v in allowedVehicles:
-            if v.level == self.vehicleLevelRequired:
-                return True
-
-        return False
-
-
-FalloutConfig.__new__.__defaults__ = ((),
- set(),
- set(),
- 0,
- 0,
- 0)
 
 def _getTileIconPath(tileIconID, prefix, state):
     return '../maps/icons/quests/tiles/%s_%s_%s.png' % (tileIconID, prefix, state)

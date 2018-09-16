@@ -25,12 +25,10 @@ class ContextTests(unittest.TestCase):
         self.con.close()
 
     def CheckContextManager(self):
-        """Can the connection be used as a context manager at all?"""
         with self.con:
             pass
 
     def CheckContextManagerCommit(self):
-        """Is a commit called in the context manager?"""
         with self.con:
             self.con.execute("insert into test(c) values ('foo')")
         self.con.rollback()
@@ -38,7 +36,6 @@ class ContextTests(unittest.TestCase):
         self.assertEqual(count, 1)
 
     def CheckContextManagerRollback(self):
-        """Is a rollback called in the context manager?"""
         self.assertEqual(did_rollback, False)
         try:
             with self.con:

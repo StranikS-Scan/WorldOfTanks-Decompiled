@@ -242,7 +242,7 @@
         <right>	vehicles/german/G12_Ltraktor/track/right.track	</right>
         <segmentLength>	0.133	</segmentLength>
         <segmentOffset>	0.156	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -489,7 +489,6 @@
   </turrets0>
   <crew>
     <commander>	radioman
-
 			gunner	</commander>
     <driver></driver>
     <loader></loader>

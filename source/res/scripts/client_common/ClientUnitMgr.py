@@ -72,7 +72,8 @@ class ClientUnitMgr(UnitClientAPI):
             self._restore()
         self.onUnitErrorReceived(requestID, unitMgrID, errorCode, errorString)
 
-    def onUnitNotify(self, unitMgrID, notifyCode, notifyString='', argsList=[]):
+    def onUnitNotify(self, unitMgrID, notifyCode, notifyString='', argsList=None):
+        argsList = argsList or []
         LOG_DEBUG('onUnitNotify: unitMgr=%s, errorCode=%s, notifyString=%r argsList=%r' % (unitMgrID,
          notifyCode,
          notifyString,
@@ -197,7 +198,7 @@ class ClientUnitBrowser(object):
                 cfdUnitID, unitMgrID, cmdrRating, peripheryID, strUnitPack = row
                 unit = ClientUnit(packedUnit=strUnitPack)
                 self.results[cfdUnitID] = dict(unitMgrID=unitMgrID, cmdrRating=cmdrRating, peripheryID=peripheryID, unit=unit)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
         LOG_DEBUG('unitBrowser results=%r' % self.results)
@@ -218,19 +219,20 @@ class ClientUnitBrowser(object):
                         self.results[cfdUnitID]['unit'] = unit
                         self.results[cfdUnitID]['cmdrRating'] = cmdrRating
                         res[cfdUnitID] = self.results[cfdUnitID]
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
         self.onResultsUpdated(res)
         return
 
-    def startSearch(self, vehTypes=[], useOtherLocations=False):
-        self.__account.enqueueUnitAssembler(vehTypes)
+    def startSearch(self, vehTypes=None, useOtherLocations=False):
+        self.__account.enqueueUnitAssembler(vehTypes or [])
 
-    def _search(self, vehInvIDs=[]):
+    def _search(self, vehInvIDs=None):
         from helpers import dependency
         from skeletons.gui.shared import IItemsCache
         itemsCache = dependency.instance(IItemsCache)
+        vehInvIDs = vehInvIDs or []
         for vehInvID in vehInvIDs:
             vehicle = itemsCache.items.getVehicle(vehInvID)
             LOG_DEBUG('vehicle[%s]=%r' % (vehInvID, vehicle))

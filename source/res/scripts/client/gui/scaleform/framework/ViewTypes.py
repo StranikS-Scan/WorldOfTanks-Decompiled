@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/ViewTypes.py
 __author__ = 'd_trofimov'
 VIEW = 'view'
+MARKER = 'marker'
 LOBBY_SUB = 'subView'
 LOBBY_TOP_SUB = 'topSubView'
 CURSOR = 'cursor'

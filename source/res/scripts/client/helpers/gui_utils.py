@@ -21,8 +21,8 @@ def pixToClipVector2(pixVector):
 
 
 def buildTexMapping(texCoords, texSize, fullTexSize):
-    max = texCoords + texSize
+    maximum = texCoords + texSize
     return ((texCoords[0] / fullTexSize[0], texCoords[1] / fullTexSize[1]),
-     (texCoords[0] / fullTexSize[0], max[1] / fullTexSize[1]),
-     (max[0] / fullTexSize[0], max[1] / fullTexSize[1]),
-     (max[0] / fullTexSize[0], texCoords[1] / fullTexSize[1]))
+     (texCoords[0] / fullTexSize[0], maximum[1] / fullTexSize[1]),
+     (maximum[0] / fullTexSize[0], maximum[1] / fullTexSize[1]),
+     (maximum[0] / fullTexSize[0], texCoords[1] / fullTexSize[1]))

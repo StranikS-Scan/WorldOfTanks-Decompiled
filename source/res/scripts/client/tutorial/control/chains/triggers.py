@@ -9,7 +9,7 @@ from gui.shared import g_eventBus, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
-from skeletons.gui.game_control import IFalloutController, IIGRController
+from skeletons.gui.game_control import IIGRController
 from skeletons.gui.server_events import IEventsCache
 from tutorial.control import game_vars, g_tutorialWeaver
 from tutorial.control.chains import aspects
@@ -218,7 +218,6 @@ class IsInSandBoxOrRandomPreQueueTrigger(IsInSandBoxPreQueueTrigger):
 
 
 class FightButtonDisabledTrigger(Trigger, IGlobalListener):
-    falloutCtrl = dependency.descriptor(IFalloutController)
     igrCtrl = dependency.descriptor(IIGRController)
     eventsCache = dependency.descriptor(IEventsCache)
 
@@ -229,8 +228,6 @@ class FightButtonDisabledTrigger(Trigger, IGlobalListener):
             self.startGlobalListening()
             g_eventBus.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
             g_currentVehicle.onChanged += self.__onVehicleChanged
-            self.falloutCtrl.onVehiclesChanged += self.__updateFalloutSettings
-            self.falloutCtrl.onSettingsChanged += self.__updateFalloutSettings
             self.eventsCache.onSyncCompleted += self.__onEventsCacheResync
             self.igrCtrl.onIgrTypeChanged -= self.__onIGRChanged
         self.toggle(isOn=self.isOn())
@@ -240,8 +237,6 @@ class FightButtonDisabledTrigger(Trigger, IGlobalListener):
             self.stopGlobalListening()
             g_eventBus.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
             g_currentVehicle.onChanged -= self.__onVehicleChanged
-            self.falloutCtrl.onVehiclesChanged -= self.__updateFalloutSettings
-            self.falloutCtrl.onSettingsChanged -= self.__updateFalloutSettings
             self.eventsCache.onSyncCompleted -= self.__onEventsCacheResync
             self.igrCtrl.onIgrTypeChanged -= self.__onIGRChanged
         self.isSubscribed = False
@@ -273,9 +268,6 @@ class FightButtonDisabledTrigger(Trigger, IGlobalListener):
         self.toggle(isOn=self.isOn())
 
     def __onVehicleChanged(self, *args):
-        self.toggle(isOn=self.isOn())
-
-    def __updateFalloutSettings(self, *args):
         self.toggle(isOn=self.isOn())
 
     def __onEventsCacheResync(self, *args):

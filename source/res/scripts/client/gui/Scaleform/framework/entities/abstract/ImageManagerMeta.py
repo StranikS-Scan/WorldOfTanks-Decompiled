@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/ImageManagerMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class ImageManagerMeta(BaseDAAPIComponent):
@@ -12,13 +8,7 @@ class ImageManagerMeta(BaseDAAPIComponent):
         return self.flashObject.as_setImageCacheSettings(maxSize, minSize) if self._isDAAPIInited() else None
 
     def as_loadImagesS(self, sourceData):
-        """
-        :param sourceData: Represented by Array (AS)
-        """
         return self.flashObject.as_loadImages(sourceData) if self._isDAAPIInited() else None
 
     def as_unloadImagesS(self, sourceData):
-        """
-        :param sourceData: Represented by Array (AS)
-        """
         return self.flashObject.as_unloadImages(sourceData) if self._isDAAPIInited() else None

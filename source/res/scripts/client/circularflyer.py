@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CircularFlyer.py
-import BigWorld
-import Math
-from Math import Matrix, Vector3
 import math
+import BigWorld
+from Math import Matrix, Vector3
 from debug_utils import LOG_CURRENT_EXCEPTION
 import SoundGroups
 
@@ -62,7 +61,7 @@ class CircularFlyer(BigWorld.UserDataObject):
                     pixieNode.attach(resourceRefs[self.pixieName])
                 if self.soundName != '':
                     self.__sound = SoundGroups.g_instance.getSound3D(self.__modelMatrix, self.soundName)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
                 self.__model = None
                 return

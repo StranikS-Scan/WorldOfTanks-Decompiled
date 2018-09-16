@@ -262,7 +262,7 @@
         <right>	vehicles/japan/J07_Chi_Ha/track/right.track	</right>
         <segmentLength>	0.105	</segmentLength>
         <segmentOffset>	0.168	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -533,7 +533,7 @@
         <right>	vehicles/japan/J07_Chi_Ha/track/right.track	</right>
         <segmentLength>	0.105	</segmentLength>
         <segmentOffset>	0.168	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -804,8 +804,8 @@
       <gunPosition>	0.100861 0.215863 0.580604	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.703046 0.256288 0.153672	</rayStart>
-          <rayEnd>	-0.51108 0.225071 0.107039	</rayEnd>
+          <rayStart>	-0.70346 0.253948 0.152345	</rayStart>
+          <rayEnd>	-0.51146 0.222956 0.105703	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.21	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -818,11 +818,12 @@
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	0.692147 0.262909 0.175287	</rayStart>
-          <rayEnd>	0.500854 0.231722 0.125952	</rayEnd>
+          <rayStart>	0.70346 0.253948 0.152345	</rayStart>
+          <rayEnd>	0.51146 0.222956 0.105703	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.21	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
@@ -1026,8 +1027,8 @@
       <gunPosition>	-0.101766 0.232358 0.65655	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.869751 0.330948 0.0990845	</rayStart>
-          <rayEnd>	-0.681255 0.29 0.0462419	</rayEnd>
+          <rayStart>	-0.868397 0.3323 0.102875	</rayStart>
+          <rayEnd>	-0.679901 0.291351 0.050033	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -1040,8 +1041,8 @@
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	0.589417 0.312467 -0.616844	</rayStart>
-          <rayEnd>	0.396694 0.272737 -0.581076	</rayEnd>
+          <rayStart>	0.559331 0.289387 -0.778542	</rayStart>
+          <rayEnd>	0.369222 0.245307 -0.734777	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>

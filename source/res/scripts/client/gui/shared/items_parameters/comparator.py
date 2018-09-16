@@ -3,7 +3,7 @@
 import collections
 import sys
 from gui.shared.items_parameters import params_cache
-BACKWARD_QUALITY_PARAMS = ['aimingTime',
+_BACKWARD_QUALITY_PARAMS = ['aimingTime',
  'shotDispersionAngle',
  'weight',
  'dispertionRadius',
@@ -16,7 +16,7 @@ BACKWARD_QUALITY_PARAMS = ['aimingTime',
  'switchOnTime',
  'switchOffTime']
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
-CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
+_CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),
  'pitchLimits': (True, False)}
 
@@ -24,9 +24,9 @@ class PARAM_STATE(object):
     WORSE = 'worse'
     NORMAL = 'normal'
     BETTER = 'better'
+    NOT_APPLICABLE = 'N/A'
 
 
-PARAMS_STATES = (PARAM_STATE.WORSE, PARAM_STATE.NORMAL, PARAM_STATE.BETTER)
 DEFAULT_AVG_VALUE = (sys.maxint, -1)
 
 def getParamExtendedData(paramName, value, otherValue, penalties=None):
@@ -43,11 +43,6 @@ def getParamExtendedData(paramName, value, otherValue, penalties=None):
 class ItemsComparator(object):
 
     def __init__(self, currentParams, otherParams):
-        """params
-            currentParams -- item which we compare,
-                            e.g. if this item has worse parameter then second, it will be highlighted as worse
-            otherParams -- item to which we compare
-        """
         super(ItemsComparator, self).__init__()
         self._currentParams = currentParams
         self._otherParams = otherParams
@@ -80,11 +75,6 @@ class VehiclesComparator(ItemsComparator):
         self.__penalties = penalties or dict()
 
     def _getPenaltiesAndBonuses(self, paramName):
-        """
-        Gets: set of possible bonuses which may affect on selected param but do not work now,
-        set of actual bonuses which affect now on selected param,
-        set of actual penalties which affect now on param,
-        """
         penalties = self.__penalties.get(paramName, [])
         allPossibleParamBonuses = self.__getPossibleParamBonuses(paramName)
         currentParamBonuses, inactive = self.__getCurrentParamBonuses(paramName, allPossibleParamBonuses)
@@ -95,10 +85,6 @@ class VehiclesComparator(ItemsComparator):
          penalties)
 
     def __getPossibleParamBonuses(self, paramName):
-        """
-        Gets set of all possible bonuses (<set((bonusName:str, bonusGroup:str),..)>),
-        which suit for selected paramName
-        """
         paramBonuses = set(params_cache.g_paramsCache.getBonuses().get(paramName, []))
         allPossibleParamBonuses = set()
         for bonusName, bonusGroup in paramBonuses:
@@ -108,19 +94,9 @@ class VehiclesComparator(ItemsComparator):
         return allPossibleParamBonuses
 
     def __getCurrentParamBonuses(self, paramName, possibleBonuses):
-        """
-        Gets set of actual bonuses which suit for selected paramName
-        if paramName is a conditional bonus then return set of bonuses which work only together with that bonus
-        """
         return self.__getConditionalBonuses(paramName, possibleBonuses) if paramName in CONDITIONAL_BONUSES else (possibleBonuses.intersection(self.__bonuses), {})
 
     def __getConditionalBonuses(self, paramName, possibleBonuses):
-        """
-        Gets set of bonuses which work only together with selected paramName
-        example: on invisibilityMovingFactor affect camouflage skill,
-        but on camouflage skill may affect brotherhood skill,
-        that is why brotherhood skill do not increase invisibilityMovingFactor without camouflage skill
-        """
         currentBonuses, affectedBonuses = set(), {}
         condition, affected = CONDITIONAL_BONUSES[paramName]
         bonuses = possibleBonuses.intersection(self.__bonuses)
@@ -138,7 +114,7 @@ class _ParameterInfo(collections.namedtuple('_ParamInfo', ('name', 'value', 'sta
 
     def getParamDiff(self):
         if isinstance(self.value, (tuple, list)):
-            diff = map(lambda (_, d): d, self.state)
+            diff = [ d for _, d in self.state ]
             if any(diff):
                 return diff
         else:
@@ -157,6 +133,7 @@ CONDITIONAL_BONUSES = {'invisibilityMovingFactor': (('camouflage', 'skill'), [('
                                ('ration_uk', 'equipment'),
                                ('ration_japan', 'equipment'),
                                ('ration_czech', 'equipment'),
+                               ('ration_italy', 'equipment'),
                                ('improvedVentilation_class1', 'optionalDevice'),
                                ('improvedVentilation_class2', 'optionalDevice'),
                                ('improvedVentilation_class3', 'optionalDevice'),
@@ -170,6 +147,7 @@ CONDITIONAL_BONUSES = {'invisibilityMovingFactor': (('camouflage', 'skill'), [('
                               ('ration_uk', 'equipment'),
                               ('ration_japan', 'equipment'),
                               ('ration_czech', 'equipment'),
+                              ('ration_italy', 'equipment'),
                               ('improvedVentilation_class1', 'optionalDevice'),
                               ('improvedVentilation_class2', 'optionalDevice'),
                               ('improvedVentilation_class3', 'optionalDevice'),
@@ -197,19 +175,25 @@ def _getParamStateInfo(paramName, val1, val2, customReverted=False):
     elif diff == 0:
         return (PARAM_STATE.NORMAL, diff)
     else:
-        isInverted = paramName in BACKWARD_QUALITY_PARAMS or customReverted
+        isInverted = paramName in _BACKWARD_QUALITY_PARAMS or customReverted
         return (PARAM_STATE.WORSE, diff) if isInverted and diff > 0 or not isInverted and diff < 0 else (PARAM_STATE.BETTER, diff)
 
 
 def rateParameterState(paramName, val1, val2, customQualityParams=None):
-    if customQualityParams is None:
-        customQualityParams = CUSTOM_QUALITY_PARAMS.get(paramName)
     if isinstance(val1, collections.Iterable):
+        if customQualityParams is None:
+            customQualityParams = _CUSTOM_QUALITY_PARAMS.get(paramName)
+        customQualityLen = len(customQualityParams) if customQualityParams else 0
         result = []
+        val2Len = len(val2)
         for i, val in enumerate(val1):
-            val2ToCompare = _getComparableValue(val, val2, i)
+            if val2Len > i:
+                val2ToCompare = val2[i]
+            else:
+                result.append((PARAM_STATE.NOT_APPLICABLE, None))
+                continue
             if customQualityParams is not None:
-                customQuality = _getComparableValue(customQualityParams[-1], customQualityParams, i)
+                customQuality = customQualityParams[min(i, customQualityLen - 1)]
             else:
                 customQuality = None
             result.append(rateParameterState(paramName, val, val2ToCompare, customQuality))

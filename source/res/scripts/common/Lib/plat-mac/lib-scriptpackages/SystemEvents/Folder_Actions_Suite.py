@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/SystemEvents/Folder_Actions_Suite.py
-"""Suite Folder Actions Suite: Terms and Events for controlling Folder Actions
-Level 1, version 1
-
-Generated from /System/Library/CoreServices/System Events.app
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'faco'
@@ -14,12 +8,6 @@ class Folder_Actions_Suite_Events:
     _argmap_attach_action_to = {'using': 'faal'}
 
     def attach_action_to(self, _object, _attributes={}, **_arguments):
-        """attach action to: Attach an action to a folder
-        Required argument: the object for the command
-        Keyword argument using: a file containing the script to attach
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: the reply for the command
-        """
         _code = 'faco'
         _subcode = 'atfa'
         aetools.keysubst(_arguments, self._argmap_attach_action_to)
@@ -30,11 +18,6 @@ class Folder_Actions_Suite_Events:
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def attached_scripts(self, _object, _attributes={}, **_arguments):
-        """attached scripts: List the actions attached to a folder
-        Required argument: the object for the command
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: the reply for the command
-        """
         _code = 'faco'
         _subcode = 'lact'
         if _arguments:
@@ -50,14 +33,6 @@ class Folder_Actions_Suite_Events:
      'folder_action_code': 'actn'}
 
     def do_folder_action(self, _object, _attributes={}, **_arguments):
-        """do folder action: Event the Finder sends to the Folder Actions FBA
-        Required argument: the object for the command
-        Keyword argument with_window_size: the new window size for the folder action message to process
-        Keyword argument with_item_list: a list of items for the folder action message to process
-        Keyword argument folder_action_code: the folder action message to process
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: the reply for the command
-        """
         _code = 'faco'
         _subcode = 'fola'
         aetools.keysubst(_arguments, self._argmap_do_folder_action)
@@ -72,13 +47,6 @@ class Folder_Actions_Suite_Events:
      'using_action_number': 'indx'}
 
     def edit_action_of(self, _object, _attributes={}, **_arguments):
-        """edit action of: Edit as action of a folder
-        Required argument: the object for the command
-        Keyword argument using_action_name: ...or the name of the action to edit
-        Keyword argument using_action_number: the index number of the action to edit...
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: the reply for the command
-        """
         _code = 'faco'
         _subcode = 'edfa'
         aetools.keysubst(_arguments, self._argmap_edit_action_of)
@@ -92,13 +60,6 @@ class Folder_Actions_Suite_Events:
      'using_action_number': 'indx'}
 
     def remove_action_from(self, _object, _attributes={}, **_arguments):
-        """remove action from: Remove a folder action from a folder
-        Required argument: the object for the command
-        Keyword argument using_action_name: ...or the name of the action to remove
-        Keyword argument using_action_number: the index number of the action to remove...
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: the reply for the command
-        """
         _code = 'faco'
         _subcode = 'rmfa'
         aetools.keysubst(_arguments, self._argmap_remove_action_from)
@@ -110,12 +71,10 @@ class Folder_Actions_Suite_Events:
 
 
 class application(aetools.ComponentItem):
-    """application - The Folder Actions Suite host program """
     want = 'capp'
 
 
 class _Prop__3c_Inheritance_3e_(aetools.NProperty):
-    """<Inheritance> - All of the properties of the superclass. """
     which = 'c@#^'
     want = 'capp'
 
@@ -123,7 +82,6 @@ class _Prop__3c_Inheritance_3e_(aetools.NProperty):
 _3c_Inheritance_3e_ = _Prop__3c_Inheritance_3e_()
 
 class _Prop_folder_actions_enabled(aetools.NProperty):
-    """folder actions enabled - Are Folder Actions currently being processed? """
     which = 'faen'
     want = 'bool'
 
@@ -131,7 +89,6 @@ class _Prop_folder_actions_enabled(aetools.NProperty):
 folder_actions_enabled = _Prop_folder_actions_enabled()
 
 class _Prop_properties(aetools.NProperty):
-    """properties - every property of the Folder Actions Suite host program """
     which = 'pALL'
     want = '****'
 
@@ -140,24 +97,20 @@ properties = _Prop_properties()
 applications = application
 
 class folder_action(aetools.ComponentItem):
-    """folder action - An action attached to a folder in the file system """
     want = 'foac'
 
 
 class _Prop_name(aetools.NProperty):
-    """name - the name of the folder action, which is also the name of the folder """
     which = 'pnam'
     want = 'utxt'
 
 
 class _Prop_path(aetools.NProperty):
-    """path - the path to the folder to which the folder action applies """
     which = 'ppth'
     want = '****'
 
 
 class _Prop_volume(aetools.NProperty):
-    """volume - the volume on which the folder action resides """
     which = 'volu'
     want = 'utxt'
 
@@ -165,12 +118,10 @@ class _Prop_volume(aetools.NProperty):
 folder_actions = folder_action
 
 class script(aetools.ComponentItem):
-    """script - A script invoked by a folder action """
     want = 'scpt'
 
 
 class _Prop_POSIX_path(aetools.NProperty):
-    """POSIX path - the POSIX file system path of the disk """
     which = 'posx'
     want = 'utxt'
 

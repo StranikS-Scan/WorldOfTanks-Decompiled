@@ -23,31 +23,31 @@ def getOriginalRequestID(serverRequestID):
 class AccountUnitAPI:
 
     def create(self, requestID, prebattleType, eventQueueType):
-        assert 0
+        pass
 
     def join(self, requestID, unitMgrID, slotIdx):
-        assert 0
+        pass
 
     def doCmd(self, requestID, unitMgrID, cmdID, param32, param64, paramString):
-        assert 0
+        pass
 
     def setRosterSlots(self, requestID, unitMgrID, rosterSlotKeys, rosterSlotValues):
-        assert 0
+        pass
 
     def sendInvites(self, requestID, accountsToInvite, comment):
-        assert 0
+        pass
 
     def createEx(self, requestID, prebattleType, param32, param64, paramStr, paramPython):
-        assert 0
+        pass
 
     def joinEx(self, requestID, unitMgrID, *args):
-        assert 0
+        pass
 
 
 class UnitClientAPI(object):
 
     def _callAPI(self, methodName, *args):
-        assert 0
+        pass
 
     def getUnitMgrID(self):
         pass

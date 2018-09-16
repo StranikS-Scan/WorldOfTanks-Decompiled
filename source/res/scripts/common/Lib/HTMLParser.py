@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/HTMLParser.py
-"""A parser for HTML and XHTML."""
 import markupbase
 import re
 interesting_normal = re.compile('[&<]')
@@ -18,10 +17,8 @@ endendtag = re.compile('>')
 endtagfind = re.compile('</\\s*([a-zA-Z][-.a-zA-Z0-9:_]*)\\s*>')
 
 class HTMLParseError(Exception):
-    """Exception raised for all parse errors."""
 
     def __init__(self, msg, position=(None, None)):
-        assert msg
         self.msg = msg
         self.lineno = position[0]
         self.offset = position[1]
@@ -36,32 +33,12 @@ class HTMLParseError(Exception):
 
 
 class HTMLParser(markupbase.ParserBase):
-    """Find tags and other markup and call handler functions.
-    
-    Usage:
-        p = HTMLParser()
-        p.feed(data)
-        ...
-        p.close()
-    
-    Start tags are handled by calling self.handle_starttag() or
-    self.handle_startendtag(); end tags by self.handle_endtag().  The
-    data between tags is passed from the parser to the derived class
-    by calling self.handle_data() with the data as argument (the data
-    may be split up in arbitrary chunks).  Entity references are
-    passed by calling self.handle_entityref() with the entity
-    reference as the argument.  Numeric character references are
-    passed to self.handle_charref() with the string containing the
-    reference as the argument.
-    """
     CDATA_CONTENT_ELEMENTS = ('script', 'style')
 
     def __init__(self):
-        """Initialize and reset this instance."""
         self.reset()
 
     def reset(self):
-        """Reset this instance.  Loses all unprocessed data."""
         self.rawdata = ''
         self.lasttag = '???'
         self.interesting = interesting_normal
@@ -70,16 +47,10 @@ class HTMLParser(markupbase.ParserBase):
         return
 
     def feed(self, data):
-        r"""Feed data to the parser.
-        
-        Call this as often as you want, with as little or as much text
-        as you want (may include '\n').
-        """
         self.rawdata = self.rawdata + data
         self.goahead(0)
 
     def close(self):
-        """Handle any buffered data."""
         self.goahead(1)
 
     def error(self, message):
@@ -88,7 +59,6 @@ class HTMLParser(markupbase.ParserBase):
     __starttag_text = None
 
     def get_starttag_text(self):
-        """Return full source of start tag: '<...>'."""
         return self.__starttag_text
 
     def set_cdata_mode(self, elem):
@@ -181,7 +151,6 @@ class HTMLParser(markupbase.ParserBase):
                     i = self.updatepos(i, i + 1)
                 else:
                     break
-            assert 0, 'interesting.search() lied'
 
         if end and i < n and not self.cdata_elem:
             self.handle_data(rawdata[i:n])
@@ -218,7 +187,6 @@ class HTMLParser(markupbase.ParserBase):
 
     def parse_pi(self, i):
         rawdata = self.rawdata
-        assert rawdata[i:i + 2] == '<?', 'unexpected call to parse_pi()'
         match = piclose.search(rawdata, i + 2)
         if not match:
             return -1
@@ -237,7 +205,6 @@ class HTMLParser(markupbase.ParserBase):
             self.__starttag_text = rawdata[i:endpos]
             attrs = []
             match = tagfind.match(rawdata, i + 1)
-            assert match, 'unexpected call to parse_starttag()'
             k = match.end()
             self.lasttag = tag = match.group(1).lower()
             while k < endpos:
@@ -299,7 +266,6 @@ class HTMLParser(markupbase.ParserBase):
 
     def parse_endtag(self, i):
         rawdata = self.rawdata
-        assert rawdata[i:i + 2] == '</', 'unexpected call to parse_endtag'
         match = endendtag.search(rawdata, i + 1)
         if not match:
             return -1

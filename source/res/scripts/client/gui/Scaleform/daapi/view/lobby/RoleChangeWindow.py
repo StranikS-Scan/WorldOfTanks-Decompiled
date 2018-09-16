@@ -39,15 +39,13 @@ def _isRoleAvailableToChange(tankman, role):
 
 
 def _getTooltip(tankman, role):
-    """Return empty string '' - if role available, else clarify why role not available for change
-    """
     td = tankman.descriptor
     if not tankmen.tankmenGroupHasRole(td.nationID, td.gid, td.isPremium, role):
         return makeTooltip(TOOLTIPS.ROLECHANGE_ROLECHANGEFORBIDDEN_HEADER, _ms(TOOLTIPS.ROLECHANGE_ROLECHANGEFORBIDDEN_BODY, role=_ms(TOOLTIPS.roleForSkill(role))))
     return makeTooltip(TOOLTIPS.ROLECHANGE_CURRENTROLEWARNING_HEADER, TOOLTIPS.ROLECHANGE_CURRENTROLEWARNING_BODY) if td.role == role else ''
 
 
-def _isRoleSlotTaken(tankmen, vehicle, role):
+def _isRoleSlotTaken(tmen, vehicle, role):
     roledTankmenInVehicle = []
     rolesCount = 0
     for idx, tankman in vehicle.crew:
@@ -57,7 +55,7 @@ def _isRoleSlotTaken(tankmen, vehicle, role):
                 roledTankmenInVehicle.append(tankman)
 
     hasFreeSlot = len(roledTankmenInVehicle) < rolesCount
-    for roleTankman in tankmen:
+    for roleTankman in tmen:
         if roleTankman.vehicleDescr and roleTankman.vehicleDescr.type.compactDescr == vehicle.intCD:
             return not hasFreeSlot
 
@@ -99,7 +97,7 @@ class RoleChangeWindow(RoleChangeMeta):
         selectedVehicle = self.itemsCache.items.getItemByCD(self.__selectedVehicleCD)
         data = []
         mainRoles = []
-        for slotIdx, tman in selectedVehicle.crew:
+        for slotIdx, _ in selectedVehicle.crew:
             mainRole = selectedVehicle.descriptor.type.crewRoles[slotIdx][0]
             if mainRole not in mainRoles:
                 mainRoles.append(mainRole)

@@ -1,10 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/mathUtils.py
-import Event
-import Math
-from Math import Vector2, Vector3, Matrix
 import random
 import math
+import Math
+from Math import Vector2, Vector3, Matrix
 
 def createIdentityMatrix():
     result = Matrix()
@@ -215,7 +214,6 @@ class Easing(object):
         self.reset(a, b, duration)
 
     def reset(self, a, b, duration):
-        assert duration > 0.0
         self.__a = a
         self.__b = b
         self.__t = 0.0
@@ -247,7 +245,7 @@ class Easing(object):
         return Easing(start, end, func, duration)
 
 
-class MatrixProviders:
+class MatrixProviders(object):
 
     @staticmethod
     def product(a, b):
@@ -257,7 +255,7 @@ class MatrixProviders:
         return m
 
 
-class RandomVectors:
+class RandomVectors(object):
 
     @staticmethod
     def random2(magnitude=1.0, randomGenerator=None):
@@ -288,19 +286,19 @@ class FIRFilter(object):
 
     def __init__(self, coeffs=None):
         self.coeffs = coeffs
-        self.values = [ Vector3(0) for x in xrange(len(self.coeffs)) ]
+        self.values = [ Vector3(0) for _ in xrange(len(self.coeffs)) ]
         self.__id = 0
         self.value = Vector3(0)
 
     def reset(self):
-        self.values = [ Vector3(0) for x in xrange(len(self.coeffs)) ]
+        self.values = [ Vector3(0) for _ in xrange(len(self.coeffs)) ]
         self.__id = 0
 
     def add(self, value):
         self.values[self.__id] = value
         self.value = Vector3(0)
-        for id, coeff in enumerate(self.coeffs):
-            self.value += self.values[self.__id - id] * coeff
+        for cID, coeff in enumerate(self.coeffs):
+            self.value += self.values[self.__id - cID] * coeff
 
         self.__id += 1
         if self.__id >= len(self.values):
@@ -311,7 +309,7 @@ class FIRFilter(object):
 class SMAFilter(FIRFilter):
 
     def __init__(self, length):
-        FIRFilter.__init__(self, [ 1.0 / length for x in xrange(length) ])
+        FIRFilter.__init__(self, [ 1.0 / length for _ in xrange(length) ])
 
 
 class LowPassFilter(object):
@@ -331,11 +329,11 @@ class LowPassFilter(object):
 class RangeFilter(object):
     value = property(lambda self: self.filter.value)
 
-    def __init__(self, minThreshold, maxLength, cutOffThreshold, filter):
+    def __init__(self, minThreshold, maxLength, cutOffThreshold, f):
         self.minThreshold = minThreshold
         self.maxLength = maxLength
         self.cutOffThreshold = cutOffThreshold
-        self.filter = filter
+        self.filter = f
 
     def reset(self):
         self.filter.reset()

@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/bdist_dumb.py
-"""distutils.command.bdist_dumb
-
-Implements the Distutils 'bdist_dumb' command (create a "dumb" built
-distribution -- i.e., just an archive to be unpacked under $prefix or
-$exec_prefix)."""
 __revision__ = '$Id$'
 import os
 from sysconfig import get_python_version

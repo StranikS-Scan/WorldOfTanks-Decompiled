@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Finder/__init__.py
-"""
-Package generated from /System/Library/CoreServices/Finder.app
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the Finder package is removed.', stacklevel=2)
 import aetools

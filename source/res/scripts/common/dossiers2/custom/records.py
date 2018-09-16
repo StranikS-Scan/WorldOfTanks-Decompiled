@@ -2026,8 +2026,6 @@ RECORD_DB_IDS = {('total', 'creationTime'): 68,
  ('singleAchievements', 'NY18A2'): 1154,
  ('singleAchievements', 'NY18A3'): 1155}
 DB_ID_TO_RECORD = dict([ (value, key) for key, value in RECORD_DB_IDS.iteritems() ])
-assert len(RECORD_DB_IDS) == len(DB_ID_TO_RECORD)
-assert len(RECORD_DB_IDS) == len(RECORDS)
 RECORD_DB_IDS.update({('vehTypeFrags', ''): 863,
  ('a15x15Cut', ''): 864,
  ('a7x7Cut', ''): 865,

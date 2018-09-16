@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/ranked/carousel_filter.py
 from account_helpers.AccountSettings import RANKED_CAROUSEL_FILTER_1, RANKED_CAROUSEL_FILTER_2
 from account_helpers.AccountSettings import RANKED_CAROUSEL_FILTER_CLIENT_1
-from gui.Scaleform.daapi.view.lobby.vehicle_carousel.carousel_filter import CarouselFilter
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter
 
 class RankedCarouselFilter(CarouselFilter):
 

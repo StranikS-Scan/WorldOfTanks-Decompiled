@@ -2,14 +2,14 @@
 # Embedded file name: scripts/client/Vibroeffects/EffectsSettings.py
 import ResMgr
 
-class EffectsSettings:
+class EffectsSettings(object):
     DELAY_BETWEEN_EFFECTS = 0.1
     COUNT_INFINITY = 4294967295L
     CFG_FOLDER = 'vibroeffects/'
     AccelerationThreshold = 0.0
     DecelerationThreshold = 0.0
 
-    class Groups:
+    class Groups(object):
         ENGINE = 'engine'
         ACCELERATION = 'acceleration'
         SHOTS = 'shots'
@@ -44,7 +44,7 @@ class EffectsSettings:
             effects = [ section for section in effectsSection.values() if section.name == 'effect' ]
             for effect in effects:
 
-                class EffectData:
+                class EffectData(object):
                     pass
 
                 data = EffectData()

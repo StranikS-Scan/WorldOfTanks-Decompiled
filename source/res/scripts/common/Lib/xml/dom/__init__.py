@@ -1,23 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/__init__.py
-"""W3C Document Object Model implementation for Python.
 
-The Python mapping of the Document Object Model is documented in the
-Python Library Reference in the section on the xml.dom package.
-
-This package contains the following modules:
-
-minidom -- A simple implementation of the Level 1 DOM with namespace
-           support added (based on the Level 2 specification) and other
-           minor Level 2 functionality.
-
-pulldom -- DOM builder supporting on-demand tree-building for selected
-           subtrees of the document.
-
-"""
 
 class Node:
-    """Class giving the NodeType constants."""
     ELEMENT_NODE = 1
     ATTRIBUTE_NODE = 2
     TEXT_NODE = 3
@@ -50,8 +35,6 @@ INVALID_ACCESS_ERR = 15
 VALIDATION_ERR = 16
 
 class DOMException(Exception):
-    """Abstract base class for DOM exceptions.
-    Exceptions with specific codes are specializations of this class."""
 
     def __init__(self, *args, **kw):
         if self.__class__ is DOMException:
@@ -127,7 +110,6 @@ class ValidationErr(DOMException):
 
 
 class UserDataHandler:
-    """Class giving the operation constants for UserDataHandler.handle()."""
     NODE_CLONED = 1
     NODE_IMPORTED = 2
     NODE_DELETED = 3

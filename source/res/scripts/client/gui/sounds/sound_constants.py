@@ -12,16 +12,6 @@ class EnabledStatus(object):
         return status in (cls.ENABLED_DEFAULT, cls.ENABLED_BY_USER)
 
 
-class HQRenderState(object):
-    LQ_HQ_ENABLED = 0
-    LQ_FOR_ALL = 1
-    HQ_FOR_ALL = 2
-
-    @classmethod
-    def isEnabled(cls, status, isMSR):
-        return not isMSR if status == cls.LQ_HQ_ENABLED else status == cls.HQ_FOR_ALL
-
-
 PLAYING_SOUND_CHECK_PERIOD = 1.0
 IS_ADVANCED_LOGGING = False
 

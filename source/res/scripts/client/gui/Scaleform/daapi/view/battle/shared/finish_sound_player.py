@@ -16,13 +16,6 @@ class _SOUND_EVENTS(object):
 
 
 class FinishSoundPlayer(IBattleFieldListener, ITeamBasesListener, IAbstractPeriodView):
-    """ Consumer responsible for finish battle sound. It is not available in replay!
-    
-    It handles 3 cases:
-        - last vehicle in either team was killed;
-        - team base was captured.
-        - time of round is over
-    """
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -34,8 +27,6 @@ class FinishSoundPlayer(IBattleFieldListener, ITeamBasesListener, IAbstractPerio
         return
 
     def updateDeadVehicles(self, aliveAllies, deadAllies, aliveEnemies, deadEnemies):
-        """ Check if there are alive vehicle in either team, play finish sound if there is none.
-        """
         if self.__vehCheckAllowed:
             allies = aliveAllies | deadAllies
             enemies = aliveEnemies | deadEnemies
@@ -57,8 +48,6 @@ class FinishSoundPlayer(IBattleFieldListener, ITeamBasesListener, IAbstractPerio
         self.__checkTimeCondition()
 
     def _playSound(self, soundID):
-        """ Play sound (protected for testing purposes)
-        """
         SoundGroups.g_instance.playSound2D(soundID)
 
     def __checkTimeCondition(self):
@@ -66,8 +55,6 @@ class FinishSoundPlayer(IBattleFieldListener, ITeamBasesListener, IAbstractPerio
             self.__onRoundFinished(_SOUND_EVENTS.TIME_IS_OVER)
 
     def __onRoundFinished(self, soundID):
-        """ Play finish sound if it hasn't already been played.
-        """
         if not self.__isPlaying:
             self._playSound(soundID)
             self.__isPlaying = True

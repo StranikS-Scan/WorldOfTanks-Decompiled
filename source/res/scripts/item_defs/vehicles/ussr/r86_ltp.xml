@@ -1,7 +1,6 @@
 <R86_LTP.xml>
   <crew>
     <commander>	gunner
-
 			radioman	</commander>
     <driver></driver>
     <loader></loader>
@@ -206,7 +205,7 @@
         <right>	vehicles/russian/R86_LTP/track/right.track	</right>
         <segmentLength>	0.087	</segmentLength>
         <segmentOffset>	0.02	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -433,7 +432,7 @@
       <tags></tags>
       <level>	3	</level>
       <notInShop>	true	</notInShop>
-      <price>	1820.0	</price>
+      <price>	1820	</price>
       <armor>
         <armor_1>	30	</armor_1>
         <armor_2>	15	</armor_2>

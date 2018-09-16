@@ -192,22 +192,26 @@ class ISoundEventChecker(IGameController):
     pass
 
 
+class IHeroTankController(IGameController):
+    onUpdated = None
+
+    def getCurrentTankOnScene(self):
+        raise NotImplementedError
+
+    def getRandomTank(self):
+        raise NotImplementedError
+
+    def getLinkByTankName(self, tankName=''):
+        raise NotImplementedError
+
+
 class IServerStatsController(IGameController):
-    """Controller holds last statistic containing number of player on server and region,
-    fires event when new statistics is received from server."""
     onStatsReceived = None
 
     def getFormattedStats(self):
-        """Gets server stats that are formatted as a single string with applied GUI style.
-        :return: tuple containing string with stats and type of tooltip (one of STATS_TYPE.*).
-        """
         raise NotImplementedError
 
     def getStats(self):
-        """Gets server stats separately for cluster and region without GUI style.
-        :return: tuple containing formatted number of players on cluster,
-            formatted number of players on region and type of tooltip (one of STATS_TYPE.*).
-        """
         raise NotImplementedError
 
 
@@ -285,6 +289,9 @@ class IBrowserController(IGameController):
     def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False, useBrowserWindow=True, isModal=False, showCreateWaiting=False, handlers=None, showBrowserCallback=None, isSolidBorder=False):
         raise NotImplementedError
 
+    def getAllBrowsers(self):
+        raise NotImplementedError
+
     def getBrowser(self, browserID):
         raise NotImplementedError
 
@@ -320,81 +327,6 @@ class IAwardController(IGameController):
 
 class IBoostersController(IGameController):
     onBoosterChangeNotify = None
-
-
-class IFalloutController(IGameController):
-    onSettingsChanged = None
-    onAutomatchChanged = None
-    onVehiclesChanged = None
-
-    def isAvailable(self):
-        raise NotImplementedError
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isSelected(self):
-        raise NotImplementedError
-
-    def setEnabled(self, isEnabled):
-        raise NotImplementedError
-
-    def getBattleType(self):
-        raise NotImplementedError
-
-    def setBattleType(self, battleType):
-        raise NotImplementedError
-
-    def getSelectedVehicles(self):
-        raise NotImplementedError
-
-    def addSelectedVehicle(self, vehInvID):
-        raise NotImplementedError
-
-    def removeSelectedVehicle(self, vehInvID):
-        raise NotImplementedError
-
-    def moveSelectedVehicle(self, vehInvID):
-        raise NotImplementedError
-
-    def getConfig(self):
-        raise NotImplementedError
-
-    def getSelectedSlots(self):
-        raise NotImplementedError
-
-    def getEmptySlots(self):
-        raise NotImplementedError
-
-    def getRequiredSlots(self):
-        raise NotImplementedError
-
-    def canSelectVehicle(self, vehicle):
-        raise NotImplementedError
-
-    def mustSelectRequiredVehicle(self):
-        raise NotImplementedError
-
-    def requiredVehicleSelected(self):
-        raise NotImplementedError
-
-    def carouselSelectionButtonTooltip(self):
-        raise NotImplementedError
-
-    def canChangeBattleType(self):
-        raise NotImplementedError
-
-    def canAutomatch(self):
-        raise NotImplementedError
-
-    def isAutomatch(self):
-        raise NotImplementedError
-
-    def setAutomatch(self, isAutomatch):
-        raise NotImplementedError
-
-    def isSuitableVeh(self, vehicle):
-        raise NotImplementedError
 
 
 class IScreenCastController(IGameController):
@@ -460,7 +392,7 @@ class IVehicleComparisonBasket(IGameController):
         raise NotImplementedError
 
     def revertVehicleByIdx(self, index):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class IEncyclopediaController(IGameController):
@@ -662,86 +594,39 @@ class IRankedBattlesController(IGameController):
         raise NotImplementedError
 
     def getCycleRewards(self, cycleID):
-        """
-        returns reward for max rank achieved in current season for given cycle ID
-        """
         raise NotImplementedError
 
     def getRanksChanges(self, isLoser=False):
-        """
-        returns ranks changes depends on team match result (win or lose)
-        """
         pass
 
     def getRanksTops(self, isLoser=False, stepDiff=None):
-        """
-        Count of places where players can earn/no_change/lose steps, or count of players if stepDiff is None
-        :param isLoser: win or lose command
-        :param stepDiff: see RANKEDBATTLES_ALIASES.STEP_VALUE_{EARN/NO_CHANGE/LOSE}
-        :return:
-        """
         pass
 
     def getMinXp(self):
-        """
-        returns minXP value
-        """
         pass
 
     def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        """
-        :return: dict, contains prime times in day based on periphery id
-        (peripheries are keys, primes are values)
-        :param groupIdentical: grouping peripheries with identical prime times in one key (exmp. 'RU1, RU2' etc.)
-        :param selectedTime: returns prime times for this day
-        """
         pass
 
     def getAllAwardsForCycle(self, cycleID):
         raise NotImplementedError
 
     def hasSuitableVehicles(self):
-        """
-        :return: bool, are player have suitable vehicles
-        """
         raise NotImplementedError
 
     def getSuitableVehicleLevels(self):
-        """
-        :return: tuple, contains minLevel and maxLevel of suitable vehicle
-        """
         raise NotImplementedError
 
     def getShieldStatus(self, rank, isStatic=False):
-        """
-        Status of current rank shield
-        :return: tuple, (prevHP (int), shiedHP (int), maxHP (int), shieldState (string), newShieldState (string))
-        :param rank: Rank
-        :param isStatic: If True - returns static data with maxHP and shieldState == shield_enabled
-        """
         raise NotImplementedError
 
     def getCurrentCycleStats(self):
-        """
-        Record from dossier for current ranked cycle
-        :return: dict from dossier with bunch of useful info
-        """
         raise NotImplementedError
 
     def showRankedAwardWindow(self, rankInfo, vehicle, questsProgress):
-        """
-        Show RankedBattlesAwardsView if needed
-        :param rankInfo:
-        :param vehicle:
-        :param questsProgress:
-        """
         raise NotImplementedError
 
     def getLadderPoints(self):
-        """
-        Return ladderPoints received by player
-        :return:
-        """
         raise NotImplementedError
 
 
@@ -758,6 +643,13 @@ class IBootcampController(IGameController):
 
     @property
     def replayCtrl(self):
+        raise NotImplementedError
+
+    @property
+    def nationData(self):
+        raise NotImplementedError
+
+    def getContext(self):
         raise NotImplementedError
 
     def hasFinishedBootcampBefore(self):
@@ -784,31 +676,24 @@ class IBootcampController(IGameController):
     def getLessonNum(self):
         raise NotImplementedError
 
+    def getCheckpoint(self):
+        raise NotImplementedError
+
+    def saveCheckpoint(self, checkpoint):
+        raise NotImplementedError
+
     @property
     def nation(self):
         raise NotImplementedError
 
-    def getDefaultLobbySettings(self):
-        raise NotImplementedError
-
-    def getLobbySettings(self):
-        raise NotImplementedError
-
-    def setLobbySettings(self, value):
-        raise NotImplementedError
-
-    def updateLobbySettingsVisibility(self, element, value):
+    def changeNation(self, nationIndex):
         raise NotImplementedError
 
     def getDisabledSettings(self):
         raise NotImplementedError
 
+    def showFinalVideo(self, callback):
+        raise NotImplementedError
 
-class ICalendarController(IGameController):
-
-    def showCalendar(self, invokedFrom):
-        """Show the advent calendar
-        
-        :param invokedFrom: Info string about the place from which the calendar is invoked.
-        """
-        pass
+    def finishBootcamp(self):
+        raise NotImplementedError

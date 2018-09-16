@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_execfile.py
-"""Fixer for execfile.
-
-This converts usages of the execfile function into calls to the built-in
-exec() function.
-"""
 from .. import fixer_base
 from ..fixer_util import Comma, Name, Call, LParen, RParen, Dot, Node, ArgList, String, syms
 
@@ -13,7 +8,6 @@ class FixExecfile(fixer_base.BaseFix):
     PATTERN = "\n    power< 'execfile' trailer< '(' arglist< filename=any [',' globals=any [',' locals=any ] ] > ')' > >\n    |\n    power< 'execfile' trailer< '(' filename=any ')' > >\n    "
 
     def transform(self, node, results):
-        assert results
         filename = results['filename']
         globals = results.get('globals')
         locals = results.get('locals')

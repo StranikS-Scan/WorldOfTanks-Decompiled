@@ -4,10 +4,9 @@ import BigWorld
 from debug_utils import LOG_NOTE, LOG_CURRENT_EXCEPTION, LOG_ERROR
 import Event
 
-class MemoryCriticalController:
+class MemoryCriticalController(object):
     ORIGIN_DEFAULT = -1
     messages = property(lambda self: self.__messages)
-    onMemCrit = property(lambda self: self.__event)
     originTexQuality = property(lambda self: self.__originTexQuality)
     originFloraQuality = property(lambda self: self.__originFloraQuality)
     originTerrainQuality = property(lambda self: self.__originTerrainQuality)
@@ -19,12 +18,12 @@ class MemoryCriticalController:
         self.__originTerrainQuality = -1
         self.__needReboot = False
         self.__loweredSettings = []
-        self.__event = Event.Event()
+        self.onMemCrit = Event.Event()
 
     def destroy(self):
-        if self.__event is not None:
-            self.__event.clear()
-            self.__event = None
+        if self.onMemCrit is not None:
+            self.onMemCrit.clear()
+            self.onMemCrit = None
         del self.__loweredSettings[:]
         return
 
@@ -70,11 +69,11 @@ class MemoryCriticalController:
         else:
             message = (1, 'insufficient_memory_please_reboot')
             self.__messages.append(message)
-            self.__event(message)
+            self.onMemCrit(message)
             LOG_NOTE("The free memory is too low, We can't do anything. Please, reboot the game.")
             return
         message = (0, 'tex_was_lowered_to_min')
-        self.__event(message)
+        self.onMemCrit(message)
         message = (1, 'insufficient_memory_please_reboot')
         self.__messages.append(message)
         if texQuality < textureMinQuality:

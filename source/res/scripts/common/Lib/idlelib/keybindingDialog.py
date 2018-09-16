@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/keybindingDialog.py
-"""
-Dialog for building Tkinter accelerator key bindings
-"""
 from Tkinter import *
 import tkMessageBox
 import string
@@ -11,12 +8,6 @@ import sys
 class GetKeysDialog(Toplevel):
 
     def __init__(self, parent, title, action, currentKeySequences):
-        """
-        action - string, the name of the virtual event these keys will be
-                 mapped to
-        currentKeys - list, a list of all key sequence lists currently mapped
-                 to virtual events, for overlap checking
-        """
         Toplevel.__init__(self, parent)
         self.configure(borderwidth=5)
         self.resizable(height=FALSE, width=FALSE)
@@ -98,13 +89,6 @@ class GetKeysDialog(Toplevel):
         labelHelpAdvanced.grid(row=0, column=0, sticky=NSEW)
 
     def SetModifiersForPlatform(self):
-        """Determine list of names of key modifiers for this platform.
-        
-        The names are used to build Tk bindings -- it doesn't matter if the
-        keyboard has these keys, it matters if Tk understands them. The
-        order is also important: key binding equality depends on it, so
-        config-keys.def must use the same ordering.
-        """
         if sys.platform == 'darwin':
             self.modifiers = ['Shift',
              'Control',
@@ -163,7 +147,6 @@ class GetKeysDialog(Toplevel):
         self.listKeysFinal.insert(END, *keys)
 
     def TranslateKey(self, key, modifiers):
-        """Translate from keycap symbol to the Tkinter keysym"""
         translateDict = {'Space': 'space',
          '~': 'asciitilde',
          '!': 'exclam',
@@ -216,12 +199,6 @@ class GetKeysDialog(Toplevel):
         self.destroy()
 
     def KeysOK(self):
-        """Validity check on user's 'basic' keybinding selection.
-        
-        Doesn't check the string produced by the advanced dialog because
-        'modifiers' isn't set.
-        
-        """
         keys = self.keyString.get()
         keys.strip()
         finalKey = self.listKeysFinal.get(ANCHOR)

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sunaudio.py
-"""Interpret sun audio headers."""
 from warnings import warnpy3k
 warnpy3k('the sunaudio module has been removed in Python 3.0; use the sunau module instead', stacklevel=2)
 del warnpy3k
@@ -11,12 +10,10 @@ class error(Exception):
 
 
 def get_long_be(s):
-    """Convert a 4-char value to integer."""
     return ord(s[0]) << 24 | ord(s[1]) << 16 | ord(s[2]) << 8 | ord(s[3])
 
 
 def gethdr(fp):
-    """Read a sound header from an open file."""
     if fp.read(4) != MAGIC:
         raise error, 'gethdr: bad magic word'
     hdr_size = get_long_be(fp.read(4))
@@ -39,7 +36,6 @@ def gethdr(fp):
 
 
 def printhdr(file):
-    """Read and print the sound header of a named file."""
     hdr = gethdr(open(file, 'r'))
     data_size, encoding, sample_rate, channels, info = hdr
     while info[-1:] == '\x00':

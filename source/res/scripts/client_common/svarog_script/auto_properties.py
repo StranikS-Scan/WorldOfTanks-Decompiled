@@ -21,7 +21,6 @@ class TypedProperty(AutoProperty):
         self.allowedType = allowedType
 
     def __set__(self, instance, value):
-        assert isinstance(value, self.allowedType)
         setattr(instance, self.fieldName, value)
 
 
@@ -31,19 +30,17 @@ class LinkDescriptor(AutoProperty):
         AutoProperty.__init__(self, fieldName)
 
     def __set__(self, instance, value):
-        assert hasattr(value, '__call__')
         setattr(instance, self.fieldName, value)
 
     def __call__(self, *args, **kwargs):
-        assert False
         return None
 
 
 class AutoPropertyInitMetaclass(type):
 
-    def __new__(cls, name, bases, attributes):
+    def __new__(mcs, name, bases, attributes):
         for attributeName, attribute in attributes.iteritems():
             if isinstance(attribute, AutoProperty) and attribute.fieldName is None:
                 attribute.fieldName = '_%s__%s' % (name, attributeName)
 
-        return super(AutoPropertyInitMetaclass, cls).__new__(cls, name, bases, attributes)
+        return super(AutoPropertyInitMetaclass, mcs).__new__(mcs, name, bases, attributes)

@@ -10,7 +10,7 @@ from helpers import dependency
 from messenger.m_constants import BATTLE_CHANNEL, MESSENGER_SCOPE, USER_TAG
 from messenger.proto.bw_chat2 import admin_chat_cmd
 from messenger.proto.bw_chat2 import entities, limits, wrappers, errors
-from messenger.proto.bw_chat2 import provider
+from messenger.proto.bw_chat2 import provider as bw2_provider
 from messenger.proto.bw_chat2.battle_chat_cmd import BattleCommandFactory
 from messenger.proto.bw_chat2.unit_chat_cmd import UnitCommandFactory
 from messenger.proto.events import g_messengerEvents
@@ -23,7 +23,7 @@ from messenger_common_chat2 import UNIT_CHAT_COMMANDS
 from skeletons.gui.battle_session import IBattleSessionProvider
 _ActionsCollection = namedtuple('_ActionsCollection', 'initID deInitID onBroadcastID broadcastID')
 
-class _EntityChatHandler(provider.ResponseSeqHandler):
+class _EntityChatHandler(bw2_provider.ResponseSeqHandler):
 
     def __init__(self, provider, adminChat, actions, factory, limits_):
         super(_EntityChatHandler, self).__init__(provider, 10)
@@ -318,7 +318,7 @@ class UnitChatHandler(_EntityChatHandler):
         g_messengerEvents.channels.onCommandReceived(cmd)
 
 
-class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFactory):
+class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandFactory):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, provider):
@@ -419,7 +419,7 @@ class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFacto
                 provider.clearActionCoolDown(actionID)
 
 
-class AdminChatCommandHandler(provider.ResponseDictHandler):
+class AdminChatCommandHandler(bw2_provider.ResponseDictHandler):
 
     def parseLine(self, text, clientID=0):
         cmd, result = None, admin_chat_cmd.parseCommandLine(text)

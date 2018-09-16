@@ -64,6 +64,9 @@ class _ChannelController(BattleLayout):
         isCurrent = isCurrentPlayer(message.accountDBID)
         return (isCurrent, message.text) if not doFormatting else (isCurrent, self._mBuilder.setColors(dbID).setName(dbID, message.accountName).setText(message.text).build())
 
+    def _formatCommand(self, command):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class TeamChannelController(_ChannelController):
 

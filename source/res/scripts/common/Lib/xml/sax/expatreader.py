@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/sax/expatreader.py
-"""
-SAX driver for the pyexpat C module.  This driver works with
-pyexpat.__version__ == '2.22'.
-"""
 version = '0.20'
 from xml.sax._exceptions import *
 from xml.sax.handler import feature_validation, feature_namespaces
@@ -41,11 +37,6 @@ else:
     del _weakref
 
 class ExpatLocator(xmlreader.Locator):
-    """Locator for use with the ExpatParser class.
-    
-    This uses a weak reference to the parser object to avoid creating
-    a circular reference between the parser and the content handler.
-    """
 
     def __init__(self, parser):
         self._ref = _mkproxy(parser)
@@ -68,7 +59,6 @@ class ExpatLocator(xmlreader.Locator):
 
 
 class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
-    """SAX driver for the pyexpat C module."""
 
     def __init__(self, namespaceHandling=0, bufsize=65516):
         xmlreader.IncrementalParser.__init__(self, bufsize)
@@ -83,7 +73,6 @@ class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
         return
 
     def parse(self, source):
-        """Parse an XML document from a URL or an InputSource."""
         source = saxutils.prepare_input_source(source)
         self._source = source
         self.reset()

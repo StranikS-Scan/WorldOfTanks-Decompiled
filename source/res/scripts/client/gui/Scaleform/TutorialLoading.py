@@ -1,14 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/TutorialLoading.py
 import GUI
-import BigWorld
-import constants
-from debug_utils import LOG_DEBUG
 from gui import g_guiResetters
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.shared.utils import graphics
-from helpers import getFullClientVersion, getClientOverride
 
 class LessonResultScreen(Flash):
 

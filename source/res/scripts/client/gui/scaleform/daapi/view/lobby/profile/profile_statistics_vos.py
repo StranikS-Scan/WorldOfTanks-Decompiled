@@ -129,9 +129,6 @@ class ProfileDictStatisticsVO(BaseDictStatisticsVO):
         self._dmgDealt = targetData.getDamageDealt()
         self._dmgReceived = targetData.getDamageReceived()
         self._damageEfficiency = BigWorld.wg_getNiceNumberFormat(PUtils.getValueOrUnavailable(targetData.getDamageEfficiency()))
-        damageBlockedByArmor = targetData.getDamageBlockedByArmor()
-        potentialDamageReceived = targetData.getPotentialDamageReceived()
-        pResDmg = potentialDamageReceived - damageBlockedByArmor
         self._armorUsingEfficiency = PUtils.getValueOrUnavailable(targetData.getArmorUsingEfficiency())
         self._avgXP = PUtils.getValueOrUnavailable(targetData.getAvgXP())
         self._avgDmg = PUtils.getValueOrUnavailable(targetData.getAvgDamage())

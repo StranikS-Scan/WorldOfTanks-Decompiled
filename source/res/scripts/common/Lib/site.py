@@ -1,64 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/site.py
-"""Append module search paths for third-party packages to sys.path.
-
-****************************************************************
-* This module is automatically imported during initialization. *
-****************************************************************
-
-In earlier versions of Python (up to 1.5a3), scripts or modules that
-needed to use site-specific modules would place ``import site''
-somewhere near the top of their code.  Because of the automatic
-import, this is no longer necessary (but code that does it still
-works).
-
-This will append site-specific paths to the module search path.  On
-Unix (including Mac OSX), it starts with sys.prefix and
-sys.exec_prefix (if different) and appends
-lib/python<version>/site-packages as well as lib/site-python.
-On other platforms (such as Windows), it tries each of the
-prefixes directly, as well as with lib/site-packages appended.  The
-resulting directories, if they exist, are appended to sys.path, and
-also inspected for path configuration files.
-
-A path configuration file is a file whose name has the form
-<package>.pth; its contents are additional directories (one per line)
-to be added to sys.path.  Non-existing directories (or
-non-directories) are never added to sys.path; no directory is added to
-sys.path more than once.  Blank lines and lines beginning with
-'#' are skipped. Lines starting with 'import' are executed.
-
-For example, suppose sys.prefix and sys.exec_prefix are set to
-/usr/local and there is a directory /usr/local/lib/python2.5/site-packages
-with three subdirectories, foo, bar and spam, and two path
-configuration files, foo.pth and bar.pth.  Assume foo.pth contains the
-following:
-
-  # foo package configuration
-  foo
-  bar
-  bletch
-
-and bar.pth contains:
-
-  # bar package configuration
-  bar
-
-Then the following directories are added to sys.path, in this order:
-
-  /usr/local/lib/python2.5/site-packages/bar
-  /usr/local/lib/python2.5/site-packages/foo
-
-Note that bletch is omitted because it doesn't exist; bar precedes foo
-because bar.pth comes alphabetically before foo.pth; and spam is
-omitted because it is not mentioned in either path configuration file.
-
-After these path manipulations, an attempt is made to import a module
-named sitecustomize, which can perform arbitrary additional
-site-specific customizations.  If this import fails with an
-ImportError exception, it is silently ignored.
-
-"""
 import sys
 import os
 import __builtin__
@@ -79,7 +20,6 @@ def makepath(*paths):
 
 
 def abs__file__():
-    """Set all module' __file__ attribute to an absolute path"""
     for m in sys.modules.values():
         if hasattr(m, '__loader__'):
             continue
@@ -90,8 +30,6 @@ def abs__file__():
 
 
 def removeduppaths():
-    """ Remove duplicate entries from sys.path along with making them
-    absolute"""
     L = []
     known_paths = set()
     for dir in sys.path:
@@ -105,7 +43,6 @@ def removeduppaths():
 
 
 def _init_pathinfo():
-    """Return a set containing all existing directory entries from sys.path"""
     d = set()
     for dir in sys.path:
         try:
@@ -119,10 +56,6 @@ def _init_pathinfo():
 
 
 def addpackage(sitedir, name, known_paths):
-    """Process a .pth file within the site-packages directory:
-       For each line in the file, either combine it with sitedir to a path
-       and add that to known_paths, or execute it if it starts with 'import '.
-    """
     if known_paths is None:
         _init_pathinfo()
         reset = 1
@@ -162,8 +95,6 @@ def addpackage(sitedir, name, known_paths):
 
 
 def addsitedir(sitedir, known_paths=None):
-    """Add 'sitedir' argument to sys.path if missing and handle .pth files in
-    'sitedir'"""
     if known_paths is None:
         known_paths = _init_pathinfo()
         reset = 1
@@ -188,15 +119,6 @@ def addsitedir(sitedir, known_paths=None):
 
 
 def check_enableusersite():
-    """Check if user site directory is safe for inclusion
-    
-    The function tests for the command line flag (including environment var),
-    process uid/gid equal to effective uid/gid.
-    
-    None: Disabled for security reasons
-    False: Disabled by user (command line option)
-    True: Safe and enabled
-    """
     if sys.flags.no_user_site:
         return False
     else:
@@ -210,12 +132,6 @@ def check_enableusersite():
 
 
 def getuserbase():
-    """Returns the `user base` directory path.
-    
-    The `user base` directory can be used to store data. If the global
-    variable ``USER_BASE`` is not initialized yet, this function will also set
-    it.
-    """
     global USER_BASE
     if USER_BASE is not None:
         return USER_BASE
@@ -226,11 +142,6 @@ def getuserbase():
 
 
 def getusersitepackages():
-    """Returns the user-specific site-packages directory path.
-    
-    If the global variable ``USER_SITE`` is not initialized yet, this
-    function will also set it.
-    """
     global USER_SITE
     user_base = getuserbase()
     if USER_SITE is not None:
@@ -248,11 +159,6 @@ def getusersitepackages():
 
 
 def addusersitepackages(known_paths):
-    """Add a per user site-package to sys.path
-    
-    Each user has its own python directory with site-packages in the
-    home directory.
-    """
     global ENABLE_USER_SITE
     user_site = getusersitepackages()
     if ENABLE_USER_SITE and os.path.isdir(user_site):
@@ -261,13 +167,6 @@ def addusersitepackages(known_paths):
 
 
 def getsitepackages():
-    """Returns a list containing all global site-packages directories
-    (and possibly site-python).
-    
-    For each directory present in the global ``PREFIXES``, this function
-    will find its `site-packages` subdirectory depending on the system
-    environment, and will return a list of full paths.
-    """
     sitepackages = []
     seen = set()
     for prefix in PREFIXES:
@@ -292,7 +191,6 @@ def getsitepackages():
 
 
 def addsitepackages(known_paths):
-    """Add site-packages (and possibly site-python) to sys.path"""
     for sitedir in getsitepackages():
         if os.path.isdir(sitedir):
             addsitedir(sitedir, known_paths)
@@ -301,13 +199,6 @@ def addsitepackages(known_paths):
 
 
 def setBEGINLIBPATH():
-    """The OS/2 EMX port has optional extension modules that do double duty
-    as DLLs (and must use the .DLL file extension) for other extensions.
-    The library search path needs to be amended so these will be found
-    during module import.  Use BEGINLIBPATH so that these are at the start
-    of the library search path.
-    
-    """
     dllpath = os.path.join(sys.prefix, 'Lib', 'lib-dynload')
     libpath = os.environ['BEGINLIBPATH'].split(';')
     if libpath[-1]:
@@ -318,12 +209,6 @@ def setBEGINLIBPATH():
 
 
 def setquit():
-    """Define new builtins 'quit' and 'exit'.
-    
-    These are objects which make the interpreter exit when called.
-    The repr of each object contains a hint at how it works.
-    
-    """
     if os.sep == ':':
         eof = 'Cmd-Q'
     elif os.sep == '\\':
@@ -352,8 +237,6 @@ def setquit():
 
 
 class _Printer(object):
-    """interactive prompt objects for printing the license text, a list of
-    contributors and the copyright notice."""
     MAXLINES = 23
 
     def __init__(self, name, data, files=(), dirs=()):
@@ -422,7 +305,6 @@ class _Printer(object):
 
 
 def setcopyright():
-    """Set 'copyright' and 'credits' in __builtin__"""
     __builtin__.copyright = _Printer('copyright', sys.copyright)
     if sys.platform[:4] == 'java':
         __builtin__.credits = _Printer('credits', 'Jython is maintained by the Jython developers (www.jython.org).')
@@ -433,10 +315,6 @@ def setcopyright():
 
 
 class _Helper(object):
-    """Define the builtin 'help'.
-    This is a wrapper around pydoc.help (with a twist).
-    
-    """
 
     def __repr__(self):
         pass
@@ -451,9 +329,6 @@ def sethelper():
 
 
 def aliasmbcs():
-    """On Windows, some default encodings are not provided by Python,
-    while they are always available as "mbcs" in each locale. Make
-    them usable by aliasing to "mbcs" in such a case."""
     if sys.platform == 'win32':
         import locale, codecs
         enc = locale.getdefaultlocale()[1]
@@ -467,16 +342,12 @@ def aliasmbcs():
 
 
 def setencoding():
-    """Set the string encoding used by the Unicode implementation.  The
-    default is 'ascii', but if you're willing to experiment, you can
-    change this."""
     encoding = 'ascii'
     if encoding != 'ascii':
         sys.setdefaultencoding(encoding)
 
 
 def execsitecustomize():
-    """Run custom site specific code, if available."""
     try:
         import sitecustomize
     except ImportError:
@@ -489,7 +360,6 @@ def execsitecustomize():
 
 
 def execusercustomize():
-    """Run custom user specific code, if available."""
     try:
         import usercustomize
     except ImportError:

@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/avatar_getter.py
-"""
-Collection of getters to get some attribute of Avatar. Uses direct access
-to attributes that wraps to try ... except AttributeError, because it's more
-faster than getattr, but it's slower if attribute is not found.
-"""
 import BigWorld
 import Math
 from gui import GUI_CTRL_MODE_FLAG
@@ -53,11 +48,6 @@ def setForcedGuiControlMode(value, stopVehicle=False, enableAiming=True, cursorV
 
 
 def getPlayerName(avatar=None):
-    """
-    Gets player's name.
-    :param avatar: cached avatar or if None using BigWorld.player()
-    :return: string containing player's name or empty string.
-    """
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -70,34 +60,18 @@ def getPlayerName(avatar=None):
 
 
 def getPlayerTeam(avatar=None):
-    """
-    Gets player's team. Uses getattr, i.e. it invokes on battle
-    loading and attribute can not be defined.
-    :param avatar: cached avatar or if None using BigWorld.player()
-    :return: number containing team or 0.
-    """
     if avatar is None:
         avatar = BigWorld.player()
     return getattr(avatar, 'team', 0)
 
 
 def getPlayerVehicleID(avatar=None):
-    """
-    Gets player's vehicleID on world. Uses getattr, i.e. it invokes on battle
-    loading and attribute can not be defined.
-    :param avatar: cached avatar or if None using BigWorld.player()
-    :return: number containing vehicleID or 0.
-    """
     if avatar is None:
         avatar = BigWorld.player()
     return getattr(avatar, 'playerVehicleID', 0)
 
 
 def isPlayerTeamKillSuspected():
-    """
-    If player has global team killer status
-    :return: bool
-    """
     return bool(getattr(BigWorld.player(), 'tkillIsSuspected', 0))
 
 
@@ -325,21 +299,11 @@ def getOwnVehiclePosition(avatar=None):
 
 
 def getDistanceToTarget(target, avatar=None):
-    """Gets distance between target and player's vehicle.
-    :param target: BigWorld entity.
-    :param avatar: instance of player entity (avatar).
-    :return: float containing distance in meters.
-    """
     ownPosition = getOwnVehiclePosition(avatar=avatar)
     return (target.position - ownPosition).length if ownPosition is not None else 0.0
 
 
 def getDistanceToGunMarker(avatar=None):
-    """Gets distance between player's vehicle and his gun marker position.
-    It is used in strategic mode.
-    :param avatar: instance of player entity (avatar).
-    :return: float containing distance in meters.
-    """
     if avatar is None:
         avatar = BigWorld.player()
     ownPosition = getOwnVehiclePosition(avatar=avatar)
@@ -356,19 +320,11 @@ def getDistanceToGunMarker(avatar=None):
 
 
 def isVehicleStunned():
-    """
-    Checking stun crew on vehicle
-    :return: bool, if crew on vehicle has stun - True, otherwise - False
-    """
     attachedVehicle = BigWorld.player().getVehicleAttached()
     return attachedVehicle.stunInfo > 0.0 if attachedVehicle is not None else False
 
 
 def getHealthPercentage(avatar=None):
-    """Gets percentages from team_healthbar_mechanic.
-    :param avatar: instance of player entity (avatar).
-    :return: health percentages.
-    """
     if avatar is None:
         avatar = BigWorld.player()
     try:

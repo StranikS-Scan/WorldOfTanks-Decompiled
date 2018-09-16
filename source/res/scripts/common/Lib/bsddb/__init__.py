@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/__init__.py
-"""Support for Berkeley DB 4.3 through 5.3 with a simple interface.
-
-For the full featured object oriented interface use the bsddb.db module
-instead.  It mirrors the Oracle Berkeley DB C API.
-"""
 import sys
 absolute_import = sys.version_info[0] >= 3
 if sys.version_info >= (2, 6) and sys.version_info < (3, 0):
@@ -119,10 +114,6 @@ class _iter_mixin(MutableMapping):
 
 
 class _DBWithCursor(_iter_mixin):
-    """
-    A simple wrapper around DB that makes it look like the bsddbobject in
-    the old module.  It uses a cursor as needed to provide DB traversal.
-    """
 
     def __init__(self, db):
         self.db = db

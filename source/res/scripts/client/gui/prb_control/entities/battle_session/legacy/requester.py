@@ -7,10 +7,6 @@ from gui.prb_control.entities.base.requester import IPrbListRequester
 from gui.prb_control.items import prb_seqs
 
 class AutoInvitesRequester(IPrbListRequester):
-    """
-    Auto invites requester that fetches invites list and sends them
-    back to entity.
-    """
 
     def __init__(self):
         self.__callback = None
@@ -34,24 +30,12 @@ class AutoInvitesRequester(IPrbListRequester):
         self.__fetchList()
 
     def getItem(self, prbID):
-        """
-        Getter for item by prebbalte ID
-        Args:
-            prbID: prebattle ID
-        """
         return prb_seqs.AutoInviteItem(prbID, **prb_getters.getPrebattleAutoInvites().get(prbID, {}))
 
     def __pe_onPrbAutoInvitesChanged(self):
-        """
-        Listener for player auto invites update event
-        """
         self.__fetchList()
 
     def __fetchList(self):
-        """
-        Is invoked to fetch list of autoinvites and send them back
-        to entity
-        """
         if self.__callback is not None:
             self.__callback(prb_seqs.AutoInvitesIterator())
         return

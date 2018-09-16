@@ -92,7 +92,6 @@ class _Listener(object):
 
 
 class ArenaVehiclesListener(_Listener):
-    """Listener of vehicles on the arena"""
     __slots__ = ('__callbackID',)
 
     def __init__(self):
@@ -352,7 +351,6 @@ class _LOAD_STATE_FLAG(object):
 
 
 class ArenaSpaceLoadListener(_Listener):
-    """Listener of Arena space loading status."""
 
     def __init__(self):
         super(ArenaSpaceLoadListener, self).__init__()
@@ -392,7 +390,7 @@ class ArenaSpaceLoadListener(_Listener):
         if progress > self.__progress:
             self.__progress = progress
             self.__onSpaceLoadUpdated(progress)
-        if progress < _MAX_PROGRESS_VALUE:
+        if progress < _MAX_PROGRESS_VALUE or not BigWorld.virtualTextureRenderComplete():
             self.__spaceLoadCB = BigWorld.callback(_SPACE_INVALIDATION_PERIOD, self.__loadSpaceCallback)
             BigWorld.SetDrawInflux(False)
         else:

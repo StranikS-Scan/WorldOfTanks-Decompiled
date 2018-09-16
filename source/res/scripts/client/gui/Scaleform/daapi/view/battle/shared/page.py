@@ -10,29 +10,19 @@ from gui.Scaleform.daapi.view.meta.BattlePageMeta import BattlePageMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES as _ALIASES
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE, BATTLE_CTRL_ID
 from gui.shared import EVENT_BUS_SCOPE, events
-from helpers import dependency
+from helpers import dependency, uniprof
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class IComponentsConfig(object):
 
     def getConfig(self):
-        """
-        Binding views to controller config.
-        It is the list where each element contains binding of controller to views
-        :return: list: (BATTLE_CTRL_ID.*, (BATTLE_VIEW_ALIASES, ...)), ...).
-        """
         raise NotImplementedError
 
     def getViewsConfig(self):
-        """
-        Returns config which contains information about views which have to be added dynamically.
-        It is the list where each element contains information about view ID and view instance.
-        :return: list: ((viewAlias, viewInstance), ...)
-        """
         return None
 
 
@@ -56,7 +46,6 @@ class ComponentsConfig(IComponentsConfig):
         return self.__doAdd(other)
 
     def __doAdd(self, other):
-        assert isinstance(other, ComponentsConfig), 'Invalid item Addition!'
         return ComponentsConfig(self.__config + other.getConfig(), self.__viewsConfig + other.getViewsConfig())
 
 
@@ -94,9 +83,6 @@ class SharedPage(BattlePageMeta):
         return self._isVisible
 
     def reload(self):
-        """Reloads (destroys and create again) all components, because replay destroys all entities,
-        all controllers when player rewinds replay back.
-        """
         self._stopBattleSession()
         self.__onPostMortemReload()
         self._startBattleSession()
@@ -104,6 +90,7 @@ class SharedPage(BattlePageMeta):
         for component in self._external:
             component.startPlugins()
 
+    @uniprof.regionDecorator(label='avatar.show_gui', scope='enter')
     def _populate(self):
         self._startBattleSession()
         super(SharedPage, self)._populate()
@@ -116,8 +103,11 @@ class SharedPage(BattlePageMeta):
         self.addListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
+        self.addListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self.__handleShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self.__handleHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.fireEvent(events.GlobalSpaceEvent(events.GlobalSpaceEvent.GO_NEXT))
 
+    @uniprof.regionDecorator(label='avatar.show_gui', scope='exit')
     def _dispose(self):
         while self._external:
             component = self._external.pop()
@@ -129,14 +119,12 @@ class SharedPage(BattlePageMeta):
         self.removeListener(events.GameEvent.TOGGLE_GUI, self._handleGUIToggled, scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self.__handleShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self.__handleHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self._stopBattleSession()
         super(SharedPage, self)._dispose()
 
     def _toggleGuiVisible(self):
-        """ Toggles GUI visible.
-        NOTE: GUI visibility can not be changed in some cases. Processing of such cases is implemented
-        in overridden routine _handleGUIToggled in each page.
-        """
         self._isVisible = not self._isVisible
         if self._isVisible:
             self.app.containerManager.showContainers(ViewTypes.DEFAULT)
@@ -162,8 +150,6 @@ class SharedPage(BattlePageMeta):
         self.sessionProvider.removeViewComponent(alias)
 
     def _startBattleSession(self):
-        """This method is invoked when battle starts, because method _populate
-        is not invoked in replay when player rewinds replay back."""
         self.sessionProvider.registerViewComponents(*self.__componentsConfig.getConfig())
         for alias, objFactory in self.__componentsConfig.getViewsConfig():
             self.sessionProvider.addViewComponent(alias, objFactory(), rule=VIEW_COMPONENT_RULE.NONE)
@@ -178,7 +164,6 @@ class SharedPage(BattlePageMeta):
         return
 
     def _stopBattleSession(self):
-        """This method is invoked when battle stops."""
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
@@ -213,6 +198,8 @@ class SharedPage(BattlePageMeta):
         self._blToggling.clear()
         for component in self._external:
             component.active(True)
+
+        self.sessionProvider.shared.hitDirection.setVisible(True)
 
     def _changeCtrlMode(self, ctrlMode):
         if ctrlMode == ctrlMode == aih_constants.CTRL_MODE_NAME.VIDEO:
@@ -263,14 +250,25 @@ class SharedPage(BattlePageMeta):
             return
         self._changeCtrlMode(ctrlMode)
 
+    def __handleShowExternals(self, _):
+        for component in self._external:
+            component.active(True)
+
+        self.sessionProvider.shared.hitDirection.setVisible(True)
+
+    def __handleHideExternals(self, _):
+        for component in self._external:
+            component.active(False)
+
+        self.sessionProvider.shared.hitDirection.setVisible(False)
+
 
 class BattlePageBusinessHandler(PackageBusinessHandler):
-    """Uses this handler to load page for playing replay correctly."""
     __slots__ = ()
 
     def __init__(self, *aliases):
         listeners = [ (alias, self.__loadPage) for alias in aliases ]
-        super(BattlePageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
+        super(BattlePageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
 
     def __loadPage(self, event):
         page = self.findViewByAlias(ViewTypes.DEFAULT, event.name)

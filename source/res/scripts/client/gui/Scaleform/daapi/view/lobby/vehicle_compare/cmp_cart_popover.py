@@ -177,8 +177,4 @@ class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
          'removeBtnEnabled': not basketLocked}
 
     def __basketChanged(self, *args):
-        """
-        gui.game_control.VehComparisonBasket.onChange event handler
-        :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData
-        """
         self.rebuildList(self.comparisonBasket.getVehiclesCDs())

@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/SniperAimingSystem.py
+import math
 import BigWorld
 import Math
 from Math import Vector3, Matrix
-import math
 from AvatarInputHandler import mathUtils
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
@@ -65,7 +65,6 @@ class SniperAimingSystem(IAimingSystem):
 
     def enable(self, targetPos, playerGunMatFunction=AimingSystems.getPlayerGunMat):
         player = BigWorld.player()
-        vehicle = player.getVehicleAttached()
         self.__playerGunMatFunction = playerGunMatFunction
         self.__vehicleTypeDescriptor = player.vehicleTypeDescriptor
         self.__vehicleMProv = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv

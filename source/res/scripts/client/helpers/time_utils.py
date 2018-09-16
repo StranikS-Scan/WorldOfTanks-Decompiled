@@ -38,14 +38,14 @@ class _TimeCorrector(object):
 
     @property
     def serverRegionalTime(self):
-        regionalSecondsOffset = 0
+        regionalNewDayUTC = 0
         try:
             serverRegionalSettings = BigWorld.player().serverSettings['regional_settings']
-            regionalSecondsOffset = serverRegionalSettings['starting_time_of_a_new_day']
+            regionalNewDayUTC = serverRegionalSettings['starting_time_of_a_new_day']
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
-        return _g_instance.serverUTCTime + regionalSecondsOffset
+        return _g_instance.serverUTCTime - regionalNewDayUTC
 
 
 _g_instance = _TimeCorrector()
@@ -319,8 +319,8 @@ class DaysAvailabilityIterator(object):
                 break
             self._availableTimestamp += ONE_DAY
 
-        currentDayStart, _ = getDayTimeBoundsForLocal()
-        availableDayStart, _ = getDayTimeBoundsForLocal(self._availableTimestamp)
+        _, _ = getDayTimeBoundsForLocal()
+        _, _ = getDayTimeBoundsForLocal(self._availableTimestamp)
         return self._availableTimestamp
 
     def _checkIntervals(self, timeStamp):

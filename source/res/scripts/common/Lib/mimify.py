@@ -1,25 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mimify.py
-"""Mimification and unmimification of mail messages.
-
-Decode quoted-printable parts of a mail message or encode using
-quoted-printable.
-
-Usage:
-        mimify(input, output)
-        unmimify(input, output, decode_base64 = 0)
-to encode and decode respectively.  Input and output may be the name
-of a file or an open file object.  Only a readline() method is used
-on the input file, only a write() method is used on the output file.
-When using file names, the input and output file names may be the
-same.
-
-Interactive usage:
-        mimify.py -e [infile [outfile]]
-        mimify.py -d [infile [outfile]]
-to encode and decode respectively.  Infile defaults to standard
-input and outfile to standard output.
-"""
 MAXLEN = 200
 CHARSET = 'ISO-8859-1'
 QUOTE = '> '
@@ -40,8 +20,6 @@ mime_head = re.compile('=\\?iso-8859-1\\?q\\?([^? \t\n]+)\\?=', re.I)
 repl = re.compile('^subject:\\s+re: ', re.I)
 
 class File:
-    """A simple fake file object that knows about limited read-ahead and
-    boundaries.  The only supported method is readline()."""
 
     def __init__(self, file, boundary):
         self.file = file
@@ -95,7 +73,6 @@ class HeaderFile:
 
 
 def mime_decode(line):
-    """Decode a single line of quoted-printable text to 8bit."""
     newline = ''
     pos = 0
     while 1:
@@ -109,7 +86,6 @@ def mime_decode(line):
 
 
 def mime_decode_header(line):
-    """Decode a header line to 8bit."""
     newline = ''
     pos = 0
     while 1:
@@ -125,7 +101,6 @@ def mime_decode_header(line):
 
 
 def unmimify_part(ifile, ofile, decode_base64=0):
-    """Convert a quoted-printable part of a MIME mail message to 8bit."""
     multipart = None
     quoted_printable = 0
     is_base64 = 0
@@ -207,7 +182,6 @@ def unmimify_part(ifile, ofile, decode_base64=0):
 
 
 def unmimify(infile, outfile, decode_base64=0):
-    """Convert quoted-printable parts of a MIME mail message to 8bit."""
     if type(infile) == type(''):
         ifile = open(infile)
         if type(outfile) == type('') and infile == outfile:
@@ -230,8 +204,6 @@ mime_char = re.compile('[=\x7f-\xff]')
 mime_header_char = re.compile('[=?\x7f-\xff]')
 
 def mime_encode(line, header):
-    """Code a single line as quoted-printable.
-    If header is set, quote some extra characters."""
     if header:
         reg = mime_header_char
     else:
@@ -265,7 +237,6 @@ def mime_encode(line, header):
 mime_header = re.compile('([ \t(]|^)([-a-zA-Z0-9_+]*[\x7f-\xff][-a-zA-Z0-9_+\x7f-\xff]*)(?=[ \t)]|\n)')
 
 def mime_encode_header(line):
-    """Code a single header line as quoted-printable."""
     newline = ''
     pos = 0
     while 1:
@@ -287,7 +258,6 @@ cte = re.compile('^content-transfer-encoding:', re.I)
 iso_char = re.compile('[\x7f-\xff]')
 
 def mimify_part(ifile, ofile, is_mime):
-    """Convert an 8bit part of a MIME mail message to quoted-printable."""
     has_cte = is_qp = is_base64 = 0
     multipart = None
     must_quote_body = must_quote_header = has_iso_chars = 0
@@ -416,7 +386,6 @@ def mimify_part(ifile, ofile, is_mime):
 
 
 def mimify(infile, outfile):
-    """Convert 8bit parts of a MIME mail message to quoted-printable."""
     if type(infile) == type(''):
         ifile = open(infile)
         if type(outfile) == type('') and infile == outfile:

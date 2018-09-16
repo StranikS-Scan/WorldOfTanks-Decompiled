@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/BARRACKS_CONSTANTS.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class BARRACKS_CONSTANTS(object):
     LOCATION_FILTER_TANKS = 'tanks'

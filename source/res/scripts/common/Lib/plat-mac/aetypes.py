@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/aetypes.py
-"""aetypes - Python objects representing various AE types."""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the aetypes module is removed.', stacklevel=2)
 from Carbon.AppleEvents import *
@@ -14,7 +13,6 @@ def pack(*args, **kwargs):
 
 
 def nice(s):
-    """'nice' representation of an object"""
     if type(s) is StringType:
         return repr(s)
     else:
@@ -22,7 +20,6 @@ def nice(s):
 
 
 class Unknown:
-    """An uninterpreted AE object"""
 
     def __init__(self, type, data):
         self.type = type
@@ -36,7 +33,6 @@ class Unknown:
 
 
 class Enum:
-    """An AE enumeration value"""
 
     def __init__(self, enum):
         self.enum = '%-4.4s' % str(enum)
@@ -83,7 +79,6 @@ def end(of):
 
 
 class Boolean:
-    """An AE boolean value"""
 
     def __init__(self, bool):
         self.bool = not not bool
@@ -110,7 +105,6 @@ def mkboolean(bool):
 
 
 class Type:
-    """An AE 4-char typename object"""
 
     def __init__(self, type):
         self.type = '%-4.4s' % str(type)
@@ -134,7 +128,6 @@ def mktype(type):
 
 
 class Keyword:
-    """An AE 4-char keyword object"""
 
     def __init__(self, keyword):
         self.keyword = '%-4.4s' % str(keyword)
@@ -154,7 +147,6 @@ def IsKeyword(x):
 
 
 class Range:
-    """An AE range object"""
 
     def __init__(self, start, stop):
         self.start = start
@@ -176,7 +168,6 @@ def IsRange(x):
 
 
 class Comparison:
-    """An AE Comparison"""
 
     def __init__(self, obj1, relo, obj2):
         self.obj1 = obj1
@@ -206,7 +197,6 @@ class NComparison(Comparison):
 
 
 class Ordinal:
-    """An AE Ordinal"""
 
     def __init__(self, abso):
         self.abso = '%-4.4s' % str(abso)
@@ -232,7 +222,6 @@ class NOrdinal(Ordinal):
 
 
 class Logical:
-    """An AE logical expression object"""
 
     def __init__(self, logc, term):
         self.logc = '%-4.4s' % str(logc)
@@ -257,7 +246,6 @@ def IsLogical(x):
 
 
 class StyledText:
-    """An AE object respresenting text in a certain style"""
 
     def __init__(self, style, text):
         self.style = style
@@ -279,7 +267,6 @@ def IsStyledText(x):
 
 
 class AEText:
-    """An AE text object with style, script and language specified"""
 
     def __init__(self, script, style, text):
         self.script = script
@@ -303,7 +290,6 @@ def IsAEText(x):
 
 
 class IntlText:
-    """A text object with script and language specified"""
 
     def __init__(self, script, language, text):
         self.script = script
@@ -325,7 +311,6 @@ def IsIntlText(x):
 
 
 class IntlWritingCode:
-    """An object representing script and language"""
 
     def __init__(self, script, language):
         self.script = script
@@ -346,7 +331,6 @@ def IsIntlWritingCode(x):
 
 
 class QDPoint:
-    """A point"""
 
     def __init__(self, v, h):
         self.v = v
@@ -367,7 +351,6 @@ def IsQDPoint(x):
 
 
 class QDRectangle:
-    """A rectangle"""
 
     def __init__(self, v0, h0, v1, h1):
         self.v0 = v0
@@ -396,7 +379,6 @@ def IsQDRectangle(x):
 
 
 class RGBColor:
-    """An RGB color"""
 
     def __init__(self, r, g, b):
         self.r = r
@@ -418,28 +400,6 @@ def IsRGBColor(x):
 
 
 class ObjectSpecifier:
-    """A class for constructing and manipulation AE object specifiers in python.
-    
-    An object specifier is actually a record with four fields:
-    
-    key type    description
-    --- ----    -----------
-    
-    'want'  type    4-char class code of thing we want,
-            e.g. word, paragraph or property
-    
-    'form'  enum    how we specify which 'want' thing(s) we want,
-            e.g. by index, by range, by name, or by property specifier
-    
-    'seld'  any which thing(s) we want,
-            e.g. its index, its name, or its property specifier
-    
-    'from'  object  the object in which it is contained,
-            or null, meaning look for it in the application
-    
-    Note that we don't call this class plain "Object", since that name
-    is likely to be used by the application.
-    """
 
     def __init__(self, want, form, seld, fr=None):
         self.want = want

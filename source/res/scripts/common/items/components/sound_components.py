@@ -18,12 +18,10 @@ class WWTripleSoundConfig(object):
 
     @property
     def wwsound(self):
-        """Gets string containing default name of sound."""
         return self.__wwsound
 
     @property
     def wwsoundPC(self):
-        """Gets string containing default name of sound that relates to player."""
         return self.__wwsoundPC
 
     @property

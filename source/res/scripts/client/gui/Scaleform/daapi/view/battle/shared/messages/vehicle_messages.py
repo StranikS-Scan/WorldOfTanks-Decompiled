@@ -21,7 +21,6 @@ class VehicleMessages(fading_messages.FadingMessages):
     def _populate(self):
         super(VehicleMessages, self)._populate()
         styles = self.getStyles()
-        assert 'entityStyle' in styles, 'Entity styles for messages under Ammo panel are not defined!'
         self.__styleFormatter = _VEHICLE_STYLE_FORMATTER % styles['entityStyle']
 
     def _dispose(self):

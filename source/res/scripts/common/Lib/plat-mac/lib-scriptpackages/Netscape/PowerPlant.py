@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Netscape/PowerPlant.py
-"""Suite PowerPlant:
-Level 0, version 0
-
-Generated from /Volumes/Sap/Applications (Mac OS 9)/Netscape Communicator\xe2\x84\xa2 Folder/Netscape Communicator\xe2\x84\xa2
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'ppnt'
@@ -14,10 +8,6 @@ class PowerPlant_Events:
     _argmap_SwitchTellTarget = {'to': 'data'}
 
     def SwitchTellTarget(self, _no_object=None, _attributes={}, **_arguments):
-        """SwitchTellTarget: Makes an object the \xd2focus\xd3 of AppleEvents
-        Keyword argument to: reference to new focus of AppleEvents
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'ppnt'
         _subcode = 'sttg'
         aetools.keysubst(_arguments, self._argmap_SwitchTellTarget)
@@ -31,11 +21,6 @@ class PowerPlant_Events:
     _argmap_select = {'data': 'data'}
 
     def select(self, _object, _attributes={}, **_arguments):
-        """select: Sets the present selection
-        Required argument: object to select or container of sub-objects to select
-        Keyword argument data: sub-object(s) to select
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'misc'
         _subcode = 'slct'
         aetools.keysubst(_arguments, self._argmap_select)

@@ -1,17 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/BootcampMarkers.py
 import weakref
+import base64
+import cPickle
+from functools import partial
 import Math
 import BigWorld
 import SoundGroups
-import base64
-import cPickle
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-from helpers import dependency, i18n
+from helpers import dependency
 from account_helpers.settings_core import ISettingsCore
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
 from skeletons.gui.battle_session import IBattleSessionProvider
-from functools import partial
 import TriggersManager
 import BattleReplay
 from BootCampEvents import g_bootcampEvents

@@ -26,9 +26,6 @@ def getLanguageCode():
 
 
 def getClientLanguage():
-    """
-    Return client string of language code
-    """
     lng = constants.DEFAULT_LANGUAGE
     try:
         lng = getLanguageCode()
@@ -63,11 +60,6 @@ def getLocalizedData(dataDict, key, defVal=''):
 
 
 def int2roman(number):
-    """
-    Convert arabic number to roman number
-    @param number: int - number
-    @return: string - roman number
-    """
     numerals = {1: 'I',
      4: 'IV',
      5: 'V',
@@ -91,22 +83,16 @@ def int2roman(number):
 
 
 def getClientVersion():
-    """ Get client version including build number.
-    """
     sec = ResMgr.openSection(VERSION_FILE_PATH)
     return sec.readString('version')
 
 
 def getShortClientVersion():
-    """ Get client version excluding build number.
-    """
     sec = ResMgr.openSection(VERSION_FILE_PATH)
     return sec.readString('version').split('#')[0]
 
 
 def getFullClientVersion():
-    """ Get client version including app name and build number.
-    """
     sec = ResMgr.openSection(VERSION_FILE_PATH)
     version = i18n.makeString(sec.readString('appname')) + ' ' + sec.readString('version')
     return version
@@ -159,14 +145,17 @@ _g_alphabetOrderExcept = {1105: 1077.5,
  1108: 1077.5}
 
 def _getSymOrderIdx(symbol):
-    assert isinstance(symbol, types.UnicodeType)
+    if not isinstance(symbol, types.UnicodeType):
+        raise UserWarning('')
     symIdx = ord(symbol)
     return _g_alphabetOrderExcept.get(symIdx, symIdx)
 
 
 def strcmp(word1, word2):
-    assert isinstance(word1, types.UnicodeType)
-    assert isinstance(word2, types.UnicodeType)
+    if not isinstance(word1, types.UnicodeType):
+        raise UserWarning('First argument should be unicode')
+    if not isinstance(word2, types.UnicodeType):
+        raise UserWarning('Second argument should be unicode')
     for sym1, sym2 in zip(word1, word2):
         if sym1 != sym2:
             return int(round(_getSymOrderIdx(sym1) - _getSymOrderIdx(sym2)))
@@ -179,9 +168,6 @@ def setHangarVisibility(isVisible):
 
 
 def getHelperServicesConfig(manager):
-    """ Configures services for package gui.
-    :param manager: helpers.dependency.DependencyManager.
-    """
     from helpers.statistics import StatisticsCollector
     from skeletons.helpers.statistics import IStatisticsCollector
     collector = StatisticsCollector()

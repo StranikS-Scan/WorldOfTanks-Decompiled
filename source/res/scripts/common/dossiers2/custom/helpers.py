@@ -34,10 +34,7 @@ def getMechanicEngineerRequirements(defaultUnlocks, unlocks, nationID=-1):
 
 def getRecordMaxValue(block, record):
     recordPacking = RECORDS[RECORD_INDICES[block, record]]
-    if recordPacking[2] == 'b' or recordPacking[2] == 'bs':
-        return 1
-    assert recordPacking[2] == 'p'
-    return recordPacking[4]
+    return 1 if recordPacking[2] == 'b' or recordPacking[2] == 'bs' else recordPacking[4]
 
 
 def updateTankExpert(dossierDescr, vehTypeFrags, nationID):

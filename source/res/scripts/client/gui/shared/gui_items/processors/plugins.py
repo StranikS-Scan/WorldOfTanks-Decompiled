@@ -37,21 +37,13 @@ def makeError(msg='', **kwargs):
 
 class ProcessorPlugin(object):
 
-    class TYPE:
-        """ Plugins type. """
+    class TYPE(object):
         VALIDATOR = 0
         CONFIRMATOR = 1
 
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, pluginType, isAsync=False, isEnabled=True):
-        """
-        Ctor.
-        
-        @param pluginType: <ProcessorPlugin.TYPE.*> plugin type
-        @param isAsync: <bool> asynchronous or not
-        @param isEnabled: <bool> plugin enabled or not
-        """
         self.type = pluginType
         self.isAsync = isAsync
         self.isEnabled = isEnabled
@@ -135,7 +127,7 @@ class VehicleRoleValidator(SyncValidator):
             return makeError('invalid_vehicle')
         else:
             if self.vehicle is not None:
-                mainRoles = set(map(lambda r: r[0], self.vehicle.descriptor.type.crewRoles))
+                mainRoles = set((r[0] for r in self.vehicle.descriptor.type.crewRoles))
                 if self.role not in mainRoles:
                     return makeError('invalid_role')
                 td = self.tankman.descriptor
@@ -239,9 +231,6 @@ class CompatibilityValidator(SyncValidator):
         self.slotIdx = slotIdx
 
     def _checkCompatibility(self):
-        """
-        @rtype : tuple
-        """
         return makeSuccess()
 
     def _validate(self):
@@ -264,9 +253,6 @@ class TurretCompatibilityInstallValidator(SyncValidator):
         self.gunCD = gunCD
 
     def _checkCompatibility(self):
-        """
-        @rtype : tuple
-        """
         return self.module.mayInstall(self.vehicle, 0, self.gunCD)
 
     def _validate(self):
@@ -281,9 +267,6 @@ class CompatibilityRemoveValidator(CompatibilityValidator):
 
 
 class MoneyValidator(SyncValidator):
-    """
-    Validates money. Possible errors: see GUI_ITEM_ECONOMY_CODE._NOT_ENOUGH_MONEY list.
-    """
 
     def __init__(self, price):
         super(MoneyValidator, self).__init__()
@@ -367,9 +350,6 @@ class FreeTankmanValidator(SyncValidator):
 
 
 class TankmanDropSkillValidator(SyncValidator):
-    """
-    Validates that there is at least one skill for dropping.
-    """
 
     def __init__(self, tankman, isEnabled=True):
         super(TankmanDropSkillValidator, self).__init__(isEnabled)
@@ -504,27 +484,18 @@ class BufferOverflowConfirmator(I18nMessageAbstractConfirmator):
 
 
 class IconPriceMessageConfirmator(I18nMessageAbstractConfirmator):
-    """
-    Invoke dialog window contains icon, text and component with price
-    """
 
     def _makeMeta(self):
         return IconPriceDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
 
 
 class DemountDeviceConfirmator(IconPriceMessageConfirmator):
-    """
-    Invoke dialog window contains icon, text and component with price
-    """
 
     def _makeMeta(self):
         return DemountDeviceDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
 
 
 class IconMessageConfirmator(I18nMessageAbstractConfirmator):
-    """
-    Invoke dialog window contains icon, text and component with price
-    """
 
     def _makeMeta(self):
         return IconDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)

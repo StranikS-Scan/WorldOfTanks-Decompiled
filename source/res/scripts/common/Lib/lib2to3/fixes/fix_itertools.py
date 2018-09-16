@@ -1,13 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_itertools.py
-""" Fixer for itertools.(imap|ifilter|izip) --> (map|filter|zip) and
-itertools.ifilterfalse --> itertools.filterfalse (bugs 2360-2363)
-
-imports from itertools are fixed in fix_itertools_import.py
-
-If itertools is imported as something else (ie: import itertools as it;
-it.izip(spam, eggs)) method calls will not get fixed.
-"""
 from .. import fixer_base
 from ..fixer_util import Name
 

@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/CLUBS_QUESTS.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class CLUBS_QUESTS(object):
     DIVISION_0_NAME = '#clubs_quests:division/0/name'

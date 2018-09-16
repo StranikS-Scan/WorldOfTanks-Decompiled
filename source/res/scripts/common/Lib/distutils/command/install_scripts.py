@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/install_scripts.py
-"""distutils.command.install_scripts
-
-Implements the Distutils 'install_scripts' command, for installing
-Python scripts."""
 __revision__ = '$Id$'
 import os
 from distutils.core import Command

@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/battle_results_processors.py
 import time
-from arena_achievements import INBATTLE_SERIES
 from constants import DESTR_CODES_BY_TAGS, GLOBAL_MAP_DIVISION, DOSSIER_TYPE
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
+from debug_utils import LOG_DEBUG_DEV
 from dossiers2.custom import records
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import isVehicleSPG, getInBattleSeriesIndex
-from dossiers2.custom.records import RECORD_DB_IDS as DOSSIER_REC_DB_IDS
-from debug_utils import *
 _saveRecordsInAccountDescr = {BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15: [{'block': 'achievements',
                                           'records': ('maxInvincibleSeries', 'maxDiehardSeries', 'maxSniperSeries', 'maxKillingSeries', 'maxPiercingSeries', 'maxAimerSeries')}],
  BONUS_CAPS.DOSSIER_ACHIEVEMENTS_7X7: [{'block': 'achievements7x7',
@@ -80,8 +78,6 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
             elif division == GLOBAL_MAP_DIVISION.ABSOLUTE:
                 blockName = 'globalMapAbsolute'
                 blockNameMax = 'maxGlobalMapAbsolute'
-            else:
-                assert False
             __updateAggregatedValues(dossierDescr.expand(blockName), dossierDescr.expand(blockName), battleResults, dossierXP, frags8p)
             for record in __updateMaxValues(dossierDescr.expand(blockNameMax), battleResults, dossierXP):
                 dossierDescr[blockNameMax][record] = maxVehResults[record]
@@ -184,7 +180,6 @@ def updatePotapovQuestAchievements(accDossierDescr, progress, curQuest, bonusCou
                 continue
             tilesCount += 1
             questList = potapov_quests.g_cache.questListByTileIDChainID(tileID, chainID)
-            assert len(questList) == chainSize
             for potapovQuestID in questList:
                 flags, state = progress.get(potapovQuestID)
                 if state is None:
@@ -376,11 +371,6 @@ def __updateMaxValuesWithAvatar(block, results):
 
 
 def __updateMarksOnGun(dossierDescr, results):
-    """
-    Updates marksOnGun medal for vehicle and related statistics.
-    :param dossierDescr: vehicle dossier.
-    :param results: battle results.
-    """
     if not BONUS_CAPS.checkAny(results['bonusType'], BONUS_CAPS.DOSSIER_MARKS_ON_GUN):
         return
     achievements = dossierDescr['achievements']
@@ -393,11 +383,6 @@ def __updateMarksOnGun(dossierDescr, results):
 
 
 def __updateMarkOfMastery(dossierDescr, results):
-    """
-    Updates markOfMastery medal for vehicle.
-    :param dossierDescr: vehicle dossier.
-    :param results: battle results.
-    """
     if not BONUS_CAPS.checkAny(results['bonusType'], BONUS_CAPS.DOSSIER_MARK_OF_MASTERY):
         return
     achievements = dossierDescr['achievements']
@@ -445,7 +430,6 @@ def _updateInBattleSeries(achievements, seriesName, results):
 
 
 def __updateAccountDossierCuts(dossierDescr, results, dossierXP, vehTypeCompDescr, vehDossierDescr):
-    assert vehDossierDescr is not None
     bonusType = results['bonusType']
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_15X15):
         a15x15Cut = dossierDescr['a15x15Cut']
@@ -506,7 +490,6 @@ def __updateAccountDossierCuts(dossierDescr, results, dossierXP, vehTypeCompDesc
         if vehDossierDescr['achievements']['markOfMastery'] != 0:
             markOfMasteryCut = dossierDescr['markOfMasteryCut']
             markOfMasteryCut[vehTypeCompDescr] = vehDossierDescr['achievements']['markOfMastery']
-    return
 
 
 def __updateTankmanDossierImpl(dossierDescr, results):

@@ -4,10 +4,6 @@ from gui.battle_control.arena_visitor import createByAvatar
 from gui.prb_control.storages.local_storage import LocalStorage
 
 class RankedStorage(LocalStorage):
-    """
-    This storage hold session-like ranked battle selection. No server or client physical storage,
-    only per-launch basis and per-battle selection.
-    """
     __slots__ = ('_isSelected',)
 
     def __init__(self):
@@ -27,9 +23,5 @@ class RankedStorage(LocalStorage):
         return self._isSelected
 
     def onAvatarBecomePlayer(self):
-        """
-        This method is needed for settings storage state in selected mode
-        to get player back into ranked from battle.
-        """
         arenaVisitor = createByAvatar()
         self._isSelected = arenaVisitor.gui.isRankedBattle()

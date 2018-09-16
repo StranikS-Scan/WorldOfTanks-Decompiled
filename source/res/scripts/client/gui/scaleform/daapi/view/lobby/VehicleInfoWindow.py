@@ -84,9 +84,5 @@ class VehicleInfoWindow(VehicleInfoMeta):
          'tooltip': tooltip})
 
     def __onVehCompareBasketChanged(self, changedData):
-        """
-        gui.game_control.VehComparisonBasket.onChange event handler
-        :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData
-        """
         if changedData.isFullChanged:
             self.__updateCompareButtonState()

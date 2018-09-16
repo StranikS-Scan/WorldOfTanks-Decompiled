@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_filelist.py
-"""Tests for distutils.filelist."""
 import os
 import re
 import unittest
@@ -13,7 +12,6 @@ from distutils.tests import support
 MANIFEST_IN = 'include ok\ninclude xo\nexclude xo\ninclude foo.tmp\ninclude buildout.cfg\nglobal-include *.x\nglobal-include *.txt\nglobal-exclude *.tmp\nrecursive-include f *.oo\nrecursive-exclude global *.x\ngraft dir\nprune dir3\n'
 
 def make_local_path(s):
-    """Converts '/' in a string to os.sep"""
     return s.replace('/', os.sep)
 
 

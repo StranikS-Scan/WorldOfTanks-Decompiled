@@ -8,8 +8,7 @@ from helpers import dependency
 from gui.sounds.ambients import BattleResultsEnv
 import SoundGroups
 from bootcamp.BootCampEvents import g_bootcampEvents
-from gui.app_loader import g_appLoader
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import g_appLoader, settings as app_settings
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from skeletons.gui.battle_results import IBattleResultsService
 from bootcamp.Bootcamp import g_bootcamp
@@ -23,8 +22,10 @@ class BCBattleResult(BCBattleResultMeta):
 
     def __init__(self, ctx=None):
         super(BCBattleResult, self).__init__()
-        assert 'arenaUniqueID' in ctx
-        assert ctx['arenaUniqueID'], 'arenaUniqueID must be greater than 0'
+        if 'arenaUniqueID' not in ctx:
+            raise UserWarning('Key "arenaUniqueID" is not found in context', ctx)
+        if not ctx['arenaUniqueID']:
+            raise UserWarning('Value of "arenaUniqueID" must be greater than 0')
         self.__arenaUniqueID = ctx['arenaUniqueID']
         self.__populated = False
         self.__isResultsSet = False
@@ -91,7 +92,7 @@ class BCBattleResult(BCBattleResultMeta):
     def __setBattleResults(self):
         if not self.__isResultsSet:
             self.__isResultsSet = True
-            g_appLoader.attachCursor(APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
+            g_appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
             g_bootcampEvents.onResultScreenFinished += self.onResultScreenFinished
             vo = self.battleResults.getResultsVO(self.__arenaUniqueID)
             self.as_setDataS(vo)

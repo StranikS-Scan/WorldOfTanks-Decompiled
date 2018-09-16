@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/GoodiesRequester.py
+from collections import defaultdict, namedtuple
 import BigWorld
 from adisp import async
-from collections import defaultdict, namedtuple
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IGoodiesRequester
 GoodieVariable = namedtuple('GoodieVariable', 'state finishTime count')

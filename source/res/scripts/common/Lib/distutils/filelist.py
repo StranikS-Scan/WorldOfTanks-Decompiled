@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/filelist.py
-"""distutils.filelist
-
-Provides the FileList class, used for poking about the filesystem
-and building lists of files.
-"""
 __revision__ = '$Id$'
 import os, re
 import fnmatch
@@ -13,19 +8,6 @@ from distutils.errors import DistutilsTemplateError, DistutilsInternalError
 from distutils import log
 
 class FileList:
-    """A list of files built by on exploring the filesystem and filtered by
-    applying various patterns to what we find there.
-    
-    Instance attributes:
-      dir
-        directory from which files will be taken -- only used if
-        'allfiles' not supplied to constructor
-      files
-        list of filenames currently being built/filtered/manipulated
-      allfiles
-        complete list of files under consideration (ie. without any
-        filtering applied)
-    """
 
     def __init__(self, warn=None, debug_print=None):
         self.allfiles = None
@@ -39,9 +21,6 @@ class FileList:
         self.allfiles = findall(dir)
 
     def debug_print(self, msg):
-        """Print 'msg' to stdout if the global DEBUG (taken from the
-        DISTUTILS_DEBUG environment variable) flag is true.
-        """
         from distutils.debug import DEBUG
         if DEBUG:
             print msg
@@ -139,31 +118,6 @@ class FileList:
         return
 
     def include_pattern(self, pattern, anchor=1, prefix=None, is_regex=0):
-        """Select strings (presumably filenames) from 'self.files' that
-        match 'pattern', a Unix-style wildcard (glob) pattern.
-        
-        Patterns are not quite the same as implemented by the 'fnmatch'
-        module: '*' and '?'  match non-special characters, where "special"
-        is platform-dependent: slash on Unix; colon, slash, and backslash on
-        DOS/Windows; and colon on Mac OS.
-        
-        If 'anchor' is true (the default), then the pattern match is more
-        stringent: "*.py" will match "foo.py" but not "foo/bar.py".  If
-        'anchor' is false, both of these will match.
-        
-        If 'prefix' is supplied, then only filenames starting with 'prefix'
-        (itself a pattern) and ending with 'pattern', with anything in between
-        them, will match.  'anchor' is ignored in this case.
-        
-        If 'is_regex' is true, 'anchor' and 'prefix' are ignored, and
-        'pattern' is assumed to be either a string containing a regex or a
-        regex object -- no translation is done, the regex is just compiled
-        and used as-is.
-        
-        Selected strings will be added to self.files.
-        
-        Return 1 if files are found.
-        """
         files_found = 0
         pattern_re = translate_pattern(pattern, anchor, prefix, is_regex)
         self.debug_print("include_pattern: applying regex r'%s'" % pattern_re.pattern)
@@ -178,13 +132,6 @@ class FileList:
         return files_found
 
     def exclude_pattern(self, pattern, anchor=1, prefix=None, is_regex=0):
-        """Remove strings (presumably filenames) from 'files' that match
-        'pattern'.
-        
-        Other parameters are the same as for 'include_pattern()', above.
-        The list 'self.files' is modified in place. Return 1 if files are
-        found.
-        """
         files_found = 0
         pattern_re = translate_pattern(pattern, anchor, prefix, is_regex)
         self.debug_print("exclude_pattern: applying regex r'%s'" % pattern_re.pattern)
@@ -198,9 +145,6 @@ class FileList:
 
 
 def findall(dir=os.curdir):
-    """Find all files under 'dir' and return the list of full filenames
-    (relative to 'dir').
-    """
     from stat import ST_MODE, S_ISREG, S_ISDIR, S_ISLNK
     list = []
     stack = [dir]
@@ -225,12 +169,6 @@ def findall(dir=os.curdir):
 
 
 def glob_to_re(pattern):
-    """Translate a shell-like glob pattern to a regular expression.
-    
-    Return a string containing the regex.  Differs from
-    'fnmatch.translate()' in that '*' does not match "special characters"
-    (which are platform-specific).
-    """
     pattern_re = fnmatch.translate(pattern)
     sep = os.sep
     if os.sep == '\\':
@@ -241,13 +179,6 @@ def glob_to_re(pattern):
 
 
 def translate_pattern(pattern, anchor=1, prefix=None, is_regex=0):
-    """Translate a shell-like wildcard pattern to a compiled regular
-    expression.
-    
-    Return the compiled regex.  If 'is_regex' true,
-    then 'pattern' is directly compiled to a regex (if it's a string)
-    or just returned as-is (assumes it's a regex object).
-    """
     if is_regex:
         if isinstance(pattern, str):
             return re.compile(pattern)

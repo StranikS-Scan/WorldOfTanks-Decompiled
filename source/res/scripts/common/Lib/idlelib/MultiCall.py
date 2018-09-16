@@ -1,35 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/MultiCall.py
-"""
-MultiCall - a class which inherits its methods from a Tkinter widget (Text, for
-example), but enables multiple calls of functions per virtual event - all
-matching events will be called, not only the most specific one. This is done
-by wrapping the event functions - event_add, event_delete and event_info.
-MultiCall recognizes only a subset of legal event sequences. Sequences which
-are not recognized are treated by the original Tk handling mechanism. A
-more-specific event will be called before a less-specific event.
-
-The recognized sequences are complete one-event sequences (no emacs-style
-Ctrl-X Ctrl-C, no shortcuts like <3>), for all types of events.
-Key/Button Press/Release events can have modifiers.
-The recognized modifiers are Shift, Control, Option and Command for Mac, and
-Control, Alt, Shift, Meta/M for other platforms.
-
-For all events which were handled by MultiCall, a new member is added to the
-event instance passed to the binded functions - mc_type. This is one of the
-event type constants defined in this module (such as MC_KEYPRESS).
-For Key/Button events (which are handled by MultiCall and may receive
-modifiers), another member is added - mc_state. This member gives the state
-of the recognized modifiers, as a combination of the modifier constants
-also defined in this module (for example, MC_SHIFT).
-Using these members is absolutely portable.
-
-The order by which events are called is defined by these rules:
-1. A more-specific event will be called before a less-specific event.
-2. A recently-binded event will be called before a previously-binded event,
-   unless this conflicts with the first rule.
-Each function will be called at most once for each event.
-"""
 import sys
 import string
 import re
@@ -127,12 +97,8 @@ _states = range(1 << len(_modifiers))
 _state_names = [ ''.join((m[0] + '-' for i, m in enumerate(_modifiers) if 1 << i & s)) for s in _states ]
 
 def expand_substates(states):
-    """For each item of states return a list containing all combinations of
-    that item with individual bits reset, sorted by the number of set bits.
-    """
 
     def nbits(n):
-        """number of bits set in n base 2"""
         nb = 0
         while n:
             n, rem = divmod(n, 2)
@@ -264,11 +230,6 @@ _keysym_re = re.compile('^\\w+$')
 _button_re = re.compile('^[1-5]$')
 
 def _parse_sequence(sequence):
-    """Get a string which should describe an event sequence. If it is
-    successfully parsed as one, return a tuple containing the state (as an int),
-    the event type (as an index of _types), and the detail - None if none, or a
-    string if there is one. If the parsing is unsuccessful, return None.
-    """
     if not sequence or sequence[0] != '<' or sequence[-1] != '>':
         return
     else:
@@ -311,15 +272,10 @@ def _triplet_to_sequence(triplet):
 _multicall_dict = {}
 
 def MultiCallCreator(widget):
-    """Return a MultiCall class which inherits its methods from the
-    given widget class (for example, Tkinter.Text). This is used
-    instead of a templating mechanism.
-    """
     if widget in _multicall_dict:
         return _multicall_dict[widget]
 
     class MultiCall(widget):
-        assert issubclass(widget, Tkinter.Misc)
 
         def __init__(self, *args, **kwargs):
             widget.__init__(self, *args, **kwargs)

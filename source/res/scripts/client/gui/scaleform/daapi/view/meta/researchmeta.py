@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ResearchMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.techtree.research_view import ResearchView
 
 class ResearchMeta(ResearchView):
@@ -36,9 +32,6 @@ class ResearchMeta(ResearchView):
         return self.flashObject.as_setFreeXP(freeXP) if self._isDAAPIInited() else None
 
     def as_setInstalledItemsS(self, data):
-        """
-        :param data: Represented by Array (AS)
-        """
         return self.flashObject.as_setInstalledItems(data) if self._isDAAPIInited() else None
 
     def as_setWalletStatusS(self, walletStatus):

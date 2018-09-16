@@ -25,8 +25,10 @@ class BattleResultsWindow(BattleResultsMeta):
 
     def __init__(self, ctx):
         super(BattleResultsWindow, self).__init__()
-        assert 'arenaUniqueID' in ctx
-        assert ctx['arenaUniqueID'], 'arenaUniqueID must be greater than 0'
+        if 'arenaUniqueID' not in ctx:
+            raise UserWarning('Key "arenaUniqueID" is not found in context', ctx)
+        if not ctx['arenaUniqueID']:
+            raise UserWarning('Value of "arenaUniqueID" must be greater than 0')
         self.__arenaUniqueID = ctx['arenaUniqueID']
         self.__dataSet = False
 
@@ -78,8 +80,10 @@ class BattleResultsWindow(BattleResultsMeta):
     @event_bus_handlers.eventBusHandler(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, EVENT_BUS_SCOPE.LOBBY)
     def __handleBattleResultsPosted(self, event):
         ctx = event.ctx
-        assert 'arenaUniqueID' in ctx
-        assert ctx['arenaUniqueID']
+        if 'arenaUniqueID' not in ctx:
+            raise UserWarning('Key "arenaUniqueID" is not found in context', ctx)
+        if not ctx['arenaUniqueID']:
+            raise UserWarning('Value of "arenaUniqueID" must be greater than 0')
         if self.__arenaUniqueID == ctx['arenaUniqueID']:
             self.__setBattleResults()
 

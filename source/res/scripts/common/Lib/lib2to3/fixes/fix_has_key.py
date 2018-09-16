@@ -1,32 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_has_key.py
-"""Fixer for has_key().
-
-Calls to .has_key() methods are expressed in terms of the 'in'
-operator:
-
-    d.has_key(k) -> k in d
-
-CAVEATS:
-1) While the primary target of this fixer is dict.has_key(), the
-   fixer will change any has_key() method call, regardless of its
-   class.
-
-2) Cases like this will not be converted:
-
-    m = d.has_key
-    if m(k):
-        ...
-
-   Only *calls* to has_key() are converted. While it is possible to
-   convert the above to something like
-
-    m = d.__contains__
-    if m(k):
-        ...
-
-   this is currently not done.
-"""
 from .. import pytree
 from ..pgen2 import token
 from .. import fixer_base
@@ -37,7 +10,6 @@ class FixHasKey(fixer_base.BaseFix):
     PATTERN = "\n    anchor=power<\n        before=any+\n        trailer< '.' 'has_key' >\n        trailer<\n            '('\n            ( not(arglist | argument<any '=' any>) arg=any\n            | arglist<(not argument<any '=' any>) arg=any ','>\n            )\n            ')'\n        >\n        after=any*\n    >\n    |\n    negation=not_test<\n        'not'\n        anchor=power<\n            before=any+\n            trailer< '.' 'has_key' >\n            trailer<\n                '('\n                ( not(arglist | argument<any '=' any>) arg=any\n                | arglist<(not argument<any '=' any>) arg=any ','>\n                )\n                ')'\n            >\n        >\n    >\n    "
 
     def transform(self, node, results):
-        assert results
         syms = self.syms
         if node.parent.type == syms.not_test and self.pattern.match(node.parent):
             return None

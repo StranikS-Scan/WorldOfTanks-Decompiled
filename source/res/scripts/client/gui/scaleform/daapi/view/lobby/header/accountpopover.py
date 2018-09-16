@@ -56,8 +56,9 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         self.destroy()
 
     def openClanStatistic(self):
-        if self.clansCtrl.isEnabled():
-            clan = self.clansCtrl.getAccountProfile()
+        isClanFeaturesEnabled = self.lobbyContext.getServerSettings().clanProfile.isEnabled()
+        if isClanFeaturesEnabled:
+            clan = self.webCtrl.getAccountProfile()
             shared_events.showClanProfileWindow(clan.getClanDbID(), clan.getClanAbbrev())
         else:
             self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
@@ -96,7 +97,7 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
     def onEnqueued(self, queueType, *args):
         self.__updateButtonsStates()
 
-    def onClanStateChanged(self, oldStateID, newStateID):
+    def onClanEnableChanged(self, enabled):
         self.__syncUserInfo()
         self.__setClanData()
 
@@ -133,7 +134,7 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
 
     def _getMyInvitesBtnParams(self):
-        if self.clansCtrl.isAvailable():
+        if self.webCtrl.isAvailable():
             inviteBtnEnabled = True
             inviteBtnTooltip = TOOLTIPS.HEADER_ACCOUNTPOPOVER_INVITEBTN
         else:
@@ -143,7 +144,7 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
          'inviteBtnTooltip': inviteBtnTooltip}
 
     def _getClanBtnsParams(self, appsCount):
-        if self.clansCtrl.isAvailable():
+        if self.webCtrl.isAvailable():
             isAvailable = True
             searchClanTooltip = TOOLTIPS.HEADER_ACCOUNTPOPOVER_SEARCHCLAN
             requestInviteBtnTooltip = TOOLTIPS.HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN
@@ -154,8 +155,8 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
             requestInviteBtnTooltip = TOOLTIPS.HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN_UNAVAILABLE
             btnTooltip = str()
         btnEnabled = not BigWorld.player().isLongDisconnectedFromCenter and self.__infoBtnEnabled
-        if self.clansCtrl.isEnabled():
-            btnEnabled = self.clansCtrl.isAvailable()
+        if self.webCtrl.isEnabled():
+            btnEnabled = self.webCtrl.isAvailable()
             if not btnEnabled:
                 btnTooltip = TOOLTIPS.HEADER_ACCOUNTPOPOVER_CLANPROFILE_UNAVAILABLE
         elif not self.lobbyContext.getServerSettings().isStrongholdsEnabled():
@@ -207,7 +208,7 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
 
     def __setUserData(self):
         userName = BigWorld.player().name
-        clanAbbrev = self.clansCtrl.getAccountProfile().getClanAbbrev()
+        clanAbbrev = self.webCtrl.getAccountProfile().getClanAbbrev()
         self.__userData = {'fullName': self.lobbyContext.getPlayerFullName(userName, clanAbbrev=clanAbbrev),
          'userName': userName,
          'clanAbbrev': clanAbbrev}
@@ -230,10 +231,10 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         return
 
     def __setClanData(self):
-        profile = self.clansCtrl.getAccountProfile()
+        profile = self.webCtrl.getAccountProfile()
         isInClan = profile.isInClan()
         clanDossier = profile.getClanDossier()
-        isClanFeaturesEnabled = self.clansCtrl.isEnabled()
+        isClanFeaturesEnabled = self.lobbyContext.getServerSettings().clanProfile.isEnabled()
         if isClanFeaturesEnabled:
             btnLabel = makeString(MENU.HEADER_ACCOUNT_POPOVER_CLAN_ENABLED_BTNLABEL)
         else:
@@ -259,7 +260,7 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         else:
             requestInviteBtnVisible = False
             clanBtnsParams = self._getClanBtnsParams(clans_fmts.formatDataToString(None))
-            clanProfile = self.clansCtrl.getAccountProfile()
+            clanProfile = self.webCtrl.getAccountProfile()
             invitesCount = 0
             if not clanProfile.isInClan():
                 invitesCount = clanProfile.getInvitesCount() or 0

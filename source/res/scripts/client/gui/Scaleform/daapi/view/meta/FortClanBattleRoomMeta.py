@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortClanBattleRoomMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyRoomView import BaseRallyRoomView
 
 class FortClanBattleRoomMeta(BaseRallyRoomView):
@@ -21,9 +17,6 @@ class FortClanBattleRoomMeta(BaseRallyRoomView):
         return self.flashObject.as_updateTeamHeaderText(value) if self._isDAAPIInited() else None
 
     def as_setBattleRoomDataS(self, data):
-        """
-        :param data: Represented by FortClanBattleRoomVO (AS)
-        """
         return self.flashObject.as_setBattleRoomData(data) if self._isDAAPIInited() else None
 
     def as_updateReadyStatusS(self, mineValue, enemyValue):
@@ -33,37 +26,22 @@ class FortClanBattleRoomMeta(BaseRallyRoomView):
         return self.flashObject.as_updateReadyDirections(value) if self._isDAAPIInited() else None
 
     def as_setConfigureButtonStateS(self, data):
-        """
-        :param data: Represented by ActionButtonVO (AS)
-        """
         return self.flashObject.as_setConfigureButtonState(data) if self._isDAAPIInited() else None
 
     def as_setTimerDeltaS(self, data):
-        """
-        :param data: Represented by ClanBattleTimerVO (AS)
-        """
         return self.flashObject.as_setTimerDelta(data) if self._isDAAPIInited() else None
 
     def as_setDirectionS(self, value, animationNotAvailable):
         return self.flashObject.as_setDirection(value, animationNotAvailable) if self._isDAAPIInited() else None
 
     def as_setReservesEnabledS(self, data):
-        """
-        :param data: Represented by Array (AS)
-        """
         return self.flashObject.as_setReservesEnabled(data) if self._isDAAPIInited() else None
 
     def as_setReservesDataS(self, reservesData):
-        """
-        :param reservesData: Represented by Vector.<DeviceSlotVO> (AS)
-        """
         return self.flashObject.as_setReservesData(reservesData) if self._isDAAPIInited() else None
 
     def as_setOpenedS(self, buttonLabel, statusLabel, tooltipLabel):
         return self.flashObject.as_setOpened(buttonLabel, statusLabel, tooltipLabel) if self._isDAAPIInited() else None
 
     def as_setTableHeaderS(self, data):
-        """
-        :param data: Represented by Vector.<NormalSortingBtnVO> (AS)
-        """
         return self.flashObject.as_setTableHeader(data) if self._isDAAPIInited() else None

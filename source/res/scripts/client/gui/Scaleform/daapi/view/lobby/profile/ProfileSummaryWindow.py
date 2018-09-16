@@ -2,10 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSummaryWindow.py
 import BigWorld
 from adisp import process
-from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import event_dispatcher as shared_events
-from gui.shared.event_bus import EVENT_BUS_SCOPE
 from helpers.i18n import makeString as _ms
 from gui.clans.clan_helpers import ClanListener
 from gui.clans.formatters import getClanRoleString
@@ -14,7 +12,6 @@ from gui.shared.formatters import text_styles
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from gui.Scaleform.daapi.view.meta.ProfileSummaryWindowMeta import ProfileSummaryWindowMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
-from gui.shared import events
 
 class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClanEmblemsHelper, ClanListener):
 
@@ -39,7 +36,7 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClanEmblemsHelper, ClanList
             path = self.getMemoryTexturePath(emblem)
             self.as_setClanEmblemS(path)
 
-    def onClanStateChanged(self, oldStateID, newStateID):
+    def onClanEnableChanged(self, enabled):
         self._requestClanInfo()
 
     def onAccountClanProfileChanged(self, profile):
@@ -59,7 +56,7 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClanEmblemsHelper, ClanList
 
     def _requestClanInfo(self):
         isShowClanProfileBtnVisible = False
-        if self.clansCtrl.isEnabled():
+        if self.lobbyContext.getServerSettings().clanProfile.isEnabled():
             isShowClanProfileBtnVisible = True
         clanDBID, clanInfo = self.itemsCache.items.getClanInfo(self._userID)
         if clanInfo is not None:
@@ -82,7 +79,7 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClanEmblemsHelper, ClanList
         self.__rating = yield req.getGlobalRating()
 
     def _getClanBtnParams(self, isVisible):
-        if self.clansCtrl.isAvailable():
+        if self.webCtrl.isAvailable():
             btnEnabled = True
             btnTooltip = None
         else:

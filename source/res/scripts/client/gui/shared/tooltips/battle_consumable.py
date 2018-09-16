@@ -10,8 +10,6 @@ from helpers import int2roman
 from helpers.i18n import makeString as _ms
 
 class BattleConsumableTooltipData(BlocksTooltipData):
-    """ Tooltip for battle consumables (e.g artillery, bomber).
-    """
 
     def __init__(self, context):
         super(BattleConsumableTooltipData, self).__init__(context, TOOLTIP_TYPE.EQUIPMENT)

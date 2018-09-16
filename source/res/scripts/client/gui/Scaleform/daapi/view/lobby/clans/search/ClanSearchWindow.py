@@ -6,7 +6,8 @@ from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.clans.clan_helpers import ClanListener, ClanFinder
 from gui.clans.items import ClanCommonData, formatField
 from gui.clans import formatters as clans_fmts
-from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, CLIENT_CLAN_RESTRICTIONS as _CCR
+from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as _CCR
+from gui.wgcg.settings import WebRequestDataType
 from gui.Scaleform.daapi.view.meta.ClanSearchWindowMeta import ClanSearchWindowMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
@@ -34,14 +35,14 @@ def _packHeaderColumnData(columnID, label, buttonWidth, tooltip, showSeparator=T
 
 
 class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
-    __coolDownRequests = [CLAN_REQUESTED_DATA_TYPE.CLAN_RATINGS, CLAN_REQUESTED_DATA_TYPE.SEARCH_CLANS, CLAN_REQUESTED_DATA_TYPE.GET_RECOMMENDED_CLANS]
+    __coolDownRequests = [WebRequestDataType.CLAN_RATINGS, WebRequestDataType.SEARCH_CLANS, WebRequestDataType.GET_RECOMMENDED_CLANS]
     MIN_CHARS_FOR_SEARCH = 2
 
     def __init__(self, ctx):
         super(ClanSearchWindow, self).__init__()
-        self.__clanFinder = ClanFinder(self.clansCtrl, None, _SEARCH_LIMIT)
+        self.__clanFinder = ClanFinder(self.webCtrl, None, _SEARCH_LIMIT)
         self.__clanFinder.init()
-        self._cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.CLAN)
+        self._cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.WGCG)
         self.__isFirstPageRequested = False
         self.__invitesLimitReached = False
         return
@@ -49,11 +50,9 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
     def onWindowClose(self):
         self.destroy()
 
-    def onClanStateChanged(self, oldStateID, newStateID):
-        if not self.clansCtrl.isEnabled():
+    def onClanEnableChanged(self, enabled):
+        if not enabled:
             self.onWindowClose()
-        if not self.clansCtrl.isAvailable():
-            pass
 
     def search(self, text):
         symbolsCount = len(text.decode('utf8'))
@@ -88,8 +87,8 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
         self.__initControls()
         self._updateControlsState()
         self._cooldown.start()
-        if not self.clansCtrl.getAccountProfile().isSynced():
-            self.clansCtrl.getAccountProfile().resync()
+        if not self.webCtrl.getAccountProfile().isSynced():
+            self.webCtrl.getAccountProfile().resync()
         self.__clanFinder.setRecommended(True)
         self.__doSearch('')
 
@@ -98,7 +97,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
         self._cooldown = None
         self.stopClanListening()
         self.__clanFinder.onListUpdated -= self._onClansListUpdated
-        self.clansCtrl.clearClanCommonDataCache()
+        self.webCtrl.clearClanCommonDataCache()
         self._searchDP.fini()
         self._searchDP = None
         super(ClanSearchWindow, self)._dispose()
@@ -190,17 +189,14 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
 
     def __applyFoundData(self, data):
         self._showDummy(False)
-        self.clansCtrl.updateClanCommonDataCache([ ClanCommonData.fromClanSearchData(item) for item in data ])
+        self.webCtrl.updateClanCommonDataCache([ ClanCommonData.fromClanSearchData(item) for item in data ])
         self._searchDP.rebuildList(data)
         self.__lastSuccessfullyFoundClans = data
 
     def __doSearch(self, text):
-        """
-        :param text: - search criteria
-        """
         self.as_showWaitingS(WAITING.PREBATTLE_AUTO_SEARCH, {})
         self._searchDP.rebuildList(None)
-        isValid, reason = self.clansCtrl.getLimits().canSearchClans(text)
+        isValid, reason = self.webCtrl.getLimits().canSearchClans(text)
         if self.__clanFinder.isRecommended() or isValid:
             self._showDummy(False)
             self.__isFirstPageRequested = True
@@ -246,8 +242,8 @@ class _ClanSearchDataProvider(ListDAAPIDataProvider, ClanEmblemsHelper):
     def getSelectedIdx(self):
         return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1
 
-    def setSelectedID(self, id):
-        self.__selectedID = id
+    def setSelectedID(self, clanID):
+        self.__selectedID = clanID
 
     def getVO(self, index):
         vo = None

@@ -299,8 +299,8 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         return
 
     def __compareVehicleLimits(self, levelLimits):
-        levelsInfo = map(lambda v: (v['minLevel'], v['maxLevel']), levelLimits.values())
-        maxCurrentLevel = max(map(lambda v: v['maxCurLevel'], levelLimits.values()))
+        levelsInfo = [ (v['minLevel'], v['maxLevel']) for v in levelLimits.values() ]
+        maxCurrentLevel = max((v['maxCurLevel'] for v in levelLimits.values()))
         for lvlInfo in levelsInfo[1:]:
             if lvlInfo != levelsInfo[0]:
                 return (False, None)

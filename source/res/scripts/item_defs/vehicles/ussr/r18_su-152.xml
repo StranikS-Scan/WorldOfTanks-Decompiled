@@ -122,7 +122,7 @@
       <userString>	#ussr_vehicles:SU-152_mod_1943	</userString>
       <tags></tags>
       <level>	7	</level>
-      <price>	20090.0	</price>
+      <price>	20090	</price>
       <unlocks>
         <chassis>	SU-152_mod_1944	  <cost>	14765	</cost>
         </chassis>
@@ -163,7 +163,7 @@
         <right>	vehicles/russian/R18_SU-152/track/right.track	</right>
         <segmentLength>	0.149	</segmentLength>
         <segmentOffset>	0.019	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -382,7 +382,7 @@
       <userString>	#ussr_vehicles:SU-152_mod_1944	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	32710.0	</price>
+      <price>	32710	</price>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -419,7 +419,7 @@
         <right>	vehicles/russian/R18_SU-152/track/right.track	</right>
         <segmentLength>	0.149	</segmentLength>
         <segmentOffset>	0.019	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -662,7 +662,7 @@
       <guns>
         <_152mm_ML-20_mod_1937>	shared	  <maxAmmo>	26	</maxAmmo>
           <unlocks>
-            <gun>	_122mm_A-19	  <cost>	18600.0	</cost>
+            <gun>	_122mm_A-19	  <cost>	18600	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -711,7 +711,7 @@
         </_152mm_ML-20_mod_1937>
         <_122mm_A-19>	shared	  <maxAmmo>	28	</maxAmmo>
           <unlocks>
-            <gun>	_122mm_D-25C_mod1944	  <cost>	21400.0	</cost>
+            <gun>	_122mm_D-25C_mod1944	  <cost>	21400	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -833,12 +833,12 @@
   </fuelTanks>
   <radios>
     <_10R>	shared	  <unlocks>
-        <radio>	_10RK	  <cost>	3100.0	</cost>
+        <radio>	_10RK	  <cost>	3100	</cost>
         </radio>
       </unlocks>
     </_10R>
     <_10RK>	shared	  <unlocks>
-        <radio>	_12RT	  <cost>	5600.0	</cost>
+        <radio>	_12RT	  <cost>	5600	</cost>
         </radio>
       </unlocks>
     </_10RK>

@@ -6,7 +6,6 @@ from skeletons.gui.shared import IItemsCache
 from helpers import dependency
 from nations import NAMES as NATION_NAMES
 from bootcamp.Bootcamp import g_bootcamp
-from bootcamp.BootcampGarage import g_bootcampGarage
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 
@@ -15,7 +14,7 @@ class BCTechTree(TechTree):
 
     def goToNextVehicle(self, vehCD):
         if not g_bootcamp.isResearchFreeLesson():
-            nationData = g_bootcampGarage.getNationData()
+            nationData = g_bootcamp.getNationData()
             if nationData['vehicle_second'] == vehCD:
                 vehicle = self.itemsCache.items.getItemByCD(int(vehCD))
                 if vehicle.isInInventory:

@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/StdSuites/QuickDraw_Graphics_Suite.py
-"""Suite QuickDraw Graphics Suite: A set of basic classes for graphics
-Level 1, version 1
-
-Generated from /Volumes/Sap/System Folder/Extensions/AppleScript
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'qdrw'
@@ -15,66 +9,55 @@ class QuickDraw_Graphics_Suite_Events:
 
 
 class arc(aetools.ComponentItem):
-    """arc - An arc """
     want = 'carc'
 
 
 class _Prop_arc_angle(aetools.NProperty):
-    """arc angle - the angle of the arc in degrees """
     which = 'parc'
     want = 'fixd'
 
 
 class _Prop_bounds(aetools.NProperty):
-    """bounds - the smallest rectangle that contains the entire arc """
     which = 'pbnd'
     want = 'qdrt'
 
 
 class _Prop_definition_rect(aetools.NProperty):
-    """definition rect - the rectangle that contains the circle or oval used to define the arc """
     which = 'pdrt'
     want = 'qdrt'
 
 
 class _Prop_fill_color(aetools.NProperty):
-    """fill color - the fill color """
     which = 'flcl'
     want = 'cRGB'
 
 
 class _Prop_fill_pattern(aetools.NProperty):
-    """fill pattern - the fill pattern """
     which = 'flpt'
     want = 'cpix'
 
 
 class _Prop_pen_color(aetools.NProperty):
-    """pen color - the pen color """
     which = 'ppcl'
     want = 'cRGB'
 
 
 class _Prop_pen_pattern(aetools.NProperty):
-    """pen pattern - the pen pattern """
     which = 'pppa'
     want = 'cpix'
 
 
 class _Prop_pen_width(aetools.NProperty):
-    """pen width - the pen width """
     which = 'ppwd'
     want = 'shor'
 
 
 class _Prop_start_angle(aetools.NProperty):
-    """start angle - the angle that defines the start of the arc, in degrees """
     which = 'pang'
     want = 'fixd'
 
 
 class _Prop_transfer_mode(aetools.NProperty):
-    """transfer mode - the transfer mode """
     which = 'pptm'
     want = 'tran'
 
@@ -82,84 +65,70 @@ class _Prop_transfer_mode(aetools.NProperty):
 arcs = arc
 
 class drawing_area(aetools.ComponentItem):
-    """drawing area - Container for graphics and supporting information """
     want = 'cdrw'
 
 
 class _Prop_background_color(aetools.NProperty):
-    """background color - the color used to fill in unoccupied areas """
     which = 'pbcl'
     want = 'cRGB'
 
 
 class _Prop_background_pattern(aetools.NProperty):
-    """background pattern - the pattern used to fill in unoccupied areas """
     which = 'pbpt'
     want = 'cpix'
 
 
 class _Prop_color_table(aetools.NProperty):
-    """color table - the color table """
     which = 'cltb'
     want = 'clrt'
 
 
 class _Prop_default_font(aetools.NProperty):
-    """default font - the name of the default font for text objects """
     which = 'ptxf'
     want = 'itxt'
 
 
 class _Prop_default_location(aetools.NProperty):
-    """default location - the default location of each new graphic object """
     which = 'pnel'
     want = 'QDpt'
 
 
 class _Prop_default_size(aetools.NProperty):
-    """default size - the default size for text objects """
     which = 'ptps'
     want = 'fixd'
 
 
 class _Prop_name(aetools.NProperty):
-    """name - the name """
     which = 'pnam'
     want = 'itxt'
 
 
 class _Prop_ordering(aetools.NProperty):
-    """ordering - the ordered list of graphic objects in the drawing area """
     which = 'gobs'
     want = 'obj '
 
 
 class _Prop_pixel_depth(aetools.NProperty):
-    """pixel depth - the number of bits per pixel """
     which = 'pdpt'
     want = 'shor'
 
 
 class _Prop_style(aetools.NProperty):
-    """style - the default text style for text objects """
     which = 'txst'
     want = 'tsty'
 
 
 class _Prop_text_color(aetools.NProperty):
-    """text color - the default color for text objects """
     which = 'ptxc'
     want = 'cRGB'
 
 
 class _Prop_update_on_change(aetools.NProperty):
-    """update on change - Redraw after each change? """
     which = 'pupd'
     want = 'bool'
 
 
 class _Prop_writing_code(aetools.NProperty):
-    """writing code - the script system and language of text objects in the drawing area """
     which = 'psct'
     want = 'intl'
 
@@ -167,62 +136,52 @@ class _Prop_writing_code(aetools.NProperty):
 drawing_areas = drawing_area
 
 class graphic_objects(aetools.ComponentItem):
-    """graphic objects -  """
     want = 'cgob'
 
 
 graphic_object = graphic_objects
 
 class graphic_shapes(aetools.ComponentItem):
-    """graphic shapes -  """
     want = 'cgsh'
 
 
 graphic_shape = graphic_shapes
 
 class graphic_text(aetools.ComponentItem):
-    """graphic text - A series of characters within a drawing area """
     want = 'cgtx'
 
 
 class _Prop_color(aetools.NProperty):
-    """color - the color of the first character """
     which = 'colr'
     want = 'cRGB'
 
 
 class _Prop_font(aetools.NProperty):
-    """font - the name of the font of the first character """
     which = 'font'
     want = 'ctxt'
 
 
 class _Prop_size(aetools.NProperty):
-    """size - the size in points of the first character """
     which = 'ptsz'
     want = 'fixd'
 
 
 class _Prop_uniform_styles(aetools.NProperty):
-    """uniform styles - the text styles that are uniform throughout the text """
     which = 'ustl'
     want = 'tsty'
 
 
 class ovals(aetools.ComponentItem):
-    """ovals -  """
     want = 'covl'
 
 
 oval = ovals
 
 class polygon(aetools.ComponentItem):
-    """polygon - A polygon """
     want = 'cpgn'
 
 
 class _Prop_point_list(aetools.NProperty):
-    """point list - the list of points that define the polygon """
     which = 'ptlt'
     want = 'QDpt'
 
@@ -230,46 +189,39 @@ class _Prop_point_list(aetools.NProperty):
 polygons = polygon
 
 class graphic_groups(aetools.ComponentItem):
-    """graphic groups -  """
     want = 'cpic'
 
 
 graphic_group = graphic_groups
 
 class pixel_maps(aetools.ComponentItem):
-    """pixel maps -  """
     want = 'cpix'
 
 
 pixel_map = pixel_maps
 
 class pixel(aetools.ComponentItem):
-    """pixel - A pixel """
     want = 'cpxl'
 
 
 pixels = pixel
 
 class rectangles(aetools.ComponentItem):
-    """rectangles -  """
     want = 'crec'
 
 
 rectangle = rectangles
 
 class rounded_rectangle(aetools.ComponentItem):
-    """rounded rectangle - A rounded rectangle """
     want = 'crrc'
 
 
 class _Prop_corner_curve_height(aetools.NProperty):
-    """corner curve height - the height of the oval used to define the shape of the rounded corners """
     which = 'pchd'
     want = 'shor'
 
 
 class _Prop_corner_curve_width(aetools.NProperty):
-    """corner curve width - the width of the oval used to define the shape of the rounded corners """
     which = 'pcwd'
     want = 'shor'
 
@@ -277,30 +229,25 @@ class _Prop_corner_curve_width(aetools.NProperty):
 rounded_rectangles = rounded_rectangle
 
 class graphic_line(aetools.ComponentItem):
-    """graphic line - A graphic line """
     want = 'glin'
 
 
 class _Prop_arrow_style(aetools.NProperty):
-    """arrow style - the arrow style """
     which = 'arro'
     want = 'arro'
 
 
 class _Prop_dash_style(aetools.NProperty):
-    """dash style - the dash style """
     which = 'pdst'
     want = 'tdas'
 
 
 class _Prop_end_point(aetools.NProperty):
-    """end point - the ending point of the line """
     which = 'pend'
     want = 'QDpt'
 
 
 class _Prop_start_point(aetools.NProperty):
-    """start point - the starting point of the line """
     which = 'pstp'
     want = 'QDpt'
 

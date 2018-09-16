@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/LightFx/Controllers/HealthController.py
 from LightFx import LightManager
 
-class HealthController:
+class HealthController(object):
     HEALTH_EFFECTS = [(9000, 'Full Health'),
      (0.6, 'Mid Health'),
      (0.3, 'Low Health'),

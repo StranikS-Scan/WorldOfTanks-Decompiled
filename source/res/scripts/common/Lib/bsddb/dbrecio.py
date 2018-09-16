@@ -1,33 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/dbrecio.py
-"""
-File-like objects that read from or write to a bsddb record.
-
-This implements (nearly) all stdio methods.
-
-f = DBRecIO(db, key, txn=None)
-f.close()           # explicitly release resources held
-flag = f.isatty()   # always false
-pos = f.tell()      # get current position
-f.seek(pos)         # set current position
-f.seek(pos, mode)   # mode 0: absolute; 1: relative; 2: relative to EOF
-buf = f.read()      # read until EOF
-buf = f.read(n)     # read up to n bytes
-f.truncate([size])  # truncate file at to at most size (default: current pos)
-f.write(buf)        # write at current position
-f.writelines(list)  # for line in list: f.write(line)
-
-Notes:
-- fileno() is left unimplemented so that code which uses it triggers
-  an exception early.
-- There's a simple test set (see end of this file) - not yet updated
-  for DBRecIO.
-- readline() is not implemented yet.
-
-
-From:
-    Itamar Shtull-Trauring <itamar@maxnm.com>
-"""
 import errno
 import string
 

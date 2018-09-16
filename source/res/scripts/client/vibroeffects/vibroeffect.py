@@ -3,7 +3,7 @@
 import BigWorld
 from Vibroeffects.EffectsSettings import EffectsSettings
 
-class VibroEffect:
+class VibroEffect(object):
 
     def __init__(self, name, handle, priority, vibrationObject, group):
         self.name = name

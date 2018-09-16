@@ -276,7 +276,7 @@
         <segmentLength>	0.146	</segmentLength>
         <segmentOffset>	0.041	</segmentOffset>
         <segment2Offset>	0.09	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -496,7 +496,7 @@
         <segmentLength>	0.146	</segmentLength>
         <segmentOffset>	0.041	</segmentOffset>
         <segment2Offset>	0.09	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -619,7 +619,7 @@
       <userString>	#usa_vehicles:Turret_1_T40	</userString>
       <tags>	cannotDetach	</tags>
       <level>	4	</level>
-      <price>	120.0	</price>
+      <price>	120	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	19	</armor_1>
@@ -858,7 +858,7 @@
       </unlocks>
     </SCR_200>
     <SCR_210>	shared	  <unlocks>
-        <radio>	SCR_506	  <cost>	5600.0	</cost>
+        <radio>	SCR_506	  <cost>	5600	</cost>
         </radio>
       </unlocks>
     </SCR_210>

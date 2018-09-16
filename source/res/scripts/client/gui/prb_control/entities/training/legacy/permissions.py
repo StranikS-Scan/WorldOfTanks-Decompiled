@@ -4,9 +4,6 @@ from constants import PREBATTLE_ROLE
 from gui.prb_control.entities.base.legacy.permissions import LegacyPermissions
 
 class TrainingPermissions(LegacyPermissions):
-    """
-    Training permissions class
-    """
 
     def canChangeVehicle(self):
         return True

@@ -1,15 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview/vehicle_preview_dp.py
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
+from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.shared.formatters import text_styles
+from gui.shared.formatters.icons import makeImageTag
 from gui.shared.gui_items.items_actions import factory
+from helpers import dependency
+from skeletons.gui.game_control import IVehicleComparisonBasket
 CREW_INFO_TAB_ID = 'crewInfoTab'
 FACT_SHEET_TAB_ID = 'factSheetTab'
 TAB_ORDER = [FACT_SHEET_TAB_ID, CREW_INFO_TAB_ID]
 TAB_DATA_MAP = {FACT_SHEET_TAB_ID: (VEHPREVIEW_CONSTANTS.FACT_SHEET_LINKAGE, VEHICLE_PREVIEW.INFOPANEL_TAB_FACTSHEET_NAME),
+ CREW_INFO_TAB_ID: (VEHPREVIEW_CONSTANTS.CREW_INFO_LINKAGE, VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME)}
+TAB_DATA_MAP_ELITE = {FACT_SHEET_TAB_ID: (VEHPREVIEW_CONSTANTS.ELITE_FACT_SHEET_LINKAGE, VEHICLE_PREVIEW.INFOPANEL_TAB_FACTSHEET_NAME),
  CREW_INFO_TAB_ID: (VEHPREVIEW_CONSTANTS.CREW_INFO_LINKAGE, VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME)}
 
 def _formatRoleLevelValue(value):
@@ -18,19 +26,16 @@ def _formatRoleLevelValue(value):
 
 class IVehPreviewDataProvider(object):
 
-    def getCrewInfo(self):
+    def getCrewInfo(self, vehicle):
         return NotImplementedError
 
     def getBuyType(self, vehicle):
         return NotImplementedError
 
-    def getBuyButtonState(self, data=None):
+    def getBottomPanelData(self, item, isHeroTank=False):
         return NotImplementedError
 
-    def getBottomPanelData(self, item):
-        return NotImplementedError
-
-    def getPriceInfo(self, data=None):
+    def getBuyingPanelData(self, item, data=None, isHeroTank=False):
         return NotImplementedError
 
     def buyAction(self, actionType, vehicleCD, skipConfirm):
@@ -38,45 +43,46 @@ class IVehPreviewDataProvider(object):
 
 
 class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
-    def getCrewInfo(self):
-        """Fill panel with formed crew or with crew roles
-        :return:
-        """
-        return {'crewPanel': self.__packTabButtonsData()}
+    def getCrewInfo(self, vehicle):
+        return {'crewPanel': self.__packTabButtonsData(vehicle)}
 
     def getBuyType(self, vehicle):
         return factory.BUY_VEHICLE if vehicle.isUnlocked else factory.UNLOCK_ITEM
 
-    def getBuyButtonState(self, data=None):
-        return {'enabled': data.enabled,
-         'label': data.label,
-         'tooltip': data.tooltip}
-
-    def getBottomPanelData(self, item):
-        isBuyingAvailable = not item.isHidden or item.isRentable or item.isRestorePossible()
-        if isBuyingAvailable:
+    def getBottomPanelData(self, item, isHeroTank=False):
+        isBuyingAvailable = not isHeroTank and (not item.isHidden or item.isRentable or item.isRestorePossible())
+        if isBuyingAvailable or isHeroTank:
             if item.canTradeIn:
                 buyingLabel = text_styles.main(VEHICLE_PREVIEW.BUYINGPANEL_TRADEINLABEL)
             else:
-                buyingLabel = text_styles.main(VEHICLE_PREVIEW.BUYINGPANEL_LABEL)
+                buyingLabel = ''
         else:
-            buyingLabel = text_styles.alert(VEHICLE_PREVIEW.BUYINGPANEL_ALERTLABEL)
-        if item.hasModulesToSelect:
-            modulesLabel = VEHICLE_PREVIEW.MODULESPANEL_TITLE
-        else:
-            modulesLabel = VEHICLE_PREVIEW.MODULESPANEL_NOMODULESOPTIONS
+            buyingLabel = text_styles.tutorial(VEHICLE_PREVIEW.BUYINGPANEL_ALERTLABEL)
         return {'buyingLabel': buyingLabel,
-         'modulesLabel': text_styles.middleTitle(modulesLabel),
          'isBuyingAvailable': isBuyingAvailable,
          'isCanTrade': item.canTradeIn,
-         'vehicleId': item.intCD}
+         'showStatusInfoTooltip': item.hasModulesToSelect,
+         'vehicleId': item.intCD,
+         'vehCompareData': self.__getVehCompareData(item),
+         'vehCompareIcon': makeImageTag(RES_ICONS.MAPS_ICONS_BUTTONS_VEHICLECOMPAREBTN, 30, 24, -27)}
 
-    def getPriceInfo(self, data=None):
-        return {'value': data.price,
+    def __getVehCompareData(self, vehicle):
+        state, tooltip = resolveStateTooltip(self.comparisonBasket, vehicle, enabledTooltip=VEH_COMPARE.VEHPREVIEW_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, fullTooltip=VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
+        return {'btnEnabled': state,
+         'btnTooltip': tooltip}
+
+    def getBuyingPanelData(self, item, data=None, isHeroTank=False):
+        isAction = data.isAction
+        return {'buyButtonEnabled': data.enabled,
+         'buyButtonLabel': data.label,
+         'buyButtonTooltip': data.tooltip,
+         'value': data.price,
          'icon': data.currencyIcon,
-         'showAction': data.isAction,
-         'actionTooltipType': TOOLTIPS_CONSTANTS.ACTION_PRICE if data.isAction else None,
+         'showGlow': isHeroTank or item.isPremium and (not item.isHidden or item.isRentable or item.isRestorePossible()),
+         'showAction': isAction,
+         'actionTooltipType': TOOLTIPS_CONSTANTS.ACTION_PRICE if isAction else None,
          'actionData': data.action}
 
     def buyAction(self, actionType, vehicleCD, skipConfirm):
@@ -86,10 +92,12 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
         else:
             factory.doAction(factory.BUY_VEHICLE, vehicleCD, skipConfirm=skipConfirm)
 
-    def __packTabButtonsData(self):
+    def __packTabButtonsData(self, vehicle):
         data = []
+        isPremium = vehicle.isPremium and (not vehicle.isHidden or vehicle.isRentable or vehicle.isRestorePossible())
+        tabMapping = TAB_DATA_MAP_ELITE if isPremium else TAB_DATA_MAP
         for idx in TAB_ORDER:
-            linkage, label = TAB_DATA_MAP[idx]
+            linkage, label = tabMapping[idx]
             data.append({'label': label,
              'linkage': linkage})
 

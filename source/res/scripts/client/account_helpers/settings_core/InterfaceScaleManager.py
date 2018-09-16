@@ -51,11 +51,6 @@ class InterfaceScaleManager(object):
 
     @staticmethod
     def getScaleOptions():
-        """
-        Return list of scales for the current resolution.
-        This list does not depend on what is set in SettingsWindow.
-        :return: list of scales, for example: ['auto', 'x1', ...]
-        """
         return graphics.getInterfaceScalesList(BigWorld.screenSize())
 
     def getScaleByIndex(self, ind, powerOfTwo=True):

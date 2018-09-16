@@ -70,10 +70,7 @@ class FrontendMapping(object):
     @staticmethod
     def __loadDeathZoneSounds(soundsIDs):
         sounds = {}
-        assert isinstance(soundsIDs, dict), 'Value of soundsIDs must be dict'
         for key, soundID in soundsIDs.iteritems():
-            assert len(key) == 2, 'Key is invalid'
-            assert isinstance(soundID, str), 'Value is invalid'
             sounds[key] = SoundGroups.g_instance.getSound2D(soundID)
 
         return sounds

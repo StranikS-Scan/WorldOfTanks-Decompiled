@@ -24,12 +24,6 @@ DSP_SEEKSPEED = 200000
 SOUND_ENABLE_STATUS_DEFAULT = 0
 SOUND_ENABLE_STATUS_VALUES = range(3)
 MASTER_VOLUME_DEFAULT = 0.5
-_envStateDefs = {'login': ('ue_01_loginscreen_enter', 'ue_01_loginscreen_exit', 0),
- 'lobby': ('ue_02_hangar_enter', 'ue_02_hangar_exit', 1),
- 'queue': ('ue_03_lobby_enter', 'ue_03_lobby_exit', 0),
- 'battleLoading': ('ue_04_loadingscreen_enter', 'ue_04_loadingscreen_exit', 0),
- 'battle': ('ue_05_arena_enter', 'ue_05_arena_exit', 0),
- 'battleResults': ('ue_06_result_enter', 'ue_06_result_exit', 0)}
 
 class CREW_GENDER_SWITCHES(object):
     GROUP = 'SWITCH_ext_vo_gender'
@@ -39,7 +33,7 @@ class CREW_GENDER_SWITCHES(object):
     GENDER_ALL = (MALE, FEMALE)
 
 
-class SoundModes():
+class SoundModes(object):
     __MODES_FOLDER = 'gui/soundModes/'
     __MODES_FILENAME = 'main_sound_modes.xml'
     DEFAULT_MODE_NAME = 'default'
@@ -186,7 +180,7 @@ class SoundModes():
         languageSet = False
         try:
             languageSet = self.__setMode(modeName)
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         if not languageSet:
@@ -195,7 +189,7 @@ class SoundModes():
                 defaultVoiceLanguage = self.__modes[SoundModes.DEFAULT_MODE_NAME].voiceLanguage
             try:
                 WWISE.setLanguage(defaultVoiceLanguage)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
             self.__currentMode = SoundModes.DEFAULT_MODE_NAME
@@ -284,7 +278,6 @@ class SoundGroups(object):
         self.__activeStingerPriority = None
         self.__muffled = False
         self.__muffledByReplay = False
-        self.__states = []
         from gui.app_loader import g_appLoader
         self.__spaceID = g_appLoader.getSpaceID()
         PlayerEvents.g_playerEvents.onAvatarReady += self.onAvatarReady
@@ -400,40 +393,11 @@ class SoundGroups(object):
             self.setVolume(categoryName, volume, False)
 
     def __onGUISpaceEntered(self, spaceID):
-        from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
+        from gui.app_loader import settings
         if WWISE.enabled:
-            if spaceID == GUI_GLOBAL_SPACE_ID.LOGIN:
+            if spaceID == settings.GUI_GLOBAL_SPACE_ID.LOGIN:
                 WWISE.WG_loadLogin()
         self.__spaceID = spaceID
-
-    def onEnvStart(self, environment):
-        state = _envStateDefs.get(environment, None)
-        if state is not None:
-            if self.__states:
-                prev = self.__states[-1]
-                prevState = _envStateDefs[prev]
-                if not prevState[2]:
-                    LOG_DEBUG('Set UE state: %s' % prevState[1])
-                    WWISE.WW_eventGlobalSync(prevState[1])
-            LOG_DEBUG('Set UE state: %s' % state[0])
-            WWISE.WW_eventGlobalSync(state[0])
-            self.__states.append(environment)
-        return
-
-    def onEnvStop(self, environment):
-        for i in xrange(len(self.__states) - 1, -1, -1):
-            if environment == self.__states[i]:
-                if i == len(self.__states) - 1:
-                    prevState = _envStateDefs[environment]
-                    LOG_DEBUG('Set UE state: %s' % prevState[1])
-                    WWISE.WW_eventGlobalSync(prevState[1])
-                del self.__states[i]
-                if self.__states:
-                    prev = self.__states[-1]
-                    prevState = _envStateDefs[prev]
-                    if not prevState[2]:
-                        LOG_DEBUG('Set UE state: %s' % prevState[0])
-                        WWISE.WW_eventGlobalSync(prevState[0])
 
     def setMasterVolume(self, volume):
         self.__masterVolume = volume
@@ -451,7 +415,8 @@ class SoundGroups(object):
         return self.__enableStatus
 
     def setEnableStatus(self, status):
-        assert status in SOUND_ENABLE_STATUS_VALUES
+        if status not in SOUND_ENABLE_STATUS_VALUES:
+            raise UserWarning('Status {} is out of range(3)'.format(status))
         self.__enableStatus = status
         self.savePreferences()
 
@@ -694,7 +659,7 @@ def loadLightSoundsDB():
         lightSoundDB = []
         if section['lightSounds'] is None:
             return
-        for propertyName, propertySection in section['lightSounds'].items():
+        for _, propertySection in section['lightSounds'].items():
             DBitem = []
             DBitem.append(propertySection.readString('modelName'))
             DBitem.append(propertySection.readVector3('offset'))

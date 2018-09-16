@@ -46,7 +46,6 @@ class _TipsCriteria(object):
         return self._classTag
 
     def setClassTag(self, tag):
-        assert tag in VEHICLE_CLASS_TAGS
         self._classTag = tag
         return self
 
@@ -54,7 +53,6 @@ class _TipsCriteria(object):
         return self._nation
 
     def setNation(self, nation):
-        assert nation in nations.NAMES
         self._nation = nation
         return self
 
@@ -62,7 +60,6 @@ class _TipsCriteria(object):
         return self._level
 
     def setLevel(self, level):
-        assert 0 < level < 11
         self._level = level
         return self
 
@@ -93,7 +90,7 @@ class SandboxTipsCriteria(_TipsCriteria):
             playerTeam = arenaDP.getNumberOfTeam()
         visitor = self.sessionProvider.arenaVisitor
         positions = visitor.type.getTeamBasePositionsIterator()
-        for team, position, number in positions:
+        for team, position, _ in positions:
             if team == playerTeam:
                 playerBaseYPos = position[2]
             enemyBaseYPos = position[2]
@@ -115,8 +112,6 @@ class EventTipsCriteria(_TipsCriteria):
 
 def _getRankedTipIterator():
     tipSize = len(RES_ICONS.MAPS_ICONS_BATTLELOADING_TIPS_RANKED_ENUM)
-    assert tipSize == len(TIPS.RANKED_ALL_BODY_ENUM)
-    assert tipSize == len(TIPS.RANKED_ALL_TITLE_ENUM)
     if tipSize > 0:
         items = range(tipSize)
         return rnd_choice_loop(*items)
@@ -144,8 +139,6 @@ class RankedTipsCriteria(_TipsCriteria):
 
 def _getEpicRandomTipIterator():
     tipSize = len(RES_ICONS.MAPS_ICONS_BATTLELOADING_TIPS_EPICRANDOM_ENUM)
-    assert tipSize == len(TIPS.EPICRANDOM_ALL_BODY_ENUM)
-    assert tipSize == len(TIPS.EPICRANDOM_ALL_TITLE_ENUM)
     if tipSize > 0:
         items = range(tipSize)
         return rnd_choice_loop(*items)
@@ -255,7 +248,12 @@ _predefinedTips = _readTips()
 
 def _getConditionedTips(arenaGuiType, battlesCount, vehicleType, vehicleNation, vehicleLvl):
     result = []
-    battlesCountConditions = filter(lambda ((minBattlesCount, maxBattlesCount), item): minBattlesCount <= battlesCount <= maxBattlesCount, _predefinedTips.iteritems())
+    battlesCountConditions = []
+    for item in _predefinedTips.iteritems():
+        (minBattlesCount, maxBattlesCount), _ = item
+        if minBattlesCount <= battlesCount <= maxBattlesCount:
+            battlesCountConditions.append(item)
+
     for _, vehicleTypeConditions in battlesCountConditions:
         for vehType in (vehicleType, ALL):
             for nation in (vehicleNation, ALL):

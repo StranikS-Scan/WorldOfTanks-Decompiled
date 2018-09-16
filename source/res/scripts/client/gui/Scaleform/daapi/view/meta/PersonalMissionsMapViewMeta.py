@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/PersonalMissionsMapViewMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class PersonalMissionsMapViewMeta(BaseDAAPIComponent):
@@ -12,7 +8,4 @@ class PersonalMissionsMapViewMeta(BaseDAAPIComponent):
         self._printOverrideError('onRegionClick')
 
     def as_setPlanDataS(self, planData):
-        """
-        :param planData: Represented by PersonalMissionsMapPlanVO (AS)
-        """
         return self.flashObject.as_setPlanData(planData) if self._isDAAPIInited() else None

@@ -10,13 +10,13 @@ from helpers.time_utils import makeLocalServerTime
 from messenger.ext import passCensor
 
 def PrbListIterator(prebattles):
-    for time, prbID, info in prebattles:
-        yield PrbListItem(time, prbID, info)
+    for t, prbID, info in prebattles:
+        yield PrbListItem(t, prbID, info)
 
 
 def RosterIterator(roster_data):
-    for pID, name, dbID, roster, state, time, vehCompDescr, igrType, clanDBID, clanAbbrev in roster_data:
-        yield PlayerPrbInfo(pID, name=name, dbID=dbID, state=state, time=time, vehCompDescr=vehCompDescr, igrType=igrType, clanDBID=clanDBID, clanAbbrev=clanAbbrev, roster=roster)
+    for pID, name, dbID, roster, state, t, vehCompDescr, igrType, clanDBID, clanAbbrev in roster_data:
+        yield PlayerPrbInfo(pID, name=name, dbID=dbID, state=state, time=t, vehCompDescr=vehCompDescr, igrType=igrType, clanDBID=clanDBID, clanAbbrev=clanAbbrev, roster=roster)
 
 
 def AutoInvitesIterator():
@@ -33,10 +33,10 @@ def AutoInvitesIterator():
 class PrbListItem(object):
     __slots__ = ('prbID', 'time', 'arenaTypeID', 'creator', 'clanAbbrev', 'playersCount', 'isOpened', 'comment', 'creatorIgrType', 'creatorDbId', 'badges')
 
-    def __init__(self, time, prbID, info):
+    def __init__(self, t, prbID, info):
         super(PrbListItem, self).__init__()
         self.prbID = prbID
-        self.time = time
+        self.time = t
         self.arenaTypeID = 0
         if PREBATTLE_CACHE_KEY.ARENA_TYPE_ID in info:
             self.arenaTypeID = info[PREBATTLE_CACHE_KEY.ARENA_TYPE_ID]

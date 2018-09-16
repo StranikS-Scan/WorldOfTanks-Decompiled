@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RecruitWindowMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class RecruitWindowMeta(AbstractWindowView):
@@ -27,21 +23,12 @@ class RecruitWindowMeta(AbstractWindowView):
         self._printOverrideError('updateAllDropdowns')
 
     def as_setVehicleClassDropdownS(self, vehicleClassData):
-        """
-        :param vehicleClassData: Represented by DataProvider (AS)
-        """
         return self.flashObject.as_setVehicleClassDropdown(vehicleClassData) if self._isDAAPIInited() else None
 
     def as_setVehicleTypeDropdownS(self, vehicleTypeData):
-        """
-        :param vehicleTypeData: Represented by DataProvider (AS)
-        """
         return self.flashObject.as_setVehicleTypeDropdown(vehicleTypeData) if self._isDAAPIInited() else None
 
     def as_setRoleDropdownS(self, roleData):
-        """
-        :param roleData: Represented by DataProvider (AS)
-        """
         return self.flashObject.as_setRoleDropdown(roleData) if self._isDAAPIInited() else None
 
     def as_setCreditsChangedS(self, credits):
@@ -54,16 +41,7 @@ class RecruitWindowMeta(AbstractWindowView):
         return self.flashObject.as_initData(data) if self._isDAAPIInited() else None
 
     def as_setNationsS(self, nationsData):
-        """
-        :param nationsData: Represented by DataProvider (AS)
-        """
         return self.flashObject.as_setNations(nationsData) if self._isDAAPIInited() else None
 
     def as_setAllDropdownsS(self, nationsData, vehicleClassData, vehicleTypeData, roleData):
-        """
-        :param nationsData: Represented by DataProvider (AS)
-        :param vehicleClassData: Represented by DataProvider (AS)
-        :param vehicleTypeData: Represented by DataProvider (AS)
-        :param roleData: Represented by DataProvider (AS)
-        """
         return self.flashObject.as_setAllDropdowns(nationsData, vehicleClassData, vehicleTypeData, roleData) if self._isDAAPIInited() else None

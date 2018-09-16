@@ -83,20 +83,21 @@ class RankedTooltipData(BlocksTooltipData):
         if self.__isForVehicleRank():
             maxRank = self.rankedController.getMaxRank(vehicle=self.item.getVehicle())
             achievedCount = '0'
-            if maxRank and maxRank.getType() == RANK_TYPES.VEHICLE:
+            if maxRank is not None and maxRank.getType() == RANK_TYPES.VEHICLE:
                 achievedCount = maxRank.getSerialID()
             vehicleName = self.item.getVehicle().userName
             achievedStr = text_styles.middleTitle(achievedCount)
             descr = text_styles.main(_ms(TOOLTIPS.BATTLETYPES_RANKED_VEHRANK_ACHIEVEDCOUNT, vehName=vehicleName))
             descr = descr + achievedStr
             return formatters.packCounterTextBlockData(achievedCount, descr, padding=formatters.packPadding(left=3, bottom=-5))
-        if self.item.isAcquired():
-            status = text_styles.statInfo(TOOLTIPS.BATTLETYPES_RANKED_RANK_STATUS_RECEIVED)
-        elif self.item.isLost():
-            status = text_styles.statusAlert(TOOLTIPS.BATTLETYPES_RANKED_RANK_STATUS_LOST)
         else:
-            status = text_styles.warning(TOOLTIPS.BATTLETYPES_RANKED_RANK_STATUS_NOTEARNED)
-        return formatters.packAlignedTextBlockData(status, BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=formatters.packPadding(top=-4))
+            if self.item.isAcquired():
+                status = text_styles.statInfo(TOOLTIPS.BATTLETYPES_RANKED_RANK_STATUS_RECEIVED)
+            elif self.item.isLost():
+                status = text_styles.statusAlert(TOOLTIPS.BATTLETYPES_RANKED_RANK_STATUS_LOST)
+            else:
+                status = text_styles.warning(TOOLTIPS.BATTLETYPES_RANKED_RANK_STATUS_NOTEARNED)
+            return formatters.packAlignedTextBlockData(status, BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=formatters.packPadding(top=-4))
 
     def _packAwardsBlock(self, quest):
         subBlocks = []

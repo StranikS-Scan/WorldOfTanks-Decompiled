@@ -10,7 +10,6 @@ from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import events
 from gui.shared.view_helpers import CooldownHelper
 from helpers import int2roman
-from helpers.i18n import makeString as _ms
 from gui.shared.formatters import text_styles
 
 class CyberSportUnitsListView(CyberSportUnitsListMeta):

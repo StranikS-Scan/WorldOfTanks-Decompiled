@@ -12,9 +12,6 @@ from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 
 class TutorialSubscriber(PreQueueSubscriber):
-    """
-    Tutorial events subscriber
-    """
 
     def subscribe(self, entity):
         g_playerEvents.onTutorialEnqueued += entity.onEnqueued
@@ -34,18 +31,12 @@ class TutorialSubscriber(PreQueueSubscriber):
 
 
 class TutorialEntryPoint(PreQueueEntryPoint):
-    """
-    Tutorial entry point
-    """
 
     def __init__(self):
         super(TutorialEntryPoint, self).__init__(FUNCTIONAL_FLAG.TUTORIAL, QUEUE_TYPE.TUTORIAL)
 
 
 class TutorialEntity(PreQueueEntity):
-    """
-    Tutorial entity class
-    """
 
     def __init__(self):
         super(TutorialEntity, self).__init__(FUNCTIONAL_FLAG.TUTORIAL, QUEUE_TYPE.TUTORIAL, TutorialSubscriber())

@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/gm_components.py
+import logging
 from collections import namedtuple
 import GUI
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.crosshair import settings
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
+_logger = logging.getLogger(__name__)
+_logger.addHandler(logging.NullHandler())
 
 class IGunMarkerComponent(object):
 
@@ -62,20 +64,26 @@ class GunMarkerComponent(IGunMarkerComponent):
         return
 
     def addView(self, container):
-        assert self._view is None, 'View is already created.'
-        self._view = self._createView(container)
-        LOG_DEBUG('FlashGUIComponent is created', self._name, self._view)
-        if self._isActive:
-            self._setupDataProvider()
-        container.addChild(self._view, self._name)
-        return
+        if self._view is not None:
+            _logger.error('GunMarkerComponent "%s" is already created.', self._name)
+            return
+        else:
+            self._view = self._createView(container)
+            _logger.debug('GunMarkerComponent "%s" is created', self._name)
+            if self._isActive:
+                self._setupDataProvider()
+            container.addChild(self._view, self._name)
+            return
 
     def removeView(self, container):
-        assert self._view is not None, 'View is already removed.'
-        self._clearDataProvider()
-        container.delChild(self._view)
-        self._view = None
-        return
+        if self._view is None:
+            _logger.error('GunMarkerComponent "%s" is already removed.', self._name)
+            return
+        else:
+            self._clearDataProvider()
+            container.delChild(self._view)
+            self._view = None
+            return
 
     def getScale(self):
         return self._scale
@@ -171,7 +179,6 @@ class VideoGunMarkerComponent(DefaultGunMarkerComponent):
 
 
 class GunMarkersComponents(object):
-    """Class contains set of gun marker components, provides access to them."""
 
     def __init__(self, components):
         super(GunMarkersComponents, self).__init__()
@@ -183,11 +190,6 @@ class GunMarkersComponents(object):
             self.__components[name] = component
 
     def addView(self, container, name):
-        """ Adds view to appropriate component by name.
-        :param container: FlashGUIComponent which created gun marker view on the Action Script side.
-        :param name: unique name of component.
-        :return: True if component is found by name, otherwise - False.
-        """
         component = self.getComponentByName(name)
         if component is not None:
             self.__components[name].addView(container)
@@ -196,11 +198,6 @@ class GunMarkersComponents(object):
             return False
 
     def removeView(self, container, name):
-        """ Removes view from appropriate component by name.
-        :param container: FlashGUIComponent which contains gun marker view.
-        :param name: unique name of component.
-        :return: True if component is found by name, otherwise - False.
-        """
         component = self.getComponentByName(name)
         if component is not None:
             component.removeView(container)
@@ -209,23 +206,15 @@ class GunMarkersComponents(object):
             return False
 
     def setScale(self, scale):
-        """ Sets scale for all components.
-        :param scale: float containing present value of scale.
-        """
         for component in self.__components.itervalues():
             component.setScale(scale)
 
     def clear(self):
-        """Clears all components and removes from this object."""
         while self.__components:
             _, component = self.__components.popitem()
             component.destroy()
 
     def switch(self, viewID):
-        """ Sets active flag for each component.
-        Active flag equals True if component's view ID equals specified view ID, otherwise - False.
-        :param viewID: one of CROSSHAIR_VIEW_ID.*.
-        """
         seq = []
         for name, component in self.__components.iteritems():
             receivedID = component.getViewID()
@@ -238,10 +227,6 @@ class GunMarkersComponents(object):
             self.__components[name].setActive(isActive)
 
     def popComponent(self, name):
-        """ Removes component by name.
-        :param name: uniques name of component.
-        :return: instance of component if component is found, otherwise - None.
-        """
         if name in self.__components:
             component = self.__components.pop(name)
             component.setActive(False)
@@ -253,18 +238,9 @@ class GunMarkersComponents(object):
         return len(self.__components)
 
     def getComponentByName(self, name):
-        """ Gets components by unique name.
-        :param name: string containing unique name of component.
-        :return: instance of component or None.
-        """
         return self.__components[name] if name in self.__components else None
 
     def getComponentByType(self, markerType, isActive=True):
-        """ Try to find first component by type of marker and active flag.
-        :param markerType: one of GUN_MARKER_TYPE.*.
-        :param isActive: bool.
-        :return: instance of component if component is found, otherwise - None.
-        """
         for component in self.__components.itervalues():
             if component.getMarkerType() == markerType:
                 if isActive:
@@ -276,7 +252,4 @@ class GunMarkersComponents(object):
         return None
 
     def getViewSettings(self):
-        """ Gets present settings of components.
-        :return: list[_ViewSettings(...), ...].
-        """
-        return map(lambda component: component.getViewSettings(), self.__components.itervalues())
+        return [ c.getViewSettings() for c in self.__components.itervalues() ]

@@ -5,7 +5,7 @@ import BigWorld
 _VEHICLE_DISAPPEAR_TIME = 0.2
 _VEHICLE_APPEAR_TIME = 0.2
 
-class StippleManager:
+class StippleManager(object):
 
     def __init__(self):
         self.__stippleDescs = {}
@@ -46,10 +46,6 @@ class StippleManager:
 
     def __addStippleModel(self, vehID):
         model = self.__stippleToAddDescs[vehID][0]
-        if False:
-            callbackID = BigWorld.callback(0.0, partial(self.__addStippleModel, vehID))
-            self.__stippleToAddDescs[vehID] = (model, callbackID)
-            return
         del self.__stippleToAddDescs[vehID]
         BigWorld.player().addModel(model)
         callbackID = BigWorld.callback(_VEHICLE_DISAPPEAR_TIME, partial(self.__removeStippleModel, vehID))

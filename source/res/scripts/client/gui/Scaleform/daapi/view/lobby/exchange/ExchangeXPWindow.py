@@ -71,7 +71,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
                  'isSelectCandidate': vehicle.isFullyElite,
                  'vehicleIco': vehicle.iconSmall,
                  'nationIco': getNationsAssetPath(vehicle.nationID, namePrefix=NATION_ICON_PREFIX_131x31)})
-            except:
+            except Exception:
                 continue
 
         labelBuilder = builder().addStyledText('middleTitle', i18n.makeString(MENU.EXCHANGE_RATE))
@@ -94,8 +94,8 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
     def _getTableHeader(self):
         return [self._createTableBtnInfo('isSelectCandidate', 40, 2, DIALOGS.GATHERINGXPFORM_SORTBY_SELECTION, 'ascending', RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_OK), self._createTableBtnInfo('vehicleName', 179, 1, DIALOGS.GATHERINGXPFORM_SORTBY_VEHICLE, 'ascending', RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_TANK, sortType='string'), self._createTableBtnInfo('xp', 103, 0, DIALOGS.GATHERINGXPFORM_SORTBY_XP, 'descending', RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_XP)]
 
-    def _createTableBtnInfo(self, id, buttonWidth, sortOrder, toolTip, defaultSortDirection, iconSource, sortType='numeric'):
-        return {'id': id,
+    def _createTableBtnInfo(self, btnID, buttonWidth, sortOrder, toolTip, defaultSortDirection, iconSource, sortType='numeric'):
+        return {'id': btnID,
          'buttonWidth': buttonWidth,
          'sortOrder': sortOrder,
          'toolTip': toolTip,

@@ -11,14 +11,14 @@
   <vehicleCamouflageKind>	desert	</vehicleCamouflageKind>
   <umbraEnabled>	1	</umbraEnabled>
   <wwmusicSetup>
-    <wwmusicLoading>	music_euro_vilage	</wwmusicLoading>
-    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
-    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+    <wwmusicLoading>	music_ruinberg_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_ruinberg_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_ruinberg_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_desert_01	</wwambientSound>
   <water>
@@ -42,21 +42,20 @@
         <wwmusicLoading></wwmusicLoading>
         <wwmusicIntensive></wwmusicIntensive>
         <wwmusicRelaxed></wwmusicRelaxed>
-        <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-        <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-        <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-        <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-        <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+        <wwmusicStop>	music_dron_stop	</wwmusicStop>
+        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+        <wwmusicResultWin>	music_airfield_result_win	</wwmusicResultWin>
+        <wwmusicResultDrawn>	music_airfield_result_drawn	</wwmusicResultDrawn>
+        <wwmusicResultDefeat>	music_airfield_result_defeat	</wwmusicResultDefeat>
       </wwmusicSetup>
       <boundingBox>
-        <bottomLeft>	-450.000000 150.000000	</bottomLeft>
+        <bottomLeft>	-500.000000 150.000000	</bottomLeft>
         <upperRight>	50.097511 500.000000	</upperRight>
       </boundingBox>
       <maxPlayersInTeam>	1	</maxPlayersInTeam>
       <runDelay>	5	</runDelay>
     </bootcamp>
   </gameplayTypes>
-  <roadMap></roadMap>
   <mapActivities>
     <warplane>
       <preset>	airfield_curve	</preset>
@@ -71,6 +70,13 @@
       <yaw>	90.000000	</yaw>
       <possibility>	1.000000	</possibility>
       <startTime>	300.000000 400.000000	</startTime>
+    </warplane>
+    <warplane>
+      <preset>	Tornado_sea	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	90.000000	</yaw>
+      <possibility>	0.300000	</possibility>
+      <startTime>	0.000000 0.000000	</startTime>
     </warplane>
   </mapActivities>
 </31_airfield.xml>

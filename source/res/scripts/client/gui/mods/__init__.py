@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/mods/__init__.py
 import importlib
-import ResMgr
 import string
+import ResMgr
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from shared_utils import forEach

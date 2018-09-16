@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/applesingle.py
-"""Routines to decode AppleSingle files
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the applesingle module is removed.', stacklevel=2)
 import struct
@@ -112,17 +110,6 @@ class AppleSingle(object):
 
 
 def decode(infile, outpath, resonly=False, verbose=False):
-    """decode(infile, outpath [, resonly=False, verbose=False])
-    
-    Creates a decoded file from an AppleSingle encoded file.
-    If resonly is True, then it will create a regular file at
-    outpath containing only the resource fork from infile.
-    Otherwise it will create an AppleDouble file at outpath
-    with the data and resource forks from infile.  On platforms
-    without the MacOS module, it will create inpath and inpath+'.rsrc'
-    with the data and resource forks respectively.
-    
-    """
     if not hasattr(infile, 'read'):
         if isinstance(infile, Carbon.File.Alias):
             infile = infile.ResolveAlias()[0]

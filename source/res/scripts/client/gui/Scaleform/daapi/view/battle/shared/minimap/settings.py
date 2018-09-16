@@ -65,14 +65,6 @@ class CIRCLE_STYLE(object):
 
 
 class VIEW_RANGE_CIRCLES_AS3_DESCR(object):
-    """
-    VIEW_RANGE_CIRCLES_AS3_DESCR calling as3 functions by [invokePy2As]  ViewRangeCirclesMinimapEntry.as
-    
-    [as_addDrawRange] Set max draw range
-    :param color : Number
-    :param alpha : Number
-    :param range : Number
-    """
     AS_ADD_MAX_DRAW_CIRCLE = 'as_addDrawRange'
     AS_ADD_DYN_CIRCLE = 'as_addDynamicViewRange'
     AS_ADD_MAX_VIEW_CIRCLE = 'as_addMaxViewRage'

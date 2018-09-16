@@ -1,11 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/effects_player.py
+from collections import defaultdict
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.Scaleform.framework.managers.loaders import ViewLoadParams
 from tutorial.data.events import GUI_EVENT_TYPE
 from tutorial.logger import LOG_ERROR, LOG_DEBUG
+from shared_utils import first
+
+class GUIEffectScope(object):
+    COMPONENT = 0
+    SCENE = 1
+
 
 class GUIEffect(object):
     __slots__ = ()
@@ -16,13 +23,13 @@ class GUIEffect(object):
     def play(self, effectData):
         return False
 
-    def stop(self, effectID=None):
+    def stop(self, effectID=None, effectSubType=None):
         pass
 
-    def cancel(self, *criteria):
+    def cancel(self, scopeType, scopeName):
         pass
 
-    def isStillRunning(self, effectID=None):
+    def isStillRunning(self, effectID=None, effectSubType=None):
         return False
 
 
@@ -57,7 +64,7 @@ class ComponentEffect(GUIEffect):
     __slots__ = ('_component',)
 
     def __init__(self):
-        super(GUIEffect, self).__init__()
+        super(ComponentEffect, self).__init__()
         self._component = None
         return
 
@@ -77,7 +84,7 @@ class ComponentEffect(GUIEffect):
             return False
 
     def _doPlay(self, effectData):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class ShowDialogEffect(ApplicationEffect):
@@ -114,7 +121,7 @@ class ShowDialogEffect(ApplicationEffect):
             LOG_ERROR('Type or id of dialog not found', effectData)
         return result
 
-    def stop(self, effectID=None):
+    def stop(self, effectID=None, effectSubType=None):
         isForceStop = effectID is None
         if not isForceStop and effectID != self._dialogID:
             LOG_ERROR('Dialog is not opened', effectID)
@@ -127,11 +134,9 @@ class ShowDialogEffect(ApplicationEffect):
                 dialog = container.getView(criteria={POP_UP_CRITERIA.UNIQUE_NAME: effectID})
                 if dialog is not None:
                     dialog.destroy()
-                elif not isForceStop:
-                    LOG_ERROR('Dialog is not opened', effectID)
             return
 
-    def isStillRunning(self, effectID=None):
+    def isStillRunning(self, effectID=None, effectSubType=None):
         if effectID is not None:
             result = self._dialogID == effectID
         else:
@@ -163,7 +168,7 @@ class ShowWindowEffect(ApplicationEffect):
             LOG_ERROR('Alias of window not found', windowType, self._aliasMap)
         return result
 
-    def stop(self, effectID=None):
+    def stop(self, effectID=None, effectSubType=None):
         isForceStop = effectID is None
         if not isForceStop:
             if effectID not in self._windowIDs:
@@ -185,7 +190,7 @@ class ShowWindowEffect(ApplicationEffect):
 
         return
 
-    def isStillRunning(self, effectID=None):
+    def isStillRunning(self, effectID=None, effectSubType=None):
         if effectID is not None:
             result = effectID in self._windowIDs
         else:
@@ -195,7 +200,9 @@ class ShowWindowEffect(ApplicationEffect):
 
 _GUI_EVENT_TO_TRIGGER_TYPE = {GUI_EVENT_TYPE.CLICK: TUTORIAL_TRIGGER_TYPES.CLICK_TYPE,
  GUI_EVENT_TYPE.CLICK_OUTSIDE: TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE,
- GUI_EVENT_TYPE.ESC: TUTORIAL_TRIGGER_TYPES.ESCAPE}
+ GUI_EVENT_TYPE.ESC: TUTORIAL_TRIGGER_TYPES.ESCAPE,
+ GUI_EVENT_TYPE.ENABLE: TUTORIAL_TRIGGER_TYPES.ENABLED,
+ GUI_EVENT_TYPE.DISABLE: TUTORIAL_TRIGGER_TYPES.DISABLED}
 
 class ShowChainHint(ApplicationEffect):
     __slots__ = ('_hintID', '_itemID')
@@ -206,7 +213,7 @@ class ShowChainHint(ApplicationEffect):
         self._itemID = None
         return
 
-    def isStillRunning(self, effectID=None):
+    def isStillRunning(self, effectID=None, effectSubType=None):
         if effectID is not None:
             result = self._hintID == effectID
         else:
@@ -237,12 +244,11 @@ class ShowChainHint(ApplicationEffect):
                 padding = hintProps.padding
                 if padding is not None:
                     content['padding'] = padding._asdict()
-                triggers = map(lambda item: _GUI_EVENT_TO_TRIGGER_TYPE[item], triggers)
-                layout.showInteractiveHint(hintProps.itemID, content, triggers)
-                return True
+                triggers = [ _GUI_EVENT_TO_TRIGGER_TYPE[item] for item in triggers ]
+                return layout.showInteractiveHint(hintProps.itemID, content, triggers)
             return False
 
-    def stop(self, effectID=None):
+    def stop(self, effectID=None, effectSubType=None):
         if effectID is not None and effectID != self._hintID:
             LOG_DEBUG('Hint is not added', effectID)
             return
@@ -256,24 +262,17 @@ class ShowChainHint(ApplicationEffect):
             self._itemID = None
             return
 
-    def cancel(self, *criteria):
-        if not criteria:
-            return
-        if self._itemID == criteria[0]:
+    def cancel(self, scopeType, scopeName):
+        if scopeType == GUIEffectScope.COMPONENT and self._itemID == scopeName or scopeType == GUIEffectScope.SCENE:
             self.stop()
 
 
 class ShowOnceOnlyHint(ShowChainHint):
     __slots__ = ()
 
-    def stop(self, effectID=None):
+    def stop(self, effectID=None, effectSubType=None):
         if effectID is not None:
             super(ShowOnceOnlyHint, self).stop(effectID)
-        return
-
-    def cancel(self, *criteria):
-        if criteria is not None and self._itemID == criteria[0]:
-            self.stop(self._hintID)
         return
 
 
@@ -312,45 +311,148 @@ class SetCriteriaEffect(ApplicationEffect):
         layout = self._getTutorialLayout()
         if layout is not None:
             layout.setCriteria(itemID, value)
-        return
+            return True
+        else:
+            return False
+
+
+class SetViewCriteriaEffect(ApplicationEffect):
+    __slots__ = ()
+
+    def play(self, effectData):
+        itemIDs, value = effectData
+        layout = self._getTutorialLayout()
+        if layout is not None:
+            for itemID in itemIDs:
+                layout.setViewCriteria(itemID, value)
+
+            return True
+        else:
+            return False
 
 
 _ACTION_TO_TRIGGER_TYPE = {GUI_EVENT_TYPE.CLICK: TUTORIAL_TRIGGER_TYPES.CLICK_TYPE,
- GUI_EVENT_TYPE.CLICK_OUTSIDE: TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE}
+ GUI_EVENT_TYPE.CLICK_OUTSIDE: TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE,
+ GUI_EVENT_TYPE.ESC: TUTORIAL_TRIGGER_TYPES.ESCAPE,
+ GUI_EVENT_TYPE.ENABLE: TUTORIAL_TRIGGER_TYPES.ENABLED,
+ GUI_EVENT_TYPE.DISABLE: TUTORIAL_TRIGGER_TYPES.DISABLED}
 
 class SetTriggerEffect(ApplicationEffect):
-    __slots__ = ('_itemsIDs',)
+    __slots__ = ('_triggersByItem',)
 
     def __init__(self):
         super(SetTriggerEffect, self).__init__()
-        self._itemsIDs = set()
+        self._triggersByItem = defaultdict(list)
 
     def play(self, effectData):
         itemID, actionType = effectData
         if actionType not in _ACTION_TO_TRIGGER_TYPE:
-            LOG_ERROR('Can not found type of trigger', itemID, actionType)
+            LOG_ERROR('Cannot find trigger type', itemID, actionType)
+            return False
+        else:
+            triggerType = _ACTION_TO_TRIGGER_TYPE[actionType]
+            layout = self._getTutorialLayout()
+            if layout is None:
+                return False
+            itemTriggers = self._triggersByItem[itemID]
+            if itemID in itemTriggers:
+                LOG_ERROR('Trigger is already set for item', itemID, triggerType)
+                return False
+            itemTriggers.append(triggerType)
+            layout.setTriggers(itemID, itemTriggers)
+            return True
+
+    def stop(self, effectID=None, effectSubType=None):
+        layout = self._getTutorialLayout()
+        itemID, actionType = effectID, effectSubType
+        if itemID is None:
+            if layout is not None:
+                for _itemID in self._triggersByItem.iterkeys():
+                    layout.clearTriggers(_itemID)
+
+            self._triggersByItem.clear()
+        elif actionType is None:
+            if itemID in self._triggersByItem:
+                if layout is not None:
+                    layout.clearTriggers(itemID)
+                del self._triggersByItem[itemID]
+        elif itemID in self._triggersByItem:
+            itemTriggers = self._triggersByItem[itemID]
+            if actionType in _ACTION_TO_TRIGGER_TYPE:
+                triggerType = _ACTION_TO_TRIGGER_TYPE[actionType]
+                if triggerType in itemTriggers:
+                    itemTriggers.remove(triggerType)
+                    if layout is not None:
+                        if itemTriggers:
+                            layout.setTriggers(itemID, itemTriggers)
+                        else:
+                            layout.clearTriggers(itemID)
+                    if not itemTriggers:
+                        del self._triggersByItem[itemID]
+            else:
+                LOG_ERROR('Cannot find trigger type', itemID, actionType)
+        return
+
+
+class SetItemPropsEffect(ApplicationEffect):
+    __slots__ = ()
+
+    def play(self, effectData):
+        itemID, props = effectData
+        layout = self._getTutorialLayout()
+        return False if layout is None else layout.setComponentProps(itemID, props)
+
+
+class PlayAnimationEffect(ApplicationEffect):
+    __slots__ = ('_activeEffects',)
+
+    def __init__(self):
+        super(PlayAnimationEffect, self).__init__()
+        self._activeEffects = {}
+
+    def isStillRunning(self, effectID=None, effectSubType=None):
+        return first(self._iterEffects(effectID, effectSubType)) is not None
+
+    def play(self, effectData):
+        itemID, animID = effectData
+        if itemID in self._activeEffects:
+            LOG_ERROR('Another animation is already playing on item.', itemID, 'Multiple animations on one item are not supported.')
+            return False
+        layout = self._getTutorialLayout()
+        if layout is None:
+            return False
+        elif layout.playComponentAnimation(itemID, animID):
+            self._activeEffects[itemID] = animID
+            return True
+        else:
+            return False
+
+    def stop(self, effectID=None, effectSubType=None):
+        layout = self._getTutorialLayout()
+        if layout is None:
             return
         else:
-            layout = self._getTutorialLayout()
-            if layout is not None:
-                self._itemsIDs.add(itemID)
-                layout.setTriggers(itemID, (_ACTION_TO_TRIGGER_TYPE[actionType],))
+            for itemID, animID in self._iterEffects(effectID, effectSubType):
+                layout.stopComponentAnimation(itemID, animID)
+                del self._activeEffects[itemID]
+
             return
 
-    def stop(self, effectID=None):
-        if effectID is None:
-            itemIDs = self._itemsIDs.copy()
-            self._itemsIDs.clear()
+    def cancel(self, scopeType, scopeName):
+        if scopeType == GUIEffectScope.COMPONENT:
+            self.stop(scopeName)
+
+    def _iterEffects(self, effectID, effectSubType):
+        itemID, animID = effectID, effectSubType
+        if itemID is None:
+            items = self._activeEffects.items()
+        elif itemID in self._activeEffects:
+            items = ((itemID, self._activeEffects[itemID]),)
         else:
-            itemIDs = {effectID}
-            if effectID not in self._itemsIDs:
-                LOG_ERROR('Trigger is not set for item', effectID)
-                return
-            self._itemsIDs.discard(effectID)
-        layout = self._getTutorialLayout()
-        if layout is not None:
-            for itemID in itemIDs:
-                layout.clearTriggers(itemID)
+            items = ()
+        for _itemID, _animID in items:
+            if animID in (_animID, None):
+                yield (_itemID, _animID)
 
         return
 
@@ -384,26 +486,24 @@ class EffectsPlayer(object):
             LOG_ERROR('GUI effect not found', effectName)
         return result
 
-    def stop(self, effectName, effectID):
+    def stop(self, effectName, effectID, effectSubType=None):
         if effectName in self._effects:
-            self._effects[effectName].stop(effectID=effectID)
+            self._effects[effectName].stop(effectID=effectID, effectSubType=effectSubType)
         else:
             LOG_ERROR('GUI effect not found', effectName)
 
-    def cancel(self, effectName, *criteria):
-        if effectName in self._effects:
-            self._effects[effectName].cancel(*criteria)
-        else:
-            LOG_ERROR('GUI effect not found', effectName)
+    def cancel(self, scopeType, scopeName):
+        for effect in self._effects.itervalues():
+            effect.cancel(scopeType, scopeName)
 
     def stopAll(self):
         for effect in self._effects.itervalues():
             effect.stop()
 
-    def isStillRunning(self, effectName, effectID=None):
+    def isStillRunning(self, effectName, effectID=None, effectSubType=None):
         result = False
         if effectName in self._effects:
-            result = self._effects[effectName].isStillRunning(effectID=effectID)
+            result = self._effects[effectName].isStillRunning(effectID=effectID, effectSubType=effectSubType)
         else:
             LOG_ERROR('GUI effect not found', effectName)
         return result

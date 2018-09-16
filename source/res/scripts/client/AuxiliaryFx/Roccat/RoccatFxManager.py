@@ -3,7 +3,7 @@
 import BigWorld
 from AuxiliaryFx.FxController import IAuxiliaryVehicleFx
 
-class ColorState:
+class ColorState(object):
 
     def __init__(self, zone, effect, speed, color):
         self.zone = zone
@@ -12,7 +12,7 @@ class ColorState:
         self.color = color
 
 
-class RoccatFxManager:
+class RoccatFxManager(object):
     ZONE_EVENT = 1
     ZONE_AMBIENT = 2
     EFFECT_OFF = 0

@@ -49,6 +49,9 @@ class _NoteTask(ContactTask):
     def sync(self, name, groups, sub=None, clanInfo=None):
         return self._result
 
+    def _doSync(self, name, groups=None, sub=None, clanInfo=None):
+        raise UserWarning('This method should not be reached in this context')
+
     def _update(self, note):
         user = self._getUser(protoType=None)
         if user:

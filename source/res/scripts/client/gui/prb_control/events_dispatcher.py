@@ -8,13 +8,12 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
-from gui.Scaleform.genConsts.FALLOUT_ALIASES import FALLOUT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.app_loader.decorators import sf_lobby
+from gui.app_loader import sf_lobby
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent
@@ -24,8 +23,7 @@ from messenger.ext.channel_num_gen import SPECIAL_CLIENT_WINDOWS
 from messenger.m_constants import LAZY_CHANNEL
 from skeletons.gui.game_control import IGameSessionController
 TOOLTIP_PRB_DATA = namedtuple('TOOLTIP_PRB_DATA', ('tooltipId', 'label'))
-_SQUAD_TYPE_TO_ALIAS = {PREBATTLE_TYPE.FALLOUT: PREBATTLE_ALIASES.FALLOUT_SQUAD_WINDOW_PY,
- PREBATTLE_TYPE.EVENT: PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY,
+_SQUAD_TYPE_TO_ALIAS = {PREBATTLE_TYPE.EVENT: PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY,
  PREBATTLE_TYPE.SQUAD: PREBATTLE_ALIASES.SQUAD_WINDOW_PY}
 _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
  'canClose',
@@ -259,27 +257,6 @@ class EventDispatcher(object):
          'value': self.__getTooltipPrbData(CHAT.CHANNELS_SQUADREADY_TOOLTIP if isTeamReady else CHAT.CHANNELS_SQUADNOTREADY_TOOLTIP),
          'isShowByReq': False,
          'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def loadFallout(self):
-        self.addFalloutToCarousel()
-
-    def addFalloutToCarousel(self):
-        clientID = channel_num_gen.getClientID4SpecialWindow(SPECIAL_CLIENT_WINDOWS.FALLOUT)
-        if not clientID:
-            LOG_ERROR('Client ID not found', 'addFalloutToCarousel')
-            return
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label='#fallout:channel/label', criteria={POP_UP_CRITERIA.VIEW_ALIAS: 'falloutBattleSelectorWindow'}, openHandler=self.showFalloutWindow)
-        self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
-
-    def removeFalloutFromCarousel(self, closeWindow=True):
-        clientID = channel_num_gen.getClientID4SpecialWindow(SPECIAL_CLIENT_WINDOWS.FALLOUT)
-        if not clientID:
-            LOG_ERROR('Client ID not found', 'removeFalloutFromCarousel')
-            return
-        self.__handleRemoveRequest(clientID, closeWindow=closeWindow)
-
-    def showFalloutWindow(self):
-        self.__fireShowEvent(FALLOUT_ALIASES.FALLOUT_BATTLE_SELECTOR_WINDOW)
 
     def _showUnitProgress(self, prbType, show):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)

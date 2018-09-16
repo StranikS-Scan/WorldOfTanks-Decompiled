@@ -44,10 +44,6 @@ class _CompareBasketListener(object):
         return
 
     def __onChanged(self, changedData):
-        """
-        gui.game_control.VehComparisonBasket.onChange event handler
-        :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData
-        """
         if changedData.addedCDs:
             cMgr = self.__getContainerManager()
             if not cMgr.isViewAvailable(ViewTypes.LOBBY_SUB, {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.VEHICLE_COMPARE}):
@@ -75,7 +71,8 @@ class _CompareBasketListener(object):
     def __onViewAddedToContainer(self, _, pyEntity):
         settings = pyEntity.settings
         if settings.type == ViewTypes.WINDOW and settings.alias == VEHICLE_COMPARE_CONSTANTS.VEHICLE_COMPARE_CART_POPOVER:
-            assert self.__currentCartPopover is None, 'Attempt to initialize object 2nd time!'
+            if self.__currentCartPopover is not None:
+                raise UserWarning('Attempt to initialize object 2nd time!')
             self.__currentCartPopover = pyEntity
             self.__currentCartPopover.onDispose += self.__onCartPopoverDisposed
         return

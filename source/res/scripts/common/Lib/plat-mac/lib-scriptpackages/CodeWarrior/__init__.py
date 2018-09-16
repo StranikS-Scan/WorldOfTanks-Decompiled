@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/CodeWarrior/__init__.py
-"""
-Package generated from /Volumes/Sap/Applications (Mac OS 9)/Metrowerks CodeWarrior 7.0/Metrowerks CodeWarrior/CodeWarrior IDE 4.2.5
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the CodeWarrior package is removed.', stacklevel=2)
 import aetools

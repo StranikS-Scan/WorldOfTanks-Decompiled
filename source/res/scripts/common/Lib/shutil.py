@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/shutil.py
-"""Utility functions for copying and archiving files and directory trees.
-
-XXX The functions here don't copy the resource fork or other metadata on Mac.
-
-"""
 import os
 import sys
 import stat
@@ -45,13 +40,10 @@ class Error(EnvironmentError):
 
 
 class SpecialFileError(EnvironmentError):
-    """Raised when trying to do a kind of operation (e.g. copying) which is
-    not supported on a special file (e.g. a named pipe)"""
     pass
 
 
 class ExecError(EnvironmentError):
-    """Raised when a command could not be executed"""
     pass
 
 
@@ -61,7 +53,6 @@ except NameError:
     WindowsError = None
 
 def copyfileobj(fsrc, fdst, length=16384):
-    """copy data from file-like object fsrc to file-like object fdst"""
     while 1:
         buf = fsrc.read(length)
         if not buf:
@@ -80,7 +71,6 @@ def _samefile(src, dst):
 
 
 def copyfile(src, dst):
-    """Copy data from src to dst"""
     if _samefile(src, dst):
         raise Error('`%s` and `%s` are the same file' % (src, dst))
     for fn in [src, dst]:
@@ -98,7 +88,6 @@ def copyfile(src, dst):
 
 
 def copymode(src, dst):
-    """Copy mode bits from src to dst"""
     if hasattr(os, 'chmod'):
         st = os.stat(src)
         mode = stat.S_IMODE(st.st_mode)
@@ -106,7 +95,6 @@ def copymode(src, dst):
 
 
 def copystat(src, dst):
-    """Copy all stat info (mode bits, atime, mtime, flags) from src to dst"""
     st = os.stat(src)
     mode = stat.S_IMODE(st.st_mode)
     if hasattr(os, 'utime'):
@@ -125,11 +113,6 @@ def copystat(src, dst):
 
 
 def copy(src, dst):
-    """Copy data and mode bits ("cp src dst").
-    
-    The destination may be a directory.
-    
-    """
     if os.path.isdir(dst):
         dst = os.path.join(dst, os.path.basename(src))
     copyfile(src, dst)
@@ -137,11 +120,6 @@ def copy(src, dst):
 
 
 def copy2(src, dst):
-    """Copy data and all stat info ("cp -p src dst").
-    
-    The destination may be a directory.
-    
-    """
     if os.path.isdir(dst):
         dst = os.path.join(dst, os.path.basename(src))
     copyfile(src, dst)
@@ -149,10 +127,6 @@ def copy2(src, dst):
 
 
 def ignore_patterns(*patterns):
-    """Function that can be used as copytree() ignore parameter.
-    
-    Patterns is a sequence of glob-style patterns
-    that are used to exclude files"""
 
     def _ignore_patterns(path, names):
         ignored_names = []
@@ -165,31 +139,6 @@ def ignore_patterns(*patterns):
 
 
 def copytree(src, dst, symlinks=False, ignore=None):
-    """Recursively copy a directory tree using copy2().
-    
-    The destination directory must not already exist.
-    If exception(s) occur, an Error is raised with a list of reasons.
-    
-    If the optional symlinks flag is true, symbolic links in the
-    source tree result in symbolic links in the destination tree; if
-    it is false, the contents of the files pointed to by symbolic
-    links are copied.
-    
-    The optional ignore argument is a callable. If given, it
-    is called with the `src` parameter, which is the directory
-    being visited by copytree(), and `names` which is the list of
-    `src` contents, as returned by os.listdir():
-    
-        callable(src, names) -> ignored_names
-    
-    Since copytree() is called recursively, the callable will be
-    called once for each directory that is copied. It returns a
-    list of names relative to the `src` directory that should
-    not be copied.
-    
-    XXX Consider this example code rather than the ultimate tool.
-    
-    """
     names = os.listdir(src)
     if ignore is not None:
         ignored_names = ignore(src, names)
@@ -229,16 +178,6 @@ def copytree(src, dst, symlinks=False, ignore=None):
 
 
 def rmtree(path, ignore_errors=False, onerror=None):
-    """Recursively delete a directory tree.
-    
-    If ignore_errors is set, errors are ignored; otherwise, if onerror
-    is set, it is called to handle the error with arguments (func,
-    path, exc_info) where func is os.listdir, os.remove, or os.rmdir;
-    path is the argument to that function that caused it to fail; and
-    exc_info is a tuple returned by sys.exc_info().  If ignore_errors
-    is false and onerror is None, an exception is raised.
-    
-    """
     if ignore_errors:
 
         def onerror(*args):
@@ -290,22 +229,6 @@ def _basename(path):
 
 
 def move(src, dst):
-    """Recursively move a file or directory to another location. This is
-    similar to the Unix "mv" command.
-    
-    If the destination is a directory or a symlink to a directory, the source
-    is moved inside the directory. The destination path must not already
-    exist.
-    
-    If the destination already exists but is not a directory, it may be
-    overwritten depending on os.rename() semantics.
-    
-    If the destination is on our current filesystem, then rename() is used.
-    Otherwise, src is copied to the destination and then removed.
-    A lot more could be done here...  A look at a mv.c shows a lot of
-    the issues this implementation glosses over.
-    
-    """
     real_dst = dst
     if os.path.isdir(dst):
         if _samefile(src, dst):
@@ -338,7 +261,6 @@ def _destinsrc(src, dst):
 
 
 def _get_gid(name):
-    """Returns a gid, given a group name."""
     if getgrnam is None or name is None:
         return
     else:
@@ -351,7 +273,6 @@ def _get_gid(name):
 
 
 def _get_uid(name):
-    """Returns an uid, given a user name."""
     if getpwnam is None or name is None:
         return
     else:
@@ -364,20 +285,6 @@ def _get_uid(name):
 
 
 def _make_tarball(base_name, base_dir, compress='gzip', verbose=0, dry_run=0, owner=None, group=None, logger=None):
-    """Create a (possibly compressed) tar file from all the files under
-    'base_dir'.
-    
-    'compress' must be "gzip" (the default), "bzip2", or None.
-    
-    'owner' and 'group' can be used to define an owner and a group for the
-    archive that is being built. If not provided, the current owner and group
-    will be used.
-    
-    The output tar file will be named 'base_name' +  ".tar", possibly plus
-    the appropriate compression extension (".gz", or ".bz2").
-    
-    Returns the output filename.
-    """
     tar_compression = {'gzip': 'gz',
      'bzip2': 'bz2',
      None: ''}
@@ -434,14 +341,6 @@ def _call_external_zip(base_dir, zip_filename, verbose=False, dry_run=False):
 
 
 def _make_zipfile(base_name, base_dir, verbose=0, dry_run=0, logger=None):
-    """Create a zip file from all the files under 'base_dir'.
-    
-    The output zip file will be named 'base_name' + ".zip".  Uses either the
-    "zipfile" Python module (if available) or the InfoZIP "zip" utility
-    (if installed and found on the default search path).  If neither tool is
-    available, raises ExecError.  Returns the name of the output zip
-    file.
-    """
     zip_filename = base_name + '.zip'
     archive_dir = os.path.dirname(base_name)
     if not os.path.exists(archive_dir):
@@ -478,24 +377,12 @@ _ARCHIVE_FORMATS = {'gztar': (_make_tarball, [('compress', 'gzip')], "gzip'ed ta
  'zip': (_make_zipfile, [], 'ZIP file')}
 
 def get_archive_formats():
-    """Returns a list of supported formats for archiving and unarchiving.
-    
-    Each element of the returned sequence is a tuple (name, description)
-    """
     formats = [ (name, registry[2]) for name, registry in _ARCHIVE_FORMATS.items() ]
     formats.sort()
     return formats
 
 
 def register_archive_format(name, function, extra_args=None, description=''):
-    """Registers an archive format.
-    
-    name is the name of the format. function is the callable that will be
-    used to create archives. If provided, extra_args is a sequence of
-    (name, value) tuples that will be passed as arguments to the callable.
-    description can be provided to describe the format, and will be returned
-    by the get_archive_formats() function.
-    """
     if extra_args is None:
         extra_args = []
     if not isinstance(function, collections.Callable):
@@ -515,22 +402,6 @@ def unregister_archive_format(name):
 
 
 def make_archive(base_name, format, root_dir=None, base_dir=None, verbose=0, dry_run=0, owner=None, group=None, logger=None):
-    """Create an archive file (eg. zip or tar).
-    
-    'base_name' is the name of the file to create, minus any format-specific
-    extension; 'format' is the archive format: one of "zip", "tar", "bztar"
-    or "gztar".
-    
-    'root_dir' is a directory that will be the root directory of the
-    archive; ie. we typically chdir into 'root_dir' before creating the
-    archive.  'base_dir' is the directory where we start archiving from;
-    ie. 'base_dir' will be the common prefix of all files and
-    directories in the archive.  'root_dir' and 'base_dir' both default
-    to the current directory.  Returns the name of the archive file.
-    
-    'owner' and 'group' are used when creating a tar archive. By default,
-    uses the current owner and group.
-    """
     save_cwd = os.getcwd()
     if root_dir is not None:
         if logger is not None:

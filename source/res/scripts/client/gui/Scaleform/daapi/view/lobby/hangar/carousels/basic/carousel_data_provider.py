@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/carousel_data_provider.py
-from gui.Scaleform.daapi.view.lobby.vehicle_carousel.carousel_data_provider import CarouselDataProvider, getStatusStrings
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider, getStatusStrings
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles
@@ -16,12 +16,10 @@ class _SUPPLY_ITEMS(object):
 
 
 class HangarCarouselDataProvider(CarouselDataProvider):
-    """ Vehicle data provider specific to hangar's carousel (has special supply slots)
-    """
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(HangarCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
-        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.ONLY_FOR_FALLOUT
+        self._baseCriteria = REQ_CRITERIA.INVENTORY
         self._supplyItems = []
         self._emptySlotsCount = 0
 
@@ -33,8 +31,6 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         return len(self._filteredIndices) - len(self._getAdditionalItemsIndexes())
 
     def updateSupplies(self):
-        """ Update the supply slots: 'buy tank' and 'buy slot'.
-        """
         self._supplyItems = []
         self._buildSupplyItems()
         self.flashObject.invalidateItems(self.__getSupplyIndices(), self._supplyItems)
@@ -87,11 +83,6 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         return
 
     def __getSupplyIndices(self):
-        """ Get the indices of supply items relatively to the vehicles list.
-        Supply items go after the vehicles, but they're in separate list.
-        
-        :return: list of supply items indices
-        """
         return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]
 
 
@@ -102,8 +93,6 @@ class BCCarouselDataProvider(CarouselDataProvider):
         return self._vehicleItems
 
     def updateSupplies(self):
-        """ Update the supply slots: 'buy tank' and 'buy slot'.
-        """
         pass
 
     def _buildVehicleItems(self):

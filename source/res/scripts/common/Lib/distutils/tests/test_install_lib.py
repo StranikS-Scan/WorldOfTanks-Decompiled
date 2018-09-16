@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_install_lib.py
-"""Tests for distutils.command.install_data."""
 import os
 import sys
 import unittest

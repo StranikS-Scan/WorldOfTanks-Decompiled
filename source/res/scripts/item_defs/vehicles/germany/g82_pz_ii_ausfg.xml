@@ -1,7 +1,6 @@
 <G82_Pz_II_AusfG.xml>
   <crew>
     <commander>	gunner
-
 			loader	</commander>
     <driver></driver>
     <radioman></radioman>
@@ -87,7 +86,7 @@
       <userString>	#germany_vehicles:Chassis_Pz_II_AusfG	</userString>
       <tags></tags>
       <level>	2	</level>
-      <price>	660.0	</price>
+      <price>	660	</price>
       <unlocks>
         <chassis>	Chassis_Pz_II_AusfG_2	  <cost>	375	</cost>
         </chassis>
@@ -222,7 +221,7 @@
         <right>	vehicles/german/G82_Pz_II_AusfG/track/right.track	</right>
         <segmentLength>	0.11	</segmentLength>
         <segmentOffset>	0.075	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -348,7 +347,7 @@
       <userString>	#germany_vehicles:Chassis_Pz_II_AusfG_2	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	2160.0	</price>
+      <price>	2160	</price>
       <unlocks>
         <vehicle>	G86_VK2001DB	  <cost>	4570	</cost>
         </vehicle>
@@ -483,7 +482,7 @@
         <right>	vehicles/german/G82_Pz_II_AusfG/track/right.track	</right>
         <segmentLength>	0.11	</segmentLength>
         <segmentOffset>	0.075	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -611,7 +610,7 @@
       <userString>	#germany_vehicles:Turret_1_Pz_II_AusfG	</userString>
       <tags>	cannotDetach	</tags>
       <level>	2	</level>
-      <price>	720.0	</price>
+      <price>	720	</price>
       <armor>
         <armor_1>	14.5	</armor_1>
         <armor_2>	14.5	</armor_2>
@@ -746,7 +745,7 @@
       <userString>	#germany_vehicles:Turret_2_Pz_II_AusfG	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1900.0	</price>
+      <price>	1900	</price>
       <unlocks>
         <gun>	_30mm_MK103	  <cost>	3150	</cost>
         </gun>
@@ -956,12 +955,12 @@
   </fuelTanks>
   <radios>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
+        <radio>	FuG7	  <cost>	1360	</cost>
         </radio>
       </unlocks>
     </FuG5>
     <FuG7>	shared	  <unlocks>
-        <radio>	FuG_Spr.A	  <cost>	4500.0	</cost>
+        <radio>	FuG_Spr.A	  <cost>	4500	</cost>
         </radio>
       </unlocks>
     </FuG7>

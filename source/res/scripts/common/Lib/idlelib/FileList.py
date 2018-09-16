@@ -14,7 +14,6 @@ class FileList:
         self.vars = {}
 
     def open(self, filename, action=None):
-        assert filename
         filename = self.canonize(filename)
         if os.path.isdir(filename):
             tkMessageBox.showerror('File Error', '%r is a directory.' % (filename,), master=self.root)

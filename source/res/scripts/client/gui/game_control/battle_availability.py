@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_availability.py
 import Event
-from debug_utils import LOG_DEBUG
 from helpers import time_utils
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier

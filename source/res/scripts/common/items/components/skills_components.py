@@ -6,7 +6,6 @@ from items.components import shared_components
 from items.components import skills_constants
 
 class BasicSkill(legacy_stuff.LegacyStuff):
-    """Class to store basic information about skill."""
     __slots__ = ('__name', '__i18n', '__icon')
 
     def __init__(self, name, i18n=None, icon=None):
@@ -20,17 +19,14 @@ class BasicSkill(legacy_stuff.LegacyStuff):
 
     @property
     def name(self):
-        """Gets string containing name of skill."""
         return self.__name
 
     @property
     def i18n(self):
-        """Gets instance of I18nComponent or None"""
         return self.__i18n
 
     @property
     def userString(self):
-        """Gets string containing UTF8 user-friendly name of the skill or empty string."""
         if self.__i18n is not None:
             return self.__i18n.userString
         else:
@@ -39,7 +35,6 @@ class BasicSkill(legacy_stuff.LegacyStuff):
 
     @property
     def description(self):
-        """Gets string containing UTF8 user-friendly description of the skill or empty string."""
         if self.__i18n is not None:
             return self.__i18n.description
         else:
@@ -48,19 +43,13 @@ class BasicSkill(legacy_stuff.LegacyStuff):
 
     @property
     def icon(self):
-        """Gets string containing name icon file with extension or empty string."""
         return self.__icon
 
     def recreate(self, *args):
-        """Create new instance of desired skill with factors that are defined in arguments.
-        :param args: tuple containing factors.
-        :return: new instance of desired skill.
-        """
         raise NotImplementedError
 
 
 class SingleNumberSkill(BasicSkill):
-    """Class of skill that has one number factor."""
     __slots__ = ('_value',)
 
     def __init__(self, basicSkill, value):
@@ -72,7 +61,6 @@ class SingleNumberSkill(BasicSkill):
 
 
 class DualNumberSkill(BasicSkill):
-    """Class of skill that has two numbers factors."""
     __slots__ = ('_first', '_second')
 
     def __init__(self, basicSkill, left, right):
@@ -269,7 +257,6 @@ class RadiomanRetransmitterSkill(SingleNumberSkill):
 
 
 class SkillsConfig(legacy_stuff.LegacyStuff):
-    """Container to store all active skills + basic information about roles."""
     __slots__ = skills_constants.ROLES | skills_constants.ACTIVE_SKILLS
 
     @staticmethod
@@ -277,15 +264,7 @@ class SkillsConfig(legacy_stuff.LegacyStuff):
         return len(skills_constants.ACTIVE_SKILLS)
 
     def addSkill(self, name, skill):
-        """Adds new skill to container.
-        :param name: string containing name of skill.
-        :param skill: instance of class BaseSkill.
-        """
         setattr(self, name, skill)
 
     def getSkill(self, name):
-        """Gets skill by name.
-        :param name: string containing name of skill.
-        :return: instance of class BaseSkill.
-        """
         return getattr(self, name, BasicSkill('unknown'))

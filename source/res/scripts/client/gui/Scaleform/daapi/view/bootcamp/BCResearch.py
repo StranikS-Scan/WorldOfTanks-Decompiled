@@ -10,7 +10,6 @@ from skeletons.gui.shared import IItemsCache
 from helpers import dependency
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import event_dispatcher as shared_events
-from bootcamp.BootcampGarage import g_bootcampGarage
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
@@ -22,7 +21,7 @@ class BCResearchItemsData(ResearchItemsData):
         lessonNum = g_bootcamp.getLessonNum()
         self.__overrideResearch = lessonNum < g_bootcamp.getContextIntParameter('researchFreeLesson')
         self.__secondVehicleResearch = lessonNum < g_bootcamp.getContextIntParameter('researchSecondVehicleLesson')
-        nationData = g_bootcampGarage.getNationData()
+        nationData = g_bootcamp.getNationData()
         self.__firstVehicleNode = nationData['vehicle_first']
         self.__secondVehicleNode = nationData['vehicle_second']
         self.__moduleNodeCD = nationData['module']
@@ -30,10 +29,6 @@ class BCResearchItemsData(ResearchItemsData):
     def _addNode(self, nodeCD, node):
         state = node.getState()
         if self.__overrideResearch:
-            if nodeCD == self.__secondVehicleNode:
-                g_bootcampGarage.setSecondVehicleNode(node)
-            elif nodeCD == self.__moduleNodeCD:
-                g_bootcampGarage.setModuleNode(node)
             if not NODE_STATE.inInventory(state):
                 state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.NOT_CLICKABLE)
             if self.getRootCD() == self.__firstVehicleNode:
@@ -71,43 +66,25 @@ class BCResearch(Research):
         super(BCResearch, self).request4Info(itemCD, rootCD)
 
     def request4Unlock(self, unlockCD, vehCD, unlockIdx, xpCost):
-        nationData = g_bootcampGarage.getNationData()
+        nationData = g_bootcamp.getNationData()
         if nationData['module'] == unlockCD:
-            g_bootcampGarage.hideHint()
             super(BCResearch, self).request4Unlock(unlockCD, vehCD, unlockIdx, xpCost)
-            g_bootcampGarage.highlightLobbyHint('DialogAccept')
         elif nationData['vehicle_second'] == unlockCD:
             shared_events.showVehiclePreview(int(unlockCD), self.alias)
         else:
             super(BCResearch, self).request4Unlock(unlockCD, vehCD, unlockIdx, xpCost)
 
     def request4Buy(self, itemCD):
-        nationData = g_bootcampGarage.getNationData()
+        nationData = g_bootcamp.getNationData()
         if nationData['module'] == itemCD:
-            g_bootcampGarage.hideHint()
             super(BCResearch, self).request4Buy(itemCD)
-            g_bootcampGarage.highlightLobbyHint('DialogAccept')
         elif nationData['vehicle_second'] == itemCD:
             shared_events.showVehiclePreview(int(itemCD), self.alias)
         else:
             super(BCResearch, self).request4Buy(itemCD)
 
-    def exitFromResearch(self):
-        if not g_bootcampGarage.isLessonSuspended:
-            super(BCResearch, self).exitFromResearch()
-
     def invalidateVehCompare(self):
         pass
-
-    def invalidateUnlocks(self, unlocks):
-        super(BCResearch, self).invalidateUnlocks(unlocks)
-        if g_bootcamp.getLessonNum() < g_bootcamp.getContextIntParameter('researchFreeLesson'):
-            g_bootcampGarage.showNextHint()
-
-    def invalidateInventory(self, data):
-        super(BCResearch, self).invalidateInventory(data)
-        if g_bootcamp.getLessonNum() < g_bootcamp.getContextIntParameter('researchFreeLesson'):
-            g_bootcampGarage.showNextHint()
 
     def goToTechTree(self, nation):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': nation}), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -139,8 +116,6 @@ class BCResearch(Research):
             shared_events.showVehiclePreview(int(itemCD), self.alias)
         elif vehicle.isInInventory:
             shared_events.selectVehicleInHangar(itemCD)
-            if g_bootcamp.getLessonNum() >= g_bootcamp.getContextIntParameter('researchSecondVehicleLesson'):
-                g_bootcampGarage.checkSecondVehicleHintEnabled()
 
     def setupContextHints(self, hintID):
         pass

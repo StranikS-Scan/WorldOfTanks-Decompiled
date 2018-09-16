@@ -68,12 +68,6 @@ class RegularStatsComposer(StatsComposer):
         super(RegularStatsComposer, self).__init__(reusable, templates.REGULAR_COMMON_STATS_BLOCK.clone(), templates.REGULAR_PERSONAL_STATS_BLOCK.clone(), templates.REGULAR_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
 
 
-class FalloutStatsComposer(StatsComposer):
-
-    def __init__(self, reusable):
-        super(FalloutStatsComposer, self).__init__(reusable, templates.FALLOUT_COMMON_STATS_BLOCK.clone(), templates.REGULAR_PERSONAL_STATS_BLOCK.clone(), templates.REGULAR_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
-
-
 class CyberSportStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
@@ -120,9 +114,6 @@ class RankedBattlesStatsComposer(StatsComposer):
         self.__resultsTeamsBlock.setRecord(results, reusable)
 
     def getResultsTeamsVO(self):
-        """
-        Returns VO for external RankedBattlesBattleResults view.
-        """
         return self.__resultsTeamsBlock.getVO()
 
 
@@ -147,15 +138,9 @@ class BootcampStatsComposer(IStatsComposer):
 
 
 def createComposer(reusable):
-    """Create composer to build data by type of bonus.
-    :param reusable: instance of _ReusableInfo.
-    :return: instance of composer.
-    """
     bonusType = reusable.common.arenaBonusType
     if bonusType == ARENA_BONUS_TYPE.CYBERSPORT:
         composer = CyberSportStatsComposer(reusable)
-    elif bonusType in ARENA_BONUS_TYPE.FALLOUT_RANGE:
-        composer = FalloutStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.RATED_SANDBOX:
         composer = RatedSandboxStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.SANDBOX:

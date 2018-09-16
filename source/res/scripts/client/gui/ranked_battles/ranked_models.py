@@ -49,14 +49,10 @@ class RANK_CHANGE_STATES(object):
 class RankedCycle(namedtuple('RankedCycle', 'ID, status, startDate, endDate, ordinalNumber, points')):
 
     def __cmp__(self, other):
-        assert isinstance(other, RankedCycle)
         return cmp(self.ID, other.ID)
 
 
 class RankedSeason(object):
-    """
-    Wrapper for raw data from server, presenting info about season and its cycles
-    """
 
     def __init__(self, seasonInfo, seasonData, stats=None, points=0):
         self.__cycleStartDate, self.__cycleEndDate, self.__seasonId, self.__cycleID = seasonInfo
@@ -93,16 +89,9 @@ class RankedSeason(object):
         return self.__cycleEndDate
 
     def getCycleOrdinalNumber(self):
-        """
-        @return: ordinal number of current cycle (starting from 1) or 0 if not presented
-        """
         return self.getCycleInfo().ordinalNumber
 
     def getPassedCyclesNumber(self):
-        """
-        Iterate through cycles to calculate the number of passed cycles.
-        :return: the number of passed cycles (int)
-        """
         return sum((1 for cycle in self.getAllCycles().values() if cycle.status == CYCLE_STATUS.PAST))
 
     def getNumber(self):
@@ -112,9 +101,6 @@ class RankedSeason(object):
         return str(self.getNumber())
 
     def getPoints(self):
-        """
-        @return: total points for season
-        """
         dossierData = self.__stats.get((self.__seasonId, 0))
         if dossierData:
             _, _, _, points, _ = dossierData
@@ -183,13 +169,11 @@ class RankProgress(object):
         self._steps = steps
 
     def __eq__(self, other):
-        assert isinstance(other, RankProgress)
         if len(self.getSteps()) != len(other.getSteps()):
             return False
         return False if len(self.getAcquiredSteps()) != len(other.getAcquiredSteps()) else True
 
     def __ne__(self, other):
-        assert isinstance(other, RankProgress)
         return not self.__eq__(other)
 
     def getSteps(self):
@@ -224,13 +208,11 @@ class Rank(object):
         self.__finalQuest = finalQuest
 
     def __eq__(self, other):
-        assert isinstance(other, Rank)
         if self.getID() != other.getID():
             return False
         return False if self.getProgress() != other.getProgress() else True
 
     def __ne__(self, other):
-        assert isinstance(other, Rank)
         return not self.__eq__(other)
 
     def getType(self):
@@ -270,14 +252,6 @@ class Rank(object):
         return self._state & RANK_STATE.MAXIMUM > 0
 
     def isRewardClaimed(self):
-        """
-        Check whether user has seen awards for this rank.
-        It is possible to re-achieve a rank without getting the same awards again.
-        IMPORTANT: Server will complete the quest itself if the user watches the match till the end and
-                   returned to Hangar after battle. But if the user leaves the match, client's RankedBattlesController
-                   will complete the quest (after user clicks to receive awards).
-        :return: True if quest is NOT associated with this rank or the associated quest is completed, False otherwise.
-        """
         return self._quest is None or self._quest.isCompleted()
 
     def hasProgress(self):
@@ -301,7 +275,6 @@ class Rank(object):
         return self.__points
 
     def getAwardsVOs(self, forCycleFinish=False, iconSize='small'):
-        assert isinstance(forCycleFinish, bool)
         quest = self.__finalQuest if forCycleFinish else self._quest
         awards = []
         if quest is not None:
@@ -361,12 +334,6 @@ class PrimeTime(object):
         return bool(self.__periods)
 
     def getAvailability(self, forTime, cycleEnd):
-        """
-        Get availability for given time and cycle end for that time
-        :param forTime: time stamp in UTC
-        :param cycleEnd: cycle end time stamp in UTC
-        :return: (is available that time, seconds left til end/start)
-        """
         periods = self.getPeriodsBetween(forTime, cycleEnd)
         if periods:
             periodsIter = iter(periods)
@@ -381,12 +348,6 @@ class PrimeTime(object):
         return (False, 0)
 
     def getPeriodsBetween(self, startTime, endTime):
-        """
-        Return the periods that includes two timestamps
-        :param startTime: start time stamp in UTC
-        :param endTime: end time stamp in UTC
-        :return: list on periods as (start, end)
-        """
         periods = []
         startDateTime = time_utils.getDateTimeInUTC(startTime)
         startTimeDayStart, _ = time_utils.getDayTimeBoundsForUTC(startTime)
@@ -432,10 +393,6 @@ class PostBattleRankInfo(namedtuple('PostBattleRankInfo', ('accRank', 'accStep',
 
     @property
     def shieldState(self):
-        """
-        Returns shield state
-        :return:
-        """
         currentRankID = self.accRank
         shieldState = self.shields.get(currentRankID, None)
         state = None

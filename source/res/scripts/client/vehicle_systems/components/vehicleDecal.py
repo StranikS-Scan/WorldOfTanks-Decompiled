@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/vehicleDecal.py
-import BigWorld
 import weakref
+import BigWorld
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from vehicle_systems.tankStructure import TankPartNames
 
-class VehicleDecal:
+class VehicleDecal(object):
     settingsCore = dependency.descriptor(ISettingsCore)
     SHADOW_OFF_SETTING = 3.9
     DECALS_OFF = 0

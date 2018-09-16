@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/QUESTS_ALIASES.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class QUESTS_ALIASES(object):
     FALLOUT_TILE_CHAINS_VIEW_ALIAS = 'FalloutQuestsTileChainsView'
@@ -14,8 +11,6 @@ class QUESTS_ALIASES(object):
     EMPTY = 'empty'
     SEASON_VIEW_TAB_RANDOM = 'seasonViewTabRandom'
     SEASON_VIEW_TAB_FALLOUT = 'seasonViewTabFallout'
-    QUEST_TASKS_PROGRESS_FALLOUT = 'QuestsProgressFalloutUI'
-    QUEST_TASKS_PROGRESS_LINKAGES = [QUEST_TASKS_PROGRESS_FALLOUT]
     RENDERER_TYPE_BLOCK_TITLE = 1
     RENDERER_TYPE_QUEST = 2
     MISSIONS_MARATHONS_VIEW_PY_ALIAS = 'MissionsMarathonsView'

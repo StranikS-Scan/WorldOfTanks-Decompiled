@@ -63,7 +63,7 @@ class _SequenceAchieveFactory(_AchieveFactory):
 
     def create(self, value=None):
         counts = {}
-        achieves = self._dossier.getBlock(self._block)
+        achieves = self._dossier.getBlock(self._block) if self._dossier is not None else ()
         for achieveID in set(achieves):
             counts[achieveID] = achieves.count(achieveID)
 

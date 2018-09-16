@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/install_headers.py
-"""distutils.command.install_headers
-
-Implements the Distutils 'install_headers' command, to install C/C++ header
-files to the Python include directory."""
 __revision__ = '$Id$'
 from distutils.core import Command
 

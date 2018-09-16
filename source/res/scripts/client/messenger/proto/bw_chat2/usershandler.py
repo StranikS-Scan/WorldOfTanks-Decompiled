@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/UsersHandler.py
 from messenger.m_constants import GAME_ONLINE_STATUS, USER_TAG
-from messenger.proto.bw_chat2 import provider, limits
+from messenger.proto.bw_chat2 import provider as bw2_provider, limits
 from messenger.proto.bw_chat2.wrappers import SearchResultIterator
 from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS, messageArgs
 from debug_utils import LOG_WARNING
 from messenger.storage import storage_getter
 
-class UsersHandler(provider.ResponseDictHandler):
+class UsersHandler(bw2_provider.ResponseDictHandler):
 
     def __init__(self, provider):
         super(UsersHandler, self).__init__(provider)

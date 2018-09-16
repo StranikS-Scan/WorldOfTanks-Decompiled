@@ -20,30 +20,17 @@ _ENEMY_OFFSET_DISABLED_BY_GAMEPLAY = ('assault',
  'domination30x30')
 
 def makeClientTeamBaseID(team, baseID):
-    """Makes unique ID to team base as first 6 bits of team number
-    (0..63 ids available), the other bits on baseID.
-    :param team: number of team.
-    :param baseID:  number containing unique ID of base.
-    :return: number containing client ID.
-    """
     if baseID is None:
         baseID = 0
     return (int(baseID) << 6) + team
 
 
 def parseClientTeamBaseID(clientID):
-    """Parses clientID for team base.
-    :param clientID: number containing client ID.
-    :return: tuple(team, baseID)
-    """
     team = clientID & 63
     return (team, clientID >> 6)
 
 
 class ITeamBasesListener(object):
-    """
-    View component that shows the team bases points.
-    """
 
     def setOffsetForEnemyPoints(self):
         pass
@@ -74,10 +61,6 @@ class ITeamBasesListener(object):
 
 
 class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController):
-    """
-    Controller adds, updates indicators in UI. It plays sounds when some base is
-    capturing.
-    """
     __slots__ = ('__battleCtx', '__arenaVisitor', '__clientIDs', '__points', '__sounds', '__callbackIDs', '__snap', '__captured')
 
     def __init__(self):
@@ -96,17 +79,12 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         return BATTLE_CTRL_ID.TEAM_BASES
 
     def startControl(self, battleCtx, arenaVisitor):
-        """Starts to control
-        :param battleCtx: instance of BattleContext.
-        :param arenaVisitor: instance of _ClientArenaVisitor.
-        """
         self.__battleCtx = battleCtx
         self.__arenaVisitor = arenaVisitor
         g_playerEvents.onTeamChanged += self.__onTeamChanged
         g_playerEvents.onRoundFinished += self.__onRoundFinished
 
     def stopControl(self):
-        """Stops to control"""
         while self.__clientIDs:
             clientID = self.__clientIDs.pop()
             for viewCmp in self._viewComponents:
@@ -125,10 +103,6 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         return
 
     def setViewComponents(self, *components):
-        """
-        Sets view component.
-        :param panel: instance of view component.
-        """
         super(BattleTeamsBasesController, self).setViewComponents(*components)
         if not self._viewComponents:
             return
@@ -155,35 +129,15 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
                 viewCmp.setNoBaseCapturing()
 
     def getTeamBasePoints(self, clientID):
-        """
-        Gets capture points for specified team base.
-        :param clientID: integer containing generated ID by makeClientTeamBaseID.
-        :return: integer containing value of points.
-        """
         points = 0
         if clientID in self.__points:
             points, _, _, _ = self.__points[clientID]
         return points
 
     def isTeamBaseCaptured(self, clientID):
-        """
-        Is base captured.
-        :param clientID: integer containing generated ID by makeClientTeamBaseID.
-        :return: bool.
-        """
         return clientID in self.__captured
 
     def invalidateTeamBasePoints(self, baseTeam, baseID, points, timeLeft, invadersCnt, capturingStopped):
-        """
-        Adds/Updates indicator for base that is capturing in UI.
-        :param baseTeam: number of base's team.
-        :param baseID: integer containing unique ID of base.
-        :param points: integer containing value of points (0 ... 100).
-        :param timeLeft: time left until base will be captured
-        :param invadersCnt: count of invaders
-        :param capturingStopped: is capture stopped.
-        :return:
-        """
         if baseTeam not in _AVAILABLE_TEAMS_NUMBERS:
             return
         clientID = makeClientTeamBaseID(baseTeam, baseID)
@@ -224,11 +178,6 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
                 self.__stopCaptureSound(baseTeam)
 
     def invalidateTeamBaseCaptured(self, baseTeam, baseID):
-        """
-        Adds/Updates indicator for base that is captured in UI.
-        :param baseTeam: number of base's team.
-        :param baseID: integer containing unique ID of base.
-        """
         if baseTeam not in _AVAILABLE_TEAMS_NUMBERS:
             return
         clientID = makeClientTeamBaseID(baseTeam, baseID)
@@ -249,9 +198,6 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         self.__stopCaptureSound(baseTeam)
 
     def removeTeamsBases(self):
-        """
-        Removes all teams base from UI, stop plays sounds.
-        """
         if not BattleReplay.isPlaying():
             for viewCmp in self._viewComponents:
                 viewCmp.removeTeamsBases()
@@ -259,9 +205,6 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         self.__stopCaptureSounds()
 
     def __onTeamChanged(self, teamID):
-        """
-        Remove the UI, so that it can be re-added next go-round in the correct color
-        """
         for clientID in self.__clientIDs:
             self.__clearUpdateCallback(clientID)
             self.__stopCaptureSound(clientID)
@@ -275,7 +218,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         pass
 
     def __hasBaseID(self, team, exclude=-1):
-        return len(filter(lambda i: i & team != 0 and i != exclude, self.__clientIDs)) > 0
+        return len([ i for i in self.__clientIDs if i & team != 0 and i != exclude ]) > 0
 
     def __playCaptureSound(self, playerTeam, baseTeam):
         if baseTeam not in self.__sounds:
@@ -347,9 +290,6 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
 
 
 class BattleTeamsBasesPlayer(BattleTeamsBasesController):
-    """
-    There is controller in replays.
-    """
 
     def _getProgressRate(self):
         rate = BattleReplay.g_replayCtrl.playbackSpeed

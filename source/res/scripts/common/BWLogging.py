@@ -7,8 +7,6 @@ import sys
 import BigWorld
 
 class BWLogger(logging.Logger):
-    """This class extends the logging.Logger class to provide BigWorld specific
-    log level support."""
     TRACE = logging.DEBUG - 1
     NOTICE = logging.INFO + 1
     HACK = logging.CRITICAL + 1
@@ -17,20 +15,14 @@ class BWLogger(logging.Logger):
         logging.Logger.__init__(self, name, level)
 
     def trace(self, msg, *args, **kw):
-        """Trace messages are the lowest priority log level within the BigWorld
-        Technology ecosystem"""
         if self.isEnabledFor(BWLogger.TRACE):
             self._log(BWLogger.TRACE, msg, args, **kw)
 
     def notice(self, msg, *args, **kw):
-        """Notice messages are listed as a severity between an INFO and 
-        a WARNING."""
         if self.isEnabledFor(BWLogger.NOTICE):
             self._log(BWLogger.NOTICE, msg, args, **kw)
 
     def hack(self, msg, *args, **kw):
-        """Hack messages are the highest priority log level within the BigWorld
-        Technology ecosystem"""
         if self.isEnabledFor(BWLogger.HACK):
             self._log(BWLogger.HACK, msg, args, **kw)
 
@@ -48,9 +40,6 @@ logLevelToBigWorldFunction = {logging.NOTSET: BigWorld.logTrace,
  BWLogger.HACK: BigWorld.logHack}
 
 class BWLogRedirectionHandler(logging.Handler):
-    """This class extends the logging Handler class to intercept a log message
-    and redirect it to the BigWorld log message handlers for transport to
-    MessageLogger."""
 
     def __init__(self):
         logging.Handler.__init__(self)
@@ -71,7 +60,6 @@ class BWLogRedirectionHandler(logging.Handler):
 _bwRedirectionHandler = None
 
 def init():
-    """Initialise the BWLogging module."""
     global _bwRedirectionHandler
     _bwRedirectionHandler = BWLogRedirectionHandler()
     logging.setLoggerClass(BWLogger)

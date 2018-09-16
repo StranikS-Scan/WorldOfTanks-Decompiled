@@ -89,17 +89,17 @@ class _GuiColorsLoader(object):
 
         return baseHash
 
-    def __readColorScheme(self, hash):
+    def __readColorScheme(self, hashh):
         color_scheme = {self.DEFAULT_TAG: None}
-        section = hash[self.DEFAULT_TAG] if self.DEFAULT_TAG in hash.keys() else None
+        section = hashh[self.DEFAULT_TAG] if self.DEFAULT_TAG in hashh.keys() else None
         if section is not None:
             color_scheme[self.DEFAULT_TAG] = self.__readColorSection(section)
-            if self.COLOR_BLIND_TAG in hash.keys():
-                section = hash[self.COLOR_BLIND_TAG]
+            if self.COLOR_BLIND_TAG in hashh.keys():
+                section = hashh[self.COLOR_BLIND_TAG]
                 if section is not None:
                     color_scheme[self.COLOR_BLIND_TAG] = self.__readColorSection(section)
         else:
-            color_scheme[self.DEFAULT_TAG] = self.__readColorSection(hash)
+            color_scheme[self.DEFAULT_TAG] = self.__readColorSection(hashh)
         return color_scheme
 
     def __readVector4(self, section, tagName):
@@ -153,6 +153,7 @@ class _GuiColorsLoader(object):
         if xmlCtx is None:
             _xml.raiseWrongXml(None, self.XML_PATH, 'can not open or read')
         self.__readXML(xmlCtx)
+        _xml.clearCaches()
         ResMgr.purge(self.XML_PATH, True)
         return
 

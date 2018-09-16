@@ -1,14 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/HyperParser.py
-"""
-HyperParser
-===========
-This module defines the HyperParser class, which provides advanced parsing
-abilities for the ParenMatch and other extensions.
-The HyperParser uses PyParser. PyParser is intended mostly to give information
-on the proper indentation of code. HyperParser gives some information on the
-structure of code, used by extensions to help the user.
-"""
 import string
 import keyword
 from idlelib import PyParse
@@ -16,9 +7,6 @@ from idlelib import PyParse
 class HyperParser:
 
     def __init__(self, editwin, index):
-        """Initialize the HyperParser to analyze the surroundings of the given
-        index.
-        """
         self.editwin = editwin
         self.text = text = editwin.text
         parser = PyParse.Parser(editwin.indentwidth, editwin.tabwidth)
@@ -55,9 +43,6 @@ class HyperParser:
         return
 
     def set_index(self, index):
-        """Set the index to which the functions relate. Note that it must be
-        in the same statement.
-        """
         indexinrawtext = len(self.rawtext) - len(self.text.get(index, self.stopatindex))
         if indexinrawtext < 0:
             raise ValueError('The index given is before the analyzed statement')
@@ -70,21 +55,12 @@ class HyperParser:
             self.indexbracket += 1
 
     def is_in_string(self):
-        """Is the index given to the HyperParser is in a string?"""
         return self.isopener[self.indexbracket] and self.rawtext[self.bracketing[self.indexbracket][0]] in ('"', "'")
 
     def is_in_code(self):
-        """Is the index given to the HyperParser is in a normal code?"""
         return not self.isopener[self.indexbracket] or self.rawtext[self.bracketing[self.indexbracket][0]] not in ('#', '"', "'")
 
     def get_surrounding_brackets(self, openers='([{', mustclose=False):
-        """If the index given to the HyperParser is surrounded by a bracket
-        defined in openers (or at least has one before it), return the
-        indices of the opening bracket and the closing bracket (or the
-        end of line, whichever comes first).
-        If it is not surrounded by brackets, or the end of line comes before
-        the closing bracket and mustclose is True, returns None.
-        """
         bracketinglevel = self.bracketing[self.indexbracket][1]
         before = self.indexbracket
         while 1:
@@ -120,9 +96,6 @@ class HyperParser:
         return pos - i
 
     def get_expression(self):
-        """Return a string with the Python expression which ends at the given
-        index, which is empty if there is no real one.
-        """
         if not self.is_in_code():
             raise ValueError('get_expression should only be called if index is inside a code.')
         rawtext = self.rawtext

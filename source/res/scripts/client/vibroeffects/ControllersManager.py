@@ -10,7 +10,7 @@ from Controllers.ShootingController import ShootingController
 from Controllers.OnceController import OnceController
 import Vibroeffects.VibroManager as VibroManager
 
-class ControllersManager:
+class ControllersManager(object):
 
     def __init__(self):
         self.__engineVibrationCtrl = EngineController()

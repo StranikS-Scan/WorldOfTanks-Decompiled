@@ -1,13 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/msvc9compiler.py
-"""distutils.msvc9compiler
-
-Contains MSVCCompiler, an implementation of the abstract CCompiler class
-for the Microsoft Visual Studio 2008.
-
-The module is compatible with VS 2005 and VS 2008. You can find legacy support
-for older versions of VS in distutils.msvccompiler.
-"""
 __revision__ = '$Id$'
 import os
 import subprocess
@@ -42,8 +34,6 @@ PLAT_TO_VCVARS = {'win32': 'x86',
  'win-ia64': 'ia64'}
 
 class Reg:
-    """Helper class to read values from the registry
-    """
 
     def get_value(cls, path, key):
         for base in HKEYS:
@@ -56,7 +46,6 @@ class Reg:
     get_value = classmethod(get_value)
 
     def read_keys(cls, base, key):
-        """Return list of registry keys."""
         try:
             handle = RegOpenKeyEx(base, key)
         except RegError:
@@ -78,10 +67,6 @@ class Reg:
     read_keys = classmethod(read_keys)
 
     def read_values(cls, base, key):
-        """Return dict of registry keys and values.
-        
-        All names are converted to lowercase.
-        """
         try:
             handle = RegOpenKeyEx(base, key)
         except RegError:
@@ -161,11 +146,6 @@ class MacroExpander:
 
 
 def get_build_version():
-    """Return the version of MSVC that was used to build Python.
-    
-    For Python 2.3 and up, the version number is included in
-    sys.version.  For earlier versions, assume the compiler is MSVC 6.
-    """
     prefix = 'MSC v.'
     i = sys.version.find(prefix)
     if i == -1:
@@ -181,10 +161,6 @@ def get_build_version():
 
 
 def normalize_and_reduce_paths(paths):
-    """Return a list of normalized paths with duplicates removed.
-    
-    The current order of paths is maintained.
-    """
     reduced_paths = []
     for p in paths:
         np = os.path.normpath(p)
@@ -195,8 +171,6 @@ def normalize_and_reduce_paths(paths):
 
 
 def removeDuplicates(variable):
-    """Remove duplicate values of an environment variable.
-    """
     oldList = variable.split(os.pathsep)
     newList = []
     for i in oldList:
@@ -208,11 +182,6 @@ def removeDuplicates(variable):
 
 
 def find_vcvarsall(version):
-    """Find the vcvarsall.bat file
-    
-    At first it tries to find the productdir of VS 2008 in the registry. If
-    that fails it falls back to the VS90COMNTOOLS env var.
-    """
     vsbase = VS_BASE % version
     try:
         productdir = Reg.get_value('%s\\Setup\\VC' % vsbase, 'productdir')
@@ -250,8 +219,6 @@ def find_vcvarsall(version):
 
 
 def query_vcvarsall(version, arch='x86'):
-    """Launch vcvarsall.bat and read the settings from its environment
-    """
     vcvarsall = find_vcvarsall(version)
     interesting = set(('include', 'lib', 'libpath', 'path'))
     result = {}
@@ -290,8 +257,6 @@ if VERSION < 8.0:
     raise DistutilsPlatformError('VC %0.1f is not supported by this module' % VERSION)
 
 class MSVCCompiler(CCompiler):
-    """Concrete class that implements an interface to Microsoft Visual C++,
-    as defined by the CCompiler abstract class."""
     compiler_type = 'msvc'
     executables = {}
     _c_extensions = ['.c']
@@ -317,7 +282,6 @@ class MSVCCompiler(CCompiler):
         return
 
     def initialize(self, plat_name=None):
-        assert not self.initialized, "don't init multiple times"
         if plat_name is None:
             plat_name = get_platform()
         ok_plats = ('win32', 'win-amd64', 'win-ia64')
@@ -617,14 +581,6 @@ class MSVCCompiler(CCompiler):
         return None
 
     def find_exe(self, exe):
-        """Return path to an MSVC executable program.
-        
-        Tries to find the program in several places: first, one of the
-        MSVC program search paths from the registry; next, the directories
-        in the PATH environment variable.  If any of those work, return an
-        absolute path that is known to exist.  If none of them work, just
-        return the original program name, 'exe'.
-        """
         for p in self.__paths:
             fn = os.path.join(os.path.abspath(p), exe)
             if os.path.isfile(fn):

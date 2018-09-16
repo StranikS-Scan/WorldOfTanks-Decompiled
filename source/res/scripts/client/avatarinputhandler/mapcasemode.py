@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/MapCaseMode.py
+import weakref
 from ArtilleryEquipment import ArtilleryEquipment
 from AvatarInputHandler import gun_marker_ctrl
 from AvatarInputHandler.aih_constants import GUN_MARKER_TYPE
@@ -12,14 +13,12 @@ import GUI
 import Keys
 import Math
 from Math import Vector2, Vector3
-import weakref
 from AvatarInputHandler.control_modes import IControlMode
 from AvatarInputHandler import AimingSystems
 import SoundGroups
 from constants import SERVER_TICK_LENGTH
 from debug_utils import LOG_ERROR
-from post_processing import g_postProcessing
-from items import vehicles, artefacts
+from items import vehicles as vehs_core, artefacts
 from constants import AIMING_MODE
 
 class _DefaultStrikeSelector(CallbackDelayer):
@@ -56,7 +55,7 @@ class _DefaultStrikeSelector(CallbackDelayer):
         return self._TICK_DELAY
 
 
-class _VehiclesSelector():
+class _VehiclesSelector(object):
 
     def __init__(self, intersectChecker):
         self.__edgedVehicles = []
@@ -157,7 +156,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
 
     def processReplayHover(self):
         replayCtrl = BattleReplay.g_replayCtrl
-        _, self.hitPosition, direction = replayCtrl.getGunMarkerParams(self.hitPosition, Math.Vector3(0.0, 0.0, 0.0))
+        _, self.hitPosition, _ = replayCtrl.getGunMarkerParams(self.hitPosition, Math.Vector3(0.0, 0.0, 0.0))
         self.__marker.update(GUN_MARKER_TYPE.CLIENT, self.hitPosition, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), SERVER_TICK_LENGTH, None)
         return
 
@@ -333,8 +332,6 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
         self.__cam.enable(targetPos, args.get('saveDist', True))
         self.__aimingMode = args.get('aimingMode', self.__aimingMode)
         self.__isEnabled = True
-        g_postProcessing.enable('strategic')
-        BigWorld.setFloraEnabled(False)
         equipmentID = args.get('equipmentID', None)
         if equipmentID is None:
             self.__activeSelector = _DefaultStrikeSelector(Vector3(0, 0, 0), None)
@@ -354,14 +351,11 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
             self.__activeSelector.destroy()
             self.__activeSelector = _DefaultStrikeSelector(Vector3(0, 0, 0), None)
             self.setGUIVisible(False)
-            g_postProcessing.disable()
-            BigWorld.setFloraEnabled(True)
             if BigWorld.player().gunRotator is not None:
                 BigWorld.player().gunRotator.clientMode = True
             return
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
-        assert self.__isEnabled
         cmdMap = CommandMapping.g_instance
         if key == Keys.KEY_LEFTMOUSE and isDown:
             replayCtrl = BattleReplay.g_replayCtrl
@@ -426,7 +420,6 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
             return False
 
     def handleMouseEvent(self, dx, dy, dz):
-        assert self.__isEnabled
         GUI.mcursor().position = Math.Vector2(0, 0)
         self.__cam.update(dx, dy, dz)
         replayCtrl = BattleReplay.g_replayCtrl
@@ -453,7 +446,6 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
         return self.__aimingMode & mode == mode
 
     def getDesiredShotPoint(self, ignoreAimingMode=False):
-        assert self.__isEnabled
         return self.__getDesiredShotPoint() if self.__aimingMode == 0 else None
 
     def __getDesiredShotPoint(self):
@@ -473,10 +465,9 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
     def isManualBind(self):
         return True
 
-    def updateGunMarker(self, markerType, pos, dir, size, relaxTime, collData):
+    def updateGunMarker(self, markerType, pos, direction, size, relaxTime, collData):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
-            assert self.__isEnabled
             self.__activeSelector.processReplayHover()
 
     def turnOff(self, sendStopEquipment=True):
@@ -493,7 +484,7 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
         return
 
     def activateEquipment(self, equipmentID):
-        equipment = vehicles.g_cache.equipments()[equipmentID]
+        equipment = vehs_core.g_cache.equipments()[equipmentID]
         strikeSelectorConstructor = _STRIKE_SELECTORS.get(type(equipment))
         if strikeSelectorConstructor is None:
             LOG_ERROR('Cannot use equipment with id', equipmentID)

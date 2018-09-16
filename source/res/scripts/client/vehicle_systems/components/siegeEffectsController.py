@@ -1,11 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/siegeEffectsController.py
-from AvatarInputHandler.cameras import ImpulseReason
-import BigWorld
 import Math
 import svarog_script.py_component
 from constants import VEHICLE_SIEGE_STATE
-from vehicle_systems.tankStructure import TankNodeNames
 
 class SiegeEffectsController(svarog_script.py_component.Component):
     SIEGE_TIMEOUT = 2.0

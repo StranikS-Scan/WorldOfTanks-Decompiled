@@ -55,7 +55,7 @@ class CandidatesDataProvider(DAAPIDataProvider):
         isPlayerSpeaking = self.bwProto.voipController.isPlayerSpeaking
         userGetter = storage_getter('users')().getUser
         colorGetter = g_settings.getColorScheme('rosters').getColors
-        mapping = map(lambda pInfo: (pInfo, userGetter(pInfo.dbID)), candidates.itervalues())
+        mapping = [ (pInfo, userGetter(pInfo.dbID)) for pInfo in candidates.itervalues() ]
         sortedList = sorted(mapping, cmp=getUnitCandidatesComparator())
         for pInfo, user in sortedList:
             dbID = pInfo.dbID
@@ -234,7 +234,7 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
         colorGetter = g_settings.getColorScheme('rosters').getColors
         ratingFormatter = BigWorld.wg_getIntegralFormat
         result = set(result)
-        removed = set(filter(lambda item: item[1] is None, result))
+        removed = set((item for item in result if item[1] is None))
         isFullUpdate = len(removed)
         for cfdUnitID, unitItem in removed:
             index = self.mapping.pop(cfdUnitID, None)

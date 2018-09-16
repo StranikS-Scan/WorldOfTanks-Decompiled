@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_sys_exc.py
-"""Fixer for sys.exc_{type, value, traceback}
-
-sys.exc_type -> sys.exc_info()[0]
-sys.exc_value -> sys.exc_info()[1]
-sys.exc_traceback -> sys.exc_info()[2]
-"""
 from .. import fixer_base
 from ..fixer_util import Attr, Call, Name, Number, Subscript, Node, syms
 

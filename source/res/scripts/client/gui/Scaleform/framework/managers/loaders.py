@@ -11,9 +11,6 @@ NO_IMPL_ALIAS = 'noImpl'
 NO_IMPL_URL = 'development/noImpl.swf'
 
 class _LoadingItem(object):
-    """
-    Represents an item (View) loaded by LoaderManager.
-    """
     __slots__ = ('loadParams', 'pyEntity', 'factoryIdx', 'args', 'kwargs', 'isCancelled')
 
     def __init__(self, loadParams, pyEntity, factoryIdx, args, kwargs):
@@ -63,9 +60,6 @@ class ViewLoadParams(object):
 
 
 class LoaderManager(LoaderManagerMeta):
-    """
-    Class of loader manager. This manager works with View entities only.
-    """
 
     def __init__(self, app):
         super(LoaderManager, self).__init__()
@@ -81,23 +75,9 @@ class LoaderManager(LoaderManagerMeta):
         return '{}[{}]=[loadingItems=[{}]]'.format(self.__class__.__name__, hex(id(self)), self.__loadingItems)
 
     def loadView(self, loadParams, *args, **kwargs):
-        """
-        Loads a view by the given alias and name with the given arguments (args and kwargs).
-        
-        :param loadParams: instance of ViewLoadParams
-        :param name: name of view.
-        :param args: args.
-        :param kwargs: kwargs.
-        :return: instance of view in python.
-        """
         return self.__doLoadView(loadParams, *args, **kwargs)
 
     def cancelLoading(self, key):
-        """
-        Cancels loading of view with the given key.
-        
-        :param key: View key represented by ViewKey.
-        """
         if key in self.__loadingItems:
             item = self.__loadingItems.pop(key)
             item.pyEntity.onDispose -= self.__handleViewDispose
@@ -108,31 +88,12 @@ class LoaderManager(LoaderManagerMeta):
                 item.pyEntity.destroy()
 
     def getViewLoadingItem(self, key):
-        """
-        Gets a loading item for the view with the given key in the list of views being loaded now.
-        
-        :param key: View key represented by ViewKey
-        :return: Reference to _LoadingItem object or None if there is no view with the given key.
-        """
         return self.__loadingItems.get(key, None)
 
     def isViewLoading(self, key):
-        """
-        Returns True if a view with the given alias is being loaded, otherwise returns False.
-        
-        :param key: View key represented by ViewKey.
-        :return: boolean.
-        """
         return key in self.__loadingItems
 
     def viewLoaded(self, alias, name, gfxEntity):
-        """
-        Callback to be invoked by AS when a view is loaded.
-        
-        :param alias: value of view alias.
-        :param name: name of view.
-        :param gfxEntity: GFXEntity (AS entity) instance.
-        """
         viewKey = ViewKey(alias, name)
         if viewKey in self.__loadingItems:
             item = self.__loadingItems.pop(viewKey)
@@ -160,13 +121,6 @@ class LoaderManager(LoaderManagerMeta):
             self.cancelLoading(viewKey)
 
     def viewLoadError(self, alias, name, errorTxt):
-        """
-        Callback to be invoked by AS when an error occurs during view loading.
-        
-        :param alias: value of view alias.
-        :param name: name of view.
-        :param errorTxt: error text represented by string.
-        """
         viewKey = ViewKey(alias, name)
         msg = 'Error occurred during view {0} loading. Error:{1}'.format(viewKey, errorTxt)
         LOG_ERROR(msg)
@@ -187,12 +141,6 @@ class LoaderManager(LoaderManagerMeta):
         return
 
     def viewInitializationError(self, alias, name):
-        """
-        Callback to be invoked by AS when initialization error occurs during view loading.
-        
-        :param alias: value of view alias.
-        :param name: name of view.
-        """
         viewKey = ViewKey(alias, name)
         msg = "View '{0}' does not implement net.wg.infrastructure.interfaces.IView".format(viewKey)
         LOG_ERROR(msg)

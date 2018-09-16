@@ -43,13 +43,6 @@ class FittingItem(GUIItem, HasIntCD):
         OTHER = 3
 
     def __init__(self, intCompactDescr, proxy=None, isBoughtForAltPrice=False):
-        """
-        Ctr.
-        
-        :param intCompactDescr: item's int compact descriptor
-        :param proxy: instance of ItemsRequester
-        :param isBoughtForAltPrice: indicates whether the item has been bought for credits(alt price)
-        """
         GUIItem.__init__(self, proxy)
         HasIntCD.__init__(self, intCompactDescr)
         self._isBoughtForAltPrice = isBoughtForAltPrice
@@ -88,40 +81,18 @@ class FittingItem(GUIItem, HasIntCD):
         return
 
     def _getAltPrice(self, buyPrice, proxy):
-        """
-        Returns an alternative buy price.
-        
-        :param buyPrice: a buy price of the item
-        :param proxy: an instance of ShopRequester
-        
-        :return: an alternative buy price in Money or MONEY_UNDEFINED (by default)
-        """
         return MONEY_UNDEFINED
 
     @property
     def buyPrices(self):
-        """
-        Return available buy prices, including a regular price and alternative price.
-        :return: ItemPrices object
-        """
         return self._buyPrices
 
     @property
     def sellPrices(self):
-        """
-        Return available sell prices, including a regular sell price and alternative sell price.
-        :return: ItemPrices object
-        """
         return self._sellPrices
 
     @property
     def isForSale(self):
-        """
-        Some items can not be sold, they will have 'notForSale' tag in xml file.
-        After moving to Money 2.0 concept this property can be removed and sellPrice.isDefined() will
-        be used to replace this property.
-        :return: bool, True if the item can be sold, False otherwise
-        """
         return True
 
     @property
@@ -138,9 +109,6 @@ class FittingItem(GUIItem, HasIntCD):
 
     @isUnlocked.setter
     def isUnlocked(self, value):
-        """
-        This property is set from g_CurrentVehicle
-        """
         self._isUnlocked = value
 
     @property
@@ -189,30 +157,14 @@ class FittingItem(GUIItem, HasIntCD):
 
     @property
     def isRemovable(self):
-        """
-        Indicates whether the item can be removed from vehicle for free. Otherwise for gold or other currency
-        differing from credits.
-        
-        :return: boolean
-        """
         return True
 
     @property
     def minRentPrice(self):
-        """
-        Returns the min rent price.
-        
-        :return:  the min rent price in Money or None (by default)
-        """
         return None
 
     @property
     def rentLeftTime(self):
-        """
-        Returns rent left time in seconds.
-        
-        :return:  int, rent left time in seconds
-        """
         pass
 
     def isPreviewAllowed(self):
@@ -220,76 +172,41 @@ class FittingItem(GUIItem, HasIntCD):
 
     @property
     def userType(self):
-        """
-        Returns item's type represented as user-friendly string.
-        """
         return getTypeInfoByName(self.itemTypeName)['userString']
 
     @property
     def userName(self):
-        """
-        Returns item's name represented as user-friendly string.
-        """
         return self.descriptor.userString
 
     @property
     def longUserName(self):
-        """
-        Returns item's long name represented as user-friendly string
-        """
         return self.userType + ' ' + self.userName
 
     @property
     def shortUserName(self):
-        """
-        Returns item's short name represented as user-friendly string
-        """
         return self.descriptor.shortUserString
 
     @property
     def shortDescription(self):
-        """
-        Return the first occurrence of short description from string.
-        """
         return getShortDescr(self.descriptor.description)
 
     @property
     def fullDescription(self):
-        """
-        Returns short description tags from passed string and return full description body.
-        :return: string
-        """
         return stripShortDescrTags(self.descriptor.description)
 
     @property
     def name(self):
-        """
-        Returns item's tech-name as string.
-        """
         return self.descriptor.name
 
     @property
     def level(self):
-        """
-        Returns item's level number value as int.
-        """
         return self.descriptor.level
 
     @property
     def isInInventory(self):
-        """
-        Returns True if the item is in inventory, False otherwise.
-        """
         return self.inventoryCount > 0
 
     def _getShortInfo(self, vehicle=None, expanded=False):
-        """
-        Returns string with item's parameters.
-        
-        :param vehicle: vehicle: vehicle which descriptor will be passed to the params_helper.getParameters
-        :param expanded: indicates if it should be expanded.
-        :return: formatted user-string
-        """
         try:
             description = i18n.makeString('#menu:descriptions/' + self.itemTypeName + ('Full' if expanded else ''))
             vehicleDescr = vehicle.descriptor if vehicle is not None else None
@@ -306,34 +223,25 @@ class FittingItem(GUIItem, HasIntCD):
         return
 
     def getShortInfo(self, vehicle=None, expanded=False):
-        """
-        Returns string with item's parameters or empty string if parameters is not available.
-        """
         return '' if not GUI_SETTINGS.technicalInfo else self._getShortInfo(vehicle, expanded)
 
     def getParams(self, vehicle=None):
-        """
-        Returns dictionary of item's parameters to show in GUI
-        """
         return dict(params_helper.get(self, vehicle.descriptor if vehicle is not None else None))
 
     def getRentPackage(self, days=None):
         return None
 
     def getGUIEmblemID(self):
-        """
-        Returns item's frame label as string. Should be overridden by derived classes.
-        """
         pass
 
     @property
     def icon(self):
-        """
-        Returns item's icon path
-        """
         return ICONS_MASK % {'type': self.itemTypeName,
          'subtype': '',
          'unicName': self.name.replace(':', '-')}
+
+    def getExtraIconInfo(self, _=None):
+        return None
 
     @property
     def iconSmall(self):
@@ -345,16 +253,6 @@ class FittingItem(GUIItem, HasIntCD):
         return self.icon
 
     def getBuyPrice(self, preferred=True):
-        """
-        Returns the buy price in consideration of item's alternative price and player's preferences (only if the
-        preferred argument is set to True).
-        Be aware that for some items (shells and equipments right now) buying for alternative price (for credits
-        for example) might be disabled on the server side. This method doesn't check it and always returns price
-        as if the switch is off.
-        
-        :param preferred: bool, whether isBoughtForAltPrice should be checked.
-        :return: ItemPrice
-        """
         if self.buyPrices.hasAltPrice():
             if preferred:
                 if self.isBoughtForAltPrice:
@@ -364,47 +262,18 @@ class FittingItem(GUIItem, HasIntCD):
         return self.buyPrices.itemPrice
 
     def getSellPrice(self, preferred=True):
-        """
-        The logic is similar to the previous method - getBuyPrice() but in terms of 'sell' price.
-        At the moment we don't have cases to sell an item for alt price, but in future it can appear.
-        :param preferred: bool, pass any value, in the future the flag can be used like 'isBoughtForAltPrice'
-        :return: ItemPrice
-        """
         return self.sellPrices.itemPrice
 
     def isInstalled(self, vehicle, slotIdx=None):
-        """
-        Item is installed on @vehicle. Can be overridden by inherited classes.
-        :param vehicle: installation vehicle
-        :param slotIdx: slot index to install. Used for equipments and optional devices.
-        :return: is installed <bool>
-        """
         return False
 
     def mayInstall(self, vehicle, slotIdx=None):
-        """
-        Item can be installed on @vehicle. Can be overridden by inherited classes.
-        :param vehicle: installation vehicle
-        :param slotIdx: slot index to install. Used for equipments and optional devices.
-        :return: tuple(can be installed <bool>, error msg <str>)
-        """
         return vehicle.descriptor.mayInstallComponent(self.intCD)
 
     def mayRemove(self, vehicle):
-        """
-        Item can be removed from @vehicle. Can be overridden by inherited classes.
-        :param vehicle: removal vehicle
-        :return: tuple(can be removed <bool>, error msg <str>)
-        """
         return (True, '')
 
     def mayRent(self, money):
-        """
-        Item can be rented. Can be overridden by inherited classes.
-        
-        :param money: player money as Money
-        :return: tuple(can be installed <bool>, error msg <str>)
-        """
         return (False, GUI_ITEM_ECONOMY_CODE.UNDEFINED)
 
     def mayRestore(self, money):
@@ -414,12 +283,6 @@ class FittingItem(GUIItem, HasIntCD):
         return False
 
     def mayObtainForMoney(self, money):
-        """
-        # Check if possible to buy or to restore or to rent item
-        
-        @param money: <Money>
-        @return: <bool>
-        """
         mayRent, rentReason = self.mayRent(money)
         if self.isRestoreAvailable():
             mayPurchase, reason = self.mayRestore(money)
@@ -430,13 +293,6 @@ class FittingItem(GUIItem, HasIntCD):
         return (mayRent, rentReason) if self.isRentable and not mayRent else (mayPurchase, reason)
 
     def mayPurchaseWithExchange(self, money, exchangeRate):
-        """
-        Returns True if it is possible to exchange gold for credits to buy item.
-        
-        :param money: Money
-        :param exchangeRate: gold to credits exchange rate
-        :return: <bool>
-        """
         canBuy, reason = self.mayPurchase(money)
         if canBuy:
             return canBuy
@@ -448,27 +304,12 @@ class FittingItem(GUIItem, HasIntCD):
         return False
 
     def mayObtainWithMoneyExchange(self, money, exchangeRate):
-        """
-        Check if possible to buy or to restore or to rent item with gold exchange.
-        
-        @param money: <Money>, available money
-        @param exchangeRate: <int>, gold to credits exchange rate
-        @return: <bool>
-        """
-        canRent, rentReason = self.mayRent(money)
+        canRent, _ = self.mayRent(money)
         if canRent:
             return True
         return True if self.isRestoreAvailable() and self.mayRestoreWithExchange(money, exchangeRate) else self.mayPurchaseWithExchange(money, exchangeRate)
 
     def mayPurchase(self, money):
-        """
-        Item can be bought. If center is not available, than disables purchase for gold.
-        We should check two prices: one is default price and other is alternative if it exists.
-        Can be overridden by inherited classes.
-        
-        :param money: <Money>, player money
-        :return: tuple(can be installed <bool>, error msg <str>)
-        """
         buyPrice = self.getBuyPrice(preferred=True).price
         result, code = self._mayPurchase(buyPrice, money)
         if not result:
@@ -480,9 +321,6 @@ class FittingItem(GUIItem, HasIntCD):
         return (result, code)
 
     def getTarget(self, vehicle):
-        """
-        Returns the target for UI components.
-        """
         if self.isInstalled(vehicle):
             return self.TARGETS.CURRENT
         return self.TARGETS.IN_INVENTORY if self.isInInventory else self.TARGETS.OTHER
@@ -509,15 +347,6 @@ class FittingItem(GUIItem, HasIntCD):
 
     @classmethod
     def _isEnoughMoney(cls, price, money):
-        """
-        Determines if the given money enough for buying/restoring an item with the given price. Note that the method
-        should NOT check if the given price is defined and will return (True, '') if the price is undefined (see Money
-        class, isDefined method).
-        
-        :param price: item price represented by Money
-        :param money: money for buying, see Money
-        :return: tuple(can be installed <bool>, error msg <str>), also see GUI_ITEM_ECONOMY_CODE
-        """
         if not price.isDefined():
             return (False, GUI_ITEM_ECONOMY_CODE.ITEM_NO_PRICE)
         shortage = money.getShortage(price)

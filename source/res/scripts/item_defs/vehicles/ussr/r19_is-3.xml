@@ -89,9 +89,9 @@
       <userString>	#ussr_vehicles:IS-3	</userString>
       <tags></tags>
       <level>	7	</level>
-      <price>	17780.0	</price>
+      <price>	17780	</price>
       <unlocks>
-        <chassis>	IS-3M	  <cost>	14200.0	</cost>
+        <chassis>	IS-3M	  <cost>	14200	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -127,7 +127,7 @@
         <segmentLength>	0.34	</segmentLength>
         <segmentOffset>	0.156	</segmentOffset>
         <segment2Offset>	0.175	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -334,7 +334,7 @@
       <userString>	#ussr_vehicles:IS-3M	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	31450.0	</price>
+      <price>	31450	</price>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -368,7 +368,7 @@
         <segmentLength>	0.34	</segmentLength>
         <segmentOffset>	0.156	</segmentOffset>
         <segment2Offset>	0.175	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -577,7 +577,7 @@
       <userString>	#ussr_vehicles:IS-3_K	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	30000.0	</price>
+      <price>	30000	</price>
       <unlocks>
         <turret>	Mod_T-10	  <cost>	14625	</cost>
         </turret>
@@ -730,7 +730,7 @@
             <maxPitch>	0 5 0.380783 5 0.444444 1 0.555556 1 0.619218 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_122mm_BL-9	  <cost>	44000.0	</cost>
+            <gun>	_122mm_BL-9	  <cost>	44000	</cost>
             </gun>
             <vehicle>	R81_IS8	  <cost>	164700	</cost>
             </vehicle>
@@ -892,7 +892,7 @@
       <userString>	#ussr_vehicles:Mod_T-10	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	31500.0	</price>
+      <price>	31500	</price>
       <armor>
         <armor_1>	249	</armor_1>
         <armor_2>	110	</armor_2>
@@ -1170,12 +1170,12 @@
   </fuelTanks>
   <radios>
     <_10RK>	shared	  <unlocks>
-        <radio>	_12RT	  <cost>	5600.0	</cost>
+        <radio>	_12RT	  <cost>	5600	</cost>
         </radio>
       </unlocks>
     </_10RK>
     <_12RT>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700.0	</cost>
+        <radio>	R113	  <cost>	8700	</cost>
         </radio>
       </unlocks>
     </_12RT>

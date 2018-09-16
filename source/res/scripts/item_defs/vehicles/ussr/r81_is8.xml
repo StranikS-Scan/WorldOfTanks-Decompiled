@@ -115,7 +115,7 @@
       <userString>	#ussr_vehicles:Chassis_IS8	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	27920.0	</price>
+      <price>	27920	</price>
       <unlocks>
         <chassis>	Chassis_IS8_2	  <cost>	23800	</cost>
         </chassis>
@@ -264,7 +264,7 @@
         <right>	vehicles/russian/R81_IS8/track/right.track	</right>
         <segmentLength>	0.16	</segmentLength>
         <segmentOffset>	0.143	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -368,7 +368,7 @@
       <userString>	#ussr_vehicles:Chassis_IS8_2	</userString>
       <tags></tags>
       <level>	9	</level>
-      <price>	66500.0	</price>
+      <price>	66500	</price>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -513,7 +513,7 @@
         <right>	vehicles/russian/R81_IS8/track/right.track	</right>
         <segmentLength>	0.16	</segmentLength>
         <segmentOffset>	0.143	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -619,9 +619,9 @@
       <userString>	#ussr_vehicles:Turret_1_IS8	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	33680.0	</price>
+      <price>	33680	</price>
       <unlocks>
-        <turret>	Turret_2_IS8	  <cost>	28300.0	</cost>
+        <turret>	Turret_2_IS8	  <cost>	28300	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -664,7 +664,7 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_122mm_BL-9	  <cost>	44000.0	</cost>
+            <gun>	_122mm_BL-9	  <cost>	44000	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -723,7 +723,7 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_122mm_M62-T2	  <cost>	59300.0	</cost>
+            <gun>	_122mm_M62-T2	  <cost>	59300	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -880,7 +880,7 @@
       <userString>	#ussr_vehicles:Turret_2_IS8	</userString>
       <tags></tags>
       <level>	9	</level>
-      <price>	66500.0	</price>
+      <price>	66500	</price>
       <armor>
         <armor_1>	201	</armor_1>
         <armor_2>	201	</armor_2>
@@ -1123,7 +1123,7 @@
   </turrets0>
   <engines>
     <V-12-5>	shared	  <unlocks>
-        <engine>	V-12-6	  <cost>	26350.0	</cost>
+        <engine>	V-12-6	  <cost>	26350	</cost>
         </engine>
       </unlocks>
     </V-12-5>
@@ -1134,12 +1134,12 @@
   </fuelTanks>
   <radios>
     <_10RK>	shared	  <unlocks>
-        <radio>	_12RT	  <cost>	5600.0	</cost>
+        <radio>	_12RT	  <cost>	5600	</cost>
         </radio>
       </unlocks>
     </_10RK>
     <_12RT>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700.0	</cost>
+        <radio>	R113	  <cost>	8700	</cost>
         </radio>
       </unlocks>
     </_12RT>

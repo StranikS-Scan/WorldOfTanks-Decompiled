@@ -932,23 +932,7 @@ VEH_FULL_RESULTS_UPDATE = Meta(('originalCredits',
  int,
  0,
  None,
- 'skip'), ('newYearXPFactor100',
- int,
- 0,
- None,
- 'any'), ('newYearTmenXPFactor100',
- int,
- 0,
- None,
- 'any'), ('newYearFreeXPFactor100',
- int,
- 0,
- None,
- 'any'), ('newYearCreditsFactor100',
- int,
- 0,
- None,
- 'any'), ('orderCredits',
+ 'skip'), ('orderCredits',
  int,
  0,
  None,
@@ -1146,7 +1130,6 @@ COMMON_RESULTS = Meta(('arenaTypeID',
  {},
  None,
  'skip'))
-assert not set(VEH_FULL_RESULTS.names()) & set(COMMON_RESULTS.names())
 VEH_INTERACTIVE_STATS = ('xp', 'damageDealt', 'capturePts', 'flagActions', 'winPoints', 'deathCount', 'resourceAbsorbed', 'stopRespawn', 'equipmentDamage', 'equipmentKills')
 VEH_INTERACTIVE_STATS_INDICES = dict(((x[1], x[0]) for x in enumerate(VEH_INTERACTIVE_STATS)))
 AVATAR_PRIVATE_STATS = ('ragePoints',)
@@ -1219,7 +1202,8 @@ class VehicleInteractionDetails(object):
         return VehicleInteractionDetails(uniqueVehIDs, values)
 
     def __getitem__(self, uniqueVehID):
-        assert type(uniqueVehID) == tuple
+        if not isinstance(uniqueVehID, tuple):
+            raise UserWarning('Argument uniqueVehID should be tuple: {}'.format(uniqueVehID))
         offset = self.__offsets.get(uniqueVehID, None)
         if offset is None:
             self.__uniqueVehIDs.append(uniqueVehID)
@@ -1229,7 +1213,8 @@ class VehicleInteractionDetails(object):
         return _VehicleInteractionDetailsItem(self.__values, offset)
 
     def __contains__(self, uniqueVehID):
-        assert type(uniqueVehID) == tuple
+        if not isinstance(uniqueVehID, tuple):
+            raise UserWarning('Argument uniqueVehID should be tuple: {}'.format(uniqueVehID))
         return uniqueVehID in self.__offsets
 
     def __str__(self):

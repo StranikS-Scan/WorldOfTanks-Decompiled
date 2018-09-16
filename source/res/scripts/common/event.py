@@ -3,30 +3,8 @@
 from debug_utils import LOG_CURRENT_EXCEPTION
 
 class Event(object):
-    """
-    Allows delegates to subscribe for the event and to be called when event
-    is triggered.
-    
-    Clearing events without event manager:
-        onEvent1 = Event()
-        onEvent2 = Event()
-        ...
-        onEvent1.clear()
-        onEvent2.clear()
-    
-    Clearing events with event manager:
-        em = EventManager()
-        onEvent1 = Event(em)
-        onEvent2 = Event(em)
-        ...
-        em.clear()
-    """
 
     def __init__(self, manager=None):
-        """
-        :param manager - event manager that is used to clear all events thereby
-        break all references.
-        """
         self.__delegates = []
         if manager is not None:
             manager.register(self)
@@ -60,16 +38,8 @@ class Event(object):
 
 
 class Handler(object):
-    """
-    Similar to Event. Difference is Handler allows only one delegate to be
-    subscribed. One event manager could be used both for handlers and events.
-    """
 
     def __init__(self, manager=None):
-        """
-        :param manager - event manager that is used to clear all handlers
-        thereby break all references.
-        """
         self.__delegate = None
         if manager is not None:
             manager.register(self)
@@ -87,9 +57,6 @@ class Handler(object):
 
 
 class EventManager(object):
-    """
-    Event manager that is used to clear all events thereby break all references.
-    """
 
     def __init__(self):
         self.__events = []
@@ -105,12 +72,6 @@ class EventManager(object):
 class SuspendedEvent(Event):
 
     def __init__(self, manager):
-        """
-        Constructor.
-        
-        :param manager: EventManager derived event manager
-        """
-        assert isinstance(manager, SuspendedEventManager)
         super(SuspendedEvent, self).__init__(manager)
         self.__manager = manager
 

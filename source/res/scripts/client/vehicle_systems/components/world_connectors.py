@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/world_connectors.py
 import BigWorld
-from svarog_script import auto_properties
 import svarog_script.py_component
 from vehicle_systems.tankStructure import TankPartNames
 

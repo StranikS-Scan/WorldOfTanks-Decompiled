@@ -12,7 +12,6 @@ from messenger.storage import StorageDecorator
 from skeletons.connection_mgr import IConnectionManager
 
 class MessengerEntry(object):
-    """Main entry to messenger package."""
     connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):

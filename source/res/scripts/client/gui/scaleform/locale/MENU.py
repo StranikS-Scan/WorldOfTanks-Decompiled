@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/MENU.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from debug_utils import LOG_WARNING
 
 class MENU(object):
@@ -399,6 +395,7 @@ class MENU(object):
     NATIONS_CZECH = '#menu:nations/czech'
     NATIONS_SWEDEN = '#menu:nations/sweden'
     NATIONS_POLAND = '#menu:nations/poland'
+    NATIONS_ITALY = '#menu:nations/italy'
     NATIONS_ALL = '#menu:nations/all'
     CAROUSELFILTER_IGR = '#menu:carouselFilter/igr'
     LEVELS_1 = '#menu:levels/1'
@@ -432,6 +429,7 @@ class MENU(object):
     NATION_TREE_TITLE_CZECH = '#menu:nation_tree/title/czech'
     NATION_TREE_TITLE_SWEDEN = '#menu:nation_tree/title/sweden'
     NATION_TREE_TITLE_POLAND = '#menu:nation_tree/title/poland'
+    NATION_TREE_TITLE_ITALY = '#menu:nation_tree/title/italy'
     SERVERSTATS_PLAYERSCOUNT = '#menu:serverStats/playersCount'
     SERVERSTATS_ARENASCOUNT = '#menu:serverStats/arenasCount'
     SERVERSTATS_PLAYERSINARENACOUNT = '#menu:serverStats/playersInArenaCount'
@@ -451,6 +449,7 @@ class MENU(object):
     TANK_PARAMS_CHASSISROTATIONSPEED = '#menu:tank_params/chassisRotationSpeed'
     TANK_PARAMS_SWITCHONTIME = '#menu:tank_params/switchOnTime'
     TANK_PARAMS_SWITCHOFFTIME = '#menu:tank_params/switchOffTime'
+    TANK_PARAMS_SWITCHTIME = '#menu:tank_params/switchTime'
     TANK_PARAMS_TIMEOFREACHING = '#menu:tank_params/timeOfReaching'
     TANK_PARAMS_ATTAINABLESPEED = '#menu:tank_params/attainableSpeed'
     TANK_PARAMS_HULLARMOR = '#menu:tank_params/hullArmor'
@@ -857,6 +856,7 @@ class MENU(object):
     MODULEINFO_PARAMETERSLABEL = '#menu:moduleInfo/parametersLabel'
     MODULEINFO_PARAMETERSCLIPGUNLABEL = '#menu:moduleInfo/parametersClipGunLabel'
     MODULEINFO_CLIPGUNLABEL = '#menu:moduleInfo/clipGunLabel'
+    MODULEINFO_AUTORELOADGUNLABEL = '#menu:moduleInfo/autoReloadGunLabel'
     MODULEINFO_HYDRAULICCHASSISLABEL = '#menu:moduleInfo/hydraulicChassisLabel'
     MODULEINFO_PARAMS_MAXLOAD = '#menu:moduleInfo/params/maxLoad'
     MODULEINFO_PARAMS_BOMBSNUMBERRANGE = '#menu:moduleInfo/params/bombsNumberRange'
@@ -872,6 +872,7 @@ class MENU(object):
     MODULEINFO_PARAMS_SHELLSCOUNT = '#menu:moduleInfo/params/shellsCount'
     MODULEINFO_PARAMS_SHELLRELOADINGTIME = '#menu:moduleInfo/params/shellReloadingTime'
     MODULEINFO_PARAMS_RELOADMAGAZINETIME = '#menu:moduleInfo/params/reloadMagazineTime'
+    MODULEINFO_PARAMS_AUTORELOADTIME = '#menu:moduleInfo/params/autoReloadTime'
     MODULEINFO_PARAMS_RELOADTIME = '#menu:moduleInfo/params/reloadTime'
     MODULEINFO_PARAMS_PIERCINGPOWER = '#menu:moduleInfo/params/piercingPower'
     MODULEINFO_ADDITIONALINFO = '#menu:moduleInfo/additionalInfo'
@@ -938,6 +939,7 @@ class MENU(object):
     VEHICLEINFO_PARAMS_RELOADTIMESECS = '#menu:vehicleInfo/params/reloadTimeSecs'
     VEHICLEINFO_PARAMS_SWITCHONTIME = '#menu:vehicleInfo/params/switchOnTime'
     VEHICLEINFO_PARAMS_SWITCHOFFTIME = '#menu:vehicleInfo/params/switchOffTime'
+    VEHICLEINFO_PARAMS_SWITCHTIME = '#menu:vehicleInfo/params/switchTime'
     VEHICLEINFO_PARAMS_STUNMAXDURATION = '#menu:vehicleInfo/params/stunMaxDuration'
     VEHICLEINFO_PARAMS_STUNMINDURATION = '#menu:vehicleInfo/params/stunMinDuration'
     VEHICLEINFO_TABS_PROPERTIES = '#menu:vehicleInfo/tabs/properties'
@@ -1686,6 +1688,8 @@ class MENU(object):
     CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
     CST_ITEM_CTX_MENU_SELL = '#menu:cst_item_ctx_menu/sell'
     CST_ITEM_CTX_MENU_REMOVEFROMTANK = '#menu:cst_item_ctx_menu/removeFromTank'
+    VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
+    VIEWHEADER_CLOSEBTN_LABEL = '#menu:viewHeader/closeBtn/label'
     CONTEXTMENU_ENUM = (CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
      CONTEXTMENU_GOTONATIONTREE,
@@ -1782,6 +1786,7 @@ class MENU(object):
      NATIONS_CZECH,
      NATIONS_SWEDEN,
      NATIONS_POLAND,
+     NATIONS_ITALY,
      NATIONS_ALL)
     TANKMEN_ENUM = (TANKMEN_LIGHTTANK,
      TANKMEN_MEDIUMTANK,
@@ -1876,6 +1881,7 @@ class MENU(object):
      MODULEINFO_PARAMS_SHELLSCOUNT,
      MODULEINFO_PARAMS_SHELLRELOADINGTIME,
      MODULEINFO_PARAMS_RELOADMAGAZINETIME,
+     MODULEINFO_PARAMS_AUTORELOADTIME,
      MODULEINFO_PARAMS_RELOADTIME,
      MODULEINFO_PARAMS_PIERCINGPOWER,
      MODULEINFO_PARAMS_DAMAGE,
@@ -1945,6 +1951,7 @@ class MENU(object):
      TANK_PARAMS_CHASSISROTATIONSPEED,
      TANK_PARAMS_SWITCHONTIME,
      TANK_PARAMS_SWITCHOFFTIME,
+     TANK_PARAMS_SWITCHTIME,
      TANK_PARAMS_TIMEOFREACHING,
      TANK_PARAMS_ATTAINABLESPEED,
      TANK_PARAMS_HULLARMOR,

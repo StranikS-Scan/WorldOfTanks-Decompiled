@@ -1,10 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/exceptions.py
-"""
-Created on Jul 1, 2015
 
-@author: oleg
-"""
 
 class ResponseCodes(object):
     NO_ERRORS = 0

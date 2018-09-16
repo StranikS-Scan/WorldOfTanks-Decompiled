@@ -102,11 +102,6 @@ def _installModulesSet(vehicle, modules, notFitted):
 
 
 def _getSlotDataIndexes(slots):
-    """
-    Provides list of tuples that contains indexes for slots data
-    :param slots: the range of slots gui.shared.gui_items.GUI_ITEM_TYPE_NAMES
-    :return: list , [(1,), (2,) ... [8,9,10]]
-    """
     index = 0
     indexes = []
     for slot in slots:
@@ -209,12 +204,6 @@ class _ConfigFittingSlotVO(FittingSlotVO):
 class _DefaultSkillCompletenessChecker(object):
 
     def isCompleted(self, levels, crew):
-        """
-        Checks if all members of crew have 100% skill level
-        :param levels: skill levels array
-        :param crew: vehicle crew
-        :return:
-        """
         for lvl in levels:
             if lvl < tankmen.MAX_SKILL_LEVEL:
                 return False
@@ -243,7 +232,7 @@ class _CurrentCrewMonitor(object):
         skillsCheckerStorage[PARAMS_AFFECTED_TANKMEN_SKILLS[1]] = self._FULL_CREW_SKILL_CHECKER
         vehicleCrew = self.itemsCache.items.getItemByCD(self.__container.getCurrentVehicle().intCD).crew
         levelsBySkills = defaultdict(list)
-        for roleIndex, tankman in vehicleCrew:
+        for _, tankman in vehicleCrew:
             if tankman is not None:
                 for skill in tankman.skills:
                     if skill.name in PARAMS_AFFECTED_TANKMEN_SKILLS:
@@ -256,10 +245,6 @@ class _CurrentCrewMonitor(object):
         return
 
     def isIncreasedSkillsSelected(self):
-        """
-        Checks is some of selected skill has been increased to 100% for comparison functionality
-        :return: True if some of selected skills has been increased to 100%
-        """
         if self.__container.getCurrentCrewSkillLevel() != CREW_TYPES.CURRENT:
             return False
         return True if self.__container.getCurrentCrewSkills().intersection(self.__increasedTo100Skills) else False
@@ -288,11 +273,6 @@ class _CrewSkillsManager(object):
         return
 
     def toggleSkill(self, skillName):
-        """
-        Apply or decline skill for particular crew members
-        :param skillName: the name (id) of skill (must be from cmp_helpers.PARAMS_AFFECTED_TANKMEN_SKILLS)
-        :return: bool, True if skill have been successfully applied / declined, otherwise False
-        """
         if skillName not in PARAMS_AFFECTED_TANKMEN_SKILLS:
             LOG_WARNING('Attempt to set skill not affected on the vehicle parameters: {}'.format(skillName))
             return False
@@ -306,12 +286,6 @@ class _CrewSkillsManager(object):
         return self._applyTankmanSkill(self.__vehicle, self.__getAffectedTankmens((skillName,)), self.__skillsByRoles, self.__selectedSkills)
 
     def applySkillForTheSameVehicle(self, vehicle, skillName):
-        """
-        Applies current skills configuration on the same vehicle
-        :param vehicle: target vehicle
-        :param skillName: str - skill name from PARAMS_AFFECTED_TANKMEN_SKILLS
-        :return:
-        """
         if vehicle.intCD != self.__vehicle.intCD:
             LOG_DEBUG('Target vehicle is not the same as current vehicle! Expected {}, received {}'.format(self.__vehicle.intCD, vehicle.intCD))
             return False
@@ -355,14 +329,6 @@ class _CrewSkillsManager(object):
 
     @classmethod
     def _applyTankmanSkill(cls, vehicle, affectedTankmens, skillsByRoles, selectedSkills):
-        """
-        Creates tankmens with particular roles and set of skills and applies it on the Vehicle
-        :param vehicle: target Vehicle
-        :param affectedTankmens: The set of tankmens roles that have to be recreated
-        :param skillsByRoles: dict, the set of skills available for particular tankmen role
-        :param selectedSkills: currently selected set of skills
-        :return: bool, True if some of tankmens has been recreated
-        """
         nationID, vehicleTypeID = vehicle.descriptor.type.id
         success = False
         for roleIdx, role in affectedTankmens:
@@ -380,11 +346,6 @@ class _CrewSkillsManager(object):
         return success
 
     def __getAffectedTankmens(self, skills):
-        """
-        Provides the set of tankmens roles which supported skills
-        :param skills: the set of skills
-        :return: set of tankmens roles
-        """
         tankmens = set()
         for skill in skills:
             tankmens |= self.__rolesBySkills[skill]
@@ -471,11 +432,6 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
             LOG_ERROR('{} installDevice. Unsupported slotType: {}'.format(self, slotType))
 
     def removeDevice(self, slotType, slotIndex):
-        """
-        Remove type from provided index slot
-        :param slotType: type of module from GUI_ITEM_TYPE_NAMES.*
-        :param slotIndex: there are 3 available indexes: (0,1,2)
-        """
         if slotType == cmp_helpers.OPTIONAL_DEVICE_TYPE_NAME:
             self._container.removeOptionalDevice(slotIndex)
         elif slotType == cmp_helpers.EQUIPMENT_TYPE_NAME:
@@ -551,10 +507,6 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
         self.__updateSlotsData((cmp_helpers.BATTLE_BOOSTER_TYPE_NAME, cmp_helpers.OPTIONAL_DEVICE_TYPE_NAME))
 
     def __updateSlotsData(self, slotsTypes):
-        """
-        Creates VO data only for provided slot types
-        :param slotsTypes: *.GUI_ITEM_TYPE_NAMES
-        """
         newVoData = getFittingSlotsData(self._container.getCurrentVehicle(), slotsTypes, _ConfigFittingSlotVO)
         for slotType in slotsTypes:
             indexesRange = _SLOT_DATA_INDEXES[HANGAR_FITTING_SLOTS.index(slotType)]
@@ -589,11 +541,11 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
         self.as_setApplyEnabledS(self._container.isCurrentVehicleModified())
 
     def __updateSkillsData(self):
-        skills = map(lambda skillType: {'icon': Tankman.getSkillBigIconPath(skillType),
+        skills = [ {'icon': Tankman.getSkillBigIconPath(skillType),
          'label': Tankman.getSkillUserName(skillType),
          'skillType': skillType,
          'isForAll': skillType in tankmen.COMMON_SKILLS,
-         'selected': skillType in self._container.getCurrentCrewSkills()}, PARAMS_AFFECTED_TANKMEN_SKILLS)
+         'selected': skillType in self._container.getCurrentCrewSkills()} for skillType in PARAMS_AFFECTED_TANKMEN_SKILLS ]
         self.as_setSkillsS(skills)
 
     @staticmethod
@@ -615,14 +567,11 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
         self.__updateCrewSelectionAvailability(crewLevel)
 
     def __updateShellSlots(self):
-        shells = map(lambda shot: self.itemsCache.items.getItemByCD(shot.shell.compactDescr), self._container.getCurrentVehicle().descriptor.gun.shots)
+        getter = self.itemsCache.items.getItemByCD
+        shells = [ getter(shot.shell.compactDescr) for shot in self._container.getCurrentVehicle().descriptor.gun.shots ]
         self.as_setAmmoS(getAmmo(shells))
 
     def __updateCrewAttentionIcon(self):
-        """
-        Show alert icon if current interface has selected tankmen skills
-        which has been increased to 100% specially for vehicle comparison basket functionality
-        """
         isVisible = False
         if self.__currentCrewMonitor:
             isVisible = self.__currentCrewMonitor.isIncreasedSkillsSelected()
@@ -636,8 +585,10 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
     def __init__(self, ctx=None):
         super(VehicleCompareConfiguratorMain, self).__init__(ctx)
         self.__vehIndex = ctx.get('index')
-        assert isinstance(self.__vehIndex, int)
-        assert 0 <= self.__vehIndex < self.comparisonBasket.getVehiclesCount()
+        if not isinstance(self.__vehIndex, int):
+            raise UserWarning('Index of vehicle should be integer: {}'.format(self.__vehIndex))
+        if self.__vehIndex < 0 or self.__vehIndex >= self.comparisonBasket.getVehiclesCount():
+            raise UserWarning('Index of vehicle out of range: {} not in (0, {})'.format(self.__vehIndex, self.comparisonBasket.getVehiclesCount()))
         self.__backAlias = ctx.get('previewAlias', VIEW_ALIAS.VEHICLE_COMPARE)
         self.__vehicle = None
         self.__crewSkillsManager = None
@@ -657,11 +608,6 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
         return self.__vehicle
 
     def getInitialVehicleData(self):
-        """
-        Provides vehicle corresponded to the vehicle if it is in hanger otherwise provides stock vehicle
-        :return: Vehicle.Vehicle, _CrewSkillsManager;
-        _CrewSkillsManager required to properly initialize and apply crew on vehicle
-        """
         basketVehicle = self.getBasketVehCmpData()
         if basketVehicle.isInInventory():
             strCD = basketVehicle.getInvVehStrCD()
@@ -698,20 +644,17 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
     def isTopModulesFromStock(self):
         topModules = self.__getTopModules()
         stockModules = self.__getStockModules()
-        return all(map(lambda item: item in stockModules, topModules))
+        return all((bool(item in stockModules) for item in topModules))
 
     def isTopModulesSelected(self):
         topModules = self.__getTopModules()
         selectedModules = cmp_helpers.getVehicleModules(self.__vehicle)
-        return all(map(lambda item: item in selectedModules, topModules))
+        return all((bool(item in selectedModules) for item in topModules))
 
     def isCamouflageSet(self):
         return cmp_helpers.isCamouflageSet(self.__vehicle)
 
     def applyNewParameters(self):
-        """
-        Transfers new selected parameters to comparison basket (save parameters)
-        """
         self.comparisonBasket.applyNewParameters(self.__vehIndex, self.__vehicle, self.getCurrentCrewSkillLevel(), self.getCurrentCrewSkills(), self.getCurrentShellIndex())
 
     def isDifferentWithInitialBasketVeh(self):
@@ -843,7 +786,6 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
         return
 
     def selectCrewSkill(self, skillType, selected):
-        assert skillType in PARAMS_AFFECTED_TANKMEN_SKILLS
         savedValue = skillType in self.__crewSkillsManager.getSelectedSkills()
         if selected != savedValue:
             if self.__crewSkillsManager.toggleSkill(skillType):
@@ -929,11 +871,6 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
         cmp_helpers.installBattleBoosterOnVehicle(self.__vehicle, intCD)
 
     def __updateSelectedShell(self, slotIndex):
-        """
-        Updates vehicle and interanal selectedShellIndex property
-        :param slotIndex: new index to select
-        :return: True if index has been successfully changed
-        """
         slotIndex = int(slotIndex)
         if self.__selectedShellIndex != slotIndex:
             self.__vehicle.descriptor.activeGunShotIndex = slotIndex

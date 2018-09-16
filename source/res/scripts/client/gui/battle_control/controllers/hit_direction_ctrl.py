@@ -97,11 +97,6 @@ class _HitDirection(object):
         return self.redraw()
 
     def redraw(self):
-        """
-        Redraw indicator if it is visible.
-        
-        :return: Animation duration.
-        """
         duration = 0
         if self.__isShown and self.__hitData is not None and self.__indicator is not None:
             timeLeft = BigWorld.time() - self.__startTime
@@ -113,13 +108,6 @@ class _HitDirection(object):
         return duration
 
     def show(self, hitData, extend=False):
-        """
-        Show indicator with the given hit data.
-        
-        :param hitData: An instance of HitData
-        :param extend: If True, current hit data will be extended with the given one.
-        :return: Animation duration
-        """
         self.__isShown = True
         self.__startTime = BigWorld.time()
         extend = extend and self.__hitData is not None
@@ -130,7 +118,6 @@ class _HitDirection(object):
         if self.__indicator:
             duration = self.__indicator.getDuration()
             timeLeft = self.__indicator.getBeginAnimationDuration() if extend else 0
-            assert duration, 'Duration should be more than 0'
             self.__indicator.showHitDirection(self.__idx, self.__hitData, timeLeft)
         else:
             duration = 0
@@ -151,10 +138,9 @@ class HitDirectionController(IViewComponentsController):
 
     def __init__(self, setup):
         super(HitDirectionController, self).__init__()
-        assert HIT_INDICATOR_MAX_ON_SCREEN, 'Can not be zero'
         self.__pull = [ _HitDirection(idx_) for idx_ in xrange(HIT_INDICATOR_MAX_ON_SCREEN) ]
         self.__ui = None
-        self.__isVisible = True
+        self.__isVisible = False
         self.__callbackIDs = {}
         self.__damageIndicatorPreset = DAMAGE_INDICATOR_PRESETS.ALL
         self.__arenaDP = weakref.proxy(setup.arenaDP)
@@ -232,11 +218,6 @@ class HitDirectionController(IViewComponentsController):
         return
 
     def addHit(self, hitData):
-        """
-        Add a new hit to control.
-        
-        :param hitData: An instance of HitData
-        """
         if not self._isValidHit(hitData):
             return
         else:
@@ -254,23 +235,11 @@ class HitDirectionController(IViewComponentsController):
             return hit
 
     def _isValidHit(self, hitData):
-        """
-        Validates that hit with the given data should be displayed to the user.
-        Do not show damage indicator if:
-        1. it is caused by battle consumables.
-        2. it is critical hit without damage and crits are disabled in user's preferences
-        
-        :param hitData: An instance of HitData
-        :return: True if hit is valid and should be shown, otherwise False.
-        """
         if hitData.isBattleConsumables():
             return False
         return False if self.__damageIndicatorPreset == DAMAGE_INDICATOR_PRESETS.WITHOUT_CRITS and hitData.isCritical() and hitData.getDamage() == 0 else True
 
     def _hideAllHits(self):
-        """
-        Hides all visible hits.
-        """
         for hit in self.__pull:
             hit.hide()
 
@@ -285,18 +254,6 @@ class HitDirectionController(IViewComponentsController):
         return find
 
     def __findHit(self, hitData):
-        """
-        Finds an appropriate damage indicator according to the following aggregation rules:
-        1. Hits are aggregated by target ID.
-        2. Blocked hit can be aggregated only with another blocked hit (aggregated value - damage).
-        3. Critical hit without HP damage can be aggregated only with another critical hit
-           without HP damage (aggregated value - crits count).
-        4. Any not blocked hit with HP damage (including with crits) can be aggregated with
-           another not blocked hit with HP damage (aggregated value - damage and crits count)
-        
-        :param hitData: An instance of HitData
-        :return: _HitDirection instance corresponding to the rules listed above or None.
-        """
         for hit in self.__pull:
             data = hit.getHitData()
             if data is not None:

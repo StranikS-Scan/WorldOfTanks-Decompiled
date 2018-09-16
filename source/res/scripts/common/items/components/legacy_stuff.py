@@ -4,7 +4,6 @@ from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP
 _IS_LEGACY_STUFF_SUPPORTED = not IS_CLIENT and not IS_CELLAPP and not IS_BASEAPP
 
 class SupportedLegacyStuff(object):
-    """Decorator to make dict-like object, but support is not full."""
     __slots__ = ()
 
     def __getitem__(self, item):
@@ -48,7 +47,6 @@ class SupportedLegacyStuff(object):
 
 
 class NoLegacyStuff(object):
-    """Decorator to disallow dict-like behavior."""
     __slots__ = ()
 
     def __getitem__(self, item):

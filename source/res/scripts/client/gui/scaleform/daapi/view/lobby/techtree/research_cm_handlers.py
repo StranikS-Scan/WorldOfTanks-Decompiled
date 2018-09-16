@@ -154,9 +154,5 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         return options
 
     def _manageVehCompareItem(self, optionsRef, vehicle):
-        """
-        :param vehicle: instance of gui.shared.gui_items.Vehicle.Vehicle
-        :param optionsRef: reference to Context Menu items list
-        """
         if self.comparisonBasket.isEnabled():
             optionsRef.append(self._makeItem(VEHICLE.COMPARE, MENU.contextmenu(VEHICLE.COMPARE), {'enabled': self.comparisonBasket.isReadyToAdd(vehicle)}))

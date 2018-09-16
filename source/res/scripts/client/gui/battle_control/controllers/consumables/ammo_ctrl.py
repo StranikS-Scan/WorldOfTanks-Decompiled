@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/ammo_ctrl.py
 import weakref
+from math import fabs
 from collections import namedtuple
 import BigWorld
 import CommandMapping
@@ -13,16 +14,15 @@ from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
 from items import vehicles
-from math import fabs
-import BattleReplay
 __all__ = ('AmmoController', 'AmmoReplayPlayer')
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
+_HUNDRED_PERCENT = 100.0
 
-class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect')):
+class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect autoReload')):
 
     @classmethod
     def default(cls):
-        return cls.__new__(cls, _ClipBurstSettings(1, 0.0), _ClipBurstSettings(1, 0.0), {}, None)
+        return cls.__new__(cls, _ClipBurstSettings(1, 0.0), _ClipBurstSettings(1, 0.0), {}, None, None)
 
     @classmethod
     def make(cls, gun):
@@ -38,7 +38,8 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect')):
             intCD = vehicles.makeIntCompactDescrByID('shell', nationID, itemID)
             shots[intCD] = (shotIdx, shotDescr.piercingPower[0])
 
-        return cls.__new__(cls, clip, burst, shots, reloadEffect)
+        autoReload = gun.autoreload if 'autoreload' in gun.tags else None
+        return cls.__new__(cls, clip, burst, shots, reloadEffect, autoReload)
 
     def getShotIndex(self, intCD):
         if intCD in self.shots:
@@ -57,49 +58,41 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect')):
     def isCassetteClip(self):
         return self.clip.size > 1 or self.burst.size > 1
 
+    def hasAutoReload(self):
+        return self.autoReload is not None
+
 
 class IGunReloadingSnapshot(object):
-    """Interface declares immutable state of reloading in a certain time"""
     __slots__ = ()
 
     def clear(self):
-        """Clears data."""
         raise NotImplementedError
 
     def getValueType(self):
-        """ Gets type of values that determine state of reloading: time, percent.
-        :return: one of GUN_RELOADING_VALUE_TYPE.*.
-        """
         raise NotImplementedError
 
     def isReloading(self):
-        """Is gun still reloading.
-        :return: bool.
-        """
         raise NotImplementedError
 
     def getActualValue(self):
-        """Gets actual value of reloading.
-        :return: float.
-        """
+        raise NotImplementedError
+
+    def getBaseValue(self):
+        raise NotImplementedError
+
+    def isReloadingFinished(self):
         raise NotImplementedError
 
 
 class IGunReloadingState(IGunReloadingSnapshot):
-    """Interface declares the state of reloading that can be update."""
     __slots__ = ()
 
     def getSnapshot(self):
-        """Gets immutable state of reloading at time of request.
-        :return: object implements IGunReloadingSnapshot.
-        """
         raise NotImplementedError
 
 
 @ReprInjector.simple(('_actualTime', 'actual'), ('_baseTime', 'base'), ('getTimePassed', 'timePassed'), ('isReloading', 'reloading'))
 class ReloadingTimeSnapshot(IGunReloadingSnapshot):
-    """ The state of reloading is based on time.
-    Server sends this time each time when gun reloading time is changed"""
     __slots__ = ('_actualTime', '_baseTime', '_startTime', '_updateTime')
 
     def __init__(self, actualTime=0.0, baseTime=0.0, startTime=0.0, updateTime=0.0):
@@ -119,7 +112,10 @@ class ReloadingTimeSnapshot(IGunReloadingSnapshot):
         return GUN_RELOADING_VALUE_TYPE.TIME
 
     def isReloading(self):
-        return self._actualTime != 0
+        return self._actualTime > 0
+
+    def isReloadingFinished(self):
+        return self._actualTime == 0
 
     def getActualValue(self):
         return self._actualTime
@@ -128,43 +124,24 @@ class ReloadingTimeSnapshot(IGunReloadingSnapshot):
         return self._baseTime
 
     def getTimePassed(self):
-        """
-        Returns time passed from start of reloading till current moment,
-        ignoring setGunReloadTime updates(e.g intuition perk was applied or
-        vehicle received crits, moves from one cell to another - in all these cases
-        server will send updates for actual/base time)
-        :return: int value
-        """
         return self.__getTimePassedFrom(self._startTime)
 
     def getTimeLeft(self):
-        """
-        Return time left, considering _updateTime(the last update of actual/base time)
-        :return: int value
-        """
-        return max(0.0, self._actualTime - self.__getTimePassedFrom(self._updateTime)) if self.isReloading() else 0.0
+        return max(0.0, self._actualTime - self.__getTimePassedFrom(self._updateTime)) if not self.isReloadingFinished() else 0.0
 
     def __getTimePassedFrom(self, specifiedTime):
-        return max(0.0, BigWorld.timeExact() - specifiedTime) if self.isReloading() and self._actualTime else 0.0
+        return max(0.0, BigWorld.timeExact() - specifiedTime) if not self.isReloadingFinished() else 0.0
 
 
 _TIME_CORRECTION_THRESHOLD = 0.01
 
 class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
-    __slots__ = ('_startTime', '_baseTime', '_actualTime')
+    __slots__ = ('_startTime', '_baseTime', '_actualTime', '_updateTime')
 
     def getSnapshot(self):
         return ReloadingTimeSnapshot(actualTime=self._actualTime, baseTime=self._baseTime, startTime=self._startTime, updateTime=self._updateTime)
 
     def setTimes(self, actualTime, baseTime):
-        """ Sets new values of state.
-        :param actualTime: float containing current time of gun reloading. Value can be:
-            0 - reloading is completed.
-            -1 - reloading is not completed, because there are no ammo or we disable reloading.
-            0..n - start to reload at specified time.
-        :param baseTime: float containing base time of gun reloading.
-            N seconds that are needed to reload gun after shoot.
-        """
         if actualTime > 0:
             if self._actualTime <= 0:
                 correction = baseTime - actualTime
@@ -182,7 +159,6 @@ class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
 
 @ReprInjector.simple(('getActualValue', 'actual'), ('isReloading', 'reloading'))
 class ReloadingPercentSnapshot(IGunReloadingSnapshot):
-    """ The state of reloading is based on percent. It is used in replay."""
     __slots__ = ('__percent',)
 
     def __init__(self, percent=0.0):
@@ -198,8 +174,14 @@ class ReloadingPercentSnapshot(IGunReloadingSnapshot):
     def getActualValue(self):
         return self.__percent
 
+    def getBaseValue(self):
+        return _HUNDRED_PERCENT
+
     def isReloading(self):
         return self.getActualValue() > 0
+
+    def isReloadingFinished(self):
+        return self.getActualValue() == 0
 
 
 class ReloadingPercentState(IGunReloadingState):
@@ -216,11 +198,10 @@ class ReloadingPercentState(IGunReloadingState):
         return
 
     def clear(self):
+        pass
 
-        def getter():
-            pass
-
-        self.__getter = getter
+    def clearGetter(self):
+        self.__getter = lambda : 0
 
     def getSnapshot(self):
         return ReloadingPercentSnapshot(percent=self.getActualValue())
@@ -229,18 +210,21 @@ class ReloadingPercentState(IGunReloadingState):
         return GUN_RELOADING_VALUE_TYPE.PERCENT
 
     def getActualValue(self):
-        return round(100.0 * self.__getter())
+        return round(_HUNDRED_PERCENT * self.__getter())
+
+    def getBaseValue(self):
+        return _HUNDRED_PERCENT
 
     def isReloading(self):
         return self.getActualValue() > 0
+
+    def isReloadingFinished(self):
+        return self.getActualValue() == 0
 
 
 _IGNORED_RELOADING_TIME = 0.15
 
 class _AutoShootsCtrl(object):
-    """ Reloading indicator is updated until player holds mouse button
-    and value of reloading less than _IGNORED_RELOADING_TIME.
-    """
     __slots__ = ('__proxy', '__isStarted', '__callbackID')
 
     def __init__(self, proxy):
@@ -292,7 +276,7 @@ class _AutoShootsCtrl(object):
 
 
 class AmmoController(MethodsRules, IBattleController):
-    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '__autoShoots', '__weakref__')
+    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunAutoReloadTimeSet', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '_autoReloadingState', '__autoShoots', '__weakref__')
 
     def __init__(self, reloadingState=None):
         super(AmmoController, self).__init__()
@@ -303,9 +287,11 @@ class AmmoController(MethodsRules, IBattleController):
         self.onCurrentShellChanged = Event.Event(self.__eManager)
         self.onGunSettingsSet = Event.Event(self.__eManager)
         self.onGunReloadTimeSet = Event.Event(self.__eManager)
+        self.onGunAutoReloadTimeSet = Event.Event(self.__eManager)
         self.__ammo = {}
         self._order = []
         self._reloadingState = reloadingState or ReloadingTimeState()
+        self._autoReloadingState = ReloadingTimeState()
         self.__currShellCD = None
         self.__nextShellCD = None
         self.__gunSettings = _GunSettings.default()
@@ -384,7 +370,8 @@ class AmmoController(MethodsRules, IBattleController):
         interval = self.__gunSettings.clip.interval
         self.triggerReloadEffect(timeLeft, baseTime)
         if interval > 0:
-            if not (self.__ammo[self.__currShellCD][1] == 1 and timeLeft == 0 or self.__ammo[self.__currShellCD][1] == 0 and timeLeft > 0):
+            shellsInClip = self.__ammo[self.__currShellCD][1]
+            if not (shellsInClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or shellsInClip == 0 and timeLeft > 0):
                 baseTime = interval
         isIgnored = False
         if CommandMapping.g_instance.isActive(CommandMapping.CMD_CM_SHOOT):
@@ -394,6 +381,22 @@ class AmmoController(MethodsRules, IBattleController):
         self._reloadingState.setTimes(timeLeft, baseTime)
         if not isIgnored:
             self.onGunReloadTimeSet(self.__currShellCD, self._reloadingState.getSnapshot())
+
+    def setGunAutoReloadTime(self, timeLeft, baseTime, stunned):
+        self._autoReloadingState.setTimes(timeLeft, baseTime)
+        self.__notifyAboutAutoReloadTimeChanges(stunned)
+        if self.__gunSettings.reloadEffect is not None:
+            shellCounts = self.__ammo[self.__currShellCD]
+            shellsInClip = shellCounts[1]
+            clipCapacity = self.__gunSettings.clip.size
+            canBeFull = shellCounts[0] >= clipCapacity
+            lastShell = shellsInClip == clipCapacity - 1
+            loadingStart = timeLeft > 0.0
+            if loadingStart:
+                self.__gunSettings.reloadEffect.onClipLoad(timeLeft, shellsInClip, lastShell, canBeFull)
+            elif self.__gunSettings.clip.size == shellsInClip:
+                self.__gunSettings.reloadEffect.onFull()
+        return
 
     def triggerReloadEffect(self, timeLeft, baseTime):
         if timeLeft > 0.0 and self.__gunSettings.reloadEffect is not None:
@@ -408,27 +411,16 @@ class AmmoController(MethodsRules, IBattleController):
         return
 
     def getGunReloadingState(self):
-        """ Gets snapshot of reloading state.
-        :return: instance of object that implements IGunReloadingSnapshot.
-        """
         return self._reloadingState.getSnapshot()
 
     def isGunReloading(self):
-        """ Is gun reloading.
-        :return: bool.
-        """
-        return self._reloadingState.isReloading()
+        return not self._reloadingState.isReloadingFinished()
 
     @MethodsRules.delayable('setGunReloadTime')
     def refreshGunReloading(self):
-        """Refreshes current state of reloading."""
         self.onGunReloadTimeSet(self.__currShellCD, self._reloadingState.getSnapshot())
 
     def getShells(self, intCD):
-        """Gets quantity of shells by compact descriptor.
-        :param intCD: integer containing compact descriptor of shell.
-        :return: tuple(quantity, quantityInClip) or (-1, -1) if shells is not found.
-        """
         try:
             quantity, quantityInClip = self.__ammo[intCD]
         except KeyError:
@@ -438,9 +430,6 @@ class AmmoController(MethodsRules, IBattleController):
         return (quantity, quantityInClip)
 
     def getOrderedShellsLayout(self):
-        """Gets list of shell.
-        :return: list( (intCD, descriptor, quantity, quantityInClip, gunSettings)), ... ).
-        """
         result = []
         for intCD in self._order:
             descriptor = vehicles.getItemByCompactDescr(intCD)
@@ -454,25 +443,16 @@ class AmmoController(MethodsRules, IBattleController):
         return result
 
     def getShellsLayout(self):
-        """Gets list of shell (it's not sorted by adding time).
-        :return: list( (intCD, (quantity, quantityInClip)), ... ).
-        """
         return self.__ammo.iteritems()
 
     def getCurrentShells(self):
-        """Gets quantity of current shells.
-        :return: tuple(quantity, quantityInClip) or (-1, -1) if shells is not found.
-        """
         return self.getShells(self.__currShellCD) if self.__currShellCD is not None else (SHELL_QUANTITY_UNKNOWN,) * 2
 
     def getShellsQuantityLeft(self):
-        """Gets quantity of shells that are left before to next clip reloading.
-        :return: integer containing quantity of clip.
-        """
         quantity, quantityInClip = self.getCurrentShells()
         if self.__gunSettings.isCassetteClip():
             result = quantityInClip
-            if result == 0 and not self._reloadingState.isReloading():
+            if result == 0 and self._reloadingState.isReloadingFinished():
                 clipSize = self.__gunSettings.clip.size
                 if clipSize <= quantity:
                     result = clipSize
@@ -503,16 +483,15 @@ class AmmoController(MethodsRules, IBattleController):
         return result
 
     def getNextSettingCode(self, intCD):
-        code = None
         if intCD == self.__currShellCD and intCD == self.__nextShellCD:
-            return code
+            return None
         elif intCD not in self.__ammo.keys():
             LOG_ERROR('Shell is not found.', intCD)
-            return code
+            return None
         else:
             quantity, _ = self.__ammo[intCD]
             if quantity <= 0:
-                return code
+                return None
             if intCD == self.__nextShellCD:
                 code = VEHICLE_SETTING.CURRENT_SHELLS
             else:
@@ -554,24 +533,37 @@ class AmmoController(MethodsRules, IBattleController):
             quantityInClip = clipSize if quantity >= clipSize else quantity
             self.setShells(self.__currShellCD, quantity, quantityInClip)
 
-    def canShoot(self):
+    def canShoot(self, isRepeat=False):
         if self.__currShellCD is None:
             result, error = False, CANT_SHOOT_ERROR.WAITING
         elif self.__ammo[self.__currShellCD][0] == 0:
             result, error = False, CANT_SHOOT_ERROR.NO_AMMO
         elif self.isGunReloading():
+            if not isRepeat and self.__gunSettings.hasAutoReload():
+                self.__shotFail()
             result, error = False, CANT_SHOOT_ERROR.RELOADING
+        elif self.__ammo[self.__currShellCD][1] == 0 and self.__gunSettings.isCassetteClip():
+            result, error = True, CANT_SHOOT_ERROR.EMPTY_CLIP
         else:
             result, error = True, CANT_SHOOT_ERROR.UNDEFINED
         return (result, error)
 
+    def __shotFail(self):
+        if self.__gunSettings.reloadEffect is not None:
+            shellCounts = self.__ammo[self.__currShellCD]
+            if shellCounts[1] == 0:
+                self.__gunSettings.reloadEffect.shotFail()
+        return
+
+    def __notifyAboutAutoReloadTimeChanges(self, stunned):
+        self.onGunAutoReloadTimeSet(min(self._autoReloadingState.getTimeLeft(), self._autoReloadingState.getActualValue()), self._autoReloadingState.getBaseValue(), stunned)
+
 
 class AmmoReplayRecorder(AmmoController):
-    __slots__ = ('__changeRecord', '__timeRecord', '__replayCtrl')
+    __slots__ = ('__changeRecord', '__timeRecord')
 
     def __init__(self, replayCtrl):
         super(AmmoReplayRecorder, self).__init__()
-        self.__replayCtrl = replayCtrl
         self.__changeRecord = replayCtrl.setAmmoSetting
         self.__timeRecord = replayCtrl.setGunReloadTime
 
@@ -580,7 +572,6 @@ class AmmoReplayRecorder(AmmoController):
         if leave:
             self.__changeRecord = None
             self.__timeRecord = None
-            self.__replayCtrl = None
         return
 
     def setGunReloadTime(self, timeLeft, baseTime):
@@ -602,7 +593,7 @@ class AmmoReplayRecorder(AmmoController):
 
 
 class AmmoReplayPlayer(AmmoController):
-    __slots__ = ('__callbackID', '__isActivated', '__timeGetter', '__percent', '__replayCtrl')
+    __slots__ = ('__callbackID', '__isActivated', '__percent', '__replayCtrl')
 
     def __init__(self, replayCtrl):
         self.__replayCtrl = replayCtrl
@@ -614,12 +605,12 @@ class AmmoReplayPlayer(AmmoController):
         return
 
     def clear(self, leave=True):
-        if leave and self.__replayCtrl is not None:
-            if self.__callbackID is not None:
-                BigWorld.cancelCallback(self.__callbackID)
-                self.__callbackID = None
-            self.__timeGetter = lambda : 0
+        if leave:
+            self._reloadingState.clearGetter()
             if self.__replayCtrl is not None:
+                if self.__callbackID is not None:
+                    BigWorld.cancelCallback(self.__callbackID)
+                    self.__callbackID = None
                 self.__replayCtrl.onAmmoSettingChanged -= self.__onAmmoSettingChanged
                 self.__replayCtrl = None
         super(AmmoReplayPlayer, self).clear(leave)

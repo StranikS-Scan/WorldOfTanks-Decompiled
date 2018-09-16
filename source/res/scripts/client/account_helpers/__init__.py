@@ -59,8 +59,5 @@ def isLongDisconnectedFromCenter():
 
 
 def getAccountHelpersConfig(manager):
-    """ Configures services for package gui.
-    :param manager: helpers.dependency.DependencyManager.
-    """
     from account_helpers import settings_core
     manager.addConfig(settings_core.getSettingsCoreConfig)

@@ -1,26 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/robotparser.py
-""" robotparser.py
-
-    Copyright (C) 2000  Bastian Kleineidam
-
-    You can choose between two licenses when using this package:
-    1) GNU GPLv2
-    2) PSF license for Python 2.2
-
-    The robots.txt Exclusion Protocol is implemented as specified in
-    http://www.robotstxt.org/norobots-rfc.txt
-
-"""
 import urlparse
 import urllib
 __all__ = ['RobotFileParser']
 
 class RobotFileParser:
-    """ This class provides a set of methods to read, parse and answer
-    questions about a single robots.txt file.
-    
-    """
 
     def __init__(self, url=''):
         self.entries = []
@@ -32,29 +16,17 @@ class RobotFileParser:
         return
 
     def mtime(self):
-        """Returns the time the robots.txt file was last fetched.
-        
-        This is useful for long-running web spiders that need to
-        check for new robots.txt files periodically.
-        
-        """
         return self.last_checked
 
     def modified(self):
-        """Sets the time the robots.txt file was last fetched to the
-        current time.
-        
-        """
         import time
         self.last_checked = time.time()
 
     def set_url(self, url):
-        """Sets the URL referring to a robots.txt file."""
         self.url = url
         self.host, self.path = urlparse.urlparse(url)[1:3]
 
     def read(self):
-        """Reads the robots.txt URL and feeds it to the parser."""
         opener = URLopener()
         f = opener.open(self.url)
         lines = [ line.strip() for line in f ]
@@ -76,9 +48,6 @@ class RobotFileParser:
         return
 
     def parse(self, lines):
-        """parse the input lines from a robots.txt file.
-        We allow that a user-agent: line is not preceded by
-        one or more blank lines."""
         state = 0
         linenumber = 0
         entry = Entry()
@@ -122,7 +91,6 @@ class RobotFileParser:
             self._add_entry(entry)
 
     def can_fetch(self, useragent, url):
-        """using the parsed robots.txt decide if useragent can fetch url"""
         if self.disallow_all:
             return False
         if self.allow_all:
@@ -150,8 +118,6 @@ class RobotFileParser:
 
 
 class RuleLine:
-    """A rule line is a single "Allow:" (allowance==True) or "Disallow:"
-    (allowance==False) followed by a path."""
 
     def __init__(self, path, allowance):
         if path == '' and not allowance:
@@ -168,7 +134,6 @@ class RuleLine:
 
 
 class Entry:
-    """An entry has one or more user-agents and zero or more rulelines"""
 
     def __init__(self):
         self.useragents = []
@@ -185,7 +150,6 @@ class Entry:
         return ''.join(ret)
 
     def applies_to(self, useragent):
-        """check if this entry applies to the specified agent"""
         useragent = useragent.split('/')[0].lower()
         for agent in self.useragents:
             if agent == '*':
@@ -197,9 +161,6 @@ class Entry:
         return False
 
     def allowance(self, filename):
-        """Preconditions:
-        - our agent applies to this entry
-        - filename is URL decoded"""
         for line in self.rulelines:
             if line.applies_to(filename):
                 return line.allowance

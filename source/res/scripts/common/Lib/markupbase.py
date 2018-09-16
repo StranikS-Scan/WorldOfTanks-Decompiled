@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/markupbase.py
-"""Shared support for scanning document type declarations in HTML and XHTML.
-
-This module is used as a foundation for the HTMLParser and sgmllib
-modules (indirectly, for htmllib as well).  It has no documented
-public API and should not be used directly.
-
-"""
 import re
 _declname_match = re.compile('[a-zA-Z][-_.a-zA-Z0-9]*\\s*').match
 _declstringlit_match = re.compile('(\\\'[^\\\']*\\\'|"[^"]*")\\s*').match
@@ -16,8 +9,6 @@ _msmarkedsectionclose = re.compile(']\\s*>')
 del re
 
 class ParserBase:
-    """Parser base class which provides some common support methods used
-    by the SGML/HTML and XHTML parsers."""
 
     def __init__(self):
         if self.__class__ is ParserBase:
@@ -31,7 +22,6 @@ class ParserBase:
         self.offset = 0
 
     def getpos(self):
-        """Return current line number and offset."""
         return (self.lineno, self.offset)
 
     def updatepos(self, i, j):
@@ -52,7 +42,6 @@ class ParserBase:
     def parse_declaration(self, i):
         rawdata = self.rawdata
         j = i + 2
-        assert rawdata[i:j] == '<!', 'unexpected call to parse_declaration'
         if rawdata[j:j + 1] == '>':
             return j + 1
         if rawdata[j:j + 1] in ('-', ''):
@@ -99,7 +88,6 @@ class ParserBase:
 
     def parse_marked_section(self, i, report=1):
         rawdata = self.rawdata
-        assert rawdata[i:i + 3] == '<![', 'unexpected call to parse_marked_section()'
         sectName, j = self._scan_name(i + 3, i)
         if j < 0:
             return j

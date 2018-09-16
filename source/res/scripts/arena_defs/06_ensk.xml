@@ -13,24 +13,24 @@
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <wwmusicSetup>
-    <wwmusicLoading>	music_rus_city	</wwmusicLoading>
-    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
-    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+    <wwmusicLoading>	music_prokhorovka_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_prokhorovka_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_prokhorovka_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_prokhorovka_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_prokhorovka_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_prokhorovka_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
   <gameplayTypes>
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	20.299999 249.699997	</position1>
+          <position1>	20.299990 249.699997	</position1>
         </team1>
         <team2>
-          <position1>	19.099998 -248.700012	</position1>
+          <position1>	19.099981 -248.700150	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
@@ -43,11 +43,23 @@
           <position>	203.359 -248.108	</position>
         </team2>
       </teamSpawnPoints>
-      <teamBasePositions>
-        <team1></team1>
-        <team2></team2>
-      </teamBasePositions>
-      <controlPoint>	-82.768829 2.876255	</controlPoint>
+      <controlPoint>	-82.768745 0.675798	</controlPoint>
     </domination>
   </gameplayTypes>
+  <mapActivities>
+    <scenario>
+      <startTime>	15.000000 15.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <period>	0.000000	</period>
+      <trajectories>
+        <warplane>
+          <preset>	ensk_airplane_fly	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
 </06_ensk.xml>

@@ -65,11 +65,5 @@ class _TmpIgnoreListCtrl(IBattleController):
 
 
 def createTmpIgnoreListCtrl(setup):
-    """
-    Factory method that creates _TmpIgnoreListCtrl instance based on the battle type.
-    
-    :param setup: an instance of BattleSessionSetup
-    :return: _TmpIgnoreListCtrl instance or None.
-    """
     arenaGuiTypeVisitor = setup.arenaVisitor.gui
     return None if arenaGuiTypeVisitor.isTutorialBattle() else _TmpIgnoreListCtrl(setup)

@@ -7,8 +7,9 @@ from helpers import dependency
 from skeletons.gui.game_control import IBrowserController, IChinaController, IGameSessionController
 
 class NoChinaController(IChinaController):
-    """It's stub to avoid cases when object is scanned to find some properties, methods."""
-    pass
+
+    def showBrowser(self):
+        pass
 
 
 class ChinaController(IChinaController):

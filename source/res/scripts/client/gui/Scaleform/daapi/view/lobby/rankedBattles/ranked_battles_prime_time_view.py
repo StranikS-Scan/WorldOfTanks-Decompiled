@@ -19,7 +19,6 @@ from gui.shared import actions
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared import events
 from gui.shared.formatters import icons, text_styles
-from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
@@ -136,10 +135,8 @@ class RankedBattlesPrimeTimeView(LobbySubView, RankedBattlesPrimeTimeMeta, Notif
         selectedItem = self.__serversDP.getVO(selectedIdx)
         currentServerName = selectedItem['label']
         if len(self.__serversList) == 1:
-            serverDDName = text_styles.concatStylesToSingleLine(text_styles.main(currentServerName), '  ', selectedItem['pingValue'])
             serversDDEnabled = False
         else:
-            serverDDName = ''
             serversDDEnabled = True
         applyButtonLabel = _ms(RANKED_BATTLES.PRIMETIME_APPLYBTN)
         title = _ms(RANKED_BATTLES.PRIMETIME_TITLE)

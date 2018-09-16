@@ -93,9 +93,6 @@ class Test_Assertions(unittest.TestCase):
 
 
 class TestLongMessage(unittest.TestCase):
-    """Test that the individual asserts honour longMessage.
-    This actually tests all the message behaviour for
-    asserts that use longMessage."""
 
     def setUp(self):
 

@@ -42,7 +42,7 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
     def changeVisibility(self, isVisible):
         super(WGMCurrencyTooltip, self).changeVisibility(isVisible)
         if isVisible and self.isWGMAvailable():
-            self.__requester.requestInfo(lambda result: self.__onDataResponse(result))
+            self.__requester.requestInfo(self.__onDataResponse)
 
     @classmethod
     def isWGMAvailable(cls):

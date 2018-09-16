@@ -494,7 +494,88 @@ def initVehiclePhysicsForced(physics, typeDesc, forcedCfg):
 
 
 def initVehiclePhysicsEditor(physics, typeDesc):
-    baseCfg = typeDesc.type.xphysics.get('detailed')
+    if not hasattr(typeDesc.type.xphysics, 'detailed'):
+        typeDesc.type.xphysics['detailed'] = {'engines': {typeDesc.engine.name: {'startRPM': 1500,
+                                            'powerFactor': 1,
+                                            'rotationFactor': 0.857143,
+                                            'engineTorque': ((500, 2.7),
+                                                             (1000, 3.15),
+                                                             (1500, 3.45),
+                                                             (2500, 2.55)),
+                                            'engineLoses': (0.13229, 6.614494),
+                                            'engineSupression': (0, 1, 1, 1),
+                                            'engineInertia': 0.01777,
+                                            'idleRPM': 1000,
+                                            'idleChoker': 0.1,
+                                            'smplEnginePower': 634.3687,
+                                            'smplFwMaxSpeed': 34,
+                                            'smplBkMaxSpeed': 14,
+                                            'rotationChoker': 0.9}},
+         'chassis': {typeDesc.chassis.name: {'angVelocityFactor0': 0.847066,
+                                             'hullCOM': (0, 1.118153, -0.00721),
+                                             'chassisMassFraction': 0.3,
+                                             'hullCOMShiftY': -0.1,
+                                             'wheelRadius': 0.4,
+                                             'bodyHeight': 1.136306,
+                                             'clearance': 0.65,
+                                             'wheelStroke': 0.3,
+                                             'roadWheelPositions': (-2.702271, -1.35474, -0.00721, 1.340321, 2.687851),
+                                             'rearDriveWheelPosition': (-3.211225, 1.786306),
+                                             'frontDriveWheelPosition': (3.218897, 1.786306),
+                                             'stiffness0': 243.6666,
+                                             'stiffness1': 263.4825,
+                                             'stiffnessFactors': (1, 1, 1, 1, 1),
+                                             'damping': 26.34825,
+                                             'movementRevertSpeed': 2,
+                                             'isRotationAroundCenter': False,
+                                             'comSideFriction': 1.5,
+                                             'comFrictionYOffs': 0,
+                                             'hullInertiaFactors': (1.8, 2, 1.6),
+                                             'rotationBrake': 30.04625,
+                                             'brake': 46225,
+                                             'wheelInertiaFactor': 1,
+                                             'angVelocityFactor': 0.720007,
+                                             'wheelSinkageResistFactor': 0,
+                                             'rotFritionFactor': 0,
+                                             'pushStop': 0.116733,
+                                             'sideFrictionConstantRatio': 0,
+                                             'centerRotationFwdSpeed': 7.462401,
+                                             'rotationByLockChoker': 0.8,
+                                             'fwLagRatio': 0.6,
+                                             'bkLagRatio': 0.4,
+                                             'grounds': {'soft': {'dirtCumulationRate': 4,
+                                                                  'dirtReleaseRate': 4,
+                                                                  'dirtSideVelocity': 32.4,
+                                                                  'maxDirt': 1,
+                                                                  'sideFriction': 1.1,
+                                                                  'fwdFriction': 1.3,
+                                                                  'rollingFriction': 0.2093,
+                                                                  'hbComSideFriction': 0,
+                                                                  'hbSideFrictionAddition': 0,
+                                                                  'rotationFactor': 0.405392}},
+                                             'gimletGoalWOnSpot': 0.65159,
+                                             'gimletPushOnSpotInit': 0.1,
+                                             'gimletPushOnSpotFinal': 4,
+                                             'pushRotOnSpotFixedPeriod': 0.13,
+                                             'pushRotOnSpotGrowPeriod': 0.433333,
+                                             'gimletGoalWOnMove': 0.553851,
+                                             'gimletPushOnMoveInit': 0.391833,
+                                             'gimletPushOnMoveFinal': 4,
+                                             'pushRotOnMoveFixedPeriod': 0.03,
+                                             'pushRotOnMoveGrowPeriod': 0.4,
+                                             'gimletVelScaleMin': 0.1,
+                                             'gimletVelScaleMax': 2,
+                                             'chsDmgMultiplier': 1}},
+         'gravityFactor': 1.25,
+         'fakegearbox': {'fwdgears': {'switchSpeed': (2.833334, 4.722222, 7.555556),
+                                      'switchHysteresis': (0.5, 0.472222, 0.755556),
+                                      'lowRpm': (0.4, 0.3, 0.3),
+                                      'highRpm': (1.2, 1, 1)},
+                         'bkwdgears': {'switchSpeed': (1.166667, 2.333333),
+                                       'switchHysteresis': (1, 1),
+                                       'lowRpm': (0.4, 0.4),
+                                       'highRpm': (1, 1)}}}
+    baseCfg = typeDesc.type.xphysics['detailed']
     gravityFactor = 1.0
     configurePhysics(physics, baseCfg, typeDesc, gravityFactor)
 
@@ -510,6 +591,9 @@ def initVehiclePhysicsClient(physics, typeDesc):
     blen = bmax[2] - bmin[2]
     width = bmax[0] - bmin[0]
     height = bmax[1] - bmin[1]
+    if blen == 0.0 and width == 0.0 and height == 0.0:
+        LOG_ERROR('Invalid bounding box for', typeDesc.name)
+        blen = width = height = 1.0
     srcEnginePower = physDescr['enginePower']
     srcMass = physDescr['weight']
     fullMass = physDescr['weight'] * WEIGHT_SCALE
@@ -533,7 +617,11 @@ def initVehiclePhysicsClient(physics, typeDesc):
     boxCenter = Math.Vector3(chassisCenter)
     boxCenter[1] = globalBoxY - physics.centerOfMass.y
     physics.removeAllDamperSprings()
-    clearanceRatio = width / clearance
+    if clearance != 0.0:
+        clearanceRatio = width / clearance
+    else:
+        LOG_ERROR('Clearance is null')
+        clearanceRatio = CLEARANCE_RATIO_LONG
     if width < WIDTH_VERY_LONG and (width < WIDTH_LONG or clearanceRatio < CLEARANCE_RATIO_LONG):
         carrierSpringPairs = NUM_SPRINGS_NORMAL
     else:
@@ -672,16 +760,15 @@ def initVehiclePhysicsFromParams(physics, params, xmlPath):
     typeDesc.type = _SimpleObject()
     typeDesc.type.name = ''
     section = ResMgr.openSection(xmlPath)
-    xphysics = vehicles._readXPhysics((None, xmlPath), section, 'physics')
-    typeDesc.type.xphysics = xphysics
-    if xphysics is None:
-        typeDesc.type.xphysics = {}
-    if xphysics:
+    try:
+        typeDesc.type.xphysics = vehicles._readXPhysics((None, xmlPath), section, 'physics')
         chassisName = xphysics['detailed']['chassis'].keys()[0]
         engineName = xphysics['detailed']['engines'].keys()[0]
-    else:
+    except:
+        typeDesc.type.xphysics = {'mode': 1}
         chassisName = 'Chassis'
         engineName = 'Engine'
+
     typeDesc.chassis = vehicle_items.createChassis(0, 0, chassisName)
     typeDesc.chassis.hullPosition = params['hullPosition']
     typeDesc.chassis.hitTester = _SimpleObject()

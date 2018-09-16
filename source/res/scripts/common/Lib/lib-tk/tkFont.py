@@ -8,32 +8,10 @@ BOLD = 'bold'
 ITALIC = 'italic'
 
 def nametofont(name):
-    """Given the name of a tk named font, returns a Font representation.
-    """
     return Font(name=name, exists=True)
 
 
 class Font:
-    """Represents a named font.
-    
-    Constructor options are:
-    
-    font -- font specifier (name, system font, or (family, size, style)-tuple)
-    name -- name to use for this font configuration (defaults to a unique name)
-    exists -- does a named font by this name already exist?
-       Creates a new named font if False, points to the existing font if True.
-       Raises _Tkinter.TclError if the assertion is false.
-    
-       the following are ignored if font is specified:
-    
-    family -- font 'family', e.g. Courier, Times, Helvetica
-    size -- font size in points
-    weight -- font thickness: NORMAL, BOLD
-    slant -- font slant: ROMAN, ITALIC
-    underline -- font underlining: false (0), true (1)
-    overstrike -- font strikeout: false (0), true (1)
-    
-    """
 
     def _set(self, kw):
         options = []
@@ -102,22 +80,18 @@ class Font:
             pass
 
     def copy(self):
-        """Return a distinct copy of the current font"""
         return Font(self._root, **self.actual())
 
     def actual(self, option=None):
-        """Return actual font attributes"""
         if option:
             return self._call('font', 'actual', self.name, '-' + option)
         else:
             return self._mkdict(self._split(self._call('font', 'actual', self.name)))
 
     def cget(self, option):
-        """Get font attribute"""
         return self._call('font', 'config', self.name, '-' + option)
 
     def config(self, **options):
-        """Modify font attributes"""
         if options:
             self._call('font', 'config', self.name, *self._set(options))
         else:
@@ -126,14 +100,9 @@ class Font:
     configure = config
 
     def measure(self, text):
-        """Return text width"""
         return int(self._call('font', 'measure', self.name, text))
 
     def metrics(self, *options):
-        """Return font metrics.
-        
-        For best performance, create a dummy widget
-        using this font before calling this method."""
         if options:
             return int(self._call('font', 'metrics', self.name, self._get(options)))
         else:
@@ -146,14 +115,12 @@ class Font:
 
 
 def families(root=None):
-    """Get font families (as a tuple)"""
     if not root:
         root = Tkinter._default_root
     return root.tk.splitlist(root.tk.call('font', 'families'))
 
 
 def names(root=None):
-    """Get names of defined fonts (as a tuple)"""
     if not root:
         root = Tkinter._default_root
     return root.tk.splitlist(root.tk.call('font', 'names'))

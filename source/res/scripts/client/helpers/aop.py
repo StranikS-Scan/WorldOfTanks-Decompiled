@@ -107,7 +107,7 @@ def _search(ns, regexp, match):
     attrNames = []
     for attrName in dir(ns):
         attr = getattr(ns, attrName)
-        if type(attr) not in (types.FunctionType, types.MethodType):
+        if not isinstance(attr, (types.FunctionType, types.MethodType)):
             continue
         if regexp.match(attrName):
             if match:
@@ -183,23 +183,6 @@ class CallData(object):
         return self._args[argIndex] if len(self._args) > argIndex else self._kwargs.get(argName, None)
 
     def changeArgs(self, *changes):
-        """ Helper method to easily change wrapped function's arguments without manually checking
-            whether they were provided as positional or keyword args.
-        
-            Usage:
-        
-            def atCall(self, cd):
-                return cd.changeArgs(
-                    (0, 'arg1', 111),     # Change or set first positional argument, named 'arg1', to 111.
-                    (3, 'arg4', 'newVal') # Change or set fourth positional argument, named 'arg4', to 'newVal.
-                )
-        
-            Makes a copy of current args & kwargs, changes them according to the provided arguments,
-            calls change() and returns changed args & kwargs.
-        
-        :param changes: each argument must be a tuple (argIndex, argName, newValue)
-        :return: tuple (newArgs, newKwargs)
-        """
         if changes:
             newArgs, newKwargs = list(self.args), self.kwargs
             for argIndex, argName, newValue in changes:

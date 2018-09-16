@@ -17,7 +17,6 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.vehicle_equipment import BATTLE_BOOSTER_LAYOUT_SIZE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
-from skeletons.gui.game_control import IFalloutController
 from skeletons.gui.shared import IItemsCache
 ARTEFACTS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE], GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT])
 _BOOSTERS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER],)
@@ -33,20 +32,17 @@ HANGAR_FITTING_SLOTS = FITTING_SLOTS + _BOOSTERS_SLOTS
 def getFittingSlotsData(vehicle, slotsRange, VoClass=None, itemsCache=None):
     devices = []
     VoClass = VoClass or FittingSlotVO
-    itemTypeIDs = [ GUI_ITEM_TYPE_INDICES[slotType] for slotType in slotsRange ]
-    gatheredItems = itemsCache.items.getItemsEx(itemTypeIDs, REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle)), vehicle.nationID)
     for slotType in slotsRange:
-        slotTypeIdx = GUI_ITEM_TYPE_INDICES[slotType]
-        slotItems = [ item for item in gatheredItems.itervalues() if item.itemTypeID == slotTypeIdx ]
+        data = itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[slotType], REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle))).values()
         if slotType in ARTEFACTS_SLOTS:
             for slotId in xrange(NUM_OPTIONAL_DEVICE_SLOTS):
-                devices.append(VoClass(slotItems, vehicle, slotType, slotId, TOOLTIPS_CONSTANTS.HANGAR_MODULE))
+                devices.append(VoClass(data, vehicle, slotType, slotId, TOOLTIPS_CONSTANTS.HANGAR_MODULE))
 
         if slotType in _BOOSTERS_SLOTS:
             for slotId in xrange(BATTLE_BOOSTER_LAYOUT_SIZE):
-                devices.append(VoClass(slotItems, vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER))
+                devices.append(VoClass(data, vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER))
 
-        devices.append(VoClass(slotItems, vehicle, slotType, tooltipType=TOOLTIPS_CONSTANTS.HANGAR_MODULE))
+        devices.append(VoClass(data, vehicle, slotType, tooltipType=TOOLTIPS_CONSTANTS.HANGAR_MODULE))
 
     return devices
 
@@ -69,7 +65,6 @@ def getAmmo(shells):
 
 class AmmunitionPanel(AmmunitionPanelMeta):
     itemsCache = dependency.descriptor(IItemsCache)
-    falloutCtrl = dependency.descriptor(IFalloutController)
 
     def update(self):
         self._update()
@@ -95,16 +90,11 @@ class AmmunitionPanel(AmmunitionPanelMeta):
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
-        self.falloutCtrl.onSettingsChanged += self._updateFalloutSettings
         self.update()
 
     def _dispose(self):
-        self.falloutCtrl.onSettingsChanged -= self._updateFalloutSettings
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(AmmunitionPanel, self)._dispose()
-
-    def _updateFalloutSettings(self):
-        self._update()
 
     def _update(self):
         if g_currentVehicle.isPresent():

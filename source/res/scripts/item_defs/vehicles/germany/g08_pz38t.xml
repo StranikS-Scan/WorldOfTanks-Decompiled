@@ -241,7 +241,7 @@
         <right>	vehicles/german/G08_Pz38t/track/right.track	</right>
         <segmentLength>	0.106	</segmentLength>
         <segmentOffset>	0.054	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -458,7 +458,7 @@
         <right>	vehicles/german/G08_Pz38t/track/right.track	</right>
         <segmentLength>	0.106	</segmentLength>
         <segmentOffset>	0.054	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -707,18 +707,19 @@
       <gunPosition>	0.001796 0.273741 0.519247	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.82989 0.328159 -0.0820177	</rayStart>
-          <rayEnd>	-0.435331 0.265967 -0.060661	</rayEnd>
+          <rayStart>	-0.830619 0.325189 -0.0771469	</rayStart>
+          <rayEnd>	-0.436061 0.262997 -0.0557902	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	0.82989 0.328159 -0.0820177	</rayStart>
-          <rayEnd>	0.435331 0.265967 -0.060661	</rayEnd>
+          <rayStart>	0.830619 0.325189 -0.0771469	</rayStart>
+          <rayEnd>	0.436061 0.262997 -0.0557902	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
@@ -897,20 +898,19 @@
       <gunPosition>	-0.000013 0.273741 0.571307	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	0.837228 0.332141 -0.100766	</rayStart>
-          <rayEnd>	0.445944 0.270145 -0.0456573	</rayEnd>
+          <rayStart>	0.836358 0.332555 -0.106603	</rayStart>
+          <rayEnd>	0.445074 0.270559 -0.0514938	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <player>
-          <rayStart>	-0.763885 0.313253 -0.105832	</rayStart>
-          <rayEnd>	-0.517365 0.274192 -0.0711095	</rayEnd>
+          <rayStart>	-0.836358 0.332555 -0.106603	</rayStart>
+          <rayEnd>	-0.445074 0.270559 -0.0514938	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
@@ -944,12 +944,12 @@
   </fuelTanks>
   <radios>
     <FuG37>	shared	  <unlocks>
-        <radio>	FuG5	  <cost>	105.0	</cost>
+        <radio>	FuG5	  <cost>	105	</cost>
         </radio>
       </unlocks>
     </FuG37>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG8	  <cost>	4040.0	</cost>
+        <radio>	FuG8	  <cost>	4040	</cost>
         </radio>
       </unlocks>
     </FuG5>

@@ -130,15 +130,11 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'tokenShopAvailabilityURL': '',
  'tokenShopAPIKey': '',
  'personalMissions': {},
- 'adventCalendarBaseURL': '',
  'rankedBattles': {}}
 
 class GuiSettings(object):
 
     def __init__(self):
-        """
-        constructs GuiSettings instance using values from guiPresetsResource
-        """
         self.__settings = _DEFAULT_SETTINGS.copy()
         settings = {}
         for item in resource_helper.root_iterator(GUI_SETTINGS_FILE_PATH, customReaders={'macros': _readMacros}):
@@ -172,9 +168,6 @@ class GuiSettings(object):
 
     @property
     def isShowLanguageBar(self):
-        """
-        @return: <bool> show laguage bar or not
-        """
         try:
             return getClientLanguage() in self.language_bar
         except Exception:

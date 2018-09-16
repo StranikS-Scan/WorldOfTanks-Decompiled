@@ -129,7 +129,7 @@ def packVehicle(vehicle):
      'dailyXPFactor': vehicle.dailyXPFactor,
      'clanLock': vehicle.clanLock,
      'isUnique': vehicle.isUnique,
-     'crew': [ (packTankman(tankman) if tankman else None) for role, tankman in vehicle.crew ],
+     'crew': [ (packTankman(tankman) if tankman else None) for _, tankman in vehicle.crew ],
      'settings': vehicle.settings,
      'lock': vehicle.lock,
      'repairCost': vehicle.repairCost,

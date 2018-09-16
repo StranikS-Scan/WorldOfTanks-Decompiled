@@ -38,5 +38,5 @@ class BattleControlsFactory(ControlsFactory):
     def createFuncScene(self, sceneModel):
         return functional.FunctionalBattleScene(sceneModel)
 
-    def createFuncInfo(self):
-        return functional.FunctionalBattleChapterInfo()
+    def createFuncChapterCtx(self):
+        return functional.FunctionalBattleChapterContext()

@@ -3,9 +3,6 @@
 
 
 class IGuiItemsFactory(object):
-    """
-    Interface of GUI items factory.
-    """
 
     def clear(self):
         raise NotImplementedError

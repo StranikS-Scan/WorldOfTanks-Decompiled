@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/stronghold/unit/requester.py
-from debug_utils import LOG_ERROR
-from helpers import dependency
 from adisp import process
-from gui.clans.contexts import StrongholdLeaveCtx, StrongholdAssignCtx, StrongholdChangeOpenedCtx, StrongholdSetVehicleCtx, StrongholdSetReadyCtx, StrongholdKickPlayerCtx, StrongholdBattleQueueCtx, StrongholdGiveLeadershipCtx, StrongholdSetReserveCtx, StrongholdSendInvitesCtx, StrongholdUnassignCtx, StrongholdUnsetReserveCtx, StrongholdJoinBattleCtx, StrongholdSetEquipmentCommanderCtx
+from debug_utils import LOG_ERROR
 from gui.prb_control import settings, prb_getters
 from gui.prb_control.entities.base.ctx import PrbCtrlRequestCtx
 from gui.prb_control.entities.base.requester import IUnitRequestProcessor
-from skeletons.gui.clans import IClanController
+from gui.wgcg.strongholds.contexts import StrongholdLeaveCtx, StrongholdAssignCtx, StrongholdChangeOpenedCtx, StrongholdSetVehicleCtx, StrongholdSetReadyCtx, StrongholdKickPlayerCtx, StrongholdBattleQueueCtx, StrongholdGiveLeadershipCtx, StrongholdSetReserveCtx, StrongholdSendInvitesCtx, StrongholdUnassignCtx, StrongholdUnsetReserveCtx, StrongholdJoinBattleCtx, StrongholdSetEquipmentCommanderCtx
+from helpers import dependency
+from skeletons.gui.web import IWebController
 
 class StrongholdUnitRequestProcessor(IUnitRequestProcessor):
-    clansCtrl = dependency.descriptor(IClanController)
+    clansCtrl = dependency.descriptor(IWebController)
 
     def init(self):
         REQUEST_TYPE = settings.REQUEST_TYPE
@@ -33,38 +33,15 @@ class StrongholdUnitRequestProcessor(IUnitRequestProcessor):
         self.__unitContextRemap.clear()
 
     def doRequest(self, ctx, methodName, *args, **kwargs):
-        """
-        Sends unit request with context given
-        Args:
-            ctx: request context
-            methodName: method name to call
-            *args: method args
-            **kwargs: method kwargs
-        """
         callback = kwargs.pop('callback', None)
         self._sendRequest(ctx, methodName, [], callback, *args, **kwargs)
         return
 
     def doRequestChain(self, ctx, chain):
-        """
-        Sends unit request with context given and further chain provided
-        Args:
-            ctx: request context
-            chain: further requests chain, as (methodName, args, kwargs) list
-        """
         self._sendNextRequest(ctx, chain)
 
     def doRawRequest(self, methodName, *args, **kwargs):
-        """
-        NOT IMPLEMENTED FOR StrongholdUnitRequestProcessor
-        
-        Sends request directly to unit manager
-        Args:
-            methodName: method name
-            *args: call args
-            **kwargs: call kwargs
-        """
-        raise NotImplementedError
+        raise UserWarning('NOT IMPLEMENTED FOR StrongholdUnitRequestProcessor')
 
     @process
     def _sendRequest(self, ctx, methodName, chain, callback, *args, **kwargs):
@@ -85,11 +62,5 @@ class StrongholdUnitRequestProcessor(IUnitRequestProcessor):
         return
 
     def _sendNextRequest(self, ctx, chain):
-        """
-        Sends next chained request in chain to unit manager with given context
-        Args:
-            ctx: request contex
-            chain: further opertaion's chain
-        """
         methodName, args, kwargs = chain[0]
         return self._sendRequest(ctx, methodName, chain[1:], *args, **kwargs)

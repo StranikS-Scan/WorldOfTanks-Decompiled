@@ -20,17 +20,17 @@ class TutorialPopUp(AbstractWindowView, TutorialProxyHolder):
             targetID = self._content[targetKey]
             if targetID:
                 self._gui.onGUIInput(ClickEvent(targetID))
-            else:
-                LOG_ERROR('ID of target is empty', targetKey)
         else:
             LOG_ERROR('Target not found in data', targetKey)
 
 
 class TutorialDialog(TutorialPopUp, TutorialDialogMeta):
 
-    def _stop(self):
+    def _stop(self, needCloseWindow=True):
         self._content.clear()
         self._gui.effects.stop(GUI_EFFECT_NAME.SHOW_DIALOG, effectID=self.uniqueName)
+        if needCloseWindow:
+            self.destroy()
 
     def submit(self):
         self._onMouseClicked('submitID')
@@ -39,6 +39,11 @@ class TutorialDialog(TutorialPopUp, TutorialDialogMeta):
     def cancel(self):
         self._onMouseClicked('cancelID')
         self._stop()
+
+    def onCustomButton(self, needStopEffect, needCloseWindow):
+        self._onMouseClicked('customID')
+        if needStopEffect:
+            self._stop(needCloseWindow)
 
     def onWindowClose(self):
         self.cancel()

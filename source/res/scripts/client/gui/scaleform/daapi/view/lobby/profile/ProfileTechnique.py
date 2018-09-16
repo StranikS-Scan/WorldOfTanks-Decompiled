@@ -107,10 +107,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         return AccountSettings.getFilter(self._getStorageId())
 
     def _getTableHeader(self, isFallout=False):
-        if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL or self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM or self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
-            markOfMasteryEnabled = True
-        else:
-            markOfMasteryEnabled = False
+        markOfMasteryEnabled = self._battlesType == PROFILE_DROPDOWN_KEYS.ALL or self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM or self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED
         return (self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
          self._createTableBtnInfo('typeIndex', 34, 1, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_TECHNIQUE, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL),
          self._createTableBtnInfo('level', 32, 2, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_LVL, 'descending', iconSource=RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL),
@@ -272,19 +269,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
             self._setRatingButton()
 
     def __packAchievement(self, stats, vehDossier, record):
-        """
-        The method packs desired achievement record for the provided vehicle dossier.
-        :param stats: vehicle's stats block (_VehiclesStatsBlock instance)
-        :param vehDossier: VehicleDossier instance
-        :param record: one from dossiers2/ui/achievements.py
-        :return: dict
-        """
         return AchievementsUtils.packAchievement(stats.getAchievement(record), vehDossier.getDossierType(), dumpDossier(vehDossier), self._userID is None)
 
     def __showMarksOnGun(self, vehicleIntCD):
-        """
-        Checks whether mark on gun should be shown
-        :param vehicleIntCD: vehicle's int compact descriptor
-        :return: bool
-        """
         return self.itemsCache.items.getItemByCD(int(vehicleIntCD)).level >= _MARK_ON_GUN_MIN_LVL

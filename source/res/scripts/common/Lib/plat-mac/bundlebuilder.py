@@ -1,27 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/bundlebuilder.py
-"""bundlebuilder.py -- Tools to assemble MacOS X (application) bundles.
-
-This module contains two classes to build so called "bundles" for
-MacOS X. BundleBuilder is a general tool, AppBuilder is a subclass
-specialized in building application bundles.
-
-[Bundle|App]Builder objects are instantiated with a bunch of keyword
-arguments, and have a build() method that will do all the work. See
-the class doc strings for a description of the constructor arguments.
-
-The module contains a main program that can be used in two ways:
-
-  % python bundlebuilder.py [options] build
-  % python buildapp.py [options] build
-
-Where "buildapp.py" is a user-supplied setup.py-like script following
-this model:
-
-  from bundlebuilder import buildapp
-  buildapp(<lots-of-keyword-args>)
-
-"""
 __all__ = ['BundleBuilder',
  'BundleBuilderError',
  'AppBuilder',
@@ -42,10 +20,6 @@ class BundleBuilderError(Exception):
 
 
 class Defaults():
-    """Class attributes that don't start with an underscore and are
-    not functions or classmethods are (deep)copied to self.__dict__.
-    This allows for mutable default values.
-    """
 
     def __init__(self, **kwargs):
         defaults = self._getDefaults()
@@ -68,10 +42,6 @@ class Defaults():
 
 
 class BundleBuilder(Defaults):
-    """BundleBuilder is a barebones class for assembling bundles. It
-    knows nothing about executables or icons, it only copies files
-    and creates the PkgInfo and Info.plist files.
-    """
     name = None
     plist = Plist(CFBundleDevelopmentRegion='English', CFBundleInfoDictionaryVersion='6.0')
     type = 'BNDL'
@@ -107,7 +77,6 @@ class BundleBuilder(Defaults):
         return
 
     def build(self):
-        """Build the bundle."""
         builddir = self.builddir
         if builddir and not os.path.exists(builddir):
             os.mkdir(builddir)
@@ -131,17 +100,14 @@ class BundleBuilder(Defaults):
         self.message('Done.', 1)
 
     def preProcess(self):
-        """Hook for subclasses."""
         pass
 
     def postProcess(self):
-        """Hook for subclasses."""
         pass
 
     def _addMetaFiles(self):
         contents = pathjoin(self.bundlepath, 'Contents')
         makedirs(contents)
-        assert len(self.type) == len(self.creator) == 4, 'type and creator must be 4-byte strings.'
         pkginfo = pathjoin(contents, 'PkgInfo')
         f = open(pkginfo, 'wb')
         f.write(self.type + self.creator)
@@ -185,7 +151,7 @@ class BundleBuilder(Defaults):
         pass
 
 
-PYC_EXT = '.pyc'
+PYC_EXT = '.pyo'
 MAGIC = imp.get_magic()
 USE_ZIPIMPORT = 'zipimport' in sys.builtin_module_names
 SITE_PY = 'import sys\nif not %(semi_standalone)s:\n    del sys.path[1:]  # sys.path[0] is Contents/Resources/\n'
@@ -531,7 +497,6 @@ def writePyc(code, path):
 
 
 def copy(src, dst, mkdirs=0):
-    """Copy a file or a directory."""
     if mkdirs:
         makedirs(os.path.dirname(dst))
     if os.path.isdir(src):
@@ -541,14 +506,11 @@ def copy(src, dst, mkdirs=0):
 
 
 def copytodir(src, dstdir):
-    """Copy a file or a directory to an existing directory."""
     dst = pathjoin(dstdir, os.path.basename(src))
     copy(src, dst)
 
 
 def makedirs(dir):
-    """Make all directories leading up to 'dir' including the leaf
-    directory. Don't moan if any path element already exists."""
     try:
         os.makedirs(dir)
     except OSError as why:
@@ -557,7 +519,6 @@ def makedirs(dir):
 
 
 def symlink(src, dst, mkdirs=0):
-    """Copy a file or a directory."""
     if not os.path.exists(src):
         raise IOError, "No such file or directory: '%s'" % src
     if mkdirs:
@@ -566,10 +527,8 @@ def symlink(src, dst, mkdirs=0):
 
 
 def pathjoin(*args):
-    """Safe wrapper for os.path.join: asserts that all but the first
-    argument are relative paths."""
     for seg in args[1:]:
-        assert seg[0] != '/'
+        pass
 
     return os.path.join(*args)
 

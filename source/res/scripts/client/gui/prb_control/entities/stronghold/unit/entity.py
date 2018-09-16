@@ -1,43 +1,42 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/stronghold/unit/entity.py
-import BigWorld
-import time
-import account_helpers
 import datetime
-from helpers import time_utils, i18n
-from debug_utils import LOG_DEBUG, LOG_ERROR
+import time
+from functools import partial
+import BigWorld
+import account_helpers
 from client_request_lib.exceptions import ResponseCodes
-from constants import PREBATTLE_TYPE, QUEUE_TYPE, CLAN_MEMBER_FLAGS
+from constants import PREBATTLE_TYPE, QUEUE_TYPE
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
-from gui.prb_control.items.unit_items import DynamicRosterSettings
-from gui.clans import contexts
 from gui.clans.clan_helpers import isStrongholdsEnabled
-from gui.shared.utils.requesters.abstract import Response
-from UnitBase import UNIT_ROLE
-from gui.prb_control import settings
 from gui.prb_control import prb_getters
-from gui.prb_control.items import ValidationResult, unit_items
-from gui.prb_control.settings import UNIT_RESTRICTION
-from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.prb_control import settings
 from gui.prb_control.entities.base.unit.entity import UnitEntity, UnitEntryPoint, UnitBrowserEntryPoint, UnitBrowserEntity
 from gui.prb_control.entities.stronghold.unit.actions_handler import StrongholdActionsHandler
-from gui.prb_control.items import SelectResult
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
+from gui.prb_control.entities.stronghold.unit.actions_validator import StrongholdActionsValidator
+from gui.prb_control.entities.stronghold.unit.permissions import StrongholdPermissions
 from gui.prb_control.entities.stronghold.unit.requester import StrongholdUnitRequestProcessor
 from gui.prb_control.entities.stronghold.unit.waiting import WaitingManager
-from gui.prb_control.entities.stronghold.unit.actions_validator import StrongholdActionsValidator
-from gui.prb_control.items.stronghold_items import StrongholdSettings
-from gui.prb_control.entities.stronghold.unit.permissions import StrongholdPermissions
-from gui.prb_control.storages import prequeue_storage_getter
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.formatters import messages
+from gui.prb_control.items import SelectResult
+from gui.prb_control.items import ValidationResult, unit_items
+from gui.prb_control.items.stronghold_items import StrongholdSettings
+from gui.prb_control.items.unit_items import DynamicRosterSettings
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
+from gui.prb_control.settings import UNIT_RESTRICTION
+from gui.prb_control.storages import prequeue_storage_getter
 from gui.shared.ClanCache import _ClanCache
 from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import StrongholdConfirmDialogMeta
 from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
-from UnitBase import UNIT_ERROR
-from functools import partial
+from gui.shared.utils.requesters.abstract import Response
+from gui.wgcg.strongholds.contexts import StrongholdJoinBattleCtx, StrongholdUpdateCtx
+from helpers import time_utils, i18n
+from UnitBase import UNIT_ERROR, UNIT_ROLE
 _CREATION_TIMEOUT = 30
 ERROR_MAX_RETRY_COUNT = 3
 SUCCESS_STATUSES = (200, 201, 403, 409)
@@ -71,18 +70,12 @@ class StrongholdDynamicRosterSettings(DynamicRosterSettings):
 
 
 class StrongholdBrowserEntryPoint(UnitBrowserEntryPoint):
-    """
-    Strongholds list entry point
-    """
 
     def __init__(self):
         super(StrongholdBrowserEntryPoint, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.EXTERNAL)
 
 
 class StrongholdEntryPoint(UnitEntryPoint):
-    """
-    Strongholds entry point
-    """
 
     def __init__(self, accountsToInvite=None):
         self.__timeout = None
@@ -105,7 +98,7 @@ class StrongholdEntryPoint(UnitEntryPoint):
                 ctx.callErrorCallback(response.data)
 
         processor = StrongholdUnitRequestProcessor()
-        processor.doRequest(contexts.StrongholdJoinBattleCtx(ctx.getID()), 'join', callback=onResponse)
+        processor.doRequest(StrongholdJoinBattleCtx(ctx.getID()), 'join', callback=onResponse)
 
     def onUnitJoined(self, unitMgrID, prbType):
         self.__cancelProcessingTimeout()
@@ -137,9 +130,6 @@ class StrongholdEntryPoint(UnitEntryPoint):
 
 
 class StrongholdBrowserEntity(UnitBrowserEntity):
-    """
-    Strongholds browser entity
-    """
 
     def __init__(self):
         super(StrongholdBrowserEntity, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.EXTERNAL)
@@ -158,9 +148,6 @@ class StrongholdBrowserEntity(UnitBrowserEntity):
 
 
 class StrongholdEntity(UnitEntity):
-    """
-    StrongholdEntity entity
-    """
     MATCHMAKING_BATTLE_BUTTON_BATTLE = 10 * time_utils.ONE_MINUTE
     MATCHMAKING_BATTLE_BUTTON_SORTIE = 10 * time_utils.ONE_MINUTE
     MATCHMAKING_ZERO_TIME_WAITING_FOR_DATA = 5
@@ -170,7 +157,7 @@ class StrongholdEntity(UnitEntity):
     CWL_INVOKE_LISTENERS = 4096
     CWL_FORCE_UPDATE_BUILDINGS = 65536
 
-    class SH_REQUEST_COOLDOWN:
+    class SH_REQUEST_COOLDOWN(object):
         PREBATTLE_ASSIGN = 0.6
 
     def __init__(self):
@@ -226,9 +213,6 @@ class StrongholdEntity(UnitEntity):
 
     @prequeue_storage_getter(QUEUE_TYPE.EXTERNAL_UNITS)
     def storage(self):
-        """
-        Prebattle storage getter property
-        """
         return None
 
     def onUnitResponseReceived(self, requestID):
@@ -277,7 +261,7 @@ class StrongholdEntity(UnitEntity):
             self.requestUpdateStronghold()
 
     def unit_onUnitFlagsChanged(self, prevFlags, nextFlags):
-        unitIdx, unit = self.getUnit()
+        _, unit = self.getUnit()
         isReady = unit.arePlayersReady(ignored=[settings.CREATOR_SLOT_INDEX])
         flags = unit_items.UnitFlags(nextFlags, prevFlags, isReady)
         isInQueue = flags.isInQueue()
@@ -417,12 +401,6 @@ class StrongholdEntity(UnitEntity):
         self.setCoolDown(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown())
 
     def canPlayerDoAction(self):
-        """
-        Can current player set ready state or go into battle.
-        Validates it with actions validators.
-        Returns:
-            validation result object
-        """
         if self.__errorCount > 0:
             return ValidationResult(False, UNIT_RESTRICTION.UNIT_MAINTENANCE)
         elif self.isStrongholdUnitFreezed() or self.isStrongholdUnitWaitingForData():
@@ -453,16 +431,13 @@ class StrongholdEntity(UnitEntity):
         return ctx.getCtrlType() is settings.CTRL_ENTITY_TYPE.UNIT and ctx.getEntityType() == self._prbType and ctx.getID() == self.getID()
 
     def requestMaintenanceUpdate(self):
-        """
-        Maintenance window button handler
-        """
         self._invokeListeners('onStrongholdMaintenance', False)
         self.requestUpdateStronghold()
 
     def requestUpdateStronghold(self):
         if self._requestsProcessor:
             unitMgrId = prb_getters.getUnitMgrID()
-            ctx = contexts.StrongholdUpdateCtx(unitMgrId=unitMgrId, waitingID='')
+            ctx = StrongholdUpdateCtx(unitMgrId=unitMgrId, waitingID='')
             self._requestsProcessor.doRequest(ctx, 'updateStronghold', callback=self.__onStrongholdUpdate)
 
     def strongholdDataChanged(self):
@@ -555,10 +530,6 @@ class StrongholdEntity(UnitEntity):
         return StrongholdActionsHandler(self)
 
     def _getClanMembers(self):
-        """
-            Method returns lists of members and clan members in the unit
-            [<accountDBID>, <accountDBID>, ...], [<accountDBID>, <accountDBID>, ...]
-        """
         _, unit = self.getUnit()
         members = [ member['accountDBID'] for member in unit.getMembers().itervalues() ]
         clanMembers = []
@@ -570,7 +541,6 @@ class StrongholdEntity(UnitEntity):
         return (members, clanMembers)
 
     def _buildPermissions(self, roles, flags, isCurrentPlayer=False, isPlayerReady=False, hasLockedState=False):
-        _, unit = self.getUnit(unitMgrID=None)
         playerInfo = self.getPlayerInfo()
         myClanRole = self.__g_clanCache.clanRole
         strongholdManageReservesRoles = None
@@ -735,10 +705,6 @@ class StrongholdEntity(UnitEntity):
         return
 
     def __calculatePeripheryTimeHelper(self, baseTimeUTC):
-        """
-        This function converts periphery string 'h:m' format data to datetime format based on baseTimeUTC
-        and return normalized to baseTimeUTC periphery start and end time
-        """
         timer = self.__strongholdSettings.getTimer()
         peripheryStartTimeUTC = time.strptime(timer.getBattlesStartTime(), '%H:%M')
         peripheryEndTimeUTC = time.strptime(timer.getBattlesEndTime(), '%H:%M')

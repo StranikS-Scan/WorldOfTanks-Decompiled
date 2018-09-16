@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/tutorial/control/functional.py
 import re
 import BigWorld
+import Event
 from helpers import dependency
 from tutorial.control import TutorialProxyHolder, game_vars
 from tutorial.control.context import GlobalStorage
@@ -9,6 +10,10 @@ from tutorial.data import chapter
 from tutorial.data.conditions import CONDITION_TYPE
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.logger import LOG_ERROR, LOG_DEBUG
+from gui.prb_control.events_dispatcher import g_eventDispatcher as prebattleControl
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from skeletons.gui.shared import IItemsCache
+from CurrentVehicle import g_currentVehicle
 
 class FunctionalCondition(TutorialProxyHolder):
 
@@ -37,11 +42,36 @@ class FunctionalWindowOnSceneCondition(FunctionalCondition):
         return result if condition.isPositiveState() else not result
 
 
+class FunctionalComponentOnSceneCondition(FunctionalCondition):
+
+    def isConditionOk(self, condition):
+        itemsOnScene = self._gui.getItemsOnScene()
+        result = condition.getID() in itemsOnScene
+        return result if condition.isPositiveState() else not result
+
+
+class FunctionalCurrentSceneCondition(FunctionalCondition):
+
+    def isConditionOk(self, condition):
+        currentSceneID = self._gui.getSceneID()
+        result = currentSceneID == condition.getID()
+        return result if condition.isPositiveState() else not result
+
+
+class FunctionalViewPresentCondition(FunctionalCondition):
+
+    def isConditionOk(self, condition):
+        viewType = condition.getViewType()
+        viewAlias = condition.getViewAlias()
+        result = self._gui.isViewPresent(viewType, criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
+        return result if condition.isPositiveState() else not result
+
+
 class FunctionalVarDefinedCondition(FunctionalCondition):
 
     def isConditionOk(self, condition):
-        vars = self._tutorial.getVars()
-        value = vars.get(condition.getID(), default=None)
+        variables = self._tutorial.getVars()
+        value = variables.get(condition.getID(), default=None)
         if condition.isPositiveState():
             result = value is not None
         else:
@@ -52,9 +82,9 @@ class FunctionalVarDefinedCondition(FunctionalCondition):
 class FunctionalVarCompareCondition(FunctionalCondition):
 
     def isConditionOk(self, condition):
-        vars = self._tutorial.getVars()
-        value = vars.get(condition.getID(), default=None)
-        other = vars.get(condition.getCompareID(), default=None)
+        variables = self._tutorial.getVars()
+        value = variables.get(condition.getID(), default=None)
+        other = variables.get(condition.getCompareID(), default=None)
         if condition.isPositiveState():
             result = value == other
         else:
@@ -97,10 +127,9 @@ class FunctionalGameItemRelateStateCondition(FunctionalCondition):
             tvars = self._tutorial.getVars()
             varID = condition.getID()
             value = tvars.get(varID, default=varID)
-            otherID = condition.getOtherID()
-            other = tvars.get(otherID, default=otherID)
+            otherIDs = (tvars.get(x, default=x) for x in condition.getOtherIDs())
             try:
-                result = getter(value, other)
+                result = getter(value, *otherIDs)
             except Exception as e:
                 LOG_ERROR('Can not resolve condition', varID, e.message)
                 return False
@@ -115,29 +144,21 @@ class FunctionalGameItemRelateStateCondition(FunctionalCondition):
 class FunctionalBonusReceivedCondition(FunctionalCondition):
 
     def isConditionOk(self, condition):
-        chapter = self._descriptor.getChapter(condition.getID())
-        if chapter is None:
+        chapterItem = self._descriptor.getChapter(condition.getID())
+        if chapterItem is None:
             chapterID = self._tutorial.getVars().get(condition.getID())
-            chapter = self._descriptor.getChapter(chapterID)
-        if chapter is None:
+            chapterItem = self._descriptor.getChapter(chapterID)
+        if chapterItem is None:
             LOG_ERROR('Chapter is not found', condition.getID())
             return False
         else:
-            result = chapter.isBonusReceived(self._bonuses.getCompleted())
+            result = chapterItem.isBonusReceived(self._bonuses.getCompleted())
             return result if condition.isPositiveState() else not result
 
 
 class FunctionalServiceCondition(FunctionalCondition):
 
     def isConditionOk(self, condition):
-        """
-        Service condition checks the service's availability by calling its 'isEnabled' method.
-        Service should be defined by its interface class name and optional path to it.
-        NOTICE: it works with our dependency injection functionality, so make sure that
-        you've registered your service properly!
-        :param condition: given service condition
-        :return: validation result
-        """
         serviceClass = condition.getServiceClass()
         if serviceClass is None:
             LOG_ERROR('Service cannot be loaded!', condition.getID(), condition.getPath())
@@ -160,7 +181,14 @@ _SUPPORTED_CONDITIONS = {CONDITION_TYPE.FLAG: FunctionalFlagCondition,
  CONDITION_TYPE.GAME_ITEM_SIMPLE_STATE: FunctionalGameItemSimpleStateCondition,
  CONDITION_TYPE.GAME_ITEM_RELATE_STATE: FunctionalGameItemRelateStateCondition,
  CONDITION_TYPE.BONUS_RECEIVED: FunctionalBonusReceivedCondition,
- CONDITION_TYPE.SERVICE: FunctionalServiceCondition}
+ CONDITION_TYPE.SERVICE: FunctionalServiceCondition,
+ CONDITION_TYPE.COMPONENT_ON_SCENE: FunctionalComponentOnSceneCondition,
+ CONDITION_TYPE.CURRENT_SCENE: FunctionalCurrentSceneCondition,
+ CONDITION_TYPE.VIEW_PRESENT: FunctionalViewPresentCondition}
+
+def _areAllConditionsOk(item):
+    return FunctionalConditions(item.getConditions()).allConditionsOk()
+
 
 class FunctionalConditions(TutorialProxyHolder):
 
@@ -202,14 +230,18 @@ class FunctionalConditions(TutorialProxyHolder):
             return result
 
     def _isConditionActive(self, condition):
-        condType = condition.getType()
-        if condType in _SUPPORTED_CONDITIONS:
-            functional = _SUPPORTED_CONDITIONS[condType]
-            assert functional, 'Function condition can not be empty'
-        else:
-            LOG_ERROR('Condition is not found', condType)
-            functional = FunctionalCondition()
-        return functional().isConditionOk(condition)
+        functional = None
+        if self._tutorial is not None:
+            functional = self._ctrlFactory.createCustomFuncCondition(condition)
+        if functional is None:
+            condType = condition.getType()
+            if condType in _SUPPORTED_CONDITIONS:
+                functional = _SUPPORTED_CONDITIONS[condType]
+                functional = functional()
+            else:
+                LOG_ERROR('Condition is not found', condType)
+                functional = FunctionalCondition()
+        return functional.isConditionOk(condition)
 
 
 class FunctionalVarSet(object):
@@ -235,6 +267,13 @@ class FunctionalEffect(TutorialProxyHolder):
     def __init__(self, effect):
         super(FunctionalEffect, self).__init__()
         self._effect = effect
+        self.__isGlobal = False
+
+    def setGlobal(self, isGlobal):
+        self.__isGlobal = isGlobal
+
+    def isGlobal(self):
+        return self.__isGlobal
 
     def triggerEffect(self):
         raise NotImplementedError('method triggerEffect is not implemented')
@@ -247,7 +286,6 @@ class FunctionalEffect(TutorialProxyHolder):
 
     def getTarget(self):
         targetID = self.getTargetID()
-        assert targetID, 'TargetID must be defined to find entity'
         return self._data.getHasIDEntity(targetID)
 
     def isInstantaneous(self):
@@ -264,6 +302,15 @@ class FunctionalEffect(TutorialProxyHolder):
         return FunctionalConditions(self._effect.getConditions()).allConditionsOk() if self._effect is not None else result
 
 
+class FunctionalEffectsGroup(FunctionalEffect):
+
+    def triggerEffect(self):
+        effects = filter(_areAllConditionsOk, self._effect.getEffects())
+        if effects:
+            self._tutorial.storeEffectsInQueue(effects, benefit=True, isGlobal=self.isGlobal())
+        return True
+
+
 class FunctionalActivateEffect(FunctionalEffect):
 
     def triggerEffect(self):
@@ -271,7 +318,9 @@ class FunctionalActivateEffect(FunctionalEffect):
         flags = self._tutorial.getFlags()
         if not flags.isActiveFlag(targetID):
             flags.activateFlag(targetID)
+            LOG_DEBUG('invalidateFlags from FunctionalActivateEffect', targetID)
             self._tutorial.invalidateFlags()
+        return True
 
 
 class FunctionalDeactivateEffect(FunctionalEffect):
@@ -281,25 +330,30 @@ class FunctionalDeactivateEffect(FunctionalEffect):
         flags = self._tutorial.getFlags()
         if flags.isActiveFlag(targetID):
             flags.deactivateFlag(targetID)
+            LOG_DEBUG('invalidateFlags from FunctionalDeactivateEffect', targetID)
             self._tutorial.invalidateFlags()
+        return True
 
 
 class FunctionalGlobalActivateEffect(FunctionalEffect):
 
     def triggerEffect(self):
         GlobalStorage.setValue(self._effect.getTargetID(), True)
+        return True
 
 
 class FunctionalGlobalDeactivateEffect(FunctionalEffect):
 
     def triggerEffect(self):
         GlobalStorage.setValue(self._effect.getTargetID(), False)
+        return True
 
 
 class FunctionalRefuseTrainingEffect(FunctionalEffect):
 
     def triggerEffect(self):
         self._tutorial.refuse()
+        return True
 
     def isStillRunning(self):
         return True
@@ -318,6 +372,7 @@ class FunctionalNextChapterEffect(FunctionalEffect):
             self._gui.showWaiting('chapter-loading', isSingle=True)
             self._gui.clear()
             self._tutorial.goToNextChapter(nextChapter)
+        return True
 
 
 class FunctionalRunTriggerEffect(FunctionalEffect):
@@ -333,9 +388,10 @@ class FunctionalRunTriggerEffect(FunctionalEffect):
         trigger = self.getTarget()
         if trigger is not None:
             trigger.run()
+            return True
         else:
             LOG_ERROR('Trigger not found', self._effect.getTargetID())
-        return
+            return False
 
     def getTarget(self):
         return self._data.getTrigger(self._effect.getTargetID())
@@ -351,19 +407,22 @@ class FunctionalRequestBonusEffect(FunctionalEffect):
 
     def triggerEffect(self):
         self._bonuses.request(chapterID=self._effect.getTargetID())
+        return True
 
 
-class FunctionalGuiItemSetPropertiesEffect(FunctionalEffect):
+class FunctionalSetGuiItemPropertiesEffect(FunctionalEffect):
 
     def triggerEffect(self):
-        effect = self._effect
-        self._gui.setItemProps(effect.getTargetID(), effect.getProps(), revert=effect.isRevert())
+        itemID = self._effect.getTargetID()
+        props = self._effect.getProps()
+        return self._gui.playEffect(GUI_EFFECT_NAME.SET_ITEM_PROPS, (itemID, props))
 
 
 class FunctionalFinishTrainingEffect(FunctionalEffect):
 
     def triggerEffect(self):
         self._tutorial.stop(finished=True)
+        return True
 
     def isStillRunning(self):
         return True
@@ -378,10 +437,19 @@ class FunctionalGuiCommandEffect(FunctionalEffect):
         targetID = self._effect.getTargetID()
         command = self._gui.config.getCommand(targetID)
         if command is not None:
+            argOverrides = self._effect.getArgOverrides()
+            if argOverrides:
+                if isinstance(command.args, dict):
+                    newArgs = command.args.copy()
+                    newArgs.update(argOverrides)
+                    command = command._replace(args=newArgs)
+                else:
+                    LOG_ERROR('cannot override GUI command args by name: arg list was not defined as dict', targetID)
             self._gui.invokeCommand(command)
+            return True
         else:
             LOG_ERROR('Command not found', targetID)
-        return
+            return False
 
 
 class FunctionalPlayerCommandEffect(FunctionalEffect):
@@ -394,6 +462,7 @@ class FunctionalPlayerCommandEffect(FunctionalEffect):
             if attr is not None and callable(attr):
                 try:
                     attr(*command.args(), **command.kwargs())
+                    return True
                 except TypeError:
                     LOG_ERROR('Number of arguments mismatch', command.getName(), command.args(), command.kwargs())
 
@@ -401,50 +470,38 @@ class FunctionalPlayerCommandEffect(FunctionalEffect):
                 LOG_ERROR('Player has not method', command.getName())
         else:
             LOG_ERROR('Command not found', self._effect.getTargetID())
-        return
+        return False
 
 
 class FunctionalShowDialogEffect(FunctionalEffect):
 
     def __init__(self, effect):
-        self._isRunning = False
-        self._isDialogClosed = False
         super(FunctionalShowDialogEffect, self).__init__(effect)
+        self._isRunning = False
 
     def triggerEffect(self):
         self._gui.release()
         dialog = self.getTarget()
         if dialog is not None:
-            self._isRunning = True
-            if self._gui.isGuiDialogDisplayed():
-                self._isDialogClosed = True
-                return
             content = dialog.getContent()
             if not dialog.isContentFull():
-                query = self._tutorial._ctrlFactory.createContentQuery(dialog.getType())
+                query = self._ctrlFactory.createContentQuery(dialog.getType())
                 query.invoke(content, dialog.getVarRef())
             self._isRunning = self._gui.playEffect(GUI_EFFECT_NAME.SHOW_DIALOG, [content])
             if not self._isRunning:
                 LOG_ERROR('Can not play effect "ShowDialog"', dialog.getID(), dialog.getType())
         else:
             LOG_ERROR('Dialog not found', self._effect.getTargetID())
-        return
+            self._isRunning = False
+        return self._isRunning
 
     def isInstantaneous(self):
         return False
 
     def isStillRunning(self):
-        if self._isRunning:
-            if self._isDialogClosed and not self._gui.isGuiDialogDisplayed():
-                self._isDialogClosed = False
-                self.triggerEffect()
-            if not self._isDialogClosed and not self._gui.isTutorialDialogDisplayed(self._effect.getTargetID()):
-                self._isDialogClosed = True
+        if self._isRunning and not self._gui.isTutorialDialogDisplayed(self._effect.getTargetID()):
+            self._isRunning = False
         return self._isRunning
-
-    def stop(self):
-        self._isRunning = False
-        self._isDialogClosed = False
 
 
 class FunctionalShowWindowEffect(FunctionalEffect):
@@ -455,11 +512,12 @@ class FunctionalShowWindowEffect(FunctionalEffect):
 
     def triggerEffect(self):
         self._gui.release()
+        isRunning = False
         window = self.getTarget()
         if window is not None:
             content = window.getContent()
             if not window.isContentFull():
-                query = self._tutorial._ctrlFactory.createContentQuery(window.getType())
+                query = self._ctrlFactory.createContentQuery(window.getType())
                 query.invoke(content, window.getVarRef())
             self._setActions(window)
             isRunning = self._gui.playEffect(GUI_EFFECT_NAME.SHOW_WINDOW, [window.getID(), window.getType(), content])
@@ -467,7 +525,7 @@ class FunctionalShowWindowEffect(FunctionalEffect):
                 LOG_ERROR('Can not play effect "ShowWindow"', window.getID(), window.getType())
         else:
             LOG_ERROR('PopUp not found', self._effect.getTargetID())
-        return
+        return isRunning
 
     def _setActions(self, window):
         self._tutorial.getFunctionalScene().setActions(window.getActions())
@@ -479,9 +537,10 @@ class FunctionalShowMessageEffect(FunctionalEffect):
         message = self.getTarget()
         if message is not None:
             self._gui.showMessage(message.getText(), lookupType=message.getGuiType())
+            return True
         else:
             LOG_ERROR('Message not found', self._effect.getTargetID())
-        return
+            return False
 
 
 _var_search = re.compile('(\\$.*?(.+?)\\$)')
@@ -492,16 +551,25 @@ class FunctionalSetGuiItemCriteria(FunctionalEffect):
         criteria = self.getTarget()
         if criteria is None:
             LOG_ERROR('Criteria is not found', self._effect.getTargetID())
-            return
+            return False
         else:
             value = criteria.getValue()
             getVar = self._tutorial.getVars().get
             for marker, varID in re.findall(_var_search, value):
                 value = value.replace(marker, str(getVar(varID)))
 
-            LOG_DEBUG('Set gui item criteria', criteria.getTargetID(), value)
-            self._gui.playEffect(GUI_EFFECT_NAME.SET_CRITERIA, (criteria.getTargetID(), value))
-            return
+            return self._playEffect(criteria, value)
+
+    def _playEffect(self, criteria, value):
+        LOG_DEBUG('Set gui item criteria', criteria.getTargetID(), value)
+        return self._gui.playEffect(GUI_EFFECT_NAME.SET_CRITERIA, (criteria.getTargetID(), value))
+
+
+class FunctionalSetGuiItemViewCriteria(FunctionalSetGuiItemCriteria):
+
+    def _playEffect(self, criteria, value):
+        LOG_DEBUG('Set gui item view criteria', criteria.getComponentIDs(), value)
+        return self._gui.playEffect(GUI_EFFECT_NAME.SET_VIEW_CRITERIA, (criteria.getComponentIDs(), value))
 
 
 class FunctionalSetAction(FunctionalEffect):
@@ -510,15 +578,14 @@ class FunctionalSetAction(FunctionalEffect):
         action = self.getTarget()
         if action is None:
             LOG_ERROR('Action is not found', self._effect.getTargetID())
-            return
+            return False
         else:
-            scene = self._tutorial.getFunctionalScene()
-            if scene is None:
-                LOG_ERROR('Scene is not defined', self._effect.getTargetID())
-                return
-            scene.setAction(action)
-            self._gui.playEffect(GUI_EFFECT_NAME.SET_TRIGGER, (action.getTargetID(), action.getType()))
-            return
+            scope = self._funcChapterCtx if self.isGlobal() else self._funcScene
+            if scope is None:
+                LOG_ERROR('Scope (scene / chapter) is not available', self._effect.getTargetID())
+                return False
+            scope.setAction(action)
+            return self._gui.playEffect(GUI_EFFECT_NAME.SET_TRIGGER, (action.getTargetID(), action.getType()))
 
 
 class FunctionalRemoveAction(FunctionalEffect):
@@ -527,15 +594,15 @@ class FunctionalRemoveAction(FunctionalEffect):
         action = self.getTarget()
         if action is None:
             LOG_ERROR('Action is not found', self._effect.getTargetID())
-            return
+            return False
         else:
-            scene = self._tutorial.getFunctionalScene()
-            if scene is None:
-                LOG_ERROR('Scene is not defined', self._effect.getTargetID())
-                return
-            scene.removeAction(action)
-            self._gui.stopEffect(GUI_EFFECT_NAME.SET_TRIGGER, action.getTargetID())
-            return
+            scope = self._funcChapterCtx if self.isGlobal() else self._funcScene
+            if scope is None:
+                LOG_ERROR('Scope (scene / chapter) is not available', self._effect.getTargetID())
+                return False
+            scope.removeAction(action)
+            self._gui.stopEffect(GUI_EFFECT_NAME.SET_TRIGGER, action.getTargetID(), action.getType())
+            return True
 
 
 class FunctionalSetVarAction(FunctionalEffect):
@@ -544,28 +611,83 @@ class FunctionalSetVarAction(FunctionalEffect):
         finder = self.getTarget()
         if finder is None:
             LOG_ERROR('Var finder is not found', self._effect.getTargetID())
-            return
+            return False
         else:
             finderType = finder.getType()
             if finderType == chapter.VAR_FINDER_TYPE.GAME_ATTRIBUTE:
                 getter = self._tutorial.getVars().get
-                args = map(lambda varID: getter(varID, default=varID), finder.getArgs())
+                args = [ getter(varID, default=varID) for varID in finder.getArgs() ]
                 self._tutorial.getVars().set(finder.getTargetID(), game_vars.getAttribute(finder.getName(), *args))
-            else:
-                LOG_ERROR('Type of setter is not supported', finderType)
-            return
+                return True
+            LOG_ERROR('Type of setter is not supported', finderType)
+            return False
 
 
-class FunctionalChapterInfo(TutorialProxyHolder):
+class FunctionalChapterContext(TutorialProxyHolder):
+
+    def __init__(self):
+        super(FunctionalChapterContext, self).__init__()
+        self._mustBeUpdated = True
+        self._updating = False
+        self._actions = chapter.ActionsHolder()
+        self._allowedToFight = True
+        self.onBeforeUpdate = Event.Event()
+        self.onAfterUpdate = Event.Event()
+
+    def clear(self):
+        self._actions.clear()
 
     def invalidate(self):
+        self._mustBeUpdated = True
+
+    def updatePreScene(self):
+        if self._mustBeUpdated:
+            self._mustBeUpdated = False
+            self._updating = True
+            self.onBeforeUpdate()
+            self._updateGlobalRuntimeEffects(isPostScene=False)
+
+    def updatePostScene(self):
+        if self._updating:
+            self._updateGlobalRuntimeEffects(isPostScene=True)
+            self._updating = False
+            self.onAfterUpdate()
+
+    def getAction(self, event):
+        return self._actions.getAction(event)
+
+    def setAction(self, action):
+        return self._actions.addAction(action)
+
+    def removeAction(self, action):
+        return self._actions.removeAction(action)
+
+    def onItemLost(self, itemID):
         pass
+
+    def onStartLongEffect(self):
+        pass
+
+    def isAllowedToFight(self):
+        return self._allowedToFight
+
+    def setAllowedToFight(self, allowed):
+        if allowed != self._allowedToFight:
+            self._allowedToFight = allowed
+            prebattleControl.updateUI()
+
+    def _updateGlobalRuntimeEffects(self, isPostScene):
+        LOG_DEBUG('updating global runtime effects', '(post-scene)' if isPostScene else '(pre-scene)')
+        effects = filter(_areAllConditionsOk, self._data.getGlobalEffects(isPostScene))
+        if effects:
+            self._tutorial.storeEffectsInQueue(effects, isGlobal=True)
 
 
 class FunctionalClearScene(FunctionalEffect):
 
     def triggerEffect(self):
         self._gui.clearScene()
+        return True
 
 
 class FunctionalScene(TutorialProxyHolder):
@@ -619,7 +741,7 @@ class FunctionalScene(TutorialProxyHolder):
                 return
             LOG_DEBUG('GUI item has been added to scene.', itemID)
             self._itemsOnScene.add(itemID)
-            effects = filter(self.__areAllConditionsOk, item.getOnSceneEffects())
+            effects = filter(_areAllConditionsOk, item.getOnSceneEffects())
             if effects:
                 if self._isUpdatedOnce:
                     self._tutorial.storeEffectsInQueue(effects, benefit=True)
@@ -636,7 +758,7 @@ class FunctionalScene(TutorialProxyHolder):
             if item is None:
                 return
             LOG_DEBUG('GUI item has been removed from scene.', itemID)
-            effects = filter(self.__areAllConditionsOk, item.getNotOnSceneEffects())
+            effects = filter(_areAllConditionsOk, item.getNotOnSceneEffects())
             if effects:
                 self._tutorial.storeEffectsInQueue(effects)
             return
@@ -656,7 +778,7 @@ class FunctionalScene(TutorialProxyHolder):
 
     def _updateScene(self):
         LOG_DEBUG('Update scene.')
-        effects = filter(self.__areAllConditionsOk, self._scene.getEffects())
+        effects = filter(_areAllConditionsOk, self._scene.getEffects())
         if self._pending:
             effects.extend(self._pending)
             self._pending = []
@@ -665,9 +787,6 @@ class FunctionalScene(TutorialProxyHolder):
         self._isUpdatedOnce = True
         self._gui.release()
 
-    def __areAllConditionsOk(self, item):
-        return FunctionalConditions(item.getConditions()).allConditionsOk()
-
 
 class GoToSceneEffect(FunctionalEffect):
 
@@ -675,7 +794,92 @@ class GoToSceneEffect(FunctionalEffect):
         sceneID = self.getTargetID()
         if sceneID is None:
             LOG_ERROR('scene is not found', self._effect.getTargetID())
-            return
+            return False
         else:
             self._gui.goToScene(sceneID)
-            return
+            return True
+
+
+class FunctionalPlayAnimationEffect(FunctionalEffect):
+
+    def isInstantaneous(self):
+        return not self._effect.needWaitForFinish()
+
+    def isStillRunning(self):
+        return False if self.isInstantaneous() else self._gui.isEffectRunning(GUI_EFFECT_NAME.PLAY_ANIMATION, *self._args)
+
+    def triggerEffect(self):
+        self._gui.release()
+        return self._gui.playEffect(GUI_EFFECT_NAME.PLAY_ANIMATION, self._args)
+
+    def stop(self):
+        self._gui.stopEffect(GUI_EFFECT_NAME.PLAY_ANIMATION, *self._args)
+
+    @property
+    def _args(self):
+        itemID = self._effect.getTargetID()
+        animType = self._effect.getAnimType()
+        return (itemID, animType)
+
+
+class FunctionalSetAllowedToFightEffect(FunctionalEffect):
+
+    def triggerEffect(self):
+        self._funcChapterCtx.setAllowedToFight(self._effect.getValue())
+        return True
+
+
+class FunctionalSelectVehicleByCDEffect(FunctionalEffect):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, *args):
+        super(FunctionalSelectVehicleByCDEffect, self).__init__(*args)
+        self.__waitingForItemsCacheSync = False
+
+    def triggerEffect(self):
+        if self.itemsCache.isSynced():
+            return self.__doTrigger()
+        self.__waitingForItemsCacheSync = True
+        self.itemsCache.onSyncCompleted += self.__doTrigger
+        return True
+
+    def isInstantaneous(self):
+        return False
+
+    def isStillRunning(self):
+        return self.__waitingForItemsCacheSync
+
+    def __doTrigger(self, *_):
+        if self.__waitingForItemsCacheSync:
+            self.__waitingForItemsCacheSync = False
+            self.itemsCache.onSyncCompleted -= self.__doTrigger
+        varID = self._effect.getTargetID()
+        vehicleCD = self._tutorial.getVars().get(varID, default=None)
+        if vehicleCD is None:
+            LOG_ERROR('invalid vehicle CD')
+            return False
+        else:
+            vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
+            if vehicle is None:
+                LOG_ERROR('vehicle not found in inventory')
+                return False
+            g_currentVehicle.selectVehicle(vehicle.invID)
+            return True
+
+
+class FunctionalPlaySoundEffect(FunctionalEffect):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def triggerEffect(self):
+        soundID = self._effect.getTargetID()
+        soundEvent = self._effect.getSoundEvent()
+        self._sound.play(soundEvent, soundID)
+        return True
+
+
+class FunctionalCloseViewEffect(FunctionalEffect):
+
+    def triggerEffect(self):
+        viewType, viewAlias = self._effect.getTargetID()
+        self._gui.closeView(viewType, criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
+        return True

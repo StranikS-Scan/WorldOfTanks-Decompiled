@@ -151,14 +151,10 @@ def getScaleformKey(bigworldKey):
 
 
 def getKey(command):
-    """Get bigworld's keyboard key assigned to to specified command.
-    """
     commandName = CommandMapping.g_instance.getName(command)
     return CommandMapping.g_instance.get(commandName)
 
 
 def getReadableKey(command):
-    """Get a human readable key name from assigned to specified command.
-    """
     key = getKey(command)
     return makeString(READABLE_KEY_NAMES.key(BigWorld.keyToString(key)))

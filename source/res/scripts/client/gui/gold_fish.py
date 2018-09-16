@@ -10,11 +10,9 @@ from skeletons.gui.shared import IItemsCache
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache, lobbyContext=ILobbyContext)
 def isGoldFishActionActive(itemsCache=None, lobbyContext=None):
-    """Determines is the goldfish action is active at this moment for current type of account"""
     outOfSessionWallet = constants.ACCOUNT_ATTR.OUT_OF_SESSION_WALLET
     return False if itemsCache is None or lobbyContext is None else not itemsCache.items.stats.isGoldFishBonusApplied and lobbyContext.getServerSettings().isGoldFishEnabled() and not itemsCache.items.stats.attributes & outOfSessionWallet != 0
 
 
 def isTimeToShowGoldFishPromo():
-    """Check is time has come to show GoldFish promo Window"""
     return getCurrentTimestamp() - AccountSettings.getFilter(GOLD_FISH_LAST_SHOW_TIME) >= GUI_SETTINGS.goldFishActionShowCooldown

@@ -24,7 +24,7 @@ class ParsersCollection(SectionParser):
 
     def __init__(self, seq):
         super(ParsersCollection, self).__init__()
-        self._parsers = dict(map(lambda parser: (parser.getTagName(), parser), seq))
+        self._parsers = dict(((parser.getTagName(), parser) for parser in seq))
 
     def clear(self):
         self._parsers.clear()

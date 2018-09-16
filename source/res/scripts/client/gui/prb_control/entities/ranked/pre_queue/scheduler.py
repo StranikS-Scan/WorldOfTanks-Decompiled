@@ -28,10 +28,6 @@ class RankedScheduler(BaseScheduler):
         self.rankedController.onPrimeTimeStatusUpdated -= self.__update
 
     def __update(self, status):
-        """
-        Process update
-        :param status: Prime time status
-        """
         if not self.rankedController.isAvailable():
             self._entity.leave(LeavePreQueueCtx(waitingID='prebattle/leave'))
             return
@@ -42,10 +38,6 @@ class RankedScheduler(BaseScheduler):
             g_eventDispatcher.updateUI()
 
     def __show(self, isInit=False):
-        """
-        Show UI elements: system message, window
-        :param isInit: flag indicating is this method called from init()
-        """
         if not self.__isPrimeTime:
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.RANKED_NOTIFICATION_PRIMETIME), type=SystemMessages.SM_TYPE.PrimeTime)
             if self.rankedController.hasAnyPeripheryWithPrimeTime() and not constants.IS_CHINA:

@@ -1,16 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pickletools.py
-""""Executable documentation" for the pickle module.
-
-Extensive comments about the pickle protocols and pickle-machine opcodes
-can be found here.  Some functions meant for external use:
-
-genops(pickle)
-   Generate all the opcodes in a pickle, as (opcode, arg, position) triples.
-
-dis(pickle, out=None, memo=None, indentlevel=4)
-   Print a symbolic disassembly of a pickle.
-"""
 __all__ = ['dis', 'genops', 'optimize']
 UP_TO_NEWLINE = -1
 TAKEN_FROM_ARGUMENT1 = -2
@@ -20,23 +9,15 @@ class ArgumentDescriptor(object):
     __slots__ = ('name', 'n', 'reader', 'doc')
 
     def __init__(self, name, n, reader, doc):
-        assert isinstance(name, str)
         self.name = name
-        assert isinstance(n, int) and (n >= 0 or n in (UP_TO_NEWLINE, TAKEN_FROM_ARGUMENT1, TAKEN_FROM_ARGUMENT4))
         self.n = n
         self.reader = reader
-        assert isinstance(doc, str)
         self.doc = doc
 
 
 from struct import unpack as _unpack
 
 def read_uint1(f):
-    r"""
-    >>> import StringIO
-    >>> read_uint1(StringIO.StringIO('\xff'))
-    255
-    """
     data = f.read(1)
     if data:
         return ord(data)
@@ -46,13 +27,6 @@ def read_uint1(f):
 uint1 = ArgumentDescriptor(name='uint1', n=1, reader=read_uint1, doc='One-byte unsigned integer.')
 
 def read_uint2(f):
-    r"""
-    >>> import StringIO
-    >>> read_uint2(StringIO.StringIO('\xff\x00'))
-    255
-    >>> read_uint2(StringIO.StringIO('\xff\xff'))
-    65535
-    """
     data = f.read(2)
     if len(data) == 2:
         return _unpack('<H', data)[0]
@@ -62,13 +36,6 @@ def read_uint2(f):
 uint2 = ArgumentDescriptor(name='uint2', n=2, reader=read_uint2, doc='Two-byte unsigned integer, little-endian.')
 
 def read_int4(f):
-    r"""
-    >>> import StringIO
-    >>> read_int4(StringIO.StringIO('\xff\x00\x00\x00'))
-    255
-    >>> read_int4(StringIO.StringIO('\x00\x00\x00\x80')) == -(2**31)
-    True
-    """
     data = f.read(4)
     if len(data) == 4:
         return _unpack('<i', data)[0]
@@ -78,31 +45,6 @@ def read_int4(f):
 int4 = ArgumentDescriptor(name='int4', n=4, reader=read_int4, doc="Four-byte signed integer, little-endian, 2's complement.")
 
 def read_stringnl(f, decode=True, stripquotes=True):
-    r"""
-    >>> import StringIO
-    >>> read_stringnl(StringIO.StringIO("'abcd'\nefg\n"))
-    'abcd'
-    
-    >>> read_stringnl(StringIO.StringIO("\n"))
-    Traceback (most recent call last):
-    ...
-    ValueError: no string quotes around ''
-    
-    >>> read_stringnl(StringIO.StringIO("\n"), stripquotes=False)
-    ''
-    
-    >>> read_stringnl(StringIO.StringIO("''\n"))
-    ''
-    
-    >>> read_stringnl(StringIO.StringIO('"abcd"'))
-    Traceback (most recent call last):
-    ...
-    ValueError: no newline found when trying to read stringnl
-    
-    Embedded escapes are undone in the result.
-    >>> read_stringnl(StringIO.StringIO(r"'a\n\\b\x00c\td'" + "\n'e'"))
-    'a\n\\b\x00c\td'
-    """
     data = f.readline()
     if not data.endswith('\n'):
         raise ValueError('no newline found when trying to read stringnl')
@@ -131,28 +73,12 @@ def read_stringnl_noescape(f):
 stringnl_noescape = ArgumentDescriptor(name='stringnl_noescape', n=UP_TO_NEWLINE, reader=read_stringnl_noescape, doc='A newline-terminated string.\n\n                        This is a str-style string, without embedded escapes,\n                        or bracketing quotes.  It should consist solely of\n                        printable ASCII characters.\n                        ')
 
 def read_stringnl_noescape_pair(f):
-    r"""
-    >>> import StringIO
-    >>> read_stringnl_noescape_pair(StringIO.StringIO("Queue\nEmpty\njunk"))
-    'Queue Empty'
-    """
     return '%s %s' % (read_stringnl_noescape(f), read_stringnl_noescape(f))
 
 
 stringnl_noescape_pair = ArgumentDescriptor(name='stringnl_noescape_pair', n=UP_TO_NEWLINE, reader=read_stringnl_noescape_pair, doc='A pair of newline-terminated strings.\n\n                             These are str-style strings, without embedded\n                             escapes, or bracketing quotes.  They should\n                             consist solely of printable ASCII characters.\n                             The pair is returned as a single string, with\n                             a single blank separating the two strings.\n                             ')
 
 def read_string4(f):
-    r"""
-    >>> import StringIO
-    >>> read_string4(StringIO.StringIO("\x00\x00\x00\x00abc"))
-    ''
-    >>> read_string4(StringIO.StringIO("\x03\x00\x00\x00abcdef"))
-    'abc'
-    >>> read_string4(StringIO.StringIO("\x00\x00\x00\x03abcdef"))
-    Traceback (most recent call last):
-    ...
-    ValueError: expected 50331648 bytes in a string4, but only 6 remain
-    """
     n = read_int4(f)
     if n < 0:
         raise ValueError('string4 byte count < 0: %d' % n)
@@ -165,15 +91,7 @@ def read_string4(f):
 string4 = ArgumentDescriptor(name='string4', n=TAKEN_FROM_ARGUMENT4, reader=read_string4, doc='A counted string.\n\n              The first argument is a 4-byte little-endian signed int giving\n              the number of bytes in the string, and the second argument is\n              that many bytes.\n              ')
 
 def read_string1(f):
-    r"""
-    >>> import StringIO
-    >>> read_string1(StringIO.StringIO("\x00"))
-    ''
-    >>> read_string1(StringIO.StringIO("\x03abcdef"))
-    'abc'
-    """
     n = read_uint1(f)
-    assert n >= 0
     data = f.read(n)
     if len(data) == n:
         return data
@@ -183,11 +101,6 @@ def read_string1(f):
 string1 = ArgumentDescriptor(name='string1', n=TAKEN_FROM_ARGUMENT1, reader=read_string1, doc='A counted string.\n\n              The first argument is a 1-byte unsigned int giving the number\n              of bytes in the string, and the second argument is that many\n              bytes.\n              ')
 
 def read_unicodestringnl(f):
-    r"""
-    >>> import StringIO
-    >>> read_unicodestringnl(StringIO.StringIO("abc\uabcd\njunk"))
-    u'abc\uabcd'
-    """
     data = f.readline()
     if not data.endswith('\n'):
         raise ValueError('no newline found when trying to read unicodestringnl')
@@ -198,22 +111,6 @@ def read_unicodestringnl(f):
 unicodestringnl = ArgumentDescriptor(name='unicodestringnl', n=UP_TO_NEWLINE, reader=read_unicodestringnl, doc='A newline-terminated Unicode string.\n\n                      This is raw-unicode-escape encoded, so consists of\n                      printable ASCII characters, and may contain embedded\n                      escape sequences.\n                      ')
 
 def read_unicodestring4(f):
-    r"""
-    >>> import StringIO
-    >>> s = u'abcd\uabcd'
-    >>> enc = s.encode('utf-8')
-    >>> enc
-    'abcd\xea\xaf\x8d'
-    >>> n = chr(len(enc)) + chr(0) * 3  # little-endian 4-byte length
-    >>> t = read_unicodestring4(StringIO.StringIO(n + enc + 'junk'))
-    >>> s == t
-    True
-    
-    >>> read_unicodestring4(StringIO.StringIO(n + enc[:-1]))
-    Traceback (most recent call last):
-    ...
-    ValueError: expected 7 bytes in a unicodestring4, but only 6 remain
-    """
     n = read_int4(f)
     if n < 0:
         raise ValueError('unicodestring4 byte count < 0: %d' % n)
@@ -226,16 +123,6 @@ def read_unicodestring4(f):
 unicodestring4 = ArgumentDescriptor(name='unicodestring4', n=TAKEN_FROM_ARGUMENT4, reader=read_unicodestring4, doc='A counted Unicode string.\n\n                    The first argument is a 4-byte little-endian signed int\n                    giving the number of bytes in the string, and the second\n                    argument-- the UTF-8 encoding of the Unicode string --\n                    contains that many bytes.\n                    ')
 
 def read_decimalnl_short(f):
-    r"""
-    >>> import StringIO
-    >>> read_decimalnl_short(StringIO.StringIO("1234\n56"))
-    1234
-    
-    >>> read_decimalnl_short(StringIO.StringIO("1234L\n56"))
-    Traceback (most recent call last):
-    ...
-    ValueError: trailing 'L' not allowed in '1234L'
-    """
     s = read_stringnl(f, decode=False, stripquotes=False)
     if s.endswith('L'):
         raise ValueError("trailing 'L' not allowed in %r" % s)
@@ -250,22 +137,6 @@ def read_decimalnl_short(f):
 
 
 def read_decimalnl_long(f):
-    r"""
-    >>> import StringIO
-    
-    >>> read_decimalnl_long(StringIO.StringIO("1234\n56"))
-    Traceback (most recent call last):
-    ...
-    ValueError: trailing 'L' required in '1234'
-    
-    Someday the trailing 'L' will probably go away from this output.
-    
-    >>> read_decimalnl_long(StringIO.StringIO("1234L\n56"))
-    1234L
-    
-    >>> read_decimalnl_long(StringIO.StringIO("123456789012345678901234L\n6"))
-    123456789012345678901234L
-    """
     s = read_stringnl(f, decode=False, stripquotes=False)
     if not s.endswith('L'):
         raise ValueError("trailing 'L' required in %r" % s)
@@ -276,11 +147,6 @@ decimalnl_short = ArgumentDescriptor(name='decimalnl_short', n=UP_TO_NEWLINE, re
 decimalnl_long = ArgumentDescriptor(name='decimalnl_long', n=UP_TO_NEWLINE, reader=read_decimalnl_long, doc="A newline-terminated decimal integer literal.\n\n                         This has a trailing 'L', and can represent integers\n                         of any size.\n                         ")
 
 def read_floatnl(f):
-    r"""
-    >>> import StringIO
-    >>> read_floatnl(StringIO.StringIO("-1.25\n6"))
-    -1.25
-    """
     s = read_stringnl(f, decode=False, stripquotes=False)
     return float(s)
 
@@ -288,14 +154,6 @@ def read_floatnl(f):
 floatnl = ArgumentDescriptor(name='floatnl', n=UP_TO_NEWLINE, reader=read_floatnl, doc="A newline-terminated decimal floating literal.\n\n              In general this requires 17 significant digits for roundtrip\n              identity, and pickling then unpickling infinities, NaNs, and\n              minus zero doesn't work across boxes, or on some boxes even\n              on itself (e.g., Windows can't read the strings it produces\n              for infinities or NaNs).\n              ")
 
 def read_float8(f):
-    r"""
-    >>> import StringIO, struct
-    >>> raw = struct.pack(">d", -1.25)
-    >>> raw
-    '\xbf\xf4\x00\x00\x00\x00\x00\x00'
-    >>> read_float8(StringIO.StringIO(raw + "\n"))
-    -1.25
-    """
     data = f.read(8)
     if len(data) == 8:
         return _unpack('>d', data)[0]
@@ -306,19 +164,6 @@ float8 = ArgumentDescriptor(name='float8', n=8, reader=read_float8, doc='An 8-by
 from pickle import decode_long
 
 def read_long1(f):
-    r"""
-    >>> import StringIO
-    >>> read_long1(StringIO.StringIO("\x00"))
-    0L
-    >>> read_long1(StringIO.StringIO("\x02\xff\x00"))
-    255L
-    >>> read_long1(StringIO.StringIO("\x02\xff\x7f"))
-    32767L
-    >>> read_long1(StringIO.StringIO("\x02\x00\xff"))
-    -256L
-    >>> read_long1(StringIO.StringIO("\x02\x00\x80"))
-    -32768L
-    """
     n = read_uint1(f)
     data = f.read(n)
     if len(data) != n:
@@ -329,19 +174,6 @@ def read_long1(f):
 long1 = ArgumentDescriptor(name='long1', n=TAKEN_FROM_ARGUMENT1, reader=read_long1, doc="A binary long, little-endian, using 1-byte size.\n\n    This first reads one byte as an unsigned size, then reads that\n    many bytes and interprets them as a little-endian 2's-complement long.\n    If the size is 0, that's taken as a shortcut for the long 0L.\n    ")
 
 def read_long4(f):
-    r"""
-    >>> import StringIO
-    >>> read_long4(StringIO.StringIO("\x02\x00\x00\x00\xff\x00"))
-    255L
-    >>> read_long4(StringIO.StringIO("\x02\x00\x00\x00\xff\x7f"))
-    32767L
-    >>> read_long4(StringIO.StringIO("\x02\x00\x00\x00\x00\xff"))
-    -256L
-    >>> read_long4(StringIO.StringIO("\x02\x00\x00\x00\x00\x80"))
-    -32768L
-    >>> read_long1(StringIO.StringIO("\x00\x00\x00\x00"))
-    0L
-    """
     n = read_int4(f)
     if n < 0:
         raise ValueError('long4 byte count < 0: %d' % n)
@@ -357,15 +189,12 @@ class StackObject(object):
     __slots__ = ('name', 'obtype', 'doc')
 
     def __init__(self, name, obtype, doc):
-        assert isinstance(name, str)
         self.name = name
-        assert isinstance(obtype, type) or isinstance(obtype, tuple)
         if isinstance(obtype, tuple):
             for contained in obtype:
-                assert isinstance(contained, type)
+                pass
 
         self.obtype = obtype
-        assert isinstance(doc, str)
         self.doc = doc
 
     def __repr__(self):
@@ -391,28 +220,19 @@ class OpcodeInfo(object):
     __slots__ = ('name', 'code', 'arg', 'stack_before', 'stack_after', 'proto', 'doc')
 
     def __init__(self, name, code, arg, stack_before, stack_after, proto, doc):
-        assert isinstance(name, str)
         self.name = name
-        assert isinstance(code, str)
-        assert len(code) == 1
         self.code = code
-        assert arg is None or isinstance(arg, ArgumentDescriptor)
         self.arg = arg
-        assert isinstance(stack_before, list)
         for x in stack_before:
-            assert isinstance(x, StackObject)
+            pass
 
         self.stack_before = stack_before
-        assert isinstance(stack_after, list)
         for x in stack_after:
-            assert isinstance(x, StackObject)
+            pass
 
         self.stack_after = stack_after
-        assert isinstance(proto, int) and 0 <= proto <= 2
         self.proto = proto
-        assert isinstance(doc, str)
         self.doc = doc
-        return
 
 
 I = OpcodeInfo
@@ -524,28 +344,6 @@ assure_pickle_consistency()
 del assure_pickle_consistency
 
 def genops(pickle):
-    """Generate all the opcodes in a pickle.
-    
-    'pickle' is a file-like object, or string, containing the pickle.
-    
-    Each opcode in the pickle is generated, from the current pickle position,
-    stopping after a STOP opcode is delivered.  A triple is generated for
-    each opcode:
-    
-        opcode, arg, pos
-    
-    opcode is an OpcodeInfo record, describing the current opcode.
-    
-    If the opcode has an argument embedded in the pickle, arg is its decoded
-    value, as a Python object.  If the opcode doesn't have an argument, arg
-    is None.
-    
-    If the pickle has a tell() method, pos was the value of pickle.tell()
-    before reading the current opcode.  If the pickle is a string object,
-    it's wrapped in a StringIO object, and the latter's tell() result is
-    used.  Else (the pickle doesn't have a tell(), and it's not obvious how
-    to query its current position) pos is None.
-    """
     import cStringIO as StringIO
     if isinstance(pickle, str):
         pickle = StringIO.StringIO(pickle)
@@ -568,14 +366,12 @@ def genops(pickle):
             arg = opcode.arg.reader(pickle)
         yield (opcode, arg, pos)
         if code == '.':
-            assert opcode.name == 'STOP'
             break
 
     return
 
 
 def optimize(p):
-    """Optimize a pickle string by removing unused PUT opcodes"""
     gets = set()
     puts = []
     prevpos = None
@@ -600,39 +396,6 @@ def optimize(p):
 
 
 def dis(pickle, out=None, memo=None, indentlevel=4):
-    """Produce a symbolic disassembly of a pickle.
-    
-    'pickle' is a file-like object, or string, containing a (at least one)
-    pickle.  The pickle is disassembled from the current position, through
-    the first STOP opcode encountered.
-    
-    Optional arg 'out' is a file-like object to which the disassembly is
-    printed.  It defaults to sys.stdout.
-    
-    Optional arg 'memo' is a Python dict, used as the pickle's memo.  It
-    may be mutated by dis(), if the pickle contains PUT or BINPUT opcodes.
-    Passing the same memo object to another dis() call then allows disassembly
-    to proceed across multiple pickles that were all created by the same
-    pickler with the same memo.  Ordinarily you don't need to worry about this.
-    
-    Optional arg indentlevel is the number of blanks by which to indent
-    a new MARK level.  It defaults to 4.
-    
-    In addition to printing the disassembly, some sanity checks are made:
-    
-    + All embedded opcode arguments "make sense".
-    
-    + Explicit and implicit pop operations have enough items on the stack.
-    
-    + When an opcode implicitly refers to a markobject, a markobject is
-      actually on the stack.
-    
-    + A memo entry isn't referenced before it's defined.
-    
-    + The markobject isn't stored in the memo.
-    
-    + A memo entry isn't redefined.
-    """
     stack = []
     if memo is None:
         memo = {}
@@ -650,9 +413,6 @@ def dis(pickle, out=None, memo=None, indentlevel=4):
         numtopop = len(before)
         markmsg = None
         if markobject in before or opcode.name == 'POP' and stack and stack[-1] is markobject:
-            assert markobject not in after
-            if markobject in before:
-                assert before[-1] is stackslice
             if markstack:
                 markpos = markstack.pop()
                 if markpos is None:
@@ -666,13 +426,11 @@ def dis(pickle, out=None, memo=None, indentlevel=4):
                 try:
                     numtopop = before.index(markobject)
                 except ValueError:
-                    assert opcode.name == 'POP'
                     numtopop = 0
 
             else:
                 errormsg = markmsg = 'no MARK exists on stack'
         if opcode.name in ('PUT', 'BINPUT', 'LONG_BINPUT'):
-            assert arg is not None
             if arg in memo:
                 errormsg = 'memo key %r already defined' % arg
             elif not stack:
@@ -683,7 +441,6 @@ def dis(pickle, out=None, memo=None, indentlevel=4):
                 memo[arg] = stack[-1]
         elif opcode.name in ('GET', 'BINGET', 'LONG_BINGET'):
             if arg in memo:
-                assert len(after) == 1
                 after = [memo[arg]]
             else:
                 errormsg = 'memo key %r has never been stored into' % arg
@@ -701,7 +458,6 @@ def dis(pickle, out=None, memo=None, indentlevel=4):
         if numtopop:
             del stack[-numtopop:]
         if markobject in after:
-            assert markobject not in before
             markstack.append(pos)
         stack.extend(after)
 

@@ -260,7 +260,7 @@
         <segmentLength>	0.161	</segmentLength>
         <segmentOffset>	0.17	</segmentOffset>
         <segment2Offset>	0.075	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -513,7 +513,7 @@
         <segmentLength>	0.161	</segmentLength>
         <segmentOffset>	0.17	</segmentOffset>
         <segment2Offset>	0.075	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1116,12 +1116,12 @@
   </turrets0>
   <engines>
     <Wright_Continental_R-975C1>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C4	  <cost>	1500.0	</cost>
+        <engine>	Wright_Continental_R-975C4	  <cost>	1500	</cost>
         </engine>
       </unlocks>
     </Wright_Continental_R-975C1>
     <Wright_Continental_R-975C4>	shared	  <unlocks>
-        <engine>	Ford_GAA	  <cost>	11000.0	</cost>
+        <engine>	Ford_GAA	  <cost>	11000	</cost>
         </engine>
       </unlocks>
     </Wright_Continental_R-975C4>

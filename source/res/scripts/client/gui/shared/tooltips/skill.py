@@ -93,7 +93,7 @@ class TankmanSkillTooltipData(BlocksTooltipData):
             value = parameter.value
             if delta > 0:
                 value -= delta
-            blocks.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData={'value': value,
+            blocks.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simplifiedDeltaParameter(parameter), statusBarData={'value': value,
              'delta': delta,
              'minValue': 0,
              'markerValue': stockParams[parameter.name],
@@ -104,11 +104,6 @@ class TankmanSkillTooltipData(BlocksTooltipData):
 
     @classmethod
     def __getSkillRoleType(cls, skillName):
-        """
-        Returns role type name which target skill contains.
-        :param skillName: [str] target skill name
-        :return: [str] role type name or None
-        """
         if skillName in tankmen.COMMON_SKILLS:
             return 'common'
         else:

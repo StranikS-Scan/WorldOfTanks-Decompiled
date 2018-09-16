@@ -126,7 +126,7 @@
       <userString>	#germany_vehicles:Chassis_JagdPantherII	</userString>
       <tags></tags>
       <level>	7	</level>
-      <price>	18860.0	</price>
+      <price>	18860	</price>
       <unlocks>
         <chassis>	Chassis_JagdPantherII_2	  <cost>	15500	</cost>
         </chassis>
@@ -164,7 +164,7 @@
         <segmentLength>	0.3	</segmentLength>
         <segmentOffset>	0.084	</segmentOffset>
         <segment2Offset>	0.154	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -465,7 +465,7 @@
         <segmentLength>	0.3	</segmentLength>
         <segmentOffset>	0.084	</segmentOffset>
         <segment2Offset>	0.154	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -932,12 +932,12 @@
   </fuelTanks>
   <radios>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
+        <radio>	FuG7	  <cost>	1360	</cost>
         </radio>
       </unlocks>
     </FuG5>
     <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200.0	</cost>
+        <radio>	FuG12	  <cost>	7200	</cost>
         </radio>
       </unlocks>
     </FuG7>

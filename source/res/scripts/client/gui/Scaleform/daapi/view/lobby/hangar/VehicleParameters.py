@@ -149,7 +149,7 @@ class _PreviewVehParamsGenerator(_VehParamsGenerator):
         super(_PreviewVehParamsGenerator, self).__init__(tooltipType or TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_ADVANCED_PARAMETERS)
 
     def _getSimplifiedValue(self, param):
-        return formatters.simlifiedDeltaParameter(param)
+        return formatters.simplifiedDeltaParameter(param)
 
     def _getBaseFormatters(self):
         return formatters.BASE_SCHEME

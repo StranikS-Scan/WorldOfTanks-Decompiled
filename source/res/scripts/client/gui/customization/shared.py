@@ -12,11 +12,6 @@ C11N_ITEM_TYPE_MAP = {GUI_ITEM_TYPE.PAINT: CustomizationType.PAINT,
  GUI_ITEM_TYPE.STYLE: CustomizationType.STYLE}
 
 class HighlightingMode(CONST_CONTAINER):
-    """ Modes of the highlighter.
-    
-    This constants has same values as in ESelectionMode
-    from bigworld_client/lib/romp/tank_region_selector.hpp.
-    """
     PAINT_REGIONS = 0
     CAMO_REGIONS = 1
     WHOLE_VEHICLE = 2
@@ -31,8 +26,6 @@ MODE_TO_C11N_TYPE = {HighlightingMode.PAINT_REGIONS: GUI_ITEM_TYPE.PAINT,
  HighlightingMode.CAMO_REGIONS_SKIP_TURRET: GUI_ITEM_TYPE.CAMOUFLAGE}
 
 def chooseMode(itemTypeID, vehicle):
-    """ Choose mode for the highlighter from the given item type and vehicle.
-    """
     if itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
         if vehicle.turret.isGunCarriage:
             return HighlightingMode.CAMO_REGIONS_SKIP_TURRET

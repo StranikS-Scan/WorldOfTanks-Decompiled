@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/binhex.py
-"""Macintosh binhex compression/decompression.
-
-easy interface:
-binhex(inputfilename, outputfilename)
-hexbin(inputfilename, outputfilename)
-"""
 import sys
 import os
 import struct
@@ -94,7 +88,6 @@ except ImportError:
 
 
 class _Hqxcoderengine:
-    """Write data to the coder in 3-byte chunks"""
 
     def __init__(self, ofp):
         self.ofp = ofp
@@ -134,7 +127,6 @@ class _Hqxcoderengine:
 
 
 class _Rlecoderengine:
-    """Write data to the RLE-coder in suitably large chunks"""
 
     def __init__(self, ofp):
         self.ofp = ofp
@@ -234,7 +226,6 @@ class BinHex:
 
 
 def binhex(inp, out):
-    """(infilename, outfilename) - Create binhex-encoded copy of a file"""
     finfo = getfileinfo(inp)
     ofp = BinHex(finfo, out)
     ifp = open(inp, 'rb')
@@ -258,14 +249,12 @@ def binhex(inp, out):
 
 
 class _Hqxdecoderengine:
-    """Read data via the decoder in 4-byte chunks"""
 
     def __init__(self, ifp):
         self.ifp = ifp
         self.eof = 0
 
     def read(self, totalwtd):
-        """Read at least wtd bytes (or until EOF)"""
         decdata = ''
         wtd = totalwtd
         while wtd > 0:
@@ -297,7 +286,6 @@ class _Hqxdecoderengine:
 
 
 class _Rledecoderengine:
-    """Read data via the RLE-coder"""
 
     def __init__(self, ifp):
         self.ifp = ifp
@@ -431,7 +419,6 @@ class HexBin:
 
 
 def hexbin(inp, out):
-    """(infilename, outfilename) - Decode binhexed file"""
     ifp = HexBin(inp)
     finfo = ifp.FInfo
     if not out:

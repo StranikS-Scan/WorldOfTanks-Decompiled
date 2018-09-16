@@ -8,7 +8,7 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 g_instance = None
 
-class EdgeDetectColorController:
+class EdgeDetectColorController(object):
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, dataSec):
@@ -18,11 +18,6 @@ class EdgeDetectColorController:
         self.__readColors(self.__colors['colorBlind'], 'colorBlind', dataSec)
 
     def updateColors(self):
-        """
-        update color based on the current player account.
-        :param place: '' for battle, 'hangar' when in hangar
-        :return:
-        """
         self.__changeColor({'isColorBlind': self.settingsCore.getSetting('isColorBlind')})
 
     def create(self):
@@ -33,8 +28,8 @@ class EdgeDetectColorController:
         self.settingsCore.onSettingsChanged -= self.__changeColor
         g_playerEvents.onAccountShowGUI -= self.__onAccountShowGUI
 
-    def __readColors(self, out, type, section):
-        cName = '%s/' % type
+    def __readColors(self, out, cType, section):
+        cName = '%s/' % cType
         out['self'] = section.readVector4(cName + 'self', Math.Vector4(0.2, 0.2, 0.2, 0.5))
         out['enemy'] = section.readVector4(cName + 'enemy', Math.Vector4(1, 0, 0, 0.5))
         out['friend'] = section.readVector4(cName + 'friend', Math.Vector4(0, 1, 0, 0.5))

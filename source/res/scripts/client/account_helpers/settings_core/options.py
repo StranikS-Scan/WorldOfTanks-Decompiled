@@ -2,15 +2,15 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/options.py
 import base64
 import cPickle
-from operator import itemgetter
+import random
 import sys
 import fractions
 import itertools
-from collections import namedtuple
 import math
 import weakref
+from collections import namedtuple
+from operator import itemgetter
 from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
-import random
 import GUI
 from AvatarInputHandler.cameras import FovExtended
 import BigWorld
@@ -24,7 +24,7 @@ import ArenaType
 import WWISE
 from constants import CONTENT_TYPE
 from gui.Scaleform.genConsts.ACOUSTICS import ACOUSTICS
-from gui.app_loader.decorators import app_getter
+from gui.app_loader import app_getter
 from gui.shared import event_dispatcher
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency
@@ -39,10 +39,9 @@ from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, Strate
 from AvatarInputHandler.control_modes import PostMortemControlMode, SniperControlMode
 from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
-from post_processing import g_postProcessing
 from Vibroeffects import VibroManager
 from messenger import g_settings as messenger_settings
-from account_helpers.AccountSettings import AccountSettings
+from account_helpers.AccountSettings import AccountSettings, SPEAKERS_DEVICE
 from account_helpers.settings_core.settings_constants import SOUND
 from shared_utils import CONST_CONTAINER, forEach
 from gui import GUI_SETTINGS
@@ -57,14 +56,22 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.clans import IClanController
+from skeletons.gui.web import IWebController
 from skeletons.gui.sounds import ISoundsController
 
-class APPLY_METHOD:
+class APPLY_METHOD(object):
     NORMAL = 'normal'
     DELAYED = 'delayed'
     RESTART = 'restart'
     NEXT_BATTLE = 'next_battle'
+
+
+def highestPriorityMethod(methods):
+    if APPLY_METHOD.RESTART in methods:
+        return APPLY_METHOD.RESTART
+    if APPLY_METHOD.DELAYED in methods:
+        return APPLY_METHOD.DELAYED
+    return APPLY_METHOD.NEXT_BATTLE if APPLY_METHOD.NEXT_BATTLE in methods else APPLY_METHOD.NORMAL
 
 
 class ISetting(object):
@@ -187,16 +194,15 @@ class SettingsContainer(ISetting):
                     continue
 
     def __filter(self, settings, f):
-        return filter(lambda item: item in f, settings) if f is not None else settings
+        if f is not None:
+            return [ item for item in settings if item in f ]
+        else:
+            return settings
 
     def getApplyMethod(self, diff=None):
         settings = self.__filter(self.indices.keys(), diff.keys())
         methods = [ m for m in self.__forEach(settings, lambda n, p: p.getApplyMethod(diff[n])) ]
-        if APPLY_METHOD.RESTART in methods:
-            return APPLY_METHOD.RESTART
-        if APPLY_METHOD.DELAYED in methods:
-            return APPLY_METHOD.DELAYED
-        return APPLY_METHOD.NEXT_BATTLE if APPLY_METHOD.NEXT_BATTLE in methods else APPLY_METHOD.NORMAL
+        return highestPriorityMethod(methods)
 
     def getSetting(self, name):
         if name in self.indices:
@@ -294,9 +300,6 @@ class SoundSetting(SettingAbstract):
 
 
 class SoundEnableSetting(SettingAbstract):
-    """
-    Enable/disable sound system in general
-    """
     soundsCtrl = dependency.descriptor(ISoundsController)
 
     def getApplyMethod(self, value):
@@ -566,20 +569,6 @@ class PreferencesSetting(SettingAbstract):
         pass
 
 
-class PostProcessingSetting(StorageDumpSetting):
-
-    def __init__(self, settingName, settingKey, storage, isPreview=False):
-        self._settingKey = settingKey
-        super(PostProcessingSetting, self).__init__(settingName, storage, isPreview)
-
-    def getDefaultValue(self):
-        return g_postProcessing.getSetting(self._settingKey)
-
-    def setSystemValue(self, value):
-        g_postProcessing.setSetting(self._settingKey, value)
-        g_postProcessing.refresh()
-
-
 class PostMortemDelaySetting(StorageDumpSetting):
 
     def getDefaultValue(self):
@@ -713,7 +702,7 @@ class MessengerDateTimeSetting(MessengerSetting):
 
 
 class ClansSetting(MessengerSetting):
-    clanCtrl = dependency.descriptor(IClanController)
+    clanCtrl = dependency.descriptor(IWebController)
 
     def _get(self):
         return super(ClansSetting, self)._get() if self.clanCtrl.isEnabled() else None
@@ -724,11 +713,11 @@ class ClansSetting(MessengerSetting):
 
 class GameplaySetting(StorageAccountSetting):
 
-    def __init__(self, settingName, gameplayName, storage, callable=lambda : True):
+    def __init__(self, settingName, gameplayName, storage, delegate=lambda : True):
         super(GameplaySetting, self).__init__(settingName, storage)
         self.gameplayName = gameplayName
         self.bit = ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName(self.gameplayName))
-        self.__callable = callable
+        self.__callable = delegate
 
     def _get(self):
         if not self.__callable():
@@ -751,17 +740,6 @@ class GameplaySetting(StorageAccountSetting):
         return super(GameplaySetting, self)._get()
 
 
-class GammaSetting(SettingAbstract):
-
-    def _get(self):
-        return BigWorld.getGammaCorrection()
-
-    def _set(self, value):
-        value = max(value, 0.5)
-        value = min(value, 2.0)
-        BigWorld.setGammaCorrection(value)
-
-
 class TripleBufferedSetting(SettingAbstract):
 
     def _get(self):
@@ -778,63 +756,6 @@ class VerticalSyncSetting(SettingAbstract):
 
     def _set(self, value):
         BigWorld.setVideoVSync(value)
-
-
-class CustomAASetting(SettingAbstract):
-
-    def __init__(self, isPreview=False):
-        super(CustomAASetting, self).__init__(isPreview)
-        self.__customAAModes = BigWorld.getSupportedCustomAAModes()
-
-    def __getModeIndex(self, mode):
-        return self.__customAAModes.index(mode) if mode in self.__customAAModes else -1
-
-    def __getModeByIndex(self, modeIndex):
-        return self.__customAAModes[int(modeIndex)] if len(self.__customAAModes) > modeIndex > -1 else None
-
-    def _get(self):
-        return self.__getModeIndex(BigWorld.getCustomAAMode())
-
-    def _getOptions(self):
-        return [ '#settings:customAAMode/mode%s' % i for i in self.__customAAModes ]
-
-    def _set(self, modeIndex):
-        mode = self.__getModeByIndex(modeIndex)
-        if mode is None:
-            LOG_ERROR('There is no gamma mode by given index', modeIndex)
-            return
-        else:
-            BigWorld.setCustomAAMode(mode)
-            return
-
-
-class MultisamplingSetting(SettingAbstract):
-
-    def __init__(self, isPreview=False):
-        super(MultisamplingSetting, self).__init__(isPreview)
-        self.__multisamplingTypes = BigWorld.getSupportedMultisamplingTypes()
-        self.__multisamplingTypes.insert(0, 0)
-
-    def __getMSTypeIndex(self, msType):
-        return self.__multisamplingTypes.index(msType) if msType in self.__multisamplingTypes else -1
-
-    def __getMSTypeByIndex(self, msTypeIndex):
-        return self.__multisamplingTypes[int(msTypeIndex)] if len(self.__multisamplingTypes) > msTypeIndex > -1 else None
-
-    def _get(self):
-        return self.__getMSTypeIndex(BigWorld.getMultisamplingType())
-
-    def _getOptions(self):
-        return [ '#settings:multisamplingType/type%s' % i for i in self.__multisamplingTypes ]
-
-    def _set(self, msTypeIndex):
-        msType = self.__getMSTypeByIndex(msTypeIndex)
-        if msType is None:
-            LOG_ERROR('There is no multisampling type by given index', msTypeIndex)
-            return
-        else:
-            BigWorld.setMultisamplingType(msType)
-            return
 
 
 class DynamicRendererSetting(SettingAbstract):
@@ -894,7 +815,8 @@ class GraphicSetting(SettingAbstract):
                  'advanced': advanced,
                  'supported': supported})
 
-            return sorted(options, key=itemgetter('data'), reverse=True)
+            options = sorted(options, key=itemgetter('data'), reverse=True)
+            return options
         else:
             return
 
@@ -1174,6 +1096,12 @@ class RefreshRateSetting(PreferencesSetting):
 
 
 class VideoModeSettings(PreferencesSetting):
+    WINDOWED = 0
+    FULLSCREEN = 1
+    BORDERLESS = 2
+    OPTIONS = {WINDOWED: 'windowed',
+     FULLSCREEN: 'fullscreen',
+     BORDERLESS: 'borderless'}
 
     def __init__(self, storage):
         super(VideoModeSettings, self).__init__()
@@ -1182,9 +1110,9 @@ class VideoModeSettings(PreferencesSetting):
 
     def _getOptions(self):
         result = []
-        allowScreenModes = ((BigWorld.WindowModeWindowed, 'windowed'), (BigWorld.WindowModeExclusiveFullscreen, 'fullscreen'))
+        allowScreenModes = ((BigWorld.WindowModeWindowed, self.OPTIONS[self.WINDOWED]), (BigWorld.WindowModeExclusiveFullscreen, self.OPTIONS[self.FULLSCREEN]))
         if graphics.getSuitableVideoModes():
-            allowScreenModes += ((BigWorld.WindowModeBorderless, 'borderless'),)
+            allowScreenModes += ((BigWorld.WindowModeBorderless, self.OPTIONS[self.BORDERLESS]),)
         for data, label in allowScreenModes:
             result.append({'data': data,
              'label': '#settings:screenMode/%s' % label})
@@ -1225,7 +1153,6 @@ class VehicleMarkerSetting(StorageAccountSetting):
 
         @classmethod
         def getOptionName(cls, mType, mOption):
-            assert mType in cls.TYPES.ALL() and mOption in cls.PARAMS.ALL()
             return 'marker%s%s' % (mType, mOption)
 
         @classmethod
@@ -1321,13 +1248,13 @@ class AimSetting(StorageAccountSetting):
         for option in self.OPTIONS.ALL():
             if option not in self.VIRTUAL_OPTIONS:
                 alpha = value[option]
-                type = 0
+                optType = 0
                 for k, v in self.VIRTUAL_OPTIONS.items():
                     if v[0] == option:
-                        type = value[k]
+                        optType = value[k]
 
                 result[option] = {'alpha': alpha,
-                 'type': type}
+                 'type': optType}
 
         return result
 
@@ -1360,7 +1287,7 @@ class MinimapVehModelsSetting(StorageDumpSetting):
 
     def _getOptions(self):
         settingsKey = '#settings:game/%s/%s'
-        return [ settingsKey % (self.settingName, type) for type in self.VEHICLE_MODELS_TYPES ]
+        return [ settingsKey % (self.settingName, mType) for mType in self.VEHICLE_MODELS_TYPES ]
 
     def getDefaultValue(self):
         return self.VEHICLE_MODELS_TYPES.index(self.OPTIONS.ALWAYS)
@@ -1395,7 +1322,7 @@ class DoubleCarouselTypeSetting(StorageDumpSetting):
 
     def _getOptions(self):
         settingsKey = '#settings:game/%s/%s'
-        return [ settingsKey % (self.settingName, type) for type in self.DOUBLE_CAROUSEL_TYPES ]
+        return [ settingsKey % (self.settingName, cType) for cType in self.DOUBLE_CAROUSEL_TYPES ]
 
     def getDefaultValue(self):
         return self.DOUBLE_CAROUSEL_TYPES.index(self.OPTIONS.ADAPTIVE)
@@ -1421,17 +1348,12 @@ class BattleLoadingTipSetting(AccountDumpSetting):
         MINIMAP = 'minimap'
         TIPS_TYPES = (TEXT, VISUAL, MINIMAP)
 
-    def getSettingID(self, isVisualOnly=False, isFallout=False):
-        if isVisualOnly:
-            return self.OPTIONS.VISUAL
-        settingID = self.OPTIONS.TIPS_TYPES[self._get()]
-        if isFallout and settingID == BattleLoadingTipSetting.OPTIONS.VISUAL:
-            settingID = BattleLoadingTipSetting.OPTIONS.TEXT
-        return settingID
+    def getSettingID(self, isVisualOnly=False):
+        return self.OPTIONS.VISUAL if isVisualOnly else self.OPTIONS.TIPS_TYPES[self._get()]
 
     def _getOptions(self):
         settingsKey = '#settings:game/%s/%s'
-        return [ settingsKey % (self.key, type) for type in self.OPTIONS.TIPS_TYPES ]
+        return [ settingsKey % (self.key, tType) for tType in self.OPTIONS.TIPS_TYPES ]
 
 
 class ShowMarksOnGunSetting(StorageAccountSetting):
@@ -1589,7 +1511,7 @@ class DynamicFOVSetting(UserPrefsStringSetting):
     def _get(self):
         try:
             return cPickle.loads(base64.b64decode(super(DynamicFOVSetting, self)._get()))
-        except:
+        except Exception:
             LOG_ERROR('Could not load dynamic fov setting')
             return self.DEFAULT
 
@@ -1740,7 +1662,7 @@ class KeyboardSettings(SettingsContainer):
             self.hideGroup('minimap', hide=True)
         if not GUI_SETTINGS.voiceChat:
             self.hideGroup('voicechat', hide=True)
-        settings = [('keysLayout', ReadOnlySetting(lambda : self._getLayout())), ('keysTooltips', ReadOnlySetting(lambda : self.KEYS_TOOLTIPS))]
+        settings = [('keysLayout', ReadOnlySetting(self._getLayout)), ('keysTooltips', ReadOnlySetting(lambda : self.KEYS_TOOLTIPS))]
         for group in self._getLayout(True):
             for setting in group['values']:
                 settings.append((setting['key'], KeyboardSetting(setting['cmd'])))
@@ -1808,35 +1730,13 @@ class KeyboardSettings(SettingsContainer):
 
     @classmethod
     def __mapValues(cls, key, cmd):
-        """
-        There are also description for keys available:
-        'descr' - is a list of {'header': ..., 'label': ...}
-        """
         return {'key': key,
          'cmd': cmd}
-
-
-class FPSPerfomancerSetting(StorageDumpSetting):
-
-    def getDefaultValue(self):
-        return BigWorld.getGraphicsSetting('PS_USE_PERFORMANCER')
-
-    def setSystemValue(self, value):
-        try:
-            BigWorld.setGraphicsSetting('PS_USE_PERFORMANCER', bool(value))
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
 
 
 class _BaseSoundPresetSetting(AccountDumpSetting):
 
     def __init__(self, actionsMap, settingName, key, subKey=None):
-        """
-        :param actionsMap: [tuple]. Each element have to be tuple of two elements: method and arguments for this method
-        :param settingName: [str] setting name
-        :param key: [str] account setting section name
-        :param subKey: [str] account setting subsection name
-        """
         super(_BaseSoundPresetSetting, self).__init__(settingName, key, subKey)
         self.__actionsMap = actionsMap
 
@@ -1873,30 +1773,34 @@ _SPEAKER_PRESET_CONFIG = ((ACOUSTICS.TYPE_ACOUSTIC_20, SPEAKERS_CONFIG.SPEAKER_S
  (ACOUSTICS.TYPE_AUTO, SPEAKERS_CONFIG.AUTO_DETECTION))
 
 def _makeSoundPresetIDsSeq():
-    """Gets all available IDs of preset in service layer
-    in order that they are displayed in settings window.
-    :return: list containing SPEAKERS_CONFIG.*.
-    """
-    return map(lambda item: item[1], _SPEAKER_PRESET_CONFIG)
+    return [ item[1] for item in _SPEAKER_PRESET_CONFIG ]
 
 
 def _makeSoundGuiIDsSeq():
-    """Gets all available IDs of preset in GUI
-    in order that they are displayed in settings window.
-    :return:
-    """
-    return map(lambda item: item[0], _SPEAKER_PRESET_CONFIG)
+    return [ item[0] for item in _SPEAKER_PRESET_CONFIG ]
 
 
 def _makeSoundPresetIDToGuiID():
-    return dict(map(lambda item: (item[1], item[0]), _SPEAKER_PRESET_CONFIG))
+    return dict(((item[1], item[0]) for item in _SPEAKER_PRESET_CONFIG))
 
 
 class SoundDevicePresetSetting(_BaseSoundPresetSetting):
     soundsCtrl = dependency.descriptor(ISoundsController)
 
+    class SYSTEMS(CONST_CONTAINER):
+        SPEAKERS = 0
+        HEADPHONES = 1
+        LAPTOP = 2
+
     def __init__(self, settingName, key, subKey=None, isPreview=False):
-        super(SoundDevicePresetSetting, self).__init__(((self.__setSound, 0), (self.__setSound, 1), (self.__setSound, 2)), settingName, key, subKey=subKey)
+        super(SoundDevicePresetSetting, self).__init__(((self.__setSound, self.SYSTEMS.SPEAKERS), (self.__setSound, self.SYSTEMS.HEADPHONES), (self.__setSound, self.SYSTEMS.LAPTOP)), settingName, key, subKey=subKey)
+
+    def getSystemState(self):
+        selectedID = self.get()
+        speakersCountID = SPEAKERS_CONFIG.SPEAKER_SETUP_2_0
+        if selectedID == self.SYSTEMS.SPEAKERS:
+            speakersCountID = self.soundsCtrl.system.getUserSpeakersPresetID()
+        return (speakersCountID in (SPEAKERS_CONFIG.AUTO_DETECTION, self.soundsCtrl.system.getSystemSpeakersPresetID()), speakersCountID)
 
     def _getOptions(self):
         options = []
@@ -1911,20 +1815,27 @@ class SoundDevicePresetSetting(_BaseSoundPresetSetting):
         else:
             LOG_ERROR('Selected preset is unresolved', selectedID)
             acousticType = ACOUSTICS.TYPE_ACOUSTICS
+        accousticValid = self.soundsCtrl.system.getUserSpeakersPresetID() in (SPEAKERS_CONFIG.AUTO_DETECTION, self.soundsCtrl.system.getSystemSpeakersPresetID())
+        otherValid = self.soundsCtrl.system.getSystemSpeakersPresetID() == SPEAKERS_CONFIG.SPEAKER_SETUP_2_0
 
         def iterator():
-            yield (ACOUSTICS.TYPE_ACOUSTICS, acousticType)
-            yield (ACOUSTICS.TYPE_HEADPHONES,) * 2
-            yield (ACOUSTICS.TYPE_LAPTOP,) * 2
+            yield (ACOUSTICS.TYPE_ACOUSTICS, acousticType, accousticValid)
+            yield (ACOUSTICS.TYPE_HEADPHONES, ACOUSTICS.TYPE_HEADPHONES, otherValid)
+            yield (ACOUSTICS.TYPE_LAPTOP, ACOUSTICS.TYPE_LAPTOP, otherValid)
 
-        for baseID, selectedID in iterator():
+        for baseID, selectedID, isValid in iterator():
             options.append({'id': baseID,
              'label': SETTINGS.sounds_sounddevice(selectedID),
              'image': '../maps/icons/settings/{}.png'.format(baseID),
              'tooltip': SETTINGS.sounds_sounddevice(selectedID),
-             'speakerId': selectedID})
+             'speakerId': selectedID,
+             'showDeviceAlert': not isValid})
 
         return options
+
+    def _set(self, value):
+        super(SoundDevicePresetSetting, self)._set(value)
+        AccountSettings.setFilter(SPEAKERS_DEVICE, 0)
 
     def __setSound(self, value):
         self.soundsCtrl.system.setSoundSystem(value)
@@ -1944,9 +1855,8 @@ class SoundSpeakersPresetSetting(SettingAbstract):
     def isPresetSupportedByIndex(self, index):
         presetIDs = _makeSoundPresetIDsSeq()
         if index < len(presetIDs):
-            if self.soundsCtrl.system.getUserSpeakersPresetID() == SPEAKERS_CONFIG.AUTO_DETECTION:
-                return presetIDs[index] <= self.soundsCtrl.system.getSystemSpeakersPresetID()
-            return True
+            presetID = presetIDs[index]
+            return presetID in (SPEAKERS_CONFIG.AUTO_DETECTION, self.soundsCtrl.system.getSystemSpeakersPresetID())
         return False
 
     def _get(self):
@@ -1963,6 +1873,7 @@ class SoundSpeakersPresetSetting(SettingAbstract):
         presetIDs = _makeSoundPresetIDsSeq()
         if value < len(presetIDs):
             self.soundsCtrl.system.setUserSpeakersPresetID(presetIDs[value])
+            AccountSettings.setFilter(SPEAKERS_DEVICE, 0)
         else:
             LOG_ERROR('Index of selected preset is invalid', value)
 
@@ -1997,9 +1908,6 @@ class SoundQualitySetting(AccountSetting):
 
 
 class BassBoostSetting(AccountSetting):
-    """
-    Enable/disable bass boost WOTD-64517
-    """
     soundsCtrl = dependency.descriptor(ISoundsController)
 
     def __init__(self):
@@ -2081,8 +1989,6 @@ class DetectionAlertSound(AccountSetting):
         return options
 
     def _getExtraData(self):
-        """ Gather information about ability to preview the options.
-        """
         extraData = []
         for sample in self._WWISE_EVENTS:
             if sample == 'sixthSense':
@@ -2105,7 +2011,7 @@ class AltVoicesSetting(StorageDumpSetting):
     DEFAULT_IDX = 0
     PREVIEW_SOUNDS_COUNT = 3
 
-    class SOUND_MODE_TYPE:
+    class SOUND_MODE_TYPE(object):
         UNKNOWN = 0
         REGULAR = 1
         NATIONAL = 2
@@ -2292,10 +2198,37 @@ class ReplaySetting(StorageAccountSetting):
 
     def _getOptions(self):
         settingsKey = '#settings:game/%s/%s'
-        return [ settingsKey % (self.settingName, type) for type in self.REPLAY_TYPES ]
+        return [ settingsKey % (self.settingName, rType) for rType in self.REPLAY_TYPES ]
 
     def setSystemValue(self, value):
         BattleReplay.g_replayCtrl.enableAutoRecordingBattles(value)
+
+
+class HangarCamPeriodSetting(StorageAccountSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        TYPE0 = 'type0'
+        TYPE1 = 'type1'
+        TYPE2 = 'type2'
+        NEVER = 'never'
+        HANGAR_CAM_TYPES = (TYPE0,
+         TYPE1,
+         TYPE2,
+         NEVER)
+
+    def getDefaultValue(self):
+        options = self.OPTIONS
+        return options.HANGAR_CAM_TYPES.index(options.TYPE0)
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.settingName, t) for t in self.OPTIONS.HANGAR_CAM_TYPES ]
+
+
+class HangarCamParallaxEnabledSetting(StorageAccountSetting):
+
+    def getDefaultValue(self):
+        return True
 
 
 class InterfaceScaleSetting(UserPrefsFloatSetting):
@@ -2397,7 +2330,7 @@ class MouseAffectedSetting(RegularSetting):
 
     def __init__(self, settingName, isPreview=False):
         super(MouseAffectedSetting, self).__init__(settingName, isPreview)
-        self._mouseSettings = map(lambda camera: MouseSetting(camera, self.settingName, self.getDefaultValue()), self._getCameras())
+        self._mouseSettings = [ MouseSetting(camera, self.settingName, self.getDefaultValue()) for camera in self._getCameras() ]
 
     def _getCameras(self):
         pass
@@ -2508,9 +2441,41 @@ class DamageLogEventPositionsSetting(GroupSetting):
 
 class BattleEventsSetting(SettingFalseByDefault):
 
-    def __init__(self, settingName, storage, isPreview=False, callable=lambda : True):
-        self.__callable = callable
+    def __init__(self, settingName, storage, isPreview=False, delegate=lambda : True):
+        self.__callable = delegate
         super(BattleEventsSetting, self).__init__(settingName, storage, isPreview)
 
     def _get(self):
         return None if not self.__callable() else super(BattleEventsSetting, self)._get()
+
+
+class BattleBorderMapModeShow(GroupSetting):
+    SHOW_BY_ALT_PRESS = 0
+    SHOW_ALWAYS = 1
+    HIDE = 2
+    ALWAYS_HIDE = 3
+    OPTIONS = {SHOW_BY_ALT_PRESS: 'alt',
+     SHOW_ALWAYS: 'always',
+     HIDE: 'hide',
+     ALWAYS_HIDE: 'alwaysHide'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(BattleBorderMapModeShow, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/borderMap/showMode/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        return self.SHOW_BY_ALT_PRESS
+
+
+class BattleBorderMapType(GroupSetting):
+    TYPE_WALL = 0
+    TYPE_DOTTED = 1
+    TYPE_HIDE = 2
+    OPTIONS = {TYPE_WALL: 'wall',
+     TYPE_DOTTED: 'dotted',
+     TYPE_HIDE: 'hide'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(BattleBorderMapType, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/borderMap/typeBorder/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        return self.TYPE_WALL

@@ -41,18 +41,12 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         self.onSelected(CustomizationOptions.BUY, self._intCD)
 
     def sellItem(self):
-        """ Sells item.
-        """
         self.onSelected(CustomizationOptions.SELL, self._intCD)
 
     def removeItemFromTank(self):
-        """ Removes the item from the currently selected tank.
-        """
         self.onSelected(CustomizationOptions.REMOVE_FROM_TANK, self._intCD)
 
     def _generateOptions(self, ctx=None):
-        """ Generate a list of options for  the context menu.
-        """
         item = self.itemsCache.items.getItemByCD(self._intCD)
         buyPriceVO = getItemPricesVO(item.getBuyPrice())
         sellPriceVO = getItemPricesVO(item.getSellPrice())
@@ -65,7 +59,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
                 removeFromTankEnabled = True
                 break
 
-        availableForPurchase = not item.isHidden and item.getBuyPrice() != ITEM_PRICE_EMPTY
+        availableForPurchase = not item.isHidden and not item.getBuyPrice() == ITEM_PRICE_EMPTY
         return [self._makeItem(CustomizationOptions.BUY, MENU.cst_item_ctx_menu(CustomizationOptions.BUY), {'data': {'price': first(buyPriceVO)} if availableForPurchase else None,
           'enabled': availableForPurchase}, None, 'CurrencyContextMenuItem'),
          self._makeSeparator(),

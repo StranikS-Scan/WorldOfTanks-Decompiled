@@ -1,16 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/shared.py
-"""
-Module contains components that are included in different blocks.
-"""
-from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, MARK_ON_GUN_RECORD, MARK_OF_MASTERY_RECORD
 from gui.battle_results import stored_sorting
 from gui.battle_results.components import base
 from gui.shared.gui_items.dossier.achievements import MarkOnGunAchievement
-_FALLOUT_SORTING_CRITERIA = 'victoryScore'
-_FALLOUT_SORTING_DIRECTION = 'descending'
 
 class TrueFlag(base.StatsItem):
 
@@ -98,15 +92,6 @@ class SortieSortingBlock(SortingBlock):
         super(SortieSortingBlock, self).__init__(stored_sorting.STATS_SORTIE_SORTING, meta, field, *path)
 
 
-class FalloutSortingBlock(SortingBlock):
-    __slots__ = ('criteria', 'direction')
-
-    def __init__(self, meta=None, field='', *path):
-        super(FalloutSortingBlock, self).__init__('', meta, field, *path)
-        self.criteria = _FALLOUT_SORTING_CRITERIA
-        self.direction = _FALLOUT_SORTING_DIRECTION
-
-
 class AchievementIcon(base.StatsBlock):
     __slots__ = ('big', 'small')
 
@@ -172,11 +157,9 @@ class BiDiStatsBlock(base.StatsBlock):
     @property
     def left(self):
         component = self.getComponent(0)
-        assert component is not None, 'Block is not configured, component must be added to index 0.'
         return component
 
     @property
     def right(self):
         component = self.getComponent(1)
-        assert component is not None, 'Block is not configured, component must be added to index 1.'
         return component

@@ -1,19 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mailcap.py
-"""Mailcap file handling.  See RFC 1524."""
 import os
 __all__ = ['getcaps', 'findmatch']
 
 def getcaps():
-    """Return a dictionary containing the mailcap database.
-    
-    The dictionary maps a MIME type (in all lowercase, e.g. 'text/plain')
-    to a list of dictionaries corresponding to mailcap entries.  The list
-    collects all the entries for that MIME type from all available mailcap
-    files.  Each dictionary contains key-value pairs for that MIME type,
-    where the viewing command is stored with the key "view".
-    
-    """
     caps = {}
     for mailcap in listmailcapfiles():
         try:
@@ -32,7 +22,6 @@ def getcaps():
 
 
 def listmailcapfiles():
-    """Return a list of all mailcap files found on the system."""
     if 'MAILCAPS' in os.environ:
         str = os.environ['MAILCAPS']
         mailcaps = str.split(':')
@@ -49,14 +38,6 @@ def listmailcapfiles():
 
 
 def readmailcapfile(fp):
-    """Read a mailcap file and return a dictionary keyed by MIME type.
-    
-    Each MIME type is mapped to an entry consisting of a list of
-    dictionaries; the list will contain more than one such dictionary
-    if a given MIME type appears more than once in the mailcap file.
-    Each dictionary contains key-value pairs for that MIME type, where
-    the viewing command is stored with the key "view".
-    """
     caps = {}
     while 1:
         line = fp.readline()
@@ -87,11 +68,6 @@ def readmailcapfile(fp):
 
 
 def parseline(line):
-    """Parse one entry in a mailcap file and return a dictionary.
-    
-    The viewing command is stored as the value with the key "view",
-    and the rest of the fields produce key-value pairs in the dict.
-    """
     fields = []
     i, n = 0, len(line)
     while i < n:
@@ -120,7 +96,6 @@ def parseline(line):
 
 
 def parsefield(line, i, n):
-    """Separate one key-value pair in a mailcap entry."""
     start = i
     while i < n:
         c = line[i]
@@ -134,14 +109,6 @@ def parsefield(line, i, n):
 
 
 def findmatch(caps, MIMEtype, key='view', filename='/dev/null', plist=[]):
-    """Find a match for a mailcap entry.
-    
-    Return a tuple containing the command line, and the mailcap entry
-    used; (None, None) if no match is found.  This may invoke the
-    'test' command of several matching entries before deciding which
-    entry to use.
-    
-    """
     entries = lookup(caps, MIMEtype, key)
     for e in entries:
         if 'test' in e:

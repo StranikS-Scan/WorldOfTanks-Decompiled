@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/account_helpers/BattleResultsCache.py
 import os
-import BigWorld
 import cPickle
-import AccountCommands
 import zlib
 import base64
 from functools import partial
-from battle_results_shared import *
+import BigWorld
+import AccountCommands
+from battle_results_shared import AVATAR_FULL_RESULTS, VEH_PUBLIC_RESULTS, AVATAR_PUBLIC_RESULTS, VEH_FULL_RESULTS, COMMON_RESULTS, VehicleInteractionDetails, PLAYER_INFO
 from debug_utils import LOG_CURRENT_EXCEPTION
 import constants
 BATTLE_RESULTS_VERSION = 1
@@ -84,7 +84,7 @@ class BattleResultsCache(object):
                 callback(AccountCommands.RES_STREAM, convertToFullForm(battleResults))
             if isSelfResults:
                 self.__account.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_BATTLE_RESULTS_RECEIVED, battleResults[0], 0, 0)
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
             if callback is not None:
                 callback(AccountCommands.RES_FAILURE, None)
@@ -102,7 +102,7 @@ def save(accountName, battleResults):
         fileName = os.path.join(folderName, '%s.dat' % arenaUniqueID)
         fileHandler = open(fileName, 'wb')
         cPickle.dump((BATTLE_RESULTS_VERSION, battleResults), fileHandler, -1)
-    except:
+    except Exception:
         LOG_CURRENT_EXCEPTION()
 
     if fileHandler is not None:
@@ -118,7 +118,7 @@ def load(uniqueFolderName, arenaUniqueID):
             return
         fileHandler = open(fileName, 'rb')
         version, battleResults = cPickle.load(fileHandler)
-    except:
+    except Exception:
         LOG_CURRENT_EXCEPTION()
 
     if fileHandler is not None:
@@ -141,7 +141,7 @@ def clean():
             for name in dirs:
                 os.rmdir(os.path.join(root, name))
 
-    except:
+    except Exception:
         LOG_CURRENT_EXCEPTION()
 
 

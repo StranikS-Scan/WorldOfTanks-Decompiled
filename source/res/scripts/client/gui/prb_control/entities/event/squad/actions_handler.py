@@ -6,9 +6,6 @@ from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 
 class EventBattleSquadActionsHandler(SquadActionsHandler):
-    """
-    Event battle squad actions handler
-    """
     eventsCache = dependency.descriptor(IEventsCache)
 
     def _loadWindow(self, ctx):

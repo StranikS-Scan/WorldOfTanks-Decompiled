@@ -1,16 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/tabnanny.py
-"""The Tab Nanny despises ambiguous indentation.  She knows no mercy.
-
-tabnanny -- Detection of ambiguous indentation
-
-For the time being this module is intended to be called as a script.
-However it is possible to import it into an IDE and use the function
-check() described below.
-
-Warning: The API provided by this module is likely to change in future
-releases; such changes may not be backward compatible.
-"""
 __version__ = '6'
 import os
 import sys
@@ -54,10 +43,6 @@ def main():
 
 
 class NannyNag(Exception):
-    """
-    Raised by tokeneater() if detecting an ambiguous indent.
-    Captured and handled in check().
-    """
 
     def __init__(self, lineno, msg, line):
         self.lineno, self.msg, self.line = lineno, msg, line
@@ -73,14 +58,6 @@ class NannyNag(Exception):
 
 
 def check(file):
-    """check(file_or_dir)
-    
-    If file_or_dir is a directory and not a symbolic link, then recursively
-    descend the directory tree named by file_or_dir, checking all .py files
-    along the way. If file_or_dir is an ordinary Python source file, it is
-    checked for whitespace related problems. The diagnostic messages are
-    written to standard output using the print statement.
-    """
     if os.path.isdir(file) and not os.path.islink(file):
         if verbose:
             print '%r: listing directory' % (file,)

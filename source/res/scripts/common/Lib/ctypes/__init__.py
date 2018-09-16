@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/__init__.py
-"""create and manipulate C data types in Python"""
 import os as _os, sys as _sys
 __version__ = '1.1.0'
 from _ctypes import Union, Structure, Array
@@ -21,10 +20,6 @@ if _os.name == 'posix' and _sys.platform == 'darwin':
 from _ctypes import FUNCFLAG_CDECL as _FUNCFLAG_CDECL, FUNCFLAG_PYTHONAPI as _FUNCFLAG_PYTHONAPI, FUNCFLAG_USE_ERRNO as _FUNCFLAG_USE_ERRNO, FUNCFLAG_USE_LASTERROR as _FUNCFLAG_USE_LASTERROR
 
 def create_string_buffer(init, size=None):
-    """create_string_buffer(aString) -> character array
-    create_string_buffer(anInteger) -> character array
-    create_string_buffer(aString, anInteger) -> character array
-    """
     if isinstance(init, (str, unicode)):
         if size is None:
             size = len(init) + 1
@@ -48,21 +43,6 @@ def c_buffer(init, size=None):
 _c_functype_cache = {}
 
 def CFUNCTYPE(restype, *argtypes, **kw):
-    """CFUNCTYPE(restype, *argtypes,
-                 use_errno=False, use_last_error=False) -> function prototype.
-    
-    restype: the result type
-    argtypes: a sequence specifying the argument types
-    
-    The function prototype can be called in different ways to create a
-    callable object:
-    
-    prototype(integer address) -> foreign function
-    prototype(callable) -> create and return a C callable function from callable
-    prototype(integer index, method name[, paramflags]) -> foreign function calling a COM method
-    prototype((ordinal number, dll object)[, paramflags]) -> foreign function exported by ordinal
-    prototype((function name, dll object)[, paramflags]) -> foreign function exported by name
-    """
     flags = _FUNCFLAG_CDECL
     if kw.pop('use_errno', False):
         flags |= _FUNCFLAG_USE_ERRNO
@@ -296,10 +276,6 @@ else:
 
 
     def create_unicode_buffer(init, size=None):
-        """create_unicode_buffer(aString) -> character array
-        create_unicode_buffer(anInteger) -> character array
-        create_unicode_buffer(aString, anInteger) -> character array
-        """
         if isinstance(init, (str, unicode)):
             if size is None:
                 size = len(init) + 1
@@ -332,19 +308,6 @@ def ARRAY(typ, len):
 
 
 class CDLL(object):
-    """An instance of this class represents a loaded dll/shared
-    library, exporting functions using the standard C calling
-    convention (named 'cdecl' on Windows).
-    
-    The exported functions can be accessed as attributes, or by
-    indexing with the function name.  Examples:
-    
-    <obj>.qsort -> callable object
-    <obj>['qsort'] -> callable object
-    
-    Calling the functions releases the Python GIL during the call and
-    reacquires it afterwards.
-    """
     _func_flags_ = _FUNCFLAG_CDECL
     _func_restype_ = c_int
 
@@ -388,19 +351,12 @@ class CDLL(object):
 
 
 class PyDLL(CDLL):
-    """This class represents the Python library itself.  It allows to
-    access Python API functions.  The GIL is not released, and
-    Python exceptions are handled correctly.
-    """
     _func_flags_ = _FUNCFLAG_CDECL | _FUNCFLAG_PYTHONAPI
 
 
 if _os.name in ('nt', 'ce'):
 
     class WinDLL(CDLL):
-        """This class represents a dll exporting functions using the
-        Windows stdcall calling convention.
-        """
         _func_flags_ = _FUNCFLAG_STDCALL
 
 
@@ -412,11 +368,6 @@ if _os.name in ('nt', 'ce'):
 
 
     class OleDLL(CDLL):
-        """This class represents a dll exporting functions using the
-        Windows stdcall calling convention, and returning HRESULT.
-        HRESULT error values are automatically raised as WindowsError
-        exceptions.
-        """
         _func_flags_ = _FUNCFLAG_STDCALL
         _func_restype_ = HRESULT
 
@@ -497,9 +448,6 @@ def cast(obj, typ):
 _string_at = PYFUNCTYPE(py_object, c_void_p, c_int)(_string_at_addr)
 
 def string_at(ptr, size=-1):
-    """string_at(addr[, size]) -> string
-    
-    Return the string at addr."""
     return _string_at(ptr, size)
 
 
@@ -511,9 +459,6 @@ else:
     _wstring_at = PYFUNCTYPE(py_object, c_void_p, c_int)(_wstring_at_addr)
 
     def wstring_at(ptr, size=-1):
-        """wstring_at(addr[, size]) -> string
-        
-        Return the string at addr."""
         return _wstring_at(ptr, size)
 
 

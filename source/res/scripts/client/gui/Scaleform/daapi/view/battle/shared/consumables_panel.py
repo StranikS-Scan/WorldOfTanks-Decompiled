@@ -5,7 +5,6 @@ from functools import partial
 from types import NoneType
 import BigWorld
 import CommandMapping
-import SoundGroups
 from constants import EQUIPMENT_STAGES
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
@@ -16,7 +15,7 @@ from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM, GUN_RELOADING_VALUE_TYPE
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
-from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentSound, IgnoreEntitySelection
+from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
@@ -33,19 +32,19 @@ PANEL_MAX_LENGTH = 12
 AMMO_START_IDX = 0
 AMMO_END_IDX = 2
 AMMO_RANGE = xrange(AMMO_START_IDX, AMMO_END_IDX + 1)
-AMMO_FULL_MASK = sum([ 1 << idx for idx in AMMO_RANGE ])
+AMMO_FULL_MASK = sum([ 1 << _idx for _idx in AMMO_RANGE ])
 EQUIPMENT_START_IDX = 3
 EQUIPMENT_END_IDX = 5
 EQUIPMENT_RANGE = xrange(EQUIPMENT_START_IDX, EQUIPMENT_END_IDX + 1)
-EQUIPMENT_FULL_MASK = sum([ 1 << idx for idx in EQUIPMENT_RANGE ])
+EQUIPMENT_FULL_MASK = sum([ 1 << _idx for _idx in EQUIPMENT_RANGE ])
 ORDERS_START_IDX = 6
 ORDERS_END_IDX = 8
 ORDERS_RANGE = xrange(ORDERS_START_IDX, ORDERS_END_IDX + 1)
-ORDERS_FULL_MASK = sum([ 1 << idx for idx in ORDERS_RANGE ])
+ORDERS_FULL_MASK = sum([ 1 << _idx for _idx in ORDERS_RANGE ])
 OPT_DEVICE_START_IDX = 9
 OPT_DEVICE_END_IDX = 11
 OPT_DEVICE_RANGE = xrange(OPT_DEVICE_START_IDX, OPT_DEVICE_END_IDX + 1)
-OPT_DEVICE_FULL_MASK = sum([ 1 << idx for idx in OPT_DEVICE_RANGE ])
+OPT_DEVICE_FULL_MASK = sum([ 1 << _idx for _idx in OPT_DEVICE_RANGE ])
 EQUIPMENT_ICON_PATH = '../maps/icons/artefact/%s.png'
 EMPTY_EQUIPMENTS_SLICE = [0] * (EQUIPMENT_END_IDX - EQUIPMENT_START_IDX + 1)
 EMPTY_ORDERS_SLICE = [0] * (ORDERS_START_IDX - ORDERS_END_IDX + 1)
@@ -76,7 +75,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
 
     def onPopUpClosed(self):
         keys = {}
-        for idx, bwKey, _, handler in self.__getKeysGenerator():
+        for _, bwKey, _, handler in self.__getKeysGenerator():
             if handler:
                 keys[bwKey] = handler
 
@@ -181,12 +180,10 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             idx = start
         else:
             idx = int(math.log(bits, 2)) + 1
-        assert -1 < idx < PANEL_MAX_LENGTH - 1
         self.__mask |= 1 << idx
         return idx
 
     def __genKey(self, idx):
-        assert -1 < idx < PANEL_MAX_LENGTH - 1
         cmdMappingKey = COMMAND_AMMO_CHOICE_MASK.format(idx + 1 if idx < 9 else 0)
         bwKey = CommandMapping.g_instance.get(cmdMappingKey)
         sfKey = 0
@@ -353,13 +350,13 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             index = self.__cds.index(currShellCD)
             valueType = state.getValueType()
             if valueType == GUN_RELOADING_VALUE_TYPE.TIME:
-                self.as_setCoolDownTimeS(index, state.getActualValue(), state.getBaseValue(), state.getTimePassed(), state.isReloading())
+                self.as_setCoolDownTimeS(index, state.getActualValue(), state.getBaseValue(), state.getTimePassed(), not state.isReloadingFinished())
             elif valueType == GUN_RELOADING_VALUE_TYPE.PERCENT:
                 self.as_setCoolDownPosAsPercentS(index, state.getActualValue())
         else:
             LOG_ERROR('Ammo is not found in panel', currShellCD, self.__cds)
 
-    def __onGunSettingsSet(self, gunSettings):
+    def __onGunSettingsSet(self, _):
         self.__reset()
 
     def __onEquipmentAdded(self, intCD, item):

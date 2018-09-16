@@ -16,7 +16,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.vehicle import VehicleSeller
 from gui.shared.gui_items.vehicle_modules import Shell
 from gui.shared.items_cache import CACHE_SYNC_REASON
-from gui.shared.money import Money, Currency, MONEY_UNDEFINED
+from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.formatters import packItemActionTooltipData
@@ -32,7 +32,6 @@ class VehicleSellDialog(VehicleSellDialogMeta):
     restore = dependency.descriptor(IRestoreController)
 
     def __init__(self, ctx=None):
-        """ Ctor """
         super(VehicleSellDialog, self).__init__()
         self.vehInvID = ctx.get('vehInvID', {})
         self.controlNumber = None
@@ -45,10 +44,6 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         return dict(AccountSettings.getSettings('vehicleSellDialog'))
 
     def setDialogSettings(self, isOpened):
-        """
-        Saving given dialog settings. Called from flash.
-        @param isOpened: <bool> is dialog opened by default
-        """
         settings = self.getDialogSettings()
         settings['isOpened'] = isOpened
         AccountSettings.setSettings('vehicleSellDialog', settings)
@@ -258,16 +253,6 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     def sell(self, vehicleCD, shells, eqs, optDevs, inventory, isDismissCrew):
-        """
-        Make server request to sell given @vehicle. Called from flash.
-        
-        @param vehicle: <dict> vehicle packed data to sell
-        @param shells: <list> list of shells items to sell
-        @param eqs: <list> list of equipment items to sell
-        @param optDevs: <list> list of optional devices to sell
-        @param inventory: <list> list of inventory items to sell
-        @param isDismissCrew: <bool> is dismiss crew
-        """
 
         def getItem(data):
             return self.itemsCache.items.getItemByCD(int(data['intCD']))

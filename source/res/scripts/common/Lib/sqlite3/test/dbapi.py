@@ -65,9 +65,6 @@ class ConnectionTests(unittest.TestCase):
         self.cx.commit()
 
     def CheckCommitAfterNoChanges(self):
-        """
-        A commit should also work when no changes were made to the database.
-        """
         self.cx.commit()
         self.cx.commit()
 
@@ -75,9 +72,6 @@ class ConnectionTests(unittest.TestCase):
         self.cx.rollback()
 
     def CheckRollbackAfterNoChanges(self):
-        """
-        A rollback should also work when no changes were made to the database.
-        """
         self.cx.rollback()
         self.cx.rollback()
 
@@ -207,7 +201,7 @@ class CursorTests(unittest.TestCase):
                 pass
 
             def __getitem__(self, x):
-                assert x == 0
+                pass
 
         self.cu.execute("insert into test(name) values ('foo')")
         self.cu.execute('select name from test where name=?', L())
@@ -269,11 +263,6 @@ class CursorTests(unittest.TestCase):
         self.assertEqual(self.cu.rowcount, 2)
 
     def CheckRowcountSelect(self):
-        """
-        pysqlite does not know the rowcount of SELECT statements, because we
-        don't fetch all rows after executing the select statement. The rowcount
-        has thus to be -1.
-        """
         self.cu.execute('select 5 union select 6')
         self.assertEqual(self.cu.rowcount, -1)
 
@@ -388,7 +377,6 @@ class CursorTests(unittest.TestCase):
         self.assertEqual(res, [])
 
     def CheckFetchmanyKwArg(self):
-        """Checks if fetchmany works with keyword arguments"""
         self.cu.execute('select name from test')
         res = self.cu.fetchmany(size=100)
         self.assertEqual(len(res), 1)

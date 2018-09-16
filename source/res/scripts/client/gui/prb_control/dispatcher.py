@@ -30,27 +30,17 @@ from gui.shared import actions
 from gui.shared.utils.listeners_collection import ListenersCollection
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController, IRentalsController
-from skeletons.gui.game_control import IIGRController, IFalloutController
+from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
 class _PreBattleDispatcher(ListenersCollection):
-    """
-    Dispatcher is a class that handles all actions from player related to
-    prebattles: select, join, create, etc. Also dispatcher itself is a listeners
-    collection that is used for global listening of prebattle events.
-    """
     gameSession = dependency.descriptor(IGameSessionController)
     rentals = dependency.descriptor(IRentalsController)
     igrCtrl = dependency.descriptor(IIGRController)
-    falloutCtrl = dependency.descriptor(IFalloutController)
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
-        """
-        In init we're setting default request context, factories composite
-        default entity and supported listeners class.
-        """
         super(_PreBattleDispatcher, self).__init__()
         self.__requestCtx = PrbCtrlRequestCtx()
         self.__factories = ControlFactoryComposite()
@@ -60,15 +50,9 @@ class _PreBattleDispatcher(ListenersCollection):
         self._setListenerClass(IGlobalListener)
 
     def __del__(self):
-        """
-        Just a mark for logs that shows us when dispatcher was deleted.
-        """
         LOG_DEBUG('_PreBattleDispatcher deleted')
 
     def start(self):
-        """
-        Start is called when dispatcher should start its job and process events.
-        """
         if self.__isStarted:
             return
         self.__isStarted = True
@@ -82,9 +66,6 @@ class _PreBattleDispatcher(ListenersCollection):
             g_eventDispatcher.addSpecBattlesToCarousel()
 
     def stop(self):
-        """
-        Is called when its time to stop dispatchers work.
-        """
         if not self.__isStarted:
             return
         self.__isStarted = False
@@ -94,41 +75,18 @@ class _PreBattleDispatcher(ListenersCollection):
         g_eventDispatcher.fini()
 
     def getEntity(self):
-        """
-        Getter for current entity.
-        Returns:
-            current prebattle entity
-        """
         return self.__entity
 
     def getControlFactories(self):
-        """
-        Getter for factories composite.
-        Returns:
-            control factories
-        """
         return self.__factories
 
     def getFunctionalState(self):
-        """
-        Gets current functional state.
-        Returns:
-            current functional state
-        """
         factory = self.__factories.get(self.__entity.getCtrlType())
         return factory.createStateEntity(self.__entity) if factory is not None else FunctionalState()
 
     @async
     @process
     def create(self, ctx, callback=None):
-        """
-        Asynchronous method for prebattle creation. Using given context its
-        creates entry point via factories and uses it to create new prebattle.
-        Current entity will be destroyed.
-        Args:
-            ctx: creation context
-            callback: request callback
-        """
         if ctx.getRequestType() != _RQ_TYPE.CREATE:
             LOG_ERROR('Invalid context to create prebattle/unit', ctx)
             if callback is not None:
@@ -164,14 +122,6 @@ class _PreBattleDispatcher(ListenersCollection):
     @async
     @process
     def join(self, ctx, callback=None):
-        """
-        Asynchronous method for prebattle joining. Using given context its
-        creates entry point via factories and uses it to join another prebattle.
-        Current entity will be destroyed.
-        Args:
-            ctx: join context
-            callback: request callback
-        """
         if ctx.getRequestType() != _RQ_TYPE.JOIN:
             LOG_ERROR('Invalid context to join prebattle/unit', ctx)
             if callback is not None:
@@ -207,13 +157,6 @@ class _PreBattleDispatcher(ListenersCollection):
     @async
     @process
     def leave(self, ctx, callback=None):
-        """
-        Asynchronous method for prebattle leaving. Using given context its
-        leaves current entity.
-        Args:
-            ctx: leave context
-            callback: request callback
-        """
         if ctx.getRequestType() != _RQ_TYPE.LEAVE:
             LOG_ERROR('Invalid context to leave prebattle/unit', ctx)
             if callback is not None:
@@ -252,13 +195,6 @@ class _PreBattleDispatcher(ListenersCollection):
     @async
     @process
     def unlock(self, unlockCtx, callback=None):
-        """
-        Asynchronous method to leave from prebattle if player is in formation
-        and shows confirmation dialog.
-        Args:
-            unlockCtx: unlock context
-            callback: request callback
-        """
         if isinstance(self.__entity, NotSupportedEntity):
             if callback is not None:
                 callback(True)
@@ -281,13 +217,6 @@ class _PreBattleDispatcher(ListenersCollection):
     @async
     @process
     def select(self, entry, callback=None):
-        """
-        Asynchronous method to select prebattle mode and leave current mode if given entry
-        is not just visual.
-        Args:
-            entry: newly selected entry point
-            callback: request callback
-        """
         ctx = entry.makeDefCtx()
         ctx.addFlags(entry.getModeFlags() & FUNCTIONAL_FLAG.LOAD_PAGE | FUNCTIONAL_FLAG.SWITCH)
         if not self.__validateJoinOp(ctx):
@@ -311,31 +240,13 @@ class _PreBattleDispatcher(ListenersCollection):
 
     @async
     def sendPrbRequest(self, ctx, callback=None):
-        """
-        Asynchronous method for send request to prebattle.
-        Args:
-            ctx: request context
-            callback: request callback
-        """
         self.__entity.request(ctx, callback=callback)
 
     def getPlayerInfo(self):
-        """
-        Gets information of player (is creator, is ready, etc.) in current active entity.
-        Returns:
-            current player info
-        """
         factory = self.__factories.get(self.__entity.getCtrlType())
         return factory.createPlayerInfo(self.__entity) if factory is not None else PlayerDecorator()
 
     def doAction(self, action=None):
-        """
-        Processes action that comes from GUI by current entity.
-        Args:
-            action: given player's action
-        Returns:
-            was this action successful
-        """
         if not g_currentVehicle.isPresent():
             SystemMessages.pushMessage(messages.getInvalidVehicleMessage(PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT), type=SystemMessages.SM_TYPE.Error)
             return False
@@ -345,12 +256,6 @@ class _PreBattleDispatcher(ListenersCollection):
     @async
     @process
     def doSelectAction(self, action, callback=None):
-        """
-        Processes action that comes from GUI to change to another mode.
-        Args:
-            action: given player's select action
-            callback: request callback
-        """
         selectResult = self.__entity.doSelectAction(action)
         if selectResult.isProcessed:
             result = True
@@ -373,12 +278,6 @@ class _PreBattleDispatcher(ListenersCollection):
     @async
     @process
     def doLeaveAction(self, action, callback=None):
-        """
-        Processes action that comes from GUI to leave current mode.
-        Args:
-            action: given player's leave action
-            callback: callback function or None
-        """
         factory = self.__factories.get(self.__entity.getCtrlType())
         if factory is None:
             LOG_ERROR('Factory is not found', self.__entity)
@@ -403,59 +302,26 @@ class _PreBattleDispatcher(ListenersCollection):
             return
 
     def getGUIPermissions(self):
-        """
-        Gets available action in GUI for current player.
-        Returns:
-            current GUI permissions
-        """
         return self.__entity.getPermissions()
 
     def isRequestInProcess(self):
-        """
-        Is current request in process.
-        Returns:
-            is request in process now
-        """
         return self.__requestCtx.isProcessing()
 
     def restorePrevious(self):
-        """
-        Trying to set current entity to previous.
-        Returns:
-            initialization result as flags
-        """
         return self.__setEntity(CreatePrbEntityCtx(self.__prevEntity.getCtrlType(), self.__prevEntity.getEntityType(), flags=self.__prevEntity.getFunctionalFlags()))
 
     def pe_onArenaCreated(self):
-        """
-        Player event listener for arena creation. Updates UI.
-        """
         if self.__entity.hasLockedState():
             g_eventDispatcher.updateUI()
 
     def pe_onArenaJoinFailure(self, errorCode, errorStr):
-        """
-        Player event listener for arena join failure. Pushes system message.
-        Args:
-            errorCode: join error code
-            errorStr: join error message
-        """
         SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
 
     def pe_onKickedFromArena(self, reasonCode):
-        """
-        Player event listener for arena kick. Resets state and pushes system message.
-        Args:
-            reasonCode: kick reason code
-        """
         self.__entity.resetPlayerState()
         SystemMessages.pushMessage(messages.getKickReasonMessage(reasonCode), type=SystemMessages.SM_TYPE.Error)
 
     def pe_onPrebattleAutoInvitesChanged(self):
-        """
-        Player event listener for autoinvites state. Controls chat tab visibility of spec battles
-        and updates UI.
-        """
         if GUI_SETTINGS.specPrebatlesVisible:
             isHidden = prb_getters.areSpecBattlesHidden()
             if isHidden:
@@ -465,17 +331,10 @@ class _PreBattleDispatcher(ListenersCollection):
         g_eventDispatcher.updateUI()
 
     def pe_onPrebattleInviteError(self, inviteID, errorCode, errorStr):
-        """
-        Player event listener for prebattle invitation failed. Resets current entity to default.
-        """
         self.__unsetEntity()
         self.__setDefault()
 
     def pe_onPrebattleJoined(self):
-        """
-        Player event listener for prebattle join. Sets entity to proper legacy or
-        resets to default.
-        """
         if prb_getters.getClientPrebattle() is not None:
             self.__setLegacy(self.__requestCtx.getFlags())
         else:
@@ -485,21 +344,11 @@ class _PreBattleDispatcher(ListenersCollection):
         return
 
     def pe_onPrebattleJoinFailure(self, errorCode):
-        """
-        Player event listener for prebattle join filure. Pushes system message and
-        resets current entity to default.
-        Args:
-            errorCode: join error code
-        """
         SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
         self.__setDefault()
         g_eventDispatcher.loadHangar()
 
     def pe_onPrebattleLeft(self):
-        """
-        Player event listener for prebattle left. Tries to keep current mode or
-        just unsets current entity.
-        """
         flags = self.__requestCtx.getFlags()
         if flags & FUNCTIONAL_FLAG.SWITCH == 0:
             prbType = 0
@@ -511,52 +360,25 @@ class _PreBattleDispatcher(ListenersCollection):
             self.__unsetEntity(self.__requestCtx)
 
     def pe_onKickedFromPrebattle(self, kickReason):
-        """
-        Player event listener for prebattle kick. Resets current entity to default.
-        """
         self.__unsetEntity()
         self.__setDefault()
 
     def ctrl_onLegacyIntroModeJoined(self, prbType):
-        """
-        Prebattle control events listener for legacy intro join. Sets new legacy entity.
-        Args:
-            prbType: joined prebattle type
-        """
         self.__setLegacy(flags=self.__requestCtx.getFlags(), prbType=prbType)
 
     def ctrl_onLegacyIntroModeLeft(self):
-        """
-        Prebattle control events listener for legacy intro leave. Unsets current legacy entity
-        and inits default state if it is not switch.
-        """
         flags = self.__requestCtx.getFlags()
         self.__unsetEntity(self.__requestCtx)
         if flags & FUNCTIONAL_FLAG.SWITCH == 0:
             self.__setDefault()
 
     def ctrl_onLegacyInited(self):
-        """
-        Prebattle control events listener for legacy init. Sets new legacy entity.
-        """
         self.__setLegacy(flags=self.__requestCtx.getFlags())
 
     def ctrl_onUnitIntroModeJoined(self, prbType, flags):
-        """
-        Prebattle control events listener for unit intro mode join. Sets new unit entity.
-        Args:
-            prbType: intro prebattle type
-            flags: functional flags
-        """
         self.__setUnit(flags=flags, prbType=prbType)
 
     def ctrl_onUnitBrowserModeLeft(self, prbType):
-        """
-        Prebattle control events listener for unit browser mode leave. Unsets current unit entity
-        and tries to init intro mode if it is not switch.
-        Args:
-            prbType: intro prebattle type
-        """
         flags = self.__requestCtx.getFlags()
         if flags & FUNCTIONAL_FLAG.SWITCH == 0:
             prbType = 0
@@ -571,23 +393,12 @@ class _PreBattleDispatcher(ListenersCollection):
             self.__unsetEntity(self.__requestCtx)
 
     def ctrl_onUnitIntroModeLeft(self):
-        """
-        Prebattle control events listener for unit intro leave. Unsets current unit entity
-        and inits default state if it is not switch.
-        """
         flags = self.__requestCtx.getFlags()
         self.__unsetEntity(self.__requestCtx)
         if flags & FUNCTIONAL_FLAG.SWITCH == 0:
             self.__setDefault()
 
     def unitMgr_onUnitJoined(self, unitMgrID, prbType):
-        """
-        Unit manager event listener for unit join. Sets unit entity if we're not already
-        joined to it.
-        Args:
-            unitMgrID: unit manager identifier
-            prbType: unit prebattle type
-        """
         entity = self.__entity
         ctx = JoinUnitCtx(unitMgrID, prbType)
         if entity.isPlayerJoined(ctx):
@@ -596,12 +407,6 @@ class _PreBattleDispatcher(ListenersCollection):
             self.__setUnit(flags=self.__requestCtx.getFlags(), prbType=self.__requestCtx.getEntityType())
 
     def unitMgr_onUnitLeft(self, unitMgrID):
-        """
-        Unit manager listener for unit left. Tries to keep current mode or
-        just unsets current entity.
-        Args:
-            unitMgrID: unit manager identifier
-        """
         flags = self.__requestCtx.getFlags()
         if flags & FUNCTIONAL_FLAG.SWITCH == 0:
             prbType = 0
@@ -616,22 +421,9 @@ class _PreBattleDispatcher(ListenersCollection):
             self.__unsetEntity(self.__requestCtx)
 
     def unitMgr_onUnitRestored(self, unitMgrID):
-        """
-        Unit manager event listener for unit restoration.
-        Args:
-            unitMgrID: unit manager identifier
-        """
         self.__entity.restore()
 
     def unitMgr_onUnitErrorReceived(self, requestID, unitMgrID, errorCode, errorString):
-        """
-        Unit manager event listener for unit request error. Pushes system message.
-        Args:
-            requestID: request identifier
-            unitMgrID: unit manager identifier
-            errorCode: request error code
-            errorString: request error message
-        """
         if errorCode not in IGNORED_UNIT_MGR_ERRORS:
             msgType, msgBody = messages.getUnitMessage(errorCode, errorString)
             SystemMessages.pushMessage(msgBody, type=msgType)
@@ -640,13 +432,6 @@ class _PreBattleDispatcher(ListenersCollection):
             self.restorePrevious()
 
     def unitBrowser_onErrorReceived(self, errorCode, errorString):
-        """
-        Unit browser event listener for request error. Pushes system message and resets current
-        entity to default.
-        Args:
-            errorCode: request error code
-            errorString: request error message
-        """
         if errorCode not in IGNORED_UNIT_BROWSER_ERRORS:
             msgType, msgBody = messages.getUnitBrowserMessage(errorCode, errorString)
             SystemMessages.pushMessage(msgBody, type=msgType)
@@ -654,38 +439,18 @@ class _PreBattleDispatcher(ListenersCollection):
             self.__setDefault()
 
     def ctrl_onPreQueueJoined(self, queueType):
-        """
-        Prebattle control events for pre queue join. Sets pre queue entity.
-        Args:
-            queueType: queue type
-        """
         self.__setPreQueue(flags=self.__requestCtx.getFlags(), queueType=queueType)
 
     def ctrl_onPreQueueJoinFailure(self, errorCode):
-        """
-        Player event listener for prequeue join filure. Resets current entity to default.
-        Args:
-            errorCode: join error code
-        """
         self.__setDefault()
 
     def ctrl_onPreQueueLeft(self):
-        """
-        Prebattle control events for pre queue leave. Unsets current unit entity
-        and inits default state if it is not switch.
-        """
         flags = self.__requestCtx.getFlags()
         self.__unsetEntity(self.__requestCtx)
         if flags & FUNCTIONAL_FLAG.SWITCH == 0:
             self.__setDefault()
 
     def gs_onTillBanNotification(self, isPlayTimeBan, timeTillBlock):
-        """
-        Game session listener for ban notification. Resets current entity to default.
-        Args:
-            isPlayTimeBan: is ban for play time
-            timeTillBlock: time when block will be activated
-        """
         if prb_getters.isParentControlActivated():
             self.__entity.resetPlayerState()
             key = '#system_messages:gameSessionControl/korea/{0:>s}'
@@ -697,30 +462,15 @@ class _PreBattleDispatcher(ListenersCollection):
                 SystemMessages.pushI18nMessage(key.format('midnightNotification'), type=SystemMessages.SM_TYPE.Warning, preBlockTime=formatter(notifyStartTime), blockTime=formatter(blockTime))
 
     def rc_onRentChange(self, vehicles):
-        """
-        Rental listener for vehicles state update. Resets current player's state.
-        Args:
-            vehicles: list of affected vehicle intCDs
-        """
         if g_currentVehicle.isPresent() and g_currentVehicle.item.intCD in vehicles and g_currentVehicle.isDisabledInRent() and g_currentVehicle.isInPrebattle():
             self.__entity.resetPlayerState()
 
     def igr_onRoomChange(self, roomType, xpFactor):
-        """
-        IGR listener for room state. Resets current player's state when he is in premium IGR,
-        joined some prebattle and this room is no more premium.
-        Args:
-            roomType: new IGR room type
-            xpFactor: xp boost factor
-        """
         if roomType != IGR_TYPE.PREMIUM:
             if g_currentVehicle.isPremiumIGR() and g_currentVehicle.isInPrebattle():
                 self.__entity.resetPlayerState()
 
     def __startListening(self):
-        """
-        Subscribes to player and system events.
-        """
         g_playerEvents.onPrebattleJoined += self.pe_onPrebattleJoined
         g_playerEvents.onPrebattleJoinFailure += self.pe_onPrebattleJoinFailure
         g_playerEvents.onPrebattleLeft += self.pe_onPrebattleLeft
@@ -760,9 +510,6 @@ class _PreBattleDispatcher(ListenersCollection):
         return
 
     def __stopListening(self):
-        """
-        Unsubscribe from player and system events.
-        """
         g_playerEvents.onPrebattleJoined -= self.pe_onPrebattleJoined
         g_playerEvents.onPrebattleJoinFailure -= self.pe_onPrebattleJoinFailure
         g_playerEvents.onPrebattleLeft -= self.pe_onPrebattleLeft
@@ -787,11 +534,6 @@ class _PreBattleDispatcher(ListenersCollection):
         g_prbCtrlEvents.clear()
 
     def __clear(self, woEvents=False):
-        """
-        Clears dispatchers current state and attributes.
-        Args:
-            woEvents: flag that we should not raise any events
-        """
         if self.__requestCtx:
             self.__requestCtx.clear()
             self.__requestCtx = None
@@ -807,60 +549,18 @@ class _PreBattleDispatcher(ListenersCollection):
         return
 
     def __setLegacy(self, flags=FUNCTIONAL_FLAG.UNDEFINED, prbType=0):
-        """
-        Sets current entity to legacy and stops request processing.
-        Args:
-            flags: functional flags
-            prbType: prebattle type
-        
-        Returns:
-            initialization result as flags
-        """
         return self.__setEntity(CreatePrbEntityCtx(_CTRL_TYPE.LEGACY, prbType, flags=flags, initCtx=self.__requestCtx))
 
     def __setUnit(self, flags=FUNCTIONAL_FLAG.UNDEFINED, prbType=0):
-        """
-        Sets current entity to unit and stops request processing.
-        Args:
-            flags: functional flags
-            prbType: prebattle type
-        
-        Returns:
-            initialization result as flags
-        """
         return self.__setEntity(CreatePrbEntityCtx(_CTRL_TYPE.UNIT, prbType, flags=flags, initCtx=self.__requestCtx))
 
     def __setPreQueue(self, flags=FUNCTIONAL_FLAG.UNDEFINED, queueType=0):
-        """
-        Sets current entity to queue and stops request processing.
-        Args:
-            flags: functional flags
-            queueType: queue type
-        
-        Returns:
-            initialization result as flags
-        """
         return self.__setEntity(CreatePrbEntityCtx(_CTRL_TYPE.PREQUEUE, queueType, flags=flags, initCtx=self.__requestCtx))
 
     def __setDefault(self):
-        """
-        Sets current entity to default (allowing the system to initialize
-        by itself) and stops request processing.
-        Returns:
-            initialization result as flags
-        """
         return self.__setEntity(CreatePrbEntityCtx(flags=FUNCTIONAL_FLAG.DEFAULT))
 
     def __validateJoinOp(self, ctx):
-        """
-        Validates join operation: is request in process, is player already joined,
-        or current entity has locked state.
-        Args:
-            ctx: join request context
-        
-        Returns:
-            was validation passed
-        """
         if self.__requestCtx.isProcessing():
             LOG_ERROR('Request is processing', self.__requestCtx)
             return False
@@ -874,11 +574,6 @@ class _PreBattleDispatcher(ListenersCollection):
         return True
 
     def __unsetEntity(self, ctx=None):
-        """
-        Unset current entity.
-        Args:
-            ctx: leave, join or create request context
-        """
         if not isinstance(self.__entity, NotSupportedEntity):
             self._invokeListeners('onPrbEntitySwitching')
             self.__entity.fini(ctx=ctx)
@@ -887,14 +582,6 @@ class _PreBattleDispatcher(ListenersCollection):
             self.__requestCtx.stopProcessing(result=True)
 
     def __setEntity(self, ctx):
-        """
-        Set current entity and clear request context.
-        Args:
-            ctx: set entity context
-        
-        Returns:
-            integer containing initialization result as flags
-        """
         created = self.__factories.createEntity(ctx)
         if created is not None:
             if created.getEntityFlags() & FUNCTIONAL_FLAG.SET_GLOBAL_LISTENERS > 0:
@@ -915,17 +602,9 @@ class _PreBattleDispatcher(ListenersCollection):
 
 
 class _PrbPeripheriesHandler(object):
-    """
-    Class of handler for join to prebattle/unit that is on another periphery.
-    """
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, loader):
-        """
-        Constructor for default attrs initialization.
-        Args:
-            loader: prebattle control loader
-        """
         super(_PrbPeripheriesHandler, self).__init__()
         self.__joinChain = None
         self.__joinCtx = None
@@ -934,15 +613,9 @@ class _PrbPeripheriesHandler(object):
         return
 
     def __del__(self):
-        """
-        Delete method for debug purposes logging.
-        """
         LOG_DEBUG('_PrbPeripheriesHandler deleted')
 
     def fini(self):
-        """
-        Finalization.
-        """
         if self.__joinChain is not None:
             self.__joinChain.onStopped -= self.__onJoinChainStopped
             self.__joinChain.stop()
@@ -953,14 +626,6 @@ class _PrbPeripheriesHandler(object):
         return
 
     def join(self, peripheryID, ctx, postActions=None, finishActions=None):
-        """
-        Join to prebattle/unit that is on another periphery.
-        Args:
-            peripheryID: periphery identifier
-            ctx: join request context
-            postActions: post actions chain
-            finishActions: finish actions chain
-        """
         if not self.lobbyContext.isAnotherPeriphery(peripheryID):
             LOG_ERROR('Player is in given periphery', peripheryID)
             return
@@ -991,25 +656,12 @@ class _PrbPeripheriesHandler(object):
             return
 
     def activate(self):
-        """
-        Activate handler when player login to server and prbLoader is enabled.
-        """
         self.__enableAction.activate()
 
     def hasJoinAction(self):
-        """
-        Check if it has join action.
-        Returns:
-            has it join action
-        """
         return self.__joinCtx is not None
 
     def __onJoinChainStopped(self, isCompleted):
-        """
-        Callback listener for join action
-        Args:
-            isCompleted: was it completed
-        """
         if isCompleted and self.__joinCtx:
             ctx, self.__joinCtx = self.__joinCtx, None
             self.__doJoin(ctx)
@@ -1019,11 +671,6 @@ class _PrbPeripheriesHandler(object):
 
     @process
     def __doJoin(self, ctx):
-        """
-        Calls dispatcher join method with context given.
-        Args:
-            ctx: join request context
-        """
         dispatcher = self.__loader.getDispatcher()
         if dispatcher:
             yield dispatcher.join(ctx)
@@ -1032,21 +679,9 @@ class _PrbPeripheriesHandler(object):
 
 
 class _PrbControlLoader(object):
-    """
-    Loader for for next entities:
-    - prebattle dispatcher. When player login to server, it creates
-    prebattle dispatcher. And when GUI says isEnabled, it starts prebattle
-    dispatcher. When player come to battle or login page, it removes
-    prebattle dispatcher;
-    - invites manager for invitation to prebattle;
-    - notifier of auto invites.
-    """
     __slots__ = ('__prbDispatcher', '__invitesManager', '__autoNotifier', '__peripheriesHandler', '__storage', '__isEnabled')
 
     def __init__(self):
-        """
-        Constructor for default initialization.
-        """
         super(_PrbControlLoader, self).__init__()
         self.__prbDispatcher = None
         self.__invitesManager = None
@@ -1057,10 +692,6 @@ class _PrbControlLoader(object):
         return
 
     def init(self):
-        """
-        Loader initializations work: subscribe to required events.
-        Routine must invoke in BWPersonality module.
-        """
         if self.__invitesManager is None:
             self.__invitesManager = InvitesManager(self)
             self.__invitesManager.init()
@@ -1074,10 +705,6 @@ class _PrbControlLoader(object):
         return
 
     def fini(self):
-        """
-        Loader finalizes work: unsubscribe from events, removes prebattle dispatcher.
-        Routine must invoke in BWPersonality module.
-        """
         self.__removeDispatcher()
         if self.__invitesManager is not None:
             self.__invitesManager.fini()
@@ -1094,10 +721,6 @@ class _PrbControlLoader(object):
         return
 
     def createBattleDispatcher(self):
-        """
-        Creates battle dispatcher. Called from Account.onAccountShowGUI or from Bootcamp to
-        start a battle without lobby
-        """
         if self.__prbDispatcher is None:
             self.__prbDispatcher = _PreBattleDispatcher()
         if self.__isEnabled:
@@ -1105,60 +728,24 @@ class _PrbControlLoader(object):
         return
 
     def getDispatcher(self):
-        """
-        Gets prebattle dispatcher.
-        Returns:
-            prebattle dispatcher or None. Returns None when
-            player come to battle or login page.
-        """
         return self.__prbDispatcher
 
     def getInvitesManager(self):
-        """
-        Gets manager for prebattle invites.
-        Returns:
-            invites manager
-        """
         return self.__invitesManager
 
     def getAutoInvitesNotifier(self):
-        """
-        Gets notifier for auto invites.
-        Returns:
-            auto notifier
-        """
         return self.__autoNotifier
 
     def getPeripheriesHandler(self):
-        """
-        Gets notifier for auto invites.
-        Returns:
-            peripheries handler
-        """
         return self.__peripheriesHandler
 
     def getStorage(self):
-        """
-        Gets storage decorator to hold local client settings.
-        Returns:
-            storage
-        """
         return self.__storage
 
     def isEnabled(self):
-        """
-        Is dispatcher enabled.
-        Returns:
-            obvious one - is dispatcher enabled.
-        """
         return self.__isEnabled
 
     def setEnabled(self, enabled):
-        """
-        Sets dispatcher enabled.
-        Args:
-            enabled: new state
-        """
         if self.__isEnabled ^ enabled:
             self.__isEnabled = enabled
             if self.__isEnabled and self.__prbDispatcher is not None:
@@ -1166,34 +753,19 @@ class _PrbControlLoader(object):
         return
 
     def onAccountShowGUI(self, ctx):
-        """
-        Listener for player event - show gui. Initializes dispatcher if needed.
-        Args:
-            ctx: gui init context
-        """
         self.createBattleDispatcher()
 
     def onAccountBecomeNonPlayer(self):
-        """
-        Listener for player event - on become non player. Deletes dispatcher.
-        """
         self.__isEnabled = False
         self.__removeDispatcher()
 
     def onAvatarBecomePlayer(self):
-        """
-        Listener for player event - on become avatar. Deletes dispatcher.
-        """
         self.__isEnabled = False
         self.__removeDispatcher()
         self.__invitesManager.onAvatarBecomePlayer()
         self.__storage.onAvatarBecomePlayer()
 
     def onDisconnected(self):
-        """
-        Listener for connection manager event - on disconnected. Deletes dispatcher
-        and clears all related data.
-        """
         self.__isEnabled = False
         self.__removeDispatcher()
         self.__autoNotifier.stop()
@@ -1206,9 +778,6 @@ class _PrbControlLoader(object):
         return
 
     def __doStart(self):
-        """
-        Do all the job related to loader statr.
-        """
         self.__storage.swap()
         self.__prbDispatcher.start()
         self.__invitesManager.start()
@@ -1216,9 +785,6 @@ class _PrbControlLoader(object):
         self.__peripheriesHandler.activate()
 
     def __removeDispatcher(self):
-        """
-        Removes prebattle dispatcher.
-        """
         if self.__prbDispatcher is not None:
             self.__prbDispatcher.stop()
             self.__prbDispatcher = None

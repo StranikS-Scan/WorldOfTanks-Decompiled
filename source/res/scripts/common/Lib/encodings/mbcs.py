@@ -1,14 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/mbcs.py
-""" Python 'mbcs' Codec for Windows
-
-
-Cloned by Mark Hammond (mhammond@skippinet.com.au) from ascii.py,
-which was written by Marc-Andre Lemburg (mal@lemburg.com).
-
-(c) Copyright CNRI, All Rights Reserved. NO WARRANTY.
-
-"""
 from codecs import mbcs_encode, mbcs_decode
 import codecs
 encode = mbcs_encode

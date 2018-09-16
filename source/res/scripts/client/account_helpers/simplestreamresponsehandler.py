@@ -13,7 +13,8 @@ class SimpleStreamResponseHandler(object):
         self.__callback = callback
         self.__default = default
 
-    def __call__(self, requestID, resultID, errorStr, ext={}):
+    def __call__(self, requestID, resultID, errorStr, ext=None):
+        ext = ext or {}
         if resultID != AccountCommands.RES_STREAM:
             self.__callback(resultID, self.__default)
         else:
@@ -28,7 +29,7 @@ class SimpleStreamResponseHandler(object):
                 try:
                     data = zlib.decompress(data)
                     data = cPickle.loads(data)
-                except:
+                except Exception:
                     LOG_CURRENT_EXCEPTION()
                     isSuccess = False
 

@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehicleBuyWindowMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class VehicleBuyWindowMeta(AbstractWindowView):
@@ -27,15 +23,9 @@ class VehicleBuyWindowMeta(AbstractWindowView):
         return self.flashObject.as_setEnabledSubmitBtn(enabled) if self._isDAAPIInited() else None
 
     def as_setInitDataS(self, data):
-        """
-        :param data: Represented by VehicleBuyVo (AS)
-        """
         return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_updateTradeOffVehicleS(self, vehicleBuyTradeOffVo):
-        """
-        :param vehicleBuyTradeOffVo: Represented by VehicleBuyTradeOffVo (AS)
-        """
         return self.flashObject.as_updateTradeOffVehicle(vehicleBuyTradeOffVo) if self._isDAAPIInited() else None
 
     def as_setTradeInWarningMessagegeS(self, message):

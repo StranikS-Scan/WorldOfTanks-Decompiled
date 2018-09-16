@@ -87,7 +87,7 @@ def _getNodeValue(node, key, default=None):
 
 def _prepareVehData(vehsList, predicate=None):
     predicate = predicate or (lambda *args: True)
-    return map(lambda v: (v, (not v.isInInventory or predicate(v), None, None)), vehsList)
+    return [ (v, (not v.isInInventory or predicate(v), None, None)) for v in vehsList ]
 
 
 class _Negatable(object):
@@ -137,7 +137,7 @@ class _Condition(object):
         pass
 
     def getValue(self):
-        raise NotImplementedError
+        raise UserWarning('This method should not be reached in this context')
 
     def getCustomTitle(self):
         titleData = self._data.get('title')
@@ -247,14 +247,10 @@ class _Requirement(_Condition, _AvailabilityCheckable, _Negatable):
 class _VehicleRequirement(_Requirement):
 
     def _isAvailable(self, vehicle):
-        """ Checks given vehicle availability
-        """
         return True
 
 
 class _VehsListParser(object):
-    """ Mix-in for vehicles list parsing functionality
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
@@ -287,8 +283,6 @@ class _VehsListParser(object):
         return defaultCriteria | criteria
 
     def _isAnyVehicleAcceptable(self, data):
-        """ Checks for all vehicles acceptance
-        """
         return not set(data) & {'types',
          'nations',
          'levels',
@@ -375,7 +369,7 @@ class _VehsListCondition(_Condition, _VehsListParser):
         return ATTACK_REASONS[self.getAttackReasonIdx()]
 
     def getLabelKey(self):
-        raise NotImplementedError
+        raise UserWarning('This method should not be reached in this context')
 
 
 class _VehsListRequirement(_VehsListCondition, _AvailabilityCheckable, _Negatable):
@@ -536,15 +530,13 @@ class Token(_Requirement):
 
     def getConsumeCount(self):
         if self.isConsumable():
-            consumeData, forceData = self._data['consume']
+            consumeData, _ = self._data['consume']
             return dict(consumeData).get('value', 0)
 
     def getID(self):
         return self._id
 
     def isDisplayable(self):
-        """ Token should be visualized only if it has a special marker
-        """
         return self._complex.isDisplayable
 
     def getUserName(self):
@@ -552,21 +544,15 @@ class Token(_Requirement):
         return userName
 
     def isOnSale(self):
-        """ Returns true if token is on sale on the prem shop.
-        """
         return self.eventsCache.prefetcher.isTokenOnSale(self._complex.webID)
 
     def getImage(self, size):
         return self.eventsCache.prefetcher.getTokenImage(self._complex.styleID, size)
 
     def getStyleID(self):
-        """ Get identifier of token's visual resources (i.e. images, title, description)
-        """
         return self._complex.styleID
 
     def getWebID(self):
-        """ Get token's identifier on external web resources.
-        """
         return self._complex.webID
 
     def negate(self):
@@ -583,10 +569,6 @@ class Token(_Requirement):
 
 
 class TokenQuestToken(Token):
-    """ Token condition inside account requirements of TokenQuest.
-    
-    We don't check availability in this case (see WOTD-81694).
-    """
 
     def _isAvailable(self):
         return True
@@ -871,7 +853,7 @@ class BattleCamouflage(_Condition, _Negatable):
 
     def negate(self):
         newCamos = []
-        for camoTypeName, camoID in vehicles.CAMOUFLAGE_KINDS.iteritems():
+        for _, camoID in vehicles.CAMOUFLAGE_KINDS.iteritems():
             if camoID not in self._camos:
                 newCamos.append(camoID)
 
@@ -1366,10 +1348,6 @@ class VehicleKillsCumulative(_Cumulativable, VehicleKills):
 
 
 class _CountOrTotalEventsCondition(_VehsListCondition):
-    """
-    Allow to check whether this condition counts number of events (hits, stuns)
-    or total amount of event results (damage dealt, stun duration)
-    """
 
     def isEventCount(self):
         return _getNodeValue(self._data, 'eventCount', default=False)
@@ -1404,7 +1382,7 @@ class VehicleDamage(_CountOrTotalEventsCondition):
 class VehicleDamageCumulative(VehicleDamage, _Cumulativable):
 
     def __init__(self, path, data, bonusCond):
-        super(VehicleDamage, self).__init__('vehicleDamageCumulative', dict(data), path)
+        super(VehicleDamageCumulative, self).__init__('vehicleDamageCumulative', dict(data), path)
         self._bonus = weakref.proxy(bonusCond)
 
     def __repr__(self):
@@ -1444,7 +1422,7 @@ class VehicleStun(_CountOrTotalEventsCondition):
 class VehicleStunCumulative(VehicleStun, _Cumulativable):
 
     def __init__(self, path, data, bonusCond):
-        super(VehicleStun, self).__init__('vehicleStunCumulative', dict(data), path)
+        super(VehicleStunCumulative, self).__init__('vehicleStunCumulative', dict(data), path)
         self._bonus = weakref.proxy(bonusCond)
 
     def __repr__(self):

@@ -19,73 +19,31 @@ class TrainingSettingsCtx(TeamSettingsCtx):
 
     @classmethod
     def fetch(cls, settings):
-        """
-        Fetches training settings and creates context for them
-        Args:
-            settings: training prebattle settings
-        
-        Returns:
-            set settings context
-        """
         return TrainingSettingsCtx(isOpened=settings['isOpened'], comment=settings['comment'], isRequestToCreate=False, arenaTypeID=settings['arenaTypeID'], roundLen=settings['roundLength'])
 
     def getArenaTypeID(self):
-        """
-        Gets selected map ID
-        """
         return self.__arenaTypeID
 
     def setArenaTypeID(self, arenaTypeID):
-        """
-        Sets selected map ID
-        Args:
-            arenaTypeID: new arena type ID
-        """
         self.__arenaTypeID = arenaTypeID
 
     def getRoundLen(self):
-        """
-        Gets round length
-        """
         return self.__roundLen
 
     def setRoundLen(self, roundLen):
-        """
-        Sets round length
-        Args:
-            roundLen: new round length
-        """
         self.__roundLen = int(roundLen)
 
     def isArenaTypeIDChanged(self, settings):
-        """
-        Was map changed
-        Args:
-            settings: prebattle settings like PREBATTLE_SETTING_NAME -> value
-        """
         return self.__arenaTypeID != settings[prb_settings.PREBATTLE_SETTING_NAME.ARENA_TYPE_ID]
 
     def isRoundLenChanged(self, settings):
-        """
-        Was round length
-        Args:
-            settings: prebattle settings like PREBATTLE_SETTING_NAME -> value
-        """
         return self.__roundLen != settings[prb_settings.PREBATTLE_SETTING_NAME.ROUND_LENGTH]
 
     def areSettingsChanged(self, settings):
-        """
-        Were settings changed
-        Args:
-            settings: prebattle settings like PREBATTLE_SETTING_NAME -> value
-        """
         return super(TrainingSettingsCtx, self).areSettingsChanged(settings) or self.isArenaTypeIDChanged(settings) or self.isRoundLenChanged(settings)
 
 
 class JoinTrainingCtx(JoinLegacyCtx):
-    """
-    Join training request context
-    """
     __slots__ = ()
 
     def __init__(self, prbID, waitingID='', flags=_FUNCTIONAL_FLAG.UNDEFINED):
@@ -94,9 +52,6 @@ class JoinTrainingCtx(JoinLegacyCtx):
 
 @ReprInjector.withParent(('__channels', 'channels'))
 class ChangeArenaVoipCtx(LegacyRequestCtx):
-    """
-    Change arena VOIP settigns request context
-    """
     __slots__ = ('__channels',)
 
     def __init__(self, channels, waitingID=''):
@@ -107,17 +62,11 @@ class ChangeArenaVoipCtx(LegacyRequestCtx):
         return _REQUEST_TYPE.CHANGE_ARENA_VOIP
 
     def getChannels(self):
-        """
-        Gets selected channels
-        """
         return self.__channels
 
 
 @ReprInjector.withParent(('__isObserver', 'isObserver'))
 class SetPlayerObserverStateCtx(SetPlayerStateCtx):
-    """
-    Set/unset player as observer request context
-    """
     __slots__ = ('__isObserver',)
 
     def __init__(self, isObserver, isReadyState, isInitial=False, waitingID=''):
@@ -134,7 +83,4 @@ class SetPlayerObserverStateCtx(SetPlayerStateCtx):
         return OBSERVER_VEH_INVENTORY_ID
 
     def isObserver(self):
-        """
-        Should this player be observer or not
-        """
         return self.__isObserver

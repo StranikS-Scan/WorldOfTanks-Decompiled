@@ -104,7 +104,7 @@ class ContactConverter(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     @classmethod
-    def getIcons(self, tags, note):
+    def getIcons(cls, tags, note):
         icons = []
         if USER_TAG.IGR_BASE in tags:
             icons.append(RES_ICONS.MAPS_ICONS_LIBRARY_BASIC_SMALL)
@@ -308,7 +308,7 @@ class OnlineOnlyCondition(OnlineTotalCondition):
 
 
 class IContactsConverter(object):
-    __slots__ = tuple()
+    __slots__ = ()
 
     def clear(self, full=False):
         raise NotImplementedError
@@ -406,7 +406,7 @@ class _ContactsConverter(IContactsConverter):
                   'isVisible': isVisible}}
 
     def _matchPattern(self, pattern, contacts):
-        return filter(lambda vo: pattern.match(vo['criteria'][1]), contacts)
+        return [ vo for vo in contacts if pattern.match(vo['criteria'][1]) ]
 
 
 class GroupConverter(_ContactsConverter):
@@ -616,7 +616,7 @@ class FriendsGroupsConverter(IContactsConverter):
         return
 
     def setGroups(self, groups, isOpened=False):
-        self._groups.update(map(lambda group: (group, GroupConverter(group, self.__parentCategory, self._conditionClass(), self._rules, self._showEmptyItem, isOpened)), groups))
+        self._groups.update([ (group, GroupConverter(group, self.__parentCategory, self._conditionClass(), self._rules, self._showEmptyItem, isOpened)) for group in groups ])
 
     def makeVO(self, pattern=None):
         vos = []

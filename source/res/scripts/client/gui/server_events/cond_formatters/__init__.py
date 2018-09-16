@@ -13,7 +13,7 @@ MAX_CONDITIONS_IN_OR_SECTION_SUPPORED = 2
 TOP_RANGE_HIGHEST = 1
 TOP_RANGE_LOWEST = 15
 
-class CONDITION_SIZE:
+class CONDITION_SIZE(object):
     NORMAL = 'normal'
     MINIMIZED = 'minimized'
 
@@ -139,7 +139,7 @@ VEHICLE_TYPES = {'heavyTank': '#item_types:vehicle/tags/heavy_tank/name',
  'AT-SPG': '#item_types:vehicle/tags/at-spg/name',
  'SPG': '#item_types:vehicle/tags/spg/name'}
 
-class FORMATTER_IDS:
+class FORMATTER_IDS(object):
     DESCRIPTION = 'descriptionFormatter'
     CUMULATIVE = 'cumulativeFormatter'
     COMPLEX = 'complex'
@@ -148,7 +148,7 @@ class FORMATTER_IDS:
     SIMPLE_TITLE = 'simpleTitleFormatter'
 
 
-class COMPLEX_CONDITION_BLOCK:
+class COMPLEX_CONDITION_BLOCK(object):
     ACHIEVEMENT = 'achievement'
     VEHICLES_LIST = 'vehicles_list'
     VEHICLES_FILTERS = 'vehicles_filters'
@@ -169,10 +169,6 @@ def packText(label):
 
 
 def intersperse(sequence, item):
-    """ Insert item in between each pair in the sequence.
-    
-    E.g.: intersperse([1, 2, 3], 0) -> [1, 0, 2, 0, 3]
-    """
     result = []
     for element in sequence:
         result.append(element)
@@ -184,16 +180,10 @@ def intersperse(sequence, item):
 
 
 def getSeparator(groupType=GROUP_TYPE.AND):
-    """
-    Create a separator for the specified group type
-    """
     return i18n.makeString('#quests:details/groups/or') if groupType == GROUP_TYPE.OR else ''
 
 
 def getSeparatorBlock(groupType=GROUP_TYPE.AND):
-    """
-    Create a separator block data
-    """
     label = getSeparator(groupType)
     if label:
         item = packText(text_styles.standard(label))
@@ -219,9 +209,6 @@ def packTokenProgress(tokenId, questId, title, image, gotCount, needCount, isBig
 
 
 def getFiltersLabel(labelKey, condition):
-    """
-    Gets localized VehicleKill or VehicleDamage condition's description by filters data
-    """
     _, fNations, fLevels, fClasses = condition.parseFilters()
     keys, kwargs = [], {}
     if fNations:
@@ -240,13 +227,6 @@ def getFiltersLabel(labelKey, condition):
 
 
 def getResultsData(condition):
-    """
-    Gets main values to display BattleResults or UnitResults conditions in GUI
-    :return label - localized condition's description
-            relation - relation type: (more, less, equal, greaterOrEqual, ...)
-            relationI18nType - GUI representation of condition (default or alternative)
-            value - condition's value
-    """
 
     def _makeStr(i18nKey, *args, **kwargs):
         if condition.isNegative():

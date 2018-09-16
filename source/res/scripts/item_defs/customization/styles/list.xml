@@ -517,6 +517,62 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <priceGroup>	rented style	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	10	</id>
+      <userString>	#vehicle_customization:rented_style/italy	</userString>
+      <texture>	gui/maps/vehicles/styles/italy.png	</texture>
+      <season>	ALL	</season>
+      <isRent>	true	</isRent>
+      <rentCount>	100	</rentCount>
+      <tags>	vehicleBound	</tags>
+      <historical>	true	</historical>
+      <outfits>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	15302	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	15300	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	15316	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
@@ -1789,6 +1845,146 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <priceGroup>	style gold	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+        <nations>	italy	</nations>
+      </include>
+      <include>
+        <levels>	10	</levels>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	41	</id>
+      <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
+      <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+      <outfits>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	515	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	256	</id>
+              <appliedTo>	30576	</appliedTo>
+            </item>
+            <item>
+              <id>	257	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	516	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	258	</id>
+              <appliedTo>	30576	</appliedTo>
+            </item>
+            <item>
+              <id>	259	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	517	</id>
+              <patternSize>	2	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	260	</id>
+              <appliedTo>	30576	</appliedTo>
+            </item>
+            <item>
+              <id>	261	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <priceGroup>	NY style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -2051,6 +2247,731 @@
               <appliedTo>	30583	</appliedTo>
             </item>
           </paints>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <historical>	true	</historical>
+    <season>	ALL	</season>
+    <priceGroup>	misc notInShop	</priceGroup>
+    <style>
+      <id>	385	</id>
+      <tags>	blackVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	ussr	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15008	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	386	</id>
+      <tags>	redVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	ussr	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15010	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	387	</id>
+      <tags>	goldVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	ussr	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15009	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	388	</id>
+      <tags>	silverVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	ussr	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15011	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	389	</id>
+      <tags>	blackVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	germany	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15108	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	390	</id>
+      <tags>	redVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	germany	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15110	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	391	</id>
+      <tags>	goldVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	germany	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15109	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	392	</id>
+      <tags>	silverVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	germany	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15111	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	393	</id>
+      <tags>	blackVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	usa	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15213	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	394	</id>
+      <tags>	redVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	usa	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15212	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	395	</id>
+      <tags>	goldVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	usa	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15211	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	396	</id>
+      <tags>	silverVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	usa	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15214	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	397	</id>
+      <tags>	blackVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	china	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15319	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	398	</id>
+      <tags>	redVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	china	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15318	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	399	</id>
+      <tags>	goldVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	china	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15317	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	400	</id>
+      <tags>	silverVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	china	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15320	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	401	</id>
+      <tags>	blackVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	france	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15413	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	402	</id>
+      <tags>	redVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	france	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15412	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	403	</id>
+      <tags>	goldVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	france	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15411	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	404	</id>
+      <tags>	silverVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	france	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15414	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	405	</id>
+      <tags>	blackVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	uk	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15514	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	406	</id>
+      <tags>	redVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	uk	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15513	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	407	</id>
+      <tags>	goldVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	uk	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15512	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	408	</id>
+      <tags>	silverVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	uk	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15515	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	409	</id>
+      <tags>	blackVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	japan	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15621	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	410	</id>
+      <tags>	redVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	japan	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15623	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	411	</id>
+      <tags>	goldVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	japan	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15622	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	412	</id>
+      <tags>	silverVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	japan	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15624	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	413	</id>
+      <tags>	blackVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	czech	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15720	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	414	</id>
+      <tags>	redVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	czech	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15722	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	415	</id>
+      <tags>	goldVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	czech	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15721	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	416	</id>
+      <tags>	silverVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	czech	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15723	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	417	</id>
+      <tags>	blackVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	sweden	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15821	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	418	</id>
+      <tags>	redVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	sweden	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15823	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	419	</id>
+      <tags>	goldVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	sweden	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15822	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	420	</id>
+      <tags>	silverVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <filter>
+        <include>
+          <nations>	sweden	</nations>
+        </include>
+      </filter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15824	</id>
+            </item>
+          </camouflages>
         </outfit>
       </outfits>
     </style>

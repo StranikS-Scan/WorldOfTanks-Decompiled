@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/btm_utils.py
-"""Utility functions used by the btm_matcher module"""
 from . import pytree
 from .pgen2 import grammar, token
 from .pygram import pattern_symbols, python_symbols
@@ -13,9 +12,6 @@ TYPE_ALTERNATIVES = -2
 TYPE_GROUP = -3
 
 class MinNode(object):
-    """This class serves as an intermediate representation of the
-    pattern tree during the conversion to sets of leaf-to-root
-    subpatterns"""
 
     def __init__(self, type=None, name=None):
         self.type = type
@@ -31,9 +27,6 @@ class MinNode(object):
         return str(self.type) + ' ' + str(self.name)
 
     def leaf_to_root(self):
-        """Internal method. Returns a characteristic path of the
-        pattern tree. This method must be run for all leaves until the
-        linear subpatterns are merged into a single"""
         node = self
         subp = []
         while node:
@@ -68,27 +61,12 @@ class MinNode(object):
         return subp
 
     def get_linear_subpattern(self):
-        """Drives the leaf_to_root method. The reason that
-        leaf_to_root must be run multiple times is because we need to
-        reject 'group' matches; for example the alternative form
-        (a | b c) creates a group [b c] that needs to be matched. Since
-        matching multiple linear patterns overcomes the automaton's
-        capabilities, leaf_to_root merges each group into a single
-        choice based on 'characteristic'ity,
-        
-        i.e. (a|b c) -> (a|b) if b more characteristic than c
-        
-        Returns: The most 'characteristic'(as defined by
-          get_characteristic_subpattern) path for the compiled pattern
-          tree.
-        """
         for l in self.leaves():
             subp = l.leaf_to_root()
             if subp:
                 return subp
 
     def leaves(self):
-        """Generator that returns the leaves of the tree"""
         for child in self.children:
             for x in child.leaves():
                 yield x
@@ -98,12 +76,6 @@ class MinNode(object):
 
 
 def reduce_tree(node, parent=None):
-    """
-    Internal function. Reduces a compiled pattern tree to an
-    intermediate representation suitable for feeding the
-    automaton. This also trims off any optional pattern elements(like
-    [a], a*).
-    """
     new_node = None
     if node.type == syms.Matcher:
         node = node.children[0]
@@ -194,10 +166,6 @@ def reduce_tree(node, parent=None):
 
 
 def get_characteristic_subpattern(subpatterns):
-    """Picks the most characteristic from a list of linear patterns
-    Current order used is:
-    names > common_names > common_chars
-    """
     if not isinstance(subpatterns, list):
         return subpatterns
     if len(subpatterns) == 1:
@@ -230,8 +198,6 @@ def get_characteristic_subpattern(subpatterns):
 
 
 def rec_test(sequence, test_func):
-    """Tests test_func on all items of sequence and items of included
-    sub-iterables"""
     for x in sequence:
         if isinstance(x, (list, tuple)):
             for y in rec_test(x, test_func):

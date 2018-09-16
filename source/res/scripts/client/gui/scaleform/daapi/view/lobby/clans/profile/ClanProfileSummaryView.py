@@ -217,7 +217,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
           'value': formatField(getter=clanInfo.getLeaderDbID, formatter=self.getGuiUserName),
           'textStyle': _STYLE.STATS_TEXT}, {'local': 'totalPlayers',
           'value': formatField(getter=clanInfo.getMembersCount, formatter=BigWorld.wg_getIntegralFormat)}]
-        canSeeTreasury = self.clansCtrl.getLimits().canSeeTreasury(self._clanDossier)
+        canSeeTreasury = self.webCtrl.getLimits().canSeeTreasury(self._clanDossier)
         if canSeeTreasury.success:
             stats.append({'local': 'gold',
              'value': formatField(getter=clanInfo.getTreasuryValue, formatter=BigWorld.wg_getIntegralFormat),
@@ -308,6 +308,5 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
         return lst
 
     def __updateStatus(self):
-        reason = self.clansCtrl.getLimits().canSendApplication(self._clanDossier).reason
-        assert reason in _STATES, 'Unknown reason, ' + reason
+        reason = self.webCtrl.getLimits().canSendApplication(self._clanDossier).reason
         self.as_updateStatusS(_STATES[reason])

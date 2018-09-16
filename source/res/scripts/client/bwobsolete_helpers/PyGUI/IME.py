@@ -33,12 +33,6 @@ def _attrToColours(attr):
 
 
 def _compositionStringBlocks():
-    """
-            Returns the current composition string as a list of blocks of
-            consecutive characters which share the same composition attributes.
-            
-            The return is a list of 2-tuples in the format (attr, unistring)
-    """
     comp = BigWorld.ime.composition
     attr = BigWorld.ime.compositionAttr
     if len(comp) == 0:
@@ -110,7 +104,6 @@ class CompositionWindow(object):
         if len(BigWorld.ime.composition) == 0:
             self.comp.visible = False
             return False
-        assert len(BigWorld.ime.compositionAttr) == len(BigWorld.ime.composition)
         for name, comp in self.comp.children:
             if name not in ('cursor', 'text'):
                 self.comp.delChild(comp)
@@ -127,7 +120,6 @@ class CompositionWindow(object):
         self.comp.text.font = fontName
         self.comp.text.text = ''
         compBlocks = _compositionStringBlocks()
-        assert len(compBlocks) > 0
         self._firstTargetConvertedBlock = -1
         fullWidth = 0
         idx = 0
@@ -347,11 +339,6 @@ _reading = None
 _candidates = None
 
 def init():
-    """
-            Initialises the singleton IME GUI components (i.e. composition 
-            and candidate windows). These components are displayed on top of
-            all other GUI components and are positioned in screen clip space.
-    """
     global _composition
     global _reading
     global _candidates
@@ -369,10 +356,6 @@ def init():
 
 
 def fini():
-    """
-            Cleans up the singleton IME GUI components. This should
-            be called on application shutdown.
-    """
     global _reading
     global _candidates
     global _composition
@@ -389,25 +372,6 @@ def fini():
 
 
 def refresh(positionClip, minClip, maxClip, fontName):
-    """
-            Refreshes the IME sub-components based on the current
-            underlying IME state. This should be called on IME events
-            coming from the engine (i.e. handleIMEEvent).
-            
-            Parameters:
-            
-            positionClip            -       The clip space position where the composition 
-                                                            string will be placed (ideally).
-                                                             
-            minClip, maxClip        -       The clip space bounding box of the parent edit box.
-                                                            This is used to keep the IME components viewable in
-                                                            this area of the screen. This is calculated based on
-                                                            the screenClip parameter and the final width of the
-                                                            composition window.
-            fontName                        -       The name of the font resource to use to display text.
-                                                            This is usually set to the same font as the edit control
-                                                            that invoked the IME.
-    """
     if _composition is None or _candidates is None or _reading is None:
         ERROR_MSG('IME components have not been initialised.')
         return
@@ -436,18 +400,11 @@ def refresh(positionClip, minClip, maxClip, fontName):
 
 
 def handleIMEEvent(event, positionClip, minClip, maxClip, fontName):
-    """
-            Takes a PyIMEEvent object and calls refresh if neccessary.
-            See refresh for detailed information on the other parameters.
-    """
     if event.compositionChanged or event.compositionCursorPositionChanged or event.candidatesVisibilityChanged or event.candidatesChanged or event.selectedCandidateChanged or event.readingChanged:
         refresh(positionClip, minClip, maxClip, fontName)
 
 
 def hideAll():
-    """
-            Hides any visible IME interfaces.
-    """
     _composition.hide()
     _candidates.hide()
     _reading.hide()

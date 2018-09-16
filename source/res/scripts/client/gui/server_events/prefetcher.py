@@ -21,8 +21,6 @@ _DEFAULT_TOKENS_STYLES = [ title.split('/')[-1] for title in QUESTS.TOKEN_DEFAUL
 _DEFAULT_DECORATIONS = [ title.split('_')[-1].replace('.png', '') for title in RES_ICONS.MAPS_ICONS_MISSIONS_DECORATIONS_DECORATION_ENUM ]
 
 class SubRequester(object):
-    """ Base class for all requesters.
-    """
 
     def __init__(self, eventsCache, semaphore):
         self._eventsCache = eventsCache
@@ -30,13 +28,9 @@ class SubRequester(object):
         self._storage = {}
 
     def pickup(self, ticket):
-        """ Get requested data from storage.
-        """
         return self._storage.get(ticket)
 
     def ask(self, filecache, fileserver):
-        """ Request data beforehand for future usage, i.e. don't wait for result.
-        """
         tickets = self._tickets()
         for ticket in tickets:
             url = self._urlGetter(fileserver)(*ticket)
@@ -45,8 +39,6 @@ class SubRequester(object):
                 filecache.get(url, headers=headers, callback=lambda name, content: None)
 
     def demand(self, filecache, fileserver):
-        """ Request data for current usage right now, i.e. wait for result.
-        """
         demanded = []
         tickets = self._tickets()
         for ticket in tickets:
@@ -72,13 +64,9 @@ class SubRequester(object):
             self._semaphore.release()
 
     def _handler(self, ticket, content):
-        """ Async handler that actually waits for the demanded data.
-        """
         pass
 
     def _tickets(self):
-        """ Grab tickets that needs to be requested from events cache.
-        """
         return []
 
     @staticmethod
@@ -94,8 +82,6 @@ class SubRequester(object):
 
 
 class TokenImagesSubRequester(SubRequester):
-    """ Requester for token images (of two sizes: 60x60 and 80x80)
-    """
 
     def pickup(self, styleID, size):
         ticket = (styleID, size)
@@ -113,10 +99,9 @@ class TokenImagesSubRequester(SubRequester):
 
     def _tickets(self):
         tickets = []
-        desiredTypes = (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST)
-        filterType = lambda q: q.getType() in desiredTypes
-        quests = self._eventsCache.getQuests(filterType)
-        for quest in quests.itervalues():
+        for quest in self._eventsCache.getQuests().itervalues():
+            if quest.getType() not in (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
+                continue
             for token in quest.accountReqs.getTokens():
                 styleID = token.getStyleID()
                 if token.isDisplayable() and styleID not in _DEFAULT_TOKENS_STYLES and styleID not in tickets:
@@ -130,8 +115,6 @@ class TokenImagesSubRequester(SubRequester):
 
 
 class TokenInfoSubRequester(SubRequester):
-    """ Requester for tokens titles.
-    """
 
     def pickup(self, styleID):
         ticket = (styleID,)
@@ -143,15 +126,14 @@ class TokenInfoSubRequester(SubRequester):
         tokens = section['root/tokens']
         for item in tokens.values():
             tokenID = item['id'].asString
-            title = item['title'].asString
+            string = item['title'].asString
             ticket = (tokenID,)
-            self._storage[ticket] = ms(MENU.QUOTE, string=title)
+            self._storage[ticket] = ms(MENU.QUOTE, string=string)
 
     def _tickets(self):
-        desiredTypes = (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST)
-        filterType = lambda q: q.getType() in desiredTypes
-        quests = self._eventsCache.getQuests(filterType)
-        for quest in quests.itervalues():
+        for quest in self._eventsCache.getQuests().itervalues():
+            if quest.getType() not in (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
+                continue
             for token in quest.accountReqs.getTokens():
                 styleID = token.getStyleID()
                 if token.isDisplayable() and styleID not in _DEFAULT_TOKENS_STYLES:
@@ -168,14 +150,6 @@ class TokenInfoSubRequester(SubRequester):
 
 
 class DecorationRequester(SubRequester):
-    """ Requester for quest's decorations.
-    
-    Depending on type of quests, decoration means different things.
-    - uiDecoration of regular quest means custom background of its preview card;
-    - uiDecoration of main token quest means custom bonus image;
-    - uiDecoration of group means custom group background;
-    - uiDecoration of discound means custom discount image.
-    """
 
     def pickup(self, decorationID, size):
         ticket = (decorationID, size)
@@ -197,15 +171,15 @@ class DecorationRequester(SubRequester):
 
     def _tickets(self):
         decorations = []
-        filterIcon = lambda q: q.getIconID()
-        groups = self._eventsCache.getGroups(filterIcon)
-        for quest in groups.itervalues():
+        for quest in self._eventsCache.getGroups().itervalues():
             decorationID = quest.getIconID()
-            decorations.append((decorationID, DECORATION_SIZES.MARATHON))
+            if decorationID:
+                decorations.append((decorationID, DECORATION_SIZES.MARATHON))
 
-        quests = self._eventsCache.getQuests(filterIcon)
-        for quest in quests.itervalues():
+        for quest in self._eventsCache.getQuests().itervalues():
             decorationID = quest.getIconID()
+            if not decorationID:
+                continue
             if isMarathon(quest.getID()):
                 if str(decorationID) not in _DEFAULT_DECORATIONS:
                     decorations.append((decorationID, DECORATION_SIZES.BONUS))
@@ -229,42 +203,6 @@ class DecorationRequester(SubRequester):
 
 
 class TokenSaleSubRequester(SubRequester):
-    """ Requester for tokens sale availability (i.e. whether they can be purchased or not).
-    
-    We need to ask PremShop about token availability. They put a special property
-    to the packages that contain token, so we're creating request to the PremShop's
-    items API to fetch the packages with tokens:
-    
-        .../shop/api/v2/items?filter[custom_properties]=TokenWebId_1,TokenWebId_2
-    
-    We also ask to include 'custom_properties' field in the response, so we have
-    the ability to know which package sells what tokens:
-    
-        ...&fields[items]=custom_properties
-    
-    Complete url is in gui_settings.xml.
-    
-    Response has the following structure:
-    {
-        "data": [
-            {
-                "attributes": {
-                    "custom_properties": {
-                        "TokenWebId_1": "1",
-                        "TokenWebId_2": "1",
-                        "TokenWebId_3": "1"
-                    }
-                },
-                "id": "1593",
-                "type": "items"
-            }
-        ],
-        "meta": {
-            "author": "Payment System Team",
-            "license": "Wargaming.net"
-        }
-    }
-    """
 
     def pickup(self, tokenWebID):
         ticket = (tokenWebID,)
@@ -272,9 +210,11 @@ class TokenSaleSubRequester(SubRequester):
 
     def _tickets(self):
         tokens = []
-        filterByTypeAndSale = lambda q: q.getType() in EVENT_TYPE.QUESTS_WITH_SHOP_BUTTON and q.isTokensOnSaleDynamic()
-        quests = self._eventsCache.getQuests(filterByTypeAndSale)
-        for quest in quests.itervalues():
+        for quest in self._eventsCache.getQuests().itervalues():
+            if quest.getType() not in EVENT_TYPE.QUESTS_WITH_SHOP_BUTTON:
+                continue
+            if not quest.isTokensOnSaleDynamic():
+                continue
             for token in quest.accountReqs.getTokens():
                 if token.isDisplayable() and token not in tokens:
                     tokens.append(token)
@@ -308,8 +248,6 @@ class TokenSaleSubRequester(SubRequester):
 
 
 class Prefetcher(object):
-    """ This class is responsible for requesting quests-related data from web services.
-    """
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, eventsCache):

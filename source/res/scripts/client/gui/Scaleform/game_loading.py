@@ -10,12 +10,14 @@ from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.utils import graphics
 from helpers import getFullClientVersion, getClientOverride, getClientLanguage
+from helpers import uniprof
 
 class GameLoading(ExternalFlashComponent, GameLoadingMeta):
 
     def __init__(self, _):
         super(GameLoading, self).__init__(ExternalFlashSettings('gameLoading', 'gameLoadingApp.swf', 'root.main', ROOT_SWF_CONSTANTS.GAME_LOADING_REGISTER_CALLBACK))
 
+    @uniprof.regionDecorator(label='offline.game_loading', scope='enter')
     def afterCreate(self):
         super(GameLoading, self).afterCreate()
         self.as_setLocaleS(getClientOverride())
@@ -31,6 +33,7 @@ class GameLoading(ExternalFlashComponent, GameLoadingMeta):
         g_guiResetters.add(self.onUpdateStage)
         self.active(True)
 
+    @uniprof.regionDecorator(label='offline.game_loading', scope='exit')
     def onDelete(self):
         g_guiResetters.discard(self.onUpdateStage)
         self.close()

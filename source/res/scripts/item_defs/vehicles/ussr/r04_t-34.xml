@@ -91,7 +91,7 @@
       <shortUserString>	#ussr_vehicles:T-34_mod_1941_short	</shortUserString>
       <tags></tags>
       <level>	4	</level>
-      <price>	2680.0	</price>
+      <price>	2680	</price>
       <unlocks>
         <chassis>	T-34_mod_1943	  <cost>	1940	</cost>
         </chassis>
@@ -187,7 +187,7 @@
         <segmentLength>	0.312	</segmentLength>
         <segmentOffset>	0.000000	</segmentOffset>
         <segment2Offset>	0.155	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -469,7 +469,7 @@
       <shortUserString>	#ussr_vehicles:T-34_mod_1943_short	</shortUserString>
       <tags></tags>
       <level>	5	</level>
-      <price>	7960.0	</price>
+      <price>	7960	</price>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -561,7 +561,7 @@
         <segmentLength>	0.312	</segmentLength>
         <segmentOffset>	0.000000	</segmentOffset>
         <segment2Offset>	0.155	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -844,7 +844,7 @@
       <userString>	#ussr_vehicles:T-34_mod_1940	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	3980.0	</price>
+      <price>	3980	</price>
       <unlocks>
         <turret>	T-34_mod_1942	  <cost>	1735	</cost>
         </turret>
@@ -1325,7 +1325,7 @@
   </turrets0>
   <engines>
     <V-2>	shared	  <unlocks>
-        <engine>	V-2-34	  <cost>	5000.0	</cost>
+        <engine>	V-2-34	  <cost>	5000	</cost>
         </engine>
       </unlocks>
     </V-2>
@@ -1336,7 +1336,7 @@
   </fuelTanks>
   <radios>
     <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040.0	</cost>
+        <radio>	_9RM	  <cost>	4040	</cost>
         </radio>
       </unlocks>
     </_9R>

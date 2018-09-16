@@ -136,7 +136,6 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
     PREMIUM_TANK_DEFAULT_CREW_XP_FACTOR = 1.5
 
     def __init__(self, tmanDescr, tankmanDossierDescr, extDossier, playerDBID=None, currentVehicleItem=None):
-        assert extDossier is not None
         super(TankmanDossier, self).__init__(tankmanDossierDescr, DOSSIER_TYPE.TANKMAN, playerDBID)
         currentVehicleType = currentVehicleItem.descriptor.type if currentVehicleItem else None
         self.tmanDescr = tmanDescr

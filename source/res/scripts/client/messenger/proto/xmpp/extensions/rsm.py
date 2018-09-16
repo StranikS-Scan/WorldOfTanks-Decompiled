@@ -48,11 +48,10 @@ class RqResultSet(ResultSet):
         super(RqResultSet, self).__init__()
         if max:
             self.setChild(SimpleExtension('max', max))
-            if not not after:
-                assert not before, 'Can be defined after or before only'
-                if after:
-                    self.setChild(SimpleExtension('after', after))
-                before and self.setChild(SimpleExtension('before', before))
+            if after:
+                self.setChild(SimpleExtension('after', after))
+            if before:
+                self.setChild(SimpleExtension('before', before))
 
     def getTag(self):
         tag = ''

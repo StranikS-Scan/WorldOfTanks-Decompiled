@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/vehicle_selector.py
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.vehicle_carousel.carousel_data_provider import getVehicleDataVO, CarouselDataProvider, getStatusStrings
-from gui.Scaleform.daapi.view.lobby.vehicle_carousel.carousel_filter import BasicCriteriesGroup
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import getVehicleDataVO, CarouselDataProvider, getStatusStrings
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import BasicCriteriesGroup
 from gui.Scaleform.daapi.view.meta.MissionsVehicleSelectorMeta import MissionsVehicleSelectorMeta
 from gui.Scaleform.daapi.view.meta.VehicleSelectorCarouselMeta import VehicleSelectorCarouselMeta
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -14,8 +14,6 @@ from gui.shared.formatters import text_styles
 from gui.shared.utils.requesters import REQ_CRITERIA
 
 class MissionVehicleSelectorCarousel(VehicleSelectorCarouselMeta):
-    """ Carousel for displaying suitable vehicles for a personal mission.
-    """
 
     def __init__(self):
         super(MissionVehicleSelectorCarousel, self).__init__()
@@ -54,11 +52,6 @@ class MissionVehicleSelectorCarousel(VehicleSelectorCarouselMeta):
 
 
 class MissionVehicleSelector(MissionsVehicleSelectorMeta):
-    """ Vehicle selector for a personal mission.
-    
-    Vehicle selector is used to select vehicle among suitable for the quest
-    (based on vehicle requirements section in quest).
-    """
 
     def __init__(self):
         super(MissionVehicleSelector, self).__init__()
@@ -131,8 +124,6 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
 
 
 class _MissionsCarouselDataProvider(CarouselDataProvider):
-    """ Carousel data provider for missions vehicle selector.
-    """
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(_MissionsCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
@@ -176,10 +167,6 @@ class _MissionsCarouselDataProvider(CarouselDataProvider):
 
 
 class SelectorCriteriesGroup(BasicCriteriesGroup):
-    """ Criteria group used in missions vehicle selector.
-    
-    The only difference is an extra inventory criteria.
-    """
 
     def update(self, filters):
         super(SelectorCriteriesGroup, self).update(filters)

@@ -159,21 +159,15 @@ class TankmanRecruitAndEquip(Processor):
 class TankmanUnload(Processor):
 
     def __init__(self, vehicle, slot=-1):
-        """
-        Ctor.
-        
-        @param vehicle: vehicle to unload tankman
-        @param slot:    slot in given vehicle to unload. -1 by default,
-                                        that means - unload all tankmen from vehicle.
-        """
         super(TankmanUnload, self).__init__()
         self.vehicle = vehicle
         self.slot = slot
         berthsNeeded = 1
         if slot == -1:
-            berthsNeeded = len(filter(lambda (role, t): t is not None, vehicle.crew))
+            berthsNeeded = len([ item for item in vehicle.crew if item[1] is not None ])
         self.__sysMsgPrefix = 'unload_tankman' if berthsNeeded == 1 else 'unload_crew'
         self.addPlugins([plugins.VehicleValidator(vehicle, False, prop={'isLocked': True}), plugins.VehicleCrewLockedValidator(vehicle), plugins.BarracksSlotsValidator(berthsNeeded)])
+        return
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError('%s/%s' % (self.__sysMsgPrefix, errStr), defaultSysMsgKey='%s/server_error' % self.__sysMsgPrefix)
@@ -219,20 +213,20 @@ class TankmanRetraining(ItemProcessor):
          plugins.MessageConfirmator('tankmanRetraining/undistributedExp', ctx={}, isEnabled=hasUndistributedExp)))
         self.vehicle = vehicle
         self.tmanCostTypeIdx = tmanCostTypeIdx
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('retraining_tankman/%s' % errStr, defaultSysMsgKey='retraining_tankman/server_error')
-
-    def _successHandler(self, code, ctx=None):
-        tmanCost = self._getRecruitPrice(self.tmanCostTypeIdx)
-        sysMsgType = _getSysMsgType(tmanCost)
-        return makeI18nSuccess('retraining_tankman/financial_success', price=formatPrice(tmanCost), type=sysMsgType, auxData=ctx) if tmanCost else makeI18nSuccess('retraining_tankman/success', type=sysMsgType, auxData=ctx)
+        self.tmanCost = self._getRecruitPrice(self.tmanCostTypeIdx)
 
     def _getRecruitPrice(self, tmanCostTypeIdx):
         upgradeCost = self.itemsCache.items.shop.tankmanCost[tmanCostTypeIdx]
         if tmanCostTypeIdx == 1:
             return Money(credits=upgradeCost[Currency.CREDITS])
         return Money(gold=upgradeCost[Currency.GOLD]) if tmanCostTypeIdx == 2 else MONEY_UNDEFINED
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('retraining_tankman/%s' % errStr, defaultSysMsgKey='retraining_tankman/server_error')
+
+    def _successHandler(self, code, ctx=None):
+        sysMsgType = _getSysMsgType(self.tmanCost)
+        return makeI18nSuccess('retraining_tankman/financial_success', price=formatPrice(self.tmanCost), type=sysMsgType, auxData=ctx) if self.tmanCost else makeI18nSuccess('retraining_tankman/success', type=sysMsgType, auxData=ctx)
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to retrain Crew:', self.item, self.vehicle, self.tmanCostTypeIdx)
@@ -241,10 +235,10 @@ class TankmanRetraining(ItemProcessor):
 
 class TankmanCrewRetraining(Processor):
 
-    def __init__(self, tankmen, vehicle, tmanCostTypeIdx):
+    def __init__(self, tmen, vehicle, tmanCostTypeIdx):
         hasUndistributedExp = False
         if tmanCostTypeIdx != 2:
-            for tmanInvID in tankmen:
+            for tmanInvID in tmen:
                 canLearnSkills, lastSkillLevel = self.itemsCache.items.getTankman(tmanInvID).newSkillCount
                 hasUndistributedExp = lastSkillLevel > 0 or canLearnSkills > 1
                 if hasUndistributedExp:
@@ -252,10 +246,10 @@ class TankmanCrewRetraining(Processor):
 
         super(TankmanCrewRetraining, self).__init__((plugins.VehicleValidator(vehicle, False),
          plugins.VehicleCrewLockedValidator(vehicle),
-         plugins.GroupOperationsValidator(tankmen, tmanCostTypeIdx),
+         plugins.GroupOperationsValidator(tmen, tmanCostTypeIdx),
          plugins.MessageConfirmator('tankmanRetraining/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory),
          plugins.MessageConfirmator('tankmanRetraining/undistributedExp', ctx={}, isEnabled=hasUndistributedExp)))
-        self.tankmen = tankmen
+        self.tankmen = tmen
         self.vehicle = vehicle
         self.tmanCostTypeIdx = tmanCostTypeIdx
 
@@ -427,7 +421,6 @@ class TankmanChangePassport(ItemProcessor):
 class TankmanRestore(ItemProcessor):
 
     def __init__(self, tankman):
-        assert tankman is not None, 'tankman must be given'
         self.__tankman = tankman
         restorePrice, _ = getTankmenRestoreInfo(tankman)
         super(TankmanRestore, self).__init__(tankman, (plugins.TankmanLockedValidator(tankman),
@@ -435,7 +428,6 @@ class TankmanRestore(ItemProcessor):
          plugins.BarracksSlotsValidator(berthsNeeded=1),
          plugins.MoneyValidator(restorePrice),
          plugins.IsLongDisconnectedFromCenter()))
-        return
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError('restore_tankman/%s' % errStr, defaultSysMsgKey='restore_tankman/server_error')

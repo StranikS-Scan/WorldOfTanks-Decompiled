@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/minicompat.py
-"""Python version compatibility support for minidom."""
 __all__ = ['NodeList',
  'EmptyNodeList',
  'StringTypes',
@@ -65,6 +64,5 @@ def defproperty(klass, name, doc):
     def set(self, value, name=name):
         raise xml.dom.NoModificationAllowedErr('attempt to modify read-only attribute ' + repr(name))
 
-    assert not hasattr(klass, '_set_' + name), 'expected not to find _set_' + name
     prop = property(get, set, doc=doc)
     setattr(klass, name, prop)

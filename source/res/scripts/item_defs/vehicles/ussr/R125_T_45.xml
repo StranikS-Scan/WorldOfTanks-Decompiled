@@ -1,9 +1,7 @@
 <R125_T_45.xml>
   <crew>
     <commander>	gunner
-
 			radioman
-
 			loader	</commander>
     <driver></driver>
   </crew>
@@ -95,7 +93,7 @@
       <userString>	#ussr_vehicles:Chassis_R125_T_45	</userString>
       <tags></tags>
       <level>	2	</level>
-      <price>	600.0	</price>
+      <price>	600	</price>
       <armor>
         <leftTrack>	5	</leftTrack>
         <rightTrack>	5	</rightTrack>
@@ -223,7 +221,7 @@
         <right>	vehicles/russian/R125_T_45/track/right.track	</right>
         <segmentLength>	0.092	</segmentLength>
         <segmentOffset>	-0.016	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -336,7 +334,7 @@
       <userString>	#ussr_vehicles:Turret_1_R125_T_45	</userString>
       <tags></tags>
       <level>	2	</level>
-      <price>	650.0	</price>
+      <price>	650	</price>
       <armor>
         <armor_1>	35	</armor_1>
         <armor_3>	35	</armor_3>

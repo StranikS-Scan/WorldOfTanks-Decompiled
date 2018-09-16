@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/stronghold/unit/waiting.py
-import BigWorld
 from gui.Scaleform.Waiting import Waiting
 from gui.prb_control.settings import REQUEST_TYPE
 from debug_utils import LOG_DEBUG
@@ -11,10 +10,6 @@ REQUEST_HANDLER = {REQUEST_TYPE.SET_RESERVE,
  REQUEST_TYPE.BATTLE_QUEUE}
 
 class WaitingManager(object):
-    """
-    WaitingManager provide context waiting-screen manual control case:
-    - Wait equal request IDs (from WGSH and SERVER) for handle WGSH response and Server Unit
-    """
 
     def __init__(self):
         super(WaitingManager, self).__init__()

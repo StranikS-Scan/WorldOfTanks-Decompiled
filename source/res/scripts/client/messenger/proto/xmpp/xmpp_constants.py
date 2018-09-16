@@ -52,7 +52,7 @@ class CHANNEL_ERROR_ID(object):
 
 CHANNEL_ERROR_NAMES = {v:k for k, v in CHANNEL_ERROR_ID.__dict__.iteritems() if not k.startswith('_')}
 
-class XMPP_ITEM_TYPE:
+class XMPP_ITEM_TYPE(object):
     EMPTY_ITEM = 0
     ROSTER_ITEM = 1
     BLOCK_ITEM = 2

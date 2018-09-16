@@ -1,33 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multifile.py
-"""A readline()-style interface to the parts of a multipart message.
-
-The MultiFile class makes each part of a multipart message "feel" like
-an ordinary file, as long as you use fp.readline().  Allows recursive
-use, for nested multipart messages.  Probably best used together
-with module mimetools.
-
-Suggested use:
-
-real_fp = open(...)
-fp = MultiFile(real_fp)
-
-"read some lines from fp"
-fp.push(separator)
-while 1:
-        "read lines from fp until it returns an empty string" (A)
-        if not fp.next(): break
-fp.pop()
-"read remaining lines from fp until it returns an empty string"
-
-The latter sequence may be used recursively at (A).
-It is also allowed to use multiple push()...pop() sequences.
-
-If seekable is given as 0, the class code will not do the bookkeeping
-it normally attempts in order to make seeks relative to the beginning of the
-current file part.  This may be useful when using MultiFile with a non-
-seekable stream object.
-"""
 from warnings import warn
 warn('the multifile module has been deprecated since Python 2.5', DeprecationWarning, stacklevel=2)
 del warn
@@ -79,7 +51,6 @@ class MultiFile:
             if self.last:
                 raise Error, 'sudden EOF in MultiFile.readline()'
             return ''
-        assert self.level == 0
         if self.is_data(line):
             return line
         marker = line.rstrip()

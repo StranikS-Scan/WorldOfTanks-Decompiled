@@ -15,7 +15,6 @@ class MethodsRules(object):
 
         def __call__(self, *args, **kwargs):
             instance = args[0]
-            assert isinstance(instance, MethodsRules), 'Wrong inheritance.'
             if instance.skip(self.__listerner):
                 LOG_DEBUG('Notification skipped: ', instance, self.__listerner)
                 return
@@ -33,7 +32,6 @@ class MethodsRules(object):
 
             def wrapper(*args, **kwargs):
                 instance = args[0]
-                assert isinstance(instance, MethodsRules), 'Wrong inheritance.'
                 if instance.delay(self.__delayerName, listener, *args, **kwargs):
                     LOG_DEBUG('Notification delayed: ', listener, *args, **kwargs)
                     return

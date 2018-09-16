@@ -131,7 +131,6 @@ class SeqTaskQueue(object):
         self.__wait = []
         if self.__queue:
             for index, task in enumerate(self.__queue):
-                assert isinstance(task, SeqTask), 'Task must be SeqTask'
                 if task.isRequired():
                     self.__wait.append(index)
                 self.__others.append(index)
@@ -160,7 +159,6 @@ class SeqTaskQueue(object):
             self.onInited()
 
     def addMultiRq(self, task):
-        assert isinstance(task, SeqTask), 'Task must be SeqTask'
         self.__multi.append(task)
         task.run()
 
@@ -279,8 +277,6 @@ class ContactTaskQueue(object):
         if tasks:
             return False
         for task in args:
-            assert jid == task.getJID()
-            assert isinstance(task, ContactTask), 'Task must be ContactTask'
             tasks.append(task)
 
         return True

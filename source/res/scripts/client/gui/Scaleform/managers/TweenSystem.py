@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/TweenSystem.py
-from gui.Scaleform.framework.entities.abstract.TweenManagerMeta import TweenManagerMeta
-import BigWorld
 import time
 import math
+import BigWorld
 import Math
-from debug_utils import LOG_ERROR
 import resource_helper
 import ResMgr
+from debug_utils import LOG_ERROR
+from gui.Scaleform.framework.entities.abstract.TweenManagerMeta import TweenManagerMeta
 TWEEN_CONSTRAINTS_FILE_PATH = 'gui/tween_constraints.xml'
 ERROR_NOT_SUCH_FILE = 'Not such file '
 REQUIRED_PARAMETERS = ['moveDuration',
@@ -94,7 +94,6 @@ class TweenManager(TweenManagerMeta):
         if self.__animCallback is not None:
             BigWorld.cancelCallback(self.__animCallback)
             self.__animCallback = None
-        index = len(self.__playStack)
         self.disposeAll()
         self.__tweens = None
         self.__playStack = None
@@ -186,10 +185,8 @@ class TweenManager(TweenManagerMeta):
         while tweenIdx < len(self.__playStack):
             tweenData = self.__playStack[tweenIdx]
             tween = tweenData[0]
-            target = tweenData[1]
             startData = tweenData[2]
             deltaData = tweenData[3]
-            delay = tweenData[4]
             duration = tweenData[5]
             if tween.isComplete:
                 if tween.getLoop():
@@ -435,12 +432,6 @@ class _AbstractTween(AbstractTweenMeta):
 
     def getIsComplete(self):
         return self.isComplete
-
-    def getPosition(self):
-        return self.position
-
-    def setPosition(self, position):
-        self.position = position
 
     def getEasy(self):
         return self.__easy

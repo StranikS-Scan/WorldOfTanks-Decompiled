@@ -1,20 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/textView.py
-"""Simple text browser for IDLE
-
-"""
 from Tkinter import *
 import tkMessageBox
 
 class TextViewer(Toplevel):
-    """A simple text viewer dialog for IDLE
-    
-    """
 
     def __init__(self, parent, title, text, modal=True):
-        """Show the given text in a scrollable window with a 'close' button
-        
-        """
         Toplevel.__init__(self, parent)
         self.configure(borderwidth=5)
         self.geometry('=%dx%d+%d+%d' % (625,

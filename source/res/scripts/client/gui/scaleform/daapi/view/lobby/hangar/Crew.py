@@ -26,7 +26,6 @@ class Crew(CrewMeta):
     def __init__(self):
         super(Crew, self).__init__()
         self.dogSound = None
-        self._showPersonalCase = True
         self._showRecruit = True
         return
 
@@ -56,7 +55,6 @@ class Crew(CrewMeta):
                 if slotIdx > 0 and tman is not None and (tankmenDescrs[lessMastered] is None or compareMastery(tankmenDescrs[lessMastered].descriptor, tman.descriptor) > 0):
                     lessMastered = slotIdx
                 role = vehicle.descriptor.type.crewRoles[slotIdx][0]
-                self._showPersonalCase = bool(tman.invID) if tman is not None else False
                 roles.append({'tankmanID': tman.invID if tman is not None else None,
                  'roleType': role,
                  'role': convert(skillsConfig.getSkill(role).userString),
@@ -117,8 +115,7 @@ class Crew(CrewMeta):
                  'skills': skillsList}
                 tankmenData.append(tankmanData)
 
-            self.as_tankmenResponseS({'showPersonalCase': self._showPersonalCase,
-             'showRecruit': self._showRecruit,
+            self.as_tankmenResponseS({'showRecruit': self._showRecruit,
              'roles': roles,
              'tankmen': tankmenData})
             dogName = ''

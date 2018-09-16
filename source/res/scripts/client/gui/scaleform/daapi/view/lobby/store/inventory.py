@@ -32,46 +32,26 @@ class Inventory(InventoryMeta):
         else:
             self.__sellItem(item.intCD)
 
-    def requestTableData(self, nation, actionsSelected, type, filter):
-        """
-        Request table data for selected tab
-        :param type: <str> tab ID
-        :param nation: <int> gui nation
-        :param actionsSelected: <bool> discount's checkbox value
-        :param filter: <obj> filter data
-        """
+    def requestTableData(self, nation, actionsSelected, tabID, f):
         Waiting.show('updateInventory')
-        filter = flashObject2Dict(filter)
+        f = flashObject2Dict(f)
         itemCD = AccountSettings.getFilter('scroll_to_item')
-        AccountSettings.setFilter('inventory_current', (nation, type, actionsSelected))
-        AccountSettings.setFilter('inventory_' + type, filter)
+        AccountSettings.setFilter('inventory_current', (nation, tabID, actionsSelected))
+        AccountSettings.setFilter('inventory_' + tabID, f)
         AccountSettings.setFilter('scroll_to_item', None)
-        self._setTableData(filter, nation, type, actionsSelected, itemCD)
+        self._setTableData(f, nation, tabID, actionsSelected, itemCD)
         Waiting.hide('updateInventory')
         return
 
     def getName(self):
-        """
-        Get component name
-        :return: <str>
-        """
         return STORE_TYPES.INVENTORY
 
     def _populate(self):
-        """
-        Prepare and set init data into Flash
-        Subscribe on account updates
-        """
         g_clientUpdateManager.addCallbacks({'inventory': self._onTableUpdate})
         super(Inventory, self)._populate()
 
-    def _getTabClass(self, type):
-        """
-        Get component tab class by type
-        :param type: <str> tab ID
-        :return:<ShopItemsTab>
-        """
-        return _INVENTORY_TABS[type]
+    def _getTabClass(self, tabType):
+        return _INVENTORY_TABS[tabType]
 
     @process
     def __sellItem(self, itemTypeCompactDescr):

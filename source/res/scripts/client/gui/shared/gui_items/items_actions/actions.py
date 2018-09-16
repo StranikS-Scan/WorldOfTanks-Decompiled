@@ -133,7 +133,7 @@ class ModuleBuyAction(BuyAction):
         item = self.itemsCache.items.getItemByCD(self.__intCD)
         if not self._mayObtainForMoney(item):
             if self._mayObtainWithMoneyExchange(item):
-                isOk, args = yield DialogsInterface.showDialog(ExchangeCreditsMeta(self.__intCD))
+                isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsMeta(self.__intCD))
                 if not isOk:
                     return
             else:
@@ -172,7 +172,7 @@ class VehicleBuyAction(BuyAction):
                             meta = RestoreExchangeCreditsMeta(self.__vehCD)
                         else:
                             meta = ExchangeCreditsMeta(self.__vehCD)
-                        isOk, args = yield DialogsInterface.showDialog(meta)
+                        isOk, _ = yield DialogsInterface.showDialog(meta)
                         if not isOk:
                             return
                     else:
@@ -205,7 +205,7 @@ class UnlockItemAction(CachedItemAction):
     @process
     def doAction(self):
         if not self._isEnoughXpToUnlock():
-            isOk, args = yield DialogsInterface.showDialog(ExchangeXpMeta(self.__unlockCD, self.__vehCD, self.__xpCost))
+            isOk, _ = yield DialogsInterface.showDialog(ExchangeXpMeta(self.__unlockCD, self.__vehCD, self.__xpCost))
             if isOk and self._isEnoughXpToUnlock() and not self._isUnlocked():
                 self._unlockItem()
         else:
@@ -256,10 +256,12 @@ class InstallItemAction(BuyAction):
 
     @process
     def installItem(self, itemCD, rootCD, state):
-        itemTypeID, nationID, itemID = vehicles.parseIntCompactDescr(itemCD)
-        assert itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
+        itemTypeID, _, __ = vehicles.parseIntCompactDescr(itemCD)
+        if itemTypeID not in GUI_ITEM_TYPE.VEHICLE_MODULES:
+            raise UserWarning('Specified type (itemTypeID={}) is not type of module'.format(itemTypeID))
         vehicle = self.itemsCache.items.getItemByCD(rootCD)
-        assert vehicle.isInInventory, 'Vehicle must be in inventory'
+        if not vehicle.isInInventory:
+            raise UserWarning('Vehicle (intCD={}) must be in inventory'.format(rootCD))
         item = self.itemsCache.items.getItemByCD(itemCD)
         conflictedEqs = item.getConflictedEquipments(vehicle)
         RequestState.sent(state)
@@ -285,14 +287,16 @@ class BuyAndInstallItemAction(InstallItemAction):
 
     @process
     def buyAndInstallItem(self, itemCD, rootCD, state):
-        itemTypeID, nationID, itemID = vehicles.parseIntCompactDescr(itemCD)
-        assert itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
+        itemTypeID, _, __ = vehicles.parseIntCompactDescr(itemCD)
+        if itemTypeID not in GUI_ITEM_TYPE.VEHICLE_MODULES:
+            raise UserWarning('Specified type (itemTypeID={}) is not type of module'.format(itemTypeID))
         vehicle = self.itemsCache.items.getItemByCD(rootCD)
-        assert vehicle.isInInventory, 'Vehicle must be in inventory'
+        if not vehicle.isInInventory:
+            raise UserWarning('Vehicle (intCD={}) must be in inventory'.format(rootCD))
         item = self.itemsCache.items.getItemByCD(itemCD)
         conflictedEqs = item.getConflictedEquipments(vehicle)
         if not self._mayObtainForMoney(item) and self._mayObtainWithMoneyExchange(item):
-            isOk, args = yield DialogsInterface.showDialog(ExchangeCreditsMeta(itemCD, vehicle.intCD))
+            isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsMeta(itemCD, vehicle.intCD))
             if not isOk:
                 return
         if self._mayObtainForMoney(item):
@@ -347,7 +351,7 @@ class SetVehicleModuleAction(BuyAction):
             if not self.__isRemove and not newComponentItem.isInInventory:
                 conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
                 if not self._mayObtainForMoney(newComponentItem) and self._mayObtainWithMoneyExchange(newComponentItem):
-                    isOk, args = yield DialogsInterface.showDialog(ExchangeCreditsMeta(newComponentItem.intCD, vehicle.intCD))
+                    isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsMeta(newComponentItem.intCD, vehicle.intCD))
                     if not isOk:
                         return
                 if self._mayObtainForMoney(newComponentItem):
@@ -379,10 +383,6 @@ class SetVehicleModuleAction(BuyAction):
 
 
 class SetVehicleLayoutAction(IGUIItemAction):
-    """
-    This action is used when you want to install/de-install item in vehicle layout.
-    in other words: make a layout changes for Shells/Equipment/BattleBooster
-    """
 
     def __init__(self, vehicle, shellsLayout=None, eqsLayout=None, battleBooster=None):
         super(SetVehicleLayoutAction, self).__init__()
@@ -415,11 +415,6 @@ class SetVehicleLayoutAction(IGUIItemAction):
 
 
 class BuyAndInstallItemVehicleLayout(SetVehicleLayoutAction):
-    """
-    This actions buys and installs an item in the vehicle layout
-    IMPORTANT: this action supports only BattleBooster item at the moment
-               but it can be extended to do the action with any type of item
-    """
 
     def __init__(self, vehicle, shellsLayout=None, eqsLayout=None, battleBooster=None, count=1):
         super(BuyAndInstallItemVehicleLayout, self).__init__(vehicle, shellsLayout, eqsLayout, battleBooster)

@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/btm_matcher.py
-"""A bottom-up tree matching algorithm implementation meant to speed
-up 2to3's matching process. After the tree patterns are reduced to
-their rarest linear path, a linear Aho-Corasick automaton is
-created. The linear automaton traverses the linear paths from the
-leaves to the root of the AST and returns a set of nodes for further
-matching. This reduces significantly the number of candidate nodes."""
 __author__ = 'George Boutsioukis <gboutsioukis@gmail.com>'
 import logging
 import itertools
@@ -14,7 +8,6 @@ from . import pytree
 from .btm_utils import reduce_tree
 
 class BMNode(object):
-    """Class for a node of the Aho-Corasick automaton used in matching"""
     count = itertools.count()
 
     def __init__(self):
@@ -25,8 +18,6 @@ class BMNode(object):
 
 
 class BottomMatcher(object):
-    """The main matcher class. After instantiating the patterns should
-    be added using the add_fixer method"""
 
     def __init__(self):
         self.match = set()
@@ -36,10 +27,6 @@ class BottomMatcher(object):
         self.logger = logging.getLogger('RefactoringTool')
 
     def add_fixer(self, fixer):
-        """Reduces a fixer's pattern tree to a linear path and adds it
-        to the matcher(a common Aho-Corasick automaton). The fixer is
-        appended on the matching states and called when they are
-        reached"""
         self.fixers.append(fixer)
         tree = reduce_tree(fixer.pattern_tree)
         linear = tree.get_linear_subpattern()
@@ -48,7 +35,6 @@ class BottomMatcher(object):
             match_node.fixers.append(fixer)
 
     def add(self, pattern, start):
-        """Recursively adds a linear pattern to the AC automaton"""
         if not pattern:
             return [start]
         elif isinstance(pattern[0], tuple):
@@ -72,21 +58,6 @@ class BottomMatcher(object):
             return end_nodes
 
     def run(self, leaves):
-        """The main interface with the bottom matcher. The tree is
-        traversed from the bottom using the constructed
-        automaton. Nodes are only checked once as the tree is
-        retraversed. When the automaton fails, we give it one more
-        shot(in case the above tree matches as a whole with the
-        rejected leaf), then we break for the next leaf. There is the
-        special case of multiple arguments(see code comments) where we
-        recheck the nodes
-        
-        Args:
-           The leaves of the AST tree to be matched
-        
-        Returns:
-           A dictionary of node matches with fixers as the keys
-        """
         current_ac_node = self.root
         results = defaultdict(list)
         for leaf in leaves:
@@ -125,7 +96,6 @@ class BottomMatcher(object):
         return results
 
     def print_ac(self):
-        """Prints a graphviz diagram of the BM automaton(for debugging)"""
         print 'digraph g{'
 
         def print_node(node):

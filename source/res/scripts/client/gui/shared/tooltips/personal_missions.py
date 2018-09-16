@@ -53,7 +53,10 @@ class BasicFreeSheetTooltip(BlocksTooltipData):
         if infoBlock is not None:
             blocks.append(infoBlock)
         bottomItems = []
-        map(lambda block: bottomItems.append(block) if block is not None else None, self._getDescriptionBlock())
+        for block in self._getDescriptionBlock():
+            if block is not None:
+                bottomItems.append(block)
+
         blocks.append(formatters.packBuildUpBlockData(bottomItems))
         return blocks
 
@@ -234,8 +237,8 @@ class PersonalMissionsMapRegionTooltipData(BlocksTooltipData):
             if not self.quest.isMainCompleted():
                 isMain = True
             conditions = PMTooltipConditionsFormatters().format(self.quest, isMain)
-            orConditions = filter(lambda q: q.isInOrGroup, conditions)
-            andConditions = filter(lambda q: not q.isInOrGroup, conditions)
+            orConditions = [ q for q in conditions if q.isInOrGroup ]
+            andConditions = [ q for q in conditions if not q.isInOrGroup ]
             self._hasOrCondition = bool(orConditions)
             blocksData = []
             blocksData.append(self._getTitleBlock())
@@ -252,7 +255,8 @@ class PersonalMissionsMapRegionTooltipData(BlocksTooltipData):
             items.append(self._getStatusBlock(self.quest))
         return items
 
-    def _getTitleBlock(self, padding={}):
+    def _getTitleBlock(self, padding=None):
+        padding = padding or {}
         padding['top'] = 10
         padding['left'] = 17
         return formatters.packTextBlockData(text=text_styles.highTitle(self.quest.getUserName()), padding=padding)
@@ -289,7 +293,7 @@ class PersonalMissionsMapRegionTooltipData(BlocksTooltipData):
         return formatters.packBuildUpBlockData(blocks=items, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(top=-6, bottom=15), gap=13)
 
     @classmethod
-    def _getAwardsBlock(self, quest):
+    def _getAwardsBlock(cls, quest):
         items = []
         linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WIDE_AWARD_BIG_BG_LINKAGE
         textPadding = formatters.packPadding(top=-8, left=16, bottom=20)
@@ -361,14 +365,11 @@ class TankwomanTooltipData(BlocksTooltipData):
         self._setWidth(364)
 
     def _packBlocks(self, *args, **kwargs):
-        blocks = [formatters.packImageTextBlockData(title=text_styles.highTitle(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_TITLE), desc=text_styles.standard(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_SUBTITLE), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_TANKWOMAN), formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_DESC_TITLE), padding=formatters.packPadding(bottom=4)), formatters.packTextBlockData(self._getConditions(), padding=formatters.packPadding(bottom=7))], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(top=-7, bottom=-3)), formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_TITLE), padding=formatters.packPadding(bottom=20)),
+        blocks = [formatters.packImageTextBlockData(title=text_styles.highTitle(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_TITLE), desc=text_styles.standard(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_SUBTITLE), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_TANKWOMAN), formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_DESC_TITLE), padding=formatters.packPadding(bottom=4)), formatters.packTextBlockData(text_styles.main(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_DESC_BODY), padding=formatters.packPadding(bottom=7))], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(top=-7, bottom=-3)), formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_TITLE), padding=formatters.packPadding(bottom=20)),
           self.__makeImageBlock(RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_MAIN_100, PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_NATION, 4, 16, 10),
           self.__makeImageBlock('../maps/icons/tankmen/skills/big/new_skill.png', PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_NEWPERK),
           self.__makeImageBlock('../maps/icons/tankmen/skills/big/brotherhood.png', PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_BROTHERHOOD)])]
         return blocks
-
-    def _getConditions(self):
-        return text_styles.main(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_DESC_BODY)
 
     def __makeImageBlock(self, icon, text, imgPaddingLeft=15, imgPaddingRight=30, imgPaddingTop=0):
         return formatters.packImageTextBlockData(title=text_styles.main(text), desc='', img=icon, imgPadding=formatters.packPadding(left=imgPaddingLeft, right=imgPaddingRight, top=imgPaddingTop), padding=formatters.packPadding(bottom=20))

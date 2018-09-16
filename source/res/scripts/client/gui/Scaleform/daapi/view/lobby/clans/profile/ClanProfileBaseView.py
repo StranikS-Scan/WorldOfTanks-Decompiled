@@ -3,17 +3,17 @@
 import BigWorld
 from adisp import process
 from gui import SystemMessages
-from gui.clans.contexts import CreateApplicationCtx
-from helpers import i18n
-from gui.shared.view_helpers.emblems import ClanEmblemsHelper
+from gui.Scaleform.daapi.view.meta.ClanProfileBaseViewMeta import ClanProfileBaseViewMeta
+from gui.Scaleform.locale.CLANS import CLANS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.clans import formatters as clans_fmts
 from gui.clans import items
 from gui.clans.clan_helpers import ClanListener
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as RES
-from gui.Scaleform.locale.CLANS import CLANS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.daapi.view.meta.ClanProfileBaseViewMeta import ClanProfileBaseViewMeta
 from gui.shared.formatters import text_styles
-from gui.clans import formatters as clans_fmts
+from gui.shared.view_helpers.emblems import ClanEmblemsHelper
+from gui.wgcg.base.contexts import CreateApplicationCtx
+from helpers import i18n
 _JOIN_BTN_ACTION_ID = 'join'
 
 class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListener):
@@ -42,7 +42,7 @@ class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListen
         self._updateDummy()
         self._initHeaderBtnStates()
 
-    def onClanStateChanged(self, oldStateID, newStateID):
+    def onClanEnableChanged(self, enabled):
         self._updateDummy()
 
     def onAccountWebVitalInfoChanged(self, fieldName, value):
@@ -62,7 +62,7 @@ class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListen
     def _sendApplication(self):
         self.as_showWaitingS(True)
         context = CreateApplicationCtx([self._clanDossier.getDbID()])
-        result = yield self.clansCtrl.sendRequest(context, allowDelay=True)
+        result = yield self.webCtrl.sendRequest(context, allowDelay=True)
         if result.isSuccess():
             clanInfo = yield self._clanDossier.requestClanInfo()
             SystemMessages.pushMessage(clans_fmts.getAppSentSysMsg(clanInfo.getClanName(), clanInfo.getTag()))
@@ -82,7 +82,7 @@ class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListen
         self.requestClanEmblem128x128(clanDbID)
 
     def _updateHeaderState(self):
-        canSendApplication = self.clansCtrl.getLimits().canSendApplication(self._clanDossier)
+        canSendApplication = self.webCtrl.getLimits().canSendApplication(self._clanDossier)
         self.as_setHeaderStateS(self.__headerBtnStates.get(canSendApplication.reason) or self._getHeaderButtonStateVO())
 
     def _getHeaderButtonStateVO(self, actionBtnVisible=False, actionBtnLabel=None, iconBtnVisible=False, topTFVisible=False, middleTFVisible=False, actionId=None, actionBtnTooltip=None, middleTF=None, topTF=None):
@@ -108,7 +108,7 @@ class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListen
         self.as_showWaitingS(False)
 
     def _updateDummy(self):
-        if self.clansCtrl.isAvailable() and not self._dummyMustBeShown:
+        if self.webCtrl.isAvailable() and not self._dummyMustBeShown:
             self.as_hideDummyS()
         else:
             self.as_showDummyS({'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON,

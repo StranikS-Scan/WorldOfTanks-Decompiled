@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/VEHICLE_PREVIEW.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_LABEL = '#vehicle_preview:header/backBtn/label'
@@ -13,6 +10,7 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_HANGAR = '#vehicle_preview:header/backBtn/descrLabel/hangar'
     HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE = '#vehicle_preview:header/backBtn/descrLabel/vehicleCompare'
     HEADER_TITLE = '#vehicle_preview:header/title'
+    HERO_HEADER_TITLE = '#vehicle_preview:hero/header/title'
     HEADER_CLOSEBTN_LABEL = '#vehicle_preview:header/closeBtn/label'
     BUYINGPANEL_LABEL = '#vehicle_preview:buyingPanel/Label'
     BUYINGPANEL_ALERTLABEL = '#vehicle_preview:buyingPanel/alertLabel'
@@ -27,3 +25,5 @@ class VEHICLE_PREVIEW(object):
     INFOPANEL_TAB_CREWINFO_NAME = '#vehicle_preview:infoPanel/tab/crewInfo/name'
     INFOPANEL_TAB_FACTSHEET_NAME = '#vehicle_preview:infoPanel/tab/factSheet/name'
     INFOPANEL_TAB_CREWINFO_LISTDESC_TEXT = '#vehicle_preview:infoPanel/tab/crewInfo/listDesc/text'
+    INFOPANEL_TAB_ELITEFACTSHEET_TITLE = '#vehicle_preview:infoPanel/tab/eliteFactSheet/title'
+    INFOPANEL_TAB_ELITEFACTSHEET_INFO = '#vehicle_preview:infoPanel/tab/eliteFactSheet/info'

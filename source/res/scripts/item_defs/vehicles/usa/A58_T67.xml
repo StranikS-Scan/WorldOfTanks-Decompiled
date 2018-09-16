@@ -231,7 +231,7 @@
         <right>	vehicles/american/A58_T67/track/right.track	</right>
         <segmentLength>	0.142	</segmentLength>
         <segmentOffset>	-0.001	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -493,7 +493,7 @@
         <right>	vehicles/american/A58_T67/track/right.track	</right>
         <segmentLength>	0.142	</segmentLength>
         <segmentOffset>	-0.001	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -987,7 +987,7 @@
   </turrets0>
   <engines>
     <Buick_series_60>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C4	  <cost>	1500.0	</cost>
+        <engine>	Wright_Continental_R-975C4	  <cost>	1500	</cost>
         </engine>
       </unlocks>
     </Buick_series_60>
@@ -998,12 +998,12 @@
   </fuelTanks>
   <radios>
     <SCR_510>	shared	  <unlocks>
-        <radio>	SCR_610	  <cost>	1480.0	</cost>
+        <radio>	SCR_610	  <cost>	1480	</cost>
         </radio>
       </unlocks>
     </SCR_510>
     <SCR_610>	shared	  <unlocks>
-        <radio>	SCR_619	  <cost>	9000.0	</cost>
+        <radio>	SCR_619	  <cost>	9000	</cost>
         </radio>
       </unlocks>
     </SCR_610>

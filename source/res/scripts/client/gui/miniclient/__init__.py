@@ -3,22 +3,6 @@
 import ResMgr
 from constants import CONTENT_TYPE, IS_SANDBOX
 from gui.Scaleform.locale.MINICLIENT import MINICLIENT
-import contacts as _contacts
-import continue_download as _continue_download
-import dynamic_squads as _dynamic_squads
-import event as _event
-import fallout_controller as _fallout_controller
-import preview as _preview
-import promo_controller as _promo_controller
-import shop as _shop
-import ranked_battles_controller as _ranked_battles_controller
-from .notifications import configure_pointcuts as _notifications_configure_pointcuts
-from .invitations import configure_pointcuts as _configure_invitation_pointcuts
-from .lobby import configure_pointcuts as _configure_lobby_pointcuts
-from .login import configure_pointcuts as _configure_login_pointcuts
-from .personal_missions import configure_pointcuts as _configure_personal_missions_pointcuts
-from .tech_tree import configure_pointcuts as _configure_tech_tree_pointcuts
-from .vehicle_compare import configure_pointcuts as _configure_vehicle_compare_pointcuts
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 
@@ -62,6 +46,22 @@ def _get_config(is_miniclient, is_tutorial, is_sandbox):
 
 
 def _enable_all_pointcuts(config):
+    from . import contacts as _contacts
+    from . import continue_download as _continue_download
+    from . import dynamic_squads as _dynamic_squads
+    from . import event as _event
+    from . import preview as _preview
+    from . import promo_controller as _promo_controller
+    from . import shop as _shop
+    from . import ranked_battles_controller as _ranked_battles_controller
+    from .notifications import configure_pointcuts as _notifications_configure_pointcuts
+    from .invitations import configure_pointcuts as _configure_invitation_pointcuts
+    from .lobby import configure_pointcuts as _configure_lobby_pointcuts
+    from .login import configure_pointcuts as _configure_login_pointcuts
+    from .personal_missions import configure_pointcuts as _configure_personal_missions_pointcuts
+    from .tech_tree import configure_pointcuts as _configure_tech_tree_pointcuts
+    from .vehicle_compare import configure_pointcuts as _configure_vehicle_compare_pointcuts
+    import hero_tank_controller as _hero_tank_controller
     _shop.OnShopItemWrapPointcut(config)
     _continue_download.OnHyperlinkClickPointcut()
     _continue_download.OnSquadHyperlinkClickPointcut()
@@ -79,15 +79,17 @@ def _enable_all_pointcuts(config):
     _dynamic_squads.DisableGameSettingPointcut()
     _dynamic_squads.InviteReceivedMessagePointcut()
     _promo_controller.ShowPromoBrowserPointcut()
-    _fallout_controller.InitFalloutPointcut()
     _ranked_battles_controller.InitRankedPointcut()
     _event.InitEventPointcut()
     _event.DisableEventBoards()
     _preview.ChangeVehicleIsPreviewAllowed(config)
     _configure_vehicle_compare_pointcuts()
+    _hero_tank_controller.InitHeroTankPointcut()
 
 
 def _enable_sandbox_platform_pointcuts(config):
+    from . import preview as _preview
+    from . import shop as _shop
     from .lobby.header.fight_button_ import DisableFightButtonPointcut, DisableTrainingFightButtonPointcut
     from .lobby.header.fight_button_ import DisableBattlesForHiddenVehicles
     from .lobby.header.battle_type_selector.pointcuts import CommandBattle

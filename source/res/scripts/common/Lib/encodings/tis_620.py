@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/tis_620.py
-""" Python Character Mapping Codec tis_620 generated from 'python-mappings/TIS-620.TXT' with gencodec.py.
-
-"""
 import codecs
 
 class Codec(codecs.Codec):

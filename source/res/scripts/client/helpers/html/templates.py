@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/html/templates.py
-import ResMgr
-from collections import defaultdict
 from types import DictType
+from collections import defaultdict
+import ResMgr
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers import html
 
@@ -100,8 +100,8 @@ class XMLCollection(Collection):
         srcDict = {}
         if keys:
             for key in keys:
-                if 'context' == key:
-                    ctx = dict(map(lambda item: (item[0], item[1].asString), source['context'].items()))
+                if key == 'context':
+                    ctx = dict(((item[0], item[1].asString) for item in source['context'].items()))
                 srcDict[key] = html.translation(source.readString(key))
 
         else:

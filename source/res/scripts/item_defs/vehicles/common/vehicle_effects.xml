@@ -2241,6 +2241,7 @@
         <impactEnd>	5.0	</impactEnd>
         <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
         <stopExplosion>	36000	</stopExplosion>
+        <lightingEnd>	8.0	</lightingEnd>
       </timeline>
       <effects>
         <pixie>
@@ -2249,6 +2250,50 @@
           <position>	HP_turretJoint	</position>
           <force>	1	</force>
         </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1.0	</innerRadius>
+          <outerRadius>	15.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <offset>	0.0 3.0 0.0	</offset>
+          <position>	HP_turretJoint	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	900	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.1	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	100	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.2	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	700	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.4	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	150	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.5	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	500	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	600	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
         <flashBang>
           <startKey>	start	</startKey>
           <stages>
@@ -2302,6 +2347,7 @@
         <impactEnd>	5.0	</impactEnd>
         <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
         <stopExplosion>	36000	</stopExplosion>
+        <lightingEnd>	8.0	</lightingEnd>
       </timeline>
       <effects>
         <pixie>
@@ -2310,6 +2356,50 @@
           <position>	HP_turretJoint	</position>
           <force>	1	</force>
         </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1.0	</innerRadius>
+          <outerRadius>	15.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <offset>	0.0 3.0 0.0	</offset>
+          <position>	HP_turretJoint	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	900	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.1	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	100	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.2	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	700	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.4	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	150	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.5	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	500	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	600	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
         <flashBang>
           <startKey>	start	</startKey>
           <stages>
@@ -2363,6 +2453,7 @@
         <impactEnd>	5.0	</impactEnd>
         <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
         <stopExplosion>	36000	</stopExplosion>
+        <lightingEnd>	8.0	</lightingEnd>
       </timeline>
       <effects>
         <pixie>
@@ -2371,6 +2462,50 @@
           <position>	HP_turretJoint	</position>
           <force>	1	</force>
         </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1.0	</innerRadius>
+          <outerRadius>	15.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <offset>	0.0 3.0 0.0	</offset>
+          <position>	HP_turretJoint	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	900	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.1	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	100	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.2	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	700	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.4	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	150	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.5	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	500	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	600	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
         <flashBang>
           <startKey>	start	</startKey>
           <stages>
@@ -2424,6 +2559,7 @@
         <impactEnd>	5.0	</impactEnd>
         <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
         <stopExplosion>	36000	</stopExplosion>
+        <lightingEnd>	8.0	</lightingEnd>
       </timeline>
       <effects>
         <pixie>
@@ -2432,6 +2568,50 @@
           <position>	HP_turretJoint	</position>
           <force>	1	</force>
         </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1.0	</innerRadius>
+          <outerRadius>	15.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <offset>	0.0 3.0 0.0	</offset>
+          <position>	HP_turretJoint	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	900	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.1	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	100	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.2	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	700	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.4	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	150	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.5	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	500	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	600	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
         <flashBang>
           <startKey>	start	</startKey>
           <stages>
@@ -2498,4 +2678,18 @@
       </effects>
     </variant1>
   </fullDestruction>
+  <dynamicCollision>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_distr_object_pc	</wwsoundPC>
+          <wwsoundNPC>	collision_distr_object_pc	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </dynamicCollision>
 </vehicle_effects.xml>

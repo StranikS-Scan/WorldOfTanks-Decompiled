@@ -1,30 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pickle.py
-"""Create portable serialized representations of Python objects.
-
-See module cPickle for a (much) faster implementation.
-See module copy_reg for a mechanism for registering custom picklers.
-See module pickletools source for extensive comments.
-
-Classes:
-
-    Pickler
-    Unpickler
-
-Functions:
-
-    dump(object, file)
-    dumps(object) -> string
-    load(file) -> object
-    loads(string) -> object
-
-Misc variables:
-
-    __version__
-    format_version
-    compatible_formats
-
-"""
 __version__ = '$Revision: 72223 $'
 from types import *
 from copy_reg import dispatch_table
@@ -52,27 +27,14 @@ HIGHEST_PROTOCOL = 2
 mloads = marshal.loads
 
 class PickleError(Exception):
-    """A common base class for the other pickling exceptions."""
     pass
 
 
 class PicklingError(PickleError):
-    """This exception is raised when an unpicklable object is passed to the
-    dump() method.
-    
-    """
     pass
 
 
 class UnpicklingError(PickleError):
-    """This exception is raised when there is a problem unpickling an object,
-    such as a security violation.
-    
-    Note that other exceptions may also be raised during unpickling, including
-    (but not necessarily limited to) AttributeError, EOFError, ImportError,
-    and IndexError.
-    
-    """
     pass
 
 
@@ -157,29 +119,6 @@ del x
 class Pickler():
 
     def __init__(self, file, protocol=None):
-        """This takes a file-like object for writing a pickle data stream.
-        
-        The optional protocol argument tells the pickler to use the
-        given protocol; supported protocols are 0, 1, 2.  The default
-        protocol is 0, to be backwards compatible.  (Protocol 0 is the
-        only protocol that can be written to a file opened in text
-        mode and read back successfully.  When using a protocol higher
-        than 0, make sure the file is opened in binary mode, both when
-        pickling and unpickling.)
-        
-        Protocol 1 is more efficient than protocol 0; protocol 2 is
-        more efficient than protocol 1.
-        
-        Specifying a negative protocol version selects the highest
-        protocol version supported.  The higher the protocol used, the
-        more recent the version of Python needed to read the pickle
-        produced.
-        
-        The file parameter must have a write() method that accepts a single
-        string argument.  It can thus be an open file object, a StringIO
-        object, or any other custom object that meets this interface.
-        
-        """
         if protocol is None:
             protocol = 0
         if protocol < 0:
@@ -194,28 +133,17 @@ class Pickler():
         return
 
     def clear_memo(self):
-        """Clears the pickler's "memo".
-        
-        The memo is the data structure that remembers which objects the
-        pickler has already seen, so that shared or recursive objects are
-        pickled by reference and not by value.  This method is useful when
-        re-using picklers.
-        
-        """
         self.memo.clear()
 
     def dump(self, obj):
-        """Write a pickled representation of obj to the open file."""
         if self.proto >= 2:
             self.write(PROTO + chr(self.proto))
         self.save(obj)
         self.write(STOP)
 
     def memoize(self, obj):
-        """Store an object in the memo."""
         if self.fast:
             return
-        assert id(obj) not in self.memo
         memo_len = len(self.memo)
         self.write(self.put(memo_len))
         self.memo[id(obj)] = (memo_len, obj)
@@ -626,7 +554,6 @@ class Pickler():
         if self.proto >= 2:
             code = _extension_registry.get((module, name))
             if code:
-                assert code > 0
                 if code <= 255:
                     write(EXT1 + chr(code))
                 elif code <= 65535:
@@ -645,15 +572,6 @@ class Pickler():
 
 
 def _keep_alive(x, memo):
-    """Keeps a reference to the object x in the memo.
-    
-    Because we remember objects by their id, we have
-    to assure that possibly temporary objects are kept
-    alive by referencing them.
-    We store a reference at the id of the memo, which should
-    normally not be used unless someone tries to deepcopy
-    the memo itself...
-    """
     try:
         memo[id(memo)].append(x)
     except KeyError:
@@ -663,13 +581,6 @@ def _keep_alive(x, memo):
 classmap = {}
 
 def whichmodule(func, funcname):
-    """Figure out the module in which a function occurs.
-    
-    Search sys.modules for the module.
-    Cache in classmap.
-    Return a module name.
-    If the function cannot be found, return "__main__".
-    """
     mod = getattr(func, '__module__', None)
     if mod is not None:
         return mod
@@ -691,26 +602,11 @@ def whichmodule(func, funcname):
 class Unpickler():
 
     def __init__(self, file):
-        """This takes a file-like object for reading a pickle data stream.
-        
-        The protocol version of the pickle is detected automatically, so no
-        proto argument is needed.
-        
-        The file-like object must have two methods, a read() method that
-        takes an integer argument, and a readline() method that requires no
-        arguments.  Both methods should return a string.  Thus file-like
-        object can be a file object opened for reading, a StringIO object,
-        or any other custom object that meets this interface.
-        """
         self.readline = file.readline
         self.read = file.read
         self.memo = {}
 
     def load(self):
-        """Read a pickled object representation from the open file.
-        
-        Return the reconstituted object hierarchy specified in the file.
-        """
         self.mark = object()
         self.stack = []
         self.append = self.stack.append
@@ -1165,31 +1061,10 @@ class _EmptyClass():
 import binascii as _binascii
 
 def encode_long(x):
-    r"""Encode a long to a two's complement little-endian binary string.
-    Note that 0L is a special case, returning an empty string, to save a
-    byte in the LONG1 pickling context.
-    
-    >>> encode_long(0L)
-    ''
-    >>> encode_long(255L)
-    '\xff\x00'
-    >>> encode_long(32767L)
-    '\xff\x7f'
-    >>> encode_long(-256L)
-    '\x00\xff'
-    >>> encode_long(-32768L)
-    '\x00\x80'
-    >>> encode_long(-128L)
-    '\x80'
-    >>> encode_long(127L)
-    '\x7f'
-    >>>
-    """
     if x == 0:
         return ''
     if x > 0:
         ashex = hex(x)
-        assert ashex.startswith('0x')
         njunkchars = 2 + ashex.endswith('L')
         nibbles = len(ashex) - njunkchars
         if nibbles & 1:
@@ -1198,14 +1073,12 @@ def encode_long(x):
             ashex = '0x00' + ashex[2:]
     else:
         ashex = hex(-x)
-        assert ashex.startswith('0x')
         njunkchars = 2 + ashex.endswith('L')
         nibbles = len(ashex) - njunkchars
         if nibbles & 1:
             nibbles += 1
         nbits = nibbles * 4
         x += 1L << nbits
-        assert x > 0
         ashex = hex(x)
         njunkchars = 2 + ashex.endswith('L')
         newnibbles = len(ashex) - njunkchars
@@ -1217,29 +1090,11 @@ def encode_long(x):
         ashex = ashex[2:-1]
     else:
         ashex = ashex[2:]
-    assert len(ashex) & 1 == 0, (x, ashex)
     binary = _binascii.unhexlify(ashex)
     return binary[::-1]
 
 
 def decode_long(data):
-    r"""Decode a long from a two's complement little-endian binary string.
-    
-    >>> decode_long('')
-    0L
-    >>> decode_long("\xff\x00")
-    255L
-    >>> decode_long("\xff\x7f")
-    32767L
-    >>> decode_long("\x00\xff")
-    -256L
-    >>> decode_long("\x00\x80")
-    -32768L
-    >>> decode_long("\x80")
-    -128L
-    >>> decode_long("\x7f")
-    127L
-    """
     nbytes = len(data)
     if nbytes == 0:
         return 0L

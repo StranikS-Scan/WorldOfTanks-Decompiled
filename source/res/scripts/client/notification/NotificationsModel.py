@@ -5,7 +5,7 @@ from notification.NotificationsCollection import NotificationsCollection
 from notification.listeners import NotificationsListeners
 from notification.settings import NOTIFICATION_STATE
 
-class NotificationsModel:
+class NotificationsModel(object):
 
     def __init__(self, counter):
         self.__currentDisplayState = None

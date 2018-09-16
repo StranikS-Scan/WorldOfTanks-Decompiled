@@ -16,7 +16,7 @@ from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shared.formatters import text_styles
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import i18n, time_utils, dependency
-from skeletons.gui.game_control import IFalloutController, IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.clans.clan_helpers import isStrongholdsEnabled
@@ -83,7 +83,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.FALLOUT) or state.isInUnit(PREBATTLE_TYPE.EVENT)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -136,6 +136,9 @@ class _SelectorItem(object):
 class _DisabledSelectorItem(_SelectorItem):
 
     def update(self, state):
+        pass
+
+    def _update(self, state):
         pass
 
     def select(self):
@@ -221,23 +224,6 @@ class _BattleTutorialItem(_SelectorItem):
         self._isDisabled = state.hasLockedState
 
 
-class _FalloutItem(_SelectorItem):
-    falloutCtrl = dependency.descriptor(IFalloutController)
-
-    def isRandomBattle(self):
-        return True
-
-    def _update(self, state):
-        self._isSelected = state.isInFallout()
-        self._isDisabled = state.hasLockedState
-        self._isVisible = self.falloutCtrl.isAvailable()
-
-    def getVO(self):
-        vo = super(_FalloutItem, self).getVO()
-        vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_BUTTONS_FALLOUTSELECTORRENDERERBGEVENT
-        return vo
-
-
 class _SandboxItem(_SelectorItem):
 
     def isRandomBattle(self):
@@ -290,7 +276,8 @@ class _BattleSelectorItems(object):
             LOG_ERROR('Can not invoke action', action)
 
     def getVOs(self):
-        return ([ item.getVO() for item in sorted(self.__items.itervalues()) if item.isVisible() ], self.__isDemonstrator, self.__isDemoButtonEnabled)
+        filtered = [ item for item in sorted(self.__items.itervalues()) if item.isVisible() ]
+        return ([ item.getVO() for item in filtered ], self.__isDemonstrator, self.__isDemoButtonEnabled)
 
     def getItems(self):
         return self.__items
@@ -356,7 +343,7 @@ class _RankedItem(_SelectorItem):
     def getVO(self):
         vo = super(_RankedItem, self).getVO()
         if self.rankedController.isAvailable():
-            vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_BUTTONS_FALLOUTSELECTORRENDERERBGEVENT
+            vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_BUTTONS_SELECTORRENDERERBGEVENT
         return vo
 
     def getFormattedLabel(self):
@@ -420,10 +407,6 @@ def _createItems(eventsCache=None, lobbyContext=None):
     _addTrainingBattleType(items)
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
-    if settings is not None and settings.isTutorialEnabled():
-        _addTutorialBattleType(items, isInRoaming)
-    if eventsCache is not None and eventsCache.isFalloutEnabled():
-        _addFalloutBattleType(items)
     if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
         _addSandboxType(items)
     return _BattleSelectorItems(items)
@@ -466,10 +449,6 @@ def _addTutorialBattleType(items, isInRoaming):
     items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL, PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 8))
 
 
-def _addFalloutBattleType(items):
-    items.append(_FalloutItem(MENU.HEADERBUTTONS_BATTLE_TYPES_FALLOUT, PREBATTLE_ACTION_NAME.FALLOUT, 2))
-
-
 def _addSandboxType(items):
     items.append(_SandboxItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETEACHING, PREBATTLE_ACTION_NAME.SANDBOX, 9))
 
@@ -509,10 +488,8 @@ def clear():
 
 
 def getItems():
-    assert _g_items, 'Items is empty'
     return _g_items
 
 
 def getSquadItems():
-    assert _g_squadItems, 'Items is empty'
     return _g_squadItems

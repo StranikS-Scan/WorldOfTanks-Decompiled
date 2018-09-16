@@ -27,7 +27,8 @@ class Browser(BrowserMeta):
     def init(self, browserID, webHandlersMap=None, alias=''):
         self.__browserID = browserID
         self.__browser = self.browserCtrl.getBrowser(self.__browserID)
-        assert self.__browser is not None, 'Cannot find browser'
+        if self.__browser is None:
+            raise UserWarning('Cannot find browser')
         self.__webCommandHandler = WebCommandHandler(self.__browserID, alias, self)
         if webHandlersMap is not None:
             self.__webCommandHandler.addHandlers(webHandlersMap)
@@ -131,7 +132,7 @@ class Browser(BrowserMeta):
         try:
             if self.__webCommandHandler is not None:
                 self.__webCommandHandler.handleCommand(command)
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         return
@@ -146,7 +147,8 @@ class Browser(BrowserMeta):
         if event.ctx['browserID'] == self.__browserID:
             self.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
             self.__browser = self.browserCtrl.getBrowser(self.__browserID)
-            assert self.__browser is not None, 'Cannot find browser'
+            if self.__browser is None:
+                raise UserWarning('Cannot find browser')
             self.__prepareBrowser()
         return
 

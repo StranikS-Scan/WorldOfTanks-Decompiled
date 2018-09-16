@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/BOOTCAMP.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from debug_utils import LOG_WARNING
 
 class BOOTCAMP(object):
@@ -31,9 +27,6 @@ class BOOTCAMP(object):
     AWARD_OPTIONS_NAME_USSR = '#bootcamp:award/options/name/ussr'
     AWARD_OPTIONS_DESCRIPTION_USSR = '#bootcamp:award/options/description/ussr'
     HINT_CAMERA_CONTROLS = '#bootcamp:hint/camera/controls'
-    MARKER_BLOCKED = '#bootcamp:marker/blocked'
-    MARKER_RICOCHET = '#bootcamp:marker/ricochet'
-    MARKER_CRITICAL = '#bootcamp:marker/critical'
     HINT_MOVE = '#bootcamp:hint/move'
     HINT_MOVE_TURRET = '#bootcamp:hint/move/turret'
     HINT_SHOOT = '#bootcamp:hint/shoot'

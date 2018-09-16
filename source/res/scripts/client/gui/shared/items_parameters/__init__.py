@@ -3,21 +3,46 @@
 import math
 import sys
 from math import ceil
-from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME
+from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME
 from helpers import i18n, time_utils
 from items import vehicles, artefacts
 RELATIVE_PARAMS = ('relativePower', 'relativeArmor', 'relativeMobility', 'relativeCamouflage', 'relativeVisibility')
 MAX_RELATIVE_VALUE = 1000
 NO_DATA = 'no data'
+_AUTO_RELOAD_TAG = 'autoreload'
 
 def _updateMinMaxValues(targetDict, key, value):
     targetDict[key] = (min(targetDict[key][0], value), max(targetDict[key][1], value))
 
 
-def getShotsPerMinute(descriptor, reloadTime):
+def _addAutoReload(result, configReloadTimes, shellsCount):
+    if len(configReloadTimes) < shellsCount:
+        extraCount = shellsCount - len(configReloadTimes)
+        fullReloadTimes = configReloadTimes + configReloadTimes[-1:] * extraCount
+    else:
+        fullReloadTimes = configReloadTimes[:]
+    autoReloadTimes = result[AUTO_RELOAD_PROP_NAME]
+    currCount = len(autoReloadTimes)
+    for idx, reloadTime in enumerate(fullReloadTimes):
+        if idx < currCount:
+            currReloadTime = autoReloadTimes[idx]
+            currReloadTime[0] = min(reloadTime, currReloadTime[0])
+            currReloadTime[1] = min(reloadTime, currReloadTime[1])
+        autoReloadTimes.append([reloadTime, reloadTime])
+
+
+def isAutoReloadGun(gun):
+    return _AUTO_RELOAD_TAG in gun.tags
+
+
+def getShotsPerMinute(descriptor, reloadTime, autoReloadGun=False):
     clip = descriptor.clip
     burst = descriptor.burst
-    clipCount = clip[0] / (burst[0] if clip[0] > 1 else 1)
+    if autoReloadGun:
+        clipCount = 1
+        reloadTime = max(reloadTime, clip[1])
+    else:
+        clipCount = clip[0] / (burst[0] if clip[0] > 1 else 1)
     value = burst[0] * clipCount * time_utils.ONE_MINUTE / (reloadTime + (burst[0] - 1) * burst[1] * clipCount + (clipCount - 1) * clip[1])
     return value
 
@@ -33,14 +58,22 @@ def calcGunParams(gunDescr, descriptors):
      DAMAGE_PROP_NAME: [],
      SHELLS_PROP_NAME: [],
      STUN_DURATION_PROP_NAME: [],
-     GUARANTEED_STUN_DURATION_PROP_NAME: []}
+     GUARANTEED_STUN_DURATION_PROP_NAME: [],
+     AUTO_RELOAD_PROP_NAME: []}
     for descr in descriptors:
         currShellsCount = descr.clip[0]
         if currShellsCount > 1:
             _updateMinMaxValues(result, SHELL_RELOADING_TIME_PROP_NAME, descr.clip[1])
             _updateMinMaxValues(result, RELOAD_MAGAZINE_TIME_PROP_NAME, descr.reloadTime)
             _updateMinMaxValues(result, SHELLS_COUNT_PROP_NAME, currShellsCount)
-        _updateMinMaxValues(result, RELOAD_TIME_PROP_NAME, getShotsPerMinute(descr, descr.reloadTime))
+        autoReload = isAutoReloadGun(descr)
+        if autoReload:
+            autoReloadTimes = descr.autoreload.reloadTime
+            _addAutoReload(result, autoReloadTimes, currShellsCount)
+            reloadTime = min(autoReloadTimes)
+        else:
+            reloadTime = descr.reloadTime
+        _updateMinMaxValues(result, RELOAD_TIME_PROP_NAME, getShotsPerMinute(descr, reloadTime, autoReload))
         curDispRadius = round(descr.shotDispersionAngle * 100, 2)
         curAimingTime = round(descr.aimingTime, 1)
         _updateMinMaxValues(result, DISPERSION_RADIUS_PROP_NAME, curDispRadius)

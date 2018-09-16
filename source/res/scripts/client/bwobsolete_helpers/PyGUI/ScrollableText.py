@@ -33,10 +33,6 @@ def _findStartOfWord(s, offset):
 
 
 def _wrapLine(s, desiredWidth, textComponent):
-    """
-            Wraps the given string into a list of lines. If there is no
-            wrapping performed, a list of length 1 is returned.
-    """
     ret = []
     i = 0
     while i < len(s):

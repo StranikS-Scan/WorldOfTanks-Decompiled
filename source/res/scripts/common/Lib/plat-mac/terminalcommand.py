@@ -1,15 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/terminalcommand.py
-"""terminalcommand.py -- A minimal interface to Terminal.app.
-
-To run a shell command in a new Terminal.app window:
-
-    import terminalcommand
-    terminalcommand.run("ls -l")
-
-No result is returned; it is purely meant as a quick way to run a script
-with a decent input/output window.
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the terminalcommand module is removed.', stacklevel=2)
 import time
@@ -21,7 +11,6 @@ START_TERMINAL = '/usr/bin/open /Applications/Utilities/Terminal.app'
 SEND_MODE = kAENoReply
 
 def run(command):
-    """Run a shell command in a new Terminal.app window."""
     termAddress = AE.AECreateDesc(typeApplicationBundleID, 'com.apple.Terminal')
     theEvent = AE.AECreateAppleEvent(kAECoreSuite, kAEDoScript, termAddress, kAutoGenerateReturnID, kAnyTransactionID)
     commandDesc = AE.AECreateDesc(typeChar, command)

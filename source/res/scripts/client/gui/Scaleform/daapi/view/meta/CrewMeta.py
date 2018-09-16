@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CrewMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class CrewMeta(BaseDAAPIComponent):
@@ -30,9 +26,6 @@ class CrewMeta(BaseDAAPIComponent):
         self._printOverrideError('onCrewDogItemClick')
 
     def as_tankmenResponseS(self, data):
-        """
-        :param data: Represented by TankmenResponseVO (AS)
-        """
         return self.flashObject.as_tankmenResponse(data) if self._isDAAPIInited() else None
 
     def as_dogResponseS(self, dogName):

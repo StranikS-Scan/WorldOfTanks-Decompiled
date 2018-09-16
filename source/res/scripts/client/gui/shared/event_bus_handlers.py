@@ -1,32 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_bus_handlers.py
-"""Automatic event subscriber/unsubscriber.
-
-Usage:
-
-1. Set the EventBusListener as a metaclass for your class:
-
-    class Foo(EventSystemEntity):
-        __metaclass__ = EventBusListener
-        ...
-
-2. Mark your handler methods with the @eventBusHandler decorator:
-
-    @eventBusHandler(GameEvent.RADIAL_MENU_CMD, EVENT_BUS_SCOPE.BATTLE)
-    def handler(self, event):
-        pass
-
-Event subscribing/unsubscribing is performed automatically before the calls
-of _populate/_dispose. Note that there is no need to explicitly define
-_populate and _dispose methods if your class doesn't use them.
-"""
 from functools import partial, wraps
 from types import FunctionType
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 
 class EventBusListener(type):
-    """Metaclass for automatic event subscribing/unsubscribing.
-    """
 
     def __new__(mcs, name, bases, namespace):
         cls = type.__new__(mcs, name, bases, namespace)
@@ -53,8 +31,6 @@ class EventBusListener(type):
 
 
 def eventBusHandler(event, scope):
-    """Decorator for marking method as an event handler.
-    """
 
     def wrapped(method):
         method.__event_bus_data__ = (event, scope)
@@ -64,8 +40,6 @@ def eventBusHandler(event, scope):
 
 
 def _populateWrapper(method):
-    """Event-subscribing wrapper for the _populate method.
-    """
 
     @wraps(method)
     def wrapped(self, *args, **kwargs):
@@ -80,8 +54,6 @@ def _populateWrapper(method):
 
 
 def _disposeWrapper(method):
-    """Event-unsubscribing wrapper for the _dispose method.
-    """
 
     @wraps(method)
     def wrapped(self, *args, **kwargs):

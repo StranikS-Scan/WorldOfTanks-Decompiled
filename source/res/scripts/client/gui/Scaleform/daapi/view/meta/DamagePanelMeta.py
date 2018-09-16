@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/DamagePanelMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class DamagePanelMeta(BaseDAAPIComponent):
@@ -27,10 +23,6 @@ class DamagePanelMeta(BaseDAAPIComponent):
         return self.flashObject.as_setPlayerInfo(playerName, clanName, regionName, vehicleTypeName) if self._isDAAPIInited() else None
 
     def as_setupS(self, healthStr, progress, indicatorType, crewLayout, yawLimits, hasTurretRotator, isAutoRotationOn):
-        """
-        :param crewLayout: Represented by Array (AS)
-        :param yawLimits: Represented by Array (AS)
-        """
         return self.flashObject.as_setup(healthStr, progress, indicatorType, crewLayout, yawLimits, hasTurretRotator, isAutoRotationOn) if self._isDAAPIInited() else None
 
     def as_updateHealthS(self, healthStr, progress):
@@ -38,24 +30,6 @@ class DamagePanelMeta(BaseDAAPIComponent):
 
     def as_updateSpeedS(self, speed):
         return self.flashObject.as_updateSpeed(speed) if self._isDAAPIInited() else None
-
-    def as_setMaxSpeedS(self, maxSpeed):
-        return self.flashObject.as_setMaxSpeed(maxSpeed) if self._isDAAPIInited() else None
-
-    def as_setRpmVibrationS(self, intensity):
-        return self.flashObject.as_setRpmVibration(intensity) if self._isDAAPIInited() else None
-
-    def as_playEngineStartAnimS(self):
-        return self.flashObject.as_playEngineStartAnim() if self._isDAAPIInited() else None
-
-    def as_startVehicleStartAnimS(self):
-        return self.flashObject.as_startVehicleStartAnim() if self._isDAAPIInited() else None
-
-    def as_finishVehicleStartAnimS(self):
-        return self.flashObject.as_finishVehicleStartAnim() if self._isDAAPIInited() else None
-
-    def as_setNormalizedEngineRpmS(self, value):
-        return self.flashObject.as_setNormalizedEngineRpm(value) if self._isDAAPIInited() else None
 
     def as_setCruiseModeS(self, mode):
         return self.flashObject.as_setCruiseMode(mode) if self._isDAAPIInited() else None

@@ -3,6 +3,7 @@
 import BigWorld
 import Event
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.shared.formatters import text_styles
 from helpers import dependency
 from helpers import i18n, time_utils
 from gui import makeHtmlString
@@ -84,12 +85,13 @@ class ConfirmDialogButtons(InfoDialogButtons):
 
 class I18nInfoDialogButtons(ISimpleDialogButtonsMeta):
 
-    def __init__(self, i18nKey='common'):
+    def __init__(self, i18nKey='common', buttonID=DIALOG_BUTTON_ID.CLOSE):
         super(I18nInfoDialogButtons, self).__init__()
         self._i18nKey = i18nKey
+        self._buttonID = buttonID
 
     def getLabels(self):
-        return [{'id': DIALOG_BUTTON_ID.CLOSE,
+        return [{'id': self._buttonID,
           'label': _getDialogStr(I18N_CANCEL_KEY.format(self._i18nKey)),
           'focused': True}]
 
@@ -104,8 +106,8 @@ class I18nConfirmDialogButtons(I18nInfoDialogButtons):
     def getLabels(self):
         return [self.__getButtonInfoObject(DIALOG_BUTTON_ID.SUBMIT, _getDialogStr(I18N_SUBMIT_KEY.format(self._i18nKey)), self._focusedIndex == DIALOG_BUTTON_ID.SUBMIT if self._focusedIndex is not None else True), self.__getButtonInfoObject(DIALOG_BUTTON_ID.CLOSE, _getDialogStr(I18N_CANCEL_KEY.format(self._i18nKey)), self._focusedIndex == DIALOG_BUTTON_ID.CLOSE if self._focusedIndex is not None else False)]
 
-    def __getButtonInfoObject(self, id, label, focused):
-        return {'id': id,
+    def __getButtonInfoObject(self, buttonID, label, focused):
+        return {'id': buttonID,
          'label': label,
          'focused': focused}
 
@@ -127,10 +129,7 @@ class SimpleDialogMeta(ISimpleDialogMeta):
         return self._message
 
     def getButtonLabels(self):
-        result = []
-        if self._buttons is not None:
-            result = self._buttons.getLabels()
-        return result
+        return self._buttons.getLabels() if self._buttons is not None else []
 
     def getTimer(self):
         return self._timer
@@ -173,12 +172,10 @@ class I18nDialogMeta(SimpleDialogMeta):
         return result
 
     def getButtonLabels(self):
-        labels = []
         if self._buttons is not None:
-            labels = self._buttons.getLabels()
-        elif self._meta is not None:
-            labels = self._meta.getButtonLabels()
-        return labels
+            return self._buttons.getLabels()
+        else:
+            return self._meta.getButtonLabels() if self._meta is not None else []
 
     def getTimer(self):
         result = self._timer
@@ -423,3 +420,19 @@ class CheckBoxDialogMeta(I18nConfirmDialogMeta):
 
     def getViewScopeType(self):
         return ScopeTemplates.DYNAMIC_SCOPE
+
+
+class I18GammaDialogMeta(I18nDialogMeta):
+
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, scope=ScopeTemplates.VIEW_SCOPE):
+        buttons = I18nInfoDialogButtons(key, DIALOG_BUTTON_ID.SUBMIT)
+        super(I18GammaDialogMeta, self).__init__(key, buttons, titleCtx, messageCtx, meta, scope)
+
+    def getMessage(self):
+        header = text_styles.highTitle(_getDialogStr('%s/message/header' % self._key))
+        desc = self._makeString('%s/message/description' % self._key, self._messageCtx)
+        msg = '{}\n\n{}'.format(header, desc)
+        return msg
+
+    def getEventType(self):
+        return events.ShowDialogEvent.SHOW_GAMMA_DIALOG

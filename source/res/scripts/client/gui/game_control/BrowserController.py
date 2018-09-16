@@ -60,17 +60,9 @@ class BrowserController(IBrowserController):
         self.__stop()
 
     def addFilterHandler(self, handler):
-        """ Adds given @handler to the browser urls filter chain. Calls
-        it if there is a @tag in url onto opened browser page.
-        Handler should receive url and list of client-specific tags,
-        return bool as flag that routine have to stop
-        """
         self.__filters.add(handler)
 
     def removeFilterHandler(self, handler):
-        """ Remove given @handler from filtering chain. Handler description
-        can be seen in addFilterhandler method doc-string
-        """
         self.__filters.discard(handler)
 
     @async
@@ -107,7 +99,8 @@ class BrowserController(IBrowserController):
         if browserID not in self.__browsers and browserID not in self.__pendingBrowsers:
             texture = self._BROWSER_TEXTURE
             app = g_appLoader.getApp()
-            assert app, 'Application can not be None'
+            if app is None:
+                raise UserWarning('Application can not be None')
             browser = WebBrowser(webBrowserID, app, texture, size, url, handlers=self.__filters)
             self.__browsers[browserID] = browser
             if self.__isCreatingBrowser():
@@ -125,6 +118,9 @@ class BrowserController(IBrowserController):
             browser.changeTitle(title)
         callback(browserID)
         return
+
+    def getAllBrowsers(self):
+        return self.__browsers
 
     def getBrowser(self, browserID):
         return self.__browsers.get(browserID)

@@ -35,7 +35,6 @@ class StanzaErrorExtension(PyExtension):
     def __init__(self, errorCondition=None, errorType=None):
         super(StanzaErrorExtension, self).__init__(_TAG.ERROR)
         if errorCondition:
-            assert errorCondition in STANZA_ERRORS
             codeExt = PyExtension(errorCondition)
             codeExt.setXmlNs(_NS.STANZA_ERROR)
             self.setChild(codeExt)

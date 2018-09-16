@@ -7,9 +7,8 @@ import Math
 import TriggersManager
 from constants import ARENA_PERIOD
 from PlayerEvents import g_playerEvents
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import avatar_getter
-from helpers import dependency, i18n
+from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from tutorial.control import g_tutorialWeaver
@@ -18,7 +17,7 @@ from tutorial.control.battle.context import BattleClientCtx
 from tutorial.control.battle.context import ExtendedBattleClientCtx
 from tutorial.control.context import SOUND_EVENT, GlobalStorage, GLOBAL_VAR
 from tutorial.control.functional import FunctionalEffect, FunctionalScene
-from tutorial.control.functional import FunctionalChapterInfo
+from tutorial.control.functional import FunctionalChapterContext
 from tutorial.control.functional import FunctionalConditions
 from tutorial.control.functional import FunctionalShowDialogEffect
 from tutorial.data.chapter import ChapterProgress
@@ -289,12 +288,12 @@ class FunctionalShowMarker(FunctionalEffect):
         data = self.getTarget()
         if _MarkersStorage.hasMarker(data.getID()):
             LOG_DEBUG('Markers is showing', data.getID())
-            return
+            return False
         else:
             marker = self.__makeEffect(data)
             if marker is not None:
                 _MarkersStorage.addMarker(data.getID(), marker)
-            return
+            return True
 
     def __makeEffect(self, data):
         typeID = data.getTypeID()
@@ -383,7 +382,7 @@ class FunctionalRemoveMarker(FunctionalEffect):
         marker = _MarkersStorage.removeMarker(self._effect.getTargetID())
         if marker is not None:
             marker.clear()
-        return
+        return True
 
 
 class FunctionalNextTaskEffect(FunctionalEffect):
@@ -403,9 +402,10 @@ class FunctionalNextTaskEffect(FunctionalEffect):
                 soundID = SOUND_EVENT.TASK_COMPLETED
             if self._gui.playEffect(GUI_EFFECT_NAME.NEXT_TASK, [task.getID(), task.getText(), flag]):
                 self._sound.play(soundID)
+                return True
         else:
             LOG_ERROR('Task not found', self._effect.getTargetID())
-        return
+        return False
 
 
 class FunctionalShowHintEffect(FunctionalEffect):
@@ -419,9 +419,10 @@ class FunctionalShowHintEffect(FunctionalEffect):
                 speakID = hint.getSpeakID()
                 if speakID:
                     self._sound.play(SOUND_EVENT.SPEAKING, sndID=speakID)
+                return True
         else:
             LOG_ERROR('Hint not found', self._effect.getTargetID())
-        return
+        return False
 
     def _getImagePaths(self, hint):
         if hint.hasImageRef():
@@ -437,28 +438,28 @@ class FunctionalTeleportEffect(FunctionalEffect):
         data = self.getTarget()
         if data is None:
             LOG_ERROR('Teleport marker not found', self._effect.getTargetID())
-            return
+            return False
         else:
             typeID = data.getTypeID()
             pointID = self._tutorial.getVars().get(data.getVarRef())
             if pointID is None:
                 LOG_ERROR('Point not found', pointID)
-                return
+                return False
             tManager = TriggersManager.g_manager
             if tManager is None or not tManager.isEnabled():
                 LOG_ERROR('TriggersManager is not defined or is not enabled')
-                return
+                return False
             position = tManager.getTriggerPosition(typeID, pointID)
             if position is None:
                 LOG_ERROR('Can not determine position of object', pointID)
-                return
+                return False
             teleport = getattr(BigWorld.player(), 'teleportVehicle', None)
             if teleport is None:
                 LOG_ERROR('BigWorld.player().teleportVehicle not found')
-                return
+                return False
             world = data.getWorldData()
             teleport(position + world.get('offset', Math.Vector3(0, 0, 0)), world.get('yaw', 0.0))
-            return
+            return True
 
 
 class FunctionalDisableCameraZoomEffect(FunctionalEffect):
@@ -477,6 +478,7 @@ class FunctionalDisableCameraZoomEffect(FunctionalEffect):
         if weaver.findPointcut(aspects.CameraUpdatePointcut) == -1:
             BigWorld.player().inputHandler.ctrl.camera.setCameraDistance(self.CAMERA_START_DIST)
             self._cameraUpdatePointIdx = weaver.weave(pointcut=aspects.CameraUpdatePointcut, aspects=(aspects.CameraZoomModeIgnoreAspect,))
+        return True
 
 
 class FunctionalEnableCameraZoomEffect(FunctionalEffect):
@@ -486,12 +488,14 @@ class FunctionalEnableCameraZoomEffect(FunctionalEffect):
         weaver.clear(idx=weaver.findPointcut(aspects.AltModeTogglePointcut))
         weaver.clear(idx=weaver.findPointcut(aspects.ArcadeCtrlMouseEventsPointcut))
         weaver.clear(idx=weaver.findPointcut(aspects.CameraUpdatePointcut))
+        return True
 
 
 class FunctionalRequestBonusEffect(FunctionalEffect):
 
     def triggerEffect(self):
         self._bonuses.request(chapterID=self._effect.getTargetID())
+        return True
 
 
 class FunctionalNextChapterEffect(FunctionalEffect):
@@ -511,7 +515,7 @@ class FunctionalNextChapterEffect(FunctionalEffect):
             if self.__nextChapter is None:
                 LOG_DEBUG('Next chapter not found')
                 self._funcScene.setExit(exitEntity)
-                return
+                return False
             delay = exitEntity.getNextDelay()
             if self._tutorial._currentChapter != self.__nextChapter:
                 self._sound.play(SOUND_EVENT.NEXT_CHAPTER)
@@ -521,9 +525,10 @@ class FunctionalNextChapterEffect(FunctionalEffect):
                 else:
                     self._gui.clear()
                     self._tutorial.goToNextChapter(self.__nextChapter)
+            return True
         else:
             LOG_ERROR('Exit not found', self._effect.getTargetID())
-        return
+            return False
 
     def isStillRunning(self):
         isFinish = BigWorld.time() >= self.__finishTime
@@ -542,7 +547,7 @@ class FunctionalShowBattleDialogEffect(FunctionalShowDialogEffect):
         player = BigWorld.player()
         if hasattr(player, 'moveVehicle'):
             player.moveVehicle(0, False)
-        super(FunctionalShowBattleDialogEffect, self).triggerEffect()
+        return super(FunctionalShowBattleDialogEffect, self).triggerEffect()
 
 
 class FunctionalShowGreeting(FunctionalEffect):
@@ -556,9 +561,12 @@ class FunctionalShowGreeting(FunctionalEffect):
                     speakID = greeting.getSpeakID()
                     if speakID is not None:
                         self._sound.play(SOUND_EVENT.SPEAKING, sndID=speakID)
+                    return True
             else:
                 LOG_ERROR('Greeting not found', self._effect.getTargetID())
-        return
+            return False
+        else:
+            return
 
     def isInstantaneous(self):
         return False
@@ -575,6 +583,7 @@ class FunctionalRefuseTrainingEffect(FunctionalEffect):
     def triggerEffect(self):
         self._cache.setRefused(True).write()
         avatar_getter.leaveArena()
+        return True
 
     def isStillRunning(self):
         return True
@@ -583,10 +592,10 @@ class FunctionalRefuseTrainingEffect(FunctionalEffect):
         return False
 
 
-class FunctionalBattleChapterInfo(FunctionalChapterInfo):
+class FunctionalBattleChapterContext(FunctionalChapterContext):
 
     def __init__(self):
-        super(FunctionalBattleChapterInfo, self).__init__()
+        super(FunctionalBattleChapterContext, self).__init__()
         chapter = self._data
         chapterID = chapter.getID()
         self._progress = []
@@ -609,6 +618,7 @@ class FunctionalBattleChapterInfo(FunctionalChapterInfo):
         return
 
     def invalidate(self):
+        super(FunctionalBattleChapterContext, self).invalidate()
         offset = 0
         mask = 0
         for conditions, wasOk in self._progress:
@@ -647,10 +657,7 @@ class FunctionalBattleScene(FunctionalScene):
             if vehType is not None:
                 self._vehTypeName = vehType.name
             else:
-                LOG_ERROR('Player\\s vehicle not found')
-        for item in self._scene.getGuiItems():
-            self._gui.setItemProps(item.getTargetID(), item.getProps(), revert=False)
-
+                LOG_ERROR('Players vehicle not found')
         self._gui.show()
         return
 

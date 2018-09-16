@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/StdSuites/Table_Suite.py
-"""Suite Table Suite: Classes for manipulating tables
-Level 1, version 1
-
-Generated from /Volumes/Sap/System Folder/Extensions/AppleScript
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'tbls'
@@ -15,18 +9,15 @@ class Table_Suite_Events:
 
 
 class cell(aetools.ComponentItem):
-    """cell - A cell """
     want = 'ccel'
 
 
 class _Prop_formula(aetools.NProperty):
-    """formula - the formula of the cell """
     which = 'pfor'
     want = 'ctxt'
 
 
 class _Prop_protection(aetools.NProperty):
-    """protection - Indicates whether value or formula in the cell can be changed """
     which = 'ppro'
     want = 'prtn'
 
@@ -34,12 +25,10 @@ class _Prop_protection(aetools.NProperty):
 cells = cell
 
 class column(aetools.ComponentItem):
-    """column - A column """
     want = 'ccol'
 
 
 class _Prop_name(aetools.NProperty):
-    """name - the name of the column """
     which = 'pnam'
     want = 'itxt'
 
@@ -47,14 +36,12 @@ class _Prop_name(aetools.NProperty):
 columns = column
 
 class rows(aetools.ComponentItem):
-    """rows -  """
     want = 'crow'
 
 
 row = rows
 
 class tables(aetools.ComponentItem):
-    """tables -  """
     want = 'ctbl'
 
 

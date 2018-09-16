@@ -4,12 +4,6 @@ import copy
 import weakref
 
 class Listenable:
-    """
-            An interface that specifies an object may be listened to. Derive from
-            this class, then call self.listeners.eventeventName when an event occurs. It
-            will go through the list of listeners and call the specified method
-            name on the listener object, if it exists.
-    """
 
     def __init__(self):
         self.listeners = _Listeners()
@@ -59,10 +53,6 @@ class _ListenerDispatch:
 
 
 class _ListenerFunc(object):
-    """
-            Used internally by FunctionListeners, transparently handling
-            weakrefs to bound methods or standard functions.
-    """
 
     def __init__(self, func):
         if hasattr(func, 'im_self'):
@@ -99,11 +89,6 @@ class _ListenerFunc(object):
 
 
 class FunctionListeners(object):
-    """
-            This listener system allows you to have a simple flat list of listeners.
-            It will hold onto weak references so that they can die, and handles the
-            special case of weak references to bound methods.
-    """
 
     def __init__(self):
         self.listeners = []

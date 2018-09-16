@@ -252,7 +252,7 @@
         <segmentLength>	0.104	</segmentLength>
         <segmentOffset>	0.03	</segmentOffset>
         <segment2Offset>	0.000000	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -445,7 +445,7 @@
         <segmentLength>	0.104	</segmentLength>
         <segmentOffset>	0.03	</segmentOffset>
         <segment2Offset>	0.000000	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -706,12 +706,12 @@
   </fuelTanks>
   <radios>
     <FuG37>	shared	  <unlocks>
-        <radio>	FuG10	  <cost>	3600.0	</cost>
+        <radio>	FuG10	  <cost>	3600	</cost>
         </radio>
       </unlocks>
     </FuG37>
     <FuG10>	shared	  <unlocks>
-        <radio>	FuG11	  <cost>	5600.0	</cost>
+        <radio>	FuG11	  <cost>	5600	</cost>
         </radio>
       </unlocks>
     </FuG10>

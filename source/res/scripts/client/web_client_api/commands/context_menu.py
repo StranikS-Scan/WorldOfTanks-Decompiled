@@ -1,38 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/commands/context_menu.py
-from collections import namedtuple
-from command import SchemeValidator, CommandHandler, instantiateObject
-_ContextMenuCommand = namedtuple('_ContextMenuCommand', ('menu_type', 'custom_parameters'))
-_ContextMenuCommand.__new__.__defaults__ = (None, {})
-_ContextMenuCommandScheme = {'required': (('menu_type', basestring),)}
-_UserContextMenuCommand = namedtuple('_UserContextMenuCommand', ('spa_id', 'user_name', 'custom_items', 'excluded_items'))
-_UserContextMenuCommand.__new__.__defaults__ = (None,
- None,
- [],
- [])
-_UserContextMenuCommandScheme = {'required': (('spa_id', (int, long, basestring)), ('user_name', basestring)),
- 'optional': (('custom_items', list), ('excluded_items', list))}
+from command import Field, W2CSchema, createSubCommandsHandler, SubCommand
 
-class ContextMenuCommand(_ContextMenuCommand, SchemeValidator):
-    """
-    Represents web command for context menu.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(ContextMenuCommand, self).__init__(_ContextMenuCommandScheme)
+class ContextMenuSchema(W2CSchema):
+    menu_type = Field(required=True, type=basestring)
 
 
-class UserContextMenuCommand(_UserContextMenuCommand, SchemeValidator):
-    """
-    Represents user's context menu command.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(UserContextMenuCommand, self).__init__(_UserContextMenuCommandScheme)
+class UserContextMenuSchema(W2CSchema):
+    spa_id = Field(required=True, type=(int, long, basestring))
+    user_name = Field(required=True, type=basestring)
+    custom_items = Field(type=list, default=[])
+    excluded_items = Field(type=list, default=[])
 
 
-def createContextMenuHandler(handlerFunc):
-    data = {'name': 'context_menu',
-     'cls': ContextMenuCommand,
-     'handler': handlerFunc}
-    return instantiateObject(CommandHandler, data)
+def createContextMenuHandler(userMenuHandler):
+    subCommands = {'user_menu': SubCommand(subSchema=UserContextMenuSchema, handler=userMenuHandler)}
+    return createSubCommandsHandler('context_menu', ContextMenuSchema, 'menu_type', subCommands)

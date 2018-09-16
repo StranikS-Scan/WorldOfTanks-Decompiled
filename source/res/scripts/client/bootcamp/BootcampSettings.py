@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/BootcampSettings.py
-import ResMgr
 from copy import deepcopy
+import ResMgr
 from BootcampConstants import HINT_TYPE, HINT_NAMES
 from helpers.i18n import makeString
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP, LOG_ERROR_BOOTCAMP
@@ -69,7 +69,7 @@ class BattleSettings(object):
         try:
             self.__loadDefaults()
             self.__loadConfig()
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION_BOOTCAMP()
 
     def lessonConfiguration(self, lessonId):
@@ -202,37 +202,6 @@ class BattleSettings(object):
             lessonPagesDefaults[pageName] = lessonProps
 
 
-class GarageSettings(object):
-    DEFAULTS_XML_PATH = 'scripts/bootcamp_docs/garage_defaults.xml'
-
-    def __init__(self):
-        super(GarageSettings, self).__init__()
-        self.__defaults = {'panels': {}}
-        try:
-            defaultSettingsConfig = ResMgr.openSection(GarageSettings.DEFAULTS_XML_PATH)
-            if not defaultSettingsConfig:
-                raise Exception("Can't open defaults config file (%s)" % GarageSettings.DEFAULTS_XML_PATH)
-            panelSection = defaultSettingsConfig['panels']
-            panels = self.__defaults['panels']
-            visiblePanels = panelSection['visible'].asString
-            visiblePanelNames = visiblePanels.split()
-            for panelName in visiblePanelNames:
-                panels['hide' + panelName] = False
-
-            invisiblePanels = panelSection['invisible'].asString
-            invisiblePanelNames = invisiblePanels.split()
-            for panelName in invisiblePanelNames:
-                panels['hide' + panelName] = True
-
-        except:
-            LOG_CURRENT_EXCEPTION_BOOTCAMP()
-
-    @property
-    def defaults(self):
-        return self.__defaults
-
-
-_GarageSettings = GarageSettings()
 _BattleSettings = BattleSettings()
 
 def getBattleSettings(lessonId):
@@ -241,7 +210,3 @@ def getBattleSettings(lessonId):
 
 def getBattleDefaults():
     return _BattleSettings.defaults
-
-
-def getGarageDefaults():
-    return _GarageSettings.defaults

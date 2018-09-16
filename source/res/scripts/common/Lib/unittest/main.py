@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/main.py
-"""Unittest main program"""
 import sys
 import os
 import types
@@ -14,9 +13,6 @@ USAGE_AS_MAIN = "Usage: %(progName)s [options] [tests]\n\nOptions:\n  -h, --help
 USAGE_FROM_MODULE = "Usage: %(progName)s [options] [test] [...]\n\nOptions:\n  -h, --help       Show this message\n  -v, --verbose    Verbose output\n  -q, --quiet      Minimal output\n%(failfast)s%(catchbreak)s%(buffer)s\nExamples:\n  %(progName)s                               - run default set of tests\n  %(progName)s MyTestSuite                   - run suite 'MyTestSuite'\n  %(progName)s MyTestCase.testSomething      - run MyTestCase.testSomething\n  %(progName)s MyTestCase                    - run all 'test*' test methods\n                                               in MyTestCase\n"
 
 class TestProgram(object):
-    """A command-line program that runs a set of tests; this is primarily
-       for making test modules conveniently executable.
-    """
     USAGE = USAGE_FROM_MODULE
     failfast = catchbreak = buffer = progName = None
 

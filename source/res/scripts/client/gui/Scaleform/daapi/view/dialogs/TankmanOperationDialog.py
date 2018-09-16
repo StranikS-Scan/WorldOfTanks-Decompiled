@@ -14,7 +14,7 @@ from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared.formatters import text_styles, icons, currency
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items.serializers import packTankman
-from gui.shared.money import Currency, MONEY_UNDEFINED
+from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
@@ -33,7 +33,7 @@ class _TankmanOperationDialogBase(TankmanOperationDialogMeta):
 
     def _populate(self):
         super(_TankmanOperationDialogBase, self)._populate()
-        self.__setTankmanData()
+        self._setTankmanData()
 
     def _dispose(self):
         super(_TankmanOperationDialogBase, self)._dispose()
@@ -43,7 +43,7 @@ class _TankmanOperationDialogBase(TankmanOperationDialogMeta):
     def _buildVO(self):
         return NotImplemented
 
-    def __setTankmanData(self):
+    def _setTankmanData(self):
         packedTankman = packTankman(self._tankman)
         nation = nations.NAMES[packedTankman['nationID']]
         tankmanName = self._tankman.fullUserName
@@ -142,6 +142,7 @@ class RestoreTankmanDialog(_TankmanOperationDialogBase):
     def _populate(self):
         self._isDismissState = False
         super(RestoreTankmanDialog, self)._populate()
+        self.restore.onTankmenBufferUpdated += self.__onTankmenBufferUpdated
         restorePrice, _ = getTankmenRestoreInfo(self._tankman)
         isEnabled = True
         if self.itemsCache.items.stats.money.getShortage(restorePrice):
@@ -151,6 +152,10 @@ class RestoreTankmanDialog(_TankmanOperationDialogBase):
         self.as_setButtonEnablingS(DIALOG_BUTTON_ID.SUBMIT, isEnabled)
         if not isEnabled:
             self.as_setButtonFocusS(DIALOG_BUTTON_ID.CLOSE)
+
+    def _dispose(self):
+        super(RestoreTankmanDialog, self)._dispose()
+        self.restore.onTankmenBufferUpdated -= self.__onTankmenBufferUpdated
 
     def _buildVO(self):
         actionPriceVO = None
@@ -178,3 +183,6 @@ class RestoreTankmanDialog(_TankmanOperationDialogBase):
          'isEnoughMoneyForRestore': isEnoughMoney,
          'actionPriceVO': actionPriceVO,
          'warningText': '\n\n'.join(warningTexts)}
+
+    def __onTankmenBufferUpdated(self, *args):
+        self._setTankmanData()

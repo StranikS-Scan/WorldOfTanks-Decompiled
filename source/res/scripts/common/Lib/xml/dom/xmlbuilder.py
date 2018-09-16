@@ -1,17 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/xmlbuilder.py
-"""Implementation of the DOM Level 3 'LS-Load' feature."""
 import copy
 import xml.dom
 from xml.dom.NodeFilter import NodeFilter
 __all__ = ['DOMBuilder', 'DOMEntityResolver', 'DOMInputSource']
 
 class Options:
-    """Features object that has variables set for each DOMBuilder feature.
-    
-    The DOMBuilder class uses an instance of this class to pass settings to
-    the ExpatBuilder class.
-    """
     namespaces = 1
     namespace_declarations = True
     validation = False
@@ -168,7 +162,6 @@ class DOMEntityResolver(object):
     __slots__ = ('_opener',)
 
     def resolveEntity(self, publicId, systemId):
-        assert systemId is not None
         source = DOMInputSource()
         source.publicId = publicId
         source.systemId = systemId
@@ -264,9 +257,6 @@ class DOMInputSource(object):
 
 
 class DOMBuilderFilter:
-    """Element filter which can be used to tailor construction of
-    a DOM instance.
-    """
     FILTER_ACCEPT = 1
     FILTER_REJECT = 2
     FILTER_SKIP = 3
@@ -286,7 +276,6 @@ class DOMBuilderFilter:
 del NodeFilter
 
 class DocumentLS:
-    """Mixin to create documents that conform to the load/save spec."""
     async = False
 
     def _get_async(self):

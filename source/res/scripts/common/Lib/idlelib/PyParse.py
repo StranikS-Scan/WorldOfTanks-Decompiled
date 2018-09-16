@@ -33,9 +33,8 @@ class Parser:
         self.tabwidth = tabwidth
 
     def set_str(self, str):
-        if not len(str) == 0:
-            assert str[-1] == '\n'
-            uniphooey = type(str) is UnicodeType and str
+        if type(str) is UnicodeType:
+            uniphooey = str
             str = []
             push = str.append
             for raw in map(ord, uniphooey):
@@ -79,9 +78,8 @@ class Parser:
             return pos
 
     def set_lo(self, lo):
-        if not lo == 0:
-            assert self.str[lo - 1] == '\n'
-            self.str = lo > 0 and self.str[lo:]
+        if lo > 0:
+            self.str = self.str[lo:]
 
     def _study1(self):
         if self.study_level >= 1:
@@ -139,7 +137,6 @@ class Parser:
                             break
                         continue
                     if ch == '\\':
-                        assert i < n
                         if str[i] == '\n':
                             lno = lno + 1
                         i = i + 1
@@ -152,20 +149,16 @@ class Parser:
                 continue
             if ch == '#':
                 i = str.find('\n', i)
-                if not i >= 0:
-                    raise AssertionError
-                    continue
-                assert ch == '\\'
-                assert i < n
-                if str[i] == '\n':
-                    lno = lno + 1
-                    continuation = i + 1 == n and C_BACKSLASH
+                continue
+            if str[i] == '\n':
+                lno = lno + 1
+                if i + 1 == n:
+                    continuation = C_BACKSLASH
             i = i + 1
 
         if continuation != C_STRING_FIRST_LINE and continuation != C_STRING_NEXT_LINES and level > 0:
             continuation = C_BRACKET
         self.continuation = continuation
-        assert (continuation == C_NONE) == (goodlines[-1] == lno)
         if goodlines[-1] != lno:
             push_good(lno)
 
@@ -182,7 +175,6 @@ class Parser:
         i = len(goodlines) - 1
         p = len(str)
         while i:
-            assert p
             q = p
             for nothing in range(goodlines[i - 1], goodlines[i]):
                 p = str.rfind('\n', 0, p - 1) + 1
@@ -192,7 +184,6 @@ class Parser:
             break
 
         if i == 0:
-            assert p == 0
             q = p
         self.stmt_start, self.stmt_end = p, q
         lastch = ''
@@ -235,12 +226,9 @@ class Parser:
             if ch == '#':
                 bracketing.append((p, len(stack) + 1))
                 p = str.find('\n', p, q) + 1
-                assert p > 0
                 bracketing.append((p, len(stack)))
                 continue
-            assert ch == '\\'
             p = p + 1
-            assert p < q
             if str[p] != '\n':
                 lastch = ch + str[p]
             p = p + 1
@@ -252,7 +240,6 @@ class Parser:
 
     def compute_bracket_indent(self):
         self._study2()
-        assert self.continuation == C_BRACKET
         j = self.lastopenbracketpos
         str = self.str
         n = len(str)
@@ -281,7 +268,6 @@ class Parser:
 
     def compute_backslash_indent(self):
         self._study2()
-        assert self.continuation == C_BACKSLASH
         str = self.str
         i = self.stmt_start
         while str[i] in ' \t':

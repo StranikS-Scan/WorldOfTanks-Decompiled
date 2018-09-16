@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/graphics.py
-import BigWorld
 import math
 from collections import namedtuple
-from debug_utils import LOG_WARNING
+import BigWorld
 from shared_utils import CONST_CONTAINER, findFirst
 import GUI
 MIN_SCREEN_WIDTH = 1024
@@ -96,20 +95,6 @@ def getSuitableBorderlessSizes():
 
 
 GraphicSetting = namedtuple('GraphicSetting', 'label value options hint advanced needRestart isArray delayed')
-
-def getCustomAAMode():
-    """
-    Returns Custom AA-Mode value
-    """
-    return BigWorld.getCustomAAMode()
-
-
-def getMultisamplingType():
-    """
-    Returns current Multisampling Type
-    """
-    return BigWorld.getMultisamplingType()
-
 
 def getGraphicsSetting(settingName):
     setting = BigWorld.graphicSetting(settingName)
@@ -227,7 +212,6 @@ class MonitorSettings(object):
 
     def setGlyphCache(self, scale=1):
         textureSize = 1024 * math.ceil(scale)
-        assert hasattr(GUI, 'wg_setGlyphCacheParams'), 'GUI.wg_setGlyphCacheParams() is not defined'
         GUI.wg_setGlyphCacheParams(1, textureSize, textureSize)
 
     @property

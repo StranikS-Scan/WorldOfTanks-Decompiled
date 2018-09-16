@@ -15,7 +15,6 @@ class ShellType(object):
 
 
 class ArmorPiercingType(ShellType):
-    """Class provides ARMOR_PIERCING_xxx specific configuration."""
     __slots__ = ('normalizationAngle', 'ricochetAngleCos')
 
     def __init__(self, name):
@@ -28,7 +27,6 @@ class ArmorPiercingType(ShellType):
 
 
 class HollowChargeType(ShellType):
-    """Class provides HOLLOW_CHARGE specific configuration."""
     __slots__ = ('piercingPowerLossFactorByDistance', 'ricochetAngleCos')
 
     def __init__(self, name):
@@ -41,7 +39,6 @@ class HollowChargeType(ShellType):
 
 
 class HighExplosiveType(ShellType):
-    """Class provides HIGH_EXPLOSIVE specific configuration."""
     __slots__ = ('explosionRadius', 'explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor')
 
     def __init__(self, name):
@@ -56,7 +53,6 @@ class HighExplosiveType(ShellType):
 
 
 class Stun(object):
-    """Class provides stun configuration of shell."""
     __slots__ = ('stunRadius', 'stunDuration', 'stunFactor', 'guaranteedStunDuration', 'damageDurationCoeff', 'guaranteedStunEffect', 'damageEffectCoeff')
 
     def __init__(self):
@@ -74,10 +70,6 @@ class Stun(object):
 
 
 def createShellType(typeName):
-    """Creates type-specific configuration of shell by name of type.
-    :param typeName: string containing name of type. @see SHELL_TYPES.
-    :return: instance of class that extends ShellType.
-    """
     shellType = None
     if typeName in (SHELL_TYPES.ARMOR_PIERCING, SHELL_TYPES.ARMOR_PIERCING_HE, SHELL_TYPES.ARMOR_PIERCING_CR):
         shellType = ArmorPiercingType(typeName)

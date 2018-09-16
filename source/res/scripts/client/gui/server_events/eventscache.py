@@ -11,12 +11,12 @@ import nations
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import async, process
-from constants import EVENT_TYPE, EVENT_CLIENT_DATA, QUEUE_TYPE, ARENA_BONUS_TYPE
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
+from constants import EVENT_TYPE, EVENT_CLIENT_DATA
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.personal_missions_controller import PersonalMissionsController
-from gui.server_events.event_items import EventBattles, createQuest, createAction, FalloutConfig, MotiveQuest
+from gui.server_events.event_items import EventBattles, createQuest, createAction, MotiveQuest
 from gui.server_events.formatters import isMarathon, getLinkedActionID
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
 from gui.server_events.prefetcher import Prefetcher
@@ -29,12 +29,9 @@ from helpers import isPlayerAccount
 from items import getTypeOfCompactDescr
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
-from shared_utils import makeTupleByDict
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-QUEUE_TYPE_TO_ARENA_BONUS_TYPE = {QUEUE_TYPE.FALLOUT_CLASSIC: ARENA_BONUS_TYPE.FALLOUT_CLASSIC,
- QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_BONUS_TYPE.FALLOUT_MULTITEAM}
 
 def _defaultQuestMaker(qID, qData, progress):
     return createQuest(qData.get('type', 0), qID, qData, progress.getQuestProgress(qID), progress.getTokenExpiryTime(qData.get('requiredToken')))
@@ -75,7 +72,6 @@ class EventsCache(IEventsCache):
         self.onProfileVisited = Event(self.__em)
         self.onPersonalQuestsVisited = Event(self.__em)
         self.__lockedQuestIds = {}
-        self.__commonQuests = None
         return
 
     def init(self):
@@ -95,6 +91,7 @@ class EventsCache(IEventsCache):
 
     def stop(self):
         g_playerEvents.onPMLocksChanged -= self.__onLockedQuestsChanged
+        self.__clearCache()
 
     def clear(self):
         self.stop()
@@ -185,8 +182,6 @@ class EventsCache(IEventsCache):
         return self._getQuests(userFilterFunc)
 
     def getActiveQuests(self, filterFunc=None):
-        """ Get active subset of events.
-        """
         filterFunc = filterFunc or (lambda a: True)
 
         def userFilterFunc(q):
@@ -195,8 +190,6 @@ class EventsCache(IEventsCache):
         return self.getQuests(userFilterFunc)
 
     def getAdvisableQuests(self, filterFunc=None):
-        """ Get subset of quests that may be notified as new.
-        """
         filterFunc = filterFunc or (lambda a: True)
 
         def userFilterFunc(q):
@@ -267,9 +260,6 @@ class EventsCache(IEventsCache):
     def isEventEnabled(self):
         return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
 
-    def isGasAttackEnabled(self):
-        return len(self.__getGasAttack()) > 0
-
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
     def getEventVehicles(self, itemsCache=None):
         result = []
@@ -294,16 +284,7 @@ class EventsCache(IEventsCache):
     def getFutureEvents(self):
         return self.getEvents(lambda q: q.getStartTimeLeft() > 0)
 
-    def isFalloutEnabled(self):
-        return bool(self.__getFallout().get('enabled', False))
-
-    def getFalloutConfig(self, queueType):
-        arenaBonusType = QUEUE_TYPE_TO_ARENA_BONUS_TYPE.get(queueType, ARENA_BONUS_TYPE.UNKNOWN)
-        return makeTupleByDict(FalloutConfig, self.__getFallout().get(arenaBonusType, {}))
-
     def getAffectedAction(self, item):
-        """Get action which affects on given item
-        """
         actionEntities = self.getActionEntities()
         if actionEntities:
             entities = actionEntities[aei.ENTITIES_SECTION_NAME]
@@ -321,46 +302,46 @@ class EventsCache(IEventsCache):
 
     def getItemAction(self, item, isBuying=True, forCredits=False):
         result = []
-        type = ACTION_MODIFIER_TYPE.DISCOUNT if isBuying else ACTION_MODIFIER_TYPE.SELLING
+        actionType = ACTION_MODIFIER_TYPE.DISCOUNT if isBuying else ACTION_MODIFIER_TYPE.SELLING
         itemTypeID = item.itemTypeID
         nationID = item.nationID
         intCD = item.intCD
-        values = self.__actionsCache[ACTION_SECTION_TYPE.ALL][type].get(itemTypeID, {}).get(nationID, [])
-        values += self.__actionsCache[ACTION_SECTION_TYPE.ALL][type].get(itemTypeID, {}).get(15, [])
+        values = self.__actionsCache[ACTION_SECTION_TYPE.ALL][actionType].get(itemTypeID, {}).get(nationID, [])
+        values += self.__actionsCache[ACTION_SECTION_TYPE.ALL][actionType].get(itemTypeID, {}).get(15, [])
         for (key, value), actionID in values:
             if item.isPremium and key in ('creditsPrice', 'creditsPriceMultiplier') and not forCredits:
                 continue
             result.append((value, actionID))
 
-        result.extend(self.__actionsCache[ACTION_SECTION_TYPE.ITEM][type].get(itemTypeID, {}).get(intCD, tuple()))
+        result.extend(self.__actionsCache[ACTION_SECTION_TYPE.ITEM][actionType].get(itemTypeID, {}).get(intCD, tuple()))
         return result
 
     def getBoosterAction(self, booster, isBuying=True, forCredits=False):
         result = []
-        type = ACTION_MODIFIER_TYPE.DISCOUNT if isBuying else ACTION_MODIFIER_TYPE.SELLING
+        actionType = ACTION_MODIFIER_TYPE.DISCOUNT if isBuying else ACTION_MODIFIER_TYPE.SELLING
         boosterID = booster.boosterID
-        values = self.__actionsCache[ACTION_SECTION_TYPE.ALL_BOOSTERS][type].get(nations.NONE_INDEX, [])
+        values = self.__actionsCache[ACTION_SECTION_TYPE.ALL_BOOSTERS][actionType].get(nations.NONE_INDEX, [])
         for (key, value), actionID in values:
             if forCredits and key == 'creditsPriceMultiplier':
                 result.append((value, actionID))
             if not forCredits and key == 'goldPriceMultiplier':
                 result.append((value, actionID))
 
-        result.extend(self.__actionsCache[ACTION_SECTION_TYPE.BOOSTER][type].get(boosterID, tuple()))
+        result.extend(self.__actionsCache[ACTION_SECTION_TYPE.BOOSTER][actionType].get(boosterID, tuple()))
         return result
 
     def getRentAction(self, item, rentPackage):
         result = []
-        type = ACTION_MODIFIER_TYPE.RENT
+        actionType = ACTION_MODIFIER_TYPE.RENT
         itemTypeID = item.itemTypeID
         nationID = item.nationID
         intCD = item.intCD
-        values = self.__actionsCache[ACTION_SECTION_TYPE.ALL][type].get(itemTypeID, {}).get(nationID, [])
-        values += self.__actionsCache[ACTION_SECTION_TYPE.ALL][type].get(itemTypeID, {}).get(15, [])
-        for (key, value), actionID in values:
+        values = self.__actionsCache[ACTION_SECTION_TYPE.ALL][actionType].get(itemTypeID, {}).get(nationID, [])
+        values += self.__actionsCache[ACTION_SECTION_TYPE.ALL][actionType].get(itemTypeID, {}).get(15, [])
+        for (_, value), actionID in values:
             result.append((value, actionID))
 
-        result.extend(self.__actionsCache[ACTION_SECTION_TYPE.ITEM][type].get(itemTypeID, {}).get((intCD, rentPackage), tuple()))
+        result.extend(self.__actionsCache[ACTION_SECTION_TYPE.ITEM][actionType].get(itemTypeID, {}).get((intCD, rentPackage), tuple()))
         return result
 
     def getEconomicsAction(self, name):
@@ -392,7 +373,7 @@ class EventsCache(IEventsCache):
     def getQuestsByTokenRequirement(self, token):
         result = []
         for q in self._getQuests(includePersonalMissions=True).itervalues():
-            if token in map(lambda t: t.getID(), q.accountReqs.getTokens()):
+            if token in [ t.getID() for t in q.accountReqs.getTokens() ]:
                 result.append(q)
 
         return result
@@ -408,17 +389,13 @@ class EventsCache(IEventsCache):
         return result
 
     def getCompensation(self, tokenID):
-        """
-        Gets bonuses compensation instead of token
-        """
         return self.__compensations.get(tokenID)
 
     def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}
         groups = {}
         filterFunc = filterFunc or (lambda a: True)
-        commonQuests = self.__getCommonQuests()
-        for qID, q in commonQuests.iteritems():
+        for qID, q in self.__getCommonQuestsIterator():
             if qID in self.__quests2actions:
                 q.linkedActions = self.__quests2actions[qID]
             if q.getType() == EVENT_TYPE.GROUP:
@@ -454,8 +431,7 @@ class EventsCache(IEventsCache):
     def _getQuestsGroups(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
         result = {}
-        commonQuests = self.__getCommonQuests()
-        for qID, q in commonQuests.iteritems():
+        for qID, q in self.__getCommonQuestsIterator():
             if q.getType() != EVENT_TYPE.GROUP:
                 continue
             if not filterFunc(q):
@@ -552,14 +528,13 @@ class EventsCache(IEventsCache):
         self.__clearInvalidateCallback()
         self.__waitForSync = True
         self.onSyncStarted()
-        self.__updateCommonQuests()
         for action in self.getActions().itervalues():
             for modifier in action.getModifiers():
                 section = modifier.getSection()
-                type = modifier.getType()
+                mType = modifier.getType()
                 itemType = modifier.getItemType()
                 values = modifier.getValues(action)
-                currentSection = self.__actionsCache[section][type]
+                currentSection = self.__actionsCache[section][mType]
                 if itemType is not None:
                     currentSection = currentSection.setdefault(itemType, {})
                 for k in values:
@@ -611,21 +586,16 @@ class EventsCache(IEventsCache):
         return
 
     def __invalidateCompensations(self):
-        """
-        Store hidden quests compensations for marathons quest to improve performance
-        """
         self.__compensations.clear()
         for q in self.getHiddenQuests(lambda q: isMarathon(q.getGroupID())).itervalues():
             self.__compensations.update(q.getCompensation())
 
     def __clearQuestsItemsCache(self):
-        for qID, q in self._getQuests().iteritems():
+        for _, q in self._getQuests().iteritems():
             q.accountReqs.clearItemsCache()
             q.vehicleReqs.clearItemsCache()
 
     def __syncActionsWithQuests(self):
-        """After invalidation of EventsCache, we should sync links between Actions and BattleQuests
-        """
         self.__actions2quests.clear()
         self.__quests2actions.clear()
         quests = self.__cache['quests']
@@ -641,9 +611,6 @@ class EventsCache(IEventsCache):
         return
 
     def __convertQuests2actions(self):
-        """from dict {action: [connected quests]} create reverted dict {quest: [connected actions]}
-        :return:
-        """
         for action, quests in self.__actions2quests.iteritems():
             for quest in quests:
                 if quest in self.__quests2actions:
@@ -690,14 +657,8 @@ class EventsCache(IEventsCache):
     def __getUnitXpFactors(self):
         return self.__getUnitData().get('xpFactors', {})
 
-    def __getFallout(self):
-        return self.__getEventsData(EVENT_CLIENT_DATA.FALLOUT)
-
     def __getUnitData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.SQUAD_BONUSES)
-
-    def __getGasAttack(self):
-        return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS).get('gasAttack', {})
 
     def __getCommonQuestsIterator(self):
         questsData = self.__getQuestsData()
@@ -709,18 +670,6 @@ class EventsCache(IEventsCache):
         motiveQuests = motivation_quests.g_cache.getAllQuests() or []
         for questDescr in motiveQuests:
             yield (questDescr.questID, self._makeQuest(questDescr.questID, questDescr.questData, maker=_motiveQuestMaker))
-
-    def __updateCommonQuests(self):
-        self.__commonQuests = {}
-        for qID, qData in self.__getCommonQuestsIterator():
-            self.__commonQuests[qID] = qData
-
-        return self.__commonQuests
-
-    def __getCommonQuests(self):
-        if self.__commonQuests is None:
-            self.__updateCommonQuests()
-        return self.__commonQuests
 
     def __loadInvalidateCallback(self, duration):
         LOG_DEBUG('load quest window invalidation callback (secs)', duration)

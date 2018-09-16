@@ -45,7 +45,4 @@ def createFakeTankmanDescr(role, vehicleType, roleLevel=100):
 
 
 def getBasicShell(vehDescr):
-    """
-        basic is shell which goes first in XML describing particular gun
-    """
     return vehDescr.gun.shots[0].shell

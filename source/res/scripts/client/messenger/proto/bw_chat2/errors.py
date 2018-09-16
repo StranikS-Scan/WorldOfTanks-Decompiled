@@ -147,7 +147,6 @@ def createCoolDownError(actionID):
 
 def createBroadcastError(args, broadcastID):
     errorID = args['int32Arg1']
-    assert _ACTIONS.isRateLimitedBroadcastFromClient(broadcastID)
     if errorID == _ERRORS.IN_CHAT_BAN:
         error = ChatBanError(makeLocalServerTime(args['floatArg1']), args['strArg1'])
     elif errorID == _ERRORS.IN_COOLDOWN:

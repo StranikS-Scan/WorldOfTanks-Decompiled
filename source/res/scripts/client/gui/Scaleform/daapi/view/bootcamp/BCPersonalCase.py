@@ -5,7 +5,6 @@ from adisp import async
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from debug_utils import LOG_DEBUG
-from bootcamp.BootcampGarage import g_bootcampGarage
 from gui.Scaleform.locale.MENU import MENU
 from bootcamp.Bootcamp import g_bootcamp
 SKILLS_TAB_INDEX = 2
@@ -61,38 +60,3 @@ class BCPersonalCase(PersonalCase):
         super(BCPersonalCase, self).__init__(ctx)
         self.tabIndex = 0
         self.dataProvider = BCPersonalCaseDataProvider(self.tmanInvID)
-        self.__skillSelected = False
-        self.__skillAdded = False
-        itemsCache = dependency.instance(IItemsCache)
-        self.__tman = itemsCache.items.getTankmanDossier(self.tmanInvID)
-
-    def checkRole(self):
-        return self.__tman.tmanDescr.role == 'commander'
-
-    def onSkillClick(self, skillId):
-        if self.checkRole() and not self.__skillSelected and skillId == 'commander_sixthSense':
-            self.__skillSelected = True
-            g_bootcampGarage.hidePrevShowNextHint()
-
-    def addTankmanSkill(self, invengoryID, skillName):
-        super(BCPersonalCase, self).addTankmanSkill(invengoryID, skillName)
-        if self.checkRole() and skillName == 'commander_sixthSense':
-            self.__skillAdded = True
-            g_bootcampGarage.hideAllHints()
-            g_bootcampGarage.runCustomAction('msgSkillsPerks')
-
-    def _populate(self):
-        LOG_DEBUG('BCPersonalCase._populate')
-        super(BCPersonalCase, self)._populate()
-        observer = self.app.bootcampManager.getObserver('BCPersonalCaseObserver')
-        if observer:
-            observer.onSkillClickEvent += self.onSkillClick
-        if self.checkRole():
-            g_bootcampGarage.runViewAlias('bootcampPresonalCase')
-
-    def _dispose(self):
-        super(BCPersonalCase, self)._dispose()
-        g_bootcampGarage.runViewAlias('hangar')
-        observer = self.app.bootcampManager.getObserver('BCPersonalCaseObserver')
-        if observer:
-            observer.onSkillClickEvent -= self.onSkillClick

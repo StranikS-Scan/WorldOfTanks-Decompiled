@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ModuleInfoWindow.py
 from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import params_helper, formatters
-from gui.shared.utils import GUN_RELOADING_TYPE, GUN_CAN_BE_CLIP, GUN_CLIP, CLIP_ICON_PATH, EXTRA_MODULE_INFO, HYDRAULIC_ICON_PATH
+from gui.shared.utils import GUN_RELOADING_TYPE, GUN_CAN_BE_CLIP, GUN_CLIP, EXTRA_MODULE_INFO, GUN_AUTO_RELOAD
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
-from gui.shared.utils.functions import stripShortDescrTags, stripColorTagDescrTags
+from gui.shared.utils.functions import stripColorTagDescrTags, getAbsoluteUrl
 from helpers import dependency
 from helpers import i18n
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -22,7 +23,6 @@ class ModuleInfoWindow(ModuleInfoMeta):
     def __init__(self, ctx=None):
         super(ModuleInfoWindow, self).__init__()
         self.moduleCompactDescr = ctx.get('moduleCompactDescr')
-        assert self.moduleCompactDescr, 'module compact descriptor must be defined'
         self.__vehicleDescr = ctx.get('vehicleDescr')
         self.__isAdditionalInfoShow = ctx.get('isAdditionalInfoShow')
 
@@ -72,7 +72,10 @@ class ModuleInfoWindow(ModuleInfoMeta):
             gunReloadingType = extraParamsInfo[GUN_RELOADING_TYPE]
             if gunReloadingType == GUN_CLIP:
                 description = i18n.makeString(MENU.MODULEINFO_CLIPGUNLABEL)
-                extraModuleInfo = CLIP_ICON_PATH
+                extraModuleInfo = RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON
+            elif gunReloadingType == GUN_AUTO_RELOAD:
+                description = i18n.makeString(MENU.MODULEINFO_AUTORELOADGUNLABEL)
+                extraModuleInfo = RES_ICONS.MAPS_ICONS_MODULES_AUTOLOADERGUN
             elif gunReloadingType == GUN_CAN_BE_CLIP:
                 otherParamsInfoList = []
                 for paramName, paramValue in formattedModuleParameters:
@@ -80,14 +83,12 @@ class ModuleInfoWindow(ModuleInfoMeta):
                         otherParamsInfoList.append({'type': formatters.formatModuleParamName(paramName) + '\n',
                          'value': text_styles.stats(paramValue)})
 
-                imgPathArr = CLIP_ICON_PATH.split('..')
-                imgPath = 'img://gui' + imgPathArr[1]
-                moduleData['otherParameters'] = {'headerText': i18n.makeString(MENU.MODULEINFO_PARAMETERSCLIPGUNLABEL, imgPath),
+                moduleData['otherParameters'] = {'headerText': i18n.makeString(MENU.MODULEINFO_PARAMETERSCLIPGUNLABEL, getAbsoluteUrl(RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON)),
                  'params': otherParamsInfoList}
         if isChassis:
             if moduleParameters['isHydraulic']:
                 description = i18n.makeString(MENU.MODULEINFO_HYDRAULICCHASSISLABEL)
-                extraModuleInfo = HYDRAULIC_ICON_PATH
+                extraModuleInfo = RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON
         moduleData['description'] = description
         paramsList = []
         for paramName, paramValue in formattedModuleParameters:

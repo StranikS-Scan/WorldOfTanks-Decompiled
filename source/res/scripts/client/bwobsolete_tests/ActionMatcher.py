@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_tests/ActionMatcher.py
-"""
-This module tests the Action Matcher via visual clues on the screen.
-It it designed to work both for your player, and for other players
-online.
-"""
 import BigWorld
 import Math
 import GUI

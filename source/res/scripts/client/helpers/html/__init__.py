@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/html/__init__.py
+import re
 from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers import i18n
-import re
 _getText_re = re.compile('\\_\\(([^)]+)\\)', re.U | re.M)
 
 def _search(match):

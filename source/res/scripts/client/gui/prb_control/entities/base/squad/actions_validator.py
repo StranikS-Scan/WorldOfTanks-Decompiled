@@ -11,9 +11,6 @@ from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
 
 class SquadBalanceValidator(BaseActionsValidator):
-    """
-    Validation for squad levels balance.
-    """
     eventsCache = dependency.descriptor(IEventsCache)
 
     def _validate(self):
@@ -28,9 +25,6 @@ class SquadBalanceValidator(BaseActionsValidator):
 
 
 class SquadVehiclesValidator(UnitVehiclesValidator):
-    """
-    Validation for squad selected vehicles.
-    """
 
     def _getVehiclesInfo(self):
         vInfos = super(SquadVehiclesValidator, self)._getVehiclesInfo()
@@ -43,9 +37,6 @@ class SquadVehiclesValidator(UnitVehiclesValidator):
 
 
 class SquadActionsValidator(UnitActionsValidator):
-    """
-    Squad actions validation class.
-    """
 
     def __init__(self, entity):
         super(SquadActionsValidator, self).__init__(entity)

@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/uu.py
-"""Implementation of the UUencode and UUdecode functions.
-
-encode(in_file, out_file [,name, mode])
-decode(in_file [, out_file, mode])
-"""
 import binascii
 import os
 import sys
@@ -15,7 +10,6 @@ class Error(Exception):
 
 
 def encode(in_file, out_file, name=None, mode=None):
-    """Uuencode file"""
     opened_files = []
     try:
         if in_file == '-':
@@ -55,7 +49,6 @@ def encode(in_file, out_file, name=None, mode=None):
 
 
 def decode(in_file, out_file=None, mode=None, quiet=0):
-    """Decode uuencoded file"""
     opened_files = []
     if in_file == '-':
         in_file = sys.stdin
@@ -117,7 +110,6 @@ def decode(in_file, out_file=None, mode=None, quiet=0):
 
 
 def test():
-    """uuencode/uudecode main program"""
     import optparse
     parser = optparse.OptionParser(usage='usage: %prog [-d] [-t] [input [output]]')
     parser.add_option('-d', '--decode', dest='decode', help='Decode (instead of encode)?', default=False, action='store_true')

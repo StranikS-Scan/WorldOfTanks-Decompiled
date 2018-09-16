@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/CodeWarrior/Standard_Suite.py
-"""Suite Standard Suite: Common terms for most applications
-Level 1, version 1
-
-Generated from /Volumes/Sap/Applications (Mac OS 9)/Metrowerks CodeWarrior 7.0/Metrowerks CodeWarrior/CodeWarrior IDE 4.2.5
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'CoRe'
@@ -16,12 +10,6 @@ class Standard_Suite_Events(Standard_Suite_Events):
      'saving_in': 'kfil'}
 
     def close(self, _object, _attributes={}, **_arguments):
-        """close: close an object
-        Required argument: the object to close
-        Keyword argument saving: specifies whether or not changes should be saved before closing
-        Keyword argument saving_in: the file in which to save the object
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'core'
         _subcode = 'clos'
         aetools.keysubst(_arguments, self._argmap_close)
@@ -35,12 +23,6 @@ class Standard_Suite_Events(Standard_Suite_Events):
     _argmap_count = {'each': 'kocl'}
 
     def count(self, _object, _attributes={}, **_arguments):
-        """count: return the number of elements of a particular class within an object
-        Required argument: the object whose elements are to be counted
-        Keyword argument each: the class of the elements to be counted. Keyword 'each' is optional in AppleScript
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: the number of elements
-        """
         _code = 'core'
         _subcode = 'cnte'
         aetools.keysubst(_arguments, self._argmap_count)
@@ -53,12 +35,6 @@ class Standard_Suite_Events(Standard_Suite_Events):
     _argmap_get = {'as': 'rtyp'}
 
     def get(self, _object, _attributes={}, **_arguments):
-        """get: get the data for an object
-        Required argument: the object whose data is to be returned
-        Keyword argument as: the desired types for the data, in order of preference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: The data from the object
-        """
         _code = 'core'
         _subcode = 'getd'
         aetools.keysubst(_arguments, self._argmap_get)
@@ -75,15 +51,6 @@ class Standard_Suite_Events(Standard_Suite_Events):
      'with_properties': 'prdt'}
 
     def make(self, _no_object=None, _attributes={}, **_arguments):
-        """make: make a new element
-        Keyword argument new: the class of the new element\xd1keyword 'new' is optional in AppleScript
-        Keyword argument as: the desired types for the data, in order of preference
-        Keyword argument at: the location at which to insert the element
-        Keyword argument with_data: the initial data for the element
-        Keyword argument with_properties: the initial values for the properties of the element
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: to the new object(s)
-        """
         _code = 'core'
         _subcode = 'crel'
         aetools.keysubst(_arguments, self._argmap_make)
@@ -95,10 +62,6 @@ class Standard_Suite_Events(Standard_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def select(self, _object=None, _attributes={}, **_arguments):
-        """select: select the specified object
-        Required argument: the object to select
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'misc'
         _subcode = 'slct'
         if _arguments:
@@ -112,11 +75,6 @@ class Standard_Suite_Events(Standard_Suite_Events):
     _argmap_set = {'to': 'data'}
 
     def set(self, _object, _attributes={}, **_arguments):
-        """set: set an object's data
-        Required argument: the object to change
-        Keyword argument to: the new value
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'core'
         _subcode = 'setd'
         aetools.keysubst(_arguments, self._argmap_set)
@@ -128,12 +86,10 @@ class Standard_Suite_Events(Standard_Suite_Events):
 
 
 class application(aetools.ComponentItem):
-    """application - an application program """
     want = 'capp'
 
 
 class _Prop_user_interaction(aetools.NProperty):
-    """user interaction - user interaction level """
     which = 'inte'
     want = 'Inte'
 
@@ -141,34 +97,28 @@ class _Prop_user_interaction(aetools.NProperty):
 user_interaction = _Prop_user_interaction()
 
 class character(aetools.ComponentItem):
-    """character - a character """
     want = 'cha '
 
 
 class _Prop_length(aetools.NProperty):
-    """length - length in characters of this object """
     which = 'pLen'
     want = 'long'
 
 
 class _Prop_offset(aetools.NProperty):
-    """offset - offset of a text object from the beginning of the document (first char has offset 1) """
     which = 'pOff'
     want = 'long'
 
 
 class insertion_point(aetools.ComponentItem):
-    """insertion point - An insertion location between two objects """
     want = 'cins'
 
 
 class line(aetools.ComponentItem):
-    """line - lines of text """
     want = 'clin'
 
 
 class _Prop_index(aetools.NProperty):
-    """index - index of a line object from the beginning of the document (first line has index 1) """
     which = 'pidx'
     want = 'long'
 
@@ -176,58 +126,48 @@ class _Prop_index(aetools.NProperty):
 lines = line
 
 class selection_2d_object(aetools.ComponentItem):
-    """selection-object - the selection visible to the user """
     want = 'csel'
 
 
 class _Prop_contents(aetools.NProperty):
-    """contents - the contents of the selection """
     which = 'pcnt'
     want = 'type'
 
 
 class text(aetools.ComponentItem):
-    """text - Text """
     want = 'ctxt'
 
 
 class window(aetools.ComponentItem):
-    """window - A window """
     want = 'cwin'
 
 
 class _Prop_bounds(aetools.NProperty):
-    """bounds - the boundary rectangle for the window """
     which = 'pbnd'
     want = 'qdrt'
 
 
 class _Prop_document(aetools.NProperty):
-    """document - the document that owns this window """
     which = 'docu'
     want = 'docu'
 
 
 class _Prop_name(aetools.NProperty):
-    """name - the title of the window """
     which = 'pnam'
     want = 'itxt'
 
 
 class _Prop_position(aetools.NProperty):
-    """position - upper left coordinates of window """
     which = 'ppos'
     want = 'QDpt'
 
 
 class _Prop_visible(aetools.NProperty):
-    """visible - is the window visible? """
     which = 'pvis'
     want = 'bool'
 
 
 class _Prop_zoomed(aetools.NProperty):
-    """zoomed - Is the window zoomed? """
     which = 'pzum'
     want = 'bool'
 
@@ -235,30 +175,25 @@ class _Prop_zoomed(aetools.NProperty):
 windows = window
 
 class document(aetools.ComponentItem):
-    """document - a document """
     want = 'docu'
 
 
 class _Prop_file_permissions(aetools.NProperty):
-    """file permissions - the file permissions for the document """
     which = 'PERM'
     want = 'PERM'
 
 
 class _Prop_kind(aetools.NProperty):
-    """kind - the kind of document """
     which = 'DKND'
     want = 'DKND'
 
 
 class _Prop_location(aetools.NProperty):
-    """location - the file of the document """
     which = 'FILE'
     want = 'fss '
 
 
 class _Prop_window(aetools.NProperty):
-    """window - the window of the document. """
     which = 'cwin'
     want = 'cwin'
 
@@ -266,7 +201,6 @@ class _Prop_window(aetools.NProperty):
 documents = document
 
 class files(aetools.ComponentItem):
-    """files - Every file """
     want = 'file'
 
 

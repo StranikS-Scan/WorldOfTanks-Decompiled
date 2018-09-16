@@ -1,28 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/cgitb.py
-"""More comprehensive traceback formatting for Python scripts.
-
-To enable this module, do:
-
-    import cgitb; cgitb.enable()
-
-at the top of your script.  The optional arguments to enable() are:
-
-    display     - if true, tracebacks are displayed in the web browser
-    logdir      - if set, tracebacks are written to files in this directory
-    context     - number of lines of source code to show for each stack frame
-    format      - 'text' or 'html' controls the output format
-
-By default, tracebacks are displayed but not saved, the context is 5 lines
-and the output format is 'html' (for backwards compatibility with the
-original use of this module)
-
-Alternatively, if you have caught an exception and want cgitb to display it
-for you, call cgitb.handler().  The optional argument to handler() is a
-3-item tuple (etype, evalue, etb) just like the value of sys.exc_info().
-The default handler displays output as HTML.
-
-"""
 import inspect
 import keyword
 import linecache
@@ -36,7 +13,6 @@ import traceback
 import types
 
 def reset():
-    """Return a string that resets the CGI and browser to a known state."""
     pass
 
 
@@ -64,7 +40,6 @@ def grey(text):
 
 
 def lookup(name, frame, locals):
-    """Find the value for a given name in the given environment."""
     if name in locals:
         return ('local', locals[name])
     elif name in frame.f_globals:
@@ -81,7 +56,6 @@ def lookup(name, frame, locals):
 
 
 def scanvars(reader, frame, locals):
-    """Scan one logical line of Python and look up values of variables used."""
     vars, lasttoken, parent, prefix, value = ([],
      None,
      None,
@@ -109,7 +83,6 @@ def scanvars(reader, frame, locals):
 
 
 def html(einfo, context=5):
-    """Return a nice HTML document describing a given traceback."""
     etype, evalue, etb = einfo
     if type(etype) is types.ClassType:
         etype = etype.__name__
@@ -182,7 +155,6 @@ def html(einfo, context=5):
 
 
 def text(einfo, context=5):
-    """Return a plain text document describing a given traceback."""
     etype, evalue, etb = einfo
     if type(etype) is types.ClassType:
         etype = etype.__name__
@@ -241,7 +213,6 @@ def text(einfo, context=5):
 
 
 class Hook:
-    """A hook to replace sys.excepthook that shows tracebacks in HTML."""
 
     def __init__(self, display=1, logdir=None, context=5, file=None, format='html'):
         self.display = display
@@ -299,9 +270,4 @@ class Hook:
 handler = Hook().handle
 
 def enable(display=1, logdir=None, context=5, format='html'):
-    """Install an exception handler that formats tracebacks as HTML.
-    
-    The optional argument 'display' can be set to 0 to suppress sending the
-    traceback to the browser, and 'logdir' can be set to a directory to cause
-    tracebacks to be written to files there."""
     sys.excepthook = Hook(display=display, logdir=logdir, context=context, format=format)

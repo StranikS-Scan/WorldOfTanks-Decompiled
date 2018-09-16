@@ -52,7 +52,7 @@ class _StatsBlock(_StatsBlockAbstract):
 
     @abstractmethod
     def _getStatsBlock(self, dossier):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _getStat(self, statName):
         return self._stats[statName]
@@ -69,7 +69,7 @@ class _StatsMaxBlock(_StatsBlockAbstract):
 
     @abstractmethod
     def _getStatsMaxBlock(self, dossier):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _getStatMax(self, statName):
         return self._statsMax[statName]
@@ -98,23 +98,14 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
         return self._vehsList
 
     def getMarksOfMastery(self):
-        """
-        Returns info about all marks of mastery for each vehicle in 'markOfMasteryCut'
-        :return: list, where each element means the number of marks for MarkOfMasteryAchievement.MARK_OF_MASTERY
-        """
         result = [0] * len(MarkOfMasteryAchievement.MARK_OF_MASTERY.ALL())
-        for vehTypeCompDescr, markOfMastery in self._markOfMasteryCut.iteritems():
+        for _, markOfMastery in self._markOfMasteryCut.iteritems():
             if isMarkOfMasteryAchieved(markOfMastery):
                 result[markOfMastery - 1] += 1
 
         return result
 
     def getMarkOfMasteryForVehicle(self, intCD):
-        """
-        Returns vehicle's mark of master
-        :param intCD: vehicle type compact descriptor
-        :return: int value, see MarkOfMasteryAchievement.MARK_OF_MASTERY for details
-        """
         return self._markOfMasteryCut[intCD] if intCD in self._markOfMasteryCut else MASTERY_IS_NOT_ACHIEVED
 
     def getBattlesStats(self):
@@ -137,11 +128,11 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
         return (vehsByType, vehsByNation, vehsByLevel)
 
     def _packVehicle(self, *args, **kwargs):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def _getVehDossiersCut(self, dossier):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class _MapStatsBlock(_StatsBlockAbstract):
@@ -168,11 +159,11 @@ class _MapStatsBlock(_StatsBlockAbstract):
         return self._mapsList
 
     def _packMap(self, *args, **kwargs):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def _getMapDossiersCut(self, dossier):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class _CommonStatsBlock(_StatsBlock):
@@ -386,7 +377,7 @@ class _Battle2StatsBlock(_StatsBlockAbstract):
 
     @abstractmethod
     def _getStats2Block(self, dossier):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _getStat2(self, statName):
         return self._stats2[statName]
@@ -493,15 +484,13 @@ class _AchievementsBlock(_StatsBlockAbstract):
 
     @abstractmethod
     def _getAcceptableAchieves(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def __isAchieveValid(self, block, name):
         return (block, name) in self.__acceptableAchieves or makeAchievesStorageName(block) in self.__acceptableAchieves and name in self.__dossier.getBlock(block)
 
 
 class _RankedCurrentSeasonStatsBlock(_StatsBlock):
-    """ NOTE: This section contains information about current ranked season.
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def getLadderPts(self):
@@ -524,56 +513,31 @@ class _RankedCurrentSeasonStatsBlock(_StatsBlock):
 
 
 class _RankedSeasonsStatsBlock(_StatsBlock):
-    """ NOTE: This section contains information about previous seasons. There is NO INFORMATION ABOUT CURRENT SEASON!!!
-    """
 
     def _getStatsBlock(self, dossier):
         return dossier.getDossierDescr()['rankedSeasons']
 
 
 class _StoredRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
-    """ NOTE: This section contains information about previous seasons. There is NO INFORMATION ABOUT CURRENT SEASON!!!
-    Data section format: { (seasonID, cycleID or 0): (rank, step, vehRankCount, ladderPts, allStepsCount) }
-    """
     _RANK_IDX = 0
     _STEPS_COUNT_IDX = 4
     _LADDER_PTS_IDX = 3
 
     def getPrevSeasonLadderPts(self):
-        """
-        Provides ladderPoint count ONLY for ONE previous SEASON!
-        :return: (int) ladderPts for previous season
-        """
         prevSeasonData = self.__getPreviousSeasonData()
         return prevSeasonData[self._LADDER_PTS_IDX] if prevSeasonData else 0
 
     def getPrevSeasonsLadderPts(self):
-        """
-        Provides ladderPoint count for ALL previous SEASONS!
-        :return: (int) ladderPts for all previous seasons
-        """
         return self.__getTotalStatistics(self._LADDER_PTS_IDX)
 
     def getPrevSeasonStepsCount(self):
-        """
-        Provides seasonSteps count for ONE previous SEASON!
-        :return: (int) seasonSteps for previous season
-        """
         prevSeasonData = self.__getPreviousSeasonData()
         return prevSeasonData[self._STEPS_COUNT_IDX] if prevSeasonData else 0
 
     def getPrevSeasonsStepsCount(self):
-        """
-        Provides seasonSteps count for ALL previous SEASONS!
-        :return: (int) seasonSteps for all previous seasons
-        """
         return self.__getTotalStatistics(self._STEPS_COUNT_IDX)
 
     def hadAchievedRank(self):
-        """
-        It determines if user received any rank in previous seasons or cycles
-        :return:
-        """
         statsIdx = self._RANK_IDX
         for stats in self._stats.itervalues():
             if stats[statsIdx] > 0:
@@ -582,13 +546,8 @@ class _StoredRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
         return False
 
     def __getTotalStatistics(self, statsIdx):
-        """
-        Total statistics by all finished seasons
-        :param statsIdx: index of required data
-        :return: int
-        """
         total = 0
-        for (seasonID, cycleID), stats in self._stats.iteritems():
+        for (_, cycleID), stats in self._stats.iteritems():
             if len(stats) > statsIdx:
                 if cycleID == 0:
                     total += stats[statsIdx]
@@ -603,14 +562,10 @@ class _StoredRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
 
 
 class _StoredVehRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
-    """ NOTE: This section contains information about previous seasons for particular vehicle.
-    There is NO INFORMATION ABOUT CURRENT SEASON!!!
-    Data section format: { (seasonID, cycleID or 0): (rank, step) }
-    """
 
     def getTotalRanksCount(self):
         sumPoints = 0
-        for (seasonID, cycleID), (rank, step) in self._stats.iteritems():
+        for (_, cycleID), (rank, _) in self._stats.iteritems():
             if cycleID > 0:
                 sumPoints += rank
 
@@ -638,8 +593,6 @@ class _TotalVehRankedSeasonsStatsBlock(_StoredVehRankedSeasonsStatsBlock):
 
 
 class _VehRankedCurrentSeasonStatsBlock(_StatsBlock):
-    """ NOTE: This section contains information about current ranked season for vehicles.
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def _getStatsBlock(self, dossier):
@@ -877,6 +830,9 @@ class AccountTotalStatsBlock(TotalStatsBlock, _VehiclesStatsBlock, _MaxVehicleSt
         TotalStatsBlock.__init__(self, dossier, statsBlocks)
         _VehiclesStatsBlock.__init__(self, dossier)
         _MaxVehicleStatsBlock.__init__(self, dossier)
+
+    def _packVehicle(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
 
     def getVehicles(self):
         vehs = {}
@@ -1461,7 +1417,7 @@ class _DossierStats(object):
 
     @abstractmethod
     def _getDossierItem(self):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class AccountDossierStats(_DossierStats):
@@ -1861,10 +1817,6 @@ class TotalAccountRankedStatsBlock(AccountRankedStatsBlock, _VehiclesStatsBlock)
         return self._rankedSeasons.getPrevSeasonsStepsCount() + self._rankedCurrentSeason.getStepsCount()
 
     def hasAchievedRank(self):
-        """
-        It determines if user achieved any rank in any season or cycle
-        :return: bool
-        """
         return self._rankedSeasons.hadAchievedRank() or self._rankedCurrentSeason.hasAchievedRank()
 
 

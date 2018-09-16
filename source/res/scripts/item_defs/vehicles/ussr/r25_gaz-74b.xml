@@ -246,7 +246,7 @@
         <right>	vehicles/russian/R25_GAZ-74b/track/right.track	</right>
         <segmentLength>	0.109	</segmentLength>
         <segmentOffset>	0.057	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -449,7 +449,7 @@
         <right>	vehicles/russian/R25_GAZ-74b/track/right.track	</right>
         <segmentLength>	0.109	</segmentLength>
         <segmentOffset>	0.057	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -552,9 +552,9 @@
           <maxAmmo>	64	</maxAmmo>
           <reloadTime>	3.4	</reloadTime>
           <unlocks>
-            <gun>	_57mm_ZiS-2	  <cost>	4000.0	</cost>
+            <gun>	_57mm_ZiS-2	  <cost>	4000	</cost>
             </gun>
-            <gun>	_85mm_D-5S-85A	  <cost>	3800.0	</cost>
+            <gun>	_85mm_D-5S-85A	  <cost>	3800	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -628,7 +628,7 @@
           </pitchLimits>
           <maxAmmo>	43	</maxAmmo>
           <unlocks>
-            <gun>	_85mm_LB-2S	  <cost>	5100.0	</cost>
+            <gun>	_85mm_LB-2S	  <cost>	5100	</cost>
             </gun>
             <vehicle>	R02_SU-85	  <cost>	12500	</cost>
             </vehicle>
@@ -721,12 +721,12 @@
   </turrets0>
   <engines>
     <GAZ-203>	shared	  <unlocks>
-        <engine>	M-80	  <cost>	240.0	</cost>
+        <engine>	M-80	  <cost>	240	</cost>
         </engine>
       </unlocks>
     </GAZ-203>
     <M-80>	shared	  <unlocks>
-        <engine>	GMC	  <cost>	400.0	</cost>
+        <engine>	GMC	  <cost>	400	</cost>
         </engine>
       </unlocks>
     </M-80>
@@ -737,7 +737,7 @@
   </fuelTanks>
   <radios>
     <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040.0	</cost>
+        <radio>	_9RM	  <cost>	4040	</cost>
         </radio>
       </unlocks>
     </_9R>

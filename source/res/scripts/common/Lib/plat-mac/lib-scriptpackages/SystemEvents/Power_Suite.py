@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/SystemEvents/Power_Suite.py
-"""Suite Power Suite: Terms and Events for controlling System power
-Level 1, version 1
-
-Generated from /System/Library/CoreServices/System Events.app
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'powr'
@@ -13,10 +7,6 @@ _code = 'powr'
 class Power_Suite_Events:
 
     def restart(self, _object, _attributes={}, **_arguments):
-        """restart: Restart the computer
-        Required argument: the object for the command
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'fndr'
         _subcode = 'rest'
         if _arguments:
@@ -28,10 +18,6 @@ class Power_Suite_Events:
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def shut_down(self, _object, _attributes={}, **_arguments):
-        """shut down: Shut Down the computer
-        Required argument: the object for the command
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'fndr'
         _subcode = 'shut'
         if _arguments:
@@ -43,10 +29,6 @@ class Power_Suite_Events:
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def sleep(self, _object, _attributes={}, **_arguments):
-        """sleep: Put the computer to sleep
-        Required argument: the object for the command
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'fndr'
         _subcode = 'slep'
         if _arguments:
@@ -59,12 +41,10 @@ class Power_Suite_Events:
 
 
 class application(aetools.ComponentItem):
-    """application - The System Events application """
     want = 'capp'
 
 
 class _Prop__3c_Inheritance_3e_(aetools.NProperty):
-    """<Inheritance> - All of the properties of the superclass. """
     which = 'c@#^'
     want = 'capp'
 
@@ -72,7 +52,6 @@ class _Prop__3c_Inheritance_3e_(aetools.NProperty):
 _3c_Inheritance_3e_ = _Prop__3c_Inheritance_3e_()
 
 class _Prop_folder_actions_enabled(aetools.NProperty):
-    """folder actions enabled - Are Folder Actions currently being processed? """
     which = 'faen'
     want = 'bool'
 
@@ -80,7 +59,6 @@ class _Prop_folder_actions_enabled(aetools.NProperty):
 folder_actions_enabled = _Prop_folder_actions_enabled()
 
 class _Prop_properties(aetools.NProperty):
-    """properties - every property of the System Events application """
     which = 'pALL'
     want = '****'
 

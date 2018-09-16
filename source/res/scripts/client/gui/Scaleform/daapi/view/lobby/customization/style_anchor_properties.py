@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/style_anchor_properties.py
 from CurrentVehicle import g_currentVehicle
-from gui.Scaleform.daapi.view.lobby.customization.anchor_properties import ANCHOR_TYPE
 from gui.Scaleform.daapi.view.lobby.customization.anchor_properties import AnchorDataVO
 from gui.Scaleform.daapi.view.lobby.customization.shared import SEASONS_ORDER, SEASON_TYPE_TO_NAME
 from gui.Scaleform.daapi.view.meta.CustomizationStyleAnchorPropertiesMeta import CustomizationStyleAnchorPropertiesMeta
@@ -28,10 +27,6 @@ class StyleDataVO(AnchorDataVO):
         self.autoProlongationCBSelected = autoProlongationCBSelected
 
     def asDict(self):
-        """
-        Creates a dictionary with the class' relevant data.
-        :return: data object
-        """
         dataDict = super(StyleDataVO, self).asDict()
         dataDict['seasonalItemData'] = self.seasonalItemData
         dataDict['itemText'] = self.itemText
@@ -51,9 +46,6 @@ class StyleAnchorProperties(CustomizationStyleAnchorPropertiesMeta):
 
     def autoProlongationSwitch(self, isSelected):
         self.__setAutoRent(isSelected)
-
-    def _getAnchorType(self):
-        return ANCHOR_TYPE.STYLE
 
     def _getData(self):
         seasonItemData = []

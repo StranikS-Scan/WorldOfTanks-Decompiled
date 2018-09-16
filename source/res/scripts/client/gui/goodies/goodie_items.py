@@ -42,9 +42,6 @@ BOOSTERS_ORDERS = {GOODIE_RESOURCE_TYPE.XP: 0,
  GOODIE_RESOURCE_TYPE.GOLD: 4}
 
 class _Goodie(object):
-    """
-    Base goodie class.
-    """
 
     def __init__(self, goodieID, goodieDescription, proxy):
         self._goodieID = goodieID
@@ -117,13 +114,9 @@ class _Goodie(object):
 
 
 class _PersonalDiscount(_Goodie):
-    """
-    Base personal discount class. Personal discounts effect on prices in game.
-    """
 
     def __init__(self, discountID, discountDescription, proxy):
         super(_PersonalDiscount, self).__init__(discountID, discountDescription, proxy)
-        assert discountDescription.variety == GOODIE_VARIETY.DISCOUNT
 
     @property
     def discountID(self):
@@ -131,53 +124,29 @@ class _PersonalDiscount(_Goodie):
 
     @property
     def targetType(self):
-        """
-        One of GOODIE_TARGET_TYPE s.
-        Target of discount applying (premimum days buying, or xp exchange rate, or vehicle buy price, etc)
-        """
         return self._goodieDescription.target.targetType
 
     @property
     def targetValue(self):
-        """
-        The name of the target (for example premium packet name, or item intCD)
-        """
         return self._goodieDescription.target.targetValue
 
     @property
     def limit(self):
-        """
-        Limits resource usage (for example 100% discount on free xp conversion, but no more than 20 gold)
-        """
         return self._goodieDescription.target.limit
 
     def getFormattedValue(self, formatter=None):
-        """
-        Gets discount formatted value
-        """
         value = '%s%%' % self.effectValue
         return formatter(value) if formatter is not None else value
 
     @property
     def targetName(self):
-        """
-        Gets localized target name
-        """
         raise NotImplementedError
 
 
 class PersonalVehicleDiscount(_PersonalDiscount):
-    """
-    Personal vehicle discount class.
-    Represent GUI instance of personal vehicle discount.
-    Effects on targeted vehicle buy price.
-    Personal vehicle discount doesn't summ with SSE action.
-    Its work only if personal discount value more than SSE discount value.
-    """
 
     def __init__(self, discountID, discountDescription, proxy):
         super(PersonalVehicleDiscount, self).__init__(discountID, discountDescription, proxy)
-        assert self.targetType == GOODIE_TARGET_TYPE.ON_BUY_VEHICLE
         vehicle = proxy.getItemByTargetValue(self.targetValue)
         self.__targetName = vehicle.userName
         self.__bigIcon = vehicle.icon
@@ -208,9 +177,6 @@ class PersonalVehicleDiscount(_PersonalDiscount):
         return _ms(MENU.DISCOUNT_DESCRIPTION_VEHICLE, effectValue=self.getFormattedValue(), targetName=self.targetName)
 
     def __getEffectValue(self, vehicle):
-        """
-        Calculates percent discount value for targeted vehicle
-        """
         resoruce = self._goodieDescription.resource
         if resoruce.isPercentage:
             return resoruce.value
@@ -220,16 +186,9 @@ class PersonalVehicleDiscount(_PersonalDiscount):
 
 
 class Booster(_Goodie):
-    """
-    Booster class. Represent GUI instance of booster.
-    Booster effects on game params such as earned xp, free xp, crew xp and credits in battle.
-    Boosters gradates by effects value and effects types.
-    Boosters can be activated by player and has time-limited period of work
-    """
 
     def __init__(self, boosterID, boosterDescription, proxy):
         super(Booster, self).__init__(boosterID, boosterDescription, proxy)
-        assert boosterDescription.variety == GOODIE_VARIETY.BOOSTER
         buyPrice, defaultPrice, altPrice, defaultAltPrice, self.isHidden = proxy.getBoosterPriceData(boosterID)
         buyPrice = ItemPrice(price=buyPrice, defPrice=defaultPrice)
         if altPrice is not None:
@@ -351,36 +310,17 @@ class Booster(_Goodie):
         return text_styles.standard(text)
 
     def getBuyPrice(self, preferred=True):
-        """
-        For goodie item - return always item's regular buy price
-        :param preferred: bool - this flag is necessary to match FittingItem's signature
-        :return: ItemPrice
-        """
         return self.buyPrices.itemPrice
 
     def getSellPrice(self, preferred=True):
-        """
-        For goodie item - return always item's regular sell price
-        :param preferred: bool - this flag is necessary to match FittingItem's signature
-        :return: ItemPrice
-        """
         return self.sellPrices.itemPrice
 
     def mayPurchase(self, money):
-        """
-        Checks booster purchasing possibility.
-        if center is not available, than disables purchase.
-        Return True and empty str if booster can be purchased,
-        else return False and error msg.
-        """
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
             return (False, GUI_ITEM_ECONOMY_CODE.CENTER_UNAVAILABLE)
         return (False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_HIDDEN) if self.isHidden else self._isEnoughMoney(self.buyPrices, money)
 
     def getFormattedValue(self, formatter=None):
-        """
-        Gets booster formatted value
-        """
         if self.effectValue > 0:
             value = '+%s%%' % self.effectValue
         else:
@@ -389,13 +329,6 @@ class Booster(_Goodie):
 
     @classmethod
     def _isEnoughMoney(cls, prices, money):
-        """
-        Determines if the given money enough for buying the booster for a price.
-        
-        :param prices: item prices represented by ItemPrices
-        :param money: money for buying, see Money
-        :return: tuple(can be installed <bool>, error msg <str>), also see GUI_ITEM_ECONOMY_CODE
-        """
         shortage = MONEY_UNDEFINED
         for itemPrice in prices:
             need = money.getShortage(itemPrice.price)

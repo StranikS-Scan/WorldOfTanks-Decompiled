@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/CallbackDelayer.py
-import BigWorld
 import functools
+import BigWorld
 
 class CallbackDelayer(object):
 
@@ -12,7 +12,7 @@ class CallbackDelayer(object):
         self.clearCallbacks()
 
     def clearCallbacks(self):
-        for callbackFunc, callbackId in self.__callbacks.iteritems():
+        for _, callbackId in self.__callbacks.iteritems():
             if callbackId is not None:
                 BigWorld.cancelCallback(callbackId)
 
@@ -48,9 +48,6 @@ class CallbackDelayer(object):
 
 
 class CallbacksSetByID(object):
-    """ Class encapsulates BigWorld's callback handling and stores callbacks by unique ID,
-    not by instance of function. It's used to invoke one callback for several entities
-    that have unique ID."""
     __slots__ = ('__callbackIDs',)
 
     def __init__(self):
@@ -58,7 +55,6 @@ class CallbacksSetByID(object):
         self.__callbackIDs = {}
 
     def clear(self):
-        """Cancels and removes all callbacks."""
         while self.__callbackIDs:
             _, callbackID = self.__callbackIDs.popitem()
             if callbackID is not None:
@@ -67,18 +63,10 @@ class CallbacksSetByID(object):
         return
 
     def delayCallback(self, uniqueID, seconds, function):
-        """Sets delay to invoke callback by unique ID.
-        :param uniqueID: integer containing unique ID.
-        :param seconds: float containing delay in seconds.
-        :param function: callable object that is received uniqueID.
-        """
         self.stopCallback(uniqueID)
         self.__callbackIDs[uniqueID] = BigWorld.callback(seconds, functools.partial(self.__handleCallback, uniqueID, function))
 
     def stopCallback(self, uniqueID):
-        """Cancels callback by unique ID.
-        :param uniqueID: integer containing unique ID.
-        """
         callbackID = self.__callbackIDs.pop(uniqueID, None)
         if callbackID is not None:
             BigWorld.cancelCallback(callbackID)

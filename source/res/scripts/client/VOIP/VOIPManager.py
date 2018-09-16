@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VOIP/VOIPManager.py
+import logging
 import BigWorld
 import Event
 import SoundGroups
@@ -8,21 +9,18 @@ from VOIP.voip_constants import VOIP_SUPPORTED_API
 import VOIPCommon
 from VOIPFsm import VOIPFsm, VOIP_FSM_STATE as STATE
 from VOIPHandler import VOIPHandler
-from VOIPLog import LOG_VOIP_INT, closeLog
 from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_find_criteria import MutedFindCriteria
 from messenger.storage import storage_getter
+_logger = logging.getLogger(__name__)
 
 class VOIPManager(VOIPHandler):
-    """
-    VOIP manager class. It is a bridge between C++ code and the client.
-    """
 
     def __init__(self):
-        LOG_VOIP_INT('VOIPManager.Create')
+        _logger.debug('VOIPManager.Create')
         super(VOIPManager, self).__init__()
         self.__initialized = False
         self.__enabled = False
@@ -52,26 +50,16 @@ class VOIPManager(VOIPHandler):
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
-        """
-        Returns instance of chat plugin to have access to VOIP Provider.
-        This provider contains methods: requestCredentials, logVivoxLogin.
-        :return: instance of chat plugin
-        """
         return None
 
     @storage_getter('users')
     def usersStorage(self):
-        """
-        Returns instance of UsersStorage from messenger package.
-        :return: instance of UsersStorage
-        """
         return None
 
     def destroy(self):
         self.__fsm.onStateChanged -= self.__onStateChanged
         BigWorld.VOIP.finalise()
-        LOG_VOIP_INT('VOIPManager.Destroy')
-        closeLog()
+        _logger.debug('VOIPManager.Destroy')
 
     def isEnabled(self):
         return self.__enabled
@@ -80,18 +68,9 @@ class VOIPManager(VOIPHandler):
         return self.__initialized
 
     def isNotInitialized(self):
-        """
-        Check if the manager is initialized and has appropriate state.
-        :return: True if it is initialized and does not start initializing process,
-        otherwise - False.
-        """
         return not self.__initialized and self.getState() == STATE.NONE
 
     def isInTesting(self):
-        """
-        Check if testing in progress (echo)
-        @return: True if if testing in progress, False otherwise
-        """
         return self.__inTesting
 
     def getVOIPDomain(self):
@@ -125,7 +104,7 @@ class VOIPManager(VOIPHandler):
         return self.__loggedIn
 
     def onConnected(self):
-        LOG_VOIP_INT('VOIPManager.Subscribe')
+        _logger.debug('VOIPManager.Subscribe')
         self.__loginAttemptsRemained = 2
         voipEvents = g_messengerEvents.voip
         voipEvents.onChannelEntered += self.__me_onChannelEntered
@@ -136,7 +115,7 @@ class VOIPManager(VOIPHandler):
         usersEvents.onUserActionReceived += self.__me_onUserActionReceived
 
     def onDisconnected(self):
-        LOG_VOIP_INT('VOIPManager.Unsubscribe')
+        _logger.debug('VOIPManager.Unsubscribe')
         voipEvents = g_messengerEvents.voip
         voipEvents.onChannelEntered -= self.__me_onChannelEntered
         voipEvents.onChannelLeft -= self.__me_onChannelLeft
@@ -160,24 +139,26 @@ class VOIPManager(VOIPHandler):
         self.__fsm.update(self)
 
     def __enable(self):
-        LOG_VOIP_INT('VOIPManager.Enable')
+        _logger.debug('VOIPManager.Enable')
         self.__enabled = True
         if self.__channel[0] != '' and not self.__user[0]:
             self.__requestCredentials()
 
     def __disable(self):
-        LOG_VOIP_INT('VOIPManager.Disable')
+        _logger.debug('VOIPManager.Disable')
         self.__enabled = False
 
     def initialize(self, domain, server):
-        LOG_VOIP_INT('VOIPManager.Initialize')
-        assert self.__initialized is False
+        if self.__initialized:
+            _logger.warning('VOIPManager is already initialized')
+            return
+        _logger.debug('VOIPManager.Initialize')
         self.__voipServer = server
         self.__voipDomain = domain
         self.__testDomain = 'sip:confctl-2@' + self.__voipDomain
-        LOG_VOIP_INT("voip_server: '%s'" % self.__voipServer)
-        LOG_VOIP_INT("voip_domain: '%s'" % self.__voipDomain)
-        LOG_VOIP_INT("test_domain: '%s'" % self.__testDomain)
+        _logger.debug("voip_server: '%s'", self.__voipServer)
+        _logger.debug("voip_domain: '%s'", self.__voipDomain)
+        _logger.debug("test_domain: '%s'", self.__testDomain)
         self.__fsm.update(self)
         logLevel = 0
         section = Settings.g_instance.userPrefs
@@ -201,18 +182,18 @@ class VOIPManager(VOIPHandler):
         self.__fsm.update(self)
 
     def __loginUser(self, username, password):
-        LOG_VOIP_INT("Login Request: '%s', '%s'" % (username, password))
+        _logger.debug('Login Request: %s', username)
         cmd = {VOIPCommon.KEY_PARTICIPANT_PROPERTY_FREQUENCY: '100'}
         BigWorld.VOIP.login(username, password, cmd)
 
     def __reloginUser(self):
         self.__loginAttemptsRemained -= 1
-        LOG_VOIP_INT('VOIPHandler.ReloginUser. Attempts remained: %d' % self.__loginAttemptsRemained)
+        _logger.debug('VOIPHandler.ReloginUser. Attempts remained: %d', self.__loginAttemptsRemained)
         if self.__enabled:
             self.__requestCredentials(1)
 
     def logout(self):
-        LOG_VOIP_INT('VOIPManager.Logout')
+        _logger.debug('VOIPManager.Logout')
         self.__clearUser()
         self.__clearDesiredChannel()
         self.__fsm.update(self)
@@ -222,32 +203,32 @@ class VOIPManager(VOIPHandler):
             self.initialize(self.__voipDomain, self.__voipServer)
         if not self.__user[0] and self.isEnabled():
             self.__requestCredentials()
-        LOG_VOIP_INT("VOIPManager.EnterChannel: '%s' '%s'" % (channel, password))
+        _logger.debug('VOIPManager.EnterChannel: %s', channel)
         self.__channel = [channel, password]
         self.__fsm.update(self)
 
     def __joinChannel(self, channel, password):
-        LOG_VOIP_INT("Joining channel '%s'" % channel)
+        _logger.debug("Joining channel '%s'", channel)
         BigWorld.VOIP.joinChannel(channel, password)
 
     def __leaveChannel(self):
         if not self.__initialized:
             return
-        LOG_VOIP_INT('VOIPManager.LeaveChannel')
+        _logger.debug('VOIPManager.LeaveChannel')
         self.__clearDesiredChannel()
         self.__fsm.update(self)
 
     def enterTestChannel(self):
         if self.__inTesting:
             return
-        LOG_VOIP_INT("VOIPManager.EnterTestChannel: '%s'" % self.__testDomain)
+        _logger.debug('VOIPManager.EnterTestChannel: %s', self.__testDomain)
         self.__inTesting = True
         self.__enterChannel(self.__testDomain, '')
 
     def leaveTestChannel(self):
         if not self.__inTesting:
             return
-        LOG_VOIP_INT('VOIPManager.LeaveTestChannel')
+        _logger.debug('VOIPManager.LeaveTestChannel')
         self.__inTesting = False
         params = self.bwProto.voipProvider.getChannelParams()
         if params[0]:
@@ -272,7 +253,7 @@ class VOIPManager(VOIPHandler):
         SoundGroups.g_instance.restoreWWISEVolume()
 
     def setVoiceActivation(self, enabled):
-        LOG_VOIP_INT('VOIPManager.SetVoiceActivation: %s' % str(enabled))
+        _logger.debug('VOIPManager.SetVoiceActivation: %s', str(enabled))
         self.__activateMicByVoice = enabled
         self.setMicMute(not enabled)
 
@@ -284,18 +265,18 @@ class VOIPManager(VOIPHandler):
         self.__setMicMute(muted)
 
     def __setMicMute(self, muted):
-        LOG_VOIP_INT('VOIPManager.SetMicMute: %s' % str(muted))
+        _logger.debug('VOIPManager.SetMicMute: %s', str(muted))
         if muted:
             BigWorld.VOIP.disableMicrophone()
         else:
             BigWorld.VOIP.enableMicrophone()
 
     def requestCaptureDevices(self):
-        LOG_VOIP_INT('VOIPManager.RequestCaptureDevices')
+        _logger.debug('VOIPManager.RequestCaptureDevices')
         BigWorld.VOIP.getCaptureDevices()
 
     def setCaptureDevice(self, deviceName):
-        LOG_VOIP_INT("VOIPManager.SetCaptureDevice: '%s'" % deviceName)
+        _logger.debug('VOIPManager.SetCaptureDevice: %s', deviceName)
         BigWorld.VOIP.setCaptureDevice(deviceName)
 
     def isParticipantTalking(self, dbid):
@@ -303,7 +284,7 @@ class VOIPManager(VOIPHandler):
         return outcome
 
     def __requestCredentials(self, reset=0):
-        LOG_VOIP_INT('VOIPManager.RequestUserCredentials')
+        _logger.debug('VOIPManager.RequestUserCredentials')
         self.bwProto.voipProvider.requestCredentials(reset)
 
     def __clearDesiredChannel(self):
@@ -313,13 +294,12 @@ class VOIPManager(VOIPHandler):
         self.__user = ['', '']
 
     def __onChatActionMute(self, dbid, muted):
-        LOG_VOIP_INT('VOIPManager.OnChatActionMute', dbid, muted)
+        _logger.debug('VOIPManager.OnChatActionMute: dbID = %d, muted = %r', dbid, muted)
         if dbid in self.__channelUsers and self.__channelUsers[dbid]['muted'] != muted:
             self.__muteParticipantForMe(dbid, muted)
 
     def __muteParticipantForMe(self, dbid, mute):
-        LOG_VOIP_INT('VOIPManager.MuteParticipantForMe: %d, %s' % (dbid, str(mute)))
-        assert dbid in self.__channelUsers
+        _logger.debug('VOIPManager.MuteParticipantForMe: %d, %s', dbid, str(mute))
         self.__channelUsers[dbid]['muted'] = mute
         uri = self.__channelUsers[dbid]['uri']
         cmd = {VOIPCommon.KEY_COMMAND: VOIPCommon.CMD_SET_PARTICIPANT_MUTE,
@@ -341,11 +321,11 @@ class VOIPManager(VOIPHandler):
             login = uri.partition('sip:')[2].rpartition('@' + domain)[0]
             s = login[login.find('.') + 1:]
             return (int(s), login)
-        except:
+        except Exception:
             return -1
 
     def __sendLeaveChannelCommand(self, channel):
-        LOG_VOIP_INT("Leaving channel '%s'" % channel)
+        _logger.debug('Leaving channel %s', channel)
         if channel:
             BigWorld.VOIP.leaveChannel(channel)
         self.__fsm.update(self)
@@ -374,7 +354,7 @@ class VOIPManager(VOIPHandler):
             self.setMicMute(muteMic)
             self.__joinChannel(self.__channel[0], self.__channel[1])
         elif newState == STATE.JOINED_CHANNEL:
-            LOG_VOIP_INT("Joined to channel: '%s'" % self.__currentChannel)
+            _logger.debug('Joined to channel: %s', self.__currentChannel)
             self.__fsm.update(self)
         elif newState == STATE.LEAVING_CHANNEL:
             self.__sendLeaveChannelCommand(self.getCurrentChannel())
@@ -390,15 +370,18 @@ class VOIPManager(VOIPHandler):
         else:
             self.__initialized = False
             self.__fsm.reset()
-            LOG_VOIP_INT('---------------------------')
-            LOG_VOIP_INT("ERROR: '%d' - '%s'" % (int(data[VOIPCommon.KEY_STATUS_CODE]), data[VOIPCommon.KEY_STATUS_STRING]))
-            LOG_VOIP_INT('---------------------------')
+            _logger.info('---------------------------')
+            _logger.info("ERROR: '%d' - '%s'", int(data[VOIPCommon.KEY_STATUS_CODE]), data[VOIPCommon.KEY_STATUS_STRING])
+            _logger.info('---------------------------')
 
     def onVoipDestroyed(self, data):
-        assert int(data[VOIPCommon.KEY_RETURN_CODE]) == VOIPCommon.CODE_SUCCESS
+        if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
+            _logger.error('Voip is not destroyed: %r', data)
 
     def onCaptureDevicesArrived(self, data):
-        assert int(data[VOIPCommon.KEY_RETURN_CODE]) == VOIPCommon.CODE_SUCCESS
+        if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
+            _logger.error('Capture devices are not arrived: %r', data)
+            return
         captureDevicesCount = int(data[VOIPCommon.KEY_COUNT])
         self.__captureDevices = []
         for i in xrange(captureDevicesCount):
@@ -408,16 +391,20 @@ class VOIPManager(VOIPHandler):
         self.onCaptureDevicesUpdated()
 
     def onSetCaptureDevice(self, data):
-        assert int(data[VOIPCommon.KEY_RETURN_CODE]) == VOIPCommon.CODE_SUCCESS
+        if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
+            _logger.error('Capture device is not set: %r', data)
 
     def onSetLocalSpeakerVolume(self, data):
-        assert int(data[VOIPCommon.KEY_RETURN_CODE]) == VOIPCommon.CODE_SUCCESS
+        if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
+            _logger.error('Local speaker volume is not set: %r', data)
 
     def onSetLocalMicVolume(self, data):
-        assert int(data[VOIPCommon.KEY_RETURN_CODE]) == VOIPCommon.CODE_SUCCESS
+        if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
+            _logger.error('Local microphone volume is not set: %r', data)
 
     def onMuteLocalMic(self, data):
-        assert int(data[VOIPCommon.KEY_RETURN_CODE]) == VOIPCommon.CODE_SUCCESS
+        if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
+            _logger.error('Local microphone volume is not muted: %r', data)
 
     def onLoginStateChange(self, data):
         returnCode = int(data[VOIPCommon.KEY_RETURN_CODE])
@@ -432,9 +419,9 @@ class VOIPManager(VOIPHandler):
                 self.__loggedIn = False
                 self.__fsm.update(self)
         else:
-            LOG_VOIP_INT('---------------------------')
-            LOG_VOIP_INT("ERROR: '%d' - '%s'" % (int(data[VOIPCommon.KEY_STATUS_CODE]), data[VOIPCommon.KEY_STATUS_STRING]))
-            LOG_VOIP_INT('---------------------------')
+            _logger.info('---------------------------')
+            _logger.info("ERROR: '%d' - '%s'", int(data[VOIPCommon.KEY_STATUS_CODE]), data[VOIPCommon.KEY_STATUS_STRING])
+            _logger.info('---------------------------')
             code = int(data[VOIPCommon.KEY_STATUS_CODE])
             if (code == VOIPCommon.STATUS_WRONG_CREDENTIALS or code == VOIPCommon.STATUS_UNKNOWN_ACCOUNT) and self.__loginAttemptsRemained > 0:
                 self.__reloginUser()
@@ -442,15 +429,18 @@ class VOIPManager(VOIPHandler):
                 self.onFailedToConnect()
 
     def onSessionAdded(self, data):
-        assert int(data[VOIPCommon.KEY_RETURN_CODE]) == VOIPCommon.CODE_SUCCESS
-        assert not self.__channelUsers
+        if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
+            _logger.error('Session is not added: %r', data)
+            return
         self.__currentChannel = data[VOIPCommon.KEY_URI]
         self.__setVolume()
         self.__fsm.update(self)
         self.onJoinedChannel(data)
 
     def onSessionRemoved(self, data):
-        assert int(data[VOIPCommon.KEY_RETURN_CODE]) == VOIPCommon.CODE_SUCCESS
+        if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
+            _logger.error('Session is not removed: %r', data)
+            return
         for dbid in self.__channelUsers.iterkeys():
             self.onPlayerSpeaking(dbid, False)
 
@@ -463,15 +453,17 @@ class VOIPManager(VOIPHandler):
     def onNetworkTest(self, data):
         returnCode = int(data[VOIPCommon.KEY_RETURN_CODE])
         if returnCode == VOIPCommon.CODE_ERROR:
-            LOG_VOIP_INT('---------------------------')
-            LOG_VOIP_INT("ERROR: '%d' - '%s'" % (int(data[VOIPCommon.KEY_STATUS_CODE]), data[VOIPCommon.KEY_STATUS_STRING]))
-            LOG_VOIP_INT('---------------------------')
+            _logger.info('---------------------------')
+            _logger.info("ERROR: '%d' - '%s'", int(data[VOIPCommon.KEY_STATUS_CODE]), data[VOIPCommon.KEY_STATUS_STRING])
+            _logger.info('---------------------------')
             self.onFailedToConnect()
             self.__clearDesiredChannel()
             self.__clearUser()
 
     def onParticipantAdded(self, data):
-        assert int(data[VOIPCommon.KEY_RETURN_CODE]) == VOIPCommon.CODE_SUCCESS
+        if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
+            _logger.error('Participant is not added: %r', data)
+            return
         uri = data[VOIPCommon.KEY_PARTICIPANT_URI]
         dbid, _ = self.__extractDBIDFromURI(uri)
         if dbid == -1:
@@ -484,7 +476,9 @@ class VOIPManager(VOIPHandler):
             self.__muteParticipantForMe(dbid, True)
 
     def onParticipantRemoved(self, data):
-        assert int(data[VOIPCommon.KEY_RETURN_CODE]) == VOIPCommon.CODE_SUCCESS
+        if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
+            _logger.error('Participant is not removed: %r', data)
+            return
         uri = data[VOIPCommon.KEY_PARTICIPANT_URI]
         dbid, _ = self.__extractDBIDFromURI(uri)
         if dbid in self.__channelUsers:
@@ -492,9 +486,11 @@ class VOIPManager(VOIPHandler):
         self.onPlayerSpeaking(dbid, False)
 
     def onParticipantUpdated(self, data):
-        assert int(data[VOIPCommon.KEY_RETURN_CODE]) == VOIPCommon.CODE_SUCCESS
+        if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
+            _logger.error('Participant is not updated: %r', data)
+            return
         uri = data[VOIPCommon.KEY_PARTICIPANT_URI]
-        dbid, participantLogin = self.__extractDBIDFromURI(uri)
+        dbid, _ = self.__extractDBIDFromURI(uri)
         if dbid == -1:
             return
         talking = int(data[VOIPCommon.KEY_IS_SPEAKING])
@@ -502,34 +498,25 @@ class VOIPManager(VOIPHandler):
             channelUser = self.__channelUsers[dbid]
             if channelUser['talking'] != talking:
                 channelUser['talking'] = talking
-                self.__muffleMasterVolume() if self.__isAnyoneTalking() else self.__restoreMasterVolume()
+                if self.__isAnyoneTalking():
+                    self.__muffleMasterVolume()
+                else:
+                    self.__restoreMasterVolume()
         self.onPlayerSpeaking(dbid, talking)
 
     def __me_onChannelEntered(self, uri, pwd):
-        """
-        Listener of event g_messengerEvents.voip.onChannelEntered.
-        """
         if not self.__inTesting:
             self.__enterChannel(uri, pwd)
 
     def __me_onChannelLeft(self):
-        """
-        Listener of event g_messengerEvents.voip.onChannelLeft.
-        """
         if not self.__inTesting:
             self.__leaveChannel()
 
     def __me_onCredentialReceived(self, name, pwd):
-        """
-        Listener of event g_messengerEvents.voip.onCredentialReceived.
-        """
-        LOG_VOIP_INT("VOIPManager.OnUserCredentials: '%s' '%s'" % (name, pwd))
+        _logger.debug('VOIPManager.OnUserCredentials: %s', name)
         self.__login(name, pwd)
 
     def __me_onUsersListReceived(self, tags):
-        """
-        Listener of event g_messengerEvents.users.onUsersListReceived.
-        """
         if USER_TAG.MUTED not in tags:
             return
         for user in self.usersStorage.getList(MutedFindCriteria()):
@@ -538,8 +525,5 @@ class VOIPManager(VOIPHandler):
                 self.__muteParticipantForMe(dbID, True)
 
     def __me_onUserActionReceived(self, actionID, user):
-        """
-        Listener of event g_messengerEvents.users.onUserActionReceived.
-        """
         if actionID in (USER_ACTION_ID.MUTE_SET, USER_ACTION_ID.MUTE_UNSET):
             self.__onChatActionMute(user.getID(), user.isMuted())

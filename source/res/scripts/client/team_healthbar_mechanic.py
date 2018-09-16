@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/team_healthbar_mechanic.py
-from debug_utils import LOG_DEBUG_DEV
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 
 class TeamHealthbarMechanic(object):

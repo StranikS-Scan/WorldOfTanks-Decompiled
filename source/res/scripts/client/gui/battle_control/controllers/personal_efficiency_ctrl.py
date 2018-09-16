@@ -14,17 +14,10 @@ class _EfficiencyInfo(object):
     __slots__ = ('__type',)
 
     def __init__(self, etype):
-        """
-        Constructor.
-        :param etype: Efficiency type (see PERSONAL_EFFICIENCY_TYPE)
-        """
         super(_EfficiencyInfo, self).__init__()
         self.__type = etype
 
     def getType(self):
-        """
-        Returns efficiency type (see PERSONAL_EFFICIENCY_TYPE)
-        """
         return self.__type
 
 
@@ -32,20 +25,11 @@ class _FeedbackEventEfficiencyInfo(_EfficiencyInfo):
     __slots__ = ('__battleEventType', '__arenaVehID')
 
     def __init__(self, etype, event):
-        """
-        Constructor
-        
-        :param etype: Efficiency type (see PERSONAL_EFFICIENCY_TYPE)
-        :param event: any _FeedbackEvent derived event
-        """
         super(_FeedbackEventEfficiencyInfo, self).__init__(etype)
         self.__battleEventType = event.getBattleEventType()
         self.__arenaVehID = event.getTargetID()
 
     def getBattleEventType(self):
-        """
-        Returns type of battle event. For details see BATTLE_EVENT_TYPE.
-        """
         return self.__battleEventType
 
     def getArenaVehicleID(self):
@@ -56,12 +40,6 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     __slots__ = ('__damage',)
 
     def __init__(self, etype, event):
-        """
-        Constructor
-        
-        :param etype: Efficiency type (see PERSONAL_EFFICIENCY_TYPE)
-        :param event: any _FeedbackEvent derived event
-        """
         super(_DamageEfficiencyInfo, self).__init__(etype, event)
         self.__damage = event.getExtra()
 
@@ -84,9 +62,6 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
         return self.__damage.isShellGold()
 
     def getShellType(self):
-        """
-        Returns shell type (see SHELL_TYPES enum) or None, if shell type is not defined.
-        """
         return self.__damage.getShellType()
 
 
@@ -94,12 +69,6 @@ class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     __slots__ = ('__critsExtra',)
 
     def __init__(self, etype, event):
-        """
-        Constructor
-        
-        :param etype: Efficiency type (see PERSONAL_EFFICIENCY_TYPE)
-        :param event: any _FeedbackEvent derived event
-        """
         super(_CriticalHitsEfficiencyInfo, self).__init__(etype, event)
         self.__critsExtra = event.getExtra()
 
@@ -122,9 +91,6 @@ class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
         return self.__critsExtra.isShellGold()
 
     def getShellType(self):
-        """
-        Returns shell type (see SHELL_TYPES enum) or None, if shell type is not defined.
-        """
         return self.__critsExtra.getShellType()
 
 
@@ -140,12 +106,6 @@ _FEEDBACK_EVENT_TYPE_TO_PERSONAL_EFFICIENCY_TYPE = {_FET.PLAYER_DAMAGED_HP_ENEMY
  _FET.PLAYER_ASSIST_TO_STUN_ENEMY: (_ETYPE.STUN, _DamageEfficiencyInfo)}
 
 def _createEfficiencyInfoFromFeedbackEvent(event):
-    """
-    Factory method to create efficiency data (info) from a feedback event
-    
-    :param event: any _FeedbackEvent derived event
-    :return: _EfficiencyInfo child based on the feedback type or None.
-    """
     if event.getType() in _FEEDBACK_EVENT_TYPE_TO_PERSONAL_EFFICIENCY_TYPE:
         etype, cls = _FEEDBACK_EVENT_TYPE_TO_PERSONAL_EFFICIENCY_TYPE[event.getType()]
         return cls(etype, event)
@@ -183,26 +143,13 @@ class PersonalEfficiencyController(IBattleController):
         self.__eManager = None
         return
 
-    def getTotalEfficiency(self, type):
-        """
-        Returns total efficiency by the given type.
-        :param type: efficiency type (see PERSONAL_EFFICIENCY_TYPE)
-        """
-        return self.__totalEfficiency[type]
+    def getTotalEfficiency(self, eType):
+        return self.__totalEfficiency[eType]
 
     def getLoogedEfficiency(self, types):
-        """
-        Returns logged efficiency by the given type mask.
-        :param types: damage types represented by bit mask (see PERSONAL_EFFICIENCY_TYPE)
-        :return: list of _DamageInfo objects
-        """
         return [ d for d in reversed(self.__efficiencyLog) if BitmaskHelper.hasAnyBitSet(types, d.getType()) ]
 
     def _onPlayerFeedbackReceived(self, events):
-        """
-        Handler of player's feedback events (see FEEDBACK_EVENT_ID).
-        :param events: List of PlayerFeedbackEvent objects
-        """
         eventsCount = 0
         totals = defaultdict(int)
         for event in events:
@@ -225,10 +172,6 @@ class PersonalEfficiencyController(IBattleController):
         return
 
     def _onPlayerSummaryFeedbackReceived(self, event):
-        """
-        Handler of FEEDBACK_EVENT_ID.DAMAGE_LOG_SUMMARY feedback event.
-        :param event: An instance of BattleSummaryFeedbackEvent
-        """
         self.__totalEfficiency[_ETYPE.DAMAGE] = event.getTotalDamage()
         self.__totalEfficiency[_ETYPE.BLOCKED_DAMAGE] = event.getTotalBlockedDamage()
         self.__totalEfficiency[_ETYPE.ASSIST_DAMAGE] = event.getTotalAssistDamage()

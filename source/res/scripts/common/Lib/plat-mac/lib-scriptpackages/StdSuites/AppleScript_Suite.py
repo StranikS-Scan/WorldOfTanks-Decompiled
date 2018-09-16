@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/StdSuites/AppleScript_Suite.py
-"""Suite AppleScript Suite: Standard terms for AppleScript
-Level 1, version 1
-
-Generated from /Volumes/Sap/System Folder/Extensions/AppleScript
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'ascr'
@@ -13,11 +7,6 @@ _code = 'ascr'
 class AppleScript_Suite_Events():
 
     def _26_(self, _object, _attributes={}, **_arguments):
-        """&: Concatenation
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'ccat'
         if _arguments:
@@ -29,11 +18,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def _2a_(self, _object, _attributes={}, **_arguments):
-        """*: Multiplication
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = '*   '
         if _arguments:
@@ -45,11 +29,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def _2b_(self, _object, _attributes={}, **_arguments):
-        """+: Addition
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = '+   '
         if _arguments:
@@ -61,11 +40,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def _2d_(self, _object, _attributes={}, **_arguments):
-        """-: Subtraction
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = '-   '
         if _arguments:
@@ -77,11 +51,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def _3c_(self, _object, _attributes={}, **_arguments):
-        """<: Less than
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = '<   '
         if _arguments:
@@ -93,11 +62,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def _3d_(self, _object, _attributes={}, **_arguments):
-        """=: Equality
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = '=   '
         if _arguments:
@@ -109,11 +73,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def _3e_(self, _object, _attributes={}, **_arguments):
-        """>: Greater than
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = '>   '
         if _arguments:
@@ -154,39 +113,6 @@ class AppleScript_Suite_Events():
      'without': 'wout'}
 
     def Call_a5_subroutine(self, _object=None, _attributes={}, **_arguments):
-        """Call\xa5subroutine: A subroutine call
-        Required argument: anything
-        Keyword argument at: a preposition
-        Keyword argument from_: a preposition
-        Keyword argument for_: a preposition
-        Keyword argument to: a preposition
-        Keyword argument thru: a preposition
-        Keyword argument through: a preposition
-        Keyword argument by: a preposition
-        Keyword argument on: a preposition
-        Keyword argument into: a preposition
-        Keyword argument onto: a preposition
-        Keyword argument between: a preposition
-        Keyword argument against: a preposition
-        Keyword argument out_of: a preposition
-        Keyword argument instead_of: a preposition
-        Keyword argument aside_from: a preposition
-        Keyword argument around: a preposition
-        Keyword argument beside: a preposition
-        Keyword argument beneath: a preposition
-        Keyword argument under: a preposition
-        Keyword argument over: a preposition
-        Keyword argument above: a preposition
-        Keyword argument below: a preposition
-        Keyword argument apart_from: a preposition
-        Keyword argument about: a preposition
-        Keyword argument since: a preposition
-        Keyword argument given: parameter:value pairs, comma-separated
-        Keyword argument with: formal parameter set to true if matching actual parameter is provided
-        Keyword argument without: formal parameter set to false if matching actual parmeter is provided
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'psbr'
         aetools.keysubst(_arguments, self._argmap_Call_a5_subroutine)
@@ -197,11 +123,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def _5e_(self, _object, _attributes={}, **_arguments):
-        """^: Exponentiation
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = '^   '
         if _arguments:
@@ -213,9 +134,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def activate(self, _no_object=None, _attributes={}, **_arguments):
-        """activate: Bring the targeted application program to the front
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'misc'
         _subcode = 'actv'
         if _arguments:
@@ -228,11 +146,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def and_(self, _object, _attributes={}, **_arguments):
-        """and: Logical conjunction
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'AND '
         if _arguments:
@@ -244,11 +157,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def as_(self, _object, _attributes={}, **_arguments):
-        """as: Coercion
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'coer'
         if _arguments:
@@ -260,11 +168,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def contains(self, _object, _attributes={}, **_arguments):
-        """contains: Containment
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'cont'
         if _arguments:
@@ -276,11 +179,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def div(self, _object, _attributes={}, **_arguments):
-        """div: Quotient
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'div '
         if _arguments:
@@ -292,9 +190,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def end_tell(self, _no_object=None, _attributes={}, **_arguments):
-        """end tell: Record or log an \xd4end tell\xd5 statement
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'ascr'
         _subcode = 'tend'
         if _arguments:
@@ -307,11 +202,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def ends_with(self, _object, _attributes={}, **_arguments):
-        """ends with: Ends with
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'ends'
         if _arguments:
@@ -328,14 +218,6 @@ class AppleScript_Suite_Events():
      'to': 'errt'}
 
     def error(self, _object=None, _attributes={}, **_arguments):
-        """error: Raise an error
-        Required argument: anything
-        Keyword argument number: an error number
-        Keyword argument partial_result: any partial result occurring before the error
-        Keyword argument from_: the object that caused the error
-        Keyword argument to: the desired class for a failed coercion
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'ascr'
         _subcode = 'err '
         aetools.keysubst(_arguments, self._argmap_error)
@@ -346,10 +228,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def idle(self, _no_object=None, _attributes={}, **_arguments):
-        """idle: Sent to a script application when it is idle
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: the number of seconds to wait for next idle event
-        """
         _code = 'misc'
         _subcode = 'idle'
         if _arguments:
@@ -362,9 +240,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def launch(self, _no_object=None, _attributes={}, **_arguments):
-        """launch: Start an application for scripting
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'ascr'
         _subcode = 'noop'
         if _arguments:
@@ -377,10 +252,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def log(self, _object, _attributes={}, **_arguments):
-        """log: Cause a comment to be logged
-        Required argument: undocumented, typecode 'TEXT'
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'ascr'
         _subcode = 'cmnt'
         if _arguments:
@@ -392,11 +263,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def mod(self, _object, _attributes={}, **_arguments):
-        """mod: Remainder
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'mod '
         if _arguments:
@@ -408,11 +274,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def negate(self, _object, _attributes={}, **_arguments):
-        """negate: Numeric negation
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'neg '
         if _arguments:
@@ -424,11 +285,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def not_(self, _object, _attributes={}, **_arguments):
-        """not: Logical negation
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'NOT '
         if _arguments:
@@ -440,11 +296,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def or_(self, _object, _attributes={}, **_arguments):
-        """or: Logical disjunction
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'OR  '
         if _arguments:
@@ -456,9 +307,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def start_log(self, _no_object=None, _attributes={}, **_arguments):
-        """start log: Start event logging in the script editor
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'ToyS'
         _subcode = 'log1'
         if _arguments:
@@ -471,11 +319,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def starts_with(self, _object, _attributes={}, **_arguments):
-        """starts with: Starts with
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = 'bgwt'
         if _arguments:
@@ -487,9 +330,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def stop_log(self, _no_object=None, _attributes={}, **_arguments):
-        """stop log: Stop event logging in the script editor
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'ToyS'
         _subcode = 'log0'
         if _arguments:
@@ -502,9 +342,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def tell(self, _no_object=None, _attributes={}, **_arguments):
-        """tell: Record or log a \xd4tell\xd5 statement
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'ascr'
         _subcode = 'tell'
         if _arguments:
@@ -517,11 +354,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def _ad_(self, _object, _attributes={}, **_arguments):
-        """\xad: Inequality
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = '\xad   '
         if _arguments:
@@ -533,11 +365,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def _b2_(self, _object, _attributes={}, **_arguments):
-        """\xb2: Less than or equal to
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = '<=  '
         if _arguments:
@@ -549,11 +376,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def _b3_(self, _object, _attributes={}, **_arguments):
-        """\xb3: Greater than or equal to
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = '>=  '
         if _arguments:
@@ -565,11 +387,6 @@ class AppleScript_Suite_Events():
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def _d6_(self, _object, _attributes={}, **_arguments):
-        """\xd6: Division
-        Required argument: an AE object reference
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: anything
-        """
         _code = 'ascr'
         _subcode = '/   '
         if _arguments:
@@ -582,38 +399,32 @@ class AppleScript_Suite_Events():
 
 
 class anything(aetools.ComponentItem):
-    """anything - any class or reference """
     want = '****'
 
 
 class pictures(aetools.ComponentItem):
-    """pictures -  """
     want = 'PICT'
 
 
 picture = pictures
 
 class styled_text(aetools.ComponentItem):
-    """styled text - text with font, size, and style information """
     want = 'STXT'
 
 
 styled_text = styled_text
 
 class strings(aetools.ComponentItem):
-    """strings -  """
     want = 'TEXT'
 
 
 string = strings
 
 class alias(aetools.ComponentItem):
-    """alias - a file on a disk or server.  The file must exist when you check the syntax of your script. """
     want = 'alis'
 
 
 class _Prop_POSIX_path(aetools.NProperty):
-    """POSIX path - the POSIX path of the file """
     which = 'psxp'
     want = 'TEXT'
 
@@ -621,36 +432,30 @@ class _Prop_POSIX_path(aetools.NProperty):
 aliases = alias
 
 class April(aetools.ComponentItem):
-    """April - the month of April """
     want = 'apr '
 
 
 class August(aetools.ComponentItem):
-    """August - the month of August """
     want = 'aug '
 
 
 class booleans(aetools.ComponentItem):
-    """booleans -  """
     want = 'bool'
 
 
 boolean = booleans
 
 class RGB_colors(aetools.ComponentItem):
-    """RGB colors -  """
     want = 'cRGB'
 
 
 RGB_color = RGB_colors
 
 class application(aetools.ComponentItem):
-    """application - specifies global properties of AppleScript """
     want = 'capp'
 
 
 class _Prop_AppleScript(aetools.NProperty):
-    """AppleScript - the top-level script object """
     which = 'ascr'
     want = 'scpt'
 
@@ -658,7 +463,6 @@ class _Prop_AppleScript(aetools.NProperty):
 AppleScript = _Prop_AppleScript()
 
 class _Prop_days(aetools.NProperty):
-    """days - the number of seconds in a day """
     which = 'days'
     want = 'long'
 
@@ -666,7 +470,6 @@ class _Prop_days(aetools.NProperty):
 days = _Prop_days()
 
 class _Prop_hours(aetools.NProperty):
-    """hours - the number of seconds in an hour """
     which = 'hour'
     want = 'long'
 
@@ -674,7 +477,6 @@ class _Prop_hours(aetools.NProperty):
 hours = _Prop_hours()
 
 class _Prop_minutes(aetools.NProperty):
-    """minutes - the number of seconds in a minute """
     which = 'min '
     want = 'long'
 
@@ -682,7 +484,6 @@ class _Prop_minutes(aetools.NProperty):
 minutes = _Prop_minutes()
 
 class _Prop_pi(aetools.NProperty):
-    """pi - the constant pi """
     which = 'pi  '
     want = 'doub'
 
@@ -690,7 +491,6 @@ class _Prop_pi(aetools.NProperty):
 pi = _Prop_pi()
 
 class _Prop_print_depth(aetools.NProperty):
-    """print depth - the maximum depth to print """
     which = 'prdp'
     want = 'long'
 
@@ -698,7 +498,6 @@ class _Prop_print_depth(aetools.NProperty):
 print_depth = _Prop_print_depth()
 
 class _Prop_print_length(aetools.NProperty):
-    """print length - the maximum length to print """
     which = 'prln'
     want = 'long'
 
@@ -706,7 +505,6 @@ class _Prop_print_length(aetools.NProperty):
 print_length = _Prop_print_length()
 
 class _Prop_result(aetools.NProperty):
-    """result - the last result of evaluation """
     which = 'rslt'
     want = '****'
 
@@ -714,7 +512,6 @@ class _Prop_result(aetools.NProperty):
 result = _Prop_result()
 
 class _Prop_return_(aetools.NProperty):
-    """return - a return character """
     which = 'ret '
     want = 'cha '
 
@@ -722,7 +519,6 @@ class _Prop_return_(aetools.NProperty):
 return_ = _Prop_return_()
 
 class _Prop_space(aetools.NProperty):
-    """space - a space character """
     which = 'spac'
     want = 'cha '
 
@@ -730,7 +526,6 @@ class _Prop_space(aetools.NProperty):
 space = _Prop_space()
 
 class _Prop_tab(aetools.NProperty):
-    """tab - a tab character """
     which = 'tab '
     want = 'cha '
 
@@ -738,7 +533,6 @@ class _Prop_tab(aetools.NProperty):
 tab = _Prop_tab()
 
 class _Prop_text_item_delimiters(aetools.NProperty):
-    """text item delimiters - the text item delimiters of a string """
     which = 'txdl'
     want = 'list'
 
@@ -746,7 +540,6 @@ class _Prop_text_item_delimiters(aetools.NProperty):
 text_item_delimiters = _Prop_text_item_delimiters()
 
 class _Prop_weeks(aetools.NProperty):
-    """weeks - the number of seconds in a week """
     which = 'week'
     want = 'long'
 
@@ -756,42 +549,35 @@ applications = application
 app = application
 
 class upper_case(aetools.ComponentItem):
-    """upper case - Text with lower case converted to upper case """
     want = 'case'
 
 
 class cubic_centimeters(aetools.ComponentItem):
-    """cubic centimeters - a volume measurement in SI cubic centimeters """
     want = 'ccmt'
 
 
 cubic_centimetres = cubic_centimeters
 
 class cubic_feet(aetools.ComponentItem):
-    """cubic feet - a volume measurement in Imperial cubic feet """
     want = 'cfet'
 
 
 class characters(aetools.ComponentItem):
-    """characters -  """
     want = 'cha '
 
 
 character = characters
 
 class writing_code_info(aetools.ComponentItem):
-    """writing code info - script code and language code of text run """
     want = 'citl'
 
 
 class _Prop_language_code(aetools.NProperty):
-    """language code - the language code for the text """
     which = 'plcd'
     want = 'shor'
 
 
 class _Prop_script_code(aetools.NProperty):
-    """script code - the script code for the text """
     which = 'pscd'
     want = 'shor'
 
@@ -799,33 +585,28 @@ class _Prop_script_code(aetools.NProperty):
 writing_code_infos = writing_code_info
 
 class text_items(aetools.ComponentItem):
-    """text items -  """
     want = 'citm'
 
 
 text_item = text_items
 
 class cubic_meters(aetools.ComponentItem):
-    """cubic meters - a volume measurement in SI cubic meters """
     want = 'cmet'
 
 
 cubic_metres = cubic_meters
 
 class centimeters(aetools.ComponentItem):
-    """centimeters - a distance measurement in SI centimeters """
     want = 'cmtr'
 
 
 centimetres = centimeters
 
 class item(aetools.ComponentItem):
-    """item - An item of any type """
     want = 'cobj'
 
 
 class _Prop_id(aetools.NProperty):
-    """id - the unique ID number of this object """
     which = 'ID  '
     want = 'long'
 
@@ -833,179 +614,148 @@ class _Prop_id(aetools.NProperty):
 items = item
 
 class C_strings(aetools.ComponentItem):
-    """C strings -  """
     want = 'cstr'
 
 
 C_string = C_strings
 
 class text(aetools.ComponentItem):
-    """text - text with language and style information """
     want = 'ctxt'
 
 
 class cubic_inches(aetools.ComponentItem):
-    """cubic inches - a volume measurement in Imperial cubic inches """
     want = 'cuin'
 
 
 class cubic_yards(aetools.ComponentItem):
-    """cubic yards - a distance measurement in Imperial cubic yards """
     want = 'cyrd'
 
 
 class December(aetools.ComponentItem):
-    """December - the month of December """
     want = 'dec '
 
 
 class degrees_Celsius(aetools.ComponentItem):
-    """degrees Celsius - a temperature measurement in SI degrees Celsius """
     want = 'degc'
 
 
 class degrees_Fahrenheit(aetools.ComponentItem):
-    """degrees Fahrenheit - a temperature measurement in degrees Fahrenheit """
     want = 'degf'
 
 
 class degrees_Kelvin(aetools.ComponentItem):
-    """degrees Kelvin - a temperature measurement in degrees Kelvin """
     want = 'degk'
 
 
 class reals(aetools.ComponentItem):
-    """reals -  """
     want = 'doub'
 
 
 real = reals
 
 class encoded_strings(aetools.ComponentItem):
-    """encoded strings -  """
     want = 'encs'
 
 
 encoded_string = encoded_strings
 
 class constants(aetools.ComponentItem):
-    """constants -  """
     want = 'enum'
 
 
 constant = constants
 
 class events(aetools.ComponentItem):
-    """events -  """
     want = 'evnt'
 
 
 event = events
 
 class February(aetools.ComponentItem):
-    """February - the month of February """
     want = 'feb '
 
 
 class feet(aetools.ComponentItem):
-    """feet - a distance measurement in Imperial feet """
     want = 'feet'
 
 
 class Friday(aetools.ComponentItem):
-    """Friday - Friday """
     want = 'fri '
 
 
 class file_specification(aetools.ComponentItem):
-    """file specification - a file specification as used by the operating system """
     want = 'fss '
 
 
 file_specifications = file_specification
 
 class gallons(aetools.ComponentItem):
-    """gallons - a volume measurement in Imperial gallons """
     want = 'galn'
 
 
 class grams(aetools.ComponentItem):
-    """grams - a mass measurement in SI meters """
     want = 'gram'
 
 
 class handlers(aetools.ComponentItem):
-    """handlers -  """
     want = 'hand'
 
 
 handler = handlers
 
 class inches(aetools.ComponentItem):
-    """inches - a distance measurement in Imperial inches """
     want = 'inch'
 
 
 class international_text(aetools.ComponentItem):
-    """international text - text that begins with a writing code """
     want = 'itxt'
 
 
 international_text = international_text
 
 class January(aetools.ComponentItem):
-    """January - the month of January """
     want = 'jan '
 
 
 class July(aetools.ComponentItem):
-    """July - the month of July """
     want = 'jul '
 
 
 class June(aetools.ComponentItem):
-    """June - the month of June """
     want = 'jun '
 
 
 class reference_forms(aetools.ComponentItem):
-    """reference forms -  """
     want = 'kfrm'
 
 
 reference_form = reference_forms
 
 class kilograms(aetools.ComponentItem):
-    """kilograms - a mass measurement in SI kilograms """
     want = 'kgrm'
 
 
 class kilometers(aetools.ComponentItem):
-    """kilometers - a distance measurement in SI kilometers """
     want = 'kmtr'
 
 
 kilometres = kilometers
 
 class keystroke(aetools.ComponentItem):
-    """keystroke - a press of a key combination on a Macintosh keyboard """
     want = 'kprs'
 
 
 class _Prop_key(aetools.NProperty):
-    """key - the character for the key was pressed (ignoring modifiers) """
     which = 'kMsg'
     want = 'cha '
 
 
 class _Prop_key_kind(aetools.NProperty):
-    """key kind - the kind of key that was pressed """
     which = 'kknd'
     want = 'ekst'
 
 
 class _Prop_modifiers(aetools.NProperty):
-    """modifiers - the modifier keys pressed in combination """
     which = 'kMod'
     want = 'eMds'
 
@@ -1013,53 +763,44 @@ class _Prop_modifiers(aetools.NProperty):
 keystrokes = keystroke
 
 class pounds(aetools.ComponentItem):
-    """pounds - a weight measurement in SI meters """
     want = 'lbs '
 
 
 class date(aetools.ComponentItem):
-    """date - Absolute date and time values """
     want = 'ldt '
 
 
 class _Prop_date_string(aetools.NProperty):
-    """date string - the date portion of a date-time value as text """
     which = 'dstr'
     want = 'TEXT'
 
 
 class _Prop_day(aetools.NProperty):
-    """day - the day of the month of a date """
     which = 'day '
     want = 'long'
 
 
 class _Prop_month(aetools.NProperty):
-    """month - the month of a date """
     which = 'mnth'
     want = 'mnth'
 
 
 class _Prop_time(aetools.NProperty):
-    """time - the time since midnight of a date """
     which = 'time'
     want = 'long'
 
 
 class _Prop_time_string(aetools.NProperty):
-    """time string - the time portion of a date-time value as text """
     which = 'tstr'
     want = 'TEXT'
 
 
 class _Prop_weekday(aetools.NProperty):
-    """weekday - the day of a week of a date """
     which = 'wkdy'
     want = 'wkdy'
 
 
 class _Prop_year(aetools.NProperty):
-    """year - the year of a date """
     which = 'year'
     want = 'long'
 
@@ -1067,24 +808,20 @@ class _Prop_year(aetools.NProperty):
 dates = date
 
 class list(aetools.ComponentItem):
-    """list - An ordered collection of items """
     want = 'list'
 
 
 class _Prop_length(aetools.NProperty):
-    """length - the length of a list """
     which = 'leng'
     want = 'long'
 
 
 class _Prop_rest(aetools.NProperty):
-    """rest - all items of the list excluding first """
     which = 'rest'
     want = 'list'
 
 
 class _Prop_reverse(aetools.NProperty):
-    """reverse - the items of the list in reverse order """
     which = 'rvse'
     want = 'list'
 
@@ -1092,140 +829,116 @@ class _Prop_reverse(aetools.NProperty):
 lists = list
 
 class liters(aetools.ComponentItem):
-    """liters - a volume measurement in SI liters """
     want = 'litr'
 
 
 litres = liters
 
 class linked_list(aetools.ComponentItem):
-    """linked list - An ordered collection of items """
     want = 'llst'
 
 
 linked_lists = linked_list
 
 class integers(aetools.ComponentItem):
-    """integers -  """
     want = 'long'
 
 
 integer = integers
 
 class list_or_record(aetools.ComponentItem):
-    """list or record - a list or record """
     want = 'lr  '
 
 
 class list_2c__record_or_text(aetools.ComponentItem):
-    """list, record or text - a list, record or text """
     want = 'lrs '
 
 
 class list_or_string(aetools.ComponentItem):
-    """list or string - a list or string """
     want = 'ls  '
 
 
 class machines(aetools.ComponentItem):
-    """machines -  """
     want = 'mach'
 
 
 machine = machines
 
 class March(aetools.ComponentItem):
-    """March - the month of March """
     want = 'mar '
 
 
 class May(aetools.ComponentItem):
-    """May - the month of May """
     want = 'may '
 
 
 class meters(aetools.ComponentItem):
-    """meters - a distance measurement in SI meters """
     want = 'metr'
 
 
 metres = meters
 
 class miles(aetools.ComponentItem):
-    """miles - a distance measurement in Imperial miles """
     want = 'mile'
 
 
 class months(aetools.ComponentItem):
-    """months -  """
     want = 'mnth'
 
 
 month = months
 
 class Monday(aetools.ComponentItem):
-    """Monday - Monday """
     want = 'mon '
 
 
 class missing_values(aetools.ComponentItem):
-    """missing values -  """
     want = 'msng'
 
 
 missing_value = missing_values
 
 class number_or_date(aetools.ComponentItem):
-    """number or date - a number or date """
     want = 'nd  '
 
 
 class number_2c__date_or_text(aetools.ComponentItem):
-    """number, date or text - a number, date or text """
     want = 'nds '
 
 
 class numbers(aetools.ComponentItem):
-    """numbers -  """
     want = 'nmbr'
 
 
 number = numbers
 
 class November(aetools.ComponentItem):
-    """November - the month of November """
     want = 'nov '
 
 
 class number_or_string(aetools.ComponentItem):
-    """number or string - a number or string """
     want = 'ns  '
 
 
 class references(aetools.ComponentItem):
-    """references -  """
     want = 'obj '
 
 
 reference = references
 
 class October(aetools.ComponentItem):
-    """October - the month of October """
     want = 'oct '
 
 
 class ounces(aetools.ComponentItem):
-    """ounces - a weight measurement in SI meters """
     want = 'ozs '
 
 
 class class_(aetools.ComponentItem):
-    """class - the type of a value """
     want = 'pcls'
 
 
 class _Prop__3c_Inheritance_3e_(aetools.NProperty):
-    """<Inheritance> - inherits some of its properties from this class """
     which = 'c@#^'
     want = 'type'
 
@@ -1233,71 +946,59 @@ class _Prop__3c_Inheritance_3e_(aetools.NProperty):
 classes = class_
 
 class prepositions(aetools.ComponentItem):
-    """prepositions -  """
     want = 'prep'
 
 
 preposition = prepositions
 
 class properties(aetools.ComponentItem):
-    """properties -  """
     want = 'prop'
 
 
 property = properties
 
 class writing_code(aetools.ComponentItem):
-    """writing code - codes that identify the language and script system """
     want = 'psct'
 
 
 class Pascal_strings(aetools.ComponentItem):
-    """Pascal strings -  """
     want = 'pstr'
 
 
 Pascal_string = Pascal_strings
 
 class quarts(aetools.ComponentItem):
-    """quarts - a volume measurement in Imperial quarts """
     want = 'qrts'
 
 
 class data(aetools.ComponentItem):
-    """data - an AppleScript raw data object """
     want = 'rdat'
 
 
 class records(aetools.ComponentItem):
-    """records -  """
     want = 'reco'
 
 
 record = records
 
 class Saturday(aetools.ComponentItem):
-    """Saturday - Saturday """
     want = 'sat '
 
 
 class seconds(aetools.ComponentItem):
-    """seconds - more than one second """
     want = 'scnd'
 
 
 class script(aetools.ComponentItem):
-    """script - An AppleScript script """
     want = 'scpt'
 
 
 class _Prop_name(aetools.NProperty):
-    """name - the name of the script """
     which = 'pnam'
     want = 'TEXT'
 
 
 class _Prop_parent(aetools.NProperty):
-    """parent - its parent, i.e. the script that will handle events that this script doesn\xd5t """
     which = 'pare'
     want = 'scpt'
 
@@ -1305,128 +1006,106 @@ class _Prop_parent(aetools.NProperty):
 scripts = script
 
 class September(aetools.ComponentItem):
-    """September - the month of September """
     want = 'sep '
 
 
 class alias_or_string(aetools.ComponentItem):
-    """alias or string - an alias or string """
     want = 'sf  '
 
 
 class sounds(aetools.ComponentItem):
-    """sounds -  """
     want = 'snd '
 
 
 sound = sounds
 
 class square_feet(aetools.ComponentItem):
-    """square feet - an area measurement in Imperial square feet """
     want = 'sqft'
 
 
 class square_kilometers(aetools.ComponentItem):
-    """square kilometers - an area measurement in SI square kilometers """
     want = 'sqkm'
 
 
 square_kilometres = square_kilometers
 
 class square_miles(aetools.ComponentItem):
-    """square miles - an area measurement in Imperial square miles """
     want = 'sqmi'
 
 
 class square_meters(aetools.ComponentItem):
-    """square meters - an area measurement in SI square meters """
     want = 'sqrm'
 
 
 square_metres = square_meters
 
 class square_yards(aetools.ComponentItem):
-    """square yards - an area measurement in Imperial square yards """
     want = 'sqyd'
 
 
 class styled_Clipboard_text(aetools.ComponentItem):
-    """styled Clipboard text - clipboard text with font, size, and style information """
     want = 'styl'
 
 
 styled_Clipboard_text = styled_Clipboard_text
 
 class Sunday(aetools.ComponentItem):
-    """Sunday - Sunday """
     want = 'sun '
 
 
 class styled_Unicode_text(aetools.ComponentItem):
-    """styled Unicode text - styled text in the Unicode format """
     want = 'sutx'
 
 
 styled_Unicode_text = styled_Unicode_text
 
 class Thursday(aetools.ComponentItem):
-    """Thursday - Thursday """
     want = 'thu '
 
 
 class Tuesday(aetools.ComponentItem):
-    """Tuesday - Tuesday """
     want = 'tue '
 
 
 class type_class(aetools.ComponentItem):
-    """type class - the name of a particular class (or any four-character code) """
     want = 'type'
 
 
 class empty_ae_name_(aetools.ComponentItem):
-    """ - the undefined value """
     want = 'undf'
 
 
 class Unicode_text(aetools.ComponentItem):
-    """Unicode text - text in the Unicode format (cannot be viewed without conversion) """
     want = 'utxt'
 
 
 Unicode_text = Unicode_text
 
 class vector(aetools.ComponentItem):
-    """vector - An ordered collection of items """
     want = 'vect'
 
 
 vectors = vector
 
 class version(aetools.ComponentItem):
-    """version - a version value """
     want = 'vers'
 
 
 class Wednesday(aetools.ComponentItem):
-    """Wednesday - Wednesday """
     want = 'wed '
 
 
 class weekdays(aetools.ComponentItem):
-    """weekdays -  """
     want = 'wkdy'
 
 
 weekday = weekdays
 
 class yards(aetools.ComponentItem):
-    """yards - a distance measurement in Imperial yards """
     want = 'yard'
 
 
 class zones(aetools.ComponentItem):
-    """zones -  """
     want = 'zone'
 
 

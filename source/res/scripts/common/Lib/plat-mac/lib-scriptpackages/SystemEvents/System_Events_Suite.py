@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/SystemEvents/System_Events_Suite.py
-"""Suite System Events Suite: Terms and Events for controlling the System Events application
-Level 1, version 1
-
-Generated from /System/Library/CoreServices/System Events.app
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'sevs'
@@ -13,10 +7,6 @@ _code = 'sevs'
 class System_Events_Suite_Events:
 
     def do_script(self, _object, _attributes={}, **_arguments):
-        """do script: Execute an OSA script.
-        Required argument: the object for the command
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'misc'
         _subcode = 'dosc'
         if _arguments:
@@ -29,12 +19,10 @@ class System_Events_Suite_Events:
 
 
 class application(aetools.ComponentItem):
-    """application - The System Events application """
     want = 'capp'
 
 
 class _Prop__3c_Inheritance_3e_(aetools.NProperty):
-    """<Inheritance> - All of the properties of the superclass. """
     which = 'c@#^'
     want = 'capp'
 
@@ -42,7 +30,6 @@ class _Prop__3c_Inheritance_3e_(aetools.NProperty):
 _3c_Inheritance_3e_ = _Prop__3c_Inheritance_3e_()
 
 class _Prop_folder_actions_enabled(aetools.NProperty):
-    """folder actions enabled - Are Folder Actions currently being processed? """
     which = 'faen'
     want = 'bool'
 
@@ -50,7 +37,6 @@ class _Prop_folder_actions_enabled(aetools.NProperty):
 folder_actions_enabled = _Prop_folder_actions_enabled()
 
 class _Prop_properties(aetools.NProperty):
-    """properties - every property of the System Events application """
     which = 'pALL'
     want = '****'
 

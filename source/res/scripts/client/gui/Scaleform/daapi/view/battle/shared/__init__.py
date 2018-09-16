@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampCompone
 from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates, ConditionalViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE, events
 __all__ = ('SharedPage',)
 
@@ -17,7 +17,6 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from gui.Scaleform.daapi.view.battle.shared import battle_loading
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
     from gui.Scaleform.daapi.view.battle.shared import damage_info_panel
     from gui.Scaleform.daapi.view.battle.shared import damage_panel
@@ -60,7 +59,7 @@ class BattlePackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((VIEW_ALIAS.ACOUSTIC_POPOVER, self.loadViewByCtxEvent), (VIEW_ALIAS.INGAME_MENU, self.__handleIngameMenuEvent), (events.GameEvent.HELP, self.__handleHelpEvent))
-        super(BattlePackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
+        super(BattlePackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
 
     def __handleIngameMenuEvent(self, event):
         window = self.findViewByAlias(ViewTypes.WINDOW, VIEW_ALIAS.INGAME_MENU)
@@ -84,7 +83,7 @@ class BattleDialogHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((events.ShowDialogEvent.SHOW_DESERTER_DLG, self.__showDeserterDialog),)
-        super(BattleDialogHandler, self).__init__(listeners, APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.GLOBAL)
+        super(BattleDialogHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.GLOBAL)
 
     def __showDeserterDialog(self, event):
         self.loadViewWithGenName(VIEW_ALIAS.INGAME_DESERTER, event.meta, event.handler)

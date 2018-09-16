@@ -41,7 +41,6 @@ def openfile(filename, mode='r'):
 class TestEmailBase(unittest.TestCase):
 
     def ndiffAssertEqual(self, first, second):
-        """Like assertEqual except use ndiff for readable output."""
         if first != second:
             sfirst = str(first)
             ssecond = str(second)
@@ -1688,13 +1687,6 @@ class TestMiscellaneous(TestEmailBase):
         self.assertEqual(Utils.mktime_tz((1970, 1, 1, 0, 0, 0, -1, -1, -1, 1234)), -1234)
 
     def test_parsedate_y2k(self):
-        """Test for parsing a date with a two-digit year.
-        
-        Parsing a date with a two-digit year should return the correct
-        four-digit year. RFC822 allows two-digit years, but RFC2822 (which
-        obsoletes RFC822) requires four-digit years.
-        
-        """
         self.assertEqual(Utils.parsedate_tz('25 Feb 03 13:47:26 -0800'), Utils.parsedate_tz('25 Feb 2003 13:47:26 -0800'))
         self.assertEqual(Utils.parsedate_tz('25 Feb 71 13:47:26 -0800'), Utils.parsedate_tz('25 Feb 1971 13:47:26 -0800'))
 
@@ -1777,7 +1769,6 @@ class TestMiscellaneous(TestEmailBase):
         eq(Utils.getaddresses(['foo: ;', '"Jason R. Mastaler" <jason@dom.ain>']), [('', ''), ('Jason R. Mastaler', 'jason@dom.ain')])
 
     def test_getaddresses_embedded_comment(self):
-        """Test proper handling of a nested comment"""
         eq = self.assertEqual
         addrs = Utils.getaddresses(['User ((nested comment)) <foo@bar.com>'])
         eq(addrs[0][1], 'foo@bar.com')
@@ -1877,10 +1868,6 @@ class TestIterators(TestEmailBase):
         eq(EMPTYSTRING.join(lines), '\nHi,\n\nDo you like this message?\n\n-Me\n')
 
     def test_pushCR_LF(self):
-        """FeedParser BufferedSubFile.push() assumed it received complete
-           line endings.  A CR ending one push() followed by a LF starting
-           the next push() added an empty line.
-        """
         imt = [('a\r \n', 2),
          ('b', 0),
          ('c\n', 1),
@@ -2085,11 +2072,9 @@ class TestQuopri(unittest.TestCase):
          '/',
          ' ']
         self.hnon = [ chr(x) for x in range(256) if chr(x) not in self.hlit ]
-        assert len(self.hlit) + len(self.hnon) == 256
         self.blit = [ chr(x) for x in range(ord(' '), ord('~') + 1) ] + ['\t']
         self.blit.remove('=')
         self.bnon = [ chr(x) for x in range(256) if chr(x) not in self.blit ]
-        assert len(self.blit) + len(self.bnon) == 256
 
     def test_header_quopri_check(self):
         for c in self.hlit:

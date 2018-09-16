@@ -11,11 +11,6 @@ from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from helpers import i18n
 
 def validatePrbCreationCooldown():
-    """
-    Validates prebattle entity creation is in cooldown
-    Returns:
-        is creation in cooldown
-    """
     if _rqc.isRequestInCoolDown(REQUEST_SCOPE.PRB_CONTROL, REQUEST_TYPE.CREATE):
         SystemMessages.pushMessage(messages.getJoinFailureMessage(JOIN_FAILURE.COOLDOWN), type=SystemMessages.SM_TYPE.Error)
         return True
@@ -23,41 +18,19 @@ def validatePrbCreationCooldown():
 
 
 def setPrbCreationCooldown():
-    """
-    Sets prebattle creation is in cooldown.
-    """
     _rqc.setRequestCoolDown(REQUEST_SCOPE.PRB_CONTROL, REQUEST_TYPE.CREATE, coolDown=REQUEST_COOLDOWN.PREBATTLE_CREATION)
 
 
 def getPrbRequestCoolDown(rqTypeID):
-    """
-    Gets cooldown time for give request type.
-    Args:
-        rqTypeID: request type
-    
-    Returns:
-        cooldown time left
-    """
     return _rqc.getRequestCoolDown(REQUEST_SCOPE.PRB_CONTROL, rqTypeID)
 
 
 class PrbCooldownManager(RequestCooldownManager):
-    """
-    Manager for prebattle request cooldowns.
-    """
 
     def __init__(self):
         super(PrbCooldownManager, self).__init__(REQUEST_SCOPE.PRB_CONTROL)
 
     def lookupName(self, rqTypeID):
-        """
-        Name for prebattle request action.
-        Args:
-            rqTypeID: request type identifier
-        
-        Returns:
-            name for prebattle request
-        """
         requestName = rqTypeID
         if rqTypeID in REQUEST_TYPE_NAMES:
             requestName = I18N_SYSTEM_MESSAGES.prebattle_request_name(REQUEST_TYPE_NAMES[rqTypeID])
@@ -67,7 +40,4 @@ class PrbCooldownManager(RequestCooldownManager):
         return requestName
 
     def getDefaultCoolDown(self):
-        """
-        Getter for default cooldown.
-        """
         return _rqc.DEFAULT_COOLDOWN_TO_REQUEST

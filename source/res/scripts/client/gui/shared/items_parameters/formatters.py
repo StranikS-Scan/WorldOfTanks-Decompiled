@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/items_parameters/formatters.py
 from itertools import chain
 import BigWorld
+from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
@@ -10,6 +11,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, PARAMS_GROUPS
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
 from web_stubs import i18n
 MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
@@ -60,11 +62,13 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'maxShotDistance': MENU.TANK_PARAMS_M,
  'switchOnTime': MENU.TANK_PARAMS_S,
  'switchOffTime': MENU.TANK_PARAMS_S,
+ 'switchTime': MENU.TANK_PARAMS_S,
  'stunMaxDuration': MENU.TANK_PARAMS_S,
  'stunMinDuration': MENU.TANK_PARAMS_S,
  'stunMaxDurationList': MENU.TANK_PARAMS_S,
  'stunMinDurationList': MENU.TANK_PARAMS_S,
- 'cooldownSeconds': MENU.TANK_PARAMS_S}
+ 'cooldownSeconds': MENU.TANK_PARAMS_S,
+ AUTO_RELOAD_PROP_NAME: MENU.TANK_PARAMS_S}
 COLORLESS_SCHEME = (text_styles.stats, text_styles.stats, text_styles.stats)
 NO_BONUS_SIMPLIFIED_SCHEME = (text_styles.warning, text_styles.warning, text_styles.warning)
 NO_BONUS_BASE_SCHEME = (text_styles.error, text_styles.stats, text_styles.stats)
@@ -82,7 +86,21 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
                         artefacts.Bomber: ('bombDamage', 'piercingPower', 'bombsNumberRange', 'areaSquare', 'flyDelayRange')},
  ITEM_TYPES.shell: ('caliber', 'avgPiercingPower', 'damage', 'stunMinDuration', 'stunMaxDuration', 'explosionRadius'),
  ITEM_TYPES.optionalDevice: ('weight',),
- ITEM_TYPES.vehicleGun: ('caliber', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'avgPiercingPower', 'avgDamageList', 'stunMinDurationList', 'stunMaxDurationList', 'dispertionRadius', 'aimingTime', 'maxShotDistance', 'weight')}
+ ITEM_TYPES.vehicleGun: ('caliber',
+                         'shellsCount',
+                         'shellReloadingTime',
+                         'reloadMagazineTime',
+                         AUTO_RELOAD_PROP_NAME,
+                         'reloadTime',
+                         'avgPiercingPower',
+                         'avgDamageList',
+                         'stunMinDurationList',
+                         'stunMaxDurationList',
+                         'dispertionRadius',
+                         'aimingTime',
+                         'maxShotDistance',
+                         'weight')}
+_COUNT_OF_AUTO_RELOAD_SLOTS_TIMES_TO_SHOW_IN_INFO = 5
 
 def measureUnitsForParameter(paramName):
     return i18n.makeString(MEASURE_UNITS[paramName])
@@ -92,8 +110,8 @@ def isRelativeParameter(paramName):
     return paramName in RELATIVE_PARAMS
 
 
-def isRelativeParameterVisible(param):
-    return isRelativeParameter(param.name) and isDiffEnoughToDisplay(param.state[1])
+def isRelativeParameterVisible(parameter):
+    return isRelativeParameter(parameter.name) and isDiffEnoughToDisplay(parameter.state[1])
 
 
 def isDiffEnoughToDisplay(value):
@@ -127,7 +145,7 @@ def formatVehicleParamName(paramName, showMeasureUnit=True):
 
 
 def getRelativeDiffParams(comparator):
-    relativeParams = filter(lambda param: isRelativeParameterVisible(param), comparator.getAllDifferentParams())
+    relativeParams = [ p for p in comparator.getAllDifferentParams() if isRelativeParameterVisible(p) ]
     return sorted(relativeParams, cmp=lambda a, b: cmp(RELATIVE_PARAMS.index(a.name), RELATIVE_PARAMS.index(b.name)))
 
 
@@ -140,11 +158,23 @@ _niceListFormat = {'rounder': BigWorld.wg_getNiceNumberFormat,
  'separator': '/'}
 _integralFormat = {'rounder': BigWorld.wg_getIntegralFormat}
 _percentFormat = {'rounder': lambda v: '%d%%' % v}
+
+def _autoReloadPreprocessor(reloadTimes):
+    times = []
+    for minSlotTime, maxSlotTime in reloadTimes:
+        if minSlotTime == maxSlotTime:
+            times.append(minSlotTime)
+        LOG_ERROR('Different auto-reload times for same gun and slot')
+        return None
+
+    return ((min(times), max(times)), '-') if len(times) > _COUNT_OF_AUTO_RELOAD_SLOTS_TIMES_TO_SHOW_IN_INFO else (times, '/')
+
+
 FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'damage': _niceRangeFormat,
  'piercingPower': _niceRangeFormat,
  'reloadTime': _niceRangeFormat,
- 'reloadTimeSecs': _niceFormat,
+ 'reloadTimeSecs': _niceRangeFormat,
  'gunRotationSpeed': _niceFormat,
  'turretRotationSpeed': _niceFormat,
  'turretYawLimits': _niceListFormat,
@@ -193,11 +223,14 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'invisibilityMovingFactor': _niceListFormat,
  'switchOnTime': _niceFormat,
  'switchOffTime': _niceFormat,
+ 'switchTime': _niceListFormat,
  'stunMaxDuration': _niceFormat,
  'stunMinDuration': _niceFormat,
  'stunMaxDurationList': _niceListFormat,
  'stunMinDurationList': _niceListFormat,
- 'cooldownSeconds': _niceFormat}
+ 'cooldownSeconds': _niceFormat,
+ AUTO_RELOAD_PROP_NAME: {'preprocessor': _autoReloadPreprocessor,
+                         'rounder': lambda v: str(int(round(v)))}}
 
 def _deltaWrapper(fn):
 
@@ -228,7 +261,8 @@ _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.BETTER: 2}
 
 def _colorize(paramStr, state, colorScheme):
-    return colorScheme[_STATES_INDEX_IN_COLOR_MAP[state[0]]](paramStr)
+    stateType, _ = state
+    return paramStr if stateType == PARAM_STATE.NOT_APPLICABLE else colorScheme[_STATES_INDEX_IN_COLOR_MAP[stateType]](paramStr)
 
 
 def colorizedFormatParameter(parameter, colorScheme):
@@ -239,7 +273,7 @@ def colorizedFullFormatParameter(parameter, colorScheme):
     return formatParameter(parameter.name, parameter.value, parameter.state, colorScheme, allowSmartRound=False)
 
 
-def simlifiedDeltaParameter(parameter, isSituational=False):
+def simplifiedDeltaParameter(parameter, isSituational=False):
     mainFormatter = SIMPLIFIED_SCHEME[1]
     delta = int(parameter.state[1])
     paramStr = formatParameter(parameter.name, parameter.value)
@@ -251,45 +285,47 @@ def simlifiedDeltaParameter(parameter, isSituational=False):
     return mainFormatter(paramStr)
 
 
+def _applyFormat(value, state, settings, doSmartRound, colorScheme):
+    if doSmartRound:
+        value = _cutDigits(value)
+    if isinstance(value, str):
+        paramStr = value
+    else:
+        paramStr = settings['rounder'](value)
+    if state is not None and colorScheme is not None:
+        paramStr = _colorize(paramStr, state, colorScheme)
+    return paramStr
+
+
 def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=None, formatSettings=None, allowSmartRound=True, showZeroDiff=False):
     formatSettings = formatSettings or FORMAT_SETTINGS
     settings = formatSettings.get(parameterName, _listFormat)
-    rounder = settings['rounder']
     doSmartRound = allowSmartRound and parameterName in _SMART_ROUND_PARAMS
-
-    def applyFormat(value, state):
-        if doSmartRound:
-            value = _cutDigits(value)
-        if isinstance(value, str):
-            paramStr = value
-        else:
-            paramStr = rounder(value)
-        if state is not None and colorScheme is not None:
-            paramStr = _colorize(paramStr, state, colorScheme)
-        return paramStr
-
-    if paramValue is None:
+    preprocessor = settings.get('preprocessor')
+    if preprocessor:
+        values, separator = preprocessor(paramValue)
+    else:
+        values = paramValue
+        separator = None
+    if values is None:
         return
-    elif isinstance(paramValue, (tuple, list)):
+    elif isinstance(values, (tuple, list)):
         if parameterState is None:
-            parameterState = [None] * len(paramValue)
-        if doSmartRound and len(set(paramValue)) == 1:
-            if paramValue[0] > 0:
-                return applyFormat(paramValue[0], parameterState[0])
+            parameterState = [None] * len(values)
+        if doSmartRound and len(set(values)) == 1:
+            if values[0] > 0:
+                return _applyFormat(values[0], parameterState[0], settings, doSmartRound, colorScheme)
             return
-        separator = settings['separator']
-        paramsList = [ applyFormat(val, parameterState[idx]) for idx, val in enumerate(paramValue) ]
+        separator = separator or settings['separator']
+        paramsList = [ _applyFormat(val, state, settings, doSmartRound, colorScheme) for val, state in zip(values, parameterState) ]
         return separator.join(paramsList)
     else:
-        return None if not showZeroDiff and paramValue == 0 else applyFormat(paramValue, parameterState)
+        return None if not showZeroDiff and values == 0 else _applyFormat(values, parameterState, settings, doSmartRound, colorScheme)
 
 
-def formatParameterDelta(pInfo, deltaScheme=BASE_SCHEME, formatSettings=DELTA_PARAMS_SETTING):
-    """
-    Gets formatted parameter delta value if parameter has diff, else return None
-    """
+def formatParameterDelta(pInfo, deltaScheme=None, formatSettings=None):
     diff = pInfo.getParamDiff()
-    return formatParameter(pInfo.name, diff, pInfo.state, deltaScheme, formatSettings, allowSmartRound=False, showZeroDiff=True) if diff is not None else None
+    return formatParameter(pInfo.name, diff, pInfo.state, deltaScheme or BASE_SCHEME, formatSettings or DELTA_PARAMS_SETTING, allowSmartRound=False, showZeroDiff=True) if diff is not None else None
 
 
 def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
@@ -316,33 +352,31 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
     return params
 
 
-_ICON_LIB_PATH = '../maps/icons/vehParams/tooltips'
-
 def getBonusIcon(bonusId):
     if bonusId.find('Rammer') >= 0 and bonusId != 'deluxRammer':
-        iconStr = 'rammer'
+        iconName = 'rammer'
     elif bonusId.find('enhanced') >= 0 and bonusId not in ('enhancedAimDrives', 'enhancedAimDrivesBattleBooster'):
-        iconStr = 'enhancedSuspension'
+        iconName = 'enhancedSuspension'
     else:
-        iconStr = bonusId.split('_class')[0]
-    return _ICON_LIB_PATH + '/bonuses/%s.png' % iconStr
+        iconName = bonusId.split('_class')[0]
+    return RES_ICONS.getParamsTooltipIcon('bonuses', iconName)
 
 
 def getPenaltyIcon(penaltyId):
-    return _ICON_LIB_PATH + '/penalties/%s.png' % penaltyId
+    return RES_ICONS.getParamsTooltipIcon('penalties', penaltyId)
 
 
 def packSituationalIcon(text, icon):
     return '<nobr>'.join((text, icon))
 
 
-def getGroupPenaltyIcon(param, comparator):
-    return RES_ICONS.MAPS_ICONS_VEHPARAMS_ICON_DECREASE if hasGroupPenalties(param.name, comparator) else ''
+def getGroupPenaltyIcon(parameter, comparator):
+    return RES_ICONS.MAPS_ICONS_VEHPARAMS_ICON_DECREASE if hasGroupPenalties(parameter.name, comparator) else ''
 
 
 def getAllParametersTitles():
     result = []
-    for groupIdx, groupName in enumerate(RELATIVE_PARAMS):
+    for _, groupName in enumerate(RELATIVE_PARAMS):
         data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_TOP, groupName)
         data['titleText'] = formatVehicleParamName(groupName)
         data['isEnabled'] = True

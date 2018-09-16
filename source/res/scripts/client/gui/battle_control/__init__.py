@@ -6,7 +6,4 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 __all__ = ('BattleSessionSetup', 'getBattleSessionConfig')
 
 def getBattleSessionConfig(manager):
-    """ Configures services for package battle_control.
-    :param manager: helpers.dependency.DependencyManager
-    """
     manager.addInstance(IBattleSessionProvider, BattleSessionProvider(), finalizer='stop')

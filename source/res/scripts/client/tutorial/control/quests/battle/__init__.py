@@ -3,7 +3,7 @@
 from tutorial.control import ControlsFactory
 from tutorial.control import context as core_ctx
 from tutorial.control import functional as core_func
-from tutorial.control.functional import FunctionalChapterInfo
+from tutorial.control.functional import FunctionalChapterContext
 from tutorial.control.quests import functional as quests_func
 from tutorial.control.quests.battle.context import FakeBonusesRequester
 from tutorial.data.effects import EFFECT_TYPE
@@ -25,5 +25,5 @@ class BattleQuestsControlsFactory(ControlsFactory):
     def createFuncScene(self, sceneModel):
         return core_func.FunctionalScene(sceneModel)
 
-    def createFuncInfo(self):
-        return FunctionalChapterInfo()
+    def createFuncChapterCtx(self):
+        return FunctionalChapterContext()

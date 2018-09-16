@@ -10,9 +10,6 @@ from items import vehicles
 from skeletons.gui.shared import IItemsCache
 
 class ObserverInTeamIsValid(AbstractTeamIsValid):
-    """
-    Observer's team limits
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def check(self, rosters, team, teamLimits):
@@ -23,11 +20,6 @@ class ObserverInTeamIsValid(AbstractTeamIsValid):
 
     @classmethod
     def __isAllObservers(cls, accountsInfo):
-        """
-        Checks are all players in team observers
-        Args:
-            accountsInfo: players accounts info
-        """
         if not accountsInfo:
             return False
         for accInfo in accountsInfo.itervalues():
@@ -45,10 +37,6 @@ class ObserverInTeamIsValid(AbstractTeamIsValid):
 
 
 class TrainingVehicleIsValid(VehicleIsValid):
-    """
-    Class for current vehicle validation in trainings. Validates also:
-    - is vehicle not observer
-    """
 
     def check(self, teamLimits):
         isValid, restriction = super(TrainingVehicleIsValid, self).check(teamLimits)
@@ -56,9 +44,6 @@ class TrainingVehicleIsValid(VehicleIsValid):
 
 
 class TrainingLimits(LimitsCollection):
-    """
-    Training limits class
-    """
 
     def __init__(self, entity):
         super(TrainingLimits, self).__init__(entity, (TrainingVehicleIsValid(),), (TeamNoPlayersInBattle(PREBATTLE_TYPE.TRAINING), TeamIsValid(), ObserverInTeamIsValid()))

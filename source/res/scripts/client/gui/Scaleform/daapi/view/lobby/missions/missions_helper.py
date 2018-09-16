@@ -57,29 +57,18 @@ class BG_STATES(object):
 
 
 def getCompletetBonusLimitTooltip():
-    """
-    Gets complex tooltip data about completed status wih bonus limits.
-    """
     return {'tooltip': makeTooltip(body=_ms(TOOLTIPS.QUESTS_COMPLETE_PROGRESS_STATUSTOOLTIP)),
      'isSpecial': False,
      'specialArgs': []}
 
 
 def getCompletetBonusLimitValueTooltip(count):
-    """
-    Gets complex tooltip data about completed status wih bonus limits.
-    """
     return {'tooltip': makeTooltip(body=_ms(TOOLTIPS.QUESTS_COMPLETE_PROGRESS_VALUE_STATUSTOOLTIP, count=text_styles.neutral(count))),
      'isSpecial': False,
      'specialArgs': []}
 
 
 def getBonusLimitTooltip(bonusCount, bonusLimit, isDaily):
-    """
-    Gets complex tooltip data about bonus limits
-    bonusCount - mission's complete count
-    bonusLimit - server definition, means that player several times can complete mission and get bonus
-    """
     header = _ms(TOOLTIPS.QUESTS_COMPLETE_PROGRESS_HEADER)
     if isDaily:
         key = TOOLTIPS.QUESTS_COMPLETE_PROGRESSDAILY_BODY
@@ -92,11 +81,6 @@ def getBonusLimitTooltip(bonusCount, bonusLimit, isDaily):
 
 
 def getPersonalBonusLimitDailyTooltip(bonusCount, bonusLimit, maxCompleteCount):
-    """
-    Gets complex tooltip data about bonus limits
-    bonusCount - mission's complete count
-    bonusLimit - server definition, means that player several times can complete mission and get bonus per day
-    """
     totalLabel = text_styles.standard(_ms(TOOLTIPS.QUESTS_COMPLETE_PROGRESSDAILY_DAILYCOUNT, totalCount=text_styles.neutral(maxCompleteCount), dailyCount=text_styles.neutral(max(bonusLimit - bonusCount, 0))))
     header = _ms(TOOLTIPS.QUESTS_COMPLETE_PROGRESSDAILY_HEADER)
     body = _ms(TOOLTIPS.QUESTS_COMPLETE_PERSONAL_PROGRESSDAILY_BODY, count=text_styles.neutral(bonusCount), totalCount=totalLabel, dailyTotalCount=text_styles.neutral(bonusLimit))
@@ -106,10 +90,6 @@ def getPersonalBonusLimitDailyTooltip(bonusCount, bonusLimit, maxCompleteCount):
 
 
 def getPersonalReqularTooltip(bonusCount):
-    """
-    Gets complex tooltip data about complete count
-    bonusCount - mission's complete count
-    """
     header = _ms(TOOLTIPS.QUESTS_COMPLETE_PROGRESSDAILY_HEADER)
     body = _ms(TOOLTIPS.QUESTS_COMPLETE_PERSONALREGULAR_BODY, count=text_styles.neutral(bonusCount))
     return {'tooltip': makeTooltip(header=header, body=body),
@@ -118,9 +98,6 @@ def getPersonalReqularTooltip(bonusCount):
 
 
 def getDisabledRequirementTooltip(event):
-    """
-    Gets tooltip data to display unavailable requirements
-    """
     return {'tooltip': TOOLTIPS_CONSTANTS.UNAVAILABLE_QUEST,
      'isSpecial': True,
      'specialArgs': [event.getID()],
@@ -128,9 +105,6 @@ def getDisabledRequirementTooltip(event):
 
 
 def getInvalidTimeIntervalsTooltip(event):
-    """
-    Gets tooltip data to display mission's schedule
-    """
     return {'tooltip': TOOLTIPS_CONSTANTS.SHEDULE_QUEST,
      'isSpecial': True,
      'specialArgs': [event.getID()],
@@ -138,18 +112,12 @@ def getInvalidTimeIntervalsTooltip(event):
 
 
 def getScheduleLabel():
-    """
-    Gets formatted schedule label
-    """
     text = text_styles.main(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLEBYTIME)
     clockIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG, 19, 19, -4, 8)
     return text_styles.concatStylesToSingleLine(clockIcon, text)
 
 
 def getOperations(currOperationID):
-    """
-    Gets operations list for operations header component
-    """
     operations = []
     for oID, o in sorted(events_helpers.getPersonalMissionsCache().getOperations().iteritems(), key=operator.itemgetter(0)):
         state = PERSONAL_MISSIONS_ALIASES.OPERATION_UNLOCKED_STATE
@@ -208,25 +176,11 @@ class _MissionInfo(QuestInfoModel):
         return
 
     def getInfo(self, mainQuest=None):
-        """
-        Gets all data for mission card: conditions, awards, status fields, etc
-        Main data to display mission card in AS.
-        Used by _EventsBlockInfo to grab all cards in block
-        """
         isAvailable, errorMsg = self.event.isAvailable()
         statusData = self._getStatusFields(isAvailable, errorMsg)
         return self._getInfo(statusData, isAvailable, errorMsg, mainQuest)
 
     def getSubstituteBonuses(self):
-        """
-        Applies compensation to the quests that emit already gathered tokens.
-        
-        Compensation works on top of tokens mechanism: if main marathon token quest
-        already consumed all necessary tokens, these tokens should be explicitly
-        substituted with compensation in the emitter quests.
-        
-        Compensation means bonuses from the hidden compensation quests.
-        """
         return self._substituteBonuses()
 
     def _getInfo(self, statusData, isAvailable, errorMsg, mainQuest=None):
@@ -247,15 +201,9 @@ class _MissionInfo(QuestInfoModel):
         return self.event.getID()
 
     def _getUIDecoration(self):
-        """
-        Gets background decoration for mission's card from web
-        """
         return self.eventsCache.prefetcher.getMissionDecoration(self.event.getIconID(), DECORATION_SIZES.CARDS)
 
     def _getMissionDurationTooltipData(self):
-        """
-        Gets complex tooltip data about mission duration and its nearest active time
-        """
         header = _ms(TOOLTIPS.QUESTS_UNAVAILABLE_TIME_STATUSTOOLTIP)
         body = _ms(QUESTS.MISSIONS_TAB_MARATHONS_HEADER_PERIOD, startDate=BigWorld.wg_getLongDateFormat(self.event.getStartTime()), endDate=BigWorld.wg_getLongDateFormat(self.event.getFinishTime()))
         note = None
@@ -269,11 +217,6 @@ class _MissionInfo(QuestInfoModel):
          'specialArgs': None}
 
     def _getCompleteStatusFields(self, isLimited, bonusCount, bonusLimit):
-        """
-        Gets status fields data for completed mission state.
-        Data used in mission card to display its completed state.
-        For completed daily quests return unavailable state fields.
-        """
         if self.event.bonusCond.isDaily():
             status = MISSIONS_STATES.NOT_AVAILABLE
             clockIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8)
@@ -297,10 +240,6 @@ class _MissionInfo(QuestInfoModel):
          'statusTooltipData': statusTooltipData}
 
     def _getUnavailableStatusFields(self, errorMsg):
-        """
-        Gets status fields data for unavailable mission state.
-        Data used in mission card to display its unavailable state.
-        """
         if errorMsg == 'requirements':
             vehicleReqs = self.event.vehicleReqs
             isVehAvailable = vehicleReqs.isAnyVehicleAcceptable() or vehicleReqs.getSuitableVehicles()
@@ -323,10 +262,6 @@ class _MissionInfo(QuestInfoModel):
          'statusTooltipData': tooltipData}
 
     def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
-        """
-        Gets status fields data for regular mission state.
-        Data used in mission card to display its regular state.
-        """
         statusTooltipData = None
         timerMsg = self.getTimerMsg('comeToEndInMinutesSeparated')
         if isLimited:
@@ -346,9 +281,6 @@ class _MissionInfo(QuestInfoModel):
          'statusTooltipData': statusTooltipData}
 
     def _getStatusFields(self, isAvailable, errorMsg):
-        """
-        Gets GUI data for all fields that relates to status
-        """
         bonusLimit = self.event.bonusCond.getBonusLimit()
         bonusCount = min(self.event.getBonusCount(), bonusLimit)
         isLimited = self._isLimited()
@@ -362,19 +294,11 @@ class _MissionInfo(QuestInfoModel):
         return BG_STATES.MARATHON if isMarathon(self.event.getGroupID()) else BG_STATES.DEFAULT
 
     def _getAwards(self, mainQuest=None):
-        """
-        Gets formatted awards list to display on awards ribbon in GUI.
-        Awards has minimized scale.
-        """
         if self.__formattedBonuses is None:
             self.__formattedBonuses = _cardAwardsFormatter.getFormattedBonuses(self._substituteBonuses(mainQuest))
         return {'awards': self.__formattedBonuses}
 
     def _getConditions(self):
-        """
-        Gets dict with different types of conditions
-        For mission card displayed only bonus, postBattle and token conditions, prebattle conditions are not displayed
-        """
         return {'battleConditions': self._getMainConditions()}
 
     def _getDailyResetStatusLabel(self):
@@ -385,11 +309,6 @@ class _MissionInfo(QuestInfoModel):
         return dailyStr
 
     def _getMainConditions(self):
-        """
-        Gets formatted conditions to display in GUI.
-        Conditions are placed in the centre of card and contain icon, title, description and progress
-        Conditions has minimized scale in mission card.
-        """
         if self._mainFormattedConditions is None:
             self._mainFormattedConditions = _cardCondFormatter.format(self.event)
         return self._mainFormattedConditions
@@ -402,14 +321,6 @@ class _MissionInfo(QuestInfoModel):
         return text_styles.highlightText(title)
 
     def _substituteBonuses(self, mainQuest=None):
-        """ Applies compensation to the quests that emit already gathered tokens.
-        
-        Compensation works on top of tokens mechanism: if main marathon token quest
-        already consumed all necessary tokens, these tokens should be explicitly
-        substituted with compensation in the emitter quests.
-        
-        Compensation means bonuses from the hidden compensation quests.
-        """
         if not self.event.isCompensationPossible():
             return self.event.getBonuses()
         else:
@@ -455,11 +366,6 @@ class _PrivateMissionInfo(_MissionInfo):
         return self._getUpdatedByTokenStatusData(statusData, bonusCount, bonusLimit)
 
     def _getUpdatedByTokenStatusData(self, statusData, bonusCount, bonusLimit):
-        """
-        There is special behavior fo personal quest.
-        It is important to show complete remaining count info for personal quest,
-        its depends on required tokens count in account
-        """
         tokens = self.event.accountReqs.getTokens()
         for token in tokens:
             if token.getID() == self.event.getRequiredToken() and token.isConsumable():
@@ -486,10 +392,6 @@ class _DetailedMissionInfo(_MissionInfo):
     __AWARDS_COUNT = 6
 
     def getVehicleRequirementsCriteria(self):
-        """ Gets criteria to find all suitable vehicles for current quest
-        
-        :return: tuple, list of required vehicles and list of extra conditions
-        """
         conds = self.event.vehicleReqs.getConditions()
         extraConditions = []
         if conds.type == GROUP_TYPE.OR:
@@ -506,9 +408,6 @@ class _DetailedMissionInfo(_MissionInfo):
         return (criteria, extraConditions)
 
     def _getUIDecoration(self):
-        """
-        Gets background decoration for mission's detailed view from web
-        """
         return self.eventsCache.prefetcher.getMissionDecoration(self.event.getIconID(), DECORATION_SIZES.DETAILS)
 
     def _getInfo(self, statusData, isAvailable, errorMsg, mainQuest=None):
@@ -522,9 +421,6 @@ class _DetailedMissionInfo(_MissionInfo):
         return data
 
     def _getStatusFields(self, isAvailable, errorMsg):
-        """
-        Gets GUI data for all fields that relates to status
-        """
         bonusLimit = self.event.bonusCond.getBonusLimit()
         bonusCount = min(self.event.getBonusCount(), bonusLimit)
         isLimited = self._isLimited()
@@ -536,11 +432,6 @@ class _DetailedMissionInfo(_MissionInfo):
         return data
 
     def _getCompleteStatusFields(self, isLimited, bonusCount, bonusLimit):
-        """
-        Gets status fields data for completed mission state.
-        Data used in detailed mission view to display its completed state.
-        For completed daily quests return unavailable state fields.
-        """
         statusTooltipData = None
         dateLabel = self._getActiveTimeDateLabel()
         resetDateLabel = ''
@@ -564,10 +455,6 @@ class _DetailedMissionInfo(_MissionInfo):
          'resetDateLabel': resetDateLabel}
 
     def _getUnavailableStatusFields(self, errorMsg):
-        """
-        Gets status fields data for unavailable mission state.
-        Data used in detailed mission view to display its unavailable state.
-        """
         result = {'status': MISSIONS_STATES.NOT_AVAILABLE}
         if errorMsg != 'requirement':
             timeLeft = self.event.getNearestActivityTimeLeft()
@@ -582,10 +469,6 @@ class _DetailedMissionInfo(_MissionInfo):
         return result
 
     def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
-        """
-        Gets status fields data for regular mission state.
-        Data used in detailed mission view to display its regular state.
-        """
         scheduleOrResetLabel = ''
         scheduleTooltip = None
         if isLimited:
@@ -608,9 +491,6 @@ class _DetailedMissionInfo(_MissionInfo):
          'scheduleTooltip': scheduleTooltip}
 
     def _getActiveTimeDateLabel(self):
-        """
-        Gets formatted mission's active time
-        """
         activeTimeStr = self._getActiveDateTimeString()
         return text_styles.standard(activeTimeStr) if activeTimeStr is not None else ''
 
@@ -623,33 +503,15 @@ class _DetailedMissionInfo(_MissionInfo):
         return conditions
 
     def _getMainConditions(self):
-        """
-        Gets formatted conditions to display in GUI.
-        detailedCardCondFormatter formatter has logic to control condition representation and scale.
-        """
         return _detailedCardCondFormatter.format(self.event)
 
     def _getPrebattleConditions(self):
-        """
-        Gets formatted prebattle conditions to display in GUI.
-        Prebattle conditions are placed under main conditions in GUI
-        has horizontal layout and looks like label with icon.
-        """
         return _preBattleConditionFormatter.format(self.event.preBattleCond, self.event)
 
     def _getAccountRequirements(self):
-        """
-        Gets formatted account requirements list to display in GUI.
-        account requirements are placed under header in mission detailed view
-        Shows completed and not available requirements in GUI to complete mission.
-        """
         return _accountReqsFormatter.format(self.event.accountReqs, self.event)
 
     def _getAwards(self, mainQuest=None):
-        """
-        Gets formatted awards list to display on awards ribbon in GUI.
-        detailedCardAwardsFormatter formatter has logic to control awards scale.
-        """
         return {'awards': _detailedCardAwardsFormatter.getFormattedBonuses(self._substituteBonuses(mainQuest))}
 
     def _getTitle(self, title):
@@ -675,8 +537,6 @@ class _DetailedPrivateMissionInfo(_DetailedMissionInfo, _PrivateMissionInfo):
 class _DetailedTokenMissionInfo(_DetailedMissionInfo):
 
     def getVehicleRequirementsCriteria(self):
-        """ Token quest lacks of vehicles requirements.
-        """
         return (None, [])
 
     def _getMainConditions(self):
@@ -706,9 +566,6 @@ class _DetailedTokenMissionInfo(_DetailedMissionInfo):
 class _DetailedPersonalMissionInfo(_MissionInfo):
 
     def getVehicleRequirementsCriteria(self):
-        """ Gets criteria to find all suitable vehicles for current quest
-        :return: tuple, list of required vehicles and list of extra conditions
-        """
         extraConditions = []
         criteria = REQ_CRITERIA.INVENTORY
         criteria |= REQ_CRITERIA.VEHICLE.LEVELS(range(self.event.getVehMinLevel(), constants.MAX_VEHICLE_LEVEL + 1))
@@ -734,10 +591,6 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
              'statusTooltipData': statusTooltipData}
 
     def _getUnavailableStatusFields(self, errorMsg):
-        """
-        Gets status fields data for unavailable personal mission state.
-        Data used in detailed personal mission view to display its unavailable state.
-        """
         return self.__getNoVehicleStatusFields() if errorMsg == 'noVehicle' else self.__getUnlockedStatusFields()
 
     def _getFullCompleteStatusFields(self):
@@ -802,16 +655,10 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         return BG_STATES.DISABLED if status is MISSIONS_STATES.NOT_AVAILABLE else BG_STATES.DEFAULT
 
     def _getAwards(self, mainQuest=None):
-        """
-        Gets formatted awards list to display on awards ribbon in GUI.
-        """
         return {'awards': _personalMissionsAwardsFormatter.getFormattedBonuses(self.event.getBonuses(isMain=True), size=AWARDS_SIZES.BIG, isObtained=self.event.isMainCompleted(), obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=10),
          'awardsFullyCompleted': _personalMissionsAwardsFormatter.getFormattedBonuses(self.event.getBonuses(isMain=False), size=AWARDS_SIZES.BIG, isObtained=self.event.isFullCompleted(), areTokensPawned=self.event.areTokensPawned(), pawnCost=self.event.getPawnCost(), obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=10)}
 
     def _getConditions(self):
-        """
-        Gets dict with different types of conditions
-        """
         return {'conditions': _personalMissionsConditionsFormatter.format(self.event, isMain=True),
          'conditionsFullyCompleted': _personalMissionsConditionsFormatter.format(self.event, isMain=False)}
 

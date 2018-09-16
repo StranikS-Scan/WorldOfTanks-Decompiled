@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_page.py
-import BigWorld
 from collections import namedtuple
+import BigWorld
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MISSIONS_PAGE
@@ -223,8 +223,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 if self.currentTab is not None and self.__currentTabAlias == alias:
                     newEvents = settings.getNewCommonEvents(self.currentTab.getSuitableEvents())
                 else:
-                    events = self.__builders[alias].getBlocksAdvisableEvents(advisableQuests)
-                    newEvents = settings.getNewCommonEvents(events)
+                    advisableEvents = self.__builders[alias].getBlocksAdvisableEvents(advisableQuests)
+                    newEvents = settings.getNewCommonEvents(advisableEvents)
                 tab['value'] = len(newEvents)
             tabs.append(header_tab)
             data.append(tab)
@@ -242,8 +242,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         return False
 
     def __tryOpenMissionDetails(self):
-        """ Depending on the open context, we may need to open missions details or close them.
-        """
         if self._eventID and self._groupID and self._showMissionDetails:
             showMissionDetails(self._eventID, self._groupID)
         else:
@@ -264,8 +262,6 @@ class MissionViewBase(MissionsViewBaseMeta):
         return
 
     def setBuilder(self, builder, filterData, eventID):
-        """ Set a builder that propagates view with data.
-        """
         self._builder = builder
         self._filterData = filterData
         self._totalQuestsCount = 0
@@ -314,9 +310,6 @@ class MissionViewBase(MissionsViewBaseMeta):
         pass
 
     def _onDataChangedNotify(self):
-        """
-        Fire event on next frame to prevent freezes
-        """
         if self.__updateDataCallback is None:
             self.__updateDataCallback = BigWorld.callback(0, self.__notifyDataChanged)
         return
@@ -328,8 +321,6 @@ class MissionViewBase(MissionsViewBaseMeta):
 
 
 class MissionView(MissionViewBase):
-    """ Missions view represents a single tab in the mission interface.
-    """
     __sound_env__ = LobbySubViewEnv
     eventsCache = dependency.descriptor(IEventsCache)
 

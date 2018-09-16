@@ -129,8 +129,6 @@ class GlobalMapBase(OpsUnpacker):
             offset += unitStrLen
             self.battleUnits[battleID] = unitStr
 
-        assert offset == len(packedData)
-
     def serialize(self):
         return {} if not self.battles else dict(battles=self.battles)
 

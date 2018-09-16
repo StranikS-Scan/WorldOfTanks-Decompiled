@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/StrategicAimingSystem.py
+import math
 import BigWorld
 import Math
-from Math import Vector3, Matrix
-import math
+from Math import Vector3
 from AvatarInputHandler import mathUtils, AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
 from AvatarInputHandler.cameras import _clampPoint2DInBox2D
@@ -67,6 +67,6 @@ class StrategicAimingSystem(IAimingSystem):
     def _updateMatrix(self):
         self._clampToArenaBB()
         collPoint = BigWorld.wg_collideSegment(BigWorld.player().spaceID, self._planePosition + Math.Vector3(0, 1000.0, 0), self._planePosition + Math.Vector3(0, -250.0, 0), 3)
-        self.__heightFromPlane = 0.0 if collPoint is None else collPoint[0][1]
+        self.__heightFromPlane = 0.0 if collPoint is None else collPoint.closestPoint[1]
         self._matrix.translation = self._planePosition + Vector3(0, self.__heightFromPlane + self.__height, 0)
         return

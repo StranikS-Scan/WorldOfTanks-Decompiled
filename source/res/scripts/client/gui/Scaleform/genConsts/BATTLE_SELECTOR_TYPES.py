@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/BATTLE_SELECTOR_TYPES.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class BATTLE_SELECTOR_TYPES(object):
     BATTLE_SELECTOR_TYPE_RANDOM = 'joinRandomQueue'

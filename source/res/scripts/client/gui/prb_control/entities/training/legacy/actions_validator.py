@@ -6,18 +6,12 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import ValidationResult
 
 class TrainingIsLoaded(BaseActionsValidator):
-    """
-    Is training view loaded
-    """
 
     def _validate(self):
         return ValidationResult(False) if g_eventDispatcher.isTrainingLoaded() else super(TrainingIsLoaded, self)._validate()
 
 
 class TrainingIntroActionsValidator(ActionsValidatorComposite):
-    """
-    Training intro actions validation class
-    """
 
     def __init__(self, entity):
         validators = [TrainingIsLoaded(entity)]
@@ -25,9 +19,6 @@ class TrainingIntroActionsValidator(ActionsValidatorComposite):
 
 
 class TrainingActionsValidator(TrainingIntroActionsValidator):
-    """
-    Training actions validation class
-    """
 
     def __init__(self, entity):
         super(TrainingActionsValidator, self).__init__(entity)

@@ -99,9 +99,6 @@ class _ClanCache(object):
 
     @property
     def isInClan(self):
-        """
-        @return: is current player in clan
-        """
         return self.clanDBID is not None and self.clanDBID != 0
 
     @property

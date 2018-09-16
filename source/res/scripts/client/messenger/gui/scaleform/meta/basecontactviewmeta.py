@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/BaseContactViewMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class BaseContactViewMeta(BaseDAAPIComponent):
@@ -21,9 +17,6 @@ class BaseContactViewMeta(BaseDAAPIComponent):
         return self.flashObject.as_setOkBtnEnabled(isEnabled) if self._isDAAPIInited() else None
 
     def as_setInitDataS(self, data):
-        """
-        :param data: Represented by ContactsViewInitDataVO (AS)
-        """
         return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_closeViewS(self):

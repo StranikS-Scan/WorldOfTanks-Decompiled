@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_unixccompiler.py
-"""Tests for distutils.unixccompiler."""
 import os
 import sys
 import unittest

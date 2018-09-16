@@ -1,17 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/locale.py
-""" Locale support.
-
-    The module provides low-level access to the C lib's locale APIs
-    and adds high level number formatting APIs as well as a locale
-    aliasing engine to complement these.
-
-    The aliasing engine includes support for many commonly used locale
-    names and maps them to values suitable for passing to the C lib's
-    setlocale() function. It also includes default encodings for all
-    supported locale names.
-
-"""
 import sys
 import encodings
 import encodings.aliases
@@ -63,9 +51,6 @@ except ImportError:
     Error = ValueError
 
     def localeconv():
-        """ localeconv() -> dict.
-            Returns numeric and monetary locale-specific parameters.
-        """
         return {'grouping': [127],
          'currency_symbol': '',
          'n_sign_posn': 127,
@@ -87,25 +72,16 @@ except ImportError:
 
 
     def setlocale(category, value=None):
-        """ setlocale(integer,string=None) -> string.
-            Activates/queries locale processing.
-        """
         if value not in (None, '', 'C'):
             raise Error, '_locale emulation only supports "C" locale'
         return 'C'
 
 
     def strcoll(a, b):
-        """ strcoll(string,string) -> int.
-            Compares two strings according to the locale.
-        """
         return cmp(a, b)
 
 
     def strxfrm(s):
-        """ strxfrm(string) -> string.
-            Returns a string that behaves for cmp locale-aware.
-        """
         return s
 
 
@@ -182,11 +158,6 @@ def _strip_padding(s, amount):
 _percent_re = re.compile('%(?:\\((?P<key>.*?)\\))?(?P<modifiers>[-#0-9 +*.hlL]*?)[eEfFgGdiouxXcrs%]')
 
 def format(percent, value, grouping=False, monetary=False, *additional):
-    """Returns the locale-aware substitution of a %? specifier
-    (percent).
-    
-    additional is for format strings which contain one or more
-    '*' modifiers."""
     match = _percent_re.match(percent)
     if not match or len(match.group()) != len(percent):
         raise ValueError('format() must be given exactly one %%char format specifier, %s not valid' % repr(percent))
@@ -217,9 +188,6 @@ def _format(percent, value, grouping=False, monetary=False, *additional):
 
 
 def format_string(f, val, grouping=False):
-    """Formats a string in the same way that the % formatting would use,
-    but takes the current locale into account.
-    Grouping is applied if the third parameter is true."""
     percents = list(_percent_re.finditer(f))
     new_f = _percent_re.sub('%s', f)
     if operator.isMappingType(val):
@@ -246,8 +214,6 @@ def format_string(f, val, grouping=False):
 
 
 def currency(val, symbol=True, grouping=False, international=False):
-    """Formats val according to the currency settings
-    in the current locale."""
     conv = localeconv()
     digits = conv[international and 'int_frac_digits' or 'frac_digits']
     if digits == 127:
@@ -280,12 +246,10 @@ def currency(val, symbol=True, grouping=False, international=False):
 
 
 def str(val):
-    """Convert float to integer, taking the locale into account."""
     return format('%.12g', val)
 
 
 def atof(string, func=float):
-    """Parses a string as a float according to the locale settings."""
     ts = localeconv()['thousands_sep']
     if ts:
         string = string.replace(ts, '')
@@ -296,7 +260,6 @@ def atof(string, func=float):
 
 
 def atoi(str):
-    """Converts a string to an integer according to the locale settings."""
     return atof(str, int)
 
 
@@ -323,20 +286,6 @@ def _replace_encoding(code, encoding):
 
 
 def normalize(localename):
-    """ Returns a normalized locale code for the given locale
-        name.
-    
-        The returned locale code is formatted for use with
-        setlocale().
-    
-        If normalization fails, the original name is returned
-        unchanged.
-    
-        If the given encoding is not known, the function defaults to
-        the default encoding for the locale code just like setlocale()
-        does.
-    
-    """
     if isinstance(localename, _unicode):
         localename = localename.encode('ascii')
     code = localename.translate(_ascii_lower_map)
@@ -392,18 +341,6 @@ def normalize(localename):
 
 
 def _parse_localename(localename):
-    """ Parses the locale code for localename and returns the
-        result as tuple (language code, encoding).
-    
-        The localename is normalized and passed through the locale
-        alias engine. A ValueError is raised in case the locale name
-        cannot be parsed.
-    
-        The language code corresponds to RFC 1766.  code and encoding
-        can be None in case the values cannot be determined or are
-        unknown to this implementation.
-    
-    """
     code = normalize(localename)
     if '@' in code:
         code, modifier = code.split('@', 1)
@@ -419,12 +356,6 @@ def _parse_localename(localename):
 
 
 def _build_localename(localetuple):
-    """ Builds a locale code from the given tuple (language code,
-        encoding).
-    
-        No aliasing or normalizing takes place.
-    
-    """
     language, encoding = localetuple
     if language is None:
         language = 'C'
@@ -436,27 +367,6 @@ def _build_localename(localetuple):
 
 
 def getdefaultlocale(envvars=('LC_ALL', 'LC_CTYPE', 'LANG', 'LANGUAGE')):
-    """ Tries to determine the default locale settings and returns
-        them as tuple (language code, encoding).
-    
-        According to POSIX, a program which has not called
-        setlocale(LC_ALL, "") runs using the portable 'C' locale.
-        Calling setlocale(LC_ALL, "") lets it use the default locale as
-        defined by the LANG variable. Since we don't want to interfere
-        with the current locale setting we thus emulate the behavior
-        in the way described above.
-    
-        To maintain compatibility with other platforms, not only the
-        LANG variable is tested, but a list of variables given as
-        envvars parameter. The first found to be defined will be
-        used. envvars defaults to the search path used in GNU gettext;
-        it must always contain the variable name 'LANG'.
-    
-        Except for the code 'C', the language code corresponds to RFC
-        1766.  code and encoding can be None in case the values cannot
-        be determined.
-    
-    """
     try:
         import _locale
         code, encoding = _locale._getdefaultlocale()
@@ -482,17 +392,6 @@ def getdefaultlocale(envvars=('LC_ALL', 'LC_CTYPE', 'LANG', 'LANGUAGE')):
 
 
 def getlocale(category=LC_CTYPE):
-    """ Returns the current setting for the given locale category as
-        tuple (language code, encoding).
-    
-        category may be one of the LC_* value except LC_ALL. It
-        defaults to LC_CTYPE.
-    
-        Except for the code 'C', the language code corresponds to RFC
-        1766.  code and encoding can be None in case the values cannot
-        be determined.
-    
-    """
     localename = _setlocale(category)
     if category == LC_ALL and ';' in localename:
         raise TypeError, 'category LC_ALL is not supported'
@@ -500,35 +399,18 @@ def getlocale(category=LC_CTYPE):
 
 
 def setlocale(category, locale=None):
-    """ Set the locale for the given category.  The locale can be
-        a string, an iterable of two strings (language code and encoding),
-        or None.
-    
-        Iterables are converted to strings using the locale aliasing
-        engine.  Locale strings are passed directly to the C lib.
-    
-        category may be given as one of the LC_* values.
-    
-    """
     if locale and type(locale) is not type(''):
         locale = normalize(_build_localename(locale))
     return _setlocale(category, locale)
 
 
 def resetlocale(category=LC_ALL):
-    """ Sets the locale for category to the default setting.
-    
-        The default setting is determined by calling
-        getdefaultlocale(). category defaults to LC_ALL.
-    
-    """
     _setlocale(category, _build_localename(getdefaultlocale()))
 
 
 if sys.platform.startswith('win'):
 
     def getpreferredencoding(do_setlocale=True):
-        """Return the charset that the user is likely using."""
         import _locale
         return _locale._getdefaultlocale()[1]
 
@@ -539,16 +421,12 @@ else:
     except NameError:
 
         def getpreferredencoding(do_setlocale=True):
-            """Return the charset that the user is likely using,
-            by looking at environment variables."""
             return getdefaultlocale()[1]
 
 
     else:
 
         def getpreferredencoding(do_setlocale=True):
-            """Return the charset that the user is likely using,
-            according to the system configuration."""
             if do_setlocale:
                 oldloc = setlocale(LC_CTYPE)
                 try:
@@ -1662,8 +1540,6 @@ windows_locale = {1078: 'af_ZA',
  1077: 'zu_ZA'}
 
 def _print_locale():
-    """ Test function.
-    """
     categories = {}
 
     def _init_categories(categories=categories):

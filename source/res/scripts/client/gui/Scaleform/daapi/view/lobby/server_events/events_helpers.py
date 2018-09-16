@@ -26,7 +26,7 @@ class _EventInfo(EventInfoModel):
 
     def getInfo(self, svrEvents, pCur=None, pPrev=None, noProgressInfo=False):
         if noProgressInfo:
-            status, statusMsg = MISSIONS_STATES.NONE, self._getStatus()[1]
+            status, _ = MISSIONS_STATES.NONE, self._getStatus()[1]
             bonusCount = self.NO_BONUS_COUNT
             qProgCur, qProgTot, qProgbarType, tooltip = (0,
              0,
@@ -34,7 +34,7 @@ class _EventInfo(EventInfoModel):
              None)
         else:
             bonusCount = self._getBonusCount(pCur)
-            status, statusMsg = self._getStatus(pCur)
+            status, _ = self._getStatus(pCur)
             qProgCur, qProgTot, qProgbarType, tooltip = self._getProgressValues(svrEvents, pCur, pPrev)
         isAvailable, _ = self.event.isAvailable()
         return {'questID': str(self.event.getID()),
@@ -61,7 +61,7 @@ class _EventInfo(EventInfoModel):
         if not isProgressReset and not isCompleted:
             for cond in self.event.bonusCond.getConditions().items:
                 if isinstance(cond, conditions._Cumulativable):
-                    for groupByKey, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
+                    for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
                         label = cond.getUserString()
                         if not diff or not label:
                             continue
@@ -78,7 +78,7 @@ class _EventInfo(EventInfoModel):
         alertMsg = ''
         if isProgressReset:
             alertMsg = i18n.makeString('#quests:postBattle/progressReset')
-        diffStr, awards = ('', None)
+        _, awards = ('', None)
         if not isProgressReset and isCompleted:
             awards = self._getBonuses(svrEvents)
         return {'title': self.event.getUserName(),
@@ -192,7 +192,7 @@ class _QuestInfo(_EventInfo, QuestInfoModel):
             else:
                 avgProgressesPerGroup = []
                 for groupByKey, values in cumulatives.iteritems():
-                    progressesSum = sum(map(lambda (c, t): c / float(t), values))
+                    progressesSum = sum([ c / float(t) for c, t in values ])
                     avgProgressesPerGroup.append((groupByKey, int(round(100.0 * progressesSum / len(values))), 100))
 
                 avgProgresses = sorted(avgProgressesPerGroup, key=operator.itemgetter(1), reverse=True)
@@ -258,7 +258,7 @@ class _PersonalMissionInfo(_QuestInfo):
 class _MotiveQuestInfo(_QuestInfo):
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted):
-        motiveQuests = filter(lambda q: q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isCompleted(), svrEvents.values())
+        motiveQuests = [ q for q in svrEvents.values() if q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isCompleted() ]
         info = super(_MotiveQuestInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted)
         info.update({'isLinkBtnVisible': len(motiveQuests) > 0})
         return info
@@ -276,5 +276,4 @@ def getEventPostBattleInfo(event, svrEvents=None, pCur=None, pPrev=None, isProgr
     return getEventInfoData(event).getPostBattleInfo(svrEvents, pCur or {}, pPrev or {}, isProgressReset, isCompleted)
 
 
-_questBranchToTabMap = {PM_BRANCH.REGULAR: QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM,
- PM_BRANCH.FALLOUT: QUESTS_ALIASES.SEASON_VIEW_TAB_FALLOUT}
+_questBranchToTabMap = {PM_BRANCH.REGULAR: QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM}

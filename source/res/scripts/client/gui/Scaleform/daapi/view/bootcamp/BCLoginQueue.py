@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCLoginQueue.py
 from gui.Scaleform.daapi.view.meta.LoginQueueWindowMeta import LoginQueueWindowMeta
 from gui.prb_control import prbDispatcherProperty
-from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
+from gui.prb_control.entities.base.ctx import LeavePrbAction
 from PlayerEvents import g_playerEvents
 from gui.shared.events import ArgsEvent, BCLoginEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE

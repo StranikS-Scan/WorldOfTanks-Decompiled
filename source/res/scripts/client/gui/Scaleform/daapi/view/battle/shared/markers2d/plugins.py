@@ -14,7 +14,7 @@ from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
-from gui.battle_control.battle_constants import PLAYER_GUI_PROPS, MARKER_HIT_STATE, MARKER_HIT_STATE_BOOTCAMP
+from gui.battle_control.battle_constants import PLAYER_GUI_PROPS, MARKER_HIT_STATE
 from gui.doc_loaders import GuiColorsLoader
 from gui.shared import g_eventBus
 from gui.shared.events import GameEvent
@@ -30,114 +30,61 @@ from skeletons.gui.game_control import IBootcampController
 _TO_FLASH_SYMBOL_NAME_MAPPING = {STUN_AREA_STATIC_MARKER: settings.MARKER_SYMBOL_NAME.STATIC_ARTY_MARKER}
 
 class IMarkersManager(object):
-    """Plugins wait for specified manager's interface to manage markers."""
 
     def createMarker(self, symbol, matrixProvider=None, active=True):
-        """Creates 2D marker.
-        :param symbol: string containing name of symbol to create desired UI component in the Flash.
-        :param matrixProvider: instance of Matrix or MatrixProvider.
-        :param active: True if marker is active (visible), otherwise - False.
-        :return: integer containing unique ID of marker.
-        """
         raise NotImplementedError
 
     def invokeMarker(self, markerID, *signature):
-        """Invokes desired method of marker in the Action Script.
-        :param markerID: integer containing unique ID of marker.
-        :param signature: tuple(<name of method in the Action Script>, *args)
-        """
         raise NotImplementedError
 
     def setMarkerMatrix(self, markerID, matrix):
-        """Sets new matrix to specified marker.
-        :param markerID: integer containing unique ID of marker.
-        :param matrix: instance of Matrix or MatrixProvider.
-        """
         raise NotImplementedError
 
     def setMarkerActive(self, markerID, active):
-        """Sets new activation flag to marker.
-        :param markerID: integer containing unique ID of marker.
-        :param active: True if marker is active (visible), otherwise - False.
-        """
         raise NotImplementedError
 
     def destroyMarker(self, markerID):
-        """Destroys 2D marker.
-        :param markerID: integer containing unique ID of marker.
-        """
         raise NotImplementedError
 
     def _createCanvas(self, arenaVisitor):
-        """Creates cpp-side component to manage markers. It can be changed in some game modes.
-        :param arenaVisitor: instance of _ClientArenaVisitor.
-        :return: instance of object that extends FlashGUIComponent.
-        """
         raise NotImplementedError
 
     def _setupPlugins(self, arenaVisitor):
-        """Creates set of plugins to create.
-        :param arenaVisitor: instance of _ClientArenaVisitor.
-        :return: dict that contains classes of plugins.
-        """
         raise NotImplementedError
 
 
 class MarkerPlugin(IPlugin):
-    """Base class of markers plugin."""
     __slots__ = ()
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def _createMarkerWithPosition(self, symbol, position, active=True):
-        """Creates 2D marker that has static position on world.
-        :param symbol: string containing name of symbol to create desired UI component in the Flash.
-        :param position: Math.Vector3 containing world position.
-        :param active: True if marker is visible, otherwise - False.
-        :return: integer containing unique ID of marker.
-        """
         matrixProvider = Matrix()
         matrixProvider.translation = position
         return self._parentObj.createMarker(symbol, matrixProvider, active)
 
     def _createMarkerWithMatrix(self, symbol, matrixProvider=None, active=True):
-        """Creates 2D marker that has matrix provider to get world position each tick.
-        :param symbol: string containing name of symbol to create desired UI component in the Flash.
-        :param matrixProvider: instance of Matrix or MatrixProvider.
-        :param active: True if marker is visible, otherwise - False.
-        :return: integer containing unique ID of marker.
-        """
         return self._parentObj.createMarker(symbol, matrixProvider=matrixProvider, active=active)
 
     def _invokeMarker(self, markerID, function, *args):
-        """See comment in method IMarkersManager.invokeMarker."""
         self._parentObj.invokeMarker(markerID, function, *args)
 
     def _setMarkerPosition(self, markerID, position):
-        """Sets position of marker.
-        :param markerID: integer containing unique ID of marker.
-        :param position: Math.Vector3 containing new position.
-        :return:
-        """
         matrix = Matrix()
         matrix.setTranslate(position)
         self._parentObj.setMarkerMatrix(markerID, matrix)
 
     def _setMarkerMatrix(self, markerID, matrix):
-        """See comment in method IMarkersManager.setMarkerMatrix."""
         self._parentObj.setMarkerMatrix(markerID, matrix)
 
     def _setMarkerActive(self, markerID, active):
-        """See comment in method IMarkersManager.setMarkerActive."""
         self._parentObj.setMarkerActive(markerID, active)
 
     def _destroyMarker(self, markerID):
-        """See comment in method IMarkersManager.destroyMarker."""
         self._parentObj.destroyMarker(markerID)
 
 
 class SettingsPlugin(MarkerPlugin):
-    """Plugin listens changing of settings and transfers desired settings to Action Script."""
 
     def init(self, *args):
         super(SettingsPlugin, self).init(*args)
@@ -155,7 +102,7 @@ class SettingsPlugin(MarkerPlugin):
 
     def __setMarkerSettings(self, notify=False):
         getter = self.settingsCore.getSetting
-        self._parentObj.setMarkerSettings(dict(map(lambda name: (name, getter(name)), MARKERS.ALL())), notify=notify)
+        self._parentObj.setMarkerSettings(dict(((name, getter(name)) for name in MARKERS.ALL())), notify=notify)
 
     def __setColorsSchemes(self):
         colors = GuiColorsLoader.load()
@@ -174,8 +121,6 @@ class SettingsPlugin(MarkerPlugin):
         self._parentObj.setColorsSchemes(defaultSchemes, colorBlindSchemes)
 
     def __onSettingsChanged(self, diff):
-        """Listener for event ISettingsCore.onSettingsChanged.
-        :param diff: dictionary containing changes in settings."""
         if GRAPHICS.COLOR_BLIND in diff:
             self._parentObj.setColorBlindFlag(diff[GRAPHICS.COLOR_BLIND])
         if set(MARKERS.ALL()) & set(diff):
@@ -186,11 +131,6 @@ class SettingsPlugin(MarkerPlugin):
 
 
 class EventBusPlugin(MarkerPlugin):
-    """Plugin listens events from event bus and invokes next actions:
-        - toggle all markers visibility if player presses V (by default) to hide all GUI;
-        - toggle all markers visibility only by key sequence CAPS + N (by default);
-        - toggle extended mode if player presses ALT (by default).
-    """
 
     def init(self, *args):
         super(EventBusPlugin, self).init(*args)
@@ -213,15 +153,10 @@ class EventBusPlugin(MarkerPlugin):
         self._parentObj.setVisible(event.ctx['visible'])
 
     def __handleMarkerVisibility(self, _):
-        """Special event toggles markers visibility only by key sequence CAPS + N (by default)
-        and no any UI visible."""
         self._parentObj.setVisible(not self._parentObj.isVisible())
 
 
 class AreaStaticMarkerPlugin(MarkerPlugin):
-    """
-    Plugin to create static area marker (marker over 3D scene terrain).
-    """
     __slots__ = ('__objects',)
 
     def __init__(self, parentObj):
@@ -248,14 +183,6 @@ class AreaStaticMarkerPlugin(MarkerPlugin):
         return
 
     def __addStaticMarker(self, areaID, position, markerSymbolName, show3DMarker=True):
-        """
-        Arguments:
-        
-            areaID: unique marker ID;
-            position: Vertex Math.Vertex3 (coordinate on terrain);
-            markerSymbolName: some string to map to flash object (MARKER_SYMBOL_NAME).
-        
-        """
         if not show3DMarker:
             return
         if areaID in self.__objects or markerSymbolName not in _TO_FLASH_SYMBOL_NAME_MAPPING:
@@ -429,11 +356,6 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         self._invokeMarker(handle, 'setEntityName', arenaDP.getPlayerGuiProps(vehicleID, vInfo.team).name())
 
     def __onVehicleMarkerAdded(self, vProxy, vInfo, guiProps):
-        """ Listener for event BattleFeedbackAdaptor.onVehicleMarkerAdded.
-        :param vProxy: entity of vehicle.
-        :param vInfo: instance of ArenaVehicleInfoVO.
-        :param guiProps: instance of PLAYER_GUI_PROPS.
-        """
         vehicleID = vInfo.vehicleID
         accountDBID = vInfo.player.accountDBID
         if vehicleID in self._markers:
@@ -451,22 +373,14 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             self._setMarkerInitialState(marker, accountDBID=accountDBID)
 
     def __onVehicleMarkerRemoved(self, vehicleID):
-        """ Listener for event BattleFeedbackAdaptor.onVehicleMarkerRemoved.
-        :param vehicleID: long containing ID of vehicle.
-        """
         self._hideVehicleMarker(vehicleID)
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
-        """ Listener for event BattleFeedbackAdaptor.onVehicleFeedbackReceived.
-        :param eventID: one of FEEDBACK_EVENT_ID.*.
-        :param vehicleID: long containing ID of vehicle.
-        :param value: new value for given event.
-        """
         if vehicleID not in self._markers:
             return
         else:
             handle = self._markers[vehicleID].getMarkerID()
-            hitStates = MARKER_HIT_STATE_BOOTCAMP if self.bootcamp.isInBootcamp() else MARKER_HIT_STATE
+            hitStates = MARKER_HIT_STATE
             if eventID in hitStates:
                 newState = 'hit'
                 stateText = ''
@@ -495,12 +409,6 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         self._invokeMarker(handle, 'showActionMarker', newState)
 
     def __updateStunMarker(self, handle, stunDuration, animated=True):
-        """
-        Show/hide stun marker
-        :param handle:
-        :param stunDuration: stun time in sec
-        :param animated: optional, showing with/without animation
-        """
         if stunDuration > 0:
             self._invokeMarker(handle, 'showStunMarker', stunDuration, animated)
         else:
@@ -516,11 +424,6 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             self._invokeMarker(handle, 'updateHealth', newHealth, self.__getVehicleDamageType(aInfo), constants.ATTACK_REASONS[attackReasonID])
 
     def __onPlayerSpeaking(self, accountDBID, flag):
-        """
-        Listener for event g_messengerEvents.voip.onPlayerSpeaking.
-        :param accountDBID: player db ID
-        :param flag: isSpeaking (true or false)
-        """
         vehicleID = self.sessionProvider.getCtx().getVehIDByAccDBID(accountDBID)
         if vehicleID in self._markers:
             marker = self._markers[vehicleID]
@@ -548,7 +451,7 @@ class RespawnableVehicleMarkerPlugin(VehicleMarkerPlugin):
 
     def start(self):
         super(RespawnableVehicleMarkerPlugin, self).start()
-        self._isSquadIndicatorEnabled = self.sessionProvider.arenaVisitor.gui.isFalloutMultiTeam()
+        self._isSquadIndicatorEnabled = False
 
     def _hideVehicleMarker(self, vehicleID):
         self._destroyVehicleMarker(vehicleID)
@@ -558,8 +461,6 @@ _EQUIPMENT_DEFAULT_INTERVAL = 1.0
 _EQUIPMENT_DELAY_FORMAT = '{0:.0f}'
 
 class EquipmentsMarkerPlugin(MarkerPlugin):
-    """Plugin to show 2D marker of equipment, updates time to activation of equipment
-    and hides given marker when equipment is applied."""
     __slots__ = ('__callbackIDs', '__finishTime', '__defaultPostfix')
 
     def __init__(self, parentObj):

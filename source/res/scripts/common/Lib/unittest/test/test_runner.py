@@ -144,7 +144,6 @@ class TestCleanUp(unittest.TestCase):
 
 
 class Test_TextTestRunner(unittest.TestCase):
-    """Tests for TextTestRunner."""
 
     def test_init(self):
         runner = unittest.TextTestRunner()

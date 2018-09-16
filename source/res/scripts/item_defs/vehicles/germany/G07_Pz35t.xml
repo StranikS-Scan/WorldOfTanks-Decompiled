@@ -1,7 +1,6 @@
 <G07_Pz35t.xml>
   <crew>
     <commander>	gunner
-
 			loader	</commander>
     <driver></driver>
     <radioman></radioman>
@@ -83,7 +82,7 @@
       <shortUserString>	#germany_vehicles:Pz35t_Standardketten_short	</shortUserString>
       <tags></tags>
       <level>	1	</level>
-      <price>	360.0	</price>
+      <price>	360	</price>
       <unlocks>
         <chassis>	Pz35t_Vetstaerktketten	  <cost>	105	</cost>
         </chassis>
@@ -260,7 +259,7 @@
         <right>	vehicles/german/G07_Pz35t/track/right.track	</right>
         <segmentLength>	0.095	</segmentLength>
         <segmentOffset>	0.059	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -393,7 +392,7 @@
       <shortUserString>	#germany_vehicles:Pz35t_Vetstaerktketten_short	</shortUserString>
       <tags></tags>
       <level>	2	</level>
-      <price>	630.0	</price>
+      <price>	630	</price>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
@@ -566,7 +565,7 @@
         <right>	vehicles/german/G07_Pz35t/track/right.track	</right>
         <segmentLength>	0.095	</segmentLength>
         <segmentOffset>	0.059	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -701,7 +700,7 @@
       <shortUserString>	#germany_vehicles:Pz35t_Standardturm_short	</shortUserString>
       <tags></tags>
       <level>	2	</level>
-      <price>	560.0	</price>
+      <price>	560	</price>
       <unlocks>
         <turret>	Pz35t_Verstaerktturm	  <cost>	270	</cost>
         </turret>
@@ -913,7 +912,7 @@
       <shortUserString>	#germany_vehicles:Pz35t_Verstaerktturm_short	</shortUserString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1430.0	</price>
+      <price>	1430	</price>
       <armor>
         <armor_1>	25	</armor_1>
         <armor_2>	25	</armor_2>

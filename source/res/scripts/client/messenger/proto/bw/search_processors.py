@@ -50,6 +50,9 @@ class SearchChannelsProcessor(SearchProcessor):
     def getSearchResultLimit(self):
         return CHANNEL_SEARCH_RESULTS_LIMIT
 
+    def getSearchCoolDown(self):
+        raise UserWarning('This method should not be reached in this context')
+
     def __cm_onSearchTokenComplete(self, requestID, result):
         self._onSearchTokenComplete(requestID, result)
 

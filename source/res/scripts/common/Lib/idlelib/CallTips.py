@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/CallTips.py
-"""CallTips.py - An IDLE Extension to Jog Your Memory
-
-Call Tips are floating windows which display function, class, and method
-parameter and docstring information when you type an opening parenthesis, and
-which disappear when you type a closing parenthesis.
-
-"""
 import __main__
 import re
 import sys
@@ -43,22 +36,12 @@ class CallTips:
         return
 
     def force_open_calltip_event(self, event):
-        """Happens when the user really wants to open a CallTip, even if a
-        function call is needed.
-        """
         self.open_calltip(True)
 
     def try_open_calltip_event(self, event):
-        """Happens when it would be nice to open a CallTip, but not really
-        necessary, for example after an opening bracket, so function calls
-        won't be made.
-        """
         self.open_calltip(False)
 
     def refresh_calltip_event(self, event):
-        """If there is already a calltip window, check if it is still needed,
-        and if so, reload it.
-        """
         if self.calltip and self.calltip.is_active():
             self.open_calltip(False)
 
@@ -79,19 +62,6 @@ class CallTips:
         self.calltip.showtip(arg_text, sur_paren[0], sur_paren[1])
 
     def fetch_tip(self, expression):
-        """Return the argument list and docstring of a function or class
-        
-        If there is a Python subprocess, get the calltip there.  Otherwise,
-        either fetch_tip() is running in the subprocess itself or it was called
-        in an IDLE EditorWindow before any script had been run.
-        
-        The subprocess environment is that of the most recently run script.  If
-        two unrelated modules are being edited some calltips in the current
-        module may be inoperative if the module was not the last to run.
-        
-        To find methods, fetch_tip must be fed a fully qualified name.
-        
-        """
         try:
             rpcclt = self.editwin.flist.pyshell.interp.rpcclt
         except AttributeError:
@@ -105,9 +75,6 @@ class CallTips:
             return
 
     def get_entity(self, expression):
-        """Return the object corresponding to expression evaluated
-        in a namespace spanning sys.modules and __main.dict__.
-        """
         if expression:
             namespace = sys.modules.copy()
             namespace.update(__main__.__dict__)
@@ -136,14 +103,6 @@ _MAX_LINES = 5
 _INDENT = '    '
 
 def get_arg_text(ob):
-    """Return a string describing the signature of a callable object, or ''.
-    
-    For Python-coded functions and methods, the first line is introspected.
-    Delete 'self' parameter for classes (.__init__) and bound methods.
-    The next lines are the first lines of the doc string up to the first
-    empty line or _MAX_LINES.    For builtins, this typically includes
-    the arguments in addition to the return value.
-    """
     argspec = ''
     try:
         ob_call = ob.__call__

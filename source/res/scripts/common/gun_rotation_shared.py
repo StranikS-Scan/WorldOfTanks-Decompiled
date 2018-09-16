@@ -51,17 +51,11 @@ def _clamp(minBound, value, maxBound):
 
 def isShootPositionInsideOtherVehicle(vehicle, turretPosition, shootPosition):
     if IS_CLIENT:
-
-        def getNearVehicles(vehicle, shootPosition):
-            nearVehicles = []
-            arenaVehicles = BigWorld.player().arena.vehicles
-            for id in arenaVehicles.iterkeys():
-                v = BigWorld.entities.get(id)
-                if v and not v.isPlayerVehicle:
-                    nearVehicles.append(v)
-
-            return nearVehicles
-
+        res = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, turretPosition, shootPosition, BigWorld.player().getVehicleAttached().id, 3)
+        if res is not None:
+            return True
+        else:
+            return False
     elif IS_CELLAPP:
 
         def getNearVehicles(vehicle, shootPosition):
@@ -103,17 +97,7 @@ def getPenetratedVehicles(vehicle, turretPosition, shootPosition):
 
 
 def isSegmentCollideWithVehicle(vehicle, startPoint, endPoint):
-    if IS_CLIENT:
-
-        def getVehicleSpaceMatrix(vehicle):
-            toVehSpace = Math.Matrix(vehicle.model.matrix)
-            toVehSpace.invert()
-            return toVehSpace
-
-        def getVehicleComponents(vehicle):
-            return vehicle.getComponents()
-
-    elif IS_CELLAPP:
+    if IS_CELLAPP:
 
         def getVehicleSpaceMatrix(vehicle):
             toVehSpace = Math.Matrix(vehicle.mover.matrix)

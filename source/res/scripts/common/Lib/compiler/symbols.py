@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/symbols.py
-"""Module symbol-table generator"""
 from compiler import ast
 from compiler.consts import SC_LOCAL, SC_GLOBAL_IMPLICIT, SC_GLOBAL_EXPLICIT, SC_FREE, SC_CELL, SC_UNKNOWN
 from compiler.misc import mangle
@@ -79,10 +78,6 @@ class Scope:
         print >> sys.stderr, '\tfrees:', self.frees
 
     def check_name(self, name):
-        """Return scope of name.
-        
-        The scope of a name could be LOCAL, GLOBAL, FREE, or CELL.
-        """
         if name in self.globals:
             return SC_GLOBAL_EXPLICIT
         elif name in self.cells:
@@ -115,18 +110,6 @@ class Scope:
                 child.force_global(name)
 
     def force_global(self, name):
-        """Force name to be global in scope.
-        
-        Some child of the current node had a free reference to name.
-        When the child was processed, it was labelled a free
-        variable.  Now that all its enclosing scope have been
-        processed, the name is known to be a global or builtin.  So
-        walk back down the child chain and set the name to be global
-        rather than free.
-        
-        Be careful to stop if a child does not think the name is
-        free.
-        """
         self.globals[name] = 1
         if name in self.frees:
             del self.frees[name]
@@ -135,12 +118,6 @@ class Scope:
                 child.force_global(name)
 
     def add_frees(self, names):
-        """Process list of free vars from nested scope.
-        
-        Returns a list of names that are either 1) declared global in the
-        parent or 2) undefined in a top-level parent.  In either case,
-        the nested scope should treat them as globals.
-        """
         child_globals = []
         for name in names:
             sc = self.check_name(name)
@@ -259,7 +236,6 @@ class SymbolVisitor:
         self.visit(node.test, scope)
 
     def visitLambda(self, node, parent, assign=0):
-        assert not assign
         for n in node.defaults:
             self.visit(n, parent)
 
@@ -331,18 +307,6 @@ class SymbolVisitor:
             scope.add_global(name)
 
     def visitAssign(self, node, scope):
-        """Propagate assignment flag down to child nodes.
-        
-        The Assign node doesn't itself contains the variables being
-        assigned to.  Instead, the children in node.nodes are visited
-        with the assign flag set to true.  When the names occur in
-        those nodes, they are marked as defs.
-        
-        Some names that occur in an assignment target are not bound by
-        the assignment, e.g. a name occurring inside a slice.  The
-        visitor handles these nodes specially; they do not propagate
-        the assign flag to their children.
-        """
         for n in node.nodes:
             self.visit(n, scope, 1)
 

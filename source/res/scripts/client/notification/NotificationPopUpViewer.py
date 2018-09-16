@@ -11,16 +11,12 @@ from notification.settings import NOTIFICATION_STATE, NOTIFICATION_GROUP
 from skeletons.connection_mgr import IConnectionManager
 
 class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView):
-    """
-    WARNING! This class uses ids mapping! It means that all ids coming outside should be maped with special method
-    from base class.
-    """
     connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         mvc = NotificationMVC.g_instance
         mvc.initialize()
-        settings = g_settings.lobby.serviceChannel
+        settings = self._getSettings()
         self.__maxAvailableItemsCount = settings.stackLength
         self.__messagesPadding = settings.padding
         self.__noDisplayingPopups = True
@@ -69,6 +65,9 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self.cleanUp()
         mvcInstance.cleanUp(resetCounter=self.connectionMgr.isDisconnected())
         super(NotificationPopUpViewer, self)._dispose()
+
+    def _getSettings(self):
+        return g_settings.lobby.serviceChannel
 
     def __onNotificationReceived(self, notification):
         if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:

@@ -48,21 +48,6 @@ _AnnouncementInfo = namedtuple('_AnnouncementInfo', ('userString',
  'isElite'))
 
 class _TechTreeDataProvider(object):
-    """
-    Class performs following operations:
-    - reads shared parameters for trees from file TREE_SHARED_REL_FILE_PATH;
-    - reads node's display information from XML-files
-        (specified nations.AVAILABLE_NAMES) that are specified for each tree of nation.
-    
-    Provides the following methods to draw nation tree:
-    - getDisplayInfo.
-    - getTopLevel. Gets parents: vehicles that provide access to given vehicle.
-    - getNextLevel. Gets child: vehicles that available from given vehicle.
-    - isNext2Unlock. Is given vehicle is next to unlock.
-    - getNext2UnlockByItems. Returns list of vehicle are available to unlock.
-    - getAvailableNations.
-    - getAnnouncement*. These operations allow you to get announcement vehicles.
-    """
     __slots__ = ('__loaded', '__availableNations', '__override', '__displayInfo', '__displaySettings', '__topLevels', '__topItems', '__nextLevels', '__unlockPrices', '__announcements', '__announcementCDToName', '__nextAnnouncements', '__nodes', '__nextTypeIDs')
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -75,11 +60,6 @@ class _TechTreeDataProvider(object):
         return
 
     def load(self, isReload=False):
-        """ Reads node's display information from XML-files that are specified for
-        each tree of nation and builds xml string for each vehicle listed in xml files.
-        :param isReload: is force clear xml file cache and rebuild xml strings.
-        :return: True if xml file was loaded, otherwise - False.
-        """
         if self.__loaded and not isReload:
             return False
         LOG_DEBUG('Tech tree data is being loaded')
@@ -98,22 +78,15 @@ class _TechTreeDataProvider(object):
             self.__makeAbsoluteCoordinates()
             self.__loaded = True
 
+        _xml.clearCaches()
         return True
 
     def setOverride(self, override=''):
-        """ If @param override is different from already set __override,
-        it resets __loaded flag and sets new __override value.
-        :param override: string containing new name of settings that should be overridden.
-        """
         if self.__override != override:
             self.__override = override
             self.__loaded = False
 
     def getDisplaySettings(self, nationID):
-        """ Gets display settings that defined in grid.
-        :param nationID: integer containing ID of nation.
-        :return: { <setting name> : <setting value>, ... }. Available settings see in tree_shared.xml.
-        """
         try:
             result = self.__displaySettings[nationID]
         except KeyError:
@@ -122,10 +95,6 @@ class _TechTreeDataProvider(object):
         return result
 
     def getNationTreeIterator(self, nationID):
-        """ Get iterator to get nodes and display information by specified nation.
-        :param nationID: integer containing ID of nation.
-        :return: generator.
-        """
         if nationID >= len(self.__nodes):
             LOG_ERROR('Nation ID is out of range', nationID)
             return
@@ -144,31 +113,13 @@ class _TechTreeDataProvider(object):
             return
 
     def getTopLevel(self, vTypeCD):
-        """ Gets top level vehicles, which are parents for given vehicle.
-        :param vTypeCD: int-type vehicle compact descriptor.
-        :return: set( <vehicle type compact descr>, ... )
-        """
         return self.__topLevels[vTypeCD]
 
     def getNextLevel(self, vTypeCD):
-        """ Gets next level vehicles, which are children for given vehicle.
-        :param vTypeCD: int-type vehicle compact descriptor.
-        :return: set( <vehicle type compact descr>, ... )
-        """
         return self.__nextLevels[vTypeCD].keys()
 
-    def isNext2Unlock(self, vTypeCD, unlocked=set(), xps=None, freeXP=0):
-        """ Is given vehicle is next to unlock. "next to unlock" - all required
-        items are unlocked. If vehicle is available in a few vehicles, than
-        returns compact descriptor for parent vehicle where min XP cost.
-        NOTE: if xps is defined than searches vehicles for which enough experience
-        and available.
-        :param vTypeCD: compact descriptor of vehicle (int).
-        :param unlocked: set of unlocked items (int compact descriptor).
-        :param xps: dict of vehicles XPs { int compact descriptor : xp, ... }
-        :param freeXP: value of free XP.
-        :return: (<is available>, <instance of UnlockProps>).
-        """
+    def isNext2Unlock(self, vTypeCD, unlocked=None, xps=None, freeXP=0):
+        unlocked = unlocked or set()
         topLevel = self.getTopLevel(vTypeCD)
         available = False
         topIDs = set()
@@ -188,17 +139,8 @@ class _TechTreeDataProvider(object):
             result = self._findNext2Unlock(compare, xps=xps, freeXP=freeXP)
         return (available, result)
 
-    def getNext2UnlockByItems(self, itemCDs, unlocked=set(), xps=None, freeXP=0):
-        """ Returns list of vehicle are available to unlock (all required
-        items are unlocked) by unlocked items.
-        NOTE: if xps is defined than searches vehicles for which enough experience
-            and available.
-        :param itemCDs: list of unlocked items which determine available vehicles.
-        :param unlocked: set of unlocked items (int compact descriptor).
-        :param xps: dict of vehicles XPs { int compact descriptor : xp, ... }
-        :param freeXP: value of free XP.
-        :return: dict( <vehicle compact descriptor>: <instance of UnlockProps>, ... )
-        """
+    def getNext2UnlockByItems(self, itemCDs, unlocked=None, xps=None, freeXP=0):
+        unlocked = unlocked or set()
         filtered = filter(lambda item: item in self.__topItems, itemCDs)
         if not filtered or not unlocked:
             return {}
@@ -225,9 +167,6 @@ class _TechTreeDataProvider(object):
         return result
 
     def getAvailableNations(self):
-        """ Gets available nations in the nation's trees.
-        :return: list of nations.
-        """
         if self.__availableNations is None:
             section = ResMgr.openSection(TREE_SHARED_REL_FILE_PATH)
             if section is None:
@@ -237,24 +176,12 @@ class _TechTreeDataProvider(object):
         return self.__availableNations[:]
 
     def getAvailableNationsIndices(self):
-        """ Gets available IDs of nations in the nation's trees.
-        :return: list of nations IDs.
-        """
         return map(lambda nation: nations.INDICES[nation], self.getAvailableNations())
 
     def getUnlockPrices(self, compactDescr):
-        """ Gets unlock prices for given item
-        :param compactDescr: int-type compact descriptor.
-        :return: unlock prices dict.
-        """
         return self.__unlockPrices[compactDescr]
 
     def getAllPossibleItems2Unlock(self, vehicle, unlocked):
-        """ Gets all possible items to unlocks on vehicle.
-        :param vehicle: instance of vehicle gui item.
-        :param unlocked: set of int-type compact descriptors.
-        :return: dict(int-type compact descriptors: instance of UnlockProps).
-        """
         items = {}
         for unlockIdx, xpCost, nodeCD, required in vehicle.getUnlocksDescrs():
             if required.issubset(unlocked) and nodeCD not in unlocked:
@@ -263,11 +190,6 @@ class _TechTreeDataProvider(object):
         return items
 
     def getUnlockedVehicleItems(self, vehicle, unlocked):
-        """ Gets all unlocked items on vehicle.
-        :param vehicle: instance of vehicle gui item.
-        :param unlocked: set of int-type compact descriptors.
-        :return: dict(int-type compact descriptors: instance of UnlockProps).
-        """
         items = {}
         for unlockIdx, xpCost, nodeCD, required in vehicle.getUnlocksDescrs():
             if required.issubset(unlocked) and nodeCD in unlocked:
@@ -299,33 +221,18 @@ class _TechTreeDataProvider(object):
         return unlockProps
 
     def getAnnouncementByName(self, name):
-        """ Gets announcement vehicle by name.
-            Note: this vehicle is not added to vehicles cache, it just is defined in GUI.
-        :param name: name of announcement vehicle
-        :return: instance of _AnnouncementInfo or None.
-        """
         return self.__announcements[name] if name in self.__announcements else None
 
     def getAnnouncementByCD(self, intCD):
-        """ Gets announcement vehicle by int-type compact descriptor.
-        :param intCD: int-type compact descriptor of vehicle.
-        :return: instance of _AnnouncementInfo or None.
-        """
         return self.getAnnouncementByName(self.__announcementCDToName[intCD]) if intCD in self.__announcementCDToName else None
 
     def getNextAnnouncements(self, intCD):
-        """ Gets sequence of int-type compact descriptor that are
-        announcements next vehicles for specified vehicle.
-        :param intCD: int-type compact descriptor of vehicle.
-        :return: generator.
-        """
         if intCD not in self.__nextAnnouncements:
             return
         for nodeCD in self.__nextAnnouncements[intCD]:
             yield nodeCD
 
     def _clear(self):
-        """Clears data."""
         self.__displayInfo = [None] * len(nations.NAMES)
         self.__nextTypeIDs = [0] * len(nations.NAMES)
         self.__nodes = [None] * len(nations.NAMES)
@@ -391,8 +298,8 @@ class _TechTreeDataProvider(object):
                 value = getattr(_xml, reader)(xmlCtx, settingSec, 'value')
                 settings[name] = value
 
-            for name in DISPLAY_SETTINGS.iterkeys():
-                if name not in settings:
+            for n in DISPLAY_SETTINGS.iterkeys():
+                if n not in settings:
                     raise _ConfigError(xmlCtx, 'Setting not found')
 
             shared['settings'][settingsName] = settings
@@ -442,7 +349,7 @@ class _TechTreeDataProvider(object):
             viaPins = defaultdict(dict)
             for outPin, setSec in pinsSec:
                 for inPin, pSec in setSec.items():
-                    viaPins[outPin][inPin] = map(lambda section: section[1].asVector2.tuple(), pSec.items())
+                    viaPins[outPin][inPin] = [ section[1].asVector2.tuple() for section in pSec.items() ]
 
             defSec = sub['default']
             default = {}

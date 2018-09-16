@@ -1,46 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/socket.py
-"""This module provides socket operations and some related functions.
-On Unix, it supports IP (Internet Protocol) and Unix domain sockets.
-On other systems, it only supports IP. Functions specific for a
-socket are available as methods of the socket object.
-
-Functions:
-
-socket() -- create a new socket object
-socketpair() -- create a pair of new socket objects [*]
-fromfd() -- create a socket object from an open file descriptor [*]
-gethostname() -- return the current hostname
-gethostbyname() -- map a hostname to its IP number
-gethostbyaddr() -- map an IP number or hostname to DNS info
-getservbyname() -- map a service name and a protocol name to a port number
-getprotobyname() -- map a protocol name (e.g. 'tcp') to a number
-ntohs(), ntohl() -- convert 16, 32 bit int from network to host byte order
-htons(), htonl() -- convert 16, 32 bit int from host to network byte order
-inet_aton() -- convert IP addr string (123.45.67.89) to 32-bit packed format
-inet_ntoa() -- convert 32-bit packed format IP to string (123.45.67.89)
-ssl() -- secure socket layer support (only available if configured)
-socket.getdefaulttimeout() -- get the default timeout value
-socket.setdefaulttimeout() -- set the default timeout value
-create_connection() -- connects to an address, with an optional timeout and
-                       optional source address.
-
- [*] not available on all platforms!
-
-Special objects:
-
-SocketType -- type object for socket objects
-error -- exception raised for I/O errors
-has_ipv6 -- boolean value indicating if IPv6 is supported
-
-Integer constants:
-
-AF_INET, AF_UNIX -- socket domains (first argument to socket() call)
-SOCK_STREAM, SOCK_DGRAM, SOCK_RAW -- socket types (second argument)
-
-Many other constants may be defined; these may be used in calls to
-the setsockopt() and getsockopt() methods.
-"""
 import _socket
 from _socket import *
 from functools import partial
@@ -96,14 +55,6 @@ if sys.platform.lower().startswith('win'):
     __all__.append('errorTab')
 
 def getfqdn(name=''):
-    """Get fully qualified domain name from name.
-    
-    An empty argument is interpreted as meaning the local host.
-    
-    First the hostname returned by gethostbyaddr() is checked, then
-    possibly existing aliases. In case no FQDN is available, hostname
-    from gethostname() is returned.
-    """
     name = name.strip()
     if not name or name == '0.0.0.0':
         name = gethostname()
@@ -185,16 +136,9 @@ class _socketobject(object):
     accept.__doc__ = _realsocket.accept.__doc__
 
     def dup(self):
-        """dup() -> socket object
-        
-        Return a new socket object connected to the same system resource."""
         return _socketobject(_sock=self._sock)
 
     def makefile(self, mode='r', bufsize=-1):
-        """makefile([mode[, bufsize]]) -> file object
-        
-        Return a regular file object corresponding to the socket.  The mode
-        and bufsize arguments are as for the built-in open() function."""
         return _fileobject(self._sock, mode, bufsize)
 
     family = property(lambda self: self._sock.family, doc='the socket family')
@@ -216,7 +160,6 @@ for _m in _socketmethods:
 socket = SocketType = _socketobject
 
 class _fileobject(object):
-    """Faux file object attached to a socket object."""
     default_bufsize = 8192
     name = '<socket>'
     __slots__ = ['mode',
@@ -359,7 +302,6 @@ class _fileobject(object):
                     buf.write(data)
                     del data
                     break
-                assert n <= left, 'recv(%d) returned %d bytes' % (left, n)
                 buf.write(data)
                 buf_len += n
                 del data
@@ -492,17 +434,6 @@ class _fileobject(object):
 _GLOBAL_DEFAULT_TIMEOUT = object()
 
 def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT, source_address=None):
-    """Connect to *address* and return the socket object.
-    
-    Convenience function.  Connect to *address* (a 2-tuple ``(host,
-    port)``) and return the socket object.  Passing the optional
-    *timeout* parameter will set the timeout on the socket instance
-    before attempting to connect.  If no *timeout* is supplied, the
-    global default timeout setting returned by :func:`getdefaulttimeout`
-    is used.  If *source_address* is set it must be a tuple of (host, port)
-    for the socket to bind as a source address before making the connection.
-    An host of '' or port 0 tells the OS to use the default.
-    """
     host, port = address
     err = None
     for res in getaddrinfo(host, port, 0, SOCK_STREAM):

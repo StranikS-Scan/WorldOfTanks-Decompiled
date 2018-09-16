@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/BATTLEDAMAGELOG_IMAGES.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class BATTLEDAMAGELOG_IMAGES(object):
     DAMAGELOG_ASSIST_16X16 = 'damageLog_assist_16x16'

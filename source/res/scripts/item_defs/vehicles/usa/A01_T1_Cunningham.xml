@@ -226,7 +226,7 @@
         <right>	vehicles/american/A01_T1_Cunningham/track/right.track	</right>
         <segmentLength>	0.166	</segmentLength>
         <segmentOffset>	0.038	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -423,18 +423,19 @@
       <gunPosition>	0.10296 0.222821 0.553734	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.587596 0.266962 0.157434	</rayStart>
-          <rayEnd>	-0.395072 0.266843 0.103264	</rayEnd>
+          <rayStart>	-0.587259 0.264652 0.158628	</rayStart>
+          <rayEnd>	-0.394735 0.264533 0.104457	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.26	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	0.58066 0.267611 0.193771	</rayStart>
-          <rayEnd>	0.388825 0.267494 0.137209	</rayEnd>
+          <rayStart>	0.580326 0.261399 0.194906	</rayStart>
+          <rayEnd>	0.38849 0.261283 0.138344	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.26	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
@@ -447,9 +448,7 @@
   </turrets0>
   <crew>
     <commander>	radioman
-
 			gunner
-
 			loader	</commander>
     <driver></driver>
   </crew>

@@ -43,7 +43,7 @@ class HasID(IHasID):
 class HasTargetID(IHasTargetID):
 
     def __init__(self, targetID, **kwargs):
-        super(IHasTargetID, self).__init__(**kwargs)
+        super(HasTargetID, self).__init__(**kwargs)
         self._targetID = targetID
 
     def getTargetID(self):

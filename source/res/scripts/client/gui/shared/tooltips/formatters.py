@@ -265,13 +265,6 @@ def packRankBlockData(rank, isEnabled=True, shieldStatus=None, linkage=BLOCKS_TO
 
 
 def packItemActionTooltipData(item, isBuying=True):
-    """
-    Build action data for given fitting item
-    
-    :param item:
-    :param isBuying:
-    :return: action data dict
-    """
     if isBuying:
         itemPrice = item.buyPrices.itemPrice
         itemAltPrice = item.buyPrices.itemAltPrice
@@ -281,19 +274,7 @@ def packItemActionTooltipData(item, isBuying=True):
     return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(item.intCD), isBuying, itemPrice.price, itemPrice.defPrice, itemAltPrice.price, itemAltPrice.defPrice)
 
 
-def packActionTooltipData(type, key, isBuying, price, oldPrice, altPrice=MONEY_UNDEFINED, oldAltPrice=MONEY_UNDEFINED):
-    """
-    Packs data into action tooltip VO.
-    
-    :param type: an ACTION_TOOLTIPS_STATE
-    :param key: key
-    :param isBuying: True if tooltip is for buying, otherwise False
-    :param price: current price
-    :param oldPrice: old price
-    :param altPrice: current alternative price
-    :param oldAltPrice: old alternative price
-    :return: VO
-    """
+def packActionTooltipData(actionType, key, isBuying, price, oldPrice, altPrice=MONEY_UNDEFINED, oldAltPrice=MONEY_UNDEFINED):
     states = list()
     if altPrice.isDefined():
         price = price + altPrice
@@ -309,7 +290,7 @@ def packActionTooltipData(type, key, isBuying, price, oldPrice, altPrice=MONEY_U
             state = None
         states.append(state)
 
-    return {'type': type,
+    return {'type': actionType,
      'key': key,
      'isBuying': isBuying,
      'state': states,
@@ -319,13 +300,6 @@ def packActionTooltipData(type, key, isBuying, price, oldPrice, altPrice=MONEY_U
 
 
 def packItemRentActionTooltipData(item, rentPackage):
-    """
-    Build rent action data for given fitting item
-    
-    :param item:
-    :param rentPackage:
-    :return: action data dict
-    """
     defaultPrice = rentPackage['defaultRentPrice'].toMoneyTuple()
     price = rentPackage['rentPrice'].toMoneyTuple()
     states = len(price) * (ACTION_TOOLTIPS_STATE.DISCOUNT,)
@@ -354,9 +328,6 @@ def packQuestAwardsBlockData(listData, columnWidth, rowHeight, linkage=BLOCKS_TO
 
 
 def packMissionVehiclesBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
-    """
-    Gets vehicles list for VehicleKill or VehicleDamage quest's conditions to display in tooltip
-    """
     return packBlockDataItem(linkage, {'dataType': 'net.wg.gui.lobby.missions.data.MissionVehicleItemRendererVO',
      'rendererType': 'MissionVehicleItemRendererUI',
      'listIconSrc': listData,
@@ -365,9 +336,6 @@ def packMissionVehiclesBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_
 
 
 def packMissionVehiclesTypeBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
-    """
-    Gets filters data: nations, types, levels for VehicleKill or VehicleDamage quest's conditions to display in tooltip
-    """
     return packBlockDataItem(linkage, {'dataType': 'net.wg.gui.lobby.missions.data.MissionVehicleTypeRendererVO',
      'rendererType': 'MissionVehicleTypeRendererUI',
      'listIconSrc': listData,
@@ -412,22 +380,6 @@ def packBadgeInfoBlockData(badgeImgSource, vehImgSource, playerName, vehName, li
      'playerName': playerName,
      'vehName': vehName}
     return packBlockDataItem(linkage, data, padding)
-
-
-def packNYProgressBlockData(leftText, rightText, currentScores, nextLvlScores, progressPct, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_NY_PROGRESS_BLOCK_LINKAGE, padding=None):
-    return packBlockDataItem(linkage, {'leftText': leftText,
-     'rightText': rightText,
-     'currentScores': currentScores,
-     'nextLvlScores': nextLvlScores,
-     'progressPct': progressPct,
-     'useHtml': useHtml}, padding)
-
-
-def packNYAwardsBlockData(title, salePct, firstAward, secondAward='', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_NY_AWARDS_BLOCK_LINKAGE, padding=None):
-    return packBlockDataItem(linkage, {'title': title,
-     'salePct': salePct,
-     'firstAward': firstAward,
-     'secondAward': secondAward}, padding)
 
 
 def packMoneyAndXpValueBlock(value, icon, iconYoffset, paddingBottom=15, valueWidth=84):

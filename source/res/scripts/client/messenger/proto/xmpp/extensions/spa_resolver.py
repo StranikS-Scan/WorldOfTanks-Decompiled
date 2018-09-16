@@ -64,7 +64,7 @@ class SpaResolverQuery(PyExtension):
 class SpaResolverByIDsQuery(PyQuery):
 
     def __init__(self, dbIDs):
-        super(SpaResolverByIDsQuery, self).__init__(IQ_TYPE.GET, SpaResolverQuery(items=map(lambda dbID: SpaResolverItem(dbID, ''), dbIDs)))
+        super(SpaResolverByIDsQuery, self).__init__(IQ_TYPE.GET, SpaResolverQuery(items=[ SpaResolverItem(dbID, '') for dbID in dbIDs ]))
 
 
 class SpaResolverHandler(IQChildHandler):

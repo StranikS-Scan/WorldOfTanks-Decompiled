@@ -4,7 +4,8 @@ import BigWorld
 from gui.clans import formatters
 from gui.clans.clan_helpers import ClanPersonalInvitesPaginator, ClanListener
 from gui.clans.items import ClanCommonData, formatField, isValueAvailable
-from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, CLAN_INVITE_STATES
+from gui.clans.settings import CLAN_INVITE_STATES
+from gui.wgcg.settings import WebRequestDataType
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
 from gui.Scaleform.daapi.view.meta.ClanPersonalInvitesViewMeta import ClanPersonalInvitesViewMeta
 from gui.Scaleform.locale.CLANS import CLANS
@@ -17,21 +18,21 @@ from gui.shared.utils import getPlayerDatabaseID
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.html import escape
-from skeletons.gui.clans import IClanController
+from skeletons.gui.web import IWebController
 
 class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
 
     def __init__(self):
         super(ClanPersonalInvitesView, self).__init__()
-        self._paginator = ClanPersonalInvitesPaginator(self.clansCtrl, getPlayerDatabaseID(), [CLAN_INVITE_STATES.ACTIVE])
-        self._cooldown = CooldownHelper([CLAN_REQUESTED_DATA_TYPE.ACCEPT_APPLICATION,
-         CLAN_REQUESTED_DATA_TYPE.ACCEPT_INVITE,
-         CLAN_REQUESTED_DATA_TYPE.DECLINE_APPLICATION,
-         CLAN_REQUESTED_DATA_TYPE.DECLINE_INVITE,
-         CLAN_REQUESTED_DATA_TYPE.DECLINE_INVITES,
-         CLAN_REQUESTED_DATA_TYPE.CLANS_INFO,
-         CLAN_REQUESTED_DATA_TYPE.CLAN_RATINGS,
-         CLAN_REQUESTED_DATA_TYPE.ACCOUNT_INVITES], self._onCooldownHandle, CoolDownEvent.CLAN)
+        self._paginator = ClanPersonalInvitesPaginator(self.webCtrl, getPlayerDatabaseID(), [CLAN_INVITE_STATES.ACTIVE])
+        self._cooldown = CooldownHelper([WebRequestDataType.ACCEPT_APPLICATION,
+         WebRequestDataType.ACCEPT_INVITE,
+         WebRequestDataType.DECLINE_APPLICATION,
+         WebRequestDataType.DECLINE_INVITE,
+         WebRequestDataType.DECLINE_INVITES,
+         WebRequestDataType.CLANS_INFO,
+         WebRequestDataType.CLAN_RATINGS,
+         WebRequestDataType.ACCOUNT_INVITES], self._onCooldownHandle, CoolDownEvent.WGCG)
 
     def declineAllSelectedInvites(self):
         self._paginator.declineList(self.dataProvider.getCheckedIDs())
@@ -100,7 +101,7 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
         self._cooldown.stop()
         self._cooldown = None
         self.stopClanListening()
-        self.clansCtrl.clearClanCommonDataCache()
+        self.webCtrl.clearClanCommonDataCache()
         super(ClanPersonalInvitesView, self)._dispose()
         return
 
@@ -116,7 +117,7 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
                 self._showDummy(CLANS.CLANPERSONALINVITESWINDOW_NOINVITES)
                 self.dataProvider.rebuildList(None, False)
             else:
-                self.clansCtrl.updateClanCommonDataCache([ ClanCommonData.fromClanPersonalInviteWrapper(item) for item in data ])
+                self.webCtrl.updateClanCommonDataCache([ ClanCommonData.fromClanPersonalInviteWrapper(item) for item in data ])
                 self.dataProvider.rebuildList(data, self._paginator.canMoveRight())
                 self.as_hideDummyS()
         else:
@@ -161,7 +162,7 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
 
 
 class PersonalInvitesDataProvider(ClanInvitesAbstractDataProvider):
-    clansCtrl = dependency.descriptor(IClanController)
+    clansCtrl = dependency.descriptor(IWebController)
 
     def __init__(self, proxy):
         super(PersonalInvitesDataProvider, self).__init__(proxy)

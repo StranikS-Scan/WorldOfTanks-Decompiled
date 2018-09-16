@@ -8,7 +8,6 @@ from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
 from gui.prb_control import settings
 from gui.prb_control.formatters import messages
-from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import i18n
 
@@ -83,15 +82,6 @@ class SquadWindow(SquadWindowMeta):
         chat = self.chat
         if chat and not pInfo.isCurrentPlayer():
             chat.as_addMessageS(messages.getUnitPlayerNotification(key, pInfo))
-
-
-class FalloutSquadWindow(SquadWindow):
-
-    def getPrbType(self):
-        return PREBATTLE_TYPE.FALLOUT
-
-    def _getSquadViewAlias(self):
-        return PREBATTLE_ALIASES.FALLOUT_SQUAD_VIEW_PY
 
 
 class EventSquadWindow(SquadWindow):

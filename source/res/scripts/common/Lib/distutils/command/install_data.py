@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/install_data.py
-"""distutils.command.install_data
-
-Implements the Distutils 'install_data' command, for installing
-platform-independent data files."""
 __revision__ = '$Id$'
 import os
 from distutils.core import Command

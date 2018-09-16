@@ -8,13 +8,14 @@ from debug_utils import LOG_DEBUG
 from helpers import i18n
 from gui.shared.utils import getPlayerDatabaseID
 from messenger import g_settings
-from messenger.m_constants import LAZY_CHANNEL, MESSENGER_SCOPE, USER_TAG
+from messenger.m_constants import LAZY_CHANNEL, MESSENGER_SCOPE, USER_TAG, PROTO_TYPE
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
 from messenger.proto.bw import entities
 from messenger.proto.bw.errors import ChannelNotFound, ChannelLimitReachedError
 from messenger.proto.bw import find_criteria, limits
 from messenger.proto.bw.wrappers import ChatActionWrapper
 from messenger.proto.events import g_messengerEvents
+from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA
 from messenger.storage import storage_getter
 
 class ChannelsManager(ChatActionsListener):
@@ -150,8 +151,12 @@ class ChannelsManager(ChatActionsListener):
         requestID = chatActionDict.get('requestID', -1)
         channels = set()
         isStore = requestID == -1
+        isMucEnabled = g_settings.server.isUserRoomsEnabled(PROTO_TYPE.XMPP)
         for channelData in data:
             received = entities.BWChannelEntity(dict(channelData))
+            if isMucEnabled and not received.isSystem() and not received.isLazy() and not received.isPrivate() and not received.isClan():
+                g_logOutput.error(CLIENT_LOG_AREA.OBSOLETE, 'Game server sends BW channel on which player is joined, but MUC are enabled. BW channel is ignored', received)
+                continue
             channel = self.channelsStorage.getChannel(received)
             if channel:
                 channel.update(other=received)
@@ -217,10 +222,6 @@ class ChannelsManager(ChatActionsListener):
             channel.addMembers([entities.BWMemberEntity(wrapper.originator, nickName=wrapper.originatorNickName)])
 
     def __onSelfLeaveChat(self, chatAction):
-        """
-        Event handler.
-        When current player exit from channel, remove page for this channel
-        """
         LOG_DEBUG('onSelfLeaveChat:%s' % (dict(chatAction),))
         wrapper = ChatActionWrapper(**dict(chatAction))
         channel = self.channelsStorage.getChannel(entities.BWChannelLightEntity(wrapper.channel))
@@ -249,7 +250,7 @@ class ChannelsManager(ChatActionsListener):
         wrapper = ChatActionWrapper(**dict(chatAction))
         channel = self.channelsStorage.getChannel(entities.BWChannelLightEntity(wrapper.channel))
         if channel is not None:
-            channel.addMembers(map(lambda memberData: self.__makeMemberFromDict(dict(memberData)), wrapper.data))
+            channel.addMembers([ self.__makeMemberFromDict(dict(memberData)) for memberData in wrapper.data ])
         return
 
     def __onReceiveMembersDelta(self, chatAction):

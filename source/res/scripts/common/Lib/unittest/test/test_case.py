@@ -11,7 +11,6 @@ import unittest
 from .support import TestEquality, TestHashing, LoggingResult, ResultWithNoStartTestRunStopTestRun
 
 class Test(object):
-    """Keep these TestCase classes out of the main namespace"""
 
     class Foo(unittest.TestCase):
 
@@ -27,7 +26,6 @@ class Test(object):
             pass
 
     class LoggingTestCase(unittest.TestCase):
-        """A test case which logs its calls."""
 
         def __init__(self, events):
             super(Test.LoggingTestCase, self).__init__('test')
@@ -376,23 +374,15 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
 
     @unittest.skipIf(sys.flags.optimize >= 2, 'Docstrings are omitted with -O2 and above')
     def testShortDescriptionWithOneLineDocstring(self):
-        """Tests shortDescription() for a method with a docstring."""
         self.assertEqual(self.shortDescription(), 'Tests shortDescription() for a method with a docstring.')
 
     @unittest.skipIf(sys.flags.optimize >= 2, 'Docstrings are omitted with -O2 and above')
     def testShortDescriptionWithMultiLineDocstring(self):
-        """Tests shortDescription() for a method with a longer docstring.
-        
-        This method ensures that only the first line of a docstring is
-        returned used in the short description, no matter how long the
-        whole thing is.
-        """
         self.assertEqual(self.shortDescription(), 'Tests shortDescription() for a method with a longer docstring.')
 
     def testAddTypeEqualityFunc(self):
 
         class SadSnake(object):
-            """Dummy class for test_addTypeEqualityFunc."""
             pass
 
         s1, s2 = SadSnake(), SadSnake()
@@ -927,13 +917,6 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
         self.assertEqual(e.args[0], v)
 
     def testSynonymAssertMethodNames(self):
-        """Test undocumented method name synonyms.
-        
-        Please do not use these methods names in your own code.
-        
-        This test confirms their continued existence and functionality
-        in order to avoid breaking existing code.
-        """
         self.assertNotEquals(3, 5)
         self.assertEquals(3, 3)
         self.assertAlmostEquals(2.0, 2.0)
@@ -941,10 +924,6 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
         self.assert_(True)
 
     def testPendingDeprecationMethodNames(self):
-        """Test fail* methods pending deprecation, they will warn in 3.2.
-        
-        Do not use these methods.  They will go away in 3.3.
-        """
         with test_support.check_warnings():
             self.failIfEqual(3, 5)
             self.failUnlessEqual(3, 3)

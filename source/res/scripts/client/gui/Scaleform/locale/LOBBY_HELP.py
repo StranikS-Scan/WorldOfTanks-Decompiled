@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/LOBBY_HELP.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class LOBBY_HELP(object):
     HEADER_SETTINGS_BUTTON = '#lobby_help:header/settings-button'

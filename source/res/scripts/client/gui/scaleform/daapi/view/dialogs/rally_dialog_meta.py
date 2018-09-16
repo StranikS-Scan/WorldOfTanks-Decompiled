@@ -14,7 +14,6 @@ _Q_TYPE = QUEUE_TYPE
 _C_TYPE = CTRL_ENTITY_TYPE
 _VIEW_SCOPES = {(_C_TYPE.UNIT, _P_TYPE.SQUAD): SimpleScope(PREBATTLE_ALIASES.SQUAD_VIEW_PY, VIEW_SCOPE),
  (_C_TYPE.UNIT, _P_TYPE.EVENT): SimpleScope(PREBATTLE_ALIASES.EVENT_SQUAD_VIEW_PY, VIEW_SCOPE),
- (_C_TYPE.UNIT, _P_TYPE.FALLOUT): SimpleScope(PREBATTLE_ALIASES.FALLOUT_SQUAD_VIEW_PY, VIEW_SCOPE),
  (_C_TYPE.UNIT, _P_TYPE.UNIT): SimpleScope(CYBER_SPORT_ALIASES.UNIT_VIEW_PY, VIEW_SCOPE),
  (_C_TYPE.LEGACY, _P_TYPE.CLAN): SimpleScope(PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, WINDOW_SCOPE),
  (_C_TYPE.LEGACY, _P_TYPE.TOURNAMENT): SimpleScope(PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, WINDOW_SCOPE),
@@ -39,13 +38,6 @@ class UnitConfirmDialogMeta(I18nConfirmDialogMeta):
 
 
 class StrongholdConfirmDialogMeta(I18nDialogMeta):
-    """
-        Class forms localization keys for Stronghold dialog (dialogs.po)
-        Dialog title:  stronghold/{key}{subkey}/title
-        Message body:  stronghold/{key}{subkey}/message
-        Submit button: stronghold/{key}/submit
-        Cancel button: stronghold/{key}/cancel
-    """
 
     def __init__(self, key, subKey='', titleCtx=None, messageCtx=None, focusedID=None):
         _key = 'stronghold/{0}{1}'
@@ -92,8 +84,6 @@ class RallyScopeConfirmDialogMeta(_RallyScopeDialogMeta):
 
 _ENTITY_TO_ANOTHER_PREFIX = {(_C_TYPE.PREQUEUE, _Q_TYPE.RANDOMS): ('', 'goToAnother'),
  (_C_TYPE.PREQUEUE, _Q_TYPE.UNKNOWN): ('', 'goToAnother'),
- (_C_TYPE.PREQUEUE, _Q_TYPE.FALLOUT_CLASSIC): ('', 'goToAnother'),
- (_C_TYPE.PREQUEUE, _Q_TYPE.FALLOUT_MULTITEAM): ('', 'goToAnother'),
  (_C_TYPE.PREQUEUE, _Q_TYPE.SANDBOX): ('', 'goToAnother'),
  (_C_TYPE.PREQUEUE, _Q_TYPE.TUTORIAL): ('', 'goToBattleTutorial'),
  (_C_TYPE.LEGACY, _P_TYPE.TRAINING): ('goToIntro', 'goToAnother'),

@@ -3,9 +3,6 @@
 from gui.prb_control.entities.base.permissions import IPrbPermissions
 
 class PreQueuePermissions(IPrbPermissions):
-    """
-    Persmissions class for prequeue actions.
-    """
 
     def __init__(self, isInQueue):
         super(PreQueuePermissions, self).__init__()

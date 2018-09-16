@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/personal_missions_operations_page.py
 import operator
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.PersonalMissionOperationsPageMeta import PersonalMissionOperationsPageMeta

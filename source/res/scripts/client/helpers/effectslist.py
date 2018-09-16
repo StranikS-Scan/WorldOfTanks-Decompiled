@@ -1,25 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/EffectsList.py
+import random
+import string
+from collections import namedtuple
+from functools import partial
 import BigWorld
 import Math
-from collections import namedtuple
-import random
 import DecalMap
 import material_kinds
 import helpers
-from functools import partial
 from PixieBG import PixieBG
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_OBSOLETE
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 from ReplayEvents import g_replayEvents
-import string
 import SoundGroups
+COLOR_WHITE = 4294967295L
 _ALLOW_DYNAMIC_LIGHTS = True
 KeyPoint = namedtuple('KeyPoint', ('name', 'time'))
 EffectsTimeLine = namedtuple('EffectsTimeLine', ('keyPoints', 'effectsList'))
 EffectsTimeLinePrereqs = namedtuple('EffectsTimeLinePrereqs', ('keyPoints', 'effectsList', 'prereqs'))
 
-class SpecialKeyPointNames:
+class SpecialKeyPointNames(object):
     START = 'start'
     END = 'end'
     STATIC = 'static'
@@ -35,8 +36,10 @@ def reload():
 
 
 class EffectsList(object):
+    __slots__ = ('__effectDescList', 'relatedEffects')
 
     def __init__(self, section):
+        super(EffectsList, self).__init__()
         self.__effectDescList = []
         self.relatedEffects = {}
         for s in section.items():
@@ -78,11 +81,11 @@ class EffectsList(object):
         for elem in effects:
             elem['typeDesc'].reattach(elem, model)
 
-    def detachFrom(self, data, key):
+    def detachFrom(self, data, key, reason=1):
         effects = data['_EffectsList_effects']
         for elem in effects[:]:
             if elem['typeDesc'].endKey == key:
-                if elem['typeDesc'].delete(elem, 1):
+                if elem['typeDesc'].delete(elem, reason):
                     effects.remove(elem)
 
     def detachAllFrom(self, data, keepPosteffects=False):
@@ -104,7 +107,7 @@ class EffectsList(object):
             return
 
 
-class EffectsListPlayer:
+class EffectsListPlayer(object):
     effectsList = property(lambda self: self.__effectsList)
     isPlaying = property(lambda self: self.__isStarted)
     activeEffects = set()
@@ -260,15 +263,19 @@ class EffectsListPlayer:
         return
 
 
-class _EffectDesc:
+class _EffectDesc(object):
+    __slots__ = ('startKey', 'endKey', '_nodeName', 'duration')
 
     def __init__(self, dataSection):
-        self.startKey = dataSection.readString('startKey')
+        self.startKey = intern(dataSection.readString('startKey'))
         if not self.startKey:
             _raiseWrongConfig('startKey', self.TYPE)
         self.endKey = dataSection.readString('endKey')
         nodeName = dataSection.readString('position')
-        self._nodeName = string.split(nodeName, '/') if nodeName else []
+        if nodeName:
+            self._nodeName = [ intern(name) for name in string.split(nodeName, '/') ]
+        else:
+            self._nodeName = []
 
     def prerequisites(self):
         return []
@@ -276,7 +283,7 @@ class _EffectDesc:
     def reattach(self, elem, model):
         pass
 
-    def create(self, model, list, args):
+    def create(self, model, effects, args):
         pass
 
     def delete(self, elem, reason):
@@ -284,16 +291,14 @@ class _EffectDesc:
 
 
 class _PixieEffectDesc(_EffectDesc):
+    __slots__ = ('_files', '_havokFiles', '_force', '_surfaceMatKinds', '_orientByClosestSurfaceNormal', '_alwaysUpdate', '__prototypePixies')
     TYPE = '_PixieEffectDesc'
 
     def __init__(self, dataSection):
-        _EffectDesc.__init__(self, dataSection)
+        super(_PixieEffectDesc, self).__init__(dataSection)
         self._files = [ f for f in dataSection.readStrings('file') if f ]
         if not self._files:
             _raiseWrongConfig('file', self.TYPE)
-        self._havokFiles = None
-        if dataSection.readBool('hasHavokVersion', False):
-            self._havokFiles = tuple([ self.__getHavokFileName(f) for f in self._files ])
         self._force = 0
         key = 'force'
         if dataSection.has_key(key):
@@ -329,7 +334,7 @@ class _PixieEffectDesc(_EffectDesc):
             elem['node'] = _findTargetNode(model, nodePos, None, self._orientByClosestSurfaceNormal, elem['surfaceNormal'])
         return
 
-    def create(self, model, list, args):
+    def create(self, model, effects, args):
         elem = {}
         node = args.get('node', None)
         if node is None:
@@ -351,21 +356,23 @@ class _PixieEffectDesc(_EffectDesc):
         elem['model'] = model
         elem['typeDesc'] = self
         elem['pixie'] = None
-        if self._havokFiles is None:
-            file = random.choice(self._files)
-        else:
-            file, fileToClear = random.choice(zip(self._files, self._havokFiles))
-            if args.get('havokEnabled', False):
-                file, fileToClear = fileToClear, file
-            self.__prototypePixies.pop(fileToClear, None)
-        prototypePixie = self.__prototypePixies.get(file)
+        eFile = random.choice(self._files)
+        prototypePixie = self.__prototypePixies.get(eFile)
+        modifiers = {}
+        if args.get('havokSpawnedDestructibles', False):
+            modifiers['doHavokDebrisSpawned'] = True
+        tintColor = args.get('tintColor', COLOR_WHITE)
+        if tintColor != COLOR_WHITE:
+            modifiers['tintColor'] = tintColor
+        if not modifiers:
+            modifiers = None
         if prototypePixie is not None:
-            elem['pixie'] = PixieBG(file, None, prototypePixie.clone())
+            elem['pixie'] = PixieBG(eFile, None, prototypePixie.clone(), None, modifiers)
             self._callbackCreate(elem)
         else:
-            elem['file'] = file
-            elem['pixie'] = PixieBG(file, self._callbackAfterLoading, None, elem)
-        list.append(elem)
+            elem['file'] = eFile
+            elem['pixie'] = PixieBG(eFile, self._callbackAfterLoading, None, elem, modifiers)
+        effects.append(elem)
         return
 
     def delete(self, elem, reason):
@@ -395,27 +402,22 @@ class _PixieEffectDesc(_EffectDesc):
             node.attach(pixie.pixie)
         return
 
-    @staticmethod
-    def __getHavokFileName(fileName):
-        import os
-        fileName, fileExtension = os.path.splitext(fileName)
-        return fileName + '_havok' + fileExtension
-
 
 class _AnimationEffectDesc(_EffectDesc):
+    __slots__ = ('_name', '_action')
     TYPE = '_AnimationEffectDesc'
 
     def __init__(self, dataSection):
-        _EffectDesc.__init__(self, dataSection)
+        super(_AnimationEffectDesc, self).__init__(dataSection)
         self._name = dataSection.readString('name')
         if not self._name:
             _raiseWrongConfig('name', self.TYPE)
 
-    def create(self, model, list, args):
+    def create(self, model, effects, args):
         targetModel = _findTargetModel(model, self._nodeName)
         self._action = targetModel.action(self._name)
         self._action()
-        list.append({'typeDesc': self,
+        effects.append({'typeDesc': self,
          'action': self._action})
 
     def delete(self, elem, reason):
@@ -430,10 +432,11 @@ class _AnimationEffectDesc(_EffectDesc):
 
 
 class _VisibilityEffectDesc(_EffectDesc):
+    __slots__ = ('_hasInitial', '_initial')
     TYPE = '_VisibilityEffectDesc'
 
     def __init__(self, dataSection):
-        _EffectDesc.__init__(self, dataSection)
+        super(_VisibilityEffectDesc, self).__init__(dataSection)
         self._hasInitial = False
         self._initial = False
         key = 'initial'
@@ -441,13 +444,13 @@ class _VisibilityEffectDesc(_EffectDesc):
             self._initial = dataSection.readBool(key, False)
             self._hasInitial = True
 
-    def create(self, model, list, args):
+    def create(self, model, effects, args):
         targetModel = _findTargetModel(model, self._nodeName)
         if self._hasInitial:
             targetModel.visible = self._initial
         else:
             targetModel.visible = not targetModel.visible
-        list.append({'typeDesc': self,
+        effects.append({'typeDesc': self,
          'model': targetModel})
 
     def delete(self, elem, reason):
@@ -457,15 +460,13 @@ class _VisibilityEffectDesc(_EffectDesc):
             elem['model'].visible = not elem['model'].visible
         return True
 
-    def delete(self, elem, reason):
-        return True
-
 
 class _ModelEffectDesc(_EffectDesc):
+    __slots__ = ('_modelName', '_animation')
     TYPE = '_ModelEffectDesc'
 
     def __init__(self, dataSection):
-        _EffectDesc.__init__(self, dataSection)
+        super(_ModelEffectDesc, self).__init__(dataSection)
         self._modelName = dataSection.readString('name')
         if not self._modelName:
             _raiseWrongConfig('name', self.TYPE)
@@ -487,7 +488,7 @@ class _ModelEffectDesc(_EffectDesc):
         targetNode.attach(model)
         return
 
-    def create(self, model, list, args):
+    def create(self, model, effects, args):
         currentModel = BigWorld.Model(self._modelName)
         newPos = args.get('position', None)
         nodeName = self._nodeName
@@ -502,7 +503,7 @@ class _ModelEffectDesc(_EffectDesc):
          'attachment': currentModel,
          'newPos': newPos,
          'node': targetNode}
-        list.append(elem)
+        effects.append(elem)
         return currentModel
 
     def delete(self, elem, reason):
@@ -510,11 +511,13 @@ class _ModelEffectDesc(_EffectDesc):
         return True
 
 
-class _BaseSoundEvent(_EffectDesc, object):
+class _BaseSoundEvent(_EffectDesc):
+    __slots__ = ('_soundName', '_parameters')
 
     def __init__(self, dataSection):
-        _EffectDesc.__init__(self, dataSection)
-        self._soundName = (dataSection.readString('wwsoundPC', ''), dataSection.readString('wwsoundNPC', ''))
+        super(_BaseSoundEvent, self).__init__(dataSection)
+        self._parameters = None
+        return
 
     def reattach(self, elem, model):
         sound = elem.get('sound')
@@ -528,7 +531,8 @@ class _BaseSoundEvent(_EffectDesc, object):
     def delete(self, elem, reason):
         soundObject = elem.get('sound', None)
         if soundObject is not None:
-            soundObject.stopAll()
+            if reason != 0:
+                soundObject.stopAll()
             elem['sound'] = None
         if elem.has_key('node'):
             elem['node'] = None
@@ -547,23 +551,25 @@ class _BaseSoundEvent(_EffectDesc, object):
         return (isPlayerVehicle, entityID)
 
     def _getName(self, args):
-        isPlayer, id = self._isPlayer(args)
-        return ((self._soundName[0 if isPlayer else 1],), id)
+        isPlayer, pID = self._isPlayer(args)
+        return (self._soundName[0 if isPlayer else 1], pID)
 
-    def _register(self, list, node, sound):
+    def _register(self, effects, node, sound):
         elem = {'typeDesc': self}
         elem['node'] = node
         elem['sound'] = sound
-        list.append(elem)
+        effects.append(elem)
 
 
-class _ShotSoundEffectDesc(_BaseSoundEvent, object):
+class _ShotSoundEffectDesc(_BaseSoundEvent):
+    __slots__ = ('_soundName',)
     TYPE = '_ShotSoundEffectDesc'
 
     def __init__(self, dataSection):
-        _BaseSoundEvent.__init__(self, dataSection)
+        super(_ShotSoundEffectDesc, self).__init__(dataSection)
+        self._soundName = ((dataSection.readString('wwsoundPC', ''),), (dataSection.readString('wwsoundNPC', ''),))
 
-    def create(self, model, list, args):
+    def create(self, model, effects, args):
         vehicle = args.get('entity', None)
         if vehicle is not None and vehicle.isAlive() and vehicle.isStarted:
             soundObject = vehicle.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.GUN)
@@ -571,24 +577,38 @@ class _ShotSoundEffectDesc(_BaseSoundEvent, object):
                 isPlayer, _ = self._isPlayer(args)
                 soundName = self._soundName[0 if isPlayer else 1]
                 distance = (BigWorld.camera().position - vehicle.position).length
-                soundObject.play(soundName)
+                for sndName in soundName:
+                    soundObject.play(sndName)
+
                 soundObject.setRTPC('RTPC_ext_control_reflections_priority', distance)
         return
 
 
-class _NodeSoundEffectDesc(_BaseSoundEvent, object):
+class _NodeSoundEffectDesc(_BaseSoundEvent):
     TYPE = '_NodeSoundEffectDesc'
+    effectUniqId = 0
+    __slots__ = ('_soundName', 'effectUniqId')
 
     def __init__(self, dataSection):
-        _BaseSoundEvent.__init__(self, dataSection)
+        super(_NodeSoundEffectDesc, self).__init__(dataSection)
+        self._soundName = ((dataSection.readString('wwsoundPC', ''),), (dataSection.readString('wwsoundNPC', ''),))
 
-    def create(self, model, list, args):
-        soundName, id = self._getName(args)
+    @classmethod
+    def nextUniqueID(cls):
+        uniqueID = cls.effectUniqId
+        cls.effectUniqId += 1
+        return uniqueID
+
+    def create(self, model, effects, args):
+        soundName, _ = self._getName(args)
         if len(soundName) < 1:
             return
         else:
+            isPresent = True
             vehicle = args.get('entity', None)
-            if vehicle is not None and vehicle.isAlive() and vehicle.isStarted:
+            if vehicle is not None:
+                isPresent = vehicle.isAlive() and vehicle.isStarted
+            if isPresent:
                 nodeDesc = args.get('position', None)
                 nodeName = self._nodeName
                 nodeLocalPos = None
@@ -598,10 +618,13 @@ class _NodeSoundEffectDesc(_BaseSoundEvent, object):
                 node = _findTargetNode(model, nodeName, nodeLocalPos)
                 hitPoint = args.get('hitPoint', None)
                 if hitPoint is None:
-                    local = nodeLocalPos.translation
+                    if nodeLocalPos is not None:
+                        local = nodeLocalPos.translation
+                    else:
+                        local = (0.0, 0.0, 0.0)
                 else:
                     local = hitPoint - node.actualNode.position
-                objectName = soundName[0] + str(id) + '_' + str(local)
+                objectName = soundName[0] + str(self.nextUniqueID())
                 soundObject = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode, local)
                 if soundObject is not None:
                     damageFactor = args.get('damageFactor', None)
@@ -618,28 +641,67 @@ class _NodeSoundEffectDesc(_BaseSoundEvent, object):
                     for soundStartParam in startParams:
                         soundObject.setRTPC(soundStartParam.name, soundStartParam.value)
 
+                    if self._parameters is not None:
+                        for soundStartParam in self._parameters:
+                            soundObject.setRTPC(soundStartParam.name, soundStartParam.value)
+
                     for sndName in soundName:
                         if sndName:
                             soundObject.play(sndName)
 
-                    self._register(list, node, soundObject)
+                    self._register(effects, node, soundObject)
                     return soundObject
             else:
                 return
             return
 
 
+class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
+    __slots__ = ('_parameters',)
+    TYPE = '_TracerSoundEffectDesc'
+    shellTypesMap = {'AP': 0,
+     'HE': 1,
+     'HC': 2,
+     'APCR': 3}
+
+    def __init__(self, dataSection):
+        super(_TracerSoundEffectDesc, self).__init__(dataSection)
+        shellType = dataSection.readString('type', '').split()[0]
+        shellType = _TracerSoundEffectDesc.shellTypesMap.get(shellType, 0)
+        self._parameters = [SoundStartParam('psb_shell_type', shellType)]
+
+    def _getName(self, args):
+        isPlayer, id = self._isPlayer(args)
+        return (self._soundName[0 if isPlayer else 1], id)
+
+    def delete(self, elem, reason):
+        if reason != 0:
+            soundObject = elem.get('sound', None)
+            if soundObject is not None:
+                soundObject.play('psb_npc_stop')
+        super(_TracerSoundEffectDesc, self).delete(elem, 0)
+        return
+
+    def _isPlayer(self, args):
+        attackerID = args.get('attackerID', None)
+        avatar = BigWorld.player()
+        return (attackerID == BigWorld.player().playerVehicleID, attackerID) if not avatar.isVehicleAlive and attackerID is not None else super(_TracerSoundEffectDesc, self)._isPlayer(args)
+
+
 class _CollisionSoundEffectDesc(_NodeSoundEffectDesc):
+    __slots__ = ('_soundName', '_parameters')
     TYPE = '_CollisionSoundEffectDesc'
 
     def __init__(self, dataSection):
-        _NodeSoundEffectDesc.__init__(self, dataSection)
+        super(_CollisionSoundEffectDesc, self).__init__(dataSection)
+        self._parameters = None
         pcSounds, npcSounds = dataSection.readString('wwsoundPC', ''), dataSection.readString('wwsoundNPC', '')
         if pcSounds == '' and npcSounds == '':
             pcSounds = npcSounds = dataSection.readString('wwsound', '')
         pcSounds = self.__parceNames(pcSounds)
         npcSounds = self.__parceNames(npcSounds)
         self._soundName = (pcSounds, npcSounds)
+        return
 
     def __parceNames(self, events):
         if events == '':
@@ -657,50 +719,91 @@ class _CollisionSoundEffectDesc(_NodeSoundEffectDesc):
             return resultEvents
 
     def _getName(self, args):
-        isPlayer, id = self._isPlayer(args)
+        isPlayer, pID = self._isPlayer(args)
         isTracks = args.get('isTracks', False)
         sounds = self._soundName[0 if isPlayer else 1]
-        return (sounds[1 if isTracks else 0], id) if sounds is not None else ('', id)
+        return (sounds[1 if isTracks else 0], pID) if sounds is not None else ('', pID)
 
-    def create(self, model, list, args):
+    def create(self, model, effects, args):
         damageFactor = args.get('damageFactor', None)
         if damageFactor < 1.0:
             args['damageFactor'] = None
             damageFactor = None
         impulse = args.get('impulse', None)
         if impulse is not None:
-            impulseParam = SoundStartParam('RTPC_ext_collision_impulse_static_object', impulse)
+            impulseParam = SoundStartParam('RTPC_ext_collision_impulse_object', impulse)
             soundParams = args.get('soundParams', [])
             soundParams.append(impulseParam)
             args['soundParams'] = soundParams
-        object = _NodeSoundEffectDesc.create(self, model, list, args)
+        object = _NodeSoundEffectDesc.create(self, model, effects, args)
         isPlayer, _ = self._isPlayer(args)
         if damageFactor is not None and object is not None and isPlayer:
             object.play('collision_static_object_damage')
         return
 
 
-class _SoundEffectDesc(_EffectDesc, object):
+class _DestructionSoundEffectDesc(_BaseSoundEvent):
+    TYPE = '_DestructionSoundEffectDesc'
+    __slots__ = ('_soundName', '_parameters')
+
+    def __init__(self, dataSection):
+        super(_DestructionSoundEffectDesc, self).__init__(dataSection)
+        self._soundName = dataSection.readString('wwsound', '')
+        self.__readParameters(dataSection)
+
+    def create(self, model, list, args):
+        soundName = self._soundName
+        if soundName == '':
+            return
+        else:
+            node = _findTargetNodeSafe(model, self._nodeName)
+            objectName = soundName
+            sound = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
+            if sound is None:
+                return
+            if self._parameters is not None:
+                for soundStartParam in self._parameters:
+                    sound.setRTPC(soundStartParam.name, soundStartParam.value)
+
+            sound.play(soundName)
+            self._register(list, node, sound)
+            return sound
+
+    def __readParameters(self, dataSection):
+        section = dataSection['params']
+        if section is None:
+            return
+        else:
+            self._parameters = []
+            for param in section.items():
+                name = 'RTPC_ext_objects_' + param[0].strip()
+                value = param[1].asFloat
+                if value > 0.0:
+                    self._parameters.append(SoundStartParam(name, value))
+
+            return
+
+
+class _SoundEffectDesc(_EffectDesc):
+    __slots__ = ('_soundName', '_soundNames', '_switch_impact_surface', '_switch_shell_type', '_dynamic', '_stopSyncVisual', '_impactNames')
     TYPE = '_SoundEffectDesc'
 
     def __init__(self, dataSection):
-        _EffectDesc.__init__(self, dataSection)
+        super(_SoundEffectDesc, self).__init__(dataSection)
         self._soundName = None
         self._soundNames = None
         self._switch_impact_surface = None
         self._switch_shell_type = None
-        self._dynamic = False
         self._stopSyncVisual = False
         if dataSection.has_key('wwsoundPC') and dataSection.has_key('wwsoundNPC'):
-            self._soundNames = (dataSection.readString('wwsoundPC'), dataSection.readString('wwsoundNPC'))
+            self._soundNames = (intern(dataSection.readString('wwsoundPC')), intern(dataSection.readString('wwsoundNPC')))
         else:
-            self._soundName = dataSection.readString('wwsound')
-        self._impactNames = (dataSection.readString('impactNPC_PC', ''), dataSection.readString('impactPC_NPC', ''), dataSection.readString('impactNPC_NPC', ''))
+            self._soundName = intern(dataSection.readString('wwsound'))
+        self._impactNames = (intern(dataSection.readString('impactNPC_PC', '')), intern(dataSection.readString('impactPC_NPC', '')), intern(dataSection.readString('impactNPC_NPC', '')))
         if dataSection.has_key('SWITCH_ext_impact_surface'):
-            self._switch_impact_surface = dataSection.readString('SWITCH_ext_impact_surface')
+            self._switch_impact_surface = intern(dataSection.readString('SWITCH_ext_impact_surface'))
         if dataSection.has_key('SWITCH_ext_shell_type'):
-            self._switch_shell_type = dataSection.readString('SWITCH_ext_shell_type')
-        self._dynamic = dataSection.readBool('dynamic', False)
+            self._switch_shell_type = intern(dataSection.readString('SWITCH_ext_shell_type'))
         if not self._soundName and not self._soundNames and not self._impactNames:
             _raiseWrongConfig('wwsound or wwsoundNPC/wwsoundPC or impact tags', dataSection)
         self._stopSyncVisual = dataSection.readBool('stopSyncVisual', False)
@@ -715,121 +818,112 @@ class _SoundEffectDesc(_EffectDesc, object):
             elem['node'] = None
         return
 
-    def create(self, model, list, args):
+    def create(self, model, effects, args):
         soundName = 'EMPTY_EVENT'
         entityID = args.get('entity_id', None)
-        player = BigWorld.player()
-        if not hasattr(player, 'playerVehicleID'):
-            elem = {'typeDesc': self}
-            elem['node'] = node = _findTargetNodeSafe(model, self._nodeName)
-            elem['sound'] = SoundGroups.g_instance.WWgetSoundObject(self._soundName, node.actualNode)
-            elem['sound'].play(self._soundName)
-            list.append(elem)
-            return
+        playerID = BigWorld.player().playerVehicleID
+        observedVehicleID = BigWorld.player().observedVehicleID
+        attachedVehicle = BigWorld.player().getVehicleAttached()
+        attackerID = args.get('attackerID')
+        if entityID is not None:
+            isPlayerVehicle = playerID == entityID or not BigWorld.entity(playerID).isAlive() and entityID == observedVehicleID
         else:
-            playerID = player.playerVehicleID
-            observedVehicleID = player.observedVehicleID
-            attachedVehicle = player.getVehicleAttached()
-            attackerID = args.get('attackerID')
-            if entityID is not None:
-                isPlayerVehicle = playerID == entityID or not BigWorld.entity(playerID).isAlive() and entityID == observedVehicleID
-            else:
-                isPlayerVehicle = args.get('isPlayerVehicle')
-                if isPlayerVehicle is None:
-                    if args.has_key('entity') and hasattr(args['entity'], 'isPlayerVehicle'):
-                        isPlayerVehicle = args['entity'].isPlayerVehicle
-                    else:
-                        isPlayerVehicle = False
-            if attackerID is None or attachedVehicle is None:
-                fromPC = False
-            else:
-                fromPC = attackerID == playerID or not BigWorld.entity(playerID).isAlive() and attachedVehicle.id == attackerID
-            if not fromPC:
-                soundName = self._soundNames[0 if isPlayerVehicle else 1] if self._soundNames is not None else self._soundName
-            if entityID is not None:
-                if soundName.startswith('expl_') and playerID != entityID:
-                    soundName = self._soundNames[1] if self._soundNames is not None else self._soundName
-            elem = {'typeDesc': self}
-            elem['node'] = node = _findTargetNodeSafe(model, self._nodeName)
-            pos = Math.Matrix(node.actualNode).translation
-            startParams = args.get('soundParams', ())
-            if self._dynamic is True or self._stopSyncVisual:
-                objectName = soundName + '_NODE_' + str(entityID) + '_' + str(self._nodeName)
-                elem['sound'] = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
-                if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                    LOG_DEBUG('SOUND: EffectList dynamic, ', soundName, args, node.actualNode, self._nodeName, elem['sound'])
-                if SoundGroups.DEBUG_TRACE_STACK is True:
-                    import traceback
-                    traceback.print_stack()
-                for soundStartParam in startParams:
-                    elem['sound'].setRTPC(soundStartParam.name, soundStartParam.value)
-
-                elem['sound'].play(soundName)
-            elif self._switch_shell_type:
-                if self._impactNames is None:
-                    raise Exception('impact tags are invalid <%s> <%s> <%s> <%s>' % (self._soundName,
-                     self._soundNames,
-                     self._switch_impact_surface,
-                     self._switch_shell_type))
-                m = Math.Matrix(node.actualNode)
-                hitdir = args.get('hitdir')
-                if hitdir is not None:
-                    m.translation -= hitdir
-                if fromPC:
-                    soundName = self._impactNames[1]
-                elif isPlayerVehicle:
-                    soundName = self._impactNames[0]
+            isPlayerVehicle = args.get('isPlayerVehicle')
+            if isPlayerVehicle is None:
+                if args.has_key('entity') and hasattr(args['entity'], 'isPlayerVehicle'):
+                    isPlayerVehicle = args['entity'].isPlayerVehicle
                 else:
-                    soundName = self._impactNames[2]
-                if hitdir is not None:
-                    t = m.applyToOrigin()
-                    m.setRotateY(hitdir.yaw)
-                    m.translation = t
-                sound = SoundGroups.g_instance.WWgetSoundObject(soundName + '_MODEL_' + str(id(model)), None, m.translation)
-                if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                    LOG_DEBUG('SOUND: EffectList impacts, ', soundName, args, str(id(model)), sound)
-                if SoundGroups.DEBUG_TRACE_STACK is True:
-                    import traceback
-                    traceback.print_stack()
-                if sound is not None:
-                    if self._switch_impact_surface:
-                        sound.setSwitch('SWITCH_ext_impact_surface', self._switch_impact_surface)
-                    sound.setSwitch('SWITCH_ext_shell_type', self._switch_shell_type)
-                    damage_size = 'SWITCH_ext_damage_size_medium'
-                    if args.has_key('damageFactor'):
-                        factor = args.get('damageFactor', 0.0)
-                        if factor < 4335.0 / 100.0:
-                            damage_size = 'SWITCH_ext_damage_size_small'
-                        elif factor > 8925.0 / 100.0:
-                            damage_size = 'SWITCH_ext_damage_size_large'
-                    sound.setSwitch('SWITCH_ext_damage_size', damage_size)
-                    sound.play(soundName)
-                    for soundStartParam in startParams:
-                        sound.setRTPC(soundStartParam.name, soundStartParam.value)
+                    isPlayerVehicle = False
+        if attackerID is None or attachedVehicle is None:
+            fromPC = False
+        else:
+            fromPC = attackerID == playerID or not BigWorld.entity(playerID).isAlive() and attachedVehicle.id == attackerID
+        if not fromPC:
+            soundName = self._soundNames[0 if isPlayerVehicle else 1] if self._soundNames is not None else self._soundName
+        if entityID is not None:
+            if soundName.startswith('expl_') and playerID != entityID:
+                soundName = self._soundNames[1] if self._soundNames is not None else self._soundName
+        elem = {'typeDesc': self}
+        elem['node'] = node = _findTargetNodeSafe(model, self._nodeName)
+        pos = Math.Matrix(node.actualNode).translation
+        startParams = args.get('soundParams', ())
+        if self._stopSyncVisual:
+            objectName = soundName + '_NODE_' + str(entityID) + '_' + str(self._nodeName)
+            elem['sound'] = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
+            if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
+                LOG_DEBUG('SOUND: EffectList dynamic, ', soundName, args, node.actualNode, self._nodeName, elem['sound'])
+            if SoundGroups.DEBUG_TRACE_STACK is True:
+                import traceback
+                traceback.print_stack()
+            for soundStartParam in startParams:
+                elem['sound'].setRTPC(soundStartParam.name, soundStartParam.value)
 
-            elif startParams:
-                sound = SoundGroups.g_instance.WWgetSoundObject(soundName + '_POS_' + str(id(pos)), None, pos)
-                if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                    LOG_DEBUG('SOUND: EffectList WWgetSoundPos, ', soundName, args, sound, pos)
-                if SoundGroups.DEBUG_TRACE_STACK is True:
-                    import traceback
-                    traceback.print_stack()
-                if sound is not None:
-                    sound.play(soundName)
-                    for soundStartParam in startParams:
-                        sound.setRTPC(soundStartParam.name, soundStartParam.value)
-
+            elem['sound'].play(soundName)
+        elif self._switch_shell_type:
+            if self._impactNames is None:
+                raise Exception('impact tags are invalid <%s> <%s> <%s> <%s>' % (self._soundName,
+                 self._soundNames,
+                 self._switch_impact_surface,
+                 self._switch_shell_type))
+            m = Math.Matrix(node.actualNode)
+            hitdir = args.get('hitdir')
+            if hitdir is not None:
+                m.translation -= hitdir
+            if fromPC:
+                soundName = self._impactNames[1]
+            elif isPlayerVehicle:
+                soundName = self._impactNames[0]
             else:
-                idd = SoundGroups.g_instance.playSoundPos(soundName, pos)
-                if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                    LOG_DEBUG('SOUND: EffectList playSoundPos, ', soundName, args, idd, pos)
-                if SoundGroups.DEBUG_TRACE_STACK is True:
-                    import traceback
-                    traceback.print_stack()
-                if idd == 0:
-                    LOG_ERROR('Failed to start sound effect, event ' + soundName)
-            list.append(elem)
-            return
+                soundName = self._impactNames[2]
+            if hitdir is not None:
+                t = m.applyToOrigin()
+                m.setRotateY(hitdir.yaw)
+                m.translation = t
+            sound = SoundGroups.g_instance.WWgetSoundObject(soundName + '_MODEL_' + str(id(model)), None, m.translation)
+            if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
+                LOG_DEBUG('SOUND: EffectList impacts, ', soundName, args, str(id(model)), sound)
+            if SoundGroups.DEBUG_TRACE_STACK is True:
+                import traceback
+                traceback.print_stack()
+            if sound is not None:
+                if self._switch_impact_surface:
+                    sound.setSwitch('SWITCH_ext_impact_surface', self._switch_impact_surface)
+                sound.setSwitch('SWITCH_ext_shell_type', self._switch_shell_type)
+                damage_size = 'SWITCH_ext_damage_size_medium'
+                if args.has_key('damageFactor'):
+                    factor = args.get('damageFactor', 0.0)
+                    if factor < 4335.0 / 100.0:
+                        damage_size = 'SWITCH_ext_damage_size_small'
+                    elif factor > 8925.0 / 100.0:
+                        damage_size = 'SWITCH_ext_damage_size_large'
+                sound.setSwitch('SWITCH_ext_damage_size', damage_size)
+                sound.play(soundName)
+                for soundStartParam in startParams:
+                    sound.setRTPC(soundStartParam.name, soundStartParam.value)
+
+        elif startParams:
+            sound = SoundGroups.g_instance.WWgetSoundObject(soundName + '_POS_' + str(id(pos)), None, pos)
+            if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
+                LOG_DEBUG('SOUND: EffectList WWgetSoundPos, ', soundName, args, sound, pos)
+            if SoundGroups.DEBUG_TRACE_STACK is True:
+                import traceback
+                traceback.print_stack()
+            if sound is not None:
+                sound.play(soundName)
+                for soundStartParam in startParams:
+                    sound.setRTPC(soundStartParam.name, soundStartParam.value)
+
+        else:
+            idd = SoundGroups.g_instance.playSoundPos(soundName, pos)
+            if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
+                LOG_DEBUG('SOUND: EffectList playSoundPos, ', soundName, args, idd, pos)
+            if SoundGroups.DEBUG_TRACE_STACK is True:
+                import traceback
+                traceback.print_stack()
+            if idd == 0:
+                LOG_ERROR('Failed to start sound effect, event ' + soundName)
+        effects.append(elem)
+        return
 
     def delete(self, elem, reason):
         if elem.has_key('sound') and elem['sound'] is not None:
@@ -844,29 +938,30 @@ class _SoundEffectDesc(_EffectDesc, object):
 
 
 class _DecalEffectDesc(_EffectDesc):
+    __slots__ = ('_texName', '_bumpTexName', '_smTexName', '_groupName', '_size', '_randomYaw', '_variation')
     TYPE = '_DecalEffectDesc'
 
     def __init__(self, dataSection):
         _EffectDesc.__init__(self, dataSection)
-        self._texName = dataSection.readString('texName')
+        self._texName = intern(dataSection.readString('texName'))
         bumpSubsection = dataSection['bumpTexName']
         if bumpSubsection is None:
             self._bumpTexName = ''
         else:
-            self._bumpTexName = bumpSubsection.asString
+            self._bumpTexName = intern(bumpSubsection.asString)
         smSubsection = dataSection['smTexName']
         if smSubsection is None:
             self._smTexName = ''
         else:
-            self._smTexName = smSubsection.asString
-        self._groupName = dataSection.readString('groupName')
+            self._smTexName = intern(smSubsection.asString)
+        self._groupName = intern(dataSection.readString('groupName'))
         self._size = dataSection.readVector2('size')
         self._randomYaw = dataSection.readBool('randomYaw')
         self._variation = dataSection.readFloat('variation', 0.0)
         return
 
-    def create(self, model, list, args):
-        if not args.get('showDecal', True) or BigWorld.isForwardPipeline():
+    def create(self, model, effects, args):
+        if not args.get('showDecal', True) or not BigWorld.isDynamicDecalEnabled():
             return
         rayStart = args['start']
         rayEnd = args['end']
@@ -882,6 +977,7 @@ class _DecalEffectDesc(_EffectDesc):
 
 
 class _ShockWaveEffectDesc(_EffectDesc):
+    __slots__ = ()
     TYPE = '_ShockWaveEffectDesc'
 
     def __init__(self, dataSection):
@@ -889,10 +985,8 @@ class _ShockWaveEffectDesc(_EffectDesc):
 
 
 class _PostProcessEffectDesc(_EffectDesc):
+    __slots__ = ()
     TYPE = '_PostProcessEffectDesc'
-
-    def __init__(self, dataSection):
-        _EffectDesc.__init__(self, dataSection)
 
     def prerequisites(self):
         return []
@@ -905,10 +999,11 @@ class _PostProcessEffectDesc(_EffectDesc):
 
 
 class _FlashBangEffectDesc(_EffectDesc):
+    __slots__ = ('_duration', '_keyframes', '__fba', '__clbackId')
     TYPE = '_FlashBangEffectDesc'
 
     def __init__(self, dataSection):
-        _EffectDesc.__init__(self, dataSection)
+        super(_FlashBangEffectDesc, self).__init__(dataSection)
         self._duration = 0.0
         self._keyframes = list()
         self.__fba = None
@@ -953,10 +1048,11 @@ class _FlashBangEffectDesc(_EffectDesc):
 
 
 class _StopEmissionEffectDesc(_EffectDesc):
+    __slots__ = ()
     TYPE = '_StopEmissionEffectDesc'
 
-    def create(self, model, list, args):
-        for elem in list:
+    def create(self, model, effects, args):
+        for elem in effects:
             pixie = elem.get('pixie')
             if pixie is not None:
                 pixie.stopEmission()
@@ -965,14 +1061,16 @@ class _StopEmissionEffectDesc(_EffectDesc):
 
 
 class _LightEffectDesc(_EffectDesc):
+    __slots__ = ('_innerRadius', '_outerRadius', '_castShadows', '_color', '_alwaysUpdate', '_colorAnimation', '_multiplierAnimation', '_offset')
     TYPE = '_LightEffectDesc'
 
     def __init__(self, dataSection):
-        _EffectDesc.__init__(self, dataSection)
+        super(_LightEffectDesc, self).__init__(dataSection)
         self._innerRadius = dataSection.readFloat('innerRadius', 1)
         self._outerRadius = dataSection.readFloat('outerRadius', 2)
         self._castShadows = dataSection.readBool('castShadows', False)
         self._color = dataSection.readVector4('color', Math.Vector4(1, 1, 1, 1))
+        self._offset = dataSection.readVector3('offset', Math.Vector3(0, 0, 0))
         self._alwaysUpdate = dataSection.readBool('alwaysUpdateModel', True)
         self._colorAnimation = []
         self._multiplierAnimation = []
@@ -997,7 +1095,7 @@ class _LightEffectDesc(_EffectDesc):
                 elem['light'].source = elem['node'].actualNode
             return
 
-    def create(self, model, list, args):
+    def create(self, model, effects, args):
         if not _ALLOW_DYNAMIC_LIGHTS:
             return
         else:
@@ -1011,11 +1109,11 @@ class _LightEffectDesc(_EffectDesc):
             elem['typeDesc'] = self
             elem['light'] = None
             elem['callback'] = BigWorld.callback(0.01, partial(self._callbackCreate, elem))
-            list.append(elem)
+            effects.append(elem)
             return
 
     def _callbackCreate(self, elem):
-        light = BigWorld.PyChunkLight()
+        light = BigWorld.PyOmniLight()
         colorKeyFrames = []
         multiplierKeyFrames = []
         for c in self._colorAnimation:
@@ -1033,10 +1131,10 @@ class _LightEffectDesc(_EffectDesc):
         light.innerRadius = self._innerRadius
         light.outerRadius = self._outerRadius
         light.castShadows = self._castShadows
+        light.offset = self._offset
         light.source = elem['node'].actualNode
         light.colorAnimator = colorAnimator
         light.multiplierAnimator = multiplierAnimator
-        light.visible = True
         elem['light'] = light
         elem['callback'] = None
         return
@@ -1049,8 +1147,7 @@ class _LightEffectDesc(_EffectDesc):
             if callback is not None:
                 BigWorld.cancelCallback(callback)
             if elem['light'] is not None:
-                elem['light'].visible = False
-                elem['light'].source = None
+                elem['light'].destroyLight()
                 elem['light'] = None
             return True
 
@@ -1060,6 +1157,7 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'sound': _SoundEffectDesc,
  'splashSound': _NodeSoundEffectDesc,
  'collisionSound': _CollisionSoundEffectDesc,
+ 'tracerSound': _TracerSoundEffectDesc,
  'shotSound': _ShotSoundEffectDesc,
  'visibility': _VisibilityEffectDesc,
  'model': _ModelEffectDesc,
@@ -1068,16 +1166,17 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'flashBang': _FlashBangEffectDesc,
  'stopEmission': _StopEmissionEffectDesc,
  'posteffect': _PostProcessEffectDesc,
- 'light': _LightEffectDesc}
+ 'light': _LightEffectDesc,
+ 'destructionSound': _DestructionSoundEffectDesc}
 
-def _createEffectDesc(type, dataSection):
+def _createEffectDesc(eType, dataSection):
     if not dataSection.values():
         return
     else:
-        factoryMethod = _effectDescFactory.get(type, None)
+        factoryMethod = _effectDescFactory.get(eType, None)
         if factoryMethod is not None:
             return factoryMethod(dataSection)
-        raise Exception('EffectsList factory has no class associated with type %s.' % type)
+        raise Exception('EffectsList factory has no class associated with type %s.' % eType)
         return
 
 
@@ -1098,7 +1197,12 @@ def __getTransformAlongNormal(localTransform, worldTransform, normal):
 
 
 def _getSurfaceAlignedTransform(model, nodeName, localTransform, precalculatedNormal=None):
-    worldTransform = Math.Matrix(model.node(nodeName))
+    node = model.node(nodeName)
+    if node is None:
+        LOG_ERROR('Not found node %s for compound, using root instead' % nodeName)
+        worldTransform = Math.Matrix(model.root)
+    else:
+        worldTransform = Math.Matrix(node)
     if precalculatedNormal is not None:
         return __getTransformAlongNormal(localTransform, worldTransform, precalculatedNormal)
     else:
@@ -1111,13 +1215,12 @@ def _getSurfaceAlignedTransform(model, nodeName, localTransform, precalculatedNo
          Math.Vector3(0.1, 0, 0),
          Math.Vector3(0, 0, -0.1),
          Math.Vector3(0, 0, 0.1))
-        isFound = False
         spaceID = BigWorld.player().spaceID
         for offset in offsets:
             res = BigWorld.wg_collideSegment(spaceID, pos, pos + offset, 128)
             if res is None:
                 continue
-            normal = res[1]
+            normal = res.normal
             localTransform = __getTransformAlongNormal(localTransform, worldTransform, normal)
             break
 
@@ -1134,7 +1237,7 @@ class _NodeWithLocal(object):
         if model.__class__.__name__ == 'Model':
             try:
                 self.__node = model.node(nodeName, local)
-            except:
+            except Exception:
                 self.__node = model.node('', local)
 
             self.__localMatrix = None
@@ -1186,14 +1289,14 @@ def _findTargetModel(model, nodes):
     LOG_OBSOLETE('THIS FEATURE IS NOT SUPPORTED')
     targetNode = model
     for iter in xrange(0, len(nodes)):
-        find = False
+        found = False
         for elem in targetNode.node(nodes[iter]).attachments:
             if isinstance(elem, BigWorld.Model):
                 targetNode = elem
-                find = True
+                found = True
                 break
 
-        if not find:
+        if not found:
             raise Exception("can't find model attachments in %s" % nodes[iter])
 
     return targetNode
@@ -1257,7 +1360,7 @@ def effectsFromSection(section):
     return EffectsTimeLine(keyPoints, effectList)
 
 
-class FalloutDestroyEffect:
+class RespawnDestroyEffect(object):
 
     @staticmethod
     def play(vehicle_id):

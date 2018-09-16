@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_helpers.py
 import operator
-import time
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_top_modules import TopModulesChecker
 from gui.game_control.veh_comparison_basket import PARAMS_AFFECTED_TANKMEN_SKILLS
 from helpers import dependency
@@ -11,7 +10,7 @@ from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.app_loader.loader import g_appLoader
+from gui.app_loader import g_appLoader
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import Tankman
 from shared_utils import first
@@ -35,34 +34,15 @@ EQUIPMENT_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT]
 BATTLE_BOOSTER_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER]
 
 def createTankman(nationID, vehicleTypeID, role, roleLevel, skills):
-    """
-    Generates tankmen with provided parameters
-    :param nationID: *.nations.INDICES
-    :param vehicleTypeID: int
-    :param role: *.Tankman.ROLES
-    :param roleLevel: *.CREW_TYPES
-    :param skills: the set of skills
-    :return: gui.shared.gui_items.Tankman
-    """
     descr = tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, roleLevel, skills)
     return Tankman(descr)
 
 
 def sortSkills(skillsSet):
-    """
-    Sorts provided set of skills in order from PARAMS_AFFECTED_TANKMEN_SKILLS
-    :param skillsSet: set of skills
-    :return: sorted set of skills
-    """
-    return sorted(skillsSet, key=lambda skill: PARAMS_AFFECTED_TANKMEN_SKILLS.index(skill))
+    return sorted(skillsSet, key=PARAMS_AFFECTED_TANKMEN_SKILLS.index)
 
 
 def _getAvailableSkillsByRoles(availableSkills):
-    """
-    Links tankmens roles with available skills for this roles
-    :param availableSkills:
-    :return:
-    """
     outcome = {}
     for role, skills in tankmen.SKILLS_BY_ROLES.iteritems():
         intersection = skills.intersection(set(availableSkills))
@@ -75,15 +55,9 @@ def _getAvailableSkillsByRoles(availableSkills):
 _PARAMS_AFFECTED_SKILLS_BY_ROLES = _getAvailableSkillsByRoles(PARAMS_AFFECTED_TANKMEN_SKILLS)
 
 def getVehicleCrewSkills(vehicle):
-    """
-    Generates the list of skills for tankmen roles from provided vehicle (items in list in the vehicle roles order)
-    :param vehicle: target Vehicle
-    :return: the list of roles and skills related to this roles:
-    [['commander', frozenset(['commander_eagleEye', 'camouflage', ...])], ...]
-    """
     descCrewRoles = vehicle.descriptor.type.crewRoles
     mainRoles = map(operator.itemgetter(0), descCrewRoles)
-    outcome = map(lambda role: [role, _PARAMS_AFFECTED_SKILLS_BY_ROLES[role]], mainRoles)
+    outcome = [ [role, _PARAMS_AFFECTED_SKILLS_BY_ROLES[role]] for role in mainRoles ]
     leftRoles = set(tankmen.ROLES.difference(set(mainRoles)))
     if leftRoles:
         for idx, rolesRange in reversed(list(enumerate(descCrewRoles))):
@@ -104,34 +78,25 @@ def getVehCrewInfo(vehIntCD, itemsCache=None):
     nativeVehiclesByIndexes = {}
     if itemsCache is not None:
         hangarVehicle = itemsCache.items.getItemByCD(vehIntCD)
-        assert hangarVehicle.itemTypeID == GUI_ITEM_TYPE.VEHICLE
-        for roleIdx, tankmen in hangarVehicle.crew:
-            if tankmen:
-                levelsByIndexes[roleIdx] = int(tankmen.roleLevel)
-                nativeVehiclesByIndexes[roleIdx] = itemsCache.items.getItemByCD(tankmen.vehicleNativeDescr.type.compactDescr)
+        for roleIdx, tman in hangarVehicle.crew:
+            if tman:
+                levelsByIndexes[roleIdx] = int(tman.roleLevel)
+                nativeVehiclesByIndexes[roleIdx] = itemsCache.items.getItemByCD(tman.vehicleNativeDescr.type.compactDescr)
 
     return (levelsByIndexes, nativeVehiclesByIndexes)
 
 
 def createTankmans(crewData):
-    return map(lambda strCD: (strCD[0], Tankman(strCD[1]) if strCD[1] else None), crewData)
+    return [ (strCD[0], Tankman(strCD[1]) if strCD[1] else None) for strCD in crewData ]
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def installEquipmentOnVehicle(vehicle, intCD, slotIndex, itemsCache=None):
-    """
-    Installs equipement on the provided vehicle in particular slot
-    :param vehicle: target Vehicle
-    :param intCD: equipment intCD
-    :param slotIndex: 0, 1, 2 - indexes
-    :return:
-    """
     if intCD and itemsCache is not None:
         equipment = itemsCache.items.getItemByCD(int(intCD))
     else:
         equipment = None
     if equipment:
-        assert equipment.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT, 'Invalid type of item: {}'.format(equipment.itemTypeID)
         success, reason = equipment.mayInstall(vehicle, slotIndex)
         if not success:
             LOG_WARNING('Equipment could not installed, reason: '.format(reason))
@@ -165,12 +130,7 @@ def isEquipmentSame(equipment1, equipment2):
 
 
 def getCmpConfiguratorMainView():
-    """
-    Provides reference on vehicle configurator view.
-    :return:
-    """
     cmpConfiguratorMain = g_appLoader.getApp().containerManager.getView(ViewTypes.LOBBY_SUB, {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR})
-    assert cmpConfiguratorMain is not None
     return cmpConfiguratorMain
 
 

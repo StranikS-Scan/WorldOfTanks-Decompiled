@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/ContainerManagerMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class ContainerManagerMeta(BaseDAAPIComponent):
@@ -33,15 +29,9 @@ class ContainerManagerMeta(BaseDAAPIComponent):
         return self.flashObject.as_bringToFront(cType, vName) if self._isDAAPIInited() else None
 
     def as_showContainersS(self, viewTypes):
-        """
-        :param viewTypes: Represented by Vector.<String> (AS)
-        """
         return self.flashObject.as_showContainers(viewTypes) if self._isDAAPIInited() else None
 
     def as_hideContainersS(self, viewTypes):
-        """
-        :param viewTypes: Represented by Vector.<String> (AS)
-        """
         return self.flashObject.as_hideContainers(viewTypes) if self._isDAAPIInited() else None
 
     def as_isContainerShownS(self, viewType):

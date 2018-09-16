@@ -2,7 +2,10 @@
 # Embedded file name: scripts/client/tutorial/control/triggers.py
 from tutorial.control import TutorialProxyHolder
 from tutorial.data.has_id import IHasID
-from tutorial.logger import LOG_ERROR
+from tutorial.logger import LOG_ERROR, LOG_DEBUG
+from CurrentVehicle import g_currentVehicle
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 
 class Trigger(TutorialProxyHolder, IHasID):
 
@@ -52,7 +55,7 @@ class Trigger(TutorialProxyHolder, IHasID):
                 LOG_ERROR('Trigger not found', triggerID)
 
         if effects and self._tutorial is not None:
-            self._tutorial.storeEffectsInQueue(effects, benefit=benefit)
+            self._tutorial.storeEffectsInQueue(effects, benefit=benefit, isGlobal=True)
         self.isRunning = False
         return
 
@@ -65,9 +68,11 @@ class Trigger(TutorialProxyHolder, IHasID):
             if value:
                 if not isActive:
                     flags.activateFlag(flagID)
+                    LOG_DEBUG('invalidateFlags from _setFlagValue', flagID, value)
                     self._tutorial.invalidateFlags()
             elif isActive:
                 flags.deactivateFlag(flagID)
+                LOG_DEBUG('invalidateFlags from _setFlagValue', flagID, value)
                 self._tutorial.invalidateFlags()
             return
 
@@ -125,3 +130,32 @@ class TriggerWithSubscription(TriggerWithValidateVar):
 
     def _unsubscribe(self):
         raise NotImplementedError
+
+
+class CurrentVehicleChangedTrigger(TriggerWithSubscription):
+
+    def _subscribe(self):
+        g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
+
+    def _unsubscribe(self):
+        g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
+
+    def __onCurrentVehicleChanged(self):
+        LOG_DEBUG('invalidateFlags from __onCurrentVehicleChanged')
+        self._tutorial.invalidateFlags()
+        self.toggle()
+
+
+class ItemsCacheSyncTrigger(TriggerWithSubscription):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def _subscribe(self):
+        self.itemsCache.onSyncCompleted += self.__onItemCacheSyncCompleted
+
+    def _unsubscribe(self):
+        self.itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
+
+    def __onItemCacheSyncCompleted(self, *_):
+        LOG_DEBUG('invalidateFlags from __onItemCacheSyncCompleted')
+        self._tutorial.invalidateFlags()
+        self.toggle()

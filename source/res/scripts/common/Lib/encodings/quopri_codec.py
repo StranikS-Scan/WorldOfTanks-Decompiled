@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/quopri_codec.py
-"""Codec for quoted-printable encoding.
-
-Like base64 and rot13, this returns Python strings, not Unicode.
-"""
 import codecs, quopri
 try:
     from cStringIO import StringIO
@@ -11,14 +7,6 @@ except ImportError:
     from StringIO import StringIO
 
 def quopri_encode(input, errors='strict'):
-    """Encode the input, returning a tuple (output object, length consumed).
-    
-    errors defines the error handling to apply. It defaults to
-    'strict' handling which is the only currently supported
-    error handling for this codec.
-    
-    """
-    assert errors == 'strict'
     f = StringIO(str(input))
     g = StringIO()
     quopri.encode(f, g, 1)
@@ -27,14 +15,6 @@ def quopri_encode(input, errors='strict'):
 
 
 def quopri_decode(input, errors='strict'):
-    """Decode the input, returning a tuple (output object, length consumed).
-    
-    errors defines the error handling to apply. It defaults to
-    'strict' handling which is the only currently supported
-    error handling for this codec.
-    
-    """
-    assert errors == 'strict'
     f = StringIO(str(input))
     g = StringIO()
     quopri.decode(f, g)

@@ -105,10 +105,6 @@ class _ClanInviteDeclinedParser(_ClanInviteActionParser):
 
 
 class _ClanInvitesCreatedParser(SectionParser):
-    """
-    This notification comes to clan members with appropriate rights of recruiting
-    when someone from their clan sends invites
-    """
 
     def getTagName(self):
         pass
@@ -117,8 +113,8 @@ class _ClanInvitesCreatedParser(SectionParser):
         return proxy_data.ClanInvitesCreatedItem(self.__getItems('account_ids', section), self.__getItems('invite_ids', section))
 
     def __getItems(self, sectionName, section):
-        str = self._readString(sectionName, section)
-        itemsList = str.split(',')
+        s = self._readString(sectionName, section)
+        itemsList = s.split(',')
         return tuple((long(itemsList[i].strip()) for i in xrange(len(itemsList))))
 
 

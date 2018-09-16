@@ -4,7 +4,7 @@ import BigWorld
 import Settings
 from gui import GUI_SETTINGS
 from Event import Event
-from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, REQUEST_RATE
+from predefined_hosts import g_preDefinedHosts, REQUEST_RATE
 
 class Servers(object):
     onServersStatusChanged = Event()
@@ -38,7 +38,7 @@ class Servers(object):
         self._serverList = []
         self._selectedServerIdx = 0
         serverName = self._loginPreferences['server_name']
-        for idx, (hostName, friendlyName, csisStatus, peripheryID) in enumerate(baseServerList):
+        for idx, (hostName, friendlyName, csisStatus, _) in enumerate(baseServerList):
             if serverName == hostName:
                 self._selectedServerIdx = idx
             self._serverList.append({'label': friendlyName,

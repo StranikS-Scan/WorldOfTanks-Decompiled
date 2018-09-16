@@ -3,7 +3,7 @@
 from helpers.html import translation
 from items import _xml
 from tutorial.control.lobby import triggers
-from tutorial.data import chapter, effects
+from tutorial.data import chapter as tutorial_chapter, effects
 from tutorial.doc_loader import sub_parsers
 
 def readBonusTriggerSection(xmlCtx, section, chapter, triggerID):
@@ -77,38 +77,38 @@ def _readBonusSection(xmlCtx, section, content):
     return content
 
 
-def _readGreetingDialogSection(xmlCtx, section, _, dialogID, type, content):
+def _readGreetingDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
     content = _readBonusSection(xmlCtx, section, content)
-    return chapter.PopUp(dialogID, type, content)
+    return tutorial_chapter.PopUp(dialogID, dialogType, content)
 
 
-def _readQuestDialogSection(xmlCtx, section, _, dialogID, type, content):
+def _readQuestDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
     content = _readBonusSection(xmlCtx, section, content)
     content['questText'] = translation(_xml.readString(xmlCtx, section, 'quest'))
-    return chapter.PopUp(dialogID, type, content)
+    return tutorial_chapter.PopUp(dialogID, dialogType, content)
 
 
-def _readSubQuestDialogSection(xmlCtx, section, _, dialogID, type, content):
+def _readSubQuestDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
     content['questText'] = translation(_xml.readString(xmlCtx, section, 'quest'))
-    return chapter.PopUp(dialogID, type, content)
+    return tutorial_chapter.PopUp(dialogID, dialogType, content)
 
 
-def _readQuestAndHelpDialogSection(xmlCtx, section, _, dialogID, type, content):
+def _readQuestAndHelpDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
     content = _readBonusSection(xmlCtx, section, content)
     content['questText'] = translation(_xml.readString(xmlCtx, section, 'quest'))
     content['helpSource'] = _xml.readString(xmlCtx, section, 'help')
-    return chapter.PopUp(dialogID, type, content)
+    return tutorial_chapter.PopUp(dialogID, dialogType, content)
 
 
-def _readQuestCompletedDialogSection(xmlCtx, section, _, dialogID, type, content):
+def _readQuestCompletedDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
     content = _readBonusSection(xmlCtx, section, content)
     content['hintText'] = translation(_xml.readString(xmlCtx, section, 'hint'))
     content['submitLabel'] = translation(_xml.readString(xmlCtx, section, 'submit-label'))
-    return chapter.PopUp(dialogID, type, content)
+    return tutorial_chapter.PopUp(dialogID, dialogType, content)
 
 
-def _readVarRefDialogSection(xmlCtx, section, _, dialogID, type, content):
-    return chapter.PopUp(dialogID, type, content, _xml.readString(xmlCtx, section, 'var-ref'))
+def _readVarRefDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
+    return tutorial_chapter.PopUp(dialogID, dialogType, content, _xml.readString(xmlCtx, section, 'var-ref'))
 
 
 def init():

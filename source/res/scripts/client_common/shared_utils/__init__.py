@@ -26,7 +26,6 @@ class BoundMethodWeakref(object):
 
     def __init__(self, func):
         self.methodName = func.__name__
-        assert not self.methodName.startswith('__'), 'BoundMethodWeakref: private methods are not supported'
         self.wrefCls = weakref.ref(func.__self__)
 
     def __call__(self, *args, **kwargs):
@@ -55,9 +54,9 @@ def safeCancelCallback(callbackID):
         LOG_ERROR('Cannot cancel BigWorld callback: incorrect callback ID.')
 
 
-def prettyPrint(dict, sort_keys=True, indent=4):
+def prettyPrint(dictValue, sort_keys=True, indent=4):
     import json
-    return json.dumps(dict, sort_keys=sort_keys, indent=indent)
+    return json.dumps(dictValue, sort_keys=sort_keys, indent=indent)
 
 
 def findFirst(function_or_None, sequence, default=None):
@@ -72,11 +71,6 @@ def first(sequence, default=None):
 
 
 def collapseIntervals(sequence):
-    """
-    Collapses intervals in the sequence if they intersect each other.
-    :param sequence: list of pairs
-    :return: result like list of collapsed paris
-    """
     result = []
     prevElement = []
     for periodStart, periodEnd in sorted(sequence):
@@ -113,7 +107,7 @@ class CONST_CONTAINER(object):
 
     @classmethod
     def ALL(cls):
-        return tuple([ v for k, v in cls.getIterator() ])
+        return tuple([ v for _, v in cls.getIterator() ])
 
     @classmethod
     def __doInit(cls):
@@ -123,12 +117,12 @@ class CONST_CONTAINER(object):
 
 
 def _getBitIndexesMap(capacity):
-    map = {}
+    result = {}
     for index in range(1, capacity + 1):
         key = (1 << index) - 1
-        map[key] = index - 1
+        result[key] = index - 1
 
-    return map
+    return result
 
 
 _INT64_SET_BITS_INDEXES_MAP = _getBitIndexesMap(64)
@@ -168,18 +162,11 @@ class BitmaskHelper(object):
         return number & mask > 0
 
     @classmethod
-    def isBitSet(self, number, bitIndex):
+    def isBitSet(cls, number, bitIndex):
         return number & 1 << bitIndex > 0
 
     @classmethod
     def getSetBitsCount(cls, mask):
-        """
-        Method goes through as many iterations as there are set bits. So if we have a 32-bit word
-        with only the high bit set, then it will only go once through the loop.
-        For details please see Brian Kernighan's algorithm.
-        :param mask: Bit mask
-        :return: Count of set bits
-        """
         count = 0
         while mask:
             count += 1
@@ -193,14 +180,6 @@ class BitmaskHelper(object):
 
     @classmethod
     def iterateSetBitsIndexes(cls, number):
-        """
-        Generator that returns indexes of set bits of the given number. Does NOT depend on number
-        bit capacity.
-        NOTE: If known that bit capacity <= INT64, use iterateInt64SetBitsIndexes because
-        it is faster on 25-30%.
-        :param number: Bit mask
-        :return: Indexes of set bits starting from 0
-        """
         counter = 0
         while number:
             if number & 1:
@@ -210,13 +189,6 @@ class BitmaskHelper(object):
 
     @classmethod
     def iterateInt64SetBitsIndexes(cls, number):
-        """
-        Generator that returns indexes of set bits of the given INT64. Depends on number
-        bit capacity (=64!). Generator goes through as many iterations as there are set bits.
-        NOTE: It faster on 25-30% than iterateSetBitsIndexes!
-        :param number: Bit mask
-        :return: Indexes of set bits starting from 0
-        """
         while number:
             submask = number - 1
             yield _INT64_SET_BITS_INDEXES_MAP[number ^ submask]
@@ -263,9 +235,6 @@ def isDefaultDict(sourceDict, defaultDict):
 
 
 def nextTick(func):
-    """
-    Moves function calling to the next frame
-    """
 
     def wrapper(*args, **kwargs):
         BigWorld.callback(0.01, lambda : func(*args, **kwargs))

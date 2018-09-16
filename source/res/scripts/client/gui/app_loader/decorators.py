@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/app_loader/decorators.py
 from gui.app_loader.loader import g_appLoader
 from gui.app_loader.settings import APP_NAME_SPACE as _SPACE
+__all__ = ('app_getter', 'def_lobby', 'def_battle', 'sf_lobby', 'sf_battle')
 
 class app_getter(property):
 

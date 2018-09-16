@@ -64,8 +64,6 @@ class ReplaceDialog(SearchDialogBase):
                 self.do_find(0)
 
     def _replace_expand(self, m, repl):
-        """ Helper function for expanding a regular expression
-        in the replace field, if needed. """
         if self.engine.isre():
             try:
                 new = m.expand(repl)

@@ -1,30 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_dict.py
-"""Fixer for dict methods.
-
-d.keys() -> list(d.keys())
-d.items() -> list(d.items())
-d.values() -> list(d.values())
-
-d.iterkeys() -> iter(d.keys())
-d.iteritems() -> iter(d.items())
-d.itervalues() -> iter(d.values())
-
-d.viewkeys() -> d.keys()
-d.viewitems() -> d.items()
-d.viewvalues() -> d.values()
-
-Except in certain very specific contexts: the iter() can be dropped
-when the context is list(), sorted(), iter() or for...in; the list()
-can be dropped when the context is list() or sorted() (but not iter()
-or for...in!). Special contexts that apply to both: list(), sorted(), tuple()
-set(), any(), all(), sum().
-
-Note: iter(d.keys()) could be written as iter(d) but since the
-original d.iterkeys() was also redundant we don't fix this.  And there
-are (rare) contexts where it makes a difference (e.g. when passing it
-as an argument to a function that introspects the argument).
-"""
 from .. import pytree
 from .. import patcomp
 from ..pgen2 import token
@@ -47,7 +22,6 @@ class FixDict(fixer_base.BaseFix):
         isview = method_name.startswith(u'view')
         if isiter or isview:
             method_name = method_name[4:]
-        assert method_name in (u'keys', u'items', u'values'), repr(method)
         head = [ n.clone() for n in head ]
         tail = [ n.clone() for n in tail ]
         special = not tail and self.in_special_context(node, isiter)

@@ -7,9 +7,6 @@ from gui.battle_control.view_components import ViewComponentsController
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 
 class ITeamHealthBarListener(object):
-    """
-    View component that shows the team bases points.
-    """
 
     def updateTeamHealthPercent(self, allyPercentage, enemyPercentage):
         pass
@@ -56,18 +53,18 @@ class TeamHealthBarController(ViewComponentsController):
         self.__loadingFinished = True
         self.__onTeamHealthPercentUpdate(avatar_getter.getHealthPercentage())
 
-    def __onTeamHealthPercentUpdate(self, list):
+    def __onTeamHealthPercentUpdate(self, percentages):
         self.__latestHealthBarData = list
-        if not self._viewComponents or not list:
+        if not self._viewComponents or not percentages:
             return
         allyPercentage = 0
         enemyPercentage = 0
-        listLength = len(list)
+        listLength = len(percentages)
         playerTeam = avatar_getter.getPlayerTeam()
         for i in range(0, listLength):
             if playerTeam == i + 1:
-                allyPercentage = list[i]
-            enemyPercentage += list[i]
+                allyPercentage = percentages[i]
+            enemyPercentage += percentages[i]
 
         for viewCmp in self._viewComponents:
             viewCmp.updateTeamHealthPercent(allyPercentage, enemyPercentage / (listLength - 1))

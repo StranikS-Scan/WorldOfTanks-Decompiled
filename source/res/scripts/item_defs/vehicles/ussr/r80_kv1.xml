@@ -226,7 +226,7 @@
         <right>	vehicles/russian/R80_KV1/track/right.track	</right>
         <segmentLength>	0.154	</segmentLength>
         <segmentOffset>	0.053	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -491,7 +491,7 @@
         <right>	vehicles/russian/R80_KV1/track/right.track	</right>
         <segmentLength>	0.154	</segmentLength>
         <segmentOffset>	0.053	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -666,7 +666,7 @@
           <unlocks>
             <gun>	_57mm_413	  <cost>	2300	</cost>
             </gun>
-            <gun>	_122mm_cannon_U-11	  <cost>	3750.0	</cost>
+            <gun>	_122mm_cannon_U-11	  <cost>	3750	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -1150,7 +1150,7 @@
   </fuelTanks>
   <radios>
     <_10R>	shared	  <unlocks>
-        <radio>	_10RK	  <cost>	3100.0	</cost>
+        <radio>	_10RK	  <cost>	3100	</cost>
         </radio>
       </unlocks>
     </_10R>

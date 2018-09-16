@@ -3,6 +3,7 @@
 from debug_utils import LOG_CURRENT_EXCEPTION
 
 class EntityExtra(object):
+    __slots__ = ('name', 'index')
 
     def __init__(self, name, index, containerName, dataSection):
         self.name = name
@@ -19,7 +20,7 @@ class EntityExtra(object):
         entity.extras[self.index] = d
         try:
             self._start(d, args)
-        except:
+        except Exception:
             if d['entity'] is not None:
                 del entity.extras[self.index]
                 try:
@@ -37,7 +38,6 @@ class EntityExtra(object):
         if data is None:
             return False
         else:
-            assert data['extra'] is self
             try:
                 self._cleanup(data)
             except Exception:
@@ -47,7 +47,6 @@ class EntityExtra(object):
             return True
 
     def stop(self, data):
-        assert data['extra'] is self
         if data['entity'] is None:
             return
         else:

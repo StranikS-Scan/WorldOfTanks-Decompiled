@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_next.py
-"""Fixer for it.next() -> next(it), per PEP 3114."""
 from ..pgen2 import token
 from ..pygram import python_symbols as syms
 from .. import fixer_base
@@ -22,7 +21,6 @@ class FixNext(fixer_base.BaseFix):
             self.shadowed_next = False
 
     def transform(self, node, results):
-        assert results
         base = results.get('base')
         attr = results.get('attr')
         name = results.get('name')

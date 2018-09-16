@@ -139,8 +139,6 @@ class OpsPacker:
 
                         pack += struct.pack(elemFormat, key, *vals)
 
-                assert 0
-
         return pack
 
     def _appendOp(self, op, packedArgs):

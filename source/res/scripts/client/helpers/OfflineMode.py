@@ -8,22 +8,18 @@ import Keys
 import Math
 import ResMgr
 import WWISE
-from post_processing import g_postProcessing
 g_offlineModeEnabled = False
 g_currentMoveRate = 0.5
 g_gui = None
-g_enablePostProcessing = True
-g_enableCinematicPostProcessing = False
-g_enableTAA = False
 MOVE_SPEED_MAX = 200.0
 MOVE_SPEED_POW = 2.0
-MOVE_SPEED_ADJUST = 0.2
+MOVE_SPEED_ADJUST = 0.1
 FOV_ADJUST = math.radians(10)
 FOV_MIN = math.radians(10)
 FOV_MAX = math.radians(160)
 MOUSE_TOGGLE_KEYS = [Keys.KEY_ESCAPE, Keys.KEY_LEFTMOUSE]
 
-class CameraTransform:
+class CameraTransform(object):
     matrix = Math.Matrix()
 
     def __init__(self, matrix):
@@ -55,7 +51,6 @@ def _loadCameraTransforms():
         m = Math.Matrix()
         m.lookAt((41, 14, -337), (-0.2, -0.05, 0.97), (0, 1, 0))
         g_cameraTransforms.append(CameraTransform(m))
-    rootDs = None
     return
 
 
@@ -83,13 +78,7 @@ def _setCameraTransform(idx):
     g_curCameraTransform = idx
 
 
-def _enablePostProcessing(bool, mode):
-    g_postProcessing.disable()
-    if bool:
-        g_postProcessing.enable(mode)
-
-
-INSTRUCTIONS = '\nWSAD: move camera\nNumpad +/-: adjust speed\nMouse Wheel: adjust FOV\nEscape: toggle mouse mode\nF: toggle camera freeze mode\nR: add new camera view point\n0-7: change camera view point\nN: move to previous camera view point\nM: move to next camera view point\nP: toggle post-precessing\nC: toggle cinematic post-processing mode\nT: toggle temporal AA\n'
+INSTRUCTIONS = '\nWSAD: move camera\nNumpad +/-: adjust FOV\nMouse Wheel: adjust speed\nEscape: toggle mouse mode\nF: toggle camera freeze mode\nR: add new camera view point\n0-7: change camera view point\nN: move to previous camera view point\nM: move to next camera view point\nP: toggle post-precessing\nC: toggle cinematic post-processing mode\nT: toggle temporal AA\n'
 
 def enabled():
     global g_offlineModeEnabled
@@ -104,12 +93,6 @@ def onStartup():
         return True
     except (ValueError, IndexError):
         return False
-
-
-def onShutdown():
-    if g_postProcessing is not None:
-        g_postProcessing.fini()
-    return
 
 
 def _clearGUI():
@@ -132,6 +115,7 @@ def _displayGUI(spaceName):
 def _offlineLoadCheck():
     if BigWorld.spaceLoadStatus() > 0.5:
         BigWorld.worldDrawEnabled(True)
+        BigWorld.uniprofSceneStart()
         _clearGUI()
         BigWorld.callback(1.0, _enableSound)
     else:
@@ -146,14 +130,13 @@ def _enableSound():
 g_spaceID = 0
 g_avatar = None
 
-class FakeAvatar:
+class FakeAvatar(object):
     spaceID = property(lambda self: BigWorld.camera().spaceID)
 
 
 g_fakeAvatar = FakeAvatar()
 
 def launch(spaceName):
-    global g_enablePostProcessing
     global g_offlineModeEnabled
     print 'Entering offline space', spaceName
     BigWorld.clearAllSpaces()
@@ -175,8 +158,6 @@ def launch(spaceName):
     GUI.mcursor().clipped = False
     g_offlineModeEnabled = True
     BigWorld.callback(1.0, _offlineLoadCheck)
-    g_postProcessing.init()
-    _enablePostProcessing(g_enablePostProcessing, 'arcade')
     return
 
 
@@ -198,9 +179,6 @@ def adjustFOV(diff):
 
 
 def handleKeyEvent(event):
-    global g_enablePostProcessing
-    global g_enableTAA
-    global g_enableCinematicPostProcessing
     global g_curCameraTransform
     if not g_offlineModeEnabled or not BigWorld.camera():
         return False
@@ -210,9 +188,9 @@ def handleKeyEvent(event):
     if event.key in MOUSE_TOGGLE_KEYS:
         GUI.mcursor().visible = not GUI.mcursor().visible
     elif event.key == Keys.KEY_ADD:
-        adjustSpeed(+MOVE_SPEED_ADJUST)
+        adjustFOV(+FOV_ADJUST)
     elif event.key == Keys.KEY_NUMPADMINUS:
-        adjustSpeed(-MOVE_SPEED_ADJUST)
+        adjustFOV(-FOV_ADJUST)
     elif event.key == Keys.KEY_F:
         newFixed = not BigWorld.camera().fixed
         BigWorld.camera().fixed = newFixed
@@ -242,19 +220,6 @@ def handleKeyEvent(event):
         _setCameraTransform(g_curCameraTransform)
     elif event.key == Keys.KEY_R:
         _addCameraTransform()
-        _saveCameraTransforms()
-    elif event.key == Keys.KEY_P:
-        g_enablePostProcessing = not g_enablePostProcessing
-        _enablePostProcessing(g_enablePostProcessing, 'arcade')
-    elif event.key == Keys.KEY_C:
-        g_enableCinematicPostProcessing = not g_enableCinematicPostProcessing
-        _enablePostProcessing(g_enableCinematicPostProcessing, 'cinematic')
-    elif event.key == Keys.KEY_T:
-        g_enableTAA = not g_enableTAA
-        modeAA = 0
-        if g_enableTAA:
-            modeAA = 3
-        BigWorld.setCustomAAMode(modeAA)
     return True
 
 
@@ -264,7 +229,7 @@ def handleMouseEvent(event):
     if GUI.mcursor().visible:
         return False
     if event.dz > 0:
-        adjustFOV(-FOV_ADJUST)
+        adjustSpeed(+MOVE_SPEED_ADJUST)
     elif event.dz < 0:
-        adjustFOV(+FOV_ADJUST)
+        adjustSpeed(-MOVE_SPEED_ADJUST)
     return BigWorld.camera().handleMouseEvent(event)

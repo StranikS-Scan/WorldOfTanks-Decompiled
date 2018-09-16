@@ -1,43 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sndhdr.py
-"""Routines to help recognizing sound files.
-
-Function whathdr() recognizes various types of sound file headers.
-It understands almost all headers that SOX can decode.
-
-The return tuple contains the following items, in this order:
-- file type (as SOX understands it)
-- sampling rate (0 if unknown or hard to decode)
-- number of channels (0 if unknown or hard to decode)
-- number of frames in the file (-1 if unknown or hard to decode)
-- number of bits/sample, or 'U' for U-LAW, or 'A' for A-LAW
-
-If the file doesn't have a recognizable type, it returns None.
-If the file can't be opened, IOError is raised.
-
-To compute the total time, divide the number of frames by the
-sampling rate (a frame contains a sample for each channel).
-
-Function what() calls whathdr().  (It used to also use some
-heuristics for raw data, but this doesn't work very well.)
-
-Finally, the function test() is a simple main program that calls
-what() for all files mentioned on the argument list.  For directory
-arguments it calls what() for all files in that directory.  Default
-argument is "." (testing all files in the current directory).  The
-option -r tells it to recurse down directories found inside
-explicitly given directories.
-"""
 __all__ = ['what', 'whathdr']
 
 def what(filename):
-    """Guess the type of a sound file"""
     res = whathdr(filename)
     return res
 
 
 def whathdr(filename):
-    """Recognize sound headers"""
     f = open(filename, 'rb')
     h = f.read(512)
     for tf in tests:

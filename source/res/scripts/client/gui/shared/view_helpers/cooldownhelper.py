@@ -8,7 +8,6 @@ from gui.shared.rq_cooldown import getRequestCoolDown
 class CooldownHelper(object):
 
     def __init__(self, requestIDs, handler, eventType, eventScope=EVENT_BUS_SCOPE.LOBBY):
-        assert requestIDs
         self._eventType = eventType
         self._eventScope = eventScope
         self._requestIDs = requestIDs

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/Vibroeffects/Controllers/ShootingController.py
 from OnceController import OnceController
 
-class ShootingController:
+class ShootingController(object):
 
     def __init__(self, caliber):
         if caliber < 50:

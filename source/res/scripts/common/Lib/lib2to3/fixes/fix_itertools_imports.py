@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_itertools_imports.py
-""" Fixer for imports of itertools.(imap|ifilter|izip|ifilterfalse) """
 from lib2to3 import fixer_base
 from lib2to3.fixer_util import BlankLine, syms, token
 
@@ -21,7 +20,6 @@ class FixItertoolsImports(fixer_base.BaseFix):
             else:
                 if child.type == token.STAR:
                     return
-                assert child.type == syms.import_as_name
                 name_node = child.children[0]
             member_name = name_node.value
             if member_name in (u'imap', u'izip', u'ifilter'):

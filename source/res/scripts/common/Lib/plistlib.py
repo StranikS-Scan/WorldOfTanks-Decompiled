@@ -1,56 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plistlib.py
-r"""plistlib.py -- a tool to generate and parse MacOSX .plist files.
-
-The PropertyList (.plist) file format is a simple XML pickle supporting
-basic object types, like dictionaries, lists, numbers and strings.
-Usually the top level object is a dictionary.
-
-To write out a plist file, use the writePlist(rootObject, pathOrFile)
-function. 'rootObject' is the top level object, 'pathOrFile' is a
-filename or a (writable) file object.
-
-To parse a plist from a file, use the readPlist(pathOrFile) function,
-with a file name or a (readable) file object as the only argument. It
-returns the top level object (again, usually a dictionary).
-
-To work with plist data in strings, you can use readPlistFromString()
-and writePlistToString().
-
-Values can be strings, integers, floats, booleans, tuples, lists,
-dictionaries, Data or datetime.datetime objects. String values (including
-dictionary keys) may be unicode strings -- they will be written out as
-UTF-8.
-
-The <data> plist type is supported through the Data class. This is a
-thin wrapper around a Python string.
-
-Generate Plist example:
-
-    pl = dict(
-        aString="Doodah",
-        aList=["A", "B", 12, 32.1, [1, 2, 3]],
-        aFloat=0.1,
-        anInt=728,
-        aDict=dict(
-            anotherString="<hello & hi there!>",
-            aUnicodeValue=u'M\xe4ssig, Ma\xdf',
-            aTrueValue=True,
-            aFalseValue=False,
-        ),
-        someData=Data("<binary gunk>"),
-        someMoreData=Data("<lots of binary gunk>" * 10),
-        aDate=datetime.datetime.fromtimestamp(time.mktime(time.gmtime())),
-    )
-    # unicode keys are possible, but a little awkward to use:
-    pl[u'\xc5benraa'] = "That was a unicode key."
-    writePlist(pl, fileName)
-
-Parse Plist example:
-
-    pl = readPlist(pathOrFile)
-    print pl["aKey"]
-"""
 __all__ = ['readPlist',
  'writePlist',
  'readPlistFromString',
@@ -67,10 +16,6 @@ import re
 import warnings
 
 def readPlist(pathOrFile):
-    """Read a .plist file. 'pathOrFile' may either be a file name or a
-    (readable) file object. Return the unpacked root object (which
-    usually is a dictionary).
-    """
     didOpen = 0
     if isinstance(pathOrFile, (str, unicode)):
         pathOrFile = open(pathOrFile)
@@ -83,9 +28,6 @@ def readPlist(pathOrFile):
 
 
 def writePlist(rootObject, pathOrFile):
-    """Write 'rootObject' to a .plist file. 'pathOrFile' may either be a
-    file name or a (writable) file object.
-    """
     didOpen = 0
     if isinstance(pathOrFile, (str, unicode)):
         pathOrFile = open(pathOrFile, 'w')
@@ -99,22 +41,16 @@ def writePlist(rootObject, pathOrFile):
 
 
 def readPlistFromString(data):
-    """Read a plist data from a string. Return the root object.
-    """
     return readPlist(StringIO(data))
 
 
 def writePlistToString(rootObject):
-    """Return 'rootObject' as a plist-formatted string.
-    """
     f = StringIO()
     writePlist(rootObject, f)
     return f.getvalue()
 
 
 def readPlistFromResource(path, restype='plst', resid=0):
-    """Read plst resource from the resource fork of path.
-    """
     warnings.warnpy3k('In 3.x, readPlistFromResource is removed.', stacklevel=2)
     from Carbon.File import FSRef, FSGetResourceForkName
     from Carbon.Files import fsRdPerm
@@ -128,8 +64,6 @@ def readPlistFromResource(path, restype='plst', resid=0):
 
 
 def writePlistToResource(rootObject, path, restype='plst', resid=0):
-    """Write 'rootObject' as a plst resource to the resource fork of path.
-    """
     warnings.warnpy3k('In 3.x, writePlistToResource is removed.', stacklevel=2)
     from Carbon.File import FSRef, FSGetResourceForkName
     from Carbon.Files import fsRdWrPerm
@@ -163,8 +97,6 @@ class DumbXMLWriter:
         self.indentLevel += 1
 
     def endElement(self, element):
-        assert self.indentLevel > 0
-        assert self.stack.pop() == element
         self.indentLevel -= 1
         self.writeln('</%s>' % element)
 
@@ -320,9 +252,6 @@ class Dict(_InternalDict):
 
 
 class Plist(_InternalDict):
-    """This class has been deprecated. Use readPlist() and writePlist()
-    functions instead, together with regular dict objects.
-    """
 
     def __init__(self, **kwargs):
         from warnings import warn
@@ -330,7 +259,6 @@ class Plist(_InternalDict):
         super(Plist, self).__init__(**kwargs)
 
     def fromFile(cls, pathOrFile):
-        """Deprecated. Use the readPlist() function instead."""
         rootObject = readPlist(pathOrFile)
         plist = cls()
         plist.update(rootObject)
@@ -339,7 +267,6 @@ class Plist(_InternalDict):
     fromFile = classmethod(fromFile)
 
     def write(self, pathOrFile):
-        """Deprecated. Use the writePlist() function instead."""
         writePlist(self, pathOrFile)
 
 
@@ -354,7 +281,6 @@ def _encodeBase64(s, maxlinelength=76):
 
 
 class Data:
-    """Wrapper for binary data."""
 
     def __init__(self, data):
         self.data = data

@@ -3,10 +3,6 @@
 from weakref import ref
 
 class WeakMethod(ref):
-    """
-    A custom `weakref.ref` subclass which simulates a weak reference to
-    a bound method, working around the lifetime problem of bound methods.
-    """
     __slots__ = ('_func_ref', '_meth_type', '_alive', '__weakref__')
 
     def __new__(cls, meth, callback=None):
@@ -60,7 +56,6 @@ class WeakMethodProxy(object):
 
     def __call__(self, *args, **kwargs):
         method = self._methodRef()
-        assert method is not None
         return method(*args, **kwargs)
 
     def __eq__(self, other):

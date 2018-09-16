@@ -1,31 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/cookielib.py
-r"""HTTP cookie handling for web clients.
-
-This module has (now fairly distant) origins in Gisle Aas' Perl module
-HTTP::Cookies, from the libwww-perl library.
-
-Docstrings, comments and debug strings in this code refer to the
-attributes of the HTTP cookie system as cookie-attributes, to distinguish
-them clearly from Python attributes.
-
-Class diagram (note that BSDDBCookieJar and the MSIE* classes are not
-distributed with the Python standard library, but are available from
-http://wwwsearch.sf.net/):
-
-                        CookieJar____
-                        /     \      \
-            FileCookieJar      \      \
-             /    |   \         \      \
- MozillaCookieJar | LWPCookieJar \      \
-                  |               |      \
-                  |   ---MSIEBase |       \
-                  |  /      |     |        \
-                  | /   MSIEDBCookieJar BSDDBCookieJar
-                  |/
-               MSIECookieJar
-
-"""
 __all__ = ['Cookie',
  'CookieJar',
  'CookiePolicy',
@@ -103,17 +77,6 @@ for month in MONTHS:
     MONTHS_LOWER.append(month.lower())
 
 def time2isoz(t=None):
-    """Return a string representing time in seconds since epoch, t.
-    
-    If the function is called without an argument, it will use the current
-    time.
-    
-    The format of the returned string is like "YYYY-MM-DD hh:mm:ssZ",
-    representing Universal Time (UTC, aka GMT).  An example of this format is:
-    
-    1994-11-24 08:49:37Z
-    
-    """
     if t is None:
         t = time.time()
     year, mon, mday, hour, min, sec = time.gmtime(t)[:6]
@@ -126,16 +89,6 @@ def time2isoz(t=None):
 
 
 def time2netscape(t=None):
-    """Return a string representing time in seconds since epoch, t.
-    
-    If the function is called without an argument, it will use the current
-    time.
-    
-    The format of the returned string is like this:
-    
-    Wed, DD-Mon-YYYY HH:MM:SS GMT
-    
-    """
     if t is None:
         t = time.time()
     year, mon, mday, hour, min, sec, wday = time.gmtime(t)[:7]
@@ -228,34 +181,6 @@ WEEKDAY_RE = re.compile('^(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)[a-z]*,?\\s*', re.I)
 LOOSE_HTTP_DATE_RE = re.compile('^\n    (\\d\\d?)            # day\n       (?:\\s+|[-\\/])\n    (\\w+)              # month\n        (?:\\s+|[-\\/])\n    (\\d+)              # year\n    (?:\n          (?:\\s+|:)    # separator before clock\n       (\\d\\d?):(\\d\\d)  # hour:min\n       (?::(\\d\\d))?    # optional seconds\n    )?                 # optional clock\n       \\s*\n    ([-+]?\\d{2,4}|(?![APap][Mm]\\b)[A-Za-z]+)? # timezone\n       \\s*\n    (?:\\(\\w+\\))?       # ASCII representation of timezone in parens.\n       \\s*$', re.X)
 
 def http2time(text):
-    """Returns time in seconds since epoch of time represented by a string.
-    
-    Return value is an integer.
-    
-    None is returned if the format of str is unrecognized, the time is outside
-    the representable range, or the timezone string is not recognized.  If the
-    string contains no timezone, UTC is assumed.
-    
-    The timezone in the string may be numerical (like "-0800" or "+0100") or a
-    string timezone (like "UTC", "GMT", "BST" or "EST").  Currently, only the
-    timezone strings equivalent to UTC (zero offset) are known to the function.
-    
-    The function loosely parses the following formats:
-    
-    Wed, 09 Feb 1994 22:23:32 GMT       -- HTTP format
-    Tuesday, 08-Feb-94 14:15:29 GMT     -- old rfc850 HTTP format
-    Tuesday, 08-Feb-1994 14:15:29 GMT   -- broken rfc850 HTTP format
-    09 Feb 1994 22:23:32 GMT            -- HTTP format (no weekday)
-    08-Feb-94 14:15:29 GMT              -- rfc850 format (no weekday)
-    08-Feb-1994 14:15:29 GMT            -- broken rfc850 format (no weekday)
-    
-    The parser ignores leading and trailing whitespace.  The time may be
-    absent.
-    
-    If the year is given with only 2 digits, the function will select the
-    century that makes the year closest to the current date.
-    
-    """
     m = STRICT_DATE_RE.search(text)
     if m:
         g = m.groups()
@@ -282,17 +207,6 @@ def http2time(text):
 ISO_DATE_RE = re.compile('^\n    (\\d{4})              # year\n       [-\\/]?\n    (\\d\\d?)              # numerical month\n       [-\\/]?\n    (\\d\\d?)              # day\n   (?:\n         (?:\\s+|[-:Tt])  # separator before clock\n      (\\d\\d?):?(\\d\\d)    # hour:min\n      (?::?(\\d\\d(?:\\.\\d*)?))?  # optional seconds (and fractional)\n   )?                    # optional clock\n      \\s*\n   ([-+]?\\d\\d?:?(:?\\d\\d)?\n    |Z|z)?               # timezone  (Z is "zero meridian", i.e. GMT)\n      \\s*$', re.X)
 
 def iso2time(text):
-    """
-    As for http2time, but parses the ISO 8601 formats:
-    
-    1994-02-03 14:15:29 -0100    -- ISO 8601 format
-    1994-02-03 14:15:29          -- zone is optional
-    1994-02-03                   -- only date
-    1994-02-03T14:15:29          -- Use T as separator
-    19940203T141529Z             -- ISO 8601 compact format
-    19940203                     -- only date
-    
-    """
     text = text.lstrip()
     day, mon, yr, hr, min, sec, tz = [None] * 7
     m = ISO_DATE_RE.search(text)
@@ -304,7 +218,6 @@ def iso2time(text):
 
 
 def unmatched(match):
-    """Return unmatched part of re.Match object."""
     start, end = match.span(0)
     return match.string[:start] + match.string[end:]
 
@@ -315,51 +228,6 @@ HEADER_VALUE_RE = re.compile('^\\s*=\\s*([^\\s;,]*)')
 HEADER_ESCAPE_RE = re.compile('\\\\(.)')
 
 def split_header_words(header_values):
-    r"""Parse header values into a list of lists containing key,value pairs.
-    
-    The function knows how to deal with ",", ";" and "=" as well as quoted
-    values after "=".  A list of space separated tokens are parsed as if they
-    were separated by ";".
-    
-    If the header_values passed as argument contains multiple values, then they
-    are treated as if they were a single value separated by comma ",".
-    
-    This means that this function is useful for parsing header fields that
-    follow this syntax (BNF as from the HTTP/1.1 specification, but we relax
-    the requirement for tokens).
-    
-      headers           = #header
-      header            = (token | parameter) *( [";"] (token | parameter))
-    
-      token             = 1*<any CHAR except CTLs or separators>
-      separators        = "(" | ")" | "<" | ">" | "@"
-                        | "," | ";" | ":" | "\" | <">
-                        | "/" | "[" | "]" | "?" | "="
-                        | "{" | "}" | SP | HT
-    
-      quoted-string     = ( <"> *(qdtext | quoted-pair ) <"> )
-      qdtext            = <any TEXT except <">>
-      quoted-pair       = "\" CHAR
-    
-      parameter         = attribute "=" value
-      attribute         = token
-      value             = token | quoted-string
-    
-    Each header is represented by a list of key/value pairs.  The value for a
-    simple token (not part of a parameter) is None.  Syntactically incorrect
-    headers will not necessarily be parsed as you would want.
-    
-    This is easier to describe with some examples:
-    
-    >>> split_header_words(['foo="bar"; port="80,81"; discard, bar=baz'])
-    [[('foo', 'bar'), ('port', '80,81'), ('discard', None)], [('bar', 'baz')]]
-    >>> split_header_words(['text/html; charset="iso-8859-1"'])
-    [[('text/html', None), ('charset', 'iso-8859-1')]]
-    >>> split_header_words([r'Basic realm="\"foo\bar\""'])
-    [[('Basic', None), ('realm', '"foobar"')]]
-    
-    """
-    assert not isinstance(header_values, basestring)
     result = []
     for text in header_values:
         orig_text = text
@@ -389,7 +257,6 @@ def split_header_words(header_values):
                     result.append(pairs)
                 pairs = []
             non_junk, nr_junk_chars = re.subn('^[=\\s;]*', '', text)
-            assert nr_junk_chars > 0, "split_header_words bug: '%s', '%s', %s" % (orig_text, text, pairs)
             text = non_junk
 
         if pairs:
@@ -401,17 +268,6 @@ def split_header_words(header_values):
 HEADER_JOIN_ESCAPE_RE = re.compile('([\\"\\\\])')
 
 def join_header_words(lists):
-    """Do the inverse (almost) of the conversion done by split_header_words.
-    
-    Takes a list of lists of (key, value) pairs and produces a single header
-    value.  Attribute values are quoted if needed.
-    
-    >>> join_header_words([[("text/plain", None), ("charset", "iso-8859/1")]])
-    'text/plain; charset="iso-8859/1"'
-    >>> join_header_words([[("text/plain", None)], [("charset", "iso-8859/1")]])
-    'text/plain, charset="iso-8859/1"'
-    
-    """
     headers = []
     for pairs in lists:
         attr = []
@@ -438,20 +294,6 @@ def _strip_quotes(text):
 
 
 def parse_ns_headers(ns_headers):
-    """Ad-hoc parser for Netscape protocol cookie-attributes.
-    
-    The old Netscape cookie format for Set-Cookie can for instance contain
-    an unquoted "," in the expires field, so we have to use this ad-hoc
-    parser instead of split_header_words.
-    
-    XXX This may not make the best possible effort to parse all the crap
-    that Netscape Cookie headers contain.  Ronald Tschalar's HTTPClient
-    parser is probably better, so could do worse than following that if
-    this ever gives any trouble.
-    
-    Currently, this is also used for parsing RFC 2109 cookies.
-    
-    """
     known_attrs = ('expires', 'domain', 'path', 'secure', 'version', 'port', 'max-age')
     result = []
     for ns_header in ns_headers:
@@ -488,7 +330,6 @@ def parse_ns_headers(ns_headers):
 IPV4_RE = re.compile('\\.\\d+$')
 
 def is_HDN(text):
-    """Return True if text is a host domain name."""
     if IPV4_RE.search(text):
         return False
     if text == '':
@@ -497,26 +338,6 @@ def is_HDN(text):
 
 
 def domain_match(A, B):
-    """Return True if domain A domain-matches domain B, according to RFC 2965.
-    
-    A and B may be host domain names or IP addresses.
-    
-    RFC 2965, section 1:
-    
-    Host names can be specified either as an IP address or a HDN string.
-    Sometimes we compare one host name with another.  (Such comparisons SHALL
-    be case-insensitive.)  Host A's name domain-matches host B's if
-    
-         *  their host name strings string-compare equal; or
-    
-         * A is a HDN string and has the form NB, where N is a non-empty
-            name string, B has the form .B', and B' is a HDN string.  (So,
-            x.y.com domain-matches .Y.com but not Y.com.)
-    
-    Note that domain-match is not a commutative operation: a.b.c.com
-    domain-matches .c.com, but not the reverse.
-    
-    """
     A = A.lower()
     B = B.lower()
     if A == B:
@@ -532,20 +353,10 @@ def domain_match(A, B):
 
 
 def liberal_is_HDN(text):
-    """Return True if text is a sort-of-like a host domain name.
-    
-    For accepting/blocking domains.
-    
-    """
     return False if IPV4_RE.search(text) else True
 
 
 def user_domain_match(A, B):
-    """For blocking/accepting domains.
-    
-    A and B may be host domain names or IP addresses.
-    
-    """
     A = A.lower()
     B = B.lower()
     if not (liberal_is_HDN(A) and liberal_is_HDN(B)):
@@ -561,12 +372,6 @@ def user_domain_match(A, B):
 cut_port_re = re.compile(':\\d+$')
 
 def request_host(request):
-    """Return request-host, as defined by RFC 2965.
-    
-    Variation from RFC: returned value is lowercased, for convenient
-    comparison.
-    
-    """
     url = request.get_full_url()
     host = urlparse.urlparse(url)[1]
     if host == '':
@@ -576,11 +381,6 @@ def request_host(request):
 
 
 def eff_request_host(request):
-    """Return a tuple (request-host, effective request-host name).
-    
-    As defined by RFC 2965, except both are lowercased.
-    
-    """
     erhn = req_host = request_host(request)
     if req_host.find('.') == -1 and not IPV4_RE.search(req_host):
         erhn = req_host + '.local'
@@ -588,7 +388,6 @@ def eff_request_host(request):
 
 
 def request_path(request):
-    """Path component of request-URI, as defined by RFC 2965."""
     url = request.get_full_url()
     parts = urlparse.urlsplit(url)
     path = escape_path(parts.path)
@@ -621,7 +420,6 @@ def uppercase_escaped_char(match):
 
 
 def escape_path(path):
-    """Escape any invalid characters in HTTP URL, and uppercase all escapes."""
     if isinstance(path, unicode):
         path = path.encode('utf-8')
     path = urllib.quote(path, HTTP_PATH_SAFE)
@@ -630,31 +428,6 @@ def escape_path(path):
 
 
 def reach(h):
-    """Return reach of host h, as defined by RFC 2965, section 1.
-    
-    The reach R of a host name H is defined as follows:
-    
-       *  If
-    
-          -  H is the host domain name of a host; and,
-    
-          -  H has the form A.B; and
-    
-          -  A has no embedded (that is, interior) dots; and
-    
-          -  B has at least one embedded dot, or B is the string "local".
-             then the reach of H is .B.
-    
-       *  Otherwise, the reach of H is H.
-    
-    >>> reach("www.acme.com")
-    '.acme.com'
-    >>> reach("acme.com")
-    'acme.com'
-    >>> reach("acme.local")
-    '.local'
-    
-    """
     i = h.find('.')
     if i >= 0:
         b = h[i + 1:]
@@ -665,15 +438,6 @@ def reach(h):
 
 
 def is_third_party(request):
-    """
-    
-    RFC 2965, section 3.3.6:
-    
-        An unverifiable transaction is to a third-party host if its request-
-        host U does not domain-match the reach R of the request-host O in the
-        origin transaction.
-    
-    """
     req_host = request_host(request)
     if not domain_match(req_host, reach(request.get_origin_req_host())):
         return True
@@ -682,22 +446,6 @@ def is_third_party(request):
 
 
 class Cookie():
-    """HTTP Cookie.
-    
-    This class represents both Netscape and RFC 2965 cookies.
-    
-    This is deliberately a very simple class.  It just holds attributes.  It's
-    possible to construct Cookie instances that don't comply with the cookie
-    standards.  CookieJar.make_cookies is the factory function for Cookie
-    objects -- it deals with cookie parsing, supplying defaults, and
-    normalising to the representation used in this class.  CookiePolicy is
-    responsible for checking them to see whether they should be accepted from
-    and returned to the server.
-    
-    Note that the port may be present in the headers, but unspecified ("Port"
-    rather than"Port=80", for example); if this is the case, port is None.
-    
-    """
 
     def __init__(self, version, name, value, port, port_specified, domain, domain_specified, domain_initial_dot, path, path_specified, secure, expires, discard, comment, comment_url, rest, rfc2109=False):
         if version is not None:
@@ -763,41 +511,21 @@ class Cookie():
 
 
 class CookiePolicy():
-    """Defines which cookies get accepted from and returned to server.
-    
-    May also modify cookies, though this is probably a bad idea.
-    
-    The subclass DefaultCookiePolicy defines the standard rules for Netscape
-    and RFC 2965 cookies -- override that if you want a customised policy.
-    
-    """
 
     def set_ok(self, cookie, request):
-        """Return true if (and only if) cookie should be accepted from server.
-        
-        Currently, pre-expired cookies never get this far -- the CookieJar
-        class deletes such cookies itself.
-        
-        """
         raise NotImplementedError()
 
     def return_ok(self, cookie, request):
-        """Return true if (and only if) cookie should be returned to server."""
         raise NotImplementedError()
 
     def domain_return_ok(self, domain, request):
-        """Return false if cookies should not be returned, given cookie domain.
-        """
         return True
 
     def path_return_ok(self, path, request):
-        """Return false if cookies should not be returned, given cookie path.
-        """
         return True
 
 
 class DefaultCookiePolicy(CookiePolicy):
-    """Implements the standard rules for accepting and returning cookies."""
     DomainStrictNoDots = 1
     DomainStrictNonDomain = 2
     DomainRFC2965Match = 4
@@ -805,7 +533,6 @@ class DefaultCookiePolicy(CookiePolicy):
     DomainStrict = DomainStrictNoDots | DomainStrictNonDomain
 
     def __init__(self, blocked_domains=None, allowed_domains=None, netscape=True, rfc2965=False, rfc2109_as_netscape=None, hide_cookie2=False, strict_domain=False, strict_rfc2965_unverifiable=True, strict_ns_unverifiable=False, strict_ns_domain=DomainLiberal, strict_ns_set_initial_dollar=False, strict_ns_set_path=False):
-        """Constructor arguments should be passed as keyword arguments only."""
         self.netscape = netscape
         self.rfc2965 = rfc2965
         self.rfc2109_as_netscape = rfc2109_as_netscape
@@ -826,11 +553,9 @@ class DefaultCookiePolicy(CookiePolicy):
         return
 
     def blocked_domains(self):
-        """Return the sequence of blocked domains (as a tuple)."""
         return self._blocked_domains
 
     def set_blocked_domains(self, blocked_domains):
-        """Set the sequence of blocked domains."""
         self._blocked_domains = tuple(blocked_domains)
 
     def is_blocked(self, domain):
@@ -841,11 +566,9 @@ class DefaultCookiePolicy(CookiePolicy):
         return False
 
     def allowed_domains(self):
-        """Return None, or the sequence of allowed domains (as a tuple)."""
         return self._allowed_domains
 
     def set_allowed_domains(self, allowed_domains):
-        """Set the sequence of allowed domains, or None."""
         if allowed_domains is not None:
             allowed_domains = tuple(allowed_domains)
         self._allowed_domains = allowed_domains
@@ -862,14 +585,7 @@ class DefaultCookiePolicy(CookiePolicy):
             return True
 
     def set_ok(self, cookie, request):
-        """
-        If you override .set_ok(), be sure to call this method.  If it returns
-        false, so should your subclass (assuming your subclass wants to be more
-        strict about which cookies to accept).
-        
-        """
         _debug(' - checking cookie %s=%s', cookie.name, cookie.value)
-        assert cookie.name is not None
         for n in ('version', 'verifiability', 'name', 'path', 'domain', 'port'):
             fn_name = 'set_ok_' + n
             fn = getattr(self, fn_name)
@@ -980,12 +696,6 @@ class DefaultCookiePolicy(CookiePolicy):
         return True
 
     def return_ok(self, cookie, request):
-        """
-        If you override .return_ok(), be sure to call this method.  If it
-        returns false, so should your subclass (assuming your subclass wants to
-        be more strict about which cookies to return).
-        
-        """
         _debug(' - checking cookie %s=%s', cookie.name, cookie.value)
         for n in ('version', 'verifiability', 'secure', 'expires', 'port', 'domain'):
             fn_name = 'return_ok_' + n
@@ -1086,7 +796,6 @@ def vals_sorted_by_key(adict):
 
 
 def deepvalues(mapping):
-    """Iterates over nested mapping, depth-first, in sorted order by key."""
     values = vals_sorted_by_key(mapping)
     for obj in values:
         mapping = False
@@ -1108,12 +817,6 @@ class Absent():
 
 
 class CookieJar():
-    """Collection of HTTP cookies.
-    
-    You may not need to know about this class: try
-    urllib2.build_opener(HTTPCookieProcessor).open(url).
-    
-    """
     non_word_re = re.compile('\\W')
     quote_re = re.compile('([\\"\\\\])')
     strict_domain_re = re.compile('\\.?[^.]*')
@@ -1152,7 +855,6 @@ class CookieJar():
         return cookies
 
     def _cookies_for_request(self, request):
-        """Return a list of cookies to be returned to server."""
         cookies = []
         for domain in self._cookies.keys():
             cookies.extend(self._cookies_for_domain(domain, request))
@@ -1160,14 +862,6 @@ class CookieJar():
         return cookies
 
     def _cookie_attrs(self, cookies):
-        """Return a list of cookie-attributes to be returned to server.
-        
-        like ['foo="bar"; $Path="/"', ...]
-        
-        The $Version attribute is also added when appropriate (currently only
-        once per request).
-        
-        """
         cookies.sort(key=lambda arg: len(arg.path), reverse=True)
         version_set = False
         attrs = []
@@ -1202,11 +896,6 @@ class CookieJar():
         return attrs
 
     def add_cookie_header(self, request):
-        """Add correct Cookie: header to request (urllib2.Request object).
-        
-        The Cookie2 header is also added unless policy.hide_cookie2 is true.
-        
-        """
         _debug('add_cookie_header')
         self._cookies_lock.acquire()
         try:
@@ -1228,18 +917,6 @@ class CookieJar():
         self.clear_expired_cookies()
 
     def _normalized_cookie_tuples(self, attrs_set):
-        """Return list of tuples containing normalised cookie information.
-        
-        attrs_set is the list of lists of key,value pairs extracted from
-        the Set-Cookie or Set-Cookie2 headers.
-        
-        Tuples are name, value, standard, rest, where name and value are the
-        cookie name and value, standard is a dictionary containing the standard
-        cookie-attributes (discard, secure, version, expires or max-age,
-        domain, path and port) and rest is a dictionary containing the rest of
-        the cookie-attributes.
-        
-        """
         cookie_tuples = []
         boolean_attrs = ('discard', 'secure')
         value_attrs = ('version', 'expires', 'max-age', 'domain', 'path', 'port', 'comment', 'commenturl')
@@ -1382,7 +1059,6 @@ class CookieJar():
         return
 
     def make_cookies(self, response, request):
-        """Return sequence of Cookie objects extracted from response object."""
         headers = response.info()
         rfc2965_hdrs = headers.getheaders('Set-Cookie2')
         ns_hdrs = headers.getheaders('Set-Cookie')
@@ -1420,7 +1096,6 @@ class CookieJar():
             return cookies
 
     def set_cookie_if_ok(self, cookie, request):
-        """Set a cookie if policy says it's OK to do so."""
         self._cookies_lock.acquire()
         try:
             self._policy._now = self._now = int(time.time())
@@ -1430,7 +1105,6 @@ class CookieJar():
             self._cookies_lock.release()
 
     def set_cookie(self, cookie):
-        """Set a cookie, without checking whether or not it should be set."""
         c = self._cookies
         self._cookies_lock.acquire()
         try:
@@ -1445,7 +1119,6 @@ class CookieJar():
             self._cookies_lock.release()
 
     def extract_cookies(self, response, request):
-        """Extract cookies from response, where allowable given the request."""
         _debug('extract_cookies: %s', response.info())
         self._cookies_lock.acquire()
         try:
@@ -1459,17 +1132,6 @@ class CookieJar():
             self._cookies_lock.release()
 
     def clear(self, domain=None, path=None, name=None):
-        """Clear some cookies.
-        
-        Invoking this method without arguments will clear all cookies.  If
-        given a single argument, only cookies belonging to that domain will be
-        removed.  If given two arguments, cookies belonging to the specified
-        path within that domain are removed.  If given three arguments, then
-        the cookie with the specified name, path and domain is removed.
-        
-        Raises KeyError if no matching cookie exists.
-        
-        """
         if name is not None:
             if domain is None or path is None:
                 raise ValueError('domain and path must be given to remove a cookie by name')
@@ -1485,12 +1147,6 @@ class CookieJar():
         return
 
     def clear_session_cookies(self):
-        """Discard all session cookies.
-        
-        Note that the .save() method won't save session cookies anyway, unless
-        you ask otherwise by passing a true ignore_discard argument.
-        
-        """
         self._cookies_lock.acquire()
         try:
             for cookie in self:
@@ -1501,15 +1157,6 @@ class CookieJar():
             self._cookies_lock.release()
 
     def clear_expired_cookies(self):
-        """Discard all expired cookies.
-        
-        You probably don't need to call this method: expired cookies are never
-        sent back to the server (provided you're using DefaultCookiePolicy),
-        this method is called by CookieJar itself every so often, and the
-        .save() method won't save expired cookies anyway (unless you ask
-        otherwise by passing a true ignore_expires argument).
-        
-        """
         self._cookies_lock.acquire()
         try:
             now = time.time()
@@ -1524,7 +1171,6 @@ class CookieJar():
         return deepvalues(self._cookies)
 
     def __len__(self):
-        """Return number of contained cookies."""
         i = 0
         for cookie in self:
             i = i + 1
@@ -1551,14 +1197,8 @@ class LoadError(IOError):
 
 
 class FileCookieJar(CookieJar):
-    """CookieJar that can be loaded from and saved to a file."""
 
     def __init__(self, filename=None, delayload=False, policy=None):
-        """
-        Cookies are NOT loaded from the named file until either the .load() or
-        .revert() method is called.
-        
-        """
         CookieJar.__init__(self, policy)
         if filename is not None:
             try:
@@ -1571,11 +1211,9 @@ class FileCookieJar(CookieJar):
         return
 
     def save(self, filename=None, ignore_discard=False, ignore_expires=False):
-        """Save cookies to a file."""
         raise NotImplementedError()
 
     def load(self, filename=None, ignore_discard=False, ignore_expires=False):
-        """Load cookies from a file."""
         if filename is None:
             if self.filename is not None:
                 filename = self.filename
@@ -1590,12 +1228,6 @@ class FileCookieJar(CookieJar):
         return
 
     def revert(self, filename=None, ignore_discard=False, ignore_expires=False):
-        """Clear all cookies and reload cookies from a saved file.
-        
-        Raises LoadError (or IOError) if reversion is not successful; the
-        object's state will not be altered if this happens.
-        
-        """
         if filename is None:
             if self.filename is not None:
                 filename = self.filename

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/_osx_support.py
-"""Shared OS X support functions."""
 import os
 import re
 import sys
@@ -13,11 +12,6 @@ _COMPILER_CONFIG_VARS = ('BLDSHARED', 'LDSHARED', 'CC', 'CXX')
 _INITPRE = '_OSX_SUPPORT_INITIAL_'
 
 def _find_executable(executable, path=None):
-    """Tries to find 'executable' in the directories listed in 'path'.
-    
-    A string listing directories separated by 'os.pathsep'; defaults to
-    os.environ['PATH'].  Returns the complete filename or None if not found.
-    """
     if path is None:
         path = os.environ['PATH']
     paths = path.split(os.pathsep)
@@ -37,7 +31,6 @@ def _find_executable(executable, path=None):
 
 
 def _read_output(commandstring):
-    """Output from successful command execution or None"""
     import contextlib
     try:
         import tempfile
@@ -54,14 +47,12 @@ def _read_output(commandstring):
 
 
 def _find_build_tool(toolname):
-    """Find a build tool on current path or using xcrun"""
     return _find_executable(toolname) or _read_output('/usr/bin/xcrun -find %s' % (toolname,)) or ''
 
 
 _SYSTEM_VERSION = None
 
 def _get_system_version():
-    """Return the OS X system version as a string"""
     global _SYSTEM_VERSION
     if _SYSTEM_VERSION is None:
         _SYSTEM_VERSION = ''
@@ -81,14 +72,12 @@ def _get_system_version():
 
 
 def _remove_original_values(_config_vars):
-    """Remove original unmodified values for testing"""
     for k in list(_config_vars):
         if k.startswith(_INITPRE):
             del _config_vars[k]
 
 
 def _save_modified_value(_config_vars, cv, newvalue):
-    """Save modified and original unmodified value of configuration var"""
     oldvalue = _config_vars.get(cv, '')
     if oldvalue != newvalue and _INITPRE + cv not in _config_vars:
         _config_vars[_INITPRE + cv] = oldvalue
@@ -96,7 +85,6 @@ def _save_modified_value(_config_vars, cv, newvalue):
 
 
 def _supports_universal_builds():
-    """Returns True if universal builds are supported on this system"""
     osx_version = _get_system_version()
     if osx_version:
         try:
@@ -108,7 +96,6 @@ def _supports_universal_builds():
 
 
 def _find_appropriate_compiler(_config_vars):
-    """Find appropriate C compiler for extension module builds"""
     if 'CC' in os.environ:
         return _config_vars
     cc = oldcc = _config_vars['CC'].split()[0]
@@ -131,7 +118,6 @@ def _find_appropriate_compiler(_config_vars):
 
 
 def _remove_universal_flags(_config_vars):
-    """Remove all universal build arguments from config vars"""
     for cv in _UNIVERSAL_CONFIG_VARS:
         if cv in _config_vars and cv not in os.environ:
             flags = _config_vars[cv]
@@ -143,7 +129,6 @@ def _remove_universal_flags(_config_vars):
 
 
 def _remove_unsupported_archs(_config_vars):
-    """Remove any unsupported archs from config vars"""
     if 'CC' in os.environ:
         return _config_vars
     else:
@@ -160,7 +145,6 @@ def _remove_unsupported_archs(_config_vars):
 
 
 def _override_all_archs(_config_vars):
-    """Allow override of all archs with ARCHFLAGS env var"""
     if 'ARCHFLAGS' in os.environ:
         arch = os.environ['ARCHFLAGS']
         for cv in _UNIVERSAL_CONFIG_VARS:
@@ -174,7 +158,6 @@ def _override_all_archs(_config_vars):
 
 
 def _check_for_unavailable_sdk(_config_vars):
-    """Remove references to any SDKs not available"""
     cflags = _config_vars.get('CFLAGS', '')
     m = re.search('-isysroot\\s+(\\S+)', cflags)
     if m is not None:
@@ -190,14 +173,6 @@ def _check_for_unavailable_sdk(_config_vars):
 
 
 def compiler_fixup(compiler_so, cc_args):
-    """
-    This function will strip '-isysroot PATH' and '-arch ARCH' from the
-    compile flags if the user has specified one them in extra_compile_flags.
-    
-    This is needed because '-arch ARCH' adds another architecture to the
-    build, without a way to remove an architecture. Furthermore GCC will
-    barf if multiple '-isysroot' arguments are present.
-    """
     stripArch = stripSysroot = False
     compiler_so = list(compiler_so)
     if not _supports_universal_builds():
@@ -238,29 +213,6 @@ def compiler_fixup(compiler_so, cc_args):
 
 
 def customize_config_vars(_config_vars):
-    """Customize Python build configuration variables.
-    
-    Called internally from sysconfig with a mutable mapping
-    containing name/value pairs parsed from the configured
-    makefile used to build this interpreter.  Returns
-    the mapping updated as needed to reflect the environment
-    in which the interpreter is running; in the case of
-    a Python from a binary installer, the installed
-    environment may be very different from the build
-    environment, i.e. different OS levels, different
-    built tools, different available CPU architectures.
-    
-    This customization is performed whenever
-    distutils.sysconfig.get_config_vars() is first
-    called.  It may be used in environments where no
-    compilers are present, i.e. when installing pure
-    Python dists.  Customization of compiler paths
-    and detection of unavailable archs is deferred
-    until the first extension module build is
-    requested (in distutils.sysconfig.customize_compiler).
-    
-    Currently called from distutils.sysconfig
-    """
     if not _supports_universal_builds():
         _remove_universal_flags(_config_vars)
     _override_all_archs(_config_vars)
@@ -269,12 +221,6 @@ def customize_config_vars(_config_vars):
 
 
 def customize_compiler(_config_vars):
-    """Customize compiler path and configuration variables.
-    
-    This customization is performed when the first
-    extension module build is requested
-    in distutils.sysconfig.customize_compiler).
-    """
     _find_appropriate_compiler(_config_vars)
     _remove_unsupported_archs(_config_vars)
     _override_all_archs(_config_vars)
@@ -282,7 +228,6 @@ def customize_compiler(_config_vars):
 
 
 def get_platform_osx(_config_vars, osname, release, machine):
-    """Filter values for get_platform()"""
     macver = _config_vars.get('MACOSX_DEPLOYMENT_TARGET', '')
     macrelease = _get_system_version() or macver
     macver = macver or macrelease

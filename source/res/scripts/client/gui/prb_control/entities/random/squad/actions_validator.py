@@ -9,9 +9,6 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import UNIT_RESTRICTION
 
 class BalancedSquadVehiclesValidator(BaseActionsValidator):
-    """
-    Balanced squad vehicle validation
-    """
 
     def _validate(self):
         levelsRange = self._entity.getRosterSettings().getLevelsRange()
@@ -19,9 +16,6 @@ class BalancedSquadVehiclesValidator(BaseActionsValidator):
 
 
 class BalancedSquadSlotsValidator(CommanderValidator):
-    """
-    Balanced squad slots validation
-    """
 
     def _validate(self):
         stats = self._entity.getStats()
@@ -30,9 +24,6 @@ class BalancedSquadSlotsValidator(CommanderValidator):
 
 
 class SPGForbiddenSquadVehiclesValidator(BaseActionsValidator):
-    """
-    SPG forbidden squad vehicle validation
-    """
 
     def _validate(self):
         pInfo = self._entity.getPlayerInfo()
@@ -45,16 +36,10 @@ class SPGForbiddenSquadVehiclesValidator(BaseActionsValidator):
 
 
 class RandomSquadActionsValidator(SquadActionsValidator):
-    """
-    Random squad actions validation class
-    """
     pass
 
 
 class BalancedSquadActionsValidator(RandomSquadActionsValidator):
-    """
-    Balanced squad actions validation class
-    """
 
     def _createVehiclesValidator(self, entity):
         baseValidator = super(BalancedSquadActionsValidator, self)._createVehiclesValidator(entity)
@@ -66,9 +51,6 @@ class BalancedSquadActionsValidator(RandomSquadActionsValidator):
 
 
 class SPGForbiddenSquadActionsValidator(RandomSquadActionsValidator):
-    """
-    SPG forbidden squad actions validation class
-    """
 
     def _createVehiclesValidator(self, entity):
         baseValidator = super(SPGForbiddenSquadActionsValidator, self)._createVehiclesValidator(entity)
@@ -76,10 +58,6 @@ class SPGForbiddenSquadActionsValidator(RandomSquadActionsValidator):
 
 
 class SPGForbiddenBalancedSquadActionsValidator(BalancedSquadActionsValidator):
-    """
-    SPG forbidden + Balanced squad actions validation class.
-    SPG validation has the highest priority.
-    """
 
     def _createVehiclesValidator(self, entity):
         baseValidator = super(SPGForbiddenBalancedSquadActionsValidator, self)._createVehiclesValidator(entity)

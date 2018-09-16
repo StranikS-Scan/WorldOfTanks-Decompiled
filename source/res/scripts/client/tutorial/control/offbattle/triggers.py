@@ -8,6 +8,7 @@ from tutorial.control.context import GlobalStorage, GLOBAL_FLAG
 from tutorial.control.offbattle.context import OffBattleClientCtx
 from tutorial.control.offbattle.functional import ContentChangedEvent
 from tutorial.control.triggers import Trigger
+import BigWorld
 __all__ = ('TutorialModeTrigger', 'TutorialQueueTrigger', 'AllBonusesTrigger')
 
 class TutorialModeTrigger(Trigger, IGlobalListener):
@@ -15,9 +16,13 @@ class TutorialModeTrigger(Trigger, IGlobalListener):
 
     def __init__(self, triggerID):
         super(TutorialModeTrigger, self).__init__(triggerID)
+        self.__checkPrbDispatcherCallbackID = None
         self._inMode = False
+        return
 
     def run(self):
+        if not self.__checkPrbDispatcher():
+            return
         if not self.isSubscribed:
             self.startGlobalListening()
             self.isSubscribed = True
@@ -28,15 +33,35 @@ class TutorialModeTrigger(Trigger, IGlobalListener):
         return self._inMode
 
     def clear(self):
+        if self.__checkPrbDispatcherCallbackID is not None:
+            BigWorld.cancelCallback(self.__checkPrbDispatcherCallbackID)
+            self.__checkPrbDispatcherCallbackID = None
         if self.isSubscribed:
             self.stopGlobalListening()
             self.isSubscribed = False
         self._inMode = False
         super(TutorialModeTrigger, self).clear()
+        return
 
     def onPrbEntitySwitched(self):
         self.__setState()
         self.toggle(isOn=self._inMode)
+
+    def __checkPrbDispatcher(self):
+        if self.prbDispatcher is None:
+            if self.__checkPrbDispatcherCallbackID is None:
+                self.__checkPrbDispatcherCallbackID = BigWorld.callback(0.0, self.__checkPrbDispatcherCallback)
+            return False
+        else:
+            if self.__checkPrbDispatcherCallbackID is not None:
+                BigWorld.cancelCallback(self.__checkPrbDispatcherCallbackID)
+                self.__checkPrbDispatcherCallbackID = None
+            return True
+
+    def __checkPrbDispatcherCallback(self):
+        self.__checkPrbDispatcherDallbackID = None
+        self.run()
+        return
 
     def __setState(self):
         funcState = self.prbDispatcher.getFunctionalState()
@@ -73,9 +98,9 @@ class TutorialQueueTrigger(Trigger, IGlobalListener):
             return
         if len(args) < 3:
             LOG_ERROR('Number of argument is invalid', args)
-            queueNumber, queueLen, avgWaitingTime = (0, 0, 0)
+            _, _, avgWaitingTime = (0, 0, 0)
         else:
-            queueNumber, queueLen, avgWaitingTime = args[:3]
+            _, _, avgWaitingTime = args[:3]
         self._event.fire(avgWaitingTime)
         if not self._inQueue:
             self._inQueue = True

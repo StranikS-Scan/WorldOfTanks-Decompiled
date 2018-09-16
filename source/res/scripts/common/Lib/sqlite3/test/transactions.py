@@ -104,10 +104,6 @@ class TransactionTests(unittest.TestCase):
             self.fail('should have raised an OperationalError')
 
     def CheckLocking(self):
-        """
-        This tests the improved concurrency with pysqlite 2.3.4. You needed
-        to roll back con2 before you could commit con1.
-        """
         if sqlite.sqlite_version_info < (3, 2, 2):
             return
         self.cur1.execute('create table test(i)')
@@ -123,10 +119,6 @@ class TransactionTests(unittest.TestCase):
         self.con1.commit()
 
     def CheckRollbackCursorConsistency(self):
-        """
-        Checks if cursors on the connection are set into a "reset" state
-        when a rollback is done on the connection.
-        """
         con = sqlite.connect(':memory:')
         cur = con.cursor()
         cur.execute('create table test(x)')

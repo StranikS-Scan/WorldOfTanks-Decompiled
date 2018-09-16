@@ -1,11 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/ClientUnit.py
 import struct
-from collections import namedtuple
 from constants import PREBATTLE_TYPE
-from debug_utils import LOG_ERROR, LOG_DEBUG_DEV, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_ERROR, LOG_DEBUG_DEV
 import Event
-from UnitBase import UnitBase, UNIT_OP, UNIT_ROLE, UNIT_FLAGS, LEADER_SLOT
+from UnitBase import UnitBase, UNIT_OP, UNIT_ROLE, LEADER_SLOT
 from shared_utils import makeTupleByDict
 PLAYER_ID_CHR = '<q'
 VEH_LEN_CHR = '<H'
@@ -14,7 +13,7 @@ _EXTRA_BY_PRB_TYPE = {}
 
 class ClientUnit(UnitBase):
 
-    def __init__(self, limitsDefs={}, slotDefs={}, slotCount=0, packedRoster='', extrasInit=None, packedUnit=''):
+    def __init__(self, limitsDefs=None, slotDefs=None, slotCount=0, packedRoster='', extrasInit=None, packedUnit=''):
         self.__eManager = Event.SuspendedEventManager()
         self.onUnitFlagsChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitReadyMaskChanged = Event.SuspendedEvent(self.__eManager)
@@ -32,7 +31,7 @@ class ClientUnit(UnitBase):
         self.onUnitExtraChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitUpdated = Event.SuspendedEvent(self.__eManager)
         self._creatorDBID = 0
-        UnitBase.__init__(self, limitsDefs, slotDefs, slotCount, packedRoster, extrasInit, packedUnit)
+        UnitBase.__init__(self, limitsDefs or {}, slotDefs or {}, slotCount, packedRoster, extrasInit, packedUnit)
 
     def destroy(self):
         self.__eManager.clear()
@@ -160,9 +159,6 @@ class ClientUnit(UnitBase):
     def isEvent(self):
         return self._prebattleTypeID == PREBATTLE_TYPE.EVENT
 
-    def isFalloutSquad(self):
-        return self._prebattleTypeID == PREBATTLE_TYPE.FALLOUT
-
     def isPrebattlesSquad(self):
         return self._prebattleTypeID in PREBATTLE_TYPE.SQUAD_PREBATTLES
 
@@ -219,7 +215,7 @@ class ClientUnit(UnitBase):
         accountDBID, hasPlayer = 0, False
         try:
             accountDBID = struct.unpack_from(PLAYER_ID_CHR, packedOps)
-            filtered = dict(filter(lambda item: item[1].get('role', 0) & UNIT_ROLE.INVITED == 0, self._players.iteritems()))
+            filtered = dict((item for item in self._players.iteritems() if item[1].get('role', 0) & UNIT_ROLE.INVITED == 0))
             hasPlayer = accountDBID in filtered
         except struct.error as e:
             LOG_ERROR(e)
@@ -286,9 +282,3 @@ class ClientUnit(UnitBase):
         self.onUnitMembersListChanged()
         self.onUnitPlayerRoleChanged(memberDBID, prevRoleFlags, newRoleFlags)
         self.onUnitPlayerRoleChanged(prev_creatorDBID, prevRoleFlags, newRoleFlags)
-
-    def _changeFalloutQueueType(self, queueType):
-        UnitBase._changeFalloutQueueType(self, queueType)
-        self.onUnitRosterChanged()
-        self.onUnitMembersListChanged()
-        self.onUnitSettingChanged(UNIT_OP.CHANGE_FALLOUT_TYPE, queueType)

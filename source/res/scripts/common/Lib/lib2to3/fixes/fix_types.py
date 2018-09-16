@@ -1,22 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_types.py
-"""Fixer for removing uses of the types module.
-
-These work for only the known names in the types module.  The forms above
-can include types. or not.  ie, It is assumed the module is imported either as:
-
-    import types
-    from types import ... # either * or specific types
-
-The import statements are not modified.
-
-There should be another fixer that handles at least the following constants:
-
-   type([]) -> list
-   type(()) -> tuple
-   type('') -> str
-
-"""
 from ..pgen2 import token
 from .. import fixer_base
 from ..fixer_util import Name

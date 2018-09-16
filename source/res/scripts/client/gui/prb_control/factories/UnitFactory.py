@@ -10,7 +10,6 @@ from gui.prb_control.entities.e_sport.unit.entity import ESportIntroEntity, ESpo
 from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEntity, PublicEntity
 from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEntryPoint, PublicEntryPoint
 from gui.prb_control.entities.event.squad.entity import EventBattleSquadEntity, EventBattleSquadEntryPoint
-from gui.prb_control.entities.fallout.squad.entity import FalloutSquadEntity, FalloutSquadEntryPoint
 from gui.prb_control.entities.stronghold.unit.entity import StrongholdEntity, StrongholdEntryPoint, StrongholdBrowserEntryPoint, StrongholdBrowserEntity
 from gui.prb_control.entities.random.squad.entity import RandomSquadEntity, RandomSquadEntryPoint
 from gui.prb_control.items import PlayerDecorator, FunctionalState
@@ -24,7 +23,6 @@ _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.SQUAD: RandomSquadEntryPoint
  PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST: StrongholdBrowserEntryPoint}
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntryPoint,
  PREBATTLE_TYPE.EVENT: EventBattleSquadEntryPoint,
- PREBATTLE_TYPE.FALLOUT: FalloutSquadEntryPoint,
  PREBATTLE_TYPE.UNIT: PublicEntryPoint,
  PREBATTLE_TYPE.EXTERNAL: StrongholdEntryPoint}
 _SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.E_SPORT_COMMON: ESportIntroEntity}
@@ -32,14 +30,10 @@ _SUPPORTED_BROWSER_BY_TYPE = {PREBATTLE_TYPE.UNIT: PublicBrowserEntity,
  PREBATTLE_TYPE.EXTERNAL: StrongholdBrowserEntity}
 _SUPPORTED_UNIT_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntity,
  PREBATTLE_TYPE.EVENT: EventBattleSquadEntity,
- PREBATTLE_TYPE.FALLOUT: FalloutSquadEntity,
  PREBATTLE_TYPE.UNIT: PublicEntity,
  PREBATTLE_TYPE.EXTERNAL: StrongholdEntity}
 
 class UnitFactory(ControlFactory):
-    """
-    Creates entry point, ctx or entity for unit control.
-    """
 
     def createEntry(self, ctx):
         return self._createEntryByType(ctx.getEntityType(), _SUPPORTED_ENTRY_BY_TYPE)
@@ -65,14 +59,6 @@ class UnitFactory(ControlFactory):
         return LeaveUnitCtx(waitingID='prebattle/leave', flags=flags, entityType=entityType)
 
     def __createByAccountState(self, ctx):
-        """
-        Tries to create entity by current account state.
-        Args:
-            ctx: creation request context.
-        
-        Returns:
-            new prebattle unit entity
-        """
         unitMrg = prb_getters.getClientUnitMgr()
         if unitMrg is None:
             return
@@ -87,25 +73,9 @@ class UnitFactory(ControlFactory):
             return self.__createByPrbType(ctx)
 
     def __createByFlags(self, ctx):
-        """
-        Tries to create entity by context flags.
-        Args:
-            ctx: creation request context.
-        
-        Returns:
-            new prebattle unit entity
-        """
         return self.__createByAccountState(ctx) if not ctx.hasFlags(FUNCTIONAL_FLAG.UNIT) else None
 
     def __createByPrbType(self, ctx):
-        """
-        Tries to create entity by prebattle type.
-        Args:
-            ctx: creation request context.
-        
-        Returns:
-            new prebattle unit entity
-        """
         if ctx.getCtrlType() != CTRL_ENTITY_TYPE.UNIT:
             return None
         else:

@@ -5,10 +5,12 @@ import BigWorld
 import VOIP
 from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
 from debug_utils import LOG_DEBUG, LOG_WARNING
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getNewSettings, invalidateSettings
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from Vibroeffects import VibroManager
 from gui import DialogsInterface, g_guiResetters
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils import flashObject2Dict, decorators
 from gui.Scaleform.daapi.view.meta.SettingsWindowMeta import SettingsWindowMeta
 from gui.Scaleform.daapi.view.common.settings.SettingsParams import SettingsParams
@@ -53,15 +55,9 @@ class SettingsWindow(SettingsWindowMeta):
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
-        """
-        Returns instance of chat plugin to have access to VOIP Controller
-        :return: instance of chat plugin
-        """
         return None
 
     def __getSettingsParam(self):
-        """Read settings from SettingsParam
-        """
         settings = {SETTINGS_GROUP.GAME_SETTINGS: self.params.getGameSettings(),
          SETTINGS_GROUP.GRAPHICS_SETTINGS: self.params.getGraphicsSettings(),
          SETTINGS_GROUP.SOUND_SETTINGS: self.params.getSoundSettings(),
@@ -73,9 +69,6 @@ class SettingsWindow(SettingsWindowMeta):
         return settings
 
     def __getSettings(self):
-        """Create dict of settings divided by groups
-        :return: dict { settingsGroup :  {keys: [settingsName], values: [settingsValues] }}
-        """
         settings = self.__getSettingsParam()
         reformatted_settings = {}
         for key, value in settings.iteritems():
@@ -128,6 +121,7 @@ class SettingsWindow(SettingsWindowMeta):
         if self.__redefinedKeyModeEnabled:
             BigWorld.wg_setRedefineKeysMode(True)
         self.__currentSettings = self.params.getMonitorSettings()
+        self.as_setInitDataS(BigWorld.wg_isRunningOnWinXP())
         self._update()
         VibroManager.g_instance.onConnect += self.onVibroManagerConnect
         VibroManager.g_instance.onDisconnect += self.onVibroManagerDisconnect
@@ -169,8 +163,6 @@ class SettingsWindow(SettingsWindowMeta):
             LOG_WARNING("Unknown settings window's page id", tabId)
 
     def onCounterTargetVisited(self, tabName, subTabName, controlId):
-        """Notify that user visited tab
-        """
         isSettingsChanged = invalidateSettings(tabName, subTabName, controlId)
         if isSettingsChanged:
             newSettings = getNewSettings()
@@ -193,6 +185,7 @@ class SettingsWindow(SettingsWindowMeta):
                 self.__commitSettings(settings, isOk, isCloseWnd)
             else:
                 self.params.revert()
+            if not isCloseWnd:
                 self._update()
 
         if applyMethod == APPLY_METHOD.RESTART:
@@ -235,18 +228,21 @@ class SettingsWindow(SettingsWindowMeta):
         option = self.settingsCore.options.getSetting(settings_constants.SOUND.SOUND_SPEAKERS)
         if not option.isPresetSupportedByIndex(index):
 
-            def apply(result):
+            def _apply(result):
                 LOG_DEBUG('Player result', result)
                 self.as_onSoundSpeakersPresetApplyS(result)
 
-            DialogsInterface.showI18nConfirmDialog('soundSpeakersPresetDoesNotMatch', callback=apply)
+            DialogsInterface.showI18nConfirmDialog('soundSpeakersPresetDoesNotMatch', callback=_apply)
             return False
         return True
 
     def startVOIPTest(self, isStart):
         LOG_DEBUG('Vivox test: %s' % str(isStart))
         rh = VOIP.getVOIPManager()
-        rh.enterTestChannel() if isStart else rh.leaveTestChannel()
+        if isStart:
+            rh.enterTestChannel()
+        else:
+            rh.leaveTestChannel()
         return False
 
     @decorators.process('__updateCaptureDevices')
@@ -286,16 +282,10 @@ class SettingsWindow(SettingsWindowMeta):
 
         DialogsInterface.showI18nConfirmDialog(dialogID, callback)
 
-    def onRecreateDevice(self):
-        actualSettings = self.params.getMonitorSettings()
-        curDrr = self.__currentSettings[settings_constants.GRAPHICS.DYNAMIC_RENDERER]
-        actualDrr = actualSettings[settings_constants.GRAPHICS.DYNAMIC_RENDERER]
-        self.__currentSettings = actualSettings
-        result = self.__currentSettings.copy()
-        if curDrr == actualDrr:
-            result[settings_constants.GRAPHICS.DYNAMIC_RENDERER] = None
-        self.as_updateVideoSettingsS(result)
-        return
+    def openGammaWizard(self, x, y, size):
+        g_eventBus.handleEvent(events.LoadViewEvent(alias=VIEW_ALIAS.GAMMA_WIZARD, ctx={'x': x,
+         'y': y,
+         'size': size}), EVENT_BUS_SCOPE.DEFAULT)
 
     def __updateInterfaceScale(self):
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())

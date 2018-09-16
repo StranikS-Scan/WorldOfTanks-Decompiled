@@ -8,27 +8,6 @@ from Math import Vector2, Vector3
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 
 def deepUpdate(dst, src, path=None):
-    """
-    Recursively traverses attributes of a pair of VehicleType-like objects or JSONs.
-    Typically, dst is VehicleType and src is either VehicleType of JSON
-    Tries to update values inside types where possible.
-    Resorts to assignment when the deeper update fails.
-    Ignores update and/or assignment of/to other untraversable types.
-    Preserves objects reference structure where possible except for assignments (tuple, float, int, bool)
-     a. Does not create new attributes at destination, ignores surplus structure of an src-obj
-          So that another deepUpdate with the copy of the old structure as a Source could undo the previous deepUpdate.
-     b. Does not override references with None values
-          because Nones are used as placeholders in incomplete source-reference-trees.
-     c. Does not override None values as the consequence of (a.) & (b.)
-    
-    The function is not protected against traversable reference loops - stack overflow will occur.
-    
-    :param dst:  destination reference tree, that is being deeply updated
-    :param src:  the source reference tree that provides diff
-    :param path: debug info for log messages attribution
-    :return: None - deep update finished, no assignment is needed at the outer level
-         not None - deep update unavailable and assignment of destination item to the value returned is needed.
-    """
     if path is None:
         path = '/'
     if dst is None or src is None or dst is src:

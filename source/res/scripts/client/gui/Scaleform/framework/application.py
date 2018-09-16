@@ -19,11 +19,6 @@ class DAAPIRootBridge(object):
     __slots__ = ('__pyScript', '__rootPath', '__initCallback', '__isInited')
 
     def __init__(self, rootPath='root', initCallback='registerApplication'):
-        """
-        :param rootPath: path to flashObject
-        :param initCallback: name of function called from flash after initialization is completed. If string is empty
-        bridge will register flashObject immediately
-        """
         self.__pyScript = None
         self.__rootPath = rootPath
         self.__initCallback = initCallback
@@ -59,12 +54,6 @@ class DAAPIRootBridge(object):
 
 
 class SFApplication(Flash, ApplicationMeta):
-    """
-    Note: Global application class.
-    Key points:
-    1. Initializes application.
-    2. Initializes DA API.
-    """
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, swfName, appNS, daapiBridge=None):
@@ -85,8 +74,8 @@ class SFApplication(Flash, ApplicationMeta):
         self._gameInputMgr = None
         self._cacheMgr = None
         self._tutorialMgr = None
-        self._bootcampMgr = None
         self._imageManager = None
+        self._graphicsOptimizationMgr = None
         self.__initialized = False
         self.__ns = appNS
         self.__viewEventsListener = ViewEventsListener(weakref.proxy(self))
@@ -151,10 +140,6 @@ class SFApplication(Flash, ApplicationMeta):
         return self._tutorialMgr
 
     @property
-    def bootcampManager(self):
-        return self._bootcampMgr
-
-    @property
     def waitingManager(self):
         return None
 
@@ -165,6 +150,10 @@ class SFApplication(Flash, ApplicationMeta):
     @property
     def imageManager(self):
         return self._imageManager
+
+    @property
+    def graphicsOptimizationManager(self):
+        return self._graphicsOptimizationMgr
 
     @property
     def initialized(self):
@@ -179,10 +168,6 @@ class SFApplication(Flash, ApplicationMeta):
         return self.__guiCtrlModeFlags
 
     def isModalViewShown(self):
-        """ Is any modal window shown.
-        For example, this routine is needed to avoid key handling in battle UI if modal window is shown.
-        :return: return True if some modal window is shown.
-        """
         manager = self._containerMgr
         if manager is not None:
             result = manager.isModalViewsIsExists()
@@ -264,15 +249,15 @@ class SFApplication(Flash, ApplicationMeta):
         if self._tutorialMgr is not None:
             self._tutorialMgr.destroy()
             self._tutorialMgr = None
-        if self._bootcampMgr is not None:
-            self._bootcampMgr.destroy()
-            self._bootcampMgr = None
         if self.__daapiBridge is not None:
             self.__daapiBridge.clear()
             self.__daapiBridge = None
         if self._imageManager is not None:
             self._imageManager.destroy()
             self._imageManager = None
+        if self._graphicsOptimizationMgr is not None:
+            self._graphicsOptimizationMgr.destroy()
+            self._graphicsOptimizationMgr = None
         super(SFApplication, self).beforeDelete()
         self.proxy = None
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.DESTROYED))
@@ -369,13 +354,13 @@ class SFApplication(Flash, ApplicationMeta):
     def setTutorialMgr(self, flashObject):
         self._tutorialMgr.setFlashObject(flashObject)
 
-    def setBootcampMgr(self, flashObject):
-        if self._bootcampMgr and flashObject:
-            self._bootcampMgr.setFlashObject(flashObject)
-
     def setImageManager(self, flashObject):
         if self._imageManager and flashObject:
             self._imageManager.setFlashObject(flashObject)
+
+    def setGraphicsOptimizationManager(self, flashObject):
+        if self._graphicsOptimizationMgr and flashObject:
+            self._graphicsOptimizationMgr.setFlashObject(flashObject)
 
     def onAsInitializationCompleted(self):
         self.__initialized = True
@@ -386,11 +371,6 @@ class SFApplication(Flash, ApplicationMeta):
         self.settingsCore.options.getSetting('interfaceScale').setSystemValue(index)
 
     def updateTooltip(self, tooltipData, linkage):
-        """
-        Update contents of a dynamic tooltip
-        :param tooltipData: new data
-        :param linkage: one from TOOLTIPS_CONSTANTS
-        """
         if self._toolTip is not None:
             self._toolTip.as_showS(tooltipData, linkage)
         return
@@ -408,6 +388,9 @@ class SFApplication(Flash, ApplicationMeta):
     def setBackgroundAlpha(self, value):
         self.movie.backgroundAlpha = value
 
+    def getBackgroundAlpha(self):
+        return self.movie.backgroundAlpha
+
     def _createManagers(self):
         self._loaderMgr = self._createLoaderManager()
         self._containerMgr = self._createContainerManager()
@@ -424,8 +407,8 @@ class SFApplication(Flash, ApplicationMeta):
         self._gameInputMgr = self._createGameInputManager()
         self._cacheMgr = self._createCacheManager()
         self._tutorialMgr = self._createTutorialManager()
-        self._bootcampMgr = self._createBootcampManager()
         self._imageManager = self._createImageManager()
+        self._graphicsOptimizationMgr = self._createGraphicsOptimizationManager()
 
     def _addGameCallbacks(self):
         g_guiResetters.add(self.__onScreenResolutionChanged)
@@ -486,7 +469,7 @@ class SFApplication(Flash, ApplicationMeta):
     def _createTutorialManager(self):
         return None
 
-    def _createBootcampManager(self):
+    def _createGraphicsOptimizationManager(self):
         return None
 
     def _setup(self):

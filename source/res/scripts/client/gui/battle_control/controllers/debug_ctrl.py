@@ -8,7 +8,6 @@ from gui.shared.utils.TimeInterval import TimeInterval
 from helpers import dependency
 from skeletons.helpers.statistics import IStatisticsCollector
 _UPDATE_INTERVAL = 0.2
-_LATENCY_UNAVAILABLE = (0, 0, 0, 0)
 
 class IDebugPanel(object):
 
@@ -17,12 +16,6 @@ class IDebugPanel(object):
 
 
 class DebugController(IViewComponentsController):
-    """Controller for the debug panel.
-    
-    This class starts internal update cycle and updates debug panel.
-    In order to collect lagging info from near vehicles, these vehicle's ids
-    should be provided from outside using special methods.
-    """
     statsCollector = dependency.descriptor(IStatisticsCollector)
 
     def __init__(self):
@@ -45,7 +38,6 @@ class DebugController(IViewComponentsController):
         return
 
     def setViewComponents(self, debugPanelUI):
-        assert isinstance(debugPanelUI, IDebugPanel)
         self._debugPanelUI = debugPanelUI
 
     def clearViewComponents(self):
@@ -74,5 +66,5 @@ class DebugController(IViewComponentsController):
             return
 
         if self._debugPanelUI is not None:
-            self._debugPanelUI.updateDebugInfo(int(ping), int(fps), isLaggingNow, fpsReplay=fpsReplay)
+            self._debugPanelUI.updateDebugInfo(ping, fps, isLaggingNow, fpsReplay=fpsReplay)
         return

@@ -2,35 +2,36 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanRequestsView.py
 import BigWorld
 from adisp import process
+from debug_utils import LOG_DEBUG
+from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
+from gui.Scaleform.daapi.view.meta.ClanRequestsViewMeta import ClanRequestsViewMeta
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters
 from gui.clans.clan_helpers import isInClanEnterCooldown
 from gui.clans.items import formatField, isValueAvailable
-from gui.clans.contexts import AcceptApplicationCtx, DeclineApplicationCtx, CreateInviteCtx, AccountsInfoCtx
-from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
-from gui.Scaleform.daapi.view.meta.ClanRequestsViewMeta import ClanRequestsViewMeta
-from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, CLAN_INVITE_STATES
+from gui.clans.settings import CLAN_INVITE_STATES
 from gui.shared.events import CoolDownEvent
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers import CooldownHelper
-from debug_utils import LOG_DEBUG
+from gui.wgcg.clan.contexts import AcceptApplicationCtx, DeclineApplicationCtx, CreateInviteCtx, AccountsInfoCtx
+from gui.wgcg.settings import WebRequestDataType
 from helpers.i18n import makeString as _ms
 
 class ClanRequestsView(ClanRequestsViewMeta):
 
     def __init__(self):
         super(ClanRequestsView, self).__init__()
-        self._cooldown = CooldownHelper([CLAN_REQUESTED_DATA_TYPE.CREATE_APPLICATIONS,
-         CLAN_REQUESTED_DATA_TYPE.CREATE_INVITES,
-         CLAN_REQUESTED_DATA_TYPE.ACCEPT_APPLICATION,
-         CLAN_REQUESTED_DATA_TYPE.ACCEPT_INVITE,
-         CLAN_REQUESTED_DATA_TYPE.DECLINE_APPLICATION,
-         CLAN_REQUESTED_DATA_TYPE.DECLINE_INVITE,
-         CLAN_REQUESTED_DATA_TYPE.DECLINE_INVITES,
-         CLAN_REQUESTED_DATA_TYPE.CLAN_INVITES,
-         CLAN_REQUESTED_DATA_TYPE.CLAN_MEMBERS_RATING], self._onCooldownHandle, CoolDownEvent.CLAN)
+        self._cooldown = CooldownHelper([WebRequestDataType.CREATE_APPLICATIONS,
+         WebRequestDataType.CREATE_INVITES,
+         WebRequestDataType.ACCEPT_APPLICATION,
+         WebRequestDataType.ACCEPT_INVITE,
+         WebRequestDataType.DECLINE_APPLICATION,
+         WebRequestDataType.DECLINE_INVITE,
+         WebRequestDataType.DECLINE_INVITES,
+         WebRequestDataType.CLAN_INVITES,
+         WebRequestDataType.CLAN_MEMBERS_RATING], self._onCooldownHandle, CoolDownEvent.WGCG)
 
     @property
     def actualRequestsPaginator(self):
@@ -115,7 +116,7 @@ class ClanRequestsView(ClanRequestsViewMeta):
         accountsInfo = tuple()
         if status is True and data:
             ctx = AccountsInfoCtx(tuple((item.getAccountDbID() for item in data)))
-            accountsResponse = yield self.clansCtrl.sendRequest(ctx)
+            accountsResponse = yield self.webCtrl.sendRequest(ctx)
             if accountsResponse.isSuccess():
                 accountsInfo = ctx.getDataObj(accountsResponse.data)
         self.dataProvider.setAccountsInfo(accountsInfo)

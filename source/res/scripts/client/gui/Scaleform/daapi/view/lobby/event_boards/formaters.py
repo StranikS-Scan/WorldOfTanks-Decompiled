@@ -75,8 +75,8 @@ def getNationTextWithIcon(nation):
     return '{}{}'.format(iconNation, getNationText(nation))
 
 
-def vehicleTypeText(type):
-    return _ms('#quests:classes/{}'.format(type))
+def vehicleTypeText(vType):
+    return _ms('#quests:classes/{}'.format(vType))
 
 
 def formatTimeToEnd(timeValue, period):

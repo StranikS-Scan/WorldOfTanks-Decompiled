@@ -6,9 +6,6 @@ from gui.shared.utils.decorators import ReprInjector
 
 @ReprInjector.withParent(('getID', 'prbID'), ('getPrbTypeName', 'type'), ('getWaitingID', 'waitingID'))
 class JoinBattleSessionCtx(JoinLegacyCtx):
-    """
-    Context to join battle session mode
-    """
     __slots__ = ()
 
     def __init__(self, prbID, prbType, waitingID='', flags=FUNCTIONAL_FLAG.UNDEFINED):

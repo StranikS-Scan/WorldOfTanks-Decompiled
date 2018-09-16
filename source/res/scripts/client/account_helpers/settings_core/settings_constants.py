@@ -11,9 +11,7 @@ class GRAPHICS(CONST_CONTAINER):
     RESOLUTION = 'resolution'
     BORDERLESS_SIZE = 'borderlessSize'
     REFRESH_RATE = 'refreshRate'
-    CUSTOM_AA = 'customAA'
-    MULTISAMPLING = 'multisampling'
-    GAMMA = 'gamma'
+    GAMMA_SETTING = 'gammaSetting'
     VERTICAL_SYNC = 'vertSync'
     TRIPLE_BUFFERED = 'tripleBuffered'
     COLOR_BLIND = 'isColorBlind'
@@ -21,7 +19,6 @@ class GRAPHICS(CONST_CONTAINER):
     GRAPHICS_SETTINGS_LIST = 'qualityOrder'
     PRESETS = 'presets'
     QUALITY_PRESET = 'graphicsQuality'
-    FPS_PERFOMANCER = 'fpsPerfomancer'
     DYNAMIC_RENDERER = 'dynamicRenderer'
     COLOR_FILTER_INTENSITY = 'colorFilterIntensity'
     COLOR_FILTER_IMAGES = 'colorFilterImages'
@@ -30,10 +27,10 @@ class GRAPHICS(CONST_CONTAINER):
     INTERFACE_SCALE = 'interfaceScale'
     DRR_AUTOSCALER_ENABLED = 'DRR_AUTOSCALER_ENABLED'
     RENDER_PIPELINE = 'RENDER_PIPELINE'
+    TESSELLATION_SUPPORTED = 'tessellationSupported'
 
     @classmethod
     def getScreenConstants(cls):
-        """Returns only the subset of constants related to screen/monitor settings."""
         return (cls.MONITOR,
          cls.VIDEO_MODE,
          cls.WINDOW_SIZE,
@@ -61,7 +58,6 @@ class GAME(CONST_CONTAINER):
     CHAT_CONTACTS_LIST_ONLY = 'chatContactsListOnly'
     LENS_EFFECT = 'enableOpticalSnpEffect'
     MINIMAP_ALPHA = 'minimapAlpha'
-    ENABLE_POSTMORTEM = 'enablePostMortemEffect'
     ENABLE_POSTMORTEM_DELAY = 'enablePostMortemDelay'
     REPLAY_ENABLED = 'replayEnabled'
     ENABLE_SERVER_AIM = 'useServerAim'
@@ -71,6 +67,8 @@ class GAME(CONST_CONTAINER):
     SNIPER_MODE_STABILIZATION = 'horStabilizationSnp'
     INCREASED_ZOOM = 'increasedZoom'
     SNIPER_MODE_BY_SHIFT = 'sniperModeByShift'
+    HANGAR_CAM_PERIOD = 'hangarCamPeriod'
+    HANGAR_CAM_PARALLAX_ENABLED = 'hangarCamParallaxEnabled'
     PLAYERS_PANELS_SHOW_LEVELS = 'ppShowLevels'
     PLAYERS_PANELS_SHOW_TYPES = 'ppShowTypes'
     PLAYERS_PANELS_STATE = 'ppState'
@@ -92,6 +90,7 @@ class GAME(CONST_CONTAINER):
     CAROUSEL_TYPE = 'carouselType'
     DOUBLE_CAROUSEL_TYPE = 'doubleCarouselType'
     VEHICLE_CAROUSEL_STATS = 'vehicleCarouselStats'
+    MINIMAP_ALPHA_ENABLED = 'minimapAlphaEnabled'
     C11N_HISTORICALLY_ACCURATE = 'c11nHistoricallyAccurate'
 
 
@@ -183,6 +182,7 @@ class FEEDBACK(CONST_CONTAINER):
     DAMAGE_INDICATOR = 'feedbackDamageIndicator'
     DAMAGE_LOG = 'feedbackDamageLog'
     BATTLE_EVENTS = 'feedbackBattleEvents'
+    BATTLE_BORDER_MAP = 'feedbackBattleBorderMap'
 
 
 class DAMAGE_INDICATOR(CONST_CONTAINER):
@@ -223,6 +223,11 @@ class BATTLE_EVENTS(CONST_CONTAINER):
     RECEIVED_DAMAGE = 'battleEventsReceivedDamage'
     RECEIVED_CRITS = 'battleEventsReceivedCrits'
     ENEMY_ASSIST_STUN = 'battleEventsEnemyAssistStun'
+
+
+class BATTLE_BORDER_MAP(CONST_CONTAINER):
+    MODE_SHOW_BORDER = 'battleBorderMapMode'
+    TYPE_BORDER = 'battleBorderMapType'
 
 
 class CONTACTS(CONST_CONTAINER):

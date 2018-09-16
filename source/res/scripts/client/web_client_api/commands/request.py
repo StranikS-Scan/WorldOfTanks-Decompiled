@@ -1,32 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/commands/request.py
-from collections import namedtuple
-from command import SchemeValidator, CommandHandler, instantiateObject
-_RequestCommand = namedtuple('_RequestCommand', ('request_id', 'custom_parameters'))
-_RequestCommand.__new__.__defaults__ = (None, None)
-_RequestCommandScheme = {'required': (('request_id', basestring),)}
-_RequestAccessTokenCommand = namedtuple('_RequestAccessTokenCommand', ('force',))
-_RequestAccessTokenCommand.__new__.__defaults__ = (False,)
-_RequestAccessTokenCommandScheme = {'optional': (('force', bool),)}
+from command import W2CSchema, createSubCommandsHandler, Field, SubCommand
 
-class RequestCommand(_RequestCommand, SchemeValidator):
-    """
-    Represents web command for general purpose requests (eg. Token1 and other common data).
-    If there is a need to do some module-specific requests (eg. ClanManagement) then another command should be created.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(RequestCommand, self).__init__(_RequestCommandScheme)
+class RequestSchema(W2CSchema):
+    request_id = Field(required=True, type=basestring)
 
 
-class RequestAccessTokenCommand(_RequestAccessTokenCommand, SchemeValidator):
-
-    def __init__(self, *args, **kwargs):
-        super(RequestAccessTokenCommand, self).__init__(_RequestAccessTokenCommandScheme)
+class RequestAccessTokenCommand(W2CSchema):
+    force = Field(type=bool)
 
 
-def createRequestHandler(handlerFunc):
-    data = {'name': 'request',
-     'cls': RequestCommand,
-     'handler': handlerFunc}
-    return instantiateObject(CommandHandler, data)
+def createRequestHandler(token1Handler=None, graphicsSettingsHandler=None, accessTokenHandler=None):
+    subCommands = {'token1': SubCommand(handler=token1Handler),
+     'graphics_settings': SubCommand(handler=graphicsSettingsHandler),
+     'access_token': SubCommand(subSchema=RequestAccessTokenCommand, handler=accessTokenHandler)}
+    return createSubCommandsHandler('request', RequestSchema, 'request_id', subCommands)

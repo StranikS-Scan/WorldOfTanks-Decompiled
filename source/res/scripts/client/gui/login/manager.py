@@ -150,6 +150,13 @@ class Manager(ILoginManager):
             self._preferences['peripheryLifetime'] = pickle.dumps((self.connectionMgr.peripheryID, time.time() + _PERIPHERY_DEFAULT_LIFETIME))
             self._preferences.writeLoginInfo()
 
+    @staticmethod
+    def getAvailableSocialNetworks():
+        raise UserWarning('This method should not be reached in this context')
+
+    def initiateSocialLogin(self, socialNetworkName, serverName, rememberUser, isRegistration):
+        raise UserWarning('This method should not be reached in this context')
+
     def _getHost(self, authMethod, hostName):
         if hostName != AUTO_LOGIN_QUERY_URL:
             return hostName
@@ -158,7 +165,7 @@ class Manager(ILoginManager):
             if pickledData:
                 try:
                     peripheryID, expirationTimestamp = pickle.loads(pickledData)
-                except:
+                except Exception:
                     LOG_DEBUG("Couldn't to read pickled periphery data. Connecting to {0}.".format(hostName))
                     return hostName
 
@@ -172,9 +179,5 @@ class Manager(ILoginManager):
             return hostName
 
     def __dumpUserName(self, name):
-        """ Dump user name to the preferences.xml (required by WGLeague's anti-cheat).
-        
-        See WOTD-55587. This method doesn't belong to Preferences class, so it's placed here.
-        """
         Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].writeString('user', name)
         Settings.g_instance.save()

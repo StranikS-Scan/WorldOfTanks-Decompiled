@@ -34,20 +34,46 @@ def _generateFormatSettings():
 
 _CMP_FORMAT_SETTINGS = _generateFormatSettings()
 
+class _BestParamsDict(dict):
+
+    def __init__(self, seq=None, **kwargs):
+        if seq is not None:
+            super(_BestParamsDict, self).__init__(seq, **kwargs)
+        else:
+            super(_BestParamsDict, self).__init__(**kwargs)
+        self.__lengths = {}
+        return
+
+    def addLen(self, key, value):
+        currLen = len(value)
+        values = self.__lengths.setdefault(key, {})
+        currVal = values.get(currLen, 0)
+        values[currLen] = currVal + 1
+
+    def toDict(self):
+        res = dict(self)
+        for k, values in self.__lengths.iteritems():
+            valuableLengths = [ length for length, count in values.iteritems() if count > 1 ]
+            valuableLengths.append(1)
+            res[k] = self[k][:max(valuableLengths)]
+
+        return res
+
+
 def getUndefinedParam():
     return text_styles.stats('--')
 
 
 def _reCalcBestParameters(targetCache):
-    assert targetCache
-    bestParamsDict = {}
+    bestParamsDict = _BestParamsDict()
     for vcParamData in targetCache:
         params = vcParamData.getParams()
         for pKey, pVal in params.iteritems():
             if isinstance(pVal, (tuple, list)):
+                bestParamsDict.addLen(pKey, pVal)
                 if pKey in bestParamsDict:
                     rateParamsList = rateParameterState(pKey, bestParamsDict[pKey], pVal)
-                    for idx, (state, diff) in enumerate(rateParamsList):
+                    for idx, (state, _) in enumerate(rateParamsList):
                         if state == PARAM_STATE.WORSE:
                             maxVals = bestParamsDict[pKey]
                             if idx == len(maxVals):
@@ -58,12 +84,12 @@ def _reCalcBestParameters(targetCache):
                 else:
                     bestParamsDict[pKey] = list(pVal)
             if pKey in bestParamsDict:
-                state, diff = rateParameterState(pKey, bestParamsDict[pKey], pVal)
+                state, _ = rateParameterState(pKey, bestParamsDict[pKey], pVal)
                 if state == PARAM_STATE.WORSE:
                     bestParamsDict[pKey] = pVal
             bestParamsDict[pKey] = pVal
 
-    return bestParamsDict
+    return bestParamsDict.toDict()
 
 
 class _VehParamsValuesGenerator(VehParamsBaseGenerator):
@@ -92,7 +118,7 @@ class _VehParamsValuesGenerator(VehParamsBaseGenerator):
 
 class _VehCompareParametersData(object):
 
-    def __init__(self, cache, vehIntCD, isInInventory, crewData, configurationType, vehData):
+    def __init__(self, cache, vehCompareData):
         super(_VehCompareParametersData, self).__init__()
         self.__crewLvl = None
         self.__skills = None
@@ -107,30 +133,25 @@ class _VehCompareParametersData(object):
         self.__battleBooster = None
         self.__isCrewInvalid = False
         self.__isInInvInvalid = False
+        self.__isConfigurationTypesInvalid = False
         self.__isCurrVehParamsInvalid = False
-        self.__vehicleIntCD = vehIntCD
-        self.setIsInInventory(isInInventory)
-        self.setVehicleData(*vehData)
-        self.setCrewData(*crewData)
-        self.setConfigurationType(configurationType)
+        self.__vehicleIntCD = vehCompareData.getVehicleCD()
+        self.setIsInInventory(vehCompareData.isInInventory())
+        self.setVehicleData(vehCompareData)
+        self.setCrewData(*vehCompareData.getCrewData())
+        self.setConfigurationType(vehCompareData.getConfigurationType())
         self.__cache = cache
         self.__paramGenerator = _VehParamsValuesGenerator(*_COLOR_SCHEMES)
-        self.__parameters = self.__initParameters(vehIntCD, self.__vehicle)
+        self.__parameters = self.__initParameters(vehCompareData.getVehicleCD(), self.__vehicle)
         return
 
     def setCrewData(self, crewLvl, skills):
-        """
-        Updates crew information
-        :param crewLvl: int, one of gui.game_control.veh_comparison_basket.CREW_TYPES
-        :param skills: set, [skillName, ...]
-        :return: bool, True if new incoming data is not similar as existed, otherwise - False
-        """
         if self.__crewLvl != crewLvl or self.__skills != skills:
             self.__crewLvl = crewLvl
             self.__skills = skills
             skillsDict = {}
             skillsByRoles = cmp_helpers.getVehicleCrewSkills(self.__vehicle)
-            for idx, (role, skillsSet) in enumerate(skillsByRoles):
+            for idx, (_, skillsSet) in enumerate(skillsByRoles):
                 sameSkills = skillsSet.intersection(self.__skills)
                 if sameSkills:
                     skillsDict[idx] = sameSkills
@@ -147,7 +168,12 @@ class _VehCompareParametersData(object):
             self.__isCurrVehParamsInvalid = True
         return self.__isCrewInvalid
 
-    def setVehicleData(self, vehicleStrCD, equipment, hasCamouflage, selectedShellIdx, battleBooster):
+    def setVehicleData(self, vehCompareData):
+        vehicleStrCD = vehCompareData.getVehicleStrCD()
+        equipment = vehCompareData.getEquipment()
+        hasCamouflage = vehCompareData.hasCamouflage()
+        selectedShellIdx = vehCompareData.getSelectedShellIndex()
+        battleBooster = vehCompareData.getBattleBooster()
         isDifferent = False
         camouflageInvalid = self.__hasCamouflage != hasCamouflage
         equipInvalid = equipment != self.__equipment
@@ -208,12 +234,10 @@ class _VehCompareParametersData(object):
         return self.__vehicleIntCD
 
     def getFormattedParameters(self, vehMaxParams):
-        if self.__isCrewInvalid:
-            if self.__isCrewInvalid:
-                self.__isCrewInvalid = False
+        self.__isCrewInvalid = False
         if self.__isInInvInvalid:
             self.__isInInvInvalid = False
-            self.__parameters.update(isInHangar=self.__isInInventory)
+            self.__parameters['isInHangar'] = self.__isInInventory
         if self.__isConfigurationTypesInvalid:
             self.__parameters.update(elite=self.__vehicle.isElite, moduleType=self._getConfigurationType(self.__configurationType), showRevertBtn=self.__showRevertButton())
             self.__isConfigurationTypesInvalid = False
@@ -232,12 +256,6 @@ class _VehCompareParametersData(object):
         return self.__currentVehParams
 
     def getDeltaParams(self, paramName, paramValue):
-        """
-        Calculates delta and return it in formatted HTML string
-        :param paramName: parameter name as string ('damage', 'turretArmor', etc...)
-        :param paramValue: parameter value
-        :return: formatted HTML string
-        """
         params = self.getParams()
         if paramName in params:
             pInfo = getParamExtendedData(paramName, params[paramName], paramValue)
@@ -250,10 +268,6 @@ class _VehCompareParametersData(object):
 
     @classmethod
     def __initParameters(cls, vehCD, vehicle):
-        """
-        Generates some constant data for vehicle
-        :return: vo as dict
-        """
         return {'id': vehCD,
          'nation': vehicle.nationID,
          'image': vehicle.icon,
@@ -307,12 +321,6 @@ class VehCompareBasketParamsCache(object):
         return
 
     def getParametersDelta(self, index, paramName):
-        """
-        Generates the list of parameters deltas
-        :param index: int index of item in cache
-        :param paramName: string name of parameter ('damage', 'turretArmor', ...)
-        :return: list of formatted parameters deltas
-        """
         targetItem = self.__cache[index]
         targetParams = targetItem.getParams()
         outcome = []
@@ -327,17 +335,13 @@ class VehCompareBasketParamsCache(object):
 
     def __addParamData(self, index):
         vehCompareData = self.comparisonBasket.getVehicleAt(index)
-        paramsData = _VehCompareParametersData(self.__cache, vehCompareData.getVehicleCD(), vehCompareData.isInInventory(), vehCompareData.getCrewData(), vehCompareData.getConfigurationType(), (vehCompareData.getVehicleStrCD(),
-         vehCompareData.getEquipment(),
-         vehCompareData.hasCamouflage(),
-         vehCompareData.getSelectedShellIndex(),
-         vehCompareData.getBattleBooster()))
+        paramsData = _VehCompareParametersData(self.__cache, vehCompareData)
         self.__cache.insert(index, paramsData)
 
     def __rebuildList(self):
         if self.__cache:
             bestParams = _reCalcBestParameters(self.__cache)
-            params = map(lambda paramData: paramData.getFormattedParameters(bestParams), self.__cache)
+            params = [ paramData.getFormattedParameters(bestParams) for paramData in self.__cache ]
             self.__view.buildList(params)
         else:
             self.__view.buildList([])
@@ -362,11 +366,11 @@ class VehCompareBasketParamsCache(object):
             paramsVehData.setIsInInventory(basketVehData.isInInventory())
             paramsVehData.setConfigurationType(basketVehData.getConfigurationType())
             crewChanged = paramsVehData.setCrewData(*basketVehData.getCrewData())
-            vehicleChanged = paramsVehData.setVehicleData(basketVehData.getVehicleStrCD(), basketVehData.getEquipment(), basketVehData.hasCamouflage(), basketVehData.getSelectedShellIndex(), basketVehData.getBattleBooster())
+            vehicleChanged = paramsVehData.setVehicleData(basketVehData)
             isBestScoreInvalid = isBestScoreInvalid or vehicleChanged or crewChanged
 
         if self.__cache:
             bestParams = _reCalcBestParameters(self.__cache) if isBestScoreInvalid else None
-            params = map(lambda paramData: paramData.getFormattedParameters(bestParams), self.__cache)
+            params = [ paramData.getFormattedParameters(bestParams) for paramData in self.__cache ]
             self.__view.updateItems(params)
         return

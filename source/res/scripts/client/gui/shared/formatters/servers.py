@@ -9,16 +9,6 @@ from predefined_hosts import HOST_AVAILABILITY, PING_STATUSES
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 
 def formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue, useBigSize=False):
-    """
-    
-    :param csisStatus:
-    :param isColorBlind:
-    :param isSelected:
-    :param pingStatus:
-    :param pingValue:
-    :param useBigSize: If True result str has 14 font size, otherwise - 11 font size
-    :return:
-    """
     if pingStatus == PING_STATUSES.REQUESTED:
         return None
     else:

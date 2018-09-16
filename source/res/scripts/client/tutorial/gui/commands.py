@@ -31,15 +31,18 @@ class _PyInvokeMethod(GUICommand):
             if method is None:
                 break
 
-        if type(method) not in (types.MethodType, types.FunctionType):
+        if not isinstance(method, (types.MethodType, types.FunctionType)):
             method = None
         return (ns, method)
 
     def invoke(self, ui, cmdData):
-        ns, method = self._py_searchMethod(ui, cmdData)
+        _, method = self._py_searchMethod(ui, cmdData)
         if method is not None and callable(method):
             try:
-                method(*cmdData.args[:])
+                if isinstance(cmdData.args, dict):
+                    method(**cmdData.args)
+                else:
+                    method(*cmdData.args[:])
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 
@@ -57,7 +60,10 @@ class _PyNoGuiInvokeMethod(GUICommand):
         imported = __import__(path, globals(), locals(), [methodName])
         method = getattr(imported, methodName, None)
         if method is not None and callable(method):
-            method(*cmdData.args[:])
+            if isinstance(cmdData.args, dict):
+                method(**cmdData.args)
+            else:
+                method(*cmdData.args[:])
         else:
             LOG_ERROR('GUI method not found', cmdData)
         return

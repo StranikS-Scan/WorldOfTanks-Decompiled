@@ -11,7 +11,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import getItemBuyPrice
 from gui.shared.gui_items.processors import ItemProcessor, makeI18nSuccess, makeI18nError, VehicleItemProcessor, plugins, makeSuccess
 from gui.shared.formatters import formatPrice, icons, getBWFormatter
-from gui.shared.money import Money, Currency
+from gui.shared.money import Currency
 from gui.shared.tooltips.formatters import packActionTooltipData
 from helpers import i18n, dependency
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -29,9 +29,6 @@ def _formatCurrencyValue(currency, value):
 
 
 class ModuleProcessor(ItemProcessor):
-    """
-    Root module processor
-    """
     ITEMS_MSG_PREFIXES = {GUI_ITEM_TYPE.SHELL: 'shell',
      GUI_ITEM_TYPE.EQUIPMENT: 'artefact',
      GUI_ITEM_TYPE.OPTIONALDEVICE: 'artefact',
@@ -39,18 +36,11 @@ class ModuleProcessor(ItemProcessor):
     DEFAULT_PREFIX = 'module'
 
     def __init__(self, item, opType, plugs=tuple()):
-        """
-        Ctor.
-        
-        @param item: module to install
-        @param opType: operation type
-        @param plugs: plugins list
-        """
         ItemProcessor.__init__(self, item, plugs + (plugins.ModuleValidator(item),))
         self.opType = opType
 
     def _getMsgCtx(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _formMessage(self, msg):
         LOG_DEBUG('Generating response for ModuleProcessor: ', self.opType, msg)
@@ -70,19 +60,8 @@ class ModuleProcessor(ItemProcessor):
 
 
 class ModuleTradeProcessor(ModuleProcessor):
-    """
-    Root module trade
-    """
 
     def __init__(self, item, count, opType, plugs=tuple()):
-        """
-        Ctor.
-        
-        @param item: module to install
-        @param count: buying count
-        @param opType: operation type
-        @param plugs: plugins list
-        """
         super(ModuleTradeProcessor, self).__init__(item, opType, plugs)
         self.count = count
 
@@ -93,39 +72,17 @@ class ModuleTradeProcessor(ModuleProcessor):
          'money': formatPrice(self._getOpPrice().price)}
 
     def _getOpPrice(self):
-        """
-        @return Returns an instance of ItemPrice
-        """
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class ModuleBuyer(ModuleTradeProcessor):
-    """
-    Module buyer
-    """
 
     def __init__(self, item, count, currency):
-        """
-        Ctor.
-        
-        @param item: module to install
-        @param count: buying count
-        @param currency: currency to be used for buying
-        """
         super(ModuleBuyer, self).__init__(item, count, 'buy')
         self._currency, self._itemPrice = self._getItemCurrencyAndPrice(currency)
         self.addPlugins((plugins.MoneyValidator(self._getOpPrice().price), plugins.ModuleConfigValidator(item)))
 
     def _getItemCurrencyAndPrice(self, currency):
-        """
-        Determines the item price and currency based on alternative and original coast. Note that by default
-        the method tries to determine the coast in credits. If the item price is not defined in credits (or the item
-        can not be bought for credits right now), the method returns the coast in the original currency.
-        
-        :param currency: the preferred currency, Currency.CREDITS by default, see class constructor.
-        
-        :return: an instance of tuple(currency, ItemPrice)
-        """
         itemPrice = getItemBuyPrice(self.item, currency, self.itemsCache.items.shop)
         if itemPrice is None:
             itemPrice = self.item.buyPrices.itemPrice
@@ -133,11 +90,6 @@ class ModuleBuyer(ModuleTradeProcessor):
         return (currency, itemPrice)
 
     def _getOpPrice(self):
-        """
-        Gets ItemPrice required to buy the specified amount of items.
-        
-        :return: an instance of ItemPrice
-        """
         return self._itemPrice * self.count
 
     def _getSysMsgType(self):
@@ -155,17 +107,8 @@ class ModuleBuyer(ModuleTradeProcessor):
 
 
 class ModuleSeller(ModuleTradeProcessor):
-    """
-    Module seller
-    """
 
     def __init__(self, item, count):
-        """
-        Ctor.
-        
-        @param item: module to install
-        @param count: module buying count
-        """
         super(ModuleSeller, self).__init__(item, count, 'sell')
 
     def _getOpPrice(self):
@@ -180,22 +123,8 @@ class ModuleSeller(ModuleTradeProcessor):
 
 
 class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
-    """
-    Root modules installer.
-    """
 
     def __init__(self, vehicle, item, itemType, slotIdx, install=True, conflictedEqs=None, plugs=tuple(), skipConfirm=False):
-        """
-        Ctor.
-        
-        @param vehicle: vehicle
-        @param item: module to install
-        @param slotIdx: vehicle equipment slot index to install
-        @param itemType: item type
-        @param install: flag to designated process
-        @param conflictedEqs: conflicted items
-        @param plugs: plugins list
-        """
         opType = 'apply' if install else 'remove'
         conflictedEqs = conflictedEqs or tuple()
         ModuleProcessor.__init__(self, item=item, opType=opType, plugs=plugs)
@@ -218,21 +147,8 @@ class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
 
 
 class OptDeviceInstaller(ModuleInstallProcessor):
-    """
-    Vehicle opt devices installer.
-    """
 
     def __init__(self, vehicle, item, slotIdx, install=True, isUseMoney=False, conflictedEqs=None, skipConfirm=False):
-        """
-        Ctor.
-        
-        @param vehicle: vehicle
-        @param item: module to install
-        @param slotIdx: vehicle equipment slot index to install
-        @param install: true if device is being installed, false if being demounted
-        @param isUseMoney: if False - it means the user selected 'destroy' device, otherwise - de-install for money
-        @param conflictedEqs: conflicted items
-        """
         super(OptDeviceInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.OPTIONALDEVICE,), slotIdx, install, conflictedEqs, skipConfirm=skipConfirm)
         self.removalPrice = item.getRemovalPrice(self.itemsCache.items)
         action = None
@@ -267,20 +183,8 @@ class OptDeviceInstaller(ModuleInstallProcessor):
 
 
 class EquipmentInstaller(ModuleInstallProcessor):
-    """
-    Vehicle equipment installer.
-    """
 
     def __init__(self, vehicle, item, slotIdx, install=True, conflictedEqs=None, skipConfirm=False):
-        """
-        Ctor.
-        
-        @param vehicle: vehicle
-        @param item: equipment to install
-        @param slotIdx: vehicle equipment slot index to install
-        @param install: flag to designated process
-        @param conflictedEqs: conflicted items
-        """
         super(EquipmentInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.EQUIPMENT,), slotIdx, install, conflictedEqs, skipConfirm=skipConfirm)
 
     def _successHandler(self, code, ctx=None):
@@ -296,21 +200,8 @@ class EquipmentInstaller(ModuleInstallProcessor):
 
 
 class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
-    """
-    Vehicle other modules installer.
-    """
 
     def __init__(self, vehicle, item, itemType, install=True, conflictedEqs=None, plugs=tuple(), skipConfirm=False):
-        """
-        Ctor.
-        
-        @param vehicle: vehicle
-        @param item: equipment to install
-        @param itemType: vehicle module type
-        @param install: flag to designated process
-        @param conflictedEqs: conflicted items
-        @param plugs: plugins list
-        """
         opType = 'apply' if install else 'remove'
         conflictedEqs = conflictedEqs or tuple()
         ModuleProcessor.__init__(self, item=item, opType=opType, plugs=plugs)
@@ -337,18 +228,8 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
 
 
 class TurretInstaller(CommonModuleInstallProcessor):
-    """
-    Vehicle turret installer.
-    """
 
     def __init__(self, vehicle, item, conflictedEqs=None, skipConfirm=False):
-        """
-        Ctor.
-        
-        @param vehicle: vehicle
-        @param item: equipment to install
-        @param conflictedEqs: conflicted items
-        """
         super(TurretInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.TURRET,), True, conflictedEqs, skipConfirm=skipConfirm)
         self.gunCD = 0
         mayInstallCurrent = item.mayInstall(vehicle, gunCD=self.gunCD)
@@ -395,18 +276,8 @@ class PreviewVehicleTurretInstaller(TurretInstaller):
 
 
 class OtherModuleInstaller(CommonModuleInstallProcessor):
-    """
-    Vehicle rest modules installer: sheels, fuel tanks, etc.
-    """
 
     def __init__(self, vehicle, item, conflictedEqs=None, skipConfirm=False):
-        """
-        Ctor.
-        
-        @param vehicle: vehicle
-        @param item: equipment to install
-        @param conflictedEqs: conflicted items
-        """
         super(OtherModuleInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.CHASSIS,
          GUI_ITEM_TYPE.GUN,
          GUI_ITEM_TYPE.ENGINE,
@@ -527,9 +398,6 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
 
 
 def getInstallerProcessor(vehicle, newComponentItem, slotIdx=0, install=True, isUseMoney=False, conflictedEqs=None, skipConfirm=False):
-    """
-    Select proper installer by type
-    """
     if newComponentItem.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
         return EquipmentInstaller(vehicle, newComponentItem, slotIdx, install, conflictedEqs, skipConfirm)
     if newComponentItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:

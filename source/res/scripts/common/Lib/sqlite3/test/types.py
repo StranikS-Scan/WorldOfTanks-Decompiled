@@ -221,7 +221,6 @@ class DeclTypesTests(unittest.TestCase):
         self.assertEqual(type(value), float)
 
     def CheckNumber2(self):
-        """Checks whether converter names are cut off at '(' characters"""
         self.cur.execute('insert into test(n2) values (5)')
         value = self.cur.execute('select n2 from test').fetchone()[0]
         self.assertEqual(type(value), float)
@@ -247,10 +246,6 @@ class ColNamesTests(unittest.TestCase):
         self.con.close()
 
     def CheckDeclTypeNotUsed(self):
-        """
-        Assures that the declared type is not used when PARSE_DECLTYPES
-        is not set.
-        """
         self.cur.execute('insert into test(x) values (?)', ('xxx',))
         self.cur.execute('select x from test')
         val = self.cur.fetchone()[0]
@@ -276,10 +271,6 @@ class ColNamesTests(unittest.TestCase):
         self.assertEqual(val, 'MARKER')
 
     def CheckCursorDescriptionNoRow(self):
-        """
-        cursor.description should at least provide the column name(s), even if
-        no row returned.
-        """
         self.cur.execute('select * from test where 0 = 1')
         self.assertEqual(self.cur.description[0][0], 'x')
 

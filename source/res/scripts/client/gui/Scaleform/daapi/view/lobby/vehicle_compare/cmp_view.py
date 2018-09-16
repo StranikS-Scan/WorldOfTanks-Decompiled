@@ -107,9 +107,6 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.__updateDifferenceAttention()
 
     def __onVehCmpBasketStateChanged(self):
-        """
-        gui.game_control.VehComparisonBasket.onSwitchChange event handler
-        """
         if not self.comparisonBasket.isEnabled():
             self.destroy()
 
@@ -122,10 +119,6 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
          'titleText': text_styles.promoSubTitle(VEH_COMPARE.VEHICLECOMPAREVIEW_HEADER)}
 
     def __updateDifferenceAttention(self):
-        """
-        Show/hide difference attention icon(WOTD-68988).
-        Two or more different tanks have difference crew or modules -> show icon, otherwise - hide
-        """
         vehiclesCount = self.comparisonBasket.getVehiclesCount()
         if vehiclesCount > 1 and len(set(self.comparisonBasket.getVehiclesCDs())) > 1:
             comparisonDataIter = self.comparisonBasket.getVehiclesPropertiesIter(lambda vehCmpData: (vehCmpData.getConfigurationType(), vehCmpData.getCrewData()))

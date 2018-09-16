@@ -1,25 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/main_view.py
-import math
-import BigWorld
 from collections import namedtuple
-from functools import partial
-from adisp import async
-from AvatarInputHandler import cameras, mathUtils
+import struct
+import BigWorld
+import GUI
+from adisp import async, process as adisp_process
+from AvatarInputHandler import cameras
 from CurrentVehicle import g_currentVehicle
-from account_helpers.settings_core.settings_constants import GRAPHICS
-from gui import DialogsInterface, g_tankActiveCamouflage, makeHtmlString, SystemMessages
+from account_helpers.settings_core.settings_constants import GRAPHICS, GAME
+from hangar_camera_common import CameraRelatedEvents
+from gui import DialogsInterface, g_tankActiveCamouflage, SystemMessages
 from gui.app_loader import g_appLoader
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID
 from gui.customization.shared import chooseMode
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID, HtmlMessageLocalDialogMeta
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.customization import CustomizationItemCMHandler
 from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider, comparisonKey
 from gui.Scaleform.daapi.view.lobby.customization.customization_cm_handlers import CustomizationOptions
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
-from gui.Scaleform.daapi.view.lobby.customization.shared import C11N_MODE, CUSTOMIZATION_POPOVER_ALIASES, TABS_ITEM_MAPPING, CUSTOMIZATION_TABS, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_NAME, SEASONS_ORDER, OutfitInfo, getCustomPurchaseItems, getStylePurchaseItems, getTotalPurchaseInfo, getOutfitWithoutItem, getItemInventoryCount, getStyleInventoryCount, AdditionalPurchaseGroups
+from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, CUSTOMIZATION_POPOVER_ALIASES, TABS_ITEM_MAPPING, C11nTabs, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_NAME, SEASONS_ORDER, OutfitInfo, getCustomPurchaseItems, getStylePurchaseItems, getTotalPurchaseInfo, getOutfitWithoutItems, getItemInventoryCount, getStyleInventoryCount, AdditionalPurchaseGroups
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS, C11N_SOUND_SPACE
 from gui.Scaleform.framework.entities.View import ViewKey, ViewKeyDynamic
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
@@ -42,59 +43,104 @@ from gui.shared.gui_items.processors.common import OutfitApplier, StyleApplier, 
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.decorators import process
 from gui.shared.utils.functions import makeTooltip
-from gui.shared.money import Money
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
-from shared_utils import first
+from shared_utils import first, nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta import ConfirmCustomizationItemMeta
+from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta import ConfirmC11nBuyMeta, ConfirmC11nSellMeta
 from gui.shared.utils import toUpper
 
 class _C11nWindowsLifecycleHandler(IViewLifecycleHandler):
-    """ Class responsible for suspending highlighter whenever modal windows pops up.
-    """
     service = dependency.descriptor(ICustomizationService)
     __SUB_VIEWS = (VIEW_ALIAS.SETTINGS_WINDOW, VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, VIEW_ALIAS.LOBBY_MENU)
     __DIALOGS = (VIEW_ALIAS.SIMPLE_DIALOG, CUSTOMIZATION_ALIASES.CONFIRM_CUSTOMIZATION_ITEM_DIALOG)
 
     def __init__(self):
         super(_C11nWindowsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS ] + [ ViewKeyDynamic(alias) for alias in self.__DIALOGS ])
+        self.__viewStack = []
 
-    def onViewCreated(self, _):
+    def onViewCreated(self, view):
+        self.__viewStack.append(view.key)
         self.service.suspendHighlighter()
 
     def onViewDestroyed(self, _):
-        self.service.resumeHighlighter()
-
-
-def _getSellItemDialogMeta(customizationItem):
-    """
-    Creates the meta object used for populating the sell back dialog
-    :param customizationItem: customization item to build from
-    :return: new instance of I18nConfirmDialogMeta for building the sell dialog
-    """
-    itemSellPrice = customizationItem.getSellPrice()
-    creditPrice = itemSellPrice.price.credits
-    l10nParams = {'price': creditPrice,
-     'name': customizationItem.userName}
-    return I18nConfirmDialogMeta('customizationConfirmSell', meta=HtmlMessageLocalDialogMeta('html_templates:lobby/dialogs', 'customizationConfirmSell', ctx=l10nParams), focusedID=DIALOG_BUTTON_ID.CLOSE)
+        self.__viewStack.pop()
+        if not self.__viewStack:
+            self.service.resumeHighlighter()
 
 
 CustomizationCarouselDataVO = namedtuple('CustomizationCarouselDataVO', ('displayString', 'isZeroCount', 'shouldShow', 'itemLayoutSize', 'bookmarks'))
 CustomizationAnchorInitVO = namedtuple('CustomizationAnchorInitVO', ('anchorUpdateVOs', 'doRegions'))
-CustomizationSlotUpdateVO = namedtuple('CustomizationSlotUpdateVO', ('slotId', 'propertySheetAlias', 'itemIntCD'))
+CustomizationSlotUpdateVO = namedtuple('CustomizationSlotUpdateVO', ('slotId', 'propertySheetAlias', 'itemIntCD', 'uid'))
 CustomizationSlotIdVO = namedtuple('CustomizationSlotIdVO', ('areaId', 'slotId', 'regionId'))
 CustomizationAnchorsSetVO = namedtuple('CustomizationAnchorsSetVO', ('rendererList',))
-CustomizationAnchorPositionVO = namedtuple('CustomizationAnchorPositionVO', ('clipX', 'clipY', 'alpha', 'scale', 'zIndex', 'slotId'))
+CustomizationAnchorPositionVO = namedtuple('CustomizationAnchorPositionVO', ('zIndex', 'slotId'))
 AnchorPositionData = namedtuple('AnchorPositionData', ('angleToCamera', 'clipSpacePos', 'slotId'))
-ANCHOR_UPDATE_TIMER_DELAY = 2
-ANCHOR_UPDATE_FREQUENCY = 1 / 30
-ANCHOR_FADE_EXPO = 1.1
-ANCHOR_ALPHA_MIN = 0.15
+
+class _VehicleCustomizationAnchorsUpdater(object):
+
+    def __init__(self, service):
+        self.__service = service
+        self.__vehicleCustomizationAnchors = None
+        self.__processedAnchors = set()
+        return
+
+    def startUpdater(self):
+        if self.__vehicleCustomizationAnchors is None:
+            self.__vehicleCustomizationAnchors = GUI.WGVehicleCustomizationAnchors()
+        return
+
+    def stopUpdater(self):
+        if self.__vehicleCustomizationAnchors is not None:
+            self._delAllAnchors()
+            self.__vehicleCustomizationAnchors = None
+        return
+
+    def setAnchors(self, displayObjects, isRegionObjects):
+
+        def getRegionBySlotId(customSlotId):
+            outfit = self.__service.getEmptyOutfit()
+            for container in (cnt for cnt in outfit.containers() if cnt.getAreaID() == customSlotId.areaId):
+                for slot in (x for x in container.slots() if x.getType() == customSlotId.slotId):
+                    if len(slot.getRegions()) > customSlotId.regionId:
+                        return slot.getRegions()[customSlotId.regionId]
+                    return None
+
+            return None
+
+        if self.__vehicleCustomizationAnchors is not None:
+            processedObjectIds = set()
+            for displayObject in displayObjects:
+                if hasattr(displayObject, 'slotData'):
+                    customSlotId = CustomizationSlotIdVO(displayObject.slotData.slotId.areaId, displayObject.slotData.slotId.slotId, displayObject.slotData.slotId.regionId)
+                    if isRegionObjects:
+                        region = getRegionBySlotId(customSlotId)
+                        anchorWorldPos = self.__service.getPointForRegionLeaderLine(region)
+                    else:
+                        anchorWorldPos = self.__service.getPointForAnchorLeaderLine(customSlotId.areaId, customSlotId.slotId, customSlotId.regionId)
+                    if anchorWorldPos is not None:
+                        uid = self.__vehicleCustomizationAnchors.addAnchor(anchorWorldPos, displayObject, not isRegionObjects)
+                        processedObjectIds.add(uid)
+
+            delAnchors = self.__processedAnchors - processedObjectIds
+            for anchorId in delAnchors:
+                self.__vehicleCustomizationAnchors.delAnchor(anchorId)
+
+            self.__processedAnchors = processedObjectIds
+        return
+
+    def _delAllAnchors(self):
+        if self.__vehicleCustomizationAnchors is not None:
+            for anchorId in self.__processedAnchors:
+                self.__vehicleCustomizationAnchors.delAnchor(anchorId)
+
+            self.__processedAnchors.clear()
+        return
+
 
 class MainView(CustomizationMainViewMeta):
     _COMMON_SOUND_SPACE = C11N_SOUND_SPACE
@@ -109,26 +155,24 @@ class MainView(CustomizationMainViewMeta):
         self.fadeAnchorsOut = False
         self.anchorMinScale = 0.75
         self._currentSeason = SeasonType.SUMMER
-        self._tabIndex = CUSTOMIZATION_TABS.PAINT
-        self._lastTab = CUSTOMIZATION_TABS.PAINT
+        self._tabIndex = C11nTabs.PAINT
+        self._lastTab = C11nTabs.PAINT
         self._originalStyle = None
         self._modifiedStyle = None
         self._originalOutfits = {}
         self._modifiedOutfits = {}
         self._currentOutfit = None
-        self._mode = C11N_MODE.CUSTOM
+        self._mode = C11nMode.CUSTOM
         self._isDeferredRenderer = True
         self.__anchorPositionCallbackID = None
         self._state = {}
         self._needFullRebuild = False
-        self.__hangarSpace = g_hangarSpace.space
         self.__locatedOnEmbelem = False
         self.itemIsPicked = False
+        self._vehicleCustomizationAnchorsUpdater = None
         return
 
     def showBuyWindow(self):
-        """  Displays the purchase / buy window or apply immediately.
-        """
         self.__releaseItemSound()
         self.soundManager.playInstantSound(SOUNDS.SELECT)
         purchaseItems = self.getPurchaseItems()
@@ -140,33 +184,25 @@ class MainView(CustomizationMainViewMeta):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     def onSelectItem(self, index):
-        """ Select item in the carousel
-        """
         self._carouselDP.selectItemIdx(index)
         self.soundManager.playInstantSound(SOUNDS.SELECT)
 
     def onPickItem(self):
-        """ Pick item in the carousel
-        """
         if not self.itemIsPicked:
             self.soundManager.playInstantSound(SOUNDS.PICK)
             self.itemIsPicked = True
 
     def onReleaseItem(self):
-        """ Release selected item
-        """
         self.__releaseItemSound()
 
     def changeSeason(self, seasonIdx):
-        """ Change the current season.
-        """
         self._currentSeason = SEASON_IDX_TO_TYPE[seasonIdx]
         seasonName = SEASON_TYPE_TO_NAME.get(self._currentSeason)
         self.soundManager.playInstantSound(SOUNDS.SEASON_SELECT.format(seasonName))
         self.refreshOutfit()
         self.refreshCarousel(rebuild=True)
         self.as_refreshAnchorPropertySheetS()
-        doRegions = self._tabIndex in CUSTOMIZATION_TABS.REGIONS
+        doRegions = self._tabIndex in C11nTabs.REGIONS
         self.__setAnchorsInitData(self._tabIndex, doRegions, True)
 
     def refreshCarousel(self, rebuild=False):
@@ -179,9 +215,7 @@ class MainView(CustomizationMainViewMeta):
         self.as_setCarouselFiltersDataS({'hotFilters': [self._carouselDP.getOwnedFilter(), self._carouselDP.getAppliedFilter()]})
 
     def refreshOutfit(self):
-        """ Apply any changes to the vehicle's 3d model.
-        """
-        if self._mode == C11N_MODE.STYLE:
+        if self._mode == C11nMode.STYLE:
             if self._modifiedStyle:
                 self._currentOutfit = self._modifiedStyle.getOutfit(self._currentSeason)
             else:
@@ -192,32 +226,22 @@ class MainView(CustomizationMainViewMeta):
         g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self._currentSeason
 
     def showGroupFromTab(self, tabIndex):
-        """ This is called when a tab change occurs in the front end.
-        
-        Initialize the new anchor or region set for the new tab group.
-        Rebuild the carousel's DAAPIDataProvider
-        Build bookmark data and send to ActionScript
-        
-        :param tabIndex: index of the newly selected tab
-        """
         self.soundManager.playInstantSound(SOUNDS.TAB_SWITCH)
         self._tabIndex = tabIndex
-        doRegions = self._tabIndex in CUSTOMIZATION_TABS.REGIONS
+        doRegions = self._tabIndex in C11nTabs.REGIONS
         self.service.stopHighlighter()
         if doRegions:
             itemTypeID = TABS_ITEM_MAPPING[self._tabIndex]
             self.service.startHighlighter(chooseMode(itemTypeID, g_currentVehicle.item))
-        self.__stopTimer()
         self.__setAnchorsInitData(self._tabIndex, doRegions)
-        if self.__locatedOnEmbelem:
-            self.__hangarSpace.clearSelectedEmblemInfo()
-            self.__hangarSpace.locateCameraToPreview()
-            self.__startTimer(ANCHOR_UPDATE_TIMER_DELAY, self.__updateAnchorPositions)
-        else:
-            self.__updateAnchorPositions()
-        if self._tabIndex == CUSTOMIZATION_TABS.STYLE:
+        if self.__locatedOnEmbelem and g_hangarSpace.spaceInited:
+            space = g_hangarSpace.space
+            space.clearSelectedEmblemInfo()
+            space.locateCameraToPreview()
+        self.__updateAnchorPositions()
+        if self._tabIndex == C11nTabs.STYLE:
             slotIdVO = CustomizationSlotIdVO(0, GUI_ITEM_TYPE.STYLE, 0)._asdict()
-        elif self._tabIndex == CUSTOMIZATION_TABS.EFFECT:
+        elif self._tabIndex == C11nTabs.EFFECT:
             slotIdVO = CustomizationSlotIdVO(Area.MISC, GUI_ITEM_TYPE.MODIFICATION, 0)._asdict()
         else:
             slotIdVO = None
@@ -226,15 +250,13 @@ class MainView(CustomizationMainViewMeta):
         return
 
     def installCustomizationElement(self, intCD, areaId, slotId, regionId, seasonIdx):
-        """ Install the given item on a vehicle.
-        """
         if self.itemIsPicked:
             self.soundManager.playInstantSound(SOUNDS.APPLY)
         item = self.itemsCache.items.getItemByCD(intCD)
         if item.isHidden and not self.getItemInventoryCount(item):
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CUSTOMIZATION_PROHIBITED, type=SystemMessages.SM_TYPE.Warning, itemName=item.userName)
             return
-        if self._mode == C11N_MODE.STYLE:
+        if self._mode == C11nMode.STYLE:
             self._modifiedStyle = item
         else:
             season = SEASON_IDX_TO_TYPE.get(seasonIdx, self._currentSeason)
@@ -247,26 +269,20 @@ class MainView(CustomizationMainViewMeta):
         self.refreshCarousel(rebuild=self._carouselDP.getAppliedFilter() or self._carouselDP.getOwnedFilter())
 
     def clearCustomizationItem(self, areaId, slotId, regionId, seasonIdx):
-        """ Removes the item from the given region.
-        (called from property sheet).
-        """
         self.soundManager.playInstantSound(SOUNDS.REMOVE)
         season = SEASON_IDX_TO_TYPE.get(seasonIdx, self._currentSeason)
         outfit = self._modifiedOutfits[season]
         outfit.getContainer(areaId).slotFor(slotId).remove(idx=regionId)
         self.refreshOutfit()
-        doRegions = self._tabIndex in CUSTOMIZATION_TABS.REGIONS
+        doRegions = self._tabIndex in C11nTabs.REGIONS
         self.__setAnchorsInitData(self._tabIndex, doRegions, True)
         self.__setBuyingPanelData()
         self.__setHeaderInitData()
         self.refreshCarousel(rebuild=self._carouselDP.getAppliedFilter() or self._carouselDP.getOwnedFilter())
 
     def switchToCustom(self, updateUI=True):
-        """ Turn on the Custom customization mode
-        (where you create vehicle's look by yourself).
-        """
         self.soundManager.playInstantSound(SOUNDS.TAB_SWITCH)
-        self._mode = C11N_MODE.CUSTOM
+        self._mode = C11nMode.CUSTOM
         self._tabIndex = self._lastTab
         self.refreshOutfit()
         self.as_setBottomPanelTabsDataS({'tabData': self.__getItemTabsData(),
@@ -276,13 +292,10 @@ class MainView(CustomizationMainViewMeta):
         self.__setHeaderInitData()
 
     def switchToStyle(self):
-        """ Turn on the Style customization mode
-        (where you use predefined vehicle looks).
-        """
         self.soundManager.playInstantSound(SOUNDS.TAB_SWITCH)
-        self._mode = C11N_MODE.STYLE
+        self._mode = C11nMode.STYLE
         self._lastTab = self._tabIndex
-        self._tabIndex = CUSTOMIZATION_TABS.STYLE
+        self._tabIndex = C11nTabs.STYLE
         self.refreshOutfit()
         self.as_setBottomPanelTabsDataS({'tabData': self.__getItemTabsData(),
          'selectedTab': self._tabIndex})
@@ -291,8 +304,6 @@ class MainView(CustomizationMainViewMeta):
         self.__setHeaderInitData()
 
     def fadeOutAnchors(self, isFadeOut):
-        """ Set whether or not to fade anchors out
-        """
         self.fadeAnchorsOut = isFadeOut
 
     def closeWindow(self):
@@ -304,37 +315,25 @@ class MainView(CustomizationMainViewMeta):
             self.__onConfirmCloseWindow(proceed=True)
 
     def itemContextMenuDisplayed(self):
-        """
-        Actionscript initiated call that happens after the item context menu is displayed.
-        Sets up an event for menu item presses
-        """
         cmHandler = self.app.contextMenuManager.getCurrentHandler()
         if isinstance(cmHandler, CustomizationItemCMHandler):
             cmHandler.onSelected += self._itemCtxMenuSelected
 
     def resetFilter(self):
-        """ Reset filter and rebuild carousel
-        """
         self.clearFilter()
         self.refreshFilterData()
         self.refreshHotFilters()
         self.refreshCarousel(rebuild=True)
 
     def clearFilter(self):
-        """ Reset filter and rebuild carousel
-        """
         self._carouselDP.clearFilter()
 
     def refreshFilterData(self):
-        """ Send new filter data to AS3.
-        """
         self.as_setFilterDataS(self._carouselDP.getFilterData())
 
     def getHistoricalPopoverData(self):
-        """ Get the unhistorical items for the Unhistorical popover (in the header)
-        """
         self.soundManager.playInstantSound(SOUNDS.SELECT)
-        if self._mode == C11N_MODE.STYLE and self._modifiedStyle:
+        if self._mode == C11nMode.STYLE and self._modifiedStyle:
             if not self._modifiedStyle.isHistorical():
                 return {'items': [self._modifiedStyle.intCD]}
             return {'items': []}
@@ -345,9 +344,6 @@ class MainView(CustomizationMainViewMeta):
         return {'items': [ item.intCD for item in sorted(items, key=comparisonKey) ]}
 
     def removeItems(self, *intCDs):
-        """ Remove the given item from every outfit.
-        Don't care about mode there.
-        """
         self.soundManager.playInstantSound(SOUNDS.REMOVE)
         if self._modifiedStyle and self._modifiedStyle.intCD in intCDs:
             self._modifiedStyle = None
@@ -362,6 +358,8 @@ class MainView(CustomizationMainViewMeta):
         self.__setHeaderInitData()
         self.__setBuyingPanelData()
         self.as_refreshAnchorPropertySheetS()
+        doRegions = self._tabIndex in C11nTabs.REGIONS
+        self.__setAnchorsInitData(self._tabIndex, doRegions, True)
         self.refreshCarousel(rebuild=self._carouselDP.getAppliedFilter() or self._carouselDP.getOwnedFilter())
         return
 
@@ -369,34 +367,37 @@ class MainView(CustomizationMainViewMeta):
         self.service.onPropertySheetShow(areaId, slotId, regionId)
 
     def onLobbyClick(self):
-        if self._tabIndex in (CUSTOMIZATION_TABS.EMBLEM, CUSTOMIZATION_TABS.INSCRIPTION):
+        if self._tabIndex in (C11nTabs.EMBLEM, C11nTabs.INSCRIPTION):
             self.as_hideAnchorPropertySheetS()
-            if self.__locatedOnEmbelem:
-                self.__stopTimer()
-                self.__hangarSpace.clearSelectedEmblemInfo()
-                self.__hangarSpace.locateCameraToPreview()
-                self.__startTimer(ANCHOR_UPDATE_TIMER_DELAY, self.__updateAnchorPositions)
+            if self.__locatedOnEmbelem and g_hangarSpace.spaceInited:
+                space = g_hangarSpace.space
+                space.clearSelectedEmblemInfo()
+                space.locateCameraToPreview()
+                self.__updateAnchorPositions()
                 self.__locatedOnEmbelem = False
 
     def setEnableMultiselectRegions(self, isEnabled):
-        """ Turn off highlighting when doing pick'n'click.
-        """
         self.service.setSelectHighlighting(isEnabled)
 
     def onChangeSize(self):
         self.__updateAnchorPositions()
 
     def onSelectAnchor(self, areaID, regionID):
-        self.soundManager.playInstantSound(SOUNDS.CHOOSE)
-        if self._tabIndex == CUSTOMIZATION_TABS.EMBLEM:
-            emblemType = 'player'
-            zoom = 0.06
-        else:
-            emblemType = 'inscription'
-            zoom = 0.1
-        self.__stopTimer()
-        self.__startTimer(ANCHOR_UPDATE_TIMER_DELAY, self.__updateAnchorPositions)
-        self.__locatedOnEmbelem = self.__hangarSpace.locateCameraOnEmblem(areaID < 2, emblemType, regionID, zoom)
+        if g_hangarSpace.spaceInited:
+            self.soundManager.playInstantSound(SOUNDS.CHOOSE)
+            if self._tabIndex == C11nTabs.EMBLEM:
+                emblemType = 'player'
+                zoom = 0.06
+            else:
+                emblemType = 'inscription'
+                zoom = 0.1
+            self.__updateAnchorPositions()
+            self.__locatedOnEmbelem = g_hangarSpace.space.locateCameraOnEmblem(areaID < 2, emblemType, regionID, zoom)
+            self.as_cameraAutoRotateChangedS(True)
+            BigWorld.callback(5, self.__cameraRotationFinished)
+
+    def __cameraRotationFinished(self):
+        self.as_cameraAutoRotateChangedS(False)
 
     def getOutfitsInfo(self):
         outfitsInfo = {}
@@ -409,24 +410,18 @@ class MainView(CustomizationMainViewMeta):
         return OutfitInfo(self._originalStyle, self._modifiedStyle)
 
     def getPurchaseItems(self):
-        return getCustomPurchaseItems(self.getOutfitsInfo()) if self._mode == C11N_MODE.CUSTOM else getStylePurchaseItems(self.getStyleInfo())
+        return getCustomPurchaseItems(self.getOutfitsInfo()) if self._mode == C11nMode.CUSTOM else getStylePurchaseItems(self.getStyleInfo())
 
     def getItemInventoryCount(self, item):
-        return getItemInventoryCount(item, self.getOutfitsInfo()) if self._mode == C11N_MODE.CUSTOM else getStyleInventoryCount(item, self.getStyleInfo())
+        return getItemInventoryCount(item, self.getOutfitsInfo()) if self._mode == C11nMode.CUSTOM else getStyleInventoryCount(item, self.getStyleInfo())
 
     def getCurrentOutfit(self):
-        """ Returns current outfit applied on the vehicle.
-        """
         return self._currentOutfit
 
     def getModifiedStyle(self):
-        """ Returns current style applied on the vehicle.
-        """
         return self._modifiedStyle
 
     def getModifiedOutfit(self, season):
-        """ Returns modified outfit for the given season.
-        """
         return self._modifiedOutfits.get(season)
 
     def getMode(self):
@@ -452,8 +447,6 @@ class MainView(CustomizationMainViewMeta):
         return appliedItems
 
     def isItemInOutfit(self, item):
-        """ Check if item is in any outfit.
-        """
         return any((outfit.has(item) for outfit in self._originalOutfits.itervalues())) or any((outfit.has(item) for outfit in self._modifiedOutfits.itervalues()))
 
     @process('buyAndInstall')
@@ -473,7 +466,7 @@ class MainView(CustomizationMainViewMeta):
                     slot.remove(pItem.regionID)
             groupHasItems[pItem.group] = True
 
-        if self._mode == C11N_MODE.CUSTOM and bool(self._originalStyle):
+        if self._mode == C11nMode.CUSTOM and bool(self._originalStyle):
             groupHasItems[self._currentSeason] = True
         empty = self.service.getEmptyOutfit()
         for season in SeasonType.COMMON_SEASONS:
@@ -509,20 +502,25 @@ class MainView(CustomizationMainViewMeta):
         self.itemsCache.onSyncCompleted += self.__onCacheResync
 
     @process('sellItem')
-    def sellItem(self, intCD, shouldSell):
-        if not shouldSell:
+    def sellItem(self, intCD, count):
+        if not count:
             return
         self._needFullRebuild = self._carouselDP.getOwnedFilter()
         item = self.itemsCache.items.getItemByCD(intCD)
-        if item.fullInventoryCount(g_currentVehicle.item):
-            yield CustomizationsSeller(g_currentVehicle.item, item).request()
-            return
-        if self._mode == C11N_MODE.CUSTOM:
-            season, outfit = getOutfitWithoutItem(self.getOutfitsInfo(), intCD)
-            yield OutfitApplier(g_currentVehicle.item, outfit, season).request()
-        else:
-            yield StyleApplier(g_currentVehicle.item).request()
-        yield CustomizationsSeller(g_currentVehicle.item, item).request()
+        if item.fullInventoryCount(g_currentVehicle.item) < count:
+            if self._mode == C11nMode.CUSTOM:
+                for season, outfit in getOutfitWithoutItems(self.getOutfitsInfo(), intCD, count):
+                    yield OutfitApplier(g_currentVehicle.item, outfit, season).request()
+
+            else:
+                yield StyleApplier(g_currentVehicle.item).request()
+        yield CustomizationsSeller(g_currentVehicle.item, item, count).request()
+        nextTick(self.refreshOutfit)()
+
+    def onAnchorsShown(self, anchors):
+        if self._vehicleCustomizationAnchorsUpdater is not None:
+            self._vehicleCustomizationAnchorsUpdater.setAnchors(anchors, self._tabIndex in C11nTabs.REGIONS)
+        return
 
     def _populate(self):
         super(MainView, self)._populate()
@@ -535,16 +533,15 @@ class MainView(CustomizationMainViewMeta):
         self.service.onCarouselFilter += self.__onCarouselFilter
         self.service.onRemoveItems += self.removeItems
         self.service.onOutfitChanged += self.__onOutfitChanged
-        g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onNotifySpaceMoved)
-        g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_CURSOR_DRAGGING, self.__onNotifyCursorDragging)
+        g_eventBus.addListener(CameraRelatedEvents.IDLE_CAMERA, self.__onNotifyHangarCameraIdleStateChanged)
         g_hangarSpace.onSpaceCreate += self.__onSpaceCreateHandler
         self.service.onRegionHighlighted += self.__onRegionHighlighted
         self.itemsCache.onSyncCompleted += self.__onCacheResync
         self.__carveUpOutfits()
         if self._modifiedStyle:
-            self._mode = C11N_MODE.STYLE
+            self._mode = C11nMode.STYLE
         else:
-            self._mode = C11N_MODE.CUSTOM
+            self._mode = C11nMode.CUSTOM
         self._carouselDP = CustomizationCarouselDataProvider(g_currentVehicle, self._carouseItemWrapper, self)
         self._carouselDP.setFlashObject(self.as_getDataProviderS())
         self._carouselDP.setEnvironment(self.app)
@@ -552,17 +549,24 @@ class MainView(CustomizationMainViewMeta):
         self.__setFooterInitData()
         self.__setBuyingPanelData()
         self.__setSeasonData()
+        self._vehicleCustomizationAnchorsUpdater = _VehicleCustomizationAnchorsUpdater(self.service)
+        self._vehicleCustomizationAnchorsUpdater.startUpdater()
         self.refreshOutfit()
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.__updateCameraParalaxFlag()
 
     def _dispose(self):
         if g_appLoader.getSpaceID() != _SPACE_ID.LOGIN:
             self.__releaseItemSound()
             self.soundManager.playInstantSound(SOUNDS.EXIT)
-        if self.__locatedOnEmbelem:
-            self.__hangarSpace.clearSelectedEmblemInfo()
-            self.__hangarSpace.locateCameraToPreview()
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self._vehicleCustomizationAnchorsUpdater.stopUpdater()
+        self._vehicleCustomizationAnchorsUpdater = None
+        if self.__locatedOnEmbelem and g_hangarSpace.spaceInited:
+            space = g_hangarSpace.space
+            space.clearSelectedEmblemInfo()
+            space.locateCameraToPreview()
         self.__viewLifecycleWatcher.stop()
-        self.__stopTimer()
         self.service.stopHighlighter()
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.lobbyContext.deleteHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
@@ -570,8 +574,7 @@ class MainView(CustomizationMainViewMeta):
         self.service.onCarouselFilter -= self.__onCarouselFilter
         self.service.onRemoveItems -= self.removeItems
         self.service.onOutfitChanged -= self.__onOutfitChanged
-        g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onNotifySpaceMoved)
-        g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_CURSOR_DRAGGING, self.__onNotifyCursorDragging)
+        g_eventBus.removeListener(CameraRelatedEvents.IDLE_CAMERA, self.__onNotifyHangarCameraIdleStateChanged)
         g_hangarSpace.onSpaceCreate -= self.__onSpaceCreateHandler
         self.service.onRegionHighlighted -= self.__onRegionHighlighted
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
@@ -579,26 +582,24 @@ class MainView(CustomizationMainViewMeta):
             g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self._currentSeason
             g_currentVehicle.refreshModel()
         super(MainView, self)._dispose()
+        return
 
+    @adisp_process
     def _itemCtxMenuSelected(self, ctxMenuID, itemIntCD):
-        """ Event notification for when a item context menu is pressed
-        
-        :param ctxMenuID: ID of the menu item pressed
-        :param itemIntCD: item CD for fetching the correct item
-        """
         item = self.itemsCache.items.getItemByCD(itemIntCD)
         if ctxMenuID == CustomizationOptions.BUY:
-            DialogsInterface.showDialog(ConfirmCustomizationItemMeta(itemIntCD), lambda _: None)
+            yield DialogsInterface.showDialog(ConfirmC11nBuyMeta(itemIntCD))
         elif ctxMenuID == CustomizationOptions.SELL:
-            DialogsInterface.showI18nConfirmDialog('customizationConfirmSell', partial(self.sellItem, item.intCD), focusedID=DIALOG_BUTTON_ID.CLOSE, meta=_getSellItemDialogMeta(item))
+            inventoryCount = self.getItemInventoryCount(item)
+            yield DialogsInterface.showDialog(ConfirmC11nSellMeta(itemIntCD, inventoryCount, self.sellItem))
         elif ctxMenuID == CustomizationOptions.REMOVE_FROM_TANK:
-            self.removeItems(item.intCD)
+            self.removeItems(itemIntCD)
 
     def _getUpdatedAnchorPositions(self):
         anchorVOs = []
         anchorPosData = []
         cType = TABS_ITEM_MAPPING[self._tabIndex]
-        if self._tabIndex == CUSTOMIZATION_TABS.STYLE:
+        if self._tabIndex == C11nTabs.STYLE:
             slotId = CustomizationSlotIdVO(0, GUI_ITEM_TYPE.STYLE, 0)
             anchorData = self.__getAnchorPositionData(slotId, 0)
             anchorPosData.append(anchorData)
@@ -614,21 +615,11 @@ class MainView(CustomizationMainViewMeta):
 
         anchorPosData.sort(key=lambda pos: pos.angleToCamera)
         for zIdx, posData in enumerate(anchorPosData):
-            alpha = (posData.angleToCamera / math.pi) ** ANCHOR_FADE_EXPO
-            alpha = mathUtils.clamp(ANCHOR_ALPHA_MIN, 1, alpha)
-            if posData.angleToCamera > math.pi / 2:
-                scale = (1 - self.anchorMinScale) * 2 * posData.angleToCamera / math.pi + 2 * self.anchorMinScale - 1
-            else:
-                scale = self.anchorMinScale
-            anchorVOs.append(CustomizationAnchorPositionVO(posData.clipSpacePos.x, posData.clipSpacePos.y, alpha, scale, zIdx, posData.slotId._asdict())._asdict())
+            anchorVOs.append(CustomizationAnchorPositionVO(zIdx, posData.slotId._asdict())._asdict())
 
         return CustomizationAnchorsSetVO(anchorVOs)._asdict()
 
     def _buildCustomizationCarouselDataVO(self):
-        """ Builds and returns a CustomizationCarouselDataVO, which handles bookmarks.
-        
-        :return: CustomizationCarouselDataVO with information on bookmarks.
-        """
         isZeroCount = self._carouselDP.itemCount == 0
         countStyle = text_styles.error if isZeroCount else text_styles.main
         displayString = text_styles.main('{} / {}'.format(countStyle(str(self._carouselDP.itemCount)), str(self._carouselDP.totalItemCount)))
@@ -646,8 +637,6 @@ class MainView(CustomizationMainViewMeta):
         return buildCustomizationItemDataVO(item, itemInventoryCount, showUnsupportedAlert=showUnsupportedAlert, isCurrentlyApplied=isCurrentlyApplied)
 
     def __carveUpOutfits(self):
-        """ Fill up the internal structures with vehicle's outfits.
-        """
         for season in SeasonType.COMMON_SEASONS:
             outfit = self.service.getCustomOutfit(season)
             self._originalOutfits[season] = outfit.copy()
@@ -670,7 +659,7 @@ class MainView(CustomizationMainViewMeta):
             self.soundManager.playInstantSound(SOUNDS.HOVER)
             return
         else:
-            if self._tabIndex == CUSTOMIZATION_TABS.EFFECT:
+            if self._tabIndex == C11nTabs.EFFECT:
                 tankPartID = Area.MISC
                 typeID = GUI_ITEM_TYPE.MODIFICATION
             if tankPartID != -1 and regionID != -1:
@@ -713,7 +702,7 @@ class MainView(CustomizationMainViewMeta):
         self.__restoreState()
         self.__setHeaderInitData()
         self.__setBuyingPanelData()
-        if self._mode == C11N_MODE.CUSTOM:
+        if self._mode == C11nMode.CUSTOM:
             self.as_hideAnchorPropertySheetS()
         else:
             self.as_refreshAnchorPropertySheetS()
@@ -737,8 +726,6 @@ class MainView(CustomizationMainViewMeta):
             self.__onConfirmCloseWindow(proceed=True)
 
     def __setBuyingPanelData(self, *_):
-        """ Update the buying panel according to the current state of cart.
-        """
         purchaseItems = self.getPurchaseItems()
         cart = getTotalPurchaseInfo(purchaseItems)
         totalPriceVO = getItemPricesVO(cart.totalPrice)
@@ -748,7 +735,7 @@ class MainView(CustomizationMainViewMeta):
         else:
             label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_APPLY)
             self.as_hideBuyingPanelS()
-        isApplyEnabled = bool(cart.numTotal) or self._mode == C11N_MODE.CUSTOM and bool(self._originalStyle)
+        isApplyEnabled = bool(cart.numTotal) or self._mode == C11nMode.CUSTOM and bool(self._originalStyle)
         shortage = self.itemsCache.items.stats.money.getShortage(cart.totalPrice.price)
         self.as_setBottomPanelHeaderS({'buyBtnEnabled': isApplyEnabled,
          'buyBtnLabel': label,
@@ -765,12 +752,18 @@ class MainView(CustomizationMainViewMeta):
         self.as_setSeasonPanelDataS({'seasonRenderersList': seasonRenderersList})
 
     def __setAnchorsInitData(self, tabIndex, doRegions, update=False):
+
+        def customizationSlotIdToUid(customizationSlotIdVO):
+            s = struct.pack('bbh', customizationSlotIdVO.areaId, customizationSlotIdVO.slotId, customizationSlotIdVO.regionId)
+            return struct.unpack('I', s)[0]
+
         anchorVOs = []
         cType = TABS_ITEM_MAPPING[tabIndex]
-        if tabIndex == CUSTOMIZATION_TABS.STYLE:
+        if tabIndex == C11nTabs.STYLE:
             slotId = CustomizationSlotIdVO(0, GUI_ITEM_TYPE.STYLE, 0)
+            uid = customizationSlotIdToUid(slotId)
             popoverAlias = CUSTOMIZATION_POPOVER_ALIASES[GUI_ITEM_TYPE.STYLE]
-            anchorVOs.append(CustomizationSlotUpdateVO(slotId._asdict(), popoverAlias, -1)._asdict())
+            anchorVOs.append(CustomizationSlotUpdateVO(slotId._asdict(), popoverAlias, -1, uid)._asdict())
         else:
             for container in self._currentOutfit.containers():
                 for slot in (x for x in container.slots() if x.getType() == cType):
@@ -779,8 +772,9 @@ class MainView(CustomizationMainViewMeta):
                         popoverAlias = CUSTOMIZATION_POPOVER_ALIASES[slot.getType()]
                         item = slot.getItem(regionId)
                         itemIntCD = item.intCD if item is not None else 0
+                        uid = customizationSlotIdToUid(slotId)
                         if self.__getAnchorPositionData(slotId, region) is not None:
-                            anchorVOs.append(CustomizationSlotUpdateVO(slotId._asdict(), popoverAlias, itemIntCD)._asdict())
+                            anchorVOs.append(CustomizationSlotUpdateVO(slotId._asdict(), popoverAlias, itemIntCD, uid)._asdict())
 
         if update:
             self.as_updateAnchorDataS(CustomizationAnchorInitVO(anchorVOs, doRegions)._asdict())
@@ -802,7 +796,7 @@ class MainView(CustomizationMainViewMeta):
         self._tabIndex = first(tabsData, {}).get('id')
         self.as_setBottomPanelInitDataS({'tabData': {'tabData': tabsData,
                      'selectedTab': self._tabIndex},
-         'tabsAvailableRegions': CUSTOMIZATION_TABS.AVAILABLE_REGIONS,
+         'tabsAvailableRegions': C11nTabs.AVAILABLE_REGIONS,
          'defaultStyleLabel': VEHICLE_CUSTOMIZATION.DEFAULTSTYLE_LABEL,
          'carouselInitData': self.__getCarouselInitData(),
          'switcherInitData': self.__getSwitcherInitData()})
@@ -820,19 +814,15 @@ class MainView(CustomizationMainViewMeta):
         self.refreshCarousel(rebuild=True)
 
     def __getSwitcherInitData(self):
-        """ Switcher is a style/custom selector.
-        """
         return {'leftLabel': VEHICLE_CUSTOMIZATION.SWITCHER_NAME_CUSTSOMSTYLE,
          'rightLabel': VEHICLE_CUSTOMIZATION.SWITCHER_NAME_DEFAULTSTYLE,
          'leftEvent': 'installStyle',
          'rightEvent': 'installStyles',
-         'isLeft': self._mode == C11N_MODE.CUSTOM}
+         'isLeft': self._mode == C11nMode.CUSTOM}
 
     def __getHistoricIndicatorData(self):
-        """ Historicity indicator and name of the current style or custom outfit.
-        """
         isDefault = all((outfit.isEmpty() for outfit in self._modifiedOutfits.itervalues()))
-        if self._mode == C11N_MODE.STYLE:
+        if self._mode == C11nMode.STYLE:
             if self._modifiedStyle:
                 isHistorical = self._modifiedStyle.isHistorical()
                 name = self._modifiedStyle.userName
@@ -853,7 +843,7 @@ class MainView(CustomizationMainViewMeta):
         return {'message': '{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.neutral(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_HEADER), text_styles.main(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_DESCRIPTION))}
 
     def __getAnchorPositionData(self, slotId, region):
-        if self._tabIndex in CUSTOMIZATION_TABS.REGIONS:
+        if self._tabIndex in C11nTabs.REGIONS:
             anchorPos = self.service.getPointForRegionLeaderLine(region)
             anchorNorm = anchorPos
         else:
@@ -862,8 +852,6 @@ class MainView(CustomizationMainViewMeta):
         return None if anchorPos is None or anchorNorm is None else AnchorPositionData(cameras.get2DAngleFromCamera(anchorNorm), cameras.projectPoint(anchorPos), slotId)
 
     def __getItemTabsData(self):
-        """ Tabs with customization items.
-        """
         data = []
         for tabIdx in self.__getVisibleTabs():
             itemTypeID = TABS_ITEM_MAPPING[tabIdx]
@@ -875,11 +863,9 @@ class MainView(CustomizationMainViewMeta):
         return data
 
     def __getVisibleTabs(self):
-        """ Get tabs that are actually visible.
-        """
         visibleTabs = []
         anchorsData = g_currentVehicle.hangarSpace.getSlotPositions()
-        for tabIdx in CUSTOMIZATION_TABS.VISIBLE:
+        for tabIdx in C11nTabs.VISIBLE:
             itemTypeID = TABS_ITEM_MAPPING[tabIdx]
             data = self._carouselDP.getSeasonAndTabData(tabIdx, self._currentSeason)
             if not data.itemCount:
@@ -898,34 +884,9 @@ class MainView(CustomizationMainViewMeta):
 
         return visibleTabs
 
-    def __onNotifySpaceMoved(self, _):
-        if self.__anchorPositionCallbackID is None:
-            self.__startTimer(ANCHOR_UPDATE_TIMER_DELAY, self.__updateAnchorPositions)
-        return
-
-    def __onNotifyCursorDragging(self, event):
-        isDragging = event.ctx.get('isDragging', False)
-        if not isDragging and self.__anchorPositionCallbackID is None:
-            self.__startTimer(ANCHOR_UPDATE_TIMER_DELAY, self.__updateAnchorPositions)
-        return
-
-    def __startTimer(self, delay, handler):
-        self.__finishTime = BigWorld.time() + delay
-        self.__updateTimer(handler)
-
-    def __updateTimer(self, handler):
-        if BigWorld.time() < self.__finishTime:
-            self.__anchorPositionCallbackID = BigWorld.callback(ANCHOR_UPDATE_FREQUENCY, partial(self.__updateTimer, handler))
-            handler()
-        else:
-            self.__stopTimer()
-
-    def __stopTimer(self):
-        if self.__anchorPositionCallbackID is not None:
-            BigWorld.cancelCallback(self.__anchorPositionCallbackID)
-            self.__anchorPositionCallbackID = None
-            self.__finishTime = 0
-        return
+    def __onNotifyHangarCameraIdleStateChanged(self, event):
+        isIdle = event.ctx.get('started', False)
+        self.as_cameraAutoRotateChangedS(isIdle)
 
     @async
     def __confirmHeaderNavigation(self, callback):
@@ -940,3 +901,11 @@ class MainView(CustomizationMainViewMeta):
         if self.itemIsPicked:
             self.soundManager.playInstantSound(SOUNDS.RELEASE)
             self.itemIsPicked = False
+
+    def __onSettingsChanged(self, diff):
+        if GAME.HANGAR_CAM_PARALLAX_ENABLED in diff:
+            self.__updateCameraParalaxFlag()
+
+    def __updateCameraParalaxFlag(self):
+        paralaxEnabled = bool(self.settingsCore.getSetting(GAME.HANGAR_CAM_PARALLAX_ENABLED))
+        self.as_setParallaxFlagS(paralaxEnabled)

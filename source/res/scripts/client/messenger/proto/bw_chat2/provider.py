@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/provider.py
+import weakref
 from collections import defaultdict, deque
 import BattleReplay
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
-import weakref
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from ids_generators import SequenceIDGenerator
@@ -241,5 +241,5 @@ class ResponseDictHandler(ResponseHandler):
         result = False
         if value in self._reqIDs.values():
             result = True
-            self._reqIDs = dict(filter(lambda item: item[1] != value, self._reqIDs.iteritems()))
+            self._reqIDs = dict((item for item in self._reqIDs.iteritems() if item[1] != value))
         return result

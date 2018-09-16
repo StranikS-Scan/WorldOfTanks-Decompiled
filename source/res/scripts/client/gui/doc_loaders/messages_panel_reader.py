@@ -33,10 +33,9 @@ def _readStyles(ctx, root):
     if section is not None:
         for xmlCtx, subSection in resource_helper.getIterator(ctx, section):
             item = resource_helper.readItem(xmlCtx, subSection, 'style')
-            assert item.name in _EXPECTED_STYLES, 'Style section %s is not expected!' % item.name
             expectedKeys = _EXPECTED_STYLES[item.name]
             for key in expectedKeys:
-                assert key in item.value, 'Style option %s is expected in section %s!' % (key, item.name)
+                pass
 
             styles[item.name] = item.value
 

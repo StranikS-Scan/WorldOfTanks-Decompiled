@@ -38,7 +38,7 @@ class Worker(threading.Thread):
                 job.doWork(self)
                 self._jobsQueue.task_done()
                 time.sleep(0.001)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
     def __repr__(self):
@@ -54,11 +54,11 @@ class ThreadPool(object):
         self._workersLimit = workersLimit
 
     def start(self):
-        for idx in xrange(self._workersLimit):
+        for _ in xrange(self._workersLimit):
             worker = self._createNewWorker()
             try:
                 worker.start()
-            except:
+            except Exception:
                 LOG_ERROR('Worker has not been started properly', worker)
             else:
                 self._workers.append(worker)

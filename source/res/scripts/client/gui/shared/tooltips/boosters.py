@@ -63,7 +63,7 @@ class BoosterTooltipData(BlocksTooltipData):
             bonuses = q.getBonuses('goodies')
             for b in bonuses:
                 boosters = b.getBoosters()
-                for qBooster, count in boosters.iteritems():
+                for qBooster, _ in boosters.iteritems():
                     if boosterID == qBooster.boosterID:
                         questsResult.add(q.getUserName())
 

@@ -7,7 +7,6 @@ class WGNCDialog(WGNCDialogMeta):
 
     def __init__(self, ctx=None):
         super(WGNCDialog, self).__init__()
-        assert ctx, 'Context can be defined'
         self.__notID = ctx['notID']
         self.__target = ctx['target']
 

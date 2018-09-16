@@ -13,10 +13,6 @@ class StoreActions(StoreActionsViewMeta):
     eventsCache = dependency.descriptor(IEventsCache)
 
     def actionSelect(self, triggerChainID):
-        """
-        run tutorial sales chain for selected action
-        :param triggerChainID: str
-        """
         event_dispatcher.runSalesChain(triggerChainID)
 
     def onActionSeen(self, actionId):
@@ -24,8 +20,8 @@ class StoreActions(StoreActionsViewMeta):
 
     def onBattleTaskSelect(self, actionId):
         if actionId:
-            id = actionId.split('/')[0]
-            action = self.eventsCache.getActions().get(id)
+            taskID = actionId.split('/')[0]
+            action = self.eventsCache.getActions().get(taskID)
             if action:
                 for quest in action.linkedQuests:
                     showMission(quest)

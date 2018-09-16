@@ -1,15 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/sysconfig.py
-"""Provide access to Python's configuration information.  The specific
-configuration variables available depend heavily on the platform and
-configuration.  The values may be retrieved using
-get_config_var(name), and the list of variables is available via
-get_config_vars().keys().  Additional convenience functions are also
-available.
-
-Written by:   Fred L. Drake, Jr.
-Email:        <fdrake@acm.org>
-"""
 __revision__ = '$Id$'
 import os
 import re
@@ -39,24 +29,10 @@ def _python_build():
 python_build = _python_build()
 
 def get_python_version():
-    """Return a string containing the major and minor Python version,
-    leaving off the patchlevel.  Sample return values could be '1.5'
-    or '2.2'.
-    """
     return sys.version[:3]
 
 
 def get_python_inc(plat_specific=0, prefix=None):
-    """Return the directory containing installed Python header files.
-    
-    If 'plat_specific' is false (the default), this is the path to the
-    non-platform-specific header files, i.e. Python.h and so on;
-    otherwise, this is the path to platform-specific header files
-    (namely pyconfig.h).
-    
-    If 'prefix' is supplied, use it instead of sys.prefix or
-    sys.exec_prefix -- i.e., ignore 'plat_specific'.
-    """
     if prefix is None:
         prefix = plat_specific and EXEC_PREFIX or PREFIX
     if os.name == 'posix':
@@ -79,19 +55,6 @@ def get_python_inc(plat_specific=0, prefix=None):
 
 
 def get_python_lib(plat_specific=0, standard_lib=0, prefix=None):
-    """Return the directory containing the Python library (standard or
-    site additions).
-    
-    If 'plat_specific' is true, return the directory containing
-    platform-specific modules, i.e. any module from a non-pure-Python
-    module distribution; otherwise, return the platform-shared library
-    directory.  If 'standard_lib' is true, return the directory
-    containing standard Python library modules; otherwise, return the
-    directory for site-specific modules.
-    
-    If 'prefix' is supplied, use it instead of sys.prefix or
-    sys.exec_prefix -- i.e., ignore 'plat_specific'.
-    """
     if prefix is None:
         prefix = plat_specific and EXEC_PREFIX or PREFIX
     if os.name == 'posix':
@@ -118,11 +81,6 @@ def get_python_lib(plat_specific=0, standard_lib=0, prefix=None):
 
 
 def customize_compiler(compiler):
-    """Do any platform-specific customization of a CCompiler instance.
-    
-    Mainly needed on Unix, so we can plug in the information that
-    varies across Unices and is stored in Python's Makefile.
-    """
     global _config_vars
     if compiler.compiler_type == 'unix':
         if sys.platform == 'darwin':
@@ -165,7 +123,6 @@ def customize_compiler(compiler):
 
 
 def get_config_h_filename():
-    """Return full pathname of installed pyconfig.h file."""
     if python_build:
         if os.name == 'nt':
             inc_dir = os.path.join(project_base, 'PC')
@@ -181,7 +138,6 @@ def get_config_h_filename():
 
 
 def get_makefile_filename():
-    """Return full pathname of installed Makefile from the Python build."""
     if python_build:
         return os.path.join(project_base, 'Makefile')
     lib_dir = get_python_lib(plat_specific=1, standard_lib=1)
@@ -189,12 +145,6 @@ def get_makefile_filename():
 
 
 def parse_config_h(fp, g=None):
-    """Parse a config.h-style file.
-    
-    A dictionary containing name/value pairs is returned.  If an
-    optional dictionary is passed in as the second argument, it is
-    used instead of a new dictionary.
-    """
     if g is None:
         g = {}
     define_rx = re.compile('#define ([A-Z][A-Za-z0-9_]+) (.*)\n')
@@ -224,12 +174,6 @@ _findvar1_rx = re.compile('\\$\\(([A-Za-z][A-Za-z0-9_]*)\\)')
 _findvar2_rx = re.compile('\\${([A-Za-z][A-Za-z0-9_]*)}')
 
 def parse_makefile(fn, g=None):
-    """Parse a Makefile-style file.
-    
-    A dictionary containing name/value pairs is returned.  If an
-    optional dictionary is passed in as the second argument, it is
-    used instead of a new dictionary.
-    """
     from distutils.text_file import TextFile
     fp = TextFile(fn, strip_comments=1, skip_blanks=1, join_lines=1)
     if g is None:
@@ -296,13 +240,6 @@ def parse_makefile(fn, g=None):
 
 
 def expand_makefile_vars(s, vars):
-    """Expand Makefile-style variables -- "${foo}" or "$(foo)" -- in
-    'string' according to 'vars' (a dictionary mapping variable names to
-    values).  Variables not present in 'vars' are silently expanded to the
-    empty string.  The variable values in 'vars' should not contain further
-    variable expansions; if 'vars' is the output of 'parse_makefile()',
-    you're fine.  Returns a variable-expanded version of 's'.
-    """
     while 1:
         m = _findvar1_rx.search(s) or _findvar2_rx.search(s)
         if m:
@@ -316,7 +253,6 @@ def expand_makefile_vars(s, vars):
 _config_vars = None
 
 def _init_posix():
-    """Initialize the module as appropriate for POSIX systems."""
     global _config_vars
     from _sysconfigdata import build_time_vars
     _config_vars = {}
@@ -324,7 +260,6 @@ def _init_posix():
 
 
 def _init_nt():
-    """Initialize the module as appropriate for NT"""
     global _config_vars
     g = {}
     g['LIBDEST'] = get_python_lib(plat_specific=0, standard_lib=1)
@@ -338,7 +273,6 @@ def _init_nt():
 
 
 def _init_os2():
-    """Initialize the module as appropriate for OS/2"""
     global _config_vars
     g = {}
     g['LIBDEST'] = get_python_lib(plat_specific=0, standard_lib=1)
@@ -350,15 +284,6 @@ def _init_os2():
 
 
 def get_config_vars(*args):
-    """With no arguments, return a dictionary of all configuration
-    variables relevant for the current platform.  Generally this includes
-    everything needed to build extensions and install both pure modules and
-    extensions.  On Unix, this means every variable defined in Python's
-    installed Makefile; on Windows and Mac OS it's a much smaller set.
-    
-    With arguments, return a list of values that result from looking up
-    each argument in the configuration variable dictionary.
-    """
     global _config_vars
     if _config_vars is None:
         func = globals().get('_init_' + os.name)
@@ -383,8 +308,4 @@ def get_config_vars(*args):
 
 
 def get_config_var(name):
-    """Return the value of a single variable using the dictionary
-    returned by 'get_config_vars()'.  Equivalent to
-    get_config_vars().get(name)
-    """
     return get_config_vars().get(name)

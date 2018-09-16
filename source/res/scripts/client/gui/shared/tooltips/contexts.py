@@ -96,8 +96,6 @@ class ParamsConfiguration(object):
 
 
 class ToolTipContext(object):
-    """ Root class for tool tip call context
-    """
 
     def __init__(self, component, fieldsToExclude=None):
         self._component = component
@@ -123,8 +121,6 @@ class ToolTipContext(object):
         return self._component
 
     def getParams(self):
-        """ Additional params that may be provided by context.
-        """
         return {}
 
 
@@ -158,8 +154,6 @@ class ShopContext(ToolTipContext):
 
 
 class AwardContext(ShopContext):
-    """ Context for award carousel's items.
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, fieldsToExclude=None):
@@ -207,9 +201,6 @@ class AwardContext(ShopContext):
 
 
 class RankedRankContext(ToolTipContext):
-    """
-    Rank class for tooltip context
-    """
     rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, fieldsToExclude=None):
@@ -283,8 +274,6 @@ class PersonalMissionOperationContext(ToolTipContext):
 
 
 class QuestContext(ToolTipContext):
-    """ Common quest class for tool tip context
-    """
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, fieldsToExclude=None):
@@ -295,8 +284,6 @@ class QuestContext(ToolTipContext):
 
 
 class PersonalMissionContext(QuestContext):
-    """ personal mission quest class for tool tip context
-    """
 
     def buildItem(self, eventID, *args, **kwargs):
         return self.eventsCache.personalMissions.getQuests().get(eventID, None)
@@ -482,7 +469,7 @@ class VehCmpModulesContext(TechTreeContext):
         return self.itemsCache.items.getItemByCD(int(node.id))
 
     def getStatusConfiguration(self, item):
-        value = super(TechTreeContext, self).getStatusConfiguration(item)
+        value = super(VehCmpModulesContext, self).getStatusConfiguration(item)
         value.isResearchPage = False
         value.showCustomStates = False
         value.checkBuying = False
@@ -513,8 +500,6 @@ class TechMainContext(HangarContext):
 
 
 class PersonalCaseContext(ToolTipContext):
-    """ Personal case class for tool tip context
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, fieldsToExclude=None):
@@ -529,8 +514,6 @@ class PersonalCaseContext(ToolTipContext):
 
 
 class NewSkillContext(PersonalCaseContext):
-    """ Tankman skill class for tool tip context
-    """
     SKILL_MOCK = namedtuple('SkillMock', ('header', 'userName', 'shortDescription', 'description', 'count', 'level'))
 
     def buildItem(self, tankmanID):
@@ -545,8 +528,6 @@ class NewSkillContext(PersonalCaseContext):
 
 
 class ProfileContext(ToolTipContext):
-    """ Profile class for tool tip context
-    """
 
     def __init__(self, fieldsToExclude=None):
         super(ProfileContext, self).__init__(TOOLTIP_COMPONENT.PROFILE, fieldsToExclude)
@@ -581,8 +562,6 @@ class ProfileContext(ToolTipContext):
 
 
 class BattleResultContext(ProfileContext):
-    """ Profile class for tool tip context
-    """
 
     def __init__(self, fieldsToExclude=None):
         super(BattleResultContext, self).__init__(fieldsToExclude)
@@ -595,7 +574,7 @@ class BattleResultContext(ProfileContext):
         return factory.create(value=value) if factory is not None else None
 
     def getParamsConfiguration(self, item):
-        value = super(ProfileContext, self).getParamsConfiguration(item)
+        value = super(BattleResultContext, self).getParamsConfiguration(item)
         value.checkAchievementExistence = False
         value.vehicleLevel = self._vehicleLevel
         value.arenaType = self._arenaType
@@ -630,57 +609,61 @@ class BattleResultMarkOfMasteryContext(BattleResultContext):
         return item
 
 
+class VehicleEliteBonusContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude=None):
+        super(VehicleEliteBonusContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
+
+    def buildItem(self, bonusId):
+        return bonusId
+
+
+class VehicleHistoricalReferenceContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude=None):
+        super(VehicleHistoricalReferenceContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
+
+    def buildItem(self, *args, **kwargs):
+        return g_currentPreviewVehicle.item
+
+
 class FinalStatisticContext(ToolTipContext):
-    """ Final statistic class for tool tip context
-    """
 
     def __init__(self, fieldsToExclude=None):
         super(FinalStatisticContext, self).__init__(TOOLTIP_COMPONENT.FINAL_STATISTIC, fieldsToExclude)
 
 
 class CyberSportUnitContext(ToolTipContext):
-    """ Final statistic class for tool tip context
-    """
 
     def __init__(self, fieldsToExclude=None):
         super(CyberSportUnitContext, self).__init__(TOOLTIP_COMPONENT.CYBER_SPORT_UNIT, fieldsToExclude)
 
 
 class FortificationContext(ToolTipContext):
-    """ Fortification class for tool tip context
-    """
 
     def __init__(self, fieldsToExclude=None):
         super(FortificationContext, self).__init__(TOOLTIP_COMPONENT.FORTIFICATIONS, fieldsToExclude)
 
 
 class ReserveContext(ToolTipContext):
-    """ Reserve class for tool tip context
-    """
 
     def __init__(self, fieldsToExclude=None):
         super(ReserveContext, self).__init__(TOOLTIP_COMPONENT.RESERVE, fieldsToExclude)
 
 
 class ClanProfileFortBuildingContext(ToolTipContext):
-    """ Clan profile fort building class for tool tip context
-    """
 
     def __init__(self, fieldsToExclude=None):
         super(ClanProfileFortBuildingContext, self).__init__(TOOLTIP_COMPONENT.CLAN_PROFILE, fieldsToExclude)
 
 
 class ContactContext(ToolTipContext):
-    """ Contact class for tool tip context
-    """
 
     def __init__(self, fieldsToExclude=None):
         super(ContactContext, self).__init__(TOOLTIP_COMPONENT.CONTACT, fieldsToExclude)
 
 
 class BattleConsumableContext(FortificationContext):
-    """ Context for all battle consumables.
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def buildItem(self, intCD):
@@ -688,16 +671,12 @@ class BattleConsumableContext(FortificationContext):
 
 
 class HangarTutorialContext(ToolTipContext):
-    """ Hangar tutorial class for tool tip context
-    """
 
     def __init__(self, fieldsToExclude=None):
         super(HangarTutorialContext, self).__init__(TOOLTIP_COMPONENT.HANGAR_TUTORIAL, fieldsToExclude)
 
 
 class FortPopoverDefResProgressContext(FortificationContext):
-    """ Fortifications popover defRes progress limit class for tool tip context
-    """
     pass
 
 
@@ -716,8 +695,6 @@ class TechCustomizationContext(ToolTipContext):
 
 
 class BoosterContext(ToolTipContext):
-    """ Booster class for tooltip context
-    """
     goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self, fieldsToExclude=None):
@@ -756,34 +733,25 @@ class BoosterStatsConfiguration(object):
 
 
 class HangarServerStatusContext(ToolTipContext):
-    """ Hangar server status context
-    """
 
     def __init__(self, fieldsToExclude=None):
         super(HangarServerStatusContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
 
 class ShopBattleBoosterContext(HangarContext):
-    """
-    Override HangarContext and always return None vehicle to not show special hints for battle boosters.
-    """
 
     def getStatsConfiguration(self, item):
-        value = super(HangarContext, self).getStatsConfiguration(item)
+        value = super(ShopBattleBoosterContext, self).getStatsConfiguration(item)
         value.vehicle = None
         return value
 
     def getStatusConfiguration(self, item):
-        value = super(HangarContext, self).getStatusConfiguration(item)
+        value = super(ShopBattleBoosterContext, self).getStatusConfiguration(item)
         value.vehicle = None
         return value
 
 
 class InventoryBattleBoosterContext(ShopBattleBoosterContext):
-    """
-    Override ShopBattleBoosterContext and always return False for everything related to buying.
-    Selling is not available for BattleBooster.
-    """
 
     def getStatsConfiguration(self, item):
         value = super(InventoryBattleBoosterContext, self).getStatsConfiguration(item)
@@ -793,22 +761,4 @@ class InventoryBattleBoosterContext(ShopBattleBoosterContext):
     def getStatusConfiguration(self, item):
         value = super(InventoryBattleBoosterContext, self).getStatusConfiguration(item)
         value.checkBuying = False
-        return value
-
-
-class NewYearAwardsResultContext(ProfileContext):
-    """ Profile class for tool tip context
-    """
-
-    def __init__(self, fieldsToExclude=None):
-        super(NewYearAwardsResultContext, self).__init__(fieldsToExclude)
-        self._component = TOOLTIP_COMPONENT.NY_REWARDS
-
-    def buildItem(self, block, name, value=0, customData=None):
-        factory = factories.getAchievementFactory((block, name))
-        return factory.create(value=value) if factory is not None else None
-
-    def getParamsConfiguration(self, item):
-        value = super(ProfileContext, self).getParamsConfiguration(item)
-        value.checkAchievementExistence = False
         return value

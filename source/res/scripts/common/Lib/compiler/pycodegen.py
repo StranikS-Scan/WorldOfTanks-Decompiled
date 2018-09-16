@@ -41,7 +41,6 @@ def compileFile(filename, display=0):
 
 
 def compile(source, filename, mode, flags=None, dont_inherit=None):
-    """Replacement for builtin compile() function"""
     if flags is not None or dont_inherit is not None:
         raise RuntimeError, 'not implemented yet'
     if mode == 'single':
@@ -120,7 +119,6 @@ class Module(AbstractCompileMode):
 
 
 class LocalNameFinder():
-    """Find local names in scope"""
 
     def __init__(self, names=()):
         self.names = misc.Set()
@@ -170,18 +168,6 @@ def is_constant_false(node):
 
 
 class CodeGenerator():
-    """Defines basic code generator for Python bytecode
-    
-    This class is an abstract base class.  Concrete subclasses must
-    define an __init__() that defines self.graph and then calls the
-    __init__() defined in this class.
-    
-    The concrete class must also define the class attributes
-    NameFinder, FunctionGen, and ClassGen.  These attributes can be
-    defined in the initClass() method, which is a hook for
-    initializing these methods after all the classes have been
-    defined.
-    """
     optimized = 0
     __initialized = None
     class_name = None
@@ -211,16 +197,11 @@ class CodeGenerator():
         return
 
     def initClass(self):
-        """This method is called once for each class"""
         pass
 
     def checkClass(self):
-        """Verify that class is constructed correctly"""
         try:
-            assert hasattr(self, 'graph')
-            assert getattr(self, 'NameFinder')
-            assert getattr(self, 'FunctionGen')
-            assert getattr(self, 'ClassGen')
+            pass
         except AssertionError as msg:
             intro = 'Bad class construction for %s' % self.__class__.__name__
             raise AssertionError, intro
@@ -233,7 +214,6 @@ class CodeGenerator():
         self.setDocstring = self.graph.setDocstring
 
     def getCode(self):
-        """Return a code object"""
         return self.graph.getCode()
 
     def mangle(self, name):
@@ -284,31 +264,12 @@ class CodeGenerator():
             raise RuntimeError, 'unsupported scope for var %s: %d' % (name, scope)
 
     def _implicitNameOp(self, prefix, name):
-        """Emit name ops for names generated implicitly by for loops
-        
-        The interpreter generates names that start with a period or
-        dollar sign.  The symbol table ignores these names because
-        they aren't present in the program text.
-        """
         if self.optimized:
             self.emit(prefix + '_FAST', name)
         else:
             self.emit(prefix + '_NAME', name)
 
     def set_lineno(self, node, force=False):
-        """Emit SET_LINENO if necessary.
-        
-        The instruction is considered necessary if the node has a
-        lineno attribute and it is different than the last lineno
-        emitted.
-        
-        Returns true if SET_LINENO was emitted.
-        
-        There are no rules for when an AST node should have a lineno
-        attribute.  The transformer and AST code need to be reviewed
-        and a consistent policy implemented and documented.  Until
-        then, this method works around missing line numbers.
-        """
         lineno = getattr(node, 'lineno', None)
         if lineno is not None and (lineno != self.last_lineno or force):
             self.emit('SET_LINENO', lineno)
@@ -699,19 +660,7 @@ class CodeGenerator():
         self.newBlock()
 
     def visitAssert(self, node):
-        end = self.newBlock()
-        self.set_lineno(node)
-        self.nextBlock()
-        self.visit(node.test)
-        self.emit('POP_JUMP_IF_TRUE', end)
-        self.nextBlock()
-        self.emit('LOAD_GLOBAL', 'AssertionError')
-        if node.fail:
-            self.visit(node.fail)
-            self.emit('RAISE_VARARGS', 2)
-        else:
-            self.emit('RAISE_VARARGS', 1)
-        self.nextBlock(end)
+        pass
 
     def visitRaise(self, node):
         self.set_lineno(node)
@@ -881,7 +830,6 @@ class CodeGenerator():
                 if name == '*':
                     self.namespace = 0
                     self.emit('IMPORT_STAR')
-                    assert len(node.names) == 1
                     return
                 self.emit('IMPORT_FROM', name)
                 self._resolveDots(name)
@@ -1228,7 +1176,6 @@ class CodeGenerator():
 
 
 class NestedScopeMixin():
-    """Defines initClass() for nested scoping (Python 2.2-compatible)"""
 
     def initClass(self):
         self.__class__.NameFinder = LocalNameFinder
@@ -1415,7 +1362,6 @@ class ClassCodeGenerator(NestedScopeMixin, AbstractClassCode, CodeGenerator):
 
 
 def generateArgList(arglist):
-    """Generate an arg list marking TupleArgs"""
     args = []
     extra = []
     count = 0
@@ -1433,7 +1379,6 @@ def generateArgList(arglist):
 
 
 def findOp(node):
-    """Find the op (DELETE, LOAD, STORE) in an AssTuple tree"""
     v = OpFinder()
     walk(node, v, verbose=0)
     return v.op
@@ -1457,16 +1402,6 @@ class OpFinder():
 
 
 class Delegator():
-    """Base class to support delegation for augmented assignment nodes
-    
-    To generator code for augmented assignments, we use the following
-    wrapper classes.  In visitAugAssign, the left-hand expression node
-    is visited twice.  The first time the visit uses the normal method
-    for that node .  The second time the visit uses a different method
-    that generates the appropriate code to perform the assignment.
-    These delegator classes wrap the original AST nodes in order to
-    support the variant visit methods.
-    """
 
     def __init__(self, obj):
         self.obj = obj

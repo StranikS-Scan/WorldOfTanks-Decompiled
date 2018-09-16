@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/__init__.py
+from time import gmtime, time as getTime
 from collections import namedtuple
 import BigWorld
-import time
-from time import gmtime
 from constants import NC_CONTEXT_ITEM_TYPE
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR
 from helpers import time_utils, i18n
@@ -48,11 +47,11 @@ class TimeFormatter(object):
     def getActualMsgTimeStr(cls, timestamp):
         try:
             DAY_SECONDS = 86400
-            currentTime = time.time()
+            currentTime = getTime()
             if currentTime - timestamp > DAY_SECONDS or gmtime().tm_mday != gmtime(timestamp).tm_mday:
                 return TimeFormatter.getShortTimeDateFormat(timestamp)
             return TimeFormatter.getShortTimeFormat(timestamp)
-        except:
+        except Exception:
             LOG_ERROR('There is error while formatting message time', timestamp)
             LOG_CURRENT_EXCEPTION()
 

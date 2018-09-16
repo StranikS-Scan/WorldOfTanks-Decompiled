@@ -6,7 +6,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.shared.utils.functions import getAbsoluteUrl
 import nations
 import BigWorld
-from gui import GUI_NATIONS, GUI_SETTINGS
+from gui import GUI_NATIONS
 from gui.shared import utils
 from gui.Scaleform.framework.entities.abstract.UtilsManagerMeta import UtilsManagerMeta
 from helpers import i18n, getClientLanguage

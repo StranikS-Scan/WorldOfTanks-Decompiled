@@ -10,16 +10,33 @@
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <maxPlayersInTeam>	30	</maxPlayersInTeam>
   <wwmusicSetup>
-    <wwmusicLoading>	music_euro_vilage	</wwmusicLoading>
-    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
-    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+    <wwmusicLoading>	music_mannerheim_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_mannerheim_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_mannerheim_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_mannerheim_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_mannerheim_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_mannerheim_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_spring_01	</wwambientSound>
+  <wwmusicDroneSetup>
+    <timeRemained>
+      <value>	180	</value>
+    </timeRemained>
+    <hpPercentRemained>
+      <value>	20	</value>
+    </hpPercentRemained>
+    <vehiclesRemained>
+      <value>	10	</value>
+    </vehiclesRemained>
+    <capturedPoints>
+      <value>	20	</value>
+    </capturedPoints>
+    <musicStopPredelay>
+      <value>	10	</value>
+    </musicStopPredelay>
+  </wwmusicDroneSetup>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <water>

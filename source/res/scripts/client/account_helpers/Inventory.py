@@ -1,10 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/Inventory.py
-import AccountCommands
-import items
 import collections
 from functools import partial
-from adisp import async
+import AccountCommands
+import items
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from items import vehicles, tankmen
 _VEHICLE = items.ITEM_TYPE_INDICES['vehicle']
@@ -112,11 +111,6 @@ class Inventory(object):
             return
         else:
             itemTypeIdx = vehicles.parseIntCompactDescr(itemCompDescr)[0]
-            assert itemTypeIdx in (_CHASSIS,
-             _GUN,
-             _ENGINE,
-             _FUEL_TANK,
-             _RADIO)
             if callback is not None:
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext)
             else:

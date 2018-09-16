@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyView.py
-import weakref
 import constants
 import gui
 from PlayerEvents import g_playerEvents
@@ -17,10 +16,8 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.events import BootcampEvent
-from gui.shared.utils import isPopupsWindowsOpenDisabled
-from gui.shared.utils.HangarSpace import g_hangarSpace
-from gui.shared.utils.functions import getViewName
-from helpers import i18n, dependency
+from hangar_camera_common import CameraRelatedEvents
+from helpers import i18n, dependency, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.gui.game_control import IIGRController
@@ -28,10 +25,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
-    """
-    The class encapsulate the logic related to controlling of lobby subviews loading.
-    It's responsible for showing the Waiting pop-up when lobby subviews are being loaded.
-    """
     __WAITING_LBL = 'loadPage'
     __SUB_VIEWS = (VIEW_ALIAS.LOBBY_HANGAR,
      VIEW_ALIAS.LOBBY_INVENTORY,
@@ -54,9 +47,7 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
      VIEW_ALIAS.BATTLE_QUEUE,
      VIEW_ALIAS.LOBBY_ACADEMY,
      RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS,
-     RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW,
-     VIEW_ALIAS.LOBBY_NY_SCREEN,
-     VIEW_ALIAS.LOBBY_NY_REWARDS)
+     RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW)
 
     def __init__(self):
         super(_LobbySubViewsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS ])
@@ -90,7 +81,7 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
 
 class LobbyView(LobbyPageMeta):
 
-    class COMPONENTS:
+    class COMPONENTS(object):
         HEADER = 'lobbyHeader'
 
     itemsCache = dependency.descriptor(IItemsCache)
@@ -108,6 +99,7 @@ class LobbyView(LobbyPageMeta):
     def bwProto(self):
         return None
 
+    @uniprof.regionDecorator(label='account.show_gui', scope='enter')
     def _populate(self):
         View._populate(self)
         self.__currIgrType = self.igrCtrl.getRoomType()
@@ -115,7 +107,6 @@ class LobbyView(LobbyPageMeta):
         self.addListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
-        g_playerEvents.onVehicleBecomeElite += self._onVehicleBecomeElite
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         viewLifecycleHandler = _LobbySubViewsLifecycleHandler()
@@ -130,10 +121,10 @@ class LobbyView(LobbyPageMeta):
         g_prbLoader.setEnabled(True)
         super(LobbyView, self)._invalidate(*args, **kwargs)
 
+    @uniprof.regionDecorator(label='account.show_gui', scope='enter')
     def _dispose(self):
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.__viewLifecycleWatcher.stop()
-        g_playerEvents.onVehicleBecomeElite -= self._onVehicleBecomeElite
         g_playerEvents.onEntityCheckOutEnqueued -= self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer -= self._onAccountBecomeNonPlayer
         if self._entityEnqueueCancelCallback:
@@ -156,10 +147,6 @@ class LobbyView(LobbyPageMeta):
             return
         SystemMessages.pushMessage(i18n.makeString('#menu:screenshot/save') % {'path': event.ctx['path']}, SystemMessages.SM_TYPE.Information)
 
-    def _onVehicleBecomeElite(self, vehTypeCompDescr):
-        if not isPopupsWindowsOpenDisabled():
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.ELITE_WINDOW, getViewName(VIEW_ALIAS.ELITE_WINDOW, vehTypeCompDescr), {'vehTypeCompDescr': vehTypeCompDescr}), EVENT_BUS_SCOPE.LOBBY)
-
     def _onEntityCheckoutEnqueued(self, cancelCallback):
         g_eventBus.addListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.handleEvent(BootcampEvent(BootcampEvent.QUEUE_DIALOG_SHOW), EVENT_BUS_SCOPE.LOBBY)
@@ -178,9 +165,9 @@ class LobbyView(LobbyPageMeta):
         return
 
     def moveSpace(self, dx, dy, dz):
-        dx, dy, dz = int(dx), int(dy), int(dz)
-        if g_hangarSpace.space:
-            g_hangarSpace.space.handleMouseEvent(dx, dy, dz)
+        self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, ctx={'dx': dx,
+         'dy': dy,
+         'dz': dz}))
         self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, ctx={'dx': dx,
          'dy': dy,
          'dz': dz}))

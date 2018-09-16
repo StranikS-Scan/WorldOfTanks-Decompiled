@@ -19,7 +19,7 @@ from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
 
-class _AWARD_BLOCK_IDS:
+class _AWARD_BLOCK_IDS(object):
     WEB_LEAGUE = 'web_league'
     BOOBY_QUEST = 'booby_quest'
     SEASON_AWARDS = 'season_awards'

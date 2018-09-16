@@ -1,17 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/ScrolledText.py
-"""A ScrolledText widget feels like a text widget but also has a
-vertical scroll bar on its right.  (Later, options may be added to
-add a horizontal bar as well, to make the bars disappear
-automatically when not needed, to move them to the other side of the
-window, etc.)
-
-Configuration options are passed to the Text widget.
-A Frame widget is inserted between the master and the text, to hold
-the Scrollbar widget.
-Most methods calls are inherited from the Text widget; Pack, Grid and
-Place methods are redirected to the Frame widget however.
-"""
 __all__ = ['ScrolledText']
 from Tkinter import Frame, Text, Scrollbar, Pack, Grid, Place
 from Tkconstants import RIGHT, LEFT, Y, BOTH

@@ -8,9 +8,8 @@ from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IBootcampController
 
-class _WWISE_EVENTS:
+class _WWISE_EVENTS(object):
     BATTLE_ENDING_SOON = 'time_buzzer_02'
     COUNTDOWN_TICKING = 'time_countdown'
     STOP_TICKING = 'time_countdown_stop'
@@ -46,7 +45,7 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         self.__isTicking = False
         self.__state = COUNTDOWN_STATE.UNDEFINED
         self.__roundLength = self.arenaVisitor.type.getRoundLength()
-        self.__endingSoonTime = self._getEndingSoonTime()
+        self.__endingSoonTime = self.arenaVisitor.type.getBattleEndingSoonTime()
         self.__endWarningIsEnabled = self.__checkEndWarningStatus()
         self.__sounds = dict()
 
@@ -83,19 +82,11 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         self.as_showBattleTimerS(True)
 
     def _callWWISE(self, wwiseEventName):
-        """
-        Method is used to play or stop sounds.
-        
-        Pretected for testing purposes.
-        """
         sound = SoundGroups.g_instance.getSound2D(wwiseEventName)
         if sound is not None:
             sound.play()
             self.__sounds[wwiseEventName] = sound
         return
-
-    def _getEndingSoonTime(self):
-        return self.arenaVisitor.type.getBattleEndingSoonTime()
 
     def __startTicking(self):
         self._callWWISE(_WWISE_EVENTS.COUNTDOWN_TICKING)

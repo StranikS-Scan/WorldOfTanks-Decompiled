@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/SoundManager.py
-import ResMgr
 from Vibroeffects import VibroManager
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework.entities.abstract.SoundManagerMeta import SoundManagerMeta
@@ -21,15 +20,15 @@ class SoundManager(SoundManagerMeta):
             LOG_ERROR('There is error while loading sounds xml data')
             LOG_CURRENT_EXCEPTION()
 
-    def soundEventHandler(self, soundsTypeSection, state, type, id):
-        self.playControlSound(state, type, id)
+    def soundEventHandler(self, soundsTypeSection, state, eventType, eventID):
+        self.playControlSound(state, eventType, eventID)
 
-    def playControlSound(self, state, type, id):
-        sound = self.sounds.getControlSound(type, state, id)
+    def playControlSound(self, state, eventType, eventID):
+        sound = self.sounds.getControlSound(eventType, state, eventID)
         if sound is not None:
             SoundGroups.g_instance.playSound2D(sound)
             if state == 'press':
-                VibroManager.g_instance.playButtonClickEffect(type)
+                VibroManager.g_instance.playButtonClickEffect(eventType)
         return
 
     def playEffectSound(self, effectName):

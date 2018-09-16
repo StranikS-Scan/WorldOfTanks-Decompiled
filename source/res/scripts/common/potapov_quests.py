@@ -418,8 +418,6 @@ class PQStorage(object):
         elif storage is not None:
             self.__compDescr = None
             self.__quests = storage
-        else:
-            assert False
         return
 
     def keys(self):

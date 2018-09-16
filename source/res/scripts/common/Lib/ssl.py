@@ -1,57 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ssl.py
-"""This module provides some more Pythonic support for SSL.
-
-Object types:
-
-  SSLSocket -- subtype of socket.socket which does SSL over the socket
-
-Exceptions:
-
-  SSLError -- exception raised for I/O errors
-
-Functions:
-
-  cert_time_to_seconds -- convert time string used for certificate
-                          notBefore and notAfter functions to integer
-                          seconds past the Epoch (the time values
-                          returned from time.time())
-
-  fetch_server_certificate (HOST, PORT) -- fetch the certificate provided
-                          by the server running on HOST at port PORT.  No
-                          validation of the certificate is performed.
-
-Integer constants:
-
-SSL_ERROR_ZERO_RETURN
-SSL_ERROR_WANT_READ
-SSL_ERROR_WANT_WRITE
-SSL_ERROR_WANT_X509_LOOKUP
-SSL_ERROR_SYSCALL
-SSL_ERROR_SSL
-SSL_ERROR_WANT_CONNECT
-
-SSL_ERROR_EOF
-SSL_ERROR_INVALID_ERROR_CODE
-
-The following group define certificate requirements that one side is
-allowing/requiring from the other side:
-
-CERT_NONE - no certificates from the other side are required (or will
-            be looked at if provided)
-CERT_OPTIONAL - certificates are not required, but if provided will be
-                validated, and if validation fails, the connection will
-                also fail
-CERT_REQUIRED - certificates are required, and will be validated, and
-                if validation fails, the connection will also fail
-
-The following constants identify various SSL protocol variants:
-
-PROTOCOL_SSLv2
-PROTOCOL_SSLv3
-PROTOCOL_SSLv23
-PROTOCOL_TLSv1
-"""
 import textwrap
 import _ssl
 from _ssl import OPENSSL_VERSION_NUMBER, OPENSSL_VERSION_INFO, OPENSSL_VERSION
@@ -79,9 +27,6 @@ import errno
 _DEFAULT_CIPHERS = 'DEFAULT:!aNULL:!eNULL:!LOW:!EXPORT:!SSLv2'
 
 class SSLSocket(socket):
-    """This class implements a subtype of socket.socket that wraps
-    the underlying OS socket in an SSL context when necessary, and
-    provides read and write methods over that channel."""
 
     def __init__(self, sock, keyfile=None, certfile=None, server_side=False, cert_reqs=CERT_NONE, ssl_version=PROTOCOL_SSLv23, ca_certs=None, do_handshake_on_connect=True, suppress_ragged_eofs=True, ciphers=None):
         if sock.getsockopt(SOL_SOCKET, SO_TYPE) != SOCK_STREAM:
@@ -122,8 +67,6 @@ class SSLSocket(socket):
         return
 
     def read(self, len=1024):
-        """Read up to LEN bytes and return them.
-        Return zero-length string on EOF."""
         try:
             return self._sslobj.read(len)
         except SSLError as x:
@@ -132,15 +75,9 @@ class SSLSocket(socket):
             raise
 
     def write(self, data):
-        """Write DATA to the underlying SSL channel.  Returns
-        number of bytes of DATA actually transmitted."""
         return self._sslobj.write(data)
 
     def getpeercert(self, binary_form=False):
-        """Returns a formatted version of the data in the
-        certificate provided by the other end of the SSL channel.
-        Return None if no certificate was provided, {} if a
-        certificate was provided, but not validated."""
         return self._sslobj.peer_certificate(binary_form)
 
     def cipher(self):
@@ -257,7 +194,6 @@ class SSLSocket(socket):
         return
 
     def do_handshake(self):
-        """Perform a TLS/SSL handshake."""
         self._sslobj.do_handshake()
 
     def _real_connect(self, addr, return_errno):
@@ -282,19 +218,12 @@ class SSLSocket(socket):
         return
 
     def connect(self, addr):
-        """Connects to remote ADDR, and then wraps the connection in
-        an SSL channel."""
         self._real_connect(addr, False)
 
     def connect_ex(self, addr):
-        """Connects to remote ADDR, and then wraps the connection in
-        an SSL channel."""
         return self._real_connect(addr, True)
 
     def accept(self):
-        """Accepts a new connection from a remote client, and returns
-        a tuple containing that new connection wrapped with a server-side
-        SSL channel, and the address of the remote client."""
         newsock, addr = socket.accept(self)
         try:
             return (SSLSocket(newsock, keyfile=self.keyfile, certfile=self.certfile, server_side=True, cert_reqs=self.cert_reqs, ssl_version=self.ssl_version, ca_certs=self.ca_certs, ciphers=self.ciphers, do_handshake_on_connect=self.do_handshake_on_connect, suppress_ragged_eofs=self.suppress_ragged_eofs), addr)
@@ -303,9 +232,6 @@ class SSLSocket(socket):
             raise e
 
     def makefile(self, mode='r', bufsize=-1):
-        """Make and return a file-like object that
-        works with the SSL connection.  Just use the code
-        from the socket module."""
         self._makefile_refs += 1
         return _fileobject(self, mode, bufsize, close=True)
 
@@ -315,9 +241,6 @@ def wrap_socket(sock, keyfile=None, certfile=None, server_side=False, cert_reqs=
 
 
 def cert_time_to_seconds(cert_time):
-    """Takes a date-time string in standard ASN1_print form
-    ("MON DAY 24HOUR:MINUTE:SEC YEAR TIMEZONE") and return
-    a Python time value in seconds past the epoch."""
     import time
     return time.mktime(time.strptime(cert_time, '%b %d %H:%M:%S %Y GMT'))
 
@@ -326,8 +249,6 @@ PEM_HEADER = '-----BEGIN CERTIFICATE-----'
 PEM_FOOTER = '-----END CERTIFICATE-----'
 
 def DER_cert_to_PEM_cert(der_cert_bytes):
-    """Takes a certificate in binary DER format and returns the
-    PEM version of it as a string."""
     if hasattr(base64, 'standard_b64encode'):
         f = base64.standard_b64encode(der_cert_bytes)
         return PEM_HEADER + '\n' + textwrap.fill(f, 64) + '\n' + PEM_FOOTER + '\n'
@@ -336,8 +257,6 @@ def DER_cert_to_PEM_cert(der_cert_bytes):
 
 
 def PEM_cert_to_DER_cert(pem_cert_string):
-    """Takes a certificate in ASCII PEM format and returns the
-    DER-encoded version of it as a byte sequence"""
     if not pem_cert_string.startswith(PEM_HEADER):
         raise ValueError('Invalid PEM encoding; must start with %s' % PEM_HEADER)
     if not pem_cert_string.strip().endswith(PEM_FOOTER):
@@ -347,10 +266,6 @@ def PEM_cert_to_DER_cert(pem_cert_string):
 
 
 def get_server_certificate(addr, ssl_version=PROTOCOL_SSLv3, ca_certs=None):
-    """Retrieve the certificate from the server at the specified address,
-    and return it as a PEM-encoded string.
-    If 'ca_certs' is specified, validate the server cert against it.
-    If 'ssl_version' is specified, use it in the connection attempt."""
     host, port = addr
     if ca_certs is not None:
         cert_reqs = CERT_REQUIRED
@@ -368,9 +283,6 @@ def get_protocol_name(protocol_code):
 
 
 def sslwrap_simple(sock, keyfile=None, certfile=None):
-    """A replacement for the old socket.ssl function.  Designed
-    for compability with Python 2.5 and earlier.  Will disappear in
-    Python 3.0."""
     if hasattr(sock, '_sock'):
         sock = sock._sock
     ssl_sock = _ssl.sslwrap(sock, 0, keyfile, certfile, CERT_NONE, PROTOCOL_SSLv23, None)

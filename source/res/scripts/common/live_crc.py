@@ -274,7 +274,6 @@ EXCLUDE = ExcludeType()
 def __split_use(use):
     includeThisLevel = set(use.get(INCLUDE, set()))
     excludeThisLevel = set(use.get(EXCLUDE, set()))
-    assert not (bool(includeThisLevel) and bool(excludeThisLevel))
     useNextLevel = []
     for x in sorted(use.items()):
         if isinstance(x[0], SelectorType):

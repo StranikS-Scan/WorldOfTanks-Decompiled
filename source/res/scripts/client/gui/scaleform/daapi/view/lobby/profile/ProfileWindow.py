@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileWindow.py
+from PlayerEvents import g_playerEvents
 from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.meta.ProfileWindowMeta import ProfileWindowMeta
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import getProfileCommonInfo
+from gui.Scaleform.daapi.view.meta.ProfileWindowMeta import ProfileWindowMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.WAITING import WAITING
+from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
+from gui.wgcg.clan.contexts import CreateInviteCtx
 from helpers import dependency
 from helpers.i18n import makeString
-from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
-from gui.clans.contexts import CreateInviteCtx
-from PlayerEvents import g_playerEvents
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -28,7 +28,7 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
         self.__userName = ctx.get('userName')
         self.__databaseID = ctx.get('databaseID')
 
-    def onClanStateChanged(self, oldStateID, newStateID):
+    def onClanEnableChanged(self, enabled):
         self.__updateAddToClanBtn()
 
     def _populate(self):
@@ -58,15 +58,16 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
         return
 
     def __updateAddToClanBtn(self):
-        clanDBID, clanInfo = self.itemsCache.items.getClanInfo(self.__databaseID)
-        isEnabled = self.clansCtrl.isAvailable()
+        _, clanInfo = self.itemsCache.items.getClanInfo(self.__databaseID)
+        isVisible = self.lobbyContext.getServerSettings().clanProfile.isEnabled()
+        isEnabled = self.webCtrl.isAvailable()
         if isEnabled and clanInfo is None:
-            profile = self.clansCtrl.getAccountProfile()
+            profile = self.webCtrl.getAccountProfile()
             dossier = profile.getClanDossier()
             isEnabled = profile.getMyClanPermissions().canHandleClanInvites() and not dossier.isClanInviteSent(self.__databaseID) and not dossier.hasClanApplication(self.__databaseID)
         userIsNotInClan = clanInfo is None
         self.as_addToClanAvailableS(isEnabled)
-        self.as_addToClanVisibleS(self.clansCtrl.isEnabled() and userIsNotInClan)
+        self.as_addToClanVisibleS(isVisible and userIsNotInClan)
         return
 
     def __isEnabledInRoaming(self, dbID):
@@ -94,7 +95,7 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
 
     def __updateUserInfo(self):
         dossier = self.itemsCache.items.getAccountDossier(self.__databaseID)
-        clanDBID, clanInfo = self.itemsCache.items.getClanInfo(self.__databaseID)
+        _, clanInfo = self.itemsCache.items.getClanInfo(self.__databaseID)
         info = getProfileCommonInfo(self.__userName, dossier.getDossierDescr())
         clanAbbrev = clanInfo[1] if clanInfo is not None else None
         self.as_setInitDataS({'fullName': self.lobbyContext.getPlayerFullName(info['name'], clanAbbrev=clanAbbrev, regionCode=self.lobbyContext.getRegionCode(self.__databaseID))})
@@ -121,9 +122,9 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
     @process
     def userAddToClan(self):
         self.as_showWaitingS(WAITING.CLANS_INVITES_SEND, {})
-        profile = self.clansCtrl.getAccountProfile()
+        profile = self.webCtrl.getAccountProfile()
         context = CreateInviteCtx(profile.getClanDbID(), [self.__databaseID])
-        result = yield self.clansCtrl.sendRequest(context, allowDelay=True)
+        result = yield self.webCtrl.sendRequest(context, allowDelay=True)
         showClanInviteSystemMsg(self.__userName, result.isSuccess(), result.getCode())
         self.__updateAddToClanBtn()
         self.as_hideWaitingS()

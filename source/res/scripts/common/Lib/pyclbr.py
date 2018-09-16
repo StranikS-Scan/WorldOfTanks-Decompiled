@@ -1,45 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pyclbr.py
-"""Parse a Python module and describe its classes and methods.
-
-Parse enough of a Python file to recognize imports and class and
-method definitions, and to find out the superclasses of a class.
-
-The interface consists of a single function:
-        readmodule_ex(module [, path])
-where module is the name of a Python module, and path is an optional
-list of directories where the module is to be searched.  If present,
-path is prepended to the system search path sys.path.  The return
-value is a dictionary.  The keys of the dictionary are the names of
-the classes defined in the module (including classes that are defined
-via the from XXX import YYY construct).  The values are class
-instances of the class Class defined here.  One special key/value pair
-is present for packages: the key '__path__' has a list as its value
-which contains the package search path.
-
-A class is described by the class Class in this module.  Instances
-of this class have the following instance variables:
-        module -- the module name
-        name -- the name of the class
-        super -- a list of super classes (Class instances)
-        methods -- a dictionary of methods
-        file -- the file in which the class was defined
-        lineno -- the line in the file on which the class statement occurred
-The dictionary of methods uses the method names as keys and the line
-numbers on which the method was defined as values.
-If the name of a super class is not recognized, the corresponding
-entry in the list of super classes is not a class instance but a
-string giving the name of the super class.  Since import statements
-are recognized and imported modules are scanned as well, this
-shouldn't happen often.
-
-A function is described by the class Function in this module.
-Instances of this class have the following instance variables:
-        module -- the module name
-        name -- the name of the class
-        file -- the file in which the class was defined
-        lineno -- the line in the file on which the class statement occurred
-"""
 import sys
 import imp
 import tokenize
@@ -52,7 +12,6 @@ __all__ = ['readmodule',
 _modules = {}
 
 class Class:
-    """Class to represent a Python class."""
 
     def __init__(self, module, name, super, file, lineno):
         self.module = module
@@ -70,7 +29,6 @@ class Class:
 
 
 class Function:
-    """Class to represent a top-level Python function"""
 
     def __init__(self, module, name, file, lineno):
         self.module = module
@@ -80,10 +38,6 @@ class Function:
 
 
 def readmodule(module, path=None):
-    """Backwards compatible interface.
-    
-    Call readmodule_ex() and then only keep Class objects from the
-    resulting dictionary."""
     res = {}
     for key, value in _readmodule(module, path or []).items():
         if isinstance(value, Class):
@@ -93,23 +47,10 @@ def readmodule(module, path=None):
 
 
 def readmodule_ex(module, path=None):
-    """Read a module file and return a dictionary of classes.
-    
-    Search for MODULE in PATH and sys.path, read and parse the
-    module and return a dictionary with one entry for each class
-    found in the module.
-    """
     return _readmodule(module, path or [])
 
 
 def _readmodule(module, path, inpackage=None):
-    """Do the hard work for readmodule[_ex].
-    
-    If INPACKAGE is given, it must be the dotted name of the package in
-    which we are searching for a submodule, and then PATH must be the
-    package search path; otherwise, we are searching for a top-level
-    module, and PATH is combined with sys.path.
-    """
     if inpackage is not None:
         fullmodule = '%s.%s' % (inpackage, module)
     else:

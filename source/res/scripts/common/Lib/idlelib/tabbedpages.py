@@ -1,14 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/tabbedpages.py
-"""An implementation of tabbed pages using only standard Tkinter.
-
-Originally developed for use in IDLE. Based on tabpage.py.
-
-Classes exported:
-TabbedPageSet -- A Tkinter implementation of a tabbed-page widget.
-TabSet -- A widget containing tabs (buttons) in one or more rows.
-
-"""
 from Tkinter import *
 
 class InvalidNameError(Exception):
@@ -20,33 +11,8 @@ class AlreadyExistsError(Exception):
 
 
 class TabSet(Frame):
-    """A widget containing tabs (buttons) in one or more rows.
-    
-    Only one tab may be selected at a time.
-    
-    """
 
     def __init__(self, page_set, select_command, tabs=None, n_rows=1, max_tabs_per_row=5, expand_tabs=False, **kw):
-        """Constructor arguments:
-        
-        select_command -- A callable which will be called when a tab is
-        selected. It is called with the name of the selected tab as an
-        argument.
-        
-        tabs -- A list of strings, the names of the tabs. Should be specified in
-        the desired tab order. The first tab will be the default and first
-        active tab. If tabs is None or empty, the TabSet will be initialized
-        empty.
-        
-        n_rows -- Number of rows of tabs to be shown. If n_rows <= 0 or is
-        None, then the number of rows will be decided by TabSet. See
-        _arrange_tabs() for details.
-        
-        max_tabs_per_row -- Used for deciding how many rows of tabs are needed,
-        when the number of rows is not constant. See _arrange_tabs() for
-        details.
-        
-        """
         Frame.__init__(self, page_set, **kw)
         self.select_command = select_command
         self.n_rows = n_rows
@@ -67,7 +33,6 @@ class TabSet(Frame):
         return
 
     def add_tab(self, tab_name):
-        """Add a new tab with the name given in tab_name."""
         if not tab_name:
             raise InvalidNameError("Invalid Tab name: '%s'" % tab_name)
         if tab_name in self._tab_names:
@@ -76,14 +41,12 @@ class TabSet(Frame):
         self._arrange_tabs()
 
     def remove_tab(self, tab_name):
-        """Remove the tab named <tab_name>"""
         if tab_name not in self._tab_names:
             raise KeyError("No such Tab: '%s" % page_name)
         self._tab_names.remove(tab_name)
         self._arrange_tabs()
 
     def set_selected_tab(self, tab_name):
-        """Show the tab named <tab_name> as the selected one"""
         if tab_name == self._selected_tab:
             return
         else:
@@ -126,15 +89,6 @@ class TabSet(Frame):
         self._tab2row = {}
 
     def _arrange_tabs(self):
-        """
-        Arrange the tabs in rows, in the order in which they were added.
-        
-        If n_rows >= 1, this will be the number of rows used. Otherwise the
-        number of rows will be calculated according to the number of tabs and
-        max_tabs_per_row. In this case, the number of rows may change when
-        adding/removing tabs.
-        
-        """
         for tab_name in self._tabs.keys():
             self._tabs.pop(tab_name).destroy()
 
@@ -161,18 +115,9 @@ class TabSet(Frame):
             return
 
     class TabButton(Frame):
-        """A simple tab-like widget."""
         bw = 2
 
         def __init__(self, name, select_command, tab_row, tab_set):
-            """Constructor arguments:
-            
-            name -- The tab's name, which will appear in its button.
-            
-            select_command -- The command to be called upon selection of the
-            tab. It is called with the tab's name as an argument.
-            
-            """
             Frame.__init__(self, tab_row, borderwidth=self.bw, relief=RAISED)
             self.name = name
             self.select_command = select_command
@@ -184,24 +129,12 @@ class TabSet(Frame):
             self.set_normal()
 
         def _select_event(self, *args):
-            """Event handler for tab selection.
-            
-            With TabbedPageSet, this calls TabbedPageSet.change_page, so that
-            selecting a tab changes the page.
-            
-            Note that this does -not- call set_selected -- it will be called by
-            TabSet.set_selected_tab, which should be called when whatever the
-            tabs are related to changes.
-            
-            """
             self.select_command(self.name)
 
         def set_selected(self):
-            """Assume selected look"""
             self._place_masks(selected=True)
 
         def set_normal(self):
-            """Assume normal look"""
             self._place_masks(selected=False)
 
         def _init_masks(self):
@@ -229,29 +162,8 @@ class TabSet(Frame):
 
 
 class TabbedPageSet(Frame):
-    """A Tkinter tabbed-pane widget.
-    
-    Constains set of 'pages' (or 'panes') with tabs above for selecting which
-    page is displayed. Only one page will be displayed at a time.
-    
-    Pages may be accessed through the 'pages' attribute, which is a dictionary
-    of pages, using the name given as the key. A page is an instance of a
-    subclass of Tk's Frame widget.
-    
-    The page widgets will be created (and destroyed when required) by the
-    TabbedPageSet. Do not call the page's pack/place/grid/destroy methods.
-    
-    Pages may be added or removed at any time using the add_page() and
-    remove_page() methods.
-    
-    """
 
     class Page(object):
-        """Abstract base class for TabbedPageSet's pages.
-        
-        Subclasses must override the _show() and _hide() methods.
-        
-        """
         uses_grid = False
 
         def __init__(self, page_set):
@@ -264,7 +176,6 @@ class TabbedPageSet(Frame):
             raise NotImplementedError
 
     class PageRemove(Page):
-        """Page class using the grid placement manager's "remove" mechanism."""
         uses_grid = True
 
         def _show(self):
@@ -274,7 +185,6 @@ class TabbedPageSet(Frame):
             self.frame.grid_remove()
 
     class PageLift(Page):
-        """Page class using the grid placement manager's "lift" mechanism."""
         uses_grid = True
 
         def __init__(self, page_set):
@@ -289,7 +199,6 @@ class TabbedPageSet(Frame):
             self.frame.lower()
 
     class PagePackForget(Page):
-        """Page class using the pack placement manager's "forget" mechanism."""
 
         def _show(self):
             self.frame.pack(fill=BOTH, expand=True)
@@ -298,35 +207,6 @@ class TabbedPageSet(Frame):
             self.frame.pack_forget()
 
     def __init__(self, parent, page_names=None, page_class=PageLift, n_rows=1, max_tabs_per_row=5, expand_tabs=False, **kw):
-        """Constructor arguments:
-        
-        page_names -- A list of strings, each will be the dictionary key to a
-        page's widget, and the name displayed on the page's tab. Should be
-        specified in the desired page order. The first page will be the default
-        and first active page. If page_names is None or empty, the
-        TabbedPageSet will be initialized empty.
-        
-        n_rows, max_tabs_per_row -- Parameters for the TabSet which will
-        manage the tabs. See TabSet's docs for details.
-        
-        page_class -- Pages can be shown/hidden using three mechanisms:
-        
-        * PageLift - All pages will be rendered one on top of the other. When
-          a page is selected, it will be brought to the top, thus hiding all
-          other pages. Using this method, the TabbedPageSet will not be resized
-          when pages are switched. (It may still be resized when pages are
-          added/removed.)
-        
-        * PageRemove - When a page is selected, the currently showing page is
-          hidden, and the new page shown in its place. Using this method, the
-          TabbedPageSet may resize when pages are changed.
-        
-        * PagePackForget - This mechanism uses the pack placement manager.
-          When a page is shown it is packed, and when it is hidden it is
-          unpacked (i.e. pack_forget). This mechanism may also cause the
-          TabbedPageSet to resize when the page is changed.
-        
-        """
         Frame.__init__(self, parent, **kw)
         self.page_class = page_class
         self.pages = {}
@@ -350,7 +230,6 @@ class TabbedPageSet(Frame):
         return
 
     def add_page(self, page_name):
-        """Add a new page with the name given in page_name."""
         if not page_name:
             raise InvalidNameError("Invalid TabPage name: '%s'" % page_name)
         if page_name in self.pages:
@@ -363,7 +242,6 @@ class TabbedPageSet(Frame):
             self.change_page(page_name)
 
     def remove_page(self, page_name):
-        """Destroy the page whose name is given in page_name."""
         if page_name not in self.pages:
             raise KeyError("No such TabPage: '%s" % page_name)
         self._pages_order.remove(page_name)
@@ -380,7 +258,6 @@ class TabbedPageSet(Frame):
         return
 
     def change_page(self, page_name):
-        """Show the page whose name is given in page_name."""
         if self._current_page == page_name:
             return
         else:

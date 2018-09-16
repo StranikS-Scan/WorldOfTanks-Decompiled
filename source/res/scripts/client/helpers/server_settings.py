@@ -87,14 +87,12 @@ class _FileServerSettings(object):
         return self.__getUrl('rare_achievements_images_big', rareAchieveID)
 
     def getRareAchievementTextsUrl(self, langID):
-        assert isinstance(langID, types.StringType), 'given langID type must be string'
         return self.__getUrl('rare_achievements_texts', langID)
 
     def getMissionsTokenImageUrl(self, tokenID, size):
         return self.__getUrl('missions_token_image', size, tokenID)
 
     def getMissionsTokenDescrsUrl(self, langID):
-        assert isinstance(langID, types.StringType), 'given langID type must be string'
         return self.__getUrl('missions_token_descrs', langID)
 
     def getMissionsDecorationUrl(self, decorationID, size):
@@ -145,7 +143,10 @@ class _ESportCurrentSeason(namedtuple('_ESportSeason', ['eSportSeasonID', 'eSpor
         return cls(0, 0, 0)
 
 
-class _ClanProfile(namedtuple('_ClanProfile', ['enabled', 'url', 'type'])):
+class _Wgcg(namedtuple('_Wgcg', ['enabled',
+ 'url',
+ 'type',
+ 'loginOnStart'])):
 
     def isEnabled(self):
         return self.enabled
@@ -156,9 +157,22 @@ class _ClanProfile(namedtuple('_ClanProfile', ['enabled', 'url', 'type'])):
     def getGateUrl(self):
         return self.url
 
+    def getLoginOnStart(self):
+        return self.loginOnStart
+
     @classmethod
     def defaults(cls):
-        return cls(False, '', '')
+        return cls(False, '', '', False)
+
+
+class _ClanProfile(namedtuple('_ClanProfile', ('enabled',))):
+
+    def isEnabled(self):
+        return self.enabled
+
+    @classmethod
+    def defaults(cls):
+        return cls(False)
 
 
 class _StrongholdSettings(namedtuple('_StrongholdSettings', ('wgshHostUrl',))):
@@ -211,7 +225,7 @@ class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ['isEnabled',
 
     def replace(self, data):
         allowedFields = self._fields
-        dataToUpdate = dict(filter(lambda (k, v): k in allowedFields, data.iteritems()))
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
         return self._replace(**dataToUpdate)
 
 
@@ -242,6 +256,9 @@ class ServerSettings(object):
 
     def __init__(self, serverSettings):
         self.onServerSettingsChange = Event()
+        self.set(serverSettings)
+
+    def set(self, serverSettings):
         self.__serverSettings = copy.deepcopy(serverSettings) if serverSettings else {}
         if 'roaming' in self.__serverSettings:
             roamingSettings = self.__serverSettings['roaming']
@@ -261,6 +278,10 @@ class ServerSettings(object):
         except TypeError:
             self.__eSportCurrentSeason = _ESportCurrentSeason.defaults()
 
+        if 'wgcg' in self.__serverSettings:
+            self.__updateWgcg(self.__serverSettings)
+        else:
+            self.__wgcg = _Wgcg.defaults()
         if 'clanProfile' in self.__serverSettings:
             self.__updateClanProfile(self.__serverSettings)
         else:
@@ -286,6 +307,7 @@ class ServerSettings(object):
             self.__rankedBattlesSettings = makeTupleByDict(_RankedBattlesConfig, self.__serverSettings['ranked_config'])
         else:
             self.__rankedBattlesSettings = _RankedBattlesConfig()
+        self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
         self.__serverSettings = updateDict(self.__serverSettings, serverSettingsDiff)
@@ -297,6 +319,8 @@ class ServerSettings(object):
             self.__updateRanked(serverSettingsDiff)
         if 'hallOfFame' in serverSettingsDiff:
             self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, serverSettingsDiff['hallOfFame'])
+        if 'wgcg' in serverSettingsDiff:
+            self.__updateWgcg(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -326,6 +350,10 @@ class ServerSettings(object):
         return self.__clanProfile
 
     @property
+    def wgcg(self):
+        return self.__wgcg
+
+    @property
     def spgRedesignFeatures(self):
         return self.__spgRedesignFeatures
 
@@ -351,9 +379,6 @@ class ServerSettings(object):
     def isRegularQuestEnabled(self):
         return self.__getGlobalSetting('isRegularQuestEnabled', True)
 
-    def isFalloutQuestEnabled(self):
-        return self.__getGlobalSetting('isFalloutQuestEnabled', True)
-
     def isStrongholdsEnabled(self):
         return self.__getGlobalSetting('strongholdSettings', {}).get('isStrongholdsEnabled', False)
 
@@ -367,7 +392,7 @@ class ServerSettings(object):
         return self.__getGlobalSetting('isGoldFishEnabled', False)
 
     def isTutorialEnabled(self):
-        return self.__getGlobalSetting('isTutorialEnabled', IS_TUTORIAL_ENABLED) and not self.isBootcampEnabled()
+        return self.__getGlobalSetting('isTutorialEnabled', IS_TUTORIAL_ENABLED)
 
     def isSandboxEnabled(self):
         return self.__getGlobalSetting('isSandboxEnabled', False)
@@ -434,12 +459,19 @@ class ServerSettings(object):
     def isCustomizationEnabled(self):
         return self.__getGlobalSetting('isCustomizationEnabled', True)
 
+    def getHeroVehicles(self):
+        return self.__getGlobalSetting('hero_vehicles', {})
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
     def __updateClanProfile(self, targetSettings):
         cProfile = targetSettings['clanProfile']
-        self.__clanProfile = _ClanProfile(cProfile.get('isEnabled', False), cProfile.get('gateUrl', ''), cProfile.get('type', 'gateway'))
+        self.__clanProfile = _ClanProfile(cProfile.get('isEnabled', False))
+
+    def __updateWgcg(self, targetSettings):
+        cProfile = targetSettings['wgcg']
+        self.__wgcg = _Wgcg(cProfile.get('isEnabled', False), cProfile.get('gateUrl', ''), cProfile.get('type', 'gateway'), cProfile.get('loginOnStart', False))
 
     def __updateRanked(self, targetSettings):
         self.__rankedBattlesSettings = self.__rankedBattlesSettings.replace(targetSettings['ranked_config'])

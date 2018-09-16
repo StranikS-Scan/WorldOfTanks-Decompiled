@@ -112,8 +112,6 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_PERSONAL_MISSION_DETAILS_VIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleDetailsClose(self, _):
-        """ We may need to close details externally when it already open.
-        """
         self.closeView()
 
     def __getQuests(self):
@@ -124,7 +122,7 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
 
     def __setData(self):
         datailedList = []
-        for idx, q in enumerate(sorted(self.__quests.itervalues(), key=methodcaller('getID'))):
+        for _, q in enumerate(sorted(self.__quests.itervalues(), key=methodcaller('getID'))):
             datailedList.append(getDetailedMissionData(q).getInfo())
 
         pages = map(lambda (i, mission): {'buttonsGroup': 'MissionDetailsPageGroup',

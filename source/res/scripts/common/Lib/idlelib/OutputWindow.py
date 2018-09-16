@@ -7,11 +7,6 @@ import tkMessageBox
 from idlelib import IOBinding
 
 class OutputWindow(EditorWindow):
-    """An editor window that can serve as an output file.
-    
-    Also the future base class for the Python shell window.
-    This class has no input facilities.
-    """
 
     def __init__(self, *args):
         EditorWindow.__init__(self, *args)

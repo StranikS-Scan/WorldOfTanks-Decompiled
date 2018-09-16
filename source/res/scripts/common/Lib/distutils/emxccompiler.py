@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/emxccompiler.py
-"""distutils.emxccompiler
-
-Provides the EMXCCompiler class, a subclass of UnixCCompiler that
-handles the EMX port of the GNU C compiler to OS/2.
-"""
 __revision__ = '$Id$'
 import os, sys, copy
 from distutils.ccompiler import gen_preprocess_options, gen_lib_options
@@ -107,21 +102,6 @@ CONFIG_H_NOTOK = 'not ok'
 CONFIG_H_UNCERTAIN = 'uncertain'
 
 def check_config_h():
-    """Check if the current Python installation (specifically, pyconfig.h)
-    appears amenable to building extensions with GCC.  Returns a tuple
-    (status, details), where 'status' is one of the following constants:
-      CONFIG_H_OK
-        all is well, go ahead and compile
-      CONFIG_H_NOTOK
-        doesn't look good
-      CONFIG_H_UNCERTAIN
-        not sure -- unable to read pyconfig.h
-    'details' is a human-readable string explaining the situation.
-    
-    Note there are two ways to conclude "OK": either 'sys.version' contains
-    the string "GCC" (implying that this Python was built with GCC), or the
-    installed "pyconfig.h" contains the string "__GNUC__".
-    """
     from distutils import sysconfig
     import string
     if string.find(sys.version, 'GCC') >= 0:
@@ -144,9 +124,6 @@ def check_config_h():
 
 
 def get_versions():
-    """ Try to find out the versions of gcc and ld.
-        If not possible it returns None for it.
-    """
     from distutils.version import StrictVersion
     from distutils.spawn import find_executable
     import re

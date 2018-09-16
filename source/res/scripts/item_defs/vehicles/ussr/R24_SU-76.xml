@@ -123,7 +123,7 @@
       <userString>	#ussr_vehicles:SU-76_1	</userString>
       <tags></tags>
       <level>	2	</level>
-      <price>	580.0	</price>
+      <price>	580	</price>
       <unlocks>
         <chassis>	SU-76bis	  <cost>	320	</cost>
         </chassis>
@@ -254,7 +254,7 @@
         <right>	vehicles/russian/R24_SU-76/track/right.track	</right>
         <segmentLength>	0.109	</segmentLength>
         <segmentOffset>	0.041	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -368,7 +368,7 @@
       <userString>	#ussr_vehicles:SU-76bis	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1730.0	</price>
+      <price>	1730	</price>
       <armor>
         <leftTrack>	15	</leftTrack>
         <rightTrack>	15	</rightTrack>
@@ -495,7 +495,7 @@
         <right>	vehicles/russian/R24_SU-76/track/right.track	</right>
         <segmentLength>	0.109	</segmentLength>
         <segmentOffset>	0.041	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -639,9 +639,9 @@
           </pitchLimits>
           <maxAmmo>	80	</maxAmmo>
           <unlocks>
-            <gun>	_57mm_ZiS-2	  <cost>	4000.0	</cost>
+            <gun>	_57mm_ZiS-2	  <cost>	4000	</cost>
             </gun>
-            <gun>	_76mm_ZiS-3_mod_42	  <cost>	2600.0	</cost>
+            <gun>	_76mm_ZiS-3_mod_42	  <cost>	2600	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -777,7 +777,7 @@
   </turrets0>
   <engines>
     <GAZ-203>	shared	  <unlocks>
-        <engine>	M-80	  <cost>	240.0	</cost>
+        <engine>	M-80	  <cost>	240	</cost>
         </engine>
       </unlocks>
     </GAZ-203>
@@ -788,7 +788,7 @@
   </fuelTanks>
   <radios>
     <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040.0	</cost>
+        <radio>	_9RM	  <cost>	4040	</cost>
         </radio>
       </unlocks>
     </_9R>

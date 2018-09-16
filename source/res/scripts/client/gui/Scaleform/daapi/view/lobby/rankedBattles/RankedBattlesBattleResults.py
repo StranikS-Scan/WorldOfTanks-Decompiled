@@ -12,11 +12,8 @@ class RankedBattlesBattleResults(RankedBattlesBattleResultsMeta):
 
     def __init__(self, ctx=None):
         super(RankedBattlesBattleResults, self).__init__()
-        assert 'rankedResultsVO' in ctx
         self.__rankedResultsVO = ctx['rankedResultsVO']
-        assert 'vehicle' in ctx
         self.__vehicle = ctx['vehicle']
-        assert 'rankInfo' in ctx
         self.__rankInfo = ctx['rankInfo']
         self.__questsProgress = ctx['questsProgress']
         accProgress = (self.__rankInfo.accRank, self.__rankInfo.accStep)
@@ -52,10 +49,6 @@ class RankedBattlesBattleResults(RankedBattlesBattleResultsMeta):
 
     @property
     def rankedWidget(self):
-        """
-        This is big widget in the middle of view
-        :return: instance of the component. It is related only to this view
-        """
         return self.getComponent(RANKEDBATTLES_ALIASES.RANKED_BATTLE_RESULTS_WIDGET)
 
     def _populate(self):

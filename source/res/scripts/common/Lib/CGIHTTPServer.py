@@ -1,24 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/CGIHTTPServer.py
-"""CGI-savvy HTTP Server.
-
-This module builds on SimpleHTTPServer by implementing GET and POST
-requests to cgi-bin scripts.
-
-If the os.fork() function is not present (e.g. on Windows),
-os.popen2() is used as a fallback, with slightly altered semantics; if
-that function is not present either (e.g. on Macintosh), only Python
-scripts are supported, and they are executed by the current process.
-
-In all cases, the implementation is intentionally naive -- all
-requests are executed sychronously.
-
-SECURITY WARNING: DON'T USE THIS CODE UNLESS YOU ARE INSIDE A FIREWALL
--- it may execute arbitrary Python code or external programs.
-
-Note that status code 200 is sent prior to execution of a CGI script, so
-scripts cannot send other status codes such as 302 (redirect).
-"""
 __version__ = '0.4'
 __all__ = ['CGIHTTPRequestHandler']
 import os
@@ -30,50 +11,24 @@ import select
 import copy
 
 class CGIHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
-    """Complete HTTP server with GET, HEAD and POST commands.
-    
-    GET and HEAD also support running CGI scripts.
-    
-    The POST command is *only* implemented for CGI scripts.
-    
-    """
     have_fork = hasattr(os, 'fork')
     have_popen2 = hasattr(os, 'popen2')
     have_popen3 = hasattr(os, 'popen3')
     rbufsize = 0
 
     def do_POST(self):
-        """Serve a POST request.
-        
-        This is only implemented for CGI scripts.
-        
-        """
         if self.is_cgi():
             self.run_cgi()
         else:
             self.send_error(501, 'Can only POST to CGI scripts')
 
     def send_head(self):
-        """Version of send_head that support CGI scripts"""
         if self.is_cgi():
             return self.run_cgi()
         else:
             return SimpleHTTPServer.SimpleHTTPRequestHandler.send_head(self)
 
     def is_cgi(self):
-        """Test whether self.path corresponds to a CGI script.
-        
-        Returns True and updates the cgi_info attribute to the tuple
-        (dir, rest) if self.path requires running a CGI script.
-        Returns False otherwise.
-        
-        If any exception is raised, the caller should assume that
-        self.path was rejected as invalid and act accordingly.
-        
-        The default implementation tests whether the normalized url
-        path begins with one of the strings in self.cgi_directories
-        (and the next character is a '/' or the end of the string).
-        """
         collapsed_path = _url_collapse_path(self.path)
         dir_sep = collapsed_path.find('/', 1)
         head, tail = collapsed_path[:dir_sep], collapsed_path[dir_sep + 1:]
@@ -85,16 +40,13 @@ class CGIHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     cgi_directories = ['/cgi-bin', '/htbin']
 
     def is_executable(self, path):
-        """Test whether argument path is an executable file."""
         return executable(path)
 
     def is_python(self, path):
-        """Test whether argument path is a Python script."""
         head, tail = os.path.splitext(path)
         return tail.lower() in ('.py', '.pyw')
 
     def run_cgi(self):
-        """Execute a CGI script."""
         dir, rest = self.cgi_info
         i = rest.find('/')
         while i >= 0:
@@ -262,21 +214,6 @@ class CGIHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 
 def _url_collapse_path(path):
-    """
-    Given a URL path, remove extra '/'s and '.' path elements and collapse
-    any '..' references and returns a colllapsed path.
-    
-    Implements something akin to RFC-2396 5.2 step 6 to parse relative paths.
-    The utility of this function is limited to is_cgi method and helps
-    preventing some security attacks.
-    
-    Returns: A tuple of (head, tail) where tail is everything after the final /
-    and head is everything before it.  Head will always start with a '/' and,
-    if it contains anything else, never have a trailing '/'.
-    
-    Raises: IndexError if too many '..' occur within the path.
-    
-    """
     path_parts = path.split('/')
     head_parts = []
     for part in path_parts[:-1]:
@@ -303,7 +240,6 @@ def _url_collapse_path(path):
 nobody = None
 
 def nobody_uid():
-    """Internal routine to get nobody's uid"""
     global nobody
     if nobody:
         return nobody
@@ -321,7 +257,6 @@ def nobody_uid():
 
 
 def executable(path):
-    """Test for executable file."""
     try:
         st = os.stat(path)
     except os.error:

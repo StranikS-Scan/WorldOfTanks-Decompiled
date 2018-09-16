@@ -1,7 +1,6 @@
 <G12_Ltraktor_bot.xml>
   <crew>
     <commander>	radioman
-
 			gunner	</commander>
     <driver></driver>
     <loader></loader>
@@ -262,7 +261,7 @@
         <right>	vehicles/german/G12_Ltraktor/track/right.track	</right>
         <segmentLength>	0.133	</segmentLength>
         <segmentOffset>	0.156	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>

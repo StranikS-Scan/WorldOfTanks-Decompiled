@@ -17,7 +17,6 @@ elif not os.path.isdir(ICONDIR):
     raise RuntimeError, "can't find icon directory (%r)" % (ICONDIR,)
 
 def listicons(icondir=ICONDIR):
-    """Utility to display the available icons."""
     root = Tk()
     import glob
     list = glob.glob(os.path.join(icondir, '*.gif'))
@@ -287,39 +286,27 @@ class TreeNode:
 
 
 class TreeItem:
-    """Abstract class representing tree items.
-    
-    Methods should typically be overridden, otherwise a default action
-    is used.
-    
-    """
 
     def __init__(self):
-        """Constructor.  Do whatever you need to do."""
         pass
 
     def GetText(self):
-        """Return text string to display."""
         pass
 
     def GetLabelText(self):
-        """Return label text string to display in front of text (if any)."""
         pass
 
     expandable = None
 
     def _IsExpandable(self):
-        """Do not override!  Called by TreeNode."""
         if self.expandable is None:
             self.expandable = self.IsExpandable()
         return self.expandable
 
     def IsExpandable(self):
-        """Return whether there are subitems."""
         pass
 
     def _GetSubList(self):
-        """Do not override!  Called by TreeNode."""
         if not self.IsExpandable():
             return []
         sublist = self.GetSubList()
@@ -328,32 +315,25 @@ class TreeItem:
         return sublist
 
     def IsEditable(self):
-        """Return whether the item's text may be edited."""
         pass
 
     def SetText(self, text):
-        """Change the item's text (if it is editable)."""
         pass
 
     def GetIconName(self):
-        """Return name of icon to be displayed normally."""
         pass
 
     def GetSelectedIconName(self):
-        """Return name of icon to be displayed when selected."""
         pass
 
     def GetSubList(self):
-        """Return list of items forming sublist."""
         pass
 
     def OnDoubleClick(self):
-        """Called on a double-click on the item."""
         pass
 
 
 class FileTreeItem(TreeItem):
-    """Example TreeItem subclass -- browse the file system."""
 
     def __init__(self, path):
         self.path = path

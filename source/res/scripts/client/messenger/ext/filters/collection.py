@@ -30,7 +30,7 @@ class ColoringObsceneLanguageFilter(IIncomingMessageFilter):
     def __init__(self):
         super(ColoringObsceneLanguageFilter, self).__init__()
         self.__currentID = None
-        g_olDictionary.overrideReplacementFunction(lambda world: self.__processBadWord(world))
+        g_olDictionary.overrideReplacementFunction(self.__processBadWord)
         return
 
     def __del__(self):

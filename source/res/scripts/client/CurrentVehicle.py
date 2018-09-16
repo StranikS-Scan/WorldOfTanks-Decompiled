@@ -8,8 +8,8 @@ from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
 from gui.vehicle_view_states import createState4CurrentVehicle
 from helpers import dependency
+from items.vehicles import VehicleDescr
 from helpers import isPlayerAccount, i18n
-from items import vehicles
 from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -18,7 +18,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.Waiting import Waiting
-from skeletons.gui.game_control import IIGRController, IRentalsController, IFalloutController
+from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.shared import IItemsCache
 _MODULES_NAMES = ('turret',
  'chassis',
@@ -105,7 +105,6 @@ class _CachedVehicle(object):
 class _CurrentVehicle(_CachedVehicle):
     igrCtrl = dependency.descriptor(IIGRController)
     rentals = dependency.descriptor(IRentalsController)
-    falloutCtrl = dependency.descriptor(IFalloutController)
 
     def __init__(self):
         super(_CurrentVehicle, self).__init__()
@@ -251,9 +250,6 @@ class _CurrentVehicle(_CachedVehicle):
     def isAutoEquipFull(self):
         return not self.isPresent() or self.item.isAutoEquipFull()
 
-    def isFalloutOnly(self):
-        return self.isPresent() and self.item.isFalloutOnly()
-
     def selectVehicle(self, vehInvID=0):
         vehicle = self.itemsCache.items.getVehicle(vehInvID)
         if vehicle is None:
@@ -289,9 +285,6 @@ class _CurrentVehicle(_CachedVehicle):
             else:
                 message = i18n.makeString('#menu:tankCarousel/vehicleStates/inPremiumIgrOnly', icon=icon)
             return (state, message, stateLvl)
-        if self.falloutCtrl and self.falloutCtrl.isSelected() and (not self.item.isFalloutAvailable or self.item.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE):
-            message = i18n.makeString(MENU.tankcarousel_vehiclestates(Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE))
-            return (state, message, Vehicle.VEHICLE_STATE_LEVEL.WARNING)
         message = '#menu:currentVehicleStatus/' + state
         return (state, message, stateLvl)
 
@@ -304,13 +297,11 @@ class _CurrentVehicle(_CachedVehicle):
          'groupLocks': self.onRotationUpdate})
         self.igrCtrl.onIgrTypeChanged += self.onIgrTypeChanged
         self.rentals.onRentChangeNotify += self.onRentChange
-        self.falloutCtrl.onSettingsChanged += self.__onFalloutChanged
 
     def _removeListeners(self):
         super(_CurrentVehicle, self)._removeListeners()
         self.igrCtrl.onIgrTypeChanged -= self.onIgrTypeChanged
         self.rentals.onRentChangeNotify -= self.onRentChange
-        self.falloutCtrl.onSettingsChanged -= self.__onFalloutChanged
 
     def _selectVehicle(self, vehInvID):
         if vehInvID == self.__vehInvID:
@@ -327,20 +318,16 @@ class _CurrentVehicle(_CachedVehicle):
         clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
             rosters = prb_getters.getPrebattleRosters(prebattle=clientPrb)
-            for rId, roster in rosters.iteritems():
+            for _, roster in rosters.iteritems():
                 if BigWorld.player().id in roster:
                     vehCompDescr = roster[BigWorld.player().id].get('vehCompDescr', '')
                     if vehCompDescr:
-                        vehDescr = vehicles.VehicleDescr(vehCompDescr)
+                        vehDescr = VehicleDescr(vehCompDescr)
                         vehicle = self.itemsCache.items.getItemByCD(vehDescr.type.compactDescr)
                         if vehicle is not None:
                             return vehicle.invID
 
         return 0
-
-    def __onFalloutChanged(self):
-        if self.isPresent() and (self.item.isOnlyForEventBattles or self.item.isFalloutAvailable):
-            self.onChanged()
 
     def __repr__(self):
         return 'CurrentVehicle(%s)' % str(self.item)
@@ -351,22 +338,26 @@ g_currentVehicle = _CurrentVehicle()
 class PreviewAppearance(object):
 
     def refreshVehicle(self, item):
-        return NotImplementedError
+        raise NotImplementedError
 
 
 class _RegularPreviewAppearance(PreviewAppearance):
 
     def refreshVehicle(self, item):
-        if item:
+        if item is not None:
             _getHangarSpace().updatePreviewVehicle(item)
         else:
             g_currentVehicle.refreshModel()
+        return
 
 
 class HeroTankPreviewAppearance(PreviewAppearance):
 
     def refreshVehicle(self, item):
-        pass
+        if item is None:
+            from ClientSelectableCameraObject import ClientSelectableCameraObject
+            ClientSelectableCameraObject.switchCamera()
+        return
 
 
 class _CurrentPreviewVehicle(_CachedVehicle):
@@ -375,6 +366,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         super(_CurrentPreviewVehicle, self).__init__()
         self.__item = None
         self.__defaultItem = None
+        self.__vehAppearance = _RegularPreviewAppearance()
         self.onComponentInstalled = Event(self._eManager)
         self.onVehicleUnlocked = Event(self._eManager)
         self.onVehicleInventoryChanged = Event(self._eManager)
@@ -391,6 +383,9 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def init(self):
         super(_CurrentPreviewVehicle, self).init()
         self.resetAppearance()
+
+    def refreshModel(self):
+        pass
 
     def selectVehicle(self, vehicleCD=None, vehicleStrCD=None):
         self._selectVehicle(vehicleCD, vehicleStrCD)
@@ -443,8 +438,10 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         processMsg(result)
         Waiting.hide('applyModule')
         if result.success:
-            self.__vehAppearance.refreshVehicle(self.item)
+            if self.__vehAppearance is not None:
+                self.__vehAppearance.refreshVehicle(self.item)
             self.onComponentInstalled()
+        return
 
     def hasModulesToSelect(self):
         return self.isPresent() and self.item.hasModulesToSelect
@@ -464,7 +461,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
                 self.__item = self.__makePreviewVehicleFromStrCD(vehicleStrCD)
             else:
                 self.__item = self.__getPreviewVehicle(vehicleCD)
-            if self.__vehAppearance:
+            if self.__vehAppearance is not None:
                 self.__vehAppearance.refreshVehicle(self.__item)
             self._setChangeCallback()
             return

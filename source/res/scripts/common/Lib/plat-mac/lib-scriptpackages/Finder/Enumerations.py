@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Finder/Enumerations.py
-"""Suite Enumerations: Enumerations for the Finder
-Level 1, version 1
-
-Generated from /System/Library/CoreServices/Finder.app
-AETE/AEUT resource version 0/144, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'tpnm'

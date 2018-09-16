@@ -5,7 +5,6 @@ from gui.DebugView import DebugView
 from gui.DebugView import DebugViewItem
 
 class DebugMonitorView(DebugView):
-    """Debug monitor view."""
 
     def __init__(self, textureName='', parentGUI=None):
         DebugView.__init__(self, textureName, parentGUI)
@@ -48,7 +47,7 @@ class DebugMonitorView(DebugView):
             if lastValue != value:
                 try:
                     resultDelta = value - lastValue
-                except:
+                except Exception:
                     pass
 
         self.__newContentInfo[keyname] = (value, resultDelta)
@@ -83,7 +82,7 @@ class DebugMonitorView(DebugView):
                         itemValueStr = valueStr1 + ' (' + valueStr2 + ')'
                         result += [(' ' * baseIndent + itemName, itemValueStr, ' = ')]
 
-        except:
+        except Exception:
             LOG_ERROR("<DebugMonitor>: can't build content items. Look exception:")
             LOG_CURRENT_EXCEPTION()
             return

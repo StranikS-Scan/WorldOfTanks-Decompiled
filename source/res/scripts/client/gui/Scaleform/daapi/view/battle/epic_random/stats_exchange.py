@@ -5,9 +5,6 @@ from gui.Scaleform.daapi.view.battle.shared.stats_exchage import createExchangeB
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import broker
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import vehicle
 from gui.battle_control.arena_info.arena_vos import EPIC_RANDOM_KEYS
-from gui.battle_control.arena_info.vos_collections import VehicleInfoSortKey
-from helpers import dependency
-from skeletons.gui.battle_session import IBattleSessionProvider
 
 class EpicRandomVehicleInfoComponent(vehicle.VehicleInfoComponent):
 

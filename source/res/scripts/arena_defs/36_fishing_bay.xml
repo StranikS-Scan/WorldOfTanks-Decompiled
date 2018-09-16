@@ -11,16 +11,16 @@
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <umbraEnabled>	1	</umbraEnabled>
   <wwmusicSetup>
-    <wwmusicLoading>	music_euro_vilage	</wwmusicLoading>
-    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
-    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+    <wwmusicLoading>	music_ruinberg_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_ruinberg_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_ruinberg_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
-  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <wwambientSound>	amb_map_36_fishing_bay_wind_autumn	</wwambientSound>
   <water>
     <texScale>	0	</texScale>
     <freqX>	0	</freqX>
@@ -40,20 +40,20 @@
   </gameplayTypes>
   <mapActivities>
     <warplane>
-      <preset>	fishing_bay_lightning_01	</preset>
-      <position>	0.000000 0.000000 0.000000	</position>
+      <preset>	fishing_bay_curve	</preset>
+      <position>	0.000000 20.000000 0.000000	</position>
       <yaw>	0.000000	</yaw>
       <possibility>	1.000000	</possibility>
-      <startTime>	0.000000 0.000000	</startTime>
-      <period>	100.000000	</period>
+      <startTime>	100.000000 200.000000	</startTime>
+      <period>	300.000000	</period>
     </warplane>
     <warplane>
-      <preset>	fishing_bay_lightning_02	</preset>
-      <position>	0.000000 0.000000 0.000000	</position>
-      <yaw>	0.000000	</yaw>
+      <preset>	fishing_bay_curve1	</preset>
+      <position>	0.000000 20.000000 0.000000	</position>
+      <yaw>	90.000000	</yaw>
       <possibility>	1.000000	</possibility>
-      <startTime>	45.000000 45.000000	</startTime>
-      <period>	90.000000	</period>
+      <startTime>	300.000000 400.000000	</startTime>
+      <period>	340.000000	</period>
     </warplane>
   </mapActivities>
 </36_fishing_bay.xml>

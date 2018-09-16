@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/rq_cooldown.py
-import BigWorld
 import math
+import BigWorld
 from debug_utils import LOG_WARNING
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
@@ -16,7 +16,7 @@ class REQUEST_SCOPE(object):
     BW_CHAT2 = 3
     XMPP = 4
     BATTLE_CONTROL = 5
-    CLAN = 6
+    WGCG = 6
     STRONGHOLD = 7
 
 
@@ -25,7 +25,7 @@ _REQUEST_SCOPE_TO_EVENT = {REQUEST_SCOPE.GLOBAL: events.CoolDownEvent.GLOBAL,
  REQUEST_SCOPE.BW_CHAT2: events.CoolDownEvent.BW_CHAT2,
  REQUEST_SCOPE.XMPP: events.CoolDownEvent.XMPP,
  REQUEST_SCOPE.BATTLE_CONTROL: events.CoolDownEvent.BATTLE,
- REQUEST_SCOPE.CLAN: events.CoolDownEvent.CLAN,
+ REQUEST_SCOPE.WGCG: events.CoolDownEvent.WGCG,
  REQUEST_SCOPE.STRONGHOLD: events.CoolDownEvent.STRONGHOLD}
 _g_coolDowns = {}
 

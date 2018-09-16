@@ -20,16 +20,12 @@ class ValueReplayConnector(object):
     _bitCoder = BitCoder(10, 8, 10)
 
     def __init__(self, battleResultsStruct, battleResults):
-        assert len(battleResultsStruct) < 1024
         self._battleResultsStruct = battleResultsStruct
         self._battleResults = battleResults
 
     @staticmethod
     def makeIndex(paramIndex, paramSubIndex, secondParamIndex):
         coder = ValueReplayConnector._bitCoder
-        assert coder.checkFit(0, paramIndex)
-        assert coder.checkFit(1, paramSubIndex)
-        assert coder.checkFit(2, secondParamIndex)
         return coder.emplace(paramIndex, paramSubIndex, secondParamIndex)
 
     @staticmethod
@@ -121,9 +117,6 @@ class ValueReplay:
     LAST = 15
 
     def __init__(self, connector, recordName, startRecordName=None, replay=None):
-        assert (startRecordName is None) ^ (replay is None)
-        assert recordName in connector
-        assert connector is not None
         self.__connector = connector
         self.__recordName = recordName
         self.__overiddenValues = {}

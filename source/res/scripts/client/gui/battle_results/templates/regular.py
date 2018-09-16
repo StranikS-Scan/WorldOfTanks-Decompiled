@@ -59,7 +59,6 @@ _COMMON_VO_META = base.DictMeta({'iconType': 'tank',
  'regionNameStr': '',
  'playerVehicles': [],
  'playerVehicleNames': [],
- 'falloutMode': '',
  'overtime': {},
  'totalFortResourceStr': '',
  'totalInfluenceStr': '',
@@ -241,9 +240,9 @@ REGULAR_PERSONAL_STATS_BLOCK.addComponent(12, details.BaseXPBlock(base.ListMeta(
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(13, details.PremiumXPBlock(base.ListMeta(), 'xpPremValues', _RECORD.PERSONAL))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(14, details.TotalXPDetailsBlock(base.ListMeta(), 'xpData', _RECORD.PERSONAL))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(15, vehicles.PersonalVehiclesRegularStatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
-(REGULAR_PERSONAL_STATS_BLOCK.addComponent(16, personal.StunDataFlag('isStunDataEnabled')),)
-(REGULAR_PERSONAL_STATS_BLOCK.addComponent(17, details.GainCrystalInBattleItem('crystalStr')),)
-(REGULAR_PERSONAL_STATS_BLOCK.addComponent(18, details.TotalCrystalDetailsBlock(base.ListMeta(), 'crystalData', _RECORD.PERSONAL)),)
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(16, personal.StunDataFlag('isStunDataEnabled'))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(17, details.GainCrystalInBattleItem('crystalStr'))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(18, details.TotalCrystalDetailsBlock(base.ListMeta(), 'crystalData', _RECORD.PERSONAL))
 _TEAM_PLAYER_VO_META = base.PropertyMeta((('userName', '', 'nameLabel'),
  ('fullName', '', 'fullNameLabel'),
  ('clanAbbrev', '', 'clanLabel'),
@@ -295,6 +294,7 @@ TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock
  ('userVO', vehicles.TeamPlayerNameBlock(field='userVO'), 'player'),
  ('squadID', 0, 'squadIndex'),
  ('isOwnSquad', False, 'isPersonalSquad'),
+ ('isTeamKiller', False, 'isTeamKiller'),
  ('statValues', vehicles.AllRegularVehicleStatValuesBlock(base.ListMeta(), 'statValues'), 'statValues'),
  ('resourceCount', 0, 'fortResource'),
  ('rank', 0, 'rank'),

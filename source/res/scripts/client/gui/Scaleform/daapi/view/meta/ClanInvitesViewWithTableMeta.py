@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ClanInvitesViewWithTableMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class ClanInvitesViewWithTableMeta(BaseDAAPIComponent):
@@ -15,9 +11,6 @@ class ClanInvitesViewWithTableMeta(BaseDAAPIComponent):
         self._printOverrideError('refreshTable')
 
     def as_setDataS(self, data):
-        """
-        :param data: Represented by ClanInvitesViewVO (AS)
-        """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_getTableDPS(self):
@@ -27,9 +20,6 @@ class ClanInvitesViewWithTableMeta(BaseDAAPIComponent):
         return self.flashObject.as_updateDefaultSortField(defaultSortField, defaultSortDirection) if self._isDAAPIInited() else None
 
     def as_showDummyS(self, data):
-        """
-        :param data: Represented by DummyVO (AS)
-        """
         return self.flashObject.as_showDummy(data) if self._isDAAPIInited() else None
 
     def as_hideDummyS(self):

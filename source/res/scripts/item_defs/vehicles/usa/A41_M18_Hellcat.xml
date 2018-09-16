@@ -222,7 +222,7 @@
         <right>	vehicles/american/A41_M18_Hellcat/track/right.track	</right>
         <segmentLength>	0.125	</segmentLength>
         <segmentOffset>	0.096	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -483,7 +483,7 @@
         <right>	vehicles/american/A41_M18_Hellcat/track/right.track	</right>
         <segmentLength>	0.125	</segmentLength>
         <segmentOffset>	0.096	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1134,12 +1134,12 @@
   </turrets0>
   <engines>
     <Wright_Continental_R-975EC2>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C1	  <cost>	900.0	</cost>
+        <engine>	Wright_Continental_R-975C1	  <cost>	900	</cost>
         </engine>
       </unlocks>
     </Wright_Continental_R-975EC2>
     <Wright_Continental_R-975C1>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C4	  <cost>	1500.0	</cost>
+        <engine>	Wright_Continental_R-975C4	  <cost>	1500	</cost>
         </engine>
       </unlocks>
     </Wright_Continental_R-975C1>
@@ -1150,12 +1150,12 @@
   </fuelTanks>
   <radios>
     <SCR_510>	shared	  <unlocks>
-        <radio>	SCR_610	  <cost>	1480.0	</cost>
+        <radio>	SCR_610	  <cost>	1480	</cost>
         </radio>
       </unlocks>
     </SCR_510>
     <SCR_610>	shared	  <unlocks>
-        <radio>	SCR_619	  <cost>	9000.0	</cost>
+        <radio>	SCR_619	  <cost>	9000	</cost>
         </radio>
       </unlocks>
     </SCR_610>

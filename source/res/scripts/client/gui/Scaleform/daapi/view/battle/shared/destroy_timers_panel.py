@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/destroy_timers_panel.py
 import weakref
+import math
 from collections import defaultdict
 import BigWorld
-import math
 import BattleReplay
 from AvatarInputHandler import AvatarInputHandler
 from ReplayEvents import g_replayEvents
@@ -22,7 +22,6 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 0,
  (_TIMER_STATES.OVERTURNED, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.DROWN, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.DEATH_ZONE, _TIMER_STATES.CRITICAL_VIEW): 1,
- (_TIMER_STATES.GAS_ATTACK, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 2,
  (_TIMER_STATES.DROWN, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.OVERTURNED, _TIMER_STATES.WARNING_VIEW): 4}
@@ -275,7 +274,6 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         super(DestroyTimersPanel, self).__init__()
         self.as_turnOnStackViewS(self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled())
         if mapping is not None:
-            assert isinstance(mapping, _mapping.FrontendMapping)
             self.__mapping = mapping
         else:
             self.__mapping = _mapping.FrontendMapping()

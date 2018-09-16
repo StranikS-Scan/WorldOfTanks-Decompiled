@@ -1,20 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/getopt.py
-"""Parser for command line options.
-
-This module helps scripts to parse the command line arguments in
-sys.argv.  It supports the same conventions as the Unix getopt()
-function (including the special meanings of arguments of the form `-'
-and `--').  Long options similar to those supported by GNU software
-may be used as well via an optional third argument.  This module
-provides two functions and an exception:
-
-getopt() -- Parse command line options
-gnu_getopt() -- Like getopt(), but allow option and non-option arguments
-to be intermixed.
-GetoptError -- exception (class) raised with 'opt' attribute, which is the
-option involved with the exception.
-"""
 __all__ = ['GetoptError',
  'error',
  'getopt',
@@ -37,31 +22,6 @@ class GetoptError(Exception):
 error = GetoptError
 
 def getopt(args, shortopts, longopts=[]):
-    """getopt(args, options[, long_options]) -> opts, args
-    
-    Parses command line options and parameter list.  args is the
-    argument list to be parsed, without the leading reference to the
-    running program.  Typically, this means "sys.argv[1:]".  shortopts
-    is the string of option letters that the script wants to
-    recognize, with options that require an argument followed by a
-    colon (i.e., the same format that Unix getopt() uses).  If
-    specified, longopts is a list of strings with the names of the
-    long options which should be supported.  The leading '--'
-    characters should not be included in the option name.  Options
-    which require an argument should be followed by an equal sign
-    ('=').
-    
-    The return value consists of two elements: the first is a list of
-    (option, value) pairs; the second is the list of program arguments
-    left after the option list was stripped (this is a trailing slice
-    of the first argument).  Each option-and-value pair returned has
-    the option as its first element, prefixed with a hyphen (e.g.,
-    '-x'), and the option argument as its second element, or an empty
-    string if the option has no argument.  The options occur in the
-    list in the same order in which they were found, thus allowing
-    multiple occurrences.  Long and short options may be mixed.
-    
-    """
     opts = []
     if type(longopts) == type(''):
         longopts = [longopts]
@@ -79,19 +39,6 @@ def getopt(args, shortopts, longopts=[]):
 
 
 def gnu_getopt(args, shortopts, longopts=[]):
-    """getopt(args, options[, long_options]) -> opts, args
-    
-    This function works like getopt(), except that GNU style scanning
-    mode is used by default. This means that option and non-option
-    arguments may be intermixed. The getopt() function stops
-    processing options as soon as a non-option argument is
-    encountered.
-    
-    If the first character of the option string is `+', or if the
-    environment variable POSIXLY_CORRECT is set, then option
-    processing stops as soon as a non-option argument is encountered.
-    
-    """
     opts = []
     prog_args = []
     if isinstance(longopts, str):
@@ -152,7 +99,6 @@ def long_has_args(opt, longopts):
         return (True, opt)
     if len(possibilities) > 1:
         raise GetoptError('option --%s not a unique prefix' % opt, opt)
-    assert len(possibilities) == 1
     unique_match = possibilities[0]
     has_arg = unique_match.endswith('=')
     if has_arg:

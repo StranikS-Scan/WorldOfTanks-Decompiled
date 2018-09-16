@@ -12,10 +12,6 @@ from gui.prb_control.items.unit_items import DynamicRosterSettings
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 
 class PublicDynamicRosterSettings(DynamicRosterSettings):
-    """
-    Class for dynamic roster settings that modifies min players count
-    like we could go in search alone
-    """
 
     def _extractSettings(self, unit):
         kwargs = super(PublicDynamicRosterSettings, self)._extractSettings(unit)
@@ -25,25 +21,16 @@ class PublicDynamicRosterSettings(DynamicRosterSettings):
 
 
 class PublicBrowserEntryPoint(ESportBrowserEntryPoint):
-    """
-    Public battles list entry point class
-    """
 
     def __init__(self):
         super(PublicBrowserEntryPoint, self).__init__(PREBATTLE_TYPE.UNIT)
 
 
 class PublicEntryPoint(ESportEntryPoint):
-    """
-    Public battle entry point class
-    """
     pass
 
 
 class PublicBrowserEntity(ESportBrowserEntity):
-    """
-    Public battles list entity
-    """
 
     def __init__(self):
         super(PublicBrowserEntity, self).__init__(PREBATTLE_TYPE.UNIT)
@@ -74,9 +61,6 @@ class PublicBrowserEntity(ESportBrowserEntity):
 
 
 class PublicEntity(ESportEntity):
-    """
-    Public battle entity
-    """
 
     def __init__(self):
         super(PublicEntity, self).__init__(PREBATTLE_TYPE.UNIT)

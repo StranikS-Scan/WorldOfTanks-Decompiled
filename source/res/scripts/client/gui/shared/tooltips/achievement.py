@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/achievement.py
 import constants
 import BigWorld
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters.icons import makeImageTag
@@ -96,9 +96,6 @@ class AchievementRecordsField(ToolTipDataField):
 
 
 class AchievementCrystalRewardField(ToolTipDataField):
-    """
-    Crystal award for achievement per vehicle level
-    """
     itemsCache = dependency.descriptor(IItemsCache)
     _rewardsLabels = None
     _rewardsValues = None

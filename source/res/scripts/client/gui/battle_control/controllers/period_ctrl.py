@@ -15,14 +15,11 @@ _COUNTDOWN_HIDE_SPEED = 1.5
 _START_NOTIFICATION_TIME = 5.0
 
 class IPlayersPanelsSwitcher(object):
-    """Interface of switcher in UI to change display mode of players panels."""
 
     def setInitialMode(self):
-        """Sets mode that is stored in settings."""
         pass
 
     def setLargeMode(self):
-        """Sets large mode until battle starts."""
         pass
 
 
@@ -51,46 +48,27 @@ class IAbstractPeriodView(IPlayersPanelsSwitcher):
 
 
 class ITimersBar(object):
-    """Interface of timers bar to display the countdown timer on the center of screen,
-    timer of duration on the right top position on the screen.
-    """
 
     def setTotalTime(self, totalTime):
-        """Sets value of time for the timer of duration on the right top position on the screen.
-        :param totalTime: integer containing time.
-        """
         raise NotImplementedError
 
     def hideTotalTime(self):
-        """Hides the timer of duration on the right top position on the screen."""
         raise NotImplementedError
 
     def setCountdown(self, state, timeLeft):
-        """Sets value of time for the countdown timer on the center of screen.
-        :param state: one of them COUNTDOWN_STATE.
-        :param timeLeft: integer containing time.
-        """
         raise NotImplementedError
 
     def hideCountdown(self, state, speed):
-        """Hides the countdown timer on the center of screen.
-        :param state: one of them COUNTDOWN_STATE.
-        :param speed: float containing speed of hiding.
-        """
         raise NotImplementedError
 
     def updateBattleCtx(self, ctx):
         raise NotImplementedError
 
     def setState(self, state):
-        """Controller notifies its components when state changes.
-        :param state: one of COUNTDOWN_STATE
-        """
         raise NotImplementedError
 
 
 class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
-    """Class of controller to sets/updates timers in the battle."""
     __slots__ = ('_callbackID', '_period', '_endTime', '_length', '_sound', '_cdState', '_ttState', '_isNotified', '_totalTime', '_countdown', '_playingTime', '_switcherState', '_battleCtx', '_arenaVisitor')
 
     def __init__(self):
@@ -119,7 +97,6 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self._arenaVisitor = arenaVisitor
 
     def stopControl(self):
-        """Routine must be invoked when a battle is finishing."""
         self._battleCtx = None
         self._arenaVisitor = None
         self.__clearCallback()
@@ -128,8 +105,6 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         return
 
     def setViewComponents(self, *components):
-        """ Sets UI.
-        """
         super(ArenaPeriodController, self).setViewComponents(*components)
         if self._period == _PERIOD.BATTLE:
             for viewCmp in self._viewComponents:
@@ -161,13 +136,6 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         return self._period
 
     def setPeriodInfo(self, period, endTime, length, additionalInfo, soundID=None):
-        """ Sets current time metrics that takes from the ClientArena.
-        :param period: integer containing one of the ARENA_PERIOD.* values.
-        :param endTime: float containing server time of the period end.
-        :param length: float containing period length.
-        :param additionalInfo: _PeriodAdditionalInfo.
-        :param soundID: string containing path to the sound of countdown timer.
-        """
         self._period = period
         self._endTime = endTime
         self._length = length
@@ -177,12 +145,6 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self.__setCallback()
 
     def invalidatePeriodInfo(self, period, endTime, length, additionalInfo):
-        """ Time metrics has been updated by server.
-        :param period: integer containing one of the ARENA_PERIOD.* values.
-        :param endTime: float containing server time of the period end.
-        :param length: float containing period length.
-        :param additionalInfo: _PeriodAdditionalInfo.
-        """
         self._period = period
         self._endTime = endTime
         self._length = length
@@ -192,24 +154,12 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self._setArenaWinStatus(additionalInfo)
 
     def _getTickInterval(self, floatLength):
-        """Calls tick once per second in regular mode and more precise if
-        # arenaLength time comes to end.
-        :param floatLength: float containing time left to end.
-        :return: float containing next interval.
-        """
         return 1 if floatLength > 1 else 0
 
     def _getHideSpeed(self):
-        """ Gets speed of hiding. It's override in replay controller to hide
-        countdown quickly.
-        :return: float.
-        """
         return _COUNTDOWN_HIDE_SPEED
 
     def _calculate(self):
-        """ Gets current value of time until the end of the period.
-        :return: float.
-        """
         return self._endTime - BigWorld.serverTime()
 
     def _setPlayingTimeOnArena(self):
@@ -332,9 +282,6 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
 
 
 class ArenaPeriodRecorder(ArenaPeriodController):
-    """Class of controller to sets/updates timers in the battle if client records
-    battle to the replay file.
-    """
     __slots__ = ('__recorder',)
     connectionMgr = dependency.descriptor(IConnectionManager)
 
@@ -377,7 +324,6 @@ class ArenaPeriodRecorder(ArenaPeriodController):
 
 
 class ArenaPeriodPlayer(ArenaPeriodController):
-    """Class of controller to sets/updates timers in the battle replay."""
     __slots__ = ('__replay',)
 
     def __init__(self):

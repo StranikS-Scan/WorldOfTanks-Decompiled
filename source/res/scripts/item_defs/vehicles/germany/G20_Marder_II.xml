@@ -111,7 +111,7 @@
       <shortUserString>	#germany_vehicles:MarderII_short	</shortUserString>
       <tags></tags>
       <level>	2	</level>
-      <price>	590.0	</price>
+      <price>	590	</price>
       <unlocks>
         <chassis>	MarderIIketten_ausf_B	  <cost>	325	</cost>
         </chassis>
@@ -242,7 +242,7 @@
         <right>	vehicles/german/G20_Marder_II/track/right.track	</right>
         <segmentLength>	0.088	</segmentLength>
         <segmentOffset>	0.112	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -395,7 +395,7 @@
       <shortUserString>	#germany_vehicles:MarderIIketten_ausf_B_short	</shortUserString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1750.0	</price>
+      <price>	1750	</price>
       <unlocks>
         <vehicle>	G39_Marder_III	  <cost>	3800	</cost>
         </vehicle>
@@ -526,7 +526,7 @@
         <right>	vehicles/german/G20_Marder_II/track/right.track	</right>
         <segmentLength>	0.088	</segmentLength>
         <segmentOffset>	0.112	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -814,7 +814,7 @@
   </fuelTanks>
   <radios>
     <FuG2>	shared	  <unlocks>
-        <radio>	FuG5	  <cost>	105.0	</cost>
+        <radio>	FuG5	  <cost>	105	</cost>
         </radio>
       </unlocks>
     </FuG2>

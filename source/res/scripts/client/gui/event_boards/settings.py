@@ -3,20 +3,17 @@
 
 
 class _EventBoardSettings(object):
-    """
-    Session only settings data for event boards
-    """
 
     def __init__(self):
         self.__minimized = {}
 
     def isGroupMinimized(self, event):
-        id = event.getEventID()
-        return self.__minimized[id] if id in self.__minimized else event.isFinished()
+        groupID = event.getEventID()
+        return self.__minimized[groupID] if groupID in self.__minimized else event.isFinished()
 
     def updateExpanded(self, event, value):
-        id = event.getEventID()
-        self.__minimized[id] = not value
+        groupID = event.getEventID()
+        self.__minimized[groupID] = not value
 
 
 _settings = _EventBoardSettings()

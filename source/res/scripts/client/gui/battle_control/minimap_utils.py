@@ -80,12 +80,6 @@ def makePointMatrixByLocal(localX, localY, bottomLeft, upperRight):
 
 
 def getCellIdxFromPosition(desiredShotPoint, boundingBox):
-    """
-    Getting cell index on minimap from position (3D coordinates)
-    :param desiredShotPoint: player.inputHandler.getDesiredShotPoint() or any other 3D world position (Math.Vector3)
-    :param boundingBox: player.arena.arenaType.boundingBox
-    :return: cell index
-    """
     mapXLength = boundingBox[1][0] - boundingBox[0][0]
     mapYLength = boundingBox[1][1] - boundingBox[0][1]
     xOffset = -boundingBox[0][0]

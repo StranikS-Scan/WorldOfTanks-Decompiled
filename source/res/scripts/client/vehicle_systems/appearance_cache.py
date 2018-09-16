@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/appearance_cache.py
-import BigWorld
 import weakref
 from functools import partial
+from collections import namedtuple
+import BigWorld
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from vehicle_systems import vehicle_assembler
-from collections import namedtuple
+from vehicle_systems.stricted_loading import loadingPriority
 _ENABLE_CACHE_TRACKER = False
 _ENABLE_PRECACHE = True
 _g_cache = None
@@ -42,7 +43,7 @@ class _AppearanceCache(object):
         global d_cacheInfo
         self.__arena.onVehicleAdded -= self.onVehicleAddedUpdate
         self.__arena.onNewVehicleListReceived -= self.onVehicleListReceived
-        for vId, appearance in self.__appearanceCache.iteritems():
+        for _, appearance in self.__appearanceCache.iteritems():
             appearance[0].destroy()
 
         self.__arena = None
@@ -93,13 +94,13 @@ class _AppearanceCache(object):
                 compoundAssembler = assemblerData.compoundAssembler
                 prereqsNames = assemblerData.prereqsNames
         else:
-            appearance, info = appearanceInfo
+            appearance, _ = appearanceInfo
         return (appearance, compoundAssembler, prereqsNames)
 
     def getAppearance(self, vId, resourceRefs):
         if _ENABLE_CACHE_TRACKER:
             LOG_DEBUG('Appearance cache. Get appearance vID = {0}'.format(vId))
-        appearance, info = self.__appearanceCache.get(vId, (None, None))
+        appearance, _ = self.__appearanceCache.get(vId, (None, None))
         return self.constructAppearance(vId, resourceRefs) if appearance is None else appearance
 
     def constructAppearance(self, vId, resourceRefs):
@@ -116,7 +117,7 @@ class _AppearanceCache(object):
                 LOG_DEBUG('Appearance cache. Constructed vID = {0}'.format(vId))
             assemblerData.info.typeDescr.keepPrereqs(resourceRefs)
             assembler.appearance.start(resourceRefs)
-            assembler.constructAppearance(BigWorld.player().playerVehicleID == vId)
+            assembler.constructAppearance(BigWorld.player().playerVehicleID == vId, resourceRefs)
             appearance = assembler.appearance
             oldAppearance = self.__appearanceCache.get(vId, None)
             if oldAppearance is not None:
@@ -134,15 +135,11 @@ class _AppearanceCache(object):
     def __cacheApperance(self, vId, info):
         assembler = vehicle_assembler.createAssembler()
         prereqs = info.typeDescr.prerequisites(True)
-        for hitTester in info.typeDescr.getHitTesters():
-            if hitTester.bspModelName is not None and not hitTester.isBspModelLoaded():
-                prereqs.append(hitTester.bspModelName)
-
         compoundAssembler, assemblerPrereqs = assembler.prerequisites(info.typeDescr, vId, info.health, info.isCrewActive, info.isTurretDetached, info.outfitCD)
         prereqs += assemblerPrereqs
         self.__assemblersCache[vId] = _AssemblerData(compoundAssembler, assembler, info, prereqs)
         if self.__spaceLoaded:
-            BigWorld.loadResourceListBG(prereqs, partial(_resourceLoaded, prereqs, vId))
+            BigWorld.loadResourceListBG(prereqs, partial(_resourceLoaded, prereqs, vId), loadingPriority(vId))
         return (compoundAssembler, prereqs)
 
     def __validateAppearanceWithInfo(self, appearance, info):

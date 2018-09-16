@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/hotshot/stats.py
-"""Statistics analyzer for HotShot."""
 import profile
 import pstats
 import hotshot.log
@@ -36,7 +35,6 @@ class StatsLoader:
                 p.trace_dispatch_return(frame, taccum * 1e-06)
                 taccum = 0
 
-        assert not self._stack
         return pstats.Stats(p)
 
     def new_frame(self, *args):

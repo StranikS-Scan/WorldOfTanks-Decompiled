@@ -46,23 +46,14 @@ class SoundsController(ISoundsController):
         return self.__soundSystem
 
     def enable(self):
-        """
-        Do enable sound system globally
-        """
         if not self.isEnabled():
             SoundGroups.g_instance.setEnableStatus(EnabledStatus.ENABLED_BY_USER)
 
     def disable(self):
-        """
-        Do disable sound system globally
-        """
         if self.isEnabled():
             SoundGroups.g_instance.setEnableStatus(EnabledStatus.DISABLED)
 
     def isEnabled(self):
-        """
-        Is sounds enabled in general
-        """
         return EnabledStatus.isEnabled(SoundGroups.g_instance.getEnableStatus())
 
     def setEnvForSpace(self, spaceID, newEnv):

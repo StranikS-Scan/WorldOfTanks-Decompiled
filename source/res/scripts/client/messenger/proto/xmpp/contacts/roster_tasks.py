@@ -45,6 +45,9 @@ class RosterResultTask(SeqTask):
     def run(self):
         pass
 
+    def _doRun(self, client):
+        raise UserWarning('This method should not be reached in this context')
+
     def sync(self, seq):
         storage = self.usersStorage
         for jid, name, groups, sub, clanInfo in seq:
@@ -180,10 +183,7 @@ class ChangeRosterItemGroupsTask(RosterItemTask):
 class _RosterItemsGroupsChain(object):
 
     def next(self, chain):
-        assert chain, 'Chain can not be empty.'
         self._chain = chain
-        if self._chain:
-            assert len(self._chain[0]) == 3
         return self._chain.pop(0)
 
 

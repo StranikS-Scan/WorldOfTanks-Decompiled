@@ -3,9 +3,7 @@
 import BigWorld
 import ArenaType
 from adisp import process
-from debug_utils import LOG_DEBUG
 from gui import SystemMessages, GUI_SETTINGS
-from gui.Scaleform import settings
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
@@ -14,9 +12,7 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.battle_results.components.style import makeBadgeIcon
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.base.legacy.ctx import SetTeamStateCtx, AssignLegacyCtx, SwapTeamsCtx
@@ -27,7 +23,6 @@ from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME
 from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.events import CoolDownEvent
-from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import dependency
@@ -113,9 +108,9 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
 
     def canDestroyRoom(self):
         if self.prbEntity:
-            settings = self.prbEntity.getSettings()
+            prbSettings = self.prbEntity.getSettings()
             playerName = BigWorld.player().name
-            return settings[PREBATTLE_SETTING_NAME.CREATOR] == playerName and settings[PREBATTLE_SETTING_NAME.DESTROY_IF_CREATOR_OUT]
+            return prbSettings[PREBATTLE_SETTING_NAME.CREATOR] == playerName and prbSettings[PREBATTLE_SETTING_NAME.DESTROY_IF_CREATOR_OUT]
         return False
 
     def getPlayerTeam(self, accID):
@@ -132,10 +127,10 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
     @process
     def __updateTrainingRoom(self, event):
         self._closeWindow(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY)
-        settings = event.ctx.get('settings', None)
-        if settings and settings.areSettingsChanged(self.prbEntity.getSettings()):
-            settings.setWaitingID('prebattle/change_settings')
-            result = yield self.prbDispatcher.sendPrbRequest(settings)
+        prbSettings = event.ctx.get('settings', None)
+        if prbSettings and prbSettings.areSettingsChanged(self.prbEntity.getSettings()):
+            prbSettings.setWaitingID('prebattle/change_settings')
+            result = yield self.prbDispatcher.sendPrbRequest(prbSettings)
             if not result:
                 self.__showActionErrorMessage()
         return
@@ -153,7 +148,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
             self.__updateStartButton(self.prbEntity)
 
     def onTeamStatesReceived(self, entity, team1State, team2State):
-        team, assigned = decodeRoster(entity.getRosterKey())
+        _, assigned = decodeRoster(entity.getRosterKey())
         if team1State.isInQueue() and team2State.isInQueue() and assigned:
             self.as_disableControlsS(True)
         elif assigned is False:
@@ -221,8 +216,8 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
     def selectCommonVoiceChat(self, index):
         result = yield self.prbDispatcher.sendPrbRequest(ChangeArenaVoipCtx(int(index), waitingID='prebattle/change_arena_voip'))
         if not result:
-            settings = self.prbEntity.getSettings()
-            self.as_setArenaVoipChannelsS(settings[PREBATTLE_SETTING_NAME.ARENA_VOIP_CHANNELS])
+            prbSettings = self.prbEntity.getSettings()
+            self.as_setArenaVoipChannelsS(prbSettings[PREBATTLE_SETTING_NAME.ARENA_VOIP_CHANNELS])
             self.__showActionErrorMessage()
 
     def onSettingUpdated(self, entity, settingName, settingValue):
@@ -332,7 +327,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
 
     def __getCreatorFromRosters(self):
         rosters = self.prbEntity.getRosters()
-        for key, roster in rosters.iteritems():
+        for _, roster in rosters.iteritems():
             for account in roster:
                 if account.isCreator:
                     return account

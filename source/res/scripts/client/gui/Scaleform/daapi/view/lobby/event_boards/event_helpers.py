@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_helpers.py
-import BigWorld
 from io import BufferedIOBase, TextIOWrapper
 from functools import wraps
+import BigWorld
 from ResMgr import DataSection
 from constants import ARENA_GUI_TYPE, MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -99,12 +99,12 @@ class _EventTypeTask(_Task):
         if eventType == _et.NATION:
             nationsList = limits.getNations()
             full = set(NationNames) == set(nationsList)
-            nations = ', '.join([ getNationText(value) for value in GUI_NATIONS if value in nationsList ])
+            nations = ', \n'.join([ getNationText(value) for value in GUI_NATIONS if value in nationsList ])
             result = TOOLTIPS.elen_task_eventtype_full(eventType) if full else _ms(TOOLTIPS.elen_task_eventtype_notfull(eventType), nations=nations)
         elif eventType == _et.CLASS:
             typeList = limits.getVehiclesClasses()
             full = set(VEHICLE_CLASS_NAME.ALL()) == set(typeList)
-            types = ', '.join([ vehicleTypeText(value) for value in typeList ])
+            types = ', \n'.join([ vehicleTypeText(value) for value in typeList ])
             result = TOOLTIPS.elen_task_eventtype_full(eventType) if full else _ms(TOOLTIPS.elen_task_eventtype_notfull(eventType), classes=types)
         elif eventType == _et.LEVEL:
             levelList = limits.getVehiclesLevels()
@@ -117,9 +117,6 @@ class _EventTypeTask(_Task):
 
 
 class _Condition(object):
-    """
-    Event condition.
-    """
 
     def __init__(self, event):
         super(_Condition, self).__init__()
@@ -228,7 +225,10 @@ class _TopLeaderboard(object):
         return self.__value
 
     def getInfo(self):
-        return {'eventID': self._top.getEventID(),
+        top = self._top
+        reward = self._event.getRewardsByRank().getRewardByRank(self.__leaderboardId)
+        category = reward.getRewardCategoryNumber(top.getMyPosition())
+        return {'eventID': top.getEventID(),
          'title': text_styles.highlightText(self.__getTitle()),
          'isAvailable': True,
          'ribbonTooltip': self.__getRibbonTooltip(),
@@ -237,14 +237,14 @@ class _TopLeaderboard(object):
          'awards': None,
          'ribbon': self.__getRibbon(),
          'status': None,
-         'background': 'marathon' if self._top.getMyPosition() else 'default',
-         'amount': str(self._top.getMyValue()),
+         'background': 'marathon' if category else 'default',
+         'amount': str(top.getMyValue()),
          'type': self.__getRaitingType(),
          'description1': self.__getMyPosititon(),
          'description2': self.__getStatusValue(),
          'uiDecoration': self.__getDecoration(),
          'uiPicture': self.__getPicture(),
-         'cardID': str(self._top.getLeaderboardID())}
+         'cardID': str(top.getLeaderboardID())}
 
     def __getTitle(self):
         if self.__eventType == _et.NATION:
@@ -270,9 +270,12 @@ class _TopLeaderboard(object):
     def __getRibbonTooltip(self):
         category = self.__rewardByRank.getRewardCategoryNumber(self._top.getMyPosition())
         if category:
-            min, max = self.__rewardByRank.getCategoryMinMax(category)
-            return makeTooltip(body=_ms(EVENT_BOARDS.TOOLTIP_TOP_REWARDGROUP, group=int2roman(category), min=min, max=max))
-        return makeTooltip(body=_ms(EVENT_BOARDS.TOOLTIP_TOP_NOREWARDGROUP))
+            minimum, maximum = self.__rewardByRank.getCategoryMinMax(category)
+            return makeTooltip(body=_ms(EVENT_BOARDS.TOOLTIP_TOP_REWARDGROUP, group=int2roman(category), min=minimum, max=maximum))
+        method = self._event.getMethod()
+        amount = self._top.getLastInLeaderboardValue()
+        parameter = self._event.getObjectiveParameter()
+        return makeParameterTooltipVO(method, amount, parameter)
 
     def __getDescriptionTooltip(self):
         category = self.__rewardByRank.getRewardCategoryNumber(self._top.getMyPosition())
@@ -308,8 +311,12 @@ class _TopLeaderboard(object):
         return _ms(EVENT_BOARDS.top_objectiveparameter(parameter))
 
     def __getRibbon(self):
+        woodRibbon = 5
         reward = self._event.getRewardsByRank().getRewardByRank(self.__leaderboardId)
-        return reward.getRewardCategoryNumber(self._top.getMyPosition())
+        ribbon = reward.getRewardCategoryNumber(self._top.getMyPosition())
+        if ribbon is None and self._top.getMyPosition() < self._event.getLeaderboardViewSize():
+            ribbon = woodRibbon
+        return ribbon
 
     def __getMyPosititon(self):
         event = self._event
@@ -550,10 +557,7 @@ class EventHeader(object):
             self._state = playerState.getPlayerState()
             self._joined = self._state is _es.JOINED
             self._stateReasons = playerState.getPlayerStateReasons()
-            if playerState.getCanJoin() and (not event.isRegistrationFinished() or not event.isFinished()):
-                self._canJoin = True
-            else:
-                self._canJoin = False
+            self._canJoin = playerState.getCanJoin() and (not event.isRegistrationFinished() or not event.isFinished())
         else:
             self._playerState = None
             self._state = None
@@ -690,22 +694,13 @@ def _readEventBoardsRewards(rewards):
 
 
 class CustomXMLGenerator(xmltodict.XMLGenerator):
-    """
-    Custom class of XMLGenerator that works faster because its writer doesn't make flush on every write.
-    Also saxutils.XMLGenerator has memory leaks if Garbage Collector is disabled.
-    """
 
     def __init__(self, out=None, encoding='iso-8859-1', short_empty_elements=False):
-        """
-        :param out: output object
-        :param encoding: output encoding
-        :param short_empty_elements: unused parameter needed for compatibility
-        """
         xmltodict.XMLGenerator.__bases__.__init__(self)
-        buffer = BufferedIOBase()
-        buffer.writable = lambda : True
-        buffer.write = out.write
-        ioWrapper = TextIOWrapper(buffer, encoding=encoding, errors='xmlcharrefreplace', newline='\n')
+        buf = BufferedIOBase()
+        buf.writable = lambda : True
+        buf.write = out.write
+        ioWrapper = TextIOWrapper(buf, encoding=encoding, errors='xmlcharrefreplace', newline='\n')
         self._write = ioWrapper.write
         self._flush = ioWrapper.flush
         self._ns_contexts = [{}]
@@ -718,14 +713,6 @@ class CustomXMLGenerator(xmltodict.XMLGenerator):
 
 
 def convertRewardsDictToBonusObjects(dictData, key='rewards'):
-    """
-    Helper function for converting dictionary with rewards data to bonus objects.
-    First, unparse dictionary into XML.
-    Then use XML for filling DataSection object.
-    And then use DataSection object in standard way to generate bonus objects.
-    The reason for this complicated solution can be found here:
-    https://confluence.wargaming.net/pages/viewpage.action?pageId=492715230
-    """
     try:
         bonuses = _readEventBoardsRewards(dictData[key])
         xmlData = xmltodict.unparse({key: dictData[key]}, xml_generator_cls=CustomXMLGenerator).encode('utf-8')
@@ -738,16 +725,12 @@ def convertRewardsDictToBonusObjects(dictData, key='rewards'):
 
         bonusObjects.sort(key=lambda b: BONUS_PRIORITY.index(b.getName()) if b.getName() in BONUS_PRIORITY else len(BONUS_PRIORITY))
         return bonusObjects
-    except:
+    except Exception:
         LOG_ERROR('WGELEN: Failed to parse rewards data!')
         return []
 
 
 def checkEventExist(method):
-    """
-    Decorator that checks existing of event before calling a method.
-    If event does not exist than show maintenance.
-    """
 
     @wraps(method)
     def methodWrapper(self, eventID, *args):

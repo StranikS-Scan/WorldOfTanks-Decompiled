@@ -20,18 +20,6 @@ def _packPlayBattleCondition():
 
 
 class MissionBonusAndPostBattleCondFormatter(ConditionsFormatter):
-    """
-    Formatter for 'bonus' and 'postbattle' conditions sections
-    Expand and mix all battle pre formatted conditions data in rows
-    All 'AND' conditions collected in one row
-    'OR' conditions expand in different rows.
-    results represent 'OR' list of rows with 'AND' conditions
-    for example: (damage vehicle and win) or (kill vehicle and survive) looks like
-    [
-        [veh damage data, win data],
-        [veh kill data , survive data]
-    ]
-    """
 
     def __init__(self):
         super(MissionBonusAndPostBattleCondFormatter, self).__init__()
@@ -85,9 +73,6 @@ def sortConditionsFunc(aData, bData):
 
 
 class PersonalMissionConditionsFormatter(ConditionsFormatter):
-    """
-    Conditions formatter for personal mission, which are displayed in detailed personal mission's view
-    """
 
     def __init__(self):
         super(PersonalMissionConditionsFormatter, self).__init__()
@@ -107,7 +92,7 @@ class PersonalMissionConditionsFormatter(ConditionsFormatter):
         return results
 
     @classmethod
-    def _isConditionBlockAvailable(cla, event, isMain):
+    def _isConditionBlockAvailable(cls, event, isMain):
         isAvailable = event.isUnlocked()
         if isMain:
             isAvailable = isAvailable and not event.isMainCompleted()
@@ -141,8 +126,8 @@ class StringPersonalMissionConditionsFormatter(PersonalMissionConditionsFormatte
 
     def format(self, event, isMain=None):
         results = super(StringPersonalMissionConditionsFormatter, self).format(event, isMain)
-        orConditions = filter(lambda q: q.isInOrGroup, results)
-        andConditions = filter(lambda q: not q.isInOrGroup, results)
+        orConditions = [ q for q in results if q.isInOrGroup ]
+        andConditions = [ q for q in results if not q.isInOrGroup ]
         andResult = ''
         for c in andConditions:
             andResult += '%s %s\n' % (i18n.makeString(QUESTS.QUEST_CONDITION_DOT), c.text)

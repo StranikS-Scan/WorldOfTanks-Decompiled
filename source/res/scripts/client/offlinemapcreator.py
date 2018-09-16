@@ -1,20 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/OfflineMapCreator.py
+import math
 import BigWorld
 import MapActivities
 import Math
-import Keys
-import GUI
 from ArenaType import g_cache
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
-from functools import partial
 from gui.app_loader import g_appLoader
-import items.vehicles
-import math
-import Account
-from account_helpers import AccountSyncData, Inventory, Stats, Shop
 import constants
-import ResMgr
 _CFG = {'basic': {'v_scale': 1.3,
            'v_start_angles': Math.Vector3(0, 0, 0),
            'v_start_pos': Math.Vector3(50, 0, 50),
@@ -47,7 +40,7 @@ _EMBLEMS_ALPHA_DAMAGED = None
 _EMBLEMS_ALPHA_UNDAMAGED = None
 _SHADOW_LIGHT_DIR = None
 
-class OfflineMapCreator:
+class OfflineMapCreator(object):
 
     def __init__(self):
         self.__spaceId = None
@@ -86,7 +79,8 @@ class OfflineMapCreator:
             BigWorld.player(avatar)
             self.__setupCamera()
             BigWorld.worldDrawEnabled(True)
-        except:
+            BigWorld.uniprofSceneStart()
+        except Exception:
             LOG_DEBUG('OfflineMapCreator.Create( %s ): FAILED with: ' % mapName)
             LOG_CURRENT_EXCEPTION()
             self.cancel()
@@ -101,7 +95,6 @@ class OfflineMapCreator:
             BigWorld.setWatcher('Visibility/GUI', True)
             self.__spaceMappingId = 0
             BigWorld.cameraSpaceID(0)
-            BigWorld.camera(None)
             self.__cam = None
             BigWorld.clearEntitiesAndSpaces()
             MapActivities.g_mapActivities.stop()
@@ -115,7 +108,8 @@ class OfflineMapCreator:
             self.__arenaTypeID = 0
             self.__vEntityId = 0
             BigWorld.worldDrawEnabled(True)
-        except:
+            BigWorld.uniprofSceneStart()
+        except Exception:
             LOG_DEBUG('OfflineMapCreator.destroy(): FAILED with: ')
             LOG_CURRENT_EXCEPTION()
             self.cancel()
@@ -134,6 +128,7 @@ class OfflineMapCreator:
         self.__isActive = False
         BigWorld.setWatcher('Visibility/GUI', True)
         BigWorld.worldDrawEnabled(True)
+        BigWorld.uniprofSceneStart()
 
     def _clamp(self, minVal, maxVal, val):
         tmpVal = val
@@ -152,16 +147,12 @@ class OfflineMapCreator:
 
     @staticmethod
     def __getArenaTypeId(mapName):
-        """
-        get default arena type id (ctf) or any other if map doesn't have ctf
-        """
         info = {arenaType.gameplayName:arenaTypeId for arenaTypeId, arenaType in g_cache.iteritems() if mapName == arenaType.geometryName}
         priority = ('ctf',)
         for p in priority:
             if p in info:
                 return info[p]
 
-        assert bool(info), 'Unknown map: {}'.format(mapName)
         return next(iter(info.itervalues()))
 
     def __setupCamera(self):
@@ -185,7 +176,7 @@ class OfflineMapCreator:
         self.__cam.target = mat
         BigWorld.camera(self.__cam)
 
-    def __loadCfg(self, type, mapName):
+    def __loadCfg(self, t, mapName):
         global _V_START_ANGLES
         global _CAM_PITCH_CONSTR
         global _CAM_PIVOT_POS
@@ -202,7 +193,7 @@ class OfflineMapCreator:
         global _CAM_DIST_CONSTR
         global _CAM_YAW_CONSTR
         global _CAM_SENS
-        cfg = _CFG[type]
+        cfg = _CFG[t]
         _SPACE_NAME = mapName
         _V_SCALE = cfg['v_scale']
         _V_START_ANGLES = cfg['v_start_angles']

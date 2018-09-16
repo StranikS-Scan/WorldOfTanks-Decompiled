@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_compat.py
-"""
-Test cases adapted from the test_bsddb.py module in Python's
-regression test suite.
-"""
 import os, string
 import unittest
 from test_all import db, hashopen, btopen, rnopen, verbose, get_new_database_path

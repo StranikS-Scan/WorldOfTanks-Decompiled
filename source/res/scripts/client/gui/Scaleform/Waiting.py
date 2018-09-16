@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/Waiting.py
 import BigWorld
 from helpers import i18n
-from debug_utils import LOG_DEBUG
 
 class _WaitingEntity(object):
 

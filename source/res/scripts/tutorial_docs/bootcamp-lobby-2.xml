@@ -1,0 +1,298 @@
+<bootcamp-lobby-2.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	DefaultScene	</initial-scene>
+  <scenes>
+    <scene>	DefaultScene	  <post-effects></post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+    <scene>	Hangar	  <post-effects></post-effects>
+      <runtime-effects>
+        <request-exclusive-hint>	VehicleResearchButton	  <condition>
+            <checkpoint-not-reached>	ModuleBoughtCheckpoint	</checkpoint-not-reached>
+          </condition>
+        </request-exclusive-hint>
+      </runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+    <scene>	Research	  <post-effects>
+        <set-gui-item-criteria>	ResearchItemNodeCriteria	</set-gui-item-criteria>
+        <effects-group>
+          <condition>
+            <checkpoint-not-reached>	ModuleUnlockedCheckpoint	</checkpoint-not-reached>
+          </condition>
+          <effects>
+            <play-sound>	bc_new_ui_element	  <event>	ANIMATION_STARTED	</event>
+            </play-sound>
+            <play-animation>	ResearchXP	  <type>	clip	</type>
+              <wait_for_finish>	True	</wait_for_finish>
+            </play-animation>
+          </effects>
+        </effects-group>
+      </post-effects>
+      <runtime-effects>
+        <request-exclusive-hint>	ResearchItemNode	  <condition>
+            <checkpoint-not-reached>	ModuleBoughtCheckpoint	</checkpoint-not-reached>
+          </condition>
+        </request-exclusive-hint>
+      </runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <global-runtime-effects>
+    <pre-scene>
+      <request-exclusive-hint>	MenuHangar	  <condition>
+          <checkpoint-reached>	ModuleBoughtCheckpoint	</checkpoint-reached>
+          <not-on-scene>	Hangar	</not-on-scene>
+        </condition>
+      </request-exclusive-hint>
+      <request-exclusive-hint>	FightButton	  <condition>
+          <checkpoint-reached>	EndCheckpoint	</checkpoint-reached>
+        </condition>
+      </request-exclusive-hint>
+    </pre-scene>
+    <post-scene>
+      <update-exclusive-hints></update-exclusive-hints>
+    </post-scene>
+  </global-runtime-effects>
+  <has-id>
+    <checkpoint>	StartCheckpoint	  <condition></condition>
+      <effects>
+        <set-var>	FirstVehicleSetter	</set-var>
+        <set-var>	ModuleSetter	</set-var>
+        <invoke-gui-cmd>	OverrideHangarMenuButtons	  <args>
+            <arg>	EnabledHangarMenuButtons_Initial	  <name>	buttonsListVarID	</name>
+            </arg>
+          </args>
+        </invoke-gui-cmd>
+        <set-visible>	CreditsButton	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	MainMenuGradient	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HeaderCenterBg	  <val>	False	</val>
+        </set-visible>
+        <show-dialog>	IntroDialog	</show-dialog>
+        <play-animation>	CreditsButton	  <type>	tween	</type>
+          <wait_for_finish>	True	</wait_for_finish>
+        </play-animation>
+        <set-visible>	CreditsButton	  <val>	True	</val>
+        </set-visible>
+        <invoke-gui-cmd>	OverrideHangarMenuButtons	  <args>
+            <arg>	EnabledHangarMenuButtons_AfterIntro	  <name>	buttonsListVarID	</name>
+            </arg>
+          </args>
+        </invoke-gui-cmd>
+        <set-visible>	MainMenuGradient	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HeaderCenterBg	  <val>	True	</val>
+        </set-visible>
+        <play-animation>	MainMenuButtonBar	  <type>	tween	</type>
+          <wait_for_finish>	False	</wait_for_finish>
+        </play-animation>
+        <play-animation>	MainMenuGradient	  <type>	tween	</type>
+          <wait_for_finish>	False	</wait_for_finish>
+        </play-animation>
+        <play-animation>	HeaderCenterBg	  <type>	tween	</type>
+          <wait_for_finish>	False	</wait_for_finish>
+        </play-animation>
+        <play-animation>	MenuHangar	  <type>	tween	</type>
+          <wait_for_finish>	True	</wait_for_finish>
+        </play-animation>
+        <set-visible>	VehicleResearchPanel	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	VehicleResearchPanelBG	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	VehicleResearchButton	  <val>	True	</val>
+        </set-visible>
+        <play-animation>	VehicleResearchPanel	  <type>	tween	</type>
+          <wait_for_finish>	False	</wait_for_finish>
+        </play-animation>
+        <play-animation>	VehicleResearchPanelBG	  <type>	tween	</type>
+          <wait_for_finish>	True	</wait_for_finish>
+        </play-animation>
+        <set-visible>	HangarParams	  <val>	True	</val>
+        </set-visible>
+        <play-animation>	HangarParams	  <type>	tween	</type>
+          <wait_for_finish>	True	</wait_for_finish>
+        </play-animation>
+      </effects>
+    </checkpoint>
+    <checkpoint>	ModuleUnlockedCheckpoint	  <condition>
+        <game-item>	ModuleCD	  <unlocked></unlocked>
+        </game-item>
+      </condition>
+      <effects>
+        <show-dialog>	ModuleUnlockedDialog	</show-dialog>
+      </effects>
+    </checkpoint>
+    <checkpoint>	ModuleBoughtCheckpoint	  <condition>
+        <game-item>	ModuleCD	  <installed>	FirstVehicleCD	</installed>
+        </game-item>
+      </condition>
+      <effects>
+        <show-dialog>	ModuleBoughtDialog	</show-dialog>
+        <set-visible>	HangarModuleGun	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleTurret	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleEngine	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleChassis	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleRadio	  <val>	True	</val>
+        </set-visible>
+        <update-layout>	AmmunitionPanel	</update-layout>
+      </effects>
+    </checkpoint>
+    <checkpoint>	EndCheckpoint	  <condition>
+        <on-scene>	Hangar	</on-scene>
+      </condition>
+      <effects>
+        <play-sound>	bc_new_ui_element	  <event>	ANIMATION_STARTED	</event>
+        </play-sound>
+        <play-animation>	HangarModuleEngine	  <type>	clip	</type>
+          <wait_for_finish>	True	</wait_for_finish>
+        </play-animation>
+        <set-allowed-to-fight>
+          <value>	True	</value>
+        </set-allowed-to-fight>
+      </effects>
+    </checkpoint>
+    <game-attribute>	FirstVehicleSetter	  <var-ref>	FirstVehicleCD	</var-ref>
+      <name>	BootcampNationDataField	</name>
+      <args>	vehicle_first	</args>
+    </game-attribute>
+    <game-attribute>	ModuleSetter	  <var-ref>	ModuleCD	</var-ref>
+      <name>	BootcampNationDataField	</name>
+      <args>	module	</args>
+    </game-attribute>
+    <gui-item-criteria>	ResearchItemNodeCriteria	  <item-id>	ResearchItemNodeID	</item-id>
+      <value>	id=$ModuleCD$	</value>
+    </gui-item-criteria>
+    <dialog>	IntroDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
+            <preset>	INTRO	</preset>
+            <label>	#bootcamp:message/intro/lesson/ii/label	</label>
+            <voiceover>	vo_bc_hangar_tank_improvement	</voiceover>
+          </data>
+        </message>
+        <message>
+          <data>
+            <icon>	../maps/icons/bootcamp/lines/bcExp.png	</icon>
+            <preset>	BLUE	</preset>
+            <label>	#bootcamp:message/experience/label	</label>
+            <text>	#bootcamp:message/experience/text	</text>
+            <voiceover>	vo_bc_hangar_experience	</voiceover>
+            <bottom_renderer>	rewards	</bottom_renderer>
+            <bottom>
+              <data>
+                <icon>	../maps/icons/bootcamp/rewards/bcExp.png	</icon>
+                <label>	{0}	</label>
+                <label_format>	getExperience	</label_format>
+                <labelTooltip>	#bootcamp:message/experience/label	</labelTooltip>
+                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcExp.png	</iconTooltip>
+                <description>	#bootcamp:message/experience/text	</description>
+              </data>
+            </bottom>
+          </data>
+        </message>
+        <message>
+          <data>
+            <icon>	../maps/icons/bootcamp/lines/bcCredits.png	</icon>
+            <preset>	BLUE	</preset>
+            <label>	#bootcamp:message/credits/label	</label>
+            <text>	#bootcamp:message/credits/text	</text>
+            <voiceover>	vo_bc_hangar_silver	</voiceover>
+            <bottom_renderer>	rewards	</bottom_renderer>
+            <bottom>
+              <data>
+                <icon>	../maps/icons/bootcamp/rewards/bcCredits.png	</icon>
+                <label>	{0}	</label>
+                <label_format>	getCredits	</label_format>
+                <labelTooltip>	#bootcamp:message/credits/label	</labelTooltip>
+                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcCredits.png	</iconTooltip>
+                <description>	#bootcamp:message/credits/text	</description>
+              </data>
+            </bottom>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <dialog>	ModuleUnlockedDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <nations>
+            <data>
+              <nation_id>	usa	</nation_id>
+              <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
+              <preset>	BLUE	</preset>
+              <label>	#bootcamp:message/unlock/module/label	</label>
+              <text>	#bootcamp:message/unlock/module/text	</text>
+              <voiceover>	vo_bc_hangar_module_investigated	</voiceover>
+            </data>
+            <data>
+              <nation_id>	germany	</nation_id>
+              <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
+              <preset>	BLUE	</preset>
+              <label>	#bootcamp:message/unlock/module/label	</label>
+              <text>	#bootcamp:message/unlock/module/text	</text>
+              <voiceover>	vo_bc_hangar_module_investigated	</voiceover>
+            </data>
+            <data>
+              <nation_id>	ussr	</nation_id>
+              <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
+              <preset>	BLUE	</preset>
+              <label>	#bootcamp:message/unlock/module/label	</label>
+              <text>	#bootcamp:message/unlock/module/text	</text>
+              <voiceover>	vo_bc_hangar_module_investigated	</voiceover>
+            </data>
+          </nations>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <dialog>	ModuleBoughtDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <icon>	../maps/icons/bootcamp/lines/bcEngine.png	</icon>
+            <preset>	GOLD	</preset>
+            <label>	#bootcamp:message/new/module/label	</label>
+            <text>	#bootcamp:message/new/module/text	</text>
+            <voiceover>	vo_bc_hangar_module_purchased	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+  </has-id>
+  <vars>
+    <var-set>	EnabledHangarMenuButtons_Initial	  <asList></asList>
+    </var-set>
+    <var-set>	EnabledHangarMenuButtons_AfterIntro	  <asList>
+        <asString>	hangar	</asString>
+      </asList>
+    </var-set>
+  </vars>
+  <triggers>
+    <trigger>	CheckpointController	  <type>	linear-checkpoint-controller	</type>
+      <validate-var></validate-var>
+      <sequence>
+        <checkpoint>	StartCheckpoint	</checkpoint>
+        <checkpoint>	ModuleUnlockedCheckpoint	</checkpoint>
+        <checkpoint>	ModuleBoughtCheckpoint	</checkpoint>
+        <checkpoint>	EndCheckpoint	</checkpoint>
+      </sequence>
+      <on-effects>
+        <save-checkpoint></save-checkpoint>
+      </on-effects>
+    </trigger>
+  </triggers>
+</bootcamp-lobby-2.xml>

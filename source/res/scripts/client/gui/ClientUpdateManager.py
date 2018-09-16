@@ -42,7 +42,7 @@ class _ClientUpdateManager(object):
         self.__unsubscribeHandler(handler, 'stats.{}'.format(currency))
 
     def removeObjectCallbacks(self, obj_instance, force=False):
-        removed = set(filter(lambda key: inspect.ismethod(key) and key.__self__ is obj_instance, self.__handlers.iterkeys()))
+        removed = set((key for key in self.__handlers.iterkeys() if inspect.ismethod(key) and key.__self__ is obj_instance))
         if force:
             for item in removed:
                 del self.__handlers[item]

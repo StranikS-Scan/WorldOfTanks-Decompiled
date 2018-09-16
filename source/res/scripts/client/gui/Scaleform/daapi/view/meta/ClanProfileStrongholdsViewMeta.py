@@ -3,17 +3,8 @@
 from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileBaseView import ClanProfileBaseView
 
 class ClanProfileStrongholdsViewMeta(ClanProfileBaseView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends ClanProfileBaseView
-    """
 
     def as_showBodyDummyS(self, data):
-        """
-        :param data: Represented by DummyVO (AS)
-        """
         return self.flashObject.as_showBodyDummy(data) if self._isDAAPIInited() else None
 
     def as_hideBodyDummyS(self):

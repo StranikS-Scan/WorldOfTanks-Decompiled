@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/Flash.py
-from collections import defaultdict
 import json
+import weakref
+from collections import defaultdict
 import GUI
 import _Scaleform
-import weakref
 from gui.Scaleform import SCALEFORM_SWF_PATH
 from debug_utils import LOG_DEBUG, LOG_CODEPOINT_WARNING, LOG_ERROR, LOG_GUI
 
@@ -32,11 +32,11 @@ class Flash(object):
     def __del__(self):
         LOG_DEBUG('Deleted: %s' % self)
 
-    def __onLogGui(self, type, msg, *kargs):
-        LOG_GUI('%s.GUI' % str(type), msg, kargs)
+    def __onLogGui(self, logType, msg, *kargs):
+        LOG_GUI('%s.GUI' % str(logType), msg, kargs)
 
-    def __onLogGuiFormat(self, type, msg, *kargs):
-        LOG_GUI('%s.GUI' % str(type), msg % kargs)
+    def __onLogGuiFormat(self, logType, msg, *kargs):
+        LOG_GUI('%s.GUI' % str(logType), msg % kargs)
 
     @property
     def movie(self):
@@ -176,7 +176,7 @@ class Flash(object):
         return result
 
 
-class _FsCommandObj():
+class _FsCommandObj(object):
 
     def __init__(self, obj):
         self.__weakObj = weakref.ref(obj)
@@ -189,7 +189,7 @@ class _FsCommandObj():
             LOG_CODEPOINT_WARNING('weak object has been already destroyed.')
 
 
-class _ExternalInterfaceObj():
+class _ExternalInterfaceObj(object):
 
     def __init__(self, obj):
         self.__weakObj = weakref.ref(obj)

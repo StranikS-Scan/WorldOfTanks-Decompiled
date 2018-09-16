@@ -4,18 +4,10 @@ import os, sys, unittest, getopt, time
 use_resources = []
 
 class ResourceDenied(Exception):
-    """Test skipped because it requested a disallowed resource.
-    
-    This is raised when a test calls requires() for a resource that
-    has not be enabled.  Resources are defined by test modules.
-    """
     pass
 
 
 def is_resource_enabled(resource):
-    """Test whether a resource is enabled.
-    
-    If the caller's module is __main__ then automatically return True."""
     if sys._getframe().f_back.f_globals.get('__name__') == '__main__':
         return True
     else:
@@ -28,9 +20,6 @@ def is_resource_enabled(resource):
 _unavail = {}
 
 def requires(resource, msg=None):
-    """Raise ResourceDenied if the specified resource is not available.
-    
-    If the caller's module is __main__ then automatically return True."""
     if sys._getframe().f_back.f_globals.get('__name__') == '__main__':
         return
     else:
@@ -58,7 +47,6 @@ def find_package_modules(package, mask):
 
 
 def get_tests(package, mask, verbosity, exclude=()):
-    """Return a list of skipped test modules, and a list of test cases."""
     tests = []
     skipped = []
     for modname in find_package_modules(package, mask):
@@ -90,7 +78,6 @@ def usage():
 
 
 def test_with_refcounts(runner, verbosity, testcase):
-    """Run testcase several times, tracking reference counts."""
     import gc
     import ctypes
     ptc = ctypes._pointer_type_cache.copy()
@@ -127,7 +114,6 @@ def test_with_refcounts(runner, verbosity, testcase):
 class TestRunner(unittest.TextTestRunner):
 
     def run(self, test, skipped):
-        """Run the given test case or test suite."""
         result = self._makeResult()
         startTime = time.time()
         test(result)

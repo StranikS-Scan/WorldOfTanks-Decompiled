@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/vos_collections.py
-from collections import defaultdict
 from gui.shared.sort_key import SortKey
 from gui.battle_control.arena_info.arena_vos import EPIC_RANDOM_KEYS
 
@@ -43,6 +42,7 @@ class SquadmanVehicleInfoSortKey(VehicleInfoSortKey):
 
 
 class SpawnGroupVehicleInfoSortKey(VehicleInfoSortKey):
+    __slots__ = ()
 
     def _cmp(self, other):
         result = cmp(self.vInfoVO.gameModeSpecific.getValue(EPIC_RANDOM_KEYS.PLAYER_GROUP), other.vInfoVO.gameModeSpecific.getValue(EPIC_RANDOM_KEYS.PLAYER_GROUP))
@@ -108,38 +108,6 @@ class RankSortKey(VehicleInfoSortKey):
         return result if result else cmp(xvInfoVO.player, yvInfoVO.player)
 
 
-class _WinPointsSortKey(SortKey):
-    __slots__ = ('teamWinPoints', 'internal')
-
-    def __init__(self, item, *args):
-        super(_WinPointsSortKey, self).__init__()
-        assert len(item) > 2, 'Given key is used in the FalloutMultiTeamItemsCollection only'
-        self.internal = self._createInternal(item[:2])
-        self.teamWinPoints = item[2]
-
-    def _cmp(self, other):
-        result = cmp(other.teamWinPoints, self.teamWinPoints)
-        return result if result else cmp(self.internal, other.internal)
-
-    @classmethod
-    def _createInternal(cls, item):
-        raise NotImplementedError
-
-
-class WinPointsAndVehicleInfoSortKey(_WinPointsSortKey):
-
-    @classmethod
-    def _createInternal(cls, item):
-        return VehicleInfoSortKey(item)
-
-
-class WinPointsAndRespawnSortKey(_WinPointsSortKey):
-
-    @classmethod
-    def _createInternal(cls, item):
-        return RespawnSortKey(item)
-
-
 class _Collection(object):
     __slots__ = ('_sortKey',)
 
@@ -172,6 +140,7 @@ class _Collection(object):
 
 
 class VehiclesInfoCollection(_Collection):
+    __slots__ = ()
 
     def _buildSeq(self, arenaDP):
         return arenaDP.getVehiclesInfoIterator()
@@ -185,10 +154,11 @@ class TeamVehiclesInfoCollection(_Collection):
         self._team = team
 
     def _buildSeq(self, arenaDP):
-        return filter(lambda item: item.team == self._team, arenaDP.getVehiclesInfoIterator())
+        return [ item for item in arenaDP.getVehiclesInfoIterator() if item.team == self._team ]
 
 
 class VehiclesItemsCollection(_Collection):
+    __slots__ = ()
 
     def _buildSeq(self, arenaDP):
         return list(arenaDP.getVehiclesItemsGenerator())
@@ -198,19 +168,21 @@ class VehiclesItemsCollection(_Collection):
 
 
 class AllyItemsCollection(VehiclesItemsCollection):
+    __slots__ = ()
 
     def _buildSeq(self, arenaDP):
         seq = super(AllyItemsCollection, self)._buildSeq(arenaDP)
         teams = arenaDP.getAllyTeams()
-        return filter(lambda (vInfo, _): vInfo.team in teams, seq)
+        return [ item for item in seq if item[0].team in teams ]
 
 
 class EnemyItemsCollection(VehiclesItemsCollection):
+    __slots__ = ()
 
     def _buildSeq(self, arenaDP):
         seq = super(EnemyItemsCollection, self)._buildSeq(arenaDP)
         teams = arenaDP.getEnemyTeams()
-        return filter(lambda (vInfo, _): vInfo.team in teams, seq)
+        return [ item for item in seq if item[0].team in teams ]
 
 
 class AliveItemsCollection(VehiclesItemsCollection):
@@ -222,21 +194,4 @@ class AliveItemsCollection(VehiclesItemsCollection):
 
     def _buildSeq(self, arenaDP):
         seq = self._collection.iterator(arenaDP)
-        return filter(lambda (vInfo, _): vInfo.isAlive(), seq)
-
-
-class FalloutMultiTeamItemsCollection(VehiclesItemsCollection):
-
-    def _sortIfNeed(self, seq):
-        if self._sortKey is not None:
-            teamsStats = defaultdict(int)
-            buffer_ = list(seq)
-            for vInfo, vStats in buffer_:
-                teamsStats[vInfo.team] += vStats.winPoints
-
-            seq = []
-            for vInfo, vStats in buffer_:
-                seq.append((vInfo, vStats, teamsStats[vInfo.team]))
-
-            seq = map(lambda (info, stats, _): (info, stats), sorted(seq, key=self._sortKey))
-        return seq
+        return [ item for item in seq if item[0].isAlive() ]

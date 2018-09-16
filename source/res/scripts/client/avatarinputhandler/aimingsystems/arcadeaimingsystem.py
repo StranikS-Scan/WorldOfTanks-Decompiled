@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/ArcadeAimingSystem.py
+import functools
+import math
 import BigWorld
 import Math
 from Math import Vector3, Matrix
-import functools
-import math
-from AvatarInputHandler import mathUtils, AimingSystems, cameras
+from AvatarInputHandler import mathUtils, AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
 from ProjectileMover import collideDynamic
 from debug_utils import LOG_WARNING
@@ -45,9 +45,6 @@ class ArcadeAimingSystem(IAimingSystem):
 
     @property
     def aimMatrix(self):
-        """ Rotation transform from __cursor focus direction.
-        Informally: aimingSystem.matrix = aimMatrix *  __cursor.matrix final ray depicts actual aim direction
-        """
         return self.__aimMatrix
 
     @aimMatrix.setter
@@ -73,6 +70,8 @@ class ArcadeAimingSystem(IAimingSystem):
         self.__cursor.focusRadius = focusRadius
         self.__idealMatrix = Math.Matrix(self._matrix)
         self.__shotPointCalculator = ShotPointCalculatorPlanar() if enableSmartShotPointCalc else None
+        self.__cachedScanDirection = Vector3(0.0, 0.0, 0.0)
+        self.__cachedScanStart = Vector3(0.0, 0.0, 0.0)
         return
 
     def getPivotSettings(self):
@@ -109,8 +108,8 @@ class ArcadeAimingSystem(IAimingSystem):
     def disable(self):
         pass
 
-    def setDynamicColliders(self, colliders):
-        self.__cursor.setDynamicColliders(colliders)
+    def setDynamicCollisions(self, enable):
+        self.__cursor.setDynamicCollisions(enable)
 
     def initAdvancedCollider(self, fovRatio, rollbackSpeed, minimalCameraDistance, speedThreshold, minVolume):
         self.__cursor.initAdvancedCollider(fovRatio, rollbackSpeed, minimalCameraDistance, speedThreshold, minVolume)
@@ -129,17 +128,15 @@ class ArcadeAimingSystem(IAimingSystem):
         aimMatrix = self.__getLookToAimMatrix()
         aimMatrix.postMultiply(self.__cursor.matrix)
         self._matrix.set(aimMatrix)
+        self.__updateScanRay()
         aimMatrix = self.__getLookToAimMatrix()
         aimMatrix.postMultiply(self.__cursor.idealMatrix)
         self.__idealMatrix.set(aimMatrix)
 
-    def __calcPitchAngle(self, distanceFromFocus, dir):
-        fov = BigWorld.projection().fov
-        near = BigWorld.projection().nearPlane
-        yLength = near * math.tan(fov * 0.5)
+    def __calcPitchAngle(self, distanceFromFocus, direction):
         alpha = -self.__aimMatrix.pitch
         a = distanceFromFocus
-        b = dir.length
+        b = direction.length
         A = 2.0 * a * math.cos(alpha)
         B = a * a - b * b
         D = A * A - 4.0 * B
@@ -149,13 +146,13 @@ class ArcadeAimingSystem(IAimingSystem):
             c = c1 if c1 > c2 else c2
             cosValue = (a * a + b * b - c * c) / (2.0 * a * b) if a * b != 0.0 else 2.0
             if cosValue < -1.0 or cosValue > 1.0:
-                LOG_WARNING('Invalid arg for acos: %f; distanceFromFocus: %f, dir: %s' % (cosValue, distanceFromFocus, dir))
-                return -dir.pitch
+                LOG_WARNING('Invalid arg for acos: %f; distanceFromFocus: %f, dir: %s' % (cosValue, distanceFromFocus, direction))
+                return -direction.pitch
             beta = math.acos(cosValue)
             eta = math.pi - beta
-            return -dir.pitch - eta
+            return -direction.pitch - eta
         else:
-            return -dir.pitch
+            return -direction.pitch
 
     def getDesiredShotPoint(self):
         scanStart, scanDir = self.__getScanRay()
@@ -173,6 +170,7 @@ class ArcadeAimingSystem(IAimingSystem):
         aimMatrix = self.__getLookToAimMatrix()
         aimMatrix.postMultiply(self.__cursor.matrix)
         self._matrix.set(aimMatrix)
+        self.__updateScanRay()
         aimWithIdealMatrix = self.__getLookToAimMatrix()
         aimWithIdealMatrix.postMultiply(self.__cursor.idealMatrix)
         self.__idealMatrix.set(aimWithIdealMatrix)
@@ -181,12 +179,14 @@ class ArcadeAimingSystem(IAimingSystem):
         return 0.0
 
     def __getScanRay(self):
-        scanDir = self.matrix.applyVector(Vector3(0.0, 0.0, 1.0))
-        scanStart = self.matrix.translation + scanDir * 0.3
-        return (scanStart, scanDir)
+        return (self.__cachedScanStart, self.__cachedScanDirection)
 
     def __getLookToAimMatrix(self):
         return Matrix(self.__aimMatrix)
+
+    def __updateScanRay(self):
+        self.__cachedScanDirection = self._matrix.applyVector(Vector3(0.0, 0.0, 1.0))
+        self.__cachedScanStart = self._matrix.translation + self.__cachedScanDirection * 0.3
 
 
 class _AimPlane(object):
@@ -203,17 +203,34 @@ class _AimPlane(object):
         self.__plane.init(targetPos, targetPos + Vector3(0.0, 0.0, 1.0), targetPos + Vector3(1.0, 0.0, 0.0))
         self.__initialProjection = Vector3(0.0, 1.0, 0.0).dot(lookDir)
 
-    def intersectRay(self, startPos, dir, checkCloseness=True, checkSign=True):
-        collisionPoint = self.__plane.intersectRay(startPos, dir)
-        projection = Vector3(0.0, 1.0, 0.0).dot(dir)
+    def intersectRay(self, startPos, direction, checkCloseness=True, checkSign=True):
+        collisionPoint = self.__plane.intersectRay(startPos, direction)
+        projection = Vector3(0.0, 1.0, 0.0).dot(direction)
         tooClose = collisionPoint.distTo(startPos) - self.__lookLength < -0.0001 and checkCloseness
         parallelToPlane = abs(projection) <= _AimPlane.__EPS_COLLIDE_ARENA
         projectionSignDiffers = projection * self.__initialProjection < 0.0 and checkSign
-        backwardCollision = (collisionPoint - startPos).dot(dir) <= 0.0
-        return startPos + dir * self.__lookLength if tooClose or parallelToPlane or projectionSignDiffers or backwardCollision else collisionPoint
+        backwardCollision = (collisionPoint - startPos).dot(direction) <= 0.0
+        return startPos + direction * self.__lookLength if tooClose or parallelToPlane or projectionSignDiffers or backwardCollision else collisionPoint
 
 
 class ShotPointCalculatorPlanar(object):
+
+    class CachedResult(object):
+
+        def __init__(self):
+            self.frameStamp = BigWorld.wg_getFrameTimestamp()
+            self.scanStart = Vector3(0.0, 0.0, 0.0)
+            self.scanDir = Vector3(0.0, 0.0, 0.0)
+            self.result = Vector3(0.0, 0.0, 0.0)
+            self.isConvenient = False
+
+        def update(self, frameStamp, scanStart, scanDir, result, isConvenient):
+            self.frameStamp = frameStamp
+            self.scanStart = scanStart
+            self.scanDir = scanDir
+            self.result = result
+            self.isConvenient = isConvenient
+
     MIN_DIST = 50
     TERRAIN_MIN_ANGLE = math.pi / 6
     aimPlane = property(lambda self: self.__aimPlane)
@@ -224,6 +241,7 @@ class ShotPointCalculatorPlanar(object):
         self.__vehicleDesc = player.vehicleTypeDescriptor
         self.__aimPlane = _AimPlane()
         self.__getTurretMat = functools.partial(AimingSystems.getTurretJointMat, self.__vehicleDesc, self.__vehicleMat)
+        self.__cachedResult = ShotPointCalculatorPlanar.CachedResult()
 
     def update(self, scanStart, scanDir):
         point, isPointConvenient = self.__testMouseTargetPoint(scanStart, scanDir)
@@ -258,48 +276,47 @@ class ShotPointCalculatorPlanar(object):
         aimDir = gunMat.applyVector(Vector3(0.0, 0.0, 1.0))
         return AimingSystems.getDesiredShotPoint(gunMat.translation, aimDir)
 
-    def __calculateClosestPoint(self, start, dir):
-        dir.normalise()
-        end = start + dir.scale(10000.0)
-        testResTerrain = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 128, 8)
-        terrainSuitsForCheck = testResTerrain and testResTerrain[1].dot(Math.Vector3(0.0, 1.0, 0.0)) <= math.cos(ShotPointCalculatorPlanar.TERRAIN_MIN_ANGLE)
-        testResNonTerrain = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 136)
+    def __calculateClosestPoint(self, start, direction):
+        direction.normalise()
+        end = start + direction.scale(10000.0)
+        testResStatic = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 128)
         testResDynamic = collideDynamic(start, end, (BigWorld.player().playerVehicleID,), False)
         closestPoint = None
         closestDist = 1000000
         isPointConvenient = True
-        if testResTerrain:
-            closestPoint = testResTerrain[0]
-            closestDist = (testResTerrain[0] - start).length
-        if terrainSuitsForCheck:
-            isPointConvenient = closestDist >= ShotPointCalculatorPlanar.MIN_DIST
-        if testResNonTerrain is not None:
-            dist = (testResNonTerrain[0] - start).length
-            if dist < closestDist:
-                closestPoint = testResNonTerrain[0]
-                closestDist = dist
+        if testResStatic:
+            closestPoint = testResStatic.closestPoint
+            closestDist = (closestPoint - start).length
+            shouldCheck = True
+            if testResStatic.isTerrain():
+                shouldCheck = testResStatic.normal.dot(Math.Vector3(0.0, 1.0, 0.0)) <= math.cos(ShotPointCalculatorPlanar.TERRAIN_MIN_ANGLE)
+            if shouldCheck:
                 isPointConvenient = closestDist >= ShotPointCalculatorPlanar.MIN_DIST
         if closestPoint is None and testResDynamic is None:
-            return (AimingSystems.shootInSkyPoint(start, dir), True)
+            return (AimingSystems.shootInSkyPoint(start, direction), True)
         else:
             if testResDynamic is not None:
                 dynDist = testResDynamic[0]
                 if dynDist <= closestDist:
-                    dir = end - start
-                    dir.normalise()
-                    closestPoint = start + dir * dynDist
+                    direction = end - start
+                    direction.normalise()
+                    closestPoint = start + direction * dynDist
                     isPointConvenient = True
             return (closestPoint, isPointConvenient)
 
-    def __testMouseTargetPoint(self, start, dir):
-        closestPoint, isPointConvenient = self.__calculateClosestPoint(start, dir)
+    def __testMouseTargetPoint(self, start, direction):
+        currentFrameStamp = BigWorld.wg_getFrameTimestamp()
+        if self.__cachedResult.frameStamp == currentFrameStamp and self.__cachedResult.scanStart == start and self.__cachedResult.scanDir == direction:
+            return (self.__cachedResult.result, self.__cachedResult.isConvenient)
+        closestPoint, isPointConvenient = self.__calculateClosestPoint(start, direction)
         turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleDesc, self.__vehicleMat, closestPoint, True)
         if not isPointConvenient:
-            minPitch, maxPitch = gun_rotation_shared.calcPitchLimitsFromDesc(turretYaw, self.__vehicleDesc.gun.pitchLimits)
+            _, maxPitch = gun_rotation_shared.calcPitchLimitsFromDesc(turretYaw, self.__vehicleDesc.gun.pitchLimits)
             pitchInBorders = gunPitch <= maxPitch + 0.001
             isPointConvenient = not pitchInBorders
         if isPointConvenient:
-            isPointConvenient = not self.__isTurretTurnRequired(dir, turretYaw, closestPoint)
+            isPointConvenient = not self.__isTurretTurnRequired(direction, turretYaw, closestPoint)
+        self.__cachedResult.update(currentFrameStamp, start, direction, closestPoint, isPointConvenient)
         return (closestPoint, isPointConvenient)
 
     def __isTurretTurnRequired(self, viewDir, turretYawOnPoint, targetPoint):

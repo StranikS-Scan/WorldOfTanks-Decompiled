@@ -39,7 +39,7 @@ class VehicleObserverGunRotator(VehicleGunRotator):
         if not replayCtrl.isPlaying:
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
-                turretYaw, gunPitch = vehicle.getAimParams()
+                turretYaw, _ = vehicle.getAimParams()
                 return turretYaw
         return super(VehicleObserverGunRotator, self).getNextTurretYaw(curAngle, shotAngle, speedLimit, angleLimits)
 
@@ -49,7 +49,7 @@ class VehicleObserverGunRotator(VehicleGunRotator):
         if not replayCtrl.isPlaying:
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
-                turretYaw, gunPitch = vehicle.getAimParams()
+                _, gunPitch = vehicle.getAimParams()
                 return gunPitch
         return super(VehicleObserverGunRotator, self).getNextGunPitch(curAngle, shotAngle, timeDiff, angleLimits)
 

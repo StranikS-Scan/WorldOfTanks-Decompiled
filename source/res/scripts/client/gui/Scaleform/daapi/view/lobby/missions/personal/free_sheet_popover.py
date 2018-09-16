@@ -39,7 +39,7 @@ class FreeSheetPopover(FreeSheetPopoverMeta):
     def __update(self):
         freeSheetsQuests = []
         pawnedSheets = 0
-        for oID, o in sorted(events_helpers.getPersonalMissionsCache().getOperations().iteritems(), key=operator.itemgetter(0)):
+        for _, o in sorted(events_helpers.getPersonalMissionsCache().getOperations().iteritems(), key=operator.itemgetter(0)):
             if o.isUnlocked():
                 operationName = _ms(PERSONAL_MISSIONS.OPERATIONTITLE_TITLE, title=o.getShortUserName())
                 idx = 1

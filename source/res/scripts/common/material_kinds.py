@@ -53,6 +53,7 @@ def _init():
     EFFECT_MATERIAL_INDEXES_BY_IDS[WATER_MATERIAL_KIND] = EFFECT_MATERIAL_INDEXES_BY_NAMES['water']
     EFFECT_MATERIAL_IDS_BY_NAMES['water'] = []
     EFFECT_MATERIAL_IDS_BY_NAMES['water'].append(WATER_MATERIAL_KIND)
+    ResMgr.purge(xmlPath, True)
     return
 
 

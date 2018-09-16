@@ -285,7 +285,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
                 if slot['selectedVehicle'] and not slot['isFreezed'] and not slot['isCommanderState']:
                     slot['selectedVehicle']['isReadyToFight'] = True
 
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         self.as_updateRallyS(data)
@@ -382,10 +382,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
 
     def _updateConfigureButtonState(self, isFirstBattle, readyButtonEnabled):
         flags = self.prbEntity.getFlags()
-        if readyButtonEnabled and isFirstBattle and not flags.isInQueue() and not flags.isInArena():
-            isEnabled = True
-        else:
-            isEnabled = False
+        isEnabled = readyButtonEnabled and isFirstBattle and not flags.isInQueue() and not flags.isInArena()
         vo = vo_converters.makeConfigureButtonVO(isEnabled, True)
         self.as_setConfigureButtonStateS(vo)
 

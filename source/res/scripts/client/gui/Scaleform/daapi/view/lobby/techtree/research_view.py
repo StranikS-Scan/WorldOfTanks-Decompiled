@@ -13,13 +13,6 @@ from skeletons.gui.game_control import IWalletController, IVehicleComparisonBask
 from skeletons.gui.shared import IItemsCache
 
 class ResearchView(LobbySubView, ResearchViewMeta):
-    """
-    Common interface to items (vehicle, module) in window of research modules, nation tree:
-    - unlocks item;
-    - buy vehicles;
-    - shows messages in service channel.
-    - refreshes data by server diff.
-    """
     __background_alpha__ = 0.0
     itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
@@ -32,17 +25,9 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         self._listener = TTListenerDecorator()
 
     def redraw(self):
-        """
-        Redraws all nodes in view.
-        """
         raise NotImplementedError('Must be overridden in subclass')
 
     def showSystemMessage(self, typeString, message):
-        """
-        Shows system message.
-        :param typeString: string containing 'Error', 'Warning' or 'Information'.
-        :param message: text of message.
-        """
         msgType = SystemMessages.SM_TYPE.lookup(typeString)
         if msgType is None:
             msgType = SystemMessages.SM_TYPE.Error
@@ -50,17 +35,11 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         return
 
     def invalidateCredits(self):
-        """
-        Value of credits updated.
-        """
         result = self._data.invalidateCredits()
         if result:
             self.as_setNodesStatesS(NODE_STATE_FLAGS.ENOUGH_MONEY, result)
 
     def invalidateGold(self):
-        """
-        Value of gold updated.
-        """
         result = self._data.invalidateGold()
         if result:
             self.as_setNodesStatesS(NODE_STATE_FLAGS.ENOUGH_MONEY, result)
@@ -68,37 +47,22 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         self.invalidateCredits()
 
     def invalidateFreeXP(self):
-        """
-        Value of free experience updated.
-        """
         result = self._data.invalidateFreeXP()
         if result:
             self.as_setNodesStatesS(NODE_STATE_FLAGS.ENOUGH_XP, result)
 
     def invalidateElites(self, elites):
-        """
-        Set of elite vehicles updated.
-        :param elites: set([<compactDescr>, ...])
-        """
         result = self._data.invalidateElites(elites)
         if result:
             self.as_setNodesStatesS(NODE_STATE_FLAGS.ELITE, result)
 
     def invalidateVTypeXP(self, xps):
-        """
-        Dict of vehicles experience updated.
-        :param xps: dict(<int:vehicle compact descriptor> : <XP>, ...)
-        """
         self.as_setVehicleTypeXPS(xps.items())
         result = self._data.invalidateVTypeXP()
         if result:
             self.as_setNodesStatesS(NODE_STATE_FLAGS.ENOUGH_XP, result)
 
     def invalidateUnlocks(self, unlocks):
-        """
-        Set of unlocks items updated.
-        :param unlocks: set([<int:compactDescr>, ...])
-        """
         next2Unlock, unlocked = self._data.invalidateUnlocks(unlocks)
         if unlocked:
             LOG_DEBUG('unlocked', unlocked)
@@ -108,36 +72,22 @@ class ResearchView(LobbySubView, ResearchViewMeta):
             self.as_setNext2UnlockS(next2Unlock)
 
     def invalidateInventory(self, data):
-        """
-        Inventory items are updated, invalidate information about inventory on current page.
-        :param data: set of int-type compact descriptors for  modified items (vehicles/modules).
-        """
         result = self._data.invalidateInventory(data)
         if result:
             self.as_setInventoryItemsS(result)
 
     def invalidatePrbState(self):
-        """
-        Player's state has been changed in prebattle, unit, prequeue.
-        """
         result = self._data.invalidatePrbState()
         if result:
             self.as_setNodesStatesS(NODE_STATE_FLAGS.VEHICLE_CAN_BE_CHANGED, result)
 
     def invalidateDiscounts(self, data):
-        """
-        Updates discount prices of nodes
-        """
         if self._data.invalidateDiscounts(data):
             self._data.invalidateCredits()
             self._data.invalidateGold()
             self.redraw()
 
     def invalidateVehLocks(self, locks):
-        """
-        Updates lock status of vehicles (in inventory) that received new value.
-        :param locks: dict(<inventory ID> : <value of lock>, ...), see AccountCommands.LOCK_REASON.
-        """
         raise NotImplementedError('Must be overridden in subclass')
 
     def invalidateWalletStatus(self, status):
@@ -150,17 +100,11 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         raise NotImplementedError('Must be overridden in subclass')
 
     def request4Info(self, itemCD, rootCD):
-        """
-        Overridden method of the class ResearchViewMeta.request4Info
-        """
         vehicle = self.itemsCache.items.getItemByCD(int(rootCD))
         if vehicle:
             shared_events.showModuleInfo(int(itemCD), vehicle.descriptor)
 
     def invalidateVehCompare(self):
-        """
-        Updates compare add icon status of nodes if change status of comparison basket fullness.
-        """
         getVehicle = self.itemsCache.items.getItemByCD
 
         def getNodeData(vehCD):

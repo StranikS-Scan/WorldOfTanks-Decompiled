@@ -13,8 +13,6 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
 
 def comparisonKey(item):
-    """ Comparison key to sort the the customization carousel.
-    """
     return (TYPES_ORDER.index(item.itemTypeID), item.groupID, item.id)
 
 
@@ -26,10 +24,6 @@ class CustomizationBookmarkVO(object):
         self.bookmarkIndex = bookmarkIndex
 
     def asDict(self):
-        """
-        Creates a dictionary with the class' relevant data.
-        :return: data object
-        """
         return {'bookmarkName': self.bookmarkName,
          'bookmarkIndex': self.bookmarkIndex}
 
@@ -63,7 +57,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._allSeasonAndTabFilterData = {}
         requirement = self._createBaseRequirements()
         allItems = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, requirement)
-        for tabIndex, cType in TABS_ITEM_MAPPING.iteritems():
+        for tabIndex in TABS_ITEM_MAPPING.iterkeys():
             self._allSeasonAndTabFilterData[tabIndex] = {}
             for season in SeasonType.COMMON_SEASONS:
                 self._allSeasonAndTabFilterData[tabIndex][season] = CustomizationSeasonAndTypeFilterData()
@@ -137,8 +131,6 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self.buildList(self._tabIndex, self._seasonID)
 
     def selectItem(self, item=None):
-        """ Select a Customization Item by item itself.
-        """
         if not item:
             self._selectIntCD = None
         else:
@@ -146,10 +138,6 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         return
 
     def selectItemIdx(self, itemIndex):
-        """ Select a Customization Item by index.
-        
-        :param itemIndex: index in the carousel of the selected item
-        """
         self._selectedIdx = itemIndex
         self.refresh()
 

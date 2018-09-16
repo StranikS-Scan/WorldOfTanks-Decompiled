@@ -130,12 +130,6 @@ class ProfileStatistics(ProfileStatisticsMeta):
             vo['seasonEnabled'] = True
 
     def __hasRankedSeasonsHistory(self):
-        """
-        We have the ranked history only in two cases:
-        1) The number of passed seasons >= 2
-        2) The number of passed seasons == 1 and there is an active current Season
-        :return: boolean result
-        """
         passedSeasons = len(self.rankedController.getSeasonPassed())
         return passedSeasons > 1 or passedSeasons == 1 and self.rankedController.getCurrentSeason() is not None
 

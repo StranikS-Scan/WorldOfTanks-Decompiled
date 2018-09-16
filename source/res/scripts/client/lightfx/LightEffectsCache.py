@@ -3,7 +3,7 @@
 import ResMgr
 import LightEffect
 
-class LightEffectsCache:
+class LightEffectsCache(object):
     SETTINGS_PATH = 'scripts/alienware_light_fx.xml'
     __ACTION_MAPPING = {'Morph': 1,
      'Pulse': 2,

@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/BaseDAAPIComponentMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
 class BaseDAAPIComponentMeta(BaseDAAPIModule):
@@ -16,6 +12,9 @@ class BaseDAAPIComponentMeta(BaseDAAPIModule):
 
     def unregisterFlashComponent(self, alias):
         self._printOverrideError('unregisterFlashComponent')
+
+    def getAlias(self):
+        self._printOverrideError('getAlias')
 
     def as_populateS(self):
         return self.flashObject.as_populate() if self._isDAAPIInited() else None

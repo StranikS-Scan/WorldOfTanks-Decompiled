@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/cfmfile.py
-"""codefragments.py -- wrapper to modify code fragments."""
 __version__ = '0.8b3'
 __author__ = 'jvr'
 import warnings
@@ -15,13 +14,6 @@ error = 'cfm.error'
 BUFSIZE = 524288
 
 def mergecfmfiles(srclist, dst, architecture='fat'):
-    """Merge all files in srclist into a new file dst.
-    
-    If architecture is given, only code fragments of that type will be used:
-    "pwpc" for PPC, "m68k" for cfm68k. This does not work for "classic"
-    68k code, since it does not use code fragments to begin with.
-    If architecture is None, all fragments will be used, enabling FAT binaries.
-    """
     srclist = list(srclist)
     for i in range(len(srclist)):
         srclist[i] = Carbon.File.pathname(srclist[i])

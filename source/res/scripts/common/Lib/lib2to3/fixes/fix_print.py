@@ -1,16 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_print.py
-"""Fixer for print.
-
-Change:
-    'print'          into 'print()'
-    'print ...'      into 'print(...)'
-    'print ... ,'    into 'print(..., end=" ")'
-    'print >>x, ...' into 'print(..., file=x)'
-
-No changes are applied if print_function is imported from __future__
-
-"""
 from .. import patcomp
 from .. import pytree
 from ..pgen2 import token
@@ -23,13 +12,11 @@ class FixPrint(fixer_base.BaseFix):
     PATTERN = "\n              simple_stmt< any* bare='print' any* > | print_stmt\n              "
 
     def transform(self, node, results):
-        assert results
         bare_print = results.get('bare')
         if bare_print:
             bare_print.replace(Call(Name(u'print'), [], prefix=bare_print.prefix))
             return
         else:
-            assert node.children[0] == Name(u'print')
             args = node.children[1:]
             if len(args) == 1 and parend_expr.match(args[0]):
                 return
@@ -38,7 +25,6 @@ class FixPrint(fixer_base.BaseFix):
                 args = args[:-1]
                 end = ' '
             if args and args[0] == pytree.Leaf(token.RIGHTSHIFT, u'>>'):
-                assert len(args) >= 2
                 file = args[1].clone()
                 args = args[3:]
             l_args = [ arg.clone() for arg in args ]

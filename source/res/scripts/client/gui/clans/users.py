@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/users.py
-from adisp import async, process
 import weakref
-from gui.clans.contexts import AccountClanRatingsCtx
+from adisp import async, process
+from gui.wgcg.clan.contexts import AccountClanRatingsCtx
 
 class UserCache(object):
 

@@ -6,13 +6,13 @@ import base64
 import urllib2
 import binascii
 import threading
+import random
+import shelve as provider
+from functools import partial
+from Queue import Queue
 import BigWorld
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from functools import partial
 from helpers import getFullClientVersion
-from Queue import Queue
-import shelve as provider
-import random
 _MIN_LIFE_TIME = 900
 _MAX_LIFE_TIME = 86400
 _LIFE_TIME_IN_MEMORY = 1200
@@ -133,7 +133,7 @@ class NotModifiedHandler(urllib2.BaseHandler):
         return addinfourl
 
 
-class CFC_OP_TYPE:
+class CFC_OP_TYPE(object):
     DOWNLOAD = 1
     READ = 2
     WRITE = 3
@@ -152,7 +152,7 @@ class WorkerThread(threading.Thread):
         callback = task['callback']
         try:
             self.input_queue.put(task, block=False)
-        except:
+        except Exception:
             callback(None, None, None)
 
         return
@@ -172,16 +172,16 @@ class WorkerThread(threading.Thread):
                 break
             try:
                 self.isBusy = True
-                type = task['opType']
-                if type == CFC_OP_TYPE.DOWNLOAD:
+                taskType = task['opType']
+                if taskType == CFC_OP_TYPE.DOWNLOAD:
                     self.__run_download(**task)
-                elif type == CFC_OP_TYPE.READ:
+                elif taskType == CFC_OP_TYPE.READ:
                     self.__run_read(**task)
-                elif type == CFC_OP_TYPE.WRITE:
+                elif taskType == CFC_OP_TYPE.WRITE:
                     self.__run_write(**task)
-                elif type == CFC_OP_TYPE.CHECK:
+                elif taskType == CFC_OP_TYPE.CHECK:
                     self.__run_check(**task)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
             self.isBusy = False
@@ -194,7 +194,7 @@ class WorkerThread(threading.Thread):
         startTime = time.time()
         try:
             try:
-                fh = file = None
+                fh = remote_file = None
                 last_modified = expires = None
                 req = urllib2.Request(url)
                 req.add_header('User-Agent', _CLIENT_VERSION)
@@ -214,14 +214,14 @@ class WorkerThread(threading.Thread):
                             last_modified = info.getheader('Last-Modified')
                             expires = info.getheader('Expires')
                         if code == 200:
-                            file = fh.read()
+                            remote_file = fh.read()
                 else:
                     opener = urllib2.build_opener(urllib2.BaseHandler())
                     fh = opener.open(req, timeout=10)
                     info = fh.info()
                     last_modified = info.getheader('Last-Modified')
                     expires = info.getheader('Expires')
-                    file = fh.read()
+                    remote_file = fh.read()
                 if expires is None:
                     expires = makeHttpTime(time.gmtime())
                 else:
@@ -241,20 +241,20 @@ class WorkerThread(threading.Thread):
                 fh.close()
 
         _LOG_EXECUTING_TIME(startTime, '__run_download', 10.0)
-        callback(file, last_modified, expires)
+        callback(remote_file, last_modified, expires)
         return
 
     def __run_read(self, name, db, callback, **params):
-        file = None
+        remote_file = None
         try:
             startTime = time.time()
             if db is not None and db.has_key(name):
-                file = db[name]
+                remote_file = db[name]
             _LOG_EXECUTING_TIME(startTime, '__run_read')
         except Exception as e:
             LOG_WARNING("Client couldn't read file.", e, name)
 
-        callback(file, None, None)
+        callback(remote_file, None, None)
         return
 
     def __run_write(self, name, data, db, callback, **params):
@@ -263,7 +263,7 @@ class WorkerThread(threading.Thread):
             if db is not None:
                 db[name] = data
             _LOG_EXECUTING_TIME(startTime, '__run_write', 5.0)
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         callback(None, None, None)
@@ -276,19 +276,19 @@ class WorkerThread(threading.Thread):
             if db is not None:
                 res = db.has_key(name)
             _LOG_EXECUTING_TIME(startTime, '__run_check')
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         callback(res, None, None)
         return
 
 
-class ThreadPool:
+class ThreadPool(object):
 
     def __init__(self, num=8):
         num = max(2, num)
         self.__workers = []
-        for i in range(num):
+        for _ in range(num):
             self.__workers.append(WorkerThread())
 
     def start(self):
@@ -304,8 +304,8 @@ class ThreadPool:
     def add_task(self, task):
         if not self.__workers:
             return
-        type = task['opType']
-        if type in (CFC_OP_TYPE.WRITE, CFC_OP_TYPE.READ, CFC_OP_TYPE.CHECK):
+        taskType = task['opType']
+        if taskType in (CFC_OP_TYPE.WRITE, CFC_OP_TYPE.READ, CFC_OP_TYPE.CHECK):
             self.__workers[0].add_task(task)
         else:
             workers = self.__workers[1:]
@@ -350,7 +350,7 @@ class CustomFilesCache(object):
             startTime = time.time()
             try:
                 self.__db.close()
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
             _LOG_EXECUTING_TIME(startTime, 'close')
@@ -375,17 +375,17 @@ class CustomFilesCache(object):
     def __get(self, url, showImmediately, checkedInCache, headers=None):
         try:
             ctime = getSafeDstUTCTime()
-            hash = base64.b32encode(url)
+            file_hash = base64.b32encode(url)
             self.__mutex.acquire()
             cache = self.__cache
-            if hash in cache:
-                data = cache[hash]
+            if file_hash in cache:
+                data = cache[file_hash]
                 if data is None:
                     LOG_DEBUG('readLocalFile, there is no file in memory.', url)
                     self.__readLocalFile(url, showImmediately)
                 else:
-                    self.__accessedCache[hash] = ctime
-                    expires, creation_time, _, file, _, last_modified = data
+                    self.__accessedCache[file_hash] = ctime
+                    expires, _, _, remote_file, _, last_modified = data
                     expires = parseHttpTime(expires)
                     if expires is None:
                         LOG_ERROR('Unable to parse expires time.', url)
@@ -393,11 +393,11 @@ class CustomFilesCache(object):
                         return
                     if ctime - _MIN_LIFE_TIME <= expires <= ctime + _MAX_LIFE_TIME + _MIN_LIFE_TIME:
                         LOG_DEBUG('postTask, Sends file to requester.', url, last_modified, data[0])
-                        self.__postTask(url, file, True)
+                        self.__postTask(url, remote_file, True)
                     else:
                         if showImmediately:
                             LOG_DEBUG('postTask, Do not release callbacks. Sends file to requester.', url, last_modified, data[0])
-                            self.__postTask(url, file, False)
+                            self.__postTask(url, remote_file, False)
                         LOG_DEBUG('readRemoteFile, there is file in cache, check last_modified field.', url, last_modified, data[0])
                         self.__readRemoteFile(url, last_modified, showImmediately, headers)
             elif checkedInCache:
@@ -436,25 +436,25 @@ class CustomFilesCache(object):
          'callback': partial(self.__onReadLocalFile, url, showImmediately)}
         self.__worker.add_task(task)
 
-    def __onReadLocalFile(self, url, showImmediately, file, d1, d2):
-        data = file
+    def __onReadLocalFile(self, url, showImmediately, remote_file, d1, d2):
+        data = remote_file
         try:
             crc, f, ver = data[2:5]
             if crc != binascii.crc32(f) or _CACHE_VERSION != ver:
                 LOG_DEBUG('Old file was found.', url)
                 raise Exception('Invalid data.')
-        except:
+        except Exception:
             data = None
 
         try:
-            hash = base64.b32encode(url)
+            file_hash = base64.b32encode(url)
             self.__mutex.acquire()
             cache = self.__cache
             if data is not None:
-                cache[hash] = data
+                cache[file_hash] = data
             else:
-                cache.pop(hash, None)
-                self.__accessedCache.pop(hash, None)
+                cache.pop(file_hash, None)
+                self.__accessedCache.pop(file_hash, None)
         finally:
             self.__mutex.release()
 
@@ -475,9 +475,9 @@ class CustomFilesCache(object):
         else:
             if res:
                 try:
-                    hash = base64.b32encode(url)
+                    file_hash = base64.b32encode(url)
                     self.__mutex.acquire()
-                    self.__cache[hash] = None
+                    self.__cache[file_hash] = None
                 finally:
                     self.__mutex.release()
 
@@ -492,8 +492,8 @@ class CustomFilesCache(object):
          'callback': partial(self.__onReadRemoteFile, url, showImmediately)}
         self.__worker.add_task(task)
 
-    def __onReadRemoteFile(self, url, showImmediately, file, last_modified, expires):
-        if file is None and last_modified is None:
+    def __onReadRemoteFile(self, url, showImmediately, remote_file, last_modified, expires):
+        if remote_file is None and last_modified is None:
             if showImmediately:
                 LOG_DEBUG('__onReadRemoteFile, Error occurred. Release callbacks.', url)
                 self.__processedCache.pop(url, None)
@@ -501,34 +501,34 @@ class CustomFilesCache(object):
                 self.__postTask(url, None, True)
             return
         else:
-            hash = base64.b32encode(url)
+            file_hash = base64.b32encode(url)
             ctime = getSafeDstUTCTime()
             fileChanged = False
             try:
                 self.__mutex.acquire()
                 cache = self.__cache
-                if file is None and last_modified is not None:
-                    value = cache.get(hash, None)
+                if remote_file is None and last_modified is not None:
+                    value = cache.get(file_hash, None)
                     if value is None:
                         LOG_WARNING('File is expected in cache, but there is no file')
                         self.__postTask(url, None, True)
                         return
-                    crc, file = value[2:4]
+                    crc, remote_file = value[2:4]
                 else:
-                    crc = binascii.crc32(file)
+                    crc = binascii.crc32(remote_file)
                     fileChanged = True
                 packet = (expires,
                  ctime,
                  crc,
-                 file,
+                 remote_file,
                  _CACHE_VERSION,
                  last_modified)
-                cache[hash] = packet
+                cache[file_hash] = packet
             finally:
                 self.__mutex.release()
 
             LOG_DEBUG('writeCache', url, last_modified, expires)
-            self.__writeCache(hash, packet)
+            self.__writeCache(file_hash, packet)
             if showImmediately and not fileChanged:
                 LOG_DEBUG('__onReadRemoteFile, showImmediately = True. Release callbacks.', url)
                 self.__processedCache.pop(url, None)
@@ -543,7 +543,7 @@ class CustomFilesCache(object):
                 os.makedirs(cacheDir)
             filename = os.path.join(cacheDir, 'icons')
             self.__db = provider.open(filename, flag='c', writeback=True)
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
     def __writeCache(self, name, packet):
@@ -560,13 +560,13 @@ class CustomFilesCache(object):
     def __onWriteCache(self, name, d1, d2, d3):
         self.__written_cache.discard(name)
 
-    def __postTask(self, url, file, invokeAndReleaseCallbacks):
-        BigWorld.callback(0.001, partial(self.__onPostTask, url, invokeAndReleaseCallbacks, file))
+    def __postTask(self, url, remote_file, invokeAndReleaseCallbacks):
+        BigWorld.callback(0.001, partial(self.__onPostTask, url, invokeAndReleaseCallbacks, remote_file))
 
-    def __onPostTask(self, url, invokeAndReleaseCallbacks, file):
+    def __onPostTask(self, url, invokeAndReleaseCallbacks, remote_file):
         if invokeAndReleaseCallbacks:
             cbs = self.__processedCache.pop(url, [])
         else:
             cbs = self.__processedCache.get(url, [])
         for cb in cbs:
-            cb(url, file)
+            cb(url, remote_file)

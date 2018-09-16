@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.meta.ChannelCarouselMeta import ChannelCarouselMet
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import ExternalCriteria
 from gui.Scaleform.genConsts.MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES import MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES
-from gui.app_loader.decorators import sf_lobby
+from gui.app_loader import sf_lobby
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelManagementEvent, ChannelCarouselEvent, PreBattleChannelEvent
 from messenger.ext import channel_num_gen
@@ -107,7 +107,7 @@ class ChannelsCarouselHandler(object):
     def removeChannel(self, channel):
         clientID = channel.getClientID()
         if clientID in self.__handlers:
-            criteria, openHandler, viewType = self.__handlers.pop(clientID)
+            criteria, _, viewType = self.__handlers.pop(clientID)
             window = None
             app = self.app
             if app is not None and app.containerManager is not None:
@@ -193,7 +193,7 @@ class ChannelsCarouselHandler(object):
     def __removeChannelFromList(self, event, targetList):
         clientID = event.clientID
         if clientID in self.__handlers:
-            criteria, openHandler, viewType = self.__handlers.pop(clientID)
+            criteria, _, viewType = self.__handlers.pop(clientID)
             if event.ctx.get('closeWindow', True) and self.app is not None:
                 window = self.app.containerManager.getView(viewType, criteria)
                 if window is not None:
@@ -334,7 +334,7 @@ class ChannelsCarouselHandler(object):
         else:
             self.__showByReqs.pop(clientID, None)
             viewContainer = self.app.containerManager
-            criteria, openHandler, viewType = self.__handlers[clientID]
+            criteria, _, viewType = self.__handlers[clientID]
             if viewType == ViewTypes.WINDOW:
                 window = viewContainer.getView(viewType, criteria)
                 if window is not None:

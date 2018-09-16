@@ -1,11 +1,8 @@
 <Observer.xml>
   <crew>
     <commander>	gunner
-
 			radioman
-
 			loader
-
 			driver	</commander>
   </crew>
   <speedLimits>
@@ -230,7 +227,7 @@
         <right>	vehicles/russian/R11_MS-1/track/right.track	</right>
         <segmentLength>	0.155	</segmentLength>
         <segmentOffset>	0.081	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>

@@ -25,7 +25,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 BattleExitResult = namedtuple('BattleExitResult', 'isDeserter playerInfo')
 
 class BattleSessionProvider(IBattleSessionProvider):
-    """This class is backend of GUI for one battle session."""
     __slots__ = ('__ctx', '__sharedRepo', '__dynamicRepo', '__requestsCtrl', '__arenaDP', '__arenaListeners', '__viewComponentsBridge', '__weakref__', '__arenaVisitor', '__invitations', '__isReplayPlaying', '__battleCache')
 
     def __init__(self):
@@ -45,68 +44,33 @@ class BattleSessionProvider(IBattleSessionProvider):
 
     @property
     def shared(self):
-        """ Returns reference to repository of shared controllers
-        that are created for all game sessions.
-        :return: instance of SharedControllersLocator.
-        """
         return self.__sharedRepo
 
     @property
     def dynamic(self):
-        """ Returns reference to repository of controllers
-        that are created for some game sessions.
-        :return: instance of DynamicControllersLocator.
-        """
         return self.__dynamicRepo
 
     @property
     def arenaVisitor(self):
-        """ Returns reference to visitor that has safe access to properties of arena.
-        :return: instance of _ClientArenaVisitor.
-        """
         return self.__arenaVisitor
 
     @property
     def invitations(self):
-        """ Returns reference to invitations handler.
-        :return: instance of _SquadInvitationsHandler.
-        """
         return self.__invitations
 
     @property
     def battleCache(self):
-        """
-        Returns reference to the battle cache that is stored on the server.
-        Note that the cache is created once per each battle and can be used to restore data
-        after re-login.
-        :return: instance of derived class BattleClientCache
-        """
         return self.__battleCache
 
     @property
     def isReplayPlaying(self):
-        """
-        Returns flag is this battle actually replay.
-        :return: boolean flag
-        """
         return self.__isReplayPlaying
 
     def getCtx(self):
-        """
-        Gets instance of ammo controller.
-        :return: instance of AmmoController.
-        """
         return self.__ctx
 
     @async
     def sendRequest(self, ctx, callback, allowDelay=None):
-        """
-        Sends request to the server.
-        :param ctx: avatar request context object,
-            @see gui.battle_control.request.context.
-        :param callback: function that is invoked when response is received.
-        :param allowDelay: bool.
-        """
         self.__requestsCtrl.request(ctx, callback=callback, allowDelay=allowDelay)
 
     def setPlayerVehicle(self, vID, vDesc):
@@ -162,32 +126,17 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def getArenaDP(self):
-        """Gets instance of arena data provider.
-        :return: instance of ArenaDataProvider.
-        """
         return self.__arenaDP
 
     def addArenaCtrl(self, controller):
-        """Adds arena controller. For additional information see
-            gui.arena_info.IArenaController.
-        :param controller: object that implements IArenaController.
-        :return: True if controller is added to arena listeners, otherwise - False.
-        """
         return self.__arenaListeners.addController(controller) if self.__arenaListeners is not None else False
 
     def removeArenaCtrl(self, controller):
-        """Removes arena controller.
-        :param controller: object extends IArenaController.
-        """
         if self.__arenaListeners is not None:
             self.__arenaListeners.removeController(controller)
         return
 
     def registerViewComponentsCtrl(self, controller):
-        """Registers controller in the bridge of view components.
-        :param controller: object that implements IViewComponentsController.
-        :return: True if controller is added to arena listeners, otherwise - False.
-        """
         if self.__viewComponentsBridge is not None:
             self.__viewComponentsBridge.registerController(controller)
             return True
@@ -195,36 +144,21 @@ class BattleSessionProvider(IBattleSessionProvider):
             return False
 
     def registerViewComponents(self, *data):
-        """Sets view component data to find that components in routines
-            addViewComponent, removeViewComponent.
-        :param data: tuple((BATTLE_CTRL.*, (componentID, ...)), ...)
-        """
         if self.__viewComponentsBridge is not None:
             self.__viewComponentsBridge.registerViewComponents(*data)
         return
 
     def addViewComponent(self, componentID, component, rule=VIEW_COMPONENT_RULE.PROXY):
-        """View component has been created.
-        :param componentID: string containing unique component ID.
-        :param component: instance of component.
-        :param rule: one of VIEW_COMPONENT_RULE.*.
-        """
         if self.__viewComponentsBridge is not None:
             self.__viewComponentsBridge.addViewComponent(componentID, component, rule=rule)
         return
 
     def removeViewComponent(self, componentID):
-        """View component has been removed.
-        :param componentID: string containing unique component ID.
-        """
         if self.__viewComponentsBridge is not None:
             self.__viewComponentsBridge.removeViewComponent(componentID)
         return
 
     def getExitResult(self):
-        """ Gets result if player exits battle that are helped to notify player about penalty (if they have).
-        :return: instance of BattleExitResult(isDeserter, player).
-        """
         if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle() and not self.__arenaVisitor.gui.isEventBattle():
             vInfo = self.__arenaDP.getVehicleInfo()
             vStats = self.__arenaDP.getVehicleStats()
@@ -239,16 +173,9 @@ class BattleSessionProvider(IBattleSessionProvider):
 
     @staticmethod
     def exit():
-        """Exits from current battle session."""
         avatar_getter.leaveArena()
 
     def start(self, setup):
-        """
-        Battle session is started.
-        :param setup: instance of BattleSessionSetup.
-        :return:
-        """
-        assert isinstance(setup, controllers.BattleSessionSetup)
         self.__isReplayPlaying = setup.isReplayPlaying
         self.__arenaVisitor = arena_visitor.createByAvatar(avatar=setup.avatar)
         setup.sessionProvider = weakref.proxy(self)
@@ -292,10 +219,6 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def switchToPostmortem(self, noRespawnPossible=True, respawnAvailable=False):
-        """Player's vehicle is destroyed, switchers GUI to postmortem mode.
-        :param noRespawnPossible: whether the player can respawn or not during the game.
-        :param respawnAvailable: if the player can respawn directly after being dead (move to respawn ctrl mode)
-        """
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
             ctrl.clear(False)
@@ -311,7 +234,6 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def useLoaderIntuition(self):
-        """Loader intuition was used."""
         ctrl = self.__sharedRepo.messages
         if ctrl is not None:
             ctrl.showVehicleMessage('LOADER_INTUITION_WAS_USED')
@@ -321,7 +243,6 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def movingToRespawnBase(self):
-        """Player's avatar is moving to the respawn."""
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
             ctrl.clear(False)
@@ -340,12 +261,6 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def invalidateVehicleState(self, state, value, vehicleID=0):
-        """State of player's vehicle (health, fire, state of device, etc.) is
-        changed, notifies GUI about it.
-        :param state: one of VEHICLE_VIEW_STATE.*.
-        :param value: value of state.
-        :param vehicleID: vehicle ID or zero.
-        """
         ctrl = self.__sharedRepo.vehicleState
         if ctrl is not None:
             ctrl.invalidate(state, value, vehicleID)
@@ -359,13 +274,6 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def setVehicleHealth(self, isPlayerVehicle, vehicleID, newHealth, attackerID, attackReasonID):
-        """New vehicle health value is changed, notifies GUI about it.
-        :param isPlayerVehicle: (bool) determine is player vehicle
-        :param vehicleID: (int) vehicle id
-        :param newHealth: (int) vehicle health
-        :param attackerID: (int) vehicle which dealt damage
-        :param attackReasonID: (str) ATTACK_REASON.*
-        """
         if not isPlayerVehicle:
             ctrl = self.__sharedRepo.feedback
             if ctrl is not None:
@@ -419,9 +327,6 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def __pe_onBattleResultsReceived(self, isActiveVehicle, _):
-        """It's listener of event _PlayerEvents.onBattleResultsReceived.
-        :param isActiveVehicle: bool.
-        """
         if isActiveVehicle and not BattleReplay.g_replayCtrl.isPlaying:
             arenaUniqueID = self.__arenaVisitor.getArenaUniqueID()
             LOG_DEBUG('Try to exit from arena', arenaUniqueID)

@@ -29,6 +29,7 @@ PIERCING_POWER_PROP_NAME = 'piercingPower'
 DAMAGE_PROP_NAME = 'damage'
 SHELLS_PROP_NAME = 'shells'
 STUN_DURATION_PROP_NAME = 'stunDuration'
+AUTO_RELOAD_PROP_NAME = 'autoReloadTime'
 GUARANTEED_STUN_DURATION_PROP_NAME = 'guaranteedStunDuration'
 CLIP_VEHICLES_PROP_NAME = 'clipVehicles'
 UNICHARGED_VEHICLES_PROP_NAME = 'uniChargedVehicles'
@@ -38,15 +39,18 @@ GUN_RELOADING_TYPE = 'gunReloadingType'
 GUN_CAN_BE_CLIP = 1
 GUN_CLIP = 2
 GUN_NORMAL = 4
-CLIP_ICON_PATH = RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON
-HYDRAULIC_ICON_PATH = RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON
+GUN_CAN_BE_AUTO_RELOAD = 5
+GUN_AUTO_RELOAD = 6
 EXTRA_MODULE_INFO = 'extraModuleInfo'
 FIELD_HIGHLIGHT_TYPE = 'highlightType'
 _FLASH_OBJECT_SYS_ATTRS = ('isPrototypeOf', 'propertyIsEnumerable', 'hasOwnProperty')
 ValidationResult = namedtuple('ValidationResult', ['isValid', 'reason'])
 
 def flashObject2Dict(obj):
-    return dict(map(lambda (k, v): (k, flashObject2Dict(v)), itertools.ifilter(lambda (x, y): x not in _FLASH_OBJECT_SYS_ATTRS, obj.children.iteritems()))) if hasattr(obj, 'children') else obj
+    if hasattr(obj, 'children'):
+        filtered = itertools.ifilter(lambda (x, y): x not in _FLASH_OBJECT_SYS_ATTRS, obj.children.iteritems())
+        return dict(((k, flashObject2Dict(v)) for k, v in filtered))
+    return obj
 
 
 def code2str(code):
@@ -73,7 +77,7 @@ def code2str(code):
 
 def isVehicleObserver(vehTypeCompDescr):
     if vehTypeCompDescr is not None:
-        item_type_id, nation_id, item_id_within_nation = vehs_core.parseIntCompactDescr(vehTypeCompDescr)
+        _, nation_id, item_id_within_nation = vehs_core.parseIntCompactDescr(vehTypeCompDescr)
         return 'observer' in vehs_core.g_cache.vehicle(nation_id, item_id_within_nation).tags
     else:
         return False
@@ -131,7 +135,7 @@ def changeStringCasing(string, isUpper):
                 for wrong, right in zip(*_REPLACEMENTS[langID]):
                     string = string.replace(wrong, right)
 
-    except:
+    except Exception:
         LOG_CURRENT_EXCEPTION()
 
     return i18n.encodeUtf8(string)
@@ -173,7 +177,7 @@ class SettingRootRecord(SettingRecord):
     def load(cls):
         try:
             return cls(**AccountSettings.getSettings(cls._getSettingName()))
-        except:
+        except Exception:
             LOG_ERROR('There is error while unpacking quests settings', AccountSettings.getSettings('quests'))
             LOG_CURRENT_EXCEPTION()
             return None
@@ -185,7 +189,7 @@ class SettingRootRecord(SettingRecord):
 
     @classmethod
     def _getSettingName(cls):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 def mapTextureToTheMemory(textureData, uniqueID=None, temp=True):
@@ -202,9 +206,6 @@ def mapTextureToTheMemory(textureData, uniqueID=None, temp=True):
 
 
 def removeTextureFromMemory(textureID):
-    """
-    Removes texture from memory by id
-    """
     BigWorld.wg_eraseScaleformTexture(textureID)
 
 
@@ -258,15 +259,13 @@ def weightedAvg(*args):
 
 
 def makeSearchableString(inputString):
-    """ Returns searchable string, i.e. utf-8 encoded and lower case
-    """
     try:
         return inputString.decode('utf-8').lower()
     except ValueError:
         LOG_ERROR('Given string cannot be decoded from UTF-8', inputString)
 
 
-class QUALIFIER_TYPE:
+class QUALIFIER_TYPE(object):
     ALL = 'all'
     RADIOMAN = 'radioman'
     COMMANDER = 'commander'
@@ -277,9 +276,6 @@ class QUALIFIER_TYPE:
 
 
 def isPopupsWindowsOpenDisabled():
-    """
-    development setting from preferences which allows not to open awards and some others windows
-    """
     userPrefs = Settings.g_instance.userPrefs
     ds = userPrefs['development']
     return ds.readBool(Settings.POPUPS_WINDOWS_DISABLED) and constants.IS_DEVELOPMENT if ds is not None else False

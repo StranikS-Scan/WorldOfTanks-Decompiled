@@ -14,11 +14,6 @@ class ComposedActionsCollection(object):
         self._actions.append(action)
 
     def compose(self):
-        """
-        returns result of composition. Result is list, because theoretically collection can be composed in couple of
-        actions. But mostly in this list will be one action. By default we just return first action. It works fine if
-        actions appear on UI looking completely the same, so we can't distinguish between them.
-        """
         return [first(self._actions)]
 
 
@@ -27,13 +22,6 @@ class SimpleMixCollection(ComposedActionsCollection):
     _groupMarkers = ('gold', 'credits')
 
     def compose(self):
-        """
-        Logic of composition is boiled down to following:
-         - find better action in each group (currently it's different currencies) and show them;
-         - if better actions has same amount of discount and finish date - join them and show as one;
-         - if we have action with worse discount, but later date - don't show it now, it'll be displayed when
-           current action finishes;
-        """
         actionsGroups = self._separateActions()
         return [self._findBetter(self._actions)] if len(self._actions) == 1 or len(actionsGroups) == 1 else self._composeActions(map(self._findBetter, actionsGroups.values()))
 
@@ -56,11 +44,6 @@ class SimpleMixCollection(ComposedActionsCollection):
         return action1.getFinishTime() == action2.getFinishTime() and not self._cmpActions(action1, action2)
 
     def _separateActions(self):
-        """
-        separates collection actions in groups by specified markers.
-        WARNING: amount of groups is not always the same as number of markers, as some groups can be not presented
-        in current collection, e.z. only credits action are running now
-        """
         result = {}
         for action in self._actions:
             paramName = action.discount.getParamName()
@@ -106,30 +89,15 @@ class PremiumActionsCollection(SimpleMixCollection):
     _groupMarkers = ('1Cost', '3Cost', '7Cost', '30Cost', '180Cost', '360Cost')
 
     def compose(self):
-        """
-        Logic of composition is boiled down to following:
-         - find better action in each group (currently it's different currencies) and show them;
-         - if better actions has same amount of discount and finish date - join them and show as one;
-         - if we have action with worse discount, but later date - don't show it now, it'll be displayed when
-           current action finishes;
-        """
         actionsGroups = self._separateActions()
         return [self._findBetter(self._actions)] if len(self._actions) == 1 or len(actionsGroups) == 1 else map(self._findBetter, actionsGroups.values())
 
 
 class CompositionRule(object):
-    """
-    This class family allows to specify WHICH ActionInfo objects can be compiled together in one display card.
-    Property collectionClass specifies HOW ActionInfo should be joined and which display card are eventually built.
-    Property _applicableParamsNames specifies ActionInfo for which params should be joined
-    """
     _applicableParamsNames = []
 
     @classmethod
     def applicableTo(cls, action):
-        """
-        Checks whether current rule can be applied to given ActionInfo objects
-        """
         return action.discount.getParamName() in cls._applicableParamsNames
 
     @classmethod

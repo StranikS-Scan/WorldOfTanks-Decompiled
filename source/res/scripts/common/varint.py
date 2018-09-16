@@ -1,13 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/varint.py
-"""Varint encoder/decoder
-
-varints are a common encoding for variable length integer data, used in
-libraries such as sqlite, protobuf, v8, and more.
-
-Here's a quick and dirty module to help avoid reimplementing the same thing
-over and over again.
-"""
 from cStringIO import StringIO as BytesIO
 
 def encode_zigzag64(n):
@@ -19,7 +11,6 @@ def decode_zigzag(n):
 
 
 def encode(number):
-    """Pack `number` into varint bytes"""
     buf = BytesIO()
     while True:
         towrite = number & 127
@@ -33,7 +24,6 @@ def encode(number):
 
 
 def decode_stream(stream):
-    """Read a varint from `stream`"""
     shift = 0
     result = 0
     while True:
@@ -45,15 +35,10 @@ def decode_stream(stream):
 
 
 def decode_bytes(buf):
-    """Read a varint from from `buf` bytes"""
     return decode_stream(BytesIO(buf))
 
 
 def _read_one(stream):
-    """Read a byte from the file (as an integer)
-    
-    raises EOFError if the stream ends while reading bytes.
-    """
     c = stream.read(1)
     if c == '':
         raise EOFError('Unexpected EOF while reading bytes')

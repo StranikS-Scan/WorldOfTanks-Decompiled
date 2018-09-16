@@ -7,7 +7,7 @@ from gui.battle_control.controllers.consumables import opt_devices_ctrl
 def createAmmoCtrl(setup):
     if setup.isReplayRecording:
         return ammo_ctrl.AmmoReplayRecorder(setup.replayCtrl)
-    return ammo_ctrl.AmmoReplayPlayer(setup.replayCtrl) if setup.isReplayPlaying else ammo_ctrl.AmmoController()
+    return ammo_ctrl.AmmoController() if setup.isReplayPlaying else ammo_ctrl.AmmoController()
 
 
 def createEquipmentCtrl(setup):

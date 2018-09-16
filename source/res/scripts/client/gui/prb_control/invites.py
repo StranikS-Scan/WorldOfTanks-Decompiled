@@ -8,8 +8,7 @@ from account_helpers import isRoamingEnabled
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui import SystemMessages
-from gui.app_loader import g_appLoader
-from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
+from gui.app_loader import g_appLoader, settings as app_settings
 from gui.prb_control.prb_helpers import BadgesHelper
 from gui.prb_control import prb_getters
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -411,11 +410,11 @@ class InvitesManager(UsersInfoHelper):
     def getInvites(self, incoming=None, version=None, onlyActive=None):
         result = self.__invites.values()
         if incoming is not None:
-            result = filter(lambda item: item.isIncoming() is incoming, result)
+            result = [ item for item in result if item.isIncoming() ]
         if version is not None:
-            result = filter(lambda item: item.getVersion() == version, result)
+            result = [ item for item in result if item.getVersion() == version ]
         if onlyActive is not None:
-            result = filter(lambda item: item.isActive() is onlyActive, result)
+            result = [ item for item in result if item.isActive() is onlyActive ]
         return result
 
     def getInvite(self, inviteID):
@@ -430,13 +429,13 @@ class InvitesManager(UsersInfoHelper):
     def getReceivedInvites(self, IDs=None):
         result = self.getInvites(incoming=True)
         if IDs is not None:
-            result = filter(lambda item: item.clientID in IDs, result)
+            result = [ item for item in result if item.clientID in IDs ]
         return result
 
     def getSentInvites(self, IDs=None):
         result = self.getInvites(incoming=False)
         if IDs is not None:
-            result = filter(lambda item: item.clientID in IDs, result)
+            result = [ item for item in result if item.clientID in IDs ]
         return result
 
     def getSentInviteCount(self):
@@ -513,7 +512,7 @@ class InvitesManager(UsersInfoHelper):
                 if invite:
                     self._addInvite(invite, userGetter)
 
-        if g_appLoader.getSpaceID() != GUI_GLOBAL_SPACE_ID.BATTLE:
+        if g_appLoader.getSpaceID() != app_settings.GUI_GLOBAL_SPACE_ID.BATTLE:
             self.syncUsersInfo()
 
     def _rebuildInvitesLists(self):
@@ -541,7 +540,7 @@ class InvitesManager(UsersInfoHelper):
         def _getUserName(userDBID):
             name, abbrev = ('', None)
             if userDBID:
-                if g_appLoader.getSpaceID() == GUI_GLOBAL_SPACE_ID.BATTLE:
+                if g_appLoader.getSpaceID() == app_settings.GUI_GLOBAL_SPACE_ID.BATTLE:
                     ctx = self.sessionProvider.getCtx()
                     isUserInBattle = ctx.getVehIDByAccDBID(userDBID) != 0
                     if isUserInBattle:

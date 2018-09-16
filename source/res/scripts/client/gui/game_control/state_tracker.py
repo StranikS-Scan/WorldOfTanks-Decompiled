@@ -6,9 +6,6 @@ from shared_utils import forEach
 from skeletons.gui.game_control import IGameStateTracker, IGameController
 
 class GameStateTracker(IGameStateTracker):
-    """ Controllers tracker class that supports theirs registration and
-    notification when game is switches to new state.
-    """
 
     def __init__(self):
         super(GameStateTracker, self).__init__()

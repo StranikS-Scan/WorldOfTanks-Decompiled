@@ -56,13 +56,17 @@ class TokensConditionFormatter(ConditionsFormatter):
 
         return result
 
+    def _packCondition(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _getFormattedField(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _packConditions(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class TokensMarathonFormatter(object):
-    """ This is a special formatter for the marathon header.
-    
-    In the marathon header we display visualized tokens, i.e. images of
-    tokens fetched from web.
-    """
     BIG_ICONS_COUNT = 2
 
     def __init__(self):

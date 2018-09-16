@@ -1,15 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/lock.py
-"""
-This lock is necessary to synchronize several components/views/any other entities.
-It is was implemented in Mark1 Event to solve the issue with two intersecting views(panels).
-When one of them is locked, the second one will wait signal about unlocking to be displayed after the first one.
-
-IMPORTANT: use this mechanism only in extreme situations (such game events) when you don't have time
-           to implement in right and good way. It is a quick-hack solution.
-
-Examples can be found in development/tests/client directory ('test_lock.py').
-"""
 import weakref
 from Event import Event
 

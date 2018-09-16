@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/hints/HintsSystem.py
 import time
+from collections import deque, namedtuple
 import BattleReplay
 import SoundGroups
 from bootcamp.BootcampConstants import HINT_TYPE, HINT_NAMES
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
 from HintControllers import createPrimaryHintController, createSecondaryHintController, createReplayPlayHintSystem
-from collections import deque, namedtuple
 from HintsBase import HINT_COMMAND
 from HintsMove import HintMove, HintMoveTurret, HintNoMove, HintNoMoveTurret, HintMoveToMarker
 from HintsScenario import HintAllyShoot, HintUselessConsumable, HintExitGameArea, HintAvoidAndDestroy, HintStartNarrative, HintSectorClear, HintSniperOnDistance, HintLowHP
@@ -16,9 +16,6 @@ from HintsShoot import HintSniper, HintSniperLevel0, HintShoot, HintAdvancedSnip
 _Voiceover = namedtuple('_Voiceover', ('name', 'sound'))
 
 class HintSystem(object):
-    """
-    The class provides functionality to manage Big displayable hints in battle(primary) and lobby
-    """
     hintsBattleClasses = {HINT_TYPE.HINT_MOVE: HintMove,
      HINT_TYPE.HINT_NO_MOVE: HintNoMove,
      HINT_TYPE.HINT_MOVE_TURRET: HintMoveTurret,
@@ -89,27 +86,16 @@ class HintSystem(object):
                 if voiceover is not None:
                     hint.voiceover = voiceover
                 self.addHint(hint)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION_BOOTCAMP()
 
         return
 
     def onAction(self, actionId, actionParams):
-        """
-        Called when Battle Action occurs
-        
-        :param actionId: id from BOOTCAMP_BATTLE_ACTION.
-        :param actionParams: list of action argument
-        """
         for hint in self._hints:
             hint.onAction(actionId, actionParams)
 
     def addHint(self, hint):
-        """
-        Register hint class in the system witch derived from HintBase
-        
-        :param hint: hint class
-        """
         hint.id = len(self._hints)
         self._hints.append(hint)
 
@@ -130,9 +116,9 @@ class HintSystem(object):
                         if curHint.id == hintId:
                             correspondedHint = curHint
                             break
-                    else:
-                        assert 'Not found corresponded hint' is None
 
+                    if correspondedHint is None:
+                        raise UserWarning('Not found corresponded hint')
                     self.__hintsNotCompleted.remove(correspondedHint)
                     self.__hintsCompleted.append(createPrimaryHintController(self, hintId, typeId, True, timeCompleted, cooldownTimeout, message, voiceover))
             if commandId == HINT_COMMAND.HIDE:
@@ -202,9 +188,6 @@ class HintSystem(object):
         return
 
     def update(self):
-        """
-        Updates all registered hint classes
-        """
         primaryCommandsQueue = []
         secondaryCommandsQueue = []
         for hint in self._hints:
@@ -235,17 +218,10 @@ class HintSystem(object):
         return
 
     def start(self):
-        """
-        Start all registered hints
-        
-        """
         for hint in self._hints:
             hint.start()
 
     def stop(self):
-        """
-        Stop and destroy all hints and current hint controller
-        """
         if self.__currentHint is not None:
             self.__currentHint.close()
             self.__currentHint = None
@@ -262,11 +238,6 @@ class HintSystem(object):
         return
 
     def playVoiceover(self, soundEvent):
-        """
-        Play voiceover or schedule if more important voiceover is playing
-        
-        :param soundEvent: sound event name
-        """
         if self.__currentVoiceover:
             if self.__currentVoiceover.name == soundEvent:
                 return
@@ -279,10 +250,5 @@ class HintSystem(object):
         self.__currentVoiceover.sound.play()
 
     def unscheduleVoiceover(self, soundEvent):
-        """
-        Cancel voiceover schedule if it is not playing yet
-        
-        :param soundEvent: sound event name
-        """
         if soundEvent in self.__voiceoverSchedule:
             self.__voiceoverSchedule.remove(soundEvent)

@@ -35,7 +35,6 @@ _MODULES_INSTALL_ORDER = (GUI_ITEM_TYPE.CHASSIS,
 
 def _getModule(moduleId):
     module = _getItem(moduleId)
-    assert module.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
     return module
 
 
@@ -50,7 +49,7 @@ def _installModule(vehicle, module):
 
 
 def _getSuitableChassisIDs(vehicle):
-    return map(lambda ch: ch.intCD, getSuitableChassis(vehicle))
+    return [ ch.intCD for ch in getSuitableChassis(vehicle) ]
 
 
 class _ModulesInstaller(object):
@@ -111,23 +110,10 @@ class _ModulesInstaller(object):
         self.__initConflictedList()
 
     def __addConflicted(self, moduleTypeID, moduleCDs):
-        """
-        Adds items in the right order into conflicted modules list:
-        :param moduleTypeID: item from the GUI_ITEM_TYPE
-        :param moduleCDs: list of adding items
-        """
         self.__hasConflicted = True
         self.__conflictedModulesCD[_MODULES_INSTALL_ORDER.index(moduleTypeID)].extend(moduleCDs)
 
     def __getSuitableModulesForGun(self, gunIntCD, vehicle):
-        """
-        Get suitable turrets and chassis for particular gun.
-        Turrets also may be unsuitable because of high weight,
-        in that case need to find suitable chassis
-        :param gunIntCD: int compact descriptor of gun module
-        :param gui.shared.gui_items.Vehicle:
-        :return: tuple: (turrets int compact descriptors, chassis int compact descriptors)
-        """
         chassisCDs = []
         turretsCDs = g_paramsCache.getPrecachedParameters(gunIntCD).getTurretsForVehicle(vehicle.intCD)
         for turretIntCS in turretsCDs:
@@ -135,7 +121,7 @@ class _ModulesInstaller(object):
             isFit, reason = suitableTurret.mayInstall(vehicle)
             if not isFit:
                 if reason == 'too heavy':
-                    chassisCDs = map(lambda ch: ch.intCD, getSuitableChassis(vehicle))
+                    chassisCDs = [ ch.intCD for ch in getSuitableChassis(vehicle) ]
             currentTurret = vehicle.turret
             _installModule(vehicle, suitableTurret)
             gun = _getModule(gunIntCD)
@@ -149,7 +135,7 @@ class _ModulesInstaller(object):
 
     def __initConflictedList(self):
         self.__hasConflicted = False
-        self.__conflictedModulesCD = [ [] for m in GUI_ITEM_TYPE.VEHICLE_MODULES ]
+        self.__conflictedModulesCD = [ [] for _ in GUI_ITEM_TYPE.VEHICLE_MODULES ]
 
 
 class _PreviewItemsData(ResearchItemsData):
@@ -315,7 +301,7 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
     def onModuleClick(self, moduleId):
         moduleId = int(moduleId)
         newComponentItem = _getModule(moduleId)
-        isMainFit, mainReason = newComponentItem.mayInstall(self.__vehicle)
+        isMainFit, _ = newComponentItem.mayInstall(self.__vehicle)
         if isMainFit:
             _installModule(self.__vehicle, newComponentItem)
         conflictedModules = self.__modulesInstaller.getConflictedModules()
@@ -345,7 +331,7 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
     def __updateChangedSlots(self):
 
         def __extractData(targetList):
-            return dict(map(lambda moduleData: (moduleData['id'], moduleData['state']), targetList))
+            return dict(((moduleData['id'], moduleData['state']) for moduleData in targetList))
 
         oldModulesData = __extractData(self.__nodes)
         self.__updateModulesData()

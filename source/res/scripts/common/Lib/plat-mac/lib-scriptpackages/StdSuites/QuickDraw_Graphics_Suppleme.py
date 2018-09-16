@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/StdSuites/QuickDraw_Graphics_Suppleme.py
-"""Suite QuickDraw Graphics Supplemental Suite: Defines transformations of graphic objects
-Level 1, version 1
-
-Generated from /Volumes/Sap/System Folder/Extensions/AppleScript
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'qdsp'
@@ -15,24 +9,20 @@ class QuickDraw_Graphics_Suppleme_Events:
 
 
 class drawing_area(aetools.ComponentItem):
-    """drawing area - Container for graphics and supporting information """
     want = 'cdrw'
 
 
 class _Prop_rotation(aetools.NProperty):
-    """rotation - the default rotation for objects in the drawing area """
     which = 'prot'
     want = 'trot'
 
 
 class _Prop_scale(aetools.NProperty):
-    """scale - the default scaling for objects in the drawing area """
     which = 'pscl'
     want = 'fixd'
 
 
 class _Prop_translation(aetools.NProperty):
-    """translation - the default repositioning for objects in the drawing area """
     which = 'ptrs'
     want = 'QDpt'
 
@@ -40,7 +30,6 @@ class _Prop_translation(aetools.NProperty):
 drawing_areas = drawing_area
 
 class graphic_groups(aetools.ComponentItem):
-    """graphic groups -  """
     want = 'cpic'
 
 

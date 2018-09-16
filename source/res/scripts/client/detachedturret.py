@@ -5,23 +5,20 @@ import BigWorld
 import Math
 from debug_utils import LOG_ERROR
 import material_kinds
-from Math import Matrix
-from ModelHitTester import SegmentCollisionResult
 from VehicleEffects import DamageFromShotDecoder
 from svarog_script.py_component import Component
-from svarog_script.py_component_system import ComponentSystem
-from vehicle_systems import tankStructure
-from vehicle_systems.tankStructure import TankPartNames, TankNodeNames
+from svarog_script.py_component_system import ComponentSystem, ComponentDescriptor
+from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, ColliderTypes
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import EffectsListPlayer, SoundStartParam, SpecialKeyPointNames
 from helpers.bound_effects import ModelBoundEffects
 from items import vehicles
 from constants import SERVER_TICK_LENGTH
-from ProjectileMover import ProjectileAwareEntities
 _MIN_COLLISION_SPEED = 3.5
 
 class DetachedTurret(BigWorld.Entity, ComponentSystem):
     allTurrets = list()
+    collisions = ComponentDescriptor()
 
     def __init__(self):
         ComponentSystem.__init__(self)
@@ -46,16 +43,19 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         gunModel = self.__vehDescr.gun.models.exploded
         assembler.addRootPart(turretModel, TankPartNames.TURRET)
         assembler.emplacePart(gunModel, TankNodeNames.GUN_JOINT, TankPartNames.GUN)
-        return assembler
+        bspModels = ((TankPartNames.getIdx(TankPartNames.TURRET), self.__vehDescr.turret.hitTester.bspModelName), (TankPartNames.getIdx(TankPartNames.GUN), self.__vehDescr.gun.hitTester.bspModelName))
+        collisionAssembler = BigWorld.CollisionAssembler(bspModels, BigWorld.player().spaceID)
+        return [assembler, collisionAssembler]
 
     def prerequisites(self):
-        prereqs = [self.__prepareModelAssembler()]
+        prereqs = self.__prepareModelAssembler()
         prereqs += self.__vehDescr.prerequisites()
         return prereqs
 
     def onEnterWorld(self, prereqs):
         self.model = prereqs[self.__vehDescr.name]
         self.model.matrix = self.matrix
+        self.collisions = prereqs['collisionAssembler']
         self.__detachConfirmationTimer.onEnterWorld()
         self.__vehDescr.keepPrereqs(prereqs)
         turretDescr = self.__vehDescr.turret
@@ -67,14 +67,13 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         self.__hitEffects = _HitEffects(self.model)
         self.addComponent(self.__hitEffects)
         self.__componentsDesc = (self.__vehDescr.turret, self.__vehDescr.gun)
-        for desc in self.__componentsDesc:
-            desc.hitTester.loadBspModel()
-
         from helpers.CallbackDelayer import CallbackDelayer
         self.__isBeingPulledCallback = CallbackDelayer()
         self.__isBeingPulledCallback.delayCallback(self.__checkIsBeingPulled(), self.__checkIsBeingPulled)
         DetachedTurret.allTurrets.append(self)
-        ProjectileAwareEntities.addEntity(self)
+        collisionData = ((TankPartNames.getIdx(TankPartNames.TURRET), self.model.matrix), (TankPartNames.getIdx(TankPartNames.GUN), self.model.node(TankPartNames.GUN)))
+        self.collisions.connect(self.id, ColliderTypes.DYNAMIC_COLLIDER, collisionData)
+        ComponentSystem.activate(self)
         BigWorld.callback(0.0, self.__createAndAttachStickers)
         return
 
@@ -91,9 +90,9 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
             return
 
     def onLeaveWorld(self):
+        ComponentSystem.deactivate(self)
         ComponentSystem.destroy(self)
         DetachedTurret.allTurrets.remove(self)
-        ProjectileAwareEntities.removeEntity(self)
         self.__detachConfirmationTimer.cancel()
         self.__detachConfirmationTimer = None
         self.__isBeingPulledCallback.destroy()
@@ -118,33 +117,11 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         return
 
     def showDamageFromShot(self, points, effectsIndex):
-        maxHitEffectCode, decodedPoints, _ = DamageFromShotDecoder.decodeHitPoints(points, self.__vehDescr)
+        _, decodedPoints, _ = DamageFromShotDecoder.decodeHitPoints(points, self.collisions)
         for shotPoint in decodedPoints:
             if shotPoint.componentName == TankPartNames.TURRET or shotPoint.componentName == TankPartNames.GUN:
                 self.__hitEffects.showHit(shotPoint, effectsIndex, shotPoint.componentName)
             LOG_ERROR("Detached turret got hit into %s component, but it's impossible" % shotPoint.componentName)
-
-    def collideSegment(self, startPoint, endPoint, skipGun=False):
-        res = None
-        filterMethod = getattr(self.filter, 'segmentMayHitEntity', lambda : True)
-        if not filterMethod(startPoint, endPoint, 0):
-            return res
-        else:
-            matricesToCheck = [Matrix(self.model.matrix)]
-            if not skipGun:
-                matricesToCheck.append(Matrix(self.model.node(TankPartNames.GUN)))
-            for matrix, desc in zip(matricesToCheck, self.__componentsDesc):
-                toModel = matrix
-                toModel.invert()
-                collisions = desc.hitTester.localHitTest(toModel.applyPoint(startPoint), toModel.applyPoint(endPoint))
-                if collisions is None:
-                    continue
-                for dist, _, hitAngleCos, matKind in collisions:
-                    if res is None or res.dist >= dist:
-                        matInfo = desc.materials.get(matKind)
-                        res = SegmentCollisionResult(dist, hitAngleCos, matInfo.armor if matInfo is not None else 0)
-
-            return res
 
     def set_isUnderWater(self, prev):
         if self.__detachmentEffects is not None:
@@ -174,7 +151,7 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
 
 class _TurretDetachmentEffects(Component):
 
-    class State:
+    class State(object):
         FLYING = 0
         ON_GROUND = 1
 
@@ -296,12 +273,10 @@ class VehicleEnterTimer(object):
             return None if not self._canAcceptVehicle(vehicle) else vehicle
 
     def __startCallback(self):
-        assert self.__callbackId is None
         if self.__time < self.__maxTime:
             self.__callbackId = BigWorld.callback(self.__timeOut, self.__onCallback)
         else:
             self._onTimedOutTick()
-        return
 
     def __onCallback(self):
         self.__callbackId = None
@@ -384,7 +359,6 @@ class SynchronousDetachment(VehicleEnterTimer):
         self.__updateVisibility()
 
     def _onCallbackTick(self, vehicle):
-        turret = self.__turret
         if vehicle.isTurretDetachmentConfirmationNeeded:
             vehicle.confirmTurretDetachment()
         self.__finished = True

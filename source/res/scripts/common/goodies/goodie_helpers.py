@@ -70,9 +70,6 @@ def loadDefinitions(d):
 
 
 def getPriceWithDiscount(price, resourceData):
-    """
-    Translates goodie value into the final price
-    """
     _, value, isPercentage = resourceData
     if isPercentage:
         result = int(price - price * (value / float(100)))

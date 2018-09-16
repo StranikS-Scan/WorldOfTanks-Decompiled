@@ -13,7 +13,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.awards import ExplosionBackAward
-from gui.shared import events, g_eventBus, event_dispatcher as shared_events, EVENT_BUS_SCOPE
+from gui.shared import events as gui_events, g_eventBus, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from gui.shared.formatters import icons, text_styles
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
@@ -217,7 +217,7 @@ class RefSystem(IRefSystemController):
 
     def showVehicleAwardWindow(self, vehicle, completedQuestIDs):
         LOG_DEBUG('Referrer has been get vehicle award', vehicle, completedQuestIDs)
-        curXp, nextXp, isBoughtVehicle = self.__getAwardParams(completedQuestIDs)
+        curXp, _, isBoughtVehicle = self.__getAwardParams(completedQuestIDs)
         shared_events.showAwardWindow(VehicleAward(vehicle, isBoughtVehicle, curXp))
 
     def showCreditsAwardWindow(self, creditsValue, completedQuestIDs):
@@ -243,11 +243,11 @@ class RefSystem(IRefSystemController):
         return refSystemStats.get('activeInvitations', 0) > 0 or len(refSystemStats.get('referrals', {})) > 0
 
     def showReferrerIntroWindow(self, invitesCount):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRER_INTRO_WINDOW, ctx={'invitesCount': invitesCount}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(gui_events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRER_INTRO_WINDOW, ctx={'invitesCount': invitesCount}), EVENT_BUS_SCOPE.LOBBY)
         self.onPlayerBecomeReferrer()
 
     def showReferralIntroWindow(self, nickname, isNewbie=False):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRALS_INTRO_WINDOW, ctx={'referrerName': nickname,
+        g_eventBus.handleEvent(gui_events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRALS_INTRO_WINDOW, ctx={'referrerName': nickname,
          'newbie': isNewbie}), EVENT_BUS_SCOPE.LOBBY)
         self.onPlayerBecomeReferral()
 
@@ -307,7 +307,7 @@ class RefSystem(IRefSystemController):
     def __makeRefItem(cls, dbID, **data):
         try:
             return _RefItem(dbID, **data)
-        except:
+        except Exception:
             LOG_ERROR('There is error while building ref system item')
             LOG_CURRENT_EXCEPTION()
 

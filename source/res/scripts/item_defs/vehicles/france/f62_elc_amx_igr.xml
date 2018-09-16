@@ -1,9 +1,7 @@
 <F62_ELC_AMX_IGR.xml>
   <crew>
     <commander>	gunner
-
 			radioman
-
 			loader	</commander>
     <driver></driver>
   </crew>
@@ -304,7 +302,7 @@
         <right>	vehicles/french/F62_ELC_AMX/track/right.track	</right>
         <segmentLength>	0.129	</segmentLength>
         <segmentOffset>	0.03	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>

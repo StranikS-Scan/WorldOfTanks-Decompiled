@@ -5,9 +5,6 @@ from skeletons.gui.sounds import ISoundsController
 __all__ = ('getSoundsConfig',)
 
 def getSoundsConfig(manager):
-    """ Configures services for package sounds.
-    :param manager: helpers.dependency.DependencyManager
-    """
     ctrl = SoundsController()
     ctrl.init()
     manager.addInstance(ISoundsController, ctrl, finalizer='fini')

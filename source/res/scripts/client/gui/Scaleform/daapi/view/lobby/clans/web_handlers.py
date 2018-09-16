@@ -4,9 +4,6 @@ from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_dispatcher import showClanProfileWindow, showClanInvitesWindow, showClanSearchWindow
 from messenger.m_constants import USER_TAG
 from messenger.proto.shared_find_criteria import MutualFriendsFindCriteria
-from web_client_api import WebCommandException
-from web_client_api.commands import instantiateObject
-from web_client_api.commands.window_navigator import OpenClanCardCommand
 
 class ONLINE_STATUS(object):
     OFFLINE = 0
@@ -14,37 +11,16 @@ class ONLINE_STATUS(object):
     BUSY = 2
 
 
-def handleClanManagementCommand(command, ctx):
-    """
-    Executes clan management actions
-    """
-    if command.action in CLAN_MANAGEMENT_ACTIONS:
-
-        def onCallback(data):
-            data['action'] = command.action
-            callback = ctx.get('callback')
-            if callable(callback):
-                callback(data)
-
-        subCommand, handler = CLAN_MANAGEMENT_ACTIONS[command.action]
-        if subCommand:
-            subCommandInstance = instantiateObject(subCommand, command.custom_parameters)
-            handler(subCommandInstance, onCallback)
-        else:
-            handler(onCallback)
-    else:
-        raise WebCommandException('Unknown clan management action: %s!' % command.action)
-
-
-def _getMembersOnline(callback):
+def handleGetMembersOnline(command, ctx):
     members = g_clanCache.clanMembers
     onlineCount = 0
     for member in members:
         if member.isOnline():
             onlineCount += 1
 
-    callback({'all_members': len(members),
-     'online_members': onlineCount})
+    ctx['callback']({'all_members': len(members),
+     'online_members': onlineCount,
+     'action': 'members_online'})
 
 
 def _getStatuses(users):
@@ -62,42 +38,26 @@ def _getStatuses(users):
     return statuses
 
 
-def _getMembersStatus(callback):
+def handleGetMembersStatus(command, ctx):
     members = g_clanCache.clanMembers
-    callback({'members_status': _getStatuses(members)})
+    ctx['callback']({'members_status': _getStatuses(members),
+     'action': 'members_status'})
 
 
-def _getFriendsStatus(callback):
+def handleGetFriendsStatus(command, ctx):
     storage = g_clanCache.usersStorage
     friends = storage.getList(MutualFriendsFindCriteria(), iterator=storage.getClanMembersIterator(False))
-    callback({'friends_status': _getStatuses(friends)})
+    ctx['callback']({'friends_status': _getStatuses(friends),
+     'action': 'friends_status'})
 
 
-CLAN_MANAGEMENT_ACTIONS = {'members_online': (None, _getMembersOnline),
- 'members_status': (None, _getMembersStatus),
- 'friends_status': (None, _getFriendsStatus)}
-
-def _openClanCard(command):
-    """
-    Opens clan card window
-    """
+def handleOpenClanCard(command, ctx):
     showClanProfileWindow(command.clan_dbid, command.clan_abbrev)
 
 
-def _openClanInvites():
-    """
-    Opens clan invites window
-    """
+def handleOpenClanInvites(command, ctx):
     showClanInvitesWindow()
 
 
-def _openClanSearch():
-    """
-    Opens clan search window
-    """
+def handleOpenClanSearch(command, ctx):
     showClanSearchWindow()
-
-
-OPEN_WINDOW_CLAN_SUB_COMMANDS = {'clan_card_window': (OpenClanCardCommand, _openClanCard),
- 'clan_invites_window': (None, _openClanInvites),
- 'clan_search_window': (None, _openClanSearch)}

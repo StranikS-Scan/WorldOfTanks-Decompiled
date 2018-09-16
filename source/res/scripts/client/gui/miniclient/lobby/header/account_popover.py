@@ -3,12 +3,11 @@
 from gui.Scaleform.locale.MINICLIENT import MINICLIENT
 from gui.shared.utils.functions import makeTooltip
 from helpers import aop
-from helpers.i18n import makeString as _ms
 
 class ClanBtnsUnavailableAspect(aop.Aspect):
 
-    def __init__(self, config={}):
-        self.__config = config
+    def __init__(self, config=None):
+        self.__config = config or {}
         aop.Aspect.__init__(self)
 
     def atReturn(self, cd):
@@ -25,8 +24,8 @@ class ClanBtnsUnavailableAspect(aop.Aspect):
 
 class MyClanInvitesBtnUnavailableAspect(aop.Aspect):
 
-    def __init__(self, config={}):
-        self.__config = config
+    def __init__(self, config=None):
+        self.__config = config or {}
         aop.Aspect.__init__(self)
 
     def atReturn(self, cd):

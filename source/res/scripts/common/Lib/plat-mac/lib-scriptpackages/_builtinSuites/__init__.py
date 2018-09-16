@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/_builtinSuites/__init__.py
-"""
-Manually generated suite used as base class for StdSuites Required and Standard
-suites. This is needed because the events and enums in this suite belong
-in the Required suite according to the Apple docs, but they often seem to be
-in the Standard suite.
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the _builtinSuites module is removed.', stacklevel=2)
 import aetools

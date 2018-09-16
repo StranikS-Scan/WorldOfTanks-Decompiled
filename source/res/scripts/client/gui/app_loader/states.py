@@ -264,6 +264,8 @@ class BattleLoadingState(_ArenaState):
 
     def hideGUI(self, appFactory):
         if self._doStartBattle:
+            if _isBattleReplayPlaying():
+                appFactory.destroyLobby()
             _enableTimeWrapInReplay()
         else:
             appFactory.hideBattle()
@@ -273,7 +275,8 @@ class BattleLoadingState(_ArenaState):
             appFactory.showLobby()
 
     def showGUI(self, appFactory, appNS, appState):
-        appFactory.destroyLobby()
+        if not _isBattleReplayPlaying():
+            appFactory.destroyLobby()
         if appState == _STATE_ID.INITIALIZED:
             appFactory.loadBattlePage(appNS, arenaGuiType=self._arenaGuiType)
 

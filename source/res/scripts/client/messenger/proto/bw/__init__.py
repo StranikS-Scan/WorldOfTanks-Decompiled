@@ -91,10 +91,6 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
 
     @classmethod
     def __getClanListener(cls):
-        """Gets ClanListener instance
-        :return: Instance of ClanListener, None if xmpp clan channels're enabled
-        :rtype ClanListener
-        """
         return None if g_settings.server.isXmppClansEnabled() else ClanListener()
 
     __errorsHandlers = {CHAT_RESPONSES.channelNotExists: '_BWProtoPlugin__onChannelNotExists',

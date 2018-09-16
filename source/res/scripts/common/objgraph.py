@@ -1,14 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/objgraph.py
-"""
-Tools for drawing Python object reference graphs with graphviz.
-
-You can find documentation online at http://mg.pov.lt/objgraph/
-
-Copyright (c) 2008-2015 Marius Gedminas <marius@pov.lt> and contributors
-
-Released under the MIT licence.
-"""
 import codecs
 import gc
 import re
@@ -41,27 +32,6 @@ except AttributeError:
     iteritems = dict.items
 
 def count(typename, objects=None):
-    """Count objects tracked by the garbage collector with a given class name.
-    
-    Example:
-    
-        >>> count('dict')
-        42
-        >>> count('MyClass', get_leaking_objects())
-        3
-        >>> count('mymodule.MyClass')
-        2
-    
-    Note that the GC does not track simple objects like int or str.
-    
-    .. versionchanged:: 1.7
-       New parameter: ``objects``.
-    
-    .. versionchanged:: 1.8
-       Accepts fully-qualified type names (i.e. 'package.module.ClassName')
-       as well as short type names (i.e. 'ClassName').
-    
-    """
     if objects is None:
         objects = gc.get_objects()
     try:
@@ -75,29 +45,6 @@ def count(typename, objects=None):
 
 
 def typestats(objects=None, shortnames=True):
-    """Count the number of instances for each type tracked by the GC.
-    
-    Note that the GC does not track simple objects like int or str.
-    
-    Note that classes with the same name but defined in different modules
-    will be lumped together if ``shortnames`` is True.
-    
-    Example:
-    
-        >>> typestats()
-        {'list': 12041, 'tuple': 10245, ...}
-        >>> typestats(get_leaking_objects())
-        {'MemoryError': 1, 'tuple': 2795, 'RuntimeError': 1, 'list': 47, ...}
-    
-    .. versionadded:: 1.1
-    
-    .. versionchanged:: 1.7
-       New parameter: ``objects``.
-    
-    .. versionchanged:: 1.8
-       New parameter: ``shortnames``.
-    
-    """
     if objects is None:
         objects = gc.get_objects()
     try:
@@ -118,29 +65,6 @@ def typestats(objects=None, shortnames=True):
 
 
 def most_common_types(limit=10, objects=None, shortnames=True):
-    """Count the names of types with the most instances.
-    
-    Returns a list of (type_name, count), sorted most-frequent-first.
-    
-    Limits the return value to at most ``limit`` items.  You may set ``limit``
-    to None to avoid that.
-    
-    The caveats documented in :func:`typestats` apply.
-    
-    Example:
-    
-        >>> most_common_types(limit=2)
-        [('list', 12041), ('tuple', 10245)]
-    
-    .. versionadded:: 1.4
-    
-    .. versionchanged:: 1.7
-       New parameter: ``objects``.
-    
-    .. versionchanged:: 1.8
-       New parameter: ``shortnames``.
-    
-    """
     stats = sorted(typestats(objects, shortnames=shortnames).items(), key=operator.itemgetter(1), reverse=True)
     if limit:
         stats = stats[:limit]
@@ -148,28 +72,6 @@ def most_common_types(limit=10, objects=None, shortnames=True):
 
 
 def show_most_common_types(limit=10, objects=None, shortnames=True):
-    """Print the table of types of most common instances.
-    
-    The caveats documented in :func:`typestats` apply.
-    
-    Example:
-    
-        >>> show_most_common_types(limit=5)
-        tuple                      8959
-        function                   2442
-        wrapper_descriptor         1048
-        dict                       953
-        builtin_function_or_method 800
-    
-    .. versionadded:: 1.1
-    
-    .. versionchanged:: 1.7
-       New parameter: ``objects``.
-    
-    .. versionchanged:: 1.8
-       New parameter: ``shortnames``.
-    
-    """
     stats = most_common_types(limit, objects, shortnames=shortnames)
     width = max((len(name) for name, count in stats))
     for name, count in stats:
@@ -177,31 +79,6 @@ def show_most_common_types(limit=10, objects=None, shortnames=True):
 
 
 def show_growth(limit=10, peak_stats={}, shortnames=True):
-    """Show the increase in peak object counts since last call.
-    
-    Limits the output to ``limit`` largest deltas.  You may set ``limit`` to
-    None to see all of them.
-    
-    Uses and updates ``peak_stats``, a dictionary from type names to previously
-    seen peak object counts.  Usually you don't need to pay attention to this
-    argument.
-    
-    The caveats documented in :func:`typestats` apply.
-    
-    Example:
-    
-        >>> show_growth()
-        wrapper_descriptor       970       +14
-        tuple                  12282       +10
-        dict                    1922        +7
-        ...
-    
-    .. versionadded:: 1.5
-    
-    .. versionchanged:: 1.8
-       New parameter: ``shortnames``.
-    
-    """
     gc.collect()
     stats = typestats(shortnames=shortnames)
     deltas = {}
@@ -224,15 +101,6 @@ def show_growth(limit=10, peak_stats={}, shortnames=True):
 
 
 def get_leaking_objects(objects=None):
-    """Return objects that do not have any referents.
-    
-    These could indicate reference-counting bugs in C code.  Or they could
-    be legitimate.
-    
-    Note that the GC does not track simple objects like int or str.
-    
-    .. versionadded:: 1.7
-    """
     if objects is None:
         gc.collect()
         objects = gc.get_objects()
@@ -250,23 +118,6 @@ def get_leaking_objects(objects=None):
 
 
 def by_type(typename, objects=None):
-    """Return objects tracked by the garbage collector with a given class name.
-    
-    Example:
-    
-        >>> by_type('MyClass')
-        [<mymodule.MyClass object at 0x...>]
-    
-    Note that the GC does not track simple objects like int or str.
-    
-    .. versionchanged:: 1.7
-       New parameter: ``objects``.
-    
-    .. versionchanged:: 1.8
-       Accepts fully-qualified type names (i.e. 'package.module.ClassName')
-       as well as short type names (i.e. 'ClassName').
-    
-    """
     if objects is None:
         objects = gc.get_objects()
     try:
@@ -280,16 +131,6 @@ def by_type(typename, objects=None):
 
 
 def at(addr):
-    """Return an object at a given memory address.
-    
-    The reverse of id(obj):
-    
-        >>> at(id(obj)) is obj
-        True
-    
-    Note that this function does not work on objects that are not tracked by
-    the GC (e.g. ints or strings).
-    """
     for o in gc.get_objects():
         if id(o) == addr:
             return o
@@ -298,212 +139,22 @@ def at(addr):
 
 
 def find_ref_chain(obj, predicate, max_depth=20, extra_ignore=()):
-    """Find a shortest chain of references leading from obj.
-    
-    The end of the chain will be some object that matches your predicate.
-    
-    ``predicate`` is a function taking one argument and returning a boolean.
-    
-    ``max_depth`` limits the search depth.
-    
-    ``extra_ignore`` can be a list of object IDs to exclude those objects from
-    your search.
-    
-    Example:
-    
-        >>> find_ref_chain(obj, lambda x: isinstance(x, MyClass))
-        [obj, ..., <MyClass object at ...>]
-    
-    Returns ``[obj]`` if such a chain could not be found.
-    
-    .. versionadded:: 1.7
-    """
     return _find_chain(obj, predicate, gc.get_referents, max_depth=max_depth, extra_ignore=extra_ignore)[::-1]
 
 
 def find_backref_chain(obj, predicate, max_depth=20, extra_ignore=()):
-    """Find a shortest chain of references leading to obj.
-    
-    The start of the chain will be some object that matches your predicate.
-    
-    ``predicate`` is a function taking one argument and returning a boolean.
-    
-    ``max_depth`` limits the search depth.
-    
-    ``extra_ignore`` can be a list of object IDs to exclude those objects from
-    your search.
-    
-    Example:
-    
-        >>> find_backref_chain(obj, is_proper_module)
-        [<module ...>, ..., obj]
-    
-    Returns ``[obj]`` if such a chain could not be found.
-    
-    .. versionchanged:: 1.5
-       Returns ``obj`` instead of ``None`` when a chain could not be found.
-    
-    """
     return _find_chain(obj, predicate, gc.get_referrers, max_depth=max_depth, extra_ignore=extra_ignore)
 
 
 def show_backrefs(objs, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None):
-    """Generate an object reference graph ending at ``objs``.
-    
-    The graph will show you what objects refer to ``objs``, directly and
-    indirectly.
-    
-    ``objs`` can be a single object, or it can be a list of objects.  If
-    unsure, wrap the single object in a new list.
-    
-    ``filename`` if specified, can be the name of a .dot or a image
-    file, whose extension indicates the desired output format; note
-    that output to a specific format is entirely handled by GraphViz:
-    if the desired format is not supported, you just get the .dot
-    file.  If ``filename`` and ``output`` is not specified, ``show_backrefs``
-    will try to produce a .dot file and spawn a viewer (xdot).  If xdot is
-    not available, ``show_backrefs`` will convert the .dot file to a
-    .png and print its name.
-    
-    ``output`` if specified, the GraphViz output will be written to this
-    file object. ``output`` and ``filename`` should not both be specified.
-    
-    Use ``max_depth`` and ``too_many`` to limit the depth and breadth of the
-    graph.
-    
-    Use ``filter`` (a predicate) and ``extra_ignore`` (a list of object IDs) to
-    remove undesired objects from the graph.
-    
-    Use ``highlight`` (a predicate) to highlight certain graph nodes in blue.
-    
-    Use ``extra_info`` (a function taking one argument and returning a
-    string) to report extra information for objects.
-    
-    Specify ``refcounts=True`` if you want to see reference counts.
-    These will mostly match the number of arrows pointing to an object,
-    but can be different for various reasons.
-    
-    Specify ``shortnames=False`` if you want to see fully-qualified type
-    names ('package.module.ClassName').  By default you get to see only the
-    class name part.
-    
-    Examples:
-    
-        >>> show_backrefs(obj)
-        >>> show_backrefs([obj1, obj2])
-        >>> show_backrefs(obj, max_depth=5)
-        >>> show_backrefs(obj, filter=lambda x: not inspect.isclass(x))
-        >>> show_backrefs(obj, highlight=inspect.isclass)
-        >>> show_backrefs(obj, extra_ignore=[id(locals())])
-    
-    .. versionchanged:: 1.3
-       New parameters: ``filename``, ``extra_info``.
-    
-    .. versionchanged:: 1.5
-       New parameter: ``refcounts``.
-    
-    .. versionchanged:: 1.8
-       New parameter: ``shortnames``.
-    
-    .. versionchanged:: 2.0
-       New parameter: ``output``.
-    
-    """
     _show_graph(objs, max_depth=max_depth, extra_ignore=extra_ignore, filter=filter, too_many=too_many, highlight=highlight, edge_func=gc.get_referrers, swap_source_target=False, filename=filename, output=output, extra_info=extra_info, refcounts=refcounts, shortnames=shortnames, cull_func=is_proper_module)
 
 
 def show_refs(objs, max_depth=3, extra_ignore=(), filter=None, too_many=10, highlight=None, filename=None, extra_info=None, refcounts=False, shortnames=True, output=None):
-    """Generate an object reference graph starting at ``objs``.
-    
-    The graph will show you what objects are reachable from ``objs``, directly
-    and indirectly.
-    
-    ``objs`` can be a single object, or it can be a list of objects.  If
-    unsure, wrap the single object in a new list.
-    
-    ``filename`` if specified, can be the name of a .dot or a image
-    file, whose extension indicates the desired output format; note
-    that output to a specific format is entirely handled by GraphViz:
-    if the desired format is not supported, you just get the .dot
-    file.  If ``filename`` and ``output`` is not specified, ``show_refs`` will
-    try to produce a .dot file and spawn a viewer (xdot).  If xdot is
-    not available, ``show_refs`` will convert the .dot file to a
-    .png and print its name.
-    
-    ``output`` if specified, the GraphViz output will be written to this
-    file object. ``output`` and ``filename`` should not both be specified.
-    
-    Use ``max_depth`` and ``too_many`` to limit the depth and breadth of the
-    graph.
-    
-    Use ``filter`` (a predicate) and ``extra_ignore`` (a list of object IDs) to
-    remove undesired objects from the graph.
-    
-    Use ``highlight`` (a predicate) to highlight certain graph nodes in blue.
-    
-    Use ``extra_info`` (a function returning a string) to report extra
-    information for objects.
-    
-    Specify ``refcounts=True`` if you want to see reference counts.
-    
-    Examples:
-    
-        >>> show_refs(obj)
-        >>> show_refs([obj1, obj2])
-        >>> show_refs(obj, max_depth=5)
-        >>> show_refs(obj, filter=lambda x: not inspect.isclass(x))
-        >>> show_refs(obj, highlight=inspect.isclass)
-        >>> show_refs(obj, extra_ignore=[id(locals())])
-    
-    .. versionadded:: 1.1
-    
-    .. versionchanged:: 1.3
-       New parameters: ``filename``, ``extra_info``.
-    
-    .. versionchanged:: 1.5
-       Follows references from module objects instead of stopping.
-       New parameter: ``refcounts``.
-    
-    .. versionchanged:: 1.8
-       New parameter: ``shortnames``.
-    
-    .. versionchanged:: 2.0
-       New parameter: ``output``.
-    """
     _show_graph(objs, max_depth=max_depth, extra_ignore=extra_ignore, filter=filter, too_many=too_many, highlight=highlight, edge_func=gc.get_referents, swap_source_target=True, filename=filename, extra_info=extra_info, refcounts=refcounts, shortnames=shortnames, output=output)
 
 
 def show_chain(*chains, **kw):
-    """Show a chain (or several chains) of object references.
-    
-    Useful in combination with :func:`find_ref_chain` or
-    :func:`find_backref_chain`, e.g.
-    
-        >>> show_chain(find_backref_chain(obj, is_proper_module))
-    
-    You can specify if you want that chain traced backwards or forwards
-    by passing a ``backrefs`` keyword argument, e.g.
-    
-        >>> show_chain(find_ref_chain(obj, is_proper_module),
-        ...            backrefs=False)
-    
-    Ideally this shouldn't matter, but for some objects
-    :func:`gc.get_referrers` and :func:`gc.get_referents` are not perfectly
-    symmetrical.
-    
-    You can specify ``highlight``, ``extra_info``, ``refcounts``,
-    ``shortnames``,``filename`` or ``output`` arguments like for
-    :func:`show_backrefs` or :func:`show_refs`.
-    
-    .. versionadded:: 1.5
-    
-    .. versionchanged:: 1.7
-       New parameter: ``backrefs``.
-    
-    .. versionchanged:: 2.0
-       New parameter: ``output``.
-    
-    """
     backrefs = kw.pop('backrefs', True)
     chains = [ chain for chain in chains if chain ]
 
@@ -518,21 +169,6 @@ def show_chain(*chains, **kw):
 
 
 def is_proper_module(obj):
-    """
-    Returns ``True`` if ``obj`` can be treated like a garbage collector root.
-    
-    That is, if ``obj`` is a module that is in ``sys.modules``.
-    
-    >>> import types
-    >>> is_proper_module([])
-    False
-    >>> is_proper_module(types)
-    True
-    >>> is_proper_module(types.ModuleType('foo'))
-    False
-    
-    .. versionadded:: 1.8
-    """
     return inspect.ismodule(obj) and obj is sys.modules.get(getattr(obj, '__name__', None))
 
 
@@ -692,15 +328,6 @@ def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(
 
 
 def _present_graph(dot_filename, filename=None):
-    """Present a .dot file to the user in the requested fashion.
-    
-    If ``filename`` is provided, runs ``dot`` to convert the .dot file
-    into the desired format, determined by the filename extension.
-    
-    If ``filename`` is not provided, tries to launch ``xdot``, a
-    graphical .dot file viewer.  If ``xdot`` is not present on the system,
-    converts the graph to a PNG.
-    """
     if filename == dot_filename:
         return
     if not filename and _program_in_path('xdot'):

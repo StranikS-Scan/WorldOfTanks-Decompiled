@@ -1,24 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_tests/GUITest.py
-"""Some tests for the ashes GUI system. 
-
-        This module has a few functions for testing specific
-        features of the GUI system. For more details on each
-        one, type help(GUITest.testname).
-        
-        Available tests are:
-        
-        mode_conv
-        anchors
-        game
-        localReSort
-        globalReSort
-        mouseEvents
-        mouseButtonFocus
-        
-        To execute a test, type GUITest.testname() into the Python console.             
-        You can use GUITest.clear() to remove all GUI components from the screen.
-"""
 import math
 import BigWorld, GUI, Math
 import Keys
@@ -49,9 +30,6 @@ def _setAllModeCombinations(c, name):
 
 
 def mode_conv():
-    """
-            Tests conversion between position and size modes.
-    """
 
     def add_conv_test_child(p, hAnchor, vAnchor, pos):
         c = GUI.Simple('system/maps/col_white.bmp')
@@ -177,11 +155,6 @@ class _ParentAnchorWindow(object):
 
 
 def anchors():
-    """
-            Tests anchoring, relative to screen and within windows.
-            It also checks the mouse hit tests (by displaying some
-            text when the mouse hovers over each component).
-    """
     clear()
     GUI.addRoot(_ParentAnchorWindow.create('LEFT', 'TOP', (-1, 1), (0, 0, 0, 255)).component)
     GUI.addRoot(_ParentAnchorWindow.create('CENTER', 'TOP', (0, 1), (0, 0, 128, 255)).component)
@@ -225,12 +198,6 @@ class _FocusableComponent:
 
 
 def mouseButtonFocus():
-    """
-            Tests exclusivity between focus and mouseButtonFocus. The test component
-            will not accept keyboard input, however it can receive mouse button events.
-            When testing, space-bar should initially do nothing until the component
-            has been clicked on with the mouse.
-    """
     clear()
     GUI.addRoot(_FocusableComponent().component)
 
@@ -329,15 +296,6 @@ def _gameStarted(label):
 
 
 def game():
-    """
-            Small game where the objective is to not touch the boxes
-            with the mouse for as long as possible :). Probably not
-            very challenging...
-            
-            This will test mouse hit testing on moving components while and 
-            hit testing while the mouse isn't being moved (i.e. you should be 
-            able to lose the game when not moving the mouse).
-    """
     clear()
     for i in range(10):
         GUI.addRoot(_GameSquare.create().component)
@@ -406,11 +364,6 @@ class _OrderChangingButton:
 
 
 def localReSort():
-    """
-            Tests that parent.reSort() on a component is sufficient
-            to correct the order in which the GUI searchs for the
-            component under the cursor.
-    """
     clear()
     ourRoot = _OrderStackingBlock.create((0.0, 0.0, 0.0), 'white').component
     GUI.addRoot(ourRoot)
@@ -424,10 +377,6 @@ def localReSort():
 
 
 def globalReSort():
-    """
-            Tests that GUI.reSort() resorts the entire tree correctly.
-            Should behave exactly the same as the local resort.
-    """
     clear()
     ourRoot = _OrderStackingBlock.create((0.0, 0.0, 0.0), 'white').component
     GUI.addRoot(ourRoot)
@@ -637,9 +586,6 @@ class _MouseEventTester2:
 
 
 def mouseEvents():
-    """
-            Tests all the possible mouse events that get sent to a component.
-    """
     clear()
     r = GUI.Simple('')
     r.width = 2.0

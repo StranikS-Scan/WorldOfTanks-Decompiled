@@ -1,25 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfilePersonnelView.py
 import BigWorld
+from account_helpers import getAccountDatabaseID
 from adisp import process
 from constants import CLAN_MEMBER_FLAGS
 from debug_utils import LOG_ERROR, LOG_WARNING
-from gui.shared.utils import sortByFields, weightedAvg
-from helpers import i18n
-from account_helpers import getAccountDatabaseID
 from gui.Scaleform.daapi.view.lobby.clans.profile import MAX_MEMBERS_IN_CLAN
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import HeaderItemsTypes, ProfileUtils
 from gui.Scaleform.daapi.view.meta.ClanProfilePersonnelViewMeta import ClanProfilePersonnelViewMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.formatters import text_styles
-from gui.shared.event_dispatcher import showClanInvitesWindow
-from gui.shared.view_helpers import UsersInfoHelper
-from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as RES
-from gui.clans import items
 from gui.clans import formatters as clans_fmts
-from gui.clans.clan_controller import SYNC_KEYS
+from gui.clans import items
+from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as RES
+from gui.shared.event_dispatcher import showClanInvitesWindow
+from gui.shared.formatters import text_styles
+from gui.shared.utils import sortByFields, weightedAvg
+from gui.shared.view_helpers import UsersInfoHelper
+from gui.wgcg.web_controller import SYNC_KEYS
+from helpers import i18n
 from helpers.i18n import makeString as _ms
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter
 from messenger.m_constants import USER_ACTION_ID
@@ -41,7 +41,7 @@ _CLAN_MEMBERS_SORT_INDEXES = (CLAN_MEMBER_FLAGS.RESERVIST,
  CLAN_MEMBER_FLAGS.VICE_LEADER,
  CLAN_MEMBER_FLAGS.LEADER)
 
-class _SORT_IDS:
+class _SORT_IDS(object):
     USER_NAME = 'userName'
     POST = 'post'
     RATING = 'rating'
@@ -184,7 +184,7 @@ class ClanProfilePersonnelView(ClanProfilePersonnelViewMeta):
         return
 
     def _updateHeaderState(self):
-        limits = self.clansCtrl.getLimits()
+        limits = self.webCtrl.getLimits()
         if limits.canAcceptApplication(self._clanDossier).success or limits.canDeclineApplication(self._clanDossier).success:
             vo = self._getHeaderButtonStateVO(False, None, True, True, False, OPEN_INVITES_ACTION_ID, topTF=i18n.makeString(CLANS.CLAN_HEADER_INVITESANDREQUESTS))
             if self._clanDossier.isSynced(SYNC_KEYS.APPS) and self._clanDossier.getAppsCount() == 0:
@@ -256,8 +256,8 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
     def getSelectedIdx(self):
         return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1
 
-    def setSelectedID(self, id):
-        self.__selectedID = id
+    def setSelectedID(self, clanID):
+        self.__selectedID = clanID
 
     def getVO(self, index):
         vo = None

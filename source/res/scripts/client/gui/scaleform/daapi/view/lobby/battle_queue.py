@@ -81,15 +81,9 @@ class _QueueProvider(object):
         pass
 
     def needAdditionalInfo(self):
-        """
-        If need show additional info for battle queue return True, otherwise - False.
-        """
         return False
 
     def additionalInfo(self):
-        """
-        Additional information for display on battle queue view.
-        """
         pass
 
 
@@ -121,35 +115,12 @@ class _RandomQueueProvider(_QueueProvider):
         self._proxy.as_showStartS(constants.IS_DEVELOPMENT and sum(vClasses) > 1)
 
     def needAdditionalInfo(self):
-        """
-        If need show long waiting warning for random battles return True, otherwise - False.
-        """
         if self._needAdditionalInfo is None:
             self._needAdditionalInfo = _needShowLongWaitingWarning()
         return self._needAdditionalInfo
 
     def additionalInfo(self):
         return text_styles.main(makeString(MENU.PREBATTLE_WAITINGTIMEWARNING))
-
-
-class _FalloutQueueProvider(_QueueProvider):
-
-    def processQueueInfo(self, qInfo):
-        info = dict(qInfo)
-        vClasses = info.get('classes', [])
-        vClassesLen = len(vClasses)
-        totalPlayers = info.get('players', 0)
-        self._proxy.flashObject.as_setPlayers(makeHtmlString(_HTMLTEMP_PLAYERSLABEL, 'players', {'count': totalPlayers}))
-        if vClassesLen:
-            vClassesData = []
-            for vClass, message in TYPES_ORDERED:
-                idx = constants.VEHICLE_CLASS_INDICES[vClass]
-                vClassesData.append({'type': message,
-                 'icon': _getVehicleIconPath(vClass),
-                 'count': vClasses[idx] if idx < vClassesLen else 0})
-
-            self._proxy.as_setDPS(vClassesData)
-        self._proxy.as_showStartS(constants.IS_DEVELOPMENT and sum(vClasses) > 1)
 
 
 class _EventQueueProvider(_RandomQueueProvider):
@@ -161,8 +132,6 @@ class _RankedQueueProvider(_RandomQueueProvider):
 
 
 _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
- constants.QUEUE_TYPE.FALLOUT_MULTITEAM: _FalloutQueueProvider,
- constants.QUEUE_TYPE.FALLOUT_CLASSIC: _FalloutQueueProvider,
  constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider,
  constants.QUEUE_TYPE.RANKED: _RankedQueueProvider}
 

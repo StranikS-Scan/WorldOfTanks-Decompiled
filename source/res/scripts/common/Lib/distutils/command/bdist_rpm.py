@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/bdist_rpm.py
-"""distutils.command.bdist_rpm
-
-Implements the Distutils 'bdist_rpm' command (create RPM source and binary
-distributions)."""
 __revision__ = '$Id$'
 import sys
 import os
@@ -232,7 +228,6 @@ class bdist_rpm(Command):
                     if not line:
                         break
                     l = string.split(string.strip(line))
-                    assert len(l) == 2
                     binary_rpms.append(l[1])
                     if source_rpm is None:
                         source_rpm = l[0]
@@ -251,7 +246,6 @@ class bdist_rpm(Command):
                     pyversion = 'any'
                 if not self.binary_only:
                     srpm = os.path.join(rpm_dir['SRPMS'], source_rpm)
-                    assert os.path.exists(srpm)
                     self.move_file(srpm, self.dist_dir)
                     filename = os.path.join(self.dist_dir, source_rpm)
                     self.distribution.dist_files.append(('bdist_rpm', pyversion, filename))
@@ -269,9 +263,6 @@ class bdist_rpm(Command):
         return os.path.join(self.dist_dir, os.path.basename(path))
 
     def _make_spec_file(self):
-        """Generate the text of an RPM spec file and return it as a
-        list of strings (one per line).
-        """
         spec_file = ['%define name ' + self.distribution.get_name(),
          '%define version ' + self.distribution.get_version().replace('-', '_'),
          '%define unmangled_version ' + self.distribution.get_version(),
@@ -342,8 +333,6 @@ class bdist_rpm(Command):
         return spec_file
 
     def _format_changelog(self, changelog):
-        """Format the changelog correctly and convert it to a list of strings
-        """
         if not changelog:
             return changelog
         new_changelog = []

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/pwd_token.py
-from constants import DEFAULT_LANGUAGE
 import hashlib
+from constants import DEFAULT_LANGUAGE
 __all__ = ('generate',)
 
 def _generateMd5Hash(pwd):

@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/VisualStateComponent.py
-"""
-"""
 import sys
 from bwdebug import ERROR_MSG
 import ResMgr

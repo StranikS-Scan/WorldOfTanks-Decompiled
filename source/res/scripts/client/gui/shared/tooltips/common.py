@@ -1,31 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/common.py
 import cPickle
-import math
 from collections import namedtuple
+import math
 from operator import methodcaller
-import BigWorld
 import ResMgr
-import ArenaType
+import BigWorld
 import constants
+import ArenaType
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
-from gui.Scaleform.genConsts.NY_CONSTANTS import NY_CONSTANTS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.NY import NY
+from gui.shared.formatters.servers import formatPingStatus, wrapServerName
+from helpers import dependency
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters as clans_fmts
 from gui.clans.items import formatField
 from gui.shared.formatters import icons, text_styles
-from gui.shared.formatters.servers import formatPingStatus, wrapServerName
 from gui.shared.formatters.text_styles import concatStylesToMultiLine
 from gui.shared.formatters.time_formatters import getTimeLeftStr
-from gui.shared.money import Money, Currency, MONEY_UNDEFINED
-from gui.shared.tooltips import efficiency
 from gui.shared.view_helpers import UsersInfoHelper
-from helpers import dependency
-from items.new_year_types import NATIONAL_SETTINGS_IDS_BY_NAME
+from gui.shared.tooltips import efficiency
+from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeContactStatusDescription
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, PING_STATUSES, PingData
 from constants import WG_GAMES, VISIBILITY
@@ -42,6 +39,7 @@ from gui.server_events.events_helpers import missionsSortFunc
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
+from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from messenger.storage import storage_getter
@@ -50,14 +48,12 @@ from gui.shared.tooltips import formatters
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.clans import IClanController
+from skeletons.gui.web import IWebController
 from skeletons.gui.game_control import IRefSystemController, IIGRController, IServerStatsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.new_year import INewYearController
-from items.new_year_types import BOUND_ATMOSPHERE_BY_LEVEL, TOY_ATMOSPHERE_BY_RANK
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 _ITEM_TYPE_TO_TOOLTIP_DICT = {GUI_ITEM_TYPE.SHELL: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_SHELL),
  GUI_ITEM_TYPE.EQUIPMENT: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_EQUIPMENT),
@@ -120,7 +116,7 @@ class IgrTooltipData(ToolTipBaseData):
         icon = makeHtmlString('html_templates:igr/iconBig', 'premium' if igrType == constants.IGR_TYPE.PREMIUM else 'basic')
         return {'title': i18n.makeString(TOOLTIPS.IGR_TITLE, igrIcon=icon),
          'description': makeHtmlString('html_templates:lobby/tooltips', descriptionTemplate, {'igrValue': '{0}%'.format(BigWorld.wg_getIntegralFormat(igrPercent))}),
-         'quests': map(lambda i: i.format(**template.ctx), qLabels),
+         'quests': [ i.format(**template.ctx) for i in qLabels ],
          'progressHeader': makeHtmlString('html_templates:lobby/tooltips', 'igr_progress_header', {}),
          'progress': qProgress,
          'premVehQuests': premVehQuests}
@@ -182,19 +178,15 @@ class BlocksTooltipData(ToolTipBaseData):
 
 
 class DynamicBlocksTooltipData(BlocksTooltipData):
-    """
-    This tooltip can be updated during its displaying.
-    """
 
     def __init__(self, context, toolTipType):
         super(DynamicBlocksTooltipData, self).__init__(context, toolTipType)
         self.__isVisible = False
 
+    def isDynamic(self):
+        return True
+
     def stopUpdates(self):
-        """
-        The method is called when Tooltip manager is disposed.
-        But this tooltip will be alive during the whole app life cycle
-        """
         self.__isVisible = False
 
     def isVisible(self):
@@ -310,7 +302,7 @@ class ContactTooltipData(ToolTipBaseData):
             groupsStr = ''
             userGroups = userEntity.getGroups()
             if userGroups:
-                groupsStr += ', '.join(map(lambda group: html.escape(group), userGroups))
+                groupsStr += ', '.join(map(html.escape, userGroups))
             if clanAbbrev and USER_TAG.CLAN_MEMBER in tags:
                 groupsStr += self.__addComma(groupsStr)
                 groupsStr += makeClanFullName(clanAbbrev)
@@ -530,27 +522,15 @@ class SettingsButtonTooltipData(BlocksTooltipData):
 
     @classmethod
     def __packServerBlock(cls, name, pingData, csisStatus, isSelected=False, isColorBlind=False):
-        """
-        Provides necessary block data from passed parameters
-        :param name: str, the name of host
-        :param pingData: predefined_hosts.PingData
-        :param csisStatus: predefined_hosts.HOST_AVAILABILITY
-        :param isSelected: bool
-        :param isColorBlind: bool
-        :return:
-        """
         pingValue, pingStatus = pingData
         pintStr = formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue, useBigSize=True)
         return formatters.packTextParameterBlockData(cls.__formatServerName(name, isSelected), pintStr, valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
 
     @classmethod
     def __packServerListBlock(cls, simpleHostList, currServUrl, isColorBlind=False):
-        """
-        Collect all server names and statuses for one textBlock
-        """
         serverNames = []
         pingTexts = []
-        for key, name, csisStatus, peripheryID in simpleHostList:
+        for key, name, csisStatus, _ in simpleHostList:
             pingValue, pingStatus = cls.__getPingData(key)
             isSelected = currServUrl == key
             pintStr = formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue, useBigSize=True)
@@ -574,7 +554,7 @@ class SettingsButtonTooltipData(BlocksTooltipData):
 
 
 class ClanCommonInfoTooltipData(ToolTipBaseData):
-    clanCtrl = dependency.descriptor(IClanController)
+    clanCtrl = dependency.descriptor(IWebController)
 
     def __init__(self, context):
         super(ClanCommonInfoTooltipData, self).__init__(context, TOOLTIP_TYPE.CLAN_PROFILE)
@@ -734,7 +714,7 @@ class ToolTipRefSysXPMultiplier(ToolTipBaseData):
         conditionsText = text_styles.standard(makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS))
         bottomText = text_styles.main(makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_BOTTOM, expNum=expNum + '<nobr>' + icon))
         xpBlocks = []
-        for i, (period, bonus) in enumerate(self.refSystem.getRefPeriods()):
+        for _, (period, bonus) in enumerate(self.refSystem.getRefPeriods()):
             xpBonus = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
             condition = self.__formatPeriod(period)
             xpBlocks.append({'xpIconSource': RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON,
@@ -778,7 +758,7 @@ class ActionTooltipData(ToolTipBaseData):
     def __init__(self, context):
         super(ActionTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
 
-    def getDisplayableData(self, type, key, newPrice, oldPrice, isBuying, forCredits=False, rentPackage=None):
+    def getDisplayableData(self, itemType, key, newPrice, oldPrice, isBuying, forCredits=False, rentPackage=None):
         descr = ''
         newPrice = Money.makeFromMoneyTuple(newPrice)
         if not newPrice.isDefined():
@@ -792,11 +772,11 @@ class ActionTooltipData(ToolTipBaseData):
         itemName = ''
         deviceNameType = None
         deviceName = None
-        if type == ACTION_TOOLTIPS_TYPE.RENT:
+        if itemType == ACTION_TOOLTIPS_TYPE.RENT:
             item = self.itemsCache.items.getItemByCD(int(key))
             itemName = '%s/rent/price' % item.name.split(':')[-1]
             deviceNameType = item.itemTypeID
-        elif type == ACTION_TOOLTIPS_TYPE.ITEM:
+        elif itemType == ACTION_TOOLTIPS_TYPE.ITEM:
             item = self.itemsCache.items.getItemByCD(int(key))
             if item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_COMPONENTS:
                 itemName = '%s/price' % item.name
@@ -813,18 +793,18 @@ class ActionTooltipData(ToolTipBaseData):
                 if item.isRented and not item.rentalIsOver and item.rentCompensation.gold > 0:
                     hasRentCompensation = True
                     rentCompensation = item.rentCompensation.gold
-        elif type == ACTION_TOOLTIPS_TYPE.CAMOUFLAGE:
-            intCD, type = cPickle.loads(key)
+        elif itemType == ACTION_TOOLTIPS_TYPE.CAMOUFLAGE:
+            intCD, itemType = cPickle.loads(key)
             item = self.itemsCache.items.getItemByCD(int(intCD))
             itemName = '%s/camouflage/priceFactor' % item.name.split(':')[-1]
-        elif type == ACTION_TOOLTIPS_TYPE.EMBLEMS:
-            group, type = cPickle.loads(key)
+        elif itemType == ACTION_TOOLTIPS_TYPE.EMBLEMS:
+            group, itemType = cPickle.loads(key)
             itemName = '%s/priceFactor' % group
-        elif type == ACTION_TOOLTIPS_TYPE.AMMO:
+        elif itemType == ACTION_TOOLTIPS_TYPE.AMMO:
             item = self.itemsCache.items.getItemByCD(int(key))
             itemName = '%s/price' % item.name
             deviceNameType = item.itemTypeID
-        elif type == ACTION_TOOLTIPS_TYPE.BOOSTER:
+        elif itemType == ACTION_TOOLTIPS_TYPE.BOOSTER:
             item = self.goodiesCache.getBooster(int(key))
             itemName = 'booster_%s/price' % item.boosterID
             deviceNameType = ACTION_TOOLTIPS_TYPE.BOOSTER
@@ -951,7 +931,6 @@ class QuestVehiclesBonusTooltipData(ToolTipBaseData):
             columns = ['<br>'.join(vehiclesList)]
         elif vehiclesListLen <= maxItemsLen:
             col1Len = int(math.ceil(vehiclesListLen / float(2)))
-            col2Len = vehiclesListLen - col1Len
             col1Str = '<br>'.join(vehiclesList[:col1Len])
             col2Str = '<br>'.join(vehiclesList[col1Len:vehiclesListLen])
             columns = [col1Str, col2Str]
@@ -1220,9 +1199,9 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
         self._btnType = None
         return
 
-    def _packBlocks(self, *args, **kwargs):
+    def _packBlocks(self, btnType=None, *args, **kwargs):
         tooltipBlocks = super(HeaderMoneyAndXpTooltipData, self)._packBlocks(*args, **kwargs)
-        self._btnType = kwargs.get('btnType', None)
+        self._btnType = btnType
         if self._btnType is None:
             LOG_ERROR('HeaderMoneyAndXpTooltipData empty btnType!')
             return tooltipBlocks
@@ -1317,217 +1296,58 @@ class MissionsToken(BlocksTooltipData):
          'left': -12})
 
 
-def paramToString(param):
-    string = '+' + str(param * 100.0) + '%' if param != 0.0 else None
-    return string
-
-
-TOOLTIP_SETTINGS_BY_NATION_ID = (NY.TOOLTIP_SETTINGS_NATIONS_NEW_YEAR,
- NY.TOOLTIP_SETTINGS_NATIONS_OLD_CHRISTMAS,
- NY.TOOLTIP_SETTINGS_NATIONS_CHRISTMAS,
- NY.TOOLTIP_SETTINGS_NATIONS_EASTERN_NEW_YEAR)
-POPOVER_SETTINGS_BY_NATION_ID = (NY.POPOVER_DECORATIONS_SETTINGS_NATIONS_NEW_YEAR,
- NY.POPOVER_DECORATIONS_SETTINGS_NATIONS_OLD_CHRISTMAS,
- NY.POPOVER_DECORATIONS_SETTINGS_NATIONS_CHRISTMAS,
- NY.POPOVER_DECORATIONS_SETTINGS_NATIONS_EASTERN_NEW_YEAR)
-TOOLTIP_SETTINGS_ICON_BY_NATION_ID = (RES_ICONS.MAPS_ICONS_NY_SETTING_48X48_SOVIET,
- RES_ICONS.MAPS_ICONS_NY_SETTING_48X48_TRADITIONALWESTERN,
- RES_ICONS.MAPS_ICONS_NY_SETTING_48X48_MODERNWESTERN,
- RES_ICONS.MAPS_ICONS_NY_SETTING_48X48_ASIAN)
-TOOLTIP_SETTINGS_BG_BY_LEVEL = (NY_CONSTANTS.NY_TOOLTIP_BUILDUP_BLOCK_RANK_BG_RED_LINKAGE,
- NY_CONSTANTS.NY_TOOLTIP_BUILDUP_BLOCK_RANK_BG_YELLOW_LINKAGE,
- NY_CONSTANTS.NY_TOOLTIP_BUILDUP_BLOCK_RANK_BG_GREEN_LINKAGE,
- NY_CONSTANTS.NY_TOOLTIP_BUILDUP_BLOCK_RANK_BG_BLUE_LINKAGE,
- NY_CONSTANTS.NY_TOOLTIP_BUILDUP_BLOCK_RANK_BG_VIOLET_LINKAGE)
-
-class NyDecorationTooltipData(BlocksTooltipData):
-    _newYearController = dependency.descriptor(INewYearController)
+class VehicleEliteBonusTooltipData(BlocksTooltipData):
 
     def __init__(self, context):
-        super(NyDecorationTooltipData, self).__init__(context, TOOLTIP_TYPE.NY)
-        self.item = None
-        self._setContentMargin(top=15, left=19, bottom=25, right=35)
-        self._setMargins(afterBlock=40, afterSeparator=20)
-        self._setWidth(355)
-        self.__level = None
-        self.__name = None
-        self.__settingsNation = None
-        self.__atmosphere_scores = None
-        self.__flakes_price = None
-        self.__settingsIcon = None
-        self.__settingsBg = None
-        return
-
-    def __setToyParameters(self, toyId):
-        toyDescr = self._newYearController.toysDescrs[toyId]
-        nationId = NATIONAL_SETTINGS_IDS_BY_NAME[toyDescr.setting]
-        self._level = toyDescr.rank
-        self.__settingsNation = TOOLTIP_SETTINGS_BY_NATION_ID[nationId]
-        self.__atmosphere_scores = TOY_ATMOSPHERE_BY_RANK[toyDescr.rank - 1]
-        self.__flakes_price = toyDescr.fragments
-        self.__name = toyDescr.name
-        self.__id = toyDescr.id
-        self.__nations = POPOVER_SETTINGS_BY_NATION_ID[nationId]
-        self.__settingsIcon = self._getIcon(toyDescr)
-        self.__settingsBg = TOOLTIP_SETTINGS_BG_BY_LEVEL[self._level - 1]
-
-    def _getIcon(self, toyDescr):
-        nationId = NATIONAL_SETTINGS_IDS_BY_NAME[toyDescr.setting]
-        return TOOLTIP_SETTINGS_ICON_BY_NATION_ID[nationId]
+        super(VehicleEliteBonusTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE_ELITE_BONUS)
+        self.bonusId = 0
+        self._setContentMargin(top=20, left=19, bottom=20, right=20)
+        self._setMargins(afterBlock=0, afterSeparator=10)
+        self._setWidth(365)
 
     def _packBlocks(self, *args, **kwargs):
-        self.item = self.context.buildItem(*args, **kwargs)
-        self.__setToyParameters(int(args[0]))
-        items = super(NyDecorationTooltipData, self)._packBlocks(*args, **kwargs)
-        topBuildUpBlockContent = [self._packHeaderBlock()]
-        topBuildUpBlock = [formatters.packBuildUpBlockData(topBuildUpBlockContent, stretchBg=False, linkage=self.__settingsBg, padding=formatters.packPadding(top=-13, left=-20, bottom=0 if self._canShowDescription() else -18))]
-        if self._canShowDescription():
-            topBuildUpBlock.append(formatters.packTextBlockData(text=text_styles.main('#ny:tooltip/settings/toys/toy%d/descr' % self.__id), padding=formatters.packPadding(top=16, left=60, bottom=-18)))
-        items.append(formatters.packBuildUpBlockData(topBuildUpBlock))
-        items.append(self._packBottomBlock())
-        return items
-
-    def _canShowDescription(self):
-        return self._level == 5
-
-    def _packHeaderBlock(self):
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(self.__name), desc=text_styles.standard(self.__settingsNation), img=self.__settingsIcon, imgPadding=formatters.packPadding(left=18, top=-5), txtGap=-2, txtOffset=80, padding=formatters.packPadding(top=20, bottom=-20), linkage=NY_CONSTANTS.NY_TOOLTIP_DECORATION_TYPE_LINKAGE)
-
-    def _packBottomBlock(self):
-        levelStr = int2roman(self._level)
-        text = text_styles.concatStylesWithSpace(text_styles.main(NY.DECORATIONS_TOOLTIP_DECORATION_LEVEL))
-        valueFormatted = text_styles.stats(levelStr)
-        bottomBuildUpBlock = [formatters.packTextParameterBlockData(name=text, value=valueFormatted, padding=formatters.packPadding(0, 0, 4))]
-        text = text_styles.concatStylesWithSpace(text_styles.main(NY.DECORATIONS_TOOLTIP_ATMOSPHERE_SCORES))
-        valueFormatted = text_styles.stats(self.__atmosphere_scores)
-        bottomBuildUpBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text, value=valueFormatted, icon=RES_ICONS.MAPS_ICONS_NY_ICONS_ICON_BUTTON_FREEZE, titlePadding=formatters.packPadding(left=3), iconPadding=formatters.packPadding(left=3, top=-1), padding=formatters.packPadding(left=55)))
-        text = text_styles.concatStylesWithSpace(text_styles.main(NY.DECORATIONS_TOOLTIP_FLAKES_PRICE))
-        valueFormatted = text_styles.stats(self.__flakes_price)
-        bottomBuildUpBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text, value=valueFormatted, icon=RES_ICONS.MAPS_ICONS_NY_ICONS_MONEY_SMALL, titlePadding=formatters.packPadding(left=-10), iconPadding=formatters.packPadding(left=-10, top=-1), padding=formatters.packPadding(left=55)))
-        return formatters.packBuildUpBlockData(bottomBuildUpBlock)
+        bonusId = self.context.buildItem(*args, **kwargs)
+        content = super(VehicleEliteBonusTooltipData, self)._packBlocks(*args, **kwargs)
+        title = ''
+        body = ''
+        icon = ''
+        if bonusId == VEHPREVIEW_CONSTANTS.BATTLE_BONUS:
+            title = TOOLTIPS.VEHICLEPREVIEW_ELITEBONUS_BATTLE_HEADER
+            body = TOOLTIPS.VEHICLEPREVIEW_ELITEBONUS_BATTLE_BODY
+            icon = RES_ICONS.MAPS_ICONS_VEHPREVIEW_BONUS_BATTLE
+        elif bonusId == VEHPREVIEW_CONSTANTS.CREW_BONUS:
+            title = TOOLTIPS.VEHICLEPREVIEW_ELITEBONUS_CREW_HEADER
+            body = TOOLTIPS.VEHICLEPREVIEW_ELITEBONUS_CREW_BODY
+            icon = RES_ICONS.MAPS_ICONS_VEHPREVIEW_BONUS_CREW
+        elif bonusId == VEHPREVIEW_CONSTANTS.CREDIT_BONUS:
+            title = TOOLTIPS.VEHICLEPREVIEW_ELITEBONUS_CREDIT_HEADER
+            body = TOOLTIPS.VEHICLEPREVIEW_ELITEBONUS_CREDIT_BODY
+            icon = RES_ICONS.MAPS_ICONS_VEHPREVIEW_BONUS_CREDIT
+        elif bonusId == VEHPREVIEW_CONSTANTS.REPLACE_BONUS:
+            title = TOOLTIPS.VEHICLEPREVIEW_ELITEBONUS_REPLACE_HEADER
+            body = TOOLTIPS.VEHICLEPREVIEW_ELITEBONUS_REPLACE_BODY
+            icon = RES_ICONS.MAPS_ICONS_VEHPREVIEW_BONUS_REPLACE
+        content.append(formatters.packTextBlockData(text_styles.highTitle(title)))
+        content.append(formatters.packImageBlockData(img=icon, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+        content.append(formatters.packTextBlockData(text_styles.main(body)))
+        return content
 
 
-class NyBoxTooltipData(BlocksTooltipData):
-    newYearController = dependency.descriptor(INewYearController)
+class VehicleHistoricalReferenceTooltipData(BlocksTooltipData):
 
     def __init__(self, context):
-        super(NyBoxTooltipData, self).__init__(context, TOOLTIP_TYPE.NY)
-        self.item = None
-        self._setContentMargin(top=20, left=19, bottom=10, right=10)
-        self._setMargins(afterBlock=10, afterSeparator=0)
-        self._setWidth(400)
-        return
+        super(VehicleHistoricalReferenceTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE_HISTORICAL_REFERENCE)
+        self.bonusId = 0
+        self._setContentMargin(top=0, left=19, bottom=20, right=20)
+        self._setMargins(afterBlock=0, afterSeparator=10)
+        self._setWidth(365)
 
     def _packBlocks(self, *args, **kwargs):
-        self.item = self.context.buildItem(*args, **kwargs)
-        items = super(NyBoxTooltipData, self)._packBlocks(*args, **kwargs)
-        lastBottomPadding = 0
-        content = []
-        content.append(formatters.packTextBlockData(text_styles.highTitle(NY.TOOLTIP_BOX_HEADER), padding=formatters.packPadding(bottom=-40)))
-        content.append(formatters.packImageBlockData(img=RES_ICONS.MAPS_ICONS_NY_BOX_NY_BOX_CLOSED, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-        if not constants.IS_SINGAPORE:
-            content.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(NY.TOOLTIP_BOX_BUY_HEADER)), formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_BOX_BUY_BODY))], padding=formatters.packPadding(top=-10)))
-            lastBottomPadding = 10
-        content.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(NY.TOOLTIP_BOX_WIN_HEADER)), formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_BOX_WIN_BODY))], padding=formatters.packPadding(top=20, bottom=lastBottomPadding)))
-        items.append(formatters.packBuildUpBlockData(content))
-        return items
-
-
-class NyFlakesTooltipData(BlocksTooltipData):
-    newYearController = dependency.descriptor(INewYearController)
-
-    def __init__(self, context):
-        super(NyFlakesTooltipData, self).__init__(context, TOOLTIP_TYPE.NY)
-        self.item = None
-        self._setContentMargin(top=15, left=19, bottom=15, right=10)
-        self._setMargins(afterBlock=15, afterSeparator=15)
-        self._setWidth(310)
-        self.__toyFragments = 0
-        return
-
-    def _packBlocks(self, *args, **kwargs):
-        self.item = self.context.buildItem(*args, **kwargs)
-        items = super(NyFlakesTooltipData, self)._packBlocks(*args, **kwargs)
-        topBuildUpBlock = formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.highTitle(NY.TOOLTIP_FLAKES_HEADER)), formatters.packTextBlockData(text_styles.standard(NY.TOOLTIP_FLAKES_BODY))])
-        middleBuildUpBlock = []
-        text = text_styles.concatStylesWithSpace(text_styles.main(NY.TOOLTIP_FLAKES_IN_STOCK))
-        self.__toyFragments = self.newYearController.getToyFragments()
-        valueFormatted = text_styles.warning(BigWorld.wg_getIntegralFormat(self.__toyFragments))
-        middleBuildUpBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text, value=valueFormatted, icon=RES_ICONS.MAPS_ICONS_NY_ICONS_MONEY_SMALL, titlePadding=formatters.packPadding(left=-10), iconPadding=formatters.packPadding(left=-10, top=-1), padding=formatters.packPadding(left=70)))
-        bottomBuildUpBlock = []
-        bottomBuildUpBlock.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_FLAKES_DESCR))]))
-        items.append(topBuildUpBlock)
-        items.append(formatters.packBuildUpBlockData(middleBuildUpBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-        items.append(formatters.packBuildUpBlockData(bottomBuildUpBlock))
-        return items
-
-
-class NyCarouselItemTooltipData(BlocksTooltipData):
-    newYearController = dependency.descriptor(INewYearController)
-    eventsCache = dependency.descriptor(IEventsCache)
-
-    def __init__(self, context):
-        super(NyCarouselItemTooltipData, self).__init__(context, TOOLTIP_TYPE.NY)
-        self.item = None
-        self._setContentMargin(top=20, left=0, right=-20, bottom=0)
-        self._setWidth(355)
-        self.__level = None
-        self.__prevLvlScores = None
-        self.__currentScores = None
-        self.__nextLvlScores = None
-        self.__progressPct = None
-        self.__salePct = None
-        self.__vehicleLvl = None
-        self.__secondAward = None
-        return
-
-    def __updateParams(self):
-        self.__level, maxLevel, self.__currentScores, self.__nextLvlScores = self.newYearController.getProgress()
-        self.__prevLvlScores = BOUND_ATMOSPHERE_BY_LEVEL[self.__level - 1]
-        self.__progressPct = float(self.__currentScores) / float(self.__nextLvlScores)
-        self.__currentScores += self.__prevLvlScores
-        self.__nextLvlScores += self.__prevLvlScores
-        self.__secondAward = None
-        self.__salePct = ''
-        allChests = self.newYearController.chestStorage.getDescriptors()
-        nextChest = None
-        for chest in allChests.values():
-            if chest.level == maxLevel + 1:
-                nextChest = chest
-                break
-
-        if nextChest:
-            nyQuest = self.eventsCache.getHiddenQuests().get(nextChest.id, None)
-            if nyQuest:
-                vehDiscount = self.newYearController.vehDiscountsStorage.extractDiscountValueByLevel(nextChest.level)
-                if vehDiscount:
-                    self.__salePct = '-' + str(vehDiscount) + '%'
-                    self.__vehicleLvl = nextChest.level
-                descrs = self.newYearController.tankmanDiscountsStorage.getDescriptors()
-                for d in descrs.itervalues():
-                    if d.level == nextChest.level:
-                        self.__secondAward = NY.TOOLTIP_CAROUSELITEM_AWARDS_GIRL
-                        break
-
-        self.__maxLevel = 10
-        return
-
-    def _packBlocks(self, *args, **kwargs):
-        self.item = self.context.buildItem(*args, **kwargs)
-        self.__updateParams()
-        self.newYearController.getBonusesForNation(1)
-        items = super(NyCarouselItemTooltipData, self)._packBlocks(*args, **kwargs)
-        levelStr = int2roman(self.__level)
-        content = []
-        vehicleLvlStr = int2roman(self.__vehicleLvl)
-        secondAwardFormatted = ''
-        if self.__secondAward:
-            secondAwardFormatted = text_styles.main(self.__secondAward)
-        content.append(formatters.packTextBlockData(text_styles.highTitle(NY.TOOLTIP_CAROUSELITEM_PROGRESS_HEADER_DECORATIONS), padding=formatters.packPadding(0, 24, 0, 20)))
-        content.append(formatters.packTextBlockData(text_styles.highTitle('{} {}'.format(text_styles.main(levelStr), text_styles.main(NY.DECORATIONS_TOOLTIP_LEVELHEADER))), padding=formatters.packPadding(-6, 24, 15)))
-        content.append(formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_CAROUSELITEM_PROGRESS_HEADER_SUBTITLE), padding=formatters.packPadding(0, 24, 5, 20)))
-        content.append(formatters.packNYProgressBlockData(text_styles.main(self.__prevLvlScores), '{} {} {} {}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_NY_ICONS_ICON_BUTTON_FREEZE, 24, 24, -6), text_styles.stats(self.__currentScores), text_styles.stats('/'), text_styles.main(self.__nextLvlScores), text_styles.main(NY.POPOVER_DECORATIONS_SETTINGS_NATIONS_OLD_CHRISTMAS)), self.__currentScores, self.__nextLvlScores, self.__progressPct, padding=formatters.packPadding(0, 20, 0, 40)))
-        if self.__level < self.__maxLevel:
-            content.append(formatters.packNYAwardsBlockData(text_styles.middleTitle(NY.TOOLTIP_CAROUSELITEM_AWARDS_HEADER), text_styles.stats(self.__salePct), text_styles.main(makeString(NY.TOOLTIP_ATMOSPHERE_VEHICLE_HEADER, level=vehicleLvlStr)), secondAwardFormatted))
-        items.append(formatters.packBuildUpBlockData(content))
-        return items
+        item = self.context.buildItem(*args, **kwargs)
+        content = super(VehicleHistoricalReferenceTooltipData, self)._packBlocks(*args, **kwargs)
+        blocks = list()
+        blocks.append(formatters.packImageBlockData(img='../maps/icons/tooltip/flag_160x100/%s.png' % item.nationName, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding={'left': -19}))
+        blocks.append(formatters.packTextBlockData(text_styles.highTitle(TOOLTIPS.VEHICLEPREVIEW_HISTORICALREFERENCE_TITLE), padding={'top': -72}))
+        blocks.append(formatters.packTextBlockData(text_styles.main(item.fullDescription), padding={'top': 10}))
+        content.append(formatters.packBuildUpBlockData(blocks))
+        return content

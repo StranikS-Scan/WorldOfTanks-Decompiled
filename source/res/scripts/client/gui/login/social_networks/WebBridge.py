@@ -13,7 +13,7 @@ from helpers import dependency
 from helpers import getLanguageCode
 from skeletons.connection_mgr import IConnectionManager
 
-class _STATUS:
+class _STATUS(object):
     OK = 0
     HTTP_SERVER_ERROR = 1
     WEB_BROWSER_ERROR = 2

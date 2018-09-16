@@ -164,8 +164,8 @@ class PackageImporter(object):
         processed = set()
         for handler in handlers:
             if not isinstance(handler, PackageBusinessHandler):
-                for handler in processed:
-                    handler.fini()
+                for h in processed:
+                    h.fini()
 
                 raise Exception('Package {0} has invalid business handler {1}'.format(path, handler.__class__.__name__))
             handler.init()

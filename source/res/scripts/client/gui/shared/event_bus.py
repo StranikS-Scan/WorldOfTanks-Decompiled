@@ -18,10 +18,10 @@ class EVENT_BUS_SCOPE(object):
 
 
 class EventBus(object):
-    __slots__ = ['__scopes']
+    __slots__ = ('__scopes',)
 
     def __init__(self):
-        self.__scopes = defaultdict(lambda : defaultdict(lambda : set()))
+        self.__scopes = defaultdict(lambda : defaultdict(set))
 
     def addListener(self, eventType, handler, scope=EVENT_BUS_SCOPE.DEFAULT):
         if handler in self.__scopes[scope][eventType]:
@@ -43,7 +43,7 @@ class EventBus(object):
                 LOG_CURRENT_EXCEPTION()
 
     def clear(self):
-        for scope, events in self.__scopes.iteritems():
+        for _, events in self.__scopes.iteritems():
             events.clear()
 
         self.__scopes.clear()

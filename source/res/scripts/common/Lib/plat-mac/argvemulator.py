@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/argvemulator.py
-"""argvemulator - create sys.argv from OSA events. Used by applets that
-want unix-style arguments.
-"""
 from warnings import warnpy3k
 warnpy3k('In 3.x, the argvemulator module is removed.', stacklevel=2)
 import sys
@@ -15,7 +12,6 @@ from Carbon.Events import *
 import aetools
 
 class ArgvCollector:
-    """A minimal FrameWork.Application-like class"""
 
     def __init__(self):
         self.quitting = 0

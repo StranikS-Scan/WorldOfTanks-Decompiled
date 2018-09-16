@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pgen2/driver.py
-"""Parser driver.
-
-This provides a high-level interface to parse a file into a syntax tree.
-
-"""
 __author__ = 'Guido van Rossum <guido@python.org>'
 __all__ = ['Driver', 'load_grammar']
 import codecs
@@ -25,7 +20,6 @@ class Driver(object):
         return
 
     def parse_tokens(self, tokens, debug=False):
-        """Parse a series of tokens and return the syntax tree."""
         p = parse.Parser(self.grammar, self.convert)
         p.setup()
         lineno = 1
@@ -35,7 +29,6 @@ class Driver(object):
         for quintuple in tokens:
             type, value, start, end, line_text = quintuple
             if start != (lineno, column):
-                assert (lineno, column) <= start, ((lineno, column), start)
                 s_lineno, s_column = start
                 if lineno < s_lineno:
                     prefix += '\n' * (s_lineno - lineno)
@@ -70,16 +63,13 @@ class Driver(object):
         return p.rootnode
 
     def parse_stream_raw(self, stream, debug=False):
-        """Parse a stream and return the syntax tree."""
         tokens = tokenize.generate_tokens(stream.readline)
         return self.parse_tokens(tokens, debug)
 
     def parse_stream(self, stream, debug=False):
-        """Parse a stream and return the syntax tree."""
         return self.parse_stream_raw(stream, debug)
 
     def parse_file(self, filename, encoding=None, debug=False):
-        """Parse a file and return the syntax tree."""
         stream = codecs.open(filename, 'r', encoding)
         try:
             return self.parse_stream(stream, debug)
@@ -87,13 +77,11 @@ class Driver(object):
             stream.close()
 
     def parse_string(self, text, debug=False):
-        """Parse a string and return the syntax tree."""
         tokens = tokenize.generate_tokens(StringIO.StringIO(text).readline)
         return self.parse_tokens(tokens, debug)
 
 
 def load_grammar(gt='Grammar.txt', gp=None, save=True, force=False, logger=None):
-    """Load the grammar (maybe from a pickle)."""
     if logger is None:
         logger = logging.getLogger()
     if gp is None:
@@ -118,17 +106,12 @@ def load_grammar(gt='Grammar.txt', gp=None, save=True, force=False, logger=None)
 
 
 def _newer(a, b):
-    """Inquire whether file a was written since file b."""
     if not os.path.exists(a):
         return False
     return True if not os.path.exists(b) else os.path.getmtime(a) >= os.path.getmtime(b)
 
 
 def main(*args):
-    """Main program, when run as a script: produce grammar pickle files.
-    
-    Calls load_grammar for each argument, a path to a grammar text file.
-    """
     if not args:
         args = sys.argv[1:]
     logging.basicConfig(level=logging.INFO, stream=sys.stdout, format='%(message)s')

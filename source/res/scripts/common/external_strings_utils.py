@@ -84,8 +84,6 @@ elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.KOREA:
     textRestrictions = TextRestrictionsKorea()
 elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.SANDBOX:
     textRestrictions = TextRestrictionsSandbox()
-else:
-    assert False, 'Unknown credential restrictions set'
 _ACCOUNT_NAME_RE = textRestrictions.ACCOUNT_NAME_RE
 _ACCOUNT_NAME_MIN_LENGTH = textRestrictions.ACCOUNT_NAME_MIN_LENGTH
 _ACCOUNT_NAME_MAX_LENGTH = textRestrictions.ACCOUNT_NAME_MAX_LENGTH

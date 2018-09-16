@@ -405,18 +405,11 @@
       <gunPosition>	-0.000000 0.26 0.747777	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.885685 0.328776 0.528541	</rayStart>
-          <rayEnd>	-0.614901 0.200324 0.515292	</rayEnd>
+          <rayStart>	-0.886436 0.327321 0.527295	</rayStart>
+          <rayEnd>	-0.615652 0.198869 0.514046	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
-          <rayStart>	0.885685 0.328776 0.528541	</rayStart>
-          <rayEnd>	0.614901 0.200324 0.515292	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.25	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <inscription>
           <rayStart>	-0.008175 0.230586 -1.03394	</rayStart>
@@ -425,6 +418,14 @@
           <size>	0.591	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
+        <player>
+          <rayStart>	0.886436 0.327321 0.527295	</rayStart>
+          <rayEnd>	0.615652 0.198869 0.514046	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.25	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
       </emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>

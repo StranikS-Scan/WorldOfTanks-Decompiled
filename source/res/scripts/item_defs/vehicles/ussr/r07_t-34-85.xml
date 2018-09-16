@@ -126,7 +126,7 @@
         <segmentLength>	0.312	</segmentLength>
         <segmentOffset>	0.000000	</segmentOffset>
         <segment2Offset>	0.155	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -494,7 +494,7 @@
         <segmentLength>	0.312	</segmentLength>
         <segmentOffset>	0.000000	</segmentOffset>
         <segment2Offset>	0.155	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -864,9 +864,9 @@
       <guns>
         <_76mm_S-54>	shared	  <maxAmmo>	68	</maxAmmo>
           <unlocks>
-            <gun>	_85mm_ZiS_S-53	  <cost>	4800.0	</cost>
+            <gun>	_85mm_ZiS_S-53	  <cost>	4800	</cost>
             </gun>
-            <gun>	_122mm_cannon_U-11	  <cost>	3750.0	</cost>
+            <gun>	_122mm_cannon_U-11	  <cost>	3750	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -920,7 +920,7 @@
         </_76mm_S-54>
         <_85mm_ZiS_S-53>	shared	  <maxAmmo>	56	</maxAmmo>
           <unlocks>
-            <turret>	T-34_mod_100	  <cost>	7220.0	</cost>
+            <turret>	T-34_mod_100	  <cost>	7220	</cost>
             </turret>
             <vehicle>	R23_T-43	  <cost>	53000	</cost>
             </vehicle>
@@ -1382,7 +1382,7 @@
   </fuelTanks>
   <radios>
     <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040.0	</cost>
+        <radio>	_9RM	  <cost>	4040	</cost>
         </radio>
       </unlocks>
     </_9R>

@@ -3,7 +3,6 @@
 import ArenaType
 from adisp import process
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES, PREBATTLE_TYPE
-from gui.Scaleform import settings
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -19,7 +18,6 @@ from gui.prb_control.entities.base.legacy.listener import ILegacyListener
 from gui.prb_control.entities.training.legacy.ctx import JoinTrainingCtx
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import getArenaFullName
 from gui.sounds.ambients import LobbySubViewEnv
@@ -116,10 +114,10 @@ class Trainings(LobbySubView, TrainingFormMeta, ILegacyListener):
 
     @process
     def __createTrainingRoom(self, event):
-        settings = event.ctx.get('settings', None)
-        if settings:
-            settings.setWaitingID('prebattle/create')
-            yield self.prbDispatcher.create(settings)
+        tSettings = event.ctx.get('settings', None)
+        if tSettings:
+            tSettings.setWaitingID('prebattle/create')
+            yield self.prbDispatcher.create(tSettings)
         return
 
     @process

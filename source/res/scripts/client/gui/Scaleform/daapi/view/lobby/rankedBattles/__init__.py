@@ -4,7 +4,7 @@ from gui.Scaleform.framework import ScopeTemplates, GroupedViewSettings
 from gui.Scaleform.framework import ViewSettings, ViewTypes
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.app_loader.settings import APP_NAME_SPACE
+from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -56,4 +56,4 @@ class RankedBattlesPackageBusinessHandler(PackageBusinessHandler):
          (RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, self.loadViewByCtxEvent),
          (RANKEDBATTLES_ALIASES.RANKED_BATTLES_STAGE_COMPLETE, self.loadViewByCtxEvent),
          (RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, self.loadViewByCtxEvent))
-        super(RankedBattlesPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+        super(RankedBattlesPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

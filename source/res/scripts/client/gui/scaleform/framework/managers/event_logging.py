@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/event_logging.py
+import time
+import itertools
 from constants import REQUEST_COOLDOWN
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.framework.entities.abstract.EventLogManagerMeta import EventLogManagerMeta
 from gui.Scaleform.genConsts.EVENT_LOG_CONSTANTS import EVENT_LOG_CONSTANTS
-import time
 import BigWorld
-import itertools
 LOG_LIMIT = 70
 PACKAGE_LIMIT = 70
 

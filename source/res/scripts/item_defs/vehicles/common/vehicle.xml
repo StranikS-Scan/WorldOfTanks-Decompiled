@@ -1,6 +1,7 @@
 <vehicle.xml>
   <lodLevels>
     <NEAR>	30	</NEAR>
+    <SPLINE_TRACK>	50	</SPLINE_TRACK>
     <MEDIUM_TRACK>	90	</MEDIUM_TRACK>
     <MEDIUM>	70	</MEDIUM>
     <FAR>	120	</FAR>
@@ -22,11 +23,8 @@
       <ramming>	4.5	</ramming>
     </collisionEffectVelocities>
     <explosionCandleVolumes>	100
-
          200
-
          400
-
          800	</explosionCandleVolumes>
   </miscParams>
   <defaultVehicleEffects>
@@ -58,6 +56,7 @@
     <explosionCandle3>	explosionCandle3	</explosionCandle3>
     <explosionCandle4>	explosionCandle4	</explosionCandle4>
     <fullDestruction>	fullDestruction	</fullDestruction>
+    <dynamicCollision>	dynamicCollision	</dynamicCollision>
   </defaultVehicleEffects>
   <defaultTurretDetachmentEffects>
     <flight>	turret_flying_medium	</flight>
@@ -101,6 +100,7 @@
     <shoot>	ShowShooting : Shoot	</shoot>
     <noAmmo>	NoneExtra : NoAmmo	</noAmmo>
     <gunReload>	NoneExtra : GunReload	</gunReload>
+    <clipReload>	NoneExtra : ClipReload	</clipReload>
     <deathZones>	NoneExtra: DeathZones	</deathZones>
     <trackInstantRepairDelay>	NoneExtra : TrackInstantRepairDelay	  <delay>	0.3	</delay>
     </trackInstantRepairDelay>
@@ -132,9 +132,11 @@
     <ration_sweden>	NoneExtra : Stimulator	</ration_sweden>
     <hotCoffee>	NoneExtra : Stimulator	</hotCoffee>
     <ration_poland>	NoneExtra : Stimulator	</ration_poland>
+    <ration_italy>	NoneExtra : Stimulator	</ration_italy>
     <removedRpmLimiter>	NoneExtra : RemovedRpmLimiter	</removedRpmLimiter>
     <qualityOil>	NoneExtra : Fuel	</qualityOil>
-    <overturnStun>	NoneExtra : OverturnStun	  <gameplayFactors>
+    <overturn>	NoneExtra : Overturn	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+      <gameplayFactors>
         <reloadTime>	2.0	</reloadTime>
         <turretRotationSpeed>	0.5	</turretRotationSpeed>
         <gunRotationSpeed>	0.5	</gunRotationSpeed>
@@ -142,7 +144,8 @@
         <shotDispersion>	2.0	</shotDispersion>
         <visionRadius>	0.5	</visionRadius>
       </gameplayFactors>
-    </overturnStun>
+    </overturn>
+    <drowning>	NoneExtra : Drowning	</drowning>
     <artillery_tier1>	NoneExtra : Artillery	</artillery_tier1>
     <artillery_tier2>	NoneExtra : Artillery	</artillery_tier2>
     <artillery_tier3>	NoneExtra : Artillery	</artillery_tier3>

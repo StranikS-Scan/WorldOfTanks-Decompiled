@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/UserList.py
-"""A more or less complete user-defined wrapper around list objects."""
 import collections
 
 class UserList(collections.MutableSequence):

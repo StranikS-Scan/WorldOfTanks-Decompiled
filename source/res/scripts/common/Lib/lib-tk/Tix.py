@@ -36,46 +36,14 @@ TCL_ALL_EVENTS = 0
 import Tkinter, os
 
 class tixCommand:
-    """The tix commands provide access to miscellaneous  elements
-    of  Tix's  internal state and the Tix application context.
-    Most of the information manipulated by these  commands pertains
-    to  the  application  as a whole, or to a screen or
-    display, rather than to a particular window.
-    
-    This is a mixin class, assumed to be mixed to Tkinter.Tk
-    that supports the self.tk.call method.
-    """
 
     def tix_addbitmapdir(self, directory):
-        """Tix maintains a list of directories under which
-        the  tix_getimage  and tix_getbitmap commands will
-        search for image files. The standard bitmap  directory
-        is $TIX_LIBRARY/bitmaps. The addbitmapdir command
-        adds directory into this list. By  using  this
-        command, the  image  files  of an applications can
-        also be located using the tix_getimage or tix_getbitmap
-        command.
-        """
         return self.tk.call('tix', 'addbitmapdir', directory)
 
     def tix_cget(self, option):
-        """Returns  the  current  value  of the configuration
-        option given by option. Option may be  any  of  the
-        options described in the CONFIGURATION OPTIONS section.
-        """
         return self.tk.call('tix', 'cget', option)
 
     def tix_configure(self, cnf=None, **kw):
-        """Query or modify the configuration options of the Tix application
-        context. If no option is specified, returns a dictionary all of the
-        available options.  If option is specified with no value, then the
-        command returns a list describing the one named option (this list
-        will be identical to the corresponding sublist of the value
-        returned if no option is specified).  If one or more option-value
-        pairs are specified, then the command modifies the given option(s)
-        to have the given value(s); in this case the command returns an
-        empty string. Option may be any of the configuration options.
-        """
         if kw:
             cnf = _cnfmerge((cnf, kw))
         elif cnf:
@@ -86,14 +54,6 @@ class tixCommand:
             return self._getconfigure1('tix', 'configure', '-' + cnf) if isinstance(cnf, StringType) else self.tk.call(('tix', 'configure') + self._options(cnf))
 
     def tix_filedialog(self, dlgclass=None):
-        """Returns the file selection dialog that may be shared among
-        different calls from this application.  This command will create a
-        file selection dialog widget when it is called the first time. This
-        dialog will be returned by all subsequent calls to tix_filedialog.
-        An optional dlgclass parameter can be passed to specified what type
-        of file selection dialog widget is desired. Possible options are
-        tix FileSelectDialog or tixExFileSelectDialog.
-        """
         if dlgclass is not None:
             return self.tk.call('tix', 'filedialog', dlgclass)
         else:
@@ -101,61 +61,15 @@ class tixCommand:
             return
 
     def tix_getbitmap(self, name):
-        """Locates a bitmap file of the name name.xpm or name in one of the
-        bitmap directories (see the tix_addbitmapdir command above).  By
-        using tix_getbitmap, you can avoid hard coding the pathnames of the
-        bitmap files in your application. When successful, it returns the
-        complete pathname of the bitmap file, prefixed with the character
-        '@'.  The returned value can be used to configure the -bitmap
-        option of the TK and Tix widgets.
-        """
         return self.tk.call('tix', 'getbitmap', name)
 
     def tix_getimage(self, name):
-        """Locates an image file of the name name.xpm, name.xbm or name.ppm
-        in one of the bitmap directories (see the addbitmapdir command
-        above). If more than one file with the same name (but different
-        extensions) exist, then the image type is chosen according to the
-        depth of the X display: xbm images are chosen on monochrome
-        displays and color images are chosen on color displays. By using
-        tix_ getimage, you can avoid hard coding the pathnames of the
-        image files in your application. When successful, this command
-        returns the name of the newly created image, which can be used to
-        configure the -image option of the Tk and Tix widgets.
-        """
         return self.tk.call('tix', 'getimage', name)
 
     def tix_option_get(self, name):
-        """Gets  the options  maintained  by  the  Tix
-        scheme mechanism. Available options include:
-        
-            active_bg       active_fg      bg
-            bold_font       dark1_bg       dark1_fg
-            dark2_bg        dark2_fg       disabled_fg
-            fg              fixed_font     font
-            inactive_bg     inactive_fg    input1_bg
-            input2_bg       italic_font    light1_bg
-            light1_fg       light2_bg      light2_fg
-            menu_font       output1_bg     output2_bg
-            select_bg       select_fg      selector
-            """
         return self.tk.call('tix', 'option', 'get', name)
 
     def tix_resetoptions(self, newScheme, newFontSet, newScmPrio=None):
-        """Resets the scheme and fontset of the Tix application to
-        newScheme and newFontSet, respectively.  This affects only those
-        widgets created after this call. Therefore, it is best to call the
-        resetoptions command before the creation of any widgets in a Tix
-        application.
-        
-        The optional parameter newScmPrio can be given to reset the
-        priority level of the Tk options set by the Tix schemes.
-        
-        Because of the way Tk handles the X option database, after Tix has
-        been has imported and inited, it is not possible to reset the color
-        schemes and font sets using the tix config command.  Instead, the
-        tix_resetoptions command must be used.
-        """
         if newScmPrio is not None:
             return self.tk.call('tix', 'resetoptions', newScheme, newFontSet, newScmPrio)
         else:
@@ -164,8 +78,6 @@ class tixCommand:
 
 
 class Tk(Tkinter.Tk, tixCommand):
-    """Toplevel widget of Tix which represents mostly the main window
-    of an application. It has an associated Tcl interpreter."""
 
     def __init__(self, screenName=None, baseName=None, className='Tix'):
         Tkinter.Tk.__init__(self, screenName, baseName, className)
@@ -183,10 +95,6 @@ class Tk(Tkinter.Tk, tixCommand):
 
 
 class Form:
-    """The Tix Form geometry manager
-    
-    Widgets can be arranged by specifying attachments to other widgets.
-    See Tix documentation for complete details"""
 
     def config(self, cnf={}, **kw):
         self.tk.call('tixForm', self._w, *self._options(cnf, kw))
@@ -227,18 +135,6 @@ class Form:
 Tkinter.Widget.__bases__ = Tkinter.Widget.__bases__ + (Form,)
 
 class TixWidget(Tkinter.Widget):
-    """A TixWidget class is used to package all (or most) Tix widgets.
-    
-    Widget initialization is extended in two ways:
-       1) It is possible to give a list of options which must be part of
-       the creation command (so called Tix 'static' options). These cannot be
-       given as a 'config' command later.
-       2) It is possible to give the name of an existing TK widget. These are
-       child widgets created automatically by a Tix mega-widget. The Tk call
-       to create these widgets is therefore bypassed in TixWidget.__init__
-    
-    Both options are for use by subclasses only.
-    """
 
     def __init__(self, master=None, widgetName=None, static_options=None, cnf={}, kw={}):
         if kw:
@@ -269,12 +165,9 @@ class TixWidget(Tkinter.Widget):
         raise AttributeError, name
 
     def set_silent(self, value):
-        """Set a variable without calling its action routine"""
         self.tk.call('tixSetSilent', self._w, value)
 
     def subwidget(self, name):
-        """Return the named subwidget (which must have been created by
-        the sub-class)."""
         n = self._subwidget_name(name)
         if not n:
             raise TclError, 'Subwidget ' + name + ' not child of ' + self._name
@@ -282,7 +175,6 @@ class TixWidget(Tkinter.Widget):
         return self._nametowidget(n)
 
     def subwidgets_all(self):
-        """Return all subwidgets."""
         names = self._subwidget_names()
         if not names:
             return []
@@ -297,7 +189,6 @@ class TixWidget(Tkinter.Widget):
         return retlist
 
     def _subwidget_name(self, name):
-        """Get a subwidget name (returns a String, not a Widget !)"""
         try:
             return self.tk.call(self._w, 'subwidget', name)
         except TclError:
@@ -306,7 +197,6 @@ class TixWidget(Tkinter.Widget):
         return None
 
     def _subwidget_names(self):
-        """Return the name of all subwidgets."""
         try:
             x = self.tk.call(self._w, 'subwidgets', '-all')
             return self.tk.splitlist(x)
@@ -316,7 +206,6 @@ class TixWidget(Tkinter.Widget):
         return None
 
     def config_all(self, option, value):
-        """Set configuration options for all subwidgets (and self)."""
         if option == '':
             return
         if not isinstance(option, StringType):
@@ -352,11 +241,6 @@ class TixWidget(Tkinter.Widget):
 
 
 class TixSubWidget(TixWidget):
-    """Subwidget class.
-    
-    This is used to mirror child widgets automatically created
-    by Tix/Tk as part of a mega-widget in Python (which is not informed
-    of this)"""
 
     def __init__(self, master, name, destroy_physically=1, check_intermediate=1):
         if check_intermediate:
@@ -398,8 +282,6 @@ class TixSubWidget(TixWidget):
 
 
 class DisplayStyle:
-    """DisplayStyle - handle configuration options shared by
-    (multiple) Display Items"""
 
     def __init__(self, itemtype, cnf={}, **kw):
         master = _default_root
@@ -440,12 +322,6 @@ class DisplayStyle:
 
 
 class Balloon(TixWidget):
-    """Balloon help widget.
-    
-    Subwidget       Class
-    ---------       -----
-    label           Label
-    message         Message"""
 
     def __init__(self, master=None, cnf={}, **kw):
         static = ['options',
@@ -458,8 +334,6 @@ class Balloon(TixWidget):
         self.subwidget_list['message'] = _dummyLabel(self, 'message', destroy_physically=0)
 
     def bind_widget(self, widget, cnf={}, **kw):
-        """Bind balloon widget to another.
-        One balloon widget may be bound to several widgets at the same time"""
         self.tk.call(self._w, 'bind', widget._w, *self._options(cnf, kw))
 
     def unbind_widget(self, widget):
@@ -467,15 +341,11 @@ class Balloon(TixWidget):
 
 
 class ButtonBox(TixWidget):
-    """ButtonBox - A container for pushbuttons.
-    Subwidgets are the buttons added with the add method.
-    """
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixButtonBox', ['orientation', 'options'], cnf, kw)
 
     def add(self, name, cnf={}, **kw):
-        """Add a button with given name to box."""
         btn = self.tk.call(self._w, 'add', name, *self._options(cnf, kw))
         self.subwidget_list[name] = _dummyButton(self, name)
         return btn
@@ -486,17 +356,6 @@ class ButtonBox(TixWidget):
 
 
 class ComboBox(TixWidget):
-    """ComboBox - an Entry field with a dropdown menu. The user can select a
-    choice by either typing in the entry subwidget or selecting from the
-    listbox subwidget.
-    
-    Subwidget       Class
-    ---------       -----
-    entry       Entry
-    arrow       Button
-    slistbox    ScrolledListBox
-    tick        Button
-    cross       Button : present if created with the fancy option"""
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixComboBox', ['editable',
@@ -527,17 +386,6 @@ class ComboBox(TixWidget):
 
 
 class Control(TixWidget):
-    """Control - An entry field with value change arrows.  The user can
-    adjust the value by pressing the two arrow buttons or by entering
-    the value directly into the entry. The new value will be checked
-    against the user-defined upper and lower limits.
-    
-    Subwidget       Class
-    ---------       -----
-    incr       Button
-    decr       Button
-    entry       Entry
-    label       Label"""
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixControl', ['options'], cnf, kw)
@@ -560,15 +408,6 @@ class Control(TixWidget):
 
 
 class DirList(TixWidget):
-    """DirList - displays a list view of a directory, its previous
-    directories and its sub-directories. The user can choose one of
-    the directories displayed in the list or change to another directory.
-    
-    Subwidget       Class
-    ---------       -----
-    hlist       HList
-    hsb              Scrollbar
-    vsb              Scrollbar"""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixDirList', ['options'], cnf, kw)
@@ -581,16 +420,6 @@ class DirList(TixWidget):
 
 
 class DirTree(TixWidget):
-    """DirTree - Directory Listing in a hierarchical view.
-    Displays a tree view of a directory, its previous directories and its
-    sub-directories. The user can choose one of the directories displayed
-    in the list or change to another directory.
-    
-    Subwidget       Class
-    ---------       -----
-    hlist           HList
-    hsb             Scrollbar
-    vsb             Scrollbar"""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixDirTree', ['options'], cnf, kw)
@@ -603,18 +432,6 @@ class DirTree(TixWidget):
 
 
 class DirSelectBox(TixWidget):
-    """DirSelectBox - Motif style file select box.
-    It is generally used for
-    the user to choose a file. FileSelectBox stores the files mostly
-    recently selected into a ComboBox widget so that they can be quickly
-    selected again.
-    
-    Subwidget       Class
-    ---------       -----
-    selection       ComboBox
-    filter          ComboBox
-    dirlist         ScrolledListBox
-    filelist        ScrolledListBox"""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixDirSelectBox', ['options'], cnf, kw)
@@ -623,19 +440,6 @@ class DirSelectBox(TixWidget):
 
 
 class ExFileSelectBox(TixWidget):
-    """ExFileSelectBox - MS Windows style file select box.
-    It provides an convenient method for the user to select files.
-    
-    Subwidget       Class
-    ---------       -----
-    cancel       Button
-    ok              Button
-    hidden       Checkbutton
-    types       ComboBox
-    dir              ComboBox
-    file       ComboBox
-    dirlist       ScrolledListBox
-    filelist       ScrolledListBox"""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixExFileSelectBox', ['options'], cnf, kw)
@@ -656,13 +460,6 @@ class ExFileSelectBox(TixWidget):
 
 
 class DirSelectDialog(TixWidget):
-    """The DirSelectDialog widget presents the directories in the file
-    system in a dialog window. The user can use this dialog window to
-    navigate through the file system to select the desired directory.
-    
-    Subwidgets       Class
-    ----------       -----
-    dirbox       DirSelectDialog"""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixDirSelectDialog', ['options'], cnf, kw)
@@ -676,12 +473,6 @@ class DirSelectDialog(TixWidget):
 
 
 class ExFileSelectDialog(TixWidget):
-    """ExFileSelectDialog - MS Windows style file select dialog.
-    It provides an convenient method for the user to select files.
-    
-    Subwidgets       Class
-    ----------       -----
-    fsbox       ExFileSelectBox"""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixExFileSelectDialog', ['options'], cnf, kw)
@@ -695,18 +486,6 @@ class ExFileSelectDialog(TixWidget):
 
 
 class FileSelectBox(TixWidget):
-    """ExFileSelectBox - Motif style file select box.
-    It is generally used for
-    the user to choose a file. FileSelectBox stores the files mostly
-    recently selected into a ComboBox widget so that they can be quickly
-    selected again.
-    
-    Subwidget       Class
-    ---------       -----
-    selection       ComboBox
-    filter          ComboBox
-    dirlist         ScrolledListBox
-    filelist        ScrolledListBox"""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixFileSelectBox', ['options'], cnf, kw)
@@ -723,12 +502,6 @@ class FileSelectBox(TixWidget):
 
 
 class FileSelectDialog(TixWidget):
-    """FileSelectDialog - Motif style file select dialog.
-    
-    Subwidgets       Class
-    ----------       -----
-    btns       StdButtonBox
-    fsbox       FileSelectBox"""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixFileSelectDialog', ['options'], cnf, kw)
@@ -743,15 +516,6 @@ class FileSelectDialog(TixWidget):
 
 
 class FileEntry(TixWidget):
-    """FileEntry - Entry field with button that invokes a FileSelectDialog.
-    The user can type in the filename manually. Alternatively, the user can
-    press the button widget that sits next to the entry, which will bring
-    up a file selection dialog.
-    
-    Subwidgets       Class
-    ----------       -----
-    button       Button
-    entry       Entry"""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixFileEntry', ['dialogtype', 'options'], cnf, kw)
@@ -766,12 +530,6 @@ class FileEntry(TixWidget):
 
 
 class HList(TixWidget, XView, YView):
-    """HList - Hierarchy display  widget can be used to display any data
-    that have a hierarchical structure, for example, file system directory
-    trees. The list entries are indented and connected by branch lines
-    according to their places in the hierarchy.
-    
-    Subwidgets - None"""
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixHList', ['columns', 'options'], cnf, kw)
@@ -954,9 +712,6 @@ class HList(TixWidget, XView, YView):
 
 
 class InputOnly(TixWidget):
-    """InputOnly - Invisible widget. Unix only.
-    
-    Subwidgets - None"""
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixInputOnly', None, cnf, kw)
@@ -964,14 +719,6 @@ class InputOnly(TixWidget):
 
 
 class LabelEntry(TixWidget):
-    """LabelEntry - Entry field with label. Packages an entry widget
-    and a label into one mega widget. It can beused be used to simplify
-    the creation of ``entry-form'' type of interface.
-    
-    Subwidgets       Class
-    ----------       -----
-    label       Label
-    entry       Entry"""
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixLabelEntry', ['labelside', 'options'], cnf, kw)
@@ -980,15 +727,6 @@ class LabelEntry(TixWidget):
 
 
 class LabelFrame(TixWidget):
-    """LabelFrame - Labelled Frame container. Packages a frame widget
-    and a label into one mega widget. To create widgets inside a
-    LabelFrame widget, one creates the new widgets relative to the
-    frame subwidget and manage them inside the frame subwidget.
-    
-    Subwidgets       Class
-    ----------       -----
-    label       Label
-    frame       Frame"""
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixLabelFrame', ['labelside', 'options'], cnf, kw)
@@ -997,12 +735,6 @@ class LabelFrame(TixWidget):
 
 
 class ListNoteBook(TixWidget):
-    """A ListNoteBook widget is very similar to the TixNoteBook widget:
-    it can be used to display many windows in a limited space using a
-    notebook metaphor. The notebook is divided into a stack of pages
-    (windows). At one time only one of these pages can be shown.
-    The user can navigate through these pages by
-    choosing the name of the desired page in the hlist subwidget."""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixListNoteBook', ['options'], cnf, kw)
@@ -1031,21 +763,12 @@ class ListNoteBook(TixWidget):
 
 
 class Meter(TixWidget):
-    """The Meter widget can be used to show the progress of a background
-    job which may take a long time to execute.
-    """
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixMeter', ['options'], cnf, kw)
 
 
 class NoteBook(TixWidget):
-    """NoteBook - Multi-page container widget (tabbed notebook metaphor).
-    
-    Subwidgets       Class
-    ----------       -----
-    nbframe       NoteBookFrame
-    <pages>       page widgets added dynamically with the add method"""
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixNoteBook', ['options'], cnf, kw)
@@ -1084,12 +807,6 @@ class NoteBookFrame(TixWidget):
 
 
 class OptionMenu(TixWidget):
-    """OptionMenu - creates a menu button of options.
-    
-    Subwidget       Class
-    ---------       -----
-    menubutton      Menubutton
-    menu            Menu"""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixOptionMenu', ['labelside', 'options'], cnf, kw)
@@ -1113,15 +830,6 @@ class OptionMenu(TixWidget):
 
 
 class PanedWindow(TixWidget):
-    """PanedWindow - Multi-pane container widget
-    allows the user to interactively manipulate the sizes of several
-    panes. The panes can be arranged either vertically or horizontally.The
-    user changes the sizes of the panes by dragging the resize handle
-    between two panes.
-    
-    Subwidgets       Class
-    ----------       -----
-    <panes>       g/p widgets added dynamically with the add method."""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixPanedWindow', ['orientation', 'options'], cnf, kw)
@@ -1155,15 +863,6 @@ class PanedWindow(TixWidget):
 
 
 class PopupMenu(TixWidget):
-    """PopupMenu widget can be used as a replacement of the tk_popup command.
-    The advantage of the Tix PopupMenu widget is it requires less application
-    code to manipulate.
-    
-    
-    Subwidgets       Class
-    ----------       -----
-    menubutton       Menubutton
-    menu       Menu"""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixPopupMenu', ['options'], cnf, kw)
@@ -1181,7 +880,6 @@ class PopupMenu(TixWidget):
 
 
 class ResizeHandle(TixWidget):
-    """Internal widget to draw resize handles on Scrolled widgets."""
 
     def __init__(self, master, cnf={}, **kw):
         flags = ['options',
@@ -1209,7 +907,6 @@ class ResizeHandle(TixWidget):
 
 
 class ScrolledHList(TixWidget):
-    """ScrolledHList - HList with automatic scrollbars."""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixScrolledHList', ['options'], cnf, kw)
@@ -1219,7 +916,6 @@ class ScrolledHList(TixWidget):
 
 
 class ScrolledListBox(TixWidget):
-    """ScrolledListBox - Listbox with automatic scrollbars."""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixScrolledListBox', ['options'], cnf, kw)
@@ -1229,7 +925,6 @@ class ScrolledListBox(TixWidget):
 
 
 class ScrolledText(TixWidget):
-    """ScrolledText - Text with automatic scrollbars."""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixScrolledText', ['options'], cnf, kw)
@@ -1239,7 +934,6 @@ class ScrolledText(TixWidget):
 
 
 class ScrolledTList(TixWidget):
-    """ScrolledTList - TList with automatic scrollbars."""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixScrolledTList', ['options'], cnf, kw)
@@ -1249,7 +943,6 @@ class ScrolledTList(TixWidget):
 
 
 class ScrolledWindow(TixWidget):
-    """ScrolledWindow - Window with automatic scrollbars."""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixScrolledWindow', ['options'], cnf, kw)
@@ -1259,10 +952,6 @@ class ScrolledWindow(TixWidget):
 
 
 class Select(TixWidget):
-    """Select - Container of button subwidgets. It can be used to provide
-    radio-box or check-box style of selection options for the user.
-    
-    Subwidgets are buttons added dynamically using the add method."""
 
     def __init__(self, master, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixSelect', ['allowzero',
@@ -1282,21 +971,12 @@ class Select(TixWidget):
 
 
 class Shell(TixWidget):
-    """Toplevel window.
-    
-    Subwidgets - None"""
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixShell', ['options', 'title'], cnf, kw)
 
 
 class DialogShell(TixWidget):
-    """Toplevel window, with popup popdown and center methods.
-    It tells the window manager that it is a dialog window and should be
-    treated specially. The exact treatment depends on the treatment of
-    the window manager.
-    
-    Subwidgets - None"""
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixDialogShell', ['options',
@@ -1318,7 +998,6 @@ class DialogShell(TixWidget):
 
 
 class StdButtonBox(TixWidget):
-    """StdButtonBox - Standard Button Box (OK, Apply, Cancel and Help) """
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixStdButtonBox', ['orientation', 'options'], cnf, kw)
@@ -1333,14 +1012,6 @@ class StdButtonBox(TixWidget):
 
 
 class TList(TixWidget, XView, YView):
-    """TList - Hierarchy display widget which can be
-    used to display data in a tabular format. The list entries of a TList
-    widget are similar to the entries in the Tk listbox widget. The main
-    differences are (1) the TList widget can display the list entries in a
-    two dimensional format and (2) you can use graphical images as well as
-    multiple colors and fonts for the list entries.
-    
-    Subwidgets - None"""
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixTList', ['options'], cnf, kw)
@@ -1417,9 +1088,6 @@ class TList(TixWidget, XView, YView):
 
 
 class Tree(TixWidget):
-    """Tree - The tixTree widget can be used to display hierarchical
-    data in a tree form. The user can adjust
-    the view of the tree by opening or closing parts of the tree."""
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixTree', ['options'], cnf, kw)
@@ -1428,43 +1096,22 @@ class Tree(TixWidget):
         self.subwidget_list['hsb'] = _dummyScrollbar(self, 'hsb')
 
     def autosetmode(self):
-        """This command calls the setmode method for all the entries in this
-        Tree widget: if an entry has no child entries, its mode is set to
-        none. Otherwise, if the entry has any hidden child entries, its mode is
-        set to open; otherwise its mode is set to close."""
         self.tk.call(self._w, 'autosetmode')
 
     def close(self, entrypath):
-        """Close the entry given by entryPath if its mode is close."""
         self.tk.call(self._w, 'close', entrypath)
 
     def getmode(self, entrypath):
-        """Returns the current mode of the entry given by entryPath."""
         return self.tk.call(self._w, 'getmode', entrypath)
 
     def open(self, entrypath):
-        """Open the entry given by entryPath if its mode is open."""
         self.tk.call(self._w, 'open', entrypath)
 
     def setmode(self, entrypath, mode='none'):
-        """This command is used to indicate whether the entry given by
-        entryPath has children entries and whether the children are visible. mode
-        must be one of open, close or none. If mode is set to open, a (+)
-        indicator is drawn next to the entry. If mode is set to close, a (-)
-        indicator is drawn next to the entry. If mode is set to none, no
-        indicators will be drawn for this entry. The default mode is none. The
-        open mode indicates the entry has hidden children and this entry can be
-        opened by the user. The close mode indicates that all the children of the
-        entry are now visible and the entry can be closed by the user."""
         self.tk.call(self._w, 'setmode', entrypath, mode)
 
 
 class CheckList(TixWidget):
-    """The CheckList widget
-    displays a list of items to be selected by the user. CheckList acts
-    similarly to the Tk checkbutton or radiobutton widgets, except it is
-    capable of handling many more items than checkbuttons or radiobuttons.
-    """
 
     def __init__(self, master=None, cnf={}, **kw):
         TixWidget.__init__(self, master, 'tixCheckList', ['options', 'radio'], cnf, kw)
@@ -1473,38 +1120,25 @@ class CheckList(TixWidget):
         self.subwidget_list['hsb'] = _dummyScrollbar(self, 'hsb')
 
     def autosetmode(self):
-        """This command calls the setmode method for all the entries in this
-        Tree widget: if an entry has no child entries, its mode is set to
-        none. Otherwise, if the entry has any hidden child entries, its mode is
-        set to open; otherwise its mode is set to close."""
         self.tk.call(self._w, 'autosetmode')
 
     def close(self, entrypath):
-        """Close the entry given by entryPath if its mode is close."""
         self.tk.call(self._w, 'close', entrypath)
 
     def getmode(self, entrypath):
-        """Returns the current mode of the entry given by entryPath."""
         return self.tk.call(self._w, 'getmode', entrypath)
 
     def open(self, entrypath):
-        """Open the entry given by entryPath if its mode is open."""
         self.tk.call(self._w, 'open', entrypath)
 
     def getselection(self, mode='on'):
-        """Returns a list of items whose status matches status. If status is
-        not specified, the list of items in the "on" status will be returned.
-        Mode can be on, off, default"""
         c = self.tk.split(self.tk.call(self._w, 'getselection', mode))
         return self.tk.splitlist(c)
 
     def getstatus(self, entrypath):
-        """Returns the current status of entryPath."""
         return self.tk.call(self._w, 'getstatus', entrypath)
 
     def setstatus(self, entrypath, mode='on'):
-        """Sets the status of entryPath to be status. A bitmap will be
-        displayed next to the entry its status is on, off or default."""
         self.tk.call(self._w, 'setstatus', entrypath, mode)
 
 
@@ -1684,8 +1318,6 @@ class _dummyPanedWindow(PanedWindow, TixSubWidget):
 
 
 def OptionName(widget):
-    """Returns the qualified path name for the widget. Normally used to set
-    default options for subwidgets. See tixwidgets.py"""
     return widget.tk.call('tixOptionName', widget._w)
 
 
@@ -1698,29 +1330,10 @@ def FileTypeList(dict):
 
 
 class CObjView(TixWidget):
-    """This file implements the Canvas Object View widget. This is a base
-    class of IconView. It implements automatic placement/adjustment of the
-    scrollbars according to the canvas objects inside the canvas subwidget.
-    The scrollbars are adjusted so that the canvas is just large enough
-    to see all the objects.
-    """
     pass
 
 
 class Grid(TixWidget, XView, YView):
-    """The Tix Grid command creates a new window  and makes it into a
-    tixGrid widget. Additional options, may be specified on the command
-    line or in the option database to configure aspects such as its cursor
-    and relief.
-    
-    A Grid widget displays its contents in a two dimensional grid of cells.
-    Each cell may contain one Tix display item, which may be in text,
-    graphics or other formats. See the DisplayStyle class for more information
-    about Tix display items. Individual cells, or groups of cells, can be
-    formatted with a wide range of attributes, such as its color, relief and
-    border.
-    
-    Subwidgets - None"""
 
     def __init__(self, master=None, cnf={}, **kw):
         static = []
@@ -1728,20 +1341,15 @@ class Grid(TixWidget, XView, YView):
         TixWidget.__init__(self, master, 'tixGrid', static, cnf, kw)
 
     def anchor_clear(self):
-        """Removes the selection anchor."""
         self.tk.call(self, 'anchor', 'clear')
 
     def anchor_get(self):
-        """Get the (x,y) coordinate of the current anchor cell"""
         return self._getints(self.tk.call(self, 'anchor', 'get'))
 
     def anchor_set(self, x, y):
-        """Set the selection anchor to the cell at (x, y)."""
         self.tk.call(self, 'anchor', 'set', x, y)
 
     def delete_row(self, from_, to=None):
-        """Delete rows between from_ and to inclusive.
-        If to is not provided,  delete only row at from_"""
         if to is None:
             self.tk.call(self, 'delete', 'row', from_)
         else:
@@ -1749,8 +1357,6 @@ class Grid(TixWidget, XView, YView):
         return
 
     def delete_column(self, from_, to=None):
-        """Delete columns between from_ and to inclusive.
-        If to is not provided,  delete only column at from_"""
         if to is None:
             self.tk.call(self, 'delete', 'column', from_)
         else:
@@ -1758,17 +1364,12 @@ class Grid(TixWidget, XView, YView):
         return
 
     def edit_apply(self):
-        """If any cell is being edited, de-highlight the cell  and  applies
-        the changes."""
         self.tk.call(self, 'edit', 'apply')
 
     def edit_set(self, x, y):
-        """Highlights  the  cell  at  (x, y) for editing, if the -editnotify
-        command returns True for this cell."""
         self.tk.call(self, 'edit', 'set', x, y)
 
     def entrycget(self, x, y, option):
-        """Get the option value for cell at (x,y)"""
         if option and option[0] != '-':
             option = '-' + option
         return self.tk.call(self, 'entrycget', x, y, option)
@@ -1777,26 +1378,18 @@ class Grid(TixWidget, XView, YView):
         return self._configure(('entryconfigure', x, y), cnf, kw)
 
     def info_exists(self, x, y):
-        """Return True if display item exists at (x,y)"""
         return self._getboolean(self.tk.call(self, 'info', 'exists', x, y))
 
     def info_bbox(self, x, y):
         return self.tk.call(self, 'info', 'bbox', x, y)
 
     def move_column(self, from_, to, offset):
-        """Moves the range of columns from position FROM through TO by
-        the distance indicated by OFFSET. For example, move_column(2, 4, 1)
-        moves the columns 2,3,4 to columns 3,4,5."""
         self.tk.call(self, 'move', 'column', from_, to, offset)
 
     def move_row(self, from_, to, offset):
-        """Moves the range of rows from position FROM through TO by
-        the distance indicated by OFFSET.
-        For example, move_row(2, 4, 1) moves the rows 2,3,4 to rows 3,4,5."""
         self.tk.call(self, 'move', 'row', from_, to, offset)
 
     def nearest(self, x, y):
-        """Return coordinate of cell nearest pixel coordinate (x,y)"""
         return self._getints(self.tk.call(self, 'nearest', x, y))
 
     def set(self, x, y, itemtype=None, **kw):
@@ -1807,61 +1400,16 @@ class Grid(TixWidget, XView, YView):
         return
 
     def size_column(self, index, **kw):
-        """Queries or sets the size of the column given by
-        INDEX.  INDEX may be any non-negative
-        integer that gives the position of a given column.
-        INDEX can also be the string "default"; in this case, this command
-        queries or sets the default size of all columns.
-        When no option-value pair is given, this command returns a tuple
-        containing the current size setting of the given column.  When
-        option-value pairs are given, the corresponding options of the
-        size setting of the given column are changed. Options may be one
-        of the follwing:
-              pad0 pixels
-                     Specifies the paddings to the left of a column.
-              pad1 pixels
-                     Specifies the paddings to the right of a column.
-              size val
-                     Specifies the width of a column.  Val may be:
-                     "auto" -- the width of the column is set to the
-                     width of the widest cell in the column;
-                     a valid Tk screen distance unit;
-                     or a real number following by the word chars
-                     (e.g. 3.4chars) that sets the width of the column to the
-                     given number of characters."""
         return self.tk.split(self.tk.call(self._w, 'size', 'column', index, *self._options({}, kw)))
 
     def size_row(self, index, **kw):
-        """Queries or sets the size of the row given by
-        INDEX. INDEX may be any non-negative
-        integer that gives the position of a given row .
-        INDEX can also be the string "default"; in this case, this command
-        queries or sets the default size of all rows.
-        When no option-value pair is given, this command returns a list con-
-        taining the current size setting of the given row . When option-value
-        pairs are given, the corresponding options of the size setting of the
-        given row are changed. Options may be one of the follwing:
-              pad0 pixels
-                     Specifies the paddings to the top of a row.
-              pad1 pixels
-                     Specifies the paddings to the bottom of a row.
-              size val
-                     Specifies the height of a row.  Val may be:
-                     "auto" -- the height of the row is set to the
-                     height of the highest cell in the row;
-                     a valid Tk screen distance unit;
-                     or a real number following by the word chars
-                     (e.g. 3.4chars) that sets the height of the row to the
-                     given number of characters."""
         return self.tk.split(self.tk.call(self, 'size', 'row', index, *self._options({}, kw)))
 
     def unset(self, x, y):
-        """Clears the cell at (x, y) by removing its display item."""
         self.tk.call(self._w, 'unset', x, y)
 
 
 class ScrolledGrid(Grid):
-    """Scrolled Grid widgets"""
 
     def __init__(self, master=None, cnf={}, **kw):
         static = []

@@ -35,13 +35,6 @@ class _GUIActionsParser(SectionParser):
         pass
 
     def parse(self, section):
-        """
-        Parses section "handlers".
-        Where gui_event - event from action received from GUI,
-        action - The names of callbacks sequence that have to be invoked on server
-        :param section:
-        :return: [(gui_event, actions), ...]
-        """
         result = []
         for name, sub in section.items():
             if name != 'handler':
@@ -178,15 +171,6 @@ class _GUIItemsParser(ParsersCollection):
 class GUIItemsParser_v2(_GUIItemsParser):
 
     def __init__(self):
-        """
-        Class contains GUI items that are supported in WGNC v2.0.
-        The list of supported items:
-        - popup;
-        - window;
-        - referrer.
-        - browser.
-        Another actions are ignored.
-        """
         super(GUIItemsParser_v2, self).__init__((_PopUpParser(),
          _WindowParser(),
          _ReferrerParser(),

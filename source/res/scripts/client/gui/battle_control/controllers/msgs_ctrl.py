@@ -23,7 +23,6 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['world_collision']: 'DEATH_FROM_WORLD_COLLISION',
  _AR_INDICES['death_zone']: 'DEATH_FROM_DEATH_ZONE',
  _AR_INDICES['drowning']: 'DEATH_FROM_DROWNING',
- _AR_INDICES['gas_attack']: 'DEATH_FROM_GAS_ATTACK',
  _AR_INDICES['overturn']: 'DEATH_FROM_OVERTURN'}
 _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
@@ -55,14 +54,6 @@ class BattleMessagesController(IBattleController):
         return
 
     def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
-        """
-        This message will be called for every client (from Arena), without any exceptions.
-        @param avatar: instance of client/Avatar
-        @param targetID: the killed vehicle
-        @param attackerID: killer's vehicle ID
-        @param equipmentID: equipment ID (for example, a consumable)
-        @param reason: see ATTACK_REASON in constants
-        """
         try:
             playerVehicleID = avatar.playerVehicleID
         except AttributeError:
@@ -88,16 +79,6 @@ class BattleMessagesController(IBattleController):
             return
 
     def showVehicleDamageInfo(self, avatar, code, targetID, entityID, extra, equipmentID):
-        """
-        This message always will be called for player's vehicle of vehicle we are
-        watching for.
-        @param avatar: instance of client/Avatar
-        @param code:
-        @param targetID: the killed vehicle
-        @param entityID: killer's vehicle ID
-        @param extra: vehicle extra
-        @param equipmentID: equipment ID (for example, a consumable)
-        """
         code, postfix = self.__getDamageInfo(avatar, code, entityID, targetID)
         self.onShowPlayerMessageByCode(code, postfix, targetID, entityID, equipmentID)
         self.onShowVehicleMessageByCode(code, postfix, entityID, extra, equipmentID)

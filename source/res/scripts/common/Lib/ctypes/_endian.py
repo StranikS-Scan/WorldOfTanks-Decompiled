@@ -5,11 +5,6 @@ from ctypes import *
 _array_type = type(Array)
 
 def _other_endian(typ):
-    """Return the type with the 'other' byte order.  Simple types like
-    c_int and so on already have __ctype_be__ and __ctype_le__
-    attributes which contain the types, for more complicated types
-    arrays and structures are supported.
-    """
     if hasattr(typ, _OTHER_ENDIAN):
         return getattr(typ, _OTHER_ENDIAN)
     if isinstance(typ, _array_type):
@@ -39,7 +34,6 @@ if sys.byteorder == 'little':
     LittleEndianStructure = Structure
 
     class BigEndianStructure(Structure):
-        """Structure with big endian byte order"""
         __metaclass__ = _swapped_meta
         _swappedbytes_ = None
 
@@ -49,7 +43,6 @@ elif sys.byteorder == 'big':
     BigEndianStructure = Structure
 
     class LittleEndianStructure(Structure):
-        """Structure with little endian byte order"""
         __metaclass__ = _swapped_meta
         _swappedbytes_ = None
 

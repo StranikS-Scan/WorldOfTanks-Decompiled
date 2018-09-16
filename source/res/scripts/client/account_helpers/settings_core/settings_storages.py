@@ -95,7 +95,6 @@ class VideoSettingsStorage(ISettingsStorage):
         width, height = self.resolution
         refreshRate = self.refreshRate
         adapterOutputExclusiveFullscreenModes = g_monitorSettings.videoModesForAdapterOutputIndex(adapterOutputIndex)
-        assert adapterOutputExclusiveFullscreenModes
         for mode in adapterOutputExclusiveFullscreenModes:
             if mode.width == width and mode.height == height and mode.refreshRate == refreshRate:
                 return mode
@@ -292,13 +291,17 @@ class FOVSettingsStorage(ISettingsStorage):
         if self._settings or forceApply:
             staticFOV, dynamicFOVLow, dynamicFOVTop = self.FOV
             dynamicFOVEnabled = self.dynamicFOVEnabled
+
+            def setFov(value, multiplier, dynamicFOVEnabled):
+                if not dynamicFOVEnabled:
+                    FovExtended.instance().resetFov()
+                FovExtended.instance().defaultHorizontalFov = value
+
             if dynamicFOVEnabled:
+                multiplier = float(dynamicFOVLow) / dynamicFOVTop
                 defaultHorizontalFov = math.radians(dynamicFOVTop)
             else:
+                multiplier = 1.0
                 defaultHorizontalFov = math.radians(staticFOV)
-
-            def setFov(value, isDynamicFov):
-                FovExtended.instance().applyHorizontalFovSetting(value, not isDynamicFov)
-
-            BigWorld.callback(0.0, functools.partial(setFov, defaultHorizontalFov, dynamicFOVEnabled))
+            BigWorld.callback(0.0, functools.partial(setFov, defaultHorizontalFov, multiplier, dynamicFOVEnabled))
         return super(FOVSettingsStorage, self).apply(restartApproved)

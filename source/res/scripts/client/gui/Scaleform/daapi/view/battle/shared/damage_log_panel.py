@@ -11,7 +11,7 @@ from gui.Scaleform.genConsts.BATTLEDAMAGELOG_IMAGES import BATTLEDAMAGELOG_IMAGE
 from gui.Scaleform.genConsts.DAMAGE_LOG_SHELL_BG_TYPES import DAMAGE_LOG_SHELL_BG_TYPES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE as _ETYPE
-from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared import events as gui_events, EVENT_BUS_SCOPE
 from helpers import dependency
 from helpers import i18n
 from shared_utils import BitmaskHelper
@@ -25,9 +25,6 @@ _EVENT_POSITIONS_TO_CONTENT_MASK = {_EVENT_POSITIONS.ALL_BOTTOM: (0, _ALL_EVENTS
  _EVENT_POSITIONS.NEGATIVE_AT_TOP: (_NEGATIVE_EVENTS_MASK, _POSITIVE_EVENTS_MASK)}
 
 class _RECORD_STYLE(object):
-    """
-    Enum of log record styles.
-    """
     FULL = 0
     SHORT = 1
 
@@ -58,16 +55,10 @@ def _formatTotalValue(value):
 
 
 class _VOModel(dict):
-    """
-    Base VO model class. Use _VOModelProperty to define properties in derived classes.
-    """
     pass
 
 
 class _VOModelProperty(object):
-    """
-    VO Model property class.
-    """
     __slots__ = ('name',)
 
     def __init__(self, name):
@@ -81,32 +72,14 @@ class _VOModelProperty(object):
 
 
 class _IVOBuilder(object):
-    """
-    Declares interface of a VO builder.
-    """
 
     def buildVO(self, info, arenaDP):
-        """
-        Builds VO by using the given data (event) and the arena data provider.
-        
-        :param info: data to be used for VO construction
-        :param arenaDP: battle-specific data provider, see ArenaDataProvider class.
-        :return: Derived classes should return VO object, represented by dict.
-        """
         raise NotImplementedError
 
 
 class _LogRecordVOBuilder(_IVOBuilder):
-    """
-    Composer that is populated with several VO builders and is used for building composite VO
-    object. The class to be used for describing content of a log record.
-    """
 
     def __init__(self, *builders):
-        """
-        Constructor.
-        :param builders: list of objects extending _IVOBuilder interface.
-        """
         super(_LogRecordVOBuilder, self).__init__()
         self.__builders = builders
 
@@ -129,9 +102,6 @@ class _VehicleVOModel(_VOModel):
 
 
 class _VehicleVOBuilder(_IVOBuilder):
-    """
-    Builder of vehicle specific VO.
-    """
 
     def buildVO(self, info, arenaDP):
         vo = _VehicleVOModel()
@@ -140,32 +110,14 @@ class _VehicleVOBuilder(_IVOBuilder):
         return vo
 
     def _populateVO(self, vehicleVO, info, arenaDP):
-        """
-        Populates the given VO with the proper data.
-        
-        :param vehicleVO: vo, instance of _VehicleVOModel class
-        :param info: data to be used for VO construction
-        :param arenaDP: battle-specific data provider, see ArenaDataProvider class.
-        """
         vTypeInfoVO = arenaDP.getVehicleInfo(info.getArenaVehicleID()).vehicleType
         vehicleVO.vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(vTypeInfoVO.classTag, '')
         vehicleVO.vehicleName = vTypeInfoVO.shortNameWithPrefix
 
 
 class _ReceivedHitVehicleVOBuilder(_VehicleVOBuilder):
-    """
-    Builder of vehicle specific VO for events associated with the received damage. For own ram
-    do not show vehicle name.
-    """
 
     def _populateVO(self, vehicleVO, info, arenaDP):
-        """
-        Populates the given VO with the proper data. For own ram do not show vehicle name.
-        
-        :param vehicleVO: vo, instance of _VehicleVOModel class
-        :param info: data to be used for VO construction
-        :param arenaDP: battle-specific data provider, see ArenaDataProvider class.
-        """
         super(_ReceivedHitVehicleVOBuilder, self)._populateVO(vehicleVO, info, arenaDP)
         if info.getArenaVehicleID() == arenaDP.getPlayerVehicleID() and info.isRam():
             vehicleVO.vehicleName = ''
@@ -183,9 +135,6 @@ class _ShellVOModel(_VOModel):
 
 
 class _ShellVOBuilder(_IVOBuilder):
-    """
-    Builder of shell specific VO.
-    """
 
     def buildVO(self, info, arenaDP):
         return _ShellVOModel(self._getShellTypeStr(info), self._getShellTypeBg(info))
@@ -202,9 +151,6 @@ class _ShellVOBuilder(_IVOBuilder):
 
 
 class _EmptyShellVOBuilder(_ShellVOBuilder):
-    """
-    Builder of empty shell VO (for some kind of events VO should not include shell description).
-    """
 
     def _getShellTypeStr(self, info):
         pass
@@ -214,9 +160,6 @@ class _EmptyShellVOBuilder(_ShellVOBuilder):
 
 
 class _DamageShellVOBuilder(_ShellVOBuilder):
-    """
-    Builder of shell specific VO for events related to damage.
-    """
 
     def buildVO(self, info, arenaDP):
         if info.isShot():
@@ -227,9 +170,6 @@ class _DamageShellVOBuilder(_ShellVOBuilder):
 
 
 class _CritsShellVOBuilder(_ShellVOBuilder):
-    """
-    Builder of shell specific VO for events related to damage.
-    """
 
     def buildVO(self, info, arenaDP):
         if info.isShot():
@@ -248,9 +188,6 @@ class _ValueVOModel(_VOModel):
 
 
 class _ValueVOBuilder(_IVOBuilder):
-    """
-    Base builder of value specific VO.
-    """
 
     def buildVO(self, info, arenaDP):
         return _ValueVOModel(self._getValue(info))
@@ -260,18 +197,12 @@ class _ValueVOBuilder(_IVOBuilder):
 
 
 class _CriticalHitValueVOBuilder(_ValueVOBuilder):
-    """
-    Crits count value builder.
-    """
 
     def _getValue(self, info):
         return i18n.makeString(INGAME_GUI.DAMAGELOG_MULTIPLIER, multiplier=str(info.getCritsCount()))
 
 
 class _DamageValueVOBuilder(_ValueVOBuilder):
-    """
-    Damage value builder.
-    """
 
     def _getValue(self, info):
         return BigWorld.wg_getIntegralFormat(info.getDamage())
@@ -286,9 +217,6 @@ class _ActionImgVOModel(_VOModel):
 
 
 class _ActionImgVOBuilder(_IVOBuilder):
-    """
-    Builder of action (event) description VO.
-    """
 
     def __init__(self, image):
         super(_ActionImgVOBuilder, self).__init__()
@@ -302,9 +230,6 @@ class _ActionImgVOBuilder(_IVOBuilder):
 
 
 class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
-    """
-    Builder of damage action (damage related events) description VO.
-    """
 
     def __init__(self, shotIcon, fireIcon, ramIcon, wcIcon):
         super(_DamageActionImgVOBuilder, self).__init__('')
@@ -322,9 +247,6 @@ class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
 
 
 class _AssistActionImgVOBuilder(_ActionImgVOBuilder):
-    """
-    Builder of assist action (crits related events) description VO.
-    """
 
     def __init__(self):
         super(_AssistActionImgVOBuilder, self).__init__('')
@@ -346,9 +268,6 @@ _ETYPE_TO_RECORD_VO_BUILDER = {_ETYPE.DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHIC
  _ETYPE.STUN: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_STUN_16X16))}
 
 class _LogViewComponent(object):
-    """
-    The class represents log component of the damage log panel (see DamageLogPanel description).
-    """
 
     def __init__(self):
         super(_LogViewComponent, self).__init__()
@@ -425,19 +344,6 @@ class _LogViewComponent(object):
 
 
 class DamageLogPanel(BattleDamageLogPanelMeta):
-    """
-    Damage log panel represents UI component displaying damage related events. It consists of
-    3 components:
-    - total damage component: displays aggregated values by caused and assist damage and blocked
-    damage (also see _TOTAL_DAMAGE_SETTINGS_TO_CONTENT_MASK mapping)
-    - top and bottom log panels: display log of events, content of each panel depends on
-      _EVENT_POSITIONS and _DISPLAYED_EVENT_TYPES settings (see _EVENT_POSITIONS_TO_CONTENT_MASK
-      and _DISPLAYED_EVENT_TYPES_TO_CONTENT_MASK mappings).
-    Each log panel is represented by _LogViewComponent class, that encapsulates logic related
-    to log's view. DamageLogPanel listens efficiency events and settings changes and notifies log
-    components about it in order to update logs' content.
-    Content of log panel is described by a bit mask (see PERSONAL_EFFICIENCY_TYPE).
-    """
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -475,15 +381,15 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         if self.__vehStateCtrl is not None:
             self.__vehStateCtrl.onPostMortemSwitched += self._onPostMortemSwitched
             self.__vehStateCtrl.onVehicleControlling += self._onVehicleControlling
-        self.addListener(events.GameEvent.SHOW_EXTENDED_INFO, self._handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.addListener(events.GameEvent.SHOW_CURSOR, self._handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
-        self.addListener(events.GameEvent.HIDE_CURSOR, self._handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(gui_events.GameEvent.SHOW_EXTENDED_INFO, self._handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.addListener(gui_events.GameEvent.SHOW_CURSOR, self._handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(gui_events.GameEvent.HIDE_CURSOR, self._handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
         return
 
     def _dispose(self):
-        self.removeListener(events.GameEvent.SHOW_EXTENDED_INFO, self._handleShowExtendedInfo, EVENT_BUS_SCOPE.BATTLE)
-        self.removeListener(events.GameEvent.SHOW_CURSOR, self._handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
-        self.removeListener(events.GameEvent.HIDE_CURSOR, self._handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(gui_events.GameEvent.SHOW_EXTENDED_INFO, self._handleShowExtendedInfo, EVENT_BUS_SCOPE.BATTLE)
+        self.removeListener(gui_events.GameEvent.SHOW_CURSOR, self._handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(gui_events.GameEvent.HIDE_CURSOR, self._handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
         if self.__vehStateCtrl is not None:
             self.__vehStateCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
             self.__vehStateCtrl.onVehicleControlling -= self._onVehicleControlling
@@ -501,16 +407,10 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         return
 
     def _invalidateContent(self):
-        """
-        Invalidates the content of the whole damage panel.
-        """
         self._invalidateTotalDamages()
         self._invalidateLogs()
 
     def _invalidateLogs(self):
-        """
-        Updates contents of the top and bottom logs based on the user preferences.
-        """
         settingGetter = self.settingsCore.getSetting
         self.__logViewMode = settingGetter(DAMAGE_LOG.SHOW_DETAILS)
         epos = settingGetter(DAMAGE_LOG.EVENT_POSITIONS)
@@ -523,9 +423,6 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__bottomLog.updateLog(bottomLogContentMask, self.__logViewMode, bottomLogRecStyle)
 
     def _invalidateTotalDamages(self):
-        """
-        Updates the content of the total panel based on the user preferences.
-        """
         contentMask = 0
         isDamageSettingEnabled = self.__isDamageSettingEnabled
         for settingName, bit in _TOTAL_DAMAGE_SETTINGS_TO_CONTENT_MASK.iteritems():
@@ -539,10 +436,6 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
             self.as_summaryStatsS(*args)
 
     def _onTotalEfficiencyUpdated(self, diff):
-        """
-        Callback to handle change of total values coming from the efficiency controller.
-        :param diff: dict of changed total values.
-        """
         for e, updateMethod in self._totalEvents:
             if e in diff:
                 isUpdated, value = self._setTotalValue(e, diff[e])
@@ -558,11 +451,6 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__bottomLog.addToLog(events)
 
     def _invalidatePanelVisibility(self):
-        """
-        Updates common visibility. The damage panel is not displayed if the player observes
-        another vehicle in Postmortem mode. The panel is always visible if the player is in
-        Observer mode (first person view).
-        """
         isVisible = True
         if self.sessionProvider.getCtx().isPlayerObserver():
             isVisible = True
@@ -580,11 +468,6 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         return
 
     def _onSettingsChanged(self, diff):
-        """
-        Callback to handle change of user preferences. Updates content if damage panel related
-        settings have been changed.
-        :param diff: dict of changed settings
-        """
         for key in _TOTAL_DAMAGE_SETTINGS_TO_CONTENT_MASK.iterkeys():
             if key in diff:
                 self._invalidateTotalDamages()
@@ -597,51 +480,23 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
             self._setSettings(self.__isVisible, bool(diff[GRAPHICS.COLOR_BLIND]))
 
     def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
-        """
-        Callback to handle switching to postmortem mode. The panel should not be displayed if the
-        player observes another vehicle.
-        """
         self._invalidatePanelVisibility()
 
     def _onVehicleControlling(self, vehicle):
-        """
-        Callback to handle switching between vehicles observed by the player. The panel should
-        not be displayed if the player observes another vehicle.
-        :param vehicle:
-        :return:
-        """
         self._invalidatePanelVisibility()
         self._invalidateTotalDamages()
 
     def _handleShowExtendedInfo(self, event):
-        """
-        Callback on Alt button press event. Shows/hides detailed damage log.
-        :param isVisible: Is Alt button is pressed.
-        """
         if self.__logViewMode == _VIEW_MODE.SHOW_BY_ALT_PRESS:
             self.as_isDownAltButtonS(event.ctx['isDown'])
 
     def _handleShowCursor(self, _):
-        """
-        Callback on Ctrl button press event. Enables scrolling of detailed damage log.
-        """
         self.as_isDownCtrlButtonS(True)
 
     def _handleHideCursor(self, _):
-        """
-        Callback on Ctrl button release event. Disables scrolling of detailed damage log.
-        """
         self.as_isDownCtrlButtonS(False)
 
     def _setTotalValue(self, etype, value):
-        """
-        Sets total value with the given efficiency type, taking into account user's preferences.
-        
-        :param etype: Efficiency type, see PERSONAL_EFFICIENCY_TYPE
-        :param value: New value
-        :return: tuple(bool, value), where bool - whether value is changed, v
-                value - formatted value
-        """
         if BitmaskHelper.hasAnyBitSet(self.__totalDamageContentMask, etype):
             value = _formatTotalValue(value)
         else:

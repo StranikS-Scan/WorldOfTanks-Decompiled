@@ -44,10 +44,6 @@ class SwitchPeripheryWindow(SwitchPeripheryWindowMeta, Notifiable):
         self.destroy()
 
     def onDropDownOpened(self, opened):
-        r"""
-        Invokes by DAAPI when user open\close dropdown menu
-        :param opened: true - list has been opened, false - list has been closed
-        """
         if GUI_SETTINGS.csisRequestRate == REQUEST_RATE.ON_REQUEST:
             if opened:
                 g_preDefinedHosts.startCSISUpdate()

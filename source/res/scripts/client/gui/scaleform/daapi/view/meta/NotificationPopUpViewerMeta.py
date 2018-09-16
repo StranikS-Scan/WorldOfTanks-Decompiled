@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/NotificationPopUpViewerMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class NotificationPopUpViewerMeta(BaseDAAPIComponent):
@@ -24,15 +20,9 @@ class NotificationPopUpViewerMeta(BaseDAAPIComponent):
         return self.flashObject.as_hasPopUpIndex(typeID, entityID) if self._isDAAPIInited() else None
 
     def as_appendMessageS(self, data):
-        """
-        :param data: Represented by PopUpNotificationInfoVO (AS)
-        """
         return self.flashObject.as_appendMessage(data) if self._isDAAPIInited() else None
 
     def as_updateMessageS(self, data):
-        """
-        :param data: Represented by PopUpNotificationInfoVO (AS)
-        """
         return self.flashObject.as_updateMessage(data) if self._isDAAPIInited() else None
 
     def as_removeMessageS(self, typeID, entityID):

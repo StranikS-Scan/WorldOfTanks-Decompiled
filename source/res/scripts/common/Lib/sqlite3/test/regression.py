@@ -72,38 +72,18 @@ class RegressionTests(unittest.TestCase):
             self.fail('pysqlite knew nothing about the implicit ROLLBACK')
 
     def CheckWorkaroundForBuggySqliteTransferBindings(self):
-        """
-        pysqlite would crash with older SQLite versions unless
-        a workaround is implemented.
-        """
         self.con.execute('create table foo(bar)')
         self.con.execute('drop table foo')
         self.con.execute('create table foo(bar)')
 
     def CheckEmptyStatement(self):
-        """
-        pysqlite used to segfault with SQLite versions 3.5.x. These return NULL
-        for "no-operation" statements
-        """
         self.con.execute('')
 
     def CheckUnicodeConnect(self):
-        """
-        With pysqlite 2.4.0 you needed to use a string or a APSW connection
-        object for opening database connections.
-        
-        Formerly, both bytestrings and unicode strings used to work.
-        
-        Let's make sure unicode strings work in the future.
-        """
         con = sqlite.connect(u':memory:')
         con.close()
 
     def CheckTypeMapUsage(self):
-        """
-        pysqlite until 2.4.1 did not rebuild the row_cast_map when recompiling
-        a statement. This test exhibits the problem.
-        """
         SELECT = 'select * from foo'
         con = sqlite.connect(':memory:', detect_types=sqlite.PARSE_DECLTYPES)
         con.execute('create table foo(bar timestamp)')
@@ -115,24 +95,14 @@ class RegressionTests(unittest.TestCase):
         con.execute(SELECT)
 
     def CheckRegisterAdapter(self):
-        """
-        See issue 3312.
-        """
         self.assertRaises(TypeError, sqlite.register_adapter, {}, None)
         return
 
     def CheckSetIsolationLevel(self):
-        """
-        See issue 3312.
-        """
         con = sqlite.connect(':memory:')
         self.assertRaises(UnicodeEncodeError, setattr, con, 'isolation_level', u'\xe9')
 
     def CheckCursorConstructorCallCheck(self):
-        """
-        Verifies that cursor methods check whether base class __init__ was
-        called.
-        """
 
         class Cursor(sqlite.Cursor):
 
@@ -150,10 +120,6 @@ class RegressionTests(unittest.TestCase):
             self.fail('should have raised ProgrammingError')
 
     def CheckConnectionConstructorCallCheck(self):
-        """
-        Verifies that connection methods check whether base class __init__ was
-        called.
-        """
 
         class Connection(sqlite.Connection):
 
@@ -170,10 +136,6 @@ class RegressionTests(unittest.TestCase):
             self.fail('should have raised ProgrammingError')
 
     def CheckCursorRegistration(self):
-        """
-        Verifies that subclassed cursor classes are correctly registered with
-        the connection object, too.  (fetch-across-rollback problem)
-        """
 
         class Connection(sqlite.Connection):
 
@@ -200,19 +162,10 @@ class RegressionTests(unittest.TestCase):
             self.fail('should have raised InterfaceError')
 
     def CheckAutoCommit(self):
-        """
-        Verifies that creating a connection in autocommit mode works.
-        2.5.3 introduced a regression so that these could no longer
-        be created.
-        """
         con = sqlite.connect(':memory:', isolation_level=None)
         return
 
     def CheckPragmaAutocommit(self):
-        """
-        Verifies that running a PRAGMA statement that does an autocommit does
-        work. This did not work in 2.5.3/2.5.4.
-        """
         cur = self.con.cursor()
         cur.execute('create table foo(bar)')
         cur.execute('insert into foo(bar) values (5)')
@@ -220,12 +173,6 @@ class RegressionTests(unittest.TestCase):
         row = cur.fetchone()
 
     def CheckSetDict(self):
-        """
-        See http://bugs.python.org/issue7478
-        
-        It was possible to successfully register callbacks that could not be
-        hashed. Return codes of PyDict_SetItem were not checked properly.
-        """
 
         class NotHashable:
 
@@ -242,19 +189,9 @@ class RegressionTests(unittest.TestCase):
         self.assertRaises(TypeError, self.con.set_progress_handler, var)
 
     def CheckConnectionCall(self):
-        """
-        Call a connection with a non-string SQL request: check error handling
-        of the statement constructor.
-        """
         self.assertRaises(sqlite.Warning, self.con, 1)
 
     def CheckRecursiveCursorUse(self):
-        """
-        http://bugs.python.org/issue10811
-        
-        Recursively using a cursor, such as when reusing it from a generator led to segfaults.
-        Now we catch recursive cursor usage and raise a ProgrammingError.
-        """
         con = sqlite.connect(':memory:')
         cur = con.cursor()
         cur.execute('create table a (bar)')
@@ -268,12 +205,6 @@ class RegressionTests(unittest.TestCase):
             cur.executemany('insert into b (baz) values (?)', ((i,) for i in foo()))
 
     def CheckConvertTimestampMicrosecondPadding(self):
-        """
-        http://bugs.python.org/issue14720
-        
-        The microsecond parsing of convert_timestamp() should pad with zeros,
-        since the microsecond string "456" actually represents "456000".
-        """
         con = sqlite.connect(':memory:', detect_types=sqlite.PARSE_DECLTYPES)
         cur = con.cursor()
         cur.execute('CREATE TABLE t (x TIMESTAMP)')

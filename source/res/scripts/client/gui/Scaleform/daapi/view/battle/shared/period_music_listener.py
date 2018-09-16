@@ -5,8 +5,6 @@ from constants import ARENA_PERIOD
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 
 class PeriodMusicListener(IAbstractPeriodView):
-    """ This class serves to notify WWISE music engine about arena period changing
-    """
     _ARENA_PERIOD_STATE = {ARENA_PERIOD.WAITING: 'STATE_arenastate_waiting',
      ARENA_PERIOD.PREBATTLE: 'STATE_arenastate_counter',
      ARENA_PERIOD.BATTLE: 'STATE_arenastate_battle'}

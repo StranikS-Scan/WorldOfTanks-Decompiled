@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bdb.py
-"""Debugger basics"""
 import fnmatch
 import sys
 import os
@@ -8,17 +7,10 @@ import types
 __all__ = ['BdbQuit', 'Bdb', 'Breakpoint']
 
 class BdbQuit(Exception):
-    """Exception to give up completely"""
     pass
 
 
 class Bdb():
-    """Generic Python debugger base class.
-    
-    This class takes care of details of the trace facility;
-    a derived class should implement user interaction.
-    The standard debugger class (pdb.Pdb) is an example.
-    """
 
     def __init__(self, skip=None):
         self.skip = set(skip) if skip else None
@@ -149,16 +141,12 @@ class Bdb():
         return self.canonic(frame.f_code.co_filename) in self.breaks
 
     def user_call(self, frame, argument_list):
-        """This method is called when there is the remote possibility
-        that we ever need to stop in this function."""
         pass
 
     def user_line(self, frame):
-        """This method is called when we stop or break at this line."""
         pass
 
     def user_return(self, frame, return_value):
-        """This method is called when a return trap is set here."""
         pass
 
     def user_exception(self, frame, exc_info):
@@ -171,12 +159,9 @@ class Bdb():
         self.stoplineno = stoplineno
 
     def set_until(self, frame):
-        """Stop when the line with the line no greater than the current one is
-        reached or when returning from current frame"""
         self._set_stopinfo(frame, frame, frame.f_lineno + 1)
 
     def set_step(self):
-        """Stop after one line of code."""
         if self.frame_returning:
             caller_frame = self.frame_returning.f_back
             if caller_frame and not caller_frame.f_trace:
@@ -185,19 +170,13 @@ class Bdb():
         return
 
     def set_next(self, frame):
-        """Stop on the next line in or below the given frame."""
         self._set_stopinfo(frame, None)
         return
 
     def set_return(self, frame):
-        """Stop when returning from the given frame."""
         self._set_stopinfo(frame.f_back, frame)
 
     def set_trace(self, frame=None):
-        """Start debugging from `frame`.
-        
-        If frame is not specified, debugging starts from caller's frame.
-        """
         if frame is None:
             frame = sys._getframe().f_back
         self.reset()
@@ -427,18 +406,6 @@ def set_trace():
 
 
 class Breakpoint():
-    """Breakpoint class
-    
-    Implements temporary breakpoints, ignore counts, disabling and
-    (re)-enabling, and conditionals.
-    
-    Breakpoints are indexed by number through bpbynumber and by
-    the file,line tuple using bplist.  The former points to a
-    single instance of class Breakpoint.  The latter points to a
-    list of such instances since there may be more than one
-    breakpoint per line.
-    
-    """
     next = 1
     bplist = {}
     bpbynumber = [None]
@@ -505,7 +472,6 @@ class Breakpoint():
 
 
 def checkfuncname(b, frame):
-    """Check whether we should break here because of `b.funcname`."""
     if not b.funcname:
         if b.line != frame.f_lineno:
             return False
@@ -518,13 +484,6 @@ def checkfuncname(b, frame):
 
 
 def effective(file, line, frame):
-    """Determine which breakpoint for this file:line is to be acted upon.
-    
-    Called only if we know there is a bpt at this
-    location.  Returns breakpoint that was triggered and a flag
-    that indicates if it is ok to delete a temporary bp.
-    
-    """
     possibles = Breakpoint.bplist[file, line]
     for i in range(0, len(possibles)):
         b = possibles[i]

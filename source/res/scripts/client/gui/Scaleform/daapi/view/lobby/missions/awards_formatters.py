@@ -13,10 +13,6 @@ from skeletons.gui.server_events import IEventsCache
 _OPERATION_AWARDS_COUNT = 3
 
 class CurtailingAwardsComposer(QuestsBonusComposer):
-    """
-    Awards formatter which curtails formatted bonuses to count given in displayedAwardsCount.
-    If there is more bonuses then specified they are wrapped in 'box' VO and listed in its tooltip
-    """
 
     def __init__(self, displayedAwardsCount, awardsFormatter=None):
         self._displayedAwardsCount = displayedAwardsCount
@@ -76,9 +72,6 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
 
 
 class DetailedCardAwardComposer(CurtailingAwardsComposer):
-    """
-    Awards formatter for detailed mission card in detailed missions view
-    """
 
     def getFormattedBonuses(self, bonuses, bigAwardsCount=6):
         preformattedBonuses = self.getPreformattedBonuses(bonuses)
@@ -87,15 +80,10 @@ class DetailedCardAwardComposer(CurtailingAwardsComposer):
 
 
 class PersonalMissionsAwardComposer(CurtailingAwardsComposer):
-    """
-    Awards formatter for personal mission bonuses.
-    May display specific reward sheet and free reward sheets bonuses.
-    Slots and berths are not shown in this formatter. UX requirement.
-    """
 
-    def __init__(self, displayedAwardsCount):
+    def __init__(self, displayedAwardsCount, packer=None):
         self._displayedAwardsCount = displayedAwardsCount
-        super(PersonalMissionsAwardComposer, self).__init__(displayedAwardsCount, getPersonalMissionAwardPacker())
+        super(PersonalMissionsAwardComposer, self).__init__(displayedAwardsCount, packer or getPersonalMissionAwardPacker())
 
     def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, gap=0, isObtained=False, areTokensPawned=False, pawnCost=0, obtainedImage='', obtainedImageOffset=0):
         if areTokensPawned:
@@ -149,9 +137,6 @@ def _getTankwomansCountInOperation(operation):
 
 
 class MainOperationAwardComposer(PersonalMissionsAwardComposer):
-    """
-    Awards formatter for operation bonuses.
-    """
     _eventsCache = dependency.descriptor(IEventsCache)
     _TANKWOMAN_BONUS = 'tankwoman'
 
@@ -177,13 +162,10 @@ class MainOperationAwardComposer(PersonalMissionsAwardComposer):
 
     def _getPreformattedTankwomanBonus(self, operation):
         _, total = _getTankwomansCountInOperation(operation)
-        return PreformattedBonus(bonusName=self._TANKWOMAN_BONUS, label=formatCountLabel(total), images=dict(map(lambda size: (size, RES_ICONS.getBonusIcon(size, self._TANKWOMAN_BONUS)), AWARDS_SIZES.ALL())), labelFormatter=text_styles.stats, align=LABEL_ALIGN.RIGHT, specialAlias=TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_TANKWOMAN, isSpecial=True, specialArgs=[]) if total else None
+        return PreformattedBonus(bonusName=self._TANKWOMAN_BONUS, label=formatCountLabel(total), images=dict(((size, RES_ICONS.getBonusIcon(size, self._TANKWOMAN_BONUS)) for size in AWARDS_SIZES.ALL())), labelFormatter=text_styles.stats, align=LABEL_ALIGN.RIGHT, specialAlias=TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_TANKWOMAN, isSpecial=True, specialArgs=[]) if total else None
 
 
 class AddOperationAwardComposer(PersonalMissionsAwardComposer):
-    """
-    Awards formatter for operation bonuses.
-    """
     _eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
@@ -206,9 +188,6 @@ class AddOperationAwardComposer(PersonalMissionsAwardComposer):
 
 
 class TooltipOperationAwardComposer(MainOperationAwardComposer):
-    """
-    Awards formatter for operation tooltip bonuses.
-    """
     _BONUSES_ORDER = ('vehicles', 'tankwoman', 'customizations', 'dossier')
 
     def _getKeySortOrder(self, key):
@@ -227,7 +206,7 @@ class TooltipOperationAwardComposer(MainOperationAwardComposer):
     def _getBonuses(self, operation):
         bonusList = []
         if not operation.isAwardAchieved():
-            for tID, bonuses in operation.getBonuses().iteritems():
+            for _, bonuses in operation.getBonuses().iteritems():
                 bonusList.extend(bonuses)
 
         else:
@@ -242,16 +221,13 @@ class TooltipOperationAwardComposer(MainOperationAwardComposer):
         if not operation.isFullCompleted():
             current, total = _getTankwomansCountInOperation(operation)
             currentStr = text_styles.success(current) if current else text_styles.stats(current)
-            images = dict(map(lambda size: (size, RES_ICONS.getBonusIcon(size, 'tankwoman')), AWARDS_SIZES.ALL()))
+            images = dict(((size, RES_ICONS.getBonusIcon(size, 'tankwoman')) for size in AWARDS_SIZES.ALL()))
             return PreformattedBonus(bonusName=self._TANKWOMAN_BONUS, label='%s / %s' % (currentStr, str(total)), images=images, labelFormatter=text_styles.main)
         else:
             return None
 
 
 class MarathonAwardComposer(CurtailingAwardsComposer):
-    """
-    Awards formatter for marathons header
-    """
     AWARDS_PER_LINE_COUNT = 3
 
     def _packBonuses(self, preformattedBonuses, size):

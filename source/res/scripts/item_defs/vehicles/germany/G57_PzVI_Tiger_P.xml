@@ -88,7 +88,7 @@
       <shortUserString>	#germany_vehicles:Chassis_PzVI_Tiger_P_short	</shortUserString>
       <tags></tags>
       <level>	6	</level>
-      <price>	15100.0	</price>
+      <price>	15100	</price>
       <unlocks>
         <chassis>	Chassis_PzVI_Tiger_P_2	  <cost>	7970	</cost>
         </chassis>
@@ -226,7 +226,7 @@
         <segmentLength>	0.258	</segmentLength>
         <segmentOffset>	0.093	</segmentOffset>
         <segment2Offset>	0.133	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -415,7 +415,7 @@
       <shortUserString>	#germany_vehicles:Chassis_PzVI_Tiger_P_2_short	</shortUserString>
       <tags></tags>
       <level>	7	</level>
-      <price>	17750.0	</price>
+      <price>	17750	</price>
       <unlocks>
         <vehicle>	G37_Ferdinand	  <cost>	150000	</cost>
         </vehicle>
@@ -553,7 +553,7 @@
         <segmentLength>	0.248	</segmentLength>
         <segmentOffset>	0.112	</segmentOffset>
         <segment2Offset>	0.133	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1075,7 +1075,7 @@
       <shortUserString>	#germany_vehicles:Turret_2_PzVI_Tiger_P_short	</shortUserString>
       <tags></tags>
       <level>	7	</level>
-      <price>	30150.0	</price>
+      <price>	30150	</price>
       <armor>
         <armor_1>	100	</armor_1>
         <armor_2>	125	</armor_2>
@@ -1404,7 +1404,7 @@
   </fuelTanks>
   <radios>
     <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200.0	</cost>
+        <radio>	FuG12	  <cost>	7200	</cost>
         </radio>
       </unlocks>
     </FuG7>

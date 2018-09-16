@@ -11,9 +11,6 @@ from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 
 class RankedPrimeTimeValidator(BaseActionsValidator):
-    """
-    Ranked prime time validation
-    """
 
     def _validate(self):
         rankedController = dependency.instance(IRankedBattlesController)
@@ -22,9 +19,6 @@ class RankedPrimeTimeValidator(BaseActionsValidator):
 
 
 class RankedVehicleValidator(BaseActionsValidator):
-    """
-    Ranked vehicle validation
-    """
 
     def _validate(self):
         lobbyContext = dependency.instance(ILobbyContext)
@@ -34,9 +28,6 @@ class RankedVehicleValidator(BaseActionsValidator):
 
 
 class RankedActionsValidator(PreQueueActionsValidator):
-    """
-    Ranked actions validation class
-    """
 
     def _createStateValidator(self, entity):
         baseValidator = super(RankedActionsValidator, self)._createStateValidator(entity)

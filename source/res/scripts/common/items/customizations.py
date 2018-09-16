@@ -1,27 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/customizations.py
-"""
-Customization uses custom serialisation mechanism described below.
-
-There are 3 basic types:
- - intField - integer value encoded by varint
- - arrayField - fixed type array encoded like: varint(size) + [encode(item) for item in items]
- - customFieldType - class with set of fields of different types. Encoded like:
-     varint(customType) + varint(hasValue) + [encode(field) for field in fields],
-     where customType is unique id of type and hasValue is a bitmask defining if i-th
-     field has stored value (encode is performed only if field has non default value).
-
-All customization components are customFieldType inherited from SerializableComponent that allow
-to pack and unpack these components with help of ComponentBinSerializer and ComponentBinDeserializer.
-
-Creating new customization component.
-You need to inherit from SerializableComponent
-assign UNIQUE customType and define fields. Order of fields is fixed and couldn't be changed in future.
-
-Modification existing customization component.
-If you want to delete existing field just mark it as deprecated.
-If you want to add new field just add it to the end of fields list.
-"""
 from cStringIO import StringIO
 import varint
 import ResMgr
@@ -29,8 +7,7 @@ from collections import namedtuple, OrderedDict, defaultdict
 from items.components.c11n_constants import ApplyArea, SeasonType, CustomizationType
 from items.components import c11n_components as cn
 from constants import IS_CELLAPP, IS_BASEAPP
-if IS_CELLAPP or IS_BASEAPP:
-    from typing import List, Dict, Type, Tuple, Any, TypeVar, Optional, MutableMapping
+from typing import List, Dict, Type, Tuple, Any, TypeVar, Optional, MutableMapping
 try:
     from xml.etree import cElementTree as ET
 except ImportError:
@@ -69,23 +46,6 @@ class SerializationException(Exception):
 
 
 class SerializableComponent(object):
-    """
-    Base class for serializable classes.
-    Fields which should be serialized are added to class.fields dictionary.
-    Each serializable class must have unique customType
-    Currently supported types are:
-      * int
-      * array[int]
-      * ComplexType (should be derived from SerializableComponent)
-      * array[ComplexType]
-      Note: no support for dict for a while. Dict is Huge and unstructured type. It can be easily supported but
-      we avoid it.
-      Order of fields does matter. Class declaration is backward compatible with some restrictions:
-        a) all new fields are added to the end of list.
-        b) no fields are removed from the middle. If field is deprecated - mark it with
-        FieldType.deprecated and value will be purged at next save
-    
-    """
     fields = OrderedDict()
     __slots__ = ()
     customType = 0
@@ -148,24 +108,16 @@ class SerializableComponent(object):
 
 
 class ComponentBinSerializer(object):
-    """
-    SerializableComponent binary serializer
-    Serialization format is based on google's protobuf (more or less). Only non-default values are stored
-    """
 
     def __init__(self):
         super(ComponentBinSerializer, self).__init__()
 
     def serialize(self, target):
-        assert hasattr(target, 'customType')
-        assert hasattr(target, 'fields')
         a = varint.encode(target.customType)
         b = self.__serializeCustomType(target)
         return a + b
 
     def __serializeCustomType(self, obj):
-        assert hasattr(obj, 'customType')
-        assert hasattr(obj, 'fields')
         hasValue = 0
         offset = 1
         result = ['\x00']
@@ -197,9 +149,6 @@ class ComponentBinSerializer(object):
 
 
 class ComponentBinDeserializer(object):
-    """
-    SerializableComponent deserializer from binary presentation produced by ComponentBinSerializer
-    """
 
     def __init__(self, customTypes):
         self.__stream = None
@@ -215,7 +164,6 @@ class ComponentBinDeserializer(object):
 
     def __decodeCustomType(self, itemType):
         cls = self.customTypes.get(itemType, None)
-        assert cls
         obj = cls()
         fields = cls.fields
         io = self.__stream
@@ -249,19 +197,14 @@ class ComponentBinDeserializer(object):
 
 
 class ComponentXmlSerializer(object):
-    """ SerializableComponent xml serializer."""
 
     def __init__(self):
         super(ComponentXmlSerializer, self).__init__()
 
     def serialize(self, parent, target):
-        assert hasattr(target, 'customType')
-        assert hasattr(target, 'fields')
         self.__serializeCustomType(parent, target)
 
     def __serializeCustomType(self, xmlObj, obj):
-        assert hasattr(obj, 'customType')
-        assert hasattr(obj, 'fields')
         for fieldName, fieldinfo in obj.fields.iteritems():
             if fieldinfo.deprecated:
                 continue
@@ -289,9 +232,6 @@ class ComponentXmlSerializer(object):
 
 
 class ComponentXmlDeserializer(object):
-    """
-    SerializableComponent deserializer from xml presentation produced by ComponentXmlSerializer.
-    """
     __slots__ = ('customTypes',)
 
     def __init__(self, customTypes):
@@ -349,7 +289,6 @@ class PaintComponent(SerializableComponent):
         super(PaintComponent, self).__init__()
 
     def toDict(self):
-        """Split appliedTo bitmask to dictionary {part: paintId}"""
         at = self.appliedTo
         p = self.id
         return {i:p for i in ApplyArea.RANGE if i & at}
@@ -383,16 +322,6 @@ class DecalComponent(SerializableComponent):
 
 
 class CustomizationOutfit(SerializableComponent):
-    """Vehicle customization set descriptor.
-    Contains all information required to represent tank on battle.
-    
-    Class fields:
-        modifications: List[int] -- various id per vehicle appearance effects (DamageLevel, Aging)
-        paints: List[PaintComponent] -- vehicle model coloring
-        camouflages: List[CamouflageComponent] -- mounted camouflages with configured pattern size and palette
-        decals: List[DecalComponent] -- decals (emblems and inscriptions)
-        styleId: int -- predefined outfit Id from xml or 0 if custom
-    """
     customType = 4
     fields = OrderedDict((('modifications', intArrayField()),
      ('paints', customArrayField(PaintComponent.customType)),
@@ -413,11 +342,6 @@ class CustomizationOutfit(SerializableComponent):
         return bool(self.modifications or self.paints or self.decals or self.styleId or self.camouflages)
 
     def mergeOutfit(self, otherOutfit, inverse=False):
-        """Apply another outfit replacing items from this outfit if conflict occurs
-        
-        :param otherOutfit: outfit to merge with
-        :param inverse: True to store result in otherOutfit
-        """
         selfOutfit = self if not inverse else otherOutfit
         otherOutfit = otherOutfit if not inverse else self
         selfOutfit.styleId = otherOutfit.styleId
@@ -428,7 +352,6 @@ class CustomizationOutfit(SerializableComponent):
         CustomizationOutfit.__overwrite(selfOutfit.camouflages, otherOutfit.camouflages, ApplyArea.CAMOUFLAGE_REGIONS)
 
     def getInvisibilityCamouflageId(self):
-        """Return camouflage id which provides invisibility bonus to vehicle."""
         for ce in self.camouflages:
             if ce.appliedTo & ApplyArea.HULL:
                 return ce.id
@@ -444,7 +367,6 @@ class CustomizationOutfit(SerializableComponent):
 
     @staticmethod
     def applyAreaBitmaskToDict(components):
-        """Convert list of objects with AppliedTo property to dict {ApplyArea: Item}"""
         res = {}
         for c in components:
             i = 1
@@ -472,9 +394,6 @@ class CustomizationOutfit(SerializableComponent):
 
     @staticmethod
     def __overwrite(selfItems, otherItems, applyRange):
-        """Unset bits from applied to in selfItems if otherItems have this bit set,
-        remove empty items and add all other items
-        """
         for o in otherItems:
             for i in applyRange:
                 if o.appliedTo & i:
@@ -486,12 +405,6 @@ class CustomizationOutfit(SerializableComponent):
         selfItems.extend(otherItems)
 
     def dismountComponents(self, applyArea, dismountTypes=CustomizationType._SIMPLE_TYPES):
-        """Dismount items from specified applyArea.
-        
-        :param dismountTypes: types of customization to unmount
-        :param applyArea: bitmask of ApplyArea values
-        :return: Dictionary of dismounted items
-        """
         outfitComponents = (self.paints, self.camouflages, self.decals)
         toMove = defaultdict(int)
         areas = [ i for i in ApplyArea.RANGE if i & applyArea ]
@@ -510,7 +423,6 @@ class CustomizationOutfit(SerializableComponent):
 
 
 _CUSTOMIZATION_CLASSES = {t.customType:t for t in SerializableComponent.__subclasses__()}
-assert len(_CUSTOMIZATION_CLASSES) == len(SerializableComponent.__subclasses__()), 'customType duplication'
 
 def makeCompDescr(customizationItem):
     return ComponentBinSerializer().serialize(customizationItem)
@@ -521,7 +433,6 @@ def parseCompDescr(customizationElementCompDescr):
 
 
 def parseOutfitDescr(outfitDescr):
-    """Parse outfit and perform basic validation"""
     if not outfitDescr:
         return CustomizationOutfit()
     outfit = parseCompDescr(outfitDescr)
@@ -531,7 +442,6 @@ def parseOutfitDescr(outfitDescr):
 
 
 def parseBattleOutfit(outfit, cache, arenaKind, bonusType):
-    """Parse outfit and substitute predefined style with items"""
     if not outfit.styleId:
         return outfit
     style = cache.styles[outfit.styleId]
@@ -542,9 +452,6 @@ if IS_CELLAPP or IS_BASEAPP:
     _itemType = TypeVar('_itemType', bound=cn.BaseCustomizationItem)
 
 def getAllItemsFromOutfit(cc, outfit):
-    """Get amount of items required to fully equip given outfit.
-    :return: dict{itemIntDescr, amount}
-    """
     result = defaultdict(int)
     for i in outfit.modifications:
         result[cn.ModificationItem.makeIntDescr(i)] = 1
@@ -568,17 +475,10 @@ def getAllItemsFromOutfit(cc, outfit):
 
 
 def getOutfitType(arenaKind, bonusType):
-    """Calculate SeasonType from arena parameters.
-    Support of event season could be here."""
     return SeasonType.fromArenaKind(arenaKind)
 
 
 def getBattleOutfit(getter, vehType, arenaKind, bonusType):
-    """Calculate resulting outfit based arena parameters
-    Order is following:
-        1) All season outfit
-        2) arena kind outfit
-    """
     styleOutfitDescr, enabled = getter(vehType, SeasonType.ALL)
     if styleOutfitDescr and enabled:
         return parseOutfitDescr(styleOutfitDescr)
@@ -589,7 +489,6 @@ def getBattleOutfit(getter, vehType, arenaKind, bonusType):
 
 
 class OutfitLogEntry(object):
-    """Class containing outfit information for log_arena_results. Must be equal to arena_vehicle_outfit.asvc schema"""
 
     def __init__(self, outfit):
         self.style_cd = cn.StyleItem.makeIntDescr(outfit.styleId) if outfit.styleId else 0
@@ -633,9 +532,6 @@ class OutfitLogEntry(object):
 
 
 class NamedVector(defaultdict):
-    """Dict with support of fieldwise arithmetic operations:
-    d1 +- d2 ->  {d1[i] +- d2[i]}
-    """
 
     def __init__(self, default_factory=int, args=None):
         super(NamedVector, self).__init__(default_factory, args or [])

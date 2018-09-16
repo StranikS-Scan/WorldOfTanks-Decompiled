@@ -1,13 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/dummy_threading.py
-"""Faux ``threading`` version using ``dummy_thread`` instead of ``thread``.
-
-The module ``_dummy_threading`` is added to ``sys.modules`` in order
-to not have ``threading`` considered imported.  Had ``threading`` been
-directly imported it would have made all subsequent imports succeed
-regardless of whether ``thread`` was available which is not desired.
-
-"""
 from sys import modules as sys_modules
 import dummy_thread
 holding_thread = False

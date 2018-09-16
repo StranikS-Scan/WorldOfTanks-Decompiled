@@ -154,7 +154,6 @@ class RemoteScript(Script):
         raise NotImplementedError
 
     def _receiveTasks(self, interruptLevel, tasks, waitTasks, cancelTasks):
-        assert self.__pendingTasks is None
         self.__pendingTasks = tasks
         self.__waitTaskIDs = waitTasks
         self.__cancelTaskIDs = cancelTasks
@@ -197,7 +196,6 @@ class RemoteScript(Script):
         self._requestTasks(results)
 
     def __invokeCallback(self, callbackID, *args, **kwargs):
-        assert not kwargs
         self.__waitResponse()
         self._invokeCallback(callbackID, args)
 
@@ -242,7 +240,6 @@ class RemoteScriptController(object):
     def _step(self, results):
         waitTasks = self.__script.step(results)
         if self.__script.status == SCRIPT_STATUS.DONE:
-            assert not self.__tasks and not waitTasks
             self.__script.endInterrupt()
             self.__interruptLevel -= 1
             waitTasks = self.__script.continueAfterInterrupt()
@@ -468,29 +465,28 @@ class ScriptDriver(object):
             return self.__interruptDriver.addTask(task, name=name, parent=parent, predecessors=predecessors)
         else:
             tasks = self.__tasks
-            if not parent is None:
-                assert parent in tasks
-                task.name = name
-                task.waitOrder = None
-                if parent is not None:
-                    parent.addSubtask(task)
-                taskPredecessors = set()
-                task.predecessors = taskPredecessors
-                if predecessors:
-                    for predecessor in predecessors:
-                        if predecessor in tasks:
-                            taskPredecessors.add(predecessor)
+            task.name = name
+            task.waitOrder = None
+            if parent is not None:
+                parent.addSubtask(task)
+            taskPredecessors = set()
+            task.predecessors = taskPredecessors
+            if predecessors:
+                for predecessor in predecessors:
+                    if predecessor in tasks:
+                        taskPredecessors.add(predecessor)
 
-                if len(tasks) >= _MAX_TASKS:
-                    LOG_WARNING('[SCRIPT] task dropped because of exceeded limit', task, tasks)
-                    return
-                if taskPredecessors:
-                    blockedTasks = self.__blockedTasks
-                    for predecessor in taskPredecessors:
-                        blockedTasks.setdefault(predecessor, []).append(task)
+            if len(tasks) >= _MAX_TASKS:
+                LOG_WARNING('[SCRIPT] task dropped because of exceeded limit', task, tasks)
+                return
+            if taskPredecessors:
+                blockedTasks = self.__blockedTasks
+                for predecessor in taskPredecessors:
+                    blockedTasks.setdefault(predecessor, []).append(task)
 
-                tasks.append(task)
-                taskPredecessors or self.__registerActiveTask(task)
+            tasks.append(task)
+            if not taskPredecessors:
+                self.__registerActiveTask(task)
             return task
 
     def waitTasks(self, tasks):
@@ -499,7 +495,6 @@ class ScriptDriver(object):
             return
         else:
             waitingTasks = self.__waitingTasks
-            assert not waitingTasks
             for waitOrder, task in enumerate(tasks):
                 if task is not None:
                     task.waitOrder = waitOrder
@@ -592,7 +587,6 @@ class ScriptDriver(object):
         if self.__interruptDriver:
             self.__interruptDriver.suspend()
             return
-        assert not self.__suspended
         for task in self.__tasks:
             task.suspend(False)
 
@@ -602,7 +596,6 @@ class ScriptDriver(object):
         if self.__interruptDriver:
             self.__interruptDriver.resume()
             return
-        assert self.__suspended
         for task in self.__tasks:
             task.resume()
 

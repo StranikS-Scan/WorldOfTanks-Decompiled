@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileHof.py
-import BigWorld
 from functools import partial
+import BigWorld
 from adisp import process
 from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers import dependency, i18n
 from gui.Scaleform import MENU
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared.formatters import icons
-from skeletons.gui.clans import IClanController
+from skeletons.gui.web import IWebController
 from skeletons.gui.server_events import IEventsCache
 from gui import DialogsInterface
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -20,7 +20,7 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 
 class ProfileHof(ProfileHofMeta):
     _eventsCache = dependency.descriptor(IEventsCache)
-    _clansController = dependency.descriptor(IClanController)
+    _clansController = dependency.descriptor(IWebController)
     _errorsStatusMap = {'1004': PROFILE_CONSTANTS.HOF_SPECIAL_CASES,
      '1005': PROFILE_CONSTANTS.HOF_SPECIAL_CASES,
      '1015': PROFILE_CONSTANTS.HOF_SPECIAL_CASES,

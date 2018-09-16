@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/PostmortemDelay.py
+import math
 import BigWorld
 import Math
 from AvatarInputHandler.DynamicCameras.ArcadeCamera import ArcadeCamera
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
-import math
 
-class PostmortemDelay:
+class PostmortemDelay(object):
     FADE_DELAY_TIME = 2.0
     KILLER_VISION_TIME = 5.0
     KILLER_VEHICLE_CAMERA_DISTANCE = 15.0
@@ -16,7 +16,6 @@ class PostmortemDelay:
     KILLER_VEHICLE_PITCH_OFFSET = -0.3
 
     def __init__(self, arcadeCamera, onKillerVisionStart, onStop):
-        assert isinstance(arcadeCamera, ArcadeCamera)
         self.__killerVehicleID = None
         self.__bActive = False
         self.__bChoiceWindowActive = False
@@ -60,7 +59,7 @@ class PostmortemDelay:
             self.__bKillerVisionActive = False
             try:
                 self.__moveCameraTo(BigWorld.player().playerVehicleID)
-            except:
+            except Exception:
                 pass
 
             self.__killerVehicleID = None
@@ -70,7 +69,7 @@ class PostmortemDelay:
             self.__bActive = False
             try:
                 self.__onStop()
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
             return
@@ -107,9 +106,9 @@ class PostmortemDelay:
                     self.__savedPivotSettings = self.__arcadeCamera.getPivotSettings()
                     self.__savedCameraDistance = self.__arcadeCamera.getCameraDistance()
                     self.__savedYawPitch = self.__arcadeCamera.angles
-                    dir = Math.Matrix(vehicle.matrix).translation - Math.Matrix(sourceVehicle.matrix).translation
-                    yaw = dir.yaw
-                    pitch = dir.pitch + self.KILLER_VEHICLE_PITCH_OFFSET
+                    direction = Math.Matrix(vehicle.matrix).translation - Math.Matrix(sourceVehicle.matrix).translation
+                    yaw = direction.yaw
+                    pitch = direction.pitch + self.KILLER_VEHICLE_PITCH_OFFSET
                     if pitch > math.pi * 0.5:
                         pitch = math.pi * 0.5
                     if pitch < -math.pi * 0.5:

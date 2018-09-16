@@ -216,7 +216,7 @@
         <right>	vehicles/german/G102_Pz_III/track/right.track	</right>
         <segmentLength>	0.113	</segmentLength>
         <segmentOffset>	0.274	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -455,7 +455,7 @@
         <right>	vehicles/german/G102_Pz_III/track/right.track	</right>
         <segmentLength>	0.113	</segmentLength>
         <segmentOffset>	0.274	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -684,18 +684,11 @@
       <gunPosition>	-0.000000 0.26 0.747777	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.885685 0.328776 0.528541	</rayStart>
-          <rayEnd>	-0.614901 0.200324 0.515292	</rayEnd>
+          <rayStart>	-0.886436 0.327321 0.527295	</rayStart>
+          <rayEnd>	-0.615652 0.198869 0.514046	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
-          <rayStart>	0.885685 0.328776 0.528541	</rayStart>
-          <rayEnd>	0.614901 0.200324 0.515292	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.25	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <inscription>
           <rayStart>	-0.008175 0.230586 -1.03394	</rayStart>
@@ -704,6 +697,14 @@
           <size>	0.591	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
+        <player>
+          <rayStart>	0.886436 0.327321 0.527295	</rayStart>
+          <rayEnd>	0.615652 0.198869 0.514046	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.25	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
       </emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
@@ -896,18 +897,11 @@
       <gunPosition>	-0.000000 0.289 0.723877	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.943985 0.39604 0.567519	</rayStart>
-          <rayEnd>	-0.587176 0.21543 0.559308	</rayEnd>
+          <rayStart>	-0.946091 0.391938 0.56615	</rayStart>
+          <rayEnd>	-0.589284 0.211329 0.55794	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.225	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
-          <rayStart>	0.943985 0.39604 0.567519	</rayStart>
-          <rayEnd>	0.587176 0.21543 0.559308	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.225	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
           <rayStart>	-0.0128836 0.247126 -1.14913	</rayStart>
@@ -916,6 +910,14 @@
           <size>	0.596	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
+        <player>
+          <rayStart>	0.946091 0.391938 0.56615	</rayStart>
+          <rayEnd>	0.589284 0.211329 0.55794	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.225	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
       </emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
@@ -943,12 +945,12 @@
   </fuelTanks>
   <radios>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
+        <radio>	FuG7	  <cost>	1360	</cost>
         </radio>
       </unlocks>
     </FuG5>
     <FuG7>	shared	  <unlocks>
-        <radio>	FuG_Spr.1	  <cost>	3600.0	</cost>
+        <radio>	FuG_Spr.1	  <cost>	3600	</cost>
         </radio>
       </unlocks>
     </FuG7>

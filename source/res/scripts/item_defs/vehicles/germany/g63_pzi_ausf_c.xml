@@ -1,9 +1,7 @@
 <G63_PzI_ausf_C.xml>
   <crew>
     <commander>	gunner
-
 			radioman
-
 			loader	</commander>
     <driver></driver>
   </crew>
@@ -229,7 +227,7 @@
         <right>	vehicles/german/G63_PzI_ausf_C/track/right.track	</right>
         <segmentLength>	0.085	</segmentLength>
         <segmentOffset>	0.193	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -527,7 +525,7 @@
         <right>	vehicles/german/G63_PzI_ausf_C/track/right.track	</right>
         <segmentLength>	0.085	</segmentLength>
         <segmentOffset>	0.193	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1016,12 +1014,12 @@
   </fuelTanks>
   <radios>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
+        <radio>	FuG7	  <cost>	1360	</cost>
         </radio>
       </unlocks>
     </FuG5>
     <FuG7>	shared	  <unlocks>
-        <radio>	FuG_Spr.A	  <cost>	4500.0	</cost>
+        <radio>	FuG_Spr.A	  <cost>	4500	</cost>
         </radio>
       </unlocks>
     </FuG7>

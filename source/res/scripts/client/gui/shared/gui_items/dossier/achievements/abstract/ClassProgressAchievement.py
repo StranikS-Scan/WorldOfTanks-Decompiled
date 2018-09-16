@@ -18,8 +18,7 @@ class ClassProgressAchievement(SimpleProgressAchievement):
         return
 
     def getUserName(self):
-        i18nRank = i18n.makeString('#achievements:achievement/rank%d' % (self._value or self.MIN_LVL))
-        return super(ClassProgressAchievement, self).getUserName() % {'rank': i18nRank}
+        return super(ClassProgressAchievement, self).getUserName() % self._getUserNameCtx()
 
     def getValue(self):
         return self._value or self.NO_LVL
@@ -41,6 +40,9 @@ class ClassProgressAchievement(SimpleProgressAchievement):
     def getNotificationInfo(self):
         notificationKey = '#achievements:%s_notification%d' % (self._getActualName(), self._value)
         return i18n.makeString(notificationKey) if i18n.doesTextExist(notificationKey) else ''
+
+    def _getUserNameCtx(self):
+        return {'rank': i18n.makeString('#achievements:achievement/rank%d' % (self._value or self.MIN_LVL))}
 
     def _readLevelUpTotalValue(self, dossier):
         if self._name not in RECORD_CONFIGS:

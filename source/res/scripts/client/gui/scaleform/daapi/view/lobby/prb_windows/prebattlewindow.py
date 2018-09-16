@@ -101,12 +101,12 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
 
     def isReadyBtnEnabled(self):
         entity = self.prbEntity
-        team, assigned = decodeRoster(entity.getRosterKey())
+        _, assigned = decodeRoster(entity.getRosterKey())
         return g_currentVehicle.isReadyToPrebattle() and not (entity.getTeamState().isInQueue() and assigned)
 
     def isLeaveBtnEnabled(self):
         entity = self.prbEntity
-        team, assigned = decodeRoster(entity.getRosterKey())
+        _, assigned = decodeRoster(entity.getRosterKey())
         return not (entity.getTeamState().isInQueue() and entity.getPlayerInfo().isReady() and assigned)
 
     def startListening(self):
@@ -186,14 +186,6 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
         raise NotImplementedError
 
     def _makeAccountsData(self, accounts, playerComparatorType=PREBATTLE_PLAYERS_COMPARATORS.REGULAR):
-        """
-        Args:
-            accounts: list of accountants
-            playerComparatorType: sort PREBATTLE_PLAYERS_COMPARATORS type
-        
-        Returns:
-            prepared accountsData sorted list
-        """
         result = []
         isPlayerSpeaking = self.bwProto.voipController.isPlayerSpeaking
         getUser = self.usersStorage.getUser

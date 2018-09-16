@@ -260,7 +260,7 @@
         <right>	vehicles/american/A35_Pershing/track/right.track	</right>
         <segmentLength>	0.143	</segmentLength>
         <segmentOffset>	0.001	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -538,7 +538,7 @@
         <right>	vehicles/american/A35_Pershing/track/right.track	</right>
         <segmentLength>	0.143	</segmentLength>
         <segmentOffset>	0.001	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1253,7 +1253,7 @@
   </turrets0>
   <engines>
     <Ford_GAN>	shared	  <unlocks>
-        <engine>	Continental_AV-1790-1	  <cost>	10500.0	</cost>
+        <engine>	Continental_AV-1790-1	  <cost>	10500	</cost>
         </engine>
       </unlocks>
     </Ford_GAN>

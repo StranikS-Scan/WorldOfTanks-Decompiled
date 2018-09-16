@@ -9,9 +9,6 @@ class URLMarcos(object):
     __MACROS_PREFIX = '$'
 
     def __init__(self):
-        """
-        Class of parser that replace macros to required value.
-        """
         super(URLMarcos, self).__init__()
         self.__asyncMacroses = macroses.getAsyncMacroses()
         self.__syncMacroses = macroses.getSyncMacroses()
@@ -32,19 +29,11 @@ class URLMarcos(object):
         return
 
     def hasMarcos(self, url):
-        """
-        Does url have macros.
-        @return: bool.
-        """
         return len(self.__filter.findall(url)) > 0
 
     @async
     @process
     def parse(self, url, params=None, callback=lambda *args: None):
-        """
-        Finds macros and replace to required value.
-        @return: string containing parsed url.
-        """
         for macros in self.__filter.findall(url):
             macroName, _, args = self.__argsFilter.match(macros).groups()
             replacement = yield self._replace(macroName, args, params)

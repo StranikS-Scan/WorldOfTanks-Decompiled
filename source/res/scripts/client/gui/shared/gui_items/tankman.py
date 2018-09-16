@@ -54,7 +54,7 @@ class TankmenComparator(object):
 class Tankman(GUIItem, HasStrCD):
     __slots__ = ('__descriptor', '_invID', '_nationID', '_itemTypeID', '_itemTypeName', '_combinedRoles', '_dismissedAt', '_isDismissed', '_areClassesCompatible', '_vehicleNativeDescr', '_vehicleInvID', '_vehicleDescr', '_vehicleBonuses', '_vehicleSlotIdx', '_skills', '_skillsMap')
 
-    class ROLES:
+    class ROLES(object):
         COMMANDER = 'commander'
         RADIOMAN = 'radioman'
         DRIVER = 'driver'
@@ -236,10 +236,6 @@ class Tankman(GUIItem, HasStrCD):
         return getRoleUserName(self.descriptor.role)
 
     def availableSkills(self, useCombinedRoles=False):
-        """ Get list of skills which tankman can learn
-        :param useCombinedRoles: get skills for combined roles (True/False)
-        :return: List with text name of skills, e.g. ['brotherhood', 'gunner_gunsmith', 'gunner_smoothTurret']
-        """
         if useCombinedRoles:
             availSkills = set()
             for role in self.combinedRoles:
@@ -251,10 +247,6 @@ class Tankman(GUIItem, HasStrCD):
         return availSkills
 
     def hasNewSkill(self, useCombinedRoles=False):
-        """ Has tankman new skills for learn
-        :param useCombinedRoles: take in account combined roles skills, (e.g. commander and radioman skills)
-        :return: True/False
-        """
         availSkills = self.availableSkills(useCombinedRoles)
         return self.roleLevel == tankmen.MAX_SKILL_LEVEL and bool(availSkills) and (self.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not self.skills)
 
@@ -274,15 +266,12 @@ class Tankman(GUIItem, HasStrCD):
 
     @property
     def efficiencyRoleLevel(self):
-        factor, addition = (1, 0)
+        factor, _ = (1, 0)
         if self.isInTank:
-            factor, addition = self.descriptor.efficiencyOnVehicle(self.vehicleDescr)
+            factor, _ = self.descriptor.efficiencyOnVehicle(self.vehicleDescr)
         return round(self.roleLevel * factor)
 
     def getNextLevelXpCost(self):
-        """ Calculate the XP cost to raise a skill by one point
-        :return: integer -> value of xp cost
-        """
         descr = self.descriptor
         if self.roleLevel != tankmen.MAX_SKILL_LEVEL or self.skills and descr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
             lastSkillNumValue = descr.lastSkillNumber - descr.freeSkillsNumber
@@ -296,9 +285,6 @@ class Tankman(GUIItem, HasStrCD):
             return descr.levelUpXpCost(nextSkillLevel, skillSeqNum) - descr.freeXP
 
     def getNextSkillXpCost(self):
-        """ Calculate the XP cost to raise a skill to MAX_SKILL_LEVEL
-        :return: integer -> value of xp cost
-        """
         descr = self.descriptor
         if self.roleLevel != tankmen.MAX_SKILL_LEVEL or self.skills and descr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
             lastSkillNumValue = descr.lastSkillNumber - descr.freeSkillsNumber
@@ -514,16 +500,9 @@ class SabatonTankmanSkill(TankmanSkill):
             self._isPermanent = True
 
     def getSkillIconName(self, skillName):
-        """Change icon for brotherhood skill
-        :return:
-        """
         return 'sabaton_brotherhood.png' if skillName == 'brotherhood' else i18n.convert(tankmen.getSkillsConfig().getSkill(skillName).icon)
 
     def getSkillUserName(self, skillName):
-        """Change description for brotherhood skill
-        :param skillName:
-        :return:
-        """
         return i18n.makeString(ITEM_TYPES.TANKMAN_SKILLS_BROTHERHOOD_SABATON) if skillName == 'brotherhood' else tankmen.getSkillsConfig().getSkill(skillName).userString
 
     @property
@@ -636,26 +615,12 @@ def calculateRankID(startRoleLevel, freeXpValue=0, typeID=(0, 0)):
 
 
 def isSkillLearnt(skillName, vehicle):
-    """
-    Check if the provided skill is learnt (100%) on the vehicle.
-    For common skill - the whole crew will be checked
-    :param skillName: string with skill
-    :param vehicle: instance of gui_item.Vehicle
-    :return: boolean result
-    """
     isCommonSkill = skillName in tankmen.COMMON_SKILLS
     return __isCommonSkillLearnt(skillName, vehicle) if isCommonSkill else __isPersonalSkillLearnt(skillName, vehicle)
 
 
 def __isCommonSkillLearnt(skillName, vehicle):
-    """
-    Check if the provide COMMON skill is learnt. It means each member in crew
-    should learn the skill
-    :param skillName: string with skill
-    :param vehicle: instance of gui_item.Vehicle
-    :return: boolean result
-    """
-    for roleIndex, tankman in vehicle.crew:
+    for _, tankman in vehicle.crew:
         if tankman is not None:
             if skillName in tankman.skillsMap:
                 if tankman.skillsMap[skillName].level != tankmen.MAX_SKILL_LEVEL:
@@ -668,13 +633,7 @@ def __isCommonSkillLearnt(skillName, vehicle):
 
 
 def __isPersonalSkillLearnt(skillName, vehicle):
-    """
-    Check if the personal skill is learnt for one member in crew.
-    :param skillName: string with skill
-    :param vehicle: vehicle: instance of gui_item.Vehicle
-    :return: boolean result
-    """
-    for roleIndex, tankman in vehicle.crew:
+    for _, tankman in vehicle.crew:
         if tankman is not None:
             if skillName in tankman.skillsMap and tankman.skillsMap[skillName].level == tankmen.MAX_SKILL_LEVEL:
                 return True

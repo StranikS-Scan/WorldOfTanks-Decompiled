@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ReferralManagementWindow.py
 import itertools
 import pickle
-from adisp import process
 from operator import methodcaller
+from adisp import process
 import BigWorld
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_WARNING
@@ -79,7 +79,7 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, IGlobalListener, No
 
     @classmethod
     def __getClosestNotification(cls):
-        updates = map(lambda r: r.getBonus()[1], cls.refSystem.getReferrals())
+        updates = [ r.getBonus()[1] for r in cls.refSystem.getReferrals() ]
         return min(updates) if updates else 0
 
     def __update(self):
@@ -126,7 +126,6 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, IGlobalListener, No
             referralNumber = text_styles.stats(ms('%d.' % (i + 1)))
             dbID = item.getAccountDBID()
             user = self.usersStorage.getUser(dbID)
-            assert user, 'User must be defined'
             contactConverter = ContactConverter()
             contactData = contactConverter.makeVO(user)
             xpIcon = RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON
@@ -206,7 +205,7 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, IGlobalListener, No
                 totalSteps = len(quests)
                 lastStep = totalSteps - 1
                 for i, (xp, events) in enumerate(quests):
-                    notCompleted = filter(lambda q: not q.isCompleted(), reversed(events))
+                    notCompleted = [ q for q in reversed(events) if not q.isCompleted() ]
                     lastNotCompleted = findFirst(None, notCompleted)
                     if lastNotCompleted is not None:
                         questIDs = map(methodcaller('getID'), notCompleted)
@@ -260,9 +259,6 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, IGlobalListener, No
 
     @process
     def __inviteOrCreateSquad(self, referralID):
-        """ Send invite to the target player if squad is already exist or
-        make the new one with invitation
-        """
         yield self.prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.SQUAD, accountsToInvite=(referralID,)))
 
     def __showInviteMessage(self, user):

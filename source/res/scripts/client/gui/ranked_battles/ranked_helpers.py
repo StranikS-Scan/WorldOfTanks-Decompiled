@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/ranked_helpers.py
-import BigWorld
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -15,18 +14,11 @@ __ANIMATION_DATA_FIELDS = ['top',
  'right']
 
 def getRankedDataFromTokenQuestID(questID):
-    """
-      parses id of quest for ranked seasons web league position:
-      seasonID, cohort number and percent of people in given cohort
-    """
     seasonID, cohort, percent = questID.split('_')[-3:]
     return (int(seasonID), int(cohort), int(percent))
 
 
 def isRankedQuestID(ID):
-    """
-        checks whether given sting ID starts with proper prefix
-    """
     return ID[:len(RANKED_QUEST_ID_PREFIX)] == RANKED_QUEST_ID_PREFIX
 
 
@@ -98,14 +90,6 @@ def buildRankVO(rank, isEnabled=False, hasTooltip=False, imageSize=RANKEDBATTLES
 
 
 def getShieldSizeByRankSize(rankSize):
-    """
-    Convert rankSize to shieldSize
-    Big => Huge
-    Small => Medium
-    Because FE scale Huge to Big and Medium to Small
-    :param rankSize:
-    :return:
-    """
     return RANKEDBATTLES_ALIASES.WIDGET_HUGE if rankSize in RANKEDBATTLES_ALIASES.SHIELD_HUGE_SIZES else RANKEDBATTLES_ALIASES.WIDGET_MEDIUM
 
 

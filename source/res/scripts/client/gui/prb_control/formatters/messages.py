@@ -48,17 +48,13 @@ def getVehicleNotSupportedMessage():
     return i18n.makeString('#system_messages:prebattle/vehicleInvalid/vehicleNotSupported')
 
 
-def getVehicleFalloutOnlyMessage():
-    return i18n.makeString('#system_messages:prebattle/vehicleInvalid/falloutOnly')
-
-
 def getClassLimitMessage4Vehicle(teamLimits):
-    classesList = map(lambda clazz: i18n.makeString('#menu:classes/%s' % clazz), teamLimits['classes'])
+    classesList = [ i18n.makeString('#menu:classes/%s' % clazz) for clazz in teamLimits['classes'] ]
     return i18n.makeString('#system_messages:prebattle/vehicleInvalid/limits/classes') % ', '.join(classesList)
 
 
 def getNationLimitMessage4Vehicle(teamLimits):
-    nationsList = map(lambda nation: i18n.makeString('#menu:nations/%s' % nation), teamLimits['nations'])
+    nationsList = [ i18n.makeString('#menu:nations/%s' % nation) for nation in teamLimits['nations'] ]
     return i18n.makeString('#system_messages:prebattle/vehicleInvalid/limits/nations') % ', '.join(nationsList)
 
 
@@ -93,7 +89,6 @@ def getRotationVehicleIsLockedMessage():
 _INVALID_VEHICLE_STATE = {PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT: getVehicleNotPresentMessage,
  PREBATTLE_RESTRICTION.VEHICLE_NOT_READY: getVehicleNotReadyMessage,
  PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED: getVehicleNotSupportedMessage,
- PREBATTLE_RESTRICTION.VEHICLE_FALLOUT_ONLY: getVehicleFalloutOnlyMessage,
  PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED: getRotationVehicleIsLockedMessage}
 _INVALID_VEHICLE_IN_TEAM = {PREBATTLE_RESTRICTION.LIMIT_CLASSES: getClassLimitMessage4Vehicle,
  PREBATTLE_RESTRICTION.LIMIT_NATIONS: getNationLimitMessage4Vehicle,

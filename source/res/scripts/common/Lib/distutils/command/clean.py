@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/clean.py
-"""distutils.command.clean
-
-Implements the Distutils 'clean' command."""
 __revision__ = '$Id$'
 import os
 from distutils.core import Command

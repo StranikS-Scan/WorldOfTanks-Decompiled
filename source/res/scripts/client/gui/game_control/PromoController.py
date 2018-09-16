@@ -80,16 +80,6 @@ class PromoController(IPromoController):
             self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, promoTitle, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
 
     def showPromo(self, url, title, forced=False, handlers=None):
-        """
-        :param url: url that should be opened in the browser:
-        :param title: the title of browser window:
-        :param forced: True - promowindow with new URL will be shown in any case,
-                       False - new promowindow will be shown
-                       if there has not been already shown promowindow during the session:
-        :param handlers: Dict:
-                key - gui action self.GUI_EVENTS.*
-                value - functions that should to be invoked when particular gui action has happened
-        """
         if forced:
             self.__registerAndShowPromoBrowser(url, title, handlers)
             self._isPromoShown = True
@@ -160,7 +150,7 @@ class PromoController(IPromoController):
     @process
     def _updatePromo(self, promosData):
         yield lambda callback: callback(True)
-        for item in filter(lambda item: item.eventType == gc_constants.PROMO.TEMPLATE.ACTION, promosData):
+        for item in [ item for item in promosData if item.eventType == gc_constants.PROMO.TEMPLATE.ACTION ]:
             promoUrl = yield self.__urlMacros.parse(item.data)
             self.__availablePromo.add(promoUrl)
 

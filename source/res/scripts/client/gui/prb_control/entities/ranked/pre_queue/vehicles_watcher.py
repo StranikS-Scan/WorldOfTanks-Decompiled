@@ -11,31 +11,18 @@ from skeletons.gui.shared import IItemsCache
 from helpers import dependency
 
 class RankedVehiclesWatcher(object):
-    """
-    Ranked vehicles watcher class: listens for proper events
-    and updates the states of vehicles selected
-    """
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def start(self):
-        """
-        Starts listening for events
-        """
         self.__setUnsuitableState()
         g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryChanged})
 
     def stop(self):
-        """
-        Stops listening for events
-        """
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__clearUnsuitableState()
 
     def __getUnsuitableVehicles(self):
-        """
-        Gets all unsupported vehicles
-        """
         config = self.lobbyContext.getServerSettings().rankedBattles
         vehLevels = range(MIN_VEHICLE_LEVEL, config.minLevel) + range(config.maxLevel + 1, MAX_VEHICLE_LEVEL + 1)
         vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels)).itervalues()
@@ -43,9 +30,6 @@ class RankedVehiclesWatcher(object):
         return chain(vehs, eventVehs)
 
     def __setUnsuitableState(self):
-        """
-        Sets to all unsupported vehicles custom state
-        """
         vehicles = self.__getUnsuitableVehicles()
         intCDs = set()
         for vehicle in vehicles:
@@ -56,9 +40,6 @@ class RankedVehiclesWatcher(object):
             g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
 
     def __clearUnsuitableState(self):
-        """
-        Unsets to all unsupported vehicles custom state
-        """
         vehicles = self.__getUnsuitableVehicles()
         intCDs = set()
         for vehicle in vehicles:
@@ -69,9 +50,4 @@ class RankedVehiclesWatcher(object):
             g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
 
     def __onInventoryChanged(self, diff):
-        """
-        Listener for inventory update envent
-        Args:
-            diff: inventory update diff
-        """
         self.__setUnsuitableState()

@@ -16,14 +16,6 @@ def _parseIcon(xmlCtx, section):
 
 
 def _readIDs(xmlCtx, subsections, accumulator, parser=None):
-    """Parses sequence of "<_id> content </_id>". Adds items to 'accumulator' dict.
-    Raises exception if the sequence is empty.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param subsections: instance of DataSection.
-    :param accumulator: dictionary to store pair (ID, name).
-    :param parser: additional parser to fetch specific data or None.
-    :return: Returns set of IDs.
-    """
     res = set()
     for sname, subsection in subsections:
         try:
@@ -47,15 +39,11 @@ def _readIDs(xmlCtx, subsections, accumulator, parser=None):
 
 
 def _readRanks(xmlCtx, subsections):
-    """Reads section containing ranks and stores data to RanksSet.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param subsections: instance of DataSection.
-    :return: instance of RanksSet.
-    """
     ranks = tankmen_components.RanksSet()
     for sname, subsection in subsections:
         if ranks.getRankByName(sname) is not None:
             _xml.raiseWrongXml(xmlCtx, sname, 'is not unique')
+        sname = intern(sname)
         ctx = (xmlCtx, sname)
         if IS_CLIENT or IS_WEB:
             i18n = shared_components.I18nString(_xml.readNonEmptyString(ctx, subsection, 'userString'))
@@ -69,12 +57,6 @@ def _readRanks(xmlCtx, subsections):
 
 
 def _readRoleRanks(xmlCtx, section, ranks):
-    """Reads section containing mapping role -> ranks and stores it to RoleRanks.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param section: instance of DataSection.
-    :param ranks: instance of RanksSet.
-    :return: instance of RoleRanks.
-    """
     roleRanks = tankmen_components.RoleRanks()
     for roleName in skills_constants.ROLES:
         rankIDs = []
@@ -106,13 +88,6 @@ def _readGroupTags(xmlCtx, section, subsectionName):
 
 
 def _readGroupRoles(xmlCtx, section, subsectionName):
-    """
-    Returns contents of roles tag group as an immutable subset of ROLES
-    :param xmlCtx: xml context for reporting and error handling purposes.
-    :param section: group section to read roles section.
-    :param subsectionName: name of roles section inside group section.
-    :return: subset of ROLES.
-    """
     source = _xml.readStringOrNone(xmlCtx, section, subsectionName)
     if source is not None:
         tags = source.split()
@@ -120,7 +95,7 @@ def _readGroupRoles(xmlCtx, section, subsectionName):
         for tag in tags:
             if tag not in skills_constants.ROLES:
                 _xml.raiseWrongXml(xmlCtx, subsectionName, 'unknown tag "{}"'.format(tag))
-            roles.append(tag)
+            roles.append(intern(tag))
 
     else:
         tags = skills_constants.ROLES
@@ -128,14 +103,6 @@ def _readGroupRoles(xmlCtx, section, subsectionName):
 
 
 def _readTankmenGroup(xmlCtx, subsection, firstNames, lastNames, icons):
-    """Reads section containing data of tankmen group and stores it to NationGroup.
-    :param xmlCtx: tuple(root ctx or None, path to section).
-    :param subsection: instance of DataSection.
-    :param firstNames: dict(ID of first name: string or None)
-    :param lastNames: dict(ID of last name: string or None)
-    :param icons: dict(ID of icon: string or None)
-    :return: instance of NationGroup.
-    """
     if IS_CLIENT or IS_WEB:
         parseName = _parseName
         parseIcon = _parseIcon
@@ -179,10 +146,6 @@ def _readNationConfigSection(xmlCtx, section):
 
 
 def readNationConfig(xmlPath):
-    """Reads xml file containing nation-specific configuration of tankmen.
-    :param xmlPath: string containing relative path to xml file.
-    :return: instance of NationConfig.
-    """
     section = ResMgr.openSection(xmlPath)
     if section is None:
         _xml.raiseWrongXml(None, xmlPath, 'can not open or read')

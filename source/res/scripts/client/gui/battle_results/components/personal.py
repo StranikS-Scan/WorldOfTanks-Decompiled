@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/personal.py
-"""
-Module contains components that are included in personal information: personal efficiency,
-list of personal vehicles, list of personal achievements, etc.
-"""
 import BigWorld
 from constants import DEATH_REASON_ALIVE
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
@@ -82,7 +78,7 @@ class PersonalVehicleNamesBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        for intCD, item in reusable.personal.getVehicleItemsIterator():
+        for _, item in reusable.personal.getVehicleItemsIterator():
             self.addNextComponent(base.DirectStatsItem('', item.userName))
 
 
@@ -90,16 +86,8 @@ class PersonalVehicleTypeIconsBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        for intCD, item in reusable.personal.getVehicleItemsIterator():
+        for _, item in reusable.personal.getVehicleItemsIterator():
             self.addNextComponent(base.DirectStatsItem('', getTypeBigIconPath(item.type, False)))
-
-
-class FalloutVehicleNamesBlock(PersonalVehicleNamesBlock):
-    __slots__ = ()
-
-    def setRecord(self, result, reusable):
-        self.addNextComponent(base.DirectStatsItem('', i18n.makeString(BATTLE_RESULTS.ALLVEHICLES)))
-        super(FalloutVehicleNamesBlock, self).setRecord(result, reusable)
 
 
 class PersonalVehicleBlock(base.StatsBlock):
@@ -146,18 +134,7 @@ class PersonalVehiclesBlock(base.StatsBlock):
             self.addComponent(self.getNextComponentIndex(), component)
 
 
-class FalloutVehiclesBlock(PersonalVehiclesBlock):
-    __slots__ = ()
-
-    def setRecord(self, result, reusable):
-        component = PersonalVehicleBlock()
-        component.vehicleIcon = RES_ICONS.MAPS_ICONS_LIBRARY_FALLOUTVEHICLESALL
-        self.addComponent(self.getNextComponentIndex(), component)
-        super(FalloutVehiclesBlock, self).setRecord(result, reusable)
-
-
 class DamageDetailsBlock(base.StatsBlock):
-    """The block contains information about the damage dealt to one enemy."""
     __slots__ = ('piercings', 'damageDealtValues', 'damageDealtNames')
 
     def __init__(self, meta=None, field='', *path):
@@ -177,7 +154,6 @@ class DamageDetailsBlock(base.StatsBlock):
 
 
 class ArmorUsingDetailsBlock(base.StatsBlock):
-    """The block contains information about blocked shots of one enemy."""
     __slots__ = ('usedArmorCount', 'armorValues', 'armorNames')
 
     def __init__(self, meta=None, field='', *path):
@@ -198,7 +174,6 @@ class ArmorUsingDetailsBlock(base.StatsBlock):
 
 
 class AssistDetailsBlock(base.StatsBlock):
-    """The block contains assist in damage for one enemy."""
     __slots__ = ('damageAssisted', 'damageAssistedValues', 'damageAssistedNames')
 
     def __init__(self, meta=None, field='', *path):
@@ -220,7 +195,6 @@ class AssistDetailsBlock(base.StatsBlock):
 
 
 class StunDetailsBlock(base.StatsBlock):
-    """The block contains information about stun for one enemy."""
     __slots__ = ('stunNum', 'stunValues', 'stunNames', 'stunDuration')
 
     def __init__(self, meta=None, field='', *path):
@@ -243,7 +217,6 @@ class StunDetailsBlock(base.StatsBlock):
 
 
 class CritsDetailsBlock(base.StatsBlock):
-    """The block contains critical damages info for one enemy."""
     __slots__ = ('critsCount', 'criticalDevices', 'destroyedDevices', 'destroyedTankmen')
 
     def __init__(self, meta=None, field='', *path):
@@ -275,7 +248,6 @@ class CritsDetailsBlock(base.StatsBlock):
 
 
 class TeamBaseDetailsBlock(base.StatsBlock):
-    """The basic block contains information about one team base."""
     __slots__ = ('_showCapturePoints', '_showDefencePoints', 'captureTotalItems', 'defenceTotalItems', 'captureValues', 'captureNames', 'defenceValues', 'defenceNames', 'label', 'isEnemyBase')
 
     def __init__(self, meta=None, field='', *path):
@@ -306,7 +278,6 @@ class TeamBaseDetailsBlock(base.StatsBlock):
 
 
 class EnemyTeamBaseDetailBlock(TeamBaseDetailsBlock):
-    """The block contains information about one enemy base."""
     __slots__ = ('_showCapturePoints', 'label', 'isEnemyBase')
 
     def __init__(self, meta=None, field='', *path):
@@ -317,7 +288,6 @@ class EnemyTeamBaseDetailBlock(TeamBaseDetailsBlock):
 
 
 class AllyTeamBaseDetailBlock(TeamBaseDetailsBlock):
-    """The block contains information about one ally base."""
     __slots__ = ('_showDefencePoints', 'label')
 
     def __init__(self, meta=None, field='', *path):
@@ -328,7 +298,6 @@ class AllyTeamBaseDetailBlock(TeamBaseDetailsBlock):
 
 
 class EnemyDetailsBlock(base.StatsBlock):
-    """The block contains information about one enemy: damage, crits, etc.."""
     __slots__ = ('vehicleIcon', 'vehicleName', 'vehicleIntCD', 'vehicleID', 'deathReason', 'spotted', 'piercings', 'damageDealt', 'killCount')
 
     def setRecord(self, result, reusable):
@@ -366,7 +335,6 @@ class EnemyDetailsBlock(base.StatsBlock):
 
 
 class TotalEfficiencyDetailsHeader(base.StatsBlock):
-    """The block contains header of personal efficiency table in tab 'Common'."""
     __slots__ = ('kills', 'damageDealt', 'criticalDamages', 'damageBlockedByArmor', 'damageAssisted', 'damageAssistedStun', 'spotted', 'killsTooltip', 'damageDealtTooltip', 'criticalDamagesTooltip', 'damageBlockedTooltip', 'damageAssistedTooltip', 'spottedTooltip', 'damageAssistedStunTooltip', 'hasEfficencyStats')
 
     def __init__(self, meta=None, field='', *path):
@@ -415,11 +383,6 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
 
     @classmethod
     def __makeEfficiencyHeaderTooltip(cls, key, value):
-        """Makes a tooltip for header efficiency (sum for damage, spotted, etc).
-        :param key: tooltip key, see BATTLERESULTS_EFFICIENCYHEADER_ENUM
-        :param value: value to display
-        :return: prepared tooltip with necessary tags, for <=0 - return None
-        """
         if value > 0:
             header = TOOLTIPS.battleresults_efficiencyheader(key)
             body = BigWorld.wg_getIntegralFormat(value)
@@ -429,12 +392,10 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
 
 
 class TotalEfficiencyDetailsBlock(base.StatsBlock):
-    """Block contains data of personal efficiency table in tab 'Common'."""
     __slots__ = ()
 
     def setRecord(self, result, reusable):
         blocks = []
-        arenaSubType = reusable.common.arenaSubTypeName
         for bases, enemies in reusable.getPersonalDetailsIterator(result):
             components = []
             for info in bases:
@@ -465,12 +426,10 @@ class TotalEfficiencyDetailsBlock(base.StatsBlock):
 
 
 class TotalPersonalAchievementsBlock(shared.BiDiStatsBlock):
-    """Block contains two lists of personal achievements"""
     __slots__ = ()
 
     def addComponent(self, index, component):
         super(TotalPersonalAchievementsBlock, self).addComponent(index, component)
-        assert isinstance(component, shared.AchievementsBlock), 'Component must be extended class AchievementBlock'
 
     def setRecord(self, result, reusable):
         left, right = reusable.personal.getAchievements(result)
@@ -479,8 +438,6 @@ class TotalPersonalAchievementsBlock(shared.BiDiStatsBlock):
 
 
 class SandboxNoIncomeAlert(base.StatsBlock):
-    """Block contains message that player played to sandbox and
-    didn't earn any game resources."""
     __slots__ = ('icon', 'text')
 
     def __init__(self, meta=None, field='', *path):

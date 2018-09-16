@@ -25,5 +25,5 @@ class HonoredRankAchievement(RegularAchievement):
         return self.__getCount(dossier)
 
     @classmethod
-    def __getCount(self, dossier):
+    def __getCount(cls, dossier):
         return dossier.getRankedStats().getTotalRanksCount()

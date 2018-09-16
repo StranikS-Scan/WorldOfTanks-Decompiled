@@ -51,9 +51,5 @@ class SoundEffectsId(CONST_CONTAINER):
 
     @classmethod
     def getFortClanWarResult(cls, battleResult):
-        """
-        :param battleResult: battle result win/lose/draw
-        :return: String with battle result
-        """
         result = '%s%s' % (cls._FORT_CLAN_WAR_RESULT_PREFIX, battleResult)
         return result

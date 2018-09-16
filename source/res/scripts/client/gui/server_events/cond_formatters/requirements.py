@@ -6,7 +6,7 @@ import nations
 from constants import EVENT_TYPE, IGR_TYPE, IS_CHINA
 from gui import makeHtmlString
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.server_events.cond_formatters import packText, getSeparator, packTokenProgress, getSeparatorBlock
+from gui.server_events.cond_formatters import packText, packTokenProgress, getSeparatorBlock
 from gui.server_events.cond_formatters.formatters import ConditionFormatter, ConditionsFormatter
 from gui.server_events.conditions import GROUP_TYPE, AndGroup
 from gui.server_events.formatters import TOKEN_SIZES
@@ -22,9 +22,7 @@ def packTokens(tokens):
 
 
 def relate(relation, value, label):
-    """ Add a relation information to the existing label.
-    """
-    if type(value) not in types.StringTypes:
+    if not isinstance(value, types.StringTypes):
         value = BigWorld.wg_getNiceNumberFormat(value)
     else:
         value = value
@@ -34,12 +32,6 @@ def relate(relation, value, label):
 
 
 def prepareAccountConditionsGroup(conditions, event):
-    """
-    Create union AND group condition for account requirements component
-    contains account requirements and some specific vehicle requirements,
-    which may be displayed in account requirements component WOTD-84729
-    Wrap vehicle requirement in vehicle condition adapter, that check available for all suitable vehicles
-    """
     group = AndGroup()
     group.add(conditions.getConditions())
     group.add(_getAdapter(event.vehicleReqs.getConditions(), event.vehicleReqs.getSuitableVehicles()))
@@ -61,12 +53,6 @@ def _getAdapter(condition, suitableVehicles):
 
 
 class RecursiveFormatter(ConditionsFormatter):
-    """ Formatter meant to be called recursively by itself.
-    
-    Supports so-called gathering formatters, i.e. formatters that depend on
-    current level of recursion nesting and should be instantiated on the current
-    method level, not globally on class instance level.
-    """
 
     def __init__(self, formatters=None, gatheringFormatters=None):
         super(RecursiveFormatter, self).__init__(formatters)
@@ -79,12 +65,17 @@ class RecursiveFormatter(ConditionsFormatter):
 
         return result
 
+    def _packCondition(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _getFormattedField(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _packConditions(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class VehicleConditionAdapter(object):
-    """
-    Adapter for vehicle requirements
-    Work as vehicle condition, but overrides isAvailable method in which check condition for all suitable vehicles
-    """
 
     def __init__(self, condition, suitableVehicles):
         self._condition = condition
@@ -101,11 +92,6 @@ class VehicleConditionAdapter(object):
 
 
 class VehicleGroupAdapter(VehicleConditionAdapter):
-    """
-    Adapter for vehicle requirements group
-    Work as logical conditions group,
-    but overrides isAvailable method in which check condition for all suitable vehicles
-    """
 
     def isEmpty(self):
         return not self._condition.items
@@ -115,9 +101,6 @@ class VehicleGroupAdapter(VehicleConditionAdapter):
 
 
 class VehicleGroupOrAdapter(VehicleGroupAdapter):
-    """
-    Adapter for OR vehicles conditions logical group
-    """
 
     def isAvailable(self, *args, **kwargs):
         for cond in self._condition.items:
@@ -128,9 +111,6 @@ class VehicleGroupOrAdapter(VehicleGroupAdapter):
 
 
 class VehicleGroupAndAdapter(VehicleGroupAdapter):
-    """
-    Adapter for AND vehicles conditions logical group
-    """
 
     def isAvailable(self, *args, **kwargs):
         res = True
@@ -143,13 +123,9 @@ class VehicleGroupAndAdapter(VehicleGroupAdapter):
 
 
 class AccountRequirementsFormatter(ConditionsFormatter):
-    """
-    Formatter for the account requirements block and some vehicles conditions block in the detailed quest window.
-    Display vehicles conditions in account requirements block was additional UX request
-    """
 
-    def __init__(self):
-        super(AccountRequirementsFormatter, self).__init__({'and': RecursiveGroupFormatter(),
+    def __init__(self, formatters=None):
+        super(AccountRequirementsFormatter, self).__init__(formatters or {'and': RecursiveGroupFormatter(),
          'or': RecursiveGroupFormatter(),
          'single': SingleGroupFormatter()})
 
@@ -175,15 +151,20 @@ class AccountRequirementsFormatter(ConditionsFormatter):
     def _getGroupFormatter(self, group):
         return self.getConditionFormatter('single') if len(group.items) == 1 and first(group.items).getName() not in ('token', 'and', 'or') else self.getConditionFormatter(group.getName())
 
+    def _packCondition(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _getFormattedField(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _packConditions(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class TQAccountRequirementsFormatter(AccountRequirementsFormatter):
-    """ Formatter for the account requirements block of token quest.
-    
-    The difference is that token requirements shouldn't appear in token quest.
-    """
 
     def __init__(self):
-        super(AccountRequirementsFormatter, self).__init__({'and': TQRecursiveGroupFormatter(),
+        super(TQAccountRequirementsFormatter, self).__init__({'and': TQRecursiveGroupFormatter(),
          'or': TQRecursiveGroupFormatter(),
          'single': SingleGroupFormatter()})
 
@@ -192,10 +173,6 @@ class TQAccountRequirementsFormatter(AccountRequirementsFormatter):
 
 
 class SingleGroupFormatter(ConditionsFormatter):
-    """ Special formatter for the single-condition case.
-    
-    We display this single condition in the header, so the body is empty.
-    """
 
     def __init__(self):
         super(SingleGroupFormatter, self).__init__({'premiumAccount': PremiumAccountFormatter(),
@@ -208,8 +185,6 @@ class SingleGroupFormatter(ConditionsFormatter):
          'hasReceivedMultipliedXP': HasReceivedMultipliedXPFormatter()})
 
     def conclusion(self, group, event, requirements, passed, total):
-        """ Format the requirement header.
-        """
         if group.isAvailable():
             icon = ''
             style = text_styles.standard
@@ -230,8 +205,6 @@ class SingleGroupFormatter(ConditionsFormatter):
         return text_styles.concatStylesWithSpace(icon, style(header), reason)
 
     def format(self, group, event):
-        """ Format the requirement body.
-        """
         passed = 0
         for condition in group.getSortedItems():
             if condition.isAvailable():
@@ -243,13 +216,20 @@ class SingleGroupFormatter(ConditionsFormatter):
     def _styler(isRequirementMet):
         return text_styles.standard if isRequirementMet else text_styles.main
 
+    def _packCondition(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _getFormattedField(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _packConditions(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class RecursiveGroupFormatter(RecursiveFormatter):
-    """ Recursive formatter that walks over condition groups.
-    """
 
-    def __init__(self):
-        super(RecursiveGroupFormatter, self).__init__(formatters={'premiumAccount': PremiumAccountFormatter(),
+    def __init__(self, formatters=None):
+        super(RecursiveGroupFormatter, self).__init__(formatters=formatters or {'premiumAccount': PremiumAccountFormatter(),
          'inClan': InClanRequirementFormatter(),
          'igrType': IgrTypeRequirementFormatter(),
          'GR': GlobalRatingRequirementFormatter(),
@@ -259,8 +239,6 @@ class RecursiveGroupFormatter(RecursiveFormatter):
          'hasReceivedMultipliedXP': HasReceivedMultipliedXPFormatter()}, gatheringFormatters={'token': TokenGatheringRequirementFormatter})
 
     def conclusion(self, group, event, requirements, passed, total):
-        """ Format the requirement header.
-        """
         if not total:
             return ''
         if group.isAvailable():
@@ -283,8 +261,6 @@ class RecursiveGroupFormatter(RecursiveFormatter):
         return text_styles.concatStylesWithSpace(icon, headerStyle(header), reasonStyle(ms(reason, count=count)))
 
     def format(self, group, event, isNested=False, topHasOrGroup=False):
-        """ Format the requirement body.
-        """
         result = []
         total, passed = (0, 0)
         separator = getSeparatorBlock(group.getName())
@@ -360,13 +336,9 @@ class RecursiveGroupFormatter(RecursiveFormatter):
 
 
 class TQRecursiveGroupFormatter(RecursiveGroupFormatter):
-    """ Recursive formatter that walks over condition groups in token quest.
-    
-    The difference is that it has no formatter for the token condition.
-    """
 
     def __init__(self):
-        super(RecursiveGroupFormatter, self).__init__(formatters={'premiumAccount': PremiumAccountFormatter(),
+        super(TQRecursiveGroupFormatter, self).__init__(formatters={'premiumAccount': PremiumAccountFormatter(),
          'inClan': InClanRequirementFormatter(),
          'igrType': IgrTypeRequirementFormatter(),
          'GR': GlobalRatingRequirementFormatter(),
@@ -491,11 +463,6 @@ class VehiclesRequirementFormatter(ConditionFormatter):
 
 
 class HasReceivedMultipliedXPFormatter(ConditionFormatter):
-    """
-    Formatter for hasReceivedMultipliedXP vehicle requirement
-    Although hasReceivedMultipliedXP is vehicle requirement,
-    it is display in account requirement component WOTD-84729
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     @classmethod
@@ -540,8 +507,6 @@ class AccountDossierRequirementFormatter(ConditionFormatter):
 
 
 class TokenGatheringRequirementFormatter(ConditionFormatter):
-    """ Gathers all token conditions of the group in the single 'condition'.
-    """
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):

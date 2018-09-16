@@ -12,6 +12,8 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
     def __init__(self):
         super(BaseDAAPIComponent, self).__init__()
         self.__components = {}
+        self.__alias = None
+        return
 
     @property
     def components(self):
@@ -24,12 +26,14 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
             component = None
         return component
 
+    def setAlias(self, alias):
+        self.__alias = alias
+
+    def getAlias(self):
+        return self.__alias
+
     def reloadComponents(self):
-        """Destroys all components and create new components in the python only.
-        NOTE: This method is used in battle replay only, because replay destroys all entities
-        when player rewinds replay back.
-        """
-        snapshot = map(lambda (viewAlias, viewPy): (viewPy.flashObject, viewAlias), self.__components.iteritems())
+        snapshot = [ (viewPy.flashObject, viewAlias) for viewAlias, viewPy in self.__components.iteritems() ]
         self.__destroyPythonComponents(pyReloading=True)
         for flashObject, alias in snapshot:
             self.registerFlashComponent(flashObject, alias)
@@ -40,7 +44,7 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         if componentPy is not None:
             componentPy = g_entitiesFactories.initialize(componentPy, component, idx)
         else:
-            LOG_ERROR('Component %s not found in python'.format(alias), alias)
+            LOG_ERROR('Component {0} not found in python'.format(alias), alias)
             return
         if not isinstance(componentPy, BaseDAAPIModule):
             LOG_ERROR('registered component {0} should extend a BaseDAAPIModule class!'.format(str(componentPy)))
@@ -76,10 +80,6 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         return
 
     def _invalidate(self, *args, **kwargs):
-        """
-        Performs self re-initialization, including child re-initialization. Note that all parameters should have
-        default value (typically None) to prevent crashes when args or/and kwargs are missed.
-        """
         super(BaseDAAPIComponent, self)._invalidate(*args, **kwargs)
         for c in self.__components.itervalues():
             c.validate()

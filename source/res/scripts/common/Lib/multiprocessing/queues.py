@@ -63,7 +63,6 @@ class Queue(object):
         return
 
     def put(self, obj, block=True, timeout=None):
-        assert not self._closed
         if not self._sem.acquire(block, timeout):
             raise Full
         self._notempty.acquire()
@@ -130,7 +129,6 @@ class Queue(object):
 
     def join_thread(self):
         debug('Queue.join_thread()')
-        assert self._closed
         if self._jointhread:
             self._jointhread()
 
@@ -250,7 +248,6 @@ class JoinableQueue(Queue):
         self._cond, self._unfinished_tasks = state[-2:]
 
     def put(self, obj, block=True, timeout=None):
-        assert not self._closed
         if not self._sem.acquire(block, timeout):
             raise Full
         self._notempty.acquire()

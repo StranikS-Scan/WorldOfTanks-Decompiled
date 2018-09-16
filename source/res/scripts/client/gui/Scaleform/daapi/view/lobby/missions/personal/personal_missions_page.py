@@ -341,8 +341,6 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         self.__updateMapData()
 
     def __tryOpenMissionDetails(self):
-        """ Depending on the open context, we may need to open personal missions details.
-        """
         if self.__eventID:
             showPersonalMissionDetails(self.__eventID)
         else:

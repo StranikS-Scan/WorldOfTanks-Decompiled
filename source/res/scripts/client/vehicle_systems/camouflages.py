@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/camouflages.py
+from collections import namedtuple
 import BigWorld
 import Math
 import items.vehicles
-from collections import namedtuple
 from constants import C11N_MASK_REGION
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
@@ -136,7 +136,7 @@ def getCamo(outfit, containerId, vDesc, descId, isDamaged, default=None):
 def getRepaint(outfit, containerId, vDesc):
     enabled = False
     quality = fading = 0.0
-    overlap_metallic = overlap_gloss = None
+    overlapMetallic = overlapGloss = None
     nationID = vDesc.type.customizationNationID
     defaultColors = items.vehicles.g_cache.customization20().defaultColors
     defaultColor = defaultColors[nationID]
@@ -145,25 +145,25 @@ def getRepaint(outfit, containerId, vDesc):
         enabled = True
         quality = mod.modValue(ModificationType.PAINT_AGE, quality)
         fading = mod.modValue(ModificationType.PAINT_FADING, fading)
-        overlap_metallic = mod.modValue(ModificationType.METALLIC, overlap_metallic)
-        overlap_gloss = mod.modValue(ModificationType.GLOSS, overlap_gloss)
+        overlapMetallic = mod.modValue(ModificationType.METALLIC, overlapMetallic)
+        overlapGloss = mod.modValue(ModificationType.GLOSS, overlapGloss)
     container = outfit.getContainer(containerId)
     paintSlot = container.slotFor(GUI_ITEM_TYPE.PAINT)
     capacity = paintSlot.capacity()
     colors = [defaultColor] * capacity
-    metallics = [overlap_metallic or _DEFAULT_METALLIC] * (capacity + 1)
-    glosses = [overlap_gloss or _DEFAULT_GLOSS] * (capacity + 1)
+    metallics = [overlapMetallic or _DEFAULT_METALLIC] * (capacity + 1)
+    glosses = [overlapGloss or _DEFAULT_GLOSS] * (capacity + 1)
     for idx in range(capacity):
         paint = paintSlot.getItem(idx)
         if paint:
             enabled = True
             colors[idx] = paint.color
-            metallics[idx] = overlap_metallic or paint.metallic
-            glosses[idx] = overlap_gloss or paint.gloss
+            metallics[idx] = overlapMetallic or paint.metallic
+            glosses[idx] = overlapGloss or paint.gloss
         if not (containerId == TankPartIndexes.GUN and idx == C11N_MASK_REGION):
             colors[idx] = colors[0]
-            metallics[idx] = overlap_metallic or metallics[0]
-            glosses[idx] = overlap_gloss or glosses[0]
+            metallics[idx] = overlapMetallic or metallics[0]
+            glosses[idx] = overlapGloss or glosses[0]
 
     colors = tuple(colors)
     metallics = tuple(metallics)

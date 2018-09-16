@@ -21,7 +21,7 @@ class PlayerUnitInfo(object):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, dbID, unitMgrID, unit, nickName='', rating=0, role=0, accountID=0, vehDict=None, isReady=False, isInSlot=False, slotIdx=-1, clanAbbrev=None, timeJoin=0, igrType=0, clanDBID=None, badges=[], **kwargs):
+    def __init__(self, dbID, unitMgrID, unit, nickName='', rating=0, role=0, accountID=0, vehDict=None, isReady=False, isInSlot=False, slotIdx=-1, clanAbbrev=None, timeJoin=0, igrType=0, clanDBID=None, badges=None, **kwargs):
         self.dbID = dbID
         self.unitMgrID = unitMgrID
         if unit is not None:
@@ -40,7 +40,7 @@ class PlayerUnitInfo(object):
         self.clanAbbrev = clanAbbrev
         self.timeJoin = timeJoin
         self.igrType = igrType
-        self.badges = BadgesHelper(badges)
+        self.badges = BadgesHelper(badges or [])
         return
 
     def __repr__(self):

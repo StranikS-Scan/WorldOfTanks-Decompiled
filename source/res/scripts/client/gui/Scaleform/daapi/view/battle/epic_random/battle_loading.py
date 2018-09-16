@@ -5,9 +5,6 @@ from gui.Scaleform.daapi.view.battle.shared.battle_loading import BattleLoading,
 class EpicRandomBattleLoading(BattleLoading):
 
     def _getViewSettingByID(self, settingID):
-        """ Get settings for view by type
-        :return:
-        """
         result = {}
         if settingID == BattleLoadingTipSetting.OPTIONS.TEXT:
             result.update({'leftTeamTitleLeft': -418,

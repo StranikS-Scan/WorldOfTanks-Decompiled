@@ -22,10 +22,10 @@ class InvitationsExchangeBlock(broker.ExchangeBlock):
         super(InvitationsExchangeBlock, self).__init__(InvitationStatusComponent())
 
     def addSortIDs(self, arenaDP, *flags):
-        raise NotImplementedError
+        raise UserWarning('This method should not be reached in this context')
 
     def addTotalStats(self, stats):
-        raise NotImplementedError
+        raise UserWarning('This method should not be reached in this context')
 
 
 class UserTagsItemData(broker.VehicleComponent):
@@ -33,7 +33,6 @@ class UserTagsItemData(broker.VehicleComponent):
 
     def __init__(self, ctx):
         super(UserTagsItemData, self).__init__()
-        assert isinstance(ctx, broker.ExchangeCtx), 'Context is invalid'
         self._ctx = ctx
         self._accountDBID = 0
         self._igrType = 0
@@ -77,7 +76,7 @@ class UsersTagsListExchangeData(broker.ExchangeBlock):
         super(UsersTagsListExchangeData, self).__init__(UserTagsItemData(ctx))
 
     def addSortIDs(self, arenaDP, *flags):
-        raise NotImplementedError
+        raise UserWarning('This method should not be reached in this context')
 
     def addTotalStats(self, stats):
-        raise NotImplementedError
+        raise UserWarning('This method should not be reached in this context')

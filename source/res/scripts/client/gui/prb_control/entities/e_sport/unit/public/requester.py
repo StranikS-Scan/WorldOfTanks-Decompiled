@@ -11,10 +11,6 @@ from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
 class UnitsListRequester(IPrbListRequester):
-    """
-    Class for units list requester. It has basic pagination functionality,
-    and could store items found in local cache.
-    """
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
@@ -71,11 +67,6 @@ class UnitsListRequester(IPrbListRequester):
             LOG_ERROR('Unit browser is not defined')
 
     def subscribe(self, unitTypeFlags):
-        """
-        Subscribes to client unit browser events
-        Args:
-            unitTypeFlags: flags of units visibility
-        """
         if self.__isSubscribed:
             return
         self.__isSubscribed = True
@@ -93,9 +84,6 @@ class UnitsListRequester(IPrbListRequester):
             LOG_ERROR('Unit browser is not defined')
 
     def unsubscribe(self):
-        """
-        Unsubscribes to client unit browser events
-        """
         self.__handlers.clear()
         browser = prb_getters.getClientUnitBrowser()
         if browser:
@@ -108,27 +96,12 @@ class UnitsListRequester(IPrbListRequester):
         return
 
     def setSelectedID(self, selectedID):
-        """
-        Sets currently selected item ID
-        Args:
-            selectedID: selected unit ID
-        """
         self.__selectedID = selectedID
 
     def addCacheItem(self, item):
-        """
-        Adds item to local cache.
-        Args:
-            item: unit item data
-        """
         self.__cache[item.cfdUnitID] = item
 
     def getCacheItem(self, cfdUnitID):
-        """
-        Tries to get item from local cache.
-        Args:
-            cfdUnitID: unit index
-        """
         try:
             item = self.__cache[cfdUnitID]
         except KeyError:
@@ -138,38 +111,18 @@ class UnitsListRequester(IPrbListRequester):
         return item
 
     def removeCacheItem(self, cfdUnitID):
-        """
-        Removes item from local cache.
-        Args:
-            cfdUnitID: unit index
-        """
         self.__cache.pop(cfdUnitID, None)
         return
 
     def __navLeft(self, browser, **kwargs):
-        """
-        Loads next bunch of units
-        Args:
-            browser: unit browser instance
-        """
         browser.left()
         return True
 
     def __navRight(self, browser, **kwargs):
-        """
-        Loads previous bunch of units
-        Args:
-            browser: unit browser instance
-        """
         browser.right()
         return True
 
     def __recenter(self, browser, **kwargs):
-        """
-        Resets current page to default
-        Args:
-            browser: unit browser instance
-        """
         result = False
         if 'unitTypeFlags' in kwargs:
             browser.recenter(self.itemsCache.items.stats.globalRating, unitTypeFlags=kwargs['unitTypeFlags'])
@@ -179,29 +132,14 @@ class UnitsListRequester(IPrbListRequester):
         return result
 
     def __refresh(self, browser, **kwargs):
-        """
-        Refreshes currently selected page
-        Args:
-            browser: unit browser instance
-        """
         browser.refresh()
         return True
 
     def __unitBrowser_onUnitsListReceived(self, data):
-        """
-        Listener for list receive event
-        Args:
-            data: result with units data, like unit Idx -> unit data
-        """
         Waiting.hide('prebattle/auto_search')
         if self.__callback:
             self.__callback(self.__selectedID, True, self.__cooldown.isInProcess(REQUEST_TYPE.UNITS_LIST), UnitsListIterator(self, data))
 
     def __unitBrowser_onUnitsListUpdated(self, data):
-        """
-        Listener for list update event
-        Args:
-            data: result with units data, like unit Idx -> unit data
-        """
         if self.__callback:
             self.__callback(self.__selectedID, False, False, UnitsUpdateIterator(self, data))

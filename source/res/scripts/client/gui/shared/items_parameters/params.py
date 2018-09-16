@@ -7,16 +7,15 @@ import math
 import operator
 from collections import namedtuple, defaultdict
 from math import ceil
-from operator import itemgetter
 from constants import SHELL_TYPES, PIERCING_POWER
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
-from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors
+from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors, isAutoReloadGun
 from gui.shared.items_parameters import functions, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME
+from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD
 from gui.shared.utils import DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_NORMAL, SHELLS_COUNT_PROP_NAME
 from gui.shared.utils import GUN_CAN_BE_CLIP, RELOAD_TIME_PROP_NAME
 from gui.shared.utils import RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP
@@ -24,7 +23,7 @@ from helpers import time_utils, dependency
 from items import getTypeOfCompactDescr, getTypeInfoByIndex, ITEM_TYPES, vehicles
 from items import utils as items_utils
 from items.components import component_constants
-from shared_utils import findFirst
+from shared_utils import findFirst, first
 from skeletons.gui.lobby_context import ILobbyContext
 MAX_VISION_RADIUS = 500
 MIN_VISION_RADIUS = 150
@@ -41,9 +40,17 @@ MODULES = {ITEM_TYPES.vehicleRadio: lambda vehicleDescr: vehicleDescr.radio,
  ITEM_TYPES.vehicleTurret: lambda vehicleDescr: vehicleDescr.turret,
  ITEM_TYPES.vehicleGun: lambda vehicleDescr: vehicleDescr.gun}
 METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR = 3.6
-_GUN_EXCLUDED_PARAMS = {GUN_NORMAL: (SHELLS_COUNT_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME),
- GUN_CLIP: (RELOAD_TIME_PROP_NAME,),
- GUN_CAN_BE_CLIP: (SHELLS_COUNT_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME)}
+_GUN_EXCLUDED_PARAMS = {GUN_NORMAL: (SHELLS_COUNT_PROP_NAME,
+              RELOAD_MAGAZINE_TIME_PROP_NAME,
+              SHELL_RELOADING_TIME_PROP_NAME,
+              AUTO_RELOAD_PROP_NAME),
+ GUN_CLIP: (RELOAD_TIME_PROP_NAME, AUTO_RELOAD_PROP_NAME),
+ GUN_CAN_BE_CLIP: (SHELLS_COUNT_PROP_NAME,
+                   RELOAD_MAGAZINE_TIME_PROP_NAME,
+                   SHELL_RELOADING_TIME_PROP_NAME,
+                   AUTO_RELOAD_PROP_NAME),
+ GUN_AUTO_RELOAD: (RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME),
+ GUN_CAN_BE_AUTO_RELOAD: (SHELLS_COUNT_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME)}
 _FACTOR_TO_SKILL_PENALTY_MAP = {'turret/rotationSpeed': ('turretRotationSpeed', 'relativePower'),
  'circularVisionRadius': ('circularVisionRadius', 'relativeVisibility'),
  'radio/distance': ('radioDistance', 'relativeVisibility'),
@@ -94,6 +101,10 @@ def _average(listOfNumbers):
 def _isStunParamVisible(shellDict):
     lobbyContext = dependency.instance(ILobbyContext)
     return shellDict.hasStun and lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+
+
+def _timesToSecs(timesPerMinutes):
+    return round(time_utils.ONE_MINUTE / timesPerMinutes, 3)
 
 
 class _ParameterBase(object):
@@ -236,7 +247,7 @@ class VehicleParams(_ParameterBase):
     @property
     def speedLimits(self):
         limits = self._itemDescr.physics['speedLimits']
-        return map(lambda speed: round(speed * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR, 2), limits)
+        return [ round(speed * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR, 2) for speed in limits ]
 
     @property
     def chassisRotationSpeed(self):
@@ -260,7 +271,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def avgDamagePerMinute(self):
-        return round(self.reloadTime * self.avgDamage)
+        return round(max(self.__calcReloadTime()) * self.avgDamage)
 
     @property
     def avgPiercingPower(self):
@@ -274,8 +285,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def reloadTime(self):
-        reloadTime = items_utils.getReloadTime(self._itemDescr, self.__factors)
-        return getShotsPerMinute(self._itemDescr.gun, reloadTime)
+        return None if self.__hasAutoReload() else min(self.__calcReloadTime())
 
     @property
     def turretRotationSpeed(self):
@@ -316,7 +326,12 @@ class VehicleParams(_ParameterBase):
 
     @property
     def reloadTimeSecs(self):
-        return None if self.__hasClipGun() else round(time_utils.ONE_MINUTE / self.reloadTime, 3)
+        hasAutoReload = self.__hasAutoReload()
+        if self.__hasClipGun() and not hasAutoReload:
+            return None
+        else:
+            reloadTimes = self.__calcReloadTime()
+            return (_timesToSecs(max(reloadTimes)), _timesToSecs(min(reloadTimes))) if hasAutoReload else (_timesToSecs(first(reloadTimes)),)
 
     @property
     def relativePower(self):
@@ -400,7 +415,10 @@ class VehicleParams(_ParameterBase):
         if self.__hasClipGun():
             gunParams = self._itemDescr.gun
             clipData = gunParams.clip
-            reloadTime = items_utils.getReloadTime(self._itemDescr, self.__factors)
+            if self.__hasAutoReload():
+                reloadTime = sum(items_utils.getClipReloadTime(self._itemDescr, self.__factors))
+            else:
+                reloadTime = items_utils.getReloadTime(self._itemDescr, self.__factors)
             return (reloadTime, clipData[1], clipData[0])
         else:
             return None
@@ -414,6 +432,10 @@ class VehicleParams(_ParameterBase):
         return self._itemDescr.type.siegeModeParams['switchOffTime'] if self._itemDescr.hasSiegeMode else None
 
     @property
+    def switchTime(self):
+        return (self.switchOnTime, self.switchOffTime) if self._itemDescr.hasSiegeMode else None
+
+    @property
     def stunMaxDuration(self):
         shell = self._itemDescr.shot.shell
         return shell.stun.stunDuration if shell.hasStun else None
@@ -424,7 +446,7 @@ class VehicleParams(_ParameterBase):
         return item.stun.guaranteedStunDuration * item.stun.stunDuration if item.hasStun else None
 
     def getParamsDict(self, preload=False):
-        conditionalParams = ('turretYawLimits', 'gunYawLimits', 'clipFireRate', 'gunRotationSpeed', 'turretRotationSpeed', 'turretArmor', 'reloadTimeSecs', 'switchOnTime', 'switchOffTime')
+        conditionalParams = ('turretYawLimits', 'gunYawLimits', 'clipFireRate', 'gunRotationSpeed', 'turretRotationSpeed', 'turretArmor', 'reloadTimeSecs', 'switchOnTime', 'switchOffTime', 'switchTime')
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
         result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot.shell))))
         return result
@@ -446,8 +468,10 @@ class VehicleParams(_ParameterBase):
 
     @staticmethod
     def getBonuses(vehicle):
-        result = map(lambda eq: (eq.name, eq.itemTypeName), [ item for item in vehicle.equipment.regularConsumables.getInstalledItems() ])
-        optDevs = map(lambda device: (device.name, device.itemTypeName), [ item for item in vehicle.optDevices if item is not None ])
+        installedItems = [ item for item in vehicle.equipment.regularConsumables.getInstalledItems() ]
+        result = [ (eq.name, eq.itemTypeName) for eq in installedItems ]
+        optDevs = [ item for item in vehicle.optDevices if item is not None ]
+        optDevs = [ (device.name, device.itemTypeName) for device in optDevs ]
         result.extend(optDevs)
         for battleBooster in vehicle.equipment.battleBoosterConsumables.getInstalledItems():
             result.append((battleBooster.name, 'battleBooster'))
@@ -505,7 +529,7 @@ class VehicleParams(_ParameterBase):
     def __getGunYawLimits(self):
         limits = self._itemDescr.gun.turretYawLimits
         if limits is not None:
-            limits = map(lambda limit: abs(math.degrees(limit)), limits[:])
+            limits = [ abs(math.degrees(limit)) for limit in limits[:] ]
         return limits
 
     def __hasTurret(self):
@@ -546,6 +570,17 @@ class VehicleParams(_ParameterBase):
     def __hasClipGun(self):
         return self._itemDescr.gun.clip[0] != 1
 
+    def __hasAutoReload(self):
+        return isAutoReloadGun(self._itemDescr.gun)
+
+    def __calcReloadTime(self):
+        hasAutoReload = self.__hasAutoReload()
+        if hasAutoReload:
+            reloadTimes = items_utils.getClipReloadTime(self._itemDescr, self.__factors)
+            return (getShotsPerMinute(self._itemDescr.gun, max(reloadTimes), hasAutoReload), getShotsPerMinute(self._itemDescr.gun, min(reloadTimes), hasAutoReload))
+        reloadTime = items_utils.getReloadTime(self._itemDescr, self.__factors)
+        return (getShotsPerMinute(self._itemDescr.gun, reloadTime, hasAutoReload),)
+
     def __getChassisPhysics(self):
         chassisName = self._itemDescr.chassis.name
         return self._itemDescr.type.xphysics['chassis'][chassisName]
@@ -585,7 +620,7 @@ class GunParams(WeightedParam):
 
     @property
     def reloadTime(self):
-        return self._getRawParams()[RELOAD_TIME_PROP_NAME]
+        return None if self.getReloadingType() in (GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_RELOAD) else self._getRawParams()[RELOAD_TIME_PROP_NAME]
 
     @property
     def avgPiercingPower(self):
@@ -593,9 +628,6 @@ class GunParams(WeightedParam):
 
     @property
     def avgDamageList(self):
-        """
-        Returns: list of average damage for all possible shells
-        """
         return self._getRawParams()[DAMAGE_PROP_NAME]
 
     @property
@@ -642,13 +674,9 @@ class GunParams(WeightedParam):
         res = self._getRawParams().get(GUARANTEED_STUN_DURATION_PROP_NAME)
         return res if res else None
 
-    def _extractRawParams(self):
-        if self._vehicleDescr is not None:
-            descriptors = getGunDescriptors(self._itemDescr, self._vehicleDescr)
-            params = calcGunParams(self._itemDescr, descriptors)
-        else:
-            params = self._getPrecachedInfo().params
-        return params
+    @property
+    def autoReloadTime(self):
+        return list(reversed(self._getRawParams().get(AUTO_RELOAD_PROP_NAME))) if self._vehicleDescr is not None else None
 
     def getParamsDict(self):
         stunConditionParams = (STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME)
@@ -657,15 +685,24 @@ class GunParams(WeightedParam):
         return result
 
     def getReloadingType(self, vehicleCD=None):
+        if vehicleCD is None and self._vehicleDescr is not None:
+            vehicleCD = self._vehicleDescr.type.compactDescr
         return self._getPrecachedInfo().getReloadingType(vehicleCD)
 
     def getAllDataDict(self):
         result = super(GunParams, self).getAllDataDict()
-        vehicleCD = self._vehicleDescr.type.compactDescr if self._vehicleDescr is not None else None
-        reloadingType = self.getReloadingType(vehicleCD)
+        reloadingType = self.getReloadingType()
         result['extras'] = {'gunReloadingType': reloadingType,
          'excludedParams': _GUN_EXCLUDED_PARAMS.get(reloadingType, tuple())}
         return result
+
+    def _extractRawParams(self):
+        if self._vehicleDescr is not None:
+            descriptors = getGunDescriptors(self._itemDescr, self._vehicleDescr)
+            params = calcGunParams(self._itemDescr, descriptors)
+        else:
+            params = self._getPrecachedInfo().params
+        return params
 
     def _getCompatible(self):
         vehiclesNamesList = self.compatibles
@@ -800,17 +837,6 @@ class EquipmentParams(_ParameterBase):
 class _ParamsDictProxy(dict):
 
     def __init__(self, calculator, preload=False, conditions=None):
-        """
-        Args:
-            calculator: object which is used for calculation of returned params
-            preload: boolean, if true - all possible values are calculated and loaded
-                     immediately during initialization
-            conditions: (([key1, key2..], condition), ...) custom conditions for specialized keys
-                        for the same key can be added different conditions
-                        each condition is presented by function which takes value corresponding to specified key
-                        and returns boolean.
-                        If any of condition functions returns False __getitem__ will raise KeyError
-        """
         super(_ParamsDictProxy, self).__init__()
         self.__paramsCalculator = calculator
         self.__cachedParams = {}
@@ -885,10 +911,6 @@ class _ParamsDictProxy(dict):
             return False
 
     def __loadAllValues(self):
-        """
-        scans calculator object and loads all its properties, which fits conditions.
-        Is necessary for proper work of __iter__ an __len__
-        """
         if not self.__allAreLoaded:
             for k, v in self.__paramsCalculator.__class__.__dict__.iteritems():
                 if isinstance(v, property):

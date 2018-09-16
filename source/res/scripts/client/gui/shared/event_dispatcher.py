@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 from adisp import process
 from debug_utils import LOG_WARNING
+from CurrentVehicle import HeroTankPreviewAppearance
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
@@ -9,9 +10,10 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils import isPopupsWindowsOpenDisabled
+from gui.shared.utils.functions import getViewName, getUniqueViewName
 from helpers import dependency
+from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.shared import IItemsCache
 
 class SETTINGS_TAB_INDEX(object):
@@ -91,13 +93,36 @@ def showHangar():
 
 
 def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None):
-    from CurrentVehicle import g_currentPreviewVehicle
-    if g_currentPreviewVehicle.isPresent():
-        g_currentPreviewVehicle.selectVehicle(vehTypeCompDescr)
+    heroTankCtrl = dependency.instance(IHeroTankController)
+    heroTankCD = heroTankCtrl.getCurrentTankOnScene()
+    if heroTankCD and heroTankCD == vehTypeCompDescr:
+        goToHeroTankOnScene(vehTypeCompDescr, previewAlias)
     else:
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW, ctx={'itemCD': vehTypeCompDescr,
          'previewAlias': previewAlias,
          'vehicleStrCD': vehStrCD}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
+    import BigWorld
+    from HeroTank import HeroTank
+    from ClientSelectableCameraObject import ClientSelectableCameraObject
+    for entity in BigWorld.entities.values():
+        if entity and isinstance(entity, HeroTank):
+            ClientSelectableCameraObject.switchCamera(entity)
+            showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previousBackAlias=None, objectSelectionEnabled=False)
+            break
+
+    return
+
+
+def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, objectSelectionEnabled=True):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, ctx={'itemCD': vehTypeCompDescr,
+     'previewAlias': previewAlias,
+     'previewAppearance': HeroTankPreviewAppearance(),
+     'isHeroTank': True,
+     'previousBackAlias': previousBackAlias,
+     'objectSelectionEnabled': objectSelectionEnabled}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def hideVehiclePreview():
@@ -113,10 +138,6 @@ def hideWebBrowser(browserID=None):
 
 
 def showAwardWindow(award, isUniqueName=True):
-    """
-    :param award: AwardAbstract instance object
-    :param isUniqueName:
-    """
     if isPopupsWindowsOpenDisabled():
         LOG_WARNING('Award popup disabled', award, isUniqueName)
         return
@@ -128,10 +149,6 @@ def showAwardWindow(award, isUniqueName=True):
 
 
 def showMissionAwardWindow(award):
-    """
-    Shows modal dialog with award(s) and congratulations.
-    :param award: AwardAbstract instance object
-    """
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MISSION_AWARD_WINDOW, name=getUniqueViewName(VIEW_ALIAS.MISSION_AWARD_WINDOW), ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -164,33 +181,21 @@ def showClanSendInviteWindow(clanDbID):
 
 
 def selectVehicleInHangar(itemCD):
-    """
-    Selects vehicle and returns to hangar.
-    :param itemCD: int-type compact descriptor of vehicle
-    """
     from CurrentVehicle import g_currentVehicle
     itemsCache = dependency.instance(IItemsCache)
     veh = itemsCache.items.getItemByCD(int(itemCD))
-    assert veh.isInInventory, 'Vehicle must be in inventory.'
+    if not veh.isInInventory:
+        raise UserWarning('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
     g_currentVehicle.selectVehicle(veh.invID)
     showHangar()
 
 
 def showPersonalCase(tankmanInvID, tabIndex, scope=EVENT_BUS_SCOPE.DEFAULT):
-    """
-    Show personalCase window on current tab.
-    :param tankmanInvID: int-type tankman inventory ID.
-    :param tabIndex: int-type tab index
-    :param scope:
-    """
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_CASE, getViewName(VIEW_ALIAS.PERSONAL_CASE, tankmanInvID), {'tankmanID': tankmanInvID,
      'page': tabIndex}), scope)
 
 
 def showPremiumWindow(arenaUniqueID=0, premiumBonusesDiff=None):
-    """
-    Show premium window
-    """
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_WINDOW), ctx={'arenaUniqueID': arenaUniqueID,
      'premiumBonusesDiff': premiumBonusesDiff}), EVENT_BUS_SCOPE.LOBBY)
 

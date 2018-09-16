@@ -7,9 +7,6 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import SANDBOX_MAX_VEHICLE_LEVEL, PRE_QUEUE_RESTRICTION
 
 class SandboxVehicleValidator(BaseActionsValidator):
-    """
-    Sandbox vehicle validation
-    """
 
     def _validate(self):
         vehicle = g_currentVehicle.item
@@ -17,9 +14,6 @@ class SandboxVehicleValidator(BaseActionsValidator):
 
 
 class SandboxActionsValidator(PreQueueActionsValidator):
-    """
-    Sandbox actions validation class
-    """
 
     def _createVehiclesValidator(self, entity):
         baseValidator = super(SandboxActionsValidator, self)._createVehiclesValidator(entity)

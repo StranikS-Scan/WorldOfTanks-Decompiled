@@ -8,14 +8,14 @@ from helpers import i18n
 from ids_generators import SequenceIDGenerator
 from helpers.i18n import makeString
 from gui import GUI_SETTINGS, SystemMessages
-from items import ITEM_TYPE_INDICES, vehicles
+from items import ITEM_TYPE_INDICES, vehicles as vehs_core
 from debug_utils import LOG_DEBUG
 from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 
 def rnd_choice(*args):
     args = list(args)
-    for i in xrange(len(args)):
+    for _ in xrange(len(args)):
         c = random.choice(args)
         yield c
         args.remove(c)
@@ -39,11 +39,6 @@ def roundToMinOrZero(value, minValue):
 
 
 def getShortDescr(descr):
-    """
-    Retrieves first occurrence of short description from string.
-    Short description can de added to string using <shortDesc></shortDesc> tags
-    """
-    res_str = ''
     res = re.findall('<shortDesc>(.*?)</shortDesc>', descr)
     if res:
         res_str = res[0]
@@ -53,32 +48,18 @@ def getShortDescr(descr):
 
 
 def stripShortDescrTags(descr):
-    """
-    Strips short description tags from passed string
-    """
     return re.sub('<shortDesc>|</shortDesc>', '', descr)
 
 
 def stripColorTagDescrTags(descr):
-    """
-    Strips short description tags from passed string
-    """
     return re.sub('{colorTagOpen}|{colorTagClose}', '', descr)
 
 
 def stripShortDescr(descr):
-    """
-    Removes short description from passed string
-    """
     return re.sub('<shortDesc>(.*?)</shortDesc>', '', descr)
 
 
 def makeTooltip(header=None, body=None, note=None, attention=None):
-    """
-    Make complex tooltip from carrying params.
-    This special formatted string will be parsed from Flash
-    net.wargaming.managers.ToolTip.showComplex(str, props)
-    """
     res_str = ''
     if header is not None:
         res_str += '{HEADER}%s{/HEADER}' % makeString(header)
@@ -94,15 +75,6 @@ def makeTooltip(header=None, body=None, note=None, attention=None):
 @async
 @process
 def checkAmmoLevel(vehicles, callback):
-    """
-    Check ammo for current vehicle, if it is lower then 20% shows message dialog
-    Example:
-            isAmmoOk = yield checkAmmoLevel()
-            if isAmmoOk:
-                    do something...
-    
-    @return: True if ammo level is ok or user confirm, False otherwise
-    """
     showAmmoWarning = False
     ammoWarningMessage = 'lowAmmo'
 
@@ -158,11 +130,6 @@ def checkAmmoLevel(vehicles, callback):
 
 
 def getModuleGoldStatus(price, money):
-    """
-    @param price: module price
-    @param money: player's money
-    @return: tuple(CouldBeBought, menuStatus, tooltipStatus)
-    """
     currency = Currency.GOLD
     availableForCredits = 1
     availableForGold = 2
@@ -183,8 +150,8 @@ def findConflictedEquipments(itemCompactDescr, itemTypeID, vehicle):
     oldModule = vehicle.descriptor.installComponent(itemCompactDescr)
     for equipmentDescr in vehicle.equipments:
         if equipmentDescr:
-            equipment = vehicles.getItemByCompactDescr(equipmentDescr)
-            installPossible, reason = equipment.checkCompatibilityWithVehicle(vehicle.descriptor)
+            equipment = vehs_core.getItemByCompactDescr(equipmentDescr)
+            installPossible, _ = equipment.checkCompatibilityWithVehicle(vehicle.descriptor)
             if not installPossible:
                 conflictEqs.append(equipment)
 
@@ -280,10 +247,6 @@ def parsePostBattleUniqueSubUrl(uniqueSubUrl):
 
 
 def showSentInviteMessage(user=None):
-    """
-    This method adds the invite(in squad) message to system channel.
-    @param user: user info
-    """
     if user is not None:
         if user is not None:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PREBATTLE_INVITES_SENDINVITE_NAME, type=SystemMessages.SM_TYPE.Information, name=user.getFullName())

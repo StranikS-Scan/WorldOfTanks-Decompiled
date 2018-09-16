@@ -20,7 +20,6 @@ class _BWChannelEntity(ChannelEntity):
 
 
 class BWBattleChannelEntity(_BWChannelEntity):
-    """Class of channel entity on arena. It's created for the client only."""
 
     def __init__(self, settings):
         super(BWBattleChannelEntity, self).__init__(CHAT_TYPE.ARENA, settings)
@@ -39,7 +38,6 @@ class BWBattleChannelEntity(_BWChannelEntity):
 
 
 class BWUnitChannelEntity(_BWChannelEntity):
-    """Class of channel entity to unit. It's created for the client only."""
 
     def __init__(self, settings, prbType):
         super(BWUnitChannelEntity, self).__init__(CHAT_TYPE.UNIT, settings)
@@ -62,7 +60,6 @@ class BWUnitChannelEntity(_BWChannelEntity):
 
 
 class BWMemberEntity(MemberEntity):
-    """Class of member entity on unit. It's received from prebattle/unit."""
 
     def __init__(self, jid, nickName, status=None):
         super(BWMemberEntity, self).__init__(jid, nickName, status)

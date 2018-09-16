@@ -7,8 +7,6 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.utils import toUpper
 
 def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=True, forceLocked=False, showUnsupportedAlert=False, isCurrentlyApplied=False):
-    """ Build a CustomizationCarouselRendererVO out of the given item.
-    """
     hasBonus = item.bonus is not None and not plainView
     locked = (not item.isUnlocked or forceLocked) and not plainView
     if plainView or item.isHidden:
@@ -54,10 +52,6 @@ class CustomizationCarouselRendererVO(object):
         self.isEquipped = isEquipped
 
     def asDict(self):
-        """
-        Creates a dictionary with the class' relevant data.
-        :return: data object
-        """
         ret = {'intCD': self.intCD,
          'typeId': self.typeId,
          'isWide': self.isWide,

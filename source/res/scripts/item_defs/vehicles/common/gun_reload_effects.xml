@@ -125,4 +125,19 @@
     <ammoLow>	gun_rld_automat_no_enough_shells	</ammoLow>
     <caliber>	SWITCH_ext_rld_automat_caliber_12_25mm	</caliber>
   </reload_automat_reloading_12_25>
+  <autoloader_reload85_107>
+    <type>	AutoReload	</type>
+    <duration>	1100.0	</duration>
+    <sound>	gun_rld_autoloader_short_oneshell	</sound>
+    <reloadStart>	gun_rld_autoloader_long_start	</reloadStart>
+    <autoLoaderFull>	gun_rld_autoloader_full_complete	</autoLoaderFull>
+    <lastShellAlert>	gun_rld_autoloader_short_lastshell	</lastShellAlert>
+    <clipShellLoad>	gun_rld_autoloader_long_oneshell	</clipShellLoad>
+    <clipShellLoadDuration>	700.0	</clipShellLoadDuration>
+    <ammoLow>	gun_rld_autoloader_no_enough_shells	</ammoLow>
+    <almostComplete>	gun_rld_autoloader_full_almost_complete	</almostComplete>
+    <shotFail>	gun_rld_autoloader_shot_fail	</shotFail>
+    <almostCompleteDuration>	6000.0	</almostCompleteDuration>
+    <caliber>	SWITCH_ext_rld_autoloader_caliber_85_107mm	</caliber>
+  </autoloader_reload85_107>
 </gun_reload_effects.xml>

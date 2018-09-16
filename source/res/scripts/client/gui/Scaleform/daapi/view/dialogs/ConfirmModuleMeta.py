@@ -53,23 +53,9 @@ class ConfirmModuleMeta(IDialogMeta):
         pass
 
     def getActualPrices(self, module):
-        """
-        Get store module prices. Since currently compound prices are not supported, all item prices (original or
-        alternative) are defined for only one currency. Therefore if an item has an alternative price, the method
-        should return the original price + the alternative price to have all set currencies in one place.
-        :param module:<FittingItem>
-        :return:<Money>
-        """
         return MONEY_UNDEFINED
 
     def getDefaultPrices(self, module):
-        """
-        Get default module prices. Since currently compound prices are not supported, all item prices (original or
-        alternative) are defined for only one currency. Therefore if an item has an alternative price, the method
-        should return the original price + the alternative price to have all set currencies in one place.
-        :param module:<FittingItem>
-        :return:<Money>
-        """
         return MONEY_UNDEFINED
 
     def getCurrency(self, module):
@@ -88,11 +74,6 @@ class SellModuleMeta(ConfirmModuleMeta):
         super(SellModuleMeta, self).__init__(typeCompactDescr, DIALOGS.SELLMODULECONFIRMATION_TITLE, DIALOGS.SELLMODULECONFIRMATION_SUBMIT, DIALOGS.SELLMODULECONFIRMATION_CANCEL)
 
     def getMaxAvailableItemsCount(self, module):
-        """
-        The maximum value is the value of items in inventory (no more then MAX_ITEMS_FOR_OPERATION)
-        @param module: current item
-        @return:
-        """
         return CurrencyCollection(*(min(module.inventoryCount, MAX_ITEMS_FOR_OPERATION) for _ in Currency.ALL))
 
     def getDefaultValue(self, module):

@@ -6,7 +6,7 @@ from gui import makeHtmlString
 from gui.Scaleform.daapi.view.battle.shared import indicators
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-from gui.app_loader.decorators import sf_battle
+from gui.app_loader import sf_battle
 from gui.battle_control.arena_info import player_format
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
@@ -70,23 +70,15 @@ class SfBattleProxy(GUIProxy):
 
     @staticmethod
     def getDirectionIndicator():
-        """
-        Gets object of direction indicator GUI component.
-        :return: instance of DirectionIndicator or None.
-        """
         indicator = None
         try:
             indicator = indicators.createDirectIndicator()
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
 
         return indicator
 
     def init(self):
-        """
-        Initializes GUI.
-        :return: True if gui proxy is inited, otherwise - False.
-        """
         result = False
         addListener = g_eventBus.addListener
         addListener(_Event.COMPONENT_REGISTERED, self.__onComponentRegistered, scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -110,9 +102,6 @@ class SfBattleProxy(GUIProxy):
         return result
 
     def fini(self):
-        """
-        Finalizes GUI.
-        """
         self.eManager.clear()
         self.__effects.clear()
         self.__registered.clear()
@@ -130,74 +119,30 @@ class SfBattleProxy(GUIProxy):
         return
 
     def clear(self):
-        """
-        GUI clear: stops effects, clear information of current chapter in
-        header, close all opened windows.
-        """
         self.__effects.stopAll()
 
     def loadConfig(self, filePath):
-        """
-        Reads specified config by given GUI API.
-        :param filePath: relative file path to GUI config.
-        """
         self.__config = gui_config.readConfig(filePath)
 
     def reloadConfig(self, filePath):
-        """
-        Clear file cache and reads specified config by given GUI API.
-        :param filePath: relative file path to GUI config.
-        """
         self.__config = gui_config.readConfig(filePath, forced=True)
 
     def getSceneID(self):
-        """
-        Gets scene ID for current view.
-        :return: string containing unique name of scene. Battle tutorial has
-        one scene only.
-        """
         pass
 
     def goToScene(self, sceneID):
-        """
-        Go to scene by sceneID.
-        :param sceneID: string containing unique name of scene.
-        """
         raise RuntimeError('Battle tutorial has one scene only.')
 
-    def playEffect(self, effectName, args, itemRef=None, containerRef=None):
-        """
-        Play effect: show dialog, show hint, ...
-        :param effectName: name of effect - PopUp, Hint, ...
-        :param args: list of effect arguments.
-        :param itemRef: gui item ID, if it is not None than effect is applied
-            to element.
-        :param containerRef: gui item ID for container. Visible effect attaches
-            to container, if it defined.
-        """
+    def playEffect(self, effectName, args):
         return self.__effects.play(effectName, args)
 
-    def stopEffect(self, effectName, effectID):
-        """
-        Stop playing effect.
-        :param effectName: name of effect - PopUp, Hint, ...
-        :param effectID: effect unique name.
-        """
-        self.__effects.stop(effectName, effectID)
+    def stopEffect(self, effectName, effectID, effectSubType=None):
+        self.__effects.stop(effectName, effectID, effectSubType)
 
-    def isEffectRunning(self, effectName, effectID=None):
-        """
-        Is effect still running.
-        :param effectName: string unique name of effect. One of GUI_EFFECT_NAME.
-        :param effectID: string unique ID of effect.
-        :return: True if effect is playing, otherwise - False.
-        """
-        return self.__effects.isStillRunning(effectName, effectID=effectID)
+    def isEffectRunning(self, effectName, effectID=None, effectSubType=None):
+        return self.__effects.isStillRunning(effectName, effectID=effectID, effectSubType=effectSubType)
 
     def clearScene(self):
-        """
-        Removes all pup-ups from stage.
-        """
         app = self.app
         if app is None or app.containerManager is None:
             return
@@ -206,10 +151,6 @@ class SfBattleProxy(GUIProxy):
             return
 
     def isGuiDialogDisplayed(self):
-        """
-        Is standard gui dialog displayed.
-        :return: bool.
-        """
         app = self.app
         if app is None or app.containerManager is None:
             return False
@@ -225,19 +166,9 @@ class SfBattleProxy(GUIProxy):
             return result
 
     def isTutorialDialogDisplayed(self, dialogID):
-        """
-        Is tutorial dialog displayed.
-        :param dialogID: string containing unique name of dialog.
-        :return: bool.
-        """
         return self.__effects.isStillRunning(GUI_EFFECT_NAME.SHOW_DIALOG, effectID=dialogID)
 
     def isTutorialWindowDisplayed(self, windowID):
-        """
-        Is tutorial window displayed.
-        :param windowID: string containing unique name of window.
-        :return: bool.
-        """
         return self.__effects.isStillRunning(GUI_EFFECT_NAME.SHOW_WINDOW, effectID=windowID)
 
     def setChapterInfo(self, title, description):
@@ -246,7 +177,7 @@ class SfBattleProxy(GUIProxy):
                 text = makeHtmlString('html_templates:battle/tutorial', 'chapterDescription', ctx={'title': title,
                  'description': description})
                 self.__tutorial.as_setChapterInfoS(text)
-            except:
+            except Exception:
                 LOG_CURRENT_EXCEPTION()
 
         return

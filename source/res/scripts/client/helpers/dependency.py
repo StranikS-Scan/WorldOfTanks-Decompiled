@@ -1,39 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/dependency.py
-"""
-Package to provide external dependencies (dependency injection) to various components of application.
-
-Usage:
-
-1. Creates callable configuration:
-    def getServices(manager):
-        # creates instance of service and adds it to manager by specified class.
-        # uses specified class to get access to desired service.
-        manager.addInstance(SomeServiceClass, SomeService(), finalizer='fini')
-
-        # adds callable object to create service to manager by specified class.
-        # services will be created at first time when someone get access to desired service.
-        manager.bindRuntime(RuntimeServiceClass, createRuntimeService,)
-
-        # adds other callable configuration.
-        manager.addConfig(getOtherServices)
-
-    Note: Services are removed from the manager in reverse order to their adding.
-
-2. Creates manager of dependencies:
-    dependency.configure(getServices)
-
-3. There are two way to get access to desired service:
-    - use descriptor in class:
-        class SomeView(...):
-            service = dependency.descriptor(SomeServiceClass)
-
-    - use direct access to desired service:
-        service = dependency.instance(SomeServiceClass)
-
-4. When application is closing, clears all resources of services:
-    dependency.clear()
-"""
 import functools
 import inspect
 from debug_utils import LOG_DEBUG
@@ -43,11 +9,6 @@ _MAX_ORDER_NUMBER = 32767
 _orderGen = SequenceIDGenerator(lowBound=0, highBound=_MAX_ORDER_NUMBER)
 
 def configure(config):
-    """Creates manager of dependencies and it is configured with callable config.
-    :param config: callable object that is invoke with DependencyManager object as argument.
-    :return: instance of manager of dependencies.
-    :exception: DependencyError.
-    """
     global _g_manager
     if _g_manager is not None:
         raise DependencyError('Manager of dependencies is already created and configured')
@@ -57,7 +18,6 @@ def configure(config):
 
 
 def clear():
-    """Clears dependency manager if it's present."""
     global _g_manager
     if _g_manager is not None:
         _g_manager.clear()
@@ -66,32 +26,16 @@ def clear():
 
 
 def instance(class_):
-    """Gets instance of service by class if manager of dependencies is created and configured.
-    :param class_: class of service.
-    :return: instance of service.
-    :exception: DependencyError.
-    """
     if _g_manager is None:
         raise DependencyError('Manager of dependencies is not created and configured')
     return _g_manager.getService(class_)
 
 
 def descriptor(class_):
-    """Creates descriptor to get desired service in some classes.
-    :param class_: class of service.
-    :return: descriptor to get desired service.
-    """
     return _ServiceDescriptor(class_)
 
 
 class replace_none_kwargs(object):
-    """ Decorator to replace named argument if it equals None to required service.
-    Usage:
-    
-        @replace_none_kwargs(service=IService)
-        def foo(value, service1=None):
-            ...
-    """
 
     def __init__(self, **services):
         super(replace_none_kwargs, self).__init__()
@@ -103,7 +47,7 @@ class replace_none_kwargs(object):
 
     def __call__(self, func):
         spec = inspect.getargspec(func)
-        for name, class_ in self.__services.iteritems():
+        for name, _ in self.__services.iteritems():
             if name not in spec.args:
                 raise DependencyError('Argument {} is not found in {}'.format(name, func))
 
@@ -127,7 +71,6 @@ class DependencyError(Exception):
 
 
 class DependencyManager(object):
-    """Class of dependency manager."""
     __slots__ = ('__services',)
 
     def __init__(self):
@@ -135,11 +78,6 @@ class DependencyManager(object):
         self.__services = {}
 
     def getService(self, class_):
-        """ Gets instance of service by class.
-        :param class_: class of service.
-        :return: instance of service.
-        :exception: DependencyError.
-        """
         try:
             result = self.__services[class_].value()
         except KeyError:
@@ -148,38 +86,21 @@ class DependencyManager(object):
         return result
 
     def addInstance(self, class_, obj, finalizer=None):
-        """Adds instance of service to manager by specified class.
-        :param class_: class of service.
-        :param obj: instance of service.
-        :param finalizer: callable object or string containing name of service method
-            that is invoked when service is removed from manager (dependency.clear).
-        """
         self._validate(class_)
         self.__services[class_] = _DependencyItem(order=_orderGen.next(), service=obj, finalizer=finalizer)
         LOG_DEBUG('Instance of service is added', class_, obj)
 
     def addRuntime(self, class_, creator, finalizer=None):
-        """Adds callable object to create service to manager by specified class.
-        This callable object is invoked at first access to service.
-        :param class_: class of service.
-        :param creator: callable object to create service.
-        :param finalizer: callable object or string containing name of service method
-            that is invoked when service is removed from manager (dependency.clear).
-        """
         self._validate(class_)
         self.__services[class_] = _RuntimeItem(creator, finalizer=finalizer)
         LOG_DEBUG('Factory of service is added', class_)
 
     def addConfig(self, config):
-        """ Adds callable configuration to create services.
-        :param config: callable configuration.
-        """
         if not callable(config):
             raise DependencyError('Config must be callable')
         config(self)
 
     def clear(self):
-        """Clears dependency manager."""
         services = sorted(self.__services.itervalues(), key=lambda item: item.order(), reverse=True)
         for service in services:
             service.finalize()

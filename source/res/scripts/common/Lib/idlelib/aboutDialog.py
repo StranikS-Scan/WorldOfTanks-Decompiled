@@ -1,17 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/aboutDialog.py
-"""About Dialog for IDLE
-
-"""
 from Tkinter import *
 import os
 from idlelib import textView
 from idlelib import idlever
 
 class AboutDialog(Toplevel):
-    """Modal about dialog for idle
-    
-    """
 
     def __init__(self, parent, title):
         Toplevel.__init__(self, parent)

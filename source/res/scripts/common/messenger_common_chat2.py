@@ -9,7 +9,6 @@ def _makeID(start=None, range=None):
     global _g_id
     id = _g_id = _g_id + 1 if start is None else start
     if range is not None:
-        assert range > 0
         _g_id += range
     return id
 
@@ -147,7 +146,6 @@ _MESSENGER_ERROR_NAMES = {_id:_name for _name, _id in MESSENGER_ERRORS.__dict__.
 AdminChatCommand = namedtuple('AdminChatCommand', ('id', 'name', 'timeout'))
 ADMIN_CHAT_COMMANDS = (AdminChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID), name='USERBAN', timeout=30.0), AdminChatCommand(id=_makeID(), name='USERUNBAN', timeout=30.0))
 ADMIN_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in ADMIN_CHAT_COMMANDS}
-assert len(ADMIN_CHAT_COMMANDS) <= MESSENGER_ACTION_IDS._BATTLE_ACTION_START_ID - MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID
 BattleChatCommand = namedtuple('BattleChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText', 'vehMarker', 'soundNotification'))
 UnitChatCommand = namedtuple('UnitChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText'))
 UNIT_CHAT_COMMANDS = (UnitChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._UNIT_COMMAND_START_ID), name='ATTENTIONTOCELL', cooldownPeriod=1.0 + _COOLDOWN_OFFSET, msgText='attention_to_cell'),)
@@ -171,7 +169,6 @@ BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS.
  BattleChatCommand(id=_makeID(), name='RELOADING_READY_CASSETE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_ready_cassette', vehMarker=None, soundNotification=None),
  BattleChatCommand(id=_makeID(), name='RELOADING_UNAVAILABLE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_unavailable', vehMarker=None, soundNotification=None))
 BATTLE_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in BATTLE_CHAT_COMMANDS}
-assert len(BATTLE_CHAT_COMMANDS) <= MESSENGER_ACTION_IDS._BATTLE_ACTION_END_ID - MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID
 
 class MUC_SERVICE_TYPE(object):
     STANDARD = 1

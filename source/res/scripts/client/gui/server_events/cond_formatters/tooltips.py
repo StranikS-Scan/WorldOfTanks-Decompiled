@@ -19,9 +19,6 @@ def reqStyle(_):
 
 
 def getSeparatorBlock(groupType=GROUP_TYPE.AND):
-    """
-    Create a separator block data
-    """
     label = getSeparator(groupType)
     if label:
         item = packText(text_styles.standard(label))
@@ -31,8 +28,6 @@ def getSeparatorBlock(groupType=GROUP_TYPE.AND):
 
 
 class MissionsAccountRequirementsFormatter(ConditionsFormatter):
-    """ Formatter for the account requirements block in the detailed quest window.
-    """
 
     def __init__(self):
         super(MissionsAccountRequirementsFormatter, self).__init__({'token': _TokenRequirementFormatter(),
@@ -49,12 +44,10 @@ class MissionsAccountRequirementsFormatter(ConditionsFormatter):
         if event.isGuiDisabled():
             return {}
         group = prepareAccountConditionsGroup(conditions, event)
-        requirements = self._format(group, event)
-        return requirements
+        rqs = self._format(group, event)
+        return rqs
 
     def _format(self, group, event, isNested=False, topHasOrGroup=False):
-        """ Recursive format method that should be called for each condition group.
-        """
         result = []
         separator = getSeparatorBlock(group.getName())
         sortedItems = group.getSortedItems()
@@ -93,6 +86,15 @@ class MissionsAccountRequirementsFormatter(ConditionsFormatter):
             formattedBranch.append(separator)
         return formattedBranch
 
+    def _packCondition(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _packConditions(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
+    def _getFormattedField(self, *args, **kwargs):
+        raise UserWarning('This method should not be reached in this context')
+
 
 class _TokenRequirementFormatter(ConditionFormatter):
     eventsCache = dependency.descriptor(IEventsCache)
@@ -108,9 +110,6 @@ class _TokenRequirementFormatter(ConditionFormatter):
 
 
 class PMTooltipConditionsFormatters(PersonalMissionConditionsFormatter):
-    """
-    Conditions formatter for personal mission for display in tooltips
-    """
     _CONDITION = namedtuple('_CONDITION', ['icon', 'title', 'isInOrGroup'])
 
     def format(self, event, isMain=None):

@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/HangarMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.View import View
 
 class HangarMeta(View):
@@ -42,9 +38,6 @@ class HangarMeta(View):
         return self.flashObject.as_showMiniClientInfo(description, hyperlink) if self._isDAAPIInited() else None
 
     def as_show3DSceneTooltipS(self, id, args):
-        """
-        :param args: Represented by Array (AS)
-        """
         return self.flashObject.as_show3DSceneTooltip(id, args) if self._isDAAPIInited() else None
 
     def as_hide3DSceneTooltipS(self):
@@ -58,15 +51,3 @@ class HangarMeta(View):
 
     def as_setAlertMessageBlockVisibleS(self, isVisible):
         return self.flashObject.as_setAlertMessageBlockVisible(isVisible) if self._isDAAPIInited() else None
-
-    def as_initNYS(self, isEnabled, isAvailable, counter):
-        return self.flashObject.as_initNY(isEnabled, isAvailable, counter) if self._isDAAPIInited() else None
-
-    def as_updateNYBoxCounterS(self, counter):
-        return self.flashObject.as_updateNYBoxCounter(counter) if self._isDAAPIInited() else None
-
-    def as_updateNYEnabledS(self, isEnabled):
-        return self.flashObject.as_updateNYEnabled(isEnabled) if self._isDAAPIInited() else None
-
-    def as_updateNYAvailableS(self, isAvailable):
-        return self.flashObject.as_updateNYAvailable(isAvailable) if self._isDAAPIInited() else None

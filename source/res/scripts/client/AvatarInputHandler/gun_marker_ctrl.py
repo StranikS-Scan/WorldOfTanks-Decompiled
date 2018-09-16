@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/gun_marker_ctrl.py
+import logging
 import math
 from collections import namedtuple
 import BattleReplay
@@ -9,8 +10,6 @@ import Math
 import constants
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler import aih_constants, aih_global_binding
-from ProjectileMover import getCollidableEntities
-from debug_utils import LOG_UNEXPECTED
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -23,6 +22,7 @@ _MIN_PIERCING_DIST = 100.0
 _MAX_PIERCING_DIST = 500.0
 _LERP_RANGE_PIERCING_DIST = _MAX_PIERCING_DIST - _MIN_PIERCING_DIST
 _BASE_PIERCING_PERCENT = 100.0
+_logger = logging.getLogger(__name__)
 
 def _computePiercingPowerAtDistImpl(dist, maxDist, p100, p500):
     if dist <= _MIN_PIERCING_DIST:
@@ -34,16 +34,13 @@ def _computePiercingPowerAtDistImpl(dist, maxDist, p100, p500):
         return 0.0
 
 
-def _computePiercingPowerRandomizationImpl(piercingPowerRandomization, min, max):
-    minPP = _BASE_PIERCING_PERCENT * (1.0 - piercingPowerRandomization * min)
-    maxPP = _BASE_PIERCING_PERCENT * (1.0 + piercingPowerRandomization * max)
+def _computePiercingPowerRandomizationImpl(piercingPowerRandomization, minimum, maximum):
+    minPP = _BASE_PIERCING_PERCENT * (1.0 - piercingPowerRandomization * minimum)
+    maxPP = _BASE_PIERCING_PERCENT * (1.0 + piercingPowerRandomization * maximum)
     return (minPP, maxPP)
 
 
 def useServerGunMarker():
-    """ Is server's gun marker used.
-    :return: bool.
-    """
     replayCtrl = BattleReplay.g_replayCtrl
     if replayCtrl.isPlaying:
         return False
@@ -52,27 +49,15 @@ def useServerGunMarker():
 
 
 def useClientGunMarker():
-    """ Is client's gun marker used.
-    :return: bool.
-    """
     return constants.HAS_DEV_RESOURCES or not useServerGunMarker()
 
 
 def useDefaultGunMarkers():
-    """ Uses default behavior to show gun markers (release version) - there is one marker
-    in one period of time. Otherwise, uses development behavior - there are two markers
-    (client and server) in one period of time if player choose setting item "Use server gun marker".
-    :return: bool.
-    """
     from gui import GUI_SETTINGS
     return not constants.HAS_DEV_RESOURCES or GUI_SETTINGS.useDefaultGunMarkers
 
 
 def createGunMarker(isStrategic):
-    """ Create gun marker controller.
-    :param isStrategic: is strategic gun marker.
-    :return: instance of gun marker that implements IGunMarkerController.
-    """
     factory = _GunMarkersDPFactory()
     if isStrategic:
         clientMarker = _SPGGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientSPGProvider())
@@ -104,12 +89,6 @@ class _StandardShotResult(object):
 
     @classmethod
     def getShotResult(cls, hitPoint, collision, _, excludeTeam=0):
-        """ Gets shot result by present state of gun marker.
-        :param hitPoint: Vector3 containing shot position.
-        :param collision: instance of EntityCollisionData.
-        :param excludeTeam: integer containing number of team that is excluded from result.
-        :return: one of SHOT_RESULT.*.
-        """
         if collision is None:
             return _SHOT_RESULT.UNDEFINED
         else:
@@ -208,19 +187,13 @@ class _CrosshairShotResults(object):
         return armor / hitAngleCos
 
     @classmethod
-    def _getAllCollisionDetails(cls, hitPoint, dir, entity):
-        startPoint = hitPoint - dir * cls._VEHICLE_TRACE_BACKWARD_LENGTH
-        endPoint = hitPoint + dir * cls._VEHICLE_TRACE_FORWARD_LENGTH
+    def _getAllCollisionDetails(cls, hitPoint, direction, entity):
+        startPoint = hitPoint - direction * cls._VEHICLE_TRACE_BACKWARD_LENGTH
+        endPoint = hitPoint + direction * cls._VEHICLE_TRACE_FORWARD_LENGTH
         return entity.collideSegmentExt(startPoint, endPoint)
 
     @classmethod
-    def getShotResult(cls, hitPoint, collision, dir, excludeTeam=0):
-        """ Gets shot result by present state of gun marker.
-        :param hitPoint: Vector3 containing shot position.
-        :param collision: instance of EntityCollisionData.
-        :param excludeTeam: integer containing number of team that is excluded from result.
-        :return: one of SHOT_RESULT.*.
-        """
+    def getShotResult(cls, hitPoint, collision, direction, excludeTeam=0):
         if collision is None:
             return _SHOT_RESULT.UNDEFINED
         else:
@@ -246,7 +219,7 @@ class _CrosshairShotResults(object):
             isJet = False
             jetStartDist = None
             ignoredMaterials = set()
-            collisionsDetails = cls._getAllCollisionDetails(hitPoint, dir, entity)
+            collisionsDetails = cls._getAllCollisionDetails(hitPoint, direction, entity)
             if collisionsDetails is None:
                 return _SHOT_RESULT.UNDEFINED
             for cDetails in collisionsDetails:
@@ -291,9 +264,6 @@ class _CrosshairShotResults(object):
 
 
 def _setupGunMarkerSizeLimits(dataProvider, scale=None):
-    """Setups actual size limits of gun marker, because of interface scale increases view port
-    and min size to multiply by scale to show same min size of gun marker in GUI
-    on different values of interface scale. See WOTD-72315."""
     if scale is None:
         settingsCore = dependency.instance(ISettingsCore)
         scale = settingsCore.interfaceScale.get()
@@ -332,68 +302,42 @@ class _SizeFilter(object):
 
 
 class IGunMarkerController(object):
-    """Interface defines methods of controller of gun marker."""
 
     def create(self):
-        """Creates all internal data of controller."""
         raise NotImplementedError
 
     def destroy(self):
-        """Destroys all internal data of controller."""
         raise NotImplementedError
 
     def enable(self):
-        """Enables desired controller. One controller can be enabled on one period of time."""
         raise NotImplementedError
 
     def disable(self):
-        """Disables desired controller."""
         raise NotImplementedError
 
     def reset(self):
-        """Resets all internal data of controller."""
         raise NotImplementedError
 
-    def update(self, markerType, position, dir, size, relaxTime, collData):
-        """ Updates desired controller.
-        :param markerType: one of GUN_MARKER_TYPE.
-        :param position: Vector3 containing present position of gun marker.
-        :param dir: Vector3 containing present direction of gun marker.
-        :param size: float containing present size of gun marker.
-        :param relaxTime: float containing present time of relax.
-        :param collData: instance of EntityCollision.
-        """
+    def update(self, markerType, position, direction, size, relaxTime, collData):
         raise NotImplementedError
 
     def setFlag(self, positive, bit):
-        """ Sets new flag.
-        :param positive: bool.
-        :param bit: one of GUN_MARKER_FLAG.
-        """
         raise NotImplementedError
 
     def getPosition(self):
-        """ Gets present position of gun marker.
-        :return: Vector3.
-        """
         raise NotImplementedError
 
     def setPosition(self, position):
-        """ Sets new position of gun marker.
-         :param position: Vector3 containing present position of gun marker.
-        """
         raise NotImplementedError
 
     def setVisible(self, flag):
         raise NotImplementedError
 
     def onRecreateDevice(self):
-        """Callback that is invoked when screen size is changed."""
         raise NotImplementedError
 
 
 class _GunMarkersDPFactory(object):
-    """Class creates/gets required data provider and configures it."""
     __clientDataProvider = aih_global_binding.bindRW(_BINDING_ID.CLIENT_GUN_MARKER_DATA_PROVIDER)
     __serverDataProvider = aih_global_binding.bindRW(_BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER)
     __clientSPGDataProvider = aih_global_binding.bindRW(_BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER)
@@ -428,7 +372,7 @@ class _GunMarkersDPFactory(object):
 
     @staticmethod
     def _makeSPGProvider():
-        dataProvider = GUI.WGSPGGunMarkerDataProvider(aih_constants.SPG_GUN_MARKER_ELEMENTS_COUNT)
+        dataProvider = GUI.WGSPGGunMarkerDataProvider(aih_constants.SPG_GUN_MARKER_ELEMENTS_COUNT, aih_constants.SPG_GUN_MARKER_ELEMENTS_RATE)
         dataProvider.positionMatrixProvider = Math.MatrixAnimation()
         dataProvider.maxTime = 5.0
         dataProvider.serverTickLength = constants.SERVER_TICK_LENGTH
@@ -439,7 +383,6 @@ class _GunMarkersDPFactory(object):
 
 
 class _GunMarkersDecorator(IGunMarkerController):
-    """Decorator that contains implementation of markers on client-side and server-side."""
     __gunMarkersFlags = aih_global_binding.bindRW(_BINDING_ID.GUN_MARKERS_FLAGS)
     __clientState = aih_global_binding.bindRW(_BINDING_ID.CLIENT_GUN_MARKER_STATE)
     __serverState = aih_global_binding.bindRW(_BINDING_ID.SERVER_GUN_MARKER_STATE)
@@ -480,7 +423,7 @@ class _GunMarkersDecorator(IGunMarkerController):
             return self.__clientMarker.getPosition()
         if markerType == _MARKER_TYPE.SERVER:
             return self.__serverMarker.getPosition()
-        LOG_UNEXPECTED('Gun maker control is not found by type', markerType)
+        _logger.warning('Gun maker control is not found by type: %d', markerType)
         return Math.Vector3()
 
     def setPosition(self, position, markerType=_MARKER_TYPE.CLIENT):
@@ -489,7 +432,7 @@ class _GunMarkersDecorator(IGunMarkerController):
         elif markerType == _MARKER_TYPE.SERVER:
             self.__serverMarker.setPosition(position)
         else:
-            LOG_UNEXPECTED('Gun maker control is not found by type', markerType)
+            _logger.warning('Gun maker control is not found by type: %d', markerType)
 
     def setFlag(self, positive, bit):
         if positive:
@@ -499,17 +442,20 @@ class _GunMarkersDecorator(IGunMarkerController):
         else:
             self.__gunMarkersFlags &= ~bit
 
-    def update(self, markerType, position, dir, size, relaxTime, collData):
+    def update(self, markerType, position, direction, size, relaxTime, collData):
         if markerType == _MARKER_TYPE.CLIENT:
-            self.__clientState = (position, dir, collData)
+            self.__clientState = (position, direction, collData)
             if self.__gunMarkersFlags & _MARKER_FLAG.CLIENT_MODE_ENABLED:
-                self.__clientMarker.update(markerType, position, dir, size, relaxTime, collData)
+                self.__clientMarker.update(markerType, position, direction, size, relaxTime, collData)
         elif markerType == _MARKER_TYPE.SERVER:
-            self.__serverState = (position, dir, collData)
+            self.__serverState = (position, direction, collData)
             if self.__gunMarkersFlags & _MARKER_FLAG.SERVER_MODE_ENABLED:
-                self.__serverMarker.update(markerType, position, dir, size, relaxTime, collData)
+                self.__serverMarker.update(markerType, position, direction, size, relaxTime, collData)
         else:
-            LOG_UNEXPECTED('Gun maker control is not found by type', markerType)
+            _logger.warning('Gun maker control is not found by type: %d', markerType)
+
+    def setVisible(self, flag):
+        pass
 
 
 class _GunMarkerController(IGunMarkerController):
@@ -540,9 +486,11 @@ class _GunMarkerController(IGunMarkerController):
     def reset(self):
         pass
 
-    def update(self, markerType, position, dir, size, relaxTime, collData):
-        assert self._gunMarkerType == markerType
-        self._position = position
+    def update(self, markerType, position, direction, size, relaxTime, collData):
+        if self._gunMarkerType == markerType:
+            self._position = position
+        else:
+            _logger.warning('Position can not be defined, type of marker does not equal: required = %d, received = %d', self._gunMarkerType, markerType)
 
     def setFlag(self, positive, bit):
         if positive:
@@ -572,7 +520,6 @@ class _GunMarkerController(IGunMarkerController):
 
 
 class _DefaultGunMarkerController(_GunMarkerController):
-    """Class of controller that is used by default."""
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, gunMakerType, dataProvider, enabledFlag=_MARKER_FLAG.UNDEFINED):
@@ -599,8 +546,8 @@ class _DefaultGunMarkerController(_GunMarkerController):
         if replayCtrl.isPlaying and replayCtrl.isClientReady:
             self.__replSwitchTime = 0.2
 
-    def update(self, markerType, pos, dir, sizeVector, relaxTime, collData):
-        super(_DefaultGunMarkerController, self).update(markerType, pos, dir, sizeVector, relaxTime, collData)
+    def update(self, markerType, pos, direction, sizeVector, relaxTime, collData):
+        super(_DefaultGunMarkerController, self).update(markerType, pos, direction, sizeVector, relaxTime, collData)
         positionMatrix = Math.Matrix()
         positionMatrix.setTranslate(pos)
         self._updateMatrixProvider(positionMatrix, relaxTime)
@@ -638,7 +585,6 @@ class _DefaultGunMarkerController(_GunMarkerController):
 
 
 class _SPGGunMarkerController(_GunMarkerController):
-    """Class of controller that is used in strategic mode."""
 
     def __init__(self, gunMakerType, dataProvider, enabledFlag=_MARKER_FLAG.UNDEFINED):
         super(_SPGGunMarkerController, self).__init__(gunMakerType, dataProvider, enabledFlag=enabledFlag)
@@ -651,12 +597,10 @@ class _SPGGunMarkerController(_GunMarkerController):
     def enable(self):
         super(_SPGGunMarkerController, self).enable()
         player = BigWorld.player()
-        assert player is not None
         self._gunRotator = player.gunRotator
         shotDescr = player.getVehicleDescriptor().shot
         self._shotSpeed = shotDescr.speed
         self._shotGravity = shotDescr.gravity
-        return
 
     def disable(self):
         self._gunRotator = None
@@ -665,8 +609,8 @@ class _SPGGunMarkerController(_GunMarkerController):
         super(_SPGGunMarkerController, self).disable()
         return
 
-    def update(self, markerType, position, dir, size, relaxTime, collData):
-        super(_SPGGunMarkerController, self).update(markerType, position, dir, size, relaxTime, collData)
+    def update(self, markerType, position, direction, size, relaxTime, collData):
+        super(_SPGGunMarkerController, self).update(markerType, position, direction, size, relaxTime, collData)
         positionMatrix = Math.Matrix()
         positionMatrix.setTranslate(position)
         self._updateMatrixProvider(positionMatrix, relaxTime)
@@ -717,7 +661,7 @@ class _ArtyHitMarkerController(_SPGGunMarkerController):
     def create(self):
         super(_ArtyHitMarkerController, self).create()
         self.__trajectoryDrawer.setColors(Math.Vector4(0, 255, 0, 255), Math.Vector4(255, 0, 0, 255), Math.Vector4(128, 128, 128, 255))
-        self.__trajectoryDrawer.setGetDynamicCollidersCallback(lambda start, end: [ e.collideSegment for e in getCollidableEntities((BigWorld.player().playerVehicleID,), start, end) ])
+        self.__trajectoryDrawer.setIgnoredID(BigWorld.player().playerVehicleID)
 
     def destroy(self):
         self.__artyEquipmentUDO = None
@@ -771,11 +715,6 @@ def _makeWorldMatrix(positionMatrix):
 
 
 def _calcScale(worldMatrix, size):
-    """Calculate scaling in clip space
-    :param worldMatrix: result of function _makeWorldMatrix.
-    :param size: size of gun marker.
-    :return: float containing scale in clip space.
-    """
     pointMat = Math.Matrix()
     pointMat.set(BigWorld.camera().matrix)
     transl = Math.Matrix()

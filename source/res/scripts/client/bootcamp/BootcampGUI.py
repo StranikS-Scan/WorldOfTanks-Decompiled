@@ -16,7 +16,7 @@ def getDirectionIndicator():
     indicator = None
     try:
         indicator = indicators.createDirectIndicator()
-    except:
+    except Exception:
         LOG_CURRENT_EXCEPTION_BOOTCAMP()
 
     return indicator

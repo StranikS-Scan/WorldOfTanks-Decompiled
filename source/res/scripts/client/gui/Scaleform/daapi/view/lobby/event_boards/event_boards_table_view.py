@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_boards_table_view.py
-import BigWorld
 from functools import partial
 from collections import namedtuple
+import BigWorld
 from adisp import process
 from helpers import dependency
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -52,18 +52,11 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         return self.__eventID
 
     def changeLeaderboard(self, leaderboardID):
-        """
-        Clean up current leaderboard and get data for new
-        :param leaderboardID: new leaderboard id
-        """
         self.__cleanUp()
         self.__leaderboardID = leaderboardID
         self.__fetchEventData()
 
     def closeView(self):
-        """
-        Close view
-        """
         self.destroy()
 
     @property
@@ -78,10 +71,6 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         self.__fetchMyLeaderboardInfo(partial(self.__fetchLeaderboardPageData, self.__leaderboardData.pageNumber + direction, self.TOP_POSITION_RANK))
 
     def onShowRewardCategory(self, categoryID):
-        """
-        Move to reward category
-        :param categoryID: category number
-        """
         categoryPage = self.__rewardCategories[categoryID]['page_number']
         if self.__leaderboardData.pageNumber != categoryPage:
             self.__fetchMyLeaderboardInfo(partial(self.__fetchLeaderboardPageData, categoryPage, self.__rewardCategories[categoryID]['rank_min']))
@@ -89,15 +78,9 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             self.__scrollToRank(self.__rewardCategories[categoryID]['rank_min'])
 
     def onRefresh(self):
-        """
-        Try to get table data
-        """
         self.__fetchEventData()
 
     def setMyPlace(self):
-        """
-        Move to my place
-        """
         self.__fetchMyLeaderboardInfo(self.__moveToMyPlace)
 
     def showNextAward(self, visible):
@@ -107,10 +90,6 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             self.__awardGroup.setActiveRewardGroup(groupID)
 
     def playerClick(self, playerID):
-        """
-        Open details view for player
-        :param playerID: player's spa id
-        """
         for item in self.__leaderboardData.excelItems:
             if item.getSpaId() == playerID:
                 g_eventBus.handleEvent(events.LoadViewEvent(EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_BATTLE_VIEW, ctx={'eventID': self.__eventID,
@@ -294,14 +273,14 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             self.__setMaintenance(False)
             self.__eventData = eventData
             self.__rewardCategories = self.__calculateRewardCategories(rewardByRank.getRewardGroups(), eventData.getLeaderboardViewSize())
-            type = eventData.getType()
+            eType = eventData.getType()
             leaderboardValue = eventData.getLeaderboard(self.__leaderboardID)
             objectiveParameter = eventData.getObjectiveParameter()
             self.__method = eventData.getMethod()
             self.as_setMyPlaceVisibleS(False)
             self.__updateHeader()
-            self.as_setBackgroundS(makeTableViewBackgroundVO(type, leaderboardValue))
-            self.as_setTableHeaderDataS(makeTableHeaderVO(self.__method, objectiveParameter, type))
+            self.as_setBackgroundS(makeTableViewBackgroundVO(eType, leaderboardValue))
+            self.as_setTableHeaderDataS(makeTableHeaderVO(self.__method, objectiveParameter, eType))
             self.__setPlayerData()
             myEventsTop = self.eventsController.getMyEventsTopData()
             self.__top = myEventsTop.getMyLeaderboardEventTop(self.__eventID, self.__leaderboardID)
@@ -382,7 +361,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
     def __updateHeader(self):
         event = self.__eventData
         name = event.getName()
-        type = event.getType()
+        eType = event.getType()
         leaderboard = self.__leaderboard
         leaderboardValue = event.getLeaderboard(self.__leaderboardID)
         if event.isFinished():
@@ -398,7 +377,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         else:
             status = None
             statusTooltip = None
-        self.as_setHeaderDataS(makeTableViewHeaderVO(type, leaderboardValue, name, status, statusTooltip))
+        self.as_setHeaderDataS(makeTableViewHeaderVO(eType, leaderboardValue, name, status, statusTooltip))
         return
 
     def __updatePage(self):

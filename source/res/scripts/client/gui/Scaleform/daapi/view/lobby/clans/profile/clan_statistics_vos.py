@@ -40,10 +40,10 @@ def _getDataObjectTruncatedValue(key, i18nFunc, value):
 
 def _getLevelParams(i18nFunc, battlesCountGetter, winsEfficiencyGetter, eloRatingGetter, placeGetter, favArenaNameGetter, ratingOutdated):
     battlesCount = formatField(getter=battlesCountGetter, formatter=BigWorld.wg_getIntegralFormat)
-    winsEfficiency = formatField(getter=winsEfficiencyGetter, formatter=lambda x: PUtils.formatFloatPercent(x))
+    winsEfficiency = formatField(getter=winsEfficiencyGetter, formatter=PUtils.formatFloatPercent)
     eloRating = formatField(getter=eloRatingGetter, formatter=BigWorld.wg_getIntegralFormat)
     place = formatField(getter=placeGetter, formatter=BigWorld.wg_getIntegralFormat)
-    favArenaName = formatField(getter=favArenaNameGetter, formatter=lambda arena_id: getI18ArenaById(arena_id))
+    favArenaName = formatField(getter=favArenaNameGetter, formatter=getI18ArenaById)
     return [_getDataObject('battles', i18nFunc, battlesCount),
      _getDataObject('wins', i18nFunc, winsEfficiency),
      _getDataObject('eloRating', i18nFunc, eloRating),

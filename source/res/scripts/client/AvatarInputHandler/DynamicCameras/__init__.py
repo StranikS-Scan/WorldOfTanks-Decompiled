@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/__init__.py
+import math
 import BigWorld
 import Math
 from Math import Vector3, Matrix
-import math
 from AvatarInputHandler import mathUtils
 from AvatarInputHandler.cameras import readVec3, readFloat, ImpulseReason
 
@@ -144,5 +144,5 @@ class AccelerationSmoother(object):
                 acceleration = Matrix(vehicle.matrix).applyVector(accelerationRelativeToVehicle)
             self.__acceleration = acceleration
             return acceleration
-        except:
+        except Exception:
             return Math.Vector3(0.0, 0.0, 0.0)

@@ -42,11 +42,7 @@ class _DamagedDevicesExtraFetcher(object):
 
 
 class BattleFeedbackAdaptor(IBattleController):
-    """
-    Class adapts some events from Avatar, Vehicle, ... to GUI event (FEEDBACK_EVENT_ID) to display
-    response on player actions.
-    """
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onMinimapFeedbackReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onMinimapFeedbackReceived', 'onShotDone', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -70,6 +66,7 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onStaticMarkerAdded = Event.Event()
         self.onStaticMarkerRemoved = Event.Event()
         self.onRoundFinished = Event.Event()
+        self.onShotDone = Event.Event()
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.FEEDBACK
@@ -92,17 +89,9 @@ class BattleFeedbackAdaptor(IBattleController):
         return
 
     def getCachedEvent(self, eventID):
-        """
-        Returns the last cached event or None.
-        :param eventID: FEEDBACK_EVENT_ID
-        """
         return self.__eventsCache.get(eventID, None)
 
     def getVehicleProxy(self, vehicleID):
-        """ Gets proxy of vehicle's entity if it is visible.
-        :param vehicleID: long containing ID of vehicle.
-        :return: proxy of vehicle's entity or None.
-        """
         proxy = None
         if vehicleID in self.__visible:
             vehicle = BigWorld.entity(vehicleID)
@@ -128,14 +117,6 @@ class BattleFeedbackAdaptor(IBattleController):
         return
 
     def handleBattleEventsSummary(self, summary):
-        """
-        RPC call from the server when user goes to Arena (including case with relogin). Summary
-        data represented by dictionary with various 'summary ' parameters. Currently it is
-        information about damage log total values (damage, blocked and assist damage) and
-        an additional killer info for postmortem window.
-        
-        :param summary: dict
-        """
         event = feedback_events.BattleSummaryFeedbackEvent.fromDict(summary)
         self.onPlayerSummaryFeedbackReceived(event)
         self.__eventsCache[event.getType()] = event
@@ -144,11 +125,6 @@ class BattleFeedbackAdaptor(IBattleController):
         self.__eventsCache[event.getType()] = event
 
     def handleBattleEvents(self, events):
-        """
-        Handle on player action. Pushes feedback events based on battle event type.
-        
-        :param events: list of event data dicts.
-        """
         feedbackEvents = []
         for data in events:
             feedbackEvent = feedback_events.PlayerFeedbackEvent.fromDict(data)
@@ -246,19 +222,10 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_HAS_AMMO, vehicleID, hasAmmo)
 
     def setDevelopmentInfo(self, code, info):
-        """ Sets some development information that are received from server.
-        Adaptor stores last received information for one code (DEVELOPMENT_INFO).
-        :param code: DEVELOPMENT_INFO.*.
-        :param info: received information.
-        """
         self.__devInfo[code] = info
         self.onDevelopmentInfoSet(code, info)
 
     def getDevelopmentInfo(self, code):
-        """ Gets desired development information by code.
-        :param code: DEVELOPMENT_INFO.*.
-        :return: last received information or None.
-        """
         return self.__devInfo[code] if code in self.__devInfo else None
 
     def _setVehicleHealthChanged(self, vehicleID, newHealth, attackerID, attackReasonID):

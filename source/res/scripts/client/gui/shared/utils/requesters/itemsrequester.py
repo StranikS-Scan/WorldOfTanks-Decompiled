@@ -7,12 +7,12 @@ import dossiers2
 import nations
 from account_shared import LayoutIterator
 from adisp import async, process
-from constants import ARENA_BONUS_TYPE, CustomizationInvData
+from constants import CustomizationInvData
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from goodies.goodie_constants import GOODIE_STATE
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
+from gui.shared.utils.requesters import vehicle_items_getter
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
-from gui.shared.utils.requesters.parsers.ShopDataParser import ShopDataParser
 from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr
 from items.components.c11n_constants import SeasonType
@@ -55,10 +55,6 @@ class InventoryPredicateCondition(PredicateCondition):
 
 
 class CompoundPredicateCondition(PredicateCondition):
-    """ Aggregates several predicates in order to operate with them as a group.
-    
-    Final condition is met when all aggregated conditions are met.
-    """
 
     def __init__(self, *predicates):
         self.predicates = predicates
@@ -71,18 +67,12 @@ class CompoundPredicateCondition(PredicateCondition):
 
 
 class NegativeCompoundPredicateCondition(CompoundPredicateCondition):
-    """ Inversion of CompoundPredicateCondition.
-    
-    Final condition is met when all aggregated conditions are missed.
-    """
 
     def __call__(self, item):
         return not super(NegativeCompoundPredicateCondition, self).__call__(item)
 
 
 class IntCDProtector(object):
-    """ This class is protector to exclude creation of items
-    by int-type compact descriptor."""
     __slots__ = ('__intCDs',)
 
     def __init__(self, *intCDs):
@@ -111,7 +101,6 @@ class RequestCriteria(object):
         return True
 
     def __or__(self, other):
-        assert isinstance(other, RequestCriteria)
         return RequestCriteria(*(self._conditions + other.getConditions()))
 
     def __invert__(self):
@@ -169,7 +158,7 @@ class REQ_CRITERIA(object):
     DISCOUNT_BUY = RequestCriteria(PredicateCondition(lambda item: item.buyPrices.itemPrice.isActionPrice() and not item.isRestoreAvailable()))
     DISCOUNT_SELL = RequestCriteria(PredicateCondition(lambda item: not item.isRented and item.sellPrices.itemPrice.isActionPrice()))
 
-    class VEHICLE:
+    class VEHICLE(object):
         FAVORITE = RequestCriteria(PredicateCondition(lambda item: item.isFavorite))
         PREMIUM = RequestCriteria(PredicateCondition(lambda item: item.isPremium))
         READY = RequestCriteria(PredicateCondition(lambda item: item.isReadyToFight))
@@ -193,8 +182,6 @@ class REQ_CRITERIA(object):
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
-        LOCKED_BY_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isLocked and item.typeOfLockingArena in ARENA_BONUS_TYPE.FALLOUT_RANGE))
-        ONLY_FOR_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isFalloutOnly()))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
@@ -202,18 +189,14 @@ class REQ_CRITERIA(object):
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
 
-        class FALLOUT:
-            SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isFalloutSelected))
-            AVAILABLE = RequestCriteria(PredicateCondition(lambda item: item.isFalloutAvailable))
-
-    class TANKMAN:
+    class TANKMAN(object):
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
         ROLES = staticmethod(lambda roles=tankmen.ROLES: RequestCriteria(PredicateCondition(lambda item: item.descriptor.role in roles)))
         NATIVE_TANKS = staticmethod(lambda vehiclesList=[]: RequestCriteria(PredicateCondition(lambda item: item.vehicleNativeDescr.type.compactDescr in vehiclesList)))
         DISMISSED = RequestCriteria(PredicateCondition(lambda item: item.isDismissed))
         ACTIVE = ~DISMISSED
 
-    class BOOSTER:
+    class BOOSTER(object):
         ENABLED = RequestCriteria(PredicateCondition(lambda item: item.enabled))
         IN_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.count > 0))
         ACTIVE = RequestCriteria(PredicateCondition(lambda item: item.finishTime is not None and item.state == GOODIE_STATE.ACTIVE))
@@ -221,32 +204,23 @@ class REQ_CRITERIA(object):
         BOOSTER_TYPES = staticmethod(lambda boosterTypes: RequestCriteria(PredicateCondition(lambda item: item.boosterType in boosterTypes)))
         IN_BOOSTER_ID_LIST = staticmethod(lambda boostersList: RequestCriteria(PredicateCondition(lambda item: item.boosterID in boostersList)))
 
-    class BATTLE_BOOSTER:
-        """
-        BattleBooster is subtype of Equipment. It does not have any relations with BOOSTER.
-        """
+    class BATTLE_BOOSTER(object):
         ALL = RequestCriteria(PredicateCondition(lambda item: item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER))
         CREW_EFFECT = RequestCriteria(PredicateCondition(lambda item: item.isCrewBooster()))
         OPTIONAL_DEVICE_EFFECT = RequestCriteria(PredicateCondition(lambda item: not item.isCrewBooster()))
 
-    class ARTEFACT:
+    class ARTEFACT(object):
         DESCRIPTOR_NAME = staticmethod(lambda descriptorName: RequestCriteria(PredicateCondition(lambda item: item.name == descriptorName)))
 
-    class OPTIONAL_DEVICE:
-        """
-        Criteria for simple and deluxe (opt. dev+) devices.
-        """
+    class OPTIONAL_DEVICE(object):
         SIMPLE = RequestCriteria(PredicateCondition(lambda item: not item.isDeluxe()))
         DELUXE = RequestCriteria(PredicateCondition(lambda item: item.isDeluxe()))
 
-    class BADGE:
-        """
-        Criteria for badges
-        """
+    class BADGE(object):
         SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isSelected))
         ACHIEVED = RequestCriteria(PredicateCondition(lambda item: item.isAchieved))
 
-    class CUSTOMIZATION:
+    class CUSTOMIZATION(object):
         SUMMER = RequestCriteria(PredicateCondition(lambda item: item.isSummer()))
         WINTER = RequestCriteria(PredicateCondition(lambda item: item.isWinter()))
         DESERT = RequestCriteria(PredicateCondition(lambda item: item.isDesert()))
@@ -267,15 +241,7 @@ class RESEARCH_CRITERIA(object):
     VEHICLE_TO_UNLOCK = ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT
 
 
-class FALLOUT_QUESTS_CRITERIA(object):
-    TOP_VEHICLE = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVEL(10) | ~REQ_CRITERIA.VEHICLE.EVENT
-
-
 class ItemsRequester(IItemsRequester):
-    """
-    GUI items getting interface. Before using any method
-    must be completed async server request (ItemsRequester.request).
-    """
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
     def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges):
@@ -422,21 +388,23 @@ class ItemsRequester(IItemsRequester):
                 if statName in ('vehTypeXP', 'vehTypeLocks'):
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(data.keys())
                 if statName in (('multipliedXPVehs', '_r'),):
-                    inventoryVehiclesCDs = map(lambda v: vehicles.getVehicleTypeCompactDescr(v['compDescr']), self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues())
+                    getter = vehicles.getVehicleTypeCompactDescr
+                    inventoryVehiclesCDs = [ getter(v['compDescr']) for v in self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues() ]
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
                 if statName in ('oldVehInvIDs',):
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
 
         for cacheType, data in diff.get('cache', {}).iteritems():
             if cacheType == 'vehsLock':
-                for id in data.keys():
-                    vehData = self.__inventory.getVehicleData(_getDiffID(id))
+                for itemID in data.keys():
+                    vehData = self.__inventory.getVehicleData(_getDiffID(itemID))
                     if vehData is not None:
                         invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehData.descriptor.type.compactDescr)
 
         for cacheType, data in diff.get('groupLocks', {}).iteritems():
             if cacheType in ('isGroupLocked', 'groupBattles'):
-                inventoryVehiclesCDs = map(lambda v: vehicles.getVehicleTypeCompactDescr(v['compDescr']), self.inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues())
+                getter = vehicles.getVehicleTypeCompactDescr
+                inventoryVehiclesCDs = [ getter(v['compDescr']) for v in self.inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues() ]
                 invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
 
         for itemTypeID, itemsDiff in diff.get('inventory', {}).iteritems():
@@ -447,8 +415,8 @@ class ItemsRequester(IItemsRequester):
                             invalidate[itemTypeID].add(vehicles.getVehicleTypeCompactDescr(strCD))
 
                 for data in itemsDiff.itervalues():
-                    for id in data.iterkeys():
-                        vehData = self.__inventory.getVehicleData(_getDiffID(id))
+                    for itemID in data.iterkeys():
+                        vehData = self.__inventory.getVehicleData(_getDiffID(itemID))
                         if vehData is not None:
                             invalidate[itemTypeID].add(vehData.descriptor.type.compactDescr)
                             invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForVehicle(vehData))
@@ -456,8 +424,8 @@ class ItemsRequester(IItemsRequester):
             if itemTypeID == GUI_ITEM_TYPE.TANKMAN:
                 for data in itemsDiff.itervalues():
                     invalidate[itemTypeID].update(data.keys())
-                    for id in data.keys():
-                        tmanInvID = _getDiffID(id)
+                    for itemID in data.keys():
+                        tmanInvID = _getDiffID(itemID)
                         tmanData = self.__inventory.getTankmanData(tmanInvID)
                         if tmanData is not None and tmanData.vehicle != -1:
                             invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCDForTankman(tmanData))
@@ -517,9 +485,6 @@ class ItemsRequester(IItemsRequester):
         return self.__makeVehicle(vehInvData.descriptor.type.compactDescr, vehInvData) if vehInvData is not None else None
 
     def getStockVehicle(self, typeCompDescr, useInventory=False):
-        """
-        Make vehicle copy with stock configuration
-        """
         if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE:
             proxy = self if useInventory else None
             return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr, proxy=proxy)
@@ -527,10 +492,6 @@ class ItemsRequester(IItemsRequester):
             return
 
     def getVehicleCopy(self, vehicle):
-        """
-        Gets full vehicle copy with crew, artefacts, shells and other if vehicle is in inventory
-        else return vehicle copy without inventory data
-        """
         return self.itemsFactory.createVehicle(typeCompDescr=vehicle.intCD, strCompactDescr=vehicle.descriptor.makeCompactDescr(), inventoryID=vehicle.invID, proxy=self)
 
     def getTankman(self, tmanInvID):
@@ -546,7 +507,6 @@ class ItemsRequester(IItemsRequester):
         return tankman
 
     def getItems(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None):
-        shopParser = ShopDataParser(self.__shop.getItemsData())
         result = ItemsCollection()
         if not isinstance(itemTypeID, tuple):
             itemTypeID = (itemTypeID,)
@@ -562,7 +522,7 @@ class ItemsRequester(IItemsRequester):
             protector = criteria.getIntCDProtector()
             if protector is not None and protector.isUnlinked():
                 return result
-            for intCD in shopParser.getItemsIterator(nationID=nationID, itemTypeID=typeID):
+            for intCD in vehicle_items_getter.getItemsIterator(self.__shop.getItemsData(), nationID=nationID, itemTypeID=typeID):
                 if protector is not None and protector.isTriggered(intCD):
                     continue
                 item = itemGetter(intCD)
@@ -570,33 +530,6 @@ class ItemsRequester(IItemsRequester):
                     result[intCD] = item
 
         return result
-
-    def getItemsEx(self, itemTypeIDs, criteria=REQ_CRITERIA.EMPTY, nationID=None):
-        shopParser = ShopDataParser(self.__shop.getItemsData())
-        result = ItemsCollection()
-        if GUI_ITEM_TYPE.VEHICLE in itemTypeIDs and nationID is None and criteria.lookInInventory():
-            vehGetter = self.getVehicle
-            for vehInvID in (self.inventory.getItems(GUI_ITEM_TYPE.VEHICLE) or {}).iterkeys():
-                item = vehGetter(vehInvID)
-                if criteria(item):
-                    result[item.intCD] = item
-
-            itemTypeIDs.remove(GUI_ITEM_TYPE.VEHICLE)
-        if not itemTypeIDs:
-            return result
-        else:
-            itemGetter = self.getItemByCD
-            protector = criteria.getIntCDProtector()
-            if protector is not None and protector.isUnlinked():
-                return result
-            for intCD in shopParser.getItemsIterator(nationID=nationID, itemTypeID=itemTypeIDs):
-                if protector is not None and protector.isTriggered(intCD):
-                    continue
-                item = itemGetter(intCD)
-                if criteria(item):
-                    result[intCD] = item
-
-            return result
 
     def getTankmen(self, criteria=REQ_CRITERIA.TANKMAN.ACTIVE):
         result = ItemsCollection()
@@ -619,11 +552,6 @@ class ItemsRequester(IItemsRequester):
         return self.getItems(GUI_ITEM_TYPE.VEHICLE, criteria=criteria)
 
     def getBadges(self, criteria=REQ_CRITERIA.EMPTY):
-        """
-        Returns badges items collection. Unfortunately, no caching is available due to
-        specific storing system.
-        :return: ItemsCollection with badges
-        """
         result = ItemsCollection()
         for badgeID, badgeData in self.__badges.available.iteritems():
             item = self.itemsFactory.createBadge(badgeData, proxy=self)
@@ -633,36 +561,13 @@ class ItemsRequester(IItemsRequester):
         return result
 
     def getItemByCD(self, typeCompDescr):
-        """
-        Trying to return item from inventory by item int
-        compact descriptor, otherwise - from shop.
-        
-        @param typeCompDescr: item int compact descriptor
-        @return: item object
-        """
         return self.__makeVehicle(typeCompDescr) if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE else self.__makeSimpleItem(typeCompDescr)
 
     def getItem(self, itemTypeID, nationID, innationID):
-        """
-        Returns item from inventory by given criteria or
-        from shop.
-        
-        @param itemTypeID: item type index from common.items.ITEM_TYPE_NAMES
-        @param nationID: nation index from nations.NAMES
-        @param innationID: item index within its nation
-        @return: gui item
-        """
         typeCompDescr = vehicles.makeIntCompactDescrByID(GUI_ITEM_TYPE_NAMES[itemTypeID], nationID, innationID)
         return self.__makeVehicle(typeCompDescr) if itemTypeID == GUI_ITEM_TYPE.VEHICLE else self.__makeSimpleItem(typeCompDescr)
 
     def getTankmanDossier(self, tmanInvID):
-        """
-        Returns tankman dossier item by given tankman
-        inventory id
-        
-        @param tmanInvID: tankman inventory id
-        @return: TankmanDossier object
-        """
         tankman = self.getTankman(tmanInvID)
         tmanDossierDescr = self.__getTankmanDossierDescr(tmanInvID)
         currentVehicleItem = None
@@ -674,13 +579,6 @@ class ItemsRequester(IItemsRequester):
         return self.itemsFactory.createTankmanDossier(tankman.descriptor, tmanDossierDescr, extDossier, currentVehicleItem=currentVehicleItem)
 
     def getVehicleDossier(self, vehTypeCompDescr, databaseID=None):
-        """
-        Returns vehicle dossier item by given vehicle type
-        int compact descriptor
-        
-        @param vehTypeCompDescr: vehicle type in compact descriptor
-        @return: VehicleDossier object
-        """
         if databaseID is None:
             return self.itemsFactory.createVehicleDossier(self.__getVehicleDossierDescr(vehTypeCompDescr), vehTypeCompDescr)
         else:
@@ -697,10 +595,6 @@ class ItemsRequester(IItemsRequester):
             yield (intCD, dossiers2.getVehicleDossierDescr(dossier))
 
     def getAccountDossier(self, databaseID=None):
-        """
-        Returns account dossier item
-        @return: AccountDossier object
-        """
         if databaseID is None:
             dossierDescr = self.__getAccountDossierDescr()
             return self.itemsFactory.createAccountDossier(dossierDescr)
@@ -728,11 +622,7 @@ class ItemsRequester(IItemsRequester):
         return self.__makeItem(itemTypeID, invDataIdx, strCompactDescr=itemData.compDescr, inventoryID=itemData.invID, proxy=self)
 
     def doesVehicleExist(self, intCD):
-        """ returns existing flag of target vehicle's int compact descriptor.
-        Raises error in case of given non-vehicle CD.
-        """
         itemTypeID, nationID, innationID = vehicles.parseIntCompactDescr(intCD)
-        assert itemTypeID == GUI_ITEM_TYPE.VEHICLE
         return innationID in vehicles.g_list.getList(nationID)
 
     def _invalidateItems(self, itemTypeID, uniqueIDs):
@@ -767,24 +657,13 @@ class ItemsRequester(IItemsRequester):
         del cache[uid]
 
     def __getAccountDossierDescr(self):
-        """
-        @return: account descriptor
-        """
         return dossiers2.getAccountDossierDescr(self.__stats.accountDossier)
 
     def __getTankmanDossierDescr(self, tmanInvID):
-        """
-        @param tmanInvID: tankman inventory id
-        @return: tankman dossier descriptor
-        """
         tmanData = self.__inventory.getTankmanData(tmanInvID)
         return dossiers2.getTankmanDossierDescr(tmanData.descriptor.dossierCompactDescr) if tmanData is not None else dossiers2.getTankmanDossierDescr()
 
     def __getVehicleDossierDescr(self, vehTypeCompDescr):
-        """
-        @param vehTypeCompDescr: vehicle type int compact descriptor
-        @return : vehicle dossier descriptor
-        """
         return dossiers2.getVehicleDossierDescr(self.__dossiers.getVehicleDossier(vehTypeCompDescr))
 
     def __makeItem(self, itemTypeIdx, uid, *args, **kwargs):
@@ -846,9 +725,6 @@ class ItemsRequester(IItemsRequester):
         return {vehData.descriptor.type.compactDescr} if vehData is not None else set()
 
     def __logBrokenSync(self):
-        """
-        Is used in situations, when ItemsRequester is not fully synced and item is created WOTD-81563
-        """
         requesters = (self.__stats,
          self.__inventory,
          self.__recycleBin,
@@ -857,5 +733,5 @@ class ItemsRequester(IItemsRequester):
          self.__goodies,
          self.__vehicleRotation,
          self.ranked)
-        unsyncedList = [ r.__class__.__name__ for r in filter(lambda r: not r.isSynced(), requesters) ]
+        unsyncedList = [ r.__class__.__name__ for r in [ r for r in requesters if r.isSynced() ] ]
         LOG_ERROR('Trying to create fitting item when requesters are not fully synced:', unsyncedList, stack=True)

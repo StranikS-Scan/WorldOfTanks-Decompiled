@@ -187,6 +187,10 @@ class ARENA_BONUS_TYPE_CAPS():
      QUESTS,
      SQUADS,
      VICTORY_DEFEAT_MESSAGE))
+    EVENT_BATTLES_2 = frozenset((RESULTS,
+     QUESTS,
+     SQUADS,
+     VICTORY_DEFEAT_MESSAGE))
     FALLOUT_CLASSIC = frozenset((RESULTS,
      DAMAGE_VEHICLE,
      CREDITS,
@@ -369,6 +373,7 @@ class ARENA_BONUS_TYPE_CAPS():
      ARENA_BONUS_TYPE.FALLOUT_CLASSIC: FALLOUT_CLASSIC,
      ARENA_BONUS_TYPE.FALLOUT_MULTITEAM: FALLOUT_MULTITEAM,
      ARENA_BONUS_TYPE.EVENT_BATTLES: EVENT_BATTLES,
+     ARENA_BONUS_TYPE.EVENT_BATTLES_2: EVENT_BATTLES_2,
      ARENA_BONUS_TYPE.RATED_SANDBOX: RATED_SANDBOX,
      ARENA_BONUS_TYPE.SANDBOX: SANDBOX,
      ARENA_BONUS_TYPE.SORTIE_2: SORTIE_2,
@@ -382,7 +387,8 @@ class ARENA_BONUS_TYPE_CAPS():
     def init():
         for caps in ARENA_BONUS_TYPE_CAPS._typeToCaps.itervalues():
             for rule in ARENA_BONUS_TYPE_CAPS.__RULES:
-                assert rule(caps)
+                if not rule(caps):
+                    raise UserWarning('Caps is invalid')
 
     @staticmethod
     def get(arenaBonusType):

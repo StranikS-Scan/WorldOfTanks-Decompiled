@@ -1,56 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ihooks.py
-"""Import hook support.
-
-Consistent use of this module will make it possible to change the
-different mechanisms involved in loading modules independently.
-
-While the built-in module imp exports interfaces to the built-in
-module searching and loading algorithm, and it is possible to replace
-the built-in function __import__ in order to change the semantics of
-the import statement, until now it has been difficult to combine the
-effect of different __import__ hacks, like loading modules from URLs
-by rimport.py, or restricted execution by rexec.py.
-
-This module defines three new concepts:
-
-1) A "file system hooks" class provides an interface to a filesystem.
-
-One hooks class is defined (Hooks), which uses the interface provided
-by standard modules os and os.path.  It should be used as the base
-class for other hooks classes.
-
-2) A "module loader" class provides an interface to search for a
-module in a search path and to load it.  It defines a method which
-searches for a module in a single directory; by overriding this method
-one can redefine the details of the search.  If the directory is None,
-built-in and frozen modules are searched instead.
-
-Two module loader class are defined, both implementing the search
-strategy used by the built-in __import__ function: ModuleLoader uses
-the imp module's find_module interface, while HookableModuleLoader
-uses a file system hooks class to interact with the file system.  Both
-use the imp module's load_* interfaces to actually load the module.
-
-3) A "module importer" class provides an interface to import a
-module, as well as interfaces to reload and unload a module.  It also
-provides interfaces to install and uninstall itself instead of the
-default __import__ and reload (and unload) functions.
-
-One module importer class is defined (ModuleImporter), which uses a
-module loader instance passed in (by default HookableModuleLoader is
-instantiated).
-
-The classes defined here should be used as base classes for extended
-functionality along those lines.
-
-If a module importer class supports dotted names, its import_module()
-must return a different value depending on whether it is called on
-behalf of a "from ... import ..." statement or not.  (This is caused
-by the way the __import__ hook is used by the Python interpreter.)  It
-would also do wise to install a different version of reload().
-
-"""
 from warnings import warnpy3k, warn
 warnpy3k('the ihooks module has been removed in Python 3.0', stacklevel=2)
 del warnpy3k
@@ -95,20 +44,6 @@ class _Verbose:
 
 
 class BasicModuleLoader(_Verbose):
-    """Basic module loader.
-    
-    This provides the same functionality as built-in import.  It
-    doesn't deal with checking sys.modules -- all it provides is
-    find_module() and a load_module(), as well as find_module_in_dir()
-    which searches just one directory, and can be overridden by a
-    derived class to change the module search algorithm when the basic
-    dependency on sys.path is unchanged.
-    
-    The interface is a little more convenient than imp's:
-    find_module(name, [path]) returns None or 'stuff', and
-    load_module(name, stuff) loads the module.
-    
-    """
 
     def find_module(self, name, path=None):
         if path is None:
@@ -150,14 +85,6 @@ class BasicModuleLoader(_Verbose):
 
 
 class Hooks(_Verbose):
-    """Hooks into the filesystem and interpreter.
-    
-    By deriving a subclass you can redefine your filesystem interface,
-    e.g. to merge it with the URL space.
-    
-    This base class behaves just like the native filesystem.
-    
-    """
 
     def get_suffixes(self):
         return imp.get_suffixes()
@@ -238,13 +165,6 @@ class Hooks(_Verbose):
 
 
 class ModuleLoader(BasicModuleLoader):
-    """Default module loader; uses file system hooks.
-    
-    By defining suitable hooks, you might be able to load modules from
-    other sources than the file system, e.g. from compressed or
-    encrypted files, tar files or (if you're brave!) URLs.
-    
-    """
 
     def __init__(self, hooks=None, verbose=VERBOSE):
         BasicModuleLoader.__init__(self, verbose)
@@ -319,7 +239,6 @@ class ModuleLoader(BasicModuleLoader):
 
 
 class FancyModuleLoader(ModuleLoader):
-    """Fancy module loader -- parses and execs the code itself."""
 
     def load_module(self, name, stuff):
         file, filename, (suff, mode, type) = stuff
@@ -366,11 +285,6 @@ class FancyModuleLoader(ModuleLoader):
 
 
 class BasicModuleImporter(_Verbose):
-    """Basic module importer; uses module loader.
-    
-    This provides basic import facilities but no package imports.
-    
-    """
 
     def __init__(self, loader=None, verbose=VERBOSE):
         _Verbose.__init__(self, verbose)
@@ -429,7 +343,6 @@ class BasicModuleImporter(_Verbose):
 
 
 class ModuleImporter(BasicModuleImporter):
-    """A module importer that supports packages."""
 
     def import_module(self, name, globals=None, locals=None, fromlist=None, level=-1):
         parent = self.determine_parent(globals, level)

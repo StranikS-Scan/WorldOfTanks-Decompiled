@@ -67,13 +67,6 @@ class SquadInvitationsFilter(object):
             return (invite.receiverDBID, include)
 
     def filterReceivedInvites(self, getter, added, changed, deleted):
-        """Filters received invites.
-        It's generator that returns item containing tuple(accountDBID, include, exclude).
-        :param getter: function to get invite data.
-        :param added: list of invites IDs that are added.
-        :param changed: list of invites IDs that are changed.
-        :param deleted: list of invites IDs that are deleted.
-        """
         for clientID in added:
             invite = getter(clientID)
             if invite is None:
@@ -102,13 +95,6 @@ class SquadInvitationsFilter(object):
         return
 
     def filterSentInvites(self, getter, added, changed, deleted):
-        """Filters sent invites.
-        It's generator that returns item containing tuple(accountDBID, include, exclude).
-        :param getter: function to get invite data.
-        :param added: list of invites IDs that are added.
-        :param changed: list of invites IDs that are changed.
-        :param deleted: list of invites IDs that are deleted.
-        """
         for clientID in added:
             invite = getter(clientID)
             if invite is None:
@@ -198,8 +184,6 @@ class _SquadInvitationsHandler(ISquadInvitationsHandler):
 
 
 class _SquadInvitationsRecorder(_SquadInvitationsHandler):
-    """ This class wraps _SquadInvitationsHandler in order to record player's
-    actions with dyn squads during replay recording."""
     __slots__ = ('__idGen',)
 
     def __init__(self, setup):
@@ -220,8 +204,6 @@ class _SquadInvitationsRecorder(_SquadInvitationsHandler):
 
 
 class _SquadInvitationsPlayer(_SquadInvitationsHandler):
-    """ This class wraps _SquadInvitationsHandler in order to simulate player's
-    actions with dyn squads during replay."""
     __slots__ = ()
 
     def __init__(self, setup):

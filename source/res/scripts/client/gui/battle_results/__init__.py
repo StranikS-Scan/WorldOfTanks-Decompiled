@@ -8,9 +8,6 @@ from skeletons.gui.battle_results import IBattleResultsService
 __all__ = ('getBattleResultsServiceConfig', 'RequestResultsContext', 'RequestEmblemContext', 'EMBLEM_TYPE')
 
 def getBattleResultsServiceConfig(manager):
-    """Configures services for package battle_results.
-    :param manager: helpers.dependency.DependencyManager
-    """
     instance = BattleResultsService()
     instance.init()
     manager.addInstance(IBattleResultsService, instance, finalizer='fini')

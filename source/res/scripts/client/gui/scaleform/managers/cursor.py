@@ -28,13 +28,6 @@ class Cursor(CursorMeta, View):
         return
 
     def attachCursor(self, flags=_CTRL_FLAG.GUI_ENABLED):
-        """
-        Mouse cursor activate. Gets mouse cursor, it hide and activate. Client
-        uses Scaleform custom mouse cursor - movie clip witch receive notifications
-        about mouse movement, left mouse button press and mouse wheel events.
-        :param flags: determine whether Flash cursor should be shown
-        """
-        assert flags & _CTRL_FLAG.CURSOR_ATTACHED, 'Flag CURSOR_ATTACHED is not defined'
         if flags & _CTRL_FLAG.CURSOR_VISIBLE > 0:
             self.show()
         else:
@@ -48,9 +41,6 @@ class Cursor(CursorMeta, View):
             BigWorld.setCursor(mcursor)
 
     def detachCursor(self):
-        """
-        Mouse cursor detach and give control camera.
-        """
         mcursor = GUI.mcursor()
         if mcursor.active:
             LOG_DEBUG('Cursor is detached')
@@ -97,10 +87,6 @@ class Cursor(CursorMeta, View):
             self.detachCursor()
 
     def __setSFMousePosition(self):
-        """
-        Sync Scaleform cursor position with BigWorld cursor position. It required
-        when: show cursor in battle or load another flash with cursor.
-        """
         screenWidth, screenHeight = GUI.screenResolution()
         mouseLeft, mouseTop = GUI.mcursor().position
         self.__saveDeviceMousePosition(mouseLeft, mouseTop)
@@ -108,28 +94,15 @@ class Cursor(CursorMeta, View):
         self.flashObject.y = round(-(-1.0 + mouseTop) / 2.0 * screenHeight)
 
     def __saveDeviceMousePosition(self, mouseLeft, mouseTop):
-        """
-        Just memorize cursor position to restore it when necessary.
-        :param mouseLeft: x position
-        :param mouseTop: y position
-        """
         self.__savedMCursorPos = (mouseLeft, mouseTop)
 
     def __restoreDeviceMousePosition(self):
-        """
-        Restore GUI.mcursor position previously saved in syncMousePosition (WOTD-2262).
-        This is required because CursorCamera will not change mcursor.position until
-        any mouse movement after cursor is hidden and keeps wrong BigWorld.target etc.
-        """
         if self.__savedMCursorPos is not None:
             GUI.mcursor().position = self.__savedMCursorPos
             self.__savedMCursorPos = None
         return
 
     def resetMousePosition(self):
-        """
-        Set mouse cursor position to the center of the screen
-        """
         GUI.mcursor().position = (0.0, 0.0)
         self.__saveDeviceMousePosition(0.0, 0.0)
         GUI.syncMousePosition(0.0, 0.0)

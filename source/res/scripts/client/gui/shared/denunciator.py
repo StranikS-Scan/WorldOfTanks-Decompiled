@@ -32,8 +32,6 @@ DENUNCIATIONS_MAP = {DENUNCIATIONS.INCORRECT_BEHAVIOR: constants.DENUNCIATION.IN
  DENUNCIATIONS.BOT: constants.DENUNCIATION.BOT}
 
 class Denunciator(object):
-    """Denunciation creation helper.
-    """
 
     @storage_getter('playerCtx')
     def playerCtx(self):

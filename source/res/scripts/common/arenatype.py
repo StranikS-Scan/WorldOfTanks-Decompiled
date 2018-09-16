@@ -7,8 +7,9 @@ from constants import ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA, ARENA_GAMEPLAY_NAMES, 
 from constants import IS_CELLAPP, IS_BASEAPP
 from items.vehicles import CAMOUFLAGE_KINDS
 from debug_utils import LOG_CURRENT_EXCEPTION
-from GasAttackSettings import GasAttackSettings
 from items import _xml
+from typing import Dict
+from Math import Vector2
 if IS_CLIENT:
     from helpers import i18n
     import WWISE
@@ -16,7 +17,6 @@ elif IS_WEB:
     from web_stubs import *
 if IS_CELLAPP or IS_BASEAPP:
     from server_constants import ARENA_ESTIMATED_LOAD_DEFAULT
-    from typing import Dict
 g_cache = {}
 g_geometryCache = {}
 g_geometryNamesToIDs = {}
@@ -47,6 +47,7 @@ def parseTypeID(typeID):
     return (typeID >> 16, typeID & 65535)
 
 
+_LIST_XML = ARENA_TYPE_XML_PATH + '_list_.xml'
 _DEFAULT_XML = ARENA_TYPE_XML_PATH + '_default_.xml'
 
 def init():
@@ -54,9 +55,9 @@ def init():
     global g_cache
     global g_geometryNamesToIDs
     global g_gameplaysMask
-    rootSection = ResMgr.openSection(ARENA_TYPE_XML_PATH + '_list_.xml')
+    rootSection = ResMgr.openSection(_LIST_XML)
     if rootSection is None:
-        raise Exception("Can't open '%s'" % (ARENA_TYPE_XML_PATH + '_list_.xml'))
+        raise Exception("Can't open '%s'" % _LIST_XML)
     defaultXml = ResMgr.openSection(_DEFAULT_XML)
     if defaultXml is None:
         raise Exception("Can't open '%s'" % _DEFAULT_XML)
@@ -71,6 +72,8 @@ def init():
         geometriesSet.add(geometryID)
         __buildCache(geometryID, value.readString('name'), defaultXml)
 
+    ResMgr.purge(_LIST_XML, True)
+    ResMgr.purge(_DEFAULT_XML, True)
     g_gameplaysMask = getGameplaysMask(g_gameplayNames)
     g_geometryNamesToIDs = dict([ (arenaType.geometryName, arenaType.geometryID) for arenaType in g_cache.itervalues() ])
     return
@@ -86,7 +89,7 @@ class ArenaType(object):
             raise Exception("'maxPlayersInTeam' value < 'minPlayersInTeam' value")
 
     def __getattr__(self, name):
-        return self.__gameplayCfg[name] if name in self.__gameplayCfg else self.__geometryCfg[name]
+        return self.__gameplayCfg[name] if name in self.__gameplayCfg else self.__geometryCfg.get(name, None)
 
 
 class GeometryType(object):
@@ -114,6 +117,7 @@ def __buildCache(geometryID, geometryName, defaultXml):
             g_cache[arenaType.id] = arenaType
             g_gameplayNames.add(arenaType.gameplayName)
 
+        ResMgr.purge(sectionName, True)
         return
 
 
@@ -124,6 +128,7 @@ def __readGeometryCfg(geometryID, geometryName, section, defaultXml):
         cfg['geometryName'] = geometryName
         cfg['geometry'] = __readString('geometry', section, defaultXml)
         cfg['boundingBox'] = __readBoundingBox(section)
+        cfg['spaceBoundingBox'] = __calcSpaceBoundingBox(cfg['boundingBox'])
         cfg['weatherPresets'] = __readWeatherPresets(section)
         cfg['vehicleCamouflageKind'] = __readVehicleCamouflageKind(section)
         cfg['isDevelopment'] = __readBool('isDevelopment', section, defaultXml, False)
@@ -218,7 +223,6 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
     if raiseIfMissing or section.has_key('boundingBox'):
         cfg['boundingBox'] = __readBoundingBox(section)
     maxTeamsInArena = cfg.get('maxTeamsInArena', geometryCfg.get('maxTeamsInArena', None))
-    assert maxTeamsInArena is not None
     cfg.update(__readWinPoints(section))
     cfg.update(__readGameplayPoints(section, geometryCfg))
     cfg['teamBasePositions'] = __readTeamBasePositions(section, maxTeamsInArena)
@@ -257,15 +261,6 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['controlPoints'] = __readControlPoints(section)
         cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d_low', required=False)
         cfg['botPoints'] = __readBotPoints(section)
-    if __hasKey('gasAttack', section, defaultXml):
-        gasAttackSection = section['gasAttack']
-        cfg['gasAttackSettings'] = __readGasAttackSettings(gasAttackSection['gameplaySettings'])
-        if IS_CLIENT:
-            from battleground import gas_attack
-            cfg['gasAttackVisual'] = gas_attack.GasAttackMapSettings.fromSection(gasAttackSection['visualSettings'])
-    elif raiseIfMissing:
-        cfg['gasAttackSettings'] = None
-        cfg['gasAttackVisual'] = None
     if not IS_CLIENT:
         if raiseIfMissing or __hasKey('battleScenarios', section, defaultXml):
             cfg['battleScenarios'] = __readBattleScenarios(section, defaultXml)
@@ -277,7 +272,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
 def __readWWmusicSection(section, defaultXml):
     wwmusic = None
     if __hasKey('wwmusicSetup', section, defaultXml):
-        wwmusic = dict()
+        wwmusic = {}
         dataSection = section if section.has_key('wwmusicSetup') else defaultXml
         for name, value in _xml.getChildren(defaultXml, dataSection, 'wwmusicSetup'):
             wwmusic[name] = value.asString
@@ -286,23 +281,10 @@ def __readWWmusicSection(section, defaultXml):
 
 
 def __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml):
-    """
-    Parses wwmusicDroneSetup section from current xml.
-    Example:
-        <wwmusicDroneSetup>
-            <timeRemained>
-                <value> 20 </value>
-                <arena_type_label> ARENA_GUI_TYPE_LABEL.LABELS.* </arena_type_label>
-                <gameplay_name> ARENA_GAMEPLAY_NAMES.* </gameplay_name>
-            </timeRemained>
-            ...
-        </wwmusicDroneSetup>
-    :param wwmusicDroneSetup: the name of tag 'wwmusicDroneSetup'
-    :param section: current arena xml
-    :param defaultXml: /arena_defs/_default_.xml
-    :return: dict: {settingName: {(ARENA_GUI_TYPE_LABEL.LABELS.*, ARENA_GAMEPLAY_NAMES.*): value, ...}...}
-    """
-    dataSection = section if section.has_key(wwmusicDroneSetup) else defaultXml
+    if section.has_key(wwmusicDroneSetup):
+        dataSection = section
+    else:
+        dataSection = defaultXml
     outcome = defaultdict(dict)
     droneChildren = sorted(_xml.getChildren(defaultXml, dataSection, wwmusicDroneSetup), key=lambda item: len(item[1].items()))
     valueTag = 'value'
@@ -331,7 +313,7 @@ def __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml):
 
         raise Exception('"{}" section missed the key "{}"!'.format(settingName, valueTag))
 
-    return dict(outcome)
+    return outcome
 
 
 def __hasKey(key, xml, defaultXml):
@@ -404,6 +386,11 @@ def __readBoundingBox(section):
     if bottomLeft[0] >= upperRight[0] or bottomLeft[1] >= upperRight[1]:
         raise Exception("wrong 'boundingBox' values")
     return (bottomLeft, upperRight)
+
+
+def __calcSpaceBoundingBox(arenaBoundingBox):
+    ARENA_EXTENT = 100
+    return (arenaBoundingBox[0] - Vector2(ARENA_EXTENT, ARENA_EXTENT), arenaBoundingBox[1] + Vector2(ARENA_EXTENT, ARENA_EXTENT))
 
 
 def __readWeatherPresets(section):
@@ -634,10 +621,6 @@ def __readGameplayPoints(section, geometryCfg):
      'repairPoints': rps,
      'resourcePoints': rsps}
     return cfg
-
-
-def __readGasAttackSettings(section):
-    return GasAttackSettings(section.readInt('attackLength'), section.readFloat('preparationPeriod'), section.readVector3('position'), section.readFloat('startRadius'), section.readFloat('endRadius'), section.readFloat('compressionTime'))
 
 
 def __readWinPoints(section):

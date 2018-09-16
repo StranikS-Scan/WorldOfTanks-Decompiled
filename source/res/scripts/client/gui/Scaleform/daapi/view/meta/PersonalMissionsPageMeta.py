@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/PersonalMissionsPageMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.View import View
 
 class PersonalMissionsPageMeta(View):
@@ -24,21 +20,12 @@ class PersonalMissionsPageMeta(View):
         self._printOverrideError('onTutorialAcceptBtnClicked')
 
     def as_setHeaderDataS(self, data):
-        """
-        :param data: Represented by OperationsHeaderVO (AS)
-        """
         return self.flashObject.as_setHeaderData(data) if self._isDAAPIInited() else None
 
     def as_updateBranchesDataS(self, data):
-        """
-        :param data: Represented by ChainsPanelVO (AS)
-        """
         return self.flashObject.as_updateBranchesData(data) if self._isDAAPIInited() else None
 
     def as_setStatusDataS(self, data):
-        """
-        :param data: Represented by StatusFooterVO (AS)
-        """
         return self.flashObject.as_setStatusData(data) if self._isDAAPIInited() else None
 
     def as_setSelectedBranchIndexS(self, index):

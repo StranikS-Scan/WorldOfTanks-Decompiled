@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StoreTableMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class StoreTableMeta(BaseDAAPIComponent):
@@ -15,7 +11,4 @@ class StoreTableMeta(BaseDAAPIComponent):
         return self.flashObject.as_getTableDataProvider() if self._isDAAPIInited() else None
 
     def as_setDataS(self, data):
-        """
-        :param data: Represented by StoreTableVO (AS)
-        """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

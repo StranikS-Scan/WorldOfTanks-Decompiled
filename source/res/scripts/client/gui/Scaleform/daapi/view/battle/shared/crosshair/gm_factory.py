@@ -99,10 +99,6 @@ class _ControlMarkersFactory(_GunMarkersFactory):
 
 
 class _DevControlMarkersFactory(_ControlMarkersFactory):
-    """ Factory creates markers that are used in control modes in development version of the client.
-    If player selects settings item "use server's gun marker",
-    then 2 gun markers are created for each control mode. First one it is client's gun marker (green).
-    Other one it is server's gun marker (debug). Its work together to compare their job."""
 
     def _createDefaultMarkers(self, markersInfo, components=None):
         return self._createDebugMarkers(markersInfo, components=components) if markersInfo.isClientMarkerActivated and markersInfo.isServerMarkerActivated else super(_DevControlMarkersFactory, self)._createDefaultMarkers(markersInfo, components=components)
@@ -153,30 +149,8 @@ else:
     _FACTORIES_COLLECTION = (_DevControlMarkersFactory, _OptionalMarkersFactory, _EquipmentMarkersFactory)
 
 def createComponents(markersInfo, vehicleInfo):
-    """Creates set of component by information about player's vehicle and
-    present state of gun markers (server marker is used, markers are enabled, etc.).
-    
-    :param markersInfo: instance of _GunMarkersSetInfo.
-    
-    :param vehicleInfo: instance of ArenaVehicleInfoVO.
-    
-    :return: set of components that are created.
-    """
     return _GunMarkersFactories(*_FACTORIES_COLLECTION).create(markersInfo, vehicleInfo)
 
 
 def overrideComponents(components, markersInfo, vehicleInfo):
-    """ Overrides (reuse existing components, create new components if it needs)
-    set of component by information about player's vehicle and present state of gun markers
-    (server marker is used, markers are enabled, etc.).
-    
-    :param components: preset set of components.
-    
-    :param markersInfo: instance of _GunMarkersSetInfo.
-    
-    :param vehicleInfo: instance of ArenaVehicleInfoVO.
-    
-    :return: set of components that are reused or created.
-    
-    """
     return _GunMarkersFactories(*_FACTORIES_COLLECTION).override(components, markersInfo, vehicleInfo)

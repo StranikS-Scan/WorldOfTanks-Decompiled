@@ -10,9 +10,6 @@ from helpers import i18n, dependency
 from skeletons.gui.game_control import IRankedBattlesController
 
 class RankedServersDataProvider(ServersDataProvider):
-    """
-    data provider for ranked servers displaying in ranked battles prime time view
-    """
     rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self):
@@ -50,11 +47,6 @@ class RankedServersDataProvider(ServersDataProvider):
             return
 
     def setSelectedID(self, sid):
-        """
-        updates selected status for server
-        :param sid: server id
-        :return: None
-        """
         super(RankedServersDataProvider, self).setSelectedID(sid)
         for vo in self.sortedCollection:
             if vo['id'] == sid:

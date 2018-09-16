@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/MINICLIENT.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class MINICLIENT(object):
     PERSONAL_QUESTS_WELCOME_VIEW_DESCRIPTION = '#miniclient:personal_quests_welcome_view/description'

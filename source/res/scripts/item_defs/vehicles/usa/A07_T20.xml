@@ -253,7 +253,7 @@
         <segmentLength>	0.128	</segmentLength>
         <segmentOffset>	0.421	</segmentOffset>
         <segment2Offset>	0.065	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -446,7 +446,7 @@
         <segmentLength>	0.128	</segmentLength>
         <segmentOffset>	0.152	</segmentOffset>
         <segment2Offset>	0.064	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -896,7 +896,7 @@
   </turrets0>
   <engines>
     <Ford_GAA>	shared	  <unlocks>
-        <engine>	Ford_GAN	  <cost>	11500.0	</cost>
+        <engine>	Ford_GAN	  <cost>	11500	</cost>
         </engine>
       </unlocks>
     </Ford_GAA>

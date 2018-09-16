@@ -13,14 +13,14 @@
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <wwmusicSetup>
-    <wwmusicLoading>	music_rus_vilage	</wwmusicLoading>
-    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
-    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+    <wwmusicLoading>	music_prokhorovka_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_prokhorovka_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_prokhorovka_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_prokhorovka_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_prokhorovka_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_prokhorovka_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
   <water>
@@ -74,22 +74,5 @@
       </teamBasePositions>
     </assault2>
   </gameplayTypes>
-  <mapActivities>
-    <warplane>
-      <preset>	murovanka_lightning_01	</preset>
-      <position>	0.000000 0.000000 0.000000	</position>
-      <yaw>	0.000000	</yaw>
-      <possibility>	1.000000	</possibility>
-      <startTime>	0.000000 0.000000	</startTime>
-      <period>	100.000000	</period>
-    </warplane>
-    <warplane>
-      <preset>	murovanka_lightning_02	</preset>
-      <position>	0.000000 0.000000 0.000000	</position>
-      <yaw>	0.000000	</yaw>
-      <possibility>	1.000000	</possibility>
-      <startTime>	35.000000 35.000000	</startTime>
-      <period>	80.000000	</period>
-    </warplane>
-  </mapActivities>
+  <mapActivities></mapActivities>
 </11_murovanka.xml>

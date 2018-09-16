@@ -30,7 +30,6 @@ class ModelHitTester(object):
 
     @property
     def bspModelName(self):
-        """Name of BSP (collision) model if it is used, None otherwise."""
         return self.__bspModelName
 
     @bspModelName.setter
@@ -86,7 +85,6 @@ class ModelHitTester(object):
         return self.__getBspModel(value).collideSegment(start, stop)
 
     def localHitTestFull_debug(self, start, stop, value=0):
-        assert IS_DEVELOPMENT
         LOG_DEBUG('localHitTestFull_debug', self.bspModelName, start, stop)
         return self.__getBspModel(value).collideSegmentFull_debug(start, stop)
 
@@ -140,4 +138,3 @@ def segmentMayHitVehicle(vehicleDescr, segmentStart, segmentEnd, vehicleCenter):
 
 
 SegmentCollisionResult = namedtuple('SegmentCollisionResult', ('dist', 'hitAngleCos', 'armor'))
-SegmentCollisionResultExt = namedtuple('SegmentCollisionResultExt', ('dist', 'hitAngleCos', 'matInfo', 'compName'))

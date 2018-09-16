@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/whichdb.py
-"""Guess which db package to use to open a db file."""
 import os
 import struct
 import sys
@@ -12,17 +11,6 @@ except ImportError:
     _dbmerror = IOError
 
 def whichdb(filename):
-    """Guess which db package to use to open a db file.
-    
-    Return values:
-    
-    - None if the database file can't be read;
-    - empty string if the file can be read but can't be recognized
-    - the module name (e.g. "dbm" or "gdbm") if recognized.
-    
-    Importing the given module may still fail, and opening the
-    database using that module may still fail.
-    """
     try:
         f = open(filename + os.extsep + 'pag', 'rb')
         f.close()

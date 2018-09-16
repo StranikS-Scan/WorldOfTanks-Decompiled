@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/helpers/DecalMap.py
 import BigWorld
 import ResMgr
+import material_kinds
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 g_instance = None
 
-class DecalMap:
+class DecalMap(object):
 
     def __init__(self, dataSec):
         self.__cfg = dict()
@@ -14,7 +15,7 @@ class DecalMap:
         self._readCfg(dataSec)
 
     def initGroups(self, scaleFactor):
-        if BigWorld.isForwardPipeline():
+        if not BigWorld.isDynamicDecalEnabled():
             return
         try:
             for group in self.__cfg['groups'].items():
@@ -73,13 +74,22 @@ class DecalMap:
                 desc['trianglesCount'] = _readFloat(group, 'trianglesCount', 1000, 100000, 1000)
                 groups[group.name] = desc
 
+            for sMatId in dataSec['scales'].values():
+                scaleU = _readFloat(sMatId, 'scaleU', 1, 2, 1)
+                for matKind in material_kinds.EFFECT_MATERIAL_IDS_BY_NAMES[sMatId.name]:
+                    BigWorld.wg_addMatkindScaleU(sMatId.name, matKind, scaleU)
+
             for dsTexSet in dataSec['textureSets'].values():
                 ts = {}
                 _DIF_TEXT = 0
                 _BUMP_TEXT = 1
-                _HMAP_TEXT = 2
+                _STRAFE_DIF_TEXT = 2
+                _STRAFE_BUMP_TEXT = 3
                 for dsMaterial in dsTexSet.values():
-                    tsMaterial = [None, None, None]
+                    tsMaterial = [None,
+                     None,
+                     None,
+                     None]
                     ts[dsMaterial.name] = tsMaterial
                     for dsTexture in dsMaterial.values():
                         texName = dsMaterial.readString(dsTexture.name)
@@ -88,8 +98,10 @@ class DecalMap:
                         textListIndex = _DIF_TEXT
                         if dsTexture.name == 'ANM':
                             textListIndex = _BUMP_TEXT
-                        elif dsTexture.name == 'GMM':
-                            textListIndex = _HMAP_TEXT
+                        elif dsTexture.name == 'STRAFE_AM':
+                            textListIndex = _STRAFE_DIF_TEXT
+                        elif dsTexture.name == 'STRAFE_ANM':
+                            textListIndex = _STRAFE_BUMP_TEXT
                         tsMaterial[textListIndex] = texIndex
 
                 self.__textureSets[dsTexSet.name] = ts

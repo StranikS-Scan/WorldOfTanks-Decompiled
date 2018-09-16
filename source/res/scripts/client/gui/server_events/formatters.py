@@ -9,7 +9,7 @@ from constants import ARENA_BONUS_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.formatters import text_styles, icons
+from gui.shared.formatters import text_styles, icons as gui_icons
 from gui.shared.money import Currency
 from helpers import i18n
 from shared_utils import CONST_CONTAINER
@@ -18,18 +18,10 @@ TokenComplex = namedtuple('TokenComplex', 'isDisplayable styleID webID')
 MARATHON_PREFIX = 'marathon:'
 
 def isMarathon(eventID):
-    """ Determines whether given event is a based on its ID.
-    
-    In case of groups, True means that group is a marathon.
-    In case of quest, True means that quest is marathon's main quest.
-    """
     return eventID.startswith(MARATHON_PREFIX)
 
 
 def getLinkedActionID(groupID, actions):
-    """
-    Gets linked action ID from group ID
-    """
     delimiter = ':'
     if groupID and delimiter in groupID:
         splittedGroup = groupID.split(delimiter)
@@ -128,7 +120,7 @@ class UiElement(object):
 
 
 def todict(uiElement_or_list):
-    if type(uiElement_or_list) is list:
+    if isinstance(uiElement_or_list, list):
         return [ uiE._dict for uiE in uiElement_or_list ]
     return uiElement_or_list._dict
 
@@ -154,7 +146,7 @@ def _packIconTextElement(label='', icon='', dataType=None, dataValue=None, count
 
 def formatRelation(value, relation, relationI18nType=RELATIONS_SCHEME.DEFAULT):
     relation = relation or 'equal'
-    if type(value) not in types.StringTypes:
+    if not isinstance(value, types.StringTypes):
         value = BigWorld.wg_getNiceNumberFormat(value)
     return makeHtmlString('html_templates:lobby/quests', 'relation', {'relation': i18n.makeString('#quests:details/relations%d/%s' % (relationI18nType, relation)),
      'value': value})
@@ -193,25 +185,25 @@ def formatVehicleLevel(value):
 
 def formatGoldPrice(value):
     value = BigWorld.wg_getIntegralFormat(value)
-    icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2, vSpace=-4)
+    icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2, vSpace=-4)
     return '{} {}'.format(text_styles.gold(value), icon)
 
 
 def formatCreditPrice(value):
     value = BigWorld.wg_getIntegralFormat(value)
-    icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2, vSpace=-4)
+    icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2, vSpace=-4)
     return '{} {}'.format(text_styles.credits(value), icon)
 
 
 def formatGoldPriceBig(value):
     value = BigWorld.wg_getIntegralFormat(value)
-    icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_1, vSpace=-1)
+    icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_1, vSpace=-1)
     return '{} {}'.format(text_styles.goldTextBig(value), icon)
 
 
 def formatCreditPriceBig(value):
     value = BigWorld.wg_getIntegralFormat(value)
-    icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_1, vSpace=-1)
+    icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_1, vSpace=-1)
     return '{} {}'.format(text_styles.creditsTextBig(value), icon)
 
 
@@ -233,7 +225,6 @@ def packTextBlock(label, value=None, relation=None, questID=None, isAvailable=Tr
         value = formatRelation(value, relation, relationI18nType)
     if counterDescr is None:
         counterDescr = i18n.makeString('#quests:quests/table/amount')
-    assert not (not isAvailable and showDone)
     blockData = {'linkage': 'CounterTextElement_UI',
      'label': label,
      'fullLabel': fullLabel,
@@ -262,25 +253,16 @@ def packVehiclesBonusBlock(label, questID):
 
 
 def packAchieveElementByItem(item):
-    """ @item is achievement gui items instance
-    """
     return _packAchieveElement(item.getUserName(), item.getIcon32x32(), item.getBlock(), item.getName(), item.getValue())
 
 
 def _packAchieveElement(userName, iconPath, block, record, value=0):
-    """ Prepares data to send to the flash
-    :param userName: i18n achievement's name
-    :param iconPath: path to the smallest achievement's icon
-    :param block: dossier block where achievement is placed
-    :param record: achievement unique name within dossier's block
-    :param value: optional for tooltip, just for showing correct user text and image
-    """
     return _packIconTextElement(label=userName, icon=iconPath, dataType='battleStatsAchievementData', dataValue=[block, record, value])
 
 
-def packCustomizations(list):
+def packCustomizations(elements):
     return UiElement({'linkage': 'CustomizationsBlock_UI',
-     'list': list})
+     'list': elements})
 
 
 ProgressData = namedtuple('ProgressData', 'rendererLinkage, progressList')
@@ -302,14 +284,14 @@ def packMissionBonusTypeElements(bonusTypes, width=24, height=24, vSpace=-9):
     elements = []
     for bonusType in uniqueTypes:
         label = i18n.makeString('#menu:bonusType/%d' % bonusType)
-        icon = icons.makeImageTag(RES_ICONS.getBrebattleConditionIcon(bonusType), width=width, height=height, vSpace=vSpace)
+        icon = gui_icons.makeImageTag(RES_ICONS.getBrebattleConditionIcon(bonusType), width=width, height=height, vSpace=vSpace)
         elements.append(_IconData(icon, label))
 
     return elements
 
 
 def packMissionFormationElement(formationName, width=24, height=24, vSpace=-9):
-    return _IconData(icons.makeImageTag(RES_ICONS.getBrebattleConditionIcon(formationName), width=width, height=height, vSpace=vSpace), i18n.makeString('#quests:details/conditions/formation/%s' % formationName))
+    return _IconData(gui_icons.makeImageTag(RES_ICONS.getBrebattleConditionIcon(formationName), width=width, height=height, vSpace=vSpace), i18n.makeString('#quests:details/conditions/formation/%s' % formationName))
 
 
 def getUniqueBonusTypes(bonusTypes):
@@ -323,6 +305,8 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.EPIC_RANDOM
         if bonusType in (ARENA_BONUS_TYPE.BOOTCAMP,):
             bonusType = ARENA_BONUS_TYPE.REGULAR
+        if bonusType in (ARENA_BONUS_TYPE.EVENT_BATTLES_2,):
+            bonusType = ARENA_BONUS_TYPE.EVENT_BATTLES
         uniqueTypes.add(bonusType)
 
     return uniqueTypes
@@ -336,7 +320,7 @@ def packMissionPrebattleCondition(label, icons='', tooltip=''):
 
 
 def packMissionCamoElement(camoTypeName, width=24, height=24, vSpace=-9):
-    return _IconData(icons.makeImageTag(RES_ICONS.getBrebattleConditionIcon(camoTypeName), width=width, height=height, vSpace=vSpace), i18n.makeString('#quests:details/conditions/mapsType/%s' % camoTypeName))
+    return _IconData(gui_icons.makeImageTag(RES_ICONS.getBrebattleConditionIcon(camoTypeName), width=width, height=height, vSpace=vSpace), i18n.makeString('#quests:details/conditions/mapsType/%s' % camoTypeName))
 
 
 def packMissionkMapElement(arenaTypeID):
@@ -346,7 +330,6 @@ def packMissionkMapElement(arenaTypeID):
 
 def getMapName(arenaTypeID):
     if arenaTypeID not in ArenaType.g_cache:
-        assert arenaTypeID in ArenaType.g_cache
         return None
     else:
         arenaType = ArenaType.g_cache[arenaTypeID]
@@ -380,7 +363,7 @@ def minimizedTitleFormat(title):
 def _titleRelationFormat(value, relation, relationI18nType=RELATIONS_SCHEME.DEFAULT, titleKey=None):
     if value is not None:
         relation = relation or 'equal'
-        if type(value) not in types.StringTypes:
+        if not isinstance(value, types.StringTypes):
             value = BigWorld.wg_getNiceNumberFormat(value)
         relation = i18n.makeString('#quests:details/relations%s/%s' % (relationI18nType, relation))
         return '%s %s' % (relation, value)
@@ -404,7 +387,7 @@ def personalTitleComplexRelationFormat(value, relation, titleKey=None):
 
 
 def titleComplexRelationFormat(value, relation, titleKey=None):
-    return titleRelationFormat(value, relation, RELATIONS_SCHEME.DEFAULT, titleKey) + icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_ON, 16, 16, 8, -4)
+    return titleRelationFormat(value, relation, RELATIONS_SCHEME.DEFAULT, titleKey) + gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_ON, 16, 16, 8, -4)
 
 
 def minimizedTitleRelationFormat(value, relation, relationI18nType=RELATIONS_SCHEME.DEFAULT, titleKey=None):
@@ -412,7 +395,7 @@ def minimizedTitleRelationFormat(value, relation, relationI18nType=RELATIONS_SCH
 
 
 def minimizedTitleComplexRelationFormat(value, relation, titleKey=None):
-    return minimizedTitleRelationFormat(value, relation, RELATIONS_SCHEME.DEFAULT, titleKey) + icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_ON, 16, 16, 2, -4)
+    return minimizedTitleRelationFormat(value, relation, RELATIONS_SCHEME.DEFAULT, titleKey) + gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_ON, 16, 16, 2, -4)
 
 
 def titleCumulativeFormat(current, total):
@@ -433,11 +416,11 @@ def minimizedTitleCumulativeFormat(current, total):
 
 
 def titleComplexFormat(current, total):
-    return titleCumulativeFormat(current, total) + icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_ON, 16, 16, 8, -4)
+    return titleCumulativeFormat(current, total) + gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_ON, 16, 16, 8, -4)
 
 
 def minimizedTitleComplexFormat(current, total):
-    return minimizedTitleCumulativeFormat(current, total) + icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_ON, 16, 16, 2, -4)
+    return minimizedTitleCumulativeFormat(current, total) + gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_ON, 16, 16, 2, -4)
 
 
 def getAchievementsConditionKey(condition):

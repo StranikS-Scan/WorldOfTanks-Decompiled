@@ -20,13 +20,11 @@ from skeletons.gui.event_boards_controllers import IEventBoardController
 from gui.event_boards.event_boards_items import EVENT_DATE_TYPE
 from gui.prb_control import prb_getters
 from skeletons.gui.shared import IItemsCache
-from skeletons.new_year import INewYearController
 
 class ElenPreviewTooltipData(BlocksTooltipData, IGlobalListener):
     _eventsController = dependency.descriptor(IEventBoardController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _connectionMgr = dependency.descriptor(IConnectionManager)
-    _newYearController = dependency.descriptor(INewYearController)
 
     def __init__(self, context):
         super(ElenPreviewTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -90,7 +88,7 @@ class ElenPreviewTooltipData(BlocksTooltipData, IGlobalListener):
             return sorted(times)
 
         primeTimesData = primeTimes.getPrimeTimes()
-        validTimes = set(filter(lambda pt: pt.isActive(), primeTimesData))
+        validTimes = set((pt for pt in primeTimesData if pt.isActive()))
         invalidTimes = set(primeTimesData) - validTimes
         blocks = []
         if validTimes:

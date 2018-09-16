@@ -51,7 +51,6 @@ encoding = encoding.lower()
 coding_re = re.compile('^[ \\t\\f]*#.*coding[:=][ \\t]*([-\\w.]+)')
 
 class EncodingMessage(SimpleDialog):
-    """Inform user that an encoding declaration is needed."""
 
     def __init__(self, master, enc):
         self.should_edit = False
@@ -86,10 +85,6 @@ class EncodingMessage(SimpleDialog):
 
 
 def coding_spec(str):
-    """Return the encoding declaration according to PEP 263.
-    
-    Raise LookupError if the encoding is declared but unknown.
-    """
     lst = str.split('\n', 2)[:2]
     for line in lst:
         match = coding_re.match(line)
@@ -222,10 +217,6 @@ class IOBinding():
         return True
 
     def decode(self, chars):
-        """Create a Unicode string
-        
-        If that fails, let Tcl try its best
-        """
         if chars.startswith(BOM_UTF8):
             try:
                 chars = chars[3:].decode('utf-8')
@@ -467,7 +458,6 @@ class IOBinding():
         return filename
 
     def updaterecentfileslist(self, filename):
-        """Update recent file list on all editor windows"""
         self.editwin.update_recent_files_list(filename)
 
 

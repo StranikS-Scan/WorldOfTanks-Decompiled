@@ -1,24 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_import.py
-"""Fixer for import statements.
-If spam is being imported from the local directory, this import:
-    from spam import eggs
-Becomes:
-    from .spam import eggs
-
-And this import:
-    import spam
-Becomes:
-    from . import spam
-"""
 from .. import fixer_base
 from os.path import dirname, join, exists, sep
 from ..fixer_util import FromImport, syms, token
 
 def traverse_imports(names):
-    """
-    Walks over all the names imported in a dotted_as_names node.
-    """
     pending = [names]
     while pending:
         node = pending.pop()

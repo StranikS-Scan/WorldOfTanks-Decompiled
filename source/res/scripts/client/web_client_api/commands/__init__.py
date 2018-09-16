@@ -9,5 +9,5 @@ from context_menu import createContextMenuHandler
 from clan_management import createClanManagementHandler
 from ranked_battles import createRankedBattlesHandler
 from vehicles import createVehiclesHandler
-from command import SchemeValidator, WebCommand, instantiateObject, CommandHandler
-__all__ = ('createNotificationHandler', 'createSoundHandler', 'createHangarSoundHandler', 'createOpenWindowHandler', 'createCloseWindowHandler', 'createOpenTabHandler', 'createStrongholdsBattleHandler', 'createRequestHandler', 'createContextMenuHandler', 'createClanManagementHandler', 'createRankedBattlesHandler', 'createVehiclesHandler', 'SchemeValidator', 'WebCommand', 'instantiateObject', 'CommandHandler')
+from command import WebCommandSchema, instantiateCommand, CommandHandler, W2CSchema, Field
+__all__ = ('createNotificationHandler', 'createSoundHandler', 'createHangarSoundHandler', 'createOpenWindowHandler', 'createCloseWindowHandler', 'createOpenTabHandler', 'createStrongholdsBattleHandler', 'createRequestHandler', 'createContextMenuHandler', 'createClanManagementHandler', 'createRankedBattlesHandler', 'createVehiclesHandler', 'WebCommandSchema', 'instantiateCommand', 'CommandHandler', 'W2CSchema', 'Field')

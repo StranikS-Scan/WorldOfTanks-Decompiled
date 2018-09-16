@@ -1,13 +1,125 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/sounds/sound_systems/wwise_system.py
 import WWISE
-import SoundGroups
-from debug_utils import LOG_DEBUG, LOG_ERROR
+import BigWorld
+from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from gui.sounds.abstract import SoundSystemAbstract
 from gui.sounds.sound_constants import SoundSystems, SPEAKERS_CONFIG
 _LAPTOP_SOUND_PRESET = 2
+_LOGIN = 0
+_LOBBY = 1
+_QUEUE = 2
+_BATTLE_LOADING = 3
+_BATTLE = 4
+_BATTLE_RESULT = 5
+_envTransition = ((None, 0.0, 0.0, 0.0, 0.0, 0.0),
+ (0.0, None, 0.0, 0.0, 0.0, 0.0),
+ (0.0, 2.0, None, 0.0, 0.0, 0.0),
+ (0.0, 0.0, 0.0, None, 0.0, 0.0),
+ (0.0, 0.0, 0.0, 0.0, None, 0.0),
+ (0.0, 0.0, 0.0, 0.0, 0.0, None))
+
+class _EnvironmentListNode(object):
+    __slots__ = ('__prev', '__next', '__environment', '__enterState', '__exitState', '__envID', '__cbkID')
+
+    def __init__(self, environment, start_state, exit_state, envID, previous=None):
+        self.__prev = previous
+        self.__next = None
+        self.__environment = environment
+        self.__enterState = start_state
+        self.__exitState = exit_state
+        self.__envID = envID
+        self.__cbkID = None
+        return
+
+    def pushEnv(self, nextNode):
+        self.__next = nextNode
+        nextNode.setPrev(self)
+        self.__setExitState()
+        nextNode.setDelayedEnter(self.__envID)
+        return nextNode
+
+    def setPrev(self, prevState):
+        self.__prev = prevState
+
+    def setNext(self, nextState):
+        self.__next = nextState
+
+    def popEnv(self):
+        self.__setExitState()
+        self.__prev.setDelayedEnter(self.__envID)
+        prev = self.__prev
+        self.__prev = None
+        self.__next = None
+        prev.setNext(None)
+        return prev
+
+    def setDelayedEnter(self, prevID):
+        if self.__envID is None:
+            return
+        else:
+            if prevID is None:
+                delayT = None
+            else:
+                delayT = _envTransition[prevID][self.__envID]
+            if delayT is None or delayT < 0.01:
+                self.__setEnterState()
+                return
+            self.__cbkID = BigWorld.callback(delayT, self.__setEnterState)
+            return
+
+    def __setEnterState(self):
+        if self.__enterState:
+            LOG_DEBUG('Set Enter UE sound state "{}" for previous finished environment: "{}"'.format(self.__enterState, self.__environment))
+            WWISE.WW_eventGlobalSync(self.__enterState)
+        self.__cbkID = None
+        return
+
+    def __setExitState(self):
+        if self.__cbkID is not None:
+            BigWorld.cancelCallback(self.__cbkID)
+            self.__cbkID = None
+            return
+        else:
+            if self.__exitState:
+                LOG_DEBUG('Set Exit UE sound state "{}" for the stopped environment "{}"'.format(self.__exitState, self.__environment))
+                WWISE.WW_eventGlobalSync(self.__exitState)
+            return
+
+
+class _EnvironmentStatesSubSys(object):
+    _envStateDefs = {'login': ('ue_01_loginscreen_enter', 'ue_01_loginscreen_exit', _LOGIN),
+     'lobby': ('ue_02_hangar_enter', 'ue_02_hangar_exit', _LOBBY),
+     'queue': ('ue_03_lobby_enter', 'ue_03_lobby_exit', _QUEUE),
+     'battleLoading': ('ue_04_loadingscreen_enter', 'ue_04_loadingscreen_exit', _BATTLE_LOADING),
+     'battle': ('ue_05_arena_enter', 'ue_05_arena_exit', _BATTLE),
+     'battleResults': ('ue_06_result_enter', 'ue_06_result_exit', _BATTLE_RESULT)}
+
+    def __init__(self):
+        self._head = _EnvironmentListNode(None, None, None, None)
+        return
+
+    def onEnvStart(self, environment):
+        state = self._envStateDefs.get(environment)
+        if state is not None:
+            self._head = self._head.pushEnv(_EnvironmentListNode(environment, *state))
+        return
+
+    def onEnvStop(self, newEnvironment):
+        state = self._envStateDefs.get(newEnvironment)
+        if state is not None:
+            if self._head is not None:
+                self._head = self._head.popEnv()
+            else:
+                LOG_WARNING('Unexpected behaviour: list node could not be None in such situation...')
+        return
+
 
 class WWISESoundSystem(SoundSystemAbstract):
+
+    def __init__(self):
+        super(WWISESoundSystem, self).__init__()
+        self.__envStatesSubSys = _EnvironmentStatesSubSys()
 
     def getID(self):
         return SoundSystems.WWISE
@@ -68,11 +180,7 @@ class WWISESoundSystem(SoundSystemAbstract):
         WWISE.WW_eventGlobalSync(eventName)
 
     def onEnvStart(self, environment):
-        if SoundGroups.g_instance is not None:
-            SoundGroups.g_instance.onEnvStart(environment)
-        return
+        self.__envStatesSubSys.onEnvStart(environment)
 
     def onEnvStop(self, environment):
-        if SoundGroups.g_instance is not None:
-            SoundGroups.g_instance.onEnvStop(environment)
-        return
+        self.__envStatesSubSys.onEnvStop(environment)

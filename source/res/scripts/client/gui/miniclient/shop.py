@@ -11,8 +11,6 @@ class _OnShopItemWrapAspect(aop.Aspect):
         aop.Aspect.__init__(self)
 
     def atReturn(self, cd):
-        """ Add warning message in item shop if vehicle not available in miniclient
-        """
         original_wrapping = cd.returned
         packedItem = cd.args[0]
         module = packedItem[0]
@@ -24,8 +22,6 @@ class _OnShopItemWrapAspect(aop.Aspect):
 
 
 class OnShopItemWrapPointcut(aop.Pointcut):
-    """Wrap item VO data vehicle for shop
-    """
 
     def __init__(self, config):
         aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.store.tabs.shop', 'ShopVehicleTab', 'itemWrapper', aspects=(_OnShopItemWrapAspect(config),))

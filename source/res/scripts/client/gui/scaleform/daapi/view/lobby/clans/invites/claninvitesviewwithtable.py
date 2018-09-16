@@ -134,8 +134,8 @@ class ClanInvitesAbstractDataProvider(SortableDAAPIDataProvider):
     def getSelectedIdx(self):
         return self.__listMapping[self.__selectedID] if self.__selectedID in self.__listMapping else -1
 
-    def setSelectedID(self, id):
-        self.__selectedID = id
+    def setSelectedID(self, clanID):
+        self.__selectedID = clanID
 
     def getVO(self, index):
         vo = None

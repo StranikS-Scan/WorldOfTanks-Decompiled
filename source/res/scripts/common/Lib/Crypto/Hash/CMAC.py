@@ -1,44 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Hash/CMAC.py
-"""CMAC (Cipher-based Message Authentication Code) algorithm
-
-CMAC is a MAC defined in `NIST SP 800-38B`_ and in RFC4493_ (for AES only)
-and constructed using a block cipher. It was originally known as `OMAC1`_.
-
-The algorithm is sometimes named *X-CMAC* where *X* is the name
-of the cipher (e.g. AES-CMAC).
-
-This is an example showing how to *create* an AES-CMAC:
-
-    >>> from Crypto.Hash import CMAC
-    >>> from Crypto.Cipher import AES
-    >>>
-    >>> secret = b'Sixteen byte key'
-    >>> cobj = CMAC.new(secret, ciphermod=AES)
-    >>> cobj.update(b'Hello')
-    >>> print cobj.hexdigest()
-
-And this is an example showing how to *check* an AES-CMAC:
-
-    >>> from Crypto.Hash import CMAC
-    >>> from Crypto.Cipher import AES
-    >>>
-    >>> # We have received a message 'msg' together
-    >>> # with its MAC 'mac'
-    >>>
-    >>> secret = b'Sixteen byte key'
-    >>> cobj = CMAC.new(secret, ciphermod=AES)
-    >>> cobj.update(msg)
-    >>> try:
-    >>>   cobj.verify(mac)
-    >>>   print "The message '%s' is authentic" % msg
-    >>> except ValueError:
-    >>>   print "The message or the key is wrong"
-
-.. _`NIST SP 800-38B`: http://csrc.nist.gov/publications/nistpubs/800-38B/SP_800-38B.pdf
-.. _RFC4493: http://www.ietf.org/rfc/rfc4493.txt
-.. _OMAC1: http://www.nuee.nagoya-u.ac.jp/labs/tiwata/omac/omac.html
-"""
 __all__ = ['new', 'digest_size', 'CMAC']
 import sys
 if sys.version_info[0] == 2 and sys.version_info[1] == 1:
@@ -55,8 +16,6 @@ def _shift_bytes(bs, xor_lsb=0):
 
 
 class _SmoothMAC(object):
-    """Turn a MAC that only operates on aligned blocks of data
-    into a MAC with granularity of 1 byte."""
 
     def __init__(self, block_size, msg=b(''), min_digest=0):
         self._bs = block_size
@@ -110,14 +69,9 @@ class _SmoothMAC(object):
             setattr(target, m, getattr(self, m))
 
     def _update(self, data_block):
-        """Delegate to the implementation the update
-        of the MAC state given some new *block aligned* data."""
         raise NotImplementedError('_update() must be still implemented')
 
     def _digest(self, left_data):
-        """Delegate to the implementation the computation
-        of the final MAC given the current MAC state
-        and the last piece of data (not block aligned)."""
         raise NotImplementedError('_digest() must be still implemented')
 
     def digest(self):
@@ -131,25 +85,9 @@ class _SmoothMAC(object):
 
 
 class CMAC(_SmoothMAC):
-    """Class that implements CMAC"""
     digest_size = None
 
     def __init__(self, key, msg=None, ciphermod=None):
-        """Create a new CMAC object.
-        
-        :Parameters:
-          key : byte string
-            secret key for the CMAC object.
-            The key must be valid for the underlying cipher algorithm.
-            For instance, it must be 16 bytes long for AES-128.
-          msg : byte string
-            The very first chunk of the message to authenticate.
-            It is equivalent to an early call to `update`. Optional.
-          ciphermod : module
-            A cipher module from `Crypto.Cipher`.
-            The cipher's block size must be 64 or 128 bits.
-            It is recommended to use `Crypto.Cipher.AES`.
-        """
         if ciphermod is None:
             raise TypeError('ciphermod must be specified (try AES)')
         _SmoothMAC.__init__(self, ciphermod.block_size, msg, 1)
@@ -177,36 +115,12 @@ class CMAC(_SmoothMAC):
         return
 
     def update(self, msg):
-        """Continue authentication of a message by consuming the next chunk of data.
-        
-        Repeated calls are equivalent to a single call with the concatenation
-        of all the arguments. In other words:
-        
-           >>> m.update(a); m.update(b)
-        
-        is equivalent to:
-        
-           >>> m.update(a+b)
-        
-        :Parameters:
-          msg : byte string
-            The next chunk of the message being authenticated
-        """
         _SmoothMAC.update(self, msg)
 
     def _update(self, data_block):
         self._IV = self._mac.encrypt(data_block)[-self._mac.block_size:]
 
     def copy(self):
-        """Return a copy ("clone") of the MAC object.
-        
-        The copy will have the same internal state as the original MAC
-        object.
-        This can be used to efficiently compute the MAC of strings that
-        share a common initial substring.
-        
-        :Returns: A `CMAC` object
-        """
         obj = CMAC(self._key, ciphermod=self._factory)
         _SmoothMAC._deep_copy(self, obj)
         obj._mac = self._factory.new(self._key, self._factory.MODE_CBC, self._IV)
@@ -219,15 +133,6 @@ class CMAC(_SmoothMAC):
         return obj
 
     def digest(self):
-        """Return the **binary** (non-printable) MAC of the message that has
-        been authenticated so far.
-        
-        This method does not change the state of the MAC object.
-        You can continue updating the object after calling this function.
-        
-        :Return: A byte string of `digest_size` bytes. It may contain non-ASCII
-         characters, including null bytes.
-        """
         return _SmoothMAC.digest(self)
 
     def _digest(self, last_data):
@@ -239,26 +144,9 @@ class CMAC(_SmoothMAC):
         return tag
 
     def hexdigest(self):
-        """Return the **printable** MAC of the message that has been
-        authenticated so far.
-        
-        This method does not change the state of the MAC object.
-        
-        :Return: A string of 2* `digest_size` bytes. It contains only
-         hexadecimal ASCII digits.
-        """
         return ''.join([ '%02x' % bord(x) for x in tuple(self.digest()) ])
 
     def verify(self, mac_tag):
-        """Verify that a given **binary** MAC (computed by another party) is valid.
-        
-        :Parameters:
-          mac_tag : byte string
-            The expected MAC of the message.
-        :Raises ValueError:
-            if the MAC does not match. It means that the message
-            has been tampered with or that the MAC key is incorrect.
-        """
         mac = self.digest()
         res = 0
         for x, y in zip(mac, mac_tag):
@@ -268,34 +156,8 @@ class CMAC(_SmoothMAC):
             raise ValueError('MAC check failed')
 
     def hexverify(self, hex_mac_tag):
-        """Verify that a given **printable** MAC (computed by another party) is valid.
-        
-        :Parameters:
-          hex_mac_tag : string
-            The expected MAC of the message, as a hexadecimal string.
-        :Raises ValueError:
-            if the MAC does not match. It means that the message
-            has been tampered with or that the MAC key is incorrect.
-        """
         self.verify(unhexlify(tobytes(hex_mac_tag)))
 
 
 def new(key, msg=None, ciphermod=None):
-    """Create a new CMAC object.
-    
-    :Parameters:
-        key : byte string
-            secret key for the CMAC object.
-            The key must be valid for the underlying cipher algorithm.
-            For instance, it must be 16 bytes long for AES-128.
-        msg : byte string
-            The very first chunk of the message to authenticate.
-            It is equivalent to an early call to `CMAC.update`. Optional.
-        ciphermod : module
-            A cipher module from `Crypto.Cipher`.
-            The cipher's block size must be 64 or 128 bits.
-            Default is `Crypto.Cipher.AES`.
-    
-    :Returns: A `CMAC` object
-    """
     return CMAC(key, msg, ciphermod)

@@ -13,14 +13,14 @@
   <batchingEnabled>	0	</batchingEnabled>
   <defaultGroundEffect>	None	</defaultGroundEffect>
   <wwmusicSetup>
-    <wwmusicLoading>	music_euro_city	</wwmusicLoading>
-    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
-    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+    <wwmusicLoading>	music_ruinberg_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_ruinberg_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_ruinberg_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
   <gameplayTypes>
@@ -66,14 +66,14 @@
     </assault2>
     <bootcamp>
       <wwmusicSetup>
-        <wwmusicLoading>	music_euro_city	</wwmusicLoading>
+        <wwmusicLoading>	bc_music_loadingscreen	</wwmusicLoading>
         <wwmusicIntensive>	bc_music_mission_04	</wwmusicIntensive>
         <wwmusicRelaxed>	bc_music_mission_04	</wwmusicRelaxed>
-        <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
-        <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
-        <wwmusicResultWin>	music_victory	</wwmusicResultWin>
-        <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
-        <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+        <wwmusicStop>	music_dron_stop	</wwmusicStop>
+        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+        <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
+        <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
+        <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
       </wwmusicSetup>
       <teamBasePositions>
         <team1>
@@ -92,6 +92,4 @@
       <runDelay>	10	</runDelay>
     </bootcamp>
   </gameplayTypes>
-  <roadMap></roadMap>
-  <mapActivities></mapActivities>
 </08_ruinberg.xml>

@@ -15,7 +15,11 @@ class CONDITION_TYPE(object):
     EFFECT_TRIGGERED = 8
     BONUS_RECEIVED = 9
     SERVICE = 10
-    RANGE = (FLAG,
+    COMPONENT_ON_SCENE = 11
+    CURRENT_SCENE = 12
+    VIEW_PRESENT = 13
+    FIRST_CUSTOM = 100
+    BASE_RANGE = (FLAG,
      GLOBAL_FLAG,
      WINDOW_ON_SCENE,
      GAME_ITEM_SIMPLE_STATE,
@@ -24,7 +28,10 @@ class CONDITION_TYPE(object):
      VAR_COMPARE,
      EFFECT_TRIGGERED,
      BONUS_RECEIVED,
-     SERVICE)
+     SERVICE,
+     COMPONENT_ON_SCENE,
+     CURRENT_SCENE,
+     VIEW_PRESENT)
 
 
 @functools.total_ordering
@@ -73,33 +80,45 @@ class CONDITION_STATE(object):
     SELECTED = _StateValue(3)
     PREMIUM = _StateValue(4)
     UNLOCKED = _StateValue(5)
-    XP_ENOUGH = _StateValue(6)
-    MONEY_ENOUGH = _StateValue(7)
-    LEVEL = _StateValue(8)
-    MAY_INSTALL = _StateValue(9)
+    IN_INVENTORY = _StateValue(6)
+    XP_ENOUGH = _StateValue(7)
+    MONEY_ENOUGH = _StateValue(8)
+    LEVEL = _StateValue(9)
+    MAY_INSTALL = _StateValue(10)
+    INSTALLED = _StateValue(11)
+    CREW_HAS_SKILL = _StateValue(12)
+    HAS_REGULAR_CONSUMABLES = _StateValue(13)
     RANGE = (UNDEFINED,
      ACTIVE,
      EQUALS,
      SELECTED,
      PREMIUM,
      UNLOCKED,
+     IN_INVENTORY,
      XP_ENOUGH,
      MONEY_ENOUGH,
      LEVEL,
-     MAY_INSTALL)
+     MAY_INSTALL,
+     INSTALLED,
+     CREW_HAS_SKILL,
+     HAS_REGULAR_CONSUMABLES)
     GAME_ITEM_SIMPLE_STATE = (SELECTED,
      PREMIUM,
      UNLOCKED,
-     MONEY_ENOUGH)
-    GAME_ITEM_RELATE_STATE = (XP_ENOUGH, LEVEL, MAY_INSTALL)
+     IN_INVENTORY,
+     MONEY_ENOUGH,
+     HAS_REGULAR_CONSUMABLES)
+    GAME_ITEM_RELATE_STATE = (XP_ENOUGH,
+     LEVEL,
+     MAY_INSTALL,
+     INSTALLED,
+     CREW_HAS_SKILL)
 
 
-class _Condition(HasID):
+class Condition(HasID):
 
     def __init__(self, entityID, condType, state):
-        assert condType in CONDITION_TYPE.RANGE
-        assert state.base in CONDITION_STATE.RANGE
-        super(_Condition, self).__init__(entityID=entityID, entityType=condType)
+        super(Condition, self).__init__(entityID=entityID, entityType=condType)
         self._state = state
 
     def getBaseState(self):
@@ -112,85 +131,108 @@ class _Condition(HasID):
         return self._state.negative
 
 
-class _ActiveCondition(_Condition):
+class ActiveCondition(Condition):
 
     def __init__(self, entityID, condType, state=CONDITION_STATE.ACTIVE):
-        assert state.base == CONDITION_STATE.ACTIVE, 'Base state must be ACTIVE'
-        super(_ActiveCondition, self).__init__(entityID, condType, state)
+        super(ActiveCondition, self).__init__(entityID, condType, state)
 
 
-class _CompareCondition(_Condition):
+class CompareCondition(Condition):
 
     def __init__(self, entityID, condType, compareID, state=CONDITION_STATE.EQUALS):
-        assert state.base == CONDITION_STATE.EQUALS, 'Base state must be EQUALS'
-        super(_CompareCondition, self).__init__(entityID, condType, state)
+        super(CompareCondition, self).__init__(entityID, condType, state)
         self._compareID = compareID
 
     def getCompareID(self):
         return self._compareID
 
 
-class FlagCondition(_ActiveCondition):
+class FlagCondition(ActiveCondition):
 
     def __init__(self, entityID, state=CONDITION_STATE.ACTIVE):
         super(FlagCondition, self).__init__(entityID, CONDITION_TYPE.FLAG, state)
 
 
-class GlobalFlagCondition(_ActiveCondition):
+class GlobalFlagCondition(ActiveCondition):
 
     def __init__(self, entityID, state=CONDITION_STATE.ACTIVE):
         super(GlobalFlagCondition, self).__init__(entityID, CONDITION_TYPE.GLOBAL_FLAG, state)
 
 
-class WindowOnSceneCondition(_ActiveCondition):
+class WindowOnSceneCondition(ActiveCondition):
 
     def __init__(self, entityID, state=CONDITION_STATE.ACTIVE):
         super(WindowOnSceneCondition, self).__init__(entityID, CONDITION_TYPE.WINDOW_ON_SCENE, state)
 
 
-class VarDefinedCondition(_ActiveCondition):
+class ComponentOnSceneCondition(ActiveCondition):
+
+    def __init__(self, entityID, state=CONDITION_STATE.ACTIVE):
+        super(ComponentOnSceneCondition, self).__init__(entityID, CONDITION_TYPE.COMPONENT_ON_SCENE, state)
+
+
+class CurrentSceneCondition(ActiveCondition):
+
+    def __init__(self, entityID, state=CONDITION_STATE.ACTIVE):
+        super(CurrentSceneCondition, self).__init__(entityID, CONDITION_TYPE.CURRENT_SCENE, state)
+
+
+class ViewPresentCondition(ActiveCondition):
+
+    def __init__(self, viewType, viewAlias, state=CONDITION_STATE.ACTIVE):
+        super(ViewPresentCondition, self).__init__(None, CONDITION_TYPE.VIEW_PRESENT, state)
+        self.__viewType = viewType
+        self.__viewAlias = viewAlias
+        return
+
+    def getViewType(self):
+        return self.__viewType
+
+    def getViewAlias(self):
+        return self.__viewAlias
+
+
+class VarDefinedCondition(ActiveCondition):
 
     def __init__(self, entityID, state=CONDITION_STATE.ACTIVE):
         super(VarDefinedCondition, self).__init__(entityID, CONDITION_TYPE.VAR_DEFINED, state)
 
 
-class VarCompareCondition(_CompareCondition):
+class VarCompareCondition(CompareCondition):
 
     def __init__(self, entityID, compareID, state=CONDITION_STATE.EQUALS):
         super(VarCompareCondition, self).__init__(entityID, CONDITION_TYPE.VAR_COMPARE, compareID, state=state)
 
 
-class EffectTriggeredCondition(_ActiveCondition):
+class EffectTriggeredCondition(ActiveCondition):
 
     def __init__(self, entityID, state=CONDITION_STATE.EQUALS):
         super(EffectTriggeredCondition, self).__init__(entityID, CONDITION_TYPE.EFFECT_TRIGGERED, state=state)
 
 
-class GameItemSimpleStateCondition(_Condition):
+class GameItemSimpleStateCondition(Condition):
 
     def __init__(self, entityID, state):
-        assert state.base in CONDITION_STATE.GAME_ITEM_SIMPLE_STATE
         super(GameItemSimpleStateCondition, self).__init__(entityID, CONDITION_TYPE.GAME_ITEM_SIMPLE_STATE, state)
 
 
-class GameItemRelateStateCondition(_Condition):
+class GameItemRelateStateCondition(Condition):
 
-    def __init__(self, entityID, otherID, state):
-        assert state.base in CONDITION_STATE.GAME_ITEM_RELATE_STATE
+    def __init__(self, entityID, otherIDs, state):
         super(GameItemRelateStateCondition, self).__init__(entityID, CONDITION_TYPE.GAME_ITEM_RELATE_STATE, state)
-        self.otherID = otherID
+        self.__otherIDs = otherIDs
 
-    def getOtherID(self):
-        return self.otherID
+    def getOtherIDs(self):
+        return self.__otherIDs
 
 
-class BonusReceivedCondition(_ActiveCondition):
+class BonusReceivedCondition(ActiveCondition):
 
     def __init__(self, entityID, state=CONDITION_STATE.ACTIVE):
         super(BonusReceivedCondition, self).__init__(entityID, CONDITION_TYPE.BONUS_RECEIVED, state)
 
 
-class ServiceCondition(_ActiveCondition):
+class ServiceCondition(ActiveCondition):
 
     def __init__(self, entityID, serviceClass, state=CONDITION_STATE.ACTIVE):
         super(ServiceCondition, self).__init__(entityID, CONDITION_TYPE.SERVICE, state)

@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/ContactNoteManageViewMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from messenger.gui.Scaleform.meta.BaseManageContactViewMeta import BaseManageContactViewMeta
 
 class ContactNoteManageViewMeta(BaseManageContactViewMeta):
@@ -12,7 +8,4 @@ class ContactNoteManageViewMeta(BaseManageContactViewMeta):
         self._printOverrideError('sendData')
 
     def as_setUserPropsS(self, value):
-        """
-        :param value: Represented by ContactUserPropVO (AS)
-        """
         return self.flashObject.as_setUserProps(value) if self._isDAAPIInited() else None

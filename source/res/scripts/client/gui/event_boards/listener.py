@@ -9,7 +9,4 @@ class IEventBoardsListener(ListenersCollection):
         self._setListenerClass(IEventBoardsListener)
 
     def onUpdateHangarFlag(self):
-        """
-        Establishes a listener when need update hangar flag
-        """
         pass

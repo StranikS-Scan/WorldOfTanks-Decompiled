@@ -4,12 +4,14 @@ import types
 import weakref
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
-import BigWorld
 import ArenaType
+import BigWorld
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
 from PlayerEvents import g_playerEvents
-from account_helpers.AccountSettings import AccountSettings, AWARDS
+from account_helpers.AccountSettings import AccountSettings, AWARDS, SPEAKERS_DEVICE, GUI_START_BEHAVIOR
+from account_helpers.settings_core.options import VideoModeSettings
+from account_helpers.settings_core.settings_constants import SOUND, GRAPHICS
 from account_shared import getFairPlayViolationName
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import EVENT_TYPE, INVOICE_ASSET
@@ -19,8 +21,9 @@ from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
 from gui import SystemMessages
 from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.DialogsInterface import showDialog
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
+from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta, I18GammaDialogMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -36,19 +39,20 @@ from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.transport import z_loads
+from gui.sounds.sound_constants import SPEAKERS_CONFIG
+from gui.shared.utils.functions import getViewName
 from helpers import dependency
 from helpers import i18n
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
 from messenger.formatters import NCContextItemFormatter, TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.proto.events import g_messengerEvents
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRefSystemController, IAwardController, IRankedBattlesController, IBootcampController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.new_year import INewYearController
-from gui.shared.utils.functions import getViewName
-from items.new_year_types import NY_STATE
+from skeletons.gui.sounds import ISoundsController
 
 class AwardController(IAwardController, IGlobalListener):
     refSystem = dependency.descriptor(IRefSystemController)
@@ -79,7 +83,9 @@ class AwardController(IAwardController, IGlobalListener):
          RankedQuestsHandler(self),
          MarkByInvoiceHandler(self),
          MarkByQuestHandler(self),
-         _NYBoxesHandler(self)]
+         SoundDeviceHandler(self),
+         EliteWindowHandler(self),
+         GammaDialogHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -177,9 +183,9 @@ class AwardHandler(object):
 class ServiceChannelHandler(AwardHandler):
     eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, type, awardCtrl):
+    def __init__(self, channelType, awardCtrl):
         super(ServiceChannelHandler, self).__init__(awardCtrl)
-        self.__type = type
+        self.__type = channelType
 
     def init(self):
         g_messengerEvents.serviceChannel.onChatMessageReceived += self.handle
@@ -190,6 +196,23 @@ class ServiceChannelHandler(AwardHandler):
     def _needToShowAward(self, ctx):
         _, message = ctx
         return message is not None and message.type == self.__type and message.data is not None
+
+
+class EliteWindowHandler(AwardHandler):
+
+    def init(self):
+        g_playerEvents.onVehicleBecomeElite += self.handle
+
+    def fini(self):
+        g_playerEvents.onVehicleBecomeElite -= self.handle
+
+    def _needToShowAward(self, ctx):
+        return True
+
+    def _showAward(self, ctx):
+        vehTypeCompDescrs = ctx
+        for vehTypeCompDescr in vehTypeCompDescrs:
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.ELITE_WINDOW, getViewName(VIEW_ALIAS.ELITE_WINDOW, vehTypeCompDescr), ctx={'vehTypeCompDescr': vehTypeCompDescr}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 class PunishWindowHandler(ServiceChannelHandler):
@@ -215,7 +238,6 @@ class PunishWindowHandler(ServiceChannelHandler):
             elif fairplayViolations[0] != 0:
                 penaltyType = 'warning'
                 violation = fairplayViolations[0]
-            from gui.DialogsInterface import showDialog
             showDialog(I18PunishmentDialogMeta('punishmentWindow', None, {'penaltyType': penaltyType,
              'arenaName': i18n.makeString(arenaType.name),
              'time': TimeFormatter.getActualMsgTimeStr(arenaCreateTime),
@@ -292,23 +314,17 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         data = ctx[1].data
         completedQuests = {}
-        completedQuestIDs = data.get('completedQuestIDs', set())
-        filterCompleted = lambda q: q.getID() in completedQuestIDs
-        allCompletedQuests = self.eventsCache.getAllQuests(includePersonalMissions=True, filterFunc=filterCompleted)
-        for quest in allCompletedQuests.itervalues():
-            if self.isShowCongrats(quest):
-                completedQuests[quest.getID()] = (quest, {'eventsCache': self.eventsCache})
+        allQuests = self.eventsCache.getAllQuests(includePersonalMissions=True)
+        for qID in data.get('completedQuestIDs', set()):
+            if qID in allQuests:
+                if self.isShowCongrats(allQuests[qID]):
+                    completedQuests[qID] = (allQuests[qID], {'eventsCache': self.eventsCache})
 
         for quest, context in completedQuests.itervalues():
             self._showWindow(quest, context)
 
     @staticmethod
     def _showWindow(quest, context):
-        """Fire an actual show event to display an award window.
-        
-        :param quest: instance of event_items.Quest (or derived)
-        :param context: dict with required data
-        """
         quests_events.showMissionAward(quest, context)
 
 
@@ -407,8 +423,6 @@ class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
 
 
 class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
-    """ Handler responsible for battle quests awards.
-    """
 
     def __init__(self, awardCtrl):
         super(BattleQuestsAutoWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
@@ -416,7 +430,7 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         _, message = ctx
         completedQuests = {}
-        allQuests = self.eventsCache.getAllQuests(includePersonalMissions=True, filterFunc=lambda quest: self._isAppropriate(quest))
+        allQuests = self.eventsCache.getAllQuests(includePersonalMissions=True, filterFunc=self._isAppropriate)
         completedQuestUniqueIDs = message.data.get('completedQuestIDs', set())
         for uniqueQuestID in completedQuestUniqueIDs:
             questID, ctx = self._getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs)
@@ -431,19 +445,10 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
 
     @staticmethod
     def _showWindow(quest, context):
-        """Fire an actual show event to display an award window.
-        
-        :param quest: instance of event_items.Quest (or derived)
-        :param context: dict with required data
-        """
         quests_events.showMissionAward(quest, context)
 
     @staticmethod
     def _isAppropriate(quest):
-        """ Check if quest is appropriate for the current handler's scope.
-        
-        :param quest: instance of event_items.Quest (or derived)
-        """
         return quest.getType() in (EVENT_TYPE.BATTLE_QUEST,
          EVENT_TYPE.TOKEN_QUEST,
          EVENT_TYPE.PERSONAL_QUEST,
@@ -451,20 +456,10 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
 
     @staticmethod
     def _getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs):
-        """ Gather the data needed by award window and get real quest id.
-        
-        :param uniqueQuestID: unique id of the quest (considering its sub quests)
-        :param completedQuests: dict {questID: (quest, context)}
-        :param completedQuestUniqueIDs: list with ids of completed quests
-        
-        :return: tuple (quest id, context)
-        """
         return (uniqueQuestID, {})
 
 
 class PersonalMissionsAutoWindowHandler(BattleQuestsAutoWindowHandler):
-    """ Handler responsible for personal quests awards.
-    """
 
     @staticmethod
     def _showWindow(quest, context):
@@ -486,8 +481,6 @@ class PersonalMissionsAutoWindowHandler(BattleQuestsAutoWindowHandler):
 
 
 class PersonalMissionByAwardListHandler(PersonalMissionsAutoWindowHandler):
-    """Personal Mission completed by pawned award list
-    """
 
     def _needToShowAward(self, ctx):
         _, msg = ctx
@@ -515,8 +508,6 @@ class PersonalMissionByAwardListHandler(PersonalMissionsAutoWindowHandler):
 
 
 class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
-    """operation complete, show congrats and next operations views
-    """
     OPERATION_PREFIXES = {'pt_final_s1_t1': 1,
      'pt_final_s1_t2': 2,
      'pt_final_s1_t3': 3,
@@ -564,8 +555,6 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
 
 
 class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
-    """operation complete, show next operations views
-    """
     OPERATION_COMPLETION_IDS = {'pt_final_s1_t1': 1,
      'pt_final_s1_t2': 2,
      'pt_final_s1_t3': 3,
@@ -626,7 +615,7 @@ class RefSysStatusWindowHandler(ServiceChannelHandler):
     def __showRefSystemNotification(self, methodName, **ctx):
         try:
             getattr(self._awardCtrl.refSystem, methodName)(**ctx)
-        except:
+        except Exception:
             LOG_ERROR('There is exception while processing notification center window', methodName, ctx)
             LOG_CURRENT_EXCEPTION()
 
@@ -922,38 +911,58 @@ class RankedQuestsHandler(MultiTypeServiceChannelHandler):
         self.__unlock()
 
 
-class _NYBoxesHandler(AwardHandler):
-    _newYearController = dependency.descriptor(INewYearController)
+class SoundDeviceHandler(AwardHandler):
+    soundsCtrl = dependency.descriptor(ISoundsController)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self, awardCtrl):
-        super(_NYBoxesHandler, self).__init__(awardCtrl)
-        self.__postponedBoxes = defaultdict(int)
-
-    def init(self):
-        self._newYearController.boxStorage.onCountChanged += self.__onBoxesCountChanged
-
-    def fini(self):
-        self._newYearController.boxStorage.onCountChanged -= self.__onBoxesCountChanged
-
-    def __onBoxesCountChanged(self, _, __, addedInfo):
-        if addedInfo:
-            descrs = self._newYearController.boxStorage.getDescriptors()
-            for bId, new_count in addedInfo.iteritems():
-                self.__postponedBoxes[descrs[bId].setting] += new_count
-
-            self.handle()
-
-    def _showAward(self, ctx):
-        for setting, new_count in self.__postponedBoxes.iteritems():
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_NY_MISSIONS_REWARD, name=getViewName(VIEW_ALIAS.LOBBY_NY_MISSIONS_REWARD, setting), ctx={'rewards': new_count,
-             'setting': setting}), EVENT_BUS_SCOPE.LOBBY)
-
-        self.__postponedBoxes = defaultdict(int)
+    def start(self):
+        self.handle()
 
     def _needToShowAward(self, ctx):
-        return self.__isNY()
+        deviceSetting = self.settingsCore.options.getSetting(SOUND.SOUND_DEVICE)
+        isValid, currentDeviceID = deviceSetting.getSystemState()
+        if isValid:
+            return False
+        lastDeviceID = AccountSettings.getFilter(SPEAKERS_DEVICE)
+        return False if currentDeviceID == lastDeviceID else True
 
-    @staticmethod
-    def __isNY():
-        player = BigWorld.player()
-        return False if not hasattr(player, 'newYear') else player.newYear.state == NY_STATE.IN_PROGRESS
+    def _showAward(self, ctx):
+        DialogsInterface.showI18nConfirmDialog('soundSpeakersPresetReset', callback=self.__callback)
+
+    def __callback(self, result):
+        deviceSetting = self.settingsCore.options.getSetting(SOUND.SOUND_DEVICE)
+        if result:
+            deviceSetting.apply(deviceSetting.SYSTEMS.SPEAKERS)
+            self.soundsCtrl.system.setUserSpeakersPresetID(SPEAKERS_CONFIG.AUTO_DETECTION)
+        else:
+            _, currentDeviceID = deviceSetting.getSystemState()
+            AccountSettings.setFilter(SPEAKERS_DEVICE, currentDeviceID)
+
+
+class GammaDialogHandler(AwardHandler):
+    DEFERRED_RENDER_PIPELINE = 0
+    settingsCore = dependency.descriptor(ISettingsCore)
+
+    def start(self):
+        self.handle()
+
+    def _needToShowAward(self, ctx):
+        isAdvanced = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE) == self.DEFERRED_RENDER_PIPELINE
+        isFullscreen = self.settingsCore.getSetting(GRAPHICS.VIDEO_MODE) == VideoModeSettings.FULLSCREEN
+        availableGamma = isAdvanced or isFullscreen
+        filters = self.__getFilters()
+        return not filters['isGammaDialogShowed'] and availableGamma and not BigWorld.checkUnattended()
+
+    def _showAward(self, ctx):
+        showDialog(I18GammaDialogMeta('gammaDialog'), self.__dialogCallback)
+        filters = self.__getFilters()
+        filters['isGammaDialogShowed'] = True
+        self.settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
+
+    def __getFilters(self):
+        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
+        return self.settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+
+    def __dialogCallback(self, result):
+        if result:
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.GAMMA_WIZARD), EVENT_BUS_SCOPE.DEFAULT)

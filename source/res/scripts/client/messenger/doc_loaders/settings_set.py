@@ -75,11 +75,11 @@ def _readReceiverValue(xmlCtx, section, settings=None):
     modifiers = []
     modifiersSec = valueSec['modifiers']
     if modifiersSec:
-        modifiers = map(lambda section: section.asInt, modifiersSec.values())
+        modifiers = [ s.asInt for s in modifiersSec.values() ]
     bwModifiers = []
     modifiersSec = valueSec['bw-modifiers']
     if modifiersSec:
-        bwModifiers = map(lambda section: section.asInt, modifiersSec.values())
+        bwModifiers = [ s.asInt for s in modifiersSec.values() ]
     label = _xml_helpers.readNoEmptyI18nStr(xmlCtx.next(valueSec), valueSec, 'label', 'Label is not defined')
     return (name, _ReceiverInBattle(name, label, modifiers, bwModifiers, valueSec.readInt('order')))
 
@@ -87,7 +87,7 @@ def _readReceiverValue(xmlCtx, section, settings=None):
 def _readReceivers(xmlCtx, section, settings):
     readers = {}
     receivers = {}
-    for flag, name, label in BATTLE_CHANNEL.ALL:
+    for _, name, label in BATTLE_CHANNEL.ALL:
         readers[name] = _readReceiverValue
         receivers[name] = _ReceiverInBattle(name, label, [], [], 0)
 

@@ -1,13 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/runpy.py
-"""runpy.py - locating and running Python code using the module namespace
-
-Provides support for locating and running Python scripts using the Python
-module namespace instead of the native filesystem.
-
-This allows Python code to play nicely with non-filesystem based PEP 302
-importers when locating support scripts as well as when importing modules.
-"""
 import sys
 import imp
 from pkgutil import read_code
@@ -19,7 +11,6 @@ except ImportError:
 __all__ = ['run_module', 'run_path']
 
 class _TempModule(object):
-    """Temporarily replace a module in sys.modules with an empty namespace"""
 
     def __init__(self, mod_name):
         self.mod_name = mod_name
@@ -62,7 +53,6 @@ class _ModifiedArgv0(object):
 
 
 def _run_code(code, run_globals, init_globals=None, mod_name=None, mod_fname=None, mod_loader=None, pkg_name=None):
-    """Helper to run code in nominated namespace"""
     if init_globals is not None:
         run_globals.update(init_globals)
     run_globals.update(__name__=mod_name, __file__=mod_fname, __loader__=mod_loader, __package__=pkg_name)
@@ -71,7 +61,6 @@ def _run_code(code, run_globals, init_globals=None, mod_name=None, mod_fname=Non
 
 
 def _run_module_code(code, init_globals=None, mod_name=None, mod_fname=None, mod_loader=None, pkg_name=None):
-    """Helper to run code in new namespace with sys modified"""
     with _TempModule(mod_name) as temp_module:
         with _ModifiedArgv0(mod_fname):
             mod_globals = temp_module.module.__dict__
@@ -122,18 +111,6 @@ def _get_main_module_details():
 
 
 def _run_module_as_main(mod_name, alter_argv=True):
-    """Runs the designated module in the __main__ namespace
-    
-       Note that the executed module will have full access to the
-       __main__ namespace. If this is not desirable, the run_module()
-       function should be used to run the module code in a fresh namespace.
-    
-       At the very least, these variables in __main__ will be overwritten:
-           __name__
-           __file__
-           __loader__
-           __package__
-    """
     try:
         if alter_argv or mod_name != '__main__':
             mod_name, loader, code, fname = _get_module_details(mod_name)
@@ -151,10 +128,6 @@ def _run_module_as_main(mod_name, alter_argv=True):
 
 
 def run_module(mod_name, init_globals=None, run_name=None, alter_sys=False):
-    """Execute a module's code without importing it
-    
-       Returns the resulting top level namespace dictionary
-    """
     mod_name, loader, code, fname = _get_module_details(mod_name)
     if run_name is None:
         run_name = mod_name
@@ -167,7 +140,6 @@ def run_module(mod_name, init_globals=None, run_name=None, alter_sys=False):
 
 
 def _get_importer(path_name):
-    """Python version of PyImport_GetImporter C API function"""
     cache = sys.path_importer_cache
     try:
         importer = cache[path_name]
@@ -201,15 +173,6 @@ def _get_code_from_file(fname):
 
 
 def run_path(path_name, init_globals=None, run_name=None):
-    """Execute code located at the specified filesystem location
-    
-       Returns the resulting top level namespace dictionary
-    
-       The file path may refer directly to a Python script (i.e.
-       one that could be directly executed with execfile) or else
-       it may refer to a zipfile or directory containing a top
-       level __main__.py script.
-    """
     if run_name is None:
         run_name = '<run_path>'
     importer = _get_importer(path_name)

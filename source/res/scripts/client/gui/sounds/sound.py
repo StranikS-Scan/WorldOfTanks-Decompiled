@@ -31,14 +31,8 @@ class Sound(object):
 
 
 class SoundSequence(object):
-    """
-    :param sounds: [list of strings] sounds pathes
-    :param beforePlayCB: method with one argument @snd. Must be called before start playing
-    :param afterPlayCB: the same as @beforePlayCB, but must be called after stop playing
-    """
 
     def __init__(self, sounds, beforePlayCB=None, afterPlayCB=None):
-        assert sounds is not None
         self.__sounds = sounds
         self.__soundsIter = None
         self.__curPlayingSnd = None

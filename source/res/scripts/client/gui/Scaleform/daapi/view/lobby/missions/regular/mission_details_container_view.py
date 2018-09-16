@@ -85,12 +85,12 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         if not datailedList:
             self.closeView()
         else:
-            pages = map(lambda (i, mission): {'buttonsGroup': 'MissionDetailsPageGroup',
+            pages = [ {'buttonsGroup': 'MissionDetailsPageGroup',
              'pageIndex': i,
              'label': '%i' % (i + 1),
              'tooltip': mission.get('statusTooltipData'),
              'status': mission.get('status'),
-             'selected': eventID == mission.get('eventID')}, enumerate(datailedList))
+             'selected': eventID == mission.get('eventID')} for i, mission in enumerate(datailedList) ]
             self.as_setInitDataS({'title': title,
              'missions': datailedList,
              'pages': pages})
@@ -98,6 +98,4 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSION_DETAILS_VIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleDetailsClose(self, _):
-        """ We may need to close details externally when it already open.
-        """
         self.destroy()

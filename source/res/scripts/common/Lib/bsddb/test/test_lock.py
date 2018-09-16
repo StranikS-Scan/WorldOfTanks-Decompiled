@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_lock.py
-"""
-TestCases for testing the locking sub-system.
-"""
 import time
 import unittest
 from test_all import db, test_support, verbose, have_threads, get_new_environment_path, get_new_database_path

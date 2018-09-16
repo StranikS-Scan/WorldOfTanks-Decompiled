@@ -18,7 +18,7 @@ RESEARCH_ITEMS = (GUI_ITEM_TYPE.GUN,
  GUI_ITEM_TYPE.CHASSIS)
 MAX_PATH_LIMIT = 5
 
-class NODE_STATE:
+class NODE_STATE(object):
 
     @classmethod
     def add(cls, state, flag):

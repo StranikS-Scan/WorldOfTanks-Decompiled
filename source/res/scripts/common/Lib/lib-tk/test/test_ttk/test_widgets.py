@@ -45,7 +45,6 @@ class StandardTtkOptionsTests(StandardOptionsTests):
 
 
 class WidgetTest(unittest.TestCase):
-    """Tests methods available in every ttk widget."""
 
     def setUp(self):
         support.root_deiconify()

@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/cp1254.py
-""" Python Character Mapping Codec cp1254 generated from 'MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1254.TXT' with gencodec.py.
-
-"""
 import codecs
 
 class Codec(codecs.Codec):

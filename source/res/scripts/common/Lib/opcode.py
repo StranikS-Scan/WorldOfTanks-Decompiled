@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/opcode.py
-"""
-opcode module - potentially shared between dis and other modules which
-operate on bytecodes (e.g. peephole optimizers).
-"""
 __all__ = ['cmp_op',
  'hasconst',
  'hasname',

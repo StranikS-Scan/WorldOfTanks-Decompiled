@@ -272,7 +272,7 @@
         <right>	vehicles/german/G25_PzII_Luchs/track/right.track	</right>
         <segmentLength>	0.09	</segmentLength>
         <segmentOffset>	0.006	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -529,7 +529,7 @@
         <right>	vehicles/german/G25_PzII_Luchs/track/right.track	</right>
         <segmentLength>	0.09	</segmentLength>
         <segmentOffset>	0.006	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -657,7 +657,7 @@
       <userString>	#germany_vehicles:PzIIL_Luchsturm	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	1580.0	</price>
+      <price>	1580	</price>
       <armor>
         <armor_1>	30	</armor_1>
         <armor_2>	25	</armor_2>
@@ -1226,12 +1226,12 @@
   </fuelTanks>
   <radios>
     <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
+        <radio>	FuG7	  <cost>	1360	</cost>
         </radio>
       </unlocks>
     </FuG5>
     <FuG7>	shared	  <unlocks>
-        <radio>	FuG_Spr.1	  <cost>	3600.0	</cost>
+        <radio>	FuG_Spr.1	  <cost>	3600	</cost>
         </radio>
       </unlocks>
     </FuG7>

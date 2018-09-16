@@ -42,11 +42,6 @@ def getPremiumCostActionPrc(discounts, packet, proxy):
 
 
 def calcVehicleRestorePrice(defaultPrice, proxy):
-    """
-    # calculate vehicle restore price
-    :param defaultPrice: <Money> default buy price
-    :return: <Money> restore price
-    """
     exchangeRate = proxy.exchangeRate
     sellPriceFactor = proxy.sellPriceModif
     restorePriceModif = proxy.vehiclesRestoreConfig.restorePriceModif
@@ -54,14 +49,7 @@ def calcVehicleRestorePrice(defaultPrice, proxy):
 
 
 def getGUIPrice(item, money, exchangeRate):
-    """
-    # chooses one of item prices to display in GUI
-    :param item: <GUIItem>
-    :param money: <Money>
-    :param exchangeRate: <int> gold exchange rate
-    :return: <Money> one price to display in GUI
-    """
-    mayRent, rentReason = item.mayRent(money)
+    mayRent, _ = item.mayRent(money)
     if item.isRestorePossible():
         if item.isRestoreAvailable():
             if item.mayRestoreWithExchange(money, exchangeRate) or not mayRent:

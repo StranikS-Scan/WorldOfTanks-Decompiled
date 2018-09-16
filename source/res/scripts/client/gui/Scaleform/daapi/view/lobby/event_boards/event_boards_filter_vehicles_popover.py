@@ -104,7 +104,6 @@ class EventBoardsFilterVehiclesPopover(EventBoardsResultFilterVehiclesPopoverVie
 
     def __updateSortField(self):
         sort = self._vehDP.getLastSortMethod()
-        assert sort
         order = 'ascending' if sort[0][1] else 'descending'
         self.as_updateTableSortFieldS(sortField=sort[0][0], sortDirection=order)
 

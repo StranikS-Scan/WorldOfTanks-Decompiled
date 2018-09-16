@@ -3,27 +3,6 @@
 from Tkinter import *
 
 class WidgetRedirector:
-    """Support for redirecting arbitrary widget subcommands.
-    
-    Some Tk operations don't normally pass through Tkinter.  For example, if a
-    character is inserted into a Text widget by pressing a key, a default Tk
-    binding to the widget's 'insert' operation is activated, and the Tk library
-    processes the insert without calling back into Tkinter.
-    
-    Although a binding to <Key> could be made via Tkinter, what we really want
-    to do is to hook the Tk 'insert' operation itself.
-    
-    When a widget is instantiated, a Tcl command is created whose name is the
-    same as the pathname widget._w.  This command is used to invoke the various
-    widget operations, e.g. insert (for a Text widget). We are going to hook
-    this command and provide a facility ('register') to intercept the widget
-    operation.
-    
-    In IDLE, the function being registered provides access to the top of a
-    Percolator chain.  At the bottom of the chain is a call to the original
-    Tk widget operation.
-    
-    """
 
     def __init__(self, widget):
         self._operations = {}
@@ -67,17 +46,6 @@ class WidgetRedirector:
             return None
 
     def dispatch(self, operation, *args):
-        """Callback from Tcl which runs when the widget is referenced.
-        
-        If an operation has been registered in self._operations, apply the
-        associated function to the args passed into Tcl. Otherwise, pass the
-        operation through to Tk via the original Tcl function.
-        
-        Note that if a registered function is called, the operation is not
-        passed through to Tk.  Apply the function returned by self.register()
-        to *args to accomplish that.  For an example, see ColorDelegator.py.
-        
-        """
         m = self._operations.get(operation)
         try:
             if m:

@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Netscape/Standard_Suite.py
-"""Suite Standard Suite: Common terms for most applications
-Level 1, version 1
-
-Generated from /Volumes/Sap/Applications (Mac OS 9)/Netscape Communicator\xe2\x84\xa2 Folder/Netscape Communicator\xe2\x84\xa2
-AETE/AEUT resource version 1/0, language 0, script 0
-"""
 import aetools
 import MacOS
 _code = 'CoRe'
@@ -14,10 +8,6 @@ from StdSuites.Standard_Suite import *
 class Standard_Suite_Events(Standard_Suite_Events):
 
     def close(self, _object, _attributes={}, **_arguments):
-        """close: Close an object
-        Required argument: the objects to close
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'core'
         _subcode = 'clos'
         if _arguments:
@@ -29,11 +19,6 @@ class Standard_Suite_Events(Standard_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def data_size(self, _object, _attributes={}, **_arguments):
-        """data size: Return the size in bytes of an object
-        Required argument: the object whose data size is to be returned
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: the size of the object in bytes
-        """
         _code = 'core'
         _subcode = 'dsiz'
         if _arguments:
@@ -45,11 +30,6 @@ class Standard_Suite_Events(Standard_Suite_Events):
         return _arguments['----'] if _arguments.has_key('----') else None
 
     def get(self, _object, _attributes={}, **_arguments):
-        """get: Get the data for an object
-        Required argument: the object whose data is to be returned
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        Returns: The data from the object
-        """
         _code = 'core'
         _subcode = 'getd'
         if _arguments:
@@ -63,11 +43,6 @@ class Standard_Suite_Events(Standard_Suite_Events):
     _argmap_set = {'to': 'data'}
 
     def set(self, _object, _attributes={}, **_arguments):
-        """set: Set an object\xd5s data
-        Required argument: the object to change
-        Keyword argument to: the new value
-        Keyword argument _attributes: AppleEvent attribute dictionary
-        """
         _code = 'core'
         _subcode = 'setd'
         aetools.keysubst(_arguments, self._argmap_set)
@@ -79,12 +54,10 @@ class Standard_Suite_Events(Standard_Suite_Events):
 
 
 class application(aetools.ComponentItem):
-    """application - An application program """
     want = 'capp'
 
 
 class _Prop_alert_application(aetools.NProperty):
-    """alert application - Most of the alerts will be sent to this application using yet unspecified AE interface. We need a few alert boxes: alert, confirm and notify. Any ideas on how to design this event? mailto:atotic@netscape.com. I\xd5d like to conform to the standard. """
     which = 'ALAP'
     want = 'type'
 
@@ -92,7 +65,6 @@ class _Prop_alert_application(aetools.NProperty):
 alert_application = _Prop_alert_application()
 
 class _Prop_kiosk_mode(aetools.NProperty):
-    """kiosk mode - Kiosk mode leaves very few menus enabled """
     which = 'KOSK'
     want = 'long'
 
@@ -100,96 +72,80 @@ class _Prop_kiosk_mode(aetools.NProperty):
 kiosk_mode = _Prop_kiosk_mode()
 
 class window(aetools.ComponentItem):
-    """window - A Window """
     want = 'cwin'
 
 
 class _Prop_URL(aetools.NProperty):
-    """URL - Current URL """
     which = 'curl'
     want = 'TEXT'
 
 
 class _Prop_bounds(aetools.NProperty):
-    """bounds - the boundary rectangle for the window """
     which = 'pbnd'
     want = 'qdrt'
 
 
 class _Prop_busy(aetools.NProperty):
-    """busy - Is window loading something right now. 2, window is busy and will reject load requests. 1, window is busy, but will interrupt outstanding loads """
     which = 'busy'
     want = 'long'
 
 
 class _Prop_closeable(aetools.NProperty):
-    """closeable - Does the window have a close box? """
     which = 'hclb'
     want = 'bool'
 
 
 class _Prop_floating(aetools.NProperty):
-    """floating - Does the window float? """
     which = 'isfl'
     want = 'bool'
 
 
 class _Prop_index(aetools.NProperty):
-    """index - the number of the window """
     which = 'pidx'
     want = 'long'
 
 
 class _Prop_modal(aetools.NProperty):
-    """modal - Is the window modal? """
     which = 'pmod'
     want = 'bool'
 
 
 class _Prop_name(aetools.NProperty):
-    """name - the title of the window """
     which = 'pnam'
     want = 'itxt'
 
 
 class _Prop_position(aetools.NProperty):
-    """position - upper left coordinates of window """
     which = 'ppos'
     want = 'QDpt'
 
 
 class _Prop_resizable(aetools.NProperty):
-    """resizable - Is the window resizable? """
     which = 'prsz'
     want = 'bool'
 
 
 class _Prop_titled(aetools.NProperty):
-    """titled - Does the window have a title bar? """
     which = 'ptit'
     want = 'bool'
 
 
 class _Prop_unique_ID(aetools.NProperty):
-    """unique ID - Window\xd5s unique ID (a bridge between WWW! suite window id\xd5s and standard AE windows) """
     which = 'wiid'
     want = 'long'
 
 
 class _Prop_visible(aetools.NProperty):
-    """visible - is the window visible? """
     which = 'pvis'
     want = 'bool'
 
 
 class _Prop_zoomable(aetools.NProperty):
-    """zoomable - Is the window zoomable? """
     which = 'iszm'
     want = 'bool'
 
 
 class _Prop_zoomed(aetools.NProperty):
-    """zoomed - Is the window zoomed? """
     which = 'pzum'
     want = 'bool'
 

@@ -7,9 +7,6 @@ from gui import doc_loaders
 import WWISE
 
 class GuiSoundsLoader(object):
-    """
-    Gui sound xml data loader.
-    """
     XML_PATH = 'gui/gui_sounds.xml'
     CONTROLS = 'controls'
     CONTROLS_DEFAULT = 'default'
@@ -27,10 +24,6 @@ class GuiSoundsLoader(object):
         self.__effects = {}
 
     def __readControlsSounds(self, xmlCtx):
-        """
-        Reading controls sounds data
-        @param xmlCtx: [xml data section] xml context document
-        """
         controlsSection = _xml.getSubsection(xmlCtx, xmlCtx, self.CONTROLS)
         self.__default = doc_loaders.readDict(xmlCtx, controlsSection, self.CONTROLS_DEFAULT)
         controlsOverridesSection = _xml.getSubsection(xmlCtx, controlsSection, self.CONTROLS_OVERRIDES)
@@ -45,34 +38,19 @@ class GuiSoundsLoader(object):
                 self.__groups[groupName] = schemaName
 
     def __readEffectsSounds(self, xmlCtx):
-        """
-        Reading effects sounds data
-        @param xmlCtx: [xml data section] xml context document
-        """
         self.__effects = doc_loaders.readDict(xmlCtx, xmlCtx, self.EFFECTS)
 
     def load(self):
-        """
-        Start loading xml data from file
-        """
         xmlCtx = ResMgr.openSection(self.XML_PATH)
         if xmlCtx is None:
             _xml.raiseWrongXml(None, self.XML_PATH, 'can not open or read')
         self.__readControlsSounds(xmlCtx)
         self.__readEffectsSounds(xmlCtx)
+        _xml.clearCaches()
         ResMgr.purge(self.XML_PATH, True)
         return
 
     def getControlSound(self, controlType, state, controlID=None):
-        """
-        Get sound path for given control and its state
-        
-        @param controlType: [str] type of control from xml document
-        @param state: [str] control state
-        @param controlID: [optional str] used to add some special
-                                                sounds for schemas
-        @return: [str] sound path
-        """
         if WWISE.enabled:
             state = 'ww' + state
         if controlID is not None and controlID in self.__overrides:
@@ -84,11 +62,4 @@ class GuiSoundsLoader(object):
             return self.__schemas[controlType].get(state) if controlType in self.__schemas else self.__default.get(state)
 
     def getEffectSound(self, effectName):
-        """
-        Returns sound path by given name from
-        `effects` xml section.
-        
-        @param effectName: [str] effect name
-        @return: [str] sound path
-        """
         return self.__effects[effectName] if effectName in self.__effects else None

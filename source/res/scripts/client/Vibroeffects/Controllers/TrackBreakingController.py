@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vibroeffects/Controllers/TrackBreakingController.py
+import math
 import BigWorld
 import Math
-import math
 from Vibroeffects.Controllers.OnceController import OnceController
 
-class TrackBreakingController:
+class TrackBreakingController(object):
     __MIN_MOVEMENT_SPEED = 1
     __wasLeftTrackBroken = None
     __wasRightTrackBroken = None

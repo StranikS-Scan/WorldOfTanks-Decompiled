@@ -1,32 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/aih_global_binding.py
-"""
-Module provides access to global descriptors when player is avatar. Global descriptors are read by
-multiple packages in a battle. Only AvatarInputHandler package changes values of global descriptors.
-
-Global descriptors are: aim offset, current avatar control mode, etc.
-
-Usage:
-    1. Adds binding of global descriptor to read its value:
-
-        class SomeClass(object):
-            aimOffset = aih_global_binding.bindRO(BINDING_ID.AIM_OFFSET)
-
-    2. DO NOT use aih_global_binding.bindRW in other places outside package AvatarInputHandler.
-
-    3. Adds subscriber to start listening descriptor change:
-
-        def on_aim_offset_changed(value):
-            ....
-
-        aih_global_binding.subscribe(BINDING_ID.AIM_OFFSET, on_aim_offset_changed)
-
-    4. Removes subscriber to stop listening descriptor change:
-
-        aih_global_binding.unsubscribe(BINDING_ID.AIM_OFFSET, on_aim_offset_changed)
-"""
+import logging
 import Math
 from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA
+_logger = logging.getLogger(__name__)
 _FLOAT_EPSILON = 0.003
 
 class BINDING_ID(object):
@@ -55,7 +32,6 @@ class BINDING_ID(object):
 
 
 class _Observable(object):
-    """Class contains some value and notifies its subscribes if own value is changed."""
 
     def __init__(self, value):
         super(_Observable, self).__init__()
@@ -63,20 +39,15 @@ class _Observable(object):
         self.__subscribers = []
 
     def clear(self):
-        """Clears data."""
         del self.__subscribers[:]
 
     def subscribe(self, subscriber):
-        """Adds subscriber that wants listening changing value.
-        :param subscriber: callable object.
-        """
-        assert subscriber not in self.__subscribers
-        self.__subscribers.append(subscriber)
+        if subscriber not in self.__subscribers:
+            self.__subscribers.append(subscriber)
+        else:
+            _logger.error('Subscriber %r already added to observable %r', subscriber, self)
 
     def unsubscribe(self, subscriber):
-        """Removes subscriber.
-        :param subscriber: callable object.
-        """
         if subscriber in self.__subscribers:
             self.__subscribers.remove(subscriber)
 
@@ -120,7 +91,6 @@ class _GlobalDataDescriptor(object):
 
     def __init__(self, bindingID, reader=False, writer=False):
         super(_GlobalDataDescriptor, self).__init__()
-        assert bindingID in BINDING_ID.RANGE
         self.__bindingID = bindingID
         self.__reader = reader
         self.__writer = writer
@@ -139,55 +109,44 @@ class _GlobalDataDescriptor(object):
 
     @classmethod
     def clear(cls):
-        """Clears data"""
         for bindingID, observable in cls.__storage.iteritems():
             observable.clear()
             observable.change(_DEFAULT_VALUES[bindingID]().value)
 
     @classmethod
     def subscribe(cls, bindingID, subscriber):
-        assert bindingID in cls.__storage, 'The bindingID {} is not found in the storage'.format(bindingID)
-        cls.__storage[bindingID].subscribe(subscriber)
+        if bindingID in cls.__storage:
+            cls.__storage[bindingID].subscribe(subscriber)
+        else:
+            _logger.error('The bindingID %d is not found in the storage', bindingID)
 
     @classmethod
     def unsubscribe(cls, bindingID, subscriber):
-        assert bindingID in cls.__storage, 'The bindingID {} is not found in the storage'.format(bindingID)
-        cls.__storage[bindingID].unsubscribe(subscriber)
+        if bindingID in cls.__storage:
+            cls.__storage[bindingID].unsubscribe(subscriber)
+        else:
+            _logger.error('The bindingID %d is not found in the storage', bindingID)
 
 
 def bindRO(bindingID):
-    """Creates reference to read only descriptor.
-    :param bindingID: one of BINDING_ID.*.
-    :return: _GlobalDataDescriptor.
-    """
+    if bindingID not in BINDING_ID.RANGE:
+        raise UserWarning('bindingID is invalid: {}'.format(bindingID))
     return _GlobalDataDescriptor(bindingID, reader=True, writer=False)
 
 
 def bindRW(bindingID):
-    """Creates reference to read-write descriptor.
-    NOTE: This routine can be used in AvatarInputHandler package only.
-    :param bindingID: one of BINDING_ID.*.
-    :return: _GlobalDataDescriptor.
-    """
+    if bindingID not in BINDING_ID.RANGE:
+        raise UserWarning('bindingID is invalid: {}'.format(bindingID))
     return _GlobalDataDescriptor(bindingID, reader=True, writer=True)
 
 
 def subscribe(bindingID, observer):
-    """Adds subscriber that wants listening changing value.
-    :param bindingID: one of GLOBAL_BINDING_ID.
-    :param observer: callable object.
-    """
     _GlobalDataDescriptor.subscribe(bindingID, observer)
 
 
 def unsubscribe(bindingID, observer):
-    """Removes subscriber.
-    :param bindingID: one of GLOBAL_BINDING_ID.
-    :param observer: callable object.
-    """
     _GlobalDataDescriptor.unsubscribe(bindingID, observer)
 
 
 def clear():
-    """Clears data."""
     _GlobalDataDescriptor.clear()

@@ -1,12 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/unit_chat_cmd.py
-from debug_utils import LOG_ERROR
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
-from helpers import dependency
-from helpers import i18n
-from messenger import g_settings
-from messenger.ext.channel_num_gen import getClientID4BattleChannel
-from messenger.m_constants import PROTO_TYPE, BATTLE_CHANNEL
+from messenger.m_constants import PROTO_TYPE
 from messenger.proto.entities import OutChatCommand, ReceivedUnitChatCommand
 from messenger.proto.interfaces import IUnitCommandFactory
 from messenger_common_chat2 import messageArgs

@@ -41,10 +41,6 @@ class PlayerCtxStorage(SimpleCachedStorage):
         return self.__clanInfo.role if self.__clanInfo else 0
 
     def getClanDbID(self):
-        """Gets clan db id by for current player if he is in clan
-        :return: clan database id or 0
-        :rtype: int
-        """
         return self.__clanInfo.dbID if self.__clanInfo else 0
 
     def setClanInfo(self, clanInfo):
@@ -85,7 +81,7 @@ class PlayerCtxStorage(SimpleCachedStorage):
         if not isinstance(key, types.StringType):
             LOG_WARNING('Key is not string', type(key), key)
             return
-        if type(value) not in types.StringTypes:
+        if not isinstance(value, types.StringTypes):
             LOG_WARNING('Value is not string', type(value), value)
             return
         if key in self.__cachedItems:

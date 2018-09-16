@@ -19,7 +19,7 @@ def __makeAchievementFileRequest(urlName, params, achievementId, callback):
         LOG_ERROR('Incorrect url format: %s' % url, params)
         callback(achievementId, None)
         return
-    except:
+    except Exception:
         LOG_CURRENT_EXCEPTION()
         callback(achievementId, None)
         return
@@ -54,7 +54,7 @@ def __allMedalsTextLoadedCallback(achievementId, data, onTextLoadedCallback):
                     description = __getAchievementDescription(item)
                     break
 
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
             description = {}
 

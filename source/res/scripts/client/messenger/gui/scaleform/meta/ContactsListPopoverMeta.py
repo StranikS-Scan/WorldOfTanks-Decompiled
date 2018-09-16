@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/ContactsListPopoverMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
 class ContactsListPopoverMeta(SmartPopOverView):
@@ -24,9 +20,6 @@ class ContactsListPopoverMeta(SmartPopOverView):
         self._printOverrideError('copyIntoGroup')
 
     def as_setInitInfoS(self, data):
-        """
-        :param data: Represented by ContactsWindowInitVO (AS)
-        """
         return self.flashObject.as_setInitInfo(data) if self._isDAAPIInited() else None
 
     def as_editGroupS(self, targetGroupName):

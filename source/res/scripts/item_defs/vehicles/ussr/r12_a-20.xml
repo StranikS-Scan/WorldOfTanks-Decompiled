@@ -86,7 +86,7 @@
       <userString>	#ussr_vehicles:A-20_mod_1938	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1420.0	</price>
+      <price>	1420	</price>
       <unlocks>
         <chassis>	A-20_mod_1941	  <cost>	840	</cost>
         </chassis>
@@ -206,7 +206,7 @@
         <segmentLength>	0.334	</segmentLength>
         <segmentOffset>	0.098	</segmentOffset>
         <segment2Offset>	0.169	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -404,7 +404,7 @@
       <userString>	#ussr_vehicles:A-20_mod_1941	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	3580.0	</price>
+      <price>	3580	</price>
       <armor>
         <leftTrack>	15	</leftTrack>
         <rightTrack>	15	</rightTrack>
@@ -520,7 +520,7 @@
         <segmentLength>	0.334	</segmentLength>
         <segmentOffset>	0.098	</segmentOffset>
         <segment2Offset>	0.169	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -720,7 +720,7 @@
       <userString>	#ussr_vehicles:A-20_mod_1938	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1880.0	</price>
+      <price>	1880	</price>
       <unlocks>
         <turret>	A-20bis	  <cost>	1215	</cost>
         </turret>
@@ -792,7 +792,7 @@
         </_45mm_20K>
         <_37mm_ZiS-19>	shared	  <maxAmmo>	150	</maxAmmo>
           <unlocks>
-            <gun>	_37mm_automatic_SH-37	  <cost>	2600.0	</cost>
+            <gun>	_37mm_automatic_SH-37	  <cost>	2600	</cost>
             </gun>
           </unlocks>
           <pitchLimits>
@@ -915,11 +915,11 @@
       <userString>	#ussr_vehicles:A-20bis	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	5170.0	</price>
+      <price>	5170	</price>
       <unlocks>
-        <gun>	_76mm_L-11	  <cost>	450.0	</cost>
+        <gun>	_76mm_L-11	  <cost>	450	</cost>
         </gun>
-        <gun>	_45mm_VT-42	  <cost>	850.0	</cost>
+        <gun>	_45mm_VT-42	  <cost>	850	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -1186,7 +1186,7 @@
   </fuelTanks>
   <radios>
     <_9R>	shared	  <unlocks>
-        <radio>	_12LL	  <cost>	5600.0	</cost>
+        <radio>	_12LL	  <cost>	5600	</cost>
         </radio>
       </unlocks>
     </_9R>

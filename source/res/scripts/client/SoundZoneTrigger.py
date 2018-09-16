@@ -2,19 +2,20 @@
 # Embedded file name: scripts/client/SoundZoneTrigger.py
 import BigWorld
 import Math
-from math import cos
-from math import sin
+from AvatarInputHandler import mathUtils
+VISUALISE_ZONE = False
 
 class SoundZoneTrigger(BigWorld.UserDataObject):
 
     def __init__(self):
         BigWorld.UserDataObject.__init__(self)
-        alpha = self.direction.x
-        centerShift = Math.Vector2(0.0, self.Size[1] * 0.5)
-        x1 = centerShift[0] * cos(alpha) - centerShift[1] * sin(alpha)
-        y1 = centerShift[0] * sin(alpha) + centerShift[1] * cos(alpha)
-        center = Math.Vector2(self.position.x, self.position.z) + Math.Vector2(x1, y1)
-        BigWorld.addSoundZoneTrigger(center, self.Size, alpha, self.ZoneEnter, self.ZoneExit, self.Reverb, self.ReverbLevel)
+        BigWorld.addSoundZoneTrigger(self.position, Math.Vector3(self.direction.z, self.direction.y, self.direction.x), Math.Vector3(self.Size.x, self.Size.y, self.Size.z), self.ZoneEnter, self.ZoneExit, self.Reverb, self.ReverbLevel, self.VolumeDeviation)
+        if VISUALISE_ZONE:
+            self.model = BigWorld.Model('objects/misc/bbox/unit_cube_1m_proxy.model')
+            BigWorld.player().addModel(self.model)
+            motor = BigWorld.Servo(Math.Matrix())
+            self.model.addMotor(motor)
+            motor.signal = mathUtils.createSRTMatrix(Math.Vector3(self.Size.x, self.Size.y, self.Size.z), Math.Vector3(self.direction.z, self.direction.y, self.direction.x), self.position)
 
     def destroy(self):
         pass

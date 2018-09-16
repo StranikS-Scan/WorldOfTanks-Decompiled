@@ -377,6 +377,13 @@
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_medium_water.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
         </effects>
       </groundWave>
     </relatedEffects>
@@ -471,6 +478,13 @@
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_medium_water.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
         </effects>
       </groundWave>
     </relatedEffects>
@@ -493,8 +507,8 @@
       <light>
         <startKey>	start	</startKey>
         <endKey>	lighting2	</endKey>
-        <innerRadius>	1	</innerRadius>
-        <outerRadius>	6	</outerRadius>
+        <innerRadius>	100	</innerRadius>
+        <outerRadius>	600	</outerRadius>
         <castShadows>	false	</castShadows>
         <position>	HP_gunFire	</position>
         <animation>
@@ -562,6 +576,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	snow	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_snow.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_medium_water.xml	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -587,8 +608,8 @@
       <light>
         <startKey>	start	</startKey>
         <endKey>	lighting2	</endKey>
-        <innerRadius>	1	</innerRadius>
-        <outerRadius>	6	</outerRadius>
+        <innerRadius>	100	</innerRadius>
+        <outerRadius>	600	</outerRadius>
         <castShadows>	false	</castShadows>
         <position>	HP_gunFire	</position>
         <animation>
@@ -659,6 +680,13 @@
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_water.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
         </effects>
       </groundWave>
     </relatedEffects>
@@ -681,8 +709,8 @@
       <light>
         <startKey>	start	</startKey>
         <endKey>	lighting2	</endKey>
-        <innerRadius>	1	</innerRadius>
-        <outerRadius>	6	</outerRadius>
+        <innerRadius>	100	</innerRadius>
+        <outerRadius>	600	</outerRadius>
         <castShadows>	false	</castShadows>
         <position>	HP_gunFire	</position>
         <animation>
@@ -753,6 +781,13 @@
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_water.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
         </effects>
       </groundWave>
     </relatedEffects>
@@ -775,8 +810,8 @@
       <light>
         <startKey>	start	</startKey>
         <endKey>	lighting2	</endKey>
-        <innerRadius>	1	</innerRadius>
-        <outerRadius>	6	</outerRadius>
+        <innerRadius>	100	</innerRadius>
+        <outerRadius>	600	</outerRadius>
         <castShadows>	false	</castShadows>
         <position>	HP_gunFire	</position>
         <animation>
@@ -844,6 +879,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	snow	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_snow_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_water.xml	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -941,6 +983,13 @@
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
         </effects>
       </groundWave>
     </relatedEffects>
@@ -1032,6 +1081,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	snow	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_snow_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.xml	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -1129,6 +1185,13 @@
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
         </effects>
       </groundWave>
     </relatedEffects>
@@ -1220,6 +1283,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	snow	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_snow_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.xml	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -1317,6 +1387,13 @@
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
         </effects>
       </groundWave>
     </relatedEffects>
@@ -1408,6 +1485,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	snow	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_snow_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.xml	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -1505,6 +1589,13 @@
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
         </effects>
       </groundWave>
     </relatedEffects>
@@ -1599,6 +1690,13 @@
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
         </effects>
       </groundWave>
     </relatedEffects>
@@ -1690,6 +1788,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	snow	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_snow.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.xml	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>

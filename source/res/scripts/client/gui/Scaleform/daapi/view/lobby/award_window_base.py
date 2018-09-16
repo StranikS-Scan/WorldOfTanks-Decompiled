@@ -7,7 +7,10 @@ class AwardWindowBase(AwardWindowsBaseMeta):
 
     def __init__(self, ctx):
         super(AwardWindowBase, self).__init__()
-        assert 'award' in ctx and isinstance(ctx['award'], AwardAbstract)
+        if 'award' not in ctx:
+            raise UserWarning('Key "award" is not found in context', ctx)
+        if not isinstance(ctx['award'], AwardAbstract):
+            raise UserWarning('Value of "award" should be instance of AwardAbstract', ctx)
         self._award = ctx['award']
 
     def onWindowClose(self):

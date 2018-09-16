@@ -6,19 +6,19 @@ from debug_utils import LOG_DEBUG
 from gui import DialogsInterface, GUI_SETTINGS
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.Scaleform.battle_entry import BattleEntry
-from gui.Scaleform.lobby_entry import LobbyEntry
 from gui.Scaleform.daapi.settings import config as sf_config
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.package_layout import PackageImporter
+from gui.Scaleform.lobby_entry import LobbyEntry
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
-from gui.app_loader.interfaces import IAppFactory
-from gui.app_loader.settings import APP_NAME_SPACE as _SPACE
+from gui.app_loader import interfaces, settings as app_settings
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from shared_utils import AlwaysValidObject
 from helpers import dependency
+from shared_utils import AlwaysValidObject
 from skeletons.gui.game_control import IBootcampController
+_SPACE = app_settings.APP_NAME_SPACE
 
-class NoAppFactory(AlwaysValidObject, IAppFactory):
+class NoAppFactory(AlwaysValidObject, interfaces.IAppFactory):
 
     def createLobby(self):
         LOG_DEBUG('NoAppFactory.createLobby')
@@ -36,7 +36,7 @@ class NoAppFactory(AlwaysValidObject, IAppFactory):
         LOG_DEBUG('NoAppFactory.destroyBattle')
 
 
-class AS3_AppFactory(IAppFactory):
+class AS3_AppFactory(interfaces.IAppFactory):
     __slots__ = ('__apps', '__packages', '__importer')
     bootcampCtrl = dependency.descriptor(IBootcampController)
 
@@ -212,12 +212,12 @@ class AS3_AppFactory(IAppFactory):
         libs = ['guiControlsLobbyBattleDynamic.swf',
          'guiControlsLobbyDynamic.swf',
          'popovers.swf',
-         'IconLibrary.swf',
-         'nyCmptsDynamic.swf']
+         'IconLibrary.swf']
         if self.bootcampCtrl.isInBootcamp():
             libs.extend(['BCGuiControlsLobbyBattle.swf', 'BCGuiControlsLobby.swf'])
         app.as_loadLibrariesS(libs)
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW), EVENT_BUS_SCOPE.LOBBY)
 
     def loadBattlePage(self, appNS, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
         if appNS != _SPACE.SF_BATTLE:
@@ -262,12 +262,8 @@ class AS3_AppFactory(IAppFactory):
     def _loadBattlePage(arenaGuiType):
         if arenaGuiType == ARENA_GUI_TYPE.TUTORIAL:
             event = events.LoadViewEvent(VIEW_ALIAS.TUTORIAL_BATTLE_PAGE)
-        elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_CLASSIC:
-            event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_CLASSIC_PAGE)
         elif arenaGuiType in (ARENA_GUI_TYPE.EPIC_RANDOM, ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING):
             event = events.LoadViewEvent(VIEW_ALIAS.EPIC_RANDOM_PAGE)
-        elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
-            event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE)
         elif arenaGuiType == ARENA_GUI_TYPE.RANKED:
             event = events.LoadViewEvent(VIEW_ALIAS.RANKED_BATTLE_PAGE)
         elif arenaGuiType == ARENA_GUI_TYPE.BOOTCAMP:

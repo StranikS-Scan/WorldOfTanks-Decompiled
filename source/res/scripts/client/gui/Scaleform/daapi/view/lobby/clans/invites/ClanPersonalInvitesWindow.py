@@ -12,11 +12,9 @@ class ClanPersonalInvitesWindow(ClanPersonalInvitesWindowMeta, ClanListener):
     def __init__(self, *args):
         super(ClanPersonalInvitesWindow, self).__init__()
 
-    def onClanStateChanged(self, oldStateID, newStateID):
-        if not self.clansCtrl.isEnabled():
+    def onClanEnableChanged(self, enabled):
+        if not enabled:
             self.onWindowClose()
-        if not self.clansCtrl.isAvailable():
-            pass
 
     def onAccountClanProfileChanged(self, profile):
         if profile.isInClan():
@@ -42,4 +40,4 @@ class ClanPersonalInvitesWindow(ClanPersonalInvitesWindowMeta, ClanListener):
         self.destroy()
 
     def _updateActualInvites(self):
-        self.as_setActualInvitesTextS(_ms(CLANS.CLANPERSONALINVITESWINDOW_ACTUALINVITES, count=text_styles.stats(formatters.formatInvitesCount(self.clansCtrl.getAccountProfile().getInvitesCount()))))
+        self.as_setActualInvitesTextS(_ms(CLANS.CLANPERSONALINVITESWINDOW_ACTUALINVITES, count=text_styles.stats(formatters.formatInvitesCount(self.webCtrl.getAccountProfile().getInvitesCount()))))

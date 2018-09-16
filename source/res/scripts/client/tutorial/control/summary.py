@@ -68,8 +68,8 @@ class FlagSummary(object):
             self.__flags[flagName] = _Flag(flagName, False)
 
     def getDict(self):
-        filtered = filter(lambda flag: flag.store, self.__flags.itervalues())
-        return dict(map(lambda flag: (flag.name, flag.active), filtered))
+        filtered = [ flag for flag in self.__flags.itervalues() if flag.store ]
+        return dict(((flag.name, flag.active) for flag in filtered))
 
 
 class VarSummary(object):
@@ -77,7 +77,7 @@ class VarSummary(object):
     def __init__(self, varSets, runtime=None):
         super(VarSummary, self).__init__()
         if varSets:
-            self.__varSets = dict(map(lambda varSet: (varSet.getID(), FunctionalVarSet(varSet)), varSets))
+            self.__varSets = dict(((varSet.getID(), FunctionalVarSet(varSet)) for varSet in varSets))
         else:
             self.__varSets = {}
         self.__runtime = runtime or {}

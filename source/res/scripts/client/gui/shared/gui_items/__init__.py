@@ -89,17 +89,8 @@ class GUI_ITEM_ECONOMY_CODE(CONST_CONTAINER):
 
 
 class ItemsCollection(dict):
-    """
-    Root collection class. Inherits from python dictionary. Used to storing gui items object in the
-    following format: (item_int_comp_descr: item_obj).
-    """
 
     def filter(self, criteria):
-        """
-        Filter collection by given criteria
-        :param criteria: filter criteria
-        :return: [ItemsCollection] filtered collection
-        """
         result = self.__class__()
         for intCD, item in self.iteritems():
             if criteria(item):
@@ -108,24 +99,12 @@ class ItemsCollection(dict):
         return result
 
     def __repr__(self):
-        """
-        :return: [str] String representation of class
-        """
         return '%s<size:%d>' % (self.__class__.__name__, len(self.items()))
 
 
 def getVehicleComponentsByType(vehicle, itemTypeIdx):
-    """
-    Returns collection of vehicle's installed items.
-    
-    @param vehicle: target vehicle
-    @param itemTypeIdx: items.ITEM_TYPE_NAMES index
-    
-    @return: ItemsCollection instance
-    """
 
     def packModules(modules):
-        """ Helper function to pack item ot items list to the collection """
         if not isinstance(modules, list):
             modules = [modules]
         return ItemsCollection([ (module.intCD, module) for module in modules if module is not None ])
@@ -144,7 +123,7 @@ def getVehicleComponentsByType(vehicle, itemTypeIdx):
         return packModules(vehicle.radio)
     if itemTypeIdx == vehicles._TANKMAN:
         from gui.shared.gui_items.Tankman import TankmenCollection
-        return TankmenCollection([ (t.invID, t) for slotIdx, t in vehicle.crew ])
+        return TankmenCollection([ (t.invID, t) for _, t in vehicle.crew ])
     if itemTypeIdx == vehicles._OPTIONALDEVICE:
         return packModules(vehicle.optDevices)
     if itemTypeIdx == vehicles._SHELL:
@@ -155,15 +134,6 @@ def getVehicleComponentsByType(vehicle, itemTypeIdx):
 
 
 def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0):
-    """
-    Returns all suitable items for given @vehicle.
-    
-    @param vehDescr: vehicle descriptor
-    @param itemTypeId: requested items types
-    @param turretPID: vehicle's turret id
-    
-    @return: (descriptors list, current vehicle's items compact descriptors list)
-    """
     descriptorsList = list()
     current = list()
     if itemTypeId == vehicles._CHASSIS:

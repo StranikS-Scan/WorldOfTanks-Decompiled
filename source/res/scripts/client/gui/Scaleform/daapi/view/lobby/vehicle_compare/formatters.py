@@ -23,14 +23,12 @@ def packHeaderColumnData(columnID, btnWidth, btnHeight, label='', icon='', toolt
 
 
 def getTreeNodeCompareData(vehicle):
-    assert vehicle
     comparisonBasket = dependency.instance(IVehicleComparisonBasket)
     return {'modeAvailable': comparisonBasket.isEnabled(),
      'cmpBasketFull': not comparisonBasket.isReadyToAdd(vehicle)}
 
 
 def getBtnCompareData(vehicle):
-    assert vehicle
     comparisonBasket = dependency.instance(IVehicleComparisonBasket)
     state, tooltip = resolveStateTooltip(comparisonBasket, vehicle, enabledTooltip=TOOLTIPS.RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_ADD, fullTooltip=TOOLTIPS.RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED)
     return {'modeAvailable': comparisonBasket.isEnabled(),

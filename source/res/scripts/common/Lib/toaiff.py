@@ -1,14 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/toaiff.py
-"""Convert "arbitrary" sound files to AIFF (Apple and SGI's audio format).
-
-Input may be compressed.
-Uncompressed file type may be AIFF, WAV, VOC, 8SVX, NeXT/Sun, and others.
-An exception is raised if the file is not of a recognized type.
-Returned filename is either the input filename or a temporary filename;
-in the latter case the caller must ensure that it is removed.
-Other temporary files used are removed by the function.
-"""
 from warnings import warnpy3k
 warnpy3k('the toaiff module has been removed in Python 3.0', stacklevel=2)
 del warnpy3k

@@ -39,13 +39,15 @@ class ModulesPanel(ModulesPanelMeta):
 
     def _update(self):
         if g_currentPreviewVehicle.isPresent():
-            self.as_setModulesEnabledS(True)
             vehicle = g_currentPreviewVehicle.item
             devices = []
-            self.as_setModulesEnabledS(True)
+            self.as_setModulesEnabledS(vehicle.hasModulesToSelect)
             self.as_setVehicleHasTurretS(vehicle.hasTurrets)
             for slotType in _MODULE_SLOTS:
                 data = self.itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[slotType], REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle))).values()
                 devices.append(FittingSlotVO(data, vehicle, slotType))
+
+            for item in devices:
+                item['isDisabledBgVisible'] = vehicle.hasModulesToSelect
 
             self.as_setDataS({'devices': devices})

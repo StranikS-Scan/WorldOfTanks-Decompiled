@@ -1,93 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ConfigParser.py
-"""Configuration file parser.
-
-A setup file consists of sections, lead by a "[section]" header,
-and followed by "name: value" entries, with continuations and such in
-the style of RFC 822.
-
-The option values can contain format strings which refer to other values in
-the same section, or values in a special [DEFAULT] section.
-
-For example:
-
-    something: %(dir)s/whatever
-
-would resolve the "%(dir)s" to the value of dir.  All reference
-expansions are done late, on demand.
-
-Intrinsic defaults can be specified by passing them into the
-ConfigParser constructor as a dictionary.
-
-class:
-
-ConfigParser -- responsible for parsing a list of
-                configuration files, and managing the parsed database.
-
-    methods:
-
-    __init__(defaults=None)
-        create the parser and specify a dictionary of intrinsic defaults.  The
-        keys must be strings, the values must be appropriate for %()s string
-        interpolation.  Note that `__name__' is always an intrinsic default;
-        its value is the section's name.
-
-    sections()
-        return all the configuration section names, sans DEFAULT
-
-    has_section(section)
-        return whether the given section exists
-
-    has_option(section, option)
-        return whether the given option exists in the given section
-
-    options(section)
-        return list of configuration options for the named section
-
-    read(filenames)
-        read and parse the list of named configuration files, given by
-        name.  A single filename is also allowed.  Non-existing files
-        are ignored.  Return list of successfully read files.
-
-    readfp(fp, filename=None)
-        read and parse one configuration file, given as a file object.
-        The filename defaults to fp.name; it is only used in error
-        messages (if fp has no `name' attribute, the string `<???>' is used).
-
-    get(section, option, raw=False, vars=None)
-        return a string value for the named option.  All % interpolations are
-        expanded in the return values, based on the defaults passed into the
-        constructor and the DEFAULT section.  Additional substitutions may be
-        provided using the `vars' argument, which must be a dictionary whose
-        contents override any pre-existing defaults.
-
-    getint(section, options)
-        like get(), but convert value to an integer
-
-    getfloat(section, options)
-        like get(), but convert value to a float
-
-    getboolean(section, options)
-        like get(), but convert value to a boolean (currently case
-        insensitively defined as 0, false, no, off for False, and 1, true,
-        yes, on for True).  Returns False or True.
-
-    items(section, raw=False, vars=None)
-        return a list of tuples with (name, value) for each option
-        in the section.
-
-    remove_section(section)
-        remove the given file section and all its options
-
-    remove_option(section, option)
-        remove the given option from the given section
-
-    set(section, option, value)
-        set the given option
-
-    write(fp)
-        write the configuration state in .ini format
-"""
 try:
     from collections import OrderedDict as _default_dict
 except ImportError:
@@ -111,16 +23,11 @@ DEFAULTSECT = 'DEFAULT'
 MAX_INTERPOLATION_DEPTH = 10
 
 class Error(Exception):
-    """Base class for ConfigParser exceptions."""
 
     def _get_message(self):
-        """Getter for 'message'; needed only to override deprecation in
-        BaseException."""
         return self.__message
 
     def _set_message(self, value):
-        """Setter for 'message'; needed only to override deprecation in
-        BaseException."""
         self.__message = value
 
     message = property(_get_message, _set_message)
@@ -136,7 +43,6 @@ class Error(Exception):
 
 
 class NoSectionError(Error):
-    """Raised when no section matches a requested option."""
 
     def __init__(self, section):
         Error.__init__(self, 'No section: %r' % (section,))
@@ -145,7 +51,6 @@ class NoSectionError(Error):
 
 
 class DuplicateSectionError(Error):
-    """Raised when a section is multiply-created."""
 
     def __init__(self, section):
         Error.__init__(self, 'Section %r already exists' % section)
@@ -154,7 +59,6 @@ class DuplicateSectionError(Error):
 
 
 class NoOptionError(Error):
-    """A requested option was not found."""
 
     def __init__(self, option, section):
         Error.__init__(self, 'No option %r in section: %r' % (option, section))
@@ -164,7 +68,6 @@ class NoOptionError(Error):
 
 
 class InterpolationError(Error):
-    """Base class for interpolation-related exceptions."""
 
     def __init__(self, option, section, msg):
         Error.__init__(self, msg)
@@ -174,7 +77,6 @@ class InterpolationError(Error):
 
 
 class InterpolationMissingOptionError(InterpolationError):
-    """A string substitution required a setting which was not available."""
 
     def __init__(self, option, section, rawval, reference):
         msg = 'Bad value substitution:\n\tsection: [%s]\n\toption : %s\n\tkey    : %s\n\trawval : %s\n' % (section,
@@ -190,13 +92,10 @@ class InterpolationMissingOptionError(InterpolationError):
 
 
 class InterpolationSyntaxError(InterpolationError):
-    """Raised when the source text into which substitutions are made
-    does not conform to the required syntax."""
     pass
 
 
 class InterpolationDepthError(InterpolationError):
-    """Raised when substitutions are nested too deeply."""
 
     def __init__(self, option, section, rawval):
         msg = 'Value interpolation too deeply recursive:\n\tsection: [%s]\n\toption : %s\n\trawval : %s\n' % (section, option, rawval)
@@ -205,7 +104,6 @@ class InterpolationDepthError(InterpolationError):
 
 
 class ParsingError(Error):
-    """Raised when a configuration file does not follow legal syntax."""
 
     def __init__(self, filename):
         Error.__init__(self, 'File contains parsing errors: %s' % filename)
@@ -219,7 +117,6 @@ class ParsingError(Error):
 
 
 class MissingSectionHeaderError(ParsingError):
-    """Raised when a key-value pair is found before any section header."""
 
     def __init__(self, filename, lineno, line):
         Error.__init__(self, 'File contains no section headers.\nfile: %s, line: %d\n%r' % (filename, lineno, line))
@@ -247,16 +144,9 @@ class RawConfigParser():
         return self._defaults
 
     def sections(self):
-        """Return a list of section names, excluding [DEFAULT]"""
         return self._sections.keys()
 
     def add_section(self, section):
-        """Create a new section in the configuration.
-        
-        Raise DuplicateSectionError if a section by the specified name
-        already exists. Raise ValueError if name is DEFAULT or any of it's
-        case-insensitive variants.
-        """
         if section.lower() == 'default':
             raise ValueError, 'Invalid section name: %s' % section
         if section in self._sections:
@@ -264,14 +154,9 @@ class RawConfigParser():
         self._sections[section] = self._dict()
 
     def has_section(self, section):
-        """Indicate whether the named section is present in the configuration.
-        
-        The DEFAULT section is not acknowledged.
-        """
         return section in self._sections
 
     def options(self, section):
-        """Return a list of option names for the given section name."""
         try:
             opts = self._sections[section].copy()
         except KeyError:
@@ -283,17 +168,6 @@ class RawConfigParser():
         return opts.keys()
 
     def read(self, filenames):
-        """Read and parse a filename or a list of filenames.
-        
-        Files that cannot be opened are silently ignored; this is
-        designed so that you can specify a list of potential
-        configuration file locations (e.g. current directory, user's
-        home directory, systemwide directory), and all existing
-        configuration files in the list will be read.  A single
-        filename may also be given.
-        
-        Return list of successfully read files.
-        """
         if isinstance(filenames, basestring):
             filenames = [filenames]
         read_ok = []
@@ -310,14 +184,6 @@ class RawConfigParser():
         return read_ok
 
     def readfp(self, fp, filename=None):
-        """Like read() but the argument must be a file-like object.
-        
-        The `fp' argument must have a `readline' method.  Optional
-        second argument is the `filename', which if not given, is
-        taken from fp.name.  If fp has no `name' attribute, `<???>' is
-        used.
-        
-        """
         if filename is None:
             try:
                 filename = fp.name
@@ -384,7 +250,6 @@ class RawConfigParser():
         return optionstr.lower()
 
     def has_option(self, section, option):
-        """Check for the existence of a given option in a given section."""
         if not section or section == DEFAULTSECT:
             option = self.optionxform(option)
             return option in self._defaults
@@ -395,7 +260,6 @@ class RawConfigParser():
             return option in self._sections[section] or option in self._defaults
 
     def set(self, section, option, value=None):
-        """Set an option."""
         if not section or section == DEFAULTSECT:
             sectdict = self._defaults
         else:
@@ -407,7 +271,6 @@ class RawConfigParser():
         sectdict[self.optionxform(option)] = value
 
     def write(self, fp):
-        """Write an .ini-format representation of the configuration state."""
         if self._defaults:
             fp.write('[%s]\n' % DEFAULTSECT)
             for key, value in self._defaults.items():
@@ -428,7 +291,6 @@ class RawConfigParser():
         return
 
     def remove_option(self, section, option):
-        """Remove an option."""
         if not section or section == DEFAULTSECT:
             sectdict = self._defaults
         else:
@@ -444,7 +306,6 @@ class RawConfigParser():
         return existed
 
     def remove_section(self, section):
-        """Remove a file section."""
         existed = section in self._sections
         if existed:
             del self._sections[section]
@@ -455,15 +316,6 @@ class RawConfigParser():
     OPTCRE_NV = re.compile('(?P<option>[^:=\\s][^:=]*)\\s*(?:(?P<vi>[:=])\\s*(?P<value>.*))?$')
 
     def _read(self, fp, fpname):
-        """Parse a sectioned setup file.
-        
-        The sections in setup file contains a title line at the top,
-        indicated by a name in square brackets (`[]'), plus key/value
-        options lines, indicated by `name: value' format lines.
-        Continuations are represented by an embedded newline then
-        leading whitespace.  Blank lines, lines beginning with a '#',
-        and just about everything else are ignored.
-        """
         cursect = None
         optname = None
         lineno = 0
@@ -529,13 +381,6 @@ class RawConfigParser():
 import UserDict as _UserDict
 
 class _Chainmap(_UserDict.DictMixin):
-    """Combine multiple mappings for successive lookups.
-    
-    For example, to emulate Python's normal lookup sequence:
-    
-        import __builtin__
-        pylookup = _Chainmap(locals(), globals(), vars(__builtin__))
-    """
 
     def __init__(self, *maps):
         self._maps = maps
@@ -564,17 +409,6 @@ class _Chainmap(_UserDict.DictMixin):
 class ConfigParser(RawConfigParser):
 
     def get(self, section, option, raw=False, vars=None):
-        """Get an option value for a given section.
-        
-        If `vars' is provided, it must be a dictionary. The option is looked up
-        in `vars' (if provided), `section', and in `defaults' in that order.
-        
-        All % interpolations are expanded in the return values, unless the
-        optional argument `raw' is true. Values for interpolation keys are
-        looked up in the same manner as the option.
-        
-        The section DEFAULT is special.
-        """
         sectiondict = {}
         try:
             sectiondict = self._sections[section]
@@ -601,17 +435,6 @@ class ConfigParser(RawConfigParser):
             return
 
     def items(self, section, raw=False, vars=None):
-        """Return a list of tuples with (name, value) for each option
-        in the section.
-        
-        All % interpolations are expanded in the return values, based on the
-        defaults passed into the constructor, unless the optional argument
-        `raw' is true.  Additional substitutions may be provided using the
-        `vars' argument, which must be a dictionary whose contents overrides
-        any pre-existing defaults.
-        
-        The section DEFAULT is special.
-        """
         d = self._defaults.copy()
         try:
             d.update(self._sections[section])
@@ -704,7 +527,6 @@ class SafeConfigParser(ConfigParser):
         return
 
     def set(self, section, option, value=None):
-        """Set an option.  Extend ConfigParser.set: check for string values."""
         if self._optcre is self.OPTCRE or value:
             if not isinstance(value, basestring):
                 raise TypeError('option values must be strings')

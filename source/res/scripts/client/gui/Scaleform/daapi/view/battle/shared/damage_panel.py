@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/damage_panel.py
 import math
+import weakref
 import BattleReplay
 import BigWorld
 import GUI
 import Math
-import weakref
 from ReplayEvents import g_replayEvents
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.formatters import formatHealthProgress, normalizeHealthPercent
@@ -30,10 +30,6 @@ _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
  VEHICLE_VIEW_STATE.DEVICES: '_updateDeviceState',
  VEHICLE_VIEW_STATE.REPAIRING: '_updateRepairingDevice',
  VEHICLE_VIEW_STATE.SWITCHING: '_switching',
- VEHICLE_VIEW_STATE.RPM: 'as_setNormalizedEngineRpmS',
- VEHICLE_VIEW_STATE.MAX_SPEED: 'as_setMaxSpeedS',
- VEHICLE_VIEW_STATE.VEHICLE_MOVEMENT_STATE: '_updateVehicleMovementState',
- VEHICLE_VIEW_STATE.VEHICLE_ENGINE_STATE: '_updateVehicleEngineState',
  VEHICLE_VIEW_STATE.STUN: '_updateStun'}
 
 class _IStunAnimPlayer(object):
@@ -222,18 +218,6 @@ class DamagePanel(DamagePanelMeta):
     def _updateDestroyed(self, _=None):
         self.as_setVehicleDestroyedS()
         self.hideStunImmediate()
-
-    def _updateVehicleMovementState(self, runAnimation):
-        if runAnimation:
-            self.as_startVehicleStartAnimS()
-        else:
-            self.as_finishVehicleStartAnimS()
-
-    def _updateVehicleEngineState(self, runAnimation):
-        if runAnimation:
-            self.as_playEngineStartAnimS()
-        else:
-            self.as_finishVehicleStartAnimS()
 
     def _updateHealth(self, health):
         if health <= self.__maxHealth and self.__maxHealth > 0:

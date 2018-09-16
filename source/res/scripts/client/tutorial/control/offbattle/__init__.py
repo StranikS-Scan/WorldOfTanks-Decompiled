@@ -44,5 +44,5 @@ class OffbattleControlsFactory(ControlsFactory):
     def createFuncScene(self, sceneModel):
         return core_func.FunctionalScene(sceneModel)
 
-    def createFuncInfo(self):
-        return lobby_func.FunctionalLobbyChapterInfo()
+    def createFuncChapterCtx(self):
+        return lobby_func.FunctionalLobbyChapterContext()

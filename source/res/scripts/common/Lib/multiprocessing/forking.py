@@ -103,7 +103,6 @@ if sys.platform != 'win32':
                     if os.WIFSIGNALED(sts):
                         self.returncode = -os.WTERMSIG(sts)
                     else:
-                        assert os.WIFEXITED(sts)
                         self.returncode = os.WEXITSTATUS(sts)
             return self.returncode
 
@@ -175,9 +174,6 @@ else:
 
 
     class Popen(object):
-        """
-        Start a subprocess to run the code of a process object
-        """
         _tls = thread._local()
 
         def __init__(self, process_obj):
@@ -241,29 +237,19 @@ else:
 
 
     def is_forking(argv):
-        """
-        Return whether commandline indicates we are forking
-        """
         if len(argv) >= 2 and argv[1] == '--multiprocessing-fork':
-            assert len(argv) == 3
             return True
         else:
             return False
 
 
     def freeze_support():
-        """
-        Run code for process object if this in not the main process
-        """
         if is_forking(sys.argv):
             main()
             sys.exit()
 
 
     def get_command_line():
-        """
-        Returns prefix of command line used for spawning a child process
-        """
         if getattr(process.current_process(), '_inheriting', False):
             raise RuntimeError('\n            Attempt to start a new process before the current process\n            has finished its bootstrapping phase.\n\n            This probably means that you are on Windows and you have\n            forgotten to use the proper idiom in the main module:\n\n                if __name__ == \'__main__\':\n                    freeze_support()\n                    ...\n\n            The "freeze_support()" line can be omitted if the program\n            is not going to be frozen to produce a Windows executable.')
         if getattr(sys, 'frozen', False):
@@ -275,10 +261,6 @@ else:
 
 
     def main():
-        """
-        Run code specified by data received over pipe
-        """
-        assert is_forking(sys.argv)
         handle = int(sys.argv[-1])
         fd = msvcrt.open_osfhandle(handle, os.O_RDONLY)
         from_parent = os.fdopen(fd, 'rb')
@@ -293,9 +275,6 @@ else:
 
 
     def get_preparation_data(name):
-        """
-        Return info about parent needed by child to unpickle process object
-        """
         from .util import _logger, _log_to_stderr
         d = dict(name=name, sys_path=sys.path, sys_argv=sys.argv, log_to_stderr=_log_to_stderr, orig_dir=process.ORIGINAL_DIR, authkey=process.current_process().authkey)
         if _logger is not None:
@@ -322,9 +301,6 @@ else:
 old_main_modules = []
 
 def prepare(data):
-    """
-    Try to get current process ready to unpickle process object
-    """
     old_main_modules.append(sys.modules['__main__'])
     if 'name' in data:
         process.current_process().name = data['name']
@@ -355,7 +331,6 @@ def prepare(data):
                 dirs = [os.path.dirname(os.path.dirname(main_path))]
             else:
                 dirs = [os.path.dirname(main_path)]
-            assert main_name not in sys.modules, main_name
             file, path_name, etc = imp.find_module(main_name, dirs)
             try:
                 main_module = imp.load_module('__parents_main__', file, path_name, etc)

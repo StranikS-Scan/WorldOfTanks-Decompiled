@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/check.py
-"""distutils.command.check
-
-Implements the Distutils 'check' command.
-"""
 __revision__ = '$Id$'
 from distutils.core import Command
 from distutils.dist import PKG_INFO_ENCODING
@@ -34,14 +30,11 @@ except ImportError:
     HAS_DOCUTILS = False
 
 class check(Command):
-    """This command checks the meta-data of the package.
-    """
     description = 'perform some checks on the package'
     user_options = [('metadata', 'm', 'Verify meta-data'), ('restructuredtext', 'r', 'Checks if long string meta-data syntax are reStructuredText-compliant'), ('strict', 's', 'Will exit with an error if a check fails')]
     boolean_options = ['metadata', 'restructuredtext', 'strict']
 
     def initialize_options(self):
-        """Sets default values for options."""
         self.restructuredtext = 0
         self.metadata = 1
         self.strict = 0
@@ -51,12 +44,10 @@ class check(Command):
         pass
 
     def warn(self, msg):
-        """Counts the number of warnings that occurs."""
         self._warnings += 1
         return Command.warn(self, msg)
 
     def run(self):
-        """Runs the command."""
         if self.metadata:
             self.check_metadata()
         if self.restructuredtext:
@@ -68,13 +59,6 @@ class check(Command):
             raise DistutilsSetupError('Please correct your package.')
 
     def check_metadata(self):
-        """Ensures that all required elements of meta-data are supplied.
-        
-        name, version, URL, (author and author_email) or
-        (maintainer and maintainer_email)).
-        
-        Warns if any are missing.
-        """
         metadata = self.distribution.metadata
         missing = []
         for attr in ('name', 'version', 'url'):
@@ -93,7 +77,6 @@ class check(Command):
             self.warn('missing meta-data: either (author and author_email) ' + 'or (maintainer and maintainer_email) ' + 'must be supplied')
 
     def check_restructuredtext(self):
-        """Checks if the long string fields are reST-compliant."""
         data = self.distribution.get_long_description()
         if not isinstance(data, unicode):
             data = data.decode(PKG_INFO_ENCODING)
@@ -108,7 +91,6 @@ class check(Command):
         return
 
     def _check_rst_data(self, data):
-        """Returns warnings when the provided data doesn't compile."""
         source_path = StringIO()
         parser = Parser()
         settings = frontend.OptionParser().get_default_values()

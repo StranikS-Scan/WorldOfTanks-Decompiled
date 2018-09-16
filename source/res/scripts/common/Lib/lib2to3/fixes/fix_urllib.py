@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_urllib.py
-"""Fix changes imports of urllib which are now incompatible.
-   This is rather similar to fix_imports, but because of the more
-   complex nature of the fixing for urllib, it has its own fixer.
-"""
 from lib2to3.fixes.fix_imports import alternates, FixImports
 from lib2to3 import fixer_base
 from lib2to3.fixer_util import Name, Comma, FromImport, Newline, find_indentation, Node, syms
@@ -74,10 +70,6 @@ class FixUrllib(FixImports):
         return '|'.join(build_pattern())
 
     def transform_import(self, node, results):
-        """Transform for the basic import case. Replaces the old
-           import name with a comma separated list of its
-           replacements.
-        """
         import_mod = results.get('module')
         pref = import_mod.prefix
         names = []
@@ -88,10 +80,6 @@ class FixUrllib(FixImports):
         import_mod.replace(names)
 
     def transform_member(self, node, results):
-        """Transform for imports of specific module elements. Replaces
-           the module to be imported from with the appropriate new
-           module.
-        """
         mod_member = results.get('mod_member')
         pref = mod_member.prefix
         member = results.get('member')
@@ -162,7 +150,6 @@ class FixUrllib(FixImports):
         return
 
     def transform_dot(self, node, results):
-        """Transform for calls to module members in code."""
         module_dot = results.get('bare_with_attr')
         member = results.get('member')
         new_name = None

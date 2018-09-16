@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/SettingsCore.py
-import Event
 import BigWorld
-from InterfaceScaleManager import InterfaceScaleManager
+import Event
 from Vibroeffects import VibroManager
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager, SETTINGS_SECTIONS
 from adisp import process
 from debug_utils import LOG_DEBUG
+from gui.Scaleform.locale.SETTINGS import SETTINGS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
+from InterfaceScaleManager import InterfaceScaleManager
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _getStunSwitch(lobbyContext=None):
@@ -48,6 +49,7 @@ class SettingsCore(ISettingsCore):
         DAMAGE_INDICATOR = settings_constants.DAMAGE_INDICATOR
         DAMAGE_LOG = settings_constants.DAMAGE_LOG
         BATTLE_EVENTS = settings_constants.BATTLE_EVENTS
+        BATTLE_BORDER_MAP = settings_constants.BATTLE_BORDER_MAP
         self.__serverSettings = ServerSettingsManager(self)
         self.__interfaceScale = InterfaceScaleManager(self)
         VIDEO_SETTINGS_STORAGE = settings_storages.VideoSettingsStorage(self.serverSettings, self)
@@ -65,6 +67,7 @@ class SettingsCore(ISettingsCore):
         DAMAGE_INDICATOR_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.DAMAGE_INDICATOR)
         DAMAGE_LOG_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.DAMAGE_LOG)
         BATTLE_EVENTS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_EVENTS)
+        BATTLE_BORDER_MAP_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_BORDER_MAP)
         MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(GAME_SETTINGS_STORAGE)
         EXTENDED_MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(EXTENDED_GAME_SETTINGS_STORAGE)
         self.__storages = {'game': GAME_SETTINGS_STORAGE,
@@ -83,14 +86,16 @@ class SettingsCore(ISettingsCore):
          'tutorial': TUTORIAL_SETTINGS_STORAGE,
          'damageIndicator': DAMAGE_INDICATOR_SETTINGS_STORAGE,
          'damageLog': DAMAGE_LOG_SETTINGS_STORAGE,
-         'battleEvents': BATTLE_EVENTS_SETTINGS_STORAGE}
+         'battleEvents': BATTLE_EVENTS_SETTINGS_STORAGE,
+         'battleBorderMap': BATTLE_BORDER_MAP_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
-        graphicSettings = tuple(map(lambda settingName: (settingName, options.GraphicSetting(settingName)), BigWorld.generateGfxSettings()))
+        graphicSettings = tuple(((settingName, options.GraphicSetting(settingName)) for settingName in BigWorld.generateGfxSettings()))
         self.__options = options.SettingsContainer(graphicSettings + ((GAME.REPLAY_ENABLED, options.ReplaySetting(GAME.REPLAY_ENABLED, storage=GAME_SETTINGS_STORAGE)),
+         (GAME.HANGAR_CAM_PERIOD, options.HangarCamPeriodSetting(GAME.HANGAR_CAM_PERIOD, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.HANGAR_CAM_PARALLAX_ENABLED, options.HangarCamParallaxEnabledSetting(GAME.HANGAR_CAM_PARALLAX_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_SERVER_AIM, options.StorageAccountSetting(GAME.ENABLE_SERVER_AIM, storage=GAME_SETTINGS_STORAGE)),
          (GAME.MINIMAP_ALPHA, options.StorageAccountSetting(GAME.MINIMAP_ALPHA, storage=GAME_SETTINGS_STORAGE)),
-         (GAME.ENABLE_POSTMORTEM, options.PostProcessingSetting(GAME.ENABLE_POSTMORTEM, 'mortem_post_effect', storage=GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_POSTMORTEM_DELAY, options.PostMortemDelaySetting(GAME.ENABLE_POSTMORTEM_DELAY, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_VEHICLES_COUNTER, options.StorageAccountSetting(GAME.SHOW_VEHICLES_COUNTER, storage=GAME_SETTINGS_STORAGE)),
          (GAME.BATTLE_LOADING_INFO, options.BattleLoadingTipSetting(GAME.BATTLE_LOADING_INFO, GAME.BATTLE_LOADING_INFO)),
@@ -120,8 +125,8 @@ class SettingsCore(ISettingsCore):
          (GAME.GAMEPLAY_DOMINATION, options.GameplaySetting(GAME.GAMEPLAY_MASK, 'domination', storage=GAMEPLAY_SETTINGS_STORAGE)),
          (GAME.GAMEPLAY_ASSAULT, options.GameplaySetting(GAME.GAMEPLAY_MASK, 'assault', storage=GAMEPLAY_SETTINGS_STORAGE)),
          (GAME.GAMEPLAY_NATIONS, options.GameplaySetting(GAME.GAMEPLAY_MASK, 'nations', storage=GAMEPLAY_SETTINGS_STORAGE)),
-         (GAME.GAMEPLAY_EPIC_STANDARD, options.GameplaySetting(GAME.GAMEPLAY_MASK, 'ctf30x30', storage=GAMEPLAY_SETTINGS_STORAGE, callable=_getEpicRandomSwitch)),
-         (GAME.GAMEPLAY_EPIC_DOMINATION, options.GameplaySetting(GAME.GAMEPLAY_MASK, 'domination30x30', storage=GAMEPLAY_SETTINGS_STORAGE, callable=_getEpicRandomSwitch)),
+         (GAME.GAMEPLAY_EPIC_STANDARD, options.GameplaySetting(GAME.GAMEPLAY_MASK, 'ctf30x30', storage=GAMEPLAY_SETTINGS_STORAGE, delegate=_getEpicRandomSwitch)),
+         (GAME.GAMEPLAY_EPIC_DOMINATION, options.GameplaySetting(GAME.GAMEPLAY_MASK, 'domination30x30', storage=GAMEPLAY_SETTINGS_STORAGE, delegate=_getEpicRandomSwitch)),
          (GAME.LENS_EFFECT, options.LensEffectSetting(GAME.LENS_EFFECT, storage=GRAPHICS_SETTINGS_STORAGE)),
          (GAME.SHOW_VECTOR_ON_MAP, options.MinimapSetting(GAME.SHOW_VECTOR_ON_MAP, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_SECTOR_ON_MAP, options.MinimapSetting(GAME.SHOW_SECTOR_ON_MAP, storage=GAME_SETTINGS_STORAGE)),
@@ -133,6 +138,7 @@ class SettingsCore(ISettingsCore):
          (GAME.DOUBLE_CAROUSEL_TYPE, options.DoubleCarouselTypeSetting(GAME.DOUBLE_CAROUSEL_TYPE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.VEHICLE_CAROUSEL_STATS, options.VehicleCarouselStatsSetting(GAME.VEHICLE_CAROUSEL_STATS, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.C11N_HISTORICALLY_ACCURATE, options.C11nHistoricallyAccurateSetting(GAME.C11N_HISTORICALLY_ACCURATE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.MINIMAP_ALPHA_ENABLED, options.StorageAccountSetting(GAME.MINIMAP_ALPHA_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GRAPHICS.MONITOR, options.MonitorSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.WINDOW_SIZE, options.WindowSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.RESOLUTION, options.ResolutionSetting(storage=VIDEO_SETTINGS_STORAGE)),
@@ -142,20 +148,18 @@ class SettingsCore(ISettingsCore):
          (GRAPHICS.COLOR_BLIND, options.AccountDumpSetting(GRAPHICS.COLOR_BLIND, GRAPHICS.COLOR_BLIND)),
          (GRAPHICS.TRIPLE_BUFFERED, options.TripleBufferedSetting()),
          (GRAPHICS.VERTICAL_SYNC, options.VerticalSyncSetting()),
-         (GRAPHICS.MULTISAMPLING, options.MultisamplingSetting()),
-         (GRAPHICS.CUSTOM_AA, options.CustomAASetting()),
          (GRAPHICS.GRAPHICS_QUALITY_HD_SD, options.GraphicsQualityNote()),
-         (GRAPHICS.GAMMA, options.GammaSetting()),
-         (GRAPHICS.FPS_PERFOMANCER, options.FPSPerfomancerSetting(GRAPHICS.FPS_PERFOMANCER, storage=GRAPHICS_SETTINGS_STORAGE)),
+         (GRAPHICS.GAMMA_SETTING, options.ReadOnlySetting(lambda : SETTINGS.GAMMABTN_LABEL)),
          (GRAPHICS.COLOR_FILTER_INTENSITY, options.ColorFilterIntensitySetting()),
          (GRAPHICS.COLOR_FILTER_IMAGES, options.ReadOnlySetting(lambda : graphics.getGraphicSettingImages('COLOR_GRADING_TECHNIQUE'))),
          (GRAPHICS.FOV, options.FOVSetting(GRAPHICS.FOV, storage=FOV_SETTINGS_STORAGE)),
-         (GRAPHICS.GRAPHICS_SETTINGS_LIST, options.ReadOnlySetting(lambda : graphics.GRAPHICS_SETTINGS.ALL())),
+         (GRAPHICS.GRAPHICS_SETTINGS_LIST, options.ReadOnlySetting(graphics.GRAPHICS_SETTINGS.ALL)),
          (GRAPHICS.INTERFACE_SCALE, options.InterfaceScaleSetting(GRAPHICS.INTERFACE_SCALE)),
          (GRAPHICS.DYNAMIC_RENDERER, options.DynamicRendererSetting()),
          (GRAPHICS.DYNAMIC_FOV_ENABLED, options.DynamicFOVEnabledSetting(storage=FOV_SETTINGS_STORAGE)),
          (GRAPHICS.VERTICAL_SYNC, options.VerticalSyncSetting()),
          (GRAPHICS.COLOR_BLIND, options.AccountDumpSetting(GRAPHICS.COLOR_BLIND, GRAPHICS.COLOR_BLIND)),
+         (GRAPHICS.TESSELLATION_SUPPORTED, options.ReadOnlySetting(BigWorld.isTesselationSupported)),
          (SOUND.MASTER_TOGGLE, options.SoundEnableSetting()),
          (SOUND.SOUND_QUALITY, options.SoundQualitySetting()),
          (SOUND.SOUND_QUALITY_VISIBLE, options.ReadOnlySetting(options.SoundQualitySetting.isAvailable)),
@@ -194,13 +198,13 @@ class SettingsCore(ISettingsCore):
          (CONTROLS.MOUSE_VERT_INVERSION, options.MouseInversionSetting(CONTROLS.MOUSE_VERT_INVERSION, 'vertInvert', storage=CONTROLS_SETTINGS_STORAGE)),
          (CONTROLS.BACK_DRAFT_INVERSION, options.BackDraftInversionSetting(storage=CONTROLS_SETTINGS_STORAGE)),
          (CONTROLS.KEYBOARD, options.KeyboardSettings()),
-         (CONTROLS.KEYBOARD_IMPORTANT_BINDS, options.ReadOnlySetting(lambda : options.KeyboardSettings.getKeyboardImportantBinds())),
+         (CONTROLS.KEYBOARD_IMPORTANT_BINDS, options.ReadOnlySetting(options.KeyboardSettings.getKeyboardImportantBinds)),
          (AIM.ARCADE, options.AimSetting('arcade', storage=AIM_SETTINGS_STORAGE)),
          (AIM.SNIPER, options.AimSetting('sniper', storage=AIM_SETTINGS_STORAGE)),
          (MARKERS.ENEMY, options.VehicleMarkerSetting(MARKERS.ENEMY, storage=MARKERS_SETTINGS_STORAGE)),
          (MARKERS.DEAD, options.VehicleMarkerSetting(MARKERS.DEAD, storage=MARKERS_SETTINGS_STORAGE)),
          (MARKERS.ALLY, options.VehicleMarkerSetting(MARKERS.ALLY, storage=MARKERS_SETTINGS_STORAGE)),
-         (OTHER.VIBRO_CONNECTED, options.ReadOnlySetting(lambda : VibroManager.g_instance.connect())),
+         (OTHER.VIBRO_CONNECTED, options.ReadOnlySetting(VibroManager.g_instance.connect)),
          (OTHER.VIBRO_GAIN, options.VibroSetting('master')),
          (OTHER.VIBRO_ENGINE, options.VibroSetting('engine')),
          (OTHER.VIBRO_ACCELERATION, options.VibroSetting('acceleration')),
@@ -227,7 +231,7 @@ class SettingsCore(ISettingsCore):
          (DAMAGE_LOG.TOTAL_DAMAGE, options.SettingFalseByDefault(DAMAGE_LOG.TOTAL_DAMAGE, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
          (DAMAGE_LOG.BLOCKED_DAMAGE, options.SettingFalseByDefault(DAMAGE_LOG.BLOCKED_DAMAGE, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
          (DAMAGE_LOG.ASSIST_DAMAGE, options.SettingFalseByDefault(DAMAGE_LOG.ASSIST_DAMAGE, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
-         (DAMAGE_LOG.ASSIST_STUN, options.BattleEventsSetting(DAMAGE_LOG.ASSIST_STUN, storage=DAMAGE_LOG_SETTINGS_STORAGE, callable=_getStunSwitch)),
+         (DAMAGE_LOG.ASSIST_STUN, options.BattleEventsSetting(DAMAGE_LOG.ASSIST_STUN, storage=DAMAGE_LOG_SETTINGS_STORAGE, delegate=_getStunSwitch)),
          (DAMAGE_LOG.SHOW_DETAILS, options.DamageLogDetailsSetting(DAMAGE_LOG.SHOW_DETAILS, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
          (DAMAGE_LOG.SHOW_EVENT_TYPES, options.DamageLogEventTypesSetting(DAMAGE_LOG.SHOW_EVENT_TYPES, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
          (DAMAGE_LOG.EVENT_POSITIONS, options.DamageLogEventPositionsSetting(DAMAGE_LOG.EVENT_POSITIONS, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
@@ -248,7 +252,9 @@ class SettingsCore(ISettingsCore):
          (BATTLE_EVENTS.ENEMY_WORLD_COLLISION, options.SettingFalseByDefault(BATTLE_EVENTS.ENEMY_WORLD_COLLISION, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
          (BATTLE_EVENTS.RECEIVED_DAMAGE, options.SettingFalseByDefault(BATTLE_EVENTS.RECEIVED_DAMAGE, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
          (BATTLE_EVENTS.RECEIVED_CRITS, options.SettingFalseByDefault(BATTLE_EVENTS.RECEIVED_CRITS, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.ENEMY_ASSIST_STUN, options.BattleEventsSetting(BATTLE_EVENTS.ENEMY_ASSIST_STUN, storage=BATTLE_EVENTS_SETTINGS_STORAGE, callable=_getStunSwitch))))
+         (BATTLE_EVENTS.ENEMY_ASSIST_STUN, options.BattleEventsSetting(BATTLE_EVENTS.ENEMY_ASSIST_STUN, storage=BATTLE_EVENTS_SETTINGS_STORAGE, delegate=_getStunSwitch)),
+         (BATTLE_BORDER_MAP.MODE_SHOW_BORDER, options.BattleBorderMapModeShow(BATTLE_BORDER_MAP.MODE_SHOW_BORDER, storage=BATTLE_BORDER_MAP_SETTINGS_STORAGE)),
+         (BATTLE_BORDER_MAP.TYPE_BORDER, options.BattleBorderMapType(BATTLE_BORDER_MAP.TYPE_BORDER, storage=BATTLE_BORDER_MAP_SETTINGS_STORAGE))))
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         self.interfaceScale.init()

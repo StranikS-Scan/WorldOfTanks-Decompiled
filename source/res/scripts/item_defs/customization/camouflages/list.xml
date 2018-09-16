@@ -1,15 +1,15 @@
 <list.xml>
-  <china:Ch06_Renault_NC3136>	http://bwt/xmlref	</china:Ch06_Renault_NC3136>
-  <china:Ch06_Renault_NC3135>	ussr	</china:Ch06_Renault_NC3135>
+  <china:Ch06_Renault_NC3137>	http://bwt/xmlref	</china:Ch06_Renault_NC3137>
+  <china:Ch06_Renault_NC3136>	ussr	</china:Ch06_Renault_NC3136>
   <china:Ch06_Renault_NC3129>	germany	</china:Ch06_Renault_NC3129>
-  <china:Ch06_Renault_NC3134>	usa	</china:Ch06_Renault_NC3134>
+  <china:Ch06_Renault_NC3135>	usa	</china:Ch06_Renault_NC3135>
   <china:Ch06_Renault_NC3126>	china	</china:Ch06_Renault_NC3126>
   <china:Ch06_Renault_NC3128>	france	</china:Ch06_Renault_NC3128>
-  <china:Ch06_Renault_NC3133>	uk	</china:Ch06_Renault_NC3133>
-  <china:Ch06_Renault_NC3130>	japan	</china:Ch06_Renault_NC3130>
+  <china:Ch06_Renault_NC3134>	uk	</china:Ch06_Renault_NC3134>
+  <china:Ch06_Renault_NC3131>	japan	</china:Ch06_Renault_NC3131>
   <china:Ch06_Renault_NC3127>	czech	</china:Ch06_Renault_NC3127>
-  <china:Ch06_Renault_NC3132>	sweden	</china:Ch06_Renault_NC3132>
-  <china:Ch06_Renault_NC3131>	poland	</china:Ch06_Renault_NC3131>
+  <china:Ch06_Renault_NC3133>	sweden	</china:Ch06_Renault_NC3133>
+  <china:Ch06_Renault_NC3132>	poland	</china:Ch06_Renault_NC3132>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/transparent	</userString>
     <season>	summer	</season>
@@ -21,7 +21,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -645,7 +645,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -794,7 +794,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -869,7 +869,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -1012,7 +1012,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -1088,7 +1088,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -1176,7 +1176,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -1254,14 +1254,14 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15317	</id>
       <texture>	vehicles/chinese/Camouflage/china_gold.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/china_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/china_gold/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -1320,8 +1320,8 @@
     <camouflage>
       <id>	15318	</id>
       <texture>	vehicles/chinese/Camouflage/china_red.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/china_red/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/china_red/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -1380,8 +1380,8 @@
     <camouflage>
       <id>	15319	</id>
       <texture>	vehicles/chinese/Camouflage/china_black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/china_black/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/china_black/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -1440,8 +1440,8 @@
     <camouflage>
       <id>	15320	</id>
       <texture>	vehicles/chinese/Camouflage/china_silver.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/china_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/china_silver/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -1569,7 +1569,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <tags>	premiumIGR	</tags>
@@ -1645,7 +1645,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <tags>	premiumIGR	</tags>
@@ -1721,7 +1721,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <tags>	premiumIGR	</tags>
@@ -1797,7 +1797,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -2063,7 +2063,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -2869,8 +2869,8 @@
     <camouflage>
       <id>	15720	</id>
       <texture>	vehicles/czech/Camouflage/Czech_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/czech_black/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/czech_black/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -2897,8 +2897,8 @@
     <camouflage>
       <id>	15721	</id>
       <texture>	vehicles/czech/Camouflage/Czech_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/czech_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/czech_gold/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -2925,8 +2925,8 @@
     <camouflage>
       <id>	15722	</id>
       <texture>	vehicles/czech/Camouflage/Czech_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/czech_red/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/czech_red/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -2953,8 +2953,8 @@
     <camouflage>
       <id>	15723	</id>
       <texture>	vehicles/czech/Camouflage/Czech_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/czech_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/czech_silver/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -4361,8 +4361,8 @@
     <camouflage>
       <id>	15411	</id>
       <texture>	vehicles/french/Camouflage/franch_victim_yellow.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/france_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/france_gold/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -4448,8 +4448,8 @@
     <camouflage>
       <id>	15412	</id>
       <texture>	vehicles/french/Camouflage/franch_victim_red.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/france_red/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/france_red/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -4534,8 +4534,8 @@
     <camouflage>
       <id>	15413	</id>
       <texture>	vehicles/french/Camouflage/franch_victim_black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/france_black/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/france_black/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -4620,8 +4620,8 @@
     <camouflage>
       <id>	15414	</id>
       <texture>	vehicles/french/Camouflage/franch_victim_silver.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/france_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/france_silver/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -8237,8 +8237,8 @@
         <G49_G_Panther>	1.7 1.7 0.23 0.000000	</G49_G_Panther>
         <G52_Pz38_NA>	4.4 4.4 0.08 0.36	</G52_Pz38_NA>
         <G51_Lowe>	3.1 3.1 0.04 0.000000	</G51_Lowe>
-        <G58_VK4502P>	2.8 4.4 0.24 0.36	</G58_VK4502P>
-        <G58_VK4502P7>	2.8 4.4 0.24 0.36	</G58_VK4502P7>
+        <G58_VK4502P>	2.5 2.5 0.24 0.36	</G58_VK4502P>
+        <G58_VK4502P7>	2.5 2.5 0.24 0.36	</G58_VK4502P7>
         <G64_Panther_II>	2.7 2.7 0.000000 0.18	</G64_Panther_II>
         <G61_G_E>	4.5 4.5 0.52 0.26	</G61_G_E>
         <G46_T-25>	2.2 2.2 0.66 0.48	</G46_T-25>
@@ -8797,8 +8797,8 @@
     <camouflage>
       <id>	15108	</id>
       <texture>	vehicles/german/Camouflage/Germany_Victim_Black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/germany_black/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/germany_black/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -8946,8 +8946,8 @@
     <camouflage>
       <id>	15109	</id>
       <texture>	vehicles/german/Camouflage/Germany_Victim_Black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/germany_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/germany_gold/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -9095,8 +9095,8 @@
     <camouflage>
       <id>	15110	</id>
       <texture>	vehicles/german/Camouflage/Germany_Victim_Black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/germany_red/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/germany_red/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -9243,8 +9243,8 @@
     <camouflage>
       <id>	15111	</id>
       <texture>	vehicles/german/Camouflage/Germany_Victim_Black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/germany_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/germany_silver/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -13226,8 +13226,8 @@
     <camouflage>
       <id>	15621	</id>
       <texture>	vehicles/japan/Camouflage/Japan_Victim.DDS	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/japan_black/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/japan_black/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -13273,8 +13273,8 @@
     <camouflage>
       <id>	15622	</id>
       <texture>	vehicles/japan/Camouflage/Japan_Victim.DDS	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/japan_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/japan_gold/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -13320,8 +13320,8 @@
     <camouflage>
       <id>	15623	</id>
       <texture>	vehicles/japan/Camouflage/Japan_Victim.DDS	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/japan_red/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/japan_red/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -13367,8 +13367,8 @@
     <camouflage>
       <id>	15624	</id>
       <texture>	vehicles/japan/Camouflage/Japan_Victim.DDS	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/japan_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/japan_silver/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -14743,8 +14743,8 @@
     <camouflage>
       <id>	15821	</id>
       <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/sweden_black/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/sweden_black/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -14779,8 +14779,8 @@
     <camouflage>
       <id>	15822	</id>
       <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/sweden_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/sweden_gold/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -14817,8 +14817,8 @@
     <camouflage>
       <id>	15823	</id>
       <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/sweden_red/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/sweden_red/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -14855,8 +14855,8 @@
     <camouflage>
       <id>	15824	</id>
       <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/sweden_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/sweden_silver/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -16141,8 +16141,8 @@
     <camouflage>
       <id>	15512	</id>
       <texture>	vehicles/british/Camouflage/GB_victim_yellow.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/uk_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/uk_gold/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -16235,8 +16235,8 @@
     <camouflage>
       <id>	15513	</id>
       <texture>	vehicles/british/Camouflage/GB_victim_red.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/uk_red/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/uk_red/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -16329,8 +16329,8 @@
     <camouflage>
       <id>	15514	</id>
       <texture>	vehicles/british/Camouflage/GB_victim_black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/uk_black/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/uk_black/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -16423,8 +16423,8 @@
     <camouflage>
       <id>	15515	</id>
       <texture>	vehicles/british/Camouflage/GB_victim_silver.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/uk_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/uk_silver/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -19401,8 +19401,8 @@
     <camouflage>
       <id>	15211	</id>
       <texture>	vehicles/american/Camouflage/usa_victim_yellow.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/usa_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/usa_gold/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -19518,8 +19518,8 @@
     <camouflage>
       <id>	15212	</id>
       <texture>	vehicles/american/Camouflage/usa_victim_red.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/usa_red/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/usa_red/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -19635,8 +19635,8 @@
     <camouflage>
       <id>	15213	</id>
       <texture>	vehicles/american/Camouflage/usa_victim_black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/usa_black/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/usa_black/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -19751,8 +19751,8 @@
     <camouflage>
       <id>	15214	</id>
       <texture>	vehicles/american/Camouflage/usa_victim_silver.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/usa_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/usa_silver/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -24336,8 +24336,8 @@
     <camouflage>
       <id>	15008	</id>
       <texture>	vehicles/russian/Camouflage/Rus_Victim_Black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/ussr_black/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/ussr_black/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -24491,8 +24491,8 @@
     <camouflage>
       <id>	15009	</id>
       <texture>	vehicles/russian/Camouflage/Rus_Victim_Black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/ussr_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/ussr_gold/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -24647,8 +24647,8 @@
     <camouflage>
       <id>	15010	</id>
       <texture>	vehicles/russian/Camouflage/Rus_Victim_Black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/ussr_red/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/ussr_red/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -24803,8 +24803,8 @@
     <camouflage>
       <id>	15011	</id>
       <texture>	vehicles/russian/Camouflage/Rus_Victim_Black.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <userString>	#vehicle_customization:camouflage/victim/ussr_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/victim/ussr_silver/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
@@ -25664,7 +25664,6 @@
       </palettes>
       <tiling>
         <R110_Object_260>	2 2 1.5 6.9	</R110_Object_260>
-        <R148_Object_430_U>	0.5 0.5 0.000000 0.000000	</R148_Object_430_U>
       </tiling>
       <vehicleFilter>
         <include>
@@ -25693,7 +25692,6 @@
       </tiling>
       <vehicleFilter>
         <include>
-          <nations>	ussr	</nations>
           <vehicles>	germany:G105_T-55_NVA_DDR	</vehicles>
         </include>
       </vehicleFilter>
@@ -26819,11 +26817,9 @@
       </palettes>
       <tiling>
         <china:Ch02_Type6244>	1.2 1.2 6.7 7	</china:Ch02_Type6244>
-        <R148_Object_430_U>	0.6 0.6 0.000000 0.000000	</R148_Object_430_U>
       </tiling>
       <vehicleFilter>
         <include>
-          <nations>	ussr	</nations>
           <vehicles>	germany:G105_T-55_NVA_DDR	</vehicles>
         </include>
       </vehicleFilter>
@@ -26962,7 +26958,6 @@
       </tiling>
       <vehicleFilter>
         <include>
-          <nations>	ussr	</nations>
           <vehicles>	germany:G105_T-55_NVA_DDR	</vehicles>
         </include>
       </vehicleFilter>
@@ -27807,16 +27802,16 @@
       <requiredToken>	token:object260:camouflage	</requiredToken>
     </camouflage>
   </itemGroup>
-  <china:Ch06_Renault_NC3135>	ussr	</china:Ch06_Renault_NC3135>
+  <china:Ch06_Renault_NC3136>	ussr	</china:Ch06_Renault_NC3136>
   <china:Ch06_Renault_NC3129>	germany	</china:Ch06_Renault_NC3129>
-  <china:Ch06_Renault_NC3134>	usa	</china:Ch06_Renault_NC3134>
+  <china:Ch06_Renault_NC3135>	usa	</china:Ch06_Renault_NC3135>
   <china:Ch06_Renault_NC3126>	china	</china:Ch06_Renault_NC3126>
   <china:Ch06_Renault_NC3128>	france	</china:Ch06_Renault_NC3128>
-  <china:Ch06_Renault_NC3133>	uk	</china:Ch06_Renault_NC3133>
-  <china:Ch06_Renault_NC3130>	japan	</china:Ch06_Renault_NC3130>
+  <china:Ch06_Renault_NC3134>	uk	</china:Ch06_Renault_NC3134>
+  <china:Ch06_Renault_NC3131>	japan	</china:Ch06_Renault_NC3131>
   <china:Ch06_Renault_NC3127>	czech	</china:Ch06_Renault_NC3127>
-  <china:Ch06_Renault_NC3132>	sweden	</china:Ch06_Renault_NC3132>
-  <china:Ch06_Renault_NC3131>	poland	</china:Ch06_Renault_NC3131>
+  <china:Ch06_Renault_NC3133>	sweden	</china:Ch06_Renault_NC3133>
+  <china:Ch06_Renault_NC3132>	poland	</china:Ch06_Renault_NC3132>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
     <season>	winter	</season>
@@ -27827,7 +27822,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <tags>	premiumIGR	</tags>
@@ -27964,7 +27959,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <tags>	premiumIGR	</tags>
@@ -28040,7 +28035,7 @@
         <nations>	china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
       </exclude>
     </vehicleFilter>
     <tags>	premiumIGR	</tags>
@@ -32222,16 +32217,16 @@
       </tiling>
     </camouflage>
   </itemGroup>
-  <china:Ch06_Renault_NC3135>	ussr	</china:Ch06_Renault_NC3135>
+  <china:Ch06_Renault_NC3136>	ussr	</china:Ch06_Renault_NC3136>
   <china:Ch06_Renault_NC3129>	germany	</china:Ch06_Renault_NC3129>
-  <china:Ch06_Renault_NC3134>	usa	</china:Ch06_Renault_NC3134>
+  <china:Ch06_Renault_NC3135>	usa	</china:Ch06_Renault_NC3135>
   <china:Ch06_Renault_NC3126>	china	</china:Ch06_Renault_NC3126>
   <china:Ch06_Renault_NC3128>	france	</china:Ch06_Renault_NC3128>
-  <china:Ch06_Renault_NC3133>	uk	</china:Ch06_Renault_NC3133>
-  <china:Ch06_Renault_NC3130>	japan	</china:Ch06_Renault_NC3130>
+  <china:Ch06_Renault_NC3134>	uk	</china:Ch06_Renault_NC3134>
+  <china:Ch06_Renault_NC3131>	japan	</china:Ch06_Renault_NC3131>
   <china:Ch06_Renault_NC3127>	czech	</china:Ch06_Renault_NC3127>
-  <china:Ch06_Renault_NC3132>	sweden	</china:Ch06_Renault_NC3132>
-  <china:Ch06_Renault_NC3131>	poland	</china:Ch06_Renault_NC3131>
+  <china:Ch06_Renault_NC3133>	sweden	</china:Ch06_Renault_NC3133>
+  <china:Ch06_Renault_NC3132>	poland	</china:Ch06_Renault_NC3132>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
     <season>	winter	</season>
@@ -37256,6 +37251,93 @@
       <tiling>
         <china:Ch05_T34_234>	3.4 3.4 2.2 1.9	</china:Ch05_T34_234>
       </tiling>
+    </camouflage>
+  </itemGroup>
+  <china:Ch06_Renault_NC3136>	ussr	</china:Ch06_Renault_NC3136>
+  <china:Ch06_Renault_NC3129>	germany	</china:Ch06_Renault_NC3129>
+  <china:Ch06_Renault_NC3135>	usa	</china:Ch06_Renault_NC3135>
+  <china:Ch06_Renault_NC3126>	china	</china:Ch06_Renault_NC3126>
+  <china:Ch06_Renault_NC3128>	france	</china:Ch06_Renault_NC3128>
+  <china:Ch06_Renault_NC3134>	uk	</china:Ch06_Renault_NC3134>
+  <china:Ch06_Renault_NC3131>	japan	</china:Ch06_Renault_NC3131>
+  <china:Ch06_Renault_NC3127>	czech	</china:Ch06_Renault_NC3127>
+  <china:Ch06_Renault_NC3133>	sweden	</china:Ch06_Renault_NC3133>
+  <china:Ch06_Renault_NC3132>	poland	</china:Ch06_Renault_NC3132>
+  <china:Ch06_Renault_NC3130>	italy	</china:Ch06_Renault_NC3130>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <invisibilityFactor>	1	</invisibilityFactor>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	526	</id>
+      <texture>	vehicles/italy/Camouflage/Italy_Victim.dds	</texture>
+      <userString>	/label	</userString>
+      <description>	/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	35 32 29 255	</c0>
+          <c1>	35 32 29 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+    <camouflage>
+      <id>	527	</id>
+      <texture>	vehicles/italy/Camouflage/Italy_Victim.dds	</texture>
+      <userString>	/label	</userString>
+      <description>	/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	145 137 38 255	</c0>
+          <c1>	108 94 26 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+    <camouflage>
+      <id>	528	</id>
+      <texture>	vehicles/italy/Camouflage/Italy_Victim.dds	</texture>
+      <userString>	/label	</userString>
+      <description>	/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	112 35 33 255	</c0>
+          <c1>	77 33 32 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+    <camouflage>
+      <id>	529	</id>
+      <texture>	vehicles/italy/Camouflage/Italy_Victim.dds	</texture>
+      <userString>	/label	</userString>
+      <description>	/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	140 147 147 255	</c0>
+          <c1>	84 90 87 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
     </camouflage>
   </itemGroup>
 </list.xml>

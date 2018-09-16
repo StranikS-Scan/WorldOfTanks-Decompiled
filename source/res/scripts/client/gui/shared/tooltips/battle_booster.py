@@ -175,7 +175,7 @@ class StatusBlockConstructor(BattleBoosterTooltipBlockConstructor):
         block = list()
         module = self.module
         inventoryVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
-        totalInstalledVehicles = map(lambda x: x.shortUserName, module.getInstalledVehicles(inventoryVehicles))
+        totalInstalledVehicles = [ x.shortUserName for x in module.getInstalledVehicles(inventoryVehicles) ]
         installedVehicles = totalInstalledVehicles[:_MAX_INSTALLED_LIST_LEN]
         if installedVehicles:
             tooltipText = ', '.join(installedVehicles)
@@ -188,9 +188,6 @@ class StatusBlockConstructor(BattleBoosterTooltipBlockConstructor):
 
 
 class BoosterHasNoEffectBlockConstructor(BattleBoosterTooltipBlockConstructor):
-    """
-    Notification if the booster has not effect
-    """
 
     def construct(self):
         block = list()
@@ -218,6 +215,6 @@ class SimplifiedStatsBlockConstructor(BattleBoosterTooltipBlockConstructor):
                 value = parameter.value
                 if delta > 0:
                     value -= delta
-                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter, self.__isSituational), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name], isOptional=self.__isSituational), padding=formatters.packPadding(left=105, top=8)))
+                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simplifiedDeltaParameter(parameter, self.__isSituational), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name], isOptional=self.__isSituational), padding=formatters.packPadding(left=105, top=8)))
 
         return block

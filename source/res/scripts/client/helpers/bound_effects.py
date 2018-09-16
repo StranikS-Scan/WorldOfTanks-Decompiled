@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/bound_effects.py
+from functools import partial
 import BigWorld
 import helpers
-from functools import partial
 from helpers.EffectsList import EffectsListPlayer
 
 class StaticSceneBoundEffects(object):
@@ -13,12 +13,12 @@ class StaticSceneBoundEffects(object):
 
     def destroy(self):
         self._matProv = None
-        for id, elem in self._models.items():
+        for mID, elem in self._models.items():
             elem['effectsPlayer'].stop()
             model = elem['model']
             if model is not None:
                 BigWorld.player().delModel(model)
-            del self._models[id]
+            del self._models[mID]
 
         return
 
@@ -26,15 +26,15 @@ class StaticSceneBoundEffects(object):
         model = helpers.newFakeModel()
         model.position = position
         BigWorld.player().addModel(model)
-        dir = args.get('dir', None)
-        if dir is not None:
-            model.rotate(dir.yaw, (0.0, 1.0, 0.0))
+        direction = args.get('dir', None)
+        if direction is not None:
+            model.rotate(direction.yaw, (0.0, 1.0, 0.0))
         self.__incrementalEffectID += 1
         effectID = self.__incrementalEffectID
         desc = dict()
         desc['model'] = model
         desc['effectsPlayer'] = EffectsListPlayer(effectsList, keyPoints, **args)
-        desc['effectsPlayer'].play(model, None, partial(self.__callbackBeforeDestroy, effectID, callbackOnStop))
+        desc['effectsPlayer'].play(model, None, partial(self.__callbackBeforeDestroy, effectID, callbackOnStop), args.get('waitForKeyOff', False))
         self._models[effectID] = desc
         return effectID
 

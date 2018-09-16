@@ -13,7 +13,8 @@ from tutorial.control.context import GLOBAL_FLAG, GlobalStorage
 from tutorial.control.listener import AppLoaderListener
 from tutorial.doc_loader import loadDescriptorData
 from tutorial.hints_manager import HintsManager
-from tutorial.logger import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR, LOG_DEBUG
+from skeletons.gui.game_control import IBootcampController
 _SETTINGS = _settings.TUTORIAL_SETTINGS
 _LOBBY_DISPATCHER = _settings.TUTORIAL_LOBBY_DISPATCHER
 _BATTLE_DISPATCHER = _settings.TUTORIAL_BATTLE_DISPATCHER
@@ -58,17 +59,10 @@ class TutorialLoader(object):
         return
 
     def init(self):
-        """
-        Initialization of tutorial loader.
-        """
         self.__listener = AppLoaderListener()
         self.__listener.start(weakref.proxy(self))
 
     def fini(self):
-        """
-        Tutorial loader finalizes work: stops training process, saving state,
-        # if tutorial is running.
-        """
         if self.__listener is not None:
             self.__listener.stop()
         if self.__hintsManager is not None:
@@ -107,21 +101,6 @@ class TutorialLoader(object):
         return result
 
     def run(self, settingsID, state=None):
-        """
-        Try to run tutorial.
-        
-        :param settingsID: string containing settings ID of required tutorial.
-        :param state: dict(
-                reloadIfRun : bool - just reload tutorial if it's running,
-                afterBattle : bool - tutorial should load scenario that is played
-                    when player left battle,
-                initialChapter : str - name of initial chapter,
-                restoreIfRun: bool - current tutorial will be started again
-                    if required tutorial stop.
-                globalFlags : dict(GLOBAL_FLAG.* : bool,)
-            )
-        :return: True if tutorial has started, otherwise - False.
-        """
         settings = self.__settings.getSettings(settingsID)
         if settings is None:
             LOG_ERROR('Can not find settings', settingsID)
@@ -139,6 +118,7 @@ class TutorialLoader(object):
                         self.__doStop()
                     else:
                         GlobalStorage.setFlags(state.get('globalFlags', {}))
+                        LOG_DEBUG('invalidateFlags from TutorialLoader.run')
                         self.__tutorial.invalidateFlags()
                         return True
                 elif restoreIfRun and not isCurrent:
@@ -171,16 +151,24 @@ class TutorialLoader(object):
 
     def goToLobby(self):
         databaseID = account_helpers.getAccountDatabaseID()
-        assert databaseID, 'Acoount database ID is not defined'
+        if not databaseID:
+            raise UserWarning('Acoount database ID is not defined')
         isFirstStart = databaseID not in self.__loggedDBIDs
         self.__loggedDBIDs.add(databaseID)
         state = {'isFirstStart': isFirstStart,
          'isAfterBattle': self.__afterBattle}
         self.__setDispatcher(_LOBBY_DISPATCHER)
         self.__restoreID = _SETTINGS.QUESTS.id
-        self.__doAutoRun((_SETTINGS.OFFBATTLE, _SETTINGS.QUESTS), state)
-        self.__hintsManager = HintsManager()
-        self.__hintsManager.start()
+        bootcampController = dependency.instance(IBootcampController)
+        isInBootcampAccount = bootcampController.isInBootcampAccount()
+        if isInBootcampAccount:
+            selectedSettings = self.__doAutoRun((_SETTINGS.OFFBATTLE, _SETTINGS.QUESTS, _SETTINGS.BOOTCAMP_LOBBY), state)
+        else:
+            selectedSettings = None
+        if selectedSettings is None or selectedSettings.hintsEnabled:
+            self.__hintsManager = HintsManager()
+            self.__hintsManager.start()
+        return
 
     def stopOnceOnlyHint(self, itemID):
         if self.__hintsManager is not None:
@@ -210,7 +198,9 @@ class TutorialLoader(object):
     def __doAutoRun(self, seq, state):
         for settings in seq:
             if self.__doRun(settings, state):
-                return
+                return settings
+
+        return None
 
     def __doRun(self, settings, state):
         if not settings.enabled:
@@ -225,7 +215,7 @@ class TutorialLoader(object):
                 return False
             cache = _cache.TutorialCache(BigWorld.player().name)
             cache.read()
-            cache.setSpace(settings.space)
+            cache.setSpace(settings.space, ioEnabled=settings.cacheEnabled)
             if state.get('byRequest', False):
                 cache.setRefused(False)
             runCtx = RunCtx(cache, **state)
@@ -235,11 +225,12 @@ class TutorialLoader(object):
             self.__doStop()
             if self.__dispatcher is None:
                 self.__setDispatcher(settings.dispatcher)
-            tutorial = core.Tutorial(settings, descriptor)
-            result = tutorial.run(weakref.proxy(self.__dispatcher), runCtx)
-            if result:
-                self.__tutorial = tutorial
-                self.__tutorial.onStopped += self.__onTutorialStopped
+            self.__tutorial = core.Tutorial(settings, descriptor)
+            self.__tutorial.onStopped += self.__onTutorialStopped
+            result = self.__tutorial.run(weakref.proxy(self.__dispatcher), runCtx)
+            if not result:
+                self.__tutorial.onStopped -= self.__onTutorialStopped
+                self.__tutorial = None
             return result
 
     def __doStop(self):
@@ -252,6 +243,7 @@ class TutorialLoader(object):
     def __doStopHints(self):
         if self.__hintsManager is not None:
             self.__hintsManager.stop()
+            self.__hintsManager = None
         return
 
     def __doClear(self):
@@ -279,45 +271,30 @@ class TutorialLoader(object):
         return
 
     def __onTutorialStopped(self):
-        """
-        Listener for event Tutorial.onStopped.
-        """
         self.__doRestore()
 
 
 g_loader = None
 
 def init():
-    """Initialization tutorial loader.
-    
-    Routine must invoke in BWPersonality module.
-    """
     global g_loader
     if IS_TUTORIAL_ENABLED:
         g_loader = TutorialLoader()
+        LOG_DEBUG('g_loader init')
         g_loader.init()
 
 
 def fini():
-    """Tutorial loader finalizes work: stops training process, saving state,
-    if tutorial is running.
-    
-    Routine must invoke in BWPersonality module.
-    """
     global g_loader
     if IS_TUTORIAL_ENABLED:
         if g_loader is not None:
             g_loader.fini()
             g_loader = None
+            LOG_DEBUG('g_loader deinit')
     return
 
 
 def isTutorialRunning(tutorialID):
-    """Is tutorial running with specified tutorialID.
-    :param tutorialID: string containing unique ID of tutorial (_SettingsDesc.id in settings).
-    :return: True if tutorial is running with specified tutorialID, otherwise - False.
-    :rtype: bool.
-    """
     isRunning = False
     if IS_TUTORIAL_ENABLED:
         if g_loader is not None:

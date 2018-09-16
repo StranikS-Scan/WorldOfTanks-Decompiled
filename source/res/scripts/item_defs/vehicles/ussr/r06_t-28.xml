@@ -100,7 +100,7 @@
       <userString>	#ussr_vehicles:T-28_0	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	2270.0	</price>
+      <price>	2270	</price>
       <unlocks>
         <chassis>	T-28_A	  <cost>	1220	</cost>
         </chassis>
@@ -249,7 +249,7 @@
         <right>	vehicles/russian/R06_T-28/track/right.track	</right>
         <segmentLength>	0.132	</segmentLength>
         <segmentOffset>	0.228	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -372,7 +372,7 @@
       <userString>	#ussr_vehicles:T-28_A	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	5250.0	</price>
+      <price>	5250	</price>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -517,7 +517,7 @@
         <right>	vehicles/russian/R06_T-28/track/right.track	</right>
         <segmentLength>	0.132	</segmentLength>
         <segmentOffset>	0.223	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -644,7 +644,7 @@
       <shortUserString>	#ussr_vehicles:T-28_cylindrical_short	</shortUserString>
       <tags></tags>
       <level>	3	</level>
-      <price>	2160.0	</price>
+      <price>	2160	</price>
       <unlocks>
         <turret>	T-28_conic	  <cost>	1025	</cost>
         </turret>
@@ -679,7 +679,7 @@
       <guns>
         <_76mm_KT-28>	shared	  <maxAmmo>	69	</maxAmmo>
           <unlocks>
-            <gun>	_76mm_L-10	  <cost>	400.0	</cost>
+            <gun>	_76mm_L-10	  <cost>	400	</cost>
             </gun>
             <gun>	_57mm_ZiS-8	  <cost>	550	</cost>
             </gun>
@@ -730,7 +730,7 @@
             <maxPitch>	0 6 0.339116 6 0.402778 5 0.597222 5 0.660884 6 1 6	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_57mm_ZiS-4	  <cost>	2200.0	</cost>
+            <gun>	_57mm_ZiS-4	  <cost>	2200	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -935,7 +935,7 @@
       <shortUserString>	#ussr_vehicles:T-28_conic_short	</shortUserString>
       <tags></tags>
       <level>	4	</level>
-      <price>	4370.0	</price>
+      <price>	4370	</price>
       <armor>
         <armor_1>	25	</armor_1>
         <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -1182,7 +1182,7 @@
       </unlocks>
     </M-5-400>
     <M-17T>	shared	  <unlocks>
-        <engine>	M-17F	  <cost>	850.0	</cost>
+        <engine>	M-17F	  <cost>	850	</cost>
         </engine>
       </unlocks>
     </M-17T>
@@ -1197,7 +1197,7 @@
   </fuelTanks>
   <radios>
     <_71-TK-3>	shared	  <unlocks>
-        <radio>	_10R	  <cost>	610.0	</cost>
+        <radio>	_10R	  <cost>	610	</cost>
         </radio>
       </unlocks>
     </_71-TK-3>

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/util.py
-"""Various utility functions."""
 from collections import namedtuple, OrderedDict
 __unittest = True
 _MAX_LENGTH = 80
@@ -19,13 +18,6 @@ def strclass(cls):
 
 
 def sorted_list_difference(expected, actual):
-    """Finds elements in only one or the other of two, sorted input lists.
-    
-    Returns a two-element tuple of lists.    The first list contains those
-    elements in the "expected" list but not in the "actual" list, and the
-    second contains those elements in the "actual" list but not in the
-    "expected" list.    Duplicate elements in either input list are ignored.
-    """
     i = j = 0
     missing = []
     unexpected = []
@@ -65,12 +57,6 @@ def sorted_list_difference(expected, actual):
 
 
 def unorderable_list_difference(expected, actual, ignore_duplicate=False):
-    """Same behavior as sorted_list_difference but
-    for lists of unorderable items (like dicts).
-    
-    As it does a linear search per item (remove) it
-    has O(n*n) performance.
-    """
     missing = []
     unexpected = []
     while expected:
@@ -107,7 +93,6 @@ def unorderable_list_difference(expected, actual, ignore_duplicate=False):
 _Mismatch = namedtuple('Mismatch', 'actual expected value')
 
 def _count_diff_all_purpose(actual, expected):
-    """Returns list of (cnt_act, cnt_exp, elem) triples where the counts differ"""
     s, t = list(actual), list(expected)
     m, n = len(s), len(t)
     NULL = object()
@@ -146,7 +131,6 @@ def _count_diff_all_purpose(actual, expected):
 
 
 def _ordered_count(iterable):
-    """Return dict of element counts, in the order they were first seen"""
     c = OrderedDict()
     for elem in iterable:
         c[elem] = c.get(elem, 0) + 1
@@ -155,7 +139,6 @@ def _ordered_count(iterable):
 
 
 def _count_diff_hashable(actual, expected):
-    """Returns list of (cnt_act, cnt_exp, elem) triples where the counts differ"""
     s, t = _ordered_count(actual), _ordered_count(expected)
     result = []
     for elem, cnt_s in s.items():

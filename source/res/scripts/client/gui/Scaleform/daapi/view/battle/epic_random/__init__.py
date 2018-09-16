@@ -1,17 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic_random/__init__.py
-"""
-Change contents for specific Event Battle.
-By default, use Classic battle page
-"""
 from gui.Scaleform.daapi.view.battle.epic_random.page import EpicRandomPage
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.daapi.view.battle.shared.page import BattlePageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_CONTEXT_MENU_HANDLER_TYPE import BATTLE_CONTEXT_MENU_HANDLER_TYPE
-from gui.app_loader.settings import APP_NAME_SPACE
-from gui.shared import EVENT_BUS_SCOPE
 __all__ = ('EpicRandomPage',)
 
 def getContextMenuHandlers():

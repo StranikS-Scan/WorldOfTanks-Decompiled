@@ -7,7 +7,6 @@ from messenger.proto.shared_errors import ClientActionError
 from messenger_common_chat2 import MESSENGER_ACTION_IDS
 from gui.shared.rq_cooldown import REQUEST_SCOPE
 from gui.shared.events import CoolDownEvent, coolDownEventParams
-from debug_utils import LOG_WARNING
 
 class ContactsManagerProxy(MigrationProxy):
     __slots__ = ()
@@ -273,7 +272,7 @@ class XMPPContactsManagerProxy(ContactsManagerProxy):
         return result
 
     def createPrivateChannel(self, dbID, name):
-        result, error = self._proto.messages.startChatSession(dbID, name)
+        result, _ = self._proto.messages.startChatSession(dbID, name)
         return result
 
     def setNote(self, dbID, note):

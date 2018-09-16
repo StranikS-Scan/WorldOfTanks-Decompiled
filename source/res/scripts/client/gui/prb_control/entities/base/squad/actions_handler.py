@@ -10,13 +10,8 @@ from gui.prb_control.entities.base.ctx import SendInvitesCtx
 from gui.prb_control.entities.base.unit.actions_handler import AbstractActionsHandler
 from gui.prb_control.settings import REQUEST_TYPE, FUNCTIONAL_FLAG
 from messenger.storage import storage_getter
-from helpers import dependency
-from skeletons.new_year import ICustomizableObjectsManager
 
 class SquadActionsHandler(AbstractActionsHandler):
-    """
-    Squad base actions handler
-    """
 
     def __init__(self, entity):
         super(SquadActionsHandler, self).__init__(entity)
@@ -24,9 +19,6 @@ class SquadActionsHandler(AbstractActionsHandler):
 
     @storage_getter('users')
     def usersStorage(self):
-        """
-        User's storage getter property.
-        """
         return None
 
     def setUnitChanged(self):
@@ -63,9 +55,7 @@ class SquadActionsHandler(AbstractActionsHandler):
     def executeFini(self):
         prbType = self._entity.getEntityType()
         g_eventDispatcher.removeUnitFromCarousel(prbType)
-        customizableObjMgr = dependency.instance(ICustomizableObjectsManager)
-        if not customizableObjMgr.state:
-            g_eventDispatcher.loadHangar()
+        g_eventDispatcher.loadHangar()
 
     @vehicleAmmoCheck
     def execute(self):
@@ -111,33 +101,17 @@ class SquadActionsHandler(AbstractActionsHandler):
             self._showInviteSentMessage(accountsToInvite)
 
     def _loadWindow(self, ctx):
-        """
-        Routine musk be invoked to load squad's prebattle window
-        Args:
-            ctx: initialization's request context
-        """
         prbType = self._entity.getEntityType()
         g_eventDispatcher.loadSquad(prbType, ctx, self._getTeamReady())
 
     def _confirmCallback(self, result):
-        """
-        Set creator ready confirm dialog callback
-        Args:
-            result: confirm result
-        """
         if result:
             self._setCreatorReady()
 
     def _setCreatorReady(self):
-        """
-        Routine to set creator ready at system's level
-        """
         self._sendBattleQueueRequest(g_currentVehicle.item.invID if not self._entity.getPlayerInfo().isReady else 0)
 
     def _getTeamReady(self):
-        """
-        Routine to set team ready at system's level
-        """
         for slot in self._entity.getSlotsIterator(*self._entity.getUnit(unitMgrID=self._entity.getID())):
             if slot.player and not slot.player.isReady:
                 return False
@@ -145,9 +119,6 @@ class SquadActionsHandler(AbstractActionsHandler):
         return True
 
     def _showInviteSentMessage(self, accountsToInvite):
-        """
-        Shows invitation send result message
-        """
         getUser = self.usersStorage.getUser
         for dbID in accountsToInvite:
             user = getUser(dbID)
@@ -158,7 +129,4 @@ class SquadActionsHandler(AbstractActionsHandler):
         return
 
     def __onKickedFromQueue(self):
-        """
-        Listener for queue kick event. Is fix for for WOTD-43677
-        """
         SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)

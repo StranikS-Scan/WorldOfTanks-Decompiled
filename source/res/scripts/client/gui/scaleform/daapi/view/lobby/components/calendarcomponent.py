@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/components/CalendarComponent.py
-from debug_utils import LOG_DEBUG
 import BigWorld
 from Event import Event, EventManager
 from gui.Scaleform.daapi.view.meta.CalendarMeta import CalendarMeta

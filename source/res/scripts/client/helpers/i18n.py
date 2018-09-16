@@ -3,17 +3,17 @@
 import types
 import json
 import gettext
-import ResMgr
 from errno import ENOENT
 from collections import defaultdict
 from encodings import utf_8
+import ResMgr
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
+_I18N_KEY_PREFIX = '#'
+_I18N_KEY_SEPARATOR = ':'
+_I18N_EMPTY_FLAG = '?empty?'
+_I18N_EMPTY_TEXT = ''
 
 class _PyFileWrapper(object):
-    """Class is used to wrap binary data which was read from text MO-file using
-    WG specific ResMgr. Provides only 'read' method which is needed for
-    gettext.GNUTranslations class
-    """
 
     def __init__(self, bwDataSection):
         self._ds = bwDataSection
@@ -22,11 +22,22 @@ class _PyFileWrapper(object):
         return self._ds.asBinary
 
 
+class _Translations(gettext.GNUTranslations):
+
+    def gettext(self, message):
+        if message not in self._catalog:
+            return message
+        tmsg = self._catalog[message]
+        if self._output_charset:
+            return tmsg.encode(self._output_charset)
+        return tmsg.encode(self._charset) if self._charset else tmsg
+
+
 def _getTranslator(domain):
     mofile = ResMgr.openSection('text/LC_MESSAGES/%s.mo' % domain)
     if mofile is None:
         raise IOError(ENOENT, 'Translation file is not found', domain)
-    return gettext.GNUTranslations(_PyFileWrapper(mofile))
+    return _Translations(_PyFileWrapper(mofile))
 
 
 class _TranslatorsCache(defaultdict):
@@ -48,13 +59,13 @@ def convert(utf8String):
 
 
 def isValidKey(key):
-    return key and key[0] == '#' and ':' in key
+    return key and key[0] == _I18N_KEY_PREFIX and _I18N_KEY_SEPARATOR in key
 
 
 def doesTextExist(key):
     if not isValidKey(key):
         return False
-    moName, subkey = key[1:].split(':', 1)
+    moName, subkey = key[1:].split(_I18N_KEY_SEPARATOR, 1)
     if not moName or not subkey:
         return False
     translator = g_translators[moName]
@@ -64,15 +75,15 @@ def doesTextExist(key):
 
 def makeString(key, *args, **kwargs):
     try:
-        if not key or key[0] != '#':
+        if not key or key[0] != _I18N_KEY_PREFIX:
             return key
-        moName, subkey = key[1:].split(':', 1)
+        moName, subkey = key[1:].split(_I18N_KEY_SEPARATOR, 1)
         if not moName or not subkey:
             return key
         translator = g_translators[moName]
         text = translator.gettext(subkey)
-        if text == '?empty?':
-            text = ''
+        if text == _I18N_EMPTY_FLAG:
+            text = _I18N_EMPTY_TEXT
         if args:
             try:
                 text = text % args

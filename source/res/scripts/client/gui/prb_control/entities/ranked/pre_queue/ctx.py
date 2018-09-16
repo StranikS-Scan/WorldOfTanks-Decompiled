@@ -6,16 +6,10 @@ from gui.shared.utils.decorators import ReprInjector
 
 @ReprInjector.withParent(('getVehicleInventoryID', 'vInvID'), ('getWaitingID', 'waitingID'))
 class RankedQueueCtx(QueueCtx):
-    """
-    Enqueue ranked request context
-    """
 
     def __init__(self, vInventoryID, waitingID=''):
         super(RankedQueueCtx, self).__init__(entityType=QUEUE_TYPE.RANKED, waitingID=waitingID)
         self.__vInventoryID = vInventoryID
 
     def getVehicleInventoryID(self):
-        """
-        Gets selected vehicle inventory ID
-        """
         return self.__vInventoryID

@@ -1,16 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/CodeContext.py
-"""CodeContext - Extension to display the block context above the edit window
-
-Once code has scrolled off the top of a window, it can be difficult to
-determine which block you are in.  This extension implements a pane at the top
-of each IDLE edit window which provides block structure hints.  These hints are
-the lines which contain the block opening keywords, e.g. 'if', for the
-enclosing block.  The number of hint lines is determined by the numlines
-variable in the CodeContext section of config-extensions.def. Lines which do
-not open blocks are not shown in the context hints pane.
-
-"""
 import Tkinter
 from Tkconstants import TOP, LEFT, X, W, SUNKEN
 import re
@@ -77,12 +66,6 @@ class CodeContext:
         return
 
     def get_line_info(self, linenum):
-        """Get the line indent value, text, and any block start keyword
-        
-        If the line does not start a block, the keyword value is False.
-        The indentation of empty lines (or comment lines) is INFINITY.
-        
-        """
         text = self.text.get('%d.0' % linenum, '%d.end' % linenum)
         spaces, firstword = getspacesfirstword(text)
         opener = firstword in BLOCKOPENERS and firstword
@@ -93,13 +76,6 @@ class CodeContext:
         return (indent, text, opener)
 
     def get_context(self, new_topvisible, stopline=1, stopindent=0):
-        """Get context lines, starting at new_topvisible and working backwards.
-        
-        Stop when stopline or stopindent is reached. Return a tuple of context
-        data and the indent level at the top of the region inspected.
-        
-        """
-        assert stopline > 0
         lines = []
         lastindent = INFINITY
         for linenum in xrange(new_topvisible, stopline - 1, -1):
@@ -120,9 +96,6 @@ class CodeContext:
         return (lines, lastindent)
 
     def update_code_context(self):
-        """Update context information and lines visible in the context pane.
-        
-        """
         new_topvisible = int(self.text.index('@0,0').split('.')[0])
         if self.topvisible == new_topvisible:
             return

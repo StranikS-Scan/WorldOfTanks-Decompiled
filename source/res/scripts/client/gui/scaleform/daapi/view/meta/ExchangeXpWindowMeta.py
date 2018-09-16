@@ -1,17 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ExchangeXpWindowMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.exchange.BaseExchangeWindow import BaseExchangeWindow
 
 class ExchangeXpWindowMeta(BaseExchangeWindow):
 
     def as_vehiclesDataChangedS(self, data):
-        """
-        :param data: Represented by ExchangeXPWindowVO (AS)
-        """
         return self.flashObject.as_vehiclesDataChanged(data) if self._isDAAPIInited() else None
 
     def as_totalExperienceChangedS(self, value):

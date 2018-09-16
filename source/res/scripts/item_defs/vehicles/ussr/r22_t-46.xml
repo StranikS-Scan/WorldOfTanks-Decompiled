@@ -1,7 +1,6 @@
 <R22_T-46.xml>
   <crew>
     <commander>	radioman
-
 			loader	</commander>
     <driver></driver>
     <gunner></gunner>
@@ -233,7 +232,7 @@
         <right>	vehicles/russian/R22_T-46/track/right.track	</right>
         <segmentLength>	0.112	</segmentLength>
         <segmentOffset>	0.208	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -465,7 +464,7 @@
         <right>	vehicles/russian/R22_T-46/track/right.track	</right>
         <segmentLength>	0.112	</segmentLength>
         <segmentOffset>	0.208	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -949,7 +948,7 @@
   </turrets0>
   <engines>
     <V-4>	shared	  <unlocks>
-        <engine>	MT-5-1	  <cost>	700.0	</cost>
+        <engine>	MT-5-1	  <cost>	700	</cost>
         </engine>
       </unlocks>
     </V-4>
@@ -960,7 +959,7 @@
   </fuelTanks>
   <radios>
     <_71-TK-3>	shared	  <unlocks>
-        <radio>	_10R	  <cost>	610.0	</cost>
+        <radio>	_10R	  <cost>	610	</cost>
         </radio>
       </unlocks>
     </_71-TK-3>

@@ -9,11 +9,6 @@ from gui.Scaleform.daapi.view.meta.BrowserInViewComponentMeta import BrowserInVi
 from skeletons.gui.game_control import IBrowserController
 
 class BrowserInViewComponent(BrowserInViewComponentMeta):
-    """
-    Universal in-game browser component.
-    Now is using only for EventBoardsBrowserOverlay
-    In future may be merged with gui.Scaleform.daapi.view.lobby.hangar.BrowserView
-    """
     browserCtrl = dependency.descriptor(IBrowserController)
 
     def __init__(self):

@@ -599,6 +599,7 @@
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
@@ -793,7 +794,7 @@
   </turrets0>
   <engines>
     <Aster>	shared	  <unlocks>
-        <engine>	Somua_LM	  <cost>	400.0	</cost>
+        <engine>	Somua_LM	  <cost>	400	</cost>
         </engine>
       </unlocks>
     </Aster>
@@ -804,7 +805,7 @@
   </fuelTanks>
   <radios>
     <ER_52>	shared	  <unlocks>
-        <radio>	ER_53	  <cost>	610.0	</cost>
+        <radio>	ER_53	  <cost>	610	</cost>
         </radio>
       </unlocks>
     </ER_52>

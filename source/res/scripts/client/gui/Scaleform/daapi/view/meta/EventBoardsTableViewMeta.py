@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/EventBoardsTableViewMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.View import View
 
 class EventBoardsTableViewMeta(View):
@@ -24,27 +20,15 @@ class EventBoardsTableViewMeta(View):
         self._printOverrideError('showNextAward')
 
     def as_setHeaderDataS(self, data):
-        """
-        :param data: Represented by EventBoardsTableViewHeaderVO (AS)
-        """
         return self.flashObject.as_setHeaderData(data) if self._isDAAPIInited() else None
 
     def as_setStatusDataS(self, data):
-        """
-        :param data: Represented by EventBoardsTableViewStatusVO (AS)
-        """
         return self.flashObject.as_setStatusData(data) if self._isDAAPIInited() else None
 
     def as_setTableDataS(self, data):
-        """
-        :param data: Represented by EventBoardTableRendererContainerVO (AS)
-        """
         return self.flashObject.as_setTableData(data) if self._isDAAPIInited() else None
 
     def as_setTableHeaderDataS(self, data):
-        """
-        :param data: Represented by EventBoardTableHeaderVO (AS)
-        """
         return self.flashObject.as_setTableHeaderData(data) if self._isDAAPIInited() else None
 
     def as_setBackgroundS(self, source):
@@ -72,9 +56,6 @@ class EventBoardsTableViewMeta(View):
         return self.flashObject.as_setMaintenance(visible, message1, message2, buttonLabel) if self._isDAAPIInited() else None
 
     def as_setAwardsStripesS(self, data):
-        """
-        :param data: Represented by EventBoardTableRendererContainerVO (AS)
-        """
         return self.flashObject.as_setAwardsStripes(data) if self._isDAAPIInited() else None
 
     def as_setEmptyDataS(self, value):

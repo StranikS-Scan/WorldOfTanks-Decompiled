@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/test/runtktests.py
-"""
-Use this module to get and run all tk tests.
-
-Tkinter tests should live in a package inside the directory where this file
-lives, like test_tkinter.
-Extensions also should live in packages following the same rule as above.
-"""
 import os
 import sys
 import unittest
@@ -23,12 +16,6 @@ def is_package(path):
 
 
 def get_tests_modules(basepath=this_dir_path, gui=True, packages=None):
-    """This will import and yield modules whose names start with test_
-    and are inside packages found in the path starting at basepath.
-    
-    If packages is specified it should contain package names that want
-    their tests collected.
-    """
     py_ext = '.py'
     for dirpath, dirnames, filenames in os.walk(basepath):
         for dirname in list(dirnames):
@@ -49,10 +36,6 @@ def get_tests_modules(basepath=this_dir_path, gui=True, packages=None):
 
 
 def get_tests(text=True, gui=True, packages=None):
-    """Yield all the tests in the modules found by get_tests_modules.
-    
-    If nogui is True, only tests that do not require a GUI will be
-    returned."""
     attrs = []
     if text:
         attrs.append('tests_nogui')

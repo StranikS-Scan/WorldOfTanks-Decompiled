@@ -8,9 +8,6 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class GameMessagesController(IViewComponentsController):
-    """
-    Controller adds messages in UI.
-    """
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, setup):
@@ -20,13 +17,9 @@ class GameMessagesController(IViewComponentsController):
         return
 
     def getControllerID(self):
-        """ Gets unique ID of controller.
-        :return: integer.
-        """
         return BATTLE_CTRL_ID.GAME_MESSAGES_PANEL
 
     def startControl(self):
-        """Start to control states. It's just implementation of interface."""
         if self.__arenaVisitor.hasGameEndMessage():
             g_playerEvents.onRoundFinished += self.__onRoundFinished
 
@@ -40,7 +33,6 @@ class GameMessagesController(IViewComponentsController):
         return
 
     def stopControl(self):
-        """Stops to control states."""
         if self.__arenaVisitor.hasGameEndMessage():
             g_playerEvents.onRoundFinished -= self.__onRoundFinished
         self.__arenaVisitor = None

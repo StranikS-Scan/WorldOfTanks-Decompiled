@@ -227,7 +227,7 @@
         <segmentLength>	0.178	</segmentLength>
         <segmentOffset>	0.321	</segmentOffset>
         <segment2Offset>	0.081	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -511,7 +511,7 @@
         <segmentLength>	0.178	</segmentLength>
         <segmentOffset>	0.321	</segmentOffset>
         <segment2Offset>	0.081	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1101,7 +1101,7 @@
   </turrets0>
   <engines>
     <Continental_AV-1790-5B>	shared	  <unlocks>
-        <engine>	Continental_AV-1790-7C	  <cost>	45000.0	</cost>
+        <engine>	Continental_AV-1790-7C	  <cost>	45000	</cost>
         </engine>
       </unlocks>
     </Continental_AV-1790-5B>

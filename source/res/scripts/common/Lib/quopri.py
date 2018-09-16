@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/quopri.py
-"""Conversions to/from quoted-printable transport encoding as per RFC 1521."""
 __all__ = ['encode',
  'decode',
  'encodestring',
@@ -16,12 +15,6 @@ except ImportError:
     b2a_qp = None
 
 def needsquoting(c, quotetabs, header):
-    """Decide whether a particular character needs to be quoted.
-    
-    The 'quotetabs' flag indicates whether embedded tabs and spaces should be
-    quoted.  Note that line-ending tabs and spaces are always encoded, as per
-    RFC 1521.
-    """
     if c in ' \t':
         return quotetabs
     if c == '_':
@@ -30,21 +23,11 @@ def needsquoting(c, quotetabs, header):
 
 
 def quote(c):
-    """Quote a single character."""
     i = ord(c)
     return ESCAPE + HEX[i // 16] + HEX[i % 16]
 
 
 def encode(input, output, quotetabs, header=0):
-    """Read 'input', apply quoted-printable encoding, and write to 'output'.
-    
-    'input' and 'output' are files with readline() and write() methods.
-    The 'quotetabs' flag indicates whether embedded tabs and spaces should be
-    quoted.  Note that line-ending tabs and spaces are always encoded, as per
-    RFC 1521.
-    The 'header' flag indicates whether we are encoding spaces as _ as per
-    RFC 1522.
-    """
     if b2a_qp is not None:
         data = input.read()
         odata = b2a_qp(data, quotetabs=quotetabs, header=header)
@@ -103,9 +86,6 @@ def encodestring(s, quotetabs=0, header=0):
 
 
 def decode(input, output, header=0):
-    """Read 'input', apply quoted-printable decoding, and write to 'output'.
-    'input' and 'output' are files with readline() and write() methods.
-    If 'header' is true, decode underscore as space (per RFC 1522)."""
     if a2b_qp is not None:
         data = input.read()
         odata = a2b_qp(data, header=header)
@@ -167,12 +147,10 @@ def decodestring(s, header=0):
 
 
 def ishex(c):
-    """Return true if the character 'c' is a hexadecimal digit."""
     return '0' <= c <= '9' or 'a' <= c <= 'f' or 'A' <= c <= 'F'
 
 
 def unhex(s):
-    """Get the integer value of a hexadecimal number."""
     bits = 0
     for c in s:
         if '0' <= c <= '9':

@@ -7,14 +7,13 @@ _DO_DEBUG_LOG = False
 
 class VehicleDescrCrew(object):
 
-    def __init__(self, vehicleDescr, crewCompactDescrs, mainSkillQualifiersApplier, activityFlags=None, isFire=False, stunFactors=None):
+    def __init__(self, vehicleDescr, crewCompactDescrs, mainSkillQualifiersApplier, activityFlags=None, isFire=False):
         if activityFlags is None:
             activityFlags = [True] * len(crewCompactDescrs)
         self._vehicleDescr = vehicleDescr
         self._crewCompactDescrs = crewCompactDescrs
         self._activityFlags = activityFlags
         self._isFire = isFire
-        self._stunFactors = stunFactors
         self._mainSkillQualifiersApplier = mainSkillQualifiersApplier
         skills = self._validateAndComputeCrew()
         self._skills = skills
@@ -230,11 +229,8 @@ class VehicleDescrCrew(object):
 
     def _updateLoaderFactors(self, factor, baseAvgLevel):
         self._factors['gun/reloadTime'] = 1.0 / factor
-        if self._stunFactors is not None:
-            self._factors['gun/reloadTime'] *= self._stunFactors['reloadTime']
         if _DO_DEBUG_LOG:
             LOG_DEBUG("Factor/baseAvgLevel of skill '%s': (%s, %s)" % ('loader', factor, baseAvgLevel))
-        return
 
     def _updateGunnerFactors(self, factor, baseAvgLevel):
         factors = self._factors
@@ -242,15 +238,8 @@ class VehicleDescrCrew(object):
         factors['gun/rotationSpeed'] = factor
         factors['gun/aimingTime'] = 1.0 / factor
         self._shotDispFactor = 1.0 / factor
-        if self._stunFactors is not None:
-            sf = self._stunFactors
-            factors['turret/rotationSpeed'] *= sf['turretRotationSpeed']
-            factors['gun/rotationSpeed'] *= sf['gunRotationSpeed']
-            factors['gun/aimingTime'] *= sf['aimingTime']
-            self._shotDispFactor *= sf['shotDispersion']
         if _DO_DEBUG_LOG:
             LOG_DEBUG("Factor/baseAvgLevel of skill '%s': (%s, %s)" % ('gunner', factor, baseAvgLevel))
-        return
 
     def _updateRepairFactors(self, factor, baseAvgLevel):
         self._factors['repairSpeed'] = factor

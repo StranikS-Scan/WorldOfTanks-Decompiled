@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/ColorSchemeManager.py
 import BigWorld
-import Math
 from gui.Scaleform.framework.entities.abstract.ColorSchemeManagerMeta import ColorSchemeManagerMeta
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.doc_loaders import GuiColorsLoader
@@ -70,10 +69,6 @@ class BattleColorSchemeManager(ColorSchemeManager, IArenaVehiclesController):
         self.__set3DFlagsColors()
 
     def invalidateArenaInfo(self):
-        """
-        Invalidate arena info listener means that even base info about player
-        could be invalidated: in our case team is important.
-        """
         self.__set3DFlagsColors()
 
     def _populate(self):
@@ -106,7 +101,7 @@ class BattleColorSchemeManager(ColorSchemeManager, IArenaVehiclesController):
         else:
             teamsOnArena = arenaDP.getTeamsOnArena()
             for teamIdx in [0] + teamsOnArena:
-                BigWorld.wg_setFlagEmblem(teamIdx, 'system/maps/wg_emblem.dds', Math.Vector4(0.0, 0.1, 0.5, 0.9))
+                BigWorld.wg_setFlagEmblem(teamIdx, BigWorld.wg_defaultFlagEmblemPath, BigWorld.wg_defaultFlagEmblemCoords)
 
             return
 

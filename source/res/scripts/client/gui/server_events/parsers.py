@@ -3,7 +3,6 @@
 import weakref
 from gui.server_events import formatters, conditions
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
@@ -31,9 +30,7 @@ class ConditionsParser(object):
         return
 
     def forEachNodeInTree(self, handler):
-        assert handler is not None
         self.__forEachNode(self.getConditions(), handler)
-        return
 
     def _handleCondition(self, name, data, uniqueName, group):
         return None
@@ -134,11 +131,6 @@ class AccountRequirements(ConditionsParser):
 
 
 class TokenQuestAccountRequirements(AccountRequirements):
-    """ Account requirements of TokenQuest
-    
-    We need a special token conditions that acts like a regular one but
-    is always available (see WOTD-81694). Other than that they work the same.
-    """
 
     def _handleCondition(self, name, data, uniqueName, group):
         return conditions.TokenQuestToken(uniqueName, data) if name == 'token' else super(TokenQuestAccountRequirements, self)._handleCondition(name, data, uniqueName, group)

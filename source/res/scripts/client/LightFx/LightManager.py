@@ -13,7 +13,7 @@ from messenger.ext.player_helpers import isCurrentPlayer
 from skeletons.connection_mgr import IConnectionManager
 g_instance = None
 
-class LightManager:
+class LightManager(object):
     UPDATE_TIMEOUT = 0.5
     ALL_LIGHTS = 'All'
     LOCATIONS_MASKS = {'Zone_LeftSpeaker': 1,
@@ -146,7 +146,7 @@ class LightManager:
         return
 
 
-class GameLights:
+class GameLights(object):
 
     @staticmethod
     def startTicks():
@@ -170,7 +170,7 @@ from gui.prb_control.dispatcher import g_prbLoader
 from messenger.proto.events import g_messengerEvents
 _chatActionsHandler = None
 
-class _ChatActionsHandler:
+class _ChatActionsHandler(object):
     connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):

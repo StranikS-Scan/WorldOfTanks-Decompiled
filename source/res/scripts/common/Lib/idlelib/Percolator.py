@@ -32,22 +32,16 @@ class Percolator:
         self.top.delete(index1, index2)
 
     def insertfilter(self, filter):
-        assert isinstance(filter, Delegator)
-        assert filter.delegate is None
         filter.setdelegate(self.top)
         self.top = filter
-        return
 
     def removefilter(self, filter):
-        assert isinstance(filter, Delegator)
-        assert filter.delegate is not None
         f = self.top
         if f is filter:
             self.top = filter.delegate
             filter.setdelegate(None)
         else:
             while f.delegate is not filter:
-                assert f is not self.bottom
                 f.resetcache()
                 f = f.delegate
 

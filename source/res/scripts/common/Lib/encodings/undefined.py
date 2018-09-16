@@ -1,16 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/undefined.py
-""" Python 'undefined' Codec
-
-    This codec will always raise a ValueError exception when being
-    used. It is intended for use by the site.py file to switch off
-    automatic string to Unicode coercion.
-
-Written by Marc-Andre Lemburg (mal@lemburg.com).
-
-(c) Copyright CNRI, All Rights Reserved. NO WARRANTY.
-
-"""
 import codecs
 
 class Codec(codecs.Codec):

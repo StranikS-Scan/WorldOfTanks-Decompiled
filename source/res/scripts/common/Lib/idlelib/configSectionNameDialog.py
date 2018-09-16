@@ -1,22 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/configSectionNameDialog.py
-"""
-Dialog that allows user to specify a new config file section name.
-Used to get new highlight theme and keybinding set names.
-The 'return value' for the dialog, used two placed in configDialog.py,
-is the .result attribute set in the Ok and Cancel methods.
-"""
 from Tkinter import *
 import tkMessageBox
 
 class GetCfgSectionNameDialog(Toplevel):
 
     def __init__(self, parent, title, message, used_names, _htest=False):
-        """
-        message - string, informational message to display
-        used_names - string collection, names already in use for validity check
-        _htest - bool, change box location when running htest
-        """
         Toplevel.__init__(self, parent)
         self.configure(borderwidth=5)
         self.resizable(height=FALSE, width=FALSE)
@@ -53,9 +42,6 @@ class GetCfgSectionNameDialog(Toplevel):
         self.buttonCancel.pack(side=RIGHT, padx=5)
 
     def name_ok(self):
-        """ After stripping entered name, check that it is a  sensible
-        ConfigParser file section name. Return it if it is, '' if not.
-        """
         name = self.name.get().strip()
         if not name:
             tkMessageBox.showerror(title='Name Error', message='No name specified.', parent=self)

@@ -70,7 +70,6 @@ class UnitsListItem(object):
         if unit:
             creatorDBID = unit.getCreatorDBID()
             if self.creator.dbID != creatorDBID:
-                isChanged = True
                 data = unit.getCreator()
                 if data:
                     self.creator = PlayerUnitInfo(creatorDBID, self.cfdUnitID, unit, **data)

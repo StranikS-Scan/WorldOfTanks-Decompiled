@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/mac_romanian.py
-""" Python Character Mapping Codec mac_romanian generated from 'MAPPINGS/VENDORS/APPLE/ROMANIAN.TXT' with gencodec.py.
-
-"""
 import codecs
 
 class Codec(codecs.Codec):

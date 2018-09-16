@@ -46,6 +46,15 @@ class SearchChannelsProcessor(SearchProcessor, ClientEventsHandler):
     def getSearchResultLimit(self):
         return CHANNEL_LIMIT.MAX_SEARCH_RESULTS
 
+    def unregisterHandlers(self):
+        raise UserWarning('This method should not be reached in this context')
+
+    def registerHandlers(self):
+        raise UserWarning('This method should not be reached in this context')
+
+    def getSearchCoolDown(self):
+        raise UserWarning('This method should not be reached in this context')
+
     def __onIQReceived(self, iqID, iqType, pyGlooxTag):
         if self._lastRequestID != iqID:
             return
@@ -69,8 +78,6 @@ class SearchUserRoomsProcessor(SearchChannelsProcessor):
 
 
 class SearchUsersProcessor(SearchProcessor, ClientEventsHandler):
-    """ Search users by name using the XMPP
-    """
 
     def __init__(self):
         super(SearchUsersProcessor, self).__init__()
@@ -93,12 +100,6 @@ class SearchUsersProcessor(SearchProcessor, ClientEventsHandler):
         return None
 
     def find(self, token, **kwargs):
-        """
-        Process find request
-        :param token: search token (username prefix)
-        :param kwargs: args
-        :return: None
-        """
         error = self.__checkCooldown(CLIENT_ACTION_ID.FIND_USERS_BY_PREFIX)
         if error:
             self._onSearchFailed(error.getMessage())
@@ -118,27 +119,18 @@ class SearchUsersProcessor(SearchProcessor, ClientEventsHandler):
             self._onSearchFailed(error.getMessage())
 
     def getSearchCoolDown(self):
-        """
-        Get cooldown between requests
-        :return: cooldown in seconds
-        """
         return self.__limits.getRequestCooldown()
 
     def getSearchResultLimit(self):
-        """
-        Get limit for search query size
-        :return: limit for search query size
-        """
         return self.__limits.getMaxResultSize()
 
+    def unregisterHandlers(self):
+        raise UserWarning('This method should not be reached in this context')
+
+    def registerHandlers(self):
+        raise UserWarning('This method should not be reached in this context')
+
     def __onIQReceived(self, iqID, iqType, pyGlooxTag):
-        """
-        Process iq response form xmpp server
-        :param iqID: iq id sequence number
-        :param iqType: iq type (get/set)
-        :param pyGlooxTag: xmpp parser wrapper
-        :return: None
-        """
         if self._lastRequestID != iqID:
             return
         if iqType == IQ_TYPE.ERROR:
@@ -154,11 +146,6 @@ class SearchUsersProcessor(SearchProcessor, ClientEventsHandler):
             self._onSearchTokenComplete(iqID, users)
 
     def __OnSuccesResponse(self, pyGlooxTag):
-        """
-        Parse response object, and return user list
-        :param pyGlooxTag: xmpp parser wrapper
-        :return:
-        """
         result = NicknamePrefixSearchHandler().handleTag(pyGlooxTag)
         users = []
         for userInfo in result:
@@ -174,11 +161,6 @@ class SearchUsersProcessor(SearchProcessor, ClientEventsHandler):
         return users
 
     def __checkCooldown(self, actionID):
-        """
-        Check if cooldown was set for action
-        :param actionID: action id
-        :return: None, if cooldown was not set, else return ChatCoolDownError object
-        """
         error = None
         if self.__cooldown.isInProcess(actionID):
             error = ChatCoolDownError(actionID, self.__cooldown.getDefaultCoolDown())

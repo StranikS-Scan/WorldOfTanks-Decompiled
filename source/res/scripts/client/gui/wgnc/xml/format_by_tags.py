@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/format_by_tags.py
+import re
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
-import re
 _RE_FLAGS = re.M | re.U
 
 class _TagFormatter(object):
@@ -14,16 +14,16 @@ class _TagFormatter(object):
 
     def format(self, text):
         try:
-            all = re.findall(self._compiled, text)
+            results = re.findall(self._compiled, text)
         except re.error:
             return text
 
-        for tag, formatted in self._prepare(all):
+        for tag, formatted in self._prepare(results):
             text = text.replace(tag, formatted)
 
         return text
 
-    def _prepare(self, all):
+    def _prepare(self, results):
         raise NotImplementedError
 
     def _makePattern(self, name):
@@ -32,8 +32,8 @@ class _TagFormatter(object):
 
 class _ValueFormatter(_TagFormatter):
 
-    def _prepare(self, all):
-        for found in all:
+    def _prepare(self, results):
+        for found in results:
             if len(found) != 2:
                 continue
             tag, value = found
@@ -150,8 +150,8 @@ class _LinkFormatter(_TagFormatter):
     def __init__(self):
         super(_LinkFormatter, self).__init__('link')
 
-    def _prepare(self, all):
-        for found in all:
+    def _prepare(self, results):
+        for found in results:
             if len(found) != 4:
                 continue
             tag, _, actions, label = found

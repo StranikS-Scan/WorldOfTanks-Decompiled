@@ -22,12 +22,9 @@ def getStyle(currency):
     if currency in _CURRENCY_TO_TEXT_STYLE:
         return _CURRENCY_TO_TEXT_STYLE[currency]
     LOG_WARNING('Text style is not set for the following currency: ', currency)
-    return lambda txt: str(txt)
+    return str
 
 
 def applyAll(currency, value):
-    """
-        returns fully formatted text to which applied both proper BW formatter and text style
-    """
     style = getStyle(currency)
     return style(getBWFormatter(currency)(value))

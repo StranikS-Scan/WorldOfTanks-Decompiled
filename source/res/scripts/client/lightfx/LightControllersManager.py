@@ -3,7 +3,7 @@
 from Controllers.HealthController import HealthController
 import LightManager
 
-class LightControllersManager:
+class LightControllersManager(object):
 
     def __init__(self, vehicle):
         self.__healthController = HealthController(vehicle.health, vehicle.typeDescriptor.maxHealth)

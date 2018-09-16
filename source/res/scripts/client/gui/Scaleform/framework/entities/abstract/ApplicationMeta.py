@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/ApplicationMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class ApplicationMeta(BaseDAAPIComponent):
@@ -56,11 +52,11 @@ class ApplicationMeta(BaseDAAPIComponent):
     def setTutorialMgr(self, mgr):
         self._printOverrideError('setTutorialMgr')
 
-    def setBootcampMgr(self, mgr):
-        self._printOverrideError('setBootcampMgr')
-
     def setImageManager(self, mgr):
         self._printOverrideError('setImageManager')
+
+    def setGraphicsOptimizationManager(self, mgr):
+        self._printOverrideError('setGraphicsOptimizationManager')
 
     def handleGlobalKeyEvent(self, command):
         self._printOverrideError('handleGlobalKeyEvent')
@@ -81,9 +77,6 @@ class ApplicationMeta(BaseDAAPIComponent):
         return self.flashObject.as_registerManagers() if self._isDAAPIInited() else None
 
     def as_loadLibrariesS(self, list):
-        """
-        :param list: Represented by Vector.<String> (AS)
-        """
         return self.flashObject.as_loadLibraries(list) if self._isDAAPIInited() else None
 
     def as_updateStageS(self, w, h, scale):

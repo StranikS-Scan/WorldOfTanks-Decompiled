@@ -13,7 +13,6 @@ from helpers import i18n
 from skeletons.gui.shared import IItemsCache
 
 class CybersportToolTipData(ToolTipBaseData):
-    """Cyber sport class for tool tip context."""
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):

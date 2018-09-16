@@ -19,16 +19,23 @@ class TutorialCache(FileLocalCache):
     def getSpace(self):
         return self.__space
 
-    def setSpace(self, space, init=None):
+    def setSpace(self, space, init=None, ioEnabled=True):
+        if self.__space is not None and not self._ioEnabled:
+            del self.__cache[self.__space]
         self.__space = space
-        self.__cache.setdefault(space, {'finished': False,
+        self._ioEnabled = ioEnabled
+        defaultValues = {'finished': False,
          'refused': False,
          'afterBattle': False,
          'flags': {},
          'currentChapter': None,
          'localCtx': None,
          'playerXPLevel': PLAYER_XP_LEVEL.NEWBIE,
-         'startOnNextLogin': True})
+         'startOnNextLogin': True}
+        if self._ioEnabled:
+            self.__cache.setdefault(space, defaultValues)
+        else:
+            self.__cache[space] = defaultValues
         if init is not None:
             cache = self.__current()
             for flag, value in init.iteritems():
@@ -128,5 +135,4 @@ class TutorialCache(FileLocalCache):
             self.__cache = cache
 
     def __current(self):
-        assert self.__space is not None, 'Space must be set'
         return self.__cache[self.__space]

@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/SystemMessageMeta.py
+from collections import namedtuple
 from gui.Scaleform.daapi.view.dialogs import IDialogMeta
 from gui.Scaleform.locale.AOGAS import AOGAS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.shared import events
 from web_stubs import i18n
-from collections import namedtuple
 
-class SESSION_CONTROL_TYPE:
+class SESSION_CONTROL_TYPE(object):
     AOGAS = 'AOGAS'
     KOREA_PARENTAL_CONTROL = 'KOREA_PARENTAL_CONTROL'
 
@@ -54,3 +54,6 @@ class SystemMessageMeta(IDialogMeta):
         self.__notificationVO = None
         self.__settingsVO = None
         return
+
+    def getViewScopeType(self):
+        raise UserWarning('This method should not be reached in this context')

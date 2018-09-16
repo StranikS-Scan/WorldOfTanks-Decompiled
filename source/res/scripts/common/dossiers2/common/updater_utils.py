@@ -157,12 +157,6 @@ def getBlockSize(updateCtx, block):
 
 
 def getBlockCompDescr(updateCtx, block):
-    """
-    Gets block compact descriptor.
-    :param updateCtx: context with general info.
-    :param block: block name.
-    :return: compact descriptor
-    """
     header = updateCtx['header']
     compDescr = updateCtx['dossierCompDescr']
     blockIndex = updateCtx['blocksLayout'].index(block)
@@ -175,12 +169,6 @@ def getBlockCompDescr(updateCtx, block):
 
 
 def setBlockCompDescr(updateCtx, block, blockCompDescr):
-    """
-    Sets block compact descriptor.
-    :param updateCtx: context with general info.
-    :param block: block name.
-    :param blockCompDescr: compact descriptor.
-    """
     header = updateCtx['header']
     compDescr = updateCtx['dossierCompDescr']
     blockIndex = updateCtx['blocksLayout'].index(block)

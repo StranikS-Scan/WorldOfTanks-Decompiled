@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehicleCompareConfiguratorViewMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_base import VehicleCompareConfiguratorBaseView
 
 class VehicleCompareConfiguratorViewMeta(VehicleCompareConfiguratorBaseView):
@@ -30,15 +26,9 @@ class VehicleCompareConfiguratorViewMeta(VehicleCompareConfiguratorBaseView):
         self._printOverrideError('changeCrewLevel')
 
     def as_setDevicesDataS(self, data):
-        """
-        :param data: Represented by Vector.<DeviceSlotVO> (AS)
-        """
         return self.flashObject.as_setDevicesData(data) if self._isDAAPIInited() else None
 
     def as_setAmmoS(self, shells):
-        """
-        :param shells: Represented by Vector.<ShellButtonVO> (AS)
-        """
         return self.flashObject.as_setAmmo(shells) if self._isDAAPIInited() else None
 
     def as_setSelectedAmmoIndexS(self, index):
@@ -54,9 +44,6 @@ class VehicleCompareConfiguratorViewMeta(VehicleCompareConfiguratorBaseView):
         return self.flashObject.as_setCrewAttentionIconVisible(value) if self._isDAAPIInited() else None
 
     def as_setSkillsS(self, skills):
-        """
-        :param skills: Represented by Vector.<VehConfSkillVO> (AS)
-        """
         return self.flashObject.as_setSkills(skills) if self._isDAAPIInited() else None
 
     def as_setTopModulesSelectedS(self, value):

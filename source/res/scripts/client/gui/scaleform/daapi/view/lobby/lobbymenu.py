@@ -8,19 +8,18 @@ from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getCou
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
 from gui.Scaleform.genConsts.MENU_CONSTANTS import MENU_CONSTANTS
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles, icons
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import i18n, getShortClientVersion, dependency
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gameplay import IGameplayLogic
 from skeletons.gui.game_control import IPromoController
-from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.game_control import IManualController
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from PlayerEvents import g_playerEvents as events
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -29,11 +28,8 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework import ViewTypes
 from gui.prb_control import prbEntityProperty
 
-def _getVersionMessage(promo):
-    return {'message': '{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())),
-     'label': i18n.makeString(MENU.PROMO_TOARCHIVE),
-     'promoEnabel': promo.isPatchPromoAvailable(),
-     'tooltip': TOOLTIPS.LOBBYMENU_VERSIONINFOBUTTON}
+def _getVersionMessage():
+    return ('{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())),)
 
 
 class LobbyMenu(LobbyMenuMeta):
@@ -48,9 +44,9 @@ class LobbyMenu(LobbyMenuMeta):
     def prbEntity(self):
         pass
 
-    def versionInfoClick(self):
-        self.promo.showVersionsPatchPromo()
+    def postClick(self):
         self.destroy()
+        self.promo.showFieldPost()
 
     def settingsClick(self):
         event_dispatcher.showSettingsWindow(redefinedKeyMode=False)
@@ -110,7 +106,10 @@ class LobbyMenu(LobbyMenuMeta):
         elif not constants.IS_SHOW_SERVER_STATS:
             state = MENU_CONSTANTS.STATE_HIDE_SERVER_STATS_ITEM
         self.as_setMenuStateS(state)
-        self.as_setVersionMessageS(_getVersionMessage(self.promo))
+        self.as_setVersionMessageS('{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())))
+        postIconClose = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_POST_CLOSE, 26, 22, -5, 0)
+        postIconOpen = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_POST_OPEN, 26, 22, -5, 0)
+        self.as_setPostButtonIconsS(postIconClose, postIconOpen)
         bootcampIcon = RES_ICONS.MAPS_ICONS_BOOTCAMP_MENU_MENUBOOTCAMPICON
         bootcampIconSource = icons.makeImageTag(bootcampIcon, 33, 27, -8, 0)
         if self.bootcamp.isInBootcamp():
@@ -127,6 +126,7 @@ class LobbyMenu(LobbyMenuMeta):
             self.as_showBootcampButtonS(False)
         if not self.manualController.isActivated() or self.bootcamp.isInBootcamp() or self.__isInQueue():
             self.as_showManualButtonS(False)
+        self.__setPostFieldButtonVisible(self.promo.isActive())
 
     def _dispose(self):
         self.__removeListeners()
@@ -139,20 +139,34 @@ class LobbyMenu(LobbyMenuMeta):
         userLogin = getattr(BigWorld.player(), 'name', '')
         if userLogin == '':
             return
-        newSettingsCnt = getCountNewSettings()
-        if newSettingsCnt > 0:
-            self.as_setCounterS([{'componentId': 'settingsBtn',
-              'count': str(newSettingsCnt)}])
-        else:
-            self.as_removeCounterS(['settingsBtn'])
+        toShow, toHide = [], []
+        counts = {'settingsBtn': getCountNewSettings(),
+         'postBtn': self.promo.getPromoCount()}
+        for componentID, count in counts.iteritems():
+            if count > 0:
+                toShow.append({'componentId': componentID,
+                 'count': str(count)})
+            toHide.append(componentID)
+
+        if toShow:
+            self.as_setCounterS(toShow)
+        if toHide:
+            self.as_removeCounterS(toHide)
 
     def __addListeners(self):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.promo.onPromoCountChanged += self.__updateNewSettingsCount
 
     def __removeListeners(self):
+        self.promo.onPromoCountChanged -= self.__updateNewSettingsCount
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
 
     def __onServerSettingChanged(self, diff):
         if 'isManualEnabled' in diff:
             manualButtonEnabled = diff['isManualEnabled']
             self.as_showManualButtonS(manualButtonEnabled)
+        if 'isFieldPostEnabled' in diff:
+            self.__setPostFieldButtonVisible(diff['isFieldPostEnabled'])
+
+    def __setPostFieldButtonVisible(self, isVisible):
+        self.as_setPostButtonVisibleS(isVisible and not self.__isInQueue())

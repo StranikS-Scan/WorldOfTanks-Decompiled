@@ -4,12 +4,9 @@
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	france	</nations>
       </include>
-      <exclude>
-        <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <style>
       <id>	36	</id>
@@ -143,12 +140,9 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	france	</nations>
       </include>
-      <exclude>
-        <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <style>
       <id>	149	</id>
@@ -207,12 +201,13 @@
       <season>	ALL	</season>
       <historical>	false	</historical>
       <modelsSet>	WH	</modelsSet>
+      <tags>	hiddenInUI	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	563	</id>
+              <id>	1	</id>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
               <appliedTo>	4368	</appliedTo>

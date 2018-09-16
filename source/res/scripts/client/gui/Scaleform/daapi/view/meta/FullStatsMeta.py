@@ -3,4 +3,18 @@
 from gui.Scaleform.daapi.view.battle.classic.base_stats import StatsBase
 
 class FullStatsMeta(StatsBase):
-    pass
+
+    def onSelectQuest(self, questID):
+        self._printOverrideError('onSelectQuest')
+
+    def as_setActiveTabS(self, tabIndex):
+        return self.flashObject.as_setActiveTab(tabIndex) if self._isDAAPIInited() else None
+
+    def as_questProgressPerformS(self, data):
+        return self.flashObject.as_questProgressPerform(data) if self._isDAAPIInited() else None
+
+    def as_resetActiveTabS(self):
+        return self.flashObject.as_resetActiveTab() if self._isDAAPIInited() else None
+
+    def as_updateProgressTrackingS(self, data):
+        return self.flashObject.as_updateProgressTracking(data) if self._isDAAPIInited() else None

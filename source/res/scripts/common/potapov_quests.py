@@ -4,9 +4,11 @@ import time
 import ResMgr
 import struct
 import quest_xml_source
-from items import _xml, ItemsPrices
+import nations
+from items import _xml, ItemsPrices, vehicles
 from items.vehicles import VEHICLE_CLASS_TAGS
-from constants import ITEM_DEFS_PATH, IS_CLIENT, IS_WEB, EVENT_TYPE
+from constants import ITEM_DEFS_PATH, IS_CLIENT, IS_WEB, EVENT_TYPE, PERSONAL_MISSION_FREE_TOKEN_NAME, PERSONAL_MISSION_2_FREE_TOKEN_NAME, PERSONAL_MISSION_FINAL_PAWN_COST, PERSONAL_MISSION_2_FINAL_PAWN_COST
+from nations import ALLIANCES_TAGS
 from soft_exception import SoftException
 if IS_CLIENT:
     from helpers import i18n
@@ -14,21 +16,32 @@ elif IS_WEB:
     from web_stubs import *
 POTAPOV_QUEST_XML_PATH = ITEM_DEFS_PATH + 'potapov_quests/'
 _FALLOUT_BATTLE_TAGS = frozenset(('classic', 'multiteam'))
-_ALLOWED_TAG_NAMES = ('initial', 'final') + tuple(_FALLOUT_BATTLE_TAGS) + tuple(VEHICLE_CLASS_TAGS)
+_ALLOWED_TAG_NAMES = ('initial', 'final') + tuple(_FALLOUT_BATTLE_TAGS) + tuple(VEHICLE_CLASS_TAGS) + tuple(ALLIANCES_TAGS)
 g_cache = None
 g_tileCache = None
 g_seasonCache = None
 
 class PQ_BRANCH():
     REGULAR = 0
-    FALLOUT = 1
+    PERSONAL_MISSION_2 = 2
     NAME_TO_TYPE = {'regular': REGULAR,
-     'fallout': FALLOUT}
+     'pm2': PERSONAL_MISSION_2}
     TYPE_TO_NAME = dict(zip(NAME_TO_TYPE.values(), NAME_TO_TYPE.keys()))
 
 
-def isPotapovQuestEnabled(gameParams, branch):
-    return not (branch == PQ_BRANCH.REGULAR and not gameParams['misc_settings']['isRegularQuestEnabled'] or branch == PQ_BRANCH.FALLOUT and not gameParams['misc_settings']['isFalloutQuestEnabled'])
+PM_BRANCH_TO_FREE_TOKEN_NAME = {PQ_BRANCH.REGULAR: PERSONAL_MISSION_FREE_TOKEN_NAME,
+ PQ_BRANCH.PERSONAL_MISSION_2: PERSONAL_MISSION_2_FREE_TOKEN_NAME}
+PM_BRANCH_TO_FINAL_PAWN_COST = {PQ_BRANCH.REGULAR: PERSONAL_MISSION_FINAL_PAWN_COST,
+ PQ_BRANCH.PERSONAL_MISSION_2: PERSONAL_MISSION_2_FINAL_PAWN_COST}
+
+def isPotapovQuestBranchEnabled(gameParams, branch):
+    if branch == PQ_BRANCH.REGULAR:
+        return gameParams['misc_settings']['isRegularQuestEnabled']
+    return gameParams['misc_settings']['isPM2QuestEnabled'] if branch == PQ_BRANCH.PERSONAL_MISSION_2 else False
+
+
+def isPotapovQuestEnabled(gameParams, pqType):
+    return pqType.tileID not in gameParams['misc_settings']['disabledPMOperations']
 
 
 class PQ_STATE():
@@ -131,11 +144,11 @@ class TileCache(object):
                 _xml.raiseWrongXml(ctx, 'id', 'is not unique')
             chainsCount = _xml.readInt(ctx, tsection, 'chainsCount', 1, 15)
             chainsCountToUnlockNext = _xml.readInt(ctx, tsection, 'chainsCountToUnlockNext', 0, 15)
-            nextTileID = _xml.readInt(ctx, tsection, 'nextTileID', 0, 15)
+            nextTileIDs = frozenset(map(int, _xml.readString(ctx, tsection, 'nextTileIDs').split()))
             achievements = {}
             basicInfo = {'name': tname,
              'chainsCount': chainsCount,
-             'nextTileID': nextTileID,
+             'nextTileIDs': nextTileIDs,
              'chainsCountToUnlockNext': chainsCountToUnlockNext,
              'questsInChain': _xml.readInt(ctx, tsection, 'questsInChain', 1, 100),
              'price': ItemsPrices._tuplePrice(_xml.readPrice(ctx, tsection, 'price')),
@@ -253,6 +266,9 @@ class PQCache(object):
             if questBranchName == 'fallout':
                 if 0 == len(tags & _FALLOUT_BATTLE_TAGS):
                     _xml.raiseWrongXml(ctx, 'tags', 'quest fallout type is not specified')
+            if questBranchName == 'pm2':
+                if 0 == len(tags & ALLIANCES_TAGS):
+                    _xml.raiseWrongXml(ctx, 'tags', 'quest vehicle class is not specified')
             if IS_CLIENT or IS_WEB:
                 basicInfo['userString'] = i18n.makeString(qsection.readString('userString'))
                 basicInfo['shortUserString'] = i18n.makeString(qsection.readString('shortUserString'))
@@ -324,20 +340,48 @@ class PQCache(object):
         return
 
 
+class ClassifierByClass(object):
+
+    def __init__(self, questTags):
+        vehClasses = list(questTags & VEHICLE_CLASS_TAGS)
+        if len(vehClasses) != 1:
+            raise SoftException('Potapov quest with tags %s has more than one vehicle class' % str(questTags))
+        self.vehClass = vehClasses[0]
+
+    @property
+    def classificationAttr(self):
+        return self.vehClass
+
+    def matchVehicle(self, vehicleType):
+        vehClass = tuple(vehicles.VEHICLE_CLASS_TAGS & vehicleType.tags)[0]
+        return vehClass == self.vehClass
+
+
+class ClassifierByAlliance(object):
+
+    def __init__(self, questTags):
+        alliances = list(questTags & ALLIANCES_TAGS)
+        if len(alliances) != 1:
+            raise SoftException('Potapov quest with tags %s has more than one alliance' % str(questTags))
+        self.alliance = alliances[0]
+
+    @property
+    def classificationAttr(self):
+        return self.alliance
+
+    def matchVehicle(self, vehicleType):
+        nationID = vehicleType.id[0]
+        return nations.NAMES[nationID] in nations.ALLIANCE_TO_NATIONS[self.alliance]
+
+
 class PQType(object):
-    __slots__ = ('id', 'tags', 'isInitial', 'isFinal', 'branch', 'vehClasses', 'falloutTypes', 'tileID', 'chainID', 'internalID', 'requiredUnlocks', 'mainQuestID', 'mainAwardListQuestID', 'addQuestID', 'addAwardListQuestID', 'mainQuestInfo', 'addQuestInfo', 'userString', 'shortUserString', 'description', 'advice', 'minLevel', 'maxLevel', 'rewardByDemand', 'mainAwardListQuestInfo', 'addAwardListQuestInfo')
+    __slots__ = ('id', 'tags', 'isInitial', 'isFinal', 'branch', 'classifier', 'tileID', 'chainID', 'internalID', 'requiredUnlocks', 'generalQuestID', 'mainQuestID', 'mainAwardListQuestID', 'addQuestID', 'addAwardListQuestID', 'mainQuestInfo', 'addQuestInfo', 'userString', 'shortUserString', 'description', 'advice', 'minLevel', 'maxLevel', 'rewardByDemand', 'mainAwardListQuestInfo', 'addAwardListQuestInfo')
 
     def __init__(self, basicInfo):
         self.id = basicInfo['id']
         self.tags = tags = basicInfo['tags']
         self.isInitial = 'initial' in tags
         self.isFinal = 'final' in tags
-        vehClasses = list(tags & VEHICLE_CLASS_TAGS)
-        vehClasses.sort()
-        self.vehClasses = tuple(vehClasses)
-        falloutTypes = list(tags & _FALLOUT_BATTLE_TAGS)
-        falloutTypes.sort()
-        self.falloutTypes = tuple(falloutTypes)
         self.minLevel = basicInfo['minLevel']
         self.maxLevel = basicInfo['maxLevel']
         self.rewardByDemand = basicInfo['rewardByDemand']
@@ -346,10 +390,17 @@ class PQType(object):
         self.chainID = basicInfo['chainID']
         self.internalID = basicInfo['internalID']
         self.requiredUnlocks = basicInfo['requiredUnlocks']
+        self.generalQuestID = basicInfo['name']
         self.mainQuestID = basicInfo['mainQuestID']
         self.mainAwardListQuestID = basicInfo['mainAwardListQuestID']
         self.addQuestID = basicInfo['addQuestID']
         self.addAwardListQuestID = basicInfo['addAwardListQuestID']
+        if self.branch == PQ_BRANCH.REGULAR:
+            self.classifier = ClassifierByClass(self.tags)
+        elif self.branch == PQ_BRANCH.PERSONAL_MISSION_2:
+            self.classifier = ClassifierByAlliance(self.tags)
+        else:
+            raise SoftException('wrong potapov quest branch: %i' % self.branch)
         if IS_CLIENT or IS_WEB:
             self.mainQuestInfo = basicInfo['mainQuestInfo']
             self.mainAwardListQuestInfo = basicInfo['mainAwardListQuestInfo']
@@ -361,11 +412,7 @@ class PQType(object):
             self.advice = basicInfo['advice']
 
     def getMajorTag(self):
-        if self.branch == PQ_BRANCH.REGULAR:
-            return self.vehClasses[0]
-        if self.branch == PQ_BRANCH.FALLOUT:
-            return self.falloutTypes[0]
-        raise SoftException('wrong potapov quest branch: %i' % self.branch)
+        return self.classifier.classificationAttr
 
     def maySelectQuest(self, unlockedQuests):
         return len(self.requiredUnlocks - frozenset(unlockedQuests)) == 0
@@ -383,8 +430,8 @@ class PQType(object):
         if not self.isFinal:
             return (False, [])
         tileInfo = g_tileCache.getTileInfo(self.tileID)
-        nextTileID = tileInfo['nextTileID']
-        if nextTileID == 0:
+        nextTileIDs = tileInfo['nextTileIDs']
+        if len(nextTileIDs) == 0:
             return (False, [])
         chainsCountToUnlockNext = tileInfo['chainsCountToUnlockNext']
         if chainsCountToUnlockNext == 0:
@@ -460,6 +507,9 @@ class PQStorage(object):
             packedValues = [ ((id & 1023) << 6) + ((flags & 7) << 3) + (state & 7) for id, (flags, state) in quests.iteritems() ]
             self.__compDescr = struct.pack(('<%sH' % (size + 1)), size, *packedValues)
             return self.__compDescr
+
+    def iteritems(self):
+        return self.__quests.iteritems()
 
 
 def _readTags(xmlCtx, section, subsectionName):

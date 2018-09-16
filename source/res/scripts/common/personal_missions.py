@@ -7,17 +7,19 @@ g_campaignsCache = None
 PERSONAL_MISSIONS_XML_PATH = potapov_quests.POTAPOV_QUEST_XML_PATH
 
 class PM_BRANCH(potapov_quests.PQ_BRANCH):
-    pass
+    ACTIVE_BRANCHES = (potapov_quests.PQ_BRANCH.REGULAR, potapov_quests.PQ_BRANCH.PERSONAL_MISSION_2)
 
 
 def isPersonalMissionsEnabled(gameParams, branch):
-    return not potapov_quests.isPotapovQuestEnabled(gameParams, branch)
+    return not potapov_quests.isPotapovQuestBranchEnabled(gameParams, branch)
 
 
 class PM_STATE(potapov_quests.PQ_STATE):
     pass
 
 
+PM_BRANCH_TO_FREE_TOKEN_NAME = potapov_quests.PM_BRANCH_TO_FREE_TOKEN_NAME
+PM_BRANCH_TO_FINAL_PAWN_COST = potapov_quests.PM_BRANCH_TO_FINAL_PAWN_COST
 PM_REWARD_BY_DEMAND = potapov_quests.PQ_REWARD_BY_DEMAND
 
 def init():

@@ -65,31 +65,36 @@ def updateFashions(fashions, vDesc, isDamaged, outfit):
 
 def getCamoPrereqs(outfit, vDesc):
     result = []
-    for partIdx, descId in enumerate(TankPartNames.ALL):
-        container = outfit.getContainer(partIdx)
-        slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
-        if not slot:
-            continue
-        camouflage = slot.getItem()
-        if camouflage:
-            result.append(camouflage.texture)
-            exclusionMap = vDesc.type.camouflage.exclusionMask
-            compDesc = getattr(vDesc, descId, None)
-            if compDesc is not None:
-                if compDesc.camouflage.exclusionMask:
-                    exclusionMap = compDesc.camouflage.exclusionMask
-            result.append(exclusionMap)
+    if not outfit:
+        return result
+    else:
+        for partIdx, descId in enumerate(TankPartNames.ALL):
+            container = outfit.getContainer(partIdx)
+            slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
+            if not slot:
+                continue
+            camouflage = slot.getItem()
+            if camouflage:
+                result.append(camouflage.texture)
+                exclusionMap = vDesc.type.camouflage.exclusionMask
+                compDesc = getattr(vDesc, descId, None)
+                if compDesc is not None:
+                    if compDesc.camouflage.exclusionMask:
+                        exclusionMap = compDesc.camouflage.exclusionMask
+                result.append(exclusionMap)
 
-    return result
+        return result
 
 
 def getCamo(outfit, containerId, vDesc, descId, isDamaged, default=None):
     result = default
-    container = outfit.getContainer(containerId)
-    slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
-    if not slot:
+    if not outfit:
         return result
     else:
+        container = outfit.getContainer(containerId)
+        slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
+        if not slot:
+            return result
         camouflage = slot.getItem()
         component = slot.getComponent()
         if camouflage:

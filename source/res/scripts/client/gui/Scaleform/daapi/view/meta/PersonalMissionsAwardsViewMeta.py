@@ -7,9 +7,6 @@ class PersonalMissionsAwardsViewMeta(View):
     def showVehiclePreview(self):
         self._printOverrideError('showVehiclePreview')
 
-    def changeOperation(self, operationID):
-        self._printOverrideError('changeOperation')
-
     def closeView(self):
         self._printOverrideError('closeView')
 

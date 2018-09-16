@@ -186,7 +186,7 @@ class DecorationRequester(SubRequester):
                 if str(decorationID) not in _DEFAULT_DECORATIONS:
                     decorations.append((decorationID, DECORATION_SIZES.BONUS))
             if quest.getType() not in EVENT_TYPE.SHARED_QUESTS:
-                for size in (DECORATION_SIZES.CARDS, DECORATION_SIZES.DETAILS, DECORATION_SIZES.DETAILS_EX):
+                for size in (DECORATION_SIZES.CARDS, DECORATION_SIZES.DETAILS):
                     decorations.append((decorationID, size))
 
         for action in self._eventsCache.getActions().itervalues():

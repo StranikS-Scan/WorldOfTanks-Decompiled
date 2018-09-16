@@ -50,7 +50,7 @@ def readModelsSets(xmlCtx, section, subsectionName):
 
 
 def readUserText(section):
-    return shared_components.I18nComponent(section.readString('userString'), section.readString('description'), section.readString('shortUserString'))
+    return shared_components.I18nComponent(section.readString('userString'), section.readString('description'), section.readString('shortUserString'), section.readString('shortDescriptionSpecial'), section.readString('longDescriptionSpecial'))
 
 
 def readDeviceHealthParams(xmlCtx, section, subsectionName='', withHysteresis=True):

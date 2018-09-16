@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/Flash.py
 import json
+import logging
 import weakref
 from collections import defaultdict
 import GUI
 import _Scaleform
 from gui.Scaleform import SCALEFORM_SWF_PATH
-from debug_utils import LOG_DEBUG, LOG_CODEPOINT_WARNING, LOG_ERROR, LOG_GUI
+_logger = logging.getLogger(__name__)
 
 class Flash(object):
 
@@ -30,13 +31,13 @@ class Flash(object):
         return
 
     def __del__(self):
-        LOG_DEBUG('Deleted: %s' % self)
+        _logger.debug('Deleted: %s', self)
 
     def __onLogGui(self, logType, msg, *kargs):
-        LOG_GUI('%s.GUI' % str(logType), msg, kargs)
+        _logger.debug('%s.GUI: %r, %r', str(logType), msg, kargs)
 
     def __onLogGuiFormat(self, logType, msg, *kargs):
-        LOG_GUI('%s.GUI' % str(logType), msg % kargs)
+        _logger.debug('%s.GUI: %r', str(logType), msg % kargs)
 
     @property
     def movie(self):
@@ -75,7 +76,7 @@ class Flash(object):
         try:
             self.movie.invoke(('_root._level0.' + path, value))
         except Exception:
-            LOG_ERROR('Error to set movie variable "' + '_root._level0.' + path + '"')
+            _logger.error('Error to set movie variable "_root._level0.%s"', path)
 
     def getMember(self, path):
         return getattr(self.movie, path, None)
@@ -156,7 +157,7 @@ class Flash(object):
                 callback(arg)
 
         else:
-            LOG_DEBUG('FsCommandCallback "%s" not found' % command, arg)
+            _logger.debug('FsCommandCallback "%s" not found: %r', command, arg)
         return result
 
     def handleExternalInterfaceCallback(self, command, args):
@@ -172,7 +173,7 @@ class Flash(object):
                 callback(*args)
 
         else:
-            LOG_DEBUG('ExternalInterfaceCallback "%s" not found' % command, args)
+            _logger.debug('ExternalInterfaceCallback "%s" not found: %r', command, args)
         return result
 
 
@@ -186,7 +187,7 @@ class _FsCommandObj(object):
         if obj:
             obj.handleFsCommandCallback(command, args)
         else:
-            LOG_CODEPOINT_WARNING('weak object has been already destroyed.')
+            _logger.warning('Weak object has been already destroyed.')
 
 
 class _ExternalInterfaceObj(object):
@@ -199,4 +200,4 @@ class _ExternalInterfaceObj(object):
         if obj:
             obj.handleExternalInterfaceCallback(command, args)
         else:
-            LOG_CODEPOINT_WARNING('weak object has been already destroyed.')
+            _logger.warning('Weak object has been already destroyed.')

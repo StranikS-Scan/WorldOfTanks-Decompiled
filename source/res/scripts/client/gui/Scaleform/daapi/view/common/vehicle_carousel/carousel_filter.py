@@ -22,6 +22,14 @@ class _CarouselFilter(object):
         self._clientSections = ()
         self._criteriesGroups = ()
 
+    @property
+    def criteria(self):
+        criteria = REQ_CRITERIA.EMPTY
+        for group in self._criteriesGroups:
+            criteria |= group.criteria
+
+        return criteria
+
     def apply(self, vehicle):
         for group in self._criteriesGroups:
             if group.isApplicableFor(vehicle):
@@ -86,6 +94,10 @@ class CriteriesGroup(object):
     def __init__(self):
         self._criteria = None
         return
+
+    @property
+    def criteria(self):
+        return self._criteria
 
     def apply(self, vehicle):
         return self._criteria(vehicle)

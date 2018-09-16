@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/gui_constants.py
 from shared_utils import CONST_CONTAINER
-from gui.Scaleform.framework import ViewTypes
 
 class ViewStatus(CONST_CONTAINER):
     UNDEFINED = 0
@@ -33,6 +32,7 @@ class ViewFlags(CONST_CONTAINER):
 
     @classmethod
     def getViewType(cls, flags):
+        from gui.Scaleform.framework import ViewTypes
         flags = flags & ViewFlags.VIEW_TYPE_MASK
         if flags == ViewFlags.VIEW:
             return ViewTypes.INVALID
@@ -65,6 +65,13 @@ class ViewFlags(CONST_CONTAINER):
         return ViewTypes.CURSOR if flags == ViewFlags.CURSOR_VIEW else None
 
 
+class ViewEventType(CONST_CONTAINER):
+    UNDEFINED = 0
+    TOOLTIP = 1
+    POPUP = 2
+    CONTEXT_MENU = 4
+
+
 class WindowStatus(CONST_CONTAINER):
     UNDEFINED = 0
     CREATED = 1
@@ -82,9 +89,10 @@ class WindowFlags(CONST_CONTAINER):
     BROWSER = 32 | WINDOW
     POP_UP = 48 | WINDOW
     TOOL_TIP = 64 | WINDOW
-    OVERLAY = 80 | WINDOW
-    SERVICE_WINDOW = 96 | GLOBAL_WINDOW
-    WAITING = 112 | GLOBAL_WINDOW
+    CONTEXT_MENU = 80 | WINDOW
+    OVERLAY = 96 | WINDOW
+    SERVICE_WINDOW = 112 | GLOBAL_WINDOW
+    WAITING = 128 | GLOBAL_WINDOW
     WINDOW_TYPE_MASK = 255
     WINDOW_MINIMIZED = 256
     WINDOW_MAXIMIZED = 512

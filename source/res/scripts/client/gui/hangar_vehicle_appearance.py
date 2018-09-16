@@ -295,7 +295,10 @@ class HangarVehicleAppearance(ComponentSystem):
             if season == SeasonType.UNDEFINED or not vehicle.hasOutfitWithItems(season):
                 season = vehicle.getAnyOutfitSeason()
             g_tankActiveCamouflage[vehicle.intCD] = season
-            return vehicle.getOutfit(season)
+            outfit = vehicle.getOutfit(season)
+            if not outfit:
+                outfit = self.itemsFactory.createOutfit()
+            return outfit
 
     def __assembleModel(self):
         from vehicle_systems import model_assembler

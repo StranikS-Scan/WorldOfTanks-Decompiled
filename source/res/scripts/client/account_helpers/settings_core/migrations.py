@@ -5,6 +5,7 @@ import constants
 from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS
 from adisp import process, async
 from debug_utils import LOG_DEBUG
+from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCache
 from skeletons.gui.game_control import IIGRController
@@ -398,6 +399,10 @@ def _migrateTo41(core, data, initialized):
     data['gameData'][GAME.SHOW_DAMAGE_ICON] = True
 
 
+def _migrateTo42(core, data, initialized):
+    data['uiStorage'][PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -556,6 +561,10 @@ _versions = ((1,
   False),
  (41,
   _migrateTo41,
+  False,
+  False),
+ (42,
+  _migrateTo42,
   False,
   False))
 

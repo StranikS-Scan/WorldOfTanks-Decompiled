@@ -53,10 +53,6 @@ class TrackCrashAuditionWWISE(TrackCrashAudition):
     def __init__(self, trackCenterMProvs):
         self.__trackCenterMProvs = trackCenterMProvs
 
-    def deactivate(self):
-        self.__trackCenterMProvs = None
-        return
-
     def playCrashSound(self, isLeft=True, restore=False):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:

@@ -3,10 +3,9 @@
 from gui.Scaleform.daapi.view.dialogs import IDialogMeta
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.server_events.events_helpers import AwardSheetPresenter
 from gui.shared import events
 from helpers.i18n import makeString as _ms
-from shared_utils import first
 
 class UseAwardSheetDialogMeta(IDialogMeta):
 
@@ -42,7 +41,7 @@ class UseAwardSheetDialogMeta(IDialogMeta):
         return _ms(PERSONAL_MISSIONS.USEAWARDSHEETWINDOW_NEEDAMOUNT)
 
     def getIcon(self):
-        return RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_FREE_SHEET_MID
+        return AwardSheetPresenter.getIcon(AwardSheetPresenter.Size.BIG)
 
     def isAvailable(self):
         return self.__quest.isUnlocked() and self.__quest.hasRequiredVehicles()
@@ -52,8 +51,8 @@ class UseAwardSheetDialogMeta(IDialogMeta):
 
     def getWarningText(self):
         if not self.__quest.hasRequiredVehicles():
-            vehClass = first(self.__quest.getVehicleClasses())
-            return _ms(PERSONAL_MISSIONS.USEAWARDSHEETWINDOW_NOVEHICLE, vehicleClass=_ms('#menu:classes/short/' + vehClass))
+            classifier = self.__quest.getQuestClassifier().classificationAttr
+            return _ms(PERSONAL_MISSIONS.sheetNoVehicleWarning(self.__quest.getQuestBranchName()), vehicleClass=_ms('#menu:classes/short/' + classifier))
         return _ms(PERSONAL_MISSIONS.USEAWARDSHEETWINDOW_LOCKED) if not self.__quest.isUnlocked() else ''
 
     def getFreeSheets(self):

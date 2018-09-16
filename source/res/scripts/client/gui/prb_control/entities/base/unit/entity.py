@@ -388,7 +388,8 @@ class _UnitIntroEntity(_UnitEntity):
     def getPlayerInfo(self, dbID=None, unitMgrID=None):
         if dbID is None:
             dbID = account_helpers.getAccountDatabaseID()
-        return unit_items.PlayerUnitInfo(dbID, unitMgrID, None)
+        _, unit = self.getUnit(unitMgrID=unitMgrID, safe=True)
+        return unit_items.PlayerUnitInfo(dbID, unitMgrID, unit)
 
     def isPlayerJoined(self, ctx):
         return ctx.getCtrlType() is CTRL_ENTITY_TYPE.UNIT and ctx.hasFlags(self.getFunctionalFlags())

@@ -23,7 +23,7 @@ class _ClassicComponentsConfig(ComponentsConfig):
            BATTLE_VIEW_ALIASES.PREBATTLE_TIMER,
            BATTLE_VIEW_ALIASES.PLAYERS_PANEL,
            BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL,
-           BATTLE_VIEW_ALIASES.COLOR_SETTINGS_TIP_PANEL,
+           BATTLE_VIEW_ALIASES.HINT_PANEL,
            DynamicAliases.DRONE_MUSIC_PLAYER,
            DynamicAliases.PERIOD_MUSIC_LISTENER)),
          (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER)),
@@ -68,7 +68,7 @@ class ClassicPage(SharedPage):
                 radialMenu.hide()
             return
 
-    def _toggleFullStats(self, isShown, permanent=None):
+    def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
         manager = self.app.containerManager
         if manager.isModalViewsIsExists():
             return
@@ -86,26 +86,49 @@ class ClassicPage(SharedPage):
                         self._fsToggling.update(self.as_getComponentsVisibilityS())
                     if permanent is not None:
                         self._fsToggling.difference_update(permanent)
+                    if tabIndex is not None:
+                        fullStats.setActiveTabIndex(tabIndex)
                     self._setComponentsVisibility(visible={self._fullStatsAlias}, hidden=self._fsToggling)
                 else:
                     self._setComponentsVisibility(visible=self._fsToggling, hidden={self._fullStatsAlias})
+                    if tabIndex is not None:
+                        fullStats.setActiveTabIndex(None)
                     self._fsToggling.clear()
                 if self._isInPostmortem:
                     self.as_setPostmortemTipsVisibleS(not isShown)
                     if self.__hideDamageLogPanel():
                         self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL})
+            if isShown:
+                self.app.enterGuiControlMode(BATTLE_VIEW_ALIASES.FULL_STATS, cursorVisible=True, enableAiming=False)
+            else:
+                self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.FULL_STATS)
             return
 
-    def _handleHideSettingsTip(self, _):
-        super(ClassicPage, self)._handleHideSettingsTip(_)
-        self._fsToggling.discard(BATTLE_VIEW_ALIASES.COLOR_SETTINGS_TIP_PANEL)
+    def _processHint(self, needShow):
+        alias = BATTLE_VIEW_ALIASES.HINT_PANEL
+        if needShow:
+            if self._isBattleLoading:
+                self._blToggling.add(alias)
+            elif self._fsToggling:
+                self._fsToggling.add(alias)
+            elif not self.as_isComponentVisibleS(alias):
+                self._setComponentsVisibility(visible={alias})
+        elif self._isBattleLoading:
+            self._blToggling.discard(alias)
+        elif self._fsToggling:
+            self._fsToggling.discard(alias)
+        elif self.as_isComponentVisibleS(alias):
+            self._setComponentsVisibility(hidden={alias})
 
     def _handleRadialMenuCmd(self, event):
         isDown = event.ctx['isDown']
         self._toggleRadialMenu(isDown)
 
     def _handleToggleFullStats(self, event):
-        self._toggleFullStats(event.ctx['isDown'])
+        self._toggleFullStats(event.ctx['isDown'], tabIndex=0)
+
+    def _handleToggleFullStatsQuestProgress(self, event):
+        self._toggleFullStats(event.ctx['isDown'], tabIndex=1)
 
     def _onBattleLoadingStart(self):
         self._toggleFullStats(isShown=False)
@@ -130,10 +153,11 @@ class ClassicPage(SharedPage):
 
     def _changeCtrlMode(self, ctrlMode):
         components = {BATTLE_VIEW_ALIASES.DAMAGE_PANEL, BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL}
-        ctrl = self.sessionProvider.shared.vehicleState
-        vehicle = ctrl.getControllingVehicle()
-        if vehicle.typeDescriptor.hasSiegeMode:
-            components.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
+        if ctrlMode != CTRL_MODE_NAME.POSTMORTEM:
+            ctrl = self.sessionProvider.shared.vehicleState
+            vehicle = ctrl.getControllingVehicle()
+            if vehicle.typeDescriptor.hasSiegeMode:
+                components.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
         if ctrlMode == CTRL_MODE_NAME.VIDEO:
             self._setComponentsVisibility(hidden=components)
         else:

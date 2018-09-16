@@ -22,6 +22,7 @@ class WAITING(object):
     BUYBERTHS = '#waiting:buyBerths'
     UPDATEINVENTORY = '#waiting:updateInventory'
     SELLITEM = '#waiting:sellItem'
+    SELLITEMS = '#waiting:sellItems'
     BUYITEM = '#waiting:buyItem'
     BUYANDINSTALL = '#waiting:buyAndInstall'
     UPDATESHOP = '#waiting:updateShop'

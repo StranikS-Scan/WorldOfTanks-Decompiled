@@ -483,114 +483,6 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         return
 
 
-class PhysicalObjectPlugin(common.EntriesPlugin, IVehiclesAndPositionsController):
-
-    def __init__(self, parent):
-        super(PhysicalObjectPlugin, self).__init__(parent, clazz=entries.VehicleEntry)
-
-    def start(self):
-        super(PhysicalObjectPlugin, self).start()
-        ctrl = self.sessionProvider.shared.feedback
-        if ctrl is not None:
-            ctrl.onMinimapPhysicalObjectAdded += self.__onMinimapPhysicalObjectAdded
-            ctrl.onMinimapPhysicalObjectRemoved += self.__onMinimapPhysicalObjectRemoved
-            ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived
-        self.sessionProvider.addArenaCtrl(self)
-        return
-
-    def stop(self):
-        self.sessionProvider.removeArenaCtrl(self)
-        ctrl = self.sessionProvider.shared.feedback
-        if ctrl is not None:
-            ctrl.onMinimapPhysicalObjectAdded -= self.__onMinimapPhysicalObjectAdded
-            ctrl.onMinimapPhysicalObjectRemoved -= self.__onMinimapPhysicalObjectRemoved
-            ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived
-        super(PhysicalObjectPlugin, self).stop()
-        return
-
-    def __onMinimapPhysicalObjectAdded(self, eProxy, guiProps):
-        entityID = eProxy.id
-        if entityID not in self._entries:
-            model = self.__addEntryToPool(entityID, VEHICLE_LOCATION.AOI)
-            self.__setPhysicalObjectInfo(entityID, model, True, guiProps, 'football', True)
-            self.__setInAoI(model, True)
-            self.__setGUILabel(model, guiProps)
-        self.__showPhysicalObject(entityID, VEHICLE_LOCATION.AOI)
-
-    def __onMinimapPhysicalObjectRemoved(self, entityID):
-        if entityID not in self._entries:
-            return
-        entry = self._entries[entityID]
-        if entry.getLocation() == VEHICLE_LOCATION.AOI:
-            self.__hidePhysicalObject(entry)
-        else:
-            LOG_DEBUG('Location of physical object entry is not in AoI', entry)
-
-    def __showPhysicalObject(self, entityID, location):
-        matrix = matrix_factory.makePhysicalObjectMPByLocation(entityID, location)
-        entry = self._entries[entityID]
-        if matrix is None:
-            self.__setActive(entry, False)
-            return
-        else:
-            self.__setLocationAndMatrix(entry, location, matrix)
-            self.__setActive(entry, True)
-            return
-
-    def __hidePhysicalObject(self, entry):
-        matrix = entry.getMatrix()
-        if matrix is not None:
-            matrix = matrix_factory.convertToLastSpottedVehicleMP(matrix)
-        else:
-            LOG_WARNING('Matrix of vehicle entry is None, vehicle features is skipped', entry)
-        self.__setLocationAndMatrix(entry, VEHICLE_LOCATION.UNDEFINED, matrix)
-        self.__setActive(entry, False)
-        return
-
-    def __onMinimapFeedbackReceived(self, eventID, entityID, value):
-        if eventID == FEEDBACK_EVENT_ID.MINIMAP_SHOW_MARKER and entityID in self._entries:
-            entry = self._entries[entityID]
-            self._invoke(entry.getID(), 'setAnimation', value)
-
-    def __setPhysicalObjectInfo(self, entityID, entry, isEnemy, guiProps, classTag, isAlive):
-        if classTag is not None:
-            entry.setVehicleInfo(isEnemy, guiProps, classTag, isAlive)
-            self._invoke(entry.getID(), 'setVehicleInfo', entityID, classTag, '', guiProps.name(), None)
-        return
-
-    def __setLocationAndMatrix(self, entry, location, matrix=None):
-        entry.setLocation(location)
-        if matrix is not None:
-            entry.setMatrix(matrix)
-            self._setMatrix(entry.getID(), matrix)
-        return
-
-    def __addEntryToPool(self, entityID, location=VEHICLE_LOCATION.AOI, positions=None):
-        if location != VEHICLE_LOCATION.UNDEFINED:
-            matrix = matrix_factory.makePhysicalObjectMPByLocation(entityID, location)
-            if matrix is None:
-                location = VEHICLE_LOCATION.UNDEFINED
-        else:
-            matrix, location = matrix_factory.getVehicleMPAndLocation(entityID, positions or {})
-        active = location != VEHICLE_LOCATION.UNDEFINED
-        model = self._addEntryEx(entityID, _S_NAME.VEHICLE, _C_NAME.PERSONAL, matrix=matrix, active=active)
-        if model is not None:
-            model.setLocation(location)
-        return model
-
-    def __setGUILabel(self, entry, guiLabel):
-        if entry.setGUILabel(guiLabel):
-            self._invoke(entry.getID(), 'setGUILabel', guiLabel)
-
-    def __setActive(self, entry, active):
-        if entry.setActive(active):
-            self._setActive(entry.getID(), active)
-
-    def __setInAoI(self, entry, isInAoI):
-        if entry.setInAoI(isInAoI):
-            self._invoke(entry.getID(), 'setInAoI', isInAoI)
-
-
 class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController):
     __slots__ = ('__playerVehicleID', '__isObserver', '__aoiToFarCallbacksIDs', '__destroyCallbacksIDs', '__flags', '__showDestroyEntries', '__isDestroyImmediately', '__destroyDuration', '__isSPG', '__replayRegistrator')
 
@@ -799,9 +691,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         vehicleType = vInfo.vehicleType
         classTag = vehicleType.classTag
         name = vehicleType.shortNameWithPrefix
-        role = vehicleType.footballRole
-        if role is not None:
-            classTag = role.replace('role_', '')
         if classTag is not None:
             entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
             animation = self.__getSpottedAnimation(entry, isSpotted)

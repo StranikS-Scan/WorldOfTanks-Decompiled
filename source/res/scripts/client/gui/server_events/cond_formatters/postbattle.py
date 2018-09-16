@@ -9,7 +9,8 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters as events_fmts
-from gui.server_events.cond_formatters import CONDITION_ICON, POSSIBLE_BATTLE_RESUTLS_KEYS, BATTLE_RESULTS_KEYS, BATTLE_RESULTS_AGGREGATED_KEYS, FORMATTER_IDS, FormattableField, packDescriptionField, packSimpleTitle, TOP_RANGE_LOWEST, getResultsData
+from gui.server_events.cond_formatters import POSSIBLE_BATTLE_RESUTLS_KEYS, BATTLE_RESULTS_KEYS, BATTLE_RESULTS_AGGREGATED_KEYS, FORMATTER_IDS, FormattableField, packDescriptionField, packSimpleTitle, TOP_RANGE_LOWEST, getResultsData
+from personal_missions_constants import CONDITION_ICON
 from gui.server_events.cond_formatters.formatters import ConditionFormatter, ConditionsFormatter, SimpleMissionsFormatter, MissionsVehicleListFormatter, GroupFormatter, MissionsBattleConditionsFormatter
 from gui.server_events.conditions import GROUP_TYPE
 from gui.server_events.formatters import RELATIONS_SCHEME
@@ -96,6 +97,12 @@ class _WinFormatter(SimpleMissionsFormatter):
         return packSimpleTitle(QUESTS.DETAILS_CONDITIONS_WIN_TITLE)
 
 
+class _PMWinFormatter(_WinFormatter):
+
+    def _getDescription(self, condition):
+        return packDescriptionField(QUESTS.DETAILS_CONDITIONS_WIN_DESCRIPTION)
+
+
 class _SurviveFormatter(SimpleMissionsFormatter):
 
     def _getDescription(self, condition):
@@ -108,6 +115,12 @@ class _SurviveFormatter(SimpleMissionsFormatter):
     @classmethod
     def _getTitle(cls, *args, **kwargs):
         return packSimpleTitle(QUESTS.DETAILS_CONDITIONS_ALIVE_TITLE)
+
+
+class _PMSurviveFormatter(_SurviveFormatter):
+
+    def _getDescription(self, condition):
+        return packDescriptionField(QUESTS.DETAILS_CONDITIONS_ALIVE_DESCRIPTION)
 
 
 class _AchievementsFormatter(SimpleMissionsFormatter):
@@ -127,7 +140,7 @@ class _AchievementsFormatter(SimpleMissionsFormatter):
         return events_fmts.packMissionIconCondition(self._getTitle(condition), MISSIONS_ALIASES.NONE, self._getDescription(condition), self._getIconKey(condition), conditionData={'data': {'rendererLinkage': MISSIONS_ALIASES.ACHIEVEMENT_RENDERER,
                   'list': achievementsList,
                   'icon': RES_ICONS.get90ConditionIcon(self._getIconKey()),
-                  'description': i18n.makeString(QUESTS.DETAILS_CONDITIONS_ACHIEVEMENTS)}}, sortKey=self._getSortKey(condition))
+                  'description': i18n.makeString(QUESTS.DETAILS_CONDITIONS_ACHIEVEMENTS)}}, sortKey=self._getSortKey(condition), progressID=condition.progressID)
 
     @classmethod
     def _getTitle(cls, *args, **kwargs):
@@ -339,8 +352,8 @@ class PersonalMissionsPostBattleConditionsFormatter(PersonalMissionsConditionsFo
         super(PersonalMissionsPostBattleConditionsFormatter, self).__init__({'vehicleKills': VehiclesKillFormatter(),
          'vehicleDamage': VehiclesDamageFormatter(),
          'vehicleStun': VehiclesStunFormatter(),
-         'win': _WinFormatter(),
-         'isAlive': _SurviveFormatter(),
+         'win': _PMWinFormatter(),
+         'isAlive': _PMSurviveFormatter(),
          'achievements': _AchievementsFormatter(),
          'clanKills': _ClanKillsFormatter(),
          'results': _BattleResultsFormatter(),

@@ -16,5 +16,5 @@ class RoleChangeMeta(AbstractWindowView):
     def as_setRolesS(self, roles):
         return self.flashObject.as_setRoles(roles) if self._isDAAPIInited() else None
 
-    def as_setPriceS(self, priceString, enoughGold, actionChangeRole):
-        return self.flashObject.as_setPrice(priceString, enoughGold, actionChangeRole) if self._isDAAPIInited() else None
+    def as_setPriceS(self, priceString, enableSubmitButton, actionChangeRole):
+        return self.flashObject.as_setPrice(priceString, enableSubmitButton, actionChangeRole) if self._isDAAPIInited() else None

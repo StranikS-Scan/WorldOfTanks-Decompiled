@@ -72,7 +72,6 @@
     <_120mm_D_1203>	90	</_120mm_D_1203>
     <_120mm_D_1203_A>	91	</_120mm_D_1203_A>
     <_120mm_D_1203_B>	92	</_120mm_D_1203_B>
-    <_105mm_D1504_sport>	500	</_105mm_D1504_sport>
     <_120mm_SA_46_AC_IGR>	60001	</_120mm_SA_46_AC_IGR>
     <_90mm_F3M_IGR>	60002	</_90mm_F3M_IGR>
     <_100mm_SA_47_IGR>	60003	</_100mm_SA_47_IGR>
@@ -4527,49 +4526,5 @@
         </_105mm_HE_OE_F1>
       </shots>
     </_105mm_CN_105_57_IGR>
-    <_105mm_D1504_sport>
-      <userString>	#football2018:F88_AMX_13_105_sport_gun_name	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	300000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.46	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.6	</amplitude>
-        <recoilEffect>	main	</recoilEffect>
-      </recoil>
-      <effects>	shot_small_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	10	</reloadTime>
-      <maxAmmo>	66	</maxAmmo>
-      <aimingTime>	3	</aimingTime>
-      <weight>	1210	</weight>
-      <maxHealth>	208	</maxHealth>
-      <maxRegenHealth>	104	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.4	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.16	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_105mm_OE_105_Mle_60_D1504_sport>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	700	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
-        </_105mm_OE_105_Mle_60_D1504_sport>
-      </shots>
-    </_105mm_D1504_sport>
   </shared>
 </guns.xml>

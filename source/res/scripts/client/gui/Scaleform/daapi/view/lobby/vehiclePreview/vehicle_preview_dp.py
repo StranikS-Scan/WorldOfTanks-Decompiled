@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview/vehicle_preview_dp.py
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -11,6 +12,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from gui.shared.gui_items.items_actions import factory
 from helpers import dependency
+from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
 CREW_INFO_TAB_ID = 'crewInfoTab'
 FACT_SHEET_TAB_ID = 'factSheetTab'
@@ -92,7 +94,7 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
             unlockProps = g_techTreeDP.getUnlockProps(vehicleCD)
             factory.doAction(factory.UNLOCK_ITEM, vehicleCD, unlockProps.parentID, unlockProps.unlockIdx, unlockProps.xpCost, skipConfirm=skipConfirm)
         else:
-            factory.doAction(factory.BUY_VEHICLE, vehicleCD, skipConfirm=skipConfirm)
+            factory.doAction(factory.BUY_VEHICLE, vehicleCD, False, VIEW_ALIAS.VEHICLE_PREVIEW, skipConfirm=skipConfirm)
 
     def __packTabButtonsData(self, vehicle):
         data = []
@@ -100,6 +102,9 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
         tabMapping = TAB_DATA_MAP_ELITE if isPremium else TAB_DATA_MAP
         for idx in TAB_ORDER:
             linkage, label = tabMapping[idx]
+            if label == VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME:
+                crewCount = len(vehicle.crew)
+                label = _ms(label, crewCount=crewCount)
             data.append({'label': label,
              'linkage': linkage})
 

@@ -8,7 +8,8 @@ from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters as events_fmts
-from gui.server_events.cond_formatters import FormattableField, FORMATTER_IDS, CONDITION_ICON, VEHICLE_TYPES, MAX_CONDITIONS_IN_OR_SECTION_SUPPORED, packSimpleTitle, packDescriptionField
+from gui.server_events.cond_formatters import FormattableField, FORMATTER_IDS, VEHICLE_TYPES, MAX_CONDITIONS_IN_OR_SECTION_SUPPORED, packSimpleTitle, packDescriptionField
+from personal_missions_constants import CONDITION_ICON
 from gui.server_events.conditions import GROUP_TYPE
 from gui.shared.formatters import text_styles
 from helpers import i18n
@@ -101,7 +102,7 @@ class SimpleMissionsFormatter(MissionFormatter):
         return result
 
     def _packGui(self, condition):
-        return events_fmts.packMissionIconCondition(self.getTitle(condition), MISSIONS_ALIASES.NONE, self.getDescription(condition), self._getIconKey(condition), sortKey=self._getSortKey(condition))
+        return events_fmts.packMissionIconCondition(self.getTitle(condition), MISSIONS_ALIASES.NONE, self.getDescription(condition), self._getIconKey(condition), sortKey=self._getSortKey(condition), progressID=condition.progressID)
 
 
 class MissionsVehicleListFormatter(MissionFormatter):
@@ -193,7 +194,7 @@ class MissionsVehicleListFormatter(MissionFormatter):
         return self._packGui(title, progressType, self.getDescription(condition), current=current, total=total, conditionData=self._getConditionData(condition), progressData=progressData, condition=condition)
 
     def _packGui(self, title, progressType, label, current=None, total=None, conditionData=None, progressData=None, condition=None):
-        return events_fmts.packMissionIconCondition(title, progressType, label, self._getIconKey(condition), current=current, total=total, conditionData=conditionData, progressData=progressData, sortKey=self._getSortKey(condition))
+        return events_fmts.packMissionIconCondition(title, progressType, label, self._getIconKey(condition), current=current, total=total, conditionData=conditionData, progressData=progressData, sortKey=self._getSortKey(condition), progressID=condition.progressID)
 
     @staticmethod
     def __makeVehicleVO(vehicle):

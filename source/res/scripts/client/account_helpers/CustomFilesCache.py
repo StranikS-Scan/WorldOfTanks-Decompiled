@@ -19,6 +19,7 @@ _MAX_LIFE_TIME = 86400
 _LIFE_TIME_IN_MEMORY = 1200
 _CACHE_VERSION = 2
 _CLIENT_VERSION = None
+_DEFAULT_REQUEST_TIMEOUT = 10
 
 def _getClientVersion():
     global _CLIENT_VERSION
@@ -150,9 +151,9 @@ class CFC_OP_TYPE(object):
 
 class WorkerThread(threading.Thread):
 
-    def __init__(self):
+    def __init__(self, queueLimit=60):
         super(WorkerThread, self).__init__()
-        self.input_queue = Queue(60)
+        self.input_queue = Queue(queueLimit)
         self.__terminate = False
         self.isBusy = False
 
@@ -161,9 +162,8 @@ class WorkerThread(threading.Thread):
         try:
             self.input_queue.put(task, block=False)
         except Exception:
-            callback(None, None, None)
-
-        return
+            LOG_CURRENT_EXCEPTION()
+            callback()
 
     def close(self):
         self.isBusy = False
@@ -180,15 +180,7 @@ class WorkerThread(threading.Thread):
                 break
             try:
                 self.isBusy = True
-                taskType = task['opType']
-                if taskType == CFC_OP_TYPE.DOWNLOAD:
-                    self.__run_download(**task)
-                elif taskType == CFC_OP_TYPE.READ:
-                    self.__run_read(**task)
-                elif taskType == CFC_OP_TYPE.WRITE:
-                    self.__run_write(**task)
-                elif taskType == CFC_OP_TYPE.CHECK:
-                    self.__run_check(**task)
+                self.__run(**task)
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 
@@ -198,108 +190,17 @@ class WorkerThread(threading.Thread):
         self.input_queue.task_done()
         return
 
-    def __run_download(self, url, modified_time, callback, **params):
-        startTime = time.time()
-        try:
-            try:
-                fh = remote_file = None
-                last_modified = expires = None
-                req = urllib2.Request(url)
-                req.add_header('User-Agent', _getClientVersion())
-                headers = params.get('headers') or {}
-                for name, value in headers.iteritems():
-                    req.add_header(name, value)
-
-                if modified_time and isinstance(modified_time, str):
-                    req.add_header('If-Modified-Since', modified_time)
-                    opener = urllib2.build_opener(NotModifiedHandler())
-                    fh = opener.open(req, timeout=10)
-                    headers = fh.info()
-                    if hasattr(fh, 'code'):
-                        code = fh.code
-                        if code in (304, 200):
-                            info = fh.info()
-                            last_modified = info.getheader('Last-Modified')
-                            expires = info.getheader('Expires')
-                        if code == 200:
-                            remote_file = fh.read()
-                else:
-                    opener = urllib2.build_opener(urllib2.BaseHandler())
-                    fh = opener.open(req, timeout=10)
-                    info = fh.info()
-                    last_modified = info.getheader('Last-Modified')
-                    expires = info.getheader('Expires')
-                    remote_file = fh.read()
-                if expires is None:
-                    expires = makeHttpTime(time.gmtime())
-                else:
-                    ctime = getSafeDstUTCTime()
-                    expiresTmp = parseHttpTime(expires)
-                    if expiresTmp > ctime + _MAX_LIFE_TIME or expiresTmp < ctime:
-                        expires = makeHttpTime(time.gmtime(time.time() + _MAX_LIFE_TIME))
-            except urllib2.HTTPError as e:
-                LOG_WARNING('Http error. Code: %d, url: %s' % (e.code, url))
-            except urllib2.URLError as e:
-                LOG_WARNING('Url error. Reason: %s, url: %s' % (str(e.reason) if isinstance(e.reason, basestring) else 'unknown', url))
-            except ValueError as e:
-                LOG_WARNING('Value error. Reason: %s, url: %s' % (e, url))
-            except Exception as e:
-                LOG_ERROR("Client couldn't download file.", e, url)
-
-        finally:
-            if fh:
-                fh.close()
-
-        _LOG_EXECUTING_TIME(startTime, '__run_download', 10.0)
-        callback(remote_file, last_modified, expires)
-        return
-
-    def __run_read(self, name, db, callback, **params):
-        remote_file = None
-        try:
-            startTime = time.time()
-            if db is not None and db.has_key(name):
-                remote_file = db[name]
-            _LOG_EXECUTING_TIME(startTime, '__run_read')
-        except Exception as e:
-            LOG_WARNING("Client couldn't read file.", e, name)
-
-        callback(remote_file, None, None)
-        return
-
-    def __run_write(self, name, data, db, callback, **params):
-        try:
-            startTime = time.time()
-            if db is not None:
-                db[name] = data
-            _LOG_EXECUTING_TIME(startTime, '__run_write', 5.0)
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
-        callback(None, None, None)
-        return
-
-    def __run_check(self, name, db, callback, **params):
-        res = False
-        try:
-            startTime = time.time()
-            if db is not None:
-                res = db.has_key(name)
-            _LOG_EXECUTING_TIME(startTime, '__run_check')
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
-        callback(res, None, None)
-        return
+    def __run(self, callback, **params):
+        callback()
 
 
 class ThreadPool(object):
 
-    def __init__(self, num=8):
-        num = max(2, num)
+    def __init__(self, workersLimit=8, queueLimit=60):
+        num = max(2, workersLimit)
         self.__workers = []
         for _ in range(num):
-            self.__workers.append(WorkerThread())
+            self.__workers.append(WorkerThread(queueLimit))
 
     def start(self):
         for w in self.__workers:
@@ -331,9 +232,9 @@ class ThreadPool(object):
 
 class CustomFilesCache(object):
 
-    def __init__(self):
+    def __init__(self, cacheFolder):
         prefsFilePath = unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')
-        self.__cacheDir = os.path.join(os.path.dirname(prefsFilePath), 'custom_data')
+        self.__cacheDir = os.path.join(os.path.dirname(prefsFilePath), cacheFolder)
         self.__cacheDir = os.path.normpath(self.__cacheDir)
         self.__mutex = threading.RLock()
         self.__cache = {}
@@ -441,30 +342,36 @@ class CustomFilesCache(object):
 
     def __readLocalFile(self, url, showImmediately):
         task = {'opType': CFC_OP_TYPE.READ,
-         'db': self.__db,
-         'name': base64.b32encode(url),
          'callback': partial(self.__onReadLocalFile, url, showImmediately)}
         self.__worker.add_task(task)
 
-    def __onReadLocalFile(self, url, showImmediately, remote_file, d1, d2):
-        data = remote_file
+    def __onReadLocalFile(self, url, showImmediately):
+        remote_file = None
+        key = base64.b32encode(url)
         try:
-            crc, f, ver = data[2:5]
+            startTime = time.time()
+            if self.__db is not None and self.__db.has_key(key):
+                remote_file = self.__db[key]
+            _LOG_EXECUTING_TIME(startTime, '__onReadLocalFile')
+        except Exception as e:
+            LOG_WARNING("Client couldn't read file.", e, key)
+
+        try:
+            crc, f, ver = remote_file[2:5]
             if crc != binascii.crc32(f) or _CACHE_VERSION != ver:
                 LOG_DEBUG('Old file was found.', url)
                 raise SoftException('Invalid data.')
         except Exception:
-            data = None
+            remote_file = None
 
         try:
-            file_hash = base64.b32encode(url)
             self.__mutex.acquire()
             cache = self.__cache
-            if data is not None:
-                cache[file_hash] = data
+            if remote_file is not None:
+                cache[key] = remote_file
             else:
-                cache.pop(file_hash, None)
-                self.__accessedCache.pop(file_hash, None)
+                cache.pop(key, None)
+                self.__accessedCache.pop(key, None)
         finally:
             self.__mutex.release()
 
@@ -473,36 +380,88 @@ class CustomFilesCache(object):
 
     def __checkFile(self, url, showImmediately, headers=None):
         task = {'opType': CFC_OP_TYPE.CHECK,
-         'db': self.__db,
-         'name': base64.b32encode(url),
          'callback': partial(self.__onCheckFile, url, showImmediately, headers)}
         self.__worker.add_task(task)
 
-    def __onCheckFile(self, url, showImmediately, headers, res, d1, d2):
-        if res is None:
-            self.__postTask(url, None, True)
-            return
-        else:
-            if res:
-                try:
-                    file_hash = base64.b32encode(url)
-                    self.__mutex.acquire()
-                    self.__cache[file_hash] = None
-                finally:
-                    self.__mutex.release()
+    def __onCheckFile(self, url, showImmediately, headers):
+        res = False
+        name = base64.b32encode(url)
+        try:
+            startTime = time.time()
+            if self.__db is not None:
+                res = self.__db.has_key(name)
+            _LOG_EXECUTING_TIME(startTime, '__onCheckFile')
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
 
-            self.__get(url, showImmediately, True, headers)
-            return
+        if res:
+            try:
+                self.__mutex.acquire()
+                self.__cache[name] = None
+            finally:
+                self.__mutex.release()
+
+        self.__get(url, showImmediately, True, headers)
+        return
 
     def __readRemoteFile(self, url, modified_time, showImmediately, headers):
         task = {'opType': CFC_OP_TYPE.DOWNLOAD,
-         'url': url,
-         'modified_time': modified_time,
-         'headers': headers,
-         'callback': partial(self.__onReadRemoteFile, url, showImmediately)}
+         'callback': partial(self.__onReadRemoteFile, url, showImmediately, modified_time, headers)}
         self.__worker.add_task(task)
 
-    def __onReadRemoteFile(self, url, showImmediately, remote_file, last_modified, expires):
+    def __onReadRemoteFile(self, url, showImmediately, modified_time, headers):
+        startTime = time.time()
+        try:
+            try:
+                fh = remote_file = None
+                last_modified = expires = None
+                req = urllib2.Request(url)
+                req.add_header('User-Agent', _getClientVersion())
+                headers = headers or {}
+                for name, value in headers.iteritems():
+                    req.add_header(name, value)
+
+                if modified_time and isinstance(modified_time, str):
+                    req.add_header('If-Modified-Since', modified_time)
+                    opener = urllib2.build_opener(NotModifiedHandler())
+                    fh = opener.open(req, timeout=_DEFAULT_REQUEST_TIMEOUT)
+                    headers = fh.info()
+                    if hasattr(fh, 'code'):
+                        code = fh.code
+                        if code in (304, 200):
+                            info = fh.info()
+                            last_modified = info.getheader('Last-Modified')
+                            expires = info.getheader('Expires')
+                        if code == 200:
+                            remote_file = fh.read()
+                else:
+                    opener = urllib2.build_opener(urllib2.BaseHandler())
+                    fh = opener.open(req, timeout=_DEFAULT_REQUEST_TIMEOUT)
+                    info = fh.info()
+                    last_modified = info.getheader('Last-Modified')
+                    expires = info.getheader('Expires')
+                    remote_file = fh.read()
+                if expires is None:
+                    expires = makeHttpTime(time.gmtime())
+                else:
+                    ctime = getSafeDstUTCTime()
+                    expiresTmp = parseHttpTime(expires)
+                    if expiresTmp > ctime + _MAX_LIFE_TIME or expiresTmp < ctime:
+                        expires = makeHttpTime(time.gmtime(time.time() + _MAX_LIFE_TIME))
+            except urllib2.HTTPError as e:
+                LOG_WARNING('Http error. Code: %d, url: %s' % (e.code, url))
+            except urllib2.URLError as e:
+                LOG_WARNING('Url error. Reason: %s, url: %s' % (str(e.reason) if isinstance(e.reason, basestring) else 'unknown', url))
+            except ValueError as e:
+                LOG_WARNING('Value error. Reason: %s, url: %s' % (e, url))
+            except Exception as e:
+                LOG_ERROR("Client couldn't download file.", e, url)
+
+        finally:
+            if fh:
+                fh.close()
+
+        _LOG_EXECUTING_TIME(startTime, '__onReadRemoteFile', 10.0)
         if remote_file is None and last_modified is None:
             if showImmediately:
                 LOG_DEBUG('__onReadRemoteFile, Error occurred. Release callbacks.', url)
@@ -561,14 +520,20 @@ class CustomFilesCache(object):
             return
         self.__written_cache.add(name)
         task = {'opType': CFC_OP_TYPE.WRITE,
-         'db': self.__db,
-         'name': name,
-         'data': packet,
-         'callback': partial(self.__onWriteCache, name)}
+         'callback': partial(self.__onWriteCache, name, packet)}
         self.__worker.add_task(task)
 
-    def __onWriteCache(self, name, d1, d2, d3):
+    def __onWriteCache(self, name, packet):
+        try:
+            startTime = time.time()
+            if self.__db is not None:
+                self.__db[name] = packet
+            _LOG_EXECUTING_TIME(startTime, '__onWriteCache', 5.0)
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
         self.__written_cache.discard(name)
+        return
 
     def __postTask(self, url, remote_file, invokeAndReleaseCallbacks):
         BigWorld.callback(0.001, partial(self.__onPostTask, url, invokeAndReleaseCallbacks, remote_file))

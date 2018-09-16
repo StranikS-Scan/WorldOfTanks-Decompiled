@@ -1,37 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/shop/stock.py
 from collections import defaultdict
+from functools import partial
 from itertools import chain
 from WeakMethod import WeakMethodProxy
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform import MENU
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Money
 from helpers import dependency, i18n
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from shared_utils import CONST_CONTAINER
 from soft_exception import SoftException
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 from web_client_api import w2c, W2CSchema, Field
 from web_client_api.shop import formatters
-
-class ItemType(CONST_CONTAINER):
-    VEHICLE = 'vehicle'
-    EQUIPMENT = 'equipment'
-    DEVICE = 'device'
-    BOOSTER = 'booster'
-    BATTLE_BOOSTER = 'battleBooster'
-    MODULE = 'module'
-    SHELL = 'shell'
-    PREMIUM_PACK = 'premiumPack'
-
+from web_client_api.common import ShopItemType
 
 class PremiumPack(object):
 
     def __init__(self, duration, cost, defCost):
         self.__duration = duration
         self.__price = ItemPrice(Money(gold=cost), Money(gold=defCost))
+
+    @property
+    def id(self):
+        pass
 
     @property
     def buyPrice(self):
@@ -45,31 +40,39 @@ class PremiumPack(object):
     def userName(self):
         return i18n.makeString('#menu:premium/packet/days%s' % self.__duration)
 
+    @property
+    def shortDescriptionSpecial(self):
+        return i18n.makeString(MENU.PREMIUM_PACKET_SHORTDESCRIPTIONSPECIAL)
 
-_GUI_ITEMS_TYPE_MAP = {ItemType.VEHICLE: GUI_ITEM_TYPE.VEHICLE,
- ItemType.EQUIPMENT: GUI_ITEM_TYPE.EQUIPMENT,
- ItemType.DEVICE: GUI_ITEM_TYPE.OPTIONALDEVICE,
- ItemType.BATTLE_BOOSTER: GUI_ITEM_TYPE.BATTLE_BOOSTER,
- ItemType.MODULE: GUI_ITEM_TYPE.VEHICLE_MODULES,
- ItemType.SHELL: GUI_ITEM_TYPE.SHELL}
-_ITEMS_CRITERIA_MAP = {ItemType.VEHICLE: {'inventory': REQ_CRITERIA.INVENTORY,
-                    'premium': REQ_CRITERIA.VEHICLE.PREMIUM,
-                    'ready': REQ_CRITERIA.VEHICLE.READY,
-                    'sellable': REQ_CRITERIA.VEHICLE.CAN_SELL},
- ItemType.EQUIPMENT: {'inventory': REQ_CRITERIA.INVENTORY},
- ItemType.DEVICE: {'inventory': REQ_CRITERIA.INVENTORY},
- ItemType.BATTLE_BOOSTER: {'inventory': REQ_CRITERIA.INVENTORY},
- ItemType.MODULE: {'inventory': REQ_CRITERIA.INVENTORY},
- ItemType.BOOSTER: {'inventory': REQ_CRITERIA.BOOSTER.IN_ACCOUNT},
- ItemType.SHELL: {'inventory': REQ_CRITERIA.INVENTORY},
- ItemType.PREMIUM_PACK: {}}
-_EXTRA_ITEMS_CRITERIA_MAP = {ItemType.VEHICLE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR,
- ItemType.EQUIPMENT: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
- ItemType.DEVICE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
- ItemType.BATTLE_BOOSTER: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
- ItemType.MODULE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
- ItemType.SHELL: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
- ItemType.BOOSTER: REQ_CRITERIA.BOOSTER.ENABLED | ~REQ_CRITERIA.HIDDEN}
+    @property
+    def longDescriptionSpecial(self):
+        return i18n.makeString(MENU.PREMIUM_PACKET_LONGDESCRIPTIONSPECIAL)
+
+
+_GUI_ITEMS_TYPE_MAP = {ShopItemType.VEHICLE: GUI_ITEM_TYPE.VEHICLE,
+ ShopItemType.EQUIPMENT: GUI_ITEM_TYPE.EQUIPMENT,
+ ShopItemType.DEVICE: GUI_ITEM_TYPE.OPTIONALDEVICE,
+ ShopItemType.BATTLE_BOOSTER: GUI_ITEM_TYPE.BATTLE_BOOSTER,
+ ShopItemType.MODULE: GUI_ITEM_TYPE.VEHICLE_MODULES,
+ ShopItemType.SHELL: GUI_ITEM_TYPE.SHELL}
+_ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: {'inventory': REQ_CRITERIA.INVENTORY,
+                        'premium': REQ_CRITERIA.VEHICLE.PREMIUM,
+                        'ready': REQ_CRITERIA.VEHICLE.READY,
+                        'sellable': REQ_CRITERIA.VEHICLE.CAN_SELL},
+ ShopItemType.EQUIPMENT: {'inventory': REQ_CRITERIA.INVENTORY},
+ ShopItemType.DEVICE: {'inventory': REQ_CRITERIA.INVENTORY},
+ ShopItemType.BATTLE_BOOSTER: {'inventory': REQ_CRITERIA.INVENTORY},
+ ShopItemType.MODULE: {'inventory': REQ_CRITERIA.INVENTORY},
+ ShopItemType.BOOSTER: {'inventory': REQ_CRITERIA.BOOSTER.IN_ACCOUNT},
+ ShopItemType.SHELL: {'inventory': REQ_CRITERIA.INVENTORY},
+ ShopItemType.PREMIUM: {}}
+_EXTRA_ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR,
+ ShopItemType.EQUIPMENT: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
+ ShopItemType.DEVICE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
+ ShopItemType.BATTLE_BOOSTER: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
+ ShopItemType.MODULE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
+ ShopItemType.SHELL: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
+ ShopItemType.BOOSTER: REQ_CRITERIA.BOOSTER.ENABLED | ~REQ_CRITERIA.HIDDEN}
 
 def _parseCriteriaSpec(itemType, spec):
     typeCriteria = _ITEMS_CRITERIA_MAP[itemType]
@@ -89,8 +92,9 @@ def _parseCriteriaSpec(itemType, spec):
 
 
 class _GetItemsSchema(W2CSchema):
-    type = Field(required=True, type=basestring, validator=lambda value, data: ItemType.hasValue(value))
+    type = Field(required=True, type=basestring, validator=lambda value, data: ShopItemType.hasValue(value))
     criteria = Field(required=False, type=basestring, validator=lambda value, data: _parseCriteriaSpec(data['type'], value))
+    fields = Field(required=False, type=list, validator=None)
 
 
 class ItemsWebApiMixin(object):
@@ -114,9 +118,11 @@ class ItemsWebApiMixin(object):
         if not self.__cachesInitialized:
             self.updateMappingCaches()
         criteria = _parseCriteriaSpec(cmd.type, cmd.criteria)
+        allowed_fields = set(cmd.fields) if cmd.fields else None
         if not criteria.lookInInventory():
             criteria |= _EXTRA_ITEMS_CRITERIA_MAP.get(cmd.type, REQ_CRITERIA.EMPTY)
-        return [ self.__getFormatter(cmd.type, criteria).format(item) for item in self.__collectItems(cmd.type, criteria) ]
+        result = [ self.__getFormatter(cmd.type, criteria).format(item, allowed_fields) for item in self.__collectItems(cmd.type, criteria) ]
+        return result
 
     def __getFormatter(self, itemType, criteria):
         key = self.__makeFormatterKey(itemType, criteria)
@@ -124,35 +130,35 @@ class ItemsWebApiMixin(object):
         if fmt is not None:
             return fmt
         else:
-            if itemType == ItemType.VEHICLE:
+            if itemType == ShopItemType.VEHICLE:
                 fmt = formatters.makeVehicleFormatter(criteria.lookInInventory())
-            elif itemType == ItemType.EQUIPMENT:
-                fmt = formatters.makeEquipmentFormatter(lambda itemID: self.__fittedVehiclesCache[ItemType.EQUIPMENT][itemID])
-            elif itemType == ItemType.DEVICE:
-                fmt = formatters.makeDeviceFormatter(lambda itemID: self.__compatVehiclesCache[ItemType.DEVICE][itemID], lambda itemID: self.__fittedVehiclesCache[ItemType.DEVICE][itemID])
-            elif itemType == ItemType.BOOSTER:
+            elif itemType == ShopItemType.EQUIPMENT:
+                fmt = formatters.makeEquipmentFormatter(partial(WeakMethodProxy(self.getFittedVehicles), ShopItemType.EQUIPMENT))
+            elif itemType == ShopItemType.DEVICE:
+                fmt = formatters.makeDeviceFormatter(partial(WeakMethodProxy(self.getCompatVehicles), ShopItemType.DEVICE), partial(WeakMethodProxy(self.getFittedVehicles), ShopItemType.DEVICE))
+            elif itemType == ShopItemType.BOOSTER:
                 fmt = formatters.makeBoosterFormatter()
-            elif itemType == ItemType.BATTLE_BOOSTER:
-                fmt = formatters.makeBattleBoosterFormatter(lambda itemID: self.__fittedVehiclesCache[ItemType.BATTLE_BOOSTER][itemID])
-            elif itemType == ItemType.MODULE:
+            elif itemType == ShopItemType.BATTLE_BOOSTER:
+                fmt = formatters.makeBattleBoosterFormatter(partial(WeakMethodProxy(self.getFittedVehicles), ShopItemType.BATTLE_BOOSTER))
+            elif itemType == ShopItemType.MODULE:
                 fmt = formatters.makeModuleFormatter()
-            elif itemType == ItemType.PREMIUM_PACK:
+            elif itemType == ShopItemType.PREMIUM:
                 fmt = formatters.makePremiumPackFormatter()
-            elif itemType == ItemType.SHELL:
+            elif itemType == ShopItemType.SHELL:
                 fmt = formatters.makeShellFormatter()
             self.__formattersMap[key] = fmt
             return fmt
 
     def __makeFormatterKey(self, itemType, criteria):
         entries = [itemType]
-        if itemType == ItemType.VEHICLE and criteria.lookInInventory():
+        if itemType == ShopItemType.VEHICLE and criteria.lookInInventory():
             entries.append('inventory')
         return ','.join(entries)
 
     def __collectItems(self, itemType, criteria):
-        if itemType == ItemType.BOOSTER:
+        if itemType == ShopItemType.BOOSTER:
             return self.__collectBoosters(criteria)
-        return self.__collectPremiumPacks() if itemType == ItemType.PREMIUM_PACK else self.__collectGuiItems(itemType, criteria)
+        return self.__collectPremiumPacks() if itemType == ShopItemType.PREMIUM else self.__collectGuiItems(itemType, criteria)
 
     def __collectBoosters(self, criteria):
         return self.goodiesCache.getBoosters(criteria=criteria).itervalues()
@@ -166,12 +172,18 @@ class ItemsWebApiMixin(object):
         discountedPrem = shop.getPremiumCostWithDiscount()
         return [ PremiumPack(duration, discountedPrem.get(duration, cost), cost) for duration, cost in defaultPrem.iteritems() ]
 
+    def getCompatVehicles(self, itemType, itemID):
+        return self.__compatVehiclesCache[itemType][itemID]
+
+    def getFittedVehicles(self, itemType, itemID):
+        return self.__fittedVehiclesCache[itemType][itemID]
+
     def updateMappingCaches(self, *args):
 
         def collectAll(itemType):
             return ((itemType, item) for item in self.__collectItems(itemType, _EXTRA_ITEMS_CRITERIA_MAP[itemType]))
 
-        types = [ItemType.DEVICE, ItemType.EQUIPMENT, ItemType.BATTLE_BOOSTER]
+        types = [ShopItemType.DEVICE, ShopItemType.EQUIPMENT, ShopItemType.BATTLE_BOOSTER]
         self.__compatVehiclesCache.clear()
         self.__compatVehiclesCache.update({itemType:defaultdict(list) for itemType in types})
         self.__fittedVehiclesCache.clear()

@@ -7,7 +7,7 @@ from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.daapi.settings.config import BATTLE_TOOLTIPS_BUILDERS_PATHS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.tooltip_mgr import ToolTip
-from gui.Scaleform.framework.application import SFApplication, DAAPIRootBridge
+from gui.Scaleform.framework.application import AppEntry, DAAPIRootBridge
 from gui.Scaleform.framework.managers import LoaderManager, ContainerManager
 from gui.Scaleform.framework.managers.TutorialManager import TutorialManager
 from gui.Scaleform.framework.managers.containers import DefaultContainer
@@ -25,6 +25,7 @@ from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.battle_input import BattleGameInputMgr
 from gui.Scaleform.managers.voice_chat import BattleVoiceChatManager
 from gui.app_loader import settings as app_settings
+from gui.impl.windows import UserWindowFlags
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import uniprof
 
@@ -55,10 +56,10 @@ class TopWindowContainer(PopUpContainer):
 BATTLE_OPTIMIZATION_CONFIG = {BATTLE_VIEW_ALIASES.MINIMAP: OptimizationSetting('minimapAlphaEnabled', True),
  BATTLE_VIEW_ALIASES.DAMAGE_PANEL: OptimizationSetting()}
 
-class BattleEntry(SFApplication):
+class BattleEntry(AppEntry):
 
     def __init__(self, appNS):
-        super(BattleEntry, self).__init__('battle.swf', appNS, DAAPIRootBridge(initCallback='registerBattleTest'))
+        super(BattleEntry, self).__init__(UserWindowFlags.BATTLE_MAIN_WND, 'battle.swf', appNS, DAAPIRootBridge(initCallback='registerBattleTest'))
         self.__input = None
         return
 

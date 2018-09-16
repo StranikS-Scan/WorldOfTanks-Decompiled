@@ -161,6 +161,10 @@ class _Condition(object):
     def isHidden(self):
         return self._data.get('hideInGui', False)
 
+    @property
+    def progressID(self):
+        return self._data.get('progressID')
+
 
 class _ConditionsGroup(_AvailabilityCheckable, _Negatable):
 

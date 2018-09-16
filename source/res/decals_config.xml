@@ -20,25 +20,37 @@
       <atlas>
         <width>	4096	</width>
         <height>	4096	</height>
-        <format>	DXT3	</format>
+        <format>	DXT5	</format>
         <constrains>
-          <minWidth>	64	</minWidth>
-          <minHeight>	64	</minHeight>
+          <minWidth>	256	</minWidth>
+          <minHeight>	256	</minHeight>
           <maxWidth>	1024	</maxWidth>
           <maxHeight>	1024	</maxHeight>
-          <format>	DXT3	</format>
+          <format>	DXT5	</format>
         </constrains>
       </atlas>
       <atlas>
         <width>	4096	</width>
         <height>	4096	</height>
-        <format>	DXT3	</format>
+        <format>	DXT5	</format>
         <constrains>
-          <minWidth>	64	</minWidth>
-          <minHeight>	64	</minHeight>
+          <minWidth>	256	</minWidth>
+          <minHeight>	256	</minHeight>
           <maxWidth>	1024	</maxWidth>
           <maxHeight>	1024	</maxHeight>
-          <format>	DXT3	</format>
+          <format>	DXT5	</format>
+        </constrains>
+      </atlas>
+      <atlas>
+        <width>	4096	</width>
+        <height>	4096	</height>
+        <format>	DXT5	</format>
+        <constrains>
+          <minWidth>	256	</minWidth>
+          <minHeight>	256	</minHeight>
+          <maxWidth>	1024	</maxWidth>
+          <maxHeight>	1024	</maxHeight>
+          <format>	DXT5	</format>
         </constrains>
       </atlas>
     </type>

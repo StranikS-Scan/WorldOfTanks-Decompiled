@@ -25,5 +25,5 @@ class ResearchPanelMeta(BaseDAAPIComponent):
     def as_actionIGRDaysLeftS(self, visible, value):
         return self.flashObject.as_actionIGRDaysLeft(visible, value) if self._isDAAPIInited() else None
 
-    def as_setNavigationEnabledS(self, value, tooltip):
-        return self.flashObject.as_setNavigationEnabled(value, tooltip) if self._isDAAPIInited() else None
+    def as_setNavigationEnabledS(self, value):
+        return self.flashObject.as_setNavigationEnabled(value) if self._isDAAPIInited() else None

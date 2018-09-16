@@ -129,7 +129,7 @@ class SquadInvitationsFilter(object):
         return
 
     def __isInviteValid(self, invite):
-        if invite.type not in {INVITATION_TYPE.SQUAD, INVITATION_TYPE.EPIC, INVITATION_TYPE.EVENT}:
+        if invite.type not in {INVITATION_TYPE.SQUAD, INVITATION_TYPE.EPIC}:
             return False
         if not invite.isSameBattle(self.__arenaUniqueID):
             return False
@@ -183,7 +183,7 @@ class _SquadInvitationsHandler(ISquadInvitationsHandler):
                 return item.receiverDBID
 
         for invite in invites:
-            if invite.type in {INVITATION_TYPE.SQUAD, INVITATION_TYPE.EPIC, INVITATION_TYPE.EVENT} and getter(invite) == playerID:
+            if invite.type in {INVITATION_TYPE.SQUAD, INVITATION_TYPE.EPIC} and getter(invite) == playerID:
                 return invite.clientID
 
         return None

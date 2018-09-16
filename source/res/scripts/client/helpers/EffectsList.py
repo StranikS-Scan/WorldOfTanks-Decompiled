@@ -1208,7 +1208,6 @@ def __getTransformAlongNormal(localTransform, worldTransform, normal):
 def _getSurfaceAlignedTransform(model, nodeName, localTransform, precalculatedNormal=None):
     node = model.node(nodeName)
     if node is None:
-        LOG_ERROR('Not found node %s for compound, using root instead' % nodeName)
         worldTransform = Math.Matrix(model.root)
     else:
         worldTransform = Math.Matrix(node)
@@ -1266,7 +1265,6 @@ class _NodeWithLocal(object):
             else:
                 self.__node = model.node(nodeName)
             if self.__node is None:
-                LOG_DEBUG('Not found node %s for compound, using root instead' % nodeName)
                 self.__node = model.root
             self.__localMatrix = local
         return

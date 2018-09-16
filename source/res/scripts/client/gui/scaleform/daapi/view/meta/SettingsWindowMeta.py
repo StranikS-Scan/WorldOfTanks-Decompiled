@@ -90,3 +90,6 @@ class SettingsWindowMeta(AbstractWindowView):
 
     def as_setColorGradingTechniqueS(self, icon, label):
         return self.flashObject.as_setColorGradingTechnique(icon, label) if self._isDAAPIInited() else None
+
+    def as_setFeedbackDataProviderS(self, dataProvider):
+        return self.flashObject.as_setFeedbackDataProvider(dataProvider) if self._isDAAPIInited() else None

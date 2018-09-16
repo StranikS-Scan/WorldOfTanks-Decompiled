@@ -13,20 +13,25 @@ from web_client_api.ui import NotificationWebApi, ContextMenuWebApi
 @w2capi(name='ranked_battles', key='action')
 class _RankedBattlesWebApi(object):
 
+    def __init__(self, browserViewContext=None):
+        super(_RankedBattlesWebApi, self).__init__()
+        self.__browserViewContext = browserViewContext
+
     @w2c(W2CSchema, name='close_browser')
     def closeBrowser(self, cmd):
-        self._onBrowserClose()
+        ctx = self.__browserViewContext
+        returnAlias = ctx.get('returnAlias', VIEW_ALIAS.LOBBY_HANGAR) if ctx else VIEW_ALIAS.LOBBY_HANGAR
+        g_eventBus.handleEvent(events.LoadViewEvent(alias=returnAlias, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+        return {}
 
-    def _onBrowserClose(self):
-        pass
+
+def _createRankedBattlesWebApi(ctx=None):
+
+    def _doCreate():
+        return _RankedBattlesWebApi(browserViewContext=ctx)
+
+    return _doCreate
 
 
-def createRankedBattlesWebHandlers(ctx=None):
-
-    class _CloseRankedBrowser(_RankedBattlesWebApi):
-
-        def _onBrowserClose(self):
-            returnAlias = ctx.get('returnAlias', VIEW_ALIAS.LOBBY_HANGAR) if ctx else VIEW_ALIAS.LOBBY_HANGAR
-            g_eventBus.handleEvent(events.LoadViewEvent(alias=returnAlias, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
-
-    return webApiCollection(ClansWebApi, _CloseRankedBrowser, NotificationWebApi, ContextMenuWebApi, RequestWebApi, SoundWebApi)
+def createRankedBattlesWebHandlers(ctx):
+    return webApiCollection(ClansWebApi, _createRankedBattlesWebApi(ctx), NotificationWebApi, ContextMenuWebApi, RequestWebApi, SoundWebApi)

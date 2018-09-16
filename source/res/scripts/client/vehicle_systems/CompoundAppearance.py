@@ -397,6 +397,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.tracks = None
         self.collisionObstaclesCollector = None
         self.tessellationCollisionSensor = None
+        self.siegeEffects = None
         self.__destroySystems()
         return
 
@@ -647,6 +648,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__destroyEngineAudition()
         if self.customEffectManager is not None:
             self.customEffectManager = None
+            self.siegeEffects = None
         return
 
     def onWaterSplash(self, waterHitPoint, isHeavySplash):
@@ -669,12 +671,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         return
 
     def __onPeriodicTimerEngine(self):
-        if self.detailedEngineState is None or self.engineAudition is None:
-            return
-        else:
-            if self.siegeEffects is not None:
-                self.siegeEffects.tick(_PERIODIC_TIME_ENGINE)
-            return _PERIODIC_TIME_ENGINE
+        return None if self.detailedEngineState is None or self.engineAudition is None else _PERIODIC_TIME_ENGINE
 
     def __onPeriodicTimer(self):
         timeStamp = BigWorld.wg_getFrameTimestamp()
@@ -693,9 +690,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
                 return
             distanceFromPlayer = self.lodCalculator.lodDistance
             self.__updateCurrTerrainMatKinds()
-            if not self.__vehicle.isPlayerVehicle:
-                if self.siegeEffects is not None:
-                    self.siegeEffects.tick(_PERIODIC_TIME)
             self.__updateEffectsLOD(distanceFromPlayer)
             if self.customEffectManager:
                 self.customEffectManager.update()
@@ -883,6 +877,11 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     def __onCameraChanged(self, cameraName, currentVehicleId=None):
         if self.engineAudition is not None:
             self.engineAudition.onCameraChanged(cameraName, currentVehicleId if currentVehicleId is not None else 0)
+        if self.tracks is not None:
+            if cameraName == 'sniper':
+                self.tracks.sniperMode(True)
+            else:
+                self.tracks.sniperMode(False)
         return
 
     def __onEngineStateGearUp(self):

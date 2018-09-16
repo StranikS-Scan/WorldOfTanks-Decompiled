@@ -1,13 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/tabs/__init__.py
-import BigWorld
 import constants
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
-from gui.Scaleform.genConsts.FOOTBAL2018_CONSTANTS import FOOTBAL2018_CONSTANTS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.prb_control.settings import VEHICLE_LEVELS
@@ -24,7 +21,6 @@ from helpers import i18n, time_utils, dependency
 from helpers.i18n import makeString
 from items import ITEM_TYPE_INDICES
 from skeletons.gui.game_control import IVehicleComparisonBasket
-from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 
 def _getBtnVehCompareData(vehicle):
@@ -109,7 +105,7 @@ class StoreItemsTab(object):
          Currency.CRYSTAL: money.getSignValue(Currency.CRYSTAL),
          'price': prices.getSum().price.toMoneyTuple(),
          'currency': prices.itemPrice.getCurrency(byWeight=False),
-         'level': self._getItemLevel(item),
+         'level': item.level,
          'nation': item.nationID,
          'type': self._getItemTypeIcon(item),
          'disabled': disabled,
@@ -117,7 +113,6 @@ class StoreItemsTab(object):
          'isCritLvl': isCritLvl,
          'statusImgSrc': statusImgSrc,
          'removable': item.isRemovable,
-         'isEvent': item.isFootball,
          'itemTypeName': item.itemTypeName,
          'goldShellsForCredits': shop.isEnabledBuyingGoldShellsForCredits,
          'goldEqsForCredits': shop.isEnabledBuyingGoldEqsForCredits,
@@ -129,9 +124,6 @@ class StoreItemsTab(object):
          'showActionGoldAndCredits': showActionGoldAndCredits,
          'actionPercent': actionPercent,
          'notForSaleText': '' if item.isForSale else MENU.SHOP_TABLE_NOTFORSALE}
-
-    def _getItemLevel(self, item):
-        return item.level
 
     def _getItemTypeIcon(self, item):
         return item.icon
@@ -146,17 +138,7 @@ class StoreItemsTab(object):
         return None
 
     def _getItemName(self, item):
-        if item.isFootball:
-            if item.isFootballStriker:
-                name = FOOTBALL2018.SPORT_ROLE_STRIKER
-            elif item.isFootballMidfielder:
-                name = FOOTBALL2018.SPORT_ROLE_MIDFIELDER
-            elif item.isFootballDefender:
-                name = FOOTBALL2018.SPORT_ROLE_DEFENDER
-            itemName = item.longUserName + ', ' + makeString(name)
-            return itemName
-        else:
-            return item.longUserName
+        return item.longUserName
 
     def _getExtraParams(self, item, invVehicles):
         return (None, 0)
@@ -252,7 +234,6 @@ class StoreModuleTab(StoreItemsTab):
 
 
 class StoreVehicleTab(StoreItemsTab):
-    eventsCache = dependency.descriptor(IEventsCache)
 
     @classmethod
     def getFilterInitData(cls):
@@ -265,25 +246,13 @@ class StoreVehicleTab(StoreItemsTab):
     def itemWrapper(self, packedItem):
         item, _, _ = packedItem
         vo = super(StoreVehicleTab, self).itemWrapper(packedItem)
-        vo.update({'tankType': self._getTankType(item),
+        vo.update({'tankType': item.type,
          'isPremium': item.isPremium,
-         'isElite': self._checkElite(item),
+         'isElite': item.isElite,
          'rentLeft': self.__getItemRentInfo(item),
          'restoreInfo': self.__getItemRestoreInfo(item),
          'canTradeIn': item.canTradeIn})
         return vo
-
-    def _getTankType(self, item):
-        if item.isFootball:
-            footballRole = item.getFootballRole()
-            if footballRole == FOOTBAL2018_CONSTANTS.ROLE_STRIKER:
-                return FOOTBAL2018_CONSTANTS.ROLE_SHORT_STRIKER
-            if footballRole == FOOTBAL2018_CONSTANTS.ROLE_MIDFIELDER:
-                return FOOTBAL2018_CONSTANTS.ROLE_SHORT_MIDFIELDER
-            if footballRole == FOOTBAL2018_CONSTANTS.ROLE_DEFENDER:
-                return FOOTBAL2018_CONSTANTS.ROLE_SHORT_DEFENDER
-            return footballRole
-        return item.type
 
     def _getItemTypeID(self):
         return GUI_ITEM_TYPE.VEHICLE
@@ -340,19 +309,8 @@ class StoreVehicleTab(StoreItemsTab):
                     discountText = makeString('#menu:shop/menu/vehicle/rent/discount', discount=text_styles.gold('{} %'.format(actionPrc)))
             rentText = makeString('#menu:shop/menu/vehicle/rent/available', price=priceText)
             return '{}  {}'.format(rentText, discountText)
-        elif item.isFootball:
-            dueDate = self.eventsCache.getEventDueDate()
-            if dueDate is not None:
-                dateStr = BigWorld.wg_getShortDateFormat(float(dueDate))
-            else:
-                dateStr = ''
-            eventLine = makeString(FOOTBALL2018.MESSAGES_INFOTYPE_AVAILABILITY, dateStr=dateStr)
-            return eventLine
         else:
             return ''
-
-    def _checkElite(self, item):
-        return False if item.isFootball else item.isElite
 
 
 class StoreShellTab(StoreItemsTab):

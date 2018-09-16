@@ -168,7 +168,8 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         size = self._getModelHeight() / (2.0 * self.cameraObjectAspect)
         self.__goalTarget = Math.Matrix(self.model.matrix).translation + self.cameraShift
         if not self.__goalDistance:
-            self.__goalDistance = size / math.tan(BigWorld.projection().fov / 2.0)
+            distConstr = self.hangarSpace.space.getCameraLocation()['camConstraints'][2]
+            self.__goalDistance = mathUtils.clamp(distConstr[0], distConstr[1], size / math.tan(BigWorld.projection().fov / 2.0))
 
     def __normalizeStartValues(self):
         yaw1 = calculateYaw(self.__startPosition, self.__goalPosition)
@@ -214,7 +215,10 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
             return
         _, minFov, maxFov = self.settingsCore.getSetting('fov')
         distConstr = self.hangarSpace.space.getCameraLocation()['camConstraints'][2]
-        relativeDist = (self.__goalDistance - distConstr[0]) / (distConstr[1] - distConstr[0])
+        if distConstr[1] != distConstr[0]:
+            relativeDist = (self.__goalDistance - distConstr[0]) / (distConstr[1] - distConstr[0])
+        else:
+            relativeDist = 1.0
         self.__startFov = BigWorld.projection().fov
         self.__goalFov = mathUtils.lerp(math.radians(minFov), math.radians(maxFov), relativeDist)
 

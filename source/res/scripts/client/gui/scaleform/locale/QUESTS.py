@@ -6,7 +6,6 @@ class QUESTS(object):
     BONUSES_COMPENSATION = '#quests:bonuses/compensation'
     MISSIONS_TAB_KURSK = '#quests:missions/tab/kursk'
     MISSIONS_TAB_MARATHONS = '#quests:missions/tab/marathons'
-    MISSIONS_TAB_GROUPED = '#quests:missions/tab/grouped'
     MISSIONS_TAB_EVENTBOARDS = '#quests:missions/tab/eventBoards'
     MISSIONS_TAB_CATEGORIES = '#quests:missions/tab/categories'
     MISSIONS_TAB_CURRENTVEHICLE = '#quests:missions/tab/currentVehicle'
@@ -263,7 +262,9 @@ class QUESTS(object):
     DETAILS_CONDITIONS_INSTALLEDMODULE_TITLE = '#quests:details/conditions/installedModule/title'
     DETAILS_CONDITIONS_TARGET_TITLE = '#quests:details/conditions/target/title'
     DETAILS_CONDITIONS_WIN_TITLE = '#quests:details/conditions/win/title'
+    DETAILS_CONDITIONS_WIN_DESCRIPTION = '#quests:details/conditions/win/description'
     DETAILS_CONDITIONS_ALIVE_TITLE = '#quests:details/conditions/alive/title'
+    DETAILS_CONDITIONS_ALIVE_DESCRIPTION = '#quests:details/conditions/alive/description'
     DETAILS_CONDITIONS_ACHIEVEMENTS_TITLE = '#quests:details/conditions/achievements/title'
     DETAILS_CONDITIONS_CLANKILLS_TITLE = '#quests:details/conditions/clanKills/title'
     DETAILS_CONDITIONS_VEHICLESKILLS_TITLE = '#quests:details/conditions/vehiclesKills/title'
@@ -988,9 +989,6 @@ class QUESTS(object):
     MISSIONS_TAB_KURSK_BODY = '#quests:missions/tab/kursk/body'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
     MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
-    MISSIONS_TAB_LABEL_GROUPED = '#quests:missions/tab/label/grouped'
-    MISSIONS_TAB_GROUPED_HEADER = '#quests:missions/tab/grouped/header'
-    MISSIONS_TAB_GROUPED_BODY = '#quests:missions/tab/grouped/body'
     MISSIONS_TAB_MISSIONS_HEADER = '#quests:missions/tab/missions/header'
     MISSIONS_TAB_MISSIONS_BODY = '#quests:missions/tab/missions/body'
     MISSIONS_TAB_LABEL_MISSIONS = '#quests:missions/tab/label/missions'
@@ -1043,6 +1041,7 @@ class QUESTS(object):
     MISSIONDETAILS_STATUS_COMPLETED_DAILY = '#quests:missionDetails/status/completed/daily'
     MISSIONDETAILS_STATUS_NOTAVAILABLE = '#quests:missionDetails/status/notAvailable'
     MISSIONDETAILS_STATUS_WRONGVEHICLE = '#quests:missionDetails/status/wrongVehicle'
+    MISSIONDETAILS_STATUS_DISABLED = '#quests:missionDetails/status/disabled'
     MISSIONDETAILS_STATUS_NOTAVAILABLEBYTIME = '#quests:missionDetails/status/notAvailableByTime'
     MISSIONDETAILS_STATUS_WRONGTIME = '#quests:missionDetails/status/wrongTime'
     MISSIONDETAILS_BATTLECONDITION_LIST = '#quests:missionDetails/battleCondition/list'
@@ -1110,6 +1109,7 @@ class QUESTS(object):
     TOKEN_DEFAULT_CZECH = '#quests:token/default/czech'
     TOKEN_DEFAULT_CHINA = '#quests:token/default/china'
     TOKEN_DEFAULT_JAPAN = '#quests:token/default/japan'
+    TOKEN_DEFAULT_POLAND = '#quests:token/default/poland'
     TOKEN_DEFAULT_SWEDEN = '#quests:token/default/sweden'
     TOKEN_DEFAULT_ITALY = '#quests:token/default/italy'
     TOKEN_DEFAULT_WOT = '#quests:token/default/wot'
@@ -1129,8 +1129,6 @@ class QUESTS(object):
     TOKEN_DEFAULT_LEAFLET = '#quests:token/default/leaflet'
     TOKEN_DEFAULT_WHEEL = '#quests:token/default/wheel'
     TOKEN_DEFAULT_BOX = '#quests:token/default/box'
-    TOKEN_DEFAULT_BUFFON = '#quests:token/default/buffon'
-    TOKEN_DEFAULT_CARD = '#quests:token/default/card'
     BONUSNAME_CREDITS = '#quests:bonusName/credits'
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
@@ -1176,12 +1174,18 @@ class QUESTS(object):
     BONUSNAME_COMPLETIONTOKENS_4_3 = '#quests:bonusName/completionTokens_4_3'
     BONUSNAME_COMPLETIONTOKENS_4_4 = '#quests:bonusName/completionTokens_4_4'
     BONUSNAME_COMPLETIONTOKENS_4_5 = '#quests:bonusName/completionTokens_4_5'
-    ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
-    ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
-    ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
-    ACTION_BUTTON_CALENDAR = '#quests:action/button/calendar'
-    ACTION_SHORT_CALENDAR = '#quests:action/short/calendar'
-    ACTION_SUBHEADER_CALENDAR = '#quests:action/subheader/calendar'
+    BONUSNAME_COMPLETIONTOKENS_5_1 = '#quests:bonusName/completionTokens_5_1'
+    BONUSNAME_COMPLETIONTOKENS_5_2 = '#quests:bonusName/completionTokens_5_2'
+    BONUSNAME_COMPLETIONTOKENS_5_3 = '#quests:bonusName/completionTokens_5_3'
+    BONUSNAME_COMPLETIONTOKENS_5_4 = '#quests:bonusName/completionTokens_5_4'
+    BONUSNAME_COMPLETIONTOKENS_6_1 = '#quests:bonusName/completionTokens_6_1'
+    BONUSNAME_COMPLETIONTOKENS_6_2 = '#quests:bonusName/completionTokens_6_2'
+    BONUSNAME_COMPLETIONTOKENS_6_3 = '#quests:bonusName/completionTokens_6_3'
+    BONUSNAME_COMPLETIONTOKENS_6_4 = '#quests:bonusName/completionTokens_6_4'
+    BONUSNAME_COMPLETIONTOKENS_7_1 = '#quests:bonusName/completionTokens_7_1'
+    BONUSNAME_COMPLETIONTOKENS_7_2 = '#quests:bonusName/completionTokens_7_2'
+    BONUSNAME_COMPLETIONTOKENS_7_3 = '#quests:bonusName/completionTokens_7_3'
+    BONUSNAME_COMPLETIONTOKENS_7_4 = '#quests:bonusName/completionTokens_7_4'
     ACTION_AUTO_EXCHANGERATE = '#quests:action/auto/exchangeRate'
     ACTION_FULL_EXCHANGERATE = '#quests:action/full/exchangeRate'
     ACTION_HERO_FULL_EXCHANGERATE = '#quests:action/hero/full/exchangeRate'
@@ -1303,27 +1307,18 @@ class QUESTS(object):
     ACTION_HERO_FULL_SET_SHELLPRICE = '#quests:action/hero/full/set_ShellPrice'
     ACTION_SHORT_SET_SHELLPRICE = '#quests:action/short/set_ShellPrice'
     ACTION_BUTTON_SET_SHELLPRICE = '#quests:action/button/set_ShellPrice'
-    ACTION_AUTO_COND_VEHPRICE = '#quests:action/auto/cond_VehPrice'
-    ACTION_SHORT_COND_VEHPRICE_MORE = '#quests:action/short/cond_VehPrice/more'
-    ACTION_SHORT_COND_VEHPRICE_TWO = '#quests:action/short/cond_VehPrice/two'
-    ACTION_SHORT_COND_VEHPRICE_ONE = '#quests:action/short/cond_VehPrice/one'
-    ACTION_BUTTON_COND_VEHPRICE = '#quests:action/button/cond_VehPrice'
-    ACTION_AUTO_MUL_VEHPRICE = '#quests:action/auto/mul_VehPrice'
-    ACTION_FULL_MUL_VEHPRICE = '#quests:action/full/mul_VehPrice'
-    ACTION_SHORT_MUL_VEHPRICE_MORE = '#quests:action/short/mul_VehPrice/more'
-    ACTION_SHORT_MUL_VEHPRICE_TWO = '#quests:action/short/mul_VehPrice/two'
-    ACTION_SHORT_MUL_VEHPRICE_ONE = '#quests:action/short/mul_VehPrice/one'
-    ACTION_BUTTON_MUL_VEHPRICE = '#quests:action/button/mul_VehPrice'
-    ACTION_AUTO_SET_VEHPRICE = '#quests:action/auto/set_VehPrice'
-    ACTION_FULL_SET_VEHPRICE = '#quests:action/full/set_VehPrice'
-    ACTION_SHORT_SET_VEHPRICE = '#quests:action/short/set_VehPrice'
-    ACTION_BUTTON_SET_VEHPRICE = '#quests:action/button/set_VehPrice'
-    ACTION_AUTO_MUL_VEHRENTPRICE = '#quests:action/auto/mul_VehRentPrice'
-    ACTION_SHORT_MUL_VEHRENTPRICE_MORE = '#quests:action/short/mul_VehRentPrice/more'
-    ACTION_SHORT_MUL_VEHRENTPRICE_TWO = '#quests:action/short/mul_VehRentPrice/two'
-    ACTION_SHORT_MUL_VEHRENTPRICE_ONE = '#quests:action/short/mul_VehRentPrice/one'
-    ACTION_FULL_MUL_VEHRENTPRICE = '#quests:action/full/mul_VehRentPrice'
-    ACTION_BUTTON_MUL_VEHRENTPRICE = '#quests:action/button/mul_VehRentPrice'
+    ACTION_AUTO_VEHICLEBUYPRICE = '#quests:action/auto/vehicleBuyPrice'
+    ACTION_FULL_VEHICLEBUYPRICE = '#quests:action/full/vehicleBuyPrice'
+    ACTION_SHORT_VEHICLEBUYPRICE_MORE = '#quests:action/short/vehicleBuyPrice/more'
+    ACTION_SHORT_VEHICLEBUYPRICE_TWO = '#quests:action/short/vehicleBuyPrice/two'
+    ACTION_SHORT_VEHICLEBUYPRICE_ONE = '#quests:action/short/vehicleBuyPrice/one'
+    ACTION_BUTTON_VEHICLEBUYPRICE = '#quests:action/button/vehicleBuyPrice'
+    ACTION_AUTO_VEHICLERENTPRICE = '#quests:action/auto/vehicleRentPrice'
+    ACTION_SHORT_VEHICLERENTPRICE_MORE = '#quests:action/short/vehicleRentPrice/more'
+    ACTION_SHORT_VEHICLERENTPRICE_TWO = '#quests:action/short/vehicleRentPrice/two'
+    ACTION_SHORT_VEHICLERENTPRICE_ONE = '#quests:action/short/vehicleRentPrice/one'
+    ACTION_FULL_VEHICLERENTPRICE = '#quests:action/full/vehicleRentPrice'
+    ACTION_BUTTON_VEHICLERENTPRICE = '#quests:action/button/vehicleRentPrice'
     ACTION_AUTO_CLANCREATIONCOST = '#quests:action/auto/clanCreationCost'
     ACTION_FULL_CLANCREATIONCOST = '#quests:action/full/clanCreationCost'
     ACTION_HERO_FULL_CLANCREATIONCOST = '#quests:action/hero/full/clanCreationCost'
@@ -1402,6 +1397,7 @@ class QUESTS(object):
     ACTION_DISCOUNT_MODIFIER = '#quests:action/discount/modifier'
     ACTION_DISCOUNT_XP = '#quests:action/discount/xp'
     ACTION_CHAIN_HINT_REMOVALCOST = '#quests:action/chain/hint/removalCost'
+    ACTION_CHAIN_HINT_SHELLSPRICE = '#quests:action/chain/hint/shellsPrice'
     ACTION_CHAIN_HINT_OPENPERSONALCASE = '#quests:action/chain/hint/openPersonalCase'
     ACTION_CHAIN_HINT_CHANGEROLE = '#quests:action/chain/hint/changeRole'
     ACTION_CHAIN_HINT_DROPSKILLS = '#quests:action/chain/hint/dropSkills'
@@ -1433,17 +1429,32 @@ class QUESTS(object):
     ACTION_BOOSTER_BOOSTER_CREDITS = '#quests:action/booster/booster_credits'
     ACTION_BOOSTER_BOOSTER_REPAIR = '#quests:action/booster/booster_repair'
     ACTION_EXCHANGERATE_GOLD2CREDIT = '#quests:action/exchangeRate/gold2credit'
+    PERSONALMISSION_STATUS_LASTDONEWITHPAWN = '#quests:personalMission/status/lastDoneWithPawn'
+    PERSONALMISSION_STATUS_ONLYMAINDONE = '#quests:personalMission/status/onlyMainDone'
+    PERSONALMISSION_STATUS_ONLYADDDONE = '#quests:personalMission/status/onlyAddDone'
     PERSONALMISSION_STATUS_MAINDONE = '#quests:personalMission/status/mainDone'
     PERSONALMISSION_STATUS_FULLDONE = '#quests:personalMission/status/fullDone'
     PERSONALMISSION_STATUS_DONEWITHPAWN = '#quests:personalMission/status/doneWithPawn'
     PERSONALMISSION_STATUS_INPROGRESS = '#quests:personalMission/status/inProgress'
+    PERSONALMISSION_STATUS_NOTDONE = '#quests:personalMission/status/notDone'
     PERSONALMISSION_STATUS_ADDINPROGRESS = '#quests:personalMission/status/addInProgress'
     PERSONALMISSION_STATUS_SHEETRECOVERYINPROGRESS = '#quests:personalMission/status/sheetRecoveryInProgress'
-    PERSONALMISSION_STATUS_LOCKEDBYVEHICLE = '#quests:personalMission/status/lockedByVehicle'
+    PERSONALMISSION_STATUS_ADDBOTTOMLOCKED_REGULAR = '#quests:personalMission/status/addBottomLocked/regular'
+    PERSONALMISSION_STATUS_ADDBOTTOMLOCKED_PM2 = '#quests:personalMission/status/addBottomLocked/pm2'
+    PERSONALMISSION_STATUS_ADDBOTTOMINFO_REGULAR = '#quests:personalMission/status/addBottomInfo/regular'
+    PERSONALMISSION_STATUS_ADDBOTTOMINFO_PM2 = '#quests:personalMission/status/addBottomInfo/pm2'
+    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR = '#quests:personalMission/status/addBottom/vehicleType/Alliance-USSR'
+    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_GERMANY = '#quests:personalMission/status/addBottom/vehicleType/Alliance-Germany'
+    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USA = '#quests:personalMission/status/addBottom/vehicleType/Alliance-USA'
+    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_FRANCE = '#quests:personalMission/status/addBottom/vehicleType/Alliance-France'
+    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_LIGHTTANK = '#quests:personalMission/status/addBottom/vehicleType/lightTank'
+    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_MEDIUMTANK = '#quests:personalMission/status/addBottom/vehicleType/mediumTank'
+    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_HEAVYTANK = '#quests:personalMission/status/addBottom/vehicleType/heavyTank'
+    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_AT_SPG = '#quests:personalMission/status/addBottom/vehicleType/AT-SPG'
+    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG = '#quests:personalMission/status/addBottom/vehicleType/SPG'
     PERSONALMISSION_STATUS_LOCKEDBYPREVMISSIONS = '#quests:personalMission/status/lockedByPrevMissions'
     PERSONALMISSION_STATUS_LOCKEDBYPREVOPERATION = '#quests:personalMission/status/lockedByPrevOperation'
     PERSONALMISSION_BOTTOMSTATUS_ALLAWARDSRECEIVED = '#quests:personalMission/bottomStatus/allAwardsReceived'
-    PERSONALMISSION_VEHICLESELECTOR_TITLE = '#quests:personalMission/vehicleSelector/title'
     QUEST_CONDITION_DOT = '#quests:quest/condition/dot'
     QUEST_CONDITION_OR = '#quests:quest/condition/or'
     ACTIONCARD_TITLE_SET_MARATHONANNOUNCE = '#quests:actionCard/title/set_MarathonAnnounce'
@@ -1459,6 +1470,35 @@ class QUESTS(object):
     ACTION_HERO_FULL_SET_MARATHONFINISHED = '#quests:action/hero/full/set_MarathonFinished'
     ACTION_BUTTON_SET_MARATHONFINISHED = '#quests:action/button/set_MarathonFinished'
     ACTION_MARATHON_ANNOUNCETIME = '#quests:action/marathon/announceTime'
+    METRICS_STATE_DONE = '#quests:metrics/state/done'
+    METRICS_STATE_INPROGRESS = '#quests:metrics/state/inProgress'
+    METRICS_STATE_FAILED = '#quests:metrics/state/failed'
+    METRICS_TITLE_PROGRESS = '#quests:metrics/title/progress'
+    METRICS_TITLE_POSITION = '#quests:metrics/title/position'
+    METRICS_TITLE_LEFT = '#quests:metrics/title/left'
+    METRICS_TITLE_TRIESLEFT = '#quests:metrics/title/triesLeft'
+    METRICS_TITLE_TARGETS = '#quests:metrics/title/targets'
+    BATTLECONDITION_STATE_COMPLETED = '#quests:battleCondition/state/completed'
+    BATTLECONDITION_STATE_COMPLETED_PERFECTLY = '#quests:battleCondition/state/completed_perfectly'
+    BATTLECONDITION_STATE_IN_PROGRESS = '#quests:battleCondition/state/in_progress'
+    BATTLECONDITION_STATE_FAILED = '#quests:battleCondition/state/failed'
+    BATTLECONDITION_TASK_STATUS_DONE = '#quests:battleCondition/task/status/done'
+    BATTLECONDITION_TASK_STATUS_FAILED = '#quests:battleCondition/task/status/failed'
+    BATTLEPROGRESS_LIMITEDBYTIME = '#quests:battleProgress/limitedByTime'
+    BATTLEPROGRESS_POSITION_SHORT = '#quests:battleProgress/position/short'
+    BATTLEPROGRESS_POSITION_LEFT = '#quests:battleProgress/position/left'
+    BATTLEPROGRESS_POSITION_ADVANTAGE = '#quests:battleProgress/position/advantage'
+    BATTLEPROGRESS_DAMAGELEFT = '#quests:battleProgress/damageLeft'
+    BATTLEPROGRESS_KILLSLEFT = '#quests:battleProgress/killsLeft'
+    BATTLEPROGRESS_ALERTLABEL_TITLE = '#quests:battleProgress/alertLabel/title'
+    BATTLEPROGRESS_ALERTLABEL_REPAIRMODULES = '#quests:battleProgress/alertLabel/repairModules'
+    BATTLEPROGRESS_AFTERBATTLERESULT = '#quests:battleProgress/afterBattleResult'
+    QUEST_FLAG_STATUS_NOT_STARTED = '#quests:quest/flag/status/not_started'
+    QUEST_FLAG_STATUS_LOCKED = '#quests:quest/flag/status/locked'
+    QUEST_FLAG_STATUS_FAILED = '#quests:quest/flag/status/failed'
+    QUEST_FLAG_STATUS_COMPLETED = '#quests:quest/flag/status/completed'
+    QUEST_FLAG_STATUS_IN_PROGRESS = '#quests:quest/flag/status/in_progress'
+    QUEST_FLAG_STATUS_COMPLETED_PERFECTLY = '#quests:quest/flag/status/completed_perfectly'
     BONUSNAME_ENUM = (BONUSNAME_CREDITS,
      BONUSNAME_GOLD,
      BONUSNAME_CRYSTAL,
@@ -1503,7 +1543,19 @@ class QUESTS(object):
      BONUSNAME_COMPLETIONTOKENS_4_2,
      BONUSNAME_COMPLETIONTOKENS_4_3,
      BONUSNAME_COMPLETIONTOKENS_4_4,
-     BONUSNAME_COMPLETIONTOKENS_4_5)
+     BONUSNAME_COMPLETIONTOKENS_4_5,
+     BONUSNAME_COMPLETIONTOKENS_5_1,
+     BONUSNAME_COMPLETIONTOKENS_5_2,
+     BONUSNAME_COMPLETIONTOKENS_5_3,
+     BONUSNAME_COMPLETIONTOKENS_5_4,
+     BONUSNAME_COMPLETIONTOKENS_6_1,
+     BONUSNAME_COMPLETIONTOKENS_6_2,
+     BONUSNAME_COMPLETIONTOKENS_6_3,
+     BONUSNAME_COMPLETIONTOKENS_6_4,
+     BONUSNAME_COMPLETIONTOKENS_7_1,
+     BONUSNAME_COMPLETIONTOKENS_7_2,
+     BONUSNAME_COMPLETIONTOKENS_7_3,
+     BONUSNAME_COMPLETIONTOKENS_7_4)
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1512,6 +1564,7 @@ class QUESTS(object):
      TOKEN_DEFAULT_CZECH,
      TOKEN_DEFAULT_CHINA,
      TOKEN_DEFAULT_JAPAN,
+     TOKEN_DEFAULT_POLAND,
      TOKEN_DEFAULT_SWEDEN,
      TOKEN_DEFAULT_ITALY,
      TOKEN_DEFAULT_WOT,
@@ -1530,9 +1583,16 @@ class QUESTS(object):
      TOKEN_DEFAULT_FOLDER,
      TOKEN_DEFAULT_LEAFLET,
      TOKEN_DEFAULT_WHEEL,
-     TOKEN_DEFAULT_BOX,
-     TOKEN_DEFAULT_BUFFON,
-     TOKEN_DEFAULT_CARD)
+     TOKEN_DEFAULT_BOX)
+    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ENUM = (PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR,
+     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_GERMANY,
+     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USA,
+     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_FRANCE,
+     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_LIGHTTANK,
+     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_MEDIUMTANK,
+     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_HEAVYTANK,
+     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_AT_SPG,
+     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG)
     DETAILS_DOSSIER_ALL_ENUM = (DETAILS_DOSSIER_RANDOM_XP,
      DETAILS_DOSSIER_RANDOM_MAXXP,
      DETAILS_DOSSIER_RANDOM_WINS,
@@ -1664,13 +1724,7 @@ class QUESTS(object):
      DETAILS_DOSSIER_22_BATTLESCOUNT,
      DETAILS_DOSSIER_24_BATTLESCOUNT,
      DETAILS_DOSSIER_27_BATTLESCOUNT)
-    ACTION_ENUM = (ACTION_AUTO_CALENDAR,
-     ACTION_FULL_CALENDAR,
-     ACTION_HERO_FULL_CALENDAR,
-     ACTION_BUTTON_CALENDAR,
-     ACTION_SHORT_CALENDAR,
-     ACTION_SUBHEADER_CALENDAR,
-     ACTION_AUTO_EXCHANGERATE,
+    ACTION_ENUM = (ACTION_AUTO_EXCHANGERATE,
      ACTION_FULL_EXCHANGERATE,
      ACTION_HERO_FULL_EXCHANGERATE,
      ACTION_SHORT_EXCHANGERATE,
@@ -1791,27 +1845,18 @@ class QUESTS(object):
      ACTION_HERO_FULL_SET_SHELLPRICE,
      ACTION_SHORT_SET_SHELLPRICE,
      ACTION_BUTTON_SET_SHELLPRICE,
-     ACTION_AUTO_COND_VEHPRICE,
-     ACTION_SHORT_COND_VEHPRICE_MORE,
-     ACTION_SHORT_COND_VEHPRICE_TWO,
-     ACTION_SHORT_COND_VEHPRICE_ONE,
-     ACTION_BUTTON_COND_VEHPRICE,
-     ACTION_AUTO_MUL_VEHPRICE,
-     ACTION_FULL_MUL_VEHPRICE,
-     ACTION_SHORT_MUL_VEHPRICE_MORE,
-     ACTION_SHORT_MUL_VEHPRICE_TWO,
-     ACTION_SHORT_MUL_VEHPRICE_ONE,
-     ACTION_BUTTON_MUL_VEHPRICE,
-     ACTION_AUTO_SET_VEHPRICE,
-     ACTION_FULL_SET_VEHPRICE,
-     ACTION_SHORT_SET_VEHPRICE,
-     ACTION_BUTTON_SET_VEHPRICE,
-     ACTION_AUTO_MUL_VEHRENTPRICE,
-     ACTION_SHORT_MUL_VEHRENTPRICE_MORE,
-     ACTION_SHORT_MUL_VEHRENTPRICE_TWO,
-     ACTION_SHORT_MUL_VEHRENTPRICE_ONE,
-     ACTION_FULL_MUL_VEHRENTPRICE,
-     ACTION_BUTTON_MUL_VEHRENTPRICE,
+     ACTION_AUTO_VEHICLEBUYPRICE,
+     ACTION_FULL_VEHICLEBUYPRICE,
+     ACTION_SHORT_VEHICLEBUYPRICE_MORE,
+     ACTION_SHORT_VEHICLEBUYPRICE_TWO,
+     ACTION_SHORT_VEHICLEBUYPRICE_ONE,
+     ACTION_BUTTON_VEHICLEBUYPRICE,
+     ACTION_AUTO_VEHICLERENTPRICE,
+     ACTION_SHORT_VEHICLERENTPRICE_MORE,
+     ACTION_SHORT_VEHICLERENTPRICE_TWO,
+     ACTION_SHORT_VEHICLERENTPRICE_ONE,
+     ACTION_FULL_VEHICLERENTPRICE,
+     ACTION_BUTTON_VEHICLERENTPRICE,
      ACTION_AUTO_CLANCREATIONCOST,
      ACTION_FULL_CLANCREATIONCOST,
      ACTION_HERO_FULL_CLANCREATIONCOST,
@@ -1890,6 +1935,7 @@ class QUESTS(object):
      ACTION_DISCOUNT_MODIFIER,
      ACTION_DISCOUNT_XP,
      ACTION_CHAIN_HINT_REMOVALCOST,
+     ACTION_CHAIN_HINT_SHELLSPRICE,
      ACTION_CHAIN_HINT_OPENPERSONALCASE,
      ACTION_CHAIN_HINT_CHANGEROLE,
      ACTION_CHAIN_HINT_DROPSKILLS,
@@ -1962,6 +2008,15 @@ class QUESTS(object):
     def getDetailsDossier(cls, battleTypeName, keyName):
         outcome = '#quests:details/dossier/{}/{}'.format(battleTypeName, keyName)
         if outcome not in cls.DETAILS_DOSSIER_ALL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getAddBottomVehType(cls, alliance):
+        outcome = '#quests:personalMission/status/addBottom/vehicleType/{}'.format(alliance)
+        if outcome not in cls.PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

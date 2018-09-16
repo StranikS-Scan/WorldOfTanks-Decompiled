@@ -182,7 +182,11 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'FE18ClosedStage',
  'FE18SoloStriker',
  'FE18SoloMidfielder',
- 'FE18SoloDefender']
+ 'FE18SoloDefender',
+ 'readyForBattleAllianceUSSR',
+ 'readyForBattleAllianceGermany',
+ 'readyForBattleAllianceUSA',
+ 'readyForBattleAllianceFrance']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -296,7 +300,11 @@ _achievements15x15PopUps = ['warrior',
  'FE18ClosedStage',
  'FE18SoloStriker',
  'FE18SoloMidfielder',
- 'FE18SoloDefender']
+ 'FE18SoloDefender',
+ 'readyForBattleAllianceUSSR',
+ 'readyForBattleAllianceGermany',
+ 'readyForBattleAllianceUSA',
+ 'readyForBattleAllianceFrance']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 ACHIEVEMENTS7X7_BLOCK_LAYOUT = ['wolfAmongSheep',
  'wolfAmongSheepMedal',
@@ -416,7 +424,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'FE18OpenPlayOff',
  'FE18OpenFinalStage',
  'FE18OpenFirstPlace',
- 'medalKursk']
+ 'medalKursk',
+ 'newMeritPM2']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -461,7 +470,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'FE18OpenPlayOff',
  'FE18OpenFinalStage',
  'FE18OpenFirstPlace',
- 'medalKursk']
+ 'medalKursk',
+ 'newMeritPM2']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

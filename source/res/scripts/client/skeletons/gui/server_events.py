@@ -5,8 +5,6 @@ from Event import Event
 class IEventsCache(object):
     onSyncStarted = None
     onSyncCompleted = None
-    onSelectedQuestsChanged = None
-    onSlotsCountChanged = None
     onProgressUpdated = None
     onEventsVisited = None
     onProfileVisited = None
@@ -32,26 +30,17 @@ class IEventsCache(object):
         raise NotImplementedError
 
     @property
-    def randomQuestsProgress(self):
-        raise NotImplementedError
-
-    @property
-    def random(self):
+    def prefetcher(self):
         raise NotImplementedError
 
     @property
     def questsProgress(self):
         raise NotImplementedError
 
-    @property
-    def personalMissions(self):
+    def getPersonalMissions(self):
         raise NotImplementedError
 
-    @property
-    def prefetcher(self):
-        raise NotImplementedError
-
-    def getLockedQuestTypes(self):
+    def getLockedQuestTypes(self, branch):
         raise NotImplementedError
 
     def update(self, diff=None, callback=None):
@@ -91,9 +80,6 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getEventBattles(self):
-        raise NotImplementedError
-
-    def getEventDueDate(self):
         raise NotImplementedError
 
     def isEventEnabled(self):

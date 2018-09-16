@@ -82,6 +82,7 @@ class ViewBackground(object):
         self.__isWindowAccessible = isAccessible
         if isAccessible and self.__delayedVideoStart:
             self.__startBGMode()
+            self.__delayedVideoStart = False
         else:
             self.__applyWindowAccessibility()
 

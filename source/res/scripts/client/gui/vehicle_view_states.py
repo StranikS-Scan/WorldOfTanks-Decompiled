@@ -97,7 +97,7 @@ class SelectedViewState(IVehicleViewState):
         return not self._locked and self._isInHangar
 
     def isCustomizationEnabled(self):
-        return self._isInHangar and not self._locked and not self._isBroken and not self._isDisabledInRent and not self._isOutfitLocked
+        return not self._isOnlyForEventBattles and self._isInHangar and not self._locked and not self._isBroken and not self._isDisabledInRent and not self._isOutfitLocked
 
     def isOnlyForEventBattles(self):
         return self._isOnlyForEventBattles

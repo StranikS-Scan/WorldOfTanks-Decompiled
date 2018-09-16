@@ -92,6 +92,22 @@ class BADGE(object):
     BADGE_35 = '#badge:badge_35'
     BADGE_35_DESCR = '#badge:badge_35_descr'
     BADGE_NOTE = '#badge:badge_note'
+    BADGE_36 = '#badge:badge_36'
+    BADGE_36_DESCR = '#badge:badge_36_descr'
+    BADGE_37 = '#badge:badge_37'
+    BADGE_37_DESCR = '#badge:badge_37_descr'
+    BADGE_38 = '#badge:badge_38'
+    BADGE_38_DESCR = '#badge:badge_38_descr'
+    BADGE_39 = '#badge:badge_39'
+    BADGE_39_DESCR = '#badge:badge_39_descr'
+    BADGE_40 = '#badge:badge_40'
+    BADGE_40_DESCR = '#badge:badge_40_descr'
+    BADGE_41 = '#badge:badge_41'
+    BADGE_41_DESCR = '#badge:badge_41_descr'
+    BADGE_42 = '#badge:badge_42'
+    BADGE_42_DESCR = '#badge:badge_42_descr'
+    BADGE_43 = '#badge:badge_43'
+    BADGE_43_DESCR = '#badge:badge_43_descr'
     BADGE_ALL_SHORT_ENUM = (BADGE_10_SHORT,
      BADGE_11_SHORT,
      BADGE_12_SHORT,
@@ -180,7 +196,23 @@ class BADGE(object):
      BADGE_34_DESCR,
      BADGE_35,
      BADGE_35_DESCR,
-     BADGE_NOTE)
+     BADGE_NOTE,
+     BADGE_36,
+     BADGE_36_DESCR,
+     BADGE_37,
+     BADGE_37_DESCR,
+     BADGE_38,
+     BADGE_38_DESCR,
+     BADGE_39,
+     BADGE_39_DESCR,
+     BADGE_40,
+     BADGE_40_DESCR,
+     BADGE_41,
+     BADGE_41_DESCR,
+     BADGE_42,
+     BADGE_42_DESCR,
+     BADGE_43,
+     BADGE_43_DESCR)
     BADGE_ALL_DESCR_ENUM = (BADGE_0_DESCR,
      BADGE_1_DESCR,
      BADGE_2_DESCR,
@@ -216,7 +248,15 @@ class BADGE(object):
      BADGE_32_DESCR,
      BADGE_33_DESCR,
      BADGE_34_DESCR,
-     BADGE_35_DESCR)
+     BADGE_35_DESCR,
+     BADGE_36_DESCR,
+     BADGE_37_DESCR,
+     BADGE_38_DESCR,
+     BADGE_39_DESCR,
+     BADGE_40_DESCR,
+     BADGE_41_DESCR,
+     BADGE_42_DESCR,
+     BADGE_43_DESCR)
 
     @classmethod
     def badgeName(cls, key0):

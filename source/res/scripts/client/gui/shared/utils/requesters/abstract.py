@@ -311,6 +311,11 @@ class ClientRequestsByIDProcessor(RequestsByIDProcessor):
     def getSender(self):
         return self._sender
 
+    def fini(self):
+        self._sender = None
+        super(ClientRequestsByIDProcessor, self).fini()
+        return
+
     def _doCall(self, method, *args, **kwargs):
         requestID = self._idsGenerator.next()
 
@@ -326,8 +331,3 @@ class ClientRequestsByIDProcessor(RequestsByIDProcessor):
         if not response.isSuccess():
             LOG_WARNING('Client request error', ctx, response)
         return response
-
-    def fini(self):
-        self._sender = None
-        super(ClientRequestsByIDProcessor, self).fini()
-        return

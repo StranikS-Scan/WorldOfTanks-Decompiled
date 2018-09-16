@@ -19,7 +19,7 @@ class StrongholdStorage(LocalStorage):
 
     def suspend(self):
         super(StrongholdStorage, self).suspend()
-        self.clear()
+        self._animationIdx = 0
 
     def setActiveAnimationIdx(self, animIdx):
         self._animationIdx = animIdx

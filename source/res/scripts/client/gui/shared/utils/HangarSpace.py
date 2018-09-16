@@ -276,7 +276,7 @@ class HangarSpace(IHangarSpace):
             self.__lastUpdatedVehicle = vehicle
 
     def getVehicleEntity(self):
-        return self.__space.getVehicleEntity() if self.__inited and self.__space.vehicleEntityId else None
+        return self.__space.getVehicleEntity() if self.__inited else None
 
     def updateVehicleOutfit(self, outfit):
         if self.__inited:

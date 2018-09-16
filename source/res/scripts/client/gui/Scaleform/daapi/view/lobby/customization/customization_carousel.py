@@ -11,7 +11,8 @@ from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
-from gui.customization.shared import createCustomizationBaseRequestCriteria
+from gui.customization.shared import createCustomizationBaseRequestCriteria, isServiceItem
+from CurrentVehicle import g_currentVehicle
 
 def comparisonKey(item):
     return (TYPES_ORDER.index(item.itemTypeID), item.groupID, item.id)
@@ -56,7 +57,8 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._proxy = proxy
         self._currentlyApplied = set()
         self._allSeasonAndTabFilterData = {}
-        requirement = createCustomizationBaseRequestCriteria(self._currentVehicle.item, self.eventsCache.randomQuestsProgress, self._proxy.getAppliedItems())
+        hasCustomDefaultCamouflage = g_currentVehicle.item.descriptor.type.hasCustomDefaultCamouflage
+        requirement = createCustomizationBaseRequestCriteria(self._currentVehicle.item, self.eventsCache.questsProgress, self._proxy.getAppliedItems())
         allItems = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, requirement)
         for tabIndex in TABS_ITEM_MAPPING.iterkeys():
             self._allSeasonAndTabFilterData[tabIndex] = {}
@@ -64,6 +66,8 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
                 self._allSeasonAndTabFilterData[tabIndex][season] = CustomizationSeasonAndTypeFilterData()
 
         for item in sorted(allItems.itervalues(), key=comparisonKey):
+            if isServiceItem(item) and hasCustomDefaultCamouflage:
+                continue
             groupName = item.groupUserName
             tabIndex = TYPE_TO_TAB_IDX.get(item.itemTypeID)
             for seasonType in SeasonType.COMMON_SEASONS:
@@ -193,7 +197,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
 
     def _buildCustomizationItems(self):
         season = self._seasonID
-        requirement = createCustomizationBaseRequestCriteria(self._currentVehicle.item, self.eventsCache.randomQuestsProgress, self._proxy.getAppliedItems(), season)
+        requirement = createCustomizationBaseRequestCriteria(self._currentVehicle.item, self.eventsCache.questsProgress, self._proxy.getAppliedItems(), season)
         seasonAndTabData = self._allSeasonAndTabFilterData[self._tabIndex][season]
         allItemsGroup = len(seasonAndTabData.allGroups) - 1
         if seasonAndTabData.selectedGroupIndex != allItemsGroup:

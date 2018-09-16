@@ -13,6 +13,12 @@ class FortClanBattleRoomMeta(BaseRallyRoomView):
     def toggleRoomStatus(self):
         self._printOverrideError('toggleRoomStatus')
 
+    def onFiltersChange(self, slotIndex, filters):
+        self._printOverrideError('onFiltersChange')
+
+    def resetFilters(self, slotIndex):
+        self._printOverrideError('resetFilters')
+
     def as_updateTeamHeaderTextS(self, value):
         return self.flashObject.as_updateTeamHeaderText(value) if self._isDAAPIInited() else None
 
@@ -45,3 +51,6 @@ class FortClanBattleRoomMeta(BaseRallyRoomView):
 
     def as_setTableHeaderS(self, data):
         return self.flashObject.as_setTableHeader(data) if self._isDAAPIInited() else None
+
+    def as_setFiltersDataS(self, data):
+        return self.flashObject.as_setFiltersData(data) if self._isDAAPIInited() else None

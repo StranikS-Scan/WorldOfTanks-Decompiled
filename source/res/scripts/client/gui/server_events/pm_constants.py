@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/server_events/pm_constants.py
 from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
 from shared_utils import CONST_CONTAINER
+from personal_missions import PM_BRANCH
 
 class SOUNDS(CONST_CONTAINER):
     COMMON_SOUND_SPACE = 'personalMissions'
@@ -28,22 +29,21 @@ class SOUNDS(CONST_CONTAINER):
     ONE_AWARD_LIST_RECEIVED_CONFIRM = 'pm_greeting_order_form_confirm'
     FOUR_AWARD_LISTS_RECEIVED = 'pm_conversion_order_form'
     FOUR_AWARD_LISTS_RECEIVED_CONFIRM = 'pm_conversion_order_form_confirm'
+    RTCP_MISSION_BRANCH = {PM_BRANCH.REGULAR: 'RTPC_ext_mission_zoom_green',
+     PM_BRANCH.PERSONAL_MISSION_2: 'RTPC_ext_mission_zoom_blue'}
+    BRANCH_DEFAULT = 0
+    BRANCH_SELECTED = 100
     MIN_MISSIONS_ZOOM = 0
     MAX_MISSIONS_ZOOM = 100
 
 
 _SOUNDS_PRIORITIES = (SOUNDS.AWARD_WINDOW, SOUNDS.WOMAN_AWARD_WINDOW, SOUNDS.TANK_AWARD_WINDOW)
-PERSONAL_MISSIONS_SOUND_SPACE = CommonSoundSpaceSettings(SOUNDS.COMMON_SOUND_SPACE, {SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_MISSIONS}, {SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_GARAGE}, (SOUNDS.MUSIC,), (SOUNDS.AMBIENT,), _SOUNDS_PRIORITIES, True)
-PERSONAL_MISSIONS_SILENT_SOUND_SPACE = CommonSoundSpaceSettings(SOUNDS.COMMON_SOUND_SPACE, {}, {}, (), (), _SOUNDS_PRIORITIES, False)
-
-class FIRST_ENTRY_STATE(CONST_CONTAINER):
-    NOT_VISITED = 0
-    TUTORIAL_WAS_SHOWN = 1
-    AWARDS_WAS_SHOWN = 2
-
+PERSONAL_MISSIONS_SOUND_SPACE = CommonSoundSpaceSettings(SOUNDS.COMMON_SOUND_SPACE, {SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_MISSIONS}, {SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_GARAGE}, (SOUNDS.MUSIC, SOUNDS.AMBIENT), (), _SOUNDS_PRIORITIES, True, '', '')
+PERSONAL_MISSIONS_SILENT_SOUND_SPACE = CommonSoundSpaceSettings(SOUNDS.COMMON_SOUND_SPACE, {}, {}, (), (), _SOUNDS_PRIORITIES, False, '', '')
 
 class PM_TUTOR_FIELDS(CONST_CONTAINER):
-    FIRST_ENTRY_STATE = 'pm_first_entry'
+    GREETING_SCREEN_SHOWN = 'pm_greeting_screen_shown'
+    FIRST_ENTRY_AWARDS_SHOWN = 'pm_first_entry_awards_shown'
     INITIAL_FAL_COUNT = 'pm_initial_free_award_lists_count'
     ONE_FAL_SHOWN = 'pm_first_free_award_list_shown'
     FOUR_FAL_SHOWN = 'pm_four_free_award_lists_shown'

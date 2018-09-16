@@ -473,6 +473,204 @@
           <name>	Track_VD_R1	</name>
         </node>
       </trackNodes>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	112	</segmentsCount>
+          <segmentsOuterThickness>	0.0328103	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.00278297	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.53656	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.148427	</back>
+              <top>	0.145643	</top>
+              <front>	0.143016	</front>
+              <bottom>	0.129713	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.141087	</back>
+              <top>	0.127851	</top>
+              <front>	0.150894	</front>
+              <bottom>	0.129713	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/german/G98_Waffentrager_E100/track/segment1.model	</model>
+            <length>	0.149999	</length>
+          </mainSegment>
+          <secSegment>
+            <model>	vehicles/german/G98_Waffentrager_E100/track/segment2.model	</model>
+            <length>	0.150001	</length>
+          </secSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top></top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L1	</wheel>
+            <wheel>	W_L7	</wheel>
+            <wheel>	W_L6	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	3.43797 0.840238	</basePos>
+              <shiftVec>	0.432204 0.134486	</shiftVec>
+              <jointIdx>	12	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L1	</wheelName>
+              <basePos>	-3.44085 0.715861	</basePos>
+              <shiftVec>	-0.278257 0.215801	</shiftVec>
+              <jointIdx>	65	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L7	</wheelName>
+              <basePos>	-2.49451 0.504028	</basePos>
+              <shiftVec>	-0.018889 -0.493823	</shiftVec>
+              <jointIdx>	77	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	2.49027 0.504027	</basePos>
+              <shiftVec>	0.0932908 -0.489151	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L1	</name>
+              <radius>	0.346983	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.44865	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L1	</name>
+              <startAngle>	10.087	</startAngle>
+              <teethCount>	9	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	6.82311	</startAngle>
+              <teethCount>	9	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top></top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	112	</segmentsCount>
+          <segmentsOuterThickness>	0.0328202	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.00278381	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.53656	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.148427	</back>
+              <top>	0.145643	</top>
+              <front>	0.143016	</front>
+              <bottom>	0.129713	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.141087	</back>
+              <top>	0.127851	</top>
+              <front>	0.150894	</front>
+              <bottom>	0.129713	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/german/G98_Waffentrager_E100/track/segment1.model	</model>
+            <length>	0.149999	</length>
+          </mainSegment>
+          <secSegment>
+            <model>	vehicles/german/G98_Waffentrager_E100/track/segment2.model	</model>
+            <length>	0.150001	</length>
+          </secSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top></top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R1	</wheel>
+            <wheel>	W_R7	</wheel>
+            <wheel>	W_R6	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	3.43797 0.840238	</basePos>
+              <shiftVec>	0.432207 0.13448	</shiftVec>
+              <jointIdx>	12	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R1	</wheelName>
+              <basePos>	-3.44085 0.715861	</basePos>
+              <shiftVec>	-0.278257 0.215802	</shiftVec>
+              <jointIdx>	65	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R7	</wheelName>
+              <basePos>	-2.49451 0.504013	</basePos>
+              <shiftVec>	-0.0188944 -0.493823	</shiftVec>
+              <jointIdx>	77	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	2.49027 0.504012	</basePos>
+              <shiftVec>	0.0932906 -0.489152	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R1	</name>
+              <radius>	0.346983	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.448652	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R1	</name>
+              <startAngle>	10.0873	</startAngle>
+              <teethCount>	9	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	6.82306	</startAngle>
+              <teethCount>	9	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top></top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
     </Chassis_G98_Waffentrager_E100_P>
   </chassis>
   <turrets0>

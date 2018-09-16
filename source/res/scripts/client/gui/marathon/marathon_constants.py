@@ -1,17 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/marathon_constants.py
 from collections import namedtuple
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.locale.QUESTS import QUESTS
-from gui.server_events.events_constants import FOOTBALL2018_PREFIX
 from shared_utils import CONST_CONTAINER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-MarathonData = namedtuple('MarathonData', ('prefix', 'tokenPrefix', 'url', 'label', 'tabTooltip', 'vehiclePrefix', 'vehicleID', 'suspend', 'completedTokenPostfix', 'awardTokens', 'questsInChain', 'zeroTime', 'minVehicleLevel', 'showInPostBattle', 'tooltipHeaderType', 'tooltips', 'icons'))
-TooltipsData = namedtuple('TooltipsData', ('header', 'body', 'bodyExtra', 'errorBattleType', 'errorVehType', 'extraStateSteps', 'extraStateDiscount', 'extraStateCompleted', 'stateStart', 'stateEnd', 'stateProgress', 'daysShort', 'hoursShort'))
-IconsData = namedtuple('IconsData', ('tooltipHeader', 'libraryOkIcon', 'mainHangarFlag', 'okIcon', 'timeIcon', 'alertIcon', 'iconFlag', 'saleIcon'))
+MarathonData = namedtuple('MarathonData', 'prefix tokenPrefix url label tabTooltip vehiclePrefix vehicleID suspend\n                          completedTokenPostfix awardTokens questsInChain minVehicleLevel showInPostBattle\n                          tooltipHeaderType tooltips icons quests')
+TooltipsData = namedtuple('TooltipsData', 'header body bodyExtra errorBattleType errorVehType extraStateSteps extraStateDiscount\n                          extraStateCompleted stateStart stateEnd stateProgress daysShort hoursShort')
+IconsData = namedtuple('IconsData', 'tooltipHeader libraryOkIcon mainHangarFlag okIcon timeIcon alertIcon iconFlag saleIcon')
+QuestsData = namedtuple('QuestsData', 'titleSetProgress autoSetAnnounce autoSetProgress autoSetFinished announceTime timeFinish')
 COUNTDOWN_TOOLTIP_HEADER = 'countdown'
 PROGRESS_TOOLTIP_HEADER = 'progress'
-MARATHONS_DATA = (MarathonData('kursk_event:', 'kursk_event:KE', 'kurskUrl', QUESTS.MISSIONS_TAB_LABEL_KURSK, QUESTS.MISSIONS_TAB_KURSK, 'It13_Progetto_M35_mod_46', 51361, ':suspend', 'STOP', ('kursk_event:KESR7DONE',), 50, 0.0, 8, True, PROGRESS_TOOLTIP_HEADER, TooltipsData(TOOLTIPS.KURSK_HEADER, TOOLTIPS.KURSK_BODY, TOOLTIPS.MARATHON_BODY_EXTRA, TOOLTIPS.KURSK_ERROR_BATTLE_TYPE, TOOLTIPS.MARATHON_ERROR_VEH_TYPE, TOOLTIPS.KURSK_EXTRA_STATE_STEPS, TOOLTIPS.MARATHON_EXTRA_STATE_DISCOUNT, TOOLTIPS.MARATHON_EXTRA_STATE_COMPLETED, TOOLTIPS.MARATHON_STATE_START, TOOLTIPS.MARATHON_STATE_END, TOOLTIPS.KURSK_PROGRESS, TOOLTIPS.TEMPLATE_DAYS_VALUE, TOOLTIPS.TEMPLATE_HOURS_SHORT), IconsData(RES_ICONS.MAPS_ICONS_QUESTS_KURSKTOOLTIPHEADER, RES_ICONS.MAPS_ICONS_LIBRARY_OKICON, RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_KURSK, RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_ICON_FLAG, RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_ICON_FLAG, RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_ICON_FLAG, RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_ICON_FLAG, RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_ICON_FLAG)), MarathonData(FOOTBALL2018_PREFIX, 'event_marathon:IM18', 'footballUrl', QUESTS.MISSIONS_TAB_LABEL_MARATHONS, QUESTS.MISSIONS_TAB_MARATHONS, 'It13_Progetto_M35_mod_46', 51361, ':suspend', 'DONE', ('kursk_event:KESR7DONE',), 50, 0.0, 8, False, COUNTDOWN_TOOLTIP_HEADER, TooltipsData(TOOLTIPS.MARATHON_HEADER, TOOLTIPS.MARATHON_BODY, TOOLTIPS.MARATHON_BODY_EXTRA, TOOLTIPS.MARATHON_ERROR_BATTLE_TYPE, TOOLTIPS.MARATHON_ERROR_VEH_TYPE, TOOLTIPS.MARATHON_EXTRA_STATE_STEPS, TOOLTIPS.MARATHON_EXTRA_STATE_DISCOUNT, TOOLTIPS.MARATHON_EXTRA_STATE_COMPLETED, TOOLTIPS.MARATHON_STATE_START, TOOLTIPS.MARATHON_STATE_END, TOOLTIPS.KURSK_PROGRESS, TOOLTIPS.TEMPLATE_DAYS_SHORT, TOOLTIPS.TEMPLATE_HOURS_SHORT), IconsData(RES_ICONS.MAPS_ICONS_QUESTS_MARATHONTOOLTIPHEADER, RES_ICONS.MAPS_ICONS_LIBRARY_OKICON, RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_ITALY, RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_OK_ICON, RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_TIME_ICON, RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_ALERT_ICON, RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_ICON_FLAG, RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_SALE_ICON)))
+MARATHONS_DATA = tuple()
+DEFAULT_MARATHON_PREFIX = MARATHONS_DATA[0].prefix if any(MARATHONS_DATA) else None
+ZERO_TIME = 0.0
 
 class MARATHON_STATE(CONST_CONTAINER):
     NOT_STARTED = 0

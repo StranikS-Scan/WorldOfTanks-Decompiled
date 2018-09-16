@@ -114,12 +114,3 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_hideMenuS(self, value):
         return self.flashObject.as_hideMenu(value) if self._isDAAPIInited() else None
-
-    def as_updateFE18AvailableS(self, isAvailable):
-        return self.flashObject.as_updateFE18Available(isAvailable) if self._isDAAPIInited() else None
-
-    def as_updateFE18VisibilityS(self, isShowMainMenuBar):
-        return self.flashObject.as_updateFE18Visibility(isShowMainMenuBar) if self._isDAAPIInited() else None
-
-    def as_setFE18DataS(self, headerBack):
-        return self.flashObject.as_setFE18Data(headerBack) if self._isDAAPIInited() else None

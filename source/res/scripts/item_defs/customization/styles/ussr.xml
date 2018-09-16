@@ -4,11 +4,11 @@
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	ussr	</nations>
       </include>
       <exclude>
-        <vehicles>	ussr:R61_Object252_BF ussr:R87_T62A_sport	</vehicles>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -143,11 +143,11 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	ussr	</nations>
       </include>
       <exclude>
-        <vehicles>	ussr:R61_Object252_BF ussr:R87_T62A_sport	</vehicles>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -207,12 +207,13 @@
       <season>	ALL	</season>
       <historical>	false	</historical>
       <modelsSet>	WH	</modelsSet>
+      <tags>	hiddenInUI	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	562	</id>
+              <id>	1	</id>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
               <appliedTo>	4368	</appliedTo>

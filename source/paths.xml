@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.0.2.3</Path>
-    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.0.2.3</Path>
+    <Path cacheSubdirs="true">./res_mods/1.1 Common Test</Path>
+    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.1 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -34,15 +34,12 @@
       <Package type="hd">./res/packages/10_hills_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/112_eiffel_tower_ctf.pkg</Package>
       <Package type="hd">./res/packages/112_eiffel_tower_ctf_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/114_czech.pkg</Package>
+      <Package type="hd">./res/packages/114_czech_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/115_sweden.pkg</Package>
       <Package type="hd">./res/packages/115_sweden_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/116_himmelball.pkg</Package>
-      <Package type="hd">./res/packages/116_himmelball_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/119_lostcityball.pkg</Package>
       <Package type="sd,hd">./res/packages/11_murovanka.pkg</Package>
       <Package type="hd">./res/packages/11_murovanka_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/120_moscowball.pkg</Package>
-      <Package type="hd">./res/packages/120_moscowball_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/13_erlenberg.pkg</Package>
       <Package type="hd">./res/packages/13_erlenberg_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line.pkg</Package>
@@ -83,13 +80,17 @@
       <Package type="hd">./res/packages/47_canada_a_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/63_tundra.pkg</Package>
       <Package type="hd">./res/packages/63_tundra_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h22_football_2018.pkg</Package>
-      <Package type="hd">./res/packages/h22_football_2018_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/90_minsk.pkg</Package>
+      <Package type="hd">./res/packages/90_minsk_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/99_poland.pkg</Package>
+      <Package type="hd">./res/packages/99_poland_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h15_gamescom_2016.pkg</Package>
+      <Package type="hd">./res/packages/h15_gamescom_2016_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/gui.pkg</Package>
+      <Package type="sandbox,sd,hd,cef">./res/packages/gui.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/misc.pkg</Package>
       <Package type="hd">./res/packages/misc_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/particles.pkg</Package>

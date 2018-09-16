@@ -1,226 +1,318 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/PromoController.py
+import logging
 from collections import namedtuple
-from account_helpers import getAccountDatabaseID
-from account_helpers.AccountSettings import AccountSettings, PROMO, LAST_PROMO_PATCH_VERSION
-from account_shared import getClientMainVersion
-from adisp import async, process
-from debug_utils import LOG_DEBUG, LOG_WARNING
+import BigWorld
+from Event import Event, EventManager
+from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+from adisp import process, async
 from gui import GUI_SETTINGS
-from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.app_loader import sf_lobby
 from gui.game_control import gc_constants
 from gui.game_control.links import URLMarcos
+from gui.promo.promo_logger import PromoLogSourceType, PromoLogActions, PromoLogSubjectType
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showBubbleTooltip
+from gui.shared.events import BrowserEvent
 from gui.shared.utils import isPopupsWindowsOpenDisabled
+from gui.wgcg.promo_screens.contexts import PromoGetTeaserRequestCtx, PromoSendTeaserShownRequestCtx, PromoGetUnreadCountRequestCtx
 from helpers import i18n, isPlayerAccount, dependency
-from shared_utils import CONST_CONTAINER
-from skeletons.gui.game_control import IPromoController, IBrowserController, IEventsNotificationsController
+from helpers.http import url_formatters
+from shared_utils import findFirst
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IPromoController, IBrowserController, IEventsNotificationsController, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
-from web_client_api.sound import SoundWebApi, HangarSoundWebApi
-_PromoData = namedtuple('_PromoData', ['url', 'title', 'guiActionHandlers'])
+from skeletons.gui.shared.promo import IPromoLogger
+from skeletons.gui.web import IWebController
+from web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
+from web_client_api.promo import PromoWebApi
+from web_client_api.request import RequestWebApi
+from web_client_api.vehicles import VehiclesWebApi
+_PromoData = namedtuple('_PromoData', ['url', 'closeCallback', 'source'])
+_logger = logging.getLogger(__name__)
 
 class PromoController(IPromoController):
-    PROMO_AUTO_VIEWS_TEST_VALUE = 5
     browserCtrl = dependency.descriptor(IBrowserController)
     eventsNotification = dependency.descriptor(IEventsNotificationsController)
-    lobbyContext = dependency.descriptor(ILobbyContext)
-
-    class GUI_EVENTS(CONST_CONTAINER):
-        CLOSE_GUI_EVENT = 'close_window'
+    __webController = dependency.descriptor(IWebController)
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __logger = dependency.descriptor(IPromoLogger)
+    __bootcamp = dependency.descriptor(IBootcampController)
+    _CHECK_FREQUENCY_IN_BATTLES = 10
 
     def __init__(self):
         super(PromoController, self).__init__()
-        self.__currentVersionPromoUrl = None
-        self.__currentVersionBrowserID = None
-        self.__currentVersionBrowserShown = False
-        self.__promoShown = set()
-        self.__availablePromo = set()
         self.__urlMacros = URLMarcos()
-        self.__guiActionsHandlers = None
+        self.__externalCloseCallback = None
         self.__isLobbyInited = False
         self.__pendingPromo = None
-        self._isPromoShown = False
+        self.__promoCount = 0
+        self.__lastUpdateTimeMark = 0
+        self.__promoData = None
+        self.__webBrgDataRequested = False
+        self.__battlesFromLastTeaser = 0
+        self.__wasInBattle = False
+        self.__hasPendingTeaser = False
+        self.__isPromoOpen = False
+        self.__browserCreationCallbacks = {}
+        self.__browserWatchers = {}
+        self.__isInHangar = False
+        self.__em = EventManager()
+        self.onNewTeaserReceived = Event(self.__em)
+        self.onPromoCountChanged = Event(self.__em)
         return
 
+    @sf_lobby
+    def app(self):
+        pass
+
     def fini(self):
-        self._stop()
+        self.__stop()
         self.__pendingPromo = None
         self.__urlMacros.clear()
         self.__urlMacros = None
-        self.__guiActionsHandlers = None
+        self.__externalCloseCallback = None
+        self.__em.clear()
+        g_eventBus.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
+        self.__browserCreationCallbacks = {}
+        self.__browserWatchers = {}
         super(PromoController, self).fini()
         return
 
     def onLobbyInited(self, event):
         if not isPlayerAccount():
             return
+        g_eventBus.addListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
         self.__isLobbyInited = True
-        self._updatePromo(self._getPromoEventNotifications())
+        if self.__hasPendingTeaser:
+            self.__tryToShowTeaser()
+        elif self.__battlesFromLastTeaser % self._CHECK_FREQUENCY_IN_BATTLES == 0:
+            self.__updateWebBrgData()
         self.eventsNotification.onEventNotificationsChanged += self.__onEventNotification
-        self.browserCtrl.onBrowserDeleted += self.__onBrowserDeleted
-        popupsWindowsDisabled = isPopupsWindowsOpenDisabled()
-        if not popupsWindowsDisabled:
-            self._processPromo(self.eventsNotification.getEventsNotifications())
+        if not isPopupsWindowsOpenDisabled():
+            self.__processPromo(self.eventsNotification.getEventsNotifications())
+        self.app.loaderManager.onViewLoaded += self.__onViewLoaded
+
+    def setNewTeaserData(self, teaserData):
+        timestamp = teaserData['timestamp']
+        if self.__lastUpdateTimeMark < timestamp and not self.__isPromoOpen:
+            self.__updateTeaserData(teaserData)
+
+    def showFieldPost(self):
+        url = GUI_SETTINGS.promoscreens
+        loadingCallback = self.__logger.getLoggingFuture(action=PromoLogActions.OPEN_FROM_MENU, type=PromoLogSubjectType.INDEX, url=url)
+        self.__showBrowserView(url, loadingCallback)
+
+    @process
+    def showLastTeaserPromo(self):
+        rowUrl = self.__promoData.get('url', '')
+        loadingCallback = self.__logger.getLoggingFuture(self.__promoData, action=PromoLogActions.OPEN_FROM_TEASER, type=PromoLogSubjectType.PROMO_SCREEN, url=rowUrl)
+        url = yield self.__addAuthParams(rowUrl)
+        self.__showBrowserView(url, loadingCallback)
+
+    def setUnreadPromoCount(self, count):
+        self.__updatePromoCount(count)
 
     def onAvatarBecomePlayer(self):
-        self._stop()
+        if self.__isLobbyInited:
+            self.__battlesFromLastTeaser += 1
+        self.__stop()
 
     def onDisconnected(self):
-        self._stop()
-        self._isPromoShown = False
+        self.__stop()
+
+    def isActive(self):
+        return self.__lobbyContext.getServerSettings().isFieldPostEnabled() and not self.__bootcamp.isInBootcamp()
+
+    def getPromoCount(self):
+        return self.__promoCount
+
+    def showPromo(self, url, closeCallback=None, source=None):
+        if self.__isLobbyInited:
+            if not self.__isPromoOpen and not self.__webBrgDataRequested:
+                self.__registerAndShowPromoBrowser(url, closeCallback, self.__logger.getLoggingFuture(action=PromoLogActions.OPEN_IN_OLD, type=PromoLogSubjectType.PROMO_SCREEN, source=source, url=url))
+        else:
+            self.__pendingPromo = _PromoData(url, closeCallback, source)
+
+    def showBubbleTooltip(self):
+        storageData = self.__settingsCore.serverSettings.getUIStorage()
+        if not storageData.get(UI_STORAGE_KEYS.FIELD_POST_HINT_IS_SHOWN):
+            showBubbleTooltip(i18n.makeString(TOOLTIPS.HEADER_VERSIONINFOHINT))
+            self.__settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.FIELD_POST_HINT_IS_SHOWN: True})
 
     @process
-    def showVersionsPatchPromo(self):
-        promoUrl = yield self.__urlMacros.parse(GUI_SETTINGS.promoscreens)
-        webBrowser = self.__getCurrentBrowser()
-        if not webBrowser or promoUrl != webBrowser.url:
-            promoTitle = i18n.makeString(MENU.PROMO_PATCH_TITLE)
-            self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, promoTitle, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
-
-    def showPromo(self, url, title, forced=False, handlers=None):
-        if forced:
-            self.__registerAndShowPromoBrowser(url, title, handlers)
-            self._isPromoShown = True
-        elif self.__isLobbyInited:
-            if not self._isPromoShown:
-                self.__registerAndShowPromoBrowser(url, title, handlers)
-                self._isPromoShown = True
+    def __updateWebBrgData(self):
+        ctx = PromoGetTeaserRequestCtx()
+        if self.__battlesFromLastTeaser == 0:
+            sourceType = PromoLogSourceType.FIRST_LOGIN
         else:
-            self.__pendingPromo = _PromoData(url, title, handlers)
+            sourceType = PromoLogSourceType.AFTER_BATTLE
+        answerCallback = self.__logger.getLoggingFuture(action=PromoLogActions.GET_MOST_IMPORTANT, source=sourceType)
+        self.__webBrgDataRequested = True
+        response = yield self.__webController.sendRequest(ctx=ctx)
+        if response.isSuccess():
+            self.__updateTeaserData(ctx.getDataObj(response.getData()))
+        self.__webBrgDataRequested = False
+        if answerCallback:
+            answerCallback(success=response.extraCode)
 
-    def getCurrentVersionBrowserID(self):
-        return self.__currentVersionBrowserID
+    def __onPromoClosed(self, **kwargs):
+        self.__isPromoOpen = False
+        self.showBubbleTooltip()
+        if self.__externalCloseCallback:
+            self.__externalCloseCallback()
+        self.__requestPromoCount()
+        actionType = PromoLogActions.CLOSED_BY_USER if kwargs.get('byUser') else PromoLogActions.KILLED_BY_SYSTEM
+        self.__logger.logAction(action=actionType, type=PromoLogSubjectType.PROMO_SCREEN_OR_INDEX, url=kwargs.get('url'))
 
-    @classmethod
-    def isPromoAutoViewsEnabled(cls):
-        return getAccountDatabaseID() % cls.PROMO_AUTO_VIEWS_TEST_VALUE != 0 and cls.lobbyContext.getServerSettings().isPromoAutoViewsEnabled()
+    @process
+    def __requestPromoCount(self):
+        if not self.isActive():
+            _logger.warning('Trying to request unread promos count when promo functionality is disabled')
+            return
+        ctx = PromoGetUnreadCountRequestCtx()
+        response = yield self.__webController.sendRequest(ctx=ctx)
+        if response.isSuccess():
+            self.__updatePromoCount(ctx.getCount(response))
 
-    def isPatchPromoAvailable(self):
-        return self.__currentVersionPromoUrl is not None and GUI_SETTINGS.isPatchPromoEnabled
+    def __updatePromoCount(self, count):
+        countChanged = count != self.__promoCount
+        self.__promoCount = count
+        if countChanged:
+            self.onPromoCountChanged()
 
-    def isPatchChanged(self):
-        mainVersion = getClientMainVersion()
-        return mainVersion is not None and AccountSettings.getSettings(LAST_PROMO_PATCH_VERSION) != mainVersion
+    def __updateTeaserData(self, teaserData):
+        self.__lastUpdateTimeMark = teaserData['timestamp']
+        self.__promoData = teaserData['lastPromo']
+        self.__updatePromoCount(teaserData['count'])
+        if self.__promoData.get('url'):
+            self.__tryToShowTeaser()
 
-    def _stop(self):
+    def __showTeaser(self):
+        if self.isActive():
+            self.__battlesFromLastTeaser = 0
+            self.__hasPendingTeaser = False
+            self.onNewTeaserReceived(self.__promoData, self.__onTeaserShown)
+        else:
+            _logger.warning('Impossible to show teaser, functionality is disabled')
+
+    @process
+    def __onTeaserShown(self, promoID):
+        yield self.__webController.sendRequest(PromoSendTeaserShownRequestCtx(promoID))
+
+    def __tryToShowTeaser(self):
+        if self.__isLobbyInited and self.__isInHangar:
+            self.__showTeaser()
+        else:
+            self.__hasPendingTeaser = True
+
+    def __stop(self):
+        if self.app and self.app.loaderManager:
+            self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         self.__isLobbyInited = False
-        self.__currentVersionPromoUrl = None
+        self.__isPromoOpen = False
         self.__currentVersionBrowserID = None
-        self.__currentVersionBrowserShown = False
-        self.browserCtrl.onBrowserDeleted -= self.__onBrowserDeleted
-        self.__cleanupGuiActionHandlers()
+        self.__externalCloseCallback = None
         self.eventsNotification.onEventNotificationsChanged -= self.__onEventNotification
+        g_eventBus.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
+        self.__browserCreationCallbacks = {}
+        watcherKeys = self.__browserWatchers.keys()
+        for browserID in watcherKeys:
+            self.__clearWatcher(browserID)
+
         return
+
+    def __processPromo(self, promos):
+        if not self.__isPromoOpen and not self.__webBrgDataRequested:
+            logData = {'action': PromoLogActions.OPEN_IN_OLD,
+             'type': PromoLogSubjectType.PROMO_SCREEN}
+            if self.__pendingPromo is not None:
+                promoData = self.__pendingPromo
+                logData.update({'source': promoData.source,
+                 'url': promoData.url})
+                loadingCallback = self.__logger.getLoggingFuture(**logData)
+                self.__registerAndShowPromoBrowser(promoData.url, promoData.closeCallback, loadingCallback)
+                self.__pendingPromo = None
+                return
+            promo = findFirst(lambda item: item.eventType.startswith(gc_constants.PROMO.TEMPLATE.ACTION), promos)
+            if promo:
+                logData.update({'source': PromoLogSourceType.SSE,
+                 'url': promo.data})
+                self.__showBrowserView(promo.data, self.__logger.getLoggingFuture(**logData))
+        return
+
+    def __onEventNotification(self, added, _):
+        self.__processPromo(added)
+
+    def __registerAndShowPromoBrowser(self, url, closeCallback, loadingCallback):
+        self.__externalCloseCallback = closeCallback
+        self.__showBrowserView(url, loadingCallback)
 
     @process
-    def _showCurrentVersionPatchPromo(self, isAsync=False):
-        self.__currentVersionBrowserID = yield self.__showPromoBrowser(self.__currentVersionPromoUrl, i18n.makeString(MENU.PROMO_PATCH_TITLE), browserID=self.__currentVersionBrowserID, isAsync=isAsync, showWaiting=not isAsync)
-
-    @process
-    def _processPromo(self, promo):
-        yield lambda callback: callback(True)
-        if self.isPatchPromoAvailable() and self.isPatchChanged() and self.isPromoAutoViewsEnabled() and not self._isPromoShown:
-            LOG_DEBUG('Showing patchnote promo:', self.__currentVersionPromoUrl)
-            AccountSettings.setSettings(LAST_PROMO_PATCH_VERSION, getClientMainVersion())
-            self.__currentVersionBrowserShown = True
-            self._isPromoShown = True
-            self._showCurrentVersionPatchPromo(isAsync=True)
-            return
-        elif not self._isPromoShown and self.__pendingPromo is not None:
-            self.__registerAndShowPromoBrowser(*self.__pendingPromo)
-            self.__pendingPromo = None
-            return
-        else:
-            actionsPromo = [ item for item in promo if item.eventType.startswith(gc_constants.PROMO.TEMPLATE.ACTION) ]
-            for actionPromo in actionsPromo:
-                promoUrl = yield self.__urlMacros.parse(actionPromo.data)
-                promoTitle = actionPromo.text
-                if promoUrl not in self.__promoShown and not self._isPromoShown and promoUrl != self.__currentVersionPromoUrl:
-                    LOG_DEBUG('Showing action promo:', promoUrl)
-                    self.__promoShown.add(promoUrl)
-                    self.__savePromoShown()
-                    self._isPromoShown = True
-                    yield self.__showPromoBrowser(promoUrl, promoTitle)
-                    return
-
-            return
-
-    @process
-    def _updatePromo(self, promosData):
-        yield lambda callback: callback(True)
-        for item in [ item for item in promosData if item.eventType == gc_constants.PROMO.TEMPLATE.ACTION ]:
-            promoUrl = yield self.__urlMacros.parse(item.data)
-            self.__availablePromo.add(promoUrl)
-
-        if self.__currentVersionPromoUrl is None:
-            self.__currentVersionPromoUrl = yield self.__urlMacros.parse(GUI_SETTINGS.currentVersionPromo)
-        promoShownSource = AccountSettings.getFilter(PROMO)
-        self.__promoShown = {url for url in promoShownSource if url in self.__availablePromo}
-        self.__savePromoShown()
-        return
-
-    def _getPromoEventNotifications(self):
-
-        def filterFunc(item):
-            return item.eventType == gc_constants.PROMO.TEMPLATE.ACTION
-
-        return self.eventsNotification.getEventsNotifications(filterFunc)
-
-    def __onUserRequestToClose(self):
-        self.__guiActionsHandlers[self.GUI_EVENTS.CLOSE_GUI_EVENT]()
-        self.__cleanupGuiActionHandlers()
-
-    def __savePromoShown(self):
-        AccountSettings.setFilter(PROMO, self.__promoShown)
-
-    def __onEventNotification(self, added, removed):
-        self._updatePromo(self._getPromoEventNotifications())
-        self._processPromo(added)
-
-    def __onBrowserDeleted(self, browserID):
-        if self.__currentVersionBrowserID == browserID:
-            self.__currentVersionBrowserID = None
-            if self.__currentVersionBrowserShown:
-                self.__currentVersionBrowserShown = False
-                g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, i18n.makeString(TOOLTIPS.HEADER_VERSIONINFOHINT)), scope=EVENT_BUS_SCOPE.LOBBY)
-        return
-
-    def __registerGuiActionHandlers(self, handlers):
-        self.__guiActionsHandlers = handlers
-        if handlers:
-            webBrowser = self.__getCurrentBrowser()
-            if webBrowser is not None:
-                webBrowser.onUserRequestToClose += self.__onUserRequestToClose
-            else:
-                LOG_WARNING('Browser with id = "{}" has not been found'.format(self.__currentVersionBrowserID))
-        return
-
-    def __cleanupGuiActionHandlers(self):
-        webBrowser = self.__getCurrentBrowser()
-        if self.__guiActionsHandlers is not None and webBrowser:
-            webBrowser.onUserRequestToClose -= self.__onUserRequestToClose
-            self.__guiActionsHandlers = None
-        return
-
-    @process
-    def __registerAndShowPromoBrowser(self, url, title, handlers):
+    def __showBrowserView(self, url, loadingCallback=None):
         promoUrl = yield self.__urlMacros.parse(url)
-        LOG_DEBUG('Showing promo:', promoUrl)
-        webBrowser = self.__getCurrentBrowser()
-        if not webBrowser or promoUrl != webBrowser.url:
-            self.__cleanupGuiActionHandlers()
-            self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, title, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
-            self.__registerGuiActionHandlers(handlers)
+        self.__registerLoadingCallback(promoUrl, loadingCallback)
+        _showBrowserView(promoUrl, self.__onPromoClosed)
+        self.__isPromoOpen = True
 
-    def __getCurrentBrowser(self):
-        return self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
+    def __registerLoadingCallback(self, url, callback):
+        if callback is not None:
+            self.__browserCreationCallbacks[url] = callback
+        return
+
+    def __handleBrowserCreated(self, event):
+        url = event.ctx.get('url')
+        if url in self.__browserCreationCallbacks:
+            callback = self.__browserCreationCallbacks.pop(url)
+            browserID = event.ctx.get('browserID')
+            browser = self.browserCtrl.getBrowser(browserID)
+            if browser is None:
+                return
+
+            def callbackWrapper(clbUrl, _, statusCode):
+                if clbUrl == url:
+                    callback(url=url, success=statusCode)
+                    self.__clearWatcher(browserID)
+
+            browser.onLoadEnd += callbackWrapper
+            self.__browserWatchers[browserID] = callbackWrapper
+        return
+
+    def __clearWatcher(self, browserID):
+        if browserID in self.__browserWatchers:
+            watcher = self.__browserWatchers.pop(browserID)
+            browser = self.browserCtrl.getBrowser(browserID)
+            if browser is not None:
+                browser.onLoadEnd -= watcher
+        return
 
     @async
     @process
-    def __showPromoBrowser(self, promoUrl, promoTitle, browserID=None, isAsync=True, showWaiting=False, callback=None):
-        browserID = yield self.browserCtrl.load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=gc_constants.BROWSER.PROMO_SIZE, isDefault=False, showCloseBtn=True, showWaiting=showWaiting, handlers=self.__createPromoWebHandlers())
-        callback(browserID)
+    def __addAuthParams(self, url, callback):
+        if not url or not self.__webController:
+            callback(url)
+        accessTokenData = yield self.__webController.getAccessTokenData(force=True)
+        params = {'access_token': str(accessTokenData.accessToken),
+         'spa_id': BigWorld.player().databaseID}
+        callback(url_formatters.addParamsToUrlQuery(url, params))
 
-    def __createPromoWebHandlers(self):
-        return SoundWebApi().getHandlers() + HangarSoundWebApi().getHandlers()
+    def __onViewLoaded(self, pyView, _):
+        if self.__isLobbyInited:
+            if pyView.alias == VIEW_ALIAS.LOBBY_HANGAR:
+                self.__isInHangar = True
+                if self.__hasPendingTeaser:
+                    self.__tryToShowTeaser()
+            elif pyView.viewType == ViewTypes.LOBBY_SUB:
+                self.__isInHangar = False
+
+
+def _showBrowserView(url, returnClb):
+    webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx={'url': url,
+     'returnClb': returnClb,
+     'webHandlers': webHandlers,
+     'returnAlias': VIEW_ALIAS.LOBBY_HANGAR}), EVENT_BUS_SCOPE.LOBBY)

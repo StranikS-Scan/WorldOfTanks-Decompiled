@@ -68,17 +68,6 @@ def makeVehicleMPByLocation(vehicleID, location, positions):
     return provider
 
 
-def makePhysicalObjectMPByLocation(entityID, location):
-    provider = None
-    if location in (VEHICLE_LOCATION.AOI, VEHICLE_LOCATION.AOI_TO_FAR):
-        entity = BigWorld.entities.get(entityID)
-        if entity is not None:
-            provider = makeVehicleEntityMP(entity)
-        else:
-            LOG_WARNING('Entity of physical object is not found to given location', entityID, location)
-    return provider
-
-
 def convertToLastSpottedVehicleMP(matrix):
     converted = Math.WGReplayAwaredSmoothTranslationOnlyMP()
     converted.source = Math.Matrix(matrix.source)

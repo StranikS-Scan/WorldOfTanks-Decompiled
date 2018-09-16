@@ -34,6 +34,9 @@ class BattleStatisticDataControllerMeta(BaseDAAPIComponent):
     def as_setArenaInfoS(self, data):
         return self.flashObject.as_setArenaInfo(data) if self._isDAAPIInited() else None
 
+    def as_setQuestStatusS(self, data):
+        return self.flashObject.as_setQuestStatus(data) if self._isDAAPIInited() else None
+
     def as_setUserTagsS(self, data):
         return self.flashObject.as_setUserTags(data) if self._isDAAPIInited() else None
 
@@ -48,3 +51,12 @@ class BattleStatisticDataControllerMeta(BaseDAAPIComponent):
 
     def as_updatePersonalStatusS(self, added=0, removed=0):
         return self.flashObject.as_updatePersonalStatus(added, removed) if self._isDAAPIInited() else None
+
+    def as_setQuestsInfoS(self, data, setForce):
+        return self.flashObject.as_setQuestsInfo(data, setForce) if self._isDAAPIInited() else None
+
+    def as_updateQuestProgressS(self, condID, data):
+        return self.flashObject.as_updateQuestProgress(condID, data) if self._isDAAPIInited() else None
+
+    def as_updateQuestHeaderProgressS(self, headerProgress):
+        return self.flashObject.as_updateQuestHeaderProgress(headerProgress) if self._isDAAPIInited() else None

@@ -100,13 +100,13 @@ def getFairPlayViolationName(violationsMask):
 def getCustomizationItem(custType, custID):
     custTypeID = getattr(CustomizationType, str(custType).upper(), None)
     if not custTypeID:
-        return (None, 'Invalid customization type')
+        return (None, 'Invalid customization type = {0}'.format(custType))
     else:
         c11nItems = vehicles.g_cache.customization20().itemTypes.get(custTypeID, None)
         if not c11nItems:
-            return (None, 'Unknown customization type')
+            return (None, 'Unknown customization typeID = {0}. custType = {1}'.format(custTypeID, custType))
         c11nItem = c11nItems.get(custID)
-        return (None, 'Invalid customization item id') if not c11nItem else (c11nItem, '')
+        return (None, 'Invalid customization item id = {0}. typeID = {1}, custType = {2}'.format(custID, custTypeID, custType)) if not c11nItem else (c11nItem, '')
 
 
 def validateCustomizationItem(custData):

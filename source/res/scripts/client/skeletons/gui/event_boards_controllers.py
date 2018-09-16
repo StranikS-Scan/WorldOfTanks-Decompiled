@@ -19,19 +19,10 @@ class IEventBoardController(object):
     def getHangarFlagData(self):
         raise NotImplementedError
 
-    def getFootballSettingsData(self):
-        raise NotImplementedError
-
-    def hasFootballEvents(self):
-        raise NotImplementedError
-
     def updateHangarFlag(self):
         raise NotImplementedError
 
     def cleanEventsData(self):
-        raise NotImplementedError
-
-    def cleanFootballEventsData(self):
         raise NotImplementedError
 
     @async
@@ -52,11 +43,6 @@ class IEventBoardController(object):
     @async
     @process
     def getEvents(self, callback, onlySettings=True, isTabVisited=False, onLogin=False, prefetchKeyArtBig=True):
-        raise NotImplementedError
-
-    @async
-    @process
-    def getFootballEvents(self, callback):
         raise NotImplementedError
 
     @async

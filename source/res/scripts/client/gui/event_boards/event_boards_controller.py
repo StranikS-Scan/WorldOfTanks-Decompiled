@@ -13,7 +13,7 @@ from gui.event_boards.event_boards_items import EventSettings
 from gui.event_boards.listener import IEventBoardsListener
 from gui.shared.utils.requesters.abstract import Response
 from gui.wgcg import IWebController
-from gui.wgcg.elen.contexts import EventBoardsGetEventDataCtx, EventBoardsGetPlayerDataCtx, EventBoardsJoinEventCtx, EventBoardsLeaveEventCtx, EventBoardsGetMyEventTopCtx, EventBoardsGetMyLeaderboardPositionCtx, EventBoardsGetLeaderboardCtx, EventBoardsGetHangarFlagCtx, EventBoardsGetFootballEventDataCtx
+from gui.wgcg.elen.contexts import EventBoardsGetEventDataCtx, EventBoardsGetPlayerDataCtx, EventBoardsJoinEventCtx, EventBoardsLeaveEventCtx, EventBoardsGetMyEventTopCtx, EventBoardsGetMyLeaderboardPositionCtx, EventBoardsGetLeaderboardCtx, EventBoardsGetHangarFlagCtx
 from gui.wgcg.settings import WebRequestDataType as _crdt
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -32,11 +32,9 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
         self.__isLoggedIn = False
         self.__eventBoardsSettings = EventBoardsSettings()
         self.__hangarFlagData = HangarFlagData()
-        self.__footballEventSettings = EventBoardsSettings()
 
     def fini(self):
         self.__eventBoardsSettings.fini()
-        self.__footballEventSettings.fini()
 
     def getPlayerEventsData(self):
         return self.__eventBoardsSettings.getPlayerEventsData() if self.__eventBoardsSettings is not None else None
@@ -53,12 +51,6 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
     def getHangarFlagData(self):
         return self.__hangarFlagData
 
-    def getFootballSettingsData(self):
-        return self.__footballEventSettings.getEventsSettings() if self.__footballEventSettings is not None else None
-
-    def hasFootballEvents(self):
-        return self.__footballEventSettings.hasEvents() if self.__footballEventSettings is not None else False
-
     def updateHangarFlag(self):
         self._invokeListeners('onUpdateHangarFlag')
 
@@ -68,11 +60,6 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
             self.__eventBoardsSettings.cleanEventsData()
         if self.__hangarFlagData is not None:
             self.__hangarFlagData.cleanEventsData()
-        return
-
-    def cleanFootballEventsData(self):
-        if self.__footballEventSettings is not None:
-            self.__footballEventSettings.cleanEventsData()
         return
 
     @async
@@ -183,17 +170,6 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
             callback(leaderboardData)
         else:
             callback(None)
-        return
-
-    @async
-    @process
-    def getFootballEvents(self, callback):
-        footballSettings = self.__footballEventSettings.getEventsSettings()
-        edResponse = yield self.sendRequest(EventBoardsGetFootballEventDataCtx(needShowErrorNotification=False))
-        if edResponse is not None:
-            footballSettings.setData(edResponse.getData())
-            self._invokeListeners('onUpdateFootballEvents')
-        callback(self)
         return
 
     def __isSuccessResponse(self, response):

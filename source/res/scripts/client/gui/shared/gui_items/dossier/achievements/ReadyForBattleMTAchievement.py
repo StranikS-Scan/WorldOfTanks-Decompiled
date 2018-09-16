@@ -1,20 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/ReadyForBattleMTAchievement.py
-from abstract import ClassProgressAchievement, getCompletedPersonalMissionsCount
-from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
+from gui.shared.gui_items.dossier.achievements.ReadyForBattleAchievement import ReadyForBattleAchievement
+from personal_missions import PM_BRANCH
 
-class ReadyForBattleMTAchievement(ClassProgressAchievement):
+class ReadyForBattleMTAchievement(ReadyForBattleAchievement):
 
     def __init__(self, dossier, value=None):
-        self.__isCurrentUserAchievement = dossier.isCurrentUser() if dossier is not None else False
-        super(ReadyForBattleMTAchievement, self).__init__('readyForBattleMT', _AB.TOTAL, dossier, value)
-        return
-
-    def getNextLevelInfo(self):
-        return ('questsLeft', self._lvlUpValue if self.__isCurrentUserAchievement else 0)
-
-    def _readProgressValue(self, dossier):
-        return dossier.getRecordValue(_AB.TOTAL, 'readyForBattleMT')
-
-    def _readCurrentProgressValue(self, dossier):
-        return getCompletedPersonalMissionsCount(1, {'mediumTank'})
+        super(ReadyForBattleMTAchievement, self).__init__(name='readyForBattleMT', classifier='mediumTank', branch=PM_BRANCH.REGULAR, dossier=dossier, value=value)

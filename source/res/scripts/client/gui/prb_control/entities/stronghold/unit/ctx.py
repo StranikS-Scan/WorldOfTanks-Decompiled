@@ -127,3 +127,54 @@ class GiveEquipmentCommanderCtx(UnitRequestCtx):
 
     def getPlayerID(self):
         return self.__databaseID
+
+
+class StopPlayersMatchingUnitCtx(UnitRequestCtx):
+    __slots__ = ()
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.STOP_PLAYERS_MATCHING
+
+
+@ReprInjector.withParent(('__slotIdx', 'slotIdx'), ('__vehTypes', 'vehTypes'))
+class ChangeVehTypesInSlotFilterCtx(UnitRequestCtx):
+    __slots__ = ('__slotIdx', '__vehTypes')
+
+    def __init__(self, slotIdx, vehTypes, waitingID=''):
+        super(ChangeVehTypesInSlotFilterCtx, self).__init__(waitingID=waitingID)
+        self.__slotIdx = slotIdx
+        self.__vehTypes = vehTypes
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.SET_SLOT_VEHICLE_TYPE_FILTER
+
+    def getSlotIdx(self):
+        return self.__slotIdx
+
+    def getVehTypes(self):
+        return self.__vehTypes
+
+    def getCooldown(self):
+        pass
+
+
+@ReprInjector.withParent(('__slotIdx', 'slotIdx'), ('__vehicles', 'vehicles'))
+class ChangeVehiclesInSlotFilterCtx(UnitRequestCtx):
+    __slots__ = ('__slotIdx', '__vehicles')
+
+    def __init__(self, slotIdx, vehicles, waitingID=''):
+        super(ChangeVehiclesInSlotFilterCtx, self).__init__(waitingID=waitingID)
+        self.__slotIdx = slotIdx
+        self.__vehicles = vehicles
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.SET_SLOT_VEHICLES_FILTER
+
+    def getSlotIdx(self):
+        return self.__slotIdx
+
+    def getVehicles(self):
+        return self.__vehicles
+
+    def getCooldown(self):
+        pass

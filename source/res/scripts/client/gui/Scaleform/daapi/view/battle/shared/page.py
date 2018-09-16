@@ -102,14 +102,15 @@ class SharedPage(BattlePageMeta):
 
         self.addListener(events.GameEvent.RADIAL_MENU_CMD, self._handleRadialMenuCmd, scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(events.GameEvent.FULL_STATS, self._handleToggleFullStats, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.addListener(events.GameEvent.FULL_STATS_QUEST_PROGRESS, self._handleToggleFullStatsQuestProgress, scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(events.GameEvent.TOGGLE_GUI, self._handleGUIToggled, scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
         self.addListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self.__handleShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self.__handleHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.addListener(events.GameEvent.SHOW_COLOR_SETTINGS_TIP, self.__handleShowSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.addListener(events.GameEvent.HIDE_COLOR_SETTINGS_TIP, self._handleHideSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.gameplay.postStateEvent(PlayerEventID.AVATAR_SHOW_GUI)
 
     @uniprof.regionDecorator(label='avatar.show_gui', scope='exit')
@@ -121,13 +122,14 @@ class SharedPage(BattlePageMeta):
         self.removeListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(events.GameEvent.RADIAL_MENU_CMD, self._handleRadialMenuCmd, scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(events.GameEvent.FULL_STATS, self._handleToggleFullStats, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.removeListener(events.GameEvent.FULL_STATS_QUEST_PROGRESS, self._handleToggleFullStatsQuestProgress, scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(events.GameEvent.TOGGLE_GUI, self._handleGUIToggled, scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self.__handleShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self.__handleHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.removeListener(events.GameEvent.SHOW_COLOR_SETTINGS_TIP, self.__handleShowSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.removeListener(events.GameEvent.HIDE_COLOR_SETTINGS_TIP, self._handleHideSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self._stopBattleSession()
         super(SharedPage, self)._dispose()
 
@@ -190,6 +192,9 @@ class SharedPage(BattlePageMeta):
     def _handleToggleFullStats(self, event):
         raise NotImplementedError
 
+    def _handleToggleFullStatsQuestProgress(self, event):
+        raise NotImplementedError
+
     def _handleGUIToggled(self, event):
         raise NotImplementedError
 
@@ -199,6 +204,9 @@ class SharedPage(BattlePageMeta):
             self._blToggling = set(self.as_getComponentsVisibilityS())
         self._blToggling.difference_update([_ALIASES.BATTLE_LOADING])
         self._blToggling.add(_ALIASES.BATTLE_MESSENGER)
+        hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
+        if hintPanel and hintPanel.getActiveHint():
+            self._blToggling.add(_ALIASES.HINT_PANEL)
         self._setComponentsVisibility(visible={_ALIASES.BATTLE_LOADING}, hidden=self._blToggling)
 
     def _onBattleLoadingFinish(self):
@@ -232,6 +240,18 @@ class SharedPage(BattlePageMeta):
         if not self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(visible={alias})
 
+    def _processHint(self, needShow):
+        alias = _ALIASES.HINT_PANEL
+        if needShow:
+            if self._isBattleLoading:
+                self._blToggling.add(alias)
+            elif not self.as_isComponentVisibleS(alias):
+                self._setComponentsVisibility(visible={alias})
+        elif self._isBattleLoading:
+            self._blToggling.discard(alias)
+        elif self.as_isComponentVisibleS(alias):
+            self._setComponentsVisibility(hidden={alias})
+
     def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
             self.as_setPostmortemTipsVisibleS(True)
@@ -242,7 +262,6 @@ class SharedPage(BattlePageMeta):
     def __onRespawnBaseMoving(self):
         if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
             self.as_setPostmortemTipsVisibleS(False)
-            self._setComponentsVisibility(hidden={_ALIASES.COLOR_SETTINGS_TIP_PANEL})
             self._isInPostmortem = False
 
     def __onPostMortemReload(self):
@@ -272,20 +291,11 @@ class SharedPage(BattlePageMeta):
 
         self.sessionProvider.shared.hitDirection.setVisible(False)
 
-    def __handleShowSettingsTip(self, event):
-        isPrebattleState = event.ctx['isPrebattle']
-        alias = _ALIASES.COLOR_SETTINGS_TIP_PANEL
-        if self._isBattleLoading and (isPrebattleState or self._isInPostmortem):
-            self._blToggling.add(alias)
-        elif not self.as_isComponentVisibleS(alias):
-            self._setComponentsVisibility(visible={alias})
+    def __handleShowBtnHint(self, _):
+        self._processHint(True)
 
-    def _handleHideSettingsTip(self, _):
-        alias = _ALIASES.COLOR_SETTINGS_TIP_PANEL
-        if self._isBattleLoading:
-            self._blToggling.discard(alias)
-        if self.as_isComponentVisibleS(alias):
-            self._setComponentsVisibility(hidden={alias})
+    def __handleHideBtnHint(self, _):
+        self._processHint(False)
 
 
 class BattlePageBusinessHandler(PackageBusinessHandler):

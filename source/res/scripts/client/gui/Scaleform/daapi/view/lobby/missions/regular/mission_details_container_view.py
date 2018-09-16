@@ -77,13 +77,11 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         self.__groupPacker = getGroupPackerByContextID(groupID, self.eventsCache)
         self.__datailedList = []
         if self.__groupPacker is not None:
-            title = self.__groupPacker.getTitle()
             for quest in self.__groupPacker.findEvents(self.__quests):
                 data = missions_helper.getDetailedMissionData(quest).getInfo()
                 self.__datailedList.append(data)
 
         else:
-            title = ''
             quest = self.__quests.get(eventID)
             if quest is not None:
                 self.__datailedList.append(missions_helper.getDetailedMissionData(quest).getInfo())
@@ -96,8 +94,7 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
              'tooltip': mission.get('statusTooltipData'),
              'status': mission.get('status'),
              'selected': eventID == mission.get('eventID')} for i, mission in enumerate(self.__datailedList) ]
-            self.as_setInitDataS({'title': title,
-             'pages': pages})
+            self.as_setInitDataS({'pages': pages})
         return
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSION_DETAILS_VIEW, EVENT_BUS_SCOPE.LOBBY)

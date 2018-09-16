@@ -163,6 +163,19 @@
       <Type>	BOOL	</Type>
       <Flags>	OWN_CLIENT	</Flags>
     </isHistoricallyAccurate>
+    <inBattleQuestNames>
+      <Type>	ARRAY	  <of>	STRING	</of>
+      </Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </inBattleQuestNames>
+    <inBattleQuestProgresses>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </inBattleQuestProgresses>
+    <questProgressDescriptor>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+    </questProgressDescriptor>
   </Properties>
   <TempProperties>
     <_Avatar__p></_Avatar__p>
@@ -423,6 +436,10 @@
       <Arg>	UINT16	</Arg>
       <Arg>	VECTOR3	</Arg>
     </onCombatEquipmentShotLaunched>
+    <updateQuestProgress>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </updateQuestProgress>
   </ClientMethods>
   <CellMethods>
     <autoAim>
@@ -692,7 +709,6 @@
       <Arg>	STRING	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	STRING	</Arg>
-      <IsMulticast>	true	</IsMulticast>
     </setDevelopmentFeature>
     <addBotToArena>
       <Exposed></Exposed>

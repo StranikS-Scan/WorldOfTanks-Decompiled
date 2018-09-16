@@ -47,11 +47,13 @@ class _EnvironmentListNode(object):
 
     def popEnv(self):
         self.__setExitState()
-        self.__prev.setDelayedEnter(self.__envID)
+        if self.__prev is not None:
+            self.__prev.setDelayedEnter(self.__envID)
         prev = self.__prev
         self.__prev = None
         self.__next = None
-        prev.setNext(None)
+        if prev is not None:
+            prev.setNext(None)
         return prev
 
     def setDelayedEnter(self, prevID):

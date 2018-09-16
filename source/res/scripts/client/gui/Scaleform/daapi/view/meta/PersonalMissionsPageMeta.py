@@ -4,7 +4,7 @@ from gui.Scaleform.framework.entities.View import View
 
 class PersonalMissionsPageMeta(View):
 
-    def onBarClick(self, vehIdx, operationIdx):
+    def onBarClick(self, chainID, operationIdx):
         self._printOverrideError('onBarClick')
 
     def onSkipTaskClick(self):
@@ -19,11 +19,23 @@ class PersonalMissionsPageMeta(View):
     def onTutorialAcceptBtnClicked(self):
         self._printOverrideError('onTutorialAcceptBtnClicked')
 
+    def showAwards(self):
+        self._printOverrideError('showAwards')
+
+    def as_setContentVisibleS(self, value):
+        return self.flashObject.as_setContentVisible(value) if self._isDAAPIInited() else None
+
+    def as_initViewS(self, pmType, chainsLen):
+        return self.flashObject.as_initView(pmType, chainsLen) if self._isDAAPIInited() else None
+
+    def as_reInitViewS(self, pmType, chainsLen):
+        return self.flashObject.as_reInitView(pmType, chainsLen) if self._isDAAPIInited() else None
+
     def as_setHeaderDataS(self, data):
         return self.flashObject.as_setHeaderData(data) if self._isDAAPIInited() else None
 
-    def as_updateBranchesDataS(self, data):
-        return self.flashObject.as_updateBranchesData(data) if self._isDAAPIInited() else None
+    def as_updateSideBarDataS(self, data):
+        return self.flashObject.as_updateSideBarData(data) if self._isDAAPIInited() else None
 
     def as_setStatusDataS(self, data):
         return self.flashObject.as_setStatusData(data) if self._isDAAPIInited() else None

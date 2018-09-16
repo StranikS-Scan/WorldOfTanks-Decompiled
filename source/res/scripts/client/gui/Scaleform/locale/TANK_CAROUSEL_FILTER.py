@@ -3,6 +3,8 @@
 
 
 class TANK_CAROUSEL_FILTER(object):
+    TOOLTIP_PARAMS = '#tank_carousel_filter:tooltip/params'
+    TOOLTIP_INVENTORY = '#tank_carousel_filter:tooltip/inventory'
     CHECKBOX_INVENTORY = '#tank_carousel_filter:checkbox/inventory'
     POPOVER_TITLE = '#tank_carousel_filter:popover/title'
     POPOVER_LABEL_NATIONS = '#tank_carousel_filter:popover/label/nations'
@@ -15,6 +17,7 @@ class TANK_CAROUSEL_FILTER(object):
     POPOVER_CHECKBOX_ELITE = '#tank_carousel_filter:popover/checkbox/elite'
     POPOVER_CHECKBOX_FAVORITE = '#tank_carousel_filter:popover/checkbox/favorite'
     POPOVER_CHECKBOX_RENTED = '#tank_carousel_filter:popover/checkbox/rented'
+    POPOVER_CHECKBOX_EVENT = '#tank_carousel_filter:popover/checkbox/event'
     POPOVER_COUNTER = '#tank_carousel_filter:popover/counter'
     TOOLTIP_TOGGLESWITCHCAROUSEL_HEADER = '#tank_carousel_filter:tooltip/toggleSwitchCarousel/header'
     TOOLTIP_TOGGLESWITCHCAROUSEL_BODY = '#tank_carousel_filter:tooltip/toggleSwitchCarousel/body'

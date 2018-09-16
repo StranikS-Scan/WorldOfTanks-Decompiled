@@ -21,13 +21,11 @@ from gui.Scaleform.Waiting import Waiting
 from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from gui.shared.tutorial_helper import getTutorialGlobalStorage
 _MODULES_NAMES = ('turret',
  'chassis',
  'engine',
  'gun',
  'radio')
-_HAVE_CURRENT_FE_VEHICLE = '_HaveCurrentFootballVehicle'
 
 class _CachedVehicle(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -300,17 +298,12 @@ class _CurrentVehicle(_CachedVehicle):
     def _selectVehicle(self, vehInvID):
         if vehInvID == self.__vehInvID:
             return
-        else:
-            Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False)
-            self.onChangeStarted()
-            self.__vehInvID = vehInvID
-            AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
-            self.refreshModel()
-            self._setChangeCallback()
-            tutorStorage = getTutorialGlobalStorage()
-            if tutorStorage is not None:
-                tutorStorage.setValue(_HAVE_CURRENT_FE_VEHICLE, self.isEvent())
-            return
+        Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False)
+        self.onChangeStarted()
+        self.__vehInvID = vehInvID
+        AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
+        self.refreshModel()
+        self._setChangeCallback()
 
     def __checkPrebattleLockedVehicle(self):
         from gui.prb_control import prb_getters

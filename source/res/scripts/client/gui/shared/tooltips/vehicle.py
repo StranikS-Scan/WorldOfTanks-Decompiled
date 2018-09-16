@@ -30,11 +30,8 @@ from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURREN
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import ITradeInController
-from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
-from gui import makeHtmlString
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
 _BATTLE_BOOSTER = 'battleBooster'
@@ -60,6 +57,8 @@ def _bonusCmp(x, y):
 def _makeModuleFitTooltipError(reason):
     return '#tooltips:moduleFits/{}'.format(reason)
 
+
+_SHORTEN_TOOLTIP_CASES = ('shopVehicle',)
 
 class VehicleInfoTooltipData(BlocksTooltipData):
 
@@ -90,19 +89,15 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
         if telecomBlock:
             items.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
-        if not vehicle.isFootball:
-            priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
-            if priceBlock:
-                self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
-                items.append(formatters.packBuildUpBlockData(priceBlock, gap=textGap, padding=blockPadding))
+        priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
+        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES
+        if priceBlock and not shouldBeCut:
+            self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
+            items.append(formatters.packBuildUpBlockData(priceBlock, gap=textGap, padding=blockPadding))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
         if simplifiedStatsBlock:
             items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
-        if vehicle.isFootball:
-            footballBlock = FootballBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
-            if footballBlock:
-                items.append(formatters.packBuildUpBlockData(footballBlock, padding=leftRightPadding, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE))
-        elif not vehicle.isRotationGroupLocked:
+        if not vehicle.isRotationGroupLocked:
             commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
             if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
@@ -119,8 +114,8 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             statsBlockConstructor = AdditionalStatsBlockConstructor
         items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
         if not vehicle.isRotationGroupLocked:
-            statusBlock = StatusBlockConstructor(vehicle, statusConfig).construct()
-            if statusBlock:
+            statusBlock, operationError = StatusBlockConstructor(vehicle, statusConfig).construct()
+            if statusBlock and not (operationError and shouldBeCut):
                 items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding))
             else:
                 self._setContentMargin(bottom=bottomPadding)
@@ -377,6 +372,7 @@ class VehicleTradeInTooltipData(ToolTipBaseData):
 
 class VehicleTradeInPriceTooltipData(ToolTipBaseData):
     tradeIn = dependency.descriptor(ITradeInController)
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(VehicleTradeInPriceTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
@@ -386,12 +382,13 @@ class VehicleTradeInPriceTooltipData(ToolTipBaseData):
             return {}
         tradeInVehicle = self.context.buildItem(tradeInVehicleCD)
         itemPrice = tradeInVehicle.buyPrices.itemPrice
+        statsMoney = self.itemsCache.items.stats.money
         bodyParts = []
         if tradeInVehicle.buyPrices.itemPrice.isActionPrice():
-            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_OLDPRICE, gold=moneyWithIcon(itemPrice.defPrice, currType=Currency.GOLD)))
-            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_NEWPRICE, gold=moneyWithIcon(itemPrice.price, currType=Currency.GOLD)))
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_OLDPRICE, gold=moneyWithIcon(itemPrice.defPrice, currType=Currency.GOLD), statsMoney=statsMoney))
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_NEWPRICE, gold=moneyWithIcon(itemPrice.price, currType=Currency.GOLD, statsMoney=statsMoney)))
         else:
-            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_PRICE, gold=moneyWithIcon(itemPrice.price, currType=Currency.GOLD)))
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_PRICE, gold=moneyWithIcon(itemPrice.price, currType=Currency.GOLD, statsMoney=statsMoney)))
         if tradeOffVehicleCD < 0:
             tradeOffVehicleName = i18n.makeString(TOOLTIPS.TRADE_VEHICLE_NOVEHICLE)
             resultPrice = itemPrice.price
@@ -402,7 +399,7 @@ class VehicleTradeInPriceTooltipData(ToolTipBaseData):
         bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_TOCHANGE, vehicleName=text_styles.playerOnline(tradeOffVehicleName)))
         return {'header': i18n.makeString(TOOLTIPS.TRADE_VEHICLE_HEADER, vehicleName=tradeInVehicle.userName),
          'body': '\n'.join(bodyParts),
-         'result': i18n.makeString(TOOLTIPS.TRADE_VEHICLE_RESULT, gold=moneyWithIcon(resultPrice, currType=Currency.GOLD))}
+         'result': i18n.makeString(TOOLTIPS.TRADE_VEHICLE_RESULT, gold=moneyWithIcon(resultPrice, currType=Currency.GOLD, statsMoney=statsMoney))}
 
 
 class VehicleTooltipBlockConstructor(object):
@@ -419,7 +416,6 @@ class VehicleTooltipBlockConstructor(object):
 
 
 class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
-    eventsCache = dependency.descriptor(IEventsCache)
 
     def construct(self):
         block = []
@@ -433,35 +429,8 @@ class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
         nameStr = text_styles.highTitle(self.vehicle.userName)
         typeStr = text_styles.main(vehicleType)
         levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(self.vehicle.level)), text_styles.standard(_ms(TOOLTIPS.VEHICLE_LEVEL)))
-        if self.vehicle.isFootball:
-            icon = RES_ICONS.MAPS_ICONS_FE18_FOOTBALL_STRIKER
-            descLine = _ms(FOOTBALL2018.MESSAGES_INFOTYPE_DESC)
-            dueDate = self.eventsCache.getEventDueDate()
-            imgSrc = makeHtmlString('html_templates:lobby/tooltips', 'tooltip_football_avail')
-            if dueDate is not None:
-                dateStr = BigWorld.wg_getShortDateFormat(float(dueDate))
-            else:
-                dateStr = ''
-            availLine = imgSrc + _ms(FOOTBALL2018.MESSAGES_INFOTYPE_AVAILABILITY, dateStr=dateStr)
-            sportsTypeStr = ''
-            if self.vehicle.isFootballStriker:
-                sportsTypeStr = FOOTBALL2018.SPORT_ROLE_STRIKER
-                icon = RES_ICONS.MAPS_ICONS_FE18_FOOTBALL_STRIKER
-            elif self.vehicle.isFootballMidfielder:
-                sportsTypeStr = FOOTBALL2018.SPORT_ROLE_MIDFIELDER
-                icon = RES_ICONS.MAPS_ICONS_FE18_FOOTBALL_MIDFIELDER
-            elif self.vehicle.isFootballDefender:
-                sportsTypeStr = FOOTBALL2018.SPORT_ROLE_DEFENDER
-                icon = RES_ICONS.MAPS_ICONS_FE18_FOOTBALL_DEFENDER
-            fullDesc = text_styles.stats(sportsTypeStr) + '\n\n' + text_styles.main(descLine) + '\n' + text_styles.premiumVehicleName(availLine)
-            linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_FOOTBALL_BLOCK_LINKAGE
-            imgTopPadding = -8
-        else:
-            imgTopPadding = -15
-            icon = getTypeBigIconPath(self.vehicle.type, self.vehicle.isElite)
-            fullDesc = text_styles.premiumVehicleName(levelStr + ' ' + typeStr)
-            linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE
-        headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=fullDesc, img=icon, imgPadding=formatters.packPadding(left=10, top=imgTopPadding), txtGap=-2, txtOffset=99, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21), linkage=linkage, imagePath=icon))
+        icon = getTypeBigIconPath(self.vehicle.type, self.vehicle.isElite)
+        headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=text_styles.concatStylesToMultiLine(levelStr + ' ' + typeStr, ''), img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-2, txtOffset=99, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21)))
         if self.vehicle.isFavorite:
             headerBlocks.append(formatters.packImageTextBlockData(title=text_styles.neutral(TOOLTIPS.VEHICLE_FAVORITE), img=RES_ICONS.MAPS_ICONS_TOOLTIP_MAIN_TYPE, imgPadding=formatters.packPadding(top=-15), imgAtLeft=False, txtPadding=formatters.packPadding(left=10), txtAlign=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=-28, bottom=-27)))
         block.append(formatters.packBuildUpBlockData(headerBlocks, stretchBg=False, linkage=bgLinkage, padding=formatters.packPadding(left=-self.leftPadding)))
@@ -483,32 +452,6 @@ class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
             telecomText = _ms(TOOLTIPS.VEHICLE_DEAL_TELECOM_MAIN, tariff=_ms(MENU.internetProviderTariff(provider)), provider=_ms(MENU.internetProviderName(provider)))
             return [formatters.packTextBlockData(text=text_styles.main(telecomText))]
         return []
-
-
-class FootballBlockConstructor(VehicleTooltipBlockConstructor):
-
-    def __init__(self, vehicle, valueWidth, leftPadding, rightPadding):
-        super(FootballBlockConstructor, self).__init__(vehicle, None, leftPadding, rightPadding)
-        self._valueWidth = valueWidth
-        return
-
-    def construct(self):
-        if self.vehicle.isFootball:
-            titleStr = None
-            descStr = None
-            if self.vehicle.isFootballStriker:
-                titleStr = FOOTBALL2018.SPORT_ROLE_STRIKER
-                descStr = FOOTBALL2018.SPORT_ROLE_STRIKER_DESC
-            elif self.vehicle.isFootballMidfielder:
-                titleStr = FOOTBALL2018.SPORT_ROLE_MIDFIELDER
-                descStr = FOOTBALL2018.SPORT_ROLE_MIDFIELDER_DESC
-            elif self.vehicle.isFootballDefender:
-                titleStr = FOOTBALL2018.SPORT_ROLE_DEFENDER
-                descStr = FOOTBALL2018.SPORT_ROLE_DEFENDER_DESC
-            imageBlock = formatters.packImageTextBlockData(title=text_styles.middleTitle(_ms(titleStr)), desc=text_styles.main(_ms(descStr)), img=RES_ICONS.MAPS_ICONS_TOOLTIP_FOOTBALL_BG, imgPadding=formatters.packPadding(left=0, top=-15), txtGap=5, txtOffset=20, padding=formatters.packPadding(left=-19, right=20))
-            return [imageBlock]
-        else:
-            return []
 
 
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):
@@ -549,7 +492,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                 xpValue = self.vehicle.xp
                 if xpValue:
                     xPText = text_styles.expText(BigWorld.wg_getIntegralFormat(xpValue))
-                    icon = ICON_TEXT_FRAMES.FREE_XP if self.vehicle.isPremium else ICON_TEXT_FRAMES.XP
+                    icon = ICON_TEXT_FRAMES.ELITE_XP if self.vehicle.isPremium else ICON_TEXT_FRAMES.XP
                     block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_XP), value=xPText, icon=icon, valueWidth=self._valueWidth, padding=paddings))
             if dailyXP:
                 attrs = self.itemsCache.items.stats.attributes
@@ -663,10 +606,7 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
     def construct(self):
         block = []
         if self.configuration.params:
-            if self.vehicle.isEvent:
-                comparator = params_helper.noSkillsVehicleComparator(self.vehicle)
-            else:
-                comparator = params_helper.idealCrewComparator(self.vehicle)
+            comparator = params_helper.idealCrewComparator(self.vehicle)
             stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(self.vehicle.intCD))
             for paramName in RELATIVE_PARAMS:
                 paramInfo = comparator.getExtendedData(paramName)
@@ -776,7 +716,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
         isClanLock = self.vehicle.clanLock or None
         isDisabledInRoaming = self.vehicle.isDisabledInRoaming
         if isClanLock or isDisabledInRoaming:
-            return block
+            return (block, False)
         else:
             if self.configuration.node is not None:
                 result = self.__getTechTreeVehicleStatus(self.configuration, self.vehicle)
@@ -804,7 +744,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     block.append(formatters.packTextBlockData(text=text_styles.standard(text)))
                 else:
                     block.append(formatters.packAlignedTextBlockData(header, BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-            return block
+            return (block, result and result.get('operationError') is not None)
 
     def __getTechTreeVehicleStatus(self, config, vehicle):
         nodeState = int(config.node.state)
@@ -846,6 +786,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             isUnlocked = vehicle.isUnlocked
             mayObtain, reason = vehicle.mayObtainForMoney(self.itemsCache.items.stats.money)
             msg = None
+            operationError = False
             if not isUnlocked:
                 msg = 'notUnlocked'
             elif isInInventory:
@@ -858,11 +799,13 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     msg = 'notEnoughCredits'
                 else:
                     msg = 'operationError'
-            if msg is not None:
+                    operationError = True
+            if msg:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % msg)
                 return {'header': header,
                  'text': text,
-                 'level': level}
+                 'level': level,
+                 'operationError': operationError}
             return
         else:
             state, level = vehicle.getState()

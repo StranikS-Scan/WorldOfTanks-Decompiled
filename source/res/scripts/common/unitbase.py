@@ -37,6 +37,7 @@ class UNIT_FLAGS:
     IS_DYNAMIC = 1024
     ARENA_FINISHED = 2048
     KEEP_OFFLINE_ROSTER = 4096
+    EXTERNAL_LEGIONARIES_MATCHING = 8192
     DEFAULT = 0
     PRE_QUEUE = 0
     PRE_SEARCH = 0
@@ -361,8 +362,6 @@ def _invitationTypeFromFlags(flags):
         return INVITATION_TYPE.EPIC
     elif flags & (UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM):
         return INVITATION_TYPE.FALLOUT
-    elif flags & UNIT_MGR_FLAGS.EVENT:
-        return INVITATION_TYPE.EVENT
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return INVITATION_TYPE.SQUAD
     else:

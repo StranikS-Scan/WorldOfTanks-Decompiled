@@ -4,7 +4,8 @@ from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events import formatters
-from gui.server_events.cond_formatters import CONDITION_ICON, POSSIBLE_BATTLE_RESUTLS_KEYS, BATTLE_RESULTS_KEYS, FORMATTER_IDS, FormattableField, packDescriptionField
+from gui.server_events.cond_formatters import POSSIBLE_BATTLE_RESUTLS_KEYS, BATTLE_RESULTS_KEYS, FORMATTER_IDS, FormattableField, packDescriptionField
+from personal_missions_constants import CONDITION_ICON
 from gui.server_events.cond_formatters.formatters import CumulativableFormatter, MissionFormatter, MissionsVehicleListFormatter, MissionsBattleConditionsFormatter
 from gui.server_events.cond_formatters.postbattle import VehiclesDamageFormatter
 from gui.server_events.cond_formatters.postbattle import VehiclesKillFormatter
@@ -138,7 +139,7 @@ class _CumulativeResultFormatter(_CumulativableFormatter):
     def _packGui(self, title, condition, progressType, current, total, progressData=None):
         description = self._getDescription(condition)
         iconKey = self._getIconKey(condition)
-        return formatters.packMissionIconCondition(title, progressType, description, iconKey, current=current, total=total, progressData=progressData, sortKey=self._getSortKey(condition))
+        return formatters.packMissionIconCondition(title, progressType, description, iconKey, current=current, total=total, progressData=progressData, sortKey=self._getSortKey(condition), progressID=condition.progressID)
 
     def _cumulativeFormat(self, condition, event):
         result = []

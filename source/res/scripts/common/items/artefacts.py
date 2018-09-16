@@ -12,7 +12,7 @@ from items.components import shared_components, component_constants
 from tankmen import MAX_SKILL_LEVEL
 
 class Artefact(BasicItem):
-    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', 'stunResistanceEffect', 'stunResistanceDuration', '_vehWeightFraction', '_weight', '_maxWeightChange', '__vehicleFilter', '__artefactFilter', 'isImproved')
+    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', 'stunResistanceEffect', 'stunResistanceDuration', '_vehWeightFraction', '_weight', '_maxWeightChange', '__vehicleFilter', '__artefactFilter', 'isImproved', 'kpi')
 
     def __init__(self, typeID, itemID, itemName, compactDescr):
         super(Artefact, self).__init__(typeID, itemID, itemName, compactDescr)
@@ -28,6 +28,7 @@ class Artefact(BasicItem):
         self.__vehicleFilter = None
         self.__artefactFilter = None
         self.isImproved = None
+        self.kpi = None
         return
 
     def init(self, xmlCtx, section):
@@ -97,8 +98,12 @@ class Artefact(BasicItem):
         else:
             self.tags = _readTags(xmlCtx, section, 'tags', self.itemTypeName)
         if IS_CLIENT or IS_WEB:
-            self.i18n = shared_components.I18nComponent(section.readString('userString'), section.readString('description'))
+            self.i18n = shared_components.I18nComponent(userStringKey=section.readString('userString'), descriptionKey=section.readString('description'), shortDescriptionSpecialKey=section.readString('shortDescriptionSpecial'), longDescriptionSpecialKey=section.readString('longDescriptionSpecial'))
             self.icon = _xml.readIcon(xmlCtx, section, 'icon')
+        if IS_CLIENT and section.has_key('kpi'):
+            self.kpi = _readKpi(xmlCtx, section['kpi'])
+        else:
+            self.kpi = []
         if IS_CELLAPP or not section.has_key('vehicleFilter'):
             self.__vehicleFilter = None
         else:
@@ -416,50 +421,22 @@ class RemovedRpmLimiter(Equipment):
 
 
 class Afterburning(Equipment):
-    __slots__ = ('maxAmount', 'deployTime', 'consumePerSec', 'cooldownTime', 'rechargePerSec', 'enginePowerFactor', 'powerFactorPerUnit', 'instantPowerIncrease', 'maxSpeedFactor')
+    __slots__ = ('enginePowerFactor', 'durationSeconds')
 
     def __init__(self):
         super(Afterburning, self).__init__()
-        self.maxAmount = component_constants.ZERO_INT
-        self.deployTime = component_constants.ZERO_FLOAT
-        self.consumePerSec = component_constants.ZERO_INT
-        self.cooldownTime = component_constants.ZERO_FLOAT
-        self.rechargePerSec = component_constants.ZERO_INT
         self.enginePowerFactor = component_constants.ZERO_FLOAT
-        self.powerFactorPerUnit = component_constants.ZERO_FLOAT
-        self.instantPowerIncrease = True
-        self.maxSpeedFactor = component_constants.ZERO_FLOAT
+        self.durationSeconds = component_constants.ZERO_INT
 
     def _readConfig(self, xmlCtx, section):
-        self.maxAmount = _xml.readInt(xmlCtx, section, 'maxAmount', 0)
-        self.deployTime = _xml.readPositiveFloat(xmlCtx, section, 'deployTime')
-        self.consumePerSec = _xml.readInt(xmlCtx, section, 'consumePerSec', 0)
-        self.cooldownTime = _xml.readPositiveFloat(xmlCtx, section, 'cooldownTime')
-        self.rechargePerSec = _xml.readInt(xmlCtx, section, 'rechargePerSec', 0)
         self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
-        self.powerFactorPerUnit = _xml.readPositiveFloat(xmlCtx, section, 'powerFactorPerUnit')
-        self.instantPowerIncrease = _xml.readBool(xmlCtx, section, 'instantPowerIncrease')
-        self.maxSpeedFactor = _xml.readPositiveFloat(xmlCtx, section, 'maxSpeedFactor')
+        self.durationSeconds = _xml.readInt(xmlCtx, section, 'durationSeconds', 1)
 
     def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
         try:
             factors['engine/power'] *= self.enginePowerFactor
-            factors['vehicle/maxSpeed'] *= self.maxSpeedFactor
         except:
             pass
-
-
-class LastChance(Equipment):
-    __slots__ = ('cooldownTime', 'recharge', 'reuseCount')
-
-    def __init__(self):
-        super(LastChance, self).__init__()
-        self.cooldownTime = component_constants.ZERO_FLOAT
-        self.recharge = component_constants.ZERO_INT
-
-    def _readConfig(self, xmlCtx, section):
-        self.cooldownTime = _xml.readPositiveFloat(xmlCtx, section, 'cooldownTime')
-        self.recharge = _xml.readInt(xmlCtx, section, 'recharge', 2)
 
 
 class RageEquipmentConfigReader(object):
@@ -1157,9 +1134,9 @@ class _VehicleFilter(object):
         return (True, None)
 
     def compatibleNations(self):
-        included = set(*chain((params.get('nations', []) for params in self.__include)))
-        excluded = set(*chain((params.get('nations', []) for params in self.__exclude)))
-        return included - excluded
+        included = set(chain.from_iterable((params.get('nations', []) for params in self.__include)))
+        excluded = set(chain.from_iterable((params.get('nations', []) for params in self.__exclude)))
+        return list(included - excluded)
 
 
 class _ArtefactFilter(object):
@@ -1267,6 +1244,29 @@ _vehicleFilterItemTypes = {'vehicle': 'vehicle',
  'fuelTank': 'vehicleFuelTank',
  'radio': 'vehicleRadio',
  'gun': 'vehicleGun'}
+
+def _readKpi(xmlCtx, section):
+    from gui.shared.gui_items import KPI
+    kpi = []
+    for kpiType, subsec in section.items():
+        if kpiType not in KPI.Type.ALL():
+            _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported KPI type')
+            return
+        if kpiType == KPI.Type.ONE_OF:
+            kpi.append(KPI(KPI.Name.COMPOUND_KPI, _readKpi(xmlCtx, subsec), KPI.Type.ONE_OF))
+        name = subsec.readString('name')
+        value = subsec.readFloat('value')
+        if not name:
+            _xml.raiseWrongXml(xmlCtx, kpiType, 'empty <name> tag not allowed')
+            return
+        if name not in KPI.Name.ALL():
+            _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported value in <name> tag')
+            return
+        kpi.append(KPI(name, value, kpiType))
+
+    return kpi
+
+
 _readTags = vehicles._readTags
 
 def _readStun(xmlCtx, scriptSection):

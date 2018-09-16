@@ -16,8 +16,8 @@ class LinkedSetDetailsOverlayMeta(BaseDAAPIComponent):
     def as_setDataVideoS(self, data):
         return self.flashObject.as_setDataVideo(data) if self._isDAAPIInited() else None
 
-    def as_setColorPagesS(self, colorPages):
-        return self.flashObject.as_setColorPages(colorPages) if self._isDAAPIInited() else None
+    def as_setColorPagesS(self, data):
+        return self.flashObject.as_setColorPages(data) if self._isDAAPIInited() else None
 
     def as_setPageS(self, index):
         return self.flashObject.as_setPage(index) if self._isDAAPIInited() else None

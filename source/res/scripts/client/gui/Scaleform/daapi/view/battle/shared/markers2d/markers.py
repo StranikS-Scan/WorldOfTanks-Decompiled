@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/markers2d/markers.py
 import Event
+import GUI
+from vehicle_systems.tankStructure import TankNodeNames
 
 class Marker(object):
 
@@ -63,7 +65,12 @@ class VehicleMarker(Marker):
 
     @classmethod
     def fetchMatrixProvider(cls, vProxy):
-        return vProxy.model.node('HP_gui')
+        rootMP = vProxy.model.node(TankNodeNames.HULL_SWINGING)
+        guiMP = vProxy.model.node(TankNodeNames.GUI)
+        rootM = rootMP.localMatrix
+        guiM = guiMP.localMatrix
+        offset = guiM.translation - rootM.translation
+        return GUI.WGVehicleMarkersMatrixProvider(rootMP, offset)
 
     def getMatrixProvider(self):
         return self.fetchMatrixProvider(self._vProxy) if self._vProxy is not None else None

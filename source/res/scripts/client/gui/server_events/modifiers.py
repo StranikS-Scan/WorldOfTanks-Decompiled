@@ -343,7 +343,7 @@ class _SplitByCurrency(ActionModifier):
     def getParamName(self):
         if self._itemType in GUI_ITEM_TYPE.ALL() and self._paramName is not None:
             itemName = GUI_ITEM_TYPE_NAMES[self._itemType]
-            return '/'.join([itemName, self._paramName])
+            return '/'.join((itemName, self._paramName))
         else:
             return self.getName()
 
@@ -610,7 +610,7 @@ class EconomicsSet(ActionModifier):
                     LOG_ERROR('Error while calculating economics discount', paramCtx)
                     LOG_CURRENT_EXCEPTION()
 
-        return None
+        return {}
 
     def splitModifiers(self):
         res = []
@@ -635,7 +635,7 @@ class EconomicsSet(ActionModifier):
 
     def _makeParamCtx(self, name, value):
         if name == 'winXPFactorMode':
-            newName = '{}/{}'.format(name, self.getParamValue())
+            newName = '/'.join((name, self.getParamValue()))
             currency = None
         else:
             newName, currency = self._extractCurrency(name)
@@ -699,7 +699,7 @@ class EconomicsSet(ActionModifier):
         return self._calculateDiscount('femalePassportChangeCost', ctx.getValue(), default, _DT.PERCENT)
 
     def handlerClanCreationCost(self, ctx):
-        default = 2500
+        default = self.itemsCache.items.shop.defaults.clanCreationCost
         return self._calculateDiscount('clanCreationCost', ctx.getValue(), default, _DT.PERCENT)
 
     def handlerFreeXPConversionDiscrecity(self, ctx):
@@ -775,7 +775,7 @@ class EconomicsMul(EconomicsSet):
     def _makeParamCtx(self, name, value):
         newName, currency = self._extractCurrency(name)
         isMult = False
-        if name not in ('exchangeRateForShellsAndEqs',) and newName.endswith(_MULTIPLIER):
+        if name != 'exchangeRateForShellsAndEqs' and newName.endswith(_MULTIPLIER):
             newName = newName[:-len(_MULTIPLIER)]
             isMult = True
         return _ParamContext(newName, value, currency=currency, isMultiplier=isMult)
@@ -835,7 +835,18 @@ class ShellPriceAll(_SplitByCurrency, _ItemsPriceAll):
 
 
 class ShellPriceNation(ShellPriceAll):
-    pass
+
+    def __init__(self, name, params, paramName=None):
+        super(ShellPriceNation, self).__init__(name, params)
+        self._paramName = paramName
+
+    def splitModifiers(self):
+        class_ = self.__class__
+        name = self.getName()
+        nation = self._params.get('nation')
+        res = [ class_(name, {param: value,
+         'nation': nation} if nation else {param: value}, param) for param, value in self._params.iteritems() if param != 'nation' ]
+        return res
 
 
 class ShellPriceSet(_ShellPrice, _BuyPriceSet):
@@ -1193,26 +1204,6 @@ class MarathonEventModifier(ActionModifier):
         super(MarathonEventModifier, self).__init__(name, params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.ALL, itemType=GUI_ITEM_TYPE.ACHIEVEMENT)
 
 
-class CalendarModifier(ActionModifier):
-
-    def __init__(self, name, params):
-        super(CalendarModifier, self).__init__('calendar', params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
-
-    def getDuration(self):
-        strDuration = self._params.get('duration')
-        return int(strDuration) if strDuration else None
-
-
-class CalendarSplashModifier(ActionModifier):
-
-    def __init__(self, name, params):
-        super(CalendarSplashModifier, self).__init__('calendarSplash', params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
-
-    def getDuration(self):
-        strDuration = self._params.get('duration')
-        return int(strDuration) if strDuration else None
-
-
 _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('set_EconomicsParams', EconomicsSet),
  ('mul_EconomicsPrices', EconomicsMul),
@@ -1248,9 +1239,7 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('mul_GoodiePriceAll', BoostersPriceAll),
  ('set_MarathonAnnounce', MarathonEventModifier),
  ('set_MarathonInProgress', MarathonEventModifier),
- ('set_MarathonFinished', MarathonEventModifier),
- ('AdventCalendarEnabled', CalendarModifier),
- ('AdventCalendarForced', CalendarSplashModifier))
+ ('set_MarathonFinished', MarathonEventModifier))
 _MODIFIERS_DICT = dict(_MODIFIERS)
 _MODIFIERS_ORDER = dict(((n, idx) for idx, (n, _) in enumerate(_MODIFIERS)))
 

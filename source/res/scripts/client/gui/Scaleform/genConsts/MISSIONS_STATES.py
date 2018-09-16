@@ -8,8 +8,10 @@ class MISSIONS_STATES(object):
     NOT_AVAILABLE = 'notAvailable'
     WRONG_TIME = 'wrongTime'
     NONE = ''
+    IN_PROGRESS = 'inProgress'
     EVENT_STATUS = [COMPLETED,
      FULL_COMPLETED,
      NOT_AVAILABLE,
      WRONG_TIME,
-     NONE]
+     NONE,
+     IN_PROGRESS]

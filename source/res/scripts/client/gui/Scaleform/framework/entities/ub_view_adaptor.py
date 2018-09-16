@@ -82,7 +82,11 @@ class UnboundViewAdaptor(DisposableEntity, ViewInterface):
         self.__view.onStatusChanged += self.__onStatusChanged
 
     def loadView(self):
-        BigWorld.callback(0.0, self.__startToLoad)
+        if self.__loadID is not None:
+            BigWorld.cancelCallback(self.__loadID)
+            self.__loadID = None
+        self.__loadID = BigWorld.callback(0.0, self.__startToLoad)
+        return
 
     def _destroy(self):
         if self.__loadID is not None:
@@ -104,5 +108,7 @@ class UnboundViewAdaptor(DisposableEntity, ViewInterface):
 
     def __startToLoad(self):
         self.__loadID = None
+        if self.__view is None:
+            raise SoftException('View is not defined.')
         self.__view.load()
         return

@@ -1,24 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_descrs.py
-from collections import namedtuple
 import weakref
 import BattleReplay
 from constants import IS_DEVELOPMENT
 from gui.Scaleform import getNecessaryArenaFrameName
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.locale.MENU import MENU
 from gui.battle_control.arena_info import settings
 from gui.prb_control.formatters import getPrebattleFullDescription
-from gui.shared.formatters import text_styles
 from gui.shared.utils import toUpper, functions
 from helpers import i18n
-_QuestInfo = namedtuple('_QuestInfo', 'name, condition, additional')
-
-def _makeQuestInfo(quest):
-    condition = '\n'.join((text_styles.middleTitle(INGAME_GUI.PERSONALMISSIONS_TIP_MAINHEADER), text_styles.main(quest.getUserMainCondition())))
-    additional = '\n'.join((text_styles.middleTitle(INGAME_GUI.PERSONALMISSIONS_TIP_ADDITIONALHEADER), text_styles.main(quest.getUserAddCondition())))
-    return _QuestInfo(quest.getUserName(), condition, additional)
-
 
 def _getDefaultTeamName(isAlly):
     return i18n.makeString(MENU.LOADING_TEAMS_ALLIES) if isAlly else i18n.makeString(MENU.LOADING_TEAMS_ENEMIES)
@@ -72,15 +62,15 @@ class IArenaGuiDescription(object):
     def isQuestEnabled(self):
         raise NotImplementedError
 
-    def getQuestInfo(self):
+    def getSelectedQuestIDs(self):
         raise NotImplementedError
 
-    def makeQuestInfo(self, vo):
+    def getSelectedQuestInfo(self):
         raise NotImplementedError
 
 
 class DefaultArenaGuiDescription(IArenaGuiDescription):
-    __slots__ = ('_visitor', '_team', '_questInfo', '_isPersonalDataSet')
+    __slots__ = ('_visitor', '_team', '_questInfo', '_isPersonalDataSet', '_selectedQuestIDs', '_selectedQuestInfo')
 
     def __init__(self, visitor):
         super(DefaultArenaGuiDescription, self).__init__()
@@ -88,6 +78,8 @@ class DefaultArenaGuiDescription(IArenaGuiDescription):
         self._team = 0
         self._isPersonalDataSet = False
         self._questInfo = None
+        self._selectedQuestIDs = None
+        self._selectedQuestInfo = None
         return
 
     def clear(self):
@@ -101,7 +93,8 @@ class DefaultArenaGuiDescription(IArenaGuiDescription):
         self._isPersonalDataSet = True
         self._team = vo.team
         if self.isQuestEnabled():
-            self._questInfo = self.makeQuestInfo(vo)
+            self._selectedQuestIDs = vo.player.personaMissionIDs
+            self._selectedQuestInfo = vo.player.personalMissionInfo
 
     def isBaseExists(self):
         return functions.isBaseExists(self._visitor.type.getID(), self._team)
@@ -150,11 +143,11 @@ class DefaultArenaGuiDescription(IArenaGuiDescription):
     def isQuestEnabled(self):
         return False
 
-    def getQuestInfo(self):
-        return self._questInfo
+    def getSelectedQuestIDs(self):
+        return self._selectedQuestIDs
 
-    def makeQuestInfo(self, vo):
-        return None
+    def getSelectedQuestInfo(self):
+        return self._selectedQuestInfo
 
 
 class ArenaWithBasesDescription(DefaultArenaGuiDescription):
@@ -172,15 +165,11 @@ class ArenaWithBasesDescription(DefaultArenaGuiDescription):
     def isInvitationEnabled(self):
         guiVisitor = self._visitor.gui
         replayCtrl = BattleReplay.g_replayCtrl
-        return (not replayCtrl.isPlaying or replayCtrl.isBattleSimulation) and (guiVisitor.isRandomBattle() or guiVisitor.isEventBattle() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT)
+        return (not replayCtrl.isPlaying or replayCtrl.isBattleSimulation) and (guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT)
 
     def isQuestEnabled(self):
         guiVisitor = self._visitor.gui
         return guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT
-
-    def makeQuestInfo(self, vo):
-        pQuests = vo.player.getRandomPersonalMissions()
-        return _makeQuestInfo(pQuests[0]) if pQuests else _QuestInfo(i18n.makeString(INGAME_GUI.PERSONALMISSIONS_TIP_NOQUESTS_VEHICLETYPE), '', '')
 
 
 class ArenaWithLabelDescription(DefaultArenaGuiDescription):
@@ -253,11 +242,11 @@ class ArenaWithL10nDescription(IArenaGuiDescription):
     def isQuestEnabled(self):
         return self._decorated.isQuestEnabled()
 
-    def getQuestInfo(self):
-        return self._decorated.getQuestInfo()
+    def getSelectedQuestIDs(self):
+        return self._decorated.getSelectedQuestIDs()
 
-    def makeQuestInfo(self, vo):
-        return self._decorated.makeQuestInfo()
+    def getSelectedQuestInfo(self):
+        return self._decorated.getSelectedQuestInfo()
 
 
 class BootcampBattleDescription(ArenaWithLabelDescription):
@@ -289,7 +278,7 @@ class EpicBattlesDescription(ArenaWithLabelDescription):
 
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui
-    if guiVisitor.isRandomBattle() or guiVisitor.isEventBattle() or guiVisitor.isTrainingBattle():
+    if guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle():
         description = ArenaWithBasesDescription(arenaVisitor)
     elif guiVisitor.isTutorialBattle():
         description = TutorialBattleDescription(arenaVisitor)

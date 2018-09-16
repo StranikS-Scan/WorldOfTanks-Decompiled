@@ -26,7 +26,12 @@ class StrongholdsRequestHandlers(RequestHandlers):
          WebRequestDataType.STRONGHOLD_STATISTICS: self.__getStrongholdStatistics,
          WebRequestDataType.STRONGHOLD_JOIN_BATTLE: self.__joinBattle,
          WebRequestDataType.STRONGHOLD_SET_EQUIPMENT_COMMANDER: self.__setEquipmentCommander,
-         WebRequestDataType.STRONGHOLD_MATCHMAKING_INFO: self.__matchmakingInfo}
+         WebRequestDataType.STRONGHOLD_MATCHMAKING_INFO: self.__matchmakingInfo,
+         WebRequestDataType.STRONGHOLD_SET_SLOT_VEHICLE_TYPE_FILTER: self.__setSlotVehicleTypeFilter,
+         WebRequestDataType.STRONGHOLD_SET_SLOT_VEHICLES_FILTER: self.__setSlotVehiclesFilter,
+         WebRequestDataType.STRONGHOLD_STOP_PLAYERS_MATCHING: self.__stopPlayersMatching,
+         WebRequestDataType.STRONGHOLD_LEAVE_MODE: self.__leaveMode,
+         WebRequestDataType.STRONGHOLD_SLOT_VEHICLE_FILTERS_UPDATE: self.__getSlotVehicleFilters}
         return handlers
 
     def __assign(self, ctx, callback):
@@ -71,14 +76,29 @@ class StrongholdsRequestHandlers(RequestHandlers):
     def __leave(self, ctx, callback, *args, **kwargs):
         self._requester.doRequestEx(ctx, callback, ('wgsh', 'leave_room'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
 
+    def __leaveMode(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'leave_mode'))
+
     def __updateStronghold(self, ctx, callback, *args, **kwargs):
-        self._requester.doRequestEx(ctx, callback, ('wgsh', 'get_wgsh_unit_info'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'get_wgsh_unit_info'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getRev())
 
     def __joinBattle(self, ctx, callback, *args, **kwargs):
         self._requester.doRequestEx(ctx, callback, ('wgsh', 'join_room'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
 
     def __matchmakingInfo(self, ctx, callback, *args, **kwargs):
         self._requester.doRequestEx(ctx, callback, ('wgsh', 'matchmaking_info'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
+
+    def __setSlotVehicleTypeFilter(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'set_slot_vehicle_type_filter'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getSlotIdx(), ctx.getVehicleTypes())
+
+    def __getSlotVehicleFilters(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'get_slot_vehicle_filters'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
+
+    def __setSlotVehiclesFilter(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'set_slot_vehicles_filter'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getSlotIdx(), ctx.getVehicles())
+
+    def __stopPlayersMatching(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'stop_players_matching'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
 
     def __getStrongholdStatistics(self, ctx, callback):
         return self._requester.doRequestEx(ctx, callback, ('wgsh', 'clan_statistics'), clan_id=ctx.getClanID())

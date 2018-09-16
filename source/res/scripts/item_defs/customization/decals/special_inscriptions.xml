@@ -70,9 +70,6 @@
       <include>
         <nations>	france	</nations>
       </include>
-      <exclude>
-        <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	134	</id>
@@ -99,9 +96,6 @@
       <include>
         <nations>	germany	</nations>
       </include>
-      <exclude>
-        <vehicles>	germany:G56_E-100_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	137	</id>
@@ -258,9 +252,6 @@
       <include>
         <nations>	ussr	</nations>
       </include>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	158	</id>
@@ -283,11 +274,7 @@
     <userString>	#vehicle_customization:inscription/special	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <type>	INSCRIPTION	</type>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
-    </vehicleFilter>
+    <vehicleFilter></vehicleFilter>
     <decal>
       <id>	170	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_190.dds	</texture>
@@ -303,9 +290,6 @@
       <include>
         <levels>	10	</levels>
       </include>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	192	</id>
@@ -329,11 +313,7 @@
     <priceGroup>	23feb inscriptions notInShop	</priceGroup>
     <type>	INSCRIPTION	</type>
     <historical>	true	</historical>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
-    </vehicleFilter>
+    <vehicleFilter></vehicleFilter>
     <decal>
       <id>	195	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_194.dds	</texture>
@@ -365,12 +345,9 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	ussr poland czech china germany italy japan	</nations>
       </include>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	550	</id>
@@ -386,12 +363,9 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	france uk usa sweden	</nations>
       </include>
-      <exclude>
-        <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	551	</id>
@@ -433,6 +407,34 @@
       <id>	568	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_203.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_203	</userString>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	WOT birthday	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	583	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_204.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_204	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Sabaton	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	sabaton inscriptions notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	584	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_205.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_205	</userString>
+      <mirror>	false	</mirror>
     </decal>
   </itemGroup>
 </special_inscriptions.xml>

@@ -31,17 +31,14 @@ class RecruitWindowMeta(AbstractWindowView):
     def as_setRoleDropdownS(self, roleData):
         return self.flashObject.as_setRoleDropdown(roleData) if self._isDAAPIInited() else None
 
-    def as_setCreditsChangedS(self, credits):
-        return self.flashObject.as_setCreditsChanged(credits) if self._isDAAPIInited() else None
-
-    def as_setGoldChangedS(self, gold):
-        return self.flashObject.as_setGoldChanged(gold) if self._isDAAPIInited() else None
-
     def as_initDataS(self, data):
         return self.flashObject.as_initData(data) if self._isDAAPIInited() else None
 
     def as_setNationsS(self, nationsData):
         return self.flashObject.as_setNations(nationsData) if self._isDAAPIInited() else None
+
+    def as_setRecruitButtonsEnableStateS(self, academyButtonEnabled, schoolButtonEnabled, coursesButtonEnabled):
+        return self.flashObject.as_setRecruitButtonsEnableState(academyButtonEnabled, schoolButtonEnabled, coursesButtonEnabled) if self._isDAAPIInited() else None
 
     def as_setAllDropdownsS(self, nationsData, vehicleClassData, vehicleTypeData, roleData):
         return self.flashObject.as_setAllDropdowns(nationsData, vehicleClassData, vehicleTypeData, roleData) if self._isDAAPIInited() else None

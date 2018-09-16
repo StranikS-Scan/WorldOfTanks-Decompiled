@@ -3,20 +3,21 @@
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.framework import ViewTypes
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS as customizationSounds
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
+from gui.promo.hangar_teaser_widget import TeaserViewer
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import LobbySimpleEvent
@@ -27,38 +28,32 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.server_events import IEventsCache
 from gui.shared import event_dispatcher as shared_events
 from gui.ranked_battles.constants import PRIME_TIME_STATUS
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
-from skeletons.gui.game_control import IFootballMetaGame
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 import BigWorld
-import WWISE
-import SoundGroups
 from HeroTank import HeroTank
-from items.football_config import MILESTONE_SCORE
-from football_hangar_common import getHangarBuffonTooltip
+from gui.game_control.links import URLMarcos
 
 class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __background_alpha__ = 0.0
     __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={customizationSounds.STATE_PLACE: customizationSounds.STATE_PLACE_GARAGE,
-     STATE_HANGAR_FILTERED: '{}_off'.format(STATE_HANGAR_FILTERED)}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
+     STATE_HANGAR_FILTERED: '{}_off'.format(STATE_HANGAR_FILTERED)}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicSkillsController = dependency.descriptor(IEpicBattleMetaGameController)
     itemsCache = dependency.descriptor(IItemsCache)
-    eventsCache = dependency.descriptor(IEventsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     statsCollector = dependency.descriptor(IStatisticsCollector)
     _settingsCore = dependency.descriptor(ISettingsCore)
     hangarSpace = dependency.descriptor(IHangarSpace)
-    footballMetaGame = dependency.descriptor(IFootballMetaGame)
+    _promoController = dependency.descriptor(IPromoController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -67,12 +62,23 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__isSpaceReadyForC11n = False
         self.__isVehicleReadyForC11n = False
         self.__isVehicleCameraReadyForC11n = False
+        self.__urlMacros = URLMarcos()
+        self.__teaser = None
         return
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def hideTeaser(self):
+        self.__teaser.stop(byUser=True)
+        self.__teaser = None
+        self._promoController.showBubbleTooltip()
+        return
+
+    def onTeaserClick(self):
+        self._promoController.showLastTeaserPromo()
 
     def showHelpLayout(self):
         containerManager = self.app.containerManager
@@ -106,11 +112,11 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.rankedController.onPrimeTimeStatusUpdated += self.__onRankedPrimeStatusUpdate
         self.epicSkillsController.onUpdated += self.__onEpicSkillsUpdate
         self.epicSkillsController.onPrimeTimeStatusUpdated += self.__onEpicSkillsUpdate
+        self._promoController.onNewTeaserReceived += self.__onTeaserReceived
         self.hangarSpace.setVehicleSelectable(True)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self._settingsCore.onSettingsChanged += self.__onSettingsChanged
-        self.footballMetaGame.onPacketsUpdated += self.__onFootballPacketsUpdated
         g_clientUpdateManager.addMoneyCallback(self.onMoneyUpdate)
         g_clientUpdateManager.addCallbacks({})
         self.startGlobalListening()
@@ -118,8 +124,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
-        if self.eventsCache.isEventEnabled():
-            WWISE.WW_setState('STATE_ext_football_music', 'STATE_ext_football_music_hangar')
         self._onPopulateEnd()
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_UI_READY, showSummaryNow=True)
 
@@ -128,7 +132,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
         self.itemsCache.onSyncCompleted -= self.onCacheResync
-        self.footballMetaGame.onPacketsUpdated -= self.__onFootballPacketsUpdated
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted -= self.__onVehicleLoading
@@ -140,6 +143,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.rankedController.onPrimeTimeStatusUpdated -= self.__onRankedPrimeStatusUpdate
         self.epicSkillsController.onUpdated -= self.__onEpicSkillsUpdate
         self.epicSkillsController.onPrimeTimeStatusUpdated -= self.__onEpicSkillsUpdate
+        self._promoController.onNewTeaserReceived -= self.__onTeaserReceived
+        if self.__teaser is not None:
+            self.__teaser.stop()
+            self.__teaser = None
         self.hangarSpace.setVehicleSelectable(False)
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         self._settingsCore.onSettingsChanged -= self.__onSettingsChanged
@@ -147,6 +154,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.closeHelpLayout()
         self.stopGlobalListening()
         LobbySelectableView._dispose(self)
+        return
 
     def __onViewAddedToContainer(self, _, pyEntity):
         self.closeHelpLayout()
@@ -239,6 +247,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                     shared_events.showHeroTankPreview(descriptor.type.compactDescr)
         self.__checkVehicleCameraState()
         self.__updateState()
+        return
+
+    def __onTeaserReceived(self, teaserData, callback):
+        if self.__teaser is None:
+            self.__teaser = TeaserViewer(self, callback)
+        self.__teaser.show(teaserData, self._promoController.getPromoCount())
         return
 
     def _highlight3DEntityAndShowTT(self, entity):
@@ -342,7 +356,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateNavigationInResearchPanel()
         self.__updateHeaderWidget()
         self.__updateCrew()
-        self.__updateFootballEventPanel()
         self.__updateAlertMessage()
         Waiting.hide('updateVehicle')
 
@@ -353,9 +366,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateParams()
         self.__updateVehicleInResearchPanel()
         self.__updateHeaderWidget()
-        self.__updateNavigationInResearchPanel()
         self.__updateCrew()
-        self.__updateFootballEventPanel()
         Waiting.hide('updateVehicle')
 
     def __onSpaceRefresh(self):
@@ -383,12 +394,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __updateState(self):
         state = g_currentVehicle.getViewState()
         self.as_setCrewEnabledS(state.isCrewOpsEnabled())
-        isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and self.__isSpaceReadyForC11n and self.__isVehicleReadyForC11n and self.__isVehicleCameraReadyForC11n
+        isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles() and self.__isSpaceReadyForC11n and self.__isVehicleReadyForC11n and self.__isVehicleCameraReadyForC11n
         if isC11nEnabled:
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_BODY))
         else:
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_DISABLED_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_DISABLED_BODY))
-        self.as_setupAmmunitionPanelS(state.isMaintenanceEnabled() and not g_currentVehicle.item.isEvent, TOOLTIPS.HANGAR_MAINTENANCE, isC11nEnabled, customizationTooltip)
+        self.as_setupAmmunitionPanelS(state.isMaintenanceEnabled(), TOOLTIPS.HANGAR_MAINTENANCE, isC11nEnabled, customizationTooltip)
         self.as_setControlsVisibleS(state.isUIShown())
 
     def __onEntityChanged(self):
@@ -414,9 +425,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             if self.ammoPanel:
                 self.ammoPanel.update()
 
-    def __onFootballPacketsUpdated(self):
-        self.__updateFootballEventPanel()
-
     def __checkVehicleCameraState(self):
         vehicleEntity = self.hangarSpace.getVehicleEntity()
         if vehicleEntity is None:
@@ -424,25 +432,3 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         else:
             self.__isVehicleCameraReadyForC11n = vehicleEntity.state == CameraMovementStates.ON_OBJECT
             return
-
-    def _makeHangarEventVO(self, vehicle):
-        hangarEventVO = {'isEvent': vehicle.isEvent(),
-         'leftLimit': MILESTONE_SCORE.FIRST,
-         'topLimit': MILESTONE_SCORE.SECOND,
-         'rightLimit': MILESTONE_SCORE.THIRD,
-         'scoreValue': self.footballMetaGame.getProgress(),
-         'highlight': self.footballMetaGame.hasPackets(),
-         'tooltip': getHangarBuffonTooltip(self.footballMetaGame.isBuffonAvailable(), self.footballMetaGame.isBuffonRecruited())}
-        return hangarEventVO
-
-    def __updateFootballEventPanel(self):
-        if self.getComponent(HANGAR_ALIASES.FOOTBALL_EVENT_PANEL) is not None and g_currentVehicle is not None:
-            hangarEventVO = self._makeHangarEventVO(g_currentVehicle)
-            self.as_setFootballVehicleDataS(hangarEventVO)
-            self.getComponent(HANGAR_ALIASES.FOOTBALL_EVENT_PANEL).updatePanel()
-            if self.footballMetaGame.hasPackets():
-                guiDataStorage = self.footballMetaGame.getGuiDataStorage()
-                if guiDataStorage is not None and not guiDataStorage.isPlayerPacketsNotified():
-                    guiDataStorage.setPlayerPacketsNotified(True)
-                    SoundGroups.g_instance.playSound2D('h22_metagame_replenishment')
-        return

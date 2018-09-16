@@ -8,28 +8,33 @@ import constants
 import nations
 from debug_utils import LOG_ERROR
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
+from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_helpers, finders
 from gui.server_events.bonuses import getBonuses, compareBonuses, BoxBonus
-from gui.server_events.cond_formatters.mixed_formatters import StringPersonalMissionConditionsFormatter
 from gui.server_events.events_helpers import isMarathon, isLinkedSet, isRegularQuest
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import getModifierObj, compareModifiers
 from gui.server_events.parsers import AccountRequirements, VehicleRequirements, TokenQuestAccountRequirements, PreBattleConditions, PostBattleConditions, BonusConditions
+from gui.shared.gui_items import Vehicle
+from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from gui.shared.utils import ValidationResult
+from gui.shared.utils.requesters.QuestsProgressRequester import PersonalMissionsProgressRequester
 from helpers import dependency
 from helpers import getLocalizedData, i18n, time_utils
-from personal_missions import PM_STATE as _PMS, PM_BRANCH
+from personal_missions import PM_STATE as _PMS, PM_BRANCH, PM_BRANCH_TO_FINAL_PAWN_COST
+from personal_missions_config import getQuestConfig
+from personal_missions_constants import DISPLAY_TYPE
 from shared_utils import first, findFirst
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 EventBattles = namedtuple('EventBattles', ['vehicleTags',
  'vehicles',
  'enabled',
- 'arenaTypeID',
- 'dueDate'])
+ 'arenaTypeID'])
 
 class DEFAULTS_GROUPS(object):
     FOR_CURRENT_VEHICLE = 'currentlyAvailable'
@@ -354,16 +359,16 @@ class Quest(ServerEventAbstract):
     def getProgressData(self):
         return self._progress or {}
 
-    def getBonuses(self, bonusName=None, isCompensation=False, bonusData=None):
+    def getBonuses(self, bonusName=None, isCompensation=False, bonusData=None, ctx=None):
         result = []
         bonusData = bonusData or self._data.get('bonus', {})
         if bonusName is None:
             for name, value in bonusData.iteritems():
-                for bonus in getBonuses(self, name, value, isCompensation):
+                for bonus in getBonuses(self, name, value, isCompensation, ctx=ctx):
                     result.append(self._bonusDecorator(bonus))
 
         elif bonusName in bonusData:
-            for bonus in getBonuses(self, bonusName, bonusData[bonusName], isCompensation):
+            for bonus in getBonuses(self, bonusName, bonusData[bonusName], isCompensation, ctx=ctx):
                 result.append(self._bonusDecorator(bonus))
 
         return sorted(result, cmp=compareBonuses, key=operator.methodcaller('getName'))
@@ -571,9 +576,9 @@ class Action(ServerEventAbstract):
                     continue
                 modifiers = m.splitModifiers()
                 for modifier in modifiers:
-                    if modifier.getName() in result:
-                        result[modifier.getName()].extend([ActionData(modifier, priority, uiDecoration)])
-                    result[modifier.getName()] = [ActionData(modifier, priority, uiDecoration)]
+                    if mName in result:
+                        result[mName].append(ActionData(modifier, priority, uiDecoration))
+                    result[mName] = [ActionData(modifier, priority, uiDecoration)]
 
             return result
 
@@ -584,9 +589,9 @@ class Action(ServerEventAbstract):
             m = getModifierObj(mName, stepData.get('params'))
             if m is None:
                 continue
-            if m.getName() in result:
-                result[m.getName()].update(m)
-            result[m.getName()] = m
+            if mName in result:
+                result[mName].update(m)
+            result[mName] = m
 
         return sorted(result.itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
 
@@ -630,7 +635,7 @@ class PMCampaign(object):
 
 class PMOperation(object):
 
-    def __init__(self, tileID, info):
+    def __init__(self, tileID, info, branch=0):
         self.__id = tileID
         self.__info = info
         self.__quests = {}
@@ -644,12 +649,17 @@ class PMOperation(object):
         self.__isAwardAchieved = False
         self.__freeTokensCount = 0
         self.__freeTokensTotalCount = 0
+        self.__branch = branch
+        self.__disabled = False
 
     def getID(self):
         return self.__id
 
-    def getNextOperationID(self):
-        return self.__info['nextTileID']
+    def getBranch(self):
+        return self.__branch
+
+    def getNextOperationIDs(self):
+        return self.__info['nextTileIDs']
 
     def getName(self):
         return self.__info['name']
@@ -663,16 +673,54 @@ class PMOperation(object):
     def getUserDescription(self):
         return self.__info['description']
 
-    def getChainVehicleClass(self, chainID):
+    def getChainClassifier(self, chainID):
         firstQuest = first(self.__quests.get(chainID, {}).itervalues())
-        return first(firstQuest.getVehicleClasses()) if firstQuest is not None else None
+        return firstQuest.getQuestClassifier() if firstQuest is not None else None
+
+    def getChainByClassifierAttr(self, classifier):
+        return findFirst(lambda (chainID, chain): self.getChainClassifier(chainID).classificationAttr == classifier, self.getQuests().iteritems(), (None, None))
+
+    def getIterationChain(self):
+        if self.__branch == PM_BRANCH.REGULAR:
+            return VEHICLE_TYPES_ORDER
+        return nations.ALLIANCES_TAGS_ORDER if self.__branch == PM_BRANCH.PERSONAL_MISSION_2 else ()
+
+    def getChainName(self, chainID):
+        classifier = self.getChainClassifier(chainID).classificationAttr
+        if self.__branch == PM_BRANCH.REGULAR:
+            return PERSONAL_MISSIONS.chainNameByVehicleType(classifier)
+        if self.__branch == PM_BRANCH.PERSONAL_MISSION_2:
+            allianceId = nations.ALLIANCE_IDS[classifier]
+            return PERSONAL_MISSIONS.getAllianceName(allianceId)
+
+    def getAllianceID(self, chainID):
+        if self.__branch == PM_BRANCH.PERSONAL_MISSION_2:
+            classifier = self.getChainClassifier(chainID).classificationAttr
+            return nations.ALLIANCE_IDS[classifier]
+
+    def getChainDescription(self, chainID):
+        if self.__branch == PM_BRANCH.PERSONAL_MISSION_2:
+            classifier = self.getChainClassifier(chainID).classificationAttr
+            allianceId = nations.ALLIANCE_IDS[classifier]
+            return PERSONAL_MISSIONS.getAllianceDetails(allianceId)
+
+    def getChainIcon(self, chainID):
+        classifier = self.getChainClassifier(chainID).classificationAttr
+        if self.__branch == PM_BRANCH.REGULAR:
+            return Vehicle.getTypeBigIconPath(classifier, False)
+        if self.__branch == PM_BRANCH.PERSONAL_MISSION_2:
+            allianceId = nations.ALLIANCE_IDS[classifier]
+            return RES_ICONS.getAllianceIcon(allianceId)
+
+    def getSmallChainIcon(self, chainID):
+        classifier = self.getChainClassifier(chainID).classificationAttr
+        if self.__branch == PM_BRANCH.REGULAR:
+            return Vehicle.getTypeSmallIconPath(classifier, False)
+        return RES_ICONS.getAlliance17x19Icon(classifier) if self.__branch == PM_BRANCH.PERSONAL_MISSION_2 else ''
 
     def getChainMajorTag(self, chainID):
         firstQuest = first(self.__quests.get(chainID, {}).itervalues())
         return firstQuest.getMajorTag() if firstQuest is not None else None
-
-    def getChainByVehicleType(self, vehicleType):
-        return findFirst(lambda (chainID, chain): self.getChainVehicleClass(chainID) == vehicleType, self.getQuests().iteritems(), (None, None))
 
     def getChainSortKey(self, chainID):
         return self.getChainMajorTag(chainID)
@@ -759,6 +807,15 @@ class PMOperation(object):
     def isUnlocked(self):
         return self.__isUnlocked
 
+    def setDisabledState(self, value):
+        self.__disabled = value
+        for _, questsInChain in self.__quests.iteritems():
+            for _, q in questsInChain.iteritems():
+                q.setDisabledState(value)
+
+    def isDisabled(self):
+        return self.__disabled
+
     def hasRequiredVehicles(self):
         return bool(self.getQuestsByFilter(operator.methodcaller('hasRequiredVehicles')))
 
@@ -769,7 +826,7 @@ class PMOperation(object):
         return self.__tokens
 
     def getTokensCount(self):
-        return tuple((sum(map(operator.itemgetter(i), self.__tokens.values())) for i in xrange(2)))
+        return tuple([ sum(tokensCount) for tokensCount in zip(*self.__tokens.values()) ])
 
     def getTotalTokensCount(self):
         result = 0
@@ -814,7 +871,7 @@ class PMOperation(object):
         hiddenQuests = eventsCache.getHiddenQuests()
         operationTokensFinder = finders.multipleTokenFinder(self.__info['tokens'])
         self.__tokens, self.__bonuses = {}, {}
-        quest = finders.getQuestByTokenAndBonus(hiddenQuests, operationTokensFinder, finders.operationCompletionBonusFinder(self.getID()))
+        quest = finders.getQuestByTokenAndBonus(hiddenQuests, operationTokensFinder, finders.operationCompletionBonusFinder(self))
         if quest is not None:
             for token in quest.accountReqs.getTokens():
                 if token.getID() in self.__info['tokens']:
@@ -836,7 +893,8 @@ class PMOperation(object):
                         if quest.isFullCompleted():
                             self.__freeTokensCount += bonusCount
 
-        self.__isAwardAchieved = qp.getTokenCount(finders.PERSONAL_MISSION_COMPLETE_TOKEN % self.getID()) > 0
+        tokenCount = qp.getTokenCount(finders.PERSONAL_MISSION_COMPLETE_TOKEN % (self.getCampaignID(), self.getID()))
+        self.__isAwardAchieved = tokenCount > 0
         return
 
     def addQuest(self, quest):
@@ -851,7 +909,7 @@ class PMOperation(object):
 
 
 class PersonalMission(Quest):
-    __strConditionsFormatter = StringPersonalMissionConditionsFormatter()
+    _TankmanBonus = namedtuple('_TankmanBonus', ('tankman', 'isMain'))
 
     def __init__(self, qID, pmType, progress=None, campaignID=None):
         super(PersonalMission, self).__init__(qID, pmType.mainQuestInfo)
@@ -860,11 +918,29 @@ class PersonalMission(Quest):
         self.__campaignID = campaignID
         self.__hasRequiredVehicles = False
         self.__canBePawned = False
+        self.__conditionsProgress = None
+        self.__disabled = False
+        self.__conditionsConfig = getQuestConfig(self.__pmType.generalQuestID)
+        return
 
     def isAvailable(self):
+        if self.isDisabled():
+            return ValidationResult(False, 'disabled')
         if not self.isUnlocked():
             return ValidationResult(False, 'isLocked')
         return ValidationResult(False, 'noVehicle') if not self.hasRequiredVehicles() else ValidationResult(True, '')
+
+    def hasBattleProgress(self):
+        return self.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2
+
+    def getDummyHeaderType(self):
+        return DISPLAY_TYPE.NONE if self.getOperationID() == 6 or not self.hasBattleProgress() else DISPLAY_TYPE.SIMPLE
+
+    def getConditionsProgress(self):
+        return self.__conditionsProgress
+
+    def getConditionsConfig(self):
+        return self.__conditionsConfig or {}
 
     def setRequiredVehiclesPresence(self, hasRequiredVehicles):
         self.__hasRequiredVehicles = hasRequiredVehicles
@@ -893,9 +969,6 @@ class PersonalMission(Quest):
     def getOperationID(self):
         return self.__pmType.tileID
 
-    def setCampaignID(self, campaignID):
-        self.__campaignID = campaignID
-
     def getCampaignID(self):
         return self.__campaignID
 
@@ -914,11 +987,8 @@ class PersonalMission(Quest):
     def getUserAdvice(self):
         return self.__pmType.advice
 
-    def getUserMainCondition(self):
-        return self.__strConditionsFormatter.format(self, True)
-
-    def getUserAddCondition(self):
-        return self.__strConditionsFormatter.format(self, False)
+    def getGeneralQuestID(self):
+        return self.__pmType.generalQuestID
 
     def getMainConditions(self):
         return dict(self.__pmType.mainQuestInfo.get('conditions'))
@@ -956,6 +1026,12 @@ class PersonalMission(Quest):
     def getQuestBranchName(self):
         return PM_BRANCH.TYPE_TO_NAME[self.getQuestBranch()]
 
+    def setDisabledState(self, value):
+        self.__disabled = value
+
+    def isDisabled(self):
+        return self.__disabled
+
     def isUnlocked(self):
         return self.__pqProgress is not None and self.__pqProgress.unlocked
 
@@ -974,8 +1050,8 @@ class PersonalMission(Quest):
     def isFinal(self):
         return self.__pmType.isFinal
 
-    def getVehicleClasses(self):
-        return set(self.__pmType.vehClasses)
+    def getQuestClassifier(self):
+        return self.__pmType.classifier
 
     def getMajorTag(self):
         return self.__pmType.getMajorTag()
@@ -1008,7 +1084,11 @@ class PersonalMission(Quest):
         return self.isMainCompleted() and self.__pqProgress is not None and self.__pqProgress.pawned
 
     def getPawnCost(self):
-        return constants.PERSONAL_QUEST_FINAL_PAWN_COST if self.isFinal() else constants.PERSONAL_QUEST_PAWN_COST
+        if self.isFinal():
+            pawnCost = PM_BRANCH_TO_FINAL_PAWN_COST[self.getQuestBranch()]
+        else:
+            pawnCost = constants.PERSONAL_MISSION_PAWN_COST
+        return pawnCost
 
     def canBeSelected(self):
         return self.isUnlocked() and not self.isFullCompleted() and not self.isInProgress()
@@ -1033,14 +1113,23 @@ class PersonalMission(Quest):
 
     def updateProgress(self, questsProgress):
         self.__pqProgress = questsProgress.getPersonalMissionProgress(self.__pmType, self._id)
+        self.__conditionsProgress = questsProgress.getConditionsProgress(self.__pmType.generalQuestID)
 
-    def getBonuses(self, bonusName=None, isMain=None, isDelayed=False):
+    def updatePqStateInBattle(self, pqState):
+        if self.__pqProgress:
+            self.__pqProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pqState, selected=self.__pqProgress.selected, unlocked=self.__pqProgress.unlocked, pawned=self.__pqProgress.pawned)
+        else:
+            self.__pqProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pqState, selected=(), unlocked=0, pawned=False)
+
+    def getBonuses(self, bonusName=None, isMain=None, returnAwardList=False, isDelayed=False, ctx=None):
         if isMain is None:
             data = (self.__pmType.mainQuestInfo, self.__pmType.addQuestInfo)
         elif isMain:
             data = (self.__pmType.mainQuestInfo,)
         else:
             data = (self.__pmType.addQuestInfo,)
+        if returnAwardList:
+            data = (self.__pmType.addAwardListQuestInfo,)
         result = []
         for d in data:
             if isDelayed:
@@ -1050,7 +1139,7 @@ class PersonalMission(Quest):
             for n, v in bonuses:
                 if bonusName is not None and n != bonusName:
                     continue
-                result.extend(getBonuses(self, n, v))
+                result.extend(getBonuses(self, n, v, ctx=ctx))
 
         return sorted(result, cmp=compareBonuses, key=operator.methodcaller('getName'))
 
@@ -1058,9 +1147,14 @@ class PersonalMission(Quest):
         for isMainBonus in (True, False):
             for bonus in self.getBonuses(isMain=isMainBonus, isDelayed=True):
                 if bonus.getName() == 'tankwomanBonus':
-                    return (bonus, isMainBonus)
+                    return self._TankmanBonus(bonus, isMainBonus)
 
-        return (None, None)
+        return self._TankmanBonus(None, None)
+
+    @staticmethod
+    def needToGetTankWoman(quest):
+        bonus = quest.getTankmanBonus()
+        return bonus.tankman and (quest.needToGetAddReward() and not bonus.isMain or quest.needToGetMainReward() and bonus.isMain)
 
     def __checkForStates(self, *statesToCheck):
         return self.__pqProgress is not None and self.__pqProgress.state in statesToCheck

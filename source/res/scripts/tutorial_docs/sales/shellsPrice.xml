@@ -3,16 +3,78 @@
   <initial-scene>	DefaultScene	</initial-scene>
   <scenes>
     <scene>	DefaultScene	  <post-effects>
-        <invoke-gui-cmd>	ConfigureShopForShells	</invoke-gui-cmd>
-        <load-view>	StoreView	</load-view>
-        <refuse-training></refuse-training>
+        <run-trigger>	IngameShopTrigger	</run-trigger>
+        <invoke-gui-cmd>	ConfigureShopForShells	  <condition>
+            <inactive>	IngameShopEnabled	</inactive>
+          </condition>
+        </invoke-gui-cmd>
+        <load-view>	OldShopView	  <condition>
+            <inactive>	IngameShopEnabled	</inactive>
+          </condition>
+        </load-view>
+        <go-scene>	Hangar	  <condition>
+            <active>	IngameShopEnabled	</active>
+          </condition>
+        </go-scene>
       </post-effects>
-      <runtime-effects></runtime-effects>
-      <gui-items></gui-items>
+      <runtime-effects>
+        <show-hint>	AmmunitionPanelHint	  <condition>
+            <active>	AmmunitionPanelOnScene	</active>
+            <active>	IngameShopEnabled	</active>
+          </condition>
+        </show-hint>
+        <refuse-training>
+          <condition>
+            <inactive>	IngameShopEnabled	</inactive>
+          </condition>
+        </refuse-training>
+        <refuse-training>
+          <condition>
+            <inactive>	AmmunitionPanelOnScene	</inactive>
+            <effect-triggered>	AmmunitionPanelHint	</effect-triggered>
+          </condition>
+        </refuse-training>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	AmmunitionPanel	  <on-scene-effects>
+            <activate>	AmmunitionPanelOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	AmmunitionPanelOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
     </scene>
   </scenes>
   <has-id>
-    <view-data>	StoreView	  <alias>	store	</alias>
+    <hint>	AmmunitionPanelHint	  <item-id>	AmmunitionPanel	</item-id>
+      <text>	#quests:action/chain/hint/shellsPrice	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <padding>
+        <left>	394	</left>
+        <top>	72	</top>
+        <right>	206	</right>
+        <bottom>	4	</bottom>
+      </padding>
+      <actions>
+        <click>	AmmunitionPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	AmmunitionPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	AmmunitionPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <view-data>	OldShopView	  <alias>	storeOld	</alias>
       <scope>	1	</scope>
       <context>
         <tabId>
@@ -24,6 +86,15 @@
       </context>
     </view-data>
   </has-id>
-  <triggers></triggers>
+  <triggers>
+    <trigger>	IngameShopTrigger	  <type>	isIngameShopEnabled	</type>
+      <on-effects>
+        <activate>	IngameShopEnabled	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	IngameShopEnabled	</inactivate>
+      </off-effects>
+    </trigger>
+  </triggers>
   <vars></vars>
 </shellsPrice.xml>

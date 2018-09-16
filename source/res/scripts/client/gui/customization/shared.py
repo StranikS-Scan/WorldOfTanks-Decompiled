@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization/shared.py
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, SeasonType
-from shared_utils import CONST_CONTAINER
+from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, SeasonType, HIDDEN_CAMOUFLAGE_ID
+from shared_utils import CONST_CONTAINER, isEmpty
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 from CurrentVehicle import g_currentVehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -82,3 +82,11 @@ def createCustomizationBaseRequestCriteria(vehicle, progress, appliedItems, seas
     season = season or SeasonType.ALL
     criteria = REQ_CRITERIA.CUSTOM(lambda item: item.mayInstall(vehicle) and item.season & season and (not item.isHidden or item.fullInventoryCount(vehicle) > 0 or appliedItems and item.intCD in appliedItems) and (not item.requiredToken or progress.getTokenCount(item.requiredToken) > 0) and (not itemTypeID or item.itemTypeID == itemTypeID))
     return criteria
+
+
+def isServiceItem(item):
+    return item.itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE and item.id == HIDDEN_CAMOUFLAGE_ID
+
+
+def isOutfitVisuallyEmpty(oufit):
+    return isEmpty((item for item in oufit.items() if not isServiceItem(item)))

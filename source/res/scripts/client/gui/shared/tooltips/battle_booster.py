@@ -173,6 +173,8 @@ class StatusBlockConstructor(BattleBoosterTooltipBlockConstructor):
 
     def construct(self):
         block = list()
+        if self.configuration.isAwardWindow:
+            return block
         module = self.module
         inventoryVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
         totalInstalledVehicles = [ x.shortUserName for x in module.getInstalledVehicles(inventoryVehicles) ]

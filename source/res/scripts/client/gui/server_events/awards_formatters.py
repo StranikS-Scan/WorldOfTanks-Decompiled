@@ -15,15 +15,15 @@ from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import time_utils, i18n, dependency
-from items import football_config
+from personal_missions import PM_BRANCH
 from shared_utils import CONST_CONTAINER, findFirst
-from skeletons.gui.game_control import IFootballMetaGame
-from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.server_events import IEventsCache
 
 class AWARDS_SIZES(CONST_CONTAINER):
     SMALL = 'small'
     BIG = 'big'
+    HUGE = 'huge'
 
 
 class COMPLETION_TOKENS_SIZES(CONST_CONTAINER):
@@ -121,12 +121,6 @@ def getMisssionsFormattersMap():
     return mapping
 
 
-def getFootballFormattersMap():
-    mapping = getMisssionsFormattersMap()
-    mapping.update({'battleToken': FootballTokenBonusFormatter()})
-    return mapping
-
-
 def getEventBoardsFormattersMap():
     countableIntegralBonusFormatter = CountableIntegralBonusFormatter()
     mapping = getDefaultFormattersMap()
@@ -166,10 +160,6 @@ def getLinkedSetAwardPacker():
 
 def getEventBoardsAwardPacker():
     return AwardsPacker(getEventBoardsFormattersMap())
-
-
-def getFootballAwardPacker():
-    return AwardsPacker(getFootballFormattersMap())
 
 
 def getPersonalMissionAwardPacker():
@@ -376,13 +366,14 @@ class FreeTokensBonusFormatter(SimpleBonusFormatter):
 
     def _format(self, bonus):
         areTokensPawned = bonus.areTokensPawned()
+        ctx = bonus.getContext()
         if areTokensPawned:
             specialAlias = TOOLTIPS_CONSTANTS.FREE_SHEET_USED
-            specialArgs = []
+            specialArgs = [ctx.get('campaignID')]
         else:
             specialAlias = TOOLTIPS_CONSTANTS.FREE_SHEET
-            specialArgs = []
-        return [PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(bonus), label=formatCountLabel(bonus.getCount()), images=self._getImages(bonus.getName()), labelFormatter=self._getLabelFormatter(bonus), align=LABEL_ALIGN.RIGHT, isCompensation=bonus.isCompensation(), isSpecial=True, specialAlias=specialAlias, specialArgs=specialArgs, areTokensPawned=areTokensPawned)]
+            specialArgs = [ctx.get('campaignID')]
+        return [PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(bonus), label=formatCountLabel(bonus.getCount()), images=self._getImages(bonus.getImageFileName()), labelFormatter=self._getLabelFormatter(bonus), align=LABEL_ALIGN.RIGHT, isCompensation=bonus.isCompensation(), isSpecial=True, specialAlias=specialAlias, specialArgs=specialArgs, areTokensPawned=areTokensPawned)]
 
     @classmethod
     def _getImages(cls, imageID):
@@ -421,14 +412,11 @@ class TokenBonusFormatter(SimpleBonusFormatter):
         for tokenID, token in bonus.getTokens().iteritems():
             complexToken = parseComplexToken(tokenID)
             if complexToken.isDisplayable:
-                result.append(self._formatDisplayableToken(complexToken, token, bonus))
+                userName = self._getUserName(complexToken.styleID)
+                tooltip = makeTooltip(i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
+                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self.__getTokenImages(complexToken.styleID), label=self._formatBonusLabel(token.count), userName=self._getUserName(complexToken.styleID), labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
 
         return result
-
-    def _formatDisplayableToken(self, complexToken, token, bonus):
-        userName = self._getUserName(complexToken.styleID)
-        tooltip = makeTooltip(i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
-        return PreformattedBonus(bonusName=bonus.getName(), images=self._getTokenImages(complexToken.styleID), label=self._formatBonusLabel(token.count), userName=self._getUserName(complexToken.styleID), labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
 
     def _formatBonusLabel(self, count):
         return formatCountLabel(count)
@@ -437,32 +425,13 @@ class TokenBonusFormatter(SimpleBonusFormatter):
         webCache = self.eventsCache.prefetcher
         return i18n.makeString(webCache.getTokenInfo(styleID))
 
-    def _getTokenImages(self, styleID):
+    def __getTokenImages(self, styleID):
         result = {}
         webCache = self.eventsCache.prefetcher
         for awardSizeKey, awardSizeVlaue in AWARDS_SIZES.getIterator():
             for tokenSizeKey, tokenSizeValue in TOKEN_SIZES.getIterator():
                 if awardSizeKey == tokenSizeKey:
                     result[awardSizeVlaue] = webCache.getTokenImage(styleID, tokenSizeValue)
-
-        return result
-
-
-class FootballTokenBonusFormatter(TokenBonusFormatter):
-    _footballMetaGame = dependency.descriptor(IFootballMetaGame)
-
-    def _format(self, bonus):
-        result = []
-        for tokenID, token in bonus.getTokens().iteritems():
-            complexToken = parseComplexToken(tokenID)
-            if complexToken.isDisplayable:
-                styleID, tooltipHeader, tooltipBody = self._footballMetaGame.getTokenInfo(tokenID)
-                if styleID is None:
-                    preformatted = self._formatDisplayableToken(complexToken, token, bonus)
-                else:
-                    count = sum(football_config.CARDS_BY_TOKEN.get(tokenID, (1,)))
-                    preformatted = PreformattedBonus(bonusName=bonus.getName(), images=self._getTokenImages(styleID), label=self._formatBonusLabel(count), userName=self._getUserName(styleID), labelFormatter=self._getLabelFormatter(bonus), tooltip=makeTooltip(tooltipHeader, tooltipBody), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
-                result.append(preformatted)
 
         return result
 
@@ -483,8 +452,15 @@ class CustomizationUnlockFormatter(TokenBonusFormatter):
         unlockTokenID = findFirst(lambda ID: ID.endswith(self.__TOKEN_POSTFIX), tokens.keys())
         if unlockTokenID is not None:
             camouflages = self.c11n.getCamouflages(criteria=REQ_CRITERIA.CUSTOMIZATION.UNLOCKED_BY(unlockTokenID))
+            branch = bonus.getContext().get('branch')
+            if branch == PM_BRANCH.REGULAR:
+                tooltip = makeTooltip(TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_HEADER, TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_BODY)
+            elif branch == PM_BRANCH.PERSONAL_MISSION_2:
+                tooltip = makeTooltip(TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_ALLIANCE_HEADER, TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_ALLIANCE_BODY)
+            else:
+                tooltip = None
             images = {size:RES_ICONS.getBonusIcon(size, self.__ICON_NAME) for size in AWARDS_SIZES.ALL()}
-            result = [PreformattedBonus(bonusName=bonus.getName(), label=formatCountLabel(len(camouflages)), align=LABEL_ALIGN.RIGHT, images=images, isSpecial=False, tooltip=makeTooltip(TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_HEADER, TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_BODY))]
+            result = [PreformattedBonus(bonusName=bonus.getName(), label=formatCountLabel(len(camouflages)), align=LABEL_ALIGN.RIGHT, images=images, isSpecial=False, tooltip=tooltip)]
         else:
             result = []
         return result
@@ -671,7 +647,7 @@ class CustomizationsBonusFormatter(SimpleBonusFormatter):
     def _format(self, bonus):
         result = []
         for item, data in zip(bonus.getCustomizations(), bonus.getList()):
-            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), userName=self._getUserName(item), isSpecial=True, label=self._formatBonusLabel(item.get('value')), labelFormatter=self._getLabelFormatter(bonus), specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM, specialArgs=[ data[o] for o in bonus.INFOTIP_ARGS_ORDER ], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
+            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), userName=self._getUserName(item), isSpecial=True, label=self._formatBonusLabel(item.get('value')), labelFormatter=self._getLabelFormatter(bonus), specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM, specialArgs=[data.get('intCD'), False], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
 
         return result
 
@@ -717,9 +693,16 @@ class OperationCustomizationsBonusFormatter(CustomizationsBonusFormatter):
                 customizations[cType] = (item, count + 1)
             customizations[cType] = (item, 1)
 
+        branch = bonus.getContext().get('branch')
+        if branch == PM_BRANCH.REGULAR:
+            tooltip = makeTooltip(TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_HEADER, TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_BODY)
+        elif branch == PM_BRANCH.PERSONAL_MISSION_2:
+            tooltip = makeTooltip(TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_ALLIANCE_HEADER, TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_ALLIANCE_BODY)
+        else:
+            tooltip = None
         result = []
         for item, count in customizations.itervalues():
-            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), userName=self._getUserName(item), label=formatCountLabel(count), labelFormatter=self._getLabelFormatter(bonus), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), isSpecial=False, tooltip=makeTooltip(TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_HEADER, TOOLTIPS.PERSONALMISSIONS_AWARDS_CAMOUFLAGE_BODY)))
+            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), userName=self._getUserName(item), label=formatCountLabel(count), labelFormatter=self._getLabelFormatter(bonus), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), isSpecial=False, tooltip=tooltip))
 
         return result
 

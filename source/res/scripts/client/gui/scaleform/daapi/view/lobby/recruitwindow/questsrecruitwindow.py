@@ -8,7 +8,7 @@ from gui.Scaleform.genConsts.AWARDWINDOW_CONSTANTS import AWARDWINDOW_CONSTANTS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SILENT_SOUND_SPACE
 from gui.shared.gui_items import Tankman
-from gui.shared.gui_items.processors.quests import PersonalMissionsGetTankwomanReward
+from gui.shared.gui_items.processors.quests import PMGetTankwomanReward
 from gui.shared.utils import decorators
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -22,7 +22,8 @@ class QuestsRecruitWindow(QuestRecruitWindowMeta):
     def __init__(self, ctx=None):
         super(QuestsRecruitWindow, self).__init__()
         self.__currentSelectedNationID = None
-        self.__questID = ctx['questID']
+        self.__mission = self.eventsCache.getPersonalMissions().getAllQuests().get(ctx['questID'])
+        self.__branch = self.__mission.getQuestBranch()
         self.__isPremium = ctx['isPremium']
         self.__fnGroup = ctx['fnGroup']
         self.__lnGroup = ctx['lnGroup']
@@ -35,8 +36,7 @@ class QuestsRecruitWindow(QuestRecruitWindowMeta):
 
     @decorators.process('updating')
     def onApply(self, data):
-        mission = self.eventsCache.personalMissions.getQuests().get(self.__questID)
-        result = yield PersonalMissionsGetTankwomanReward(mission, int(data.nation), int(data.vehicle), data.tankmanRole).request()
+        result = yield PMGetTankwomanReward(self.__mission, int(data.nation), int(data.vehicle), data.tankmanRole).request()
         if result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
@@ -61,7 +61,7 @@ class QuestsRecruitWindow(QuestRecruitWindowMeta):
         selectedNationID = int(selectedNationID)
         nationName = nations.NAMES[selectedNationID]
         if self.__currentSelectedNationID != selectedNationID:
-            firstNameID, lastNameID, iconID = self.eventsCache.personalMissions.getNextTankwomanIDs(selectedNationID, self.__isPremium, int(self.__fnGroup), int(self.__lnGroup), int(self.__iGroupID))
+            firstNameID, lastNameID, iconID = self.eventsCache.getPersonalMissions().getNextTankwomanIDs(self.__branch, selectedNationID, self.__isPremium, int(self.__fnGroup), int(self.__lnGroup), int(self.__iGroupID))
             rankID = Tankman.calculateRankID(tankmen.MAX_SKILL_LEVEL, self.__freeXpValue)
             faceIcon = Tankman.getBigIconPath(selectedNationID, iconID)
             self.as_setInitDataS({'windowTitle': _ms(DIALOGS.RECRUITWINDOW_TITLE),

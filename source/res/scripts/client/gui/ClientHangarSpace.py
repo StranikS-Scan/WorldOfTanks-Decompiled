@@ -3,6 +3,7 @@
 import copy
 import json
 import math
+from logging import getLogger
 import BigWorld
 import Math
 import MusicControllerWWISE
@@ -47,6 +48,7 @@ _CFG = {}
 _HANGAR_CFGS = {}
 _EVENT_HANGAR_PATHS = {}
 _IGR_HANGAR_PATH_KEY = 'igrPremHangarPath' + ('CN' if constants.IS_CHINA else '')
+_logger = getLogger(__name__)
 
 def hangarCFG():
     global _CFG
@@ -81,6 +83,7 @@ def _readHangarSettings():
             _loadCustomizationConfig(customizationCfg, customizationXmlSection)
             cfg[_CUSTOMIZATION_HANGAR_SETTINGS_SEC] = customizationCfg
         configset[spaceKey] = cfg
+        _validateConfigValues(cfg)
 
     return configset
 
@@ -145,6 +148,12 @@ def loadConfig(cfg, xml, defaultCfg=None):
         cfg['v_start_angles'][i] = math.radians(cfg['v_start_angles'][i])
 
     return
+
+
+def _validateConfigValues(cfg):
+    if cfg['cam_pitch_constr'][0] <= -90.0:
+        _logger.warning('incorrect value - cam_pitch_constr[0] must be greater than -90 degrees!')
+        cfg['cam_pitch_constr'][0] = -89.9
 
 
 def _loadCustomizationConfig(cfg, xml):
@@ -296,7 +305,7 @@ class ClientHangarSpace(object):
         return vEntity.appearance.getSlotPositions() if vEntity is not None and vEntity.isVehicleLoaded else None
 
     def getVehicleEntity(self):
-        return BigWorld.entity(self.__vEntityId)
+        return BigWorld.entity(self.__vEntityId) if self.__vEntityId else None
 
     @property
     def vehicleEntityId(self):

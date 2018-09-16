@@ -44,7 +44,7 @@ class _Notifier(object):
 
     def startNotification(self):
         self.__cancelNotification()
-        self.__processNotification()
+        self.__scheduleNextNotification()
 
     def stopNotification(self):
         self.__cancelNotification()
@@ -61,10 +61,10 @@ class _Notifier(object):
     def _onNotification(self):
         self._notificationCallbackID = None
         self._updateFunc()
-        self.__processNotification()
+        self.__scheduleNextNotification()
         return
 
-    def __processNotification(self):
+    def __scheduleNextNotification(self):
         delta = self.__deltaFunc() if self.__deltaFunc is not None else None
         if not delta:
             return

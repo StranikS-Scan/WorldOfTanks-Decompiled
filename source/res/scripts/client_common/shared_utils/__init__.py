@@ -87,7 +87,8 @@ class CONST_CONTAINER(object):
 
     @classmethod
     def getIterator(cls):
-        for k, v in cls.__dict__.iteritems():
+        attrs = itertools.chain.from_iterable([ c.__dict__.iteritems() for c in itertools.chain([cls], cls.__bases__) ])
+        for k, v in attrs:
             if not k.startswith('_') and type(v) in ScalarTypes:
                 yield (k, v)
 
@@ -98,7 +99,7 @@ class CONST_CONTAINER(object):
 
     @classmethod
     def hasKey(cls, key):
-        return key in cls.__dict__
+        return key in dir(cls)
 
     @classmethod
     def hasValue(cls, value):

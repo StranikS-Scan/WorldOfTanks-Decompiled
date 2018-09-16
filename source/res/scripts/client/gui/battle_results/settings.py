@@ -35,11 +35,6 @@ class PLAYER_TEAM_RESULT(object):
     WIN = 'win'
     DEFEAT = 'lose'
     DRAW = 'tie'
-    FOOTBALL_BLUE_WIN = 'football_2_win'
-    FOOTBALL_BLUE_LOSE = 'football_2_lose'
-    FOOTBALL_TIE = 'football_tie'
-    FOOTBALL_RED_WIN = 'football_1_win'
-    FOOTBALL_RED_LOSE = 'football_1_lose'
     ENDED = 'ended'
 
 

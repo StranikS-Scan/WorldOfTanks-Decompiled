@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/items/__init__.py
 import nations
 from items import _xml
-from constants import IS_CLIENT, IS_CELLAPP, ITEM_DEFS_PATH
+from constants import IS_CLIENT, ITEM_DEFS_PATH
 from soft_exception import SoftException
 if IS_CLIENT:
     import ResMgr
@@ -191,6 +191,15 @@ def parseIntCompactDescr(compactDescr):
     if itemTypeID == 0:
         itemTypeID = compactDescr >> 24 & 255
     return (itemTypeID, compactDescr >> 4 & 15, compactDescr >> 8 & 65535)
+
+
+def allianceFromVehicleCD(compactDescr):
+    _, nation, _ = parseIntCompactDescr(compactDescr)
+    return nations.NATION_TO_ALLIANCE_IDS_MAP[nation]
+
+
+def isFromSameAlliance(typeCD1, typeCD2):
+    return allianceFromVehicleCD(typeCD1) == allianceFromVehicleCD(typeCD2)
 
 
 def clearXMLCache():

@@ -275,12 +275,18 @@ class DestroyDeviceDialogMeta(IconDialogMeta):
         return events.ShowDialogEvent.SHOW_DESTROY_DEVICE_DIALOG
 
 
+class PMConfirmationDialogMeta(IconDialogMeta):
+
+    def getEventType(self):
+        return events.ShowDialogEvent.SHOW_PM_CONFIRMATION_DIALOG
+
+
 class DemountDeviceDialogMeta(IconPriceDialogMeta):
     DISMANTLE_DEVICE_PATH = '../maps/icons/modules/dismantleDevice.png'
 
     def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None):
         super(DemountDeviceDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
-        self.onConfirmationStatusChnaged = Event.Event()
+        self.onConfirmationStatusChanged = Event.Event()
         self.__isOperationAllowed = False
         self.__checkIsOperationAllowed()
         g_clientUpdateManager.addMoneyCallback(self.__moneyChangeHandler)
@@ -307,13 +313,13 @@ class DemountDeviceDialogMeta(IconPriceDialogMeta):
         operationAllowed = userMoney >= itemRemovalPrice.price
         if self.__isOperationAllowed != operationAllowed:
             self.__isOperationAllowed = operationAllowed
-            self.onConfirmationStatusChnaged(operationAllowed)
+            self.onConfirmationStatusChanged(operationAllowed)
 
     def getEventType(self):
         return events.ShowDialogEvent.SHOW_DEMOUNT_DEVICE_DIALOG
 
     def dispose(self):
-        self.onConfirmationStatusChnaged.clear()
+        self.onConfirmationStatusChanged.clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
 
 

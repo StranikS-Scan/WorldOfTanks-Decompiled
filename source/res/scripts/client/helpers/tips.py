@@ -120,31 +120,10 @@ class SandboxTipsCriteria(_TipsCriteria):
         return _FoundTip(i18n.makeString('#tips:howToPlay'), i18n.makeString('#tips:sandbox%s' % geometryIndex), TIPS_IMAGE_SOURCE % ('sandbox' + str(geometryIndex) + str(positionIndex)))
 
 
-def _getEventTipIterator():
-    tipSize = len(RES_ICONS.MAPS_ICONS_BATTLELOADING_TIPS_EVENT_ENUM)
-    if tipSize > 0:
-        items = range(tipSize)
-        return rnd_choice_loop(*items)
-    else:
-        return None
-
-
 class EventTipsCriteria(_TipsCriteria):
-    __tipIterator = None
-
-    def __init__(self):
-        super(EventTipsCriteria, self).__init__()
-        if EventTipsCriteria.__tipIterator is None:
-            EventTipsCriteria.__tipIterator = _getEventTipIterator()
-        return
 
     def find(self):
-        iterator = EventTipsCriteria.__tipIterator
-        if iterator is not None:
-            tipNum = next(iterator)
-            return _FoundTip(i18n.makeString(TIPS.getEventTipTitle(tipNum)), i18n.makeString(TIPS.getEventTipBody(tipNum)), RES_ICONS.getEventBattleLoadingTipImage(tipNum))
-        else:
-            return _FoundTip('', '', '')
+        return _FoundTip(i18n.makeString('#tips:eventTitle'), i18n.makeString('#tips:eventMessage'), TIPS_IMAGE_SOURCE % 'event')
 
 
 def _getRankedTipIterator():

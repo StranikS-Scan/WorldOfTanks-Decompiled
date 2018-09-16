@@ -35,7 +35,7 @@ class UnboundComponentAdaptor(BaseDAAPIComponent):
 
     def __createUnboundView(self):
         if self.__unbound is not None:
-            _logger.error('Unbound view %d is already created in component %s', self.__unbound.layoutID, self.getAlias())
+            _logger.error('Unbound view %r is already created in component %s', self.__unbound, self.getAlias())
             return
         else:
             self.__unbound = self._makeUnboundView()
@@ -48,7 +48,7 @@ class UnboundComponentAdaptor(BaseDAAPIComponent):
             return
         else:
             if wasAdded and self.flashObject is not None:
-                self.flashObject.removeUnboundView(self.__unbound.layoutID)
+                self.flashObject.removeUnboundView(self.__unbound.uniqueID)
             self.__unbound.onStatusChanged -= self.__onStatusChanged
             self.__unbound.destroy()
             self.__unbound = None
@@ -56,7 +56,7 @@ class UnboundComponentAdaptor(BaseDAAPIComponent):
 
     def __addUnboundView(self):
         if self.flashObject is not None:
-            if not self.flashObject.addUnboundView(self.__unbound.layoutID):
+            if not self.flashObject.addUnboundView(self.__unbound.uniqueID):
                 _logger.error('Unbound view can not be added to component %s', self.getAlias())
                 self.__destroyUnboundView(wasAdded=False)
         else:

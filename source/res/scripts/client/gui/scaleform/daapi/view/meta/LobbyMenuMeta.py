@@ -19,8 +19,8 @@ class LobbyMenuMeta(View):
     def quitClick(self):
         self._printOverrideError('quitClick')
 
-    def versionInfoClick(self):
-        self._printOverrideError('versionInfoClick')
+    def postClick(self):
+        self._printOverrideError('postClick')
 
     def onCounterNeedUpdate(self):
         self._printOverrideError('onCounterNeedUpdate')
@@ -34,8 +34,8 @@ class LobbyMenuMeta(View):
     def manualClick(self):
         self._printOverrideError('manualClick')
 
-    def as_setVersionMessageS(self, data):
-        return self.flashObject.as_setVersionMessage(data) if self._isDAAPIInited() else None
+    def as_setVersionMessageS(self, message):
+        return self.flashObject.as_setVersionMessage(message) if self._isDAAPIInited() else None
 
     def as_setCounterS(self, counters):
         return self.flashObject.as_setCounter(counters) if self._isDAAPIInited() else None
@@ -45,6 +45,12 @@ class LobbyMenuMeta(View):
 
     def as_setBootcampButtonLabelS(self, label, icon):
         return self.flashObject.as_setBootcampButtonLabel(label, icon) if self._isDAAPIInited() else None
+
+    def as_setPostButtonIconsS(self, iconClose, iconOpen):
+        return self.flashObject.as_setPostButtonIcons(iconClose, iconOpen) if self._isDAAPIInited() else None
+
+    def as_setPostButtonVisibleS(self, isVisible):
+        return self.flashObject.as_setPostButtonVisible(isVisible) if self._isDAAPIInited() else None
 
     def as_showBootcampButtonS(self, value):
         return self.flashObject.as_showBootcampButton(value) if self._isDAAPIInited() else None

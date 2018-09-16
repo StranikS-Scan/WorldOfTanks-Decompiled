@@ -351,10 +351,12 @@ class ChatCommandsController(IBattleController):
                 outcome = OBJECTIVE_CUT
             elif target.publicInfo['team'] == player.team:
                 outcome = ALLY_CUT
-            elif 'SPG' in self.__getCurrentVehicleDesc(player)['vehicleType'].type.tags:
-                outcome = ENEMY_SPG_CUT
             else:
-                outcome = ENEMY_CUT
+                vehicleDesc = self.__getVehicleDesc(player.playerVehicleID)['vehicleType']
+                if vehicleDesc is not None and 'SPG' in vehicleDesc.type.tags:
+                    outcome = ENEMY_SPG_CUT
+                else:
+                    outcome = ENEMY_CUT
         return outcome
 
     def __isTargetCorrect(self, player, target):
@@ -369,8 +371,10 @@ class ChatCommandsController(IBattleController):
                     return not vInfo.isActionsDisabled()
         return False
 
-    def __getCurrentVehicleDesc(self, player):
-        vehicles = player.arena.vehicles
+    def __getVehicleDesc(self, vehicleID):
+        vehicles = BigWorld.player().arena.vehicles
         for vID, desc in vehicles.items():
-            if vID == player.playerVehicleID:
+            if vID == vehicleID:
                 return desc
+
+        return None

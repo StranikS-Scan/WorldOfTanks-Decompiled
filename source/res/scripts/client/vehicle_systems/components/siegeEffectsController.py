@@ -7,13 +7,19 @@ from constants import VEHICLE_SIEGE_STATE
 class SiegeEffectsController(svarog_script.py_component.Component):
     SIEGE_TIMEOUT = 2.0
     SIEGE_IMPULSE = 0.1
+    HIGH_PRIORITY_TICK_RATE = 0.1
+    NPC_TICK_RATE = 0.25
 
-    def __init__(self, appearance):
+    def __init__(self, appearance, isHighPriority):
         self.__appearance = appearance
         self.__effectManager = appearance.customEffectManager
         self.__siegeTimeOut = 0.0
         self.__siegeInProgress = 0
         self.__state = VEHICLE_SIEGE_STATE.DISABLED
+        if isHighPriority:
+            self.__tickRate = SiegeEffectsController.HIGH_PRIORITY_TICK_RATE
+        else:
+            self.__tickRate = SiegeEffectsController.NPC_TICK_RATE
 
     def destroy(self):
         self.__effectManager = None
@@ -41,8 +47,9 @@ class SiegeEffectsController(svarog_script.py_component.Component):
                 self.__siegeInProgress = 0
             self.__state = newState
 
-    def tick(self, dt):
+    def tick(self):
         if self.__siegeTimeOut > 0.0:
-            self.__siegeTimeOut -= dt
+            self.__siegeTimeOut -= self.__tickRate
         self.__effectManager.variables['siegeStart'] = 1 if self.__siegeTimeOut > 0.0 else 0
         self.__effectManager.variables['siegeProgress'] = self.__siegeInProgress
+        return self.__tickRate

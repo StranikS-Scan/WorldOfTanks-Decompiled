@@ -34,6 +34,14 @@ def timestamp_to_datetime(timestamp):
 
 class GatewayDataAccessor(base.BaseDataAccessor):
 
+    def __init__(self, url_fetcher, gateway_host, client_lang=None, user_agent=None):
+        self.client_lang = client_lang
+        self._session_id = None
+        self.url_fetcher = url_fetcher
+        self.gateway_host = gateway_host
+        self.user_agent = user_agent
+        return
+
     def _apply_converters(self, data, converters):
         if data:
             if not isinstance(data, (tuple, list)):
@@ -87,14 +95,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
             return wrapped(something, func=None) if not callable(something) else wrapped
 
         return wrapper
-
-    def __init__(self, url_fetcher, gateway_host, client_lang=None, user_agent=None):
-        self.client_lang = client_lang
-        self._session_id = None
-        self.url_fetcher = url_fetcher
-        self.gateway_host = gateway_host
-        self.user_agent = user_agent
-        return
 
     def login(self, callback, account_id, spa_token):
         auth = b64encode(':'.join([str(account_id), str(spa_token)]))
@@ -359,9 +359,9 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data=get_params, converters={'clan_id': int,
          'defence_hour': lambda x: dt_time(x, 0) if x >= 0 else None})
 
-    def get_wgsh_unit_info(self, callback, periphery_id, unit_server_id, fields=None):
+    def get_wgsh_unit_info(self, callback, periphery_id, unit_server_id, rev, fields=None):
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
-        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+        return self._request_data(callback, url, get_data={'rev': rev}, converters={'periphery_id': int,
          'unit_server_id': int})
 
     def set_vehicle(self, callback, periphery_id, unit_server_id, vehicle_cd, fields=None):
@@ -369,6 +369,30 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         post_data = {'vehicle_cd': vehicle_cd}
         return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
          'unit_server_id': int}, method='PATCH', post_data=post_data)
+
+    def set_slot_vehicle_type_filter(self, callback, periphery_id, unit_server_id, slot_idx, vehicle_types, fields=None):
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/set_slot_vehicle_filters/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        _data = {'slot_id': slot_idx,
+         'vehicle_types': vehicle_types}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='POST', post_data=_data)
+
+    def set_slot_vehicles_filter(self, callback, periphery_id, unit_server_id, slot_idx, vehicles, fields=None):
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/set_slot_vehicle_filters/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        _data = {'slot_id': slot_idx,
+         'vehicle_cds': vehicles}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='POST', post_data=_data)
+
+    def get_slot_vehicle_filters(self, callback, periphery_id, unit_server_id, fields=None):
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/get_slot_vehicle_filters/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='GET')
+
+    def stop_players_matching(self, callback, periphery_id, unit_server_id):
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/stop_players_matching/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='DELETE')
 
     def set_readiness(self, callback, periphery_id, unit_server_id, is_ready, reset_vehicle, fields=None):
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/readiness/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
@@ -413,6 +437,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/leave/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
          'unit_server_id': int}, method='POST')
+
+    def leave_mode(self, callback, fields=None):
+        url = '/wgsh/leave_mode/'
+        return self._request_data(callback, url, get_data={}, converters={}, method='DELETE')
 
     def take_away_leadership(self, callback, periphery_id, unit_server_id, fields=None):
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/take_away_leadership/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
@@ -481,10 +509,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/wgelen/v1/get_events_data'
         return self._request_data(callback, url, method='GET')
 
-    def get_football_events_data(self, callback, fields=None):
-        url = '/wgelen/football/v1/get_events_data'
-        return self._request_data(callback, url, method='GET')
-
     def get_hangar_flag(self, callback, fields=None):
         url = '/wgelen/v1/get_hangar_flag'
         return self._request_data(callback, url, method='GET')
@@ -522,3 +546,26 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def hof_user_restore(self, callback):
         url = '/hof/user/restore/'
         return self._request_data(callback, url, method='POST')
+
+    def get_teaser(self, callback):
+        get_params = {'language': self._get_formatted_language_code()}
+        url = '/promobe/teaser/'
+        return self._request_data(callback, url, get_data=get_params, method='GET')
+
+    def send_teaser(self, callback, promo_id):
+        url = '/promobe/teaser/view/'
+        params = {'promoscreen_id': promo_id,
+         'language': self._get_formatted_language_code()}
+        return self._request_data(callback, url, params, method='POST')
+
+    def get_unread_count(self, callback):
+        get_params = {'language': self._get_formatted_language_code()}
+        url = '/promobe/unread/'
+        return self._request_data(callback, url, get_data=get_params, method='GET')
+
+    def client_promo_log(self, callback, data):
+        url = '/client_promo_log/'
+        return self._request_data(callback, url, data, method='GET')
+
+    def _get_formatted_language_code(self):
+        return self.client_lang.replace('_', '-')

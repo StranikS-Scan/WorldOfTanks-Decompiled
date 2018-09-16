@@ -2,7 +2,10 @@
 # Embedded file name: scripts/client/gui/battle_results/components/progress.py
 import math
 import operator
+from collections import namedtuple
 import BigWorld
+import personal_missions
+from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.battle_results.components import base
@@ -13,7 +16,6 @@ from gui.shared.gui_items.Vehicle import getLevelIconPath
 from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-import personal_missions
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 MIN_BATTLES_TO_SHOW_PROGRESS = 5
@@ -213,6 +215,8 @@ class VehicleProgressBlock(base.StatsBlock):
             helper.clear()
 
 
+PMComplete = namedtuple('PMComplete', ['isMainComplete', 'isAddComplete'])
+
 class QuestsProgressBlock(base.StatsBlock):
     eventsCache = dependency.descriptor(IEventsCache)
     __slots__ = ()
@@ -223,31 +227,16 @@ class QuestsProgressBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         questsProgress = reusable.personal.getQuestsProgress()
-        if not questsProgress:
-            return
-        else:
-
-            def _sortCommonQuestsFunc(aData, bData):
-                aQuest, aCurProg, aPrevProg, _, _ = aData
-                bQuest, bCurProg, bPrevProg, _, _ = bData
-                res = cmp(aQuest.isCompleted(aCurProg), bQuest.isCompleted(bCurProg))
-                if res:
-                    return -res
-                if aQuest.isCompleted() and bQuest.isCompleted(bCurProg):
-                    res = aQuest.getBonusCount(aCurProg) - aPrevProg.get('bonusCount', 0) - (bQuest.getBonusCount(bCurProg) - bPrevProg.get('bonusCount', 0))
-                    if not res:
-                        return res
-                return cmp(aQuest.getID(), bQuest.getID())
-
-            from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
-            quests = self.eventsCache.getQuests()
-            quests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
-            commonQuests, personalMissions = [], {}
+        personalMissions = {}
+        commonQuests = []
+        allCommonQuests = self.eventsCache.getQuests()
+        allCommonQuests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
+        if questsProgress:
             for qID, qProgress in questsProgress.iteritems():
                 pGroupBy, pPrev, pCur = qProgress
                 isCompleted = pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
-                if qID in quests:
-                    quest = quests[qID]
+                if qID in allCommonQuests:
+                    quest = allCommonQuests[qID]
                     isProgressReset = not isCompleted and quest.bonusCond.isInRow() and pCur.get('battlesCount', 0) == 0
                     if pPrev or max(pCur.itervalues()) != 0:
                         commonQuests.append((quest,
@@ -257,25 +246,56 @@ class QuestsProgressBlock(base.StatsBlock):
                          isCompleted))
                 if personal_missions.g_cache.isPersonalMission(qID):
                     pqID = personal_missions.g_cache.getPersonalMissionIDByUniqueID(qID)
-                    questsCache = self.eventsCache.random
-                    quest = questsCache.getQuests()[pqID]
+                    questsCache = self.eventsCache.getPersonalMissions()
+                    quest = questsCache.getAllQuests()[pqID]
                     progress = personalMissions.setdefault(quest, {})
                     progress.update({qID: isCompleted})
 
-            for e, data in sorted(personalMissions.items(), key=operator.itemgetter(0)):
-                if data.get(e.getAddQuestID(), False):
-                    complete = (True, True)
-                elif data.get(e.getMainQuestID(), False):
-                    complete = (True, False)
-                else:
-                    complete = (False, False)
-                info = events_helpers.getEventPostBattleInfo(e, quests, None, None, False, complete)
-                if info is not None:
-                    self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
+        pm2Progress = reusable.personal.getPM2Progress()
+        if pm2Progress:
+            quests = self.eventsCache.getPersonalMissions().getAllQuests()
+            for qID, data in pm2Progress.iteritems():
+                quest = quests[qID]
+                if quest in personalMissions:
+                    personalMissions[quest].update(data)
+                progress = personalMissions.setdefault(quest, {})
+                progress.update(data)
 
-            for e, pCur, pPrev, reset, complete in sorted(commonQuests, cmp=_sortCommonQuestsFunc):
-                info = events_helpers.getEventPostBattleInfo(e, quests, pCur, pPrev, reset, complete)
-                if info is not None:
-                    self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
+        for quest, data in sorted(personalMissions.items(), key=operator.itemgetter(0), cmp=self.__sortPersonalMissions):
+            if data.get(quest.getAddQuestID(), False):
+                complete = PMComplete(True, True)
+            elif data.get(quest.getMainQuestID(), False):
+                complete = PMComplete(True, False)
+            else:
+                complete = PMComplete(False, False)
+            info = getEventPostBattleInfo(quest, None, None, None, False, complete, progressData=data)
+            if info is not None:
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
 
-            return
+        for e, pCur, pPrev, reset, complete in sorted(commonQuests, cmp=self.__sortCommonQuestsFunc):
+            info = getEventPostBattleInfo(e, allCommonQuests, pCur, pPrev, reset, complete)
+            if info is not None:
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
+
+        return
+
+    @staticmethod
+    def __sortPersonalMissions(a, b):
+        aFullCompleted, bFullCompleted = a.isFullCompleted(), b.isFullCompleted()
+        if aFullCompleted != bFullCompleted:
+            return bFullCompleted - aFullCompleted
+        aCompleted, bCompleted = a.isCompleted(), b.isCompleted()
+        return bCompleted - aCompleted if aCompleted != bCompleted else b.getCampaignID() - a.getCampaignID()
+
+    @staticmethod
+    def __sortCommonQuestsFunc(aData, bData):
+        aQuest, aCurProg, aPrevProg, _, _ = aData
+        bQuest, bCurProg, bPrevProg, _, _ = bData
+        res = cmp(aQuest.isCompleted(aCurProg), bQuest.isCompleted(bCurProg))
+        if res:
+            return -res
+        if aQuest.isCompleted() and bQuest.isCompleted(bCurProg):
+            res = aQuest.getBonusCount(aCurProg) - aPrevProg.get('bonusCount', 0) - (bQuest.getBonusCount(bCurProg) - bPrevProg.get('bonusCount', 0))
+            if not res:
+                return res
+        return cmp(aQuest.getID(), bQuest.getID())

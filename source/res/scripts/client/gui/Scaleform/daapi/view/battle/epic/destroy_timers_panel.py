@@ -57,20 +57,18 @@ class EpicDestroyTimersPanel(EpicDestroyTimersPanelMeta):
         super(EpicDestroyTimersPanel, self)._dispose()
 
     def _showDeathZoneTimer(self, value):
-        if BigWorld.player().team == EPIC_BATTLE_TEAM_ID.TEAM_DEFENDER and not value[4] and avatar_getter.getInputHandler().ctrlModeName != CTRL_MODE_NAME.POSTMORTEM:
+        if value.needToCloseAll():
             if self.__delayedCB is not None:
                 BigWorld.cancelCallback(self.__delayedCB)
-            self.__delayedCB = BigWorld.callback(_LEAVE_ZONE_DEFENDER_DELAY, partial(self.__displayDeathZoneTimer, value[0:4]))
+                self.__delayedCB = None
+            else:
+                self.__displayDeathZoneTimer(value)
+        elif BigWorld.player().team == EPIC_BATTLE_TEAM_ID.TEAM_DEFENDER and not value.entered and avatar_getter.getInputHandler().ctrlModeName != CTRL_MODE_NAME.POSTMORTEM:
+            if self.__delayedCB is not None:
+                BigWorld.cancelCallback(self.__delayedCB)
+            self.__delayedCB = BigWorld.callback(_LEAVE_ZONE_DEFENDER_DELAY, partial(self.__displayDeathZoneTimer, value))
         else:
-            self.__displayDeathZoneTimer(value[0:4])
-        return
-
-    def _hideDeathZoneTimer(self, value):
-        if self.__delayedCB is not None:
-            BigWorld.cancelCallback(self.__delayedCB)
-            self.__delayedCB = None
-        else:
-            super(EpicDestroyTimersPanel, self)._hideDeathZoneTimer(value)
+            self.__displayDeathZoneTimer(value)
         return
 
     def _onVehicleStateUpdated(self, state, value):

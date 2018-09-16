@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/stronghold_items.py
+from collections import namedtuple
 import itertools
 from debug_utils import LOG_ERROR
 from helpers.time_utils import ONE_MINUTE, ONE_HOUR
@@ -17,13 +18,67 @@ SUPPORT_ORDER = (AIRSTRIKE, ARTILLERY_STRIKE)
 RESERVE_ITEMS = {SUPPORT_TYPE: (AIRSTRIKE, ARTILLERY_STRIKE),
  REQUISITION_TYPE: (REQUISITION,),
  HEAVYTRUCKS_TYPE: (HIGH_CAPACITY_TRANSPORT,)}
-_OldStrongholdDataScheme = ('type', 'min_level', 'max_level', 'min_players_count', 'max_players_count', 'industrial_resource_multiplier', 'max_legionaries_count', 'public', 'battle_duration', 'battle_series_duration', 'battle_idx', 'matchmaker_next_tick', 'time_to_ready', 'direction', 'requisition_bonus_percent', 'enemy_clan', 'clan', 'available_reserves', 'permissions', 'ready_button_enabled', 'selected_reserves', 'battle_series_status', 'battles_end_time', 'battles_start_time', 'fort_battles_before_start_lag', 'sorties_before_start_lag', 'sorties_before_end_lag')
-_OldStrongholdDataProxyScheme = {'header': ('max_legionaries_count', 'max_players_count', 'direction', 'battle_duration', 'min_level', 'max_level', 'industrial_resource_multiplier', 'type', 'min_players_count', 'battle_idx', 'battle_series_status', 'battle_series_duration', 'enemy_clan', 'clan'),
- 'timer': ('sorties_before_start_lag', 'fort_battles_before_start_lag', 'sorties_before_end_lag', 'time_to_ready', 'matchmaker_next_tick', 'battles_start_time', 'battles_end_time'),
- 'state': ('public',),
- 'reserve': ('available_reserves', 'selected_reserves', 'requisition_bonus_percent', 'permissions'),
+_OldStrongholdDataScheme = ('type',
+ 'min_level',
+ 'max_level',
+ 'min_players_count',
+ 'max_players_count',
+ 'industrial_resource_multiplier',
+ 'max_legionaries_count',
+ 'public',
+ 'battle_duration',
+ 'battle_series_duration',
+ 'battle_idx',
+ 'matchmaker_next_tick',
+ 'time_to_ready',
+ 'direction',
+ 'requisition_bonus_percent',
+ 'enemy_clan',
+ 'clan',
+ 'available_reserves',
+ 'permissions',
+ 'ready_button_enabled',
+ 'selected_reserves',
+ 'battle_series_status',
+ 'battles_end_time',
+ 'battles_start_time',
+ 'fort_battles_before_start_lag',
+ 'sorties_before_start_lag',
+ 'sorties_before_end_lag',
+ 'is_players_matching_available',
+ 'slots_locked_by_filter')
+_OldStrongholdDataProxyScheme = {'header': ('max_legionaries_count',
+            'max_players_count',
+            'direction',
+            'battle_duration',
+            'min_level',
+            'max_level',
+            'industrial_resource_multiplier',
+            'type',
+            'min_players_count',
+            'battle_idx',
+            'battle_series_status',
+            'battle_series_duration',
+            'enemy_clan',
+            'clan'),
+ 'timer': ('sorties_before_start_lag',
+           'fort_battles_before_start_lag',
+           'sorties_before_end_lag',
+           'time_to_ready',
+           'matchmaker_next_tick',
+           'battles_start_time',
+           'battles_end_time'),
+ 'state': ('public', 'is_players_matching_available', 'slots_locked_by_filter'),
+ 'reserve': ('available_reserves',
+             'selected_reserves',
+             'requisition_bonus_percent',
+             'permissions'),
  'all': ('ready_button_enabled',)}
-_StrongholdDataScheme = ('header', 'timer', 'state', 'reserve', 'all')
+_StrongholdDataScheme = ('header',
+ 'timer',
+ 'state',
+ 'reserve',
+ 'all')
 
 def isEnemyBattleIndex(index):
     return index >= 3
@@ -91,6 +146,12 @@ class StrongholdSettings(object):
 
     def isSortie(self):
         return self.__data.getHeader().isSortie()
+
+    def isPlayersMatchingAvailable(self):
+        return self.__data.getState().isPlayersMatchingAvailable()
+
+    def getSlotsInPlayersMatching(self):
+        return self.__data.getState().getSlotsLockedByFilter()
 
     def getReserveOrder(self):
         return RESERVE_SORTIE_ORDER if self.isSortie() else RESERVE_STRONGHOLD_ORDER
@@ -360,13 +421,23 @@ class StrongholdData(object):
 
         def __init__(self):
             self.__public = None
+            self.__is_players_matching_available = None
+            self.__slots_locked_by_filter = None
             return
 
         def setData(self, data):
             self.__public = data['public']
+            self.__is_players_matching_available = data['is_players_matching_available']
+            self.__slots_locked_by_filter = data['slots_locked_by_filter']
 
         def getPublic(self):
             return self.__public
+
+        def isPlayersMatchingAvailable(self):
+            return self.__is_players_matching_available
+
+        def getSlotsLockedByFilter(self):
+            return self.__slots_locked_by_filter
 
     class StrongholdDataReserve(object):
 
@@ -518,3 +589,23 @@ class StrongholdData(object):
 
     def setReserve(self, data):
         self.__reserve.setData(data)
+
+
+StrongholdUnitStats = namedtuple('UnitStats', ('readyCount',
+ 'occupiedSlotsCount',
+ 'openedSlotsCount',
+ 'freeSlotsCount',
+ 'curTotalLevel',
+ 'levelsSeq',
+ 'clanMembersInRoster',
+ 'legionariesInRoster',
+ 'playersMatchingSlotsCount'))
+StrongholdUnitStats.__new__.__defaults__ = (0,
+ 0,
+ 0,
+ 0,
+ 0,
+ (),
+ 0,
+ 0,
+ 0)

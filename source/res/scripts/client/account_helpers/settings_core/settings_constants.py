@@ -205,6 +205,7 @@ class FEEDBACK(CONST_CONTAINER):
     DAMAGE_LOG = 'feedbackDamageLog'
     BATTLE_EVENTS = 'feedbackBattleEvents'
     BATTLE_BORDER_MAP = 'feedbackBattleBorderMap'
+    QUESTS_PROGRESS = 'feedbackQuestsProgress'
 
 
 class DAMAGE_INDICATOR(CONST_CONTAINER):
@@ -252,6 +253,11 @@ class BATTLE_BORDER_MAP(CONST_CONTAINER):
     TYPE_BORDER = 'battleBorderMapType'
 
 
+class QUESTS_PROGRESS(CONST_CONTAINER):
+    VIEW_TYPE = 'progressViewType'
+    DISPLAY_TYPE = 'progressViewConditions'
+
+
 class CONTACTS(CONST_CONTAINER):
     SHOW_OFFLINE_USERS = 'showOfflineUsers'
     SHOW_OTHERS_CATEGORY = 'showOthersCategory'
@@ -267,7 +273,3 @@ class SETTINGS_GROUP(CONST_CONTAINER):
     MARKERS_SETTINGS = 'MarkerSettings'
     OTHER_SETTINGS = 'OtherSettings'
     FEEDBACK_SETTINGS = 'FeedbackSettings'
-
-
-class UI_STORAGE(CONST_CONTAINER):
-    DISABLE_ANIMATED_TOOLTIP = 'disable_animated_tooltip'

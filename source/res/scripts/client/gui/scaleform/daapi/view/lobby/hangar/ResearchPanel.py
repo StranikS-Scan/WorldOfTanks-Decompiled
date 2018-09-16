@@ -15,8 +15,6 @@ from gui.shared.formatters.time_formatters import getTimeLeftStr
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket, IIGRController
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 
 class ResearchPanel(ResearchPanelMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -42,11 +40,8 @@ class ResearchPanel(ResearchPanelMeta):
         self.comparisonBasket.onSwitchChange -= self.onCurrentVehicleChanged
 
     def setNavigationEnabled(self, isEnabled):
-        if g_currentVehicle.isEvent():
-            self.as_setNavigationEnabledS(False, FOOTBALL2018.HANGAR_UNLOCKBUTTONDISABLEDFOOTBALL)
-            self.__isNavigationEnabled = False
-        else:
-            self.as_setNavigationEnabledS(isEnabled, TOOLTIPS.HANGAR_UNLOCKBUTTON)
+        if self.__isNavigationEnabled != isEnabled:
+            self.as_setNavigationEnabledS(isEnabled)
             self.__isNavigationEnabled = isEnabled
 
     def goToResearch(self):

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/Inventory.py
 import collections
+from array import array
 from functools import partial
+from itertools import chain
 import logging
 import AccountCommands
 import items
@@ -82,6 +84,15 @@ class Inventory(object):
             return
         else:
             self.__account.shop.waitForSync(partial(self.__sellItem_onShopSynced, itemTypeIdx, itemInvID, count, callback))
+            return
+
+    def sellMultiple(self, itemList, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            self.__account.shop.waitForSync(partial(self.__sellMultipleItems_onShopSynced, itemList, callback))
             return
 
     def sellVehicle(self, vehInvID, dismissCrew, itemsFromVehicle, itemsFromInventory, callback):
@@ -321,32 +332,6 @@ class Inventory(object):
             self.__account._doCmdInt3(AccountCommands.CMD_ADD_TMAN_XP, tmanInvID, xp, 0, proxy)
             return
 
-    def fb18OpenPackets(self, callback=None):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER)
-            return
-        else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_GENERATE_FOOTBALL_CARDS, 0, 0, 0, proxy)
-            return
-
-    def fb18RecruitBuffon(self, vehIntCD, callback=None):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER)
-            return
-        else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext)
-            else:
-                proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_RECRUIT_BUFFON, vehIntCD, 0, 0, proxy)
-            return
-
     def getProviderForVehInvId(self, vehInvId, serverSettings):
         if not self.__cache:
             _logger.warning('Local cache is empty, cannot get provider name.')
@@ -399,6 +384,20 @@ class Inventory(object):
             else:
                 proxy = None
             self.__account._doCmdInt4(AccountCommands.CMD_SELL_ITEM, shopRev, itemTypeIdx, itemInvID, count, proxy)
+            return
+
+    def __sellMultipleItems_onShopSynced(self, itemList, callback, resultID, shopRev):
+        if resultID < 0:
+            if callback is not None:
+                callback(resultID)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            intArr = array('i', [shopRev] + list(chain(*itemList)))
+            self.__account._doCmdIntArr(AccountCommands.CMD_SELL_MULTIPLE_ITEMS, intArr, proxy)
             return
 
     def __sellVehicle_onShopSynced(self, vehInvID, flags, itemsFromVehicle, itemsFromInventory, callback, resultID, shopRev):

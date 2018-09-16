@@ -221,14 +221,14 @@ class KPI(object):
         VEHICLE_STILL_CAMOUFLAGE = 'vehicleStillCamouflage'
         VEHICLE_FIRE_CHANCE = 'vehicleFireChance'
         VEHICLE_GUN_RELOAD_TIME = 'vehicleGunReloadTime'
-        VEHICLE_GUN_AIM_TIME = 'vehicleGunAimTime'
+        VEHICLE_GUN_AIM_SPEED = 'vehicleGunAimSpeed'
         VEHICLE_GUN_SHOT_DISPERSION = 'vehicleGunShotDispersion'
         VEHICLE_AMMO_BAY_STRENGTH = 'vehicleAmmoBayStrength'
         VEHICLE_FUEL_TANK_STRENGTH = 'vehicleFuelTankStrength'
         VEHICLE_ENGINE_STRENGTH = 'vehicleEngineStrength'
         VEHICLE_CHASSIS_STRENGTH = 'vehicleChassisStrength'
         VEHICLE_CHASSIS_LOAD = 'vehicleChassisLoad'
-        VEHICLE_CHASSIS_FALL_DAMAGE_RESISTANCE = 'vehicleChassisFallDamageResistance'
+        VEHICLE_CHASSIS_FALL_DAMAGE = 'vehicleChassisFallDamage'
         VEHICLE_RAM_OR_EXPLOSION_DAMAGE_RESISTANCE = 'vehicleRamOrExplosionDamageResistance'
         VEHICLE_SOFT_GROUND_PASSABILITY = 'vehicleSoftGroundPassability'
         VEHICLE_MEDIUM_GROUND_PASSABILITY = 'vehicleMediumGroundPassability'
@@ -255,12 +255,12 @@ class KPI(object):
         GAME_CREDITS = 'gameCredits'
 
     class Type(CONST_CONTAINER):
-        FACTOR = 'factor'
-        VALUE = 'value'
-        SKILL_BOOST = 'skillBoost'
-        OR = 'or'
+        MUL = 'mul'
+        ADD = 'add'
+        BOOST_SKILL = 'boostSkill'
+        ONE_OF = 'oneOf'
 
-    def __init__(self, kpiName, kpiValue, kpyType=Type.FACTOR):
+    def __init__(self, kpiName, kpiValue, kpyType=Type.MUL):
         self.__name = kpiName
         self.__value = kpiValue
         self.__type = kpyType
@@ -283,7 +283,7 @@ VEHICLE_ATTR_TO_KPI_NAME_MAP = {'repairSpeed': KPI.Name.VEHICLE_REPAIR_SPEED,
  'circularVisionRadius': KPI.Name.VEHICLE_CIRCULAR_VISION_RADIUS,
  'circularVisionRadiusFactor': KPI.Name.VEHICLE_CIRCULAR_VISION_RADIUS,
  'gunReloadTimeFactor': KPI.Name.VEHICLE_GUN_RELOAD_TIME,
- 'gunAimingTimeFactor': KPI.Name.VEHICLE_GUN_AIM_TIME,
+ 'gunAimingTimeFactor': KPI.Name.VEHICLE_GUN_AIM_SPEED,
  'crewLevelIncrease': KPI.Name.CREW_LEVEL,
  'ammoBayHealthFactor': KPI.Name.VEHICLE_AMMO_BAY_STRENGTH,
  'fuelTankHealthFactor': KPI.Name.VEHICLE_FUEL_TANK_STRENGTH,

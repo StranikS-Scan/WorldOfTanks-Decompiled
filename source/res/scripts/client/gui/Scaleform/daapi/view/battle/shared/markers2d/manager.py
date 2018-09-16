@@ -3,7 +3,6 @@
 import logging
 import weakref
 import GUI
-from constants import ARENA_GUI_TYPE
 from gui import DEPTH_OF_VehicleMarker, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
@@ -44,31 +43,9 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
          speed)
 
     def setMarkerSettings(self, markerSettings, notify=False):
-        sessionProvider = dependency.instance(IBattleSessionProvider)
-        if sessionProvider is not None:
-            arenaType = sessionProvider.arenaVisitor.getArenaGuiType()
-            isEventBattle = arenaType == ARENA_GUI_TYPE.EVENT_BATTLES
-            if isEventBattle:
-                for markerType in markerSettings:
-                    markerSettings[markerType]['markerBaseHp'] = 3
-                    markerSettings[markerType]['markerBaseLevel'] = False
-                    markerSettings[markerType]['markerBaseIcon'] = False
-                    markerSettings[markerType]['markerBaseHpIndicator'] = False
-                    markerSettings[markerType]['markerBaseDamage'] = False
-                    markerSettings[markerType]['markerBaseVehicleName'] = True
-                    markerSettings[markerType]['markerBasePlayerName'] = True
-                    markerSettings[markerType]['markerAltHp'] = 3
-                    markerSettings[markerType]['markerAltLevel'] = False
-                    markerSettings[markerType]['markerAltIcon'] = False
-                    markerSettings[markerType]['markerAltHpIndicator'] = False
-                    markerSettings[markerType]['markerAltDamage'] = False
-                    markerSettings[markerType]['markerAltVehicleName'] = True
-                    markerSettings[markerType]['markerAltPlayerName'] = True
-
         self.as_setMarkerSettingsS(markerSettings)
         if notify:
             self.as_updateMarkersSettingsS()
-        return
 
     def setColorsSchemes(self, defaultSchemes, colorBlindSchemes):
         self.as_setColorSchemesS(defaultSchemes, colorBlindSchemes)

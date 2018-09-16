@@ -5,22 +5,28 @@ from collections import defaultdict
 import BigWorld
 import constants
 from constants import EVENT_TYPE
-from gui import makeHtmlString
+from gui import makeHtmlString, GUI_NATIONS
+from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import OldStyleBonusesFormatter
+from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getNationText
+from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import formatters, conditions, settings as quest_settings
 from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, isLinkedSet
-from gui.shared.formatters import text_styles
+from gui.server_events.events_helpers import getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest
+from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter
+from gui.shared.formatters import text_styles, icons
 from helpers import i18n, int2roman, time_utils, dependency
+from helpers.i18n import makeString as _ms
+from nations import ALLIANCE_TO_NATIONS
 from personal_missions import PM_BRANCH
 from quest_xml_source import MAX_BONUS_LIMIT
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from helpers.i18n import makeString as _ms
-from gui.Scaleform.locale.LINKEDSET import LINKEDSET
-from gui.server_events.events_helpers import getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest
 _AWARDS_PER_PAGE = 3
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
@@ -29,7 +35,7 @@ class _EventInfo(EventInfoModel):
 
     def getInfo(self, svrEvents, pCur=None, pPrev=None, noProgressInfo=False):
         if noProgressInfo:
-            status, _ = MISSIONS_STATES.NONE, self._getStatus()[1]
+            status = MISSIONS_STATES.NONE
             bonusCount = self.NO_BONUS_COUNT
             qProgCur, qProgTot, qProgbarType, tooltip = (0,
              0,
@@ -58,7 +64,7 @@ class _EventInfo(EventInfoModel):
          'isNew': quest_settings.isNewCommonEvent(self.event),
          'isAvailable': isAvailable}
 
-    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted):
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
         index = 0
         progresses = []
         if not isProgressReset and not isCompleted:
@@ -232,37 +238,39 @@ class _QuestInfo(_EventInfo, QuestInfoModel):
              tooltip)
 
 
-class _PersonalMissionInfo(_QuestInfo):
+class _PersonalMissionInfo(_EventInfo):
 
-    def _getBonuses(self, svrEvents, _=None):
-        mainBonuses = self.event.getBonuses(isMain=True)
-        addBonuses = self.event.getBonuses(isMain=False)
-        return (_QuestInfo._getBonuses(self, None, bonuses=mainBonuses), _QuestInfo._getBonuses(self, None, bonuses=addBonuses))
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
+        info = super(_PersonalMissionInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
+        condFormatter = PostBattleConditionsFormatter(self.event, progressData)
+        statusState, statusText = self._getStatus(pmComplete=isCompleted)
+        info.update({'title': text_styles.highTitle(info.get('title')),
+         'linkBtnVisible': statusState == PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS,
+         'collapsedToggleBtnVisible': statusState == PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS,
+         'descr': condFormatter.getMultiplierDescription(),
+         'personalInfo': [condFormatter.getConditionsData(isMain=True), condFormatter.getConditionsData(isMain=False)],
+         'questState': {'statusState': statusState,
+                        'statusText': statusText},
+         'awards': []})
+        return info
 
-    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted):
-
-        def _packCondition(titleKey, text):
-            return '%s\n%s' % (text_styles.middleTitle(i18n.makeString(titleKey)), text_styles.main(text))
-
-        def _packStatus(completed):
-            return 'done' if completed else 'notDone'
-
-        return {'title': self.event.getUserName(),
-         'questInfo': self.getInfo(svrEvents),
-         'awards': None,
-         'progressList': [],
-         'alertMsg': '',
-         'personalInfo': [{'statusStr': _packStatus(isCompleted[0]),
-                           'text': _packCondition(PERSONAL_MISSIONS.TASKDETAILSVIEW_MAINCONDITIONS, self.event.getUserMainCondition())}, {'statusStr': _packStatus(isCompleted[1]),
-                           'text': _packCondition(PERSONAL_MISSIONS.TASKDETAILSVIEW_ADDITIONALCONDITIONS, self.event.getUserAddCondition())}],
-         'questType': self.event.getType()}
+    def _getStatus(self, pCur=None, pmComplete=None):
+        if pmComplete:
+            if pmComplete.isAddComplete:
+                msg = text_styles.bonusAppliedText(QUESTS.PERSONALMISSION_STATUS_FULLDONE)
+                return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_FULL_DONE, msg)
+            if pmComplete.isMainComplete:
+                msg = text_styles.bonusAppliedText(QUESTS.PERSONALMISSION_STATUS_MAINDONE)
+                return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_DONE, msg)
+        msg = text_styles.neutral(QUESTS.PERSONALMISSION_STATUS_INPROGRESS)
+        return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS, msg)
 
 
 class _MotiveQuestInfo(_QuestInfo):
 
-    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted):
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
         motiveQuests = [ q for q in svrEvents.values() if q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isCompleted() ]
-        info = super(_MotiveQuestInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted)
+        info = super(_MotiveQuestInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
         info.update({'isLinkBtnVisible': len(motiveQuests) > 0})
         return info
 
@@ -276,12 +284,12 @@ class _LinkedSetQuestInfo(_QuestInfo):
         res['description'] = _ms(LINKEDSET.QUEST_CARD_TITLE, mission_name=missionName, quest_name=questName)
         return res
 
-    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted):
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
         bonuses = self.event.getBonuses()
         if not bonuses:
             return None
         else:
-            res = super(_LinkedSetQuestInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted)
+            res = super(_LinkedSetQuestInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
             res['title'] = getLocalizedQuestNameForLinkedSetQuest(self.event)
             progresses = res.get('progressList', [])
             if progresses and len(progresses) == 1:
@@ -290,7 +298,7 @@ class _LinkedSetQuestInfo(_QuestInfo):
             return res
 
 
-def getEventInfoData(event):
+def _getEventInfoData(event):
     if event.getType() == constants.EVENT_TYPE.PERSONAL_MISSION:
         return _PersonalMissionInfo(event)
     if event.getType() == constants.EVENT_TYPE.MOTIVE_QUEST:
@@ -300,8 +308,41 @@ def getEventInfoData(event):
     return _QuestInfo(event) if event.getType() in constants.EVENT_TYPE.QUEST_RANGE else _EventInfo(event)
 
 
-def getEventPostBattleInfo(event, svrEvents=None, pCur=None, pPrev=None, isProgressReset=False, isCompleted=False):
-    return getEventInfoData(event).getPostBattleInfo(svrEvents, pCur or {}, pPrev or {}, isProgressReset, isCompleted)
+def getEventPostBattleInfo(event, svrEvents=None, pCur=None, pPrev=None, isProgressReset=False, isCompleted=False, progressData=None):
+    return _getEventInfoData(event).getPostBattleInfo(svrEvents, pCur or {}, pPrev or {}, isProgressReset, isCompleted, progressData)
+
+
+def getNationsForChain(operation, chainID):
+    return ALLIANCE_TO_NATIONS[operation.getChainClassifier(chainID).classificationAttr]
+
+
+def getChainVehRequirements(operation, chainID, useIcons=False):
+    vehs, minLevel, maxLevel = getChainVehTypeAndLevelRestrictions(operation, chainID)
+    if useIcons and operation.getBranch() == PM_BRANCH.PERSONAL_MISSION_2:
+        nations = getNationsForChain(operation, chainID)
+        vehsData = []
+        for nation in GUI_NATIONS:
+            if nation in nations:
+                vehsData.append(icons.makeImageTag(getNationsFilterAssetPath(nation), 26, 16, -4))
+
+        vehs = ' '.join(vehsData)
+    return _ms(PERSONAL_MISSIONS.OPERATIONINFO_CHAINVEHREQ, vehs=vehs, minLevel=minLevel, maxLevel=maxLevel)
+
+
+def getChainVehTypeAndLevelRestrictions(operation, chainID):
+    _eventsCache = dependency.instance(IEventsCache)
+    pmCache = _eventsCache.getPersonalMissions()
+    minLevel, maxLevel = pmCache.getVehicleLevelRestrictions(operation.getID())
+    vehType = _ms(QUESTS.getAddBottomVehType(operation.getChainClassifier(chainID).classificationAttr))
+    if operation.getBranch() == PM_BRANCH.PERSONAL_MISSION_2:
+        nations = getNationsForChain(operation, chainID)
+        nationsText = []
+        for nation in GUI_NATIONS:
+            if nation in nations:
+                nationsText.append(getNationText(nation))
+
+        vehType = _ms(vehType, nations=', '.join(nationsText))
+    return (vehType, int2roman(minLevel), int2roman(maxLevel))
 
 
 _questBranchToTabMap = {PM_BRANCH.REGULAR: QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM}

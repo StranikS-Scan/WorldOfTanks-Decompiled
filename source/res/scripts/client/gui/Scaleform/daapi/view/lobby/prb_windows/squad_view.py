@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/squad_view.py
 from adisp import process
-from gui.Scaleform.daapi.view.lobby.prb_windows.SquadActionButtonStateVO import SquadActionButtonStateVO
+from gui.Scaleform.daapi.view.lobby.prb_windows.squad_action_button_state_vo import SquadActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.SquadViewMeta import SquadViewMeta
@@ -20,7 +20,6 @@ from helpers import dependency
 from helpers import i18n
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
 
 class SquadView(SquadViewMeta):
     eventsCache = dependency.descriptor(IEventsCache)
@@ -136,7 +135,7 @@ class SquadView(SquadViewMeta):
         isArtVisible = isSquadXpFactorsEnabled
         if isArtVisible:
             tooltip, tooltipType = self._getInfoIconTooltipParams()
-            hdrIconSource, iXPadding, iYPadding, hdrMessageText, hatIconSource = self._getHeaderMessageParams()
+            hdrIconSource, iXPadding, iYPadding, hdrMessageText = self._getHeaderMessageParams()
         else:
             tooltip = ''
             tooltipType = ''
@@ -144,20 +143,16 @@ class SquadView(SquadViewMeta):
             hdrMessageText = ''
             iXPadding = 0
             iYPadding = 0
-            hatIconSource = None
         data = {'infoIconTooltip': tooltip,
          'infoIconTooltipType': tooltipType,
          'isVisibleInfoIcon': isArtVisible,
          'isVisibleHeaderIcon': isArtVisible,
          'headerIconSource': hdrIconSource,
-         'isVisibleHatIcon': hatIconSource is not None,
-         'hatIconSource': hatIconSource,
          'icoXPadding': iXPadding,
          'icoYPadding': iYPadding,
          'headerMessageText': hdrMessageText,
          'isVisibleHeaderMessage': isArtVisible}
         self.as_setSimpleTeamSectionDataS(data)
-        return
 
     def _getHeaderMessageParams(self):
         entity = self.prbEntity
@@ -181,8 +176,7 @@ class SquadView(SquadViewMeta):
         return (headerIconSource,
          iconXPadding,
          iconYPadding,
-         headerMessageText,
-         None)
+         headerMessageText)
 
     def _getInfoIconTooltipParams(self):
         isBalancedSquadEnabled = self.eventsCache.isBalancedSquadEnabled()
@@ -245,15 +239,13 @@ class EventSquadView(SquadView):
 
     def _getHeaderMessageParams(self):
         headerIconSource = RES_ICONS.MAPS_ICONS_SQUAD_EVENT
-        headerMessageText = text_styles.main(i18n.makeString(FOOTBALL2018.DIALOGS_SQUADCHANNEL_HEADERMSG_EVENTFORMATIONRESTRICTION))
+        headerMessageText = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SQUADCHANNEL_HEADERMSG_EVENTFORMATIONRESTRICTION))
         iconXPadding = 0
         iconYPadding = 0
-        hatIconSource = RES_ICONS.MAPS_ICONS_FE18_FOOTBALL_SQUADWINDOW_HAT_ICON
         return (headerIconSource,
          iconXPadding,
          iconYPadding,
-         headerMessageText,
-         hatIconSource)
+         headerMessageText)
 
     def _getLeaveBtnTooltip(self):
         return TOOLTIPS.SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD
@@ -272,5 +264,4 @@ class EpicSquadView(SquadView):
         return (headerIconSource,
          iconXPadding,
          iconYPadding,
-         headerMessageText,
-         None)
+         headerMessageText)

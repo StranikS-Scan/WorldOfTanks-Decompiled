@@ -1685,7 +1685,7 @@ class KeyboardSettings(SettingsContainer):
        ('alternate_mode', 'CMD_CM_ALTERNATE_MODE'),
        ('trajectory_view', 'CMD_CM_TRAJECTORY_VIEW'),
        ('reloadPartialClip', 'CMD_RELOAD_PARTIAL_CLIP'))),
-     ('vehicle_other', (('showHUD', 'CMD_TOGGLE_GUI'), ('showRadialMenu', 'CMD_RADIAL_MENU_SHOW'))),
+     ('vehicle_other', (('showHUD', 'CMD_TOGGLE_GUI'), ('showRadialMenu', 'CMD_RADIAL_MENU_SHOW'), ('showQuestProgress', 'CMD_QUEST_PROGRESS_SHOW'))),
      ('equipment', (('item01', 'CMD_AMMO_CHOICE_1'),
        ('item02', 'CMD_AMMO_CHOICE_2'),
        ('item03', 'CMD_AMMO_CHOICE_3'),
@@ -2597,3 +2597,29 @@ class LoginServerSelectionSetting(PreferencesSetting):
 
     def _get(self):
         return self.__value
+
+
+class QuestsProgressViewType(GroupSetting):
+    TYPE_STANDARD = 0
+    TYPE_HIDE = 1
+    OPTIONS = {TYPE_STANDARD: 'standard',
+     TYPE_HIDE: 'hidden'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(QuestsProgressViewType, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/questsProgress/type/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        return self.TYPE_STANDARD
+
+
+class QuestsProgressDisplayType(GroupSetting):
+    SHOW_ALL = 0
+    PROGRESS_ONLY = 1
+    OPTIONS = {SHOW_ALL: 'showAll',
+     PROGRESS_ONLY: 'showProgress'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(QuestsProgressDisplayType, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/questsProgress/standardConditions/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        return self.SHOW_ALL

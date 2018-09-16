@@ -4,7 +4,7 @@ from functools import partial
 import BigWorld
 from adisp import process
 from async import async, await
-from gui.Scaleform.locale.LINKEDSET import LINKEDSET
+from debug_utils import LOG_ERROR
 from gui import DialogsInterface
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -16,14 +16,16 @@ from gui.Scaleform.daapi.view.meta.MissionsEventBoardsViewMeta import MissionsEv
 from gui.Scaleform.daapi.view.meta.MissionsGroupedViewMeta import MissionsGroupedViewMeta
 from gui.Scaleform.daapi.view.meta.MissionsMarathonViewMeta import MissionsMarathonViewMeta
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
+from gui.Scaleform.genConsts.LINKEDSET_ALIASES import LINKEDSET_ALIASES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
+from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.event_boards.settings import expandGroup, isGroupMinimized
 from gui.marathon.web_handlers import createMarathonWebHandlers
 from gui.server_events import settings, caches
-from gui.server_events.events_constants import FOOTBALL2018_PREFIX
+from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_dispatcher import hideMissionDetails
 from gui.server_events.events_dispatcher import showMissionsCategories
 from gui.server_events.events_helpers import isMarathon, isRegularQuest
@@ -35,11 +37,6 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController
 from skeletons.gui.server_events import IEventsCache
-from gui.Scaleform.genConsts.LINKEDSET_ALIASES import LINKEDSET_ALIASES
-from gui.server_events.event_items import DEFAULTS_GROUPS
-from skeletons.gui.lobby_context import ILobbyContext
-from gui.Scaleform.framework import g_entitiesFactories
-QUESTS_COUNT_LINKEDSET_BLOCK = 1
 
 class _GroupedMissionsView(MissionsGroupedViewMeta):
 
@@ -87,14 +84,15 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     _browserCtrl = dependency.descriptor(IBrowserController)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     eventsCache = dependency.descriptor(IEventsCache)
-    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(MissionsMarathonView, self).__init__()
         self.__browserID = None
-        self._marathonCtrl = self._marathonsCtrl.getMarathon(caches.getNavInfo().getMarathonPrefix()) or self._marathonsCtrl.getPrimaryMarathon()
+        self._marathonEvent = self._marathonsCtrl.getMarathon(caches.getNavInfo().getMarathonPrefix()) or self._marathonsCtrl.getPrimaryMarathon()
         self._width = 0
         self._height = 0
+        self._builder = None
+        self.__loadBrowserCallbackID = None
         return
 
     def closeView(self):
@@ -106,8 +104,8 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     @process
     def reload(self):
         browser = self._browserCtrl.getBrowser(self.__browserID)
-        if browser is not None:
-            url = yield self._marathonCtrl.getUrl()
+        if browser is not None and self._marathonEvent:
+            url = yield self._marathonEvent.getUrl()
             if url:
                 browser.doNavigate(url)
         else:
@@ -116,32 +114,13 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
 
     def setActive(self, value):
         self.reload()
-        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
 
     def setBuilder(self, builder, filterData, eventID):
         self._builder = builder
-        self._filterData = filterData
-        self._totalQuestsCount = 0
-        self._filteredQuestsCount = 0
-        self._eventID = eventID
         self._onEventsUpdate()
 
     def setMarathon(self, prefix):
-        self._marathonCtrl = self._marathonsCtrl.getMarathon(prefix)
-        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
-
-    def __onServerSettingChanged(self, diff):
-        if self._marathonCtrl.prefix == FOOTBALL2018_PREFIX and 'footballSettings' in diff and 'isFootballEnabled' in diff['footballSettings']:
-            enabled = diff['footballSettings']['isFootballEnabled']
-            if not enabled:
-                self.__showDisabledDlg()
-            else:
-                self.reload()
-
-    @process
-    def __showDisabledDlg(self):
-        yield DialogsInterface.showI18nInfoDialog('elenDisabled')
-        g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self._marathonEvent = self._marathonsCtrl.getMarathon(prefix)
 
     def viewSize(self, width, height):
         self._width = width
@@ -149,18 +128,18 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
 
     @process
     def _onRegisterFlashComponent(self, viewPy, alias):
-        if alias == VIEW_ALIAS.BROWSER:
-            url = yield self._marathonCtrl.getUrl()
-            browserID = yield self._browserCtrl.load(url=url, useBrowserWindow=False, browserID=self.__browserID, browserSize=(self._width, self._height))
-            self.__browserID = browserID
-            viewPy.init(browserID, createMarathonWebHandlers(), alias=alias)
-            browser = self._browserCtrl.getBrowser(browserID)
-            if browser is not None:
-                browser.useSpecialKeys = False
-                browser.allowRightClick = True
-                browser.skipEscape = False
-                browser.setAllowAutoLoadingScreen(showLoadingWheel=False)
-                browser.onReadyToShowContent = self.__removeLoadingScreen
+        if alias == VIEW_ALIAS.BROWSER and self._marathonEvent:
+            if self.__browserID is None:
+                url = yield self._marathonEvent.getUrl()
+                browserID = yield self._browserCtrl.load(url=url, useBrowserWindow=False, browserID=self.__browserID, browserSize=(self._width, self._height))
+                self.__browserID = browserID
+                viewPy.init(browserID, createMarathonWebHandlers(), alias=alias)
+                browser = self._browserCtrl.getBrowser(browserID)
+                if browser is not None:
+                    browser.setAllowAutoLoadingScreen(False)
+                    browser.onReadyToShowContent = self.__removeLoadingScreen
+            else:
+                LOG_ERROR('Attampt to initialize browser 2nd time!')
         return
 
     @async
@@ -172,7 +151,22 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     def _populate(self):
         super(MissionsMarathonView, self)._populate()
         Waiting.hide('loadPage')
-        BigWorld.callback(0.01, self.as_loadBrowserS)
+        self.__loadBrowserCallbackID = BigWorld.callback(0.01, self.__loadBrowser)
+
+    def _dispose(self):
+        self.__cancelLoadBrowserCallback()
+        super(MissionsMarathonView, self)._dispose()
+
+    def __cancelLoadBrowserCallback(self):
+        if self.__loadBrowserCallbackID is not None:
+            BigWorld.cancelCallback(self.__loadBrowserCallbackID)
+            self.__loadBrowserCallbackID = None
+        return
+
+    def __loadBrowser(self):
+        self.__loadBrowserCallbackID = None
+        self.as_loadBrowserS()
+        return
 
     def __removeLoadingScreen(self, url):
         browser = self._browserCtrl.getBrowser(self.__browserID)
@@ -214,6 +208,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
     def serverClick(self, eventID, serverID):
 
         def doJoin():
+            from gui.Scaleform.framework import g_entitiesFactories
             g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent('missions'), scope=EVENT_BUS_SCOPE.LOBBY)
 
         reloginCtrl = dependency.instance(IReloginController)
@@ -324,6 +319,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 
 
 class MissionsCategoriesView(_GroupedMissionsView):
+    QUESTS_COUNT_LINKEDSET_BLOCK = 1
 
     def openMissionDetailsView(self, eventID, blockID):
         if blockID == DEFAULTS_GROUPS.LINKEDSET_QUESTS:
@@ -350,16 +346,16 @@ class MissionsCategoriesView(_GroupedMissionsView):
 
     def _appendBlockDataToResult(self, result, data):
         if data.blockData.get('blockId', None) == DEFAULTS_GROUPS.LINKEDSET_QUESTS and self._getQuestFilteredCountFromBlockData(data) == 0:
-            return QUESTS_COUNT_LINKEDSET_BLOCK
+            return self.QUESTS_COUNT_LINKEDSET_BLOCK
         else:
             result.append(data.blockData)
             return
 
     def _getQuestTotalCountFromBlockData(self, data):
-        return QUESTS_COUNT_LINKEDSET_BLOCK if data.blockData.get('blockId', None) == DEFAULTS_GROUPS.LINKEDSET_QUESTS else super(MissionsCategoriesView, self)._getQuestTotalCountFromBlockData(data)
+        return self.QUESTS_COUNT_LINKEDSET_BLOCK if data.blockData.get('blockId', None) == DEFAULTS_GROUPS.LINKEDSET_QUESTS else super(MissionsCategoriesView, self)._getQuestTotalCountFromBlockData(data)
 
     def _getQuestFilteredCountFromBlockData(self, data):
-        return QUESTS_COUNT_LINKEDSET_BLOCK if data.blockData.get('blockId', None) == DEFAULTS_GROUPS.LINKEDSET_QUESTS else super(MissionsCategoriesView, self)._getQuestFilteredCountFromBlockData(data)
+        return self.QUESTS_COUNT_LINKEDSET_BLOCK if data.blockData.get('blockId', None) == DEFAULTS_GROUPS.LINKEDSET_QUESTS else super(MissionsCategoriesView, self)._getQuestFilteredCountFromBlockData(data)
 
     @staticmethod
     def _getBackground():

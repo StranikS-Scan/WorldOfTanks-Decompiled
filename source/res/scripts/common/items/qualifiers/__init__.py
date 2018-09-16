@@ -4,7 +4,7 @@ import os
 import ResMgr
 from constants import ITEM_DEFS_PATH, KNOWN_QUALIFIER_CONDITION_PARAMS
 from itertools import chain
-from debug_utils import *
+from debug_utils import LOG_ERROR, LOG_WARNING
 from ._qualifier import QUALIFIER_TYPE, parseQualifier, CREW_ROLE, QUALIFIER_TYPE_NAMES
 from soft_exception import SoftException
 _XML_FILE = os.path.join(ITEM_DEFS_PATH, 'qualifiers.xml')

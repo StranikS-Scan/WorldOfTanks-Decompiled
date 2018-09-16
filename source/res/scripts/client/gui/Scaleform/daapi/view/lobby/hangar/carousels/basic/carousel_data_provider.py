@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/carousel_data_provider.py
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider, getStatusStrings
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles
@@ -69,7 +70,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
          'smallInfoText': text_styles.concatStylesToMultiLine(smallBuyTankString, smallEmptySlotsString),
          'infoText': text_styles.concatStylesToMultiLine(buyTankString, emptySlotsString),
          'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK,
-         'tooltip': TOOLTIPS.TANKS_CAROUSEL_BUY_VEHICLE})
+         'tooltip': TOOLTIPS.TANKS_CAROUSEL_BUY_VEHICLE_NEW if isIngameShopEnabled() else TOOLTIPS.TANKS_CAROUSEL_BUY_VEHICLE})
         buySlotVO = {'buySlot': True,
          'slotPrice': slotPrice,
          'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_SLOT,

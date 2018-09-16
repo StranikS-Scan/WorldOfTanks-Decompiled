@@ -70,5 +70,4 @@ class MissionAwardWindow(MissionAwardWindowMeta):
          'conditions': None,
          'isPersonalQuest': self._award.isPersonal(),
          'availableNextQuest': self._award.isNextAvailable(),
-         'isLastQuest': self._award.isLast(),
-         'isShowOrangeBtn': self._award.isShowOrangeBtn()}
+         'isLastQuest': self._award.isLast()}

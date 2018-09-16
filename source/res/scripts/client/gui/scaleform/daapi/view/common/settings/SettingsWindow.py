@@ -24,6 +24,7 @@ from helpers import dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.lobby_context import ILobbyContext
 _PAGES = (SETTINGS.GAMETITLE,
  SETTINGS.GRAFICTITLE,
  SETTINGS.SOUNDTITLE,
@@ -54,6 +55,7 @@ def _delayCall(delay, function):
 
 class SettingsWindow(SettingsWindowMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(SettingsWindow, self).__init__()
@@ -129,6 +131,18 @@ class SettingsWindow(SettingsWindowMeta):
 
     def _populate(self):
         super(SettingsWindow, self)._populate()
+        dataVO = [{'label': SETTINGS.FEEDBACK_TAB_DAMAGEINDICATOR,
+          'linkage': VIEW_ALIAS.FEEDBACK_DAMAGE_INDICATOR},
+         {'label': SETTINGS.FEEDBACK_TAB_EVENTSINFO,
+          'linkage': VIEW_ALIAS.FEEDBACK_BATTLE_EVENTS},
+         {'label': SETTINGS.FEEDBACK_TAB_DAMAGELOGPANEL,
+          'linkage': VIEW_ALIAS.FEEDBACK_DAMAGE_LOG},
+         {'label': SETTINGS.FEEDBACK_TAB_BATTLEBORDERMAP,
+          'linkage': VIEW_ALIAS.FEEDBACK_BATTLE_BORDER_MAP}]
+        if self.lobbyContext.getServerSettings().isPMBattleProgressEnabled():
+            dataVO.append({'label': SETTINGS.FEEDBACK_TAB_QUESTSPROGRESS,
+             'linkage': VIEW_ALIAS.FEEDBACK_QUESTS_PROGRESS})
+        self.as_setFeedbackDataProviderS(dataVO)
         if self.__redefinedKeyModeEnabled:
             BigWorld.wg_setRedefineKeysMode(True)
         self.__currentSettings = self.params.getMonitorSettings()

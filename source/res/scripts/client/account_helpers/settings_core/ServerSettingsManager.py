@@ -42,6 +42,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     DAMAGE_LOG = 'FEEDBACK_DAMAGE_LOG'
     BATTLE_EVENTS = 'FEEDBACK_BATTLE_EVENTS'
     BATTLE_BORDER_MAP = 'FEEDBACK_BORDER_MAP'
+    QUESTS_PROGRESS = 'QUESTS_PROGRESS'
     ENCYCLOPEDIA_RECOMMENDATIONS_1 = 'ENCYCLOPEDIA_RECOMMENDATIONS_1'
     ENCYCLOPEDIA_RECOMMENDATIONS_2 = 'ENCYCLOPEDIA_RECOMMENDATIONS_2'
     ENCYCLOPEDIA_RECOMMENDATIONS_3 = 'ENCYCLOPEDIA_RECOMMENDATIONS_3'
@@ -52,6 +53,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
 class UI_STORAGE_KEYS(CONST_CONTAINER):
     AUTO_RELOAD_HIGHLIGHTS_COUNTER = 'auto_reload_highlights_count'
     AUTO_RELOAD_MARK_IS_SHOWN = 'auto_reload_mark_shown'
+    DISABLE_ANIMATED_TOOLTIP = 'disable_animated_tooltip'
+    FIELD_POST_HINT_IS_SHOWN = 'field_post_hint'
 
 
 class ServerSettingsManager(object):
@@ -67,6 +70,7 @@ class ServerSettingsManager(object):
     DAMAGE_LOG = settings_constants.DAMAGE_LOG
     BATTLE_EVENTS = settings_constants.BATTLE_EVENTS
     BATTLE_BORDER_MAP = settings_constants.BATTLE_BORDER_MAP
+    QUESTS_PROGRESS = settings_constants.QUESTS_PROGRESS
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -99,7 +103,7 @@ class ServerSettingsManager(object):
                                        GAME.MINIMAP_ALPHA_ENABLED: 15,
                                        GAME.HANGAR_CAM_PARALLAX_ENABLED: 16,
                                        GAME.C11N_HISTORICALLY_ACCURATE: 17}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
-                                       GAME.BATTLE_LOADING_RANKED_INFO: Offset(15, 98304),
+                                       GAME.BATTLE_LOADING_RANKED_INFO: Offset(21, 6291456),
                                        GAME.HANGAR_CAM_PERIOD: Offset(18, 1835008)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GAME.LENS_EFFECT: 1}, offsets={}),
@@ -263,8 +267,7 @@ class ServerSettingsManager(object):
                                          'HoldSheetHint': 4,
                                          'HaveNewBadgeHint': 5,
                                          'EpicReservesSlotHint': 6,
-                                         'EpicReservesBtnHint': 7,
-                                         'FootballFilterHint': 8}, offsets={}),
+                                         'EpicReservesBtnHint': 7}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESETS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -297,19 +300,23 @@ class ServerSettingsManager(object):
                                        BATTLE_EVENTS.ENEMY_ASSIST_STUN: 17}, offsets={}),
      SETTINGS_SECTIONS.BATTLE_BORDER_MAP: Section(masks={}, offsets={BATTLE_BORDER_MAP.MODE_SHOW_BORDER: Offset(0, 3),
                                            BATTLE_BORDER_MAP.TYPE_BORDER: Offset(2, 12)}),
-     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1: Section(masks={'hasNew': 15}, offsets={'item_1': Offset(0, 36863),
-                                                        'item_2': Offset(16, 2415853568L)}),
-     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2: Section(masks={}, offsets={'item_3': Offset(0, 36863),
-                                                        'item_4': Offset(16, 2415853568L)}),
-     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_3: Section(masks={}, offsets={'item_5': Offset(0, 36863),
-                                                        'item_6': Offset(16, 2415853568L)}),
-     SETTINGS_SECTIONS.UI_STORAGE: Section(masks={PM_TUTOR_FIELDS.ONE_FAL_SHOWN: 7,
+     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1: Section(masks={'hasNew': 15}, offsets={'item_1': Offset(0, 32767),
+                                                        'item_2': Offset(16, 2147418112)}),
+     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2: Section(masks={}, offsets={'item_3': Offset(0, 32767),
+                                                        'item_4': Offset(16, 2147418112)}),
+     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_3: Section(masks={}, offsets={'item_5': Offset(0, 32767),
+                                                        'item_6': Offset(16, 2147418112)}),
+     SETTINGS_SECTIONS.UI_STORAGE: Section(masks={PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN: 0,
+                                    PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: 1,
+                                    PM_TUTOR_FIELDS.ONE_FAL_SHOWN: 7,
                                     PM_TUTOR_FIELDS.FOUR_FAL_SHOWN: 8,
                                     UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: 9,
-                                    'disable_animated_tooltip': 10}, offsets={PM_TUTOR_FIELDS.FIRST_ENTRY_STATE: Offset(0, 3),
-                                    PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
+                                    UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP: 13,
+                                    UI_STORAGE_KEYS.FIELD_POST_HINT_IS_SHOWN: 14}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168)}),
-     SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)})}
+     SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
+                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -388,12 +395,6 @@ class ServerSettingsManager(object):
         if key in storageSection:
             self.saveInUIStorage({key: storageSection[key] + step})
 
-    def getPersonalMissionsFirstEntryState(self):
-        return self.getUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_STATE: 0})[PM_TUTOR_FIELDS.FIRST_ENTRY_STATE]
-
-    def setPersonalMissionsFirstEntryState(self, value):
-        return self.saveInUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_STATE: value})
-
     def getHasNewEncyclopediaRecommendations(self):
         return self.getSectionSettings(SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, 'hasNew')
 
@@ -408,6 +409,9 @@ class ServerSettingsManager(object):
         mask = self._getMaskForLinkedSetQuest(questID, missionID)
         newValue = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown', 0) | mask
         return self.setSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, {'shown': newValue})
+
+    def setQuestProgressSettings(self, settings):
+        self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)
 
     def _getMaskForLinkedSetQuest(self, questID, missionID):
         return 1 << questID - 1 + (missionID - 1) * 10
@@ -586,6 +590,7 @@ class ServerSettingsManager(object):
          'feedbackDamageLog': {},
          'feedbackBattleEvents': {},
          'onceOnlyHints': {},
+         'uiStorage': {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -643,6 +648,10 @@ class ServerSettingsManager(object):
         clearOnceOnlyHints = clear.get('onceOnlyHints', 0)
         if onceOnlyHints or clearOnceOnlyHints:
             settings[SETTINGS_SECTIONS.ONCE_ONLY_HINTS] = self._buildSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, onceOnlyHints) ^ clearOnceOnlyHints
+        uiStorage = data.get('uiStorage', {})
+        clearUIStorage = clear.get('uiStorage', 0)
+        if uiStorage or clearUIStorage:
+            settings[SETTINGS_SECTIONS.UI_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.UI_STORAGE, uiStorage) ^ clearUIStorage
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

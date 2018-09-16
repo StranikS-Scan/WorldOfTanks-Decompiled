@@ -354,11 +354,6 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         self.__identifySPG()
         self.__constructComponents()
 
-    def resetDirectionFootball(self):
-        self.onControlModeChanged('arcade', force=True)
-        arcadeMode = self.__ctrls['arcade']
-        arcadeMode.camera.setToVehicleDirectionFootball()
-
     def setKillerVehicleID(self, killerVehicleID):
         self.__killerVehicleID = killerVehicleID
 
@@ -452,8 +447,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
     def onControlModeChanged(self, eMode, **args):
         if self.steadyVehicleMatrixCalculator is not None:
             self.steadyVehicleMatrixCalculator.relinkSources()
-        force = args.get('force', False)
-        if not self.__isArenaStarted and eMode != _CTRL_MODE.POSTMORTEM and not force:
+        if not self.__isArenaStarted and eMode != _CTRL_MODE.POSTMORTEM:
             return
         else:
             player = BigWorld.player()

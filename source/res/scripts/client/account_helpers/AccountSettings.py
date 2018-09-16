@@ -51,7 +51,6 @@ FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
-LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
@@ -75,6 +74,7 @@ LAST_BADGES_VISIT = 'lastBadgesVisit'
 ENABLE_RANKED_ANIMATIONS = 'enableRankedAnimations'
 COLOR_SETTINGS_TAB_IDX = 'colorSettingsTabIdx'
 COLOR_SETTINGS_SHOWS_COUNT = 'colorSettingsShowsCount'
+QUEST_PROGRESS_SHOWS_COUNT = 'questProgressShowsCount'
 APPLIED_COLOR_SETTINGS = 'appliedColorSettings'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
@@ -421,7 +421,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'personalMissions': {'introShown': False,
                                                 'operationsVisited': set(),
                                                 'headerAlert': False}},
-                'checkBoxConfirmator': {'questsConfirmDialogShow': True},
+                'checkBoxConfirmator': {'questsConfirmDialogShow': True,
+                                        'questsConfirmDialogShowPM2': True},
                 'customization': {},
                 'showVehModelsOnMap': 0,
                 'battleLoadingInfo': 1,
@@ -439,7 +440,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'PveTriggerShown': False,
                 'isEpicPerformanceWarningClicked': False,
                 LAST_PROMO_PATCH_VERSION: '',
-                LAST_CALENDAR_SHOW_TIMESTAMP: '',
                 LAST_RESTORE_NOTIFICATION: None,
                 'dynamicRange': 0,
                 'soundDevice': 0,
@@ -463,7 +463,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                                                        'TERRAIN_TESSELLATION_ENABLED': True,
                                                                                        'SNIPER_MODE_TERRAIN_TESSELLATION_ENABLED': True}},
                                        'FeedbackSettings': {'feedbackBattleBorderMap': {'battleBorderMapType': True,
-                                                                                        'battleBorderMapMode': True}}},
+                                                                                        'battleBorderMapMode': True},
+                                                            'feedbackQuestsProgress': {'progressViewType': True,
+                                                                                       'progressViewConditions': True}},
+                                       'ControlsSettings': {'showQuestProgress': True}},
                 TRAJECTORY_VIEW_HINT_COUNTER: 10,
                 SHOW_OPT_DEVICE_HINT: True,
                 'c11nHistoricallyAccurate': True,
@@ -471,6 +474,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 ENABLE_RANKED_ANIMATIONS: True,
                 COLOR_SETTINGS_TAB_IDX: 0,
                 COLOR_SETTINGS_SHOWS_COUNT: 0,
+                QUEST_PROGRESS_SHOWS_COUNT: 6,
                 APPLIED_COLOR_SETTINGS: {}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
@@ -513,7 +517,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 35
+    version = 37
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -884,6 +888,31 @@ class AccountSettings(object):
                 SoundGroups.g_instance.savePreferences()
             if currVersion < 35:
                 AccountSettings.settingsCore.applySetting('loginServerSelection', False)
+            if currVersion < 36:
+                from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import LobbyHeader
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings.__readSection(section, KEY_COUNTERS)
+                    if NEW_LOBBY_TAB_COUNTER in accSettings.keys():
+                        counters = _unpack(accSettings[NEW_LOBBY_TAB_COUNTER].asString)
+                        if LobbyHeader.TABS.PERSONAL_MISSIONS in counters:
+                            counters[LobbyHeader.TABS.PERSONAL_MISSIONS] = True
+                            accSettings.write(NEW_LOBBY_TAB_COUNTER, _pack(counters))
+
+            if currVersion < 37:
+                cmSection = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
+                for command, section in cmSection.items()[:]:
+                    newSection = None
+                    satelliteKeys = ''
+                    fireKey = AccountSettings.__readSection(section, 'fireKey').asString
+                    if fireKey == 'KEY_N':
+                        if command == 'CMD_QUEST_PROGRESS_SHOW':
+                            pass
+                        else:
+                            newSection = cmSection.createSection('CMD_QUEST_PROGRESS_SHOW')
+                    if newSection is not None:
+                        newSection.writeString('fireKey', 'KEY_NONE')
+
+                CommandMapping.g_instance.restoreUserConfig()
             ads.writeInt('version', AccountSettings.version)
         return
 

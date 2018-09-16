@@ -26,7 +26,7 @@ _YEAR = 31556926
 MAX_BONUS_LIMIT = 1000000
 
 class XMLNode(object):
-    __slots__ = ('name', 'value', 'questClientConditions', 'relatedGroup', 'info', 'bonus', 'bonusDelayed', 'groupContent')
+    __slots__ = ('name', 'value', 'questClientConditions', 'relatedGroup', 'info', 'bonus', 'bonusDelayed', 'groupContent', 'scripts')
 
     def __init__(self, name=''):
         self.name = intern(name)
@@ -37,6 +37,7 @@ class XMLNode(object):
         self.bonus = {}
         self.bonusDelayed = {}
         self.groupContent = None
+        self.scripts = ''
         return
 
     def __repr__(self):
@@ -176,6 +177,8 @@ class Source(object):
                     raise SoftException('tokenQuest: daily should be used with bonusLimit tag')
             mainNode.bonus = walkBonuses(readBonusSection(availableBonuses, questSection['bonus'], eventType), FilterVisitor(eventType))
             mainNode.bonusDelayed = walkBonuses(readBonusSection(availableBonuses, questSection['bonusDelayed'], eventType), FilterVisitor(eventType))
+            if eventType in (EVENT_TYPE.NT_QUEST, EVENT_TYPE.POTAPOV_QUEST):
+                mainNode.scripts = questSection['scripts'].asString if questSection.has_key('scripts') else ''
             questClientData = dict(info)
             questClientData['bonus'] = deepcopy(mainNode.bonus)
             if mainNode.bonusDelayed is not None:
@@ -520,6 +523,9 @@ class Source(object):
             if name in ('hideInGui',):
                 node.questClientConditions.append((name, True))
                 continue
+            if name in ('progressID',):
+                node.questClientConditions.append((name, sub.readString('', '')))
+                continue
             subNode = XMLNode(name)
             if name in ('greater', 'equal', 'less', 'lessOrEqual', 'greaterOrEqual'):
                 subNode.relatedGroup = intern('operator')
@@ -533,6 +539,9 @@ class Source(object):
                 continue
             if name in ('hideInGui',):
                 node.questClientConditions.append((name, True))
+                continue
+            if name in ('progressID',):
+                node.questClientConditions.append((name, sub.readString('', '')))
                 continue
             node.addChild(True)
 
@@ -577,7 +586,7 @@ class Source(object):
 
     def __readCondition_keyResults(self, _, section, node):
         name = section.asString
-        if name not in battle_results_shared.VEH_BASE_RESULTS.names() and name not in battle_results_shared.COMMON_RESULTS.names() and name not in battle_results_shared.VEH_FULL_RESULTS.names() and name not in battle_results_shared.AVATAR_BASE_RESULTS.names() and name not in battle_results_shared.AVATAR_FULL_RESULTS.names():
+        if name not in battle_results_shared.VEH_BASE_RESULTS.names() and name not in battle_results_shared.COMMON_RESULTS.names() and name not in battle_results_shared.VEH_FULL_RESULTS.names() and name not in battle_results_shared.AVATAR_BASE_RESULTS.names() and name not in battle_results_shared.AVATAR_FULL_RESULTS.names() and name != 'addQuestCompleted':
             raise SoftException("Unsupported battle result variable '%s'" % name)
         node.addChild(name)
 

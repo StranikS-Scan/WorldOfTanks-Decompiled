@@ -1,15 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/vehicles.py
 from constants import DEATH_REASON_ALIVE
-from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.battle_results.components import base, shared, style, common
 from gui.battle_results.components.base import PropertyValue
 from gui.battle_results.components.personal import fillKillerInfoBlock
 from gui.battle_results.reusable import sort_keys
-from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
+from gui.shared.formatters import text_styles
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
@@ -622,79 +622,3 @@ class RankedResultsListItemStatsBlock(base.StatsBlock):
         if self.settingsCore.getSetting('isColorBlind') and standoff == RANKEDBATTLES_ALIASES.STANDOFF_MINUS:
             standoff = RANKEDBATTLES_ALIASES.STANDOFF_MINUS_BLIND
         self.standoff = standoff
-
-
-class FootballVehicleStatsBlock(RegularVehicleStatsBlock):
-    __slots__ = ('goals', 'goalsStr', 'assists')
-
-    def setRecord(self, result, reusable):
-        super(FootballVehicleStatsBlock, self).setRecord(result, reusable)
-        self.goals = result.goals - result.selfGoals
-        self.goalsStr = style.getIntegralFormatIfNoEmpty(result.goals) if result.selfGoals < 1 else '{}  {}'.format(style.getIntegralFormatIfNoEmpty(result.goals), style.markValueAsError(result.selfGoals))
-        self.assists = result.assists
-
-
-class FootballVehicleStatValuesBlock(RegularVehicleStatValuesBlock):
-    __slots__ = ('_isPersonal', 'shots', 'goals', 'selfGoals', 'assists', 'steals', 'productivityPoints')
-    lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def setRecord(self, result, reusable):
-        self.shots = style.getIntegralFormatIfNoEmpty(result.shots)
-        self.hits = (result.directHits, result.piercings)
-        self.explosionHits = style.getIntegralFormatIfNoEmpty(result.explosionHits)
-        self.damageDealt = style.getIntegralFormatIfNoEmpty(result.damageDealt)
-        self.directHitsReceived = style.getIntegralFormatIfNoEmpty(result.directHitsReceived)
-        self.piercingsReceived = style.getIntegralFormatIfNoEmpty(result.piercingsReceived)
-        self.explosionHitsReceived = style.getIntegralFormatIfNoEmpty(result.explosionHitsReceived)
-        self.goals = style.getIntegralFormatIfNoEmpty(result.goals)
-        self.selfGoals = style.getIntegralFormatIfNoEmpty(result.selfGoals)
-        self.assists = style.getIntegralFormatIfNoEmpty(result.assists)
-        self.steals = style.getIntegralFormatIfNoEmpty(result.steals)
-        self.productivityPoints = style.getIntegralFormatIfNoEmpty(result.productivityPoints)
-
-    def getVO(self):
-        vo = []
-        for component in self._components:
-            field = component.getField()
-            if field not in self.__slots__:
-                continue
-            value = component.getVO()
-            if self._isPersonal and field in _STAT_VALUES_VO_REPLACER:
-                field = _STAT_VALUES_VO_REPLACER[field]
-            vo.append(style.makeStatValue(field, value))
-
-        return vo
-
-
-class AllFootballVehicleStatValuesBlock(base.StatsBlock):
-    __slots__ = ()
-
-    def setRecord(self, result, reusable):
-        if result:
-            isPersonal, iterator = result
-            add = self.addNextComponent
-            for vehicle in iterator:
-                block = FootballVehicleStatValuesBlock()
-                block.setPersonal(isPersonal)
-                block.setRecord(vehicle, reusable)
-                add(block)
-
-
-class PersonalVehiclesFootballStatsBlock(base.StatsBlock):
-    __slots__ = ()
-
-    def setRecord(self, result, reusable):
-        info = reusable.getPersonalVehiclesInfo(result)
-        add = self.addNextComponent
-        for data in info.getVehiclesIterator():
-            block = FootballVehicleStatValuesBlock()
-            block.setPersonal(True)
-            block.setRecord(data, reusable)
-            add(block)
-
-
-class FootballTeamStatsBlock(TeamStatsBlock):
-    __slots__ = ()
-
-    def __init__(self, meta=None, field='', *path):
-        super(FootballTeamStatsBlock, self).__init__(FootballVehicleStatsBlock, meta, field, *path)

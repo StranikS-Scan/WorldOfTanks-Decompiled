@@ -25,7 +25,6 @@ from items.components.c11n_constants import SeasonType
 from items.vehicles import VEHICLE_CLASS_TAGS
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
-from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
@@ -97,16 +96,16 @@ class ElementTooltip(BlocksTooltipData):
         self._setMargins(afterBlock=14)
         self._setWidth(387)
         self._item = None
-        self._hideInventory = False
+        self._isShowPrice = True
         self._specialArgs = None
         return
 
     def _packBlocks(self, *args):
-        itemIntCD = first(args)
+        itemIntCD = int(args[0])
         if len(args) > 1:
-            self._hideInventory = args[1]
+            self._isShowPrice = args[1]
         else:
-            self._hideInventory = False
+            self._isShowPrice = True
         if len(args) > 2:
             self._specialArgs = args[2]
         else:
@@ -121,7 +120,7 @@ class ElementTooltip(BlocksTooltipData):
         if self._item.itemTypeID != GUI_ITEM_TYPE.STYLE:
             bonus = self._item.bonus
         else:
-            for container in (self._item.getOutfit(season).hull for season in SeasonType.SEASONS):
+            for container in (self._item.getOutfit(season).hull for season in SeasonType.SEASONS if self._item.getOutfit(season)):
                 camo = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem()
                 if camo and camo.bonus:
                     bonus = camo.bonus
@@ -134,7 +133,7 @@ class ElementTooltip(BlocksTooltipData):
             items.append(self._packBonusBlock(bonus, camo, self._item.itemTypeID == GUI_ITEM_TYPE.STYLE))
         if not self._item.isHistorical() or self._item.fullDescription:
             items.append(self._packDescriptionBlock())
-        if not self._hideInventory:
+        if self._isShowPrice:
             items.append(self._packInventoryBlock())
         if not self._item.isUnlocked:
             items.append(self._packLockedBlock())

@@ -36,16 +36,12 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.server_events import IEventsCache
-import WWISE
 TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
  ('mediumTank', ITEM_TYPES.VEHICLE_TAGS_MEDIUM_TANK_NAME),
  ('lightTank', ITEM_TYPES.VEHICLE_TAGS_LIGHT_TANK_NAME),
  ('AT-SPG', ITEM_TYPES.VEHICLE_TAGS_AT_SPG_NAME),
  ('SPG', ITEM_TYPES.VEHICLE_TAGS_SPG_NAME))
-EVENT_TYPES_ORDERED = (('heavyTank', FOOTBALL2018.SPORT_ROLE_DEFENDER, 'defender'), ('mediumTank', FOOTBALL2018.SPORT_ROLE_MIDFIELDER, 'midfielder'), ('lightTank', FOOTBALL2018.SPORT_ROLE_STRIKER, 'striker'))
 _LONG_WAITING_LEVELS = (9, 10)
 _HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
 
@@ -164,26 +160,7 @@ class _EpicQueueProvider(_RandomQueueProvider):
 
 
 class _EventQueueProvider(_RandomQueueProvider):
-
-    def processQueueInfo(self, qInfo):
-        info = dict(qInfo)
-        if 'classes' in info:
-            vClasses = info['classes']
-            vClassesLen = len(vClasses)
-        else:
-            vClasses = []
-            vClassesLen = 0
-        self._proxy.flashObject.as_setPlayers(makeHtmlString(_HTMLTEMP_PLAYERSLABEL, 'players', {'count': sum(vClasses)}))
-        if vClassesLen:
-            vClassesData = []
-            for vClass, message, footballRole in EVENT_TYPES_ORDERED:
-                idx = constants.VEHICLE_CLASS_INDICES[vClass]
-                vClassesData.append({'type': message,
-                 'icon': _getVehicleIconPath(footballRole),
-                 'count': vClasses[idx] if idx < vClassesLen else 0})
-
-            self._proxy.as_setDPS(vClassesData)
-        self._proxy.as_showStartS(self._isStartButtonDisplayed(vClasses))
+    pass
 
 
 class _RankedQueueProvider(_RandomQueueProvider):
@@ -201,7 +178,6 @@ def _providerFactory(proxy, qType):
 
 class BattleQueue(BattleQueueMeta, LobbySubView):
     __sound_env__ = BattleQueueEnv
-    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, ctx=None):
         super(BattleQueue, self).__init__()
@@ -237,8 +213,6 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.__updateTimer()
         self.__updateClientState()
         MusicControllerWWISE.play()
-        if self.eventsCache.isEventEnabled():
-            WWISE.WW_setState('STATE_ext_football_music', 'STATE_ext_football_music_lobby')
 
     def _dispose(self):
         self.__stopUpdateScreen()
@@ -259,27 +233,16 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
                 iconlabel = constants.ARENA_GUI_TYPE_LABEL.LABELS[guiType]
             else:
                 iconlabel = 'neutral'
-            vehicle = g_currentVehicle.item
-            subtitle = None
-            if guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES:
-                subtitle = FOOTBALL2018.BATTLEQUEUE_SUBTITLE
-                footballRole = self.__getFootballRole(vehicle)
-                if footballRole is not None:
-                    vehType = footballRole
-                else:
-                    vehType = vehicle.type
-            else:
-                vehType = vehicle.type
             if self.__provider.needAdditionalInfo():
                 additional = self.__provider.additionalInfo()
             else:
                 additional = ''
+            vehicle = g_currentVehicle.item
             textLabel = self.__provider.getTankInfoLabel()
             tankName = vehicle.shortUserName
-            iconPath = _getVehicleIconPath(vehType)
+            iconPath = _getVehicleIconPath(vehicle.type)
             self.as_setTypeInfoS({'iconLabel': iconlabel,
              'title': title,
-             'subtitle': subtitle,
              'description': description,
              'additional': additional,
              'tankLabel': text_styles.main(textLabel),
@@ -306,29 +269,18 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             return
 
     def __updateTimer(self):
-        if self.prbEntity is None:
-            return
-        else:
-            self.__timerCallback = None
-            self.__timerCallback = BigWorld.callback(1, self.__updateTimer)
-            textLabel = text_styles.main(makeString(MENU.PREBATTLE_TIMERLABEL))
-            timeLabel = '%d:%02d' % divmod(self.__createTime, 60)
-            if self.__provider.needAdditionalInfo():
-                timeLabel = text_styles.concatStylesToSingleLine(timeLabel, '*')
-            self.as_setTimerS(textLabel, timeLabel)
-            self.__createTime += 1
-            return
+        self.__timerCallback = None
+        self.__timerCallback = BigWorld.callback(1, self.__updateTimer)
+        textLabel = text_styles.main(makeString(MENU.PREBATTLE_TIMERLABEL))
+        timeLabel = '%d:%02d' % divmod(self.__createTime, 60)
+        if self.__provider is not None and self.__provider.needAdditionalInfo():
+            timeLabel = text_styles.concatStylesToSingleLine(timeLabel, '*')
+        self.as_setTimerS(textLabel, timeLabel)
+        self.__createTime += 1
+        return
 
     def _getProvider(self):
         return self.__provider
-
-    def __getFootballRole(self, vehicle):
-        if vehicle.isFootballStriker:
-            return 'striker'
-        elif vehicle.isFootballMidfielder:
-            return 'midfielder'
-        else:
-            return 'defender' if vehicle.isFootballDefender else None
 
 
 class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmblemsHelper, IGlobalListener):
@@ -372,7 +324,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         self.__showBattleRoom()
 
     def onUnitFlagsChanged(self, flags, timeLeft):
-        if not self.prbEntity.hasLockedState():
+        if not self.prbEntity.canShowStrongholdsBattleQueue():
             self.__showBattleRoom()
 
     def onUpdateHeader(self, header, isFirstBattle, isUnitFreezed):

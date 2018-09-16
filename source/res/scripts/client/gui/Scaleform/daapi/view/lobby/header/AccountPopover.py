@@ -5,9 +5,11 @@ from adisp import process
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, BOOSTERS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.AccountPopoverMeta import AccountPopoverMeta
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -21,6 +23,7 @@ from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showStorage
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -55,7 +58,12 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
 
     def openBoostersWindow(self, idx):
         slotID = self.components.get(VIEW_ALIAS.BOOSTERS_PANEL).getBoosterSlotID(idx)
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW, ctx={'slotID': slotID}), EVENT_BUS_SCOPE.LOBBY)
+        settings = self.lobbyContext.getServerSettings()
+        shouldOpenStorage = isIngameShopEnabled() and settings.isIngameStorageEnabled()
+        if shouldOpenStorage:
+            showStorage(defaultSection=STORAGE_CONSTANTS.PERSONAL_RESERVES)
+        else:
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW, ctx={'slotID': slotID}), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
 
     def openClanStatistic(self):
@@ -91,8 +99,7 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         else:
             if self.__tutorStorage is not None:
                 self.__tutorStorage.setValue(HAVE_NEW_BADGE, False)
-            from gui.shared import g_eventBus
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BADGES_PAGE, ctx={}), scope=EVENT_BUS_SCOPE.LOBBY)
+            shared_events.showBadges()
             self.destroy()
             return
 

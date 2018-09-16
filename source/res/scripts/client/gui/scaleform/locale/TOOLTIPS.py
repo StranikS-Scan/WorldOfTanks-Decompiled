@@ -10,6 +10,9 @@ class TOOLTIPS(object):
     BARRACKS_TANKMEN_DISMISS = '#tooltips:barracks/tankmen/dismiss'
     TANKS_CAROUSEL_BUY_SLOT = '#tooltips:tanks_carousel/buy_slot'
     TANKS_CAROUSEL_BUY_VEHICLE = '#tooltips:tanks_carousel/buy_vehicle'
+    TANKS_CAROUSEL_BUY_VEHICLE_NEW = '#tooltips:tanks_carousel/buy_vehicle_new'
+    VEHICLEPREVIEW_MODULSNOMODULES = '#tooltips:vehiclePreview/modulsnoModules'
+    VEHICLEPREVIEW_MODULS = '#tooltips:vehiclePreview/moduls'
     BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN = '#tooltips:battleResults/FortResource/resultsShareBtn'
     PRIVATEQUESTS_AWARDSBUTTON = '#tooltips:privateQuests/awardsButton'
     PRIVATEQUESTS_BACKBUTTON = '#tooltips:privateQuests/backButton'
@@ -23,7 +26,6 @@ class TOOLTIPS(object):
     SQUADWINDOW_DOMINATION_VEHICLESINFOICON = '#tooltips:squadWindow/domination/vehiclesInfoIcon'
     LOBBYMENU_VERSIONINFOBUTTON = '#tooltips:lobbyMenu/versionInfoButton'
     CYBERSPORT_ROSTERSLOTSETTINGS_HEADERTEXT = '#tooltips:cyberSport/rosterSlotSettings/headerText'
-    HANGAR_UNLOCKBUTTON = '#tooltips:hangar/unlockButton'
     HANGAR_AMMO_PANEL_DEVICE_EMPTY = '#tooltips:hangar/ammo_panel/device/empty'
     HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY = '#tooltips:hangar/ammo_panel/equipment/empty'
     HANGAR_AMMO_PANEL_BATTLEBOOSTER_EMPTY = '#tooltips:hangar/ammo_panel/battleBooster/empty'
@@ -39,12 +41,16 @@ class TOOLTIPS(object):
     HEADER_INFO_PLAYERS_ONLINE_FULL = '#tooltips:header/info/players_online_full'
     HEADER_BUTTONS_HANGAR = '#tooltips:header/buttons/hangar'
     HEADER_BUTTONS_SHOP = '#tooltips:header/buttons/shop'
+    HEADER_BUTTONS_SHOP2 = '#tooltips:header/buttons/shop2'
+    HEADER_BUTTONS_STORAGE = '#tooltips:header/buttons/storage'
     HEADER_BUTTONS_PROFILE = '#tooltips:header/buttons/profile'
     HEADER_BUTTONS_TECHTREE = '#tooltips:header/buttons/techtree'
     HEADER_BUTTONS_BARRACKS = '#tooltips:header/buttons/barracks'
     HEADER_BUTTONS_FORTS = '#tooltips:header/buttons/forts'
     HEADER_BUTTONS_FORTS_TURNEDOFF = '#tooltips:header/buttons/forts/turnedOff'
     HEADER_BUTTONS_FORTS_SANDBOX_TURNEDOFF = '#tooltips:header/buttons/forts/sandbox/turnedOff'
+    HEADER_BUTTONS_CLANS = '#tooltips:header/buttons/clans'
+    HEADER_BUTTONS_CLANS_TURNEDOFF = '#tooltips:header/buttons/clans/turnedOff'
     HEADER_BUTTONS_BROWSER = '#tooltips:header/buttons/browser'
     HEADER_BUTTONS_ENCYCLOPEDIA = '#tooltips:header/buttons/encyclopedia'
     HEADER_BUTTONS_MANUAL = '#tooltips:header/buttons/manual'
@@ -109,11 +115,23 @@ class TOOLTIPS(object):
     NOTIFICATIONSVIEW_TAB_INFO = '#tooltips:notificationsView/tab/info'
     NOTIFICATIONSVIEW_TAB_INVITES = '#tooltips:notificationsView/tab/invites'
     NOTIFICATIONSVIEW_TAB_OFFERS = '#tooltips:notificationsView/tab/offers'
-    HANGAR_HEADER_PERSONALQUESTS_DISABLED = '#tooltips:hangar/header/personalQuests/disabled'
-    HANGAR_HEADER_PERSONALQUESTS_UNAVAILABLE = '#tooltips:hangar/header/personalQuests/unavailable'
-    HANGAR_HEADER_PERSONALQUESTS_COMPLETED = '#tooltips:hangar/header/personalQuests/completed'
-    HANGAR_HEADER_PERSONALQUESTS_AVAILABLE = '#tooltips:hangar/header/personalQuests/available'
-    HANGAR_HEADER_PERSONALQUESTS_DONE = '#tooltips:hangar/header/personalQuests/done'
+    HANGAR_HEADER_PERSONALMISSIONS_NOVEHICLE = '#tooltips:hangar/header/personalMissions/noVehicle'
+    HANGAR_HEADER_PERSONALMISSIONS2_NOVEHICLE = '#tooltips:hangar/header/personalMissions2/noVehicle'
+    HANGAR_HEADER_PERSONALMISSIONS_DISABLEDALL = '#tooltips:hangar/header/personalMissions/disabledAll'
+    HANGAR_HEADER_PERSONALMISSIONS_COMPLETEDLOCKEDNEXT = '#tooltips:hangar/header/personalMissions/completedLockedNext'
+    HANGAR_HEADER_PERSONALMISSIONS2_COMPLETEDLOCKEDNEXT = '#tooltips:hangar/header/personalMissions2/completedLockedNext'
+    HANGAR_HEADER_PERSONALMISSIONS_DONELOCKEDNEXT = '#tooltips:hangar/header/personalMissions/doneLockedNext'
+    HANGAR_HEADER_PERSONALMISSIONS2_DONELOCKEDNEXT = '#tooltips:hangar/header/personalMissions2/doneLockedNext'
+    HANGAR_HEADER_PERSONALMISSIONS2_UNAVAILABLEFULL = '#tooltips:hangar/header/personalMissions2/unavailableFull'
+    HANGAR_HEADER_PERSONALMISSIONS_COMPLETED = '#tooltips:hangar/header/personalMissions/completed'
+    HANGAR_HEADER_PERSONALMISSIONS_AVAILABLE = '#tooltips:hangar/header/personalMissions/available'
+    HANGAR_HEADER_PERSONALMISSIONS_LOWLEVEL = '#tooltips:hangar/header/personalMissions/lowLevel'
+    HANGAR_HEADER_PERSONALMISSIONS_DONE = '#tooltips:hangar/header/personalMissions/done'
+    HANGAR_HEADER_PERSONALMISSIONS2_DONE = '#tooltips:hangar/header/personalMissions2/done'
+    HANGAR_HEADER_PERSONALMISSIONS_DONEALL = '#tooltips:hangar/header/personalMissions/doneAll'
+    HANGAR_HEADER_PERSONALMISSIONS_BRANCH_DISABLED = '#tooltips:hangar/header/personalMissions/branch_disabled'
+    HANGAR_HEADER_PERSONALMISSIONS_OPERATION_DISABLED = '#tooltips:hangar/header/personalMissions/operation_disabled'
+    HANGAR_HEADER_PERSONALMISSIONS_MISSION_DISABLED = '#tooltips:hangar/header/personalMissions/mission_disabled'
     MARATHON_OFF = '#tooltips:marathon/off'
     MISSIONS_VEHICLE_SELECTOR_LIST = '#tooltips:missions/vehicle_selector/list'
     MISSIONS_VEHICLE_SELECTOR_SELECT = '#tooltips:missions/vehicle_selector/select'
@@ -131,6 +149,10 @@ class TOOLTIPS(object):
     ELEN_BUTTON_REGISTRATION_NOTSTARTED = '#tooltips:elen/button/registration/notStarted'
     CUSTOMIZATION_NONHISTORICINDICATOR = '#tooltips:customization/nonHistoricIndicator'
     RANKEDBATTLEVIEW_SCOREPOINT = '#tooltips:rankedBattleView/scorePoint'
+    STORAGE_MAINMENU_FOR_SELL = '#tooltips:storage/mainMenu/for_sell'
+    STORAGE_MAINMENU_STORAGE = '#tooltips:storage/mainMenu/storage'
+    STORAGE_MAINMENU_IN_HANGAR = '#tooltips:storage/mainMenu/in_hangar'
+    STORAGE_MAINMENU_PERSONAL_RESERVES = '#tooltips:storage/mainMenu/personal_reserves'
     TEMPLATE_DAYS_SHORT = '#tooltips:template/days/short'
     TEMPLATE_DAYS_VALUE = '#tooltips:template/days/value'
     TEMPLATE_HOURS_SHORT = '#tooltips:template/hours/short'
@@ -768,6 +790,8 @@ class TOOLTIPS(object):
     BATTLEBOOSTER_REPLACE = '#tooltips:battleBooster/replace'
     TANKS_CAROUSEL_BUY_VEHICLE_HEADER = '#tooltips:tanks_carousel/buy_vehicle/header'
     TANKS_CAROUSEL_BUY_VEHICLE_BODY = '#tooltips:tanks_carousel/buy_vehicle/body'
+    TANKS_CAROUSEL_BUY_VEHICLE_NEW_HEADER = '#tooltips:tanks_carousel/buy_vehicle_new/header'
+    TANKS_CAROUSEL_BUY_VEHICLE_NEW_BODY = '#tooltips:tanks_carousel/buy_vehicle_new/body'
     TANKS_CAROUSEL_BUY_SLOT_HEADER = '#tooltips:tanks_carousel/buy_slot/header'
     TANKS_CAROUSEL_BUY_SLOT_BODY = '#tooltips:tanks_carousel/buy_slot/body'
     TANKS_CAROUSEL_VEHICLESTATES_BATTLE = '#tooltips:tanks_carousel/vehicleStates/battle'
@@ -831,6 +855,8 @@ class TOOLTIPS(object):
     BARRACKS_TANKMEN_RECOVERY_FREE_BODY = '#tooltips:barracks/tankmen/recovery/free/body'
     BARRACKS_TANKMEN_RECOVERY_GOLD_BODY = '#tooltips:barracks/tankmen/recovery/gold/body'
     BARRACKS_PLACESCOUNT_DISMISS_HEADER = '#tooltips:barracks/placesCount/dismiss/header'
+    CREW_HEADER = '#tooltips:crew/header'
+    CREW_BODY = '#tooltips:crew/body'
     CREW_LOCK_HEADER = '#tooltips:crew/lock/header'
     CREW_LOCK_BODY = '#tooltips:crew/lock/body'
     BARRACKS_PLACESCOUNT_DISMISS_BODY = '#tooltips:barracks/placesCount/dismiss/body'
@@ -850,6 +876,10 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_INVENTORY_BODY = '#tooltips:header/buttons/inventory/body'
     HEADER_BUTTONS_SHOP_HEADER = '#tooltips:header/buttons/shop/header'
     HEADER_BUTTONS_SHOP_BODY = '#tooltips:header/buttons/shop/body'
+    HEADER_BUTTONS_SHOP2_HEADER = '#tooltips:header/buttons/shop2/header'
+    HEADER_BUTTONS_SHOP2_BODY = '#tooltips:header/buttons/shop2/body'
+    HEADER_BUTTONS_STORAGE_HEADER = '#tooltips:header/buttons/storage/header'
+    HEADER_BUTTONS_STORAGE_BODY = '#tooltips:header/buttons/storage/body'
     HEADER_BUTTONS_PROFILE_HEADER = '#tooltips:header/buttons/profile/header'
     HEADER_BUTTONS_PROFILE_BODY = '#tooltips:header/buttons/profile/body'
     HEADER_BUTTONS_TECHTREE_HEADER = '#tooltips:header/buttons/techtree/header'
@@ -858,6 +888,8 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_BARRACKS_BODY = '#tooltips:header/buttons/barracks/body'
     HEADER_BUTTONS_FORTS_HEADER = '#tooltips:header/buttons/forts/header'
     HEADER_BUTTONS_FORTS_BODY = '#tooltips:header/buttons/forts/body'
+    HEADER_BUTTONS_CLANS_HEADER = '#tooltips:header/buttons/clans/header'
+    HEADER_BUTTONS_CLANS_BODY = '#tooltips:header/buttons/clans/body'
     HEADER_BUTTONS_BROWSER_HEADER = '#tooltips:header/buttons/browser/header'
     HEADER_BUTTONS_BROWSER_BODY = '#tooltips:header/buttons/browser/body'
     HEADER_BUTTONS_ENCYCLOPEDIA_HEADER = '#tooltips:header/buttons/encyclopedia/header'
@@ -870,6 +902,8 @@ class TOOLTIPS(object):
     BARRACKS_ITEM_BUY_BODY = '#tooltips:barracks/item_buy/body'
     HEADER_BUTTONS_FORTS_TURNEDOFF_HEADER = '#tooltips:header/buttons/forts/turnedOff/header'
     HEADER_BUTTONS_FORTS_TURNEDOFF_BODY = '#tooltips:header/buttons/forts/turnedOff/body'
+    HEADER_BUTTONS_CLANS_TURNEDOFF_HEADER = '#tooltips:header/buttons/clans/turnedOff/header'
+    HEADER_BUTTONS_CLANS_TURNEDOFF_BODY = '#tooltips:header/buttons/clans/turnedOff/body'
     HEADER_BUTTONS_FORTS_SANDBOX_TURNEDOFF_HEADER = '#tooltips:header/buttons/forts/sandbox/turnedOff/header'
     HEADER_BUTTONS_MISSIONS_HEADER = '#tooltips:header/buttons/missions/header'
     HEADER_BUTTONS_MISSIONS_BODY = '#tooltips:header/buttons/missions/body'
@@ -1027,6 +1061,8 @@ class TOOLTIPS(object):
     QUESTS_SEASONAWARD_FEMALETANKMAN_DESCRIPTION_PART1 = '#tooltips:quests/seasonAward/femaleTankman/description/part1'
     QUESTS_SEASONAWARD_FEMALETANKMAN_DESCRIPTION_PART2 = '#tooltips:quests/seasonAward/femaleTankman/description/part2'
     QUESTS_SEASONAWARD_TOKENS_DESCRIPTION = '#tooltips:quests/seasonAward/tokens/description'
+    QUESTS_PM_STATUS_MAIN = '#tooltips:quests/pm/status/main'
+    QUESTS_PM_STATUS_ADDITIONAL = '#tooltips:quests/pm/status/additional'
     VEHICLESTATUS_BODY = '#tooltips:vehicleStatus/body'
     VEHICLESTATUS_BATTLE_HEADER = '#tooltips:vehicleStatus/battle/header'
     VEHICLESTATUS_LOCKED_HEADER = '#tooltips:vehicleStatus/locked/header'
@@ -1277,6 +1313,7 @@ class TOOLTIPS(object):
     STRONGHOLDS_TIMER_SQUADINQUEUE = '#tooltips:strongholds/timer/squadInQueue'
     STRONGHOLDS_TIMER_SEARCHENEMY = '#tooltips:strongholds/timer/searchEnemy'
     STRONGHOLDS_TIMER_WAITINGFORDATA = '#tooltips:strongholds/timer/WaitingForData'
+    STRONGHOLDS_TIMER_LEGIONARIESSEARCH = '#tooltips:strongholds/timer/legionariesSearch'
     STRONGHOLDS_TIMER_SQUADINBATTLE = '#tooltips:strongholds/timer/squadInBattle'
     STRONGHOLDS_TIMER_TIMETOBATTLE = '#tooltips:strongholds/timer/timeToBattle'
     STRONGHOLDS_TIMER_TIMETONEXTBATTLE = '#tooltips:strongholds/timer/timeToNextBattle'
@@ -1288,6 +1325,8 @@ class TOOLTIPS(object):
     FORTIFICATION_SORTIE_BATTLEROOM_STATUS_COMMANDER = '#tooltips:fortification/sortie/battleRoom/status/commander'
     FORTIFICATION_SORTIE_PLAYER_VEHICLE = '#tooltips:fortification/sortie/player/vehicle'
     FORTIFICATION_SORTIE_SLOT_VEHICLE_NOTREADY_TEMPORALLY_BODY = '#tooltips:fortification/sortie/slot/vehicle/notReady/temporally/body'
+    FORTIFICATION_SORTIE_REMOVEFILTERS = '#tooltips:fortification/sortie/removeFilters'
+    FORTIFICATION_SORTIE_CONFIGUREBTN = '#tooltips:fortification/sortie/configureBtn'
     FORTIFICATION_SORTIE_REMOVEBTN_HEADER = '#tooltips:fortification/sortie/removeBtn/header'
     FORTIFICATION_SORTIE_REMOVEBTN_BODY = '#tooltips:fortification/sortie/removeBtn/body'
     FORTIFICATION_SORTIE_GUNNERICON_HEADER = '#tooltips:fortification/sortie/gunnerIcon/header'
@@ -1570,6 +1609,8 @@ class TOOLTIPS(object):
     BOOSTERSWINDOW_BOOSTER_HEADER_DESCRIPTION_CREWXP = '#tooltips:boostersWindow/booster/header/description/crewXp'
     BOOSTERSWINDOW_BOOSTER_HEADER_CREDITS = '#tooltips:boostersWindow/booster/header/credits'
     BOOSTERSWINDOW_BOOSTER_HEADER_DESCRIPTION_CREDITS = '#tooltips:boostersWindow/booster/header/description/credits'
+    BOOSTERSWINDOW_BOOSTER_SHORTDESCRIPTIONSPECIAL = '#tooltips:boostersWindow/booster/shortDescriptionSpecial'
+    BOOSTERSWINDOW_BOOSTER_LONGDESCRIPTIONSPECIAL = '#tooltips:boostersWindow/booster/longDescriptionSpecial'
     BOOSTERSWINDOW_BOOSTER_QUALITY_SMALL = '#tooltips:boostersWindow/booster/quality/small'
     BOOSTERSWINDOW_BOOSTER_QUALITY_MEDIUM = '#tooltips:boostersWindow/booster/quality/medium'
     BOOSTERSWINDOW_BOOSTER_QUALITY_BIG = '#tooltips:boostersWindow/booster/quality/big'
@@ -1664,6 +1705,30 @@ class TOOLTIPS(object):
     AWARDITEM_COMPLETIONTOKENS_4_4_BODY = '#tooltips:awardItem/completionTokens_4_4/body'
     AWARDITEM_COMPLETIONTOKENS_4_5_HEADER = '#tooltips:awardItem/completionTokens_4_5/header'
     AWARDITEM_COMPLETIONTOKENS_4_5_BODY = '#tooltips:awardItem/completionTokens_4_5/body'
+    AWARDITEM_COMPLETIONTOKENS_5_1_HEADER = '#tooltips:awardItem/completionTokens_5_1/header'
+    AWARDITEM_COMPLETIONTOKENS_5_1_BODY = '#tooltips:awardItem/completionTokens_5_1/body'
+    AWARDITEM_COMPLETIONTOKENS_5_2_HEADER = '#tooltips:awardItem/completionTokens_5_2/header'
+    AWARDITEM_COMPLETIONTOKENS_5_2_BODY = '#tooltips:awardItem/completionTokens_5_2/body'
+    AWARDITEM_COMPLETIONTOKENS_5_3_HEADER = '#tooltips:awardItem/completionTokens_5_3/header'
+    AWARDITEM_COMPLETIONTOKENS_5_3_BODY = '#tooltips:awardItem/completionTokens_5_3/body'
+    AWARDITEM_COMPLETIONTOKENS_5_4_HEADER = '#tooltips:awardItem/completionTokens_5_4/header'
+    AWARDITEM_COMPLETIONTOKENS_5_4_BODY = '#tooltips:awardItem/completionTokens_5_4/body'
+    AWARDITEM_COMPLETIONTOKENS_6_1_HEADER = '#tooltips:awardItem/completionTokens_6_1/header'
+    AWARDITEM_COMPLETIONTOKENS_6_1_BODY = '#tooltips:awardItem/completionTokens_6_1/body'
+    AWARDITEM_COMPLETIONTOKENS_6_2_HEADER = '#tooltips:awardItem/completionTokens_6_2/header'
+    AWARDITEM_COMPLETIONTOKENS_6_2_BODY = '#tooltips:awardItem/completionTokens_6_2/body'
+    AWARDITEM_COMPLETIONTOKENS_6_3_HEADER = '#tooltips:awardItem/completionTokens_6_3/header'
+    AWARDITEM_COMPLETIONTOKENS_6_3_BODY = '#tooltips:awardItem/completionTokens_6_3/body'
+    AWARDITEM_COMPLETIONTOKENS_6_4_HEADER = '#tooltips:awardItem/completionTokens_6_4/header'
+    AWARDITEM_COMPLETIONTOKENS_6_4_BODY = '#tooltips:awardItem/completionTokens_6_4/body'
+    AWARDITEM_COMPLETIONTOKENS_7_1_HEADER = '#tooltips:awardItem/completionTokens_7_1/header'
+    AWARDITEM_COMPLETIONTOKENS_7_1_BODY = '#tooltips:awardItem/completionTokens_7_1/body'
+    AWARDITEM_COMPLETIONTOKENS_7_2_HEADER = '#tooltips:awardItem/completionTokens_7_2/header'
+    AWARDITEM_COMPLETIONTOKENS_7_2_BODY = '#tooltips:awardItem/completionTokens_7_2/body'
+    AWARDITEM_COMPLETIONTOKENS_7_3_HEADER = '#tooltips:awardItem/completionTokens_7_3/header'
+    AWARDITEM_COMPLETIONTOKENS_7_3_BODY = '#tooltips:awardItem/completionTokens_7_3/body'
+    AWARDITEM_COMPLETIONTOKENS_7_4_HEADER = '#tooltips:awardItem/completionTokens_7_4/header'
+    AWARDITEM_COMPLETIONTOKENS_7_4_BODY = '#tooltips:awardItem/completionTokens_7_4/body'
     AWARDITEM_TANKMEN_BODY = '#tooltips:awardItem/tankmen/body'
     AWARDITEM_TANKWOMEN_HEADER = '#tooltips:awardItem/tankwomen/header'
     AWARDITEM_TANKWOMEN_BODY = '#tooltips:awardItem/tankwomen/body'
@@ -1781,7 +1846,8 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_CREW_INFLUENCE_ENGINEPOWER = '#tooltips:vehiclePreview/crew/influence/enginePower'
     VEHICLEPREVIEW_CREW_INFLUENCE_RADIODISTANCE = '#tooltips:vehiclePreview/crew/influence/radioDistance'
     VEHICLEPREVIEW_CREW_ADDITIONALROLES = '#tooltips:vehiclePreview/crew/additionalRoles'
-    VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER = '#tooltips:vehiclePreview/vehiclePanel/info/header'
+    VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_WITHCREW = '#tooltips:vehiclePreview/vehiclePanel/info/header/withCrew'
+    VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_NOCREW = '#tooltips:vehiclePreview/vehiclePanel/info/header/noCrew'
     VEHICLEPREVIEW_VEHICLEPANEL_INFO_BODY = '#tooltips:vehiclePreview/vehiclePanel/info/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_HEADER = '#tooltips:vehiclePreview/buyButton/parentModuleIsLocked/header'
     VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_BODY = '#tooltips:vehiclePreview/buyButton/parentModuleIsLocked/body'
@@ -1793,6 +1859,8 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHCREDITS_BODY = '#tooltips:vehiclePreview/buyButton/notEnoughCredits/body'
     VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_HEADER = '#tooltips:vehiclePreview/buyButton/notEnoughGold/header'
     VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_BODY = '#tooltips:vehiclePreview/buyButton/notEnoughGold/body'
+    VEHICLEPREVIEW_BUYBUTTON_ENDTIME_HEADER = '#tooltips:vehiclePreview/buyButton/endTime/header'
+    VEHICLEPREVIEW_BUYBUTTON_ENDTIME_BODY = '#tooltips:vehiclePreview/buyButton/endTime/body'
     VEHICLEPREVIEW_MODULS_HEADER = '#tooltips:vehiclePreview/moduls/header'
     VEHICLEPREVIEW_MODULS_BODY = '#tooltips:vehiclePreview/moduls/body'
     VEHICLEPREVIEW_MODULSNOMODULES_HEADER = '#tooltips:vehiclePreview/modulsnoModules/header'
@@ -1806,6 +1874,19 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_ELITEBONUS_CREDIT_HEADER = '#tooltips:vehiclePreview/eliteBonus/credit/header'
     VEHICLEPREVIEW_ELITEBONUS_CREDIT_BODY = '#tooltips:vehiclePreview/eliteBonus/credit/body'
     VEHICLEPREVIEW_HISTORICALREFERENCE_TITLE = '#tooltips:vehiclePreview/historicalReference/title'
+    VEHICLEPREVIEW_SHOPPACK_TITLE = '#tooltips:vehiclePreview/shopPack/title'
+    VEHICLEPREVIEW_SHOPPACK_DESC = '#tooltips:vehiclePreview/shopPack/desc'
+    VEHICLEPREVIEW_SHOPPACK_DATETIMETOOLTIP_HEADER = '#tooltips:vehiclePreview/shopPack/dateTimeTooltip/header'
+    VEHICLEPREVIEW_SHOPPACK_DATETIMETOOLTIP_BODY = '#tooltips:vehiclePreview/shopPack/dateTimeTooltip/body'
+    VEHICLEPREVIEW_BOXTOOLTIP_HEADER = '#tooltips:vehiclePreview/boxTooltip/header'
+    VEHICLEPREVIEW_BOXTOOLTIP_BODY = '#tooltips:vehiclePreview/boxTooltip/body'
+    VEHICLEPREVIEW_BOXTOOLTIP_SHELL_HEADER = '#tooltips:vehiclePreview/boxTooltip/shell/header'
+    VEHICLEPREVIEW_BOXTOOLTIP_CAMOUFLAGE_HEADER = '#tooltips:vehiclePreview/boxTooltip/camouflage/header'
+    VEHICLEPREVIEW_BOXTOOLTIP_STYLE_HEADER = '#tooltips:vehiclePreview/boxTooltip/style/header'
+    VEHICLEPREVIEW_BOXTOOLTIP_EMBLEM_HEADER = '#tooltips:vehiclePreview/boxTooltip/emblem/header'
+    VEHICLEPREVIEW_BOXTOOLTIP_INSCRIPTION_HEADER = '#tooltips:vehiclePreview/boxTooltip/inscription/header'
+    VEHICLEPREVIEW_BOXTOOLTIP_MODIFICATION_HEADER = '#tooltips:vehiclePreview/boxTooltip/modification/header'
+    VEHICLEPREVIEW_BOXTOOLTIP_PAINT_HEADER = '#tooltips:vehiclePreview/boxTooltip/paint/header'
     CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_HEADER = '#tooltips:contentBuyView/slotCheckbox/notEnoughSlots/header'
     CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_BODY = '#tooltips:contentBuyView/slotCheckbox/notEnoughSlots/body'
     SQUADWINDOW_EVENTVEHICLE = '#tooltips:squadWindow/eventVehicle'
@@ -1901,24 +1982,47 @@ class TOOLTIPS(object):
     MISSIONS_VEHICLE_SELECTOR_LIST_BODY = '#tooltips:missions/vehicle_selector/list/body'
     MISSIONS_VEHICLE_SELECTOR_SELECT_HEADER = '#tooltips:missions/vehicle_selector/select/header'
     MISSIONS_VEHICLE_SELECTOR_SELECT_BODY = '#tooltips:missions/vehicle_selector/select/body'
-    HANGAR_HEADER_PERSONALQUESTS_DISABLED_HEADER = '#tooltips:hangar/header/personalQuests/disabled/header'
-    HANGAR_HEADER_PERSONALQUESTS_DISABLED_BODY = '#tooltips:hangar/header/personalQuests/disabled/body'
-    HANGAR_HEADER_PERSONALQUESTS_UNAVAILABLE_HEADER = '#tooltips:hangar/header/personalQuests/unavailable/header'
-    HANGAR_HEADER_PERSONALQUESTS_UNAVAILABLE_BODY = '#tooltips:hangar/header/personalQuests/unavailable/body'
-    HANGAR_HEADER_PERSONALQUESTS_COMPLETED_HEADER = '#tooltips:hangar/header/personalQuests/completed/header'
-    HANGAR_HEADER_PERSONALQUESTS_COMPLETED_BODY = '#tooltips:hangar/header/personalQuests/completed/body'
-    HANGAR_HEADER_PERSONALQUESTS_AVAILABLE_HEADER = '#tooltips:hangar/header/personalQuests/available/header'
-    HANGAR_HEADER_PERSONALQUESTS_AVAILABLE_BODY = '#tooltips:hangar/header/personalQuests/available/body'
-    HANGAR_HEADER_PERSONALQUESTS_AWARD_HEADER = '#tooltips:hangar/header/personalQuests/award/header'
-    HANGAR_HEADER_PERSONALQUESTS_AWARD_BODY = '#tooltips:hangar/header/personalQuests/award/body'
+    HANGAR_HEADER_PERSONALMISSIONS_NOVEHICLE_HEADER = '#tooltips:hangar/header/personalMissions/noVehicle/header'
+    HANGAR_HEADER_PERSONALMISSIONS_NOVEHICLE_BODY = '#tooltips:hangar/header/personalMissions/noVehicle/body'
+    HANGAR_HEADER_PERSONALMISSIONS2_NOVEHICLE_HEADER = '#tooltips:hangar/header/personalMissions2/noVehicle/header'
+    HANGAR_HEADER_PERSONALMISSIONS2_NOVEHICLE_BODY = '#tooltips:hangar/header/personalMissions2/noVehicle/body'
+    HANGAR_HEADER_PERSONALMISSIONS_BRANCH_DISABLED_HEADER = '#tooltips:hangar/header/personalMissions/branch_disabled/header'
+    HANGAR_HEADER_PERSONALMISSIONS_BRANCH_DISABLED_BODY = '#tooltips:hangar/header/personalMissions/branch_disabled/body'
+    HANGAR_HEADER_PERSONALMISSIONS_OPERATION_DISABLED_HEADER = '#tooltips:hangar/header/personalMissions/operation_disabled/header'
+    HANGAR_HEADER_PERSONALMISSIONS_OPERATION_DISABLED_BODY = '#tooltips:hangar/header/personalMissions/operation_disabled/body'
+    HANGAR_HEADER_PERSONALMISSIONS_MISSION_DISABLED_HEADER = '#tooltips:hangar/header/personalMissions/mission_disabled/header'
+    HANGAR_HEADER_PERSONALMISSIONS_MISSION_DISABLED_BODY = '#tooltips:hangar/header/personalMissions/mission_disabled/body'
+    HANGAR_HEADER_PERSONALMISSIONS_DISABLEDALL_HEADER = '#tooltips:hangar/header/personalMissions/disabledAll/header'
+    HANGAR_HEADER_PERSONALMISSIONS_DISABLEDALL_BODY = '#tooltips:hangar/header/personalMissions/disabledAll/body'
+    HANGAR_HEADER_PERSONALMISSIONS_COMPLETEDLOCKEDNEXT_HEADER = '#tooltips:hangar/header/personalMissions/completedLockedNext/header'
+    HANGAR_HEADER_PERSONALMISSIONS_COMPLETEDLOCKEDNEXT_BODY = '#tooltips:hangar/header/personalMissions/completedLockedNext/body'
+    HANGAR_HEADER_PERSONALMISSIONS_DONELOCKEDNEXT_HEADER = '#tooltips:hangar/header/personalMissions/doneLockedNext/header'
+    HANGAR_HEADER_PERSONALMISSIONS_DONELOCKEDNEXT_BODY = '#tooltips:hangar/header/personalMissions/doneLockedNext/body'
+    HANGAR_HEADER_PERSONALMISSIONS2_COMPLETEDLOCKEDNEXT_HEADER = '#tooltips:hangar/header/personalMissions2/completedLockedNext/header'
+    HANGAR_HEADER_PERSONALMISSIONS2_COMPLETEDLOCKEDNEXT_BODY = '#tooltips:hangar/header/personalMissions2/completedLockedNext/body'
+    HANGAR_HEADER_PERSONALMISSIONS2_DONELOCKEDNEXT_HEADER = '#tooltips:hangar/header/personalMissions2/doneLockedNext/header'
+    HANGAR_HEADER_PERSONALMISSIONS2_DONELOCKEDNEXT_BODY = '#tooltips:hangar/header/personalMissions2/doneLockedNext/body'
+    HANGAR_HEADER_PERSONALMISSIONS2_UNAVAILABLEFULL_HEADER = '#tooltips:hangar/header/personalMissions2/unavailableFull/header'
+    HANGAR_HEADER_PERSONALMISSIONS2_UNAVAILABLEFULL_BODY = '#tooltips:hangar/header/personalMissions2/unavailableFull/body'
+    HANGAR_HEADER_PERSONALMISSIONS_COMPLETED_HEADER = '#tooltips:hangar/header/personalMissions/completed/header'
+    HANGAR_HEADER_PERSONALMISSIONS_COMPLETED_BODY = '#tooltips:hangar/header/personalMissions/completed/body'
+    HANGAR_HEADER_PERSONALMISSIONS_DONE_HEADER = '#tooltips:hangar/header/personalMissions/done/header'
+    HANGAR_HEADER_PERSONALMISSIONS_DONE_BODY = '#tooltips:hangar/header/personalMissions/done/body'
+    HANGAR_HEADER_PERSONALMISSIONS_AVAILABLE_HEADER = '#tooltips:hangar/header/personalMissions/available/header'
+    HANGAR_HEADER_PERSONALMISSIONS_AVAILABLE_BODY = '#tooltips:hangar/header/personalMissions/available/body'
+    HANGAR_HEADER_PERSONALMISSIONS_LOWLEVEL_HEADER = '#tooltips:hangar/header/personalMissions/lowLevel/header'
+    HANGAR_HEADER_PERSONALMISSIONS_LOWLEVEL_BODY = '#tooltips:hangar/header/personalMissions/lowLevel/body'
+    HANGAR_HEADER_PERSONALMISSIONS_AWARD_HEADER = '#tooltips:hangar/header/personalMissions/award/header'
+    HANGAR_HEADER_PERSONALMISSIONS_AWARD_BODY = '#tooltips:hangar/header/personalMissions/award/body'
     DETAILS_CONDITIONS_ADDITIONAL = '#tooltips:details/conditions/additional'
-    HANGAR_HEADER_PERSONALQUESTS_DONE_HEADER = '#tooltips:hangar/header/personalQuests/done/header'
-    HANGAR_HEADER_PERSONALQUESTS_DONE_BODY = '#tooltips:hangar/header/personalQuests/done/body'
+    HANGAR_HEADER_PERSONALMISSIONS_DONEALL_HEADER = '#tooltips:hangar/header/personalMissions/doneAll/header'
+    HANGAR_HEADER_PERSONALMISSIONS_DONEALL_BODY = '#tooltips:hangar/header/personalMissions/doneAll/body'
     QUESTS_SCHEDULE_HEADER = '#tooltips:quests/schedule/header'
     QUESTS_SCHEDULE_DESCRIPTION = '#tooltips:quests/schedule/description'
     QUESTS_SCHEDULE_WEEKDAYS = '#tooltips:quests/schedule/weekDays'
     QUESTS_SCHEDULE_INTERVALS = '#tooltips:quests/schedule/intervals'
     QUESTS_UNAVAILABLE_VEHICLE_HEADER = '#tooltips:quests/unavailable/vehicle/header'
+    QUESTS_UNAVAILABLE_DISABLED_HEADER = '#tooltips:quests/unavailable/disabled/header'
     QUESTS_UNAVAILABLE_VEHICLE_BODY = '#tooltips:quests/unavailable/vehicle/body'
     QUESTS_UNAVAILABLE_BULLET = '#tooltips:quests/unavailable/bullet'
     QUESTS_UNAVAILABLE_REQUIREMENT_HEADER = '#tooltips:quests/unavailable/requirement/header'
@@ -2064,12 +2168,16 @@ class TOOLTIPS(object):
     PERSONALMISSIONS_OPERATION_FOOTER_TITLE_NOTAVAILABLE = '#tooltips:personalMissions/operation/footer/title/notAvailable'
     PERSONALMISSIONS_OPERATION_FOOTER_DESCR_DOPREVOPERATION = '#tooltips:personalMissions/operation/footer/descr/doPrevOperation'
     PERSONALMISSIONS_OPERATION_FOOTER_DESCR_NOVEHICLE = '#tooltips:personalMissions/operation/footer/descr/noVehicle'
+    PERSONALMISSIONS_OPERATION_FOOTER_DESCR_DISABLED = '#tooltips:personalMissions/operation/footer/descr/disabled'
+    PERSONALMISSIONS_OPERATION_HEADER_DESCR_POSTPONED = '#tooltips:personalMissions/operation/header/descr/postponed'
     PERSONALMISSIONS_OPERATION_FOOTER_TITLE_DONE = '#tooltips:personalMissions/operation/footer/title/done'
     PERSONALMISSIONS_OPERATION_FOOTER_DESCR_SELECTQUEST = '#tooltips:personalMissions/operation/footer/descr/selectQuest'
     PERSONALMISSIONS_OPERATION_FOOTER_TITLE_INPROGRESS = '#tooltips:personalMissions/operation/footer/title/inProgress'
     PERSONALMISSIONS_OPERATION_FOOTER_DESCR_COMPLETIONTOKENS = '#tooltips:personalMissions/operation/footer/descr/completionTokens'
+    PERSONALMISSIONS_OPERATION_FOOTER_DESCR_COMPLETIONTOKENS_PM2 = '#tooltips:personalMissions/operation/footer/descr/completionTokens/pm2'
     PERSONALMISSIONS_OPERATION_FOOTER_DESCR_FREESHEETS = '#tooltips:personalMissions/operation/footer/descr/freeSheets'
     PERSONALMISSIONS_OPERATION_FOOTER_DESCR_QUESTSFULLYDONE = '#tooltips:personalMissions/operation/footer/descr/questsFullyDone'
+    PERSONALMISSIONS_OPERATION_FOOTER_DESCR_POSTPONED = '#tooltips:personalMissions/operation/footer/descr/postponed'
     PERSONALMISSIONS_OPERATION_FOOTER_TITLE_AVAILABLE = '#tooltips:personalMissions/operation/footer/title/available'
     PERSONALMISSIONS_OPERATION_FOOTER_TITLE_EXCELLENTDONE = '#tooltips:personalMissions/operation/footer/title/excellentDone'
     PERSONALMISSIONS_OPERATIONTITLE_COMPLETESTATE_HEADER = '#tooltips:personalMissions/operationTitle/completeState/header'
@@ -2084,6 +2192,7 @@ class TOOLTIPS(object):
     PERSONALMISSIONS_MAPREGION_AWARDS_TITLE_ALLRECEIVED = '#tooltips:personalMissions/mapRegion/awards/title/allReceived'
     PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_NOTAVAILABLE = '#tooltips:personalMissions/mapRegion/footer/title/notAvailable'
     PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_NOVEHICLE = '#tooltips:personalMissions/mapRegion/footer/title/noVehicle'
+    PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_DISABLED = '#tooltips:personalMissions/mapRegion/footer/title/disabled'
     PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_DONE = '#tooltips:personalMissions/mapRegion/footer/title/done'
     PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_DONEFREESHEET = '#tooltips:personalMissions/mapRegion/footer/title/doneFreeSheet'
     PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_INPROGRESS = '#tooltips:personalMissions/mapRegion/footer/title/inProgress'
@@ -2096,20 +2205,14 @@ class TOOLTIPS(object):
     PERSONALMISSIONS_FOOTER_PAWNEDSHEET_BODY = '#tooltips:personalMissions/footer/pawnedSheet/body'
     PERSONALMISSIONS_AWARDS_CAMOUFLAGE_HEADER = '#tooltips:personalMissions/awards/camouflage/header'
     PERSONALMISSIONS_AWARDS_CAMOUFLAGE_BODY = '#tooltips:personalMissions/awards/camouflage/body'
+    PERSONALMISSIONS_AWARDS_CAMOUFLAGE_ALLIANCE_HEADER = '#tooltips:personalMissions/awards/camouflage/alliance/header'
+    PERSONALMISSIONS_AWARDS_CAMOUFLAGE_ALLIANCE_BODY = '#tooltips:personalMissions/awards/camouflage/alliance/body'
     PERSONALMISSIONS_AWARDS_CAMOUFLAGEONLY_HEADER = '#tooltips:personalMissions/awards/camouflageOnly/header'
     PERSONALMISSIONS_AWARDS_CAMOUFLAGEONLY_BODY = '#tooltips:personalMissions/awards/camouflageOnly/body'
     PERSONALMISSIONS_AWARDS_CAMOUFLAGENATION_HEADER = '#tooltips:personalMissions/awards/camouflageNation/header'
     PERSONALMISSIONS_AWARDS_CAMOUFLAGENATION_BODY = '#tooltips:personalMissions/awards/camouflageNation/body'
     PERSONALMISSIONS_AWARDS_CAMOUFLAGEALL_HEADER = '#tooltips:personalMissions/awards/camouflageAll/header'
     PERSONALMISSIONS_AWARDS_CAMOUFLAGEALL_BODY = '#tooltips:personalMissions/awards/camouflageAll/body'
-    PERSONALMISSIONS_AWARDS_STATS_QUESTSCOMPLETED_HEADER = '#tooltips:personalMissions/awards/stats/questsCompleted/header'
-    PERSONALMISSIONS_AWARDS_STATS_QUESTSCOMPLETED_BODY = '#tooltips:personalMissions/awards/stats/questsCompleted/body'
-    PERSONALMISSIONS_AWARDS_STATS_COMPLETIONTOKENS_HEADER = '#tooltips:personalMissions/awards/stats/completionTokens/header'
-    PERSONALMISSIONS_AWARDS_STATS_COMPLETIONTOKENS_BODY = '#tooltips:personalMissions/awards/stats/completionTokens/body'
-    PERSONALMISSIONS_AWARDS_STATS_TANKWOMANBONUS_HEADER = '#tooltips:personalMissions/awards/stats/tankwomanBonus/header'
-    PERSONALMISSIONS_AWARDS_STATS_TANKWOMANBONUS_BODY = '#tooltips:personalMissions/awards/stats/tankwomanBonus/body'
-    PERSONALMISSIONS_AWARDS_STATS_CREDITS_HEADER = '#tooltips:personalMissions/awards/stats/credits/header'
-    PERSONALMISSIONS_AWARDS_STATS_CREDITS_BODY = '#tooltips:personalMissions/awards/stats/credits/body'
     PERSONALMISSIONS_STATUS_MAINDONE_HEADER = '#tooltips:personalMissions/status/mainDone/header'
     PERSONALMISSIONS_STATUS_MAINDONE_BODY = '#tooltips:personalMissions/status/mainDone/body'
     PERSONALMISSIONS_STATUS_FULLDONE_HEADER = '#tooltips:personalMissions/status/fullDone/header'
@@ -2123,7 +2226,8 @@ class TOOLTIPS(object):
     PERSONALMISSIONS_STATUS_SHEETRECOVERYINPROGRESS_HEADER = '#tooltips:personalMissions/status/sheetRecoveryInProgress/header'
     PERSONALMISSIONS_STATUS_SHEETRECOVERYINPROGRESS_BODY = '#tooltips:personalMissions/status/sheetRecoveryInProgress/body'
     PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER = '#tooltips:personalMissions/status/lockedByVehicle/header'
-    PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_BODY = '#tooltips:personalMissions/status/lockedByVehicle/body'
+    PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLETYPE_BODY = '#tooltips:personalMissions/status/lockedByVehicleType/body'
+    PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLEALLIANCE_BODY = '#tooltips:personalMissions/status/lockedByVehicleAlliance/body'
     PERSONALMISSIONS_STATUS_LOCKEDBYPREVMISSIONS_HEADER = '#tooltips:personalMissions/status/lockedByPrevMissions/header'
     PERSONALMISSIONS_STATUS_LOCKEDBYPREVMISSIONS_BODY = '#tooltips:personalMissions/status/lockedByPrevMissions/body'
     PERSONALMISSIONS_STATUS_LOCKEDBYPREVOPERATION_HEADER = '#tooltips:personalMissions/status/lockedByPrevOperation/header'
@@ -2155,6 +2259,46 @@ class TOOLTIPS(object):
     ELEN_SUMMARY_RANK_3 = '#tooltips:elen/summary/rank/3'
     ELEN_SUMMARY_RANK_4 = '#tooltips:elen/summary/rank/4'
     ELEN_SUMMARY_RANK_NORANK = '#tooltips:elen/summary/rank/noRank'
+    ELEN_SUMMARY_OBJPARAM_MAX_ORIGINALXP_HEADER = '#tooltips:elen/summary/objParam/max/originalXP/header'
+    ELEN_SUMMARY_OBJPARAM_MAX_ORIGINALXP_BODY = '#tooltips:elen/summary/objParam/max/originalXP/body'
+    ELEN_SUMMARY_OBJPARAM_MAX_XP_HEADER = '#tooltips:elen/summary/objParam/max/xp/header'
+    ELEN_SUMMARY_OBJPARAM_MAX_XP_BODY = '#tooltips:elen/summary/objParam/max/xp/body'
+    ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEDEALT_HEADER = '#tooltips:elen/summary/objParam/max/damageDealt/header'
+    ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEDEALT_BODY = '#tooltips:elen/summary/objParam/max/damageDealt/body'
+    ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEASSISTED_HEADER = '#tooltips:elen/summary/objParam/max/damageAssisted/header'
+    ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEASSISTED_BODY = '#tooltips:elen/summary/objParam/max/damageAssisted/body'
+    ELEN_SUMMARY_OBJPARAM_SUMALL_ORIGINALXP_HEADER = '#tooltips:elen/summary/objParam/sumAll/originalXP/header'
+    ELEN_SUMMARY_OBJPARAM_SUMALL_ORIGINALXP_BODY = '#tooltips:elen/summary/objParam/sumAll/originalXP/body'
+    ELEN_SUMMARY_OBJPARAM_SUMALL_XP_HEADER = '#tooltips:elen/summary/objParam/sumAll/xp/header'
+    ELEN_SUMMARY_OBJPARAM_SUMALL_XP_BODY = '#tooltips:elen/summary/objParam/sumAll/xp/body'
+    ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEDEALT_HEADER = '#tooltips:elen/summary/objParam/sumAll/damageDealt/header'
+    ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEDEALT_BODY = '#tooltips:elen/summary/objParam/sumAll/damageDealt/body'
+    ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEASSISTED_HEADER = '#tooltips:elen/summary/objParam/sumAll/damageAssisted/header'
+    ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEASSISTED_BODY = '#tooltips:elen/summary/objParam/sumAll/damageAssisted/body'
+    ELEN_SUMMARY_OBJPARAM_SUMN_ORIGINALXP_HEADER = '#tooltips:elen/summary/objParam/sumN/originalXP/header'
+    ELEN_SUMMARY_OBJPARAM_SUMN_ORIGINALXP_BODY = '#tooltips:elen/summary/objParam/sumN/originalXP/body'
+    ELEN_SUMMARY_OBJPARAM_SUMN_XP_HEADER = '#tooltips:elen/summary/objParam/sumN/xp/header'
+    ELEN_SUMMARY_OBJPARAM_SUMN_XP_BODY = '#tooltips:elen/summary/objParam/sumN/xp/body'
+    ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEDEALT_HEADER = '#tooltips:elen/summary/objParam/sumN/damageDealt/header'
+    ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEDEALT_BODY = '#tooltips:elen/summary/objParam/sumN/damageDealt/body'
+    ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEASSISTED_HEADER = '#tooltips:elen/summary/objParam/sumN/damageAssisted/header'
+    ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEASSISTED_BODY = '#tooltips:elen/summary/objParam/sumN/damageAssisted/body'
+    ELEN_SUMMARY_OBJPARAM_SUMSEQN_ORIGINALXP_HEADER = '#tooltips:elen/summary/objParam/sumSeqN/originalXP/header'
+    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_ORIGINALXP_HEADER = '#tooltips:elen/summary/objParam/sumMSeqN/originalXP/header'
+    ELEN_SUMMARY_OBJPARAM_SUMSEQN_ORIGINALXP_BODY = '#tooltips:elen/summary/objParam/sumSeqN/originalXP/body'
+    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_ORIGINALXP_BODY = '#tooltips:elen/summary/objParam/sumMSeqN/originalXP/body'
+    ELEN_SUMMARY_OBJPARAM_SUMSEQN_XP_HEADER = '#tooltips:elen/summary/objParam/sumSeqN/xp/header'
+    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_XP_HEADER = '#tooltips:elen/summary/objParam/sumMSeqN/xp/header'
+    ELEN_SUMMARY_OBJPARAM_SUMSEQN_XP_BODY = '#tooltips:elen/summary/objParam/sumSeqN/xp/body'
+    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_XP_BODY = '#tooltips:elen/summary/objParam/sumMSeqN/xp/body'
+    ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEDEALT_HEADER = '#tooltips:elen/summary/objParam/sumSeqN/damageDealt/header'
+    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEDEALT_HEADER = '#tooltips:elen/summary/objParam/sumMSeqN/damageDealt/header'
+    ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEDEALT_BODY = '#tooltips:elen/summary/objParam/sumSeqN/damageDealt/body'
+    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEDEALT_BODY = '#tooltips:elen/summary/objParam/sumMSeqN/damageDealt/body'
+    ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEASSISTED_HEADER = '#tooltips:elen/summary/objParam/sumSeqN/damageAssisted/header'
+    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_HEADER = '#tooltips:elen/summary/objParam/sumMSeqN/damageAssisted/header'
+    ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEASSISTED_BODY = '#tooltips:elen/summary/objParam/sumSeqN/damageAssisted/body'
+    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_BODY = '#tooltips:elen/summary/objParam/sumMSeqN/damageAssisted/body'
     ELEN_SUMMARY_ADDPARAM_WINRATE_HEADER = '#tooltips:elen/summary/addParam/winRate/header'
     ELEN_SUMMARY_ADDPARAM_WINRATE_BODY = '#tooltips:elen/summary/addParam/winRate/body'
     ELEN_SUMMARY_ADDPARAM_FRAGS_HEADER = '#tooltips:elen/summary/addParam/frags/header'
@@ -2231,7 +2375,6 @@ class TOOLTIPS(object):
     ELEN_BUTTON_REGISTRATION_STARTED_BODY = '#tooltips:elen/button/registration/started/body'
     ELEN_STATUS_REQUIREMENTS_HEADER = '#tooltips:elen/status/requirements/header'
     ELEN_STATUS_CANTJOIN_REASON_BYAGE = '#tooltips:elen/status/cantJoin/reason/byAge'
-    ELEN_STATUS_CANTJOIN_REASON_BYVEHICLE = '#tooltips:elen/status/cantJoin/reason/byVehicle'
     ELEN_STATUS_CANTJOIN_REASON_BYWINRATEHIGH = '#tooltips:elen/status/cantJoin/reason/byWinRateHigh'
     ELEN_STATUS_CANTJOIN_REASON_BYWINRATELOW = '#tooltips:elen/status/cantJoin/reason/byWinRateLow'
     ELEN_STATUS_CANTJOIN_REASON_BYBATTLESCOUNT = '#tooltips:elen/status/cantJoin/reason/byBattlesCount'
@@ -2260,20 +2403,20 @@ class TOOLTIPS(object):
     ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEASSISTED_HEADER = '#tooltips:elen/excel/objParam/sumN/damageAssisted/header'
     ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEASSISTED_BODY = '#tooltips:elen/excel/objParam/sumN/damageAssisted/body'
     ELEN_EXCEL_OBJPARAM_SUMSEQN_ORIGINALXP_HEADER = '#tooltips:elen/excel/objParam/sumSeqN/originalXP/header'
-    ELEN_EXCEL_OBJPARAM_SUMSEQN_ORIGINALXP_BODY = '#tooltips:elen/excel/objParam/sumSeqN/originalXP/body'
-    ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_HEADER = '#tooltips:elen/excel/objParam/sumSeqN/xp/header'
-    ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_BODY = '#tooltips:elen/excel/objParam/sumSeqN/xp/body'
-    ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_HEADER = '#tooltips:elen/excel/objParam/sumSeqN/damageDealt/header'
-    ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_BODY = '#tooltips:elen/excel/objParam/sumSeqN/damageDealt/body'
-    ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_HEADER = '#tooltips:elen/excel/objParam/sumSeqN/damageAssisted/header'
-    ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_BODY = '#tooltips:elen/excel/objParam/sumSeqN/damageAssisted/body'
     ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/originalXP/header'
+    ELEN_EXCEL_OBJPARAM_SUMSEQN_ORIGINALXP_BODY = '#tooltips:elen/excel/objParam/sumSeqN/originalXP/body'
     ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_BODY = '#tooltips:elen/excel/objParam/sumMSeqN/originalXP/body'
+    ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_HEADER = '#tooltips:elen/excel/objParam/sumSeqN/xp/header'
     ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/xp/header'
+    ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_BODY = '#tooltips:elen/excel/objParam/sumSeqN/xp/body'
     ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_BODY = '#tooltips:elen/excel/objParam/sumMSeqN/xp/body'
+    ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_HEADER = '#tooltips:elen/excel/objParam/sumSeqN/damageDealt/header'
     ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/damageDealt/header'
+    ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_BODY = '#tooltips:elen/excel/objParam/sumSeqN/damageDealt/body'
     ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_BODY = '#tooltips:elen/excel/objParam/sumMSeqN/damageDealt/body'
+    ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_HEADER = '#tooltips:elen/excel/objParam/sumSeqN/damageAssisted/header'
     ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/damageAssisted/header'
+    ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_BODY = '#tooltips:elen/excel/objParam/sumSeqN/damageAssisted/body'
     ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_BODY = '#tooltips:elen/excel/objParam/sumMSeqN/damageAssisted/body'
     ELEN_EXCEL_OBJPARAM_SUMALL_ORIGINALXP_HEADER = '#tooltips:elen/excel/objParam/sumAll/originalXP/header'
     ELEN_EXCEL_OBJPARAM_SUMALL_ORIGINALXP_BODY = '#tooltips:elen/excel/objParam/sumAll/originalXP/body'
@@ -2376,10 +2519,27 @@ class TOOLTIPS(object):
     MARATHON_OFF_BODY = '#tooltips:marathon/off/body'
     MARATHON_ERROR_BATTLE_TYPE = '#tooltips:marathon/error/battle_type'
     MARATHON_ERROR_VEH_TYPE = '#tooltips:marathon/error/veh_type'
+    XPEXCHANGEWINDOW_GOLD_GOLDAFTEREXCHANGE_HEADER = '#tooltips:xpExchangewindow/gold/goldAfterExchange/header'
+    XPEXCHANGEWINDOW_GOLD_GOLDAFTEREXCHANGE_BODY = '#tooltips:xpExchangewindow/gold/goldAfterExchange/body'
+    STORAGE_MAINMENU_FOR_SELL_HEADER = '#tooltips:storage/mainMenu/for_sell/header'
+    STORAGE_MAINMENU_FOR_SELL_BODY = '#tooltips:storage/mainMenu/for_sell/body'
+    STORAGE_MAINMENU_STORAGE_HEADER = '#tooltips:storage/mainMenu/storage/header'
+    STORAGE_MAINMENU_STORAGE_BODY = '#tooltips:storage/mainMenu/storage/body'
+    STORAGE_MAINMENU_IN_HANGAR_HEADER = '#tooltips:storage/mainMenu/in_hangar/header'
+    STORAGE_MAINMENU_IN_HANGAR_BODY = '#tooltips:storage/mainMenu/in_hangar/body'
+    STORAGE_MAINMENU_PERSONAL_RESERVES_HEADER = '#tooltips:storage/mainMenu/personal_reserves/header'
+    STORAGE_MAINMENU_PERSONAL_RESERVES_BODY = '#tooltips:storage/mainMenu/personal_reserves/body'
     HEADER_BUTTONS_ALL_CLICKDESC_ENUM = (HEADER_BUTTONS_CRYSTAL_CLICKDESC,
      HEADER_BUTTONS_GOLD_CLICKDESC,
      HEADER_BUTTONS_CREDITS_CLICKDESC,
      HEADER_BUTTONS_FREEXP_CLICKDESC)
+    VEHICLEPREVIEW_BOXTOOLTIP_ALL_HEADER_ENUM = (VEHICLEPREVIEW_BOXTOOLTIP_SHELL_HEADER,
+     VEHICLEPREVIEW_BOXTOOLTIP_CAMOUFLAGE_HEADER,
+     VEHICLEPREVIEW_BOXTOOLTIP_STYLE_HEADER,
+     VEHICLEPREVIEW_BOXTOOLTIP_EMBLEM_HEADER,
+     VEHICLEPREVIEW_BOXTOOLTIP_INSCRIPTION_HEADER,
+     VEHICLEPREVIEW_BOXTOOLTIP_MODIFICATION_HEADER,
+     VEHICLEPREVIEW_BOXTOOLTIP_PAINT_HEADER)
     CUSTOMIZATION_TABS_ALL_BODY_ENUM = (CUSTOMIZATION_TABS_PAINT_BODY,
      CUSTOMIZATION_TABS_CAMOUFLAGE_BODY,
      CUSTOMIZATION_TABS_EMBLEM_BODY,
@@ -2465,6 +2625,18 @@ class TOOLTIPS(object):
      AWARDITEM_COMPLETIONTOKENS_4_3_BODY,
      AWARDITEM_COMPLETIONTOKENS_4_4_BODY,
      AWARDITEM_COMPLETIONTOKENS_4_5_BODY,
+     AWARDITEM_COMPLETIONTOKENS_5_1_BODY,
+     AWARDITEM_COMPLETIONTOKENS_5_2_BODY,
+     AWARDITEM_COMPLETIONTOKENS_5_3_BODY,
+     AWARDITEM_COMPLETIONTOKENS_5_4_BODY,
+     AWARDITEM_COMPLETIONTOKENS_6_1_BODY,
+     AWARDITEM_COMPLETIONTOKENS_6_2_BODY,
+     AWARDITEM_COMPLETIONTOKENS_6_3_BODY,
+     AWARDITEM_COMPLETIONTOKENS_6_4_BODY,
+     AWARDITEM_COMPLETIONTOKENS_7_1_BODY,
+     AWARDITEM_COMPLETIONTOKENS_7_2_BODY,
+     AWARDITEM_COMPLETIONTOKENS_7_3_BODY,
+     AWARDITEM_COMPLETIONTOKENS_7_4_BODY,
      AWARDITEM_TANKMEN_BODY,
      AWARDITEM_TANKWOMEN_BODY,
      AWARDITEM_ONEOF_BODY,
@@ -2494,7 +2666,9 @@ class TOOLTIPS(object):
      VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHCREDITS_HEADER,
      VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHCREDITS_BODY,
      VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_HEADER,
-     VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_BODY)
+     VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_BODY,
+     VEHICLEPREVIEW_BUYBUTTON_ENDTIME_HEADER,
+     VEHICLEPREVIEW_BUYBUTTON_ENDTIME_BODY)
     ELEN_SUMMARY_BATTLES_ALL_BODY_ENUM = (ELEN_SUMMARY_BATTLES_VEHICLE_BODY,
      ELEN_SUMMARY_BATTLES_NATION_BODY,
      ELEN_SUMMARY_BATTLES_LEVEL_BODY,
@@ -2508,12 +2682,12 @@ class TOOLTIPS(object):
      ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEDEALT_BODY,
      ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEASSISTED_BODY,
      ELEN_EXCEL_OBJPARAM_SUMSEQN_ORIGINALXP_BODY,
-     ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_BODY,
-     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_BODY,
-     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_BODY,
      ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_BODY,
+     ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_BODY,
      ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_BODY,
+     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_BODY,
      ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_BODY,
+     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_BODY,
      ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_BODY,
      ELEN_EXCEL_OBJPARAM_SUMALL_ORIGINALXP_BODY,
      ELEN_EXCEL_OBJPARAM_SUMALL_XP_BODY,
@@ -2529,12 +2703,12 @@ class TOOLTIPS(object):
      ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEDEALT_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEASSISTED_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMSEQN_ORIGINALXP_HEADER,
-     ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_HEADER,
-     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_HEADER,
-     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_HEADER,
+     ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_HEADER,
+     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_HEADER,
+     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMALL_ORIGINALXP_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMALL_XP_HEADER,
@@ -2641,6 +2815,18 @@ class TOOLTIPS(object):
      AWARDITEM_COMPLETIONTOKENS_4_3_HEADER,
      AWARDITEM_COMPLETIONTOKENS_4_4_HEADER,
      AWARDITEM_COMPLETIONTOKENS_4_5_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_5_1_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_5_2_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_5_3_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_5_4_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_6_1_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_6_2_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_6_3_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_6_4_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_7_1_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_7_2_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_7_3_HEADER,
+     AWARDITEM_COMPLETIONTOKENS_7_4_HEADER,
      AWARDITEM_TANKWOMEN_HEADER,
      AWARDITEM_ONEOF_HEADER,
      AWARDITEM_ONEOF_RANKEDCYCLE_HEADER,
@@ -3145,6 +3331,15 @@ class TOOLTIPS(object):
     def getHeaderBtnTitle(cls, btnType):
         outcome = '#tooltips:header/buttons/{}/title'.format(btnType)
         if outcome not in cls.HEADER_BUTTONS_ALL_TITLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getItemBoxTooltip(cls, itemTypeName):
+        outcome = '#tooltips:vehiclePreview/boxTooltip/{}/header'.format(itemTypeName)
+        if outcome not in cls.VEHICLEPREVIEW_BOXTOOLTIP_ALL_HEADER_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

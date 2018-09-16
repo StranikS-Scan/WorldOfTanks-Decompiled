@@ -7,4 +7,4 @@ from gui.shared.tooltips.builders import DataBuilder
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
-    return (DataBuilder(TOOLTIPS_CONSTANTS.DIRECT_MODULE, TOOLTIPS_CONSTANTS.REF_SYS_DIRECTS_UI, fortifications.ToolTipRefSysDirects(contexts.FortificationContext())),)
+    return (DataBuilder(TOOLTIPS_CONSTANTS.DIRECT_MODULE, TOOLTIPS_CONSTANTS.REF_SYS_DIRECTS_UI, fortifications.ToolTipRefSysDirects(contexts.FortificationContext())), DataBuilder(TOOLTIPS_CONSTANTS.FORT_SORTIE_SLOT, TOOLTIPS_CONSTANTS.SUITABLE_VEHICLE_UI, fortifications.FortificationsSlotToolTipData(contexts.FortificationContext())))

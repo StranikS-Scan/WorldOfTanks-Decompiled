@@ -18,6 +18,7 @@ class OfflineEntity(BigWorld.Entity):
 
 
 class PlayerOfflineEntity(BigWorld.Entity):
+    inputHandler = None
 
     def __init__(self):
         pass

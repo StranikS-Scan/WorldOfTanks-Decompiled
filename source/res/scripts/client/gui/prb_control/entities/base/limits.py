@@ -27,21 +27,18 @@ class VehicleIsValid(IVehicleLimit):
     def check(self, teamLimits):
         if not g_currentVehicle.isPresent():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT)
-        else:
-            if g_currentVehicle.isEvent():
-                permittedVehicles = teamLimits['vehicles']
-                if permittedVehicles is None or g_currentVehicle.item.intCD not in teamLimits['vehicles']:
-                    return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
-            if g_currentVehicle.isRotationGroupLocked():
-                return (False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
-            if not g_currentVehicle.isReadyToPrebattle():
-                return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_READY)
-            vehicle = g_currentVehicle.item
-            shellsList = []
-            for shell in vehicle.shells:
-                shellsList.extend([shell.intCD, shell.count])
+        if g_currentVehicle.isEvent():
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
+        if g_currentVehicle.isRotationGroupLocked():
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
+        if not g_currentVehicle.isReadyToPrebattle():
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_READY)
+        vehicle = g_currentVehicle.item
+        shellsList = []
+        for shell in vehicle.shells:
+            shellsList.extend([shell.intCD, shell.count])
 
-            return isVehicleValid(vehicle.descriptor, shellsList, teamLimits)
+        return isVehicleValid(vehicle.descriptor, shellsList, teamLimits)
 
 
 class AbstractTeamIsValid(ITeamLimit):

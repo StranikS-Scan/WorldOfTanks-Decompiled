@@ -2,14 +2,14 @@
 # Embedded file name: scripts/client_common/ClientArena.py
 import cPickle
 import zlib
-import ArenaType
-import BigWorld
-import Event
 import Math
-from PlayerEvents import g_playerEvents
-from constants import ARENA_PERIOD, ARENA_UPDATE
-from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_ERROR
+import BigWorld
+import ArenaType
 from items import vehicles
+import Event
+from constants import ARENA_PERIOD, ARENA_UPDATE
+from PlayerEvents import g_playerEvents
+from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_ERROR
 import arena_component_system.client_arena_component_assembler as assembler
 
 class ClientArena(object):
@@ -33,14 +33,7 @@ class ClientArena(object):
      ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP',
      ARENA_UPDATE.VIEW_POINTS: '_ClientArena__onViewPoints',
      ARENA_UPDATE.VEHICLE_RECOVERED: '_ClientArena__onVehicleRecovered',
-     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar',
-     ARENA_UPDATE.FOOTBALL_OVERTIME_POINTS: '_ClientArena__onFootballOvertimePoints',
-     ARENA_UPDATE.FOOTBALL_GOAL_SCORED: '_ClientArena__onGoalScored',
-     ARENA_UPDATE.FOOTBALL_GOAL_TIMELINE: '_ClientArena__onGoalTimeline',
-     ARENA_UPDATE.FOOTBALL_BALL_DROP: '_ClientArena__onBallDrop',
-     ARENA_UPDATE.FOOTBALL_RETURN_TO_PLAY: '_ClientArena__onReturnToPlay',
-     ARENA_UPDATE.FOOTBALL_WINNER_DECLARED: '_ClientArena__onWinnerDeclared',
-     ARENA_UPDATE.FOOTBALL_FADE_OUT_OVERLAY: '_ClientArena__onFadeOutOverlay'}
+     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, weatherPresetID):
         self.__vehicles = {}
@@ -76,13 +69,6 @@ class ClientArena(object):
         self.onFogOfWarEnabled = Event.Event(em)
         self.onFogOfWarHiddenVehiclesSet = Event.Event(em)
         self.onTeamHealthPercentUpdate = Event.Event(em)
-        self.onFootballOvertimePoints = Event.Event(em)
-        self.onGoalScored = Event.Event(em)
-        self.onBallDrop = Event.Event(em)
-        self.onGoalTimeline = Event.Event(em)
-        self.onReturnToPlay = Event.Event(em)
-        self.onWinnerDeclared = Event.Event(em)
-        self.onFadeOutOverlay = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
         if self.arenaType is None:
@@ -296,41 +282,14 @@ class ClientArena(object):
          'events': info[13],
          'igrType': info[14],
          'personalMissionIDs': info[15],
-         'crewGroup': info[16],
-         'ranked': info[17],
-         'outfitCD': info[18]}
+         'personalMissionInfo': info[16],
+         'crewGroup': info[17],
+         'ranked': info[18],
+         'outfitCD': info[19]}
         return (info[0], infoAsDict)
 
     def __vehicleStatisticsAsDict(self, stats):
         return (stats[0], {'frags': stats[1]})
-
-    def __onFootballOvertimePoints(self, argStr):
-        data = cPickle.loads(zlib.decompress(argStr))
-        self.onFootballOvertimePoints(data)
-
-    def __onGoalScored(self, argStr):
-        data = cPickle.loads(zlib.decompress(argStr))
-        self.onGoalScored(data)
-
-    def __onGoalTimeline(self, argStr):
-        data = cPickle.loads(zlib.decompress(argStr))
-        self.onGoalTimeline(data)
-
-    def __onBallDrop(self, argStr):
-        data = cPickle.loads(zlib.decompress(argStr))
-        self.onBallDrop(data)
-
-    def __onReturnToPlay(self, argStr):
-        data = cPickle.loads(zlib.decompress(argStr))
-        self.onReturnToPlay(data)
-
-    def __onWinnerDeclared(self, argStr):
-        data = cPickle.loads(zlib.decompress(argStr))
-        self.onWinnerDeclared(data)
-
-    def __onFadeOutOverlay(self, argStr):
-        data = cPickle.loads(zlib.decompress(argStr))
-        self.onFadeOutOverlay(data)
 
 
 def _convertToList(vec4):

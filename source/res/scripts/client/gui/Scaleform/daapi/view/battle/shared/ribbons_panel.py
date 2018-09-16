@@ -1,17 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_panel.py
 import BigWorld
-from debug_utils import LOG_DEBUG_DEV, LOG_UNEXPECTED
-from helpers import dependency
-from helpers import i18n
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS, GRAPHICS
-from gui.Scaleform.daapi.view.meta.RibbonsPanelMeta import RibbonsPanelMeta
+from debug_utils import LOG_DEBUG_DEV, LOG_UNEXPECTED
 from gui.Scaleform.daapi.view.battle.shared import ribbons_aggregator
+from gui.Scaleform.daapi.view.meta.RibbonsPanelMeta import RibbonsPanelMeta
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES as _BET
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+from gui.battle_control import avatar_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
-from gui.battle_control import avatar_getter
+from helpers import dependency
+from helpers import i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.shared.ribbons_aggregator import DAMAGE_SOURCE

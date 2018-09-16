@@ -6,18 +6,16 @@ from debug_utils import LOG_DEBUG
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
 from helpers import i18n
 from items import tankmen, ITEM_TYPES
-from personal_missions import PM_BRANCH
 
-class _PersonalMissionsSelect(Processor):
+class _PMSelect(Processor):
 
-    def __init__(self, personalMissions, events_cache, questBranch):
+    def __init__(self, personalMissions, events_cache, branch):
+        self._branch = branch
         self.__quests = personalMissions
-        self.__questBranch = questBranch
-        deselectedQuests = set(events_cache.getSelectedQuests().values()).difference(set(personalMissions))
-        super(_PersonalMissionsSelect, self).__init__((plugins.PersonalMissionValidator(personalMissions), self._getLockedByVehicleValidator(deselectedQuests)))
+        deselectedQuests = set(events_cache.getSelectedQuestsForBranch(self._branch).values()).difference(set(personalMissions))
+        super(_PMSelect, self).__init__((plugins.PMValidator(personalMissions), self._getLockedByVehicleValidator(deselectedQuests)))
 
-    @staticmethod
-    def _getLockedByVehicleValidator(quests):
+    def _getLockedByVehicleValidator(self, quests):
         raise NotImplementedError
 
     def _getMessagePrefix(self):
@@ -35,7 +33,7 @@ class _PersonalMissionsSelect(Processor):
     def _request(self, callback):
         questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
         LOG_DEBUG('Make server request to select personal mission', questIDs)
-        BigWorld.player().selectPersonalMissions(questIDs, self.__questBranch, lambda code, errStr: self._response(code, callback, errStr=errStr))
+        BigWorld.player().selectPersonalMissions(questIDs, self._branch, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _getQuestsData(self, methodcaller):
         return [ methodcaller(q) for q in self.__quests ]
@@ -44,12 +42,16 @@ class _PersonalMissionsSelect(Processor):
         return self._getQuestsData(methodcaller=operator.methodcaller('getUserName'))
 
 
-class PersonalMissionSelect(_PersonalMissionsSelect):
+class PMSelect(_PMSelect):
 
-    def __init__(self, quest, events_cache, questsBranch):
-        quests, oldQuest = self._removeFromSameChain(events_cache.getSelectedQuests().values(), quest)
-        super(PersonalMissionSelect, self).__init__(quests, events_cache, questsBranch)
-        self.addPlugins([plugins.PersonalMissionSlotsValidator(events_cache.questsProgress, removedCount=int(oldQuest is not None)), plugins.PersonalMissionSelectConfirmator(quest, oldQuest, isEnabled=oldQuest is not None and oldQuest != quest)])
+    def __init__(self, quest, events_cache, branch):
+        quests, oldQuest = self._removeFromSameChain(events_cache.getSelectedQuestsForBranch(branch).values(), quest)
+        selectConfirmatorEnable = oldQuest is not None and oldQuest != quest
+        super(PMSelect, self).__init__(quests, events_cache, branch)
+        self.addPlugins([plugins.PMSlotsValidator(events_cache.getQuestsProgress(self._branch), removedCount=int(oldQuest is not None)),
+         plugins.PMSelectConfirmator(quest, oldQuest, 'questsConfirmDialogShow', isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() not in (5, 6, 7)),
+         plugins.PMSelectConfirmator(quest, oldQuest, 'questsConfirmDialogShowPM2', isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() == 6),
+         plugins.PMProgressResetConfirmator(quest, oldQuest, isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() in (5, 7))])
         return
 
     def _getMessagePrefix(self):
@@ -66,22 +68,19 @@ class PersonalMissionSelect(_PersonalMissionsSelect):
         return (result, removedQuest)
 
 
-class RandomQuestSelect(PersonalMissionSelect):
+class PMQuestSelect(PMSelect):
 
-    def __init__(self, quest, events_cache):
-        super(RandomQuestSelect, self).__init__(quest, events_cache, PM_BRANCH.REGULAR)
-
-    @staticmethod
-    def _getLockedByVehicleValidator(quests):
-        return plugins.PersonalMissionsLockedByVehicle(quests)
+    def _getLockedByVehicleValidator(self, quests):
+        return plugins.PMLockedByVehicle(self._branch, quests)
 
 
-class _PersonalMissionRefuse(_PersonalMissionsSelect):
+class _PMRefuse(_PMSelect):
 
-    def __init__(self, quest, events_cache, questBranch):
-        selectedQuests = events_cache.getSelectedQuests()
-        selectedQuests.pop(quest.getID(), None)
-        super(_PersonalMissionRefuse, self).__init__(selectedQuests.values(), events_cache, questBranch)
+    def __init__(self, personalMission, events_cache, branch):
+        selectedQuests = events_cache.getSelectedQuestsForBranch(branch)
+        selectedQuests.pop(personalMission.getID(), None)
+        super(_PMRefuse, self).__init__(selectedQuests.values(), events_cache, branch)
+        self.addPlugins([plugins.PMDismissWithProgressConfirmator(personalMission, isEnabled=personalMission.getOperationID() in (5, 7))])
         return
 
     def _successHandler(self, code, ctx=None):
@@ -96,23 +95,19 @@ class _PersonalMissionRefuse(_PersonalMissionsSelect):
         pass
 
 
-class RandomQuestRefuse(_PersonalMissionRefuse):
+class PMRefuse(_PMRefuse):
 
-    def __init__(self, quest, events_cache):
-        super(RandomQuestRefuse, self).__init__(quest, events_cache, PM_BRANCH.REGULAR)
-
-    @staticmethod
-    def _getLockedByVehicleValidator(quests):
-        return plugins.PersonalMissionsLockedByVehicle(quests)
+    def _getLockedByVehicleValidator(self, quests):
+        return plugins.PMLockedByVehicle(self._branch, quests)
 
 
-class _PersonalMissionsGetReward(Processor):
+class _PMGetReward(Processor):
 
     def __init__(self, personalMission, needTankman, nationID, inNationID, role):
-        plugs = [plugins.PersonalMissionRewardValidator(personalMission)]
+        plugs = [plugins.PMRewardValidator(personalMission)]
         if needTankman:
             plugs.insert(0, plugins.VehicleCrewLockedValidator(self.itemsCache.items.getItem(ITEM_TYPES.vehicle, nationID, inNationID)))
-        super(_PersonalMissionsGetReward, self).__init__(tuple(plugs))
+        super(_PMGetReward, self).__init__(tuple(plugs))
         self.__quest = personalMission
         self.__nationID = nationID
         self.__inNationID = inNationID
@@ -130,26 +125,25 @@ class _PersonalMissionsGetReward(Processor):
         BigWorld.player().getPersonalMissionReward(self.__quest.getID(), self.__quest.getQuestBranch(), self.__needTankman, self.__nationID, self.__inNationID, tankmen.SKILL_INDICES[self.__role], lambda code, errStr: self._response(code, callback, errStr=errStr))
 
 
-class PersonalMissionsGetTankwomanReward(_PersonalMissionsGetReward):
+class PMGetTankwomanReward(_PMGetReward):
 
     def __init__(self, personalMission, nationID, inNationID, role):
-        super(PersonalMissionsGetTankwomanReward, self).__init__(personalMission, True, nationID, inNationID, role)
+        super(PMGetTankwomanReward, self).__init__(personalMission, True, nationID, inNationID, role)
 
     def _getMessagePrefix(self):
         pass
 
 
-class PersonalMissionsGetRegularReward(_PersonalMissionsGetReward):
+class PMGetReward(_PMGetReward):
 
     def __init__(self, personalMission):
-        super(PersonalMissionsGetRegularReward, self).__init__(personalMission, False, 0, 0, 'commander')
+        super(PMGetReward, self).__init__(personalMission, False, 0, 0, 'commander')
 
 
-class PersonalMissionPawn(Processor):
+class PMPawn(Processor):
 
     def __init__(self, personalMission):
-        plugs = (plugins.PersonalMissionPawnConfirmator(personalMission), plugins.PersonalMissionPawnValidator([personalMission]), plugins.PersonalMissionFreeTokensValidator(personalMission))
-        super(PersonalMissionPawn, self).__init__(plugs)
+        super(PMPawn, self).__init__((plugins.PMPawnConfirmator(personalMission), plugins.PMPawnValidator([personalMission]), plugins.PMFreeTokensValidator(personalMission)))
         self.__quest = personalMission
 
     def _getMessagePrefix(self):

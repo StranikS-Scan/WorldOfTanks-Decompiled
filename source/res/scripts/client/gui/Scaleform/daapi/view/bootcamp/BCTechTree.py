@@ -33,7 +33,7 @@ class BCTechTree(TechTree):
                 if 'vehCompareTreeNodeData' in node:
                     node['vehCompareTreeNodeData']['modeAvailable'] = False
                 nodeState = node['state']
-                if not NODE_STATE.inInventory(nodeState) and not NODE_STATE.isPremium(nodeState):
+                if not NODE_STATE.inInventory(nodeState):
                     node['state'] = NODE_STATE_FLAGS.LOCKED
                     if NODE_STATE.isAnnouncement(nodeState):
                         node['state'] |= NODE_STATE_FLAGS.ANNOUNCEMENT

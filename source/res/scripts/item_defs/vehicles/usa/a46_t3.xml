@@ -462,6 +462,434 @@
           </transform>
         </decal>
       </AODecals>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	67	</segmentsCount>
+          <segmentsOuterThickness>	0.0583062	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.000209063	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-0.926654	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.13377	</back>
+              <top>	0.128272	</top>
+              <front>	0.124284	</front>
+              <bottom>	0.112695	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.122731	</back>
+              <top>	0.116527	</top>
+              <front>	0.13331	</front>
+              <bottom>	0.121058	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/american/A46_T3/track/segment.model	</model>
+            <length>	0.133479	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-0.960169	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.85517 0.85517 0.85517 0.85517 0.85517 0.85517 0.85517	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.900169	</xStart>
+                <xStep>	0.0352853	</xStep>
+                <ySamples>	0.92517 0.94164 0.944372 0.944733 0.945096 0.940714 0.939378 0.929474	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.653171	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.929474 0.919474 0.909474 0.899474 0.889474 0.879474 0.848734	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.623493	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.799916 0.810961 0.825194 0.845384 0.868958 0.868958 0.868958	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.683493	</xStart>
+                <xStep>	0.0387562	</xStep>
+                <ySamples>	0.938958 0.93847 0.941115 0.943757 0.941628 0.940355	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.877274	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.940355 0.930355 0.920355 0.910355 0.900355 0.890355 0.880355	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-2.15153	</xStart>
+                <xStep>	0.0667395	</xStep>
+                <ySamples>	0.994756 1.03111 1.05856 1.07353 1.08521 1.09541 1.101 1.1062 1.10941 1.11271 1.11598 1.1192 1.12247 1.1264 1.13046 1.13038 1.13031 1.13023 1.13016 1.13009 1.13002 1.12994 1.12987 1.1298 1.12972 1.12965 1.12958 1.12951 1.12944 1.12936 1.12929 1.12922 1.12915 1.12908 1.12901 1.12894 1.12312 1.11618 1.11053 1.10478 1.09884 1.0929 1.08696 1.08102 1.07508 1.06892 1.06278 1.05683 1.05088 1.03941 1.02928 1.0212 1.01598 1.01114 1.00328 0.993028 0.983818 0.962748 0.931131 0.879556 0.77493	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L3	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	1.53288 0.653542	</basePos>
+              <shiftVec>	0.2319 0.174316	</shiftVec>
+              <jointIdx>	8	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L3	</wheelName>
+              <basePos>	-1.76724 0.645205	</basePos>
+              <shiftVec>	-0.244117 0.18608	</shiftVec>
+              <jointIdx>	38	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L3	</wheelName>
+              <basePos>	-1.10903 0.327205	</basePos>
+              <shiftVec>	0.0387622 -0.251796	</shiftVec>
+              <jointIdx>	49	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.09992 0.326897	</basePos>
+              <shiftVec>	0.121546 -0.220511	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L3	</name>
+              <radius>	0.305788	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L2	</name>
+              <radius>	0.11	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L1	</name>
+              <radius>	0.11	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.288879	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	9.09183	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-0.785773 1.08126 -2.15146	</point>
+                <point>	-0.785774 1.11761 -2.08472	</point>
+                <point>	-0.785774 1.14506 -2.01798	</point>
+                <point>	-0.785774 1.16003 -1.95124	</point>
+                <point>	-0.785775 1.17171 -1.8845	</point>
+                <point>	-0.785775 1.18191 -1.81776	</point>
+                <point>	-0.885775 1.1875 -1.75102	</point>
+                <point>	-0.975775 1.1927 -1.68428	</point>
+                <point>	-0.965775 1.19591 -1.61754	</point>
+                <point>	-0.785776 1.19921 -1.5508	</point>
+                <point>	-0.785776 1.20248 -1.48406	</point>
+                <point>	-0.885776 1.2057 -1.41732	</point>
+                <point>	-0.975776 1.20897 -1.35058	</point>
+                <point>	-0.975776 1.2129 -1.28385	</point>
+                <point>	-0.785776 1.21696 -1.21711	</point>
+                <point>	-0.785776 1.21688 -1.15037	</point>
+                <point>	-0.795777 1.21681 -1.08363	</point>
+                <point>	-0.805777 1.21673 -1.01689	</point>
+                <point>	-0.825777 1.21666 -0.950148	</point>
+                <point>	-0.845777 1.21659 -0.883408	</point>
+                <point>	-0.865777 1.21652 -0.816668	</point>
+                <point>	-0.875777 1.21644 -0.749929	</point>
+                <point>	-0.895777 1.21637 -0.683189	</point>
+                <point>	-0.915777 1.2163 -0.61645	</point>
+                <point>	-0.925777 1.21622 -0.54971	</point>
+                <point>	-0.945777 1.21615 -0.482971	</point>
+                <point>	-0.965778 1.21608 -0.416231	</point>
+                <point>	-0.975778 1.21601 -0.349492	</point>
+                <point>	-0.975778 1.21594 -0.282753	</point>
+                <point>	-0.975778 1.21586 -0.216013	</point>
+                <point>	-0.975778 1.21579 -0.149274	</point>
+                <point>	-0.975778 1.21572 -0.082534	</point>
+                <point>	-0.975778 1.21565 -0.0157944	</point>
+                <point>	-0.975778 1.21558 0.0509451	</point>
+                <point>	-0.975778 1.21551 0.117685	</point>
+                <point>	-0.975779 1.21544 0.184424	</point>
+                <point>	-0.975779 1.20962 0.251164	</point>
+                <point>	-0.975779 1.20268 0.317903	</point>
+                <point>	-0.975779 1.19703 0.384643	</point>
+                <point>	-0.975779 1.19128 0.451382	</point>
+                <point>	-0.975779 1.18534 0.518122	</point>
+                <point>	-0.975779 1.1794 0.584862	</point>
+                <point>	-0.975779 1.17346 0.651601	</point>
+                <point>	-0.975779 1.16752 0.71834	</point>
+                <point>	-0.975779 1.16158 0.78508	</point>
+                <point>	-0.975779 1.15542 0.851819	</point>
+                <point>	-0.975779 1.14928 0.918559	</point>
+                <point>	-0.975779 1.14333 0.985298	</point>
+                <point>	-0.975779 1.13738 1.05204	</point>
+                <point>	-0.975779 1.12591 1.11878	</point>
+                <point>	-0.975779 1.11578 1.18552	</point>
+                <point>	-0.935779 1.1077 1.25226	</point>
+                <point>	-0.795779 1.10248 1.319	</point>
+                <point>	-0.785779 1.09764 1.38574	</point>
+                <point>	-0.785779 1.08978 1.45248	</point>
+                <point>	-0.785779 1.07953 1.51922	</point>
+                <point>	-0.785779 1.07032 1.58595	</point>
+                <point>	-0.785779 1.04925 1.65269	</point>
+                <point>	-0.975779 1.01763 1.71943	</point>
+                <point>	-0.975778 0.966055 1.78617	</point>
+                <point>	-0.975777 0.861429 1.85291	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	-0.926618 0.858839 -0.900101	</point>
+                <point>	-0.926618 0.875309 -0.86907	</point>
+                <point>	-0.926618 0.878041 -0.833387	</point>
+                <point>	-0.926618 0.878402 -0.799955	</point>
+                <point>	-0.926618 0.878765 -0.766281	</point>
+                <point>	-0.926618 0.874383 -0.730109	</point>
+                <point>	-0.926618 0.873047 -0.69935	</point>
+                <point>	-0.926654 0.863143 -0.653104	</point>
+              </range>
+              <range>
+                <point>	-0.926621 0.872627 0.683561	</point>
+                <point>	-0.926621 0.872139 0.725074	</point>
+                <point>	-0.926621 0.874784 0.761336	</point>
+                <point>	-0.926621 0.877426 0.799747	</point>
+                <point>	-0.926621 0.875297 0.84059	</point>
+                <point>	-0.926621 0.874024 0.877341	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	67	</segmentsCount>
+          <segmentsOuterThickness>	0.0579474	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.000101715	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	0.92703	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.13377	</back>
+              <top>	0.128272	</top>
+              <front>	0.124284	</front>
+              <bottom>	0.112695	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.122731	</back>
+              <top>	0.116527	</top>
+              <front>	0.13331	</front>
+              <bottom>	0.121058	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/american/A46_T3/track/segment.model	</model>
+            <length>	0.133477	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-0.960172	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.855148 0.855148 0.855148 0.855148 0.855148 0.855148 0.855148	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.900172	</xStart>
+                <xStep>	0.0352853	</xStep>
+                <ySamples>	0.925148 0.941618 0.94435 0.944711 0.945074 0.940692 0.939356 0.929453	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.653175	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.929453 0.919453 0.909453 0.899453 0.889453 0.879453 0.84757	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.62349	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.799166 0.810157 0.824297 0.844261 0.868937 0.868937 0.868937	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.68349	</xStart>
+                <xStep>	0.038756	</xStep>
+                <ySamples>	0.938937 0.938449 0.941094 0.943736 0.941607 0.940334	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.87727	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.940334 0.930334 0.920334 0.910334 0.900334 0.890334 0.880334	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-2.15153	</xStart>
+                <xStep>	0.0667395	</xStep>
+                <ySamples>	0.994738 1.03109 1.05854 1.07351 1.08519 1.09539 1.10098 1.10618 1.10939 1.11269 1.11596 1.11918 1.12245 1.12638 1.13044 1.13036 1.13029 1.13021 1.13014 1.13007 1.13 1.12992 1.12985 1.12978 1.1297 1.12963 1.12956 1.12949 1.12942 1.12934 1.12927 1.1292 1.12913 1.12906 1.12899 1.12892 1.1231 1.11616 1.11051 1.10476 1.09882 1.09288 1.08694 1.081 1.07506 1.0689 1.06276 1.05681 1.05086 1.03939 1.02926 1.02118 1.01596 1.01112 1.00326 0.99301 0.9838 0.96273 0.931108 0.879533 0.774907	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R3	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	1.53288 0.653188	</basePos>
+              <shiftVec>	0.231872 0.174335	</shiftVec>
+              <jointIdx>	8	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R3	</wheelName>
+              <basePos>	-1.76725 0.644849	</basePos>
+              <shiftVec>	-0.244151 0.186037	</shiftVec>
+              <jointIdx>	38	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R3	</wheelName>
+              <basePos>	-1.10903 0.326849	</basePos>
+              <shiftVec>	0.0386907 -0.252101	</shiftVec>
+              <jointIdx>	49	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.09992 0.326897	</basePos>
+              <shiftVec>	0.12154 -0.22087	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R3	</name>
+              <radius>	0.305789	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R2	</name>
+              <radius>	0.11	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R1	</name>
+              <radius>	0.11	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.288868	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	9.0918	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	0.785773 1.08126 -2.15146	</point>
+                <point>	0.785774 1.11761 -2.08472	</point>
+                <point>	0.785774 1.14506 -2.01798	</point>
+                <point>	0.785774 1.16003 -1.95124	</point>
+                <point>	0.785775 1.17171 -1.8845	</point>
+                <point>	0.785775 1.18191 -1.81776	</point>
+                <point>	0.885775 1.1875 -1.75102	</point>
+                <point>	0.975775 1.1927 -1.68428	</point>
+                <point>	0.965775 1.19591 -1.61754	</point>
+                <point>	0.785776 1.19921 -1.5508	</point>
+                <point>	0.785776 1.20248 -1.48406	</point>
+                <point>	0.885776 1.2057 -1.41732	</point>
+                <point>	0.975776 1.20897 -1.35058	</point>
+                <point>	0.975776 1.2129 -1.28385	</point>
+                <point>	0.785776 1.21696 -1.21711	</point>
+                <point>	0.785776 1.21688 -1.15037	</point>
+                <point>	0.795777 1.21681 -1.08363	</point>
+                <point>	0.805777 1.21673 -1.01689	</point>
+                <point>	0.825777 1.21666 -0.950148	</point>
+                <point>	0.845777 1.21659 -0.883408	</point>
+                <point>	0.865777 1.21652 -0.816668	</point>
+                <point>	0.875777 1.21644 -0.749929	</point>
+                <point>	0.895777 1.21637 -0.683189	</point>
+                <point>	0.915777 1.2163 -0.61645	</point>
+                <point>	0.925777 1.21622 -0.54971	</point>
+                <point>	0.945777 1.21615 -0.482971	</point>
+                <point>	0.965778 1.21608 -0.416231	</point>
+                <point>	0.975778 1.21601 -0.349492	</point>
+                <point>	0.975778 1.21594 -0.282753	</point>
+                <point>	0.975778 1.21586 -0.216013	</point>
+                <point>	0.975778 1.21579 -0.149274	</point>
+                <point>	0.975778 1.21572 -0.082534	</point>
+                <point>	0.975778 1.21565 -0.0157944	</point>
+                <point>	0.975778 1.21558 0.0509451	</point>
+                <point>	0.975778 1.21551 0.117685	</point>
+                <point>	0.975779 1.21544 0.184424	</point>
+                <point>	0.975779 1.20962 0.251164	</point>
+                <point>	0.975779 1.20268 0.317903	</point>
+                <point>	0.975779 1.19703 0.384643	</point>
+                <point>	0.975779 1.19128 0.451382	</point>
+                <point>	0.975779 1.18534 0.518122	</point>
+                <point>	0.975779 1.1794 0.584862	</point>
+                <point>	0.975779 1.17346 0.651601	</point>
+                <point>	0.975779 1.16752 0.71834	</point>
+                <point>	0.975779 1.16158 0.78508	</point>
+                <point>	0.975779 1.15542 0.851819	</point>
+                <point>	0.975779 1.14928 0.918559	</point>
+                <point>	0.975779 1.14333 0.985298	</point>
+                <point>	0.975779 1.13738 1.05204	</point>
+                <point>	0.975779 1.12591 1.11878	</point>
+                <point>	0.975779 1.11578 1.18552	</point>
+                <point>	0.935779 1.1077 1.25226	</point>
+                <point>	0.795779 1.10248 1.319	</point>
+                <point>	0.785779 1.09764 1.38574	</point>
+                <point>	0.785779 1.08978 1.45248	</point>
+                <point>	0.785779 1.07953 1.51922	</point>
+                <point>	0.785779 1.07032 1.58595	</point>
+                <point>	0.785779 1.04925 1.65269	</point>
+                <point>	0.975779 1.01763 1.71943	</point>
+                <point>	0.975778 0.966055 1.78617	</point>
+                <point>	0.975777 0.861429 1.85291	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	0.926618 0.858839 -0.900101	</point>
+                <point>	0.926618 0.875309 -0.86907	</point>
+                <point>	0.926618 0.878041 -0.833387	</point>
+                <point>	0.926618 0.878402 -0.799955	</point>
+                <point>	0.926618 0.878765 -0.766281	</point>
+                <point>	0.926618 0.874383 -0.730109	</point>
+                <point>	0.926618 0.873047 -0.69935	</point>
+                <point>	0.926654 0.863143 -0.653104	</point>
+              </range>
+              <range>
+                <point>	0.926621 0.872627 0.683561	</point>
+                <point>	0.926621 0.872139 0.725074	</point>
+                <point>	0.926621 0.874784 0.761336	</point>
+                <point>	0.926621 0.877426 0.799747	</point>
+                <point>	0.926621 0.875297 0.84059	</point>
+                <point>	0.926621 0.874024 0.877341	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
     </Chassis_A46_T3>
     <Chassis_A46_T3_2>
       <userString>	#usa_vehicles:Chassis_A46_T3_2	</userString>
@@ -705,6 +1133,434 @@
           </transform>
         </decal>
       </AODecals>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	67	</segmentsCount>
+          <segmentsOuterThickness>	0.0583062	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.000209063	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-0.926654	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.13377	</back>
+              <top>	0.128272	</top>
+              <front>	0.124284	</front>
+              <bottom>	0.112695	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.122731	</back>
+              <top>	0.116527	</top>
+              <front>	0.13331	</front>
+              <bottom>	0.121058	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/american/A46_T3/track/segment.model	</model>
+            <length>	0.133479	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-0.960169	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.85517 0.85517 0.85517 0.85517 0.85517 0.85517 0.85517	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.900169	</xStart>
+                <xStep>	0.0352853	</xStep>
+                <ySamples>	0.92517 0.94164 0.944372 0.944733 0.945096 0.940714 0.939378 0.929474	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.653171	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.929474 0.919474 0.909474 0.899474 0.889474 0.879474 0.848734	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.623493	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.799916 0.810961 0.825194 0.845384 0.868958 0.868958 0.868958	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.683493	</xStart>
+                <xStep>	0.0387562	</xStep>
+                <ySamples>	0.938958 0.93847 0.941115 0.943757 0.941628 0.940355	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.877274	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.940355 0.930355 0.920355 0.910355 0.900355 0.890355 0.880355	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-2.15153	</xStart>
+                <xStep>	0.0667395	</xStep>
+                <ySamples>	0.994756 1.03111 1.05856 1.07353 1.08521 1.09541 1.101 1.1062 1.10941 1.11271 1.11598 1.1192 1.12247 1.1264 1.13046 1.13038 1.13031 1.13023 1.13016 1.13009 1.13002 1.12994 1.12987 1.1298 1.12972 1.12965 1.12958 1.12951 1.12944 1.12936 1.12929 1.12922 1.12915 1.12908 1.12901 1.12894 1.12312 1.11618 1.11053 1.10478 1.09884 1.0929 1.08696 1.08102 1.07508 1.06892 1.06278 1.05683 1.05088 1.03941 1.02928 1.0212 1.01598 1.01114 1.00328 0.993028 0.983818 0.962748 0.931131 0.879556 0.77493	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L3	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	1.53288 0.653542	</basePos>
+              <shiftVec>	0.2319 0.174316	</shiftVec>
+              <jointIdx>	8	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L3	</wheelName>
+              <basePos>	-1.76724 0.645205	</basePos>
+              <shiftVec>	-0.244117 0.18608	</shiftVec>
+              <jointIdx>	38	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L3	</wheelName>
+              <basePos>	-1.10903 0.327205	</basePos>
+              <shiftVec>	0.0387622 -0.251796	</shiftVec>
+              <jointIdx>	49	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.09992 0.326897	</basePos>
+              <shiftVec>	0.121546 -0.220511	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L3	</name>
+              <radius>	0.305788	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L2	</name>
+              <radius>	0.11	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L1	</name>
+              <radius>	0.11	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.288879	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	9.09183	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-0.785773 1.08126 -2.15146	</point>
+                <point>	-0.785774 1.11761 -2.08472	</point>
+                <point>	-0.785774 1.14506 -2.01798	</point>
+                <point>	-0.785774 1.16003 -1.95124	</point>
+                <point>	-0.785775 1.17171 -1.8845	</point>
+                <point>	-0.785775 1.18191 -1.81776	</point>
+                <point>	-0.885775 1.1875 -1.75102	</point>
+                <point>	-0.975775 1.1927 -1.68428	</point>
+                <point>	-0.965775 1.19591 -1.61754	</point>
+                <point>	-0.785776 1.19921 -1.5508	</point>
+                <point>	-0.785776 1.20248 -1.48406	</point>
+                <point>	-0.885776 1.2057 -1.41732	</point>
+                <point>	-0.975776 1.20897 -1.35058	</point>
+                <point>	-0.975776 1.2129 -1.28385	</point>
+                <point>	-0.785776 1.21696 -1.21711	</point>
+                <point>	-0.785776 1.21688 -1.15037	</point>
+                <point>	-0.795777 1.21681 -1.08363	</point>
+                <point>	-0.805777 1.21673 -1.01689	</point>
+                <point>	-0.825777 1.21666 -0.950148	</point>
+                <point>	-0.845777 1.21659 -0.883408	</point>
+                <point>	-0.865777 1.21652 -0.816668	</point>
+                <point>	-0.875777 1.21644 -0.749929	</point>
+                <point>	-0.895777 1.21637 -0.683189	</point>
+                <point>	-0.915777 1.2163 -0.61645	</point>
+                <point>	-0.925777 1.21622 -0.54971	</point>
+                <point>	-0.945777 1.21615 -0.482971	</point>
+                <point>	-0.965778 1.21608 -0.416231	</point>
+                <point>	-0.975778 1.21601 -0.349492	</point>
+                <point>	-0.975778 1.21594 -0.282753	</point>
+                <point>	-0.975778 1.21586 -0.216013	</point>
+                <point>	-0.975778 1.21579 -0.149274	</point>
+                <point>	-0.975778 1.21572 -0.082534	</point>
+                <point>	-0.975778 1.21565 -0.0157944	</point>
+                <point>	-0.975778 1.21558 0.0509451	</point>
+                <point>	-0.975778 1.21551 0.117685	</point>
+                <point>	-0.975779 1.21544 0.184424	</point>
+                <point>	-0.975779 1.20962 0.251164	</point>
+                <point>	-0.975779 1.20268 0.317903	</point>
+                <point>	-0.975779 1.19703 0.384643	</point>
+                <point>	-0.975779 1.19128 0.451382	</point>
+                <point>	-0.975779 1.18534 0.518122	</point>
+                <point>	-0.975779 1.1794 0.584862	</point>
+                <point>	-0.975779 1.17346 0.651601	</point>
+                <point>	-0.975779 1.16752 0.71834	</point>
+                <point>	-0.975779 1.16158 0.78508	</point>
+                <point>	-0.975779 1.15542 0.851819	</point>
+                <point>	-0.975779 1.14928 0.918559	</point>
+                <point>	-0.975779 1.14333 0.985298	</point>
+                <point>	-0.975779 1.13738 1.05204	</point>
+                <point>	-0.975779 1.12591 1.11878	</point>
+                <point>	-0.975779 1.11578 1.18552	</point>
+                <point>	-0.935779 1.1077 1.25226	</point>
+                <point>	-0.795779 1.10248 1.319	</point>
+                <point>	-0.785779 1.09764 1.38574	</point>
+                <point>	-0.785779 1.08978 1.45248	</point>
+                <point>	-0.785779 1.07953 1.51922	</point>
+                <point>	-0.785779 1.07032 1.58595	</point>
+                <point>	-0.785779 1.04925 1.65269	</point>
+                <point>	-0.975779 1.01763 1.71943	</point>
+                <point>	-0.975778 0.966055 1.78617	</point>
+                <point>	-0.975777 0.861429 1.85291	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	-0.926618 0.858839 -0.900101	</point>
+                <point>	-0.926618 0.875309 -0.86907	</point>
+                <point>	-0.926618 0.878041 -0.833387	</point>
+                <point>	-0.926618 0.878402 -0.799955	</point>
+                <point>	-0.926618 0.878765 -0.766281	</point>
+                <point>	-0.926618 0.874383 -0.730109	</point>
+                <point>	-0.926618 0.873047 -0.69935	</point>
+                <point>	-0.926654 0.863143 -0.653104	</point>
+              </range>
+              <range>
+                <point>	-0.926621 0.872627 0.683561	</point>
+                <point>	-0.926621 0.872139 0.725074	</point>
+                <point>	-0.926621 0.874784 0.761336	</point>
+                <point>	-0.926621 0.877426 0.799747	</point>
+                <point>	-0.926621 0.875297 0.84059	</point>
+                <point>	-0.926621 0.874024 0.877341	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	67	</segmentsCount>
+          <segmentsOuterThickness>	0.0579474	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.000101715	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	0.92703	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.13377	</back>
+              <top>	0.128272	</top>
+              <front>	0.124284	</front>
+              <bottom>	0.112695	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.122731	</back>
+              <top>	0.116527	</top>
+              <front>	0.13331	</front>
+              <bottom>	0.121058	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/american/A46_T3/track/segment.model	</model>
+            <length>	0.133477	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-0.960172	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.855148 0.855148 0.855148 0.855148 0.855148 0.855148 0.855148	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.900172	</xStart>
+                <xStep>	0.0352853	</xStep>
+                <ySamples>	0.925148 0.941618 0.94435 0.944711 0.945074 0.940692 0.939356 0.929453	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.653175	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.929453 0.919453 0.909453 0.899453 0.889453 0.879453 0.84757	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.62349	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.799166 0.810157 0.824297 0.844261 0.868937 0.868937 0.868937	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.68349	</xStart>
+                <xStep>	0.038756	</xStep>
+                <ySamples>	0.938937 0.938449 0.941094 0.943736 0.941607 0.940334	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.87727	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.940334 0.930334 0.920334 0.910334 0.900334 0.890334 0.880334	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-2.15153	</xStart>
+                <xStep>	0.0667395	</xStep>
+                <ySamples>	0.994738 1.03109 1.05854 1.07351 1.08519 1.09539 1.10098 1.10618 1.10939 1.11269 1.11596 1.11918 1.12245 1.12638 1.13044 1.13036 1.13029 1.13021 1.13014 1.13007 1.13 1.12992 1.12985 1.12978 1.1297 1.12963 1.12956 1.12949 1.12942 1.12934 1.12927 1.1292 1.12913 1.12906 1.12899 1.12892 1.1231 1.11616 1.11051 1.10476 1.09882 1.09288 1.08694 1.081 1.07506 1.0689 1.06276 1.05681 1.05086 1.03939 1.02926 1.02118 1.01596 1.01112 1.00326 0.99301 0.9838 0.96273 0.931108 0.879533 0.774907	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R3	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	1.53288 0.653188	</basePos>
+              <shiftVec>	0.231872 0.174335	</shiftVec>
+              <jointIdx>	8	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R3	</wheelName>
+              <basePos>	-1.76725 0.644849	</basePos>
+              <shiftVec>	-0.244151 0.186037	</shiftVec>
+              <jointIdx>	38	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R3	</wheelName>
+              <basePos>	-1.10903 0.326849	</basePos>
+              <shiftVec>	0.0386907 -0.252101	</shiftVec>
+              <jointIdx>	49	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.09992 0.326897	</basePos>
+              <shiftVec>	0.12154 -0.22087	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R3	</name>
+              <radius>	0.305789	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R2	</name>
+              <radius>	0.11	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R1	</name>
+              <radius>	0.11	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.288868	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	9.0918	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	0.785773 1.08126 -2.15146	</point>
+                <point>	0.785774 1.11761 -2.08472	</point>
+                <point>	0.785774 1.14506 -2.01798	</point>
+                <point>	0.785774 1.16003 -1.95124	</point>
+                <point>	0.785775 1.17171 -1.8845	</point>
+                <point>	0.785775 1.18191 -1.81776	</point>
+                <point>	0.885775 1.1875 -1.75102	</point>
+                <point>	0.975775 1.1927 -1.68428	</point>
+                <point>	0.965775 1.19591 -1.61754	</point>
+                <point>	0.785776 1.19921 -1.5508	</point>
+                <point>	0.785776 1.20248 -1.48406	</point>
+                <point>	0.885776 1.2057 -1.41732	</point>
+                <point>	0.975776 1.20897 -1.35058	</point>
+                <point>	0.975776 1.2129 -1.28385	</point>
+                <point>	0.785776 1.21696 -1.21711	</point>
+                <point>	0.785776 1.21688 -1.15037	</point>
+                <point>	0.795777 1.21681 -1.08363	</point>
+                <point>	0.805777 1.21673 -1.01689	</point>
+                <point>	0.825777 1.21666 -0.950148	</point>
+                <point>	0.845777 1.21659 -0.883408	</point>
+                <point>	0.865777 1.21652 -0.816668	</point>
+                <point>	0.875777 1.21644 -0.749929	</point>
+                <point>	0.895777 1.21637 -0.683189	</point>
+                <point>	0.915777 1.2163 -0.61645	</point>
+                <point>	0.925777 1.21622 -0.54971	</point>
+                <point>	0.945777 1.21615 -0.482971	</point>
+                <point>	0.965778 1.21608 -0.416231	</point>
+                <point>	0.975778 1.21601 -0.349492	</point>
+                <point>	0.975778 1.21594 -0.282753	</point>
+                <point>	0.975778 1.21586 -0.216013	</point>
+                <point>	0.975778 1.21579 -0.149274	</point>
+                <point>	0.975778 1.21572 -0.082534	</point>
+                <point>	0.975778 1.21565 -0.0157944	</point>
+                <point>	0.975778 1.21558 0.0509451	</point>
+                <point>	0.975778 1.21551 0.117685	</point>
+                <point>	0.975779 1.21544 0.184424	</point>
+                <point>	0.975779 1.20962 0.251164	</point>
+                <point>	0.975779 1.20268 0.317903	</point>
+                <point>	0.975779 1.19703 0.384643	</point>
+                <point>	0.975779 1.19128 0.451382	</point>
+                <point>	0.975779 1.18534 0.518122	</point>
+                <point>	0.975779 1.1794 0.584862	</point>
+                <point>	0.975779 1.17346 0.651601	</point>
+                <point>	0.975779 1.16752 0.71834	</point>
+                <point>	0.975779 1.16158 0.78508	</point>
+                <point>	0.975779 1.15542 0.851819	</point>
+                <point>	0.975779 1.14928 0.918559	</point>
+                <point>	0.975779 1.14333 0.985298	</point>
+                <point>	0.975779 1.13738 1.05204	</point>
+                <point>	0.975779 1.12591 1.11878	</point>
+                <point>	0.975779 1.11578 1.18552	</point>
+                <point>	0.935779 1.1077 1.25226	</point>
+                <point>	0.795779 1.10248 1.319	</point>
+                <point>	0.785779 1.09764 1.38574	</point>
+                <point>	0.785779 1.08978 1.45248	</point>
+                <point>	0.785779 1.07953 1.51922	</point>
+                <point>	0.785779 1.07032 1.58595	</point>
+                <point>	0.785779 1.04925 1.65269	</point>
+                <point>	0.975779 1.01763 1.71943	</point>
+                <point>	0.975778 0.966055 1.78617	</point>
+                <point>	0.975777 0.861429 1.85291	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	0.926618 0.858839 -0.900101	</point>
+                <point>	0.926618 0.875309 -0.86907	</point>
+                <point>	0.926618 0.878041 -0.833387	</point>
+                <point>	0.926618 0.878402 -0.799955	</point>
+                <point>	0.926618 0.878765 -0.766281	</point>
+                <point>	0.926618 0.874383 -0.730109	</point>
+                <point>	0.926618 0.873047 -0.69935	</point>
+                <point>	0.926654 0.863143 -0.653104	</point>
+              </range>
+              <range>
+                <point>	0.926621 0.872627 0.683561	</point>
+                <point>	0.926621 0.872139 0.725074	</point>
+                <point>	0.926621 0.874784 0.761336	</point>
+                <point>	0.926621 0.877426 0.799747	</point>
+                <point>	0.926621 0.875297 0.84059	</point>
+                <point>	0.926621 0.874024 0.877341	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
     </Chassis_A46_T3_2>
   </chassis>
   <turrets0>

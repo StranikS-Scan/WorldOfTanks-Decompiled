@@ -84,30 +84,6 @@ class IArenaVehiclesController(IArenaLoadController, IContactsController):
     def invalidateFogOfWarHiddenVehiclesFlag(self, flag):
         pass
 
-    def invalidateFootballOvertimePoints(self, arenaDP, data):
-        pass
-
-    def invalidateGoalData(self, data):
-        pass
-
-    def invalidateGoalTimeline(self, data):
-        pass
-
-    def invalidateOnBallDrop(self, data):
-        pass
-
-    def onBallDrop(self, data):
-        pass
-
-    def onReturnToPlay(self, data):
-        pass
-
-    def onWinnerDeclared(self, data):
-        pass
-
-    def onFadeOutOverlay(self, data):
-        pass
-
 
 class ITeamsBasesController(IArenaController):
     __slots__ = ()

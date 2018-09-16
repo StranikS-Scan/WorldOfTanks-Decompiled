@@ -18,6 +18,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getAchievementsTabCounter
 from gui.Scaleform.daapi.view.lobby.store.actions_formatters import getNewActiveActions
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getBuyPremiumUrl, getBuyGoldUrl, isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.LobbyHeaderMeta import LobbyHeaderMeta
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
 from gui.Scaleform.framework.entities.View import ViewKey
@@ -28,7 +29,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.clans.clan_helpers import isStrongholdsEnabled
+from gui.clans.clan_helpers import isStrongholdsEnabled, isClansTabReplaceStrongholds
 from gui.game_control.ServerStats import STATS_TYPE
 from gui.game_control.wallet import WalletController
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
@@ -40,6 +41,7 @@ from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showWebShop, showStorage
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter
 from gui.shared.formatters.ranges import toRomanRangeString
@@ -64,6 +66,7 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
+from SoundGroups import g_instance as SoundGroupsInstance
 _MAX_BOOSTERS_TO_DISPLAY = 99
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
@@ -120,6 +123,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     class TABS(CONST_CONTAINER):
         HANGAR = VIEW_ALIAS.LOBBY_HANGAR
         STORE = VIEW_ALIAS.LOBBY_STORE
+        STORE_OLD = VIEW_ALIAS.LOBBY_STORE_OLD
+        STORAGE = VIEW_ALIAS.LOBBY_STORAGE
         PROFILE = VIEW_ALIAS.LOBBY_PROFILE
         TECHTREE = VIEW_ALIAS.LOBBY_TECHTREE
         BARRACKS = VIEW_ALIAS.LOBBY_BARRACKS
@@ -132,11 +137,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         PERSONAL_MISSIONS_PAGE = VIEW_ALIAS.PERSONAL_MISSIONS_PAGE
 
     RANKED_WELCOME_VIEW_DISABLE_CONTROLS = BUTTONS.ALL()
-
-    class FE18_SUB_VIEWS(CONST_CONTAINER):
-        LOBBY_FE18_COLLECTIONS = VIEW_ALIAS.FOOTBALL_CARD_COLLECTION
-        LOBBY_FE18_BUFFON_RECRUITMENT = VIEW_ALIAS.FOOTBALL_BUFFON_RECRUITMENT_PANEL
-
     itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
     gameSession = dependency.descriptor(IGameSessionController)
@@ -161,6 +161,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._isLobbyHeaderControlsDisabled = False
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
         self.__isFightBtnDisabled = self.bootcampController.isInBootcamp()
+        self.__isIngameShopEnabled = isIngameShopEnabled()
         return
 
     def onClanEmblem16x16Received(self, clanDbID, emblem):
@@ -199,8 +200,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def updateXPInfo(self):
         self.__setFreeXP(self.itemsCache.items.stats.actualFreeXP)
 
-    def updateClanInfo(self):
-        self.__setClanInfo(g_clanCache.clanInfo)
+    def updateClanInfo(self, diff=None):
+        self.__setClanInfo(g_clanCache.clanInfo, diff)
 
     def updateAccountAttrs(self):
         stats = self.itemsCache.items.stats
@@ -231,7 +232,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         shared_events.showCrystalWindow()
 
     def onPayment(self):
-        shared_events.openPaymentLink()
+        if self.__isIngameShopEnabled:
+            url = getBuyGoldUrl()
+            showWebShop(url)
+        else:
+            shared_events.openPaymentLink()
 
     def showExchangeWindow(self):
         shared_events.showExchangeCurrencyWindow()
@@ -240,7 +245,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         shared_events.showExchangeXPWindow()
 
     def showPremiumDialog(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+        if self.__isIngameShopEnabled:
+            url = getBuyPremiumUrl()
+            showWebShop(url)
+        else:
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     def onPremShopClick(self):
         self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.PREM_SHOP))
@@ -279,7 +288,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__viewLifecycleWatcher.start(self.app.containerManager, [_RankedBattlesWelcomeViewLifecycleHandler(self)])
         if self.bootcampController.isInBootcamp():
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
-        self.__updateFE18SquadButton()
         self._onPopulateEnd()
         return
 
@@ -395,6 +403,18 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbyHeaderMenuEvent.MENY_HIDE, self.__onHideMenuBar, scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def __updateIngameShopState(self):
+        newIngameShopEnabled = isIngameShopEnabled()
+        if self.__isIngameShopEnabled != newIngameShopEnabled:
+            if newIngameShopEnabled:
+                self.__hideCounter(self.TABS.STORE_OLD)
+            else:
+                self.__hideCounter(self.TABS.STORE)
+            self.__isIngameShopEnabled = newIngameShopEnabled
+            self.as_setHangarMenuDataS(self._getHangarMenuItemDataProvider(None))
+            self.__onActionVisited(len(getNewActiveActions(self.eventsCache)))
+        return
+
     def __updateServerData(self):
         serverShortName = self.connectionMgr.serverUserNameShort.strip().split(' ')[-1]
         if len(serverShortName) > _MAX_HEADER_SERVER_NAME_LEN:
@@ -407,7 +427,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             serverShortName = _SERVER_NAME_PREFIX % serverShortName[:_MAX_HEADER_SERVER_NAME_LEN]
         self.as_setServerS(serverShortName, TOOLTIPS_CONSTANTS.SETTINGS_BUTTON, TOOLTIP_TYPES.SPECIAL)
 
-    def __setClanInfo(self, clanInfo):
+    def __setClanInfo(self, clanInfo, diff=None):
         if not isPlayerAccount():
             return
         else:
@@ -447,6 +467,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
              'boosterText': boosterText})
             if g_clanCache.clanDBID:
                 self.requestClanEmblem16x16(g_clanCache.clanDBID)
+            if diff is not None and any((self.goodiesCache.haveBooster(itemId) for itemId in diff.keys())):
+                SoundGroupsInstance.playSound2D('warehouse_booster')
             return
 
     def __updateBadge(self, *args):
@@ -558,6 +580,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __triggerViewLoad(self, alias):
         if alias == self.TABS.BROWSER:
             self.chinaCtrl.showBrowser()
+        elif alias == self.TABS.STORAGE:
+            showStorage()
         else:
             if alias == self.TABS.ACADEMY:
                 self.__hideCounter(alias)
@@ -589,19 +613,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if pyEntity.viewType is ViewTypes.LOBBY_SUB:
             if pyEntity.alias in self.TABS.ALL():
                 self.__setCurrentScreen(pyEntity.alias)
-            self.__updateFE18Visibility(pyEntity.settings.alias)
-
-    def __updateFE18Visibility(self, alias):
-        isShowMainMenu = alias not in self.FE18_SUB_VIEWS.ALL()
-        self.as_updateFE18AvailableS(True)
-        self.as_updateFE18VisibilityS(isShowMainMenu)
-
-    def __onFE18StateChanged(self, _):
-        pass
-
-    def __updateFE18SquadButton(self):
-        btnSourse = RES_ICONS.MAPS_ICONS_FE18_FOOTBALL_LOBBY_HEADER if self.eventsCache.isEventEnabled() else ''
-        self.as_setFE18DataS(btnSourse)
 
     def __getContainer(self, viewType):
         return self.app.containerManager.getContainer(viewType) if self.app is not None and self.app.containerManager is not None else None
@@ -791,7 +802,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def _updateTabCounters(self):
         self.__onEventsVisited()
         self.__onProfileVisited()
-        self.__updatePersonalTabCounter(self.TABS.PERSONAL_MISSIONS)
+        self.__updatePersonalTabCounter()
 
     def __handleFightButtonUpdated(self, _):
         self._updatePrebattleControls()
@@ -815,7 +826,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._updateTabCounters()
         self.updateMoneyStats()
         self.updateXPInfo()
-        self.__updateFE18SquadButton()
 
     def __onEventsVisited(self, counters=None):
         if counters is not None:
@@ -838,10 +848,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.__hideCounter(self.TABS.MISSIONS)
 
     def __onActionVisited(self, counter):
-        if counter:
-            self.__setCounter(self.TABS.STORE, counter)
-        else:
-            self.__hideCounter(self.TABS.STORE)
+        if not self.__isIngameShopEnabled:
+            if counter:
+                self.__setCounter(self.TABS.STORE_OLD, counter)
+            else:
+                self.__hideCounter(self.TABS.STORE_OLD)
 
     def __onProfileVisited(self):
         self.__updateProfileTabCounter()
@@ -852,13 +863,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if alias in counters and counters[alias]:
             counters[alias] = False
             AccountSettings.setCounters(NEW_LOBBY_TAB_COUNTER, counters)
-        self.__updatePersonalTabCounter(alias)
+        self.__updatePersonalTabCounter()
 
     def __onIGRChanged(self, *args):
         self._updatePrebattleControls()
 
-    def __updateGoodies(self, *args):
-        self.updateClanInfo()
+    def __updateGoodies(self, diff, *args):
+        self.updateClanInfo(diff)
         self.updateXPInfo()
         self.updateAccountAttrs()
 
@@ -870,11 +881,18 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def _updateStrongholdsSelector(self, emblem=None):
         strongholdEnabled = isStrongholdsEnabled()
-        if strongholdEnabled:
-            tooltip = TOOLTIPS.HEADER_BUTTONS_FORTS
+        clansTabReplaceStrongholds = isClansTabReplaceStrongholds()
+        clanDBID = self.itemsCache.items.stats.clanDBID
+        if not clanDBID:
+            strongholdsTabConfig = {(True, False): (MENU.HEADERBUTTONS_STRONGHOLD, TOOLTIPS.HEADER_BUTTONS_FORTS),
+             (False, False): (MENU.HEADERBUTTONS_STRONGHOLD, TOOLTIPS.HEADER_BUTTONS_FORTS_TURNEDOFF),
+             (True, True): (MENU.HEADERBUTTONS_CLANS, TOOLTIPS.HEADER_BUTTONS_CLANS),
+             (False, True): (MENU.HEADERBUTTONS_CLANS, TOOLTIPS.HEADER_BUTTONS_CLANS_TURNEDOFF)}
+            label, tooltip = strongholdsTabConfig[strongholdEnabled, clansTabReplaceStrongholds]
         else:
-            tooltip = TOOLTIPS.HEADER_BUTTONS_FORTS_TURNEDOFF
-        return {'label': MENU.HEADERBUTTONS_STRONGHOLD,
+            label = MENU.HEADERBUTTONS_STRONGHOLD
+            tooltip = TOOLTIPS.HEADER_BUTTONS_FORTS if strongholdEnabled else TOOLTIPS.HEADER_BUTTONS_FORTS_TURNEDOFF
+        return {'label': label,
          'value': VIEW_ALIAS.LOBBY_STRONGHOLD,
          'tooltip': tooltip,
          'icon': emblem,
@@ -885,11 +903,14 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
           'value': self.TABS.HANGAR,
           'textColor': 16764006,
           'textColorOver': 16768409,
-          'tooltip': TOOLTIPS.HEADER_BUTTONS_HANGAR},
-         {'label': MENU.HEADERBUTTONS_SHOP,
-          'value': self.TABS.STORE,
-          'tooltip': TOOLTIPS.HEADER_BUTTONS_SHOP},
-         {'label': MENU.HEADERBUTTONS_MISSIONS,
+          'tooltip': TOOLTIPS.HEADER_BUTTONS_HANGAR}, {'label': MENU.HEADERBUTTONS_SHOP,
+          'value': self.TABS.STORE if self.__isIngameShopEnabled else self.TABS.STORE_OLD,
+          'tooltip': TOOLTIPS.HEADER_BUTTONS_SHOP2 if self.__isIngameShopEnabled else TOOLTIPS.HEADER_BUTTONS_SHOP}]
+        if self.__isIngameShopEnabled:
+            tabDataProvider.append({'label': MENU.HEADERBUTTONS_STORAGE,
+             'value': self.TABS.STORAGE,
+             'tooltip': TOOLTIPS.HEADER_BUTTONS_STORAGE})
+        tabDataProvider.extend([{'label': MENU.HEADERBUTTONS_MISSIONS,
           'value': self.TABS.MISSIONS,
           'tooltip': TOOLTIPS.HEADER_BUTTONS_MISSIONS},
          {'label': MENU.HEADERBUTTONS_PERSONALMISSIONS,
@@ -906,7 +927,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
           'subValues': [self.TABS.RESEARCH]},
          {'label': MENU.HEADERBUTTONS_BARRACKS,
           'value': self.TABS.BARRACKS,
-          'tooltip': TOOLTIPS.HEADER_BUTTONS_BARRACKS}]
+          'tooltip': TOOLTIPS.HEADER_BUTTONS_BARRACKS}])
         if constants.IS_CHINA:
             tabDataProvider.append({'label': MENU.HEADERBUTTONS_BROWSER,
              'value': self.TABS.BROWSER,
@@ -949,26 +970,27 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.as_setGoldFishEnabledS(enabledVal, isAnimEnabled, tooltip, TOOLTIP_TYPES.COMPLEX)
 
     def __onServerSettingChanged(self, diff):
-        if 'isSandboxEnabled' in diff:
-            self._updatePrebattleControls()
-        if 'isBootcampEnabled' in diff:
+        strongholdSettingsChanged = 'strongholdSettings' in diff
+        epicRandomStateChanged = 'isEpicRandomEnabled' in diff
+        bootcampStateChanged = 'isBootcampEnabled' in diff
+        updateHangarMenuData = any((strongholdSettingsChanged, epicRandomStateChanged, 'isRegularQuestEnabled' in diff))
+        updatePrebattleControls = any((strongholdSettingsChanged,
+         epicRandomStateChanged,
+         bootcampStateChanged,
+         'isSandboxEnabled' in diff,
+         'ranked_config' in diff,
+         'epic_config' in diff))
+        if 'ingameShop' in diff:
+            self.__updateIngameShopState()
+        if bootcampStateChanged:
             battle_selector_items.clear()
             battle_selector_items.create()
-            self._updatePrebattleControls()
-        if 'strongholdSettings' in diff:
+        if updateHangarMenuData:
             self._updateHangarMenuData()
+        if updatePrebattleControls:
             self._updatePrebattleControls()
-        if 'ranked_config' in diff:
-            self._updatePrebattleControls()
-        if 'hallOfFame' in diff:
+        if not updateHangarMenuData and 'hallOfFame' in diff:
             self.__updateProfileTabCounter()
-        if 'isEpicRandomEnabled' in diff:
-            self._updateHangarMenuData()
-            self._updatePrebattleControls()
-        if 'isRegularQuestEnabled' in diff:
-            self._updateHangarMenuData()
-        if 'epic_config' in diff:
-            self._updatePrebattleControls()
 
     def __updateProfileTabCounter(self):
         if self.lobbyContext.getServerSettings().isHofEnabled():
@@ -980,16 +1002,14 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         else:
             self.__hideCounter(self.TABS.PROFILE)
 
-    def __updatePersonalTabCounter(self, alias):
-        if self.eventsCache.personalMissions.hasVehicleForQuests():
-            counters = AccountSettings.getCounters(NEW_LOBBY_TAB_COUNTER)
-            if alias not in counters:
-                counters[alias] = True
-                AccountSettings.setCounters(NEW_LOBBY_TAB_COUNTER, counters)
-            if counters[alias]:
-                self.__setCounter(alias, 1)
-            else:
-                self.__hideCounter(alias)
+    def __updatePersonalTabCounter(self):
+        counters = AccountSettings.getCounters(NEW_LOBBY_TAB_COUNTER)
+        alias = self.TABS.PERSONAL_MISSIONS
+        if alias not in counters:
+            counters[alias] = True
+            AccountSettings.setCounters(NEW_LOBBY_TAB_COUNTER, counters)
+        if counters[alias]:
+            self.__setCounter(alias, 1)
         else:
             self.__hideCounter(alias)
 

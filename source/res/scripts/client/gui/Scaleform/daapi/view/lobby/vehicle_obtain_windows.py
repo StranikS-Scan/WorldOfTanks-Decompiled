@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_obtain_windows.py
+from collections import namedtuple
 import constants
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
@@ -7,17 +8,19 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.DialogsInterface import showI18nConfirmDialog
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.VehicleBuyWindowMeta import VehicleBuyWindowMeta
 from gui.Scaleform.genConsts.VEHICLE_BUY_WINDOW_ALIASES import VEHICLE_BUY_WINDOW_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.ingame_shop import showBuyGoldForVehicleWebOverlay
 from gui.shared.events import VehicleBuyEvent
 from gui.shared.formatters import text_styles, moneyWithIcon
 from gui.shared.formatters.text_styles import neutral
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
+from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleRestoreProcessor, VehicleTradeInProcessor
 from gui.shared.money import Money, Currency
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
@@ -28,6 +31,7 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, time_utils, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 class _TABS(CONST_CONTAINER):
@@ -36,10 +40,16 @@ class _TABS(CONST_CONTAINER):
     TRADE = 1
 
 
+VehicleBuyWindowState = namedtuple('VehicleBuyWindowState', ('buyAmmo',
+ 'buySlot',
+ 'crewType',
+ 'rentID'))
+
 class VehicleBuyWindow(VehicleBuyWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     rentals = dependency.descriptor(IRentalsController)
     tradeIn = dependency.descriptor(ITradeInController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(VehicleBuyWindow, self).__init__()
@@ -47,6 +57,8 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         self.inNationID = ctx.get('itemID')
         self.vehicle = None
         self.tradeOffVehicle = None
+        self.__state = VehicleBuyWindowState(False, False, -1, -1)
+        self.__isGoldAutoPurhaseEnabled = isIngameShopEnabled()
         if ctx.get('isTradeIn', False):
             self.selectedTab = _TABS.TRADE
         else:
@@ -57,7 +69,17 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         self.destroy()
 
     def submit(self, data):
+        if self.__isGoldAutoPurhaseEnabled:
+            availableGold = self.itemsCache.items.stats.money.gold
+            requiredGold = (self._getVehiclePrice(self.vehicle) + self._getSetupPrice()).price.gold
+            if availableGold < requiredGold:
+                showBuyGoldForVehicleWebOverlay(requiredGold, self.vehicle.intCD)
+                return
         self.__requestForMoneyObtain(data)
+
+    def stateChange(self, data):
+        self.__state = VehicleBuyWindowState(data.buyAmmo, data.buySlot, data.crewType, data.rentId)
+        self.__updateButtons()
 
     def onTradeInClearVehicle(self):
         self.tradeOffVehicle = None
@@ -116,17 +138,21 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
                 self.selectedTab = _TABS.TRADE
         return {'tradeInPriceLabel': i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_TRADEIN_PRICELABEL, vehiclename=vehicle.shortUserName),
          'tradeInCrewCheckbox': i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_TRADEIN_TANKMENCHECKBOX),
-         'tradeInVehiclePrices': self._getVehiclePrice(vehicle).toMoneyTuple(),
+         'tradeInVehiclePrices': self._getVehiclePrice(vehicle).price.toMoneyTuple(),
          'tradeInVehiclePricesActionData': self._getItemPriceActionData(vehicle),
          'tradeInStudyLabel': i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_TRADEIN_STUDYLABEL, count=text_styles.stats(str(len(vehicle.crew)))),
          'hasTradeOffVehicles': self.tradeIn.getTradeInInfo(vehicle) is not None,
          'selectedTab': self.selectedTab}
 
-    def _isSubmitBtnEnabled(self, vehicle):
-        if vehicle.isPurchased:
+    def _isSubmitBtnEnabled(self):
+        if self.vehicle.isPurchased:
             return False
         money = self.itemsCache.items.stats.money
-        canBuy, _ = vehicle.mayObtainForMoney(money)
+        vehiclePrice = self._getVehiclePrice(self.vehicle)
+        setupPrice = self._getSetupPrice()
+        totalPrice = vehiclePrice + setupPrice
+        canBuy = totalPrice.price <= money
+        canBuy |= self.__isGoldAutoPurhaseEnabled and totalPrice.price.gold > money.gold and totalPrice.price.credits <= money.credits
         return canBuy
 
     def _initData(self, *args):
@@ -134,7 +160,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         self.as_setGoldS(stats.gold)
         self.as_setCreditsS(stats.credits)
         self.vehicle = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.nationID, self.inNationID)
-        self.as_setEnabledSubmitBtnS(self._isSubmitBtnEnabled(self.vehicle))
+        self.__updateButtons()
         if self.vehicle is None:
             LOG_ERROR("Vehicle Item mustn't be None!", 'NationID:', self.nationID, 'InNationID:', self.inNationID)
         elif self.vehicle.isInInventory and not self.vehicle.isRented:
@@ -143,7 +169,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
             isTradeIn = self._isTradeIn()
             initData = {'headerData': self._getOptainHeaderData(self.vehicle),
              'isTradeIn': isTradeIn,
-             'contentData': self._getByuContentData(self.vehicle, stats, isTradeIn)}
+             'contentData': self._getBuyContentData(self.vehicle, stats, isTradeIn)}
             initData.update(self._getContentLinkageFields())
             initData.update(self._getGuiFields(self.vehicle))
             if isTradeIn:
@@ -175,15 +201,12 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
          'type': vehicle.type,
          'nationID': self.nationID}
 
-    def _getByuContentData(self, vehicle, stats, isTradeIn):
+    def _getBuyContentData(self, vehicle, stats, isTradeIn):
         shop = self.itemsCache.items.shop
         shopDefaults = shop.defaults
         tankMenCount = len(vehicle.crew)
         vehiclePricesActionData = self._getItemPriceActionData(vehicle)
-        ammoPrice = ITEM_PRICE_EMPTY
-        for shell in vehicle.gun.defaultAmmo:
-            ammoPrice += shell.buyPrices.itemPrice * shell.defaultCount
-
+        ammoPrice = self._getAmmoPrice()
         ammoActionPriceData = None
         if ammoPrice.isActionPrice():
             ammoActionPriceData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.AMMO, str(vehicle.intCD), True, ammoPrice.price, ammoPrice.defPrice)
@@ -217,7 +240,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
              'label': '%d%% - %s' % (tCost['roleLevel'], formatedPrice)})
 
         initData = {'tankmenTotalLabel': tankmenTotalLabel,
-         'vehiclePrices': self._getVehiclePrice(vehicle).toMoneyTuple(),
+         'vehiclePrices': self._getVehiclePrice(vehicle).price.toMoneyTuple(),
          'vehiclePricesActionData': vehiclePricesActionData,
          'isRentable': vehicle.isRentable,
          'rentDataDD': self._getRentData(vehicle, vehiclePricesActionData),
@@ -234,8 +257,44 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
             initData.update(self.__getTradeInContentFields(vehicle))
         return initData
 
+    def _getSetupPrice(self):
+        setupPrice = ITEM_PRICE_EMPTY
+        if self.__state.buyAmmo:
+            setupPrice = setupPrice + self._getAmmoPrice()
+        if self.__state.buySlot:
+            setupPrice = setupPrice + self._getSlotPrice()
+        if self.__state.crewType != -1:
+            setupPrice = setupPrice + self._getCrewPrice()
+        return setupPrice
+
+    def _getAmmoPrice(self):
+        ammoPrice = ITEM_PRICE_EMPTY
+        for shell in self.vehicle.gun.defaultAmmo:
+            ammoPrice += shell.buyPrices.itemPrice * shell.defaultCount
+
+        return ammoPrice
+
+    def _getSlotPrice(self):
+        shop = self.itemsCache.items.shop
+        stats = self.itemsCache.items.stats
+        price = Money(gold=shop.getVehicleSlotsPrice(stats.vehicleSlots))
+        defPrice = Money(gold=shop.defaults.getVehicleSlotsPrice(stats.vehicleSlots))
+        return ItemPrice(price, defPrice)
+
+    def _getCrewPrice(self):
+        if self.__state.crewType != -1:
+            shop = self.itemsCache.items.shop
+            costs = (shop.tankmanCostWithGoodyDiscount[self.__state.crewType], shop.defaults.tankmanCost[self.__state.crewType])
+            tankmanCount = len(self.vehicle.crew)
+            return ItemPrice(*[ Money(gold=cost[Currency.GOLD], credits=cost[Currency.CREDITS]) for cost in costs ]) * tankmanCount
+        return ITEM_PRICE_EMPTY
+
     def _getVehiclePrice(self, vehicle):
-        return vehicle.buyPrices.itemPrice.price
+        if self.__state.rentID == -1:
+            return vehicle.buyPrices.itemPrice
+        rentPackage = vehicle.rentPackages[self.__state.rentID]
+        price, defPrice = rentPackage['rentPrice'], rentPackage['defaultRentPrice']
+        return ItemPrice(price, defPrice)
 
     def _getItemPriceActionData(self, vehicle):
         return packItemActionTooltipData(vehicle) if vehicle.buyPrices.itemPrice.isActionPrice() else None
@@ -279,6 +338,14 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         vehicle = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.nationID, self.inNationID)
         if vehicle and vehicle.intCD in vehicles:
             self._initData()
+
+    def __updateButtons(self):
+        isBuyEnabled = self._isSubmitBtnEnabled()
+        isStudyEnabled = not self.vehicle.hasCrew
+        academyEnabled = isStudyEnabled
+        schoolEnabled = isStudyEnabled
+        freeEnabled = isStudyEnabled
+        self.as_setStateS(academyEnabled, schoolEnabled, freeEnabled, isBuyEnabled)
 
     @decorators.process('buyItem')
     def __requestForMoneyObtain(self, data):
@@ -376,7 +443,7 @@ class VehicleRestoreWindow(VehicleBuyWindow):
         return VehicleRestoreProcessor(vehicle, data.buySlot, data.buyAmmo, data.crewType)
 
     def _getVehiclePrice(self, vehicle):
-        return vehicle.restorePrice
+        return ItemPrice(vehicle.restorePrice, vehicle.restorePrice)
 
     def _getItemPriceActionData(self, vehicle):
         return None

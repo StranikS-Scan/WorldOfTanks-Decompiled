@@ -9,9 +9,35 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events.settings import visitEventGUI
 from helpers import i18n
 from shared_utils import findFirst
-__LOWER_BETTER_STEPS = ('set_EconomicsPrices', 'mul_EconomicsPrices', 'mul_GoodiePrice', 'mul_GoodiePriceAll', 'set_GoodiePrice', 'mul_EquipmentPrice', 'mul_EquipmentPriceAll', 'set_EquipmentPrice', 'mul_HornPrice', 'mul_HornPriceAll', 'set_HornPrice', 'mul_OptionalDevicePrice', 'mul_OptionalDevicePriceAll', 'set_OptionalDevicePrice', 'cond_ShellGoldPrice', 'mul_ShellPrice', 'mul_ShellPriceAll', 'mul_ShellPriceNation', 'set_ShellPrice', 'cond_VehPrice', 'mul_VehPrice', 'mul_VehPriceAll', 'mul_VehPriceNation', 'set_VehPrice', 'cond_VehRentPrice', 'mul_VehRentPrice', 'mul_VehRentPriceAll', 'mul_VehRentPriceNation')
-__MORE_BETTER_STEPS = ('set_EconomicsParams', 'mul_EconomicsParams')
-_INTERSECTED_ACTIONS_LIST = __LOWER_BETTER_STEPS + __MORE_BETTER_STEPS
+_INTERSECTED_ACTIONS_LIST = {'set_EconomicsPrices',
+ 'mul_EconomicsPrices',
+ 'mul_GoodiePrice',
+ 'mul_GoodiePriceAll',
+ 'set_GoodiePrice',
+ 'mul_EquipmentPrice',
+ 'mul_EquipmentPriceAll',
+ 'set_EquipmentPrice',
+ 'mul_HornPrice',
+ 'mul_HornPriceAll',
+ 'set_HornPrice',
+ 'mul_OptionalDevicePrice',
+ 'mul_OptionalDevicePriceAll',
+ 'set_OptionalDevicePrice',
+ 'cond_ShellGoldPrice',
+ 'mul_ShellPrice',
+ 'mul_ShellPriceAll',
+ 'mul_ShellPriceNation',
+ 'set_ShellPrice',
+ 'cond_VehPrice',
+ 'mul_VehPrice',
+ 'mul_VehPriceAll',
+ 'mul_VehPriceNation',
+ 'set_VehPrice',
+ 'cond_VehRentPrice',
+ 'mul_VehRentPrice',
+ 'mul_VehRentPriceAll',
+ 'mul_VehRentPriceNationset_EconomicsParams',
+ 'mul_EconomicsParams'}
 
 class ACTIONS_SIZE(object):
     HERO = 'hero'
@@ -52,6 +78,32 @@ class _LAYOUT_TEMPLATE_FIELDS(object):
 
 
 _ltf = _LAYOUT_TEMPLATE_FIELDS
+_FORMATING_FIELDS = (_ltf.HEROCARD,
+ _ltf.COLUMNLEFT,
+ _ltf.COLUMNRIGHT,
+ _ltf.COMINGSOON)
+
+def getAllActionsInfoIterator(actions, entities):
+    actionEntities = entities.get('actionEntities', None)
+    actionNames = entities.get('actions', None)
+    actionSteps = entities.get('steps', None)
+    affectedActions = set()
+    if actionEntities and actionNames and actionSteps:
+        affectedActions = {(actionNames[name], actionSteps[step]) for name, step, _ in actionEntities.values()}
+    for action in actions:
+        for actionInfo in getActionInfoData(action):
+            if actionInfo.visualPriority not in _ACTIONS_PRIORITY_LEVEL.ALL_VISIBLE:
+                continue
+            if not actionInfo.isDiscountVisible():
+                continue
+            aiStep = actionInfo.discount.getName()
+            aiName = actionInfo.event.getID()
+            if aiStep in _INTERSECTED_ACTIONS_LIST and (aiName, aiStep) not in affectedActions:
+                continue
+            yield actionInfo
+
+    return
+
 
 def _dumpLayoutSkeleton():
     return {_ltf.TITLE: MENU.STORETAB_ACTIONS,
@@ -62,11 +114,6 @@ def _dumpLayoutSkeleton():
      _ltf.EMPTY: {_ltf.INFO: i18n.makeString(QUESTS.ACTION_EMPTY_INFO),
                   _ltf.BTNLABEL: i18n.makeString(QUESTS.ACTION_EMPTY_BTNLABEL)}}
 
-
-_FORMATTABLE_FIELDS = (_ltf.HEROCARD,
- _ltf.COLUMNLEFT,
- _ltf.COLUMNRIGHT,
- _ltf.COMINGSOON)
 
 class ActionCardFormatter(object):
     __slots__ = ('discount',)
@@ -167,7 +214,19 @@ class ActionsBuilder(object):
 
     @classmethod
     def getAllVisibleDiscounts(cls, actions, entities, announced, sorting=False):
-        visibleCards = cls._getAllVisibleDiscounts(actions, entities, announced)
+        composer = ActionComposer()
+        visibleCards = {_VISIBLE_CARDS.ACTIONS: [],
+         _VISIBLE_CARDS.ANNOUNCED: []}
+        if actions:
+            for actionsInfo in getAllActionsInfoIterator(actions, entities):
+                composer.add(actionsInfo)
+
+        visibleCards[_VISIBLE_CARDS.ACTIONS] = composer.getActions()
+        for announce in announced:
+            infoList = getAnnouncedActionInfo(announce)
+            if infoList:
+                visibleCards[_VISIBLE_CARDS.ANNOUNCED].append(infoList)
+
         if sorting:
             visibleCards[_VISIBLE_CARDS.ACTIONS] = sorted(visibleCards[_VISIBLE_CARDS.ACTIONS], key=methodcaller('getFinishTime'))
             visibleCards[_VISIBLE_CARDS.ANNOUNCED] = sorted(visibleCards[_VISIBLE_CARDS.ANNOUNCED], key=methodcaller('getStartTime'))
@@ -234,7 +293,7 @@ class ActionsBuilder(object):
         self.__visibleCards = self.getAllVisibleDiscounts(actions, entities, announced)
         template = self.createLayoutTemplate(self.__visibleCards)
         cards = template[_ltf.CARDS]
-        for field in _FORMATTABLE_FIELDS:
+        for field in _FORMATING_FIELDS:
             discounts = cards[field]
             result = []
             if discounts:
@@ -258,41 +317,6 @@ class ActionsBuilder(object):
         visitedCard = findFirst(lambda x: x.getID() == actionID, cards)
         if visitedCard:
             visitEventGUI(visitedCard, counters=(_getNewActiveActionsCounter,))
-
-    @classmethod
-    def _getAllVisibleDiscounts(cls, actions, entities, announced):
-        composer = ActionComposer()
-        visibleCards = {_VISIBLE_CARDS.ACTIONS: [],
-         _VISIBLE_CARDS.ANNOUNCED: []}
-        if actions:
-            affectedActions = set()
-            actionEntities = entities.get('actionEntities', None)
-            actionNames = entities.get('actions', None)
-            actionSteps = entities.get('steps', None)
-            if actionEntities and actionNames and actionSteps:
-                for name, step, _ in actionEntities.values():
-                    affectedActions.add((actionNames[name], actionSteps[step]))
-
-            for action in actions:
-                for actionInfo in getActionInfoData(action):
-                    if actionInfo.visualPriority not in _ACTIONS_PRIORITY_LEVEL.ALL_VISIBLE:
-                        continue
-                    aiName = actionInfo.event.getID()
-                    aiStep = actionInfo.discount.getName()
-                    if not actionInfo.isDiscountVisible():
-                        continue
-                    if aiStep in _INTERSECTED_ACTIONS_LIST:
-                        if (aiName, aiStep) in affectedActions:
-                            composer.add(actionInfo)
-                    composer.add(actionInfo)
-
-        visibleCards[_VISIBLE_CARDS.ACTIONS] = composer.getActions()
-        for announce in announced:
-            infoList = getAnnouncedActionInfo(announce)
-            if infoList:
-                visibleCards[_VISIBLE_CARDS.ANNOUNCED].append(infoList)
-
-        return visibleCards
 
     def __setVisualPriority(self, items, priority):
         for item in items:

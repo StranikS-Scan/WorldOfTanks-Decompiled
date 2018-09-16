@@ -35,7 +35,8 @@ class SettingsParams(object):
         return {settings_constants.FEEDBACK.DAMAGE_LOG: self.getDamageLogSettings(),
          settings_constants.FEEDBACK.DAMAGE_INDICATOR: self.getDamageIndicatorSettings(),
          settings_constants.FEEDBACK.BATTLE_EVENTS: self.getBattleEventsSettings(),
-         settings_constants.FEEDBACK.BATTLE_BORDER_MAP: self.getBattleBorderMapSettings()}
+         settings_constants.FEEDBACK.BATTLE_BORDER_MAP: self.getBattleBorderMapSettings(),
+         settings_constants.FEEDBACK.QUESTS_PROGRESS: self.getQuestsProgressSettings()}
 
     def getOtherSettings(self):
         return self.settingsCore.packSettings(settings_constants.OTHER.ALL())
@@ -51,6 +52,9 @@ class SettingsParams(object):
 
     def getBattleBorderMapSettings(self):
         return self.settingsCore.packSettings(settings_constants.BATTLE_BORDER_MAP.ALL())
+
+    def getQuestsProgressSettings(self):
+        return self.settingsCore.packSettings(settings_constants.QUESTS_PROGRESS.ALL())
 
     def getAimSettings(self):
         return self.settingsCore.packSettings(settings_constants.AIM.ALL())

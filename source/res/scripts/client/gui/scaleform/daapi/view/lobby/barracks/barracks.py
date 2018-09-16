@@ -8,18 +8,21 @@ from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.BarracksMeta import BarracksMeta
+from gui.Scaleform.daapi.view.lobby.barracks.sound_constants import BARRACKS_SOUND_SPACE
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
+from gui.ingame_shop import showBuyGoldForBerth
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import events, event_dispatcher as shared_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons, moneyWithIcon
 from gui.shared.gui_items import Tankman, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
-from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
+from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRestore
 from gui.shared.money import Currency
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
@@ -57,11 +60,6 @@ def _packTankmanData(tankman, itemsCache=None):
         slot = None
         isInSelfVehicle = True
         isInSelfVehicleType = True
-    footballRole = tankmanVehicle.getFootballRole()
-    if footballRole is not None:
-        tankType = footballRole
-    else:
-        tankType = tankmanVehicle.type
     data = {'firstName': tankman.firstUserName,
      'lastName': tankman.lastUserName,
      'rank': tankman.rankUserName,
@@ -76,7 +74,7 @@ def _packTankmanData(tankman, itemsCache=None):
      'nationID': tankman.nationID,
      'typeID': tankmanVehicle.innationID,
      'roleType': tankman.descriptor.role,
-     'tankType': tankType,
+     'tankType': tankmanVehicle.type,
      'inTank': tankman.isInTank,
      'compact': str(tankman.invID),
      'lastSkillLevel': tankman.descriptor.lastSkillLevel,
@@ -111,7 +109,7 @@ def _packBuyBerthsSlot(itemsCache=None):
     enoughGold = berthPrice.gold <= gold
     return {'buy': True,
      'price': BigWorld.wg_getGoldFormat(berthPrice.getSignValue(Currency.GOLD)),
-     'enoughGold': enoughGold,
+     'enoughGold': enoughGold or isIngameShopEnabled(),
      'actionPriceData': action,
      'count': berthCount}
 
@@ -130,6 +128,7 @@ def _makeRecoveryPeriodText(restoreInfo):
 
 class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     __sound_env__ = LobbySubViewEnv
+    _COMMON_SOUND_SPACE = BARRACKS_SOUND_SPACE
     itemsCache = dependency.descriptor(IItemsCache)
     restore = dependency.descriptor(IRestoreController)
 
@@ -153,13 +152,13 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.RECRUIT_WINDOW, ctx={'data': rendererData,
          'menuEnabled': menuEnabled}))
 
-    @decorators.process('buyBerths')
     def buyBerths(self):
-        items = self.itemsCache.items
-        berthPrice, berthsCount = items.shop.getTankmanBerthPrice(items.stats.tankmenBerthsCount)
-        result = yield TankmanBerthsBuyer(berthPrice, berthsCount).request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        price, _ = self.itemsCache.items.shop.getTankmanBerthPrice(self.itemsCache.items.stats.tankmenBerthsCount)
+        availableMoney = self.itemsCache.items.stats.money
+        if price and availableMoney.gold < price.gold and isIngameShopEnabled():
+            showBuyGoldForBerth(price.gold)
+        else:
+            ActionsFactory.doAction(ActionsFactory.BUY_BERTHS)
 
     def setTankmenFilter(self):
         self.as_setTankmenFilterS(self.filter['nation'], self.filter['role'], self.filter['tankType'], self.filter['location'], self.filter['nationID'])

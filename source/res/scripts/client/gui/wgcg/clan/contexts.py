@@ -28,10 +28,10 @@ class ClanFavouriteAttributesCtx(CommonWebRequestCtx):
 
 
 @ReprInjector.withParent(('getClanID', 'clanID'))
-class WebRequestBaseCtx(CommonWebRequestCtx):
+class ClanRequestBaseCtx(CommonWebRequestCtx):
 
     def __init__(self, clanID, waitingID=''):
-        super(WebRequestBaseCtx, self).__init__(waitingID)
+        super(ClanRequestBaseCtx, self).__init__(waitingID)
         self._clanID = clanID
 
     def getClanID(self):
@@ -48,7 +48,7 @@ class WebRequestBaseCtx(CommonWebRequestCtx):
 
 
 @ReprInjector.withParent()
-class ClanInfoCtx(WebRequestBaseCtx):
+class ClanInfoCtx(ClanRequestBaseCtx):
 
     def getRequestType(self):
         return WebRequestDataType.CLAN_INFO
@@ -123,7 +123,7 @@ class ClanRatingsCtx(CommonWebRequestCtx):
 
 
 @ReprInjector.withParent()
-class ClanGlobalMapStatsCtx(WebRequestBaseCtx):
+class ClanGlobalMapStatsCtx(ClanRequestBaseCtx):
 
     def getRequestType(self):
         return WebRequestDataType.CLAN_GLOBAL_MAP_STATS
@@ -423,7 +423,7 @@ class GetClanInvitesCount(ClanInvitesCtx):
 
 
 @ReprInjector.withParent()
-class ClanMembersCtx(WebRequestBaseCtx):
+class ClanMembersCtx(ClanRequestBaseCtx):
 
     def getRequestType(self):
         return WebRequestDataType.CLAN_MEMBERS
@@ -547,7 +547,7 @@ class GetAccountAppsCount(AccountApplicationsCtx):
 
 
 @ReprInjector.withParent()
-class GetProvincesCtx(WebRequestBaseCtx):
+class GetProvincesCtx(ClanRequestBaseCtx):
 
     def getRequestType(self):
         return WebRequestDataType.CLAN_PROVINCES

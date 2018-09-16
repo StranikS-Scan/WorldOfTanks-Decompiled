@@ -194,8 +194,12 @@ class ISoundEventChecker(IGameController):
 
 class IHeroTankController(IGameController):
     onUpdated = None
+    onInteractive = None
 
     def getRandomTankCD(self):
+        raise NotImplementedError
+
+    def setInteractive(self, interactive):
         raise NotImplementedError
 
     def getCurrentTankCD(self):
@@ -303,17 +307,31 @@ class IBrowserController(IGameController):
 
 
 class IPromoController(IGameController):
+    onNewTeaserReceived = None
+    onPromoCountChanged = None
 
-    def showVersionsPatchPromo(self):
+    def isActive(self):
         raise NotImplementedError
 
-    def isPatchPromoAvailable(self):
+    def getPromoCount(self):
         raise NotImplementedError
 
-    def isPatchChanged(self):
+    def showPromo(self, url, handlers=None, source=None):
         raise NotImplementedError
 
-    def showPromo(self, url, title, forced=False, handlers=None):
+    def setNewTeaserData(self, teaserData):
+        raise NotImplementedError
+
+    def showFieldPost(self):
+        raise NotImplementedError
+
+    def showLastTeaserPromo(self):
+        raise NotImplementedError
+
+    def setUnreadPromoCount(self, count):
+        raise NotImplementedError
+
+    def showBubbleTooltip(self):
         raise NotImplementedError
 
 
@@ -358,6 +376,10 @@ class IVehicleComparisonBasket(IGameController):
         raise NotImplementedError
 
     def removeAllVehicles(self):
+        raise NotImplementedError
+
+    @property
+    def maxVehiclesToCompare(self):
         raise NotImplementedError
 
     def isFull(self):
@@ -732,7 +754,7 @@ class IMarathonEventsController(IGameController):
     def getPrefix(self, eventID):
         raise NotImplementedError
 
-    def getShowedPostBattleQuests(self):
+    def getVisibleInPostBattleQuests(self):
         raise NotImplementedError
 
     def getQuestsData(self, prefix=None, postfix=None):
@@ -742,52 +764,6 @@ class IMarathonEventsController(IGameController):
         raise NotImplementedError
 
     def isAnyActive(self):
-        raise NotImplementedError
-
-
-class IMarathonEventController(object):
-    onFlagUpdateNotify = None
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isAvailable(self):
-        raise NotImplementedError
-
-    def getMarathonFlagState(self, vehicle):
-        raise NotImplementedError
-
-    def checkForWarnings(self, vehicle):
-        raise NotImplementedError
-
-    def getState(self):
-        raise NotImplementedError
-
-    def getMarathonProgress(self):
-        raise NotImplementedError
-
-    def getQuestsData(self, prefix=None, postfix=None):
-        raise NotImplementedError
-
-    def getTokensData(self, prefix=None, postfix=None):
-        raise NotImplementedError
-
-    def getMarathonQuests(self):
-        raise NotImplementedError
-
-    def getFormattedRemainingTime(self):
-        raise NotImplementedError
-
-    def getExtraDaysToBuy(self):
-        raise NotImplementedError
-
-    def isVehicleObtained(self):
-        raise NotImplementedError
-
-    def getMarathonDiscount(self):
-        raise NotImplementedError
-
-    def getUrl(self, callback):
         raise NotImplementedError
 
 
@@ -878,47 +854,3 @@ class IManualController(IGameController):
 
     def runBootcamp(self):
         raise NotImplementedError
-
-
-class IFootballMetaGame(IGameController):
-    onPacketsOpened = None
-    onMilestoneReached = None
-    onPacketsUpdated = None
-    onBuffonRecruited = None
-
-    def getGuiDataStorage(self):
-        raise NotImplementedError
-
-    def getTokenInfo(self, tokenID):
-        raise NotImplementedError
-
-    def getDecks(self):
-        raise NotImplementedError
-
-    def getPackets(self):
-        raise NotImplementedError
-
-    def getProgress(self):
-        raise NotImplementedError
-
-    def hasPackets(self):
-        raise NotImplementedError
-
-    def isBuffonAvailable(self):
-        raise NotImplementedError
-
-    def isBuffonRecruited(self):
-        raise NotImplementedError
-
-    def getMilestone(self):
-        raise NotImplementedError
-
-    def openPackets(self):
-        raise NotImplementedError
-
-    def recruitBuffon(self, vehicleIntCD):
-        raise NotImplementedError
-
-
-class ICalendarController(IGameController):
-    pass

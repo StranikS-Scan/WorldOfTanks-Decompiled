@@ -4,10 +4,8 @@ import json
 import inspect
 import logging
 import weakref
-from collections import namedtuple
 from functools import partial
 from itertools import chain
-from new import instancemethod
 from types import FunctionType, BooleanType, TypeType
 from Event import Event
 from soft_exception import SoftException
@@ -64,7 +62,7 @@ class Schema(object):
 
 
 class Field(object):
-    __slots__ = ('required', 'type', 'default', 'deprecated', 'validator')
+    __slots__ = ('required', 'type', 'default', 'deprecated', 'validator', '__weakref__')
 
     def __init__(self, required=False, type=None, default=None, deprecated=None, validator=None):
         if required and default is not None:
@@ -90,28 +88,6 @@ class W2CSchemaMeta(ISchemeMeta):
         super(W2CSchemaMeta, cls).__init__(*args, **kwargs)
         cls.__schema = {k:v for k, v in args[2].iteritems() if isinstance(v, Field)}
         cls.__methods = {k:v for k, v in args[2].iteritems() if isinstance(v, FunctionType)}
-
-    def __validateField(cls, schema, key, data, required):
-        if required and key not in data:
-            return "Command validation failed: '%s' parameter is missing!" % key
-        else:
-            if key in data:
-                if schema.hasType() and not isinstance(data[key], schema.type):
-                    return "Command validation failed: Value '%s' for parameter '%s' is wrong!" % (data[key], key)
-                if schema.hasValidator():
-                    errmsg = ''
-                    try:
-                        isValid = schema.validator(data[key], data)
-                    except SoftException as err:
-                        isValid = False
-                        errmsg = '; {}'.format(err)
-
-                    if not isValid:
-                        return 'Invalid value for field {}: {}{}'.format(key, data[key], errmsg)
-                deprecatedMessage = schema.deprecated
-                if deprecatedMessage is not None:
-                    _logger.warning('"%s" parameter is deprecated (%s)!', key, deprecatedMessage)
-            return
 
     def validate(cls, data):
         for key, value in cls.__schema.iteritems():
@@ -142,16 +118,49 @@ class W2CSchemaMeta(ISchemeMeta):
         for name in customParameters:
             data['custom_parameters'][name] = data.pop(name)
 
-        objectClsBase = namedtuple('ObjectClsBase', data.keys())
-        if cls.__methods:
-            objectCls = type('ObjectCls', (objectClsBase,), {})
-            obj = objectCls(**data)
-            for key, value in cls.__methods.iteritems():
-                setattr(obj, key, instancemethod(value, obj, objectCls))
+        return Schema2Command(data, methods=cls.__methods)
 
+    @staticmethod
+    def __validateField(schema, key, data, required):
+        if required and key not in data:
+            return "Command validation failed: '%s' parameter is missing!" % key
         else:
-            obj = objectClsBase(**data)
-        return obj
+            if key in data:
+                if schema.hasType() and not isinstance(data[key], schema.type):
+                    return "Command validation failed: Value '%s' for parameter '%s' is wrong!" % (data[key], key)
+                if schema.hasValidator():
+                    errmsg = ''
+                    try:
+                        isValid = schema.validator(data[key], data)
+                    except SoftException as err:
+                        isValid = False
+                        errmsg = '; {}'.format(err)
+
+                    if not isValid:
+                        return 'Invalid value for field {}: {}{}'.format(key, data[key], errmsg)
+                deprecatedMessage = schema.deprecated
+                if deprecatedMessage is not None:
+                    _logger.warning('"%s" parameter is deprecated (%s)!', key, deprecatedMessage)
+            return
+
+
+class Schema2Command(object):
+
+    def __init__(self, data, methods=None):
+        super(Schema2Command, self).__init__()
+        self.__data = data
+        self.__methods = methods.keys()
+        for key, value in methods.iteritems():
+            setattr(self, key, value.__get__(self))
+
+    def clear(self):
+        for name in self.__methods:
+            delattr(self, name)
+
+    def __getattr__(self, name):
+        if name in self.__data:
+            return self.__data[name]
+        raise AttributeError('Property is not found in {0}: {1}'.format(self.__class__, name))
 
 
 class W2CSchema(Schema):
@@ -191,38 +200,53 @@ def createSubCommandsHandler(commandName, commandSchema, keyField, subCommands):
 
 
 def w2capi(name=None, key=None):
+    return _W2CApi(name, key)
 
-    def decorator(cls):
 
-        class _class(cls):
-            w2c_name = name
+def _makeOverriddenMeta(key):
 
-            def __init__(self):
-                for base in cls.__bases__:
-                    base.__init__(self)
+    def _get(*args, **kwargs):
+        args[2][key] = Field(required=True, type=basestring)
+        return W2CSchemaMeta(*args, **kwargs)
 
-                super(_class, self).__init__()
+    return _get
 
-            def getHandlers(self):
-                if name and key:
 
-                    class _meta(W2CSchemaMeta):
+def _makeOverriddenSchema(key):
 
-                        def __init__(cls, *args, **kwargs):
-                            args[2][key] = Field(required=True, type=basestring)
-                            super(_meta, cls).__init__(*args, **kwargs)
+    class _OverriddenSchema(W2CSchema):
+        __metaclass__ = _makeOverriddenMeta(key)
 
-                    class _schema(W2CSchema):
-                        __metaclass__ = _meta
+    return _OverriddenSchema
 
-                    subcommands = {wrapper.w2c_name:SubCommand(wrapper.w2c_schema, partial(wrapper, self)) for _, wrapper in inspect.getmembers(cls, inspect.ismethod) if getattr(wrapper, 'w2c_name', None)}
-                    return [createSubCommandsHandler(self.w2c_name or cls.__name__.lower(), _schema, key, subcommands)]
-                else:
-                    return [ createCommandHandler(commandName=wrapper.w2c_name, commandSchema=wrapper.w2c_schema, handlerFunc=partial(wrapper, self), finiHandlerFunc=partial(getattr(cls, wrapper.w2c_fini), self) if wrapper.w2c_fini else None) for _, wrapper in inspect.getmembers(cls, inspect.ismethod) if getattr(wrapper, 'w2c_name', None) ]
 
-        return _class
+class _W2CApi(object):
 
-    return decorator
+    def __init__(self, name, key):
+        super(_W2CApi, self).__init__()
+        self.__name = name
+        self.__key = key
+
+    def __call__(self, clazz):
+        clazz.w2c_name = self.__name
+        if self.__name and self.__key:
+
+            def generate(key, scheme):
+
+                def getter(api):
+                    subcommands = {wrapper.w2c_name:SubCommand(wrapper.w2c_schema, partial(wrapper, api)) for _, wrapper in inspect.getmembers(clazz, inspect.ismethod) if getattr(wrapper, 'w2c_name', None)}
+                    return [createSubCommandsHandler(api.w2c_name or clazz.__name__.lower(), scheme, key, subcommands)]
+
+                return getter
+
+            getHandlers = generate(self.__key, _makeOverriddenSchema(self.__key))
+        else:
+
+            def getHandlers(api):
+                return [ createCommandHandler(commandName=wrapper.w2c_name, commandSchema=wrapper.w2c_schema, handlerFunc=partial(wrapper, api), finiHandlerFunc=partial(getattr(clazz, wrapper.w2c_fini), api) if wrapper.w2c_fini else None) for _, wrapper in inspect.getmembers(clazz, inspect.ismethod) if getattr(wrapper, 'w2c_name', None) ]
+
+        clazz.getHandlers = getHandlers
+        return clazz
 
 
 class _CallbackDispatcher(object):
@@ -303,6 +327,7 @@ class WebCommandHandler(object):
 
         command = instantiateCommand(WebCommandSchema, parsed)
         self.handleWebCommand(command)
+        command.clear()
 
     def addHandlers(self, handlers):
         for handler in handlers:
@@ -325,6 +350,7 @@ class WebCommandHandler(object):
             raise WebCommandException("Command '%s' is unsupported!" % commandName)
         command = instantiateCommand(handler.schema, webCommand.params)
         handler.handler(command, self.__createCtx(commandName, webCommand.web_id))
+        command.clear()
         return
 
     def __createCtx(self, commandName, webId):

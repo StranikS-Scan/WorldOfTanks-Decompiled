@@ -38,3 +38,7 @@ class TEXT_MANAGER_STYLES(object):
     PREMIUM_VEHICLE_NAME = 'premiumVehicleName'
     MISSION_STATUS_UNAVAILABLE = 'missionStatusUnavailable'
     MISSION_STATUS_AVAILABLE = 'missionStatusAvailable'
+    EPIC_TITLE = 'epicTitle'
+    EPIC_TITLE_YELLOW = 'epicTitleYellow'
+    HERO_TITLE = 'heroTitle'
+    HERO_TITLE_YELLOW = 'heroTitleYellow'

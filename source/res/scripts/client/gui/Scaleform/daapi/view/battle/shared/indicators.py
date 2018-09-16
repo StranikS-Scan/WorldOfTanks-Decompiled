@@ -2,30 +2,26 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/indicators.py
 import BigWorld
 import GUI
-import CommandMapping
+import SoundGroups
+from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDICATOR, GRAPHICS
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
-from gui import DEPTH_OF_Aim, GUI_SETTINGS, makeHtmlString
-from helpers import dependency
-from shared_utils import CONST_CONTAINER
-from account_helpers.AccountSettings import AccountSettings
-from account_helpers.settings_core.settings_constants import CONTROLS, SOUND, DAMAGE_INDICATOR, GRAPHICS
+from gui import DEPTH_OF_Aim, GUI_SETTINGS
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.daapi.view.battle.shared import siege_component
-from gui.Scaleform.daapi.view.meta.SixthSenseMeta import SixthSenseMeta
 from gui.Scaleform.daapi.view.meta.SiegeModeIndicatorMeta import SiegeModeIndicatorMeta
-from gui.shared.crits_mask_parser import critsParserGenerator
-from gui.shared.formatters import text_styles
-from gui.shared.utils.key_mapping import getReadableKey
+from gui.Scaleform.daapi.view.meta.SixthSenseMeta import SixthSenseMeta
+from gui.Scaleform.genConsts.DAMAGEINDICATOR import DAMAGEINDICATOR
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+from gui.battle_control.battle_constants import DEVICE_STATES_RANGE
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
-from gui.battle_control.battle_constants import DEVICE_STATES_RANGE
 from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator
-from gui.Scaleform.genConsts.DAMAGEINDICATOR import DAMAGEINDICATOR
+from gui.shared.crits_mask_parser import critsParserGenerator
+from helpers import dependency
 from helpers import i18n
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-import SoundGroups
+from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 _DAMAGE_INDICATOR_SWF = 'battleDamageIndicatorApp.swf'
@@ -507,10 +503,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self._switchTime = 0.0
         self._startTime = BigWorld.serverTime()
         self._switchTimeTable = {}
-        self._hintsLeft = 0
-        self._isHintShown = False
-        self._isInPostmortem = False
-        self._isObserver = False
         self._siegeComponent = None
         self._isInRecovery = False
         self._isInProgressCircle = False
@@ -520,25 +512,14 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
     def _populate(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         crosshairCtrl = self.sessionProvider.shared.crosshair
-        keyboardSetting = self.settingsCore.options.getSetting(CONTROLS.KEYBOARD)
-        arenaDP = self.sessionProvider.getArenaDP()
         isReplayPlaying = self.sessionProvider.isReplayPlaying
         self._siegeComponent = siege_component.createSiegeComponent(self, isReplayPlaying)
-        keyboardSetting.onKeyBindingsChanged += self.__onKeyBindingsChanged
-        self._hintsLeft = AccountSettings.getSettings('siegeModeHintCounter')
-        if arenaDP is not None:
-            vInfo = arenaDP.getVehicleInfo()
-            self._isObserver = vInfo.isObserver()
-        else:
-            self._isObserver = False
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
             crosshairCtrl.onCrosshairScaleChanged += self.__onCrosshairPositionChanged
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling += self.__onVehicleControlling
-            vStateCtrl.onPostMortemSwitched += self.__onPostMortemSwitched
-            vStateCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
             vehicle = vStateCtrl.getControllingVehicle()
             if vehicle is not None:
                 self.__onVehicleControlling(vehicle)
@@ -548,20 +529,15 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
     def _dispose(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         crosshairCtrl = self.sessionProvider.shared.crosshair
-        keyboardSetting = self.settingsCore.options.getSetting(CONTROLS.KEYBOARD)
-        keyboardSetting.onKeyBindingsChanged -= self.__onKeyBindingsChanged
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairPositionChanged -= self.__onCrosshairPositionChanged
             crosshairCtrl.onCrosshairScaleChanged -= self.__onCrosshairPositionChanged
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
-            vStateCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
-            vStateCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         self._switchTimeTable.clear()
         self._siegeComponent.clear()
         self._siegeComponent = None
-        AccountSettings.setSettings('siegeModeHintCounter', self._hintsLeft)
         return
 
     def __updateIndicatorView(self, isSmooth=False):
@@ -569,7 +545,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         engineState = self._devices['engine']
         totalTime = self._switchTimeTable[self._siegeState][engineState]
         self._siegeComponent.invalidate(totalTime, self._switchTime, self._siegeState, engineState, isSmooth)
-        self.__updateHintView()
 
     def __updateHintView(self):
         LOG_DEBUG('Updating siege mode: hint')
@@ -627,8 +602,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             for deviceName in self._devices:
                 self._devices[deviceName] = 'normal'
 
-            if self._isEnabled:
-                self.as_hideHintS()
             self._isEnabled = False
         self.as_setVisibleS(self._isEnabled)
         return
@@ -679,15 +652,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         scaledPosition = crosshairCtrl.getScaledPosition()
         self.as_updateLayoutS(*scaledPosition)
 
-    def __onKeyBindingsChanged(self):
-        if not self._isEnabled:
-            return
-        self.__updateHintView()
-
     def __updateSiegeState(self, siegeState, switchTime):
-        if siegeState == _SIEGE_STATE.SWITCHING_OFF:
-            if not self._isObserver and not self._isInPostmortem:
-                self._hintsLeft = max(0, self._hintsLeft - 1)
         if self._siegeState in _SIEGE_STATE.SWITCHING:
             isSmooth = siegeState not in _SIEGE_STATE.SWITCHING
         else:
@@ -705,15 +670,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
     def __updateDestroyed(self, _):
         self._isEnabled = False
         self.as_setVisibleS(False)
-
-    def __getHint(self):
-        keyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
-        if keyName:
-            pressText = text_styles.tutorial(INGAME_GUI.SIEGEMODE_HINT_PRESS)
-            hintText = text_styles.tutorial(INGAME_GUI.siegeModeHint(self._siegeState))
-            keyText = makeHtmlString('html_templates:battle/siegeMode', 'toggle', ctx={'key': keyName})
-            return (keyText, pressText, hintText)
-        return ('', '', text_styles.tutorial(INGAME_GUI.SIEGEMODE_HINT_NOBINDING))
 
     def __areOtherIndicatorsShown(self):
         return self._isUnderFire or self._isInRecovery or self._isInProgressCircle

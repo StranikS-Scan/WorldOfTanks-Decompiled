@@ -1,93 +1,93 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Avatar.py
 import cPickle
+import math
 import zlib
 from functools import partial
-import math
-import Account
 import BigWorld
-import WoT
-import WWISE
 import Keys
 import Math
-import Vehicle
-import ClientArena
-import AvatarInputHandler
-import ProjectileMover
-import constants
-import Event
-import AreaDestructibles
-import CommandMapping
-import Weather
-import MusicControllerWWISE
-import SoundGroups
-import AvatarPositionControl
 import ResMgr
-import TriggersManager
+import WWISE
+import WoT
+import Account
 import AccountCommands
-from account_helpers.settings_core.settings_constants import SOUND
-from TriggersManager import TRIGGER_TYPE
+import AreaDestructibles
+import AuxiliaryFx
+import AvatarInputHandler
+import AvatarPositionControl
+import BattleReplay
+import ClientArena
+import CommandMapping
+import Event
+import FlockManager
+import MusicControllerWWISE
+import ProjectileMover
+import SoundGroups
+import TriggersManager
+import Vehicle
+import Weather
+import constants
+from AimSound import AimSound
+from AvatarInputHandler import cameras
+from AvatarInputHandler.control_modes import ArcadeControlMode, VideoCameraControlMode, PostMortemControlMode
+from ChatManager import chatManager
+from ClientChat import ClientChat
+from Flock import DebugLine
+from LightFx import LightManager
 from OfflineMapCreator import g_offlineMapCreator
+from PlayerEvents import g_playerEvents
+from TriggersManager import TRIGGER_TYPE
+from Vibroeffects.Controllers.ReloadController import ReloadController as VibroReloadController
+from account_helpers import BattleResultsCache
+from account_helpers import ClientInvitations
+from account_helpers.settings_core.settings_constants import SOUND
+from avatar_helpers import AvatarSyncData
+from battle_results_shared import AVATAR_PRIVATE_STATS, listToDict
+from bootcamp.Bootcamp import g_bootcamp
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from constants import ARENA_PERIOD, AIMING_MODE, VEHICLE_SETTING, DEVELOPMENT_INFO, ARENA_GUI_TYPE
-from constants import VEHICLE_MISC_STATUS, VEHICLE_HIT_FLAGS
 from constants import DROWN_WARNING_LEVEL
-from constants import VEHICLE_SIEGE_STATE
 from constants import TARGET_LOST_FLAGS
+from constants import VEHICLE_MISC_STATUS, VEHICLE_HIT_FLAGS
+from constants import VEHICLE_SIEGE_STATE
+from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_CODEPOINT_WARNING, LOG_NOTE
+from gui import GUI_CTRL_MODE_FLAG, IngameSoundNotifications, SystemMessages
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 from gui.app_loader import g_appLoader, settings as app_settings
 from gui.battle_control import BattleSessionSetup
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CANT_SHOOT_ERROR
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CANT_SHOOT_ERROR, DestroyTimerViewState, DeathZoneTimerViewState
+from gui.prb_control.formatters import messages
 from gui.wgnc import g_wgncProvider
+from gun_rotation_shared import decodeGunAngles, isShootPositionInsideOtherVehicle
+from helpers import DecalMap
+from helpers import bound_effects
 from helpers import dependency, uniprof
 from helpers.i18n import makeString
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles
 from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS
+from material_kinds import EFFECT_MATERIALS
 from messenger import MessengerEntry, g_settings
-from messenger.proto import proto_getter
 from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
+from physics_shared import computeBarrelLocalPoint
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.helpers.statistics import IStatisticsCollector
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULS
-from PlayerEvents import g_playerEvents
 from avatar_components.CombatEquipmentManager import CombatEquipmentManager
 from avatar_components.AvatarObserver import AvatarObserver
 from avatar_components.avatar_epic_data import AvatarEpicData
 from avatar_components.avatar_recovery_mechanic import AvatarRecoveryMechanic
 from avatar_components.avatar_respawn_mechanic import AvatarRespawnMechanic
 from avatar_components.team_healthbar_mechanic import TeamHealthbarMechanic
-from ChatManager import chatManager
-from vehicle_systems.stipple_manager import StippleManager
-from helpers import bound_effects
-from helpers import DecalMap
-from gui import GUI_CTRL_MODE_FLAG, IngameSoundNotifications, SystemMessages
-from gui.prb_control.formatters import messages
-from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_CODEPOINT_WARNING, LOG_NOTE
-from material_kinds import EFFECT_MATERIALS
-from Vibroeffects.Controllers.ReloadController import ReloadController as VibroReloadController
-from LightFx import LightManager
-import AuxiliaryFx
-from account_helpers import BattleResultsCache
-from account_helpers import ClientInvitations
-from avatar_helpers import AvatarSyncData
-import BattleReplay
-from physics_shared import computeBarrelLocalPoint
-from AvatarInputHandler.control_modes import ArcadeControlMode, VideoCameraControlMode, PostMortemControlMode
-from AvatarInputHandler.epic_battle_death_mode import DeathFreeCamMode
-from AvatarInputHandler import cameras
-from gun_rotation_shared import decodeGunAngles, isShootPositionInsideOtherVehicle
-from battle_results_shared import AVATAR_PRIVATE_STATS, listToDict
-import FlockManager
-from Flock import DebugLine
 from vehicle_systems import appearance_cache
-from ClientChat import ClientChat
-from bootcamp.Bootcamp import g_bootcamp
-from AimSound import AimSound
+from vehicle_systems.stipple_manager import StippleManager
+from AvatarInputHandler.epic_battle_death_mode import DeathFreeCamMode
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 
 class _CRUISE_CONTROL_MODE(object):
@@ -101,7 +101,6 @@ class _CRUISE_CONTROL_MODE(object):
 
 _SHOT_WAITING_MAX_TIMEOUT = 0.2
 _SHOT_WAITING_MIN_TIMEOUT = 0.12
-FOOTBALL_TEAM_EFFECT_OFFSET = 10
 
 class _MOVEMENT_FLAGS(object):
     FORWARD = 1
@@ -733,6 +732,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 if cmdMap.isFired(CommandMapping.CMD_RELOAD_PARTIAL_CLIP, key) and isDown:
                     self.guiSessionProvider.shared.ammo.reloadPartialClip(self)
                     return True
+                if cmdMap.isFired(CommandMapping.CMD_QUEST_PROGRESS_SHOW, key) and (mods != 2 or not isDown):
+                    gui_event_dispatcher.toggleFullStatsQuestProgress(isDown)
+                    return True
                 if key == Keys.KEY_ESCAPE and isDown and mods == 0 and self.guiSessionProvider.shared.equipments.cancel():
                     return True
                 if g_appLoader.handleKey(app_settings.APP_NAME_SPACE.SF_BATTLE, isDown, key, mods):
@@ -939,18 +941,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.onLockTarget(AimSound.TARGET_LOST, not lossReasonFlags & TARGET_LOST_FLAGS.KILLED_BY_ME)
         TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.AUTO_AIM_AT_VEHICLE)
 
-    def onFootballPlayerReset(self):
-        self.gunRotator.reset()
-        Vehicle.Vehicle.resetPenalty()
-        self.inputHandler.resetDirectionFootball()
-        self.cell.autoAim(0)
-        self.inputHandler.setAimingMode(False, AIMING_MODE.TARGET_LOCK)
-        self.gunRotator.clientMode = True
-        self.__autoAimVehID = 0
-        self.__cruiseControlMode = _CRUISE_CONTROL_MODE.NONE
-        self.__updateCruiseControlPanel()
-        TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.AUTO_AIM_AT_VEHICLE)
-
     def updateVehicleHealth(self, vehicleID, health, deathReasonID, isCrewActive, isRespawn):
         rawHealth = health
         health = max(0, health)
@@ -1120,40 +1110,23 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__lastVehicleSpeeds = (speed, rspeed)
 
     def updateVehicleDestroyTimer(self, code, period, warnLvl=None):
-        state = VEHICLE_VIEW_STATE.HIDE_DESTROY_TIMER
-        value = code
+        state = VEHICLE_VIEW_STATE.DESTROY_TIMER
+        value = DestroyTimerViewState.makeCloseTimerState(code)
         if warnLvl is None:
             if period[1] > 0:
-                state = VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER
-                value = (code,
-                 period[0],
-                 'critical',
-                 period[0])
+                value = DestroyTimerViewState(code, period[0], 'critical', period[0])
         elif warnLvl == DROWN_WARNING_LEVEL.DANGER:
-            state = VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER
-            value = (code,
-             period[1],
-             'critical',
-             period[0])
+            value = DestroyTimerViewState(code, period[1], 'critical', period[0])
         elif warnLvl == DROWN_WARNING_LEVEL.CAUTION:
-            state = VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER
-            value = (code,
-             0,
-             'warning',
-             0)
+            value = DestroyTimerViewState(code, 0, 'warning', 0)
         self.guiSessionProvider.invalidateVehicleState(state, value)
         return
 
     def updateVehicleDeathZoneTimer(self, time, zoneID, entered=True, finishTime=None, state='critical'):
-        timer = VEHICLE_VIEW_STATE.HIDE_DEATHZONE_TIMER
-        value = zoneID
+        timer = VEHICLE_VIEW_STATE.DEATHZONE_TIMER
+        value = DeathZoneTimerViewState.makeCloseTimerState(zoneID)
         if time > 0 or state == 'warning':
-            timer = VEHICLE_VIEW_STATE.SHOW_DEATHZONE_TIMER
-            value = (zoneID,
-             time,
-             state,
-             finishTime,
-             entered)
+            value = DeathZoneTimerViewState(zoneID, time, state, finishTime, entered)
         self.guiSessionProvider.invalidateVehicleState(timer, value)
 
     def showOwnVehicleHitDirection(self, hitDirYaw, attackerID, damage, crits, isBlocked, isShellHE, damagedID, attackReasonID):
@@ -1323,14 +1296,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     replayCtrl = BattleReplay.g_replayCtrl
                     if (gunFirePos - refStartPoint).length > 50.0 and (gunFirePos - BigWorld.camera().position).length < 50.0 and replayCtrl.isPlaying:
                         velocity = velocity.length * gunMatrix.applyVector((0, 0, 1))
-            if self.guiSessionProvider.arenaVisitor.gui.isEventBattle():
-                arenaDataProvider = self.guiSessionProvider.getArenaDP()
-                if arenaDataProvider.getVehicleInfo(shooterID).team == 1:
-                    effectsDescr = vehicles.g_cache.shotEffects[effectsIndex + FOOTBALL_TEAM_EFFECT_OFFSET]
-                else:
-                    effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
-            else:
-                effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
+            effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
             self.__projectileMover.add(shotID, effectsDescr, gravity, refStartPoint, velocity, startPoint, maxShotDist, shooterID, BigWorld.camera().position)
             if isRicochet:
                 self.__projectileMover.hold(shotID)
@@ -1402,6 +1368,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def updateGasAttackState(self, state, activationTime, currentTime):
         pass
+
+    def updateQuestProgress(self, questID, progressesInfo):
+        LOG_DEBUG('[QUEST] Progress:', questID, progressesInfo)
+        self.guiSessionProvider.shared.questProgress.updateQuestProgress(questID, progressesInfo)
 
     def updateAvatarPrivateStats(self, stats):
         stats = cPickle.loads(zlib.decompress(stats))
@@ -2169,8 +2139,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         isMyVehicle = targetID == self.playerVehicleID
         isObservedVehicle = not self.__isVehicleAlive and targetID == getattr(self.inputHandler.ctrl, 'curVehicleID', None)
         if isMyVehicle or isObservedVehicle:
-            self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.HIDE_DESTROY_TIMER, None)
-            self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.HIDE_DEATHZONE_TIMER, None)
+            self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DESTROY_TIMER, DestroyTimerViewState.makeCloseAllState())
+            self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DEATHZONE_TIMER, DeathZoneTimerViewState.makeCloseAllState())
             self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.UNDER_FIRE, False)
             self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.RECOVERY, (False, 0, None))
             deathInfo = {'killerID': attackerID,
@@ -2196,9 +2166,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
 
     def __onArenaPeriodChange(self, period, periodEndTime, periodLength, periodAdditionalInfo):
-        if self.__prevArenaPeriod == ARENA_PERIOD.BATTLE and period == ARENA_PERIOD.PREBATTLE:
-            if not self.isObserver():
-                self.onFootballPlayerReset()
         self.__setIsOnArena(period == ARENA_PERIOD.BATTLE)
         if period == ARENA_PERIOD.PREBATTLE and period > self.__prevArenaPeriod:
             LightManager.GameLights.startTicks()
@@ -2472,10 +2439,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__physicsMode = newMode
 
     def __isPlayerInSquad(self, vehicleId):
-        return self.arena is not None and self.arena.guiType in (constants.ARENA_GUI_TYPE.RANDOM,
-         constants.ARENA_GUI_TYPE.EPIC_RANDOM,
-         constants.ARENA_GUI_TYPE.EVENT_BATTLES,
-         constants.ARENA_GUI_TYPE.EPIC_BATTLE) and self.guiSessionProvider.getArenaDP().isSquadMan(vID=vehicleId)
+        return self.arena is not None and self.arena.guiType in (constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.EPIC_RANDOM, constants.ARENA_GUI_TYPE.EPIC_BATTLE) and self.guiSessionProvider.getArenaDP().isSquadMan(vID=vehicleId)
 
     def __getAdditiveShotDispersionFactor(self, descriptor):
         if self.__aimingBooster is not None:

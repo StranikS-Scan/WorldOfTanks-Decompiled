@@ -852,7 +852,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
 
         return self._request_data(inner_callback, 'strongholds', url)
 
-    def get_wgsh_unit_info(self, callback, periphery_id, unit_server_id, fields=None):
+    def get_wgsh_unit_info(self, callback, periphery_id, unit_server_id, rev, fields=None):
         try:
             periphery_id = int(periphery_id)
             unit_server_id = int(unit_server_id)
@@ -860,7 +860,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
             error = exceptions.BadRequest()
             return callback({'description': error.description}, error.status_code, error.response_code)
 
-        url = '/unit_api/periphery/{periphery_id}/units/{unit_server_id}/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        url = '/unit_api/periphery/{periphery_id}/units/{unit_server_id}/?rev={rev}'.format(periphery_id=periphery_id, unit_server_id=unit_server_id, rev=rev)
 
         @preprocess_callback(callback, 'wgsh')
         def inner_callback(data):
@@ -1173,3 +1173,47 @@ class StagingDataAccessor(base.BaseDataAccessor):
             return data and data[0] or {}
 
         return self._request_data(inner_callback, 'strongholds', url)
+
+    def get_teaser(self, callback, fields=None):
+        url = '/teaser/?%s' % urlencode(self._pack_promo_params())
+
+        @preprocess_callback(callback, 'promo')
+        def inner_callback(data):
+            return data or {}
+
+        return self._request_data(inner_callback, 'promo', url, method='GET')
+
+    def send_teaser(self, callback, promo_id, fields=None):
+
+        @preprocess_callback(callback, 'promo')
+        def inner_callback(data):
+            return data or {}
+
+        params = {'promoscreen_id': promo_id}
+        url = '/teaser/view/'
+        return self._request_data(inner_callback, 'promo', url, method='POST', postData=self._pack_promo_params(params))
+
+    def get_unread_count(self, callback, fields=None):
+        url = '/unread/?%s' % urlencode(self._pack_promo_params())
+
+        @preprocess_callback(callback, 'promo')
+        def inner_callback(data):
+            return data or {}
+
+        return self._request_data(inner_callback, 'promo', url, method='GET')
+
+    def client_promo_log(self, callback, data, fields=None):
+
+        @preprocess_callback(callback, 'promo')
+        def inner_callback(data):
+            return data or {}
+
+        url = '/client_promo_log/?%s' % urlencode(self._pack_promo_params(data))
+        return self._request_data(inner_callback, 'promo', url, method='GET')
+
+    def _pack_promo_params(self, params=None):
+        if params is None:
+            params = {}
+        default_params = {'spa_id': self._account}
+        default_params.update(params)
+        return default_params

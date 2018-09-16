@@ -804,7 +804,8 @@ class BattleReplay(object):
             if allPlayersVehicles is not None:
                 for playerVehicles in allPlayersVehicles.itervalues():
                     for vehicle in playerVehicles:
-                        vehicle['damageEventList'] = None
+                        if vehicle is not None:
+                            vehicle['damageEventList'] = None
 
             personals = modifiedResults.get('personal', None)
             if personals is not None:
@@ -812,6 +813,9 @@ class BattleReplay(object):
                     for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'crystalReplay', 'freeXPReplay', 'avatarDamageEventList'):
                         personal[field] = None
 
+            common = modifiedResults.get('common', None)
+            if common is not None:
+                common['accountCompDescr'] = None
             modifiedResults = (modifiedResults, self.__getArenaVehiclesInfo(), BigWorld.player().arena.statistics)
             self.__replayCtrl.setArenaStatisticsStr(json.dumps(_JSON_Encode(modifiedResults)))
         return

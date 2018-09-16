@@ -123,9 +123,6 @@
       <include>
         <nations>	france	</nations>
       </include>
-      <exclude>
-        <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <style>
       <id>	3	</id>
@@ -184,7 +181,7 @@
         <nations>	germany	</nations>
       </include>
       <exclude>
-        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian germany:G56_E-100_sport	</vehicles>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -475,7 +472,7 @@
         <nations>	ussr	</nations>
       </include>
       <exclude>
-        <vehicles>	ussr:R61_Object252_BF ussr:R87_T62A_sport	</vehicles>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -572,6 +569,63 @@
           <camouflages>
             <item>
               <id>	541	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
+    <priceGroup>	rented style	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	187	</id>
+      <userString>	#vehicle_customization:rented_style/poland	</userString>
+      <texture>	gui/maps/vehicles/styles/poland.png	</texture>
+      <season>	ALL	</season>
+      <isRent>	true	</isRent>
+      <rentCount>	100	</rentCount>
+      <tags>	vehicleBound	</tags>
+      <historical>	true	</historical>
+      <outfits>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	15901	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	15902	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	15900	</id>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
               <appliedTo>	4368	</appliedTo>

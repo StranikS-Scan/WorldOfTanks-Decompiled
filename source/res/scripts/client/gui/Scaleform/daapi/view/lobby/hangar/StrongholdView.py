@@ -11,11 +11,13 @@ from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.meta.StrongholdViewMeta import StrongholdViewMeta
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
+from gui.Scaleform.daapi.view.lobby.strongholds.sound_constants import STRONGHOLD_SOUND_SPACE
 from skeletons.gui.game_control import IBrowserController
 
 class StrongholdView(LobbySubView, StrongholdViewMeta):
     __background_alpha__ = 1.0
     __sound_env__ = StrongholdEnv
+    _COMMON_SOUND_SPACE = STRONGHOLD_SOUND_SPACE
     browserCtrl = dependency.descriptor(IBrowserController)
 
     def __init__(self, ctx=None):
@@ -66,6 +68,8 @@ class StrongholdView(LobbySubView, StrongholdViewMeta):
 
     def _dispose(self):
         super(StrongholdView, self)._dispose()
+        if self.__browserId:
+            self.browserCtrl.delBrowser(self.__browserId)
         self.fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_DEACTIVATED), scope=EVENT_BUS_SCOPE.STRONGHOLD)
 
     def __close(self):

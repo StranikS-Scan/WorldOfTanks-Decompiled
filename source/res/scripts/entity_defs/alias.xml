@@ -669,6 +669,9 @@
         <Type>	ARRAY	  <of>	UINT16	</of>
         </Type>
       </potapovQuestIDs>
+      <potapovQuestInfo>
+        <Type>	PYTHON	</Type>
+      </potapovQuestInfo>
       <vehiclesInfo>
         <Type>	ARRAY	  <of>	ARENA_VEH_INFO	</of>
         </Type>
@@ -1073,4 +1076,16 @@
       </aliveOnly>
     </Properties>
   </VEHICLE_DETECTOR_INFO>
+  <QUEST_PROGRESS>	FIXED_DICT	  <Properties>
+      <goal>
+        <Type>	INT32	</Type>
+      </goal>
+      <value>
+        <Type>	INT32	</Type>
+      </value>
+      <complete>
+        <Type>	BOOL	</Type>
+      </complete>
+    </Properties>
+  </QUEST_PROGRESS>
 </alias.xml>

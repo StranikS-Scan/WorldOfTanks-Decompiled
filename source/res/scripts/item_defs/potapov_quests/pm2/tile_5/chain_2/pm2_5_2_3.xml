@@ -1,0 +1,162 @@
+<pm2_5_2_3.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_5_2_3_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions></conditions>
+      <scripts>	
+pass
+         	</scripts>
+      <bonus>
+        <credits>	100000	</credits>
+        <token>
+          <id>	token:pt:final:s2:t5:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_5_2_3_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pm2_5_2_3_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+        <token>
+          <id>	token:pt:final:s2:t5:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_5_2_3_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions></conditions>
+      <scripts>	
+LOG = globals().get('LOG')
+""":type: typing.LOG_DEBUG_DEV"""
+
+QUEST_EVENT_TYPE = globals().get('QUEST_EVENT_TYPE')
+""":type: quest_definitions.QUEST_EVENT_TYPE"""
+
+quest_progress = globals().get('quest_progress')
+""":type: quest_progress"""
+
+server_constants = globals().get('server_constants')
+""":type: server_constants"""
+
+items = globals().get('items')
+""":type: items"""
+
+ATTACK_REASON = globals().get('ATTACK_REASON')
+""":type: constants.ATTACK_REASON"""
+
+filters = globals().get('filters')
+""":type: battle_result_event_list_helpers"""
+
+
+KILLS = 'kills'
+DAMAGE_IN_BATTLE = 'damageInBattle'
+DAMAGE_IN_BATTLE_SERIES = 'damageInBattleSeries'
+
+
+def onFinishBattle(eventType, eventData, quest, processor):
+    questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
+
+    avatarResults = eventData['avatarResults']
+    eventLog = avatarResults['damageEventList']
+
+    targetClasses = questProgress.getProgress(KILLS).getParam('targetClasses')
+
+    damageDealt = sum(filters.sumDamage(eventList) for _, eventList in eventLog.iteritems())
+
+    if questProgress.increaseUntilComplete(DAMAGE_IN_BATTLE, damageDealt):
+        questProgress.increaseUntilComplete(DAMAGE_IN_BATTLE_SERIES, 1)
+
+    killCount = sum(1
+                    for (_, cd), eventList in eventLog.iteritems()
+                    if items.vehicles.getVehicleClass(cd) in targetClasses and filters.isTargetKilled(eventList))
+
+    questProgress.increaseUntilComplete(KILLS, killCount)
+
+    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=DAMAGE_IN_BATTLE_SERIES))
+
+    processor.setQuestProgress(quest.progressID, questProgress.save())
+
+
+def onInit(eventType, eventData, quest, processor):
+    for event in events.iterkeys():
+        processor.subscribe(event, quest)
+    return True
+
+
+events = {
+    QUEST_EVENT_TYPE.INIT: onInit,
+    QUEST_EVENT_TYPE.FINISH_BATTLE: onFinishBattle,
+}
+
+
+def quest(eventType, eventData, quest, processor):
+    LOG('QUEST EVENT:', eventType, quest.id)
+    return events.get(eventType, lambda *args: False)(eventType, eventData, quest, processor)
+
+         	</scripts>
+      <bonus>
+        <credits>	50000	</credits>
+        <token>
+          <id>	token:pt:final:s2:t5:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_5_2_3_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pm2_5_2_3_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	addQuestCompleted	</key>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list_2	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm2_5_2_3.xml>

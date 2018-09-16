@@ -3,6 +3,7 @@
 from collections import namedtuple
 from debug_utils import LOG_ERROR
 from helpers import dependency
+from personal_missions import PM_BRANCH
 from shared_utils import first
 from gui.shared.utils.decorators import ReprInjector
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES as _QA
@@ -36,7 +37,7 @@ PQ_TABS = (_QA.SEASON_VIEW_TAB_RANDOM,)
 def getEnabledPQTabs(lobbyContext=None):
     if lobbyContext is not None:
         tabs = list(PQ_TABS)
-        if not lobbyContext.getServerSettings().isRegularQuestEnabled():
+        if not lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch=PM_BRANCH.REGULAR):
             tabs.remove(_QA.SEASON_VIEW_TAB_RANDOM)
     else:
         tabs = []

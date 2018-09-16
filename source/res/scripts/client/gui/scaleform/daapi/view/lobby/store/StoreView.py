@@ -2,10 +2,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/StoreView.py
 from account_helpers import AccountSettings
 from gui.Scaleform.daapi.view.lobby.store.actions_formatters import getActiveActions, getNewActiveActions
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.StoreViewMeta import StoreViewMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showHangar
 from gui.sounds.ambients import ShopEnv
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -13,6 +15,7 @@ from helpers import dependency
 from helpers.i18n import makeString
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.lobby_context import ILobbyContext
 _TABS = ({'id': STORE_CONSTANTS.STORE_ACTIONS,
   'label': makeString(MENU.STORETAB_ACTIONS),
   'linkage': STORE_CONSTANTS.STORE_ACTIONS_LINKAGE}, {'id': STORE_CONSTANTS.SHOP,
@@ -29,6 +32,7 @@ def _getTabIndex(tabId):
 class StoreView(StoreViewMeta):
     __sound_env__ = ShopEnv
     eventsCache = dependency.descriptor(IEventsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(StoreView, self).__init__(ctx)
@@ -60,10 +64,14 @@ class StoreView(StoreViewMeta):
     def __addHandlers(self):
         self.eventsCache.onSyncCompleted += self.__updateActionsCounter
         self.eventsCache.onEventsVisited += self.__onActionVisitedChange
+        serverSettings = self.lobbyContext.getServerSettings()
+        serverSettings.onServerSettingsChange += self.__onServerSettingChanged
 
     def __removeHandlers(self):
         self.eventsCache.onSyncCompleted -= self.__updateActionsCounter
         self.eventsCache.onEventsVisited -= self.__onActionVisitedChange
+        serverSettings = self.lobbyContext.getServerSettings()
+        serverSettings.onServerSettingsChange -= self.__onServerSettingChanged
 
     def __onActionVisitedChange(self, counters):
         if 'actions' in counters:
@@ -73,6 +81,10 @@ class StoreView(StoreViewMeta):
                   'count': str(counter)},))
             else:
                 self.as_removeBtnTabCountersS((STORE_CONSTANTS.STORE_ACTIONS,))
+
+    def __onServerSettingChanged(self, diff):
+        if 'ingameShop' in diff and isIngameShopEnabled():
+            showHangar()
 
     def __updateActionsCounter(self):
         newActions = getNewActiveActions(self.eventsCache)

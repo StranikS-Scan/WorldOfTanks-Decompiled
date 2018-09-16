@@ -4,7 +4,7 @@ import copy
 from collections import namedtuple
 from functools import partial
 import BigWorld
-from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, PERSONAL_QUEST_FREE_TOKEN_NAME
+from constants import EVENT_TYPE as _ET, DOSSIER_TYPE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from gui import makeHtmlString
@@ -28,12 +28,13 @@ from helpers import dependency
 from helpers import getLocalizedData, i18n
 from helpers import time_utils
 from items import vehicles, tankmen
+from items.components import c11n_components as cc
+from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import makeTupleByDict
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IFootballMetaGame
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSATION,
  'hasCompensation': False,
@@ -304,16 +305,12 @@ class TokensBonus(SimpleBonus):
     def getCount(self):
         return sum((v.get('count', 0) for v in self._value.values()))
 
-    def isFootball(self):
-        return all(('fb18' in v for v in self._value))
-
 
 class BattleTokensBonus(TokensBonus):
     eventsCache = dependency.descriptor(IEventsCache)
-    footballMetaGame = dependency.descriptor(IFootballMetaGame)
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
-        super(TokensBonus, self).__init__(name, value, isCompensation)
+        super(TokensBonus, self).__init__(name, value, isCompensation, ctx)
         self._name = 'battleToken'
 
     def isShowInGUI(self):
@@ -324,13 +321,8 @@ class BattleTokensBonus(TokensBonus):
         for tokenID, _ in self._value.iteritems():
             complexToken = parseComplexToken(tokenID)
             if complexToken.isDisplayable:
-                _, tooltipHeader, _ = self.footballMetaGame.getTokenInfo(tokenID)
-                if tooltipHeader is None:
-                    userName = self._getUserName(complexToken.styleID)
-                    preformatted = i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName)
-                else:
-                    preformatted = tooltipHeader
-                result.append(preformatted)
+                userName = self._getUserName(complexToken.styleID)
+                result.append(i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName))
 
         return ', '.join(result) if result else None
 
@@ -341,10 +333,10 @@ class BattleTokensBonus(TokensBonus):
 
 def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):
     from gui.server_events.finders import PERSONAL_MISSION_TOKEN
-    completionTokenID = PERSONAL_MISSION_TOKEN % ctx['operationID']
+    completionTokenID = PERSONAL_MISSION_TOKEN % (ctx['campaignID'], ctx['operationID'])
     result = []
     for tID, tValue in value.iteritems():
-        if tID == PERSONAL_QUEST_FREE_TOKEN_NAME:
+        if tID in PM_BRANCH_TO_FREE_TOKEN_NAME.values():
             result.append(FreeTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID == completionTokenID:
             result.append(CompletionTokensBonus({tID: tValue}, isCompensation, ctx))
@@ -355,8 +347,9 @@ def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):
 
 class FreeTokensBonus(TokensBonus):
 
-    def __init__(self, value, isCompensation=False, ctx=None):
+    def __init__(self, value, isCompensation=False, ctx=None, hasPawned=False):
         super(FreeTokensBonus, self).__init__('freeTokens', value, isCompensation, ctx)
+        self.__hasPawnedTokens = hasPawned
 
     def isShowInGUI(self):
         return self.getCount() > 0
@@ -368,7 +361,18 @@ class FreeTokensBonus(TokensBonus):
         return makeHtmlString('html_templates:lobby/quests/bonuses', self._name, {'value': self.formatValue()})
 
     def areTokensPawned(self):
-        return self.getContext()['areTokensPawned']
+        return self.__hasPawnedTokens
+
+    def getImageFileName(self):
+        return '_'.join((self.getName(), str(self.__determineBranchID())))
+
+    def __determineBranchID(self):
+        result = PM_BRANCH.REGULAR
+        for branch, token in PM_BRANCH_TO_FREE_TOKEN_NAME.iteritems():
+            if token in self._value:
+                result = branch
+
+        return result
 
 
 class CompletionTokensBonus(TokensBonus):
@@ -739,7 +743,7 @@ class DossierBonus(SimpleBonus):
         return result
 
     def format(self):
-        return ', '.join([ achievement.getUserName() for achievement in self.getAchievements() ])
+        return ', '.join(self.formattedList())
 
     def formattedList(self):
         return self.getAchievements()
@@ -905,7 +909,7 @@ class RefSystemTankmenBonus(TankmenBonus):
 
 class CustomizationsBonus(SimpleBonus):
     c11n = dependency.descriptor(ICustomizationService)
-    INFOTIP_ARGS_ORDER = ('intCD', 'hideInventory')
+    INFOTIP_ARGS_ORDER = ('intCD', 'showPrice')
 
     def getList(self):
         result = []
@@ -926,18 +930,52 @@ class CustomizationsBonus(SimpleBonus):
              'valueStr': valueStr,
              'boundVehicle': boundVehicle,
              'boundToCurrentVehicle': boundToCurrentVehicle,
-             'hideInventory': True})
+             'showPrice': False})
 
         return result
 
     def getCustomizations(self):
         return self._value or []
 
-    def __getCommonAwardsVOs(self, item, data, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
+    def compensation(self):
+        bonuses = []
+        substitutes = []
+        cache = vehicles.g_cache.customization20()
+        for customizationItem in self._value:
+            c11nItem = self.__getC11nItem(customizationItem)
+            itemType, itemId = cc.splitIntDescr(c11nItem.intCD)
+            c11nComponent = cache.itemTypes[itemType][itemId]
+            count = customizationItem.get('value')
+            inventoryCount = c11nItem.inventoryCount
+            maxNumber = c11nComponent.maxNumber
+            compensationCount = count - max(0, maxNumber - inventoryCount)
+            if compensationCount > 0 and maxNumber != 0:
+                realCount = count - compensationCount
+                if realCount > 0:
+                    substituteItem = copy.deepcopy(customizationItem)
+                    substituteItem['value'] = realCount
+                    substitutes.append(substituteItem)
+                compensation = customizationItem.get('customCompensation')
+                money = Money.makeMoney(compensation)
+                for currency, value in money.iteritems():
+                    if value:
+                        cls = _BONUSES.get(currency)
+                        bonuses.append(cls(currency, value * compensationCount, isCompensation=True))
+
+            substitutes.append(copy.deepcopy(customizationItem))
+
+        bonuses.insert(0, CustomizationsBonus('customizations', substitutes))
+        return bonuses
+
+    def __getC11nItem(self, item):
         itemTypeName = item.get('custType')
         itemID = item.get('id')
         itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
         c11nItem = self.c11n.getItemByID(itemTypeID, itemID)
+        return c11nItem
+
+    def __getCommonAwardsVOs(self, item, data, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
+        c11nItem = self.__getC11nItem(item)
         count = item.get('value', 1)
         itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, c11nItem.itemTypeName),
          'label': text_styles.hightlight('x{}'.format(count)),
@@ -963,12 +1001,9 @@ class CustomizationsBonus(SimpleBonus):
             itemData = self.__getCommonAwardsVOs(item, data, iconSize='big', align=TEXT_ALIGN.CENTER)
             itemData.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
             if withDescription:
-                itemTypeName = item.get('custType')
-                itemID = item.get('id')
-                itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
-                item = self.c11n.getItemByID(itemTypeID, itemID)
-                itemData['description'] = item.userType
-                itemData['title'] = item.userName
+                c11nItem = self.__getC11nItem(item)
+                itemData['description'] = c11nItem.userType
+                itemData['title'] = c11nItem.userName
             result.append(itemData)
 
         return result
@@ -1087,10 +1122,10 @@ def _initFromTree(key, name, value, isCompensation=False, ctx=None):
     return []
 
 
-def getBonuses(quest, name, value, isCompensation=False):
+def getBonuses(quest, name, value, isCompensation=False, ctx=None):
     questType = quest.getType()
     key = [name, questType]
-    ctx = {}
+    ctx = ctx or {}
     if questType in (_ET.BATTLE_QUEST, _ET.TOKEN_QUEST, _ET.PERSONAL_QUEST) and name == 'tokens':
         parentsName = quest.getParentsName()
         for n, v in value.iteritems():
@@ -1102,8 +1137,9 @@ def getBonuses(quest, name, value, isCompensation=False):
     elif questType == _ET.PERSONAL_MISSION:
         ctx.update({'operationID': quest.getOperationID(),
          'chainID': quest.getChainID(),
+         'campaignID': quest.getCampaignID(),
          'areTokensPawned': False})
-    return _initFromTree(key, name, value, isCompensation, ctx)
+    return _initFromTree(key, name, value, isCompensation, ctx=ctx)
 
 
 def getTutorialBonuses(name, value):

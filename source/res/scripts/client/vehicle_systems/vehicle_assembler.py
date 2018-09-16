@@ -111,7 +111,7 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
             if not gEffectsDisabled():
                 model_assembler.assembleVehicleAudition(isPlayer, appearance)
                 model_assembler.subscribeEngineAuditionToEngineState(appearance.engineAudition, appearance.detailedEngineState)
-                createEffects(appearance)
+                createEffects(appearance, isPlayer)
             if isPlayer:
                 gunRotatorConnector = GunRotatorConnector(appearance)
                 appearance.addComponent(gunRotatorConnector)
@@ -126,7 +126,8 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
         lodLink = DataLinks.createFloatLink(lodCalcInst, 'lodDistance')
         lodStateLink = lodCalcInst.lodStateLink
         matrixBinding = BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged
-        appearance.shadowManager = VehicleShadowManager(compoundModel, matrixBinding)
+        changeCamera = BigWorld.player().inputHandler.onCameraChanged
+        appearance.shadowManager = VehicleShadowManager(compoundModel, matrixBinding, changeCamera)
         isDamaged = appearance.damageState.isCurrentModelDamaged
         if not isDamaged:
             self.__assembleNonDamagedOnly(resourceRefs, appearance, isPlayer, lodLink, lodStateLink)

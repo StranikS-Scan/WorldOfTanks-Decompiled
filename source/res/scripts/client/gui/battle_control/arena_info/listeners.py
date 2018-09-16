@@ -117,13 +117,6 @@ class ArenaVehiclesListener(_Listener):
             arena.onInteractiveStats += self.__arena_onInteractiveStats
             arena.onGameModeSpecifcStats += self.__arena_onGameModeSpecifcStats
             arena.onFogOfWarHiddenVehiclesSet += self.__arena_onFogOfWarHiddenVehiclesSet
-            arena.onFootballOvertimePoints += self.__arena_onFootballOvertimePoints
-            arena.onGoalScored += self.__arena_onGoalScored
-            arena.onGoalTimeline += self.__arena_onGoalTimeline
-            arena.onBallDrop += self.__arena_onBallDrop
-            arena.onReturnToPlay += self.__arena_onReturnToPlay
-            arena.onWinnerDeclared += self.__arena_onWinnerDeclared
-            arena.onFadeOutOverlay += self.__arena_onFadeOutOverlay
         return
 
     def stop(self):
@@ -142,13 +135,6 @@ class ArenaVehiclesListener(_Listener):
             arena.onInteractiveStats -= self.__arena_onInteractiveStats
             arena.onGameModeSpecifcStats -= self.__arena_onGameModeSpecifcStats
             arena.onFogOfWarHiddenVehiclesSet -= self.__arena_onFogOfWarHiddenVehiclesSet
-            arena.onFootballOvertimePoints -= self.__arena_onFootballOvertimePoints
-            arena.onGoalScored -= self.__arena_onGoalScored
-            arena.onGoalTimeline -= self.__arena_onGoalTimeline
-            arena.onBallDrop -= self.__arena_onBallDrop
-            arena.onReturnToPlay -= self.__arena_onReturnToPlay
-            arena.onWinnerDeclared -= self.__arena_onWinnerDeclared
-            arena.onFadeOutOverlay -= self.__arena_onFadeOutOverlay
         super(ArenaVehiclesListener, self).stop()
         return
 
@@ -229,27 +215,6 @@ class ArenaVehiclesListener(_Listener):
 
     def __arena_onFogOfWarHiddenVehiclesSet(self, flag):
         self._invokeListenersMethod('invalidateFogOfWarHiddenVehiclesFlag', flag)
-
-    def __arena_onFootballOvertimePoints(self, data):
-        self._invokeListenersMethod('invalidateFootballOvertimePoints', self._arenaDP, data)
-
-    def __arena_onGoalScored(self, data):
-        self._invokeListenersMethod('invalidateGoalData', data)
-
-    def __arena_onGoalTimeline(self, data):
-        self._invokeListenersMethod('invalidateGoalTimeline', data)
-
-    def __arena_onBallDrop(self, data):
-        self._invokeListenersMethod('invalidateOnBallDrop', data)
-
-    def __arena_onReturnToPlay(self, data):
-        self._invokeListenersMethod('onReturnToPlay', data)
-
-    def __arena_onWinnerDeclared(self, data):
-        self._invokeListenersMethod('onWinnerDeclared', data)
-
-    def __arena_onFadeOutOverlay(self, data):
-        self._invokeListenersMethod('onFadeOutOverlay', data)
 
     def __isRequiredDataExists(self):
         return self._arenaDP is not None and self._arenaDP.isRequiredDataExists()

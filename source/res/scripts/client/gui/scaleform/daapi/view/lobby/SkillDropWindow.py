@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/SkillDropWindow.py
 import cPickle as pickle
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+from gui.ingame_shop import showBuyGoldForCrew
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from helpers import dependency
 from items import tankmen
 from gui import SystemMessages
 from gui.shared.utils import decorators
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.serializers import packTankman
+from gui.shared.gui_items.serializers import packTankman, packDropSkill
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.processors.tankman import TankmanDropSkills
 from gui.shared.money import Money, Currency
@@ -50,13 +52,13 @@ class SkillDropWindow(SkillDropMeta):
             lenSkills = len(tankman.skills)
             availableSkillsCount = skills_count - lenSkills
             hasNewSkills = tankman.roleLevel == tankmen.MAX_SKILL_LEVEL and availableSkillsCount and (tankman.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not lenSkills)
-            self.as_setDataS({'money': items.stats.money.toMoneyTuple(),
-             'tankman': packTankman(tankman, isCountPermanentSkills=False),
+            self.as_setDataS({'tankman': packTankman(tankman, isCountPermanentSkills=False),
              'dropSkillsCost': dropSkillsCost,
              'hasNewSkills': hasNewSkills,
              'newSkills': tankman.newSkillCount,
              'defaultSavingMode': 0,
              'texts': self.__getTexts()})
+            self.as_updateRetrainButtonsDataS(packDropSkill(tankman))
             return
 
     def __getTexts(self):
@@ -69,10 +71,10 @@ class SkillDropWindow(SkillDropMeta):
         super(SkillDropWindow, self)._populate()
         self.__setData()
         self.itemsCache.onSyncCompleted += self.__setData
-        g_clientUpdateManager.addCurrencyCallback(Currency.CREDITS, self.onCreditsChange)
-        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.onGoldChange)
+        g_clientUpdateManager.addCurrencyCallback(Currency.CREDITS, self.__setData)
+        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.__setData)
         g_clientUpdateManager.addCallbacks({'inventory.8.compDescr': self.onTankmanChanged,
-         'cache.mayConsumeWalletResources': self.onGoldChange})
+         'cache.mayConsumeWalletResources': self.__setData})
 
     def _dispose(self):
         self.itemsCache.onSyncCompleted -= self.__setData
@@ -87,12 +89,6 @@ class SkillDropWindow(SkillDropMeta):
             self.__setData()
         return
 
-    def onCreditsChange(self, credit):
-        self.as_setCreditsS(credit)
-
-    def onGoldChange(self, gold):
-        self.as_setGoldS(self.itemsCache.items.stats.gold)
-
     def onWindowClose(self):
         self.destroy()
 
@@ -106,6 +102,11 @@ class SkillDropWindow(SkillDropMeta):
     @decorators.process('deleting')
     def dropSkills(self, dropSkillCostIdx):
         tankman = self.itemsCache.items.getTankman(self.tmanInvID)
+        dropSkillCost = self.itemsCache.items.shop.dropSkillsCost[dropSkillCostIdx].get(Currency.GOLD, 0)
+        currentGold = self.itemsCache.items.stats.gold
+        if currentGold < dropSkillCost and isIngameShopEnabled():
+            showBuyGoldForCrew(dropSkillCost)
+            return
         proc = TankmanDropSkills(tankman, dropSkillCostIdx)
         result = yield proc.request()
         if result.userMsg:

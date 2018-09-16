@@ -19,7 +19,6 @@ from items.tankmen import getSkillsConfig, compareMastery
 from helpers.i18n import convert
 from gui.ClientUpdateManager import g_clientUpdateManager
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
 class Crew(CrewMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -56,11 +55,6 @@ class Crew(CrewMeta):
                 if slotIdx > 0 and tman is not None and (tankmenDescrs[lessMastered] is None or compareMastery(tankmenDescrs[lessMastered].descriptor, tman.descriptor) > 0):
                     lessMastered = slotIdx
                 role = vehicle.descriptor.type.crewRoles[slotIdx][0]
-                footballRole = vehicle.getFootballRole()
-                if footballRole is not None:
-                    tankType = footballRole
-                else:
-                    tankType = vehicle.type
                 roles.append({'tankmanID': tman.invID if tman is not None else None,
                  'roleType': role,
                  'role': convert(skillsConfig.getSkill(role).userString),
@@ -69,7 +63,7 @@ class Crew(CrewMeta):
                  'typeID': vehicle.innationID,
                  'slot': slotIdx,
                  'vehicleType': vehicle.shortUserName,
-                 'tankType': tankType,
+                 'tankType': vehicle.type,
                  'vehicleElite': vehicle.isPremium or vehicle.isPremiumIGR,
                  'roles': list(vehicle.descriptor.type.crewRoles[slotIdx])})
 
@@ -78,32 +72,24 @@ class Crew(CrewMeta):
                 if tankman.isInTank and tankman.vehicleInvID != vehicle.invID:
                     continue
                 tankmanVehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
-                descriptor = tankman.descriptor
-                bonus_role_level = commander_bonus if descriptor.role != 'commander' else 0.0
+                bonus_role_level = commander_bonus if tankman.descriptor.role != 'commander' else 0.0
                 skills_count = skillsConfig.getNumberOfActiveSkills()
                 skillsList = []
-                isEvent = g_currentVehicle.item.isEvent
-                if not isEvent:
-                    for skill in tankman.skills:
-                        skillsList.append({'tankmanID': tankman.invID,
-                         'id': str(tankman.skills.index(skill)),
-                         'name': skill.userName,
-                         'desc': skill.description,
-                         'icon': skill.icon,
-                         'level': skill.level,
-                         'active': skill.isEnable and skill.isActive})
+                for skill in tankman.skills:
+                    skillsList.append({'tankmanID': tankman.invID,
+                     'id': str(tankman.skills.index(skill)),
+                     'name': skill.userName,
+                     'desc': skill.description,
+                     'icon': skill.icon,
+                     'level': skill.level,
+                     'active': skill.isEnable and skill.isActive})
 
-                    newSkillsCount, lastNewSkillLvl = tankman.newSkillCount
-                    if newSkillsCount > 0:
-                        skillsList.append({'buy': True,
-                         'buyCount': newSkillsCount - 1,
-                         'tankmanID': tankman.invID,
-                         'level': lastNewSkillLvl})
-                footballRole = tankmanVehicle.getFootballRole()
-                if footballRole is not None:
-                    tankType = footballRole
-                else:
-                    tankType = tankmanVehicle.type
+                newSkillsCount, lastNewSkillLvl = tankman.newSkillCount
+                if newSkillsCount > 0:
+                    skillsList.append({'buy': True,
+                     'buyCount': newSkillsCount - 1,
+                     'tankmanID': tankman.invID,
+                     'level': lastNewSkillLvl})
                 tankmanData = {'firstName': tankman.firstUserName,
                  'lastName': tankman.lastUserName,
                  'rank': tankman.rankUserName,
@@ -112,23 +98,21 @@ class Crew(CrewMeta):
                  'vehicleType': tankmanVehicle.shortUserName,
                  'iconFile': tankman.icon,
                  'rankIconFile': tankman.iconRank,
-                 'roleIconFile': Tankman.getRoleBigIconPath(descriptor.role),
+                 'roleIconFile': Tankman.getRoleBigIconPath(tankman.descriptor.role),
                  'contourIconFile': tankmanVehicle.iconContour,
                  'tankmanID': tankman.invID,
                  'nationID': tankman.nationID,
                  'typeID': tankmanVehicle.innationID,
                  'inTank': tankman.isInTank,
-                 'roleType': descriptor.role,
-                 'tankType': tankType,
+                 'roleType': tankman.descriptor.role,
+                 'tankType': tankmanVehicle.type,
                  'efficiencyLevel': tankman.efficiencyRoleLevel,
                  'bonus': bonus_role_level,
-                 'lastSkillLevel': descriptor.lastSkillLevel if not isEvent else 100,
+                 'lastSkillLevel': tankman.descriptor.lastSkillLevel,
                  'isLessMastered': vehicle.crewIndices.get(tankman.invID) == lessMastered and vehicle.isXPToTman,
                  'compact': tankman.strCD,
                  'availableSkillsCount': skills_count,
                  'skills': skillsList}
-                if isEvent:
-                    tankmanData['footballAlertIconPath'] = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
                 tankmenData.append(tankmanData)
 
             self.as_tankmenResponseS({'showRecruit': self._showRecruit,

@@ -15,11 +15,11 @@ from constants import EVENT_TYPE, EVENT_CLIENT_DATA
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
-from gui.server_events.personal_missions_controller import PersonalMissionsController
 from gui.server_events.event_items import EventBattles, createQuest, createAction, MotiveQuest
 from gui.server_events.events_helpers import isMarathon, isLinkedSet
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE, clearModifiersCache
+from gui.server_events.personal_missions_cache import PersonalMissionsCache
 from gui.server_events.prefetcher import Prefetcher
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM as aei
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
@@ -62,14 +62,12 @@ class EventsCache(IEventsCache):
         self.__quests2actions = {}
         self.__questsDossierBonuses = defaultdict(set)
         self.__compensations = {}
-        self.__personalMissions = PersonalMissionsController()
+        self.__personalMissions = PersonalMissionsCache()
         self.__questsProgress = QuestsProgressRequester()
         self.__em = EventManager()
         self.__prefetcher = Prefetcher(self)
         self.onSyncStarted = Event(self.__em)
         self.onSyncCompleted = Event(self.__em)
-        self.onSelectedQuestsChanged = Event(self.__em)
-        self.onSlotsCountChanged = Event(self.__em)
         self.onProgressUpdated = Event(self.__em)
         self.onMissionVisited = Event(self.__em)
         self.onEventsVisited = Event(self.__em)
@@ -92,8 +90,10 @@ class EventsCache(IEventsCache):
     def start(self):
         self.__lockedQuestIds = BigWorld.player().personalMissionsLock
         g_playerEvents.onPMLocksChanged += self.__onLockedQuestsChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
     def stop(self):
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         g_playerEvents.onPMLocksChanged -= self.__onLockedQuestsChanged
         self.__clearCache()
 
@@ -106,29 +106,20 @@ class EventsCache(IEventsCache):
         return self.__waitForSync
 
     @property
-    def randomQuestsProgress(self):
-        return self.__personalMissions.questsProgress
-
-    @property
-    def random(self):
-        return self.__personalMissions
-
-    @property
     def questsProgress(self):
         return self.__questsProgress
 
-    @property
-    def personalMissions(self):
+    def getPersonalMissions(self):
         return self.__personalMissions
 
     @property
     def prefetcher(self):
         return self.__prefetcher
 
-    def getLockedQuestTypes(self):
+    def getLockedQuestTypes(self, branch):
         questIDs = set()
         result = set()
-        allQuests = self.personalMissions.getQuests()
+        allQuests = self.getPersonalMissions().getQuestsForBranch(branch)
         for lockedList in self.__lockedQuestIds.values():
             if lockedList is not None:
                 questIDs.update(lockedList)
@@ -143,8 +134,8 @@ class EventsCache(IEventsCache):
     @process
     def update(self, diff=None, callback=None):
         clearModifiersCache()
-        yield self.randomQuestsProgress.request()
-        if not self.randomQuestsProgress.isSynced():
+        yield self.getPersonalMissions().questsProgressRequest()
+        if not self.getPersonalMissions().isQuestsProgressSynced():
             callback(False)
             return
         else:
@@ -156,8 +147,8 @@ class EventsCache(IEventsCache):
             isNeedToClearItemsCaches = False
 
             def _cbWrapper(*args):
-                self.__personalMissions.update(self, diff)
                 callback(*args)
+                self.__personalMissions.update(self, diff)
 
             if diff is not None:
                 isQPUpdated = 'quests' in diff or 'tokens' in diff
@@ -270,10 +261,7 @@ class EventsCache(IEventsCache):
 
     def getEventBattles(self):
         battles = self.__getEventBattles()
-        return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID'), battles.get('dueDate')) if battles else EventBattles(set(), [], 0, None, None)
-
-    def getEventDueDate(self):
-        return self.getEventBattles().dueDate
+        return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
 
     def isEventEnabled(self):
         return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
@@ -429,7 +417,7 @@ class EventsCache(IEventsCache):
             result[qID] = q
 
         if includePersonalMissions:
-            for qID, q in self.personalMissions.getQuests().iteritems():
+            for qID, q in self.getPersonalMissions().getAllQuests().iteritems():
                 if filterFunc(q):
                     result[qID] = q
 
@@ -505,7 +493,7 @@ class EventsCache(IEventsCache):
         storage = self.__cache['quests']
         if qID in storage:
             return storage[qID]
-        q = storage[qID] = maker(qID, qData, self.__questsProgress, **kwargs)
+        q = storage[qID] = maker(qID, qData, self.__questsProgress)
         return q
 
     def _makeAction(self, aID, aData):
@@ -719,3 +707,6 @@ class EventsCache(IEventsCache):
 
     def __onLockedQuestsChanged(self):
         self.__lockedQuestIds = BigWorld.player().personalMissionsLock
+
+    def __onServerSettingsChange(self, *args, **kwargs):
+        self.__personalMissions.updateDisabledStateForQuests()

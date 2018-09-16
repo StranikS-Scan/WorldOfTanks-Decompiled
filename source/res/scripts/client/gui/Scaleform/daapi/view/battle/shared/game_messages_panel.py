@@ -28,6 +28,6 @@ class GameMessagesPanel(GameMessagesPanelMeta):
             else:
                 messageType = GAME_MESSAGES_CONSTS.DEFEAT
         endGameMsgData = {'title': toUpper(i18n.makeString(_FULL_RESULT_LABEL.format(messageType))),
-         'subTitle': toUpper(makeRegularFinishResultLabel(reason, messageType))}
+         'subTitle': makeRegularFinishResultLabel(reason, messageType)}
         msg = PlayerMessageData(messageType, GAME_MESSAGES_CONSTS.DEFAULT_MESSAGE_LENGTH, GAME_MESSAGES_CONSTS.GAME_MESSAGE_PRIORITY_END_GAME, endGameMsgData)
         self._addMessage(msg.getDict())

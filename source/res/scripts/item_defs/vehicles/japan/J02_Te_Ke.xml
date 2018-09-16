@@ -349,6 +349,194 @@
           </transform>
         </decal>
       </AODecals>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	109	</segmentsCount>
+          <segmentsOuterThickness>	0.0308177	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00636663	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-0.837062	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.0592543	</back>
+              <top>	0.0685801	</top>
+              <front>	0.064491	</front>
+              <bottom>	0.0527934	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0622255	</back>
+              <top>	0.0347229	</top>
+              <front>	0.0736588	</front>
+              <bottom>	0.0432669	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/japan/J02_Te_Ke/track/segment.model	</model>
+            <length>	0.0712688	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top></top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	1.66163 0.598596	</basePos>
+              <shiftVec>	0.211655 0.0614439	</shiftVec>
+              <jointIdx>	14	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	W_L4	</wheelName>
+              <basePos>	-1.30316 0.325525	</basePos>
+              <shiftVec>	-0.303929 0.0498035	</shiftVec>
+              <jointIdx>	66	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L3	</wheelName>
+              <basePos>	-0.517699 0.209952	</basePos>
+              <shiftVec>	-0.0318028 -0.193882	</shiftVec>
+              <jointIdx>	84	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.17101 0.209953	</basePos>
+              <shiftVec>	0.0272896 -0.192014	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	W_L4	</name>
+              <radius>	0.307652	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L2	</name>
+              <radius>	0.115	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L1	</name>
+              <radius>	0.115	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.24	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	-80.1971	</startAngle>
+              <teethCount>	20	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top></top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	109	</segmentsCount>
+          <segmentsOuterThickness>	0.0308178	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00636677	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	0.837	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.0592543	</back>
+              <top>	0.0685801	</top>
+              <front>	0.064491	</front>
+              <bottom>	0.0527934	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0622255	</back>
+              <top>	0.0347229	</top>
+              <front>	0.0736588	</front>
+              <bottom>	0.0432669	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/japan/J02_Te_Ke/track/segment.model	</model>
+            <length>	0.0713183	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top></top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	1.66163 0.598596	</basePos>
+              <shiftVec>	0.21164 0.0614425	</shiftVec>
+              <jointIdx>	14	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	W_R4	</wheelName>
+              <basePos>	-1.30316 0.325523	</basePos>
+              <shiftVec>	-0.303926 0.0497997	</shiftVec>
+              <jointIdx>	66	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R3	</wheelName>
+              <basePos>	-0.517699 0.20995	</basePos>
+              <shiftVec>	-0.0318011 -0.193881	</shiftVec>
+              <jointIdx>	84	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.17101 0.209952	</basePos>
+              <shiftVec>	0.0272821 -0.192015	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	W_R4	</name>
+              <radius>	0.307648	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R2	</name>
+              <radius>	0.115	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R1	</name>
+              <radius>	0.115	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.24	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	-80.1972	</startAngle>
+              <teethCount>	20	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top></top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
     </Chassis_Te_Ke>
   </chassis>
   <turrets0>

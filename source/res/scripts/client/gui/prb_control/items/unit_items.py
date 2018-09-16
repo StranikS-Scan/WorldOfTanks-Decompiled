@@ -264,6 +264,12 @@ class UnitFlags(object):
     def isChanged(self):
         return self.__flagsDiff & UNIT_FLAGS.CHANGED_STATE_ASQ > 0
 
+    def isInExternalLegionariesMatching(self):
+        return self.__flags & UNIT_FLAGS.EXTERNAL_LEGIONARIES_MATCHING > 0
+
+    def isExternalLegionariesMatchingChanged(self):
+        return self.__flagsDiff & UNIT_FLAGS.EXTERNAL_LEGIONARIES_MATCHING > 0
+
 
 UnitStats = namedtuple('UnitStats', ('readyCount', 'occupiedSlotsCount', 'openedSlotsCount', 'freeSlotsCount', 'curTotalLevel', 'levelsSeq'))
 UnitStats.__new__.__defaults__ = (0,

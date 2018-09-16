@@ -121,6 +121,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
         self.startGlobalListening()
         self.__getStaticData()
         self.__invalidateBattleAbilityItems()
+        self.__invalidateBattleAbilitiesForVehicle()
         self.startNotification()
         if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
             self.lobbyContext.addFightButtonConfirmator(self.__confirmFightButtonPressEnabled)

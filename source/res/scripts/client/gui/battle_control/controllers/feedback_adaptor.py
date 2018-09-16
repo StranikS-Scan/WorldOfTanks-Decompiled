@@ -3,12 +3,12 @@
 import weakref
 import BigWorld
 import Event
+import TriggersManager
+import feedback_events
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET, BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
-import feedback_events
-import TriggersManager
 FEEDBACK_TO_TRIGGER_ID = {_FET.VEHICLE_VISIBILITY_CHANGED: TriggersManager.TRIGGER_TYPE.PLAYER_DETECT_ENEMY}
 _CELL_BLINKING_DURATION = 3.0
 
@@ -42,7 +42,7 @@ class _DamagedDevicesExtraFetcher(object):
 
 
 class BattleFeedbackAdaptor(IBattleController):
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onMinimapPhysicalObjectAdded', 'onMinimapPhysicalObjectRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onMinimapFeedbackReceived', 'onShotDone', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onMinimapFeedbackReceived', 'onShotDone', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -61,8 +61,6 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onVehicleFeedbackReceived = Event.Event()
         self.onMinimapVehicleAdded = Event.Event()
         self.onMinimapVehicleRemoved = Event.Event()
-        self.onMinimapPhysicalObjectAdded = Event.Event()
-        self.onMinimapPhysicalObjectRemoved = Event.Event()
         self.onMinimapFeedbackReceived = Event.Event()
         self.onDevelopmentInfoSet = Event.Event()
         self.onStaticMarkerAdded = Event.Event()
@@ -175,30 +173,6 @@ class BattleFeedbackAdaptor(IBattleController):
         if not isPlayerVehicle:
             self.onVehicleMarkerRemoved(vehicleID)
         self.onMinimapVehicleRemoved(vehicleID)
-        return
-
-    def startPhysicalObjectVisual(self, eProxy, isImmediate=False):
-        entityID = eProxy.id
-        self.__arenaDP.addPhysicalObjectID(entityID)
-        self.__visible.add(entityID)
-        guiProps = self.__arenaDP.getPhysicalObjectGuiProps(entityID)
-
-        def __addPhysicalObjectToUI():
-            self.__pending[entityID] = None
-            self.onMinimapPhysicalObjectAdded(eProxy, guiProps)
-            return
-
-        if isImmediate:
-            __addPhysicalObjectToUI()
-        else:
-            self.__pending[entityID] = BigWorld.callback(0.0, __addPhysicalObjectToUI)
-
-    def stopPhysicalObjectVisual(self, entityID):
-        callbackID = self.__pending.pop(entityID, None)
-        if callbackID is not None:
-            BigWorld.cancelCallback(callbackID)
-        self.__visible.discard(entityID)
-        self.onMinimapPhysicalObjectRemoved(entityID)
         return
 
     def setRoundFinished(self, winningTeam, reason):

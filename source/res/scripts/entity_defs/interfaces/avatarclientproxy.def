@@ -139,5 +139,9 @@
       <Arg>	UINT16	</Arg>
       <Arg>	VECTOR3	</Arg>
     </avatarClientProxy_onCombatEquipmentShotLaunched>
+    <avatarClientProxy_updateQuestProgress>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </avatarClientProxy_updateQuestProgress>
   </BaseMethods>
 </AvatarClientProxy.def>

@@ -32,6 +32,9 @@ class DossierFormatter(OldStyleBonusFormatter):
         for achieve in bonus.getAchievements():
             self._result.append(formatters.packAchieveElementByItem(achieve))
 
+        for badge in bonus.getBadges():
+            self._result.append(formatters.packBadgeElementByItem(badge))
+
 
 class CustomizationsFormatter(OldStyleBonusFormatter):
 

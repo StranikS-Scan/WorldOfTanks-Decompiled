@@ -7,6 +7,9 @@ class VehicleBuyWindowMeta(AbstractWindowView):
     def submit(self, data):
         self._printOverrideError('submit')
 
+    def stateChange(self, data):
+        self._printOverrideError('stateChange')
+
     def selectTab(self, tabIndex):
         self._printOverrideError('selectTab')
 
@@ -19,9 +22,6 @@ class VehicleBuyWindowMeta(AbstractWindowView):
     def as_setCreditsS(self, value):
         return self.flashObject.as_setCredits(value) if self._isDAAPIInited() else None
 
-    def as_setEnabledSubmitBtnS(self, enabled):
-        return self.flashObject.as_setEnabledSubmitBtn(enabled) if self._isDAAPIInited() else None
-
     def as_setInitDataS(self, data):
         return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
@@ -30,3 +30,6 @@ class VehicleBuyWindowMeta(AbstractWindowView):
 
     def as_setTradeInWarningMessagegeS(self, message):
         return self.flashObject.as_setTradeInWarningMessagege(message) if self._isDAAPIInited() else None
+
+    def as_setStateS(self, academyEnabled, schoolEnabled, freeEnabled, submitEnabled):
+        return self.flashObject.as_setState(academyEnabled, schoolEnabled, freeEnabled, submitEnabled) if self._isDAAPIInited() else None

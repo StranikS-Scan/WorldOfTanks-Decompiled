@@ -9,7 +9,6 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.server_events import events_helpers
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import getTankmanSkill
@@ -262,12 +261,23 @@ class PotapovQuestsChainContext(ToolTipContext):
 
 
 class PersonalMissionOperationContext(ToolTipContext):
+    _eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, fieldsToExclude=None):
         super(PersonalMissionOperationContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
     def buildItem(self, tileID):
-        return events_helpers.getPersonalMissionsCache().getOperations().get(tileID)
+        return self._eventsCache.getPersonalMissions().getAllOperations().get(tileID)
+
+
+class PersonalMissionCampaignContext(ToolTipContext):
+    _eventsCache = dependency.descriptor(IEventsCache)
+
+    def __init__(self, fieldsToExclude=None):
+        super(PersonalMissionCampaignContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
+
+    def buildItem(self, campaignID):
+        return self._eventsCache.getPersonalMissions().getAllCampaigns().get(campaignID)
 
 
 class QuestContext(ToolTipContext):
@@ -283,7 +293,8 @@ class QuestContext(ToolTipContext):
 class PersonalMissionContext(QuestContext):
 
     def buildItem(self, eventID, *args, **kwargs):
-        return self.eventsCache.personalMissions.getQuests().get(eventID, None)
+        quests = self.eventsCache.getPersonalMissions().getAllQuests()
+        return quests[eventID] if eventID in quests else None
 
 
 class BaseHangarParamContext(ToolTipContext):
@@ -304,10 +315,6 @@ class HangarParamContext(BaseHangarParamContext):
     def __init__(self):
         super(HangarParamContext, self).__init__(True)
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
-
-    def getComparator(self):
-        vehicle = g_currentVehicle.item
-        return params_helper.noSkillsVehicleComparator(vehicle) if vehicle.isEvent else super(HangarParamContext, self).getComparator()
 
 
 class PreviewParamContext(HangarParamContext):
@@ -747,4 +754,19 @@ class InventoryBattleBoosterContext(ShopBattleBoosterContext):
     def getStatusConfiguration(self, item):
         value = super(InventoryBattleBoosterContext, self).getStatusConfiguration(item)
         value.checkBuying = False
+        return value
+
+
+class AwardBattleBoosterContext(InventoryBattleBoosterContext):
+
+    def getStatsConfiguration(self, item):
+        value = super(AwardBattleBoosterContext, self).getStatsConfiguration(item)
+        value.isAwardWindow = True
+        value.inventoryCount = False
+        value.vehiclesCount = False
+        return value
+
+    def getStatusConfiguration(self, item):
+        value = super(AwardBattleBoosterContext, self).getStatusConfiguration(item)
+        value.isAwardWindow = True
         return value

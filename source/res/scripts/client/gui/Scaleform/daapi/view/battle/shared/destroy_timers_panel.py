@@ -348,36 +348,27 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         return
 
     def __showDestroyTimer(self, value):
-        if len(value) == 4:
-            code, totalTime, level, startTime = value
-        else:
-            (code, totalTime, level), startTime = value, None
-        self._showTimer(self._mapping.getTimerTypeIDByMiscCode(code), totalTime, level, None, startTime)
-        return
-
-    def __hideDestroyTimer(self, value):
-        if value is not None:
-            self._hideTimer(self._mapping.getTimerTypeIDByMiscCode(value))
-        else:
+        if value.needToCloseAll():
             for typeID in self._mapping.getDestroyTimersTypesIDs():
                 self._hideTimer(typeID)
 
             self._timers.removeTimer(_TIMER_STATES.FIRE)
+        elif value.needToCloseTimer():
+            self._hideTimer(self._mapping.getTimerTypeIDByMiscCode(value.code))
+        else:
+            self._showTimer(self._mapping.getTimerTypeIDByMiscCode(value.code), value.totalTime, value.level, None, value.startTime)
         return
 
     def _showDeathZoneTimer(self, value):
-        code, totalTime, level, finishTime = value
-        self.__playDeathZoneSound(code, level)
-        self._showTimer(self._mapping.getTimerTypeIDByDeathZoneCode(code), totalTime, level, finishTime)
-
-    def _hideDeathZoneTimer(self, value):
-        if value is not None:
-            self._hideTimer(self._mapping.getTimerTypeIDByDeathZoneCode(value))
-        else:
+        if value.needToCloseAll():
             for typeID in self._mapping.getDeathZoneTimersTypesIDs():
                 self._hideTimer(typeID)
 
-        return
+        elif value.needToCloseTimer():
+            self._hideTimer(self._mapping.getTimerTypeIDByDeathZoneCode(value.zoneID))
+        else:
+            self.__playDeathZoneSound(value.zoneID, value.level)
+            self._showTimer(self._mapping.getTimerTypeIDByDeathZoneCode(value.zoneID), value.totalTime, value.level, value.finishTime)
 
     def __stopSound(self):
         if self.__sound is not None:
@@ -439,8 +430,8 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
     def __onVehicleControlling(self, vehicle):
         ctrl = self.sessionProvider.shared.vehicleState
         checkStatesIDs = (VEHICLE_VIEW_STATE.FIRE,
-         VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER,
-         VEHICLE_VIEW_STATE.SHOW_DEATHZONE_TIMER,
+         VEHICLE_VIEW_STATE.DESTROY_TIMER,
+         VEHICLE_VIEW_STATE.DEATHZONE_TIMER,
          VEHICLE_VIEW_STATE.STUN,
          VEHICLE_VIEW_STATE.CAPTURE_BLOCKED,
          VEHICLE_VIEW_STATE.SMOKE,
@@ -455,14 +446,10 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
             self.__hideAll()
         elif state == VEHICLE_VIEW_STATE.FIRE:
             self.__setFireInVehicle(value)
-        elif state == VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER:
+        elif state == VEHICLE_VIEW_STATE.DESTROY_TIMER:
             self.__showDestroyTimer(value)
-        elif state == VEHICLE_VIEW_STATE.HIDE_DESTROY_TIMER:
-            self.__hideDestroyTimer(value)
-        elif state == VEHICLE_VIEW_STATE.SHOW_DEATHZONE_TIMER:
+        elif state == VEHICLE_VIEW_STATE.DEATHZONE_TIMER:
             self._showDeathZoneTimer(value)
-        elif state == VEHICLE_VIEW_STATE.HIDE_DEATHZONE_TIMER:
-            self._hideDeathZoneTimer(value)
         elif state == VEHICLE_VIEW_STATE.STUN:
             self.__showStunTimer(value)
         elif state == VEHICLE_VIEW_STATE.CAPTURE_BLOCKED:

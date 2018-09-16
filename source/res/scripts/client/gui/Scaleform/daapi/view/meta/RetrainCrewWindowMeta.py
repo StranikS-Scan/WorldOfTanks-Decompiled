@@ -18,6 +18,3 @@ class RetrainCrewWindowMeta(AbstractWindowView):
 
     def as_setCrewOperationDataS(self, data):
         return self.flashObject.as_setCrewOperationData(data) if self._isDAAPIInited() else None
-
-    def as_setAllCrewDataS(self, data):
-        return self.flashObject.as_setAllCrewData(data) if self._isDAAPIInited() else None

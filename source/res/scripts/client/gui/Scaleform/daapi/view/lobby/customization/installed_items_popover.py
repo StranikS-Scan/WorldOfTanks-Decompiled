@@ -11,6 +11,8 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
+from CurrentVehicle import g_currentVehicle
+from gui.customization.shared import isServiceItem, isOutfitVisuallyEmpty
 _PopoverHeadersVO = namedtuple('_PopoverHeadersVO', ('title', 'checkBoxText', 'counterText', 'currentSeasonImage'))
 _RegionId = namedtuple('_RegionId', ('areaId', 'slotType', 'regionIdx'))
 _DisplayedItemsVO = namedtuple('_DisplayedItemsVO', ('id', 'icon', 'userName', 'numItems', 'isHistoric', 'price', 'isApplied', 'isWide', 'itemsList'))
@@ -83,7 +85,7 @@ class InstalledItemsPopover(CustomizationItemsPopoverMeta):
         if self._isNonHistoric and nonHistoricItemsCount == 0:
             isClear = True
             clearMessage = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_CLEAR_NONHISTORICMASSAGE
-        elif self.__ctx.currentOutfit.isEmpty():
+        elif isOutfitVisuallyEmpty(self.__ctx.currentOutfit):
             isClear = True
             clearMessage = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_CLEAR_MASSAGE
         title = text_styles.highTitle(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_TITLE_ITEMS, mapType=_ms(seasonLabel)))
@@ -132,6 +134,7 @@ class InstalledItemsPopoverDataProvider(SortableDAAPIDataProvider):
 
     def buildList(self, isNonHistoric):
         self.clear()
+        hasCustomDefaultCamouflage = g_currentVehicle.item.descriptor.type.hasCustomDefaultCamouflage
         purchaseItems = [ it for it in self.__ctx.getPurchaseItems() if not it.isDismantling and it.group == self.__ctx.currentSeason ]
         purchaseItemsGroups = {}
         for it in purchaseItems:
@@ -149,6 +152,8 @@ class InstalledItemsPopoverDataProvider(SortableDAAPIDataProvider):
                 for idx in range(slot.capacity()):
                     item = slot.getItem(idx)
                     if item:
+                        if isServiceItem(item) and hasCustomDefaultCamouflage:
+                            continue
                         if not isNonHistoric or not item.isHistorical():
                             if item.intCD not in notModifiedItemsGroups:
                                 notModifiedItemsGroups[item.intCD] = _ItemGroupDescription(item, 0, [], slot.getType(), True)

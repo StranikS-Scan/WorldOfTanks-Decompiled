@@ -6,6 +6,7 @@ from debug_utils import LOG_WARNING
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
 from items import tankmen
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.dialogs.missions_dialogs_meta import UseAwardSheetDialogMeta
 from gui import DialogsInterface
 from gui.game_control import restore_contoller
@@ -14,7 +15,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.money import Currency
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta
 from helpers import dependency
 from items.components import skills_constants
 from skeletons.gui.server_events import IEventsCache
@@ -538,10 +539,10 @@ class VehicleFreeLimitConfirmator(MessageInformator):
         return not self.vehicle.buyPrices.itemPrice.isDefined() and self.crewType < 1 and not self.itemsCache.items.stats.freeVehiclesLeft
 
 
-class PersonalMissionValidator(SyncValidator):
+class PMValidator(SyncValidator):
 
     def __init__(self, quests):
-        super(PersonalMissionValidator, self).__init__()
+        super(PMValidator, self).__init__()
         self.quests = quests
 
     def _validate(self):
@@ -554,10 +555,10 @@ class PersonalMissionValidator(SyncValidator):
         return makeSuccess()
 
 
-class PersonalMissionPawnValidator(SyncValidator):
+class PMPawnValidator(SyncValidator):
 
     def __init__(self, quests):
-        super(PersonalMissionPawnValidator, self).__init__()
+        super(PMPawnValidator, self).__init__()
         self.quests = quests
 
     def _validate(self):
@@ -574,13 +575,13 @@ class _EventsCacheValidator(SyncValidator):
     eventsCache = dependency.descriptor(IEventsCache)
 
 
-class PersonalMissionsLockedByVehicle(_EventsCacheValidator):
+class PMLockedByVehicle(_EventsCacheValidator):
 
-    def __init__(self, quests, messageKeyPrefix=''):
-        super(PersonalMissionsLockedByVehicle, self).__init__()
+    def __init__(self, branch, quests, messageKeyPrefix=''):
+        super(PMLockedByVehicle, self).__init__()
         self._messageKeyPrefix = messageKeyPrefix
-        self._lockedChains = self.eventsCache.getLockedQuestTypes()
         self.quests = quests
+        self._lockedChains = self.eventsCache.getLockedQuestTypes(branch)
 
     def _validate(self):
         for quest in self.quests:
@@ -590,10 +591,10 @@ class PersonalMissionsLockedByVehicle(_EventsCacheValidator):
         return makeSuccess()
 
 
-class PersonalMissionSlotsValidator(SyncValidator):
+class PMSlotsValidator(SyncValidator):
 
     def __init__(self, questsProgress, isEnabled=True, removedCount=0):
-        super(PersonalMissionSlotsValidator, self).__init__(isEnabled)
+        super(PMSlotsValidator, self).__init__(isEnabled)
         self.__removedCount = removedCount
         self._questsProgress = questsProgress
 
@@ -601,38 +602,25 @@ class PersonalMissionSlotsValidator(SyncValidator):
         return makeError('NOT_ENOUGH_SLOTS') if not self._questsProgress.getPersonalMissionsFreeSlots(self.__removedCount) else makeSuccess()
 
 
-class PersonalMissionChainsValidator(_EventsCacheValidator):
+class PMRewardValidator(SyncValidator):
 
     def __init__(self, quest):
-        super(PersonalMissionChainsValidator, self).__init__()
-        self.quest = quest
-
-    def _validate(self):
-        for quest in self.eventsCache.personalMissions.getSelectedQuests().itervalues():
-            if quest.getChainID() == self.quest.getChainID():
-                return makeError('TOO_MANY_QUESTS_IN_CHAIN')
-
-        return makeSuccess()
-
-
-class PersonalMissionRewardValidator(SyncValidator):
-
-    def __init__(self, quest):
-        super(PersonalMissionRewardValidator, self).__init__()
+        super(PMRewardValidator, self).__init__()
         self.quest = quest
 
     def _validate(self):
         return makeError('NO_REWARD') if not self.quest.needToGetReward() else makeSuccess()
 
 
-class PersonalMissionFreeTokensValidator(_EventsCacheValidator):
+class PMFreeTokensValidator(_EventsCacheValidator):
 
     def __init__(self, quest, isEnabled=True):
-        super(PersonalMissionFreeTokensValidator, self).__init__(isEnabled)
+        super(PMFreeTokensValidator, self).__init__(isEnabled)
         self.quest = quest
+        self._branch = quest.getPMType().branch
 
     def _validate(self):
-        return makeError('NOT_ENOUGH_FREE_TOKENS') if self.eventsCache.random.getFreeTokensCount() < self.quest.getPawnCost() else makeSuccess()
+        return makeError('NOT_ENOUGH_FREE_TOKENS') if self.eventsCache.getPersonalMissions().getFreeTokensCount(self._branch) < self.quest.getPawnCost() else makeSuccess()
 
 
 class CheckBoxConfirmator(DialogAbstractConfirmator):
@@ -666,10 +654,10 @@ class CheckBoxConfirmator(DialogAbstractConfirmator):
         AccountSettings.setSettings(CheckBoxConfirmator.__ACC_SETT_MAIN_KEY, settings)
 
 
-class PersonalMissionSelectConfirmator(CheckBoxConfirmator):
+class PMSelectConfirmator(CheckBoxConfirmator):
 
-    def __init__(self, quest, oldQuest, activeHandler=None, isEnabled=True):
-        super(PersonalMissionSelectConfirmator, self).__init__(settingFieldName='questsConfirmDialogShow', activeHandler=activeHandler, isEnabled=isEnabled)
+    def __init__(self, quest, oldQuest, settingFieldName, activeHandler=None, isEnabled=True):
+        super(PMSelectConfirmator, self).__init__(settingFieldName=settingFieldName, activeHandler=activeHandler, isEnabled=isEnabled)
         self.quest = quest
         self.oldQuest = oldQuest
 
@@ -678,18 +666,43 @@ class PersonalMissionSelectConfirmator(CheckBoxConfirmator):
          'oldQuest': self.oldQuest.getUserName()})
 
 
-class PersonalMissionPawnConfirmator(DialogAbstractConfirmator):
+class PMProgressResetConfirmator(DialogAbstractConfirmator):
+
+    def __init__(self, quest, oldQuest, activeHandler=None, isEnabled=True):
+        super(PMProgressResetConfirmator, self).__init__(activeHandler=activeHandler, isEnabled=isEnabled)
+        self.quest = quest
+        self.oldQuest = oldQuest
+
+    def _makeMeta(self):
+        return PMConfirmationDialogMeta('questsConfirmProgressDialog', messageCtx={'newQuest': self.quest.getUserName(),
+         'oldQuest': self.oldQuest.getUserName(),
+         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84})
+
+
+class PMDismissWithProgressConfirmator(DialogAbstractConfirmator):
+
+    def __init__(self, quest, activeHandler=None, isEnabled=True):
+        super(PMDismissWithProgressConfirmator, self).__init__(activeHandler=activeHandler, isEnabled=isEnabled)
+        self.quest = quest
+
+    def _makeMeta(self):
+        return PMConfirmationDialogMeta('questsDismissProgressDialog', messageCtx={'quest': self.quest.getUserName(),
+         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84})
+
+
+class PMPawnConfirmator(DialogAbstractConfirmator):
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, quest, activeHandler=None, isEnabled=True):
-        super(PersonalMissionPawnConfirmator, self).__init__(activeHandler=activeHandler, isEnabled=isEnabled)
+        super(PMPawnConfirmator, self).__init__(activeHandler=activeHandler, isEnabled=isEnabled)
         self.quest = quest
+        self._branch = quest.getPMType().branch
 
     def _activeHandler(self):
         return self.quest.canBePawned()
 
     def _makeMeta(self):
-        return UseAwardSheetDialogMeta(self.quest, self.eventsCache.random.getFreeTokensCount())
+        return UseAwardSheetDialogMeta(self.quest, self.eventsCache.getPersonalMissions().getFreeTokensCount(self._branch))
 
 
 class BoosterActivateValidator(SyncValidator):

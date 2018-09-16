@@ -206,12 +206,12 @@ class Stats(object):
         self.__account._doCmdIntStr(AccountCommands.CMD_SET_DOSSIER_FIELD, value, path, proxy)
         return
 
-    def unlockLinkedSetMission(self, token, callback=None):
+    def unlockLinkedSetMission(self, token, tokenCount=1, callback=None):
         if callback is not None:
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
         else:
             proxy = None
-        self.__account._doCmdStr(AccountCommands.CMD_UNLOCK_LINKED_SET_MISSION, token, proxy)
+        self.__account._doCmdIntStr(AccountCommands.CMD_UNLOCK_LINKED_SET_MISSION, tokenCount, token, proxy)
         return
 
     def lockLinkedSetMission(self, token, callback=None):
@@ -249,7 +249,7 @@ class Stats(object):
             self.__account._doCmdStr(AccountCommands.CMD_SET_RANKED_INFO, data, proxy)
             return
 
-    def addFreeAwardLists(self, count, callback=None):
+    def addFreeAwardLists(self, count, season=1, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -259,10 +259,10 @@ class Stats(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdIntArr(AccountCommands.CMD_ADD_FREE_AWARD_LISTS, [count], proxy)
+            self.__account._doCmdIntArr(AccountCommands.CMD_ADD_FREE_AWARD_LISTS, [count, season], proxy)
             return
 
-    def drawFreeAwardLists(self, count, callback=None):
+    def drawFreeAwardLists(self, count, season=1, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -272,7 +272,7 @@ class Stats(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdIntArr(AccountCommands.CMD_DRAW_FREE_AWARD_LISTS, [count], proxy)
+            self.__account._doCmdIntArr(AccountCommands.CMD_DRAW_FREE_AWARD_LISTS, [count, season], proxy)
             return
 
     def completePersonalMission(self, questID, withAdditional=False, callback=None):

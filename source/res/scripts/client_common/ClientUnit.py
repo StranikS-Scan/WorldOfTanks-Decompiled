@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/ClientUnit.py
 import struct
+from collections import namedtuple
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG_DEV
 import Event
@@ -9,7 +10,9 @@ from shared_utils import makeTupleByDict
 PLAYER_ID_CHR = '<q'
 VEH_LEN_CHR = '<H'
 VEH_LEN_SIZE = struct.calcsize(VEH_LEN_CHR)
-_EXTRA_BY_PRB_TYPE = {}
+_ExternalPrebattleExtra = namedtuple('ExternalPrebattleExtra', ('rev',))
+_ExternalPrebattleExtra.__new__.__defaults__ = (0,)
+_EXTRA_BY_PRB_TYPE = {PREBATTLE_TYPE.EXTERNAL: _ExternalPrebattleExtra}
 
 class ClientUnit(UnitBase):
 

@@ -3,22 +3,25 @@
 import weakref
 from collections import namedtuple
 from abc import ABCMeta, abstractmethod
+import logging
 import BigWorld
 from adisp import async
 from arena_achievements import getAchievementCondition
 from constants import WIN_XP_FACTOR_MODE, IS_CHINA, ARENA_BONUS_TYPE
 from dossiers2.custom.records import RECORD_DB_IDS
 from items import ItemsPrices
-from debug_utils import LOG_DEBUG, LOG_WARNING
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE, GOODIE_RESOURCE_TYPE
 from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieData
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from items.item_price import getNextSlotPrice, getNextBerthPackPrice
 from skeletons.gui.shared.utils.requesters import IShopCommonStats, IShopRequester
+from gui.shared.gui_items.gui_item_economics import ItemPrice
+_logger = logging.getLogger(__name__)
 _DEFAULT_EXCHANGE_RATE = 400
 _DEFAULT_CRYSTAL_EXCHANGE_RATE = 200
 _DEFAULT_SELL_PRICE_MODIF = 0.5
+_DEFAULT_CLAN_CREATION_COST = 2500
 _VehiclesRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'restoreDuration restoreCooldown restorePriceModif')
 _TankmenRestoreConfig = namedtuple('_TankmenRestoreConfig', 'freeDuration billableDuration cost limit')
 _TargetData = namedtuple('_TargetData', 'targetType, targetValue, limit')
@@ -44,6 +47,7 @@ class _NamedGoodieData(GoodieData):
 
 
 class TradeInData(_TradeInData):
+    __slots__ = ()
 
     @property
     def isEnabled(self):
@@ -119,7 +123,7 @@ class ShopCommonStats(IShopCommonStats):
         result = None
         rewards = self.getValue('achievementsReward', None)
         if rewards is None:
-            LOG_WARNING('AchievementsReward is undefined!')
+            _logger.warning('AchievementsReward is undefined!')
             return result
         else:
             isRewardEnabled = rewards.get('isEnabled', False)
@@ -162,6 +166,10 @@ class ShopCommonStats(IShopCommonStats):
     @property
     def exchangeRate(self):
         return self.getValue('exchangeRate', _DEFAULT_EXCHANGE_RATE)
+
+    @property
+    def clanCreationCost(self):
+        return self.getValue('clanCreationCost', _DEFAULT_CLAN_CREATION_COST)
 
     @property
     def crystalExchangeRate(self):
@@ -422,6 +430,38 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
             return getPriceWithDiscount(price, bestGoody.resource)
         return price
 
+    def getVehicleSlotsItemPrice(self, currentSlotsCount):
+        defPrice = self.defaults.getVehicleSlotsPrice(currentSlotsCount)
+        price = self.getVehicleSlotsPrice(currentSlotsCount)
+        slotGoodies = self.personalSlotDiscounts
+        if slotGoodies:
+            bestGoody = self.bestGoody(slotGoodies)
+            price = getPriceWithDiscount(price, bestGoody.resource)
+        return ItemPrice(price=Money.makeFrom(Currency.GOLD, price), defPrice=Money.makeFrom(Currency.GOLD, defPrice))
+
+    def getTankmanCostItemPrices(self):
+        result = []
+        defaultCost = self.defaults.tankmanCost
+        countItems = len(defaultCost)
+        if countItems == len(self.tankmanCostWithGoodyDiscount):
+            for idx in xrange(countItems):
+                commanderLevelsPrices = {}
+                commanderLevelsDefPrices = {}
+                for currency in Currency.ALL:
+                    defPriceCurrency = defaultCost[idx].get(currency, None)
+                    if defPriceCurrency:
+                        commanderLevelsPrices[currency] = self.tankmanCostWithGoodyDiscount[idx].get(currency, None)
+                        commanderLevelsDefPrices[currency] = defPriceCurrency
+
+                price = Money(**commanderLevelsPrices)
+                defPrice = Money(**commanderLevelsDefPrices)
+                itemPrice = ItemPrice(price=price, defPrice=defPrice)
+                result.append(itemPrice)
+
+        else:
+            _logger.error('len(self.tankmanCost) must be equal to len(self.tankmanCostWithGoodyDiscount)')
+        return result
+
     @property
     def tankmanCostWithGoodyDiscount(self):
         prices = self.tankmanCost
@@ -525,7 +565,7 @@ class DefaultShopRequester(ShopCommonStats):
         self.__proxy = weakref.proxy(proxy)
 
     def clear(self):
-        LOG_DEBUG('Clearing shop defaults.')
+        _logger.debug('Clearing shop defaults.')
         self.__cache.clear()
 
     def update(self, cache):
@@ -586,6 +626,10 @@ class DefaultShopRequester(ShopCommonStats):
     @property
     def exchangeRate(self):
         return self.getValue('exchangeRate', self.__proxy.exchangeRate)
+
+    @property
+    def clanCreationCost(self):
+        return self.getValue('clanCreationCost', self.__proxy.clanCreationCost)
 
     @property
     def exchangeRateForShellsAndEqs(self):

@@ -10,11 +10,13 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.view_events_listener import ViewEventsListener
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.impl.windows.main_window import MainWindow
 from gui.shared.events import AppLifeCycleEvent, GameEvent, DirectLoadViewEvent
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
@@ -56,12 +58,13 @@ class DAAPIRootBridge(object):
             _logger.error('Flash root is not found: %s', self.__rootPath)
 
 
-class SFApplication(Flash, ApplicationMeta):
+class AppEntry(Flash, ApplicationMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
     connectionMgr = dependency.descriptor(IConnectionManager)
+    guiApp = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, swfName, appNS, daapiBridge=None):
-        super(SFApplication, self).__init__(swfName, path=SCALEFORM_SWF_PATH_V3)
+    def __init__(self, userWndFlags, swfName, appNS, daapiBridge=None):
+        super(AppEntry, self).__init__(swfName, path=SCALEFORM_SWF_PATH_V3)
         self.proxy = weakref.proxy(self)
         self._loaderMgr = None
         self._containerMgr = None
@@ -88,6 +91,8 @@ class SFApplication(Flash, ApplicationMeta):
         self.__guiCtrlModeFlags = GUI_CTRL_MODE_FLAG.CURSOR_DETACHED
         self.__daapiBridge = daapiBridge or DAAPIRootBridge()
         self.__daapiBridge.setPyScript(self.proxy)
+        self.__mainWnd = MainWindow(userWndFlags, None)
+        self.__mainWnd.load()
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.CREATING))
         return
 
@@ -185,12 +190,12 @@ class SFApplication(Flash, ApplicationMeta):
                 self._setup()
             else:
                 self.__guiCtrlModeFlags = GUI_CTRL_MODE_FLAG.CURSOR_DETACHED
-            super(SFApplication, self).active(state)
+            super(AppEntry, self).active(state)
 
     def afterCreate(self):
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.INITIALIZING))
-        _logger.debug('SFApplication.afterCreate: %s', self.__ns)
-        super(SFApplication, self).afterCreate()
+        _logger.debug('AppEntry.afterCreate: %s', self.__ns)
+        super(AppEntry, self).afterCreate()
         self._createManagers()
         self.as_registerManagersS()
         libraries = self._getRequiredLibraries()
@@ -205,7 +210,7 @@ class SFApplication(Flash, ApplicationMeta):
         self.connectionMgr.onDisconnected += self.__cm_onDisconnected
 
     def beforeDelete(self):
-        _logger.debug('SFApplication.beforeDelete: %s', self.__ns)
+        _logger.debug('AppEntry.beforeDelete: %s', self.__ns)
         self.__viewEventsListener.destroy()
         self.removeListener(GameEvent.CHANGE_APP_RESOLUTION, self.__onAppResolutionChanged, scope=EVENT_BUS_SCOPE.GLOBAL)
         self._removeGameCallbacks()
@@ -263,7 +268,10 @@ class SFApplication(Flash, ApplicationMeta):
         if self._graphicsOptimizationMgr is not None:
             self._graphicsOptimizationMgr.destroy()
             self._graphicsOptimizationMgr = None
-        super(SFApplication, self).beforeDelete()
+        if self.__mainWnd is not None:
+            self.__mainWnd.destroy()
+            self.__mainWnd = None
+        super(AppEntry, self).beforeDelete()
         self.proxy = None
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.DESTROYED))
         self.connectionMgr.onDisconnected -= self.__cm_onDisconnected
@@ -333,6 +341,9 @@ class SFApplication(Flash, ApplicationMeta):
     def setSoundMgr(self, flashObject):
         if self._soundMgr and flashObject:
             self._soundMgr.setFlashObject(flashObject)
+
+    def getToolTipMgr(self):
+        return self._toolTip
 
     def setTooltipMgr(self, flashObject):
         if self._toolTip and flashObject:

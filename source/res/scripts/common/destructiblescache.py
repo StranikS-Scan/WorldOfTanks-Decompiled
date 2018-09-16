@@ -8,7 +8,7 @@ from constants import TREE_TAG, CUSTOM_DESTRUCTIBLE_TAGS
 import string
 from material_kinds import EFFECT_MATERIALS, EFFECT_MATERIAL_INDEXES_BY_NAMES
 from constants import IS_CLIENT, IS_CELLAPP, IS_DEVELOPMENT, DESTRUCTIBLE_MATKIND
-from debug_utils import *
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 import items
 from soft_exception import SoftException
 if IS_CLIENT:

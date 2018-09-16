@@ -181,8 +181,8 @@ class StrongholdsAccessor(BaseAccessor):
 
 class WgshAccessor(BaseAccessor):
 
-    def get_wgsh_unit_info(self, callback, periphery_id, unit_server_id, fields=None):
-        return self._data_source.get_wgsh_unit_info(callback, periphery_id, unit_server_id, fields=fields)
+    def get_wgsh_unit_info(self, callback, periphery_id, unit_server_id, rev, fields=None):
+        return self._data_source.get_wgsh_unit_info(callback, periphery_id, unit_server_id, rev, fields=fields)
 
     def set_vehicle(self, callback, periphery_id, unit_server_id, vehicle_cd, fields=None):
         return self._data_source.set_vehicle(callback, periphery_id, unit_server_id, vehicle_cd, fields=fields)
@@ -208,6 +208,9 @@ class WgshAccessor(BaseAccessor):
     def leave_room(self, callback, periphery_id, unit_server_id, fields=None):
         return self._data_source.leave_room(callback, periphery_id, unit_server_id, fields=fields)
 
+    def leave_mode(self, callback, fields=None):
+        return self._data_source.leave_mode(callback, fields=fields)
+
     def take_away_leadership(self, callback, periphery_id, unit_server_id, fields=None):
         return self._data_source.take_away_leadership(callback, periphery_id, unit_server_id, fields=fields)
 
@@ -228,6 +231,18 @@ class WgshAccessor(BaseAccessor):
 
     def matchmaking_info(self, callback, periphery_id, unit_server_id, fields=None):
         return self._data_source.matchmaking_info(callback, periphery_id, unit_server_id, fields=fields)
+
+    def set_slot_vehicle_type_filter(self, callback, periphery_id, unit_server_id, slot_idx, vehicle_types, fields=None):
+        return self._data_source.set_slot_vehicle_type_filter(callback, periphery_id, unit_server_id, slot_idx, vehicle_types, fields=fields)
+
+    def set_slot_vehicles_filter(self, callback, periphery_id, unit_server_id, slot_idx, vehicles, fields=None):
+        return self._data_source.set_slot_vehicles_filter(callback, periphery_id, unit_server_id, slot_idx, vehicles, fields=fields)
+
+    def get_slot_vehicle_filters(self, callback, periphery_id, unit_server_id, fields=None):
+        return self._data_source.get_slot_vehicle_filters(callback, periphery_id, unit_server_id, fields=fields)
+
+    def stop_players_matching(self, callback, periphery_id, unit_server_id):
+        return self._data_source.stop_players_matching(callback, periphery_id, unit_server_id)
 
     def clan_statistics(self, callback, clan_id, fields=None):
         return self._data_source.clan_statistics(callback, clan_id, fields=fields)
@@ -271,9 +286,6 @@ class WGElenAccessor(BaseAccessor):
     def get_player_data(self, callback, fields=None):
         return self._data_source.get_player_data(callback, fields=fields)
 
-    def get_football_events_data(self, callback, fields=None):
-        return self._data_source.get_football_events_data(callback, fields=fields)
-
 
 class WgrmsAccessor(BaseAccessor):
 
@@ -285,6 +297,21 @@ class WgrmsAccessor(BaseAccessor):
 
     def hof_user_restore(self, callback):
         return self._data_source.hof_user_restore(callback)
+
+
+class PromoScreensAccessor(BaseAccessor):
+
+    def get_teaser(self, callback):
+        return self._data_source.get_teaser(callback)
+
+    def send_teaser(self, callback, promo_id):
+        return self._data_source.send_teaser(callback, promo_id)
+
+    def get_unread_count(self, callback):
+        return self._data_source.get_unread_count(callback)
+
+    def client_promo_log(self, callback, data):
+        return self._data_source.client_promo_log(callback, data)
 
 
 class Requester(object):
@@ -301,6 +328,7 @@ class Requester(object):
     rblb = RequestDescriptor(RblbAccessor)
     wgelen = RequestDescriptor(WGElenAccessor)
     wgrms = RequestDescriptor(WgrmsAccessor)
+    promo_screens = RequestDescriptor(PromoScreensAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

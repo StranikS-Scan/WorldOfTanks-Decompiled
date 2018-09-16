@@ -22,8 +22,3 @@ class HANGAR_ALIASES(object):
     VEH_PARAM_RENDERER_STATE_SIMPLE_BOTTOM = 'simpleBottom'
     VEH_PARAM_RENDERER_STATE_ADVANCED = 'advanced'
     VEH_PARAM_RENDERER_STATE_SEPARATOR = 'separator'
-    FOOTBALL_CARD_COLLECTION = 'cardCollection'
-    FOOTBALL_BUFFON_RECRUITMENT_PANEL = 'buffonRecruitment'
-    FOOTBALL_BUFFON_LOBBY_BUTTON = 'buffonLobbyButton'
-    FOOTBALL_EVENT_PANEL = 'footballEventPanel'
-    FOOTBALL_CARDS_PACKET_SCREEN = 'footballCardsPacketScreen'

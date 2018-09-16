@@ -124,9 +124,6 @@
       <include>
         <nations>	france	</nations>
       </include>
-      <exclude>
-        <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <style>
       <id>	3	</id>
@@ -185,7 +182,7 @@
         <nations>	germany	</nations>
       </include>
       <exclude>
-        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian germany:G56_E-100_sport	</vehicles>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -476,7 +473,7 @@
         <nations>	ussr	</nations>
       </include>
       <exclude>
-        <vehicles>	ussr:R61_Object252_BF ussr:R87_T62A_sport	</vehicles>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -586,11 +583,68 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
+    <priceGroup>	rented style	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	187	</id>
+      <userString>	#vehicle_customization:rented_style/poland	</userString>
+      <texture>	gui/maps/vehicles/styles/poland.png	</texture>
+      <season>	ALL	</season>
+      <isRent>	true	</isRent>
+      <rentCount>	100	</rentCount>
+      <tags>	vehicleBound	</tags>
+      <historical>	true	</historical>
+      <outfits>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	15901	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	15902	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	15900	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	china	</nations>
       </include>
       <exclude>
@@ -729,7 +783,7 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	china	</nations>
       </include>
       <exclude>
@@ -782,7 +836,7 @@
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	czech	</nations>
       </include>
     </vehicleFilter>
@@ -918,7 +972,7 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	czech	</nations>
       </include>
     </vehicleFilter>
@@ -968,12 +1022,9 @@
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	france	</nations>
       </include>
-      <exclude>
-        <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <style>
       <id>	36	</id>
@@ -1107,12 +1158,9 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	france	</nations>
       </include>
-      <exclude>
-        <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <style>
       <id>	149	</id>
@@ -1171,12 +1219,13 @@
       <season>	ALL	</season>
       <historical>	false	</historical>
       <modelsSet>	WH	</modelsSet>
+      <tags>	hiddenInUI	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	563	</id>
+              <id>	1	</id>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
               <appliedTo>	4368	</appliedTo>
@@ -1201,11 +1250,11 @@
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	germany	</nations>
       </include>
       <exclude>
-        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian germany:G56_E-100_sport	</vehicles>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -1340,11 +1389,11 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	germany	</nations>
       </include>
       <exclude>
-        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian germany:G56_E-100_sport	</vehicles>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -1389,11 +1438,54 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <priceGroup>	KanonenPanter_105 styles notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G112_KanonenJagdPanzer_105	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	194	</id>
+      <userString>	#vehicle_customization:special_style/KanonenPanter_105	</userString>
+      <description></description>
+      <texture>	gui/maps/vehicles/styles/KanonenPanter_105.png	</texture>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+      <modelsSet>	KanonenPanter	</modelsSet>
+      <tags>	hiddenInUI	</tags>
+      <maxNumber>	1	</maxNumber>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	16	</appliedTo>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	12848	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	japan	</nations>
       </include>
     </vehicleFilter>
@@ -1529,7 +1621,7 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	japan	</nations>
       </include>
     </vehicleFilter>
@@ -1579,7 +1671,7 @@
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	sweden	</nations>
       </include>
     </vehicleFilter>
@@ -1715,7 +1807,7 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	sweden	</nations>
       </include>
     </vehicleFilter>
@@ -1765,7 +1857,7 @@
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	uk	</nations>
       </include>
     </vehicleFilter>
@@ -1901,7 +1993,7 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	uk	</nations>
       </include>
     </vehicleFilter>
@@ -1947,11 +2039,54 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <priceGroup>	royalCorps styles notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB93_Caernarvon_AX	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	189	</id>
+      <userString>	#vehicle_customization:special_style/royal_corps	</userString>
+      <description></description>
+      <texture>	gui/maps/vehicles/styles/royal_corps.png	</texture>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+      <modelsSet>	RoyalCorps	</modelsSet>
+      <tags>	hiddenInUI	</tags>
+      <maxNumber>	1	</maxNumber>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	16	</appliedTo>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	usa	</nations>
       </include>
       <exclude>
@@ -2090,7 +2225,7 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	usa	</nations>
       </include>
       <exclude>
@@ -2143,11 +2278,11 @@
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	ussr	</nations>
       </include>
       <exclude>
-        <vehicles>	ussr:R61_Object252_BF ussr:R87_T62A_sport	</vehicles>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -2282,11 +2417,11 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	ussr	</nations>
       </include>
       <exclude>
-        <vehicles>	ussr:R61_Object252_BF ussr:R87_T62A_sport	</vehicles>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -2346,12 +2481,13 @@
       <season>	ALL	</season>
       <historical>	false	</historical>
       <modelsSet>	WH	</modelsSet>
+      <tags>	hiddenInUI	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	562	</id>
+              <id>	1	</id>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
               <appliedTo>	4368	</appliedTo>
@@ -2425,7 +2561,7 @@
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	italy	</nations>
       </include>
     </vehicleFilter>
@@ -2561,7 +2697,7 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	italy	</nations>
       </include>
     </vehicleFilter>
@@ -2611,7 +2747,7 @@
     <priceGroup>	italy marathon style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	italy	</nations>
       </include>
     </vehicleFilter>
@@ -2643,6 +2779,191 @@
             </item>
             <item>
               <id>	543	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <priceGroup>	style gold	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	6 8 9 10	</levels>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	185	</id>
+      <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
+      <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+      <outfits>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	515	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	256	</id>
+              <appliedTo>	30576	</appliedTo>
+            </item>
+            <item>
+              <id>	257	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	516	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	258	</id>
+              <appliedTo>	30576	</appliedTo>
+            </item>
+            <item>
+              <id>	259	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	517	</id>
+              <patternSize>	2	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	260	</id>
+              <appliedTo>	30576	</appliedTo>
+            </item>
+            <item>
+              <id>	261	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	15592	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	6 8 9 10	</levels>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	186	</id>
+      <userString>	#vehicle_customization:special_style/global_map	</userString>
+      <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <paints>
+            <item>
+              <id>	287	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	557	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	545	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	545	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	545	</id>
               <appliedTo>	12288	</appliedTo>
             </item>
           </decals>
@@ -2698,7 +3019,7 @@
     <priceGroup>	NY style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	china	</nations>
       </include>
       <exclude>
@@ -2737,11 +3058,11 @@
     <priceGroup>	NY style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	ussr	</nations>
       </include>
       <exclude>
-        <vehicles>	ussr:R61_Object252_BF ussr:R87_T62A_sport	</vehicles>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -2776,11 +3097,11 @@
     <priceGroup>	NY style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	germany czech france poland	</nations>
       </include>
       <exclude>
-        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian germany:G56_E-100_sport france:F88_AMX_13_105_sport	</vehicles>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -2815,7 +3136,7 @@
     <priceGroup>	NY style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	usa uk sweden japan	</nations>
       </include>
       <exclude>
@@ -2854,10 +3175,10 @@
     <priceGroup>	WG Fest style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -2950,7 +3271,7 @@
         <levels>	10	</levels>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -3055,69 +3376,13 @@
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <priceGroup>	legacy notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-      </include>
-      <include>
-        <levels>	10	</levels>
-      </include>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <style>
-      <id>	139	</id>
-      <userString>	#vehicle_customization:special_style/global_map	</userString>
-      <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <paints>
-            <item>
-              <id>	287	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <camouflages>
-            <item>
-              <id>	557	</id>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-              <appliedTo>	4368	</appliedTo>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	545	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-            <item>
-              <id>	545	</id>
-              <appliedTo>	768	</appliedTo>
-            </item>
-            <item>
-              <id>	545	</id>
-              <appliedTo>	12288	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -3172,16 +3437,17 @@
     <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	ussr poland czech china	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF ussr:R87_T62A_sport	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
       <id>	142	</id>
       <userString>	#vehicle_customization:special_style/frontline_ussr	</userString>
+      <description>	#vehicle_customization:special_style/frontline_ussr_desc	</description>
       <texture>	gui/maps/vehicles/styles/frontline_ussr.png	</texture>
       <season>	ALL	</season>
       <historical>	true	</historical>
@@ -3211,16 +3477,17 @@
     <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	france uk usa sweden	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF france:F88_AMX_13_105_sport	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
       <id>	145	</id>
       <userString>	#vehicle_customization:special_style/frontline_alliance	</userString>
+      <description>	#vehicle_customization:special_style/frontline_alliance_desc	</description>
       <texture>	gui/maps/vehicles/styles/frontline_alliance.png	</texture>
       <season>	ALL	</season>
       <historical>	true	</historical>
@@ -3250,16 +3517,17 @@
     <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	germany italy japan	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF germany:G56_E-100_sport	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
       <id>	144	</id>
       <userString>	#vehicle_customization:special_style/frontline_captured	</userString>
+      <description>	#vehicle_customization:special_style/frontline_captured_desc	</description>
       <texture>	gui/maps/vehicles/styles/frontline_captured.png	</texture>
       <season>	ALL	</season>
       <historical>	true	</historical>
@@ -3293,10 +3561,10 @@
     <priceGroup>	23feb style	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -4063,9 +4331,6 @@
         <include>
           <nations>	ussr	</nations>
         </include>
-        <exclude>
-          <vehicles>	ussr:R87_T62A_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4086,9 +4351,6 @@
         <include>
           <nations>	ussr	</nations>
         </include>
-        <exclude>
-          <vehicles>	ussr:R87_T62A_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4109,9 +4371,6 @@
         <include>
           <nations>	ussr	</nations>
         </include>
-        <exclude>
-          <vehicles>	ussr:R87_T62A_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4132,9 +4391,6 @@
         <include>
           <nations>	ussr	</nations>
         </include>
-        <exclude>
-          <vehicles>	ussr:R87_T62A_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4155,9 +4411,6 @@
         <include>
           <nations>	germany	</nations>
         </include>
-        <exclude>
-          <vehicles>	germany:G56_E-100_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4178,9 +4431,6 @@
         <include>
           <nations>	germany	</nations>
         </include>
-        <exclude>
-          <vehicles>	germany:G56_E-100_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4201,9 +4451,6 @@
         <include>
           <nations>	germany	</nations>
         </include>
-        <exclude>
-          <vehicles>	germany:G56_E-100_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4224,9 +4471,6 @@
         <include>
           <nations>	germany	</nations>
         </include>
-        <exclude>
-          <vehicles>	germany:G56_E-100_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4407,9 +4651,6 @@
         <include>
           <nations>	france	</nations>
         </include>
-        <exclude>
-          <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4430,9 +4671,6 @@
         <include>
           <nations>	france	</nations>
         </include>
-        <exclude>
-          <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4453,9 +4691,6 @@
         <include>
           <nations>	france	</nations>
         </include>
-        <exclude>
-          <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4476,9 +4711,6 @@
         <include>
           <nations>	france	</nations>
         </include>
-        <exclude>
-          <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -4886,6 +5118,86 @@
           <camouflages>
             <item>
               <id>	529	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	425	</id>
+      <tags>	blackVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <vehicleFilter>
+        <include>
+          <nations>	poland	</nations>
+        </include>
+      </vehicleFilter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	595	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	426	</id>
+      <tags>	redVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <vehicleFilter>
+        <include>
+          <nations>	poland	</nations>
+        </include>
+      </vehicleFilter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	597	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	427	</id>
+      <tags>	goldVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <vehicleFilter>
+        <include>
+          <nations>	poland	</nations>
+        </include>
+      </vehicleFilter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	596	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	428	</id>
+      <tags>	silverVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <vehicleFilter>
+        <include>
+          <nations>	poland	</nations>
+        </include>
+      </vehicleFilter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	598	</id>
             </item>
           </camouflages>
         </outfit>

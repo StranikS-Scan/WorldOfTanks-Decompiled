@@ -12,9 +12,7 @@ from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelMeta
 from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
-from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
@@ -25,11 +23,9 @@ from gui.shared.events import GameEvent
 from gui.shared.utils.key_mapping import getScaleformKey
 from helpers import dependency
 from helpers import i18n
-from items import vehicles
 from shared_utils import forEach
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
 AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/%s'
 NO_AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/NO_%s'
 COMMAND_AMMO_CHOICE_MASK = 'CMD_AMMO_CHOICE_{0:d}'
@@ -57,7 +53,6 @@ EMPTY_EQUIPMENT_TOOLTIP = i18n.makeString('#ingame_gui:consumables_panel/equipme
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 TOOLTIP_NO_BODY_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}'
 _EQUIPMENT_GLOW_TIME = 7
-_FOOTBALL_ABILITIES = ('lastchance', 'afterburning', 'defenderAbility')
 
 def _isEquipmentAvailableToUse(eq):
     return eq.isAvailableToUse
@@ -109,7 +104,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             self.__reloadTicker = _PythonReloadTicker(self)
         else:
             self.__reloadTicker = None
-        self.__eventAbilitiesAdded = False
         return
 
     def onClickedToSlot(self, bwKey):
@@ -393,14 +387,12 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             if self.__reloadTicker:
                 self.__reloadTicker.startAnimation(index, state.getActualValue(), state.getBaseValue())
             else:
-                self.as_setCoolDownTimeS(index, state.getActualValue(), state.getBaseValue(), state.getTimePassed())
+                self.as_setCoolDownTimeS(index, state.getActualValue(), state.getBaseValue(), state.getTimePassed(), not state.isReloadingFinished())
         else:
             LOG_ERROR('Ammo is not found in panel', currShellCD, self.__cds)
 
     def __onGunSettingsSet(self, _):
         self.__reset()
-        if self.sessionProvider.arenaVisitor.gui.isEventBattle() and not self.__eventAbilitiesAdded:
-            self.__addFootballEventAbilities()
 
     def __onEquipmentAdded(self, intCD, item):
         if item:
@@ -413,7 +405,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             idx = self.__genNextIdx(EQUIPMENT_FULL_MASK + ORDERS_FULL_MASK, EQUIPMENT_START_IDX)
             self.__cds[idx] = intCD
             bwKey, sfKey = self.__genKey(idx)
-            self.as_addEquipmentSlotS(idx, bwKey, sfKey, None, 0, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP, animation=ANIMATION_TYPES.NONE)
+            self.as_addEquipmentSlotS(idx, bwKey, sfKey, None, 0, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP)
             snap = self.__cds[EQUIPMENT_START_IDX:EQUIPMENT_END_IDX + 1]
             if snap == EMPTY_EQUIPMENTS_SLICE:
                 self.as_showEquipmentSlotsS(False)
@@ -425,7 +417,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             quantity = item.getQuantity()
             currentTime = item.getTimeRemaining()
             maxTime = item.getTotalTime()
-            self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getAnimationType())
+            self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
             if item.isReusable or item.isAvatar() and item.getStage() != EQUIPMENT_STAGES.PREPARING:
                 glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if item.isAvatar() else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
                 if self.__canApplyingGlowEquipment(item):
@@ -459,13 +451,11 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         descriptor = item.getDescriptor()
         iconPath = self._getEquipmentIconPath() % descriptor.icon[0]
         body = descriptor.description
-        extraName = descriptor.extraName()
-        if extraName not in _FOOTBALL_ABILITIES:
-            if item.getTotalTime() > 0:
-                tooltipStr = INGAME_GUI.CONSUMABLES_PANEL_EQUIPMENT_COOLDOWNSECONDS
-                cooldownSeconds = str(int(descriptor.cooldownSeconds))
-                paramsString = i18n.makeString(tooltipStr, cooldownSeconds=cooldownSeconds)
-                body = body + '\n\n' + paramsString
+        if item.getTotalTime() > 0:
+            tooltipStr = INGAME_GUI.CONSUMABLES_PANEL_EQUIPMENT_COOLDOWNSECONDS
+            cooldownSeconds = str(int(descriptor.cooldownSeconds))
+            paramsString = i18n.makeString(tooltipStr, cooldownSeconds=cooldownSeconds)
+            body = body + '\n\n' + paramsString
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
         tag = item.getTag()
         if tag:
@@ -478,7 +468,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                 self.__keys[bwKey] = handler
         else:
             bwKey, sfKey = (None, None)
-        self.as_addEquipmentSlotS(idx, bwKey, sfKey, tag, item.getQuantity(), item.getTimeRemaining(), item.getTotalTime(), iconPath, toolTip, item.getAnimationType())
+        self.as_addEquipmentSlotS(idx, bwKey, sfKey, tag, item.getQuantity(), item.getTimeRemaining(), item.getTotalTime(), iconPath, toolTip)
         return None
 
     def __onOptionalDeviceAdded(self, intCD, descriptor, isOn):
@@ -488,23 +478,10 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description.format(colorTagOpen='', colorTagClose=''))
         self.as_addOptionalDeviceSlotS(idx, -1 if isOn else 0, iconPath, toolTip)
 
-    def __addFootballEventAbilities(self):
-        arenaDataProvider = self.sessionProvider.getArenaDP()
-        if arenaDataProvider is not None:
-            vehicleInfo = arenaDataProvider.getVehicleInfo()
-            compactDescr = vehicleInfo.vehicleType.compactDescr
-            if compactDescr != 0:
-                _, nationID, compID = vehicles.parseIntCompactDescr(compactDescr)
-                vehType = vehicles.g_cache.vehicle(nationID, compID)
-                if 'role_defender' in vehType.tags:
-                    self.as_addOptionalDeviceSlotS(self.__genNextIdx(OPT_DEVICE_FULL_MASK, OPT_DEVICE_START_IDX), -1, RES_ICONS.MAPS_ICONS_ARTEFACT_DEFENDERABILITY, TOOLTIP_FORMAT.format(i18n.makeString(ARTEFACTS.DEFENDERABILITY_NAME), i18n.makeString(ARTEFACTS.DEFENDERABILITY_DESCR)))
-                    self.__eventAbilitiesAdded = True
-        return
-
     def __onOptionalDeviceUpdated(self, intCD, isOn):
         if intCD in self.__cds:
             duration = -1 if isOn else 0
-            self.as_setCoolDownTimeS(self.__cds.index(intCD), duration, duration, 0)
+            self.as_setCoolDownTimeS(self.__cds.index(intCD), duration, duration, 0, False)
         else:
             LOG_ERROR('Optional device is not found in panel', intCD, self.__cds)
 

@@ -5,6 +5,7 @@ from constants import DESTR_CODES_BY_TAGS, GLOBAL_MAP_DIVISION, DOSSIER_TYPE
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from debug_utils import LOG_DEBUG_DEV
 from dossiers2.custom import records
+from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import isVehicleSPG, getInBattleSeriesIndex
 _saveRecordsInAccountDescr = {BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15: [{'block': 'achievements',
@@ -159,42 +160,42 @@ def updateTankmanDossier(dossierDescr, battleResults):
     __updateTankmanDossierImpl(dossierDescr, battleResults)
 
 
-def updatePotapovQuestAchievements(accDossierDescr, progress, curQuest, bonusCount):
-    if not bonusCount:
-        return
-    else:
-        if not accDossierDescr['singleAchievements']['firstMerit']:
-            accDossierDescr['singleAchievements']['firstMerit'] = 1
-        tileID, chainID = curQuest.tileID, curQuest.chainID
-        import potapov_quests
-        tileInfo = potapov_quests.g_tileCache.getTileInfo(tileID)
-        if tileInfo['seasonID'] != 1:
-            return
-        pqAchievements = tileInfo['achievements']
-        if not pqAchievements:
-            return
-        chainAchievement = pqAchievements.get(chainID, None)
-        if chainAchievement is None:
-            return
-        chainSize = 15
-        tilesCount = 1
-        completedQuestsCount = 0
-        for tileID, tileInfo in potapov_quests.g_tileCache:
-            if tileInfo['seasonID'] != 1:
-                continue
-            tilesCount += 1
-            questList = potapov_quests.g_cache.questListByTileIDChainID(tileID, chainID)
-            for potapovQuestID in questList:
-                flags, state = progress.get(potapovQuestID)
-                if state is None:
-                    continue
-                if state >= potapov_quests.PQ_STATE.NEED_GET_ADD_REWARD:
-                    completedQuestsCount += 1
+def updatePotapovQuestAchievements(accDossierDescr, progress):
+    import potapov_quests
+    achievementCounters = dict()
+    completedCounters = dict()
+    tileCache = potapov_quests.g_tileCache
+    for questID, (flags, state) in progress.iteritems():
+        if state < potapov_quests.PQ_STATE.NEED_GET_MAIN_REWARD:
+            continue
+        pqType = potapov_quests.g_cache.questByPotapovQuestID(questID)
+        tileInfo = tileCache.getTileInfo(pqType.tileID)
+        if state >= potapov_quests.PQ_STATE.NEED_GET_MAIN_REWARD:
+            seasonID = tileInfo['seasonID']
+            completedCounters[seasonID] = completedCounters.get(seasonID, 0) + 1
+        if state >= potapov_quests.PQ_STATE.NEED_GET_ADD_REWARD:
+            pqAchievements = tileInfo['achievements'] or {}
+            chainAchievement = pqAchievements.get(pqType.chainID, None)
+            if chainAchievement:
+                achievementCounters[chainAchievement] = achievementCounters.get(chainAchievement, 0) + 1
 
-        res = max(tilesCount - completedQuestsCount / chainSize, 1)
-        if res <= 4:
-            accDossierDescr['achievements'][chainAchievement] = res
-        return
+    for seasonID, minCounter, achievementName in ((1, 1, 'firstMerit'), (2, 5, 'newMeritPM2')):
+        needToAward = completedCounters.get(seasonID, 0) >= minCounter
+        if needToAward and achievementName not in accDossierDescr['singleAchievements']:
+            accDossierDescr['singleAchievements'][achievementName] = True
+
+    for chainAchievement, counter in achievementCounters.iteritems():
+        if chainAchievement not in RECORD_CONFIGS:
+            continue
+        steps = RECORD_CONFIGS[chainAchievement]
+        maxLevel = len(steps)
+        level = sum((1 for i in xrange(maxLevel) if counter >= steps[i]))
+        stage = 0 if level == 0 else maxLevel - level + 1
+        currStage = accDossierDescr['achievements'][chainAchievement]
+        if currStage == 0 or stage < currStage:
+            accDossierDescr['achievements'][chainAchievement] = stage
+
+    return
 
 
 def __updateDossierCommonPart(dossierType, dossierDescr, results, dossierXP, winnerTeam):

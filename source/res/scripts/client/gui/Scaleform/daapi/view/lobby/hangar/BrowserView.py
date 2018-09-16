@@ -8,10 +8,16 @@ from gui.InputHandler import g_instance as g_inputHandler
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserViewMeta import BrowserViewMeta
+from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
+
+def makeBrowserParams(waitingMessage=WAITING.LOADCONTENT, isTransparent=False):
+    return {'waitingMessage': waitingMessage,
+     'isTransparent': isTransparent}
+
 
 class BrowserView(LobbySubView, BrowserViewMeta):
     __background_alpha__ = 1.0
@@ -26,6 +32,7 @@ class BrowserView(LobbySubView, BrowserViewMeta):
         self.__browser = None
         self.__browserView = None
         self.__errorOccurred = False
+        self.__closedByUser = False
         return
 
     def onFocusChange(self, hasFocus):
@@ -33,6 +40,7 @@ class BrowserView(LobbySubView, BrowserViewMeta):
         self.__updateSkipEscape()
 
     def onCloseBtnClick(self):
+        self.__closedByUser = True
         self.onCloseView()
 
     def onCloseView(self):
@@ -61,9 +69,16 @@ class BrowserView(LobbySubView, BrowserViewMeta):
     def _dispose(self):
         if self.__browserView:
             self.__browserView.onError -= self.__onError
+        returnCallback = self.__getFromCtx('returnClb')
+        if returnCallback is not None:
+            callbackArgs = {'byUser': self.__closedByUser}
+            if self.__browser:
+                callbackArgs['url'] = self.__browser.url
+            returnCallback(**callbackArgs)
         g_inputHandler.onKeyDown -= self.__onKeyDown
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         super(BrowserView, self)._dispose()
+        return
 
     def __onError(self):
         self.__errorOccurred = True

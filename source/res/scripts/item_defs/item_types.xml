@@ -66,7 +66,6 @@
       <enhancedVertical_elastic_elements_user></enhancedVertical_elastic_elements_user>
       <enhancedHorizontal_elastic_elements_user></enhancedHorizontal_elastic_elements_user>
       <antifragmentationLining_superheavy_user></antifragmentationLining_superheavy_user>
-      <lastchance_user></lastchance_user>
       <lendLeaseVehicle></lendLeaseVehicle>
       <beast></beast>
       <sinai></sinai>
@@ -97,9 +96,6 @@
       <siegeMode></siegeMode>
       <lockCrew></lockCrew>
       <lockOutfit></lockOutfit>
-      <role_defender></role_defender>
-      <role_midfielder></role_midfielder>
-      <role_striker></role_striker>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -149,12 +145,25 @@
     <description>	#item_types:optionalDevice/desc	</description>
     <tags>
       <deluxe></deluxe>
+      <armor></armor>
+      <firepower></firepower>
+      <reconnaissance></reconnaissance>
+      <mobility></mobility>
+      <camouflage></camouflage>
       <toolbox></toolbox>
       <ventilation></ventilation>
       <rammer></rammer>
       <coatedOptics></coatedOptics>
       <aimingStabilizer></aimingStabilizer>
       <enhancedAimDrives></enhancedAimDrives>
+      <antifragmentationLining></antifragmentationLining>
+      <stereoscope></stereoscope>
+      <camouflageNet></camouflageNet>
+      <enhancedSuspension></enhancedSuspension>
+      <grousers></grousers>
+      <wetCombatPack></wetCombatPack>
+      <carbonDioxide></carbonDioxide>
+      <filterCyclone></filterCyclone>
     </tags>
   </optionalDevice>
   <shell>
@@ -182,7 +191,13 @@
       <aimingStabilizer></aimingStabilizer>
       <enhancedAimDrives></enhancedAimDrives>
       <notForSale></notForSale>
+      <armor></armor>
       <showQuantity></showQuantity>
+      <reconnaissance></reconnaissance>
+      <camouflage></camouflage>
+      <firepower></firepower>
+      <mobility></mobility>
+      <premium_equipment></premium_equipment>
     </tags>
   </equipment>
   <customizationItem>

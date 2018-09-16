@@ -57,6 +57,7 @@ from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.ARENAS import ARENAS
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from soft_exception import SoftException
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 _ITEM_TYPE_TO_TOOLTIP_DICT = {GUI_ITEM_TYPE.SHELL: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_SHELL),
  GUI_ITEM_TYPE.EQUIPMENT: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_EQUIPMENT),
@@ -776,12 +777,18 @@ class ActionTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self, itemType, key, newPrice, oldPrice, isBuying, forCredits=False, rentPackage=None):
         descr = ''
-        newPrice = Money.makeFromMoneyTuple(newPrice)
-        if not newPrice.isDefined():
-            newPrice = Money(credits=0)
         oldPrice = Money.makeFromMoneyTuple(oldPrice)
         if not oldPrice.isDefined():
             oldPrice = Money(credits=0)
+        currency = Currency.CREDITS
+        for currency in Currency.ALL:
+            currencyValue = oldPrice.get(currency)
+            if currencyValue is not None:
+                break
+
+        newPrice = Money.makeFromMoneyTuple(newPrice)
+        if not newPrice.isDefined():
+            newPrice = Money.makeFrom(currency, 0)
         hasRentCompensation = False
         hasPersonalDiscount = False
         rentCompensation = None
@@ -827,33 +834,38 @@ class ActionTooltipData(ToolTipBaseData):
         _ms = makeHtmlString
         _template = 'html_templates:lobby/quests/actions'
         _format = BigWorld.wg_getGoldFormat
-        fmtNewGold = _ms(_template, Currency.GOLD, {'value': _format(newPrice.gold)}) if newPrice.gold is not None else ''
-        fmtNewCredits = _ms(_template, Currency.CREDITS, {'value': _format(newPrice.credits)}) if newPrice.credits is not None else ''
-        fmtNewCrystal = _ms(_template, Currency.CRYSTAL, {'value': _format(newPrice.crystal)}) if newPrice.crystal is not None else ''
-        fmtOldGold = _ms(_template, Currency.GOLD, {'value': _format(oldPrice.gold)}) if oldPrice.gold is not None else ''
-        fmtOldCredits = _ms(_template, Currency.CREDITS, {'value': _format(oldPrice.credits)}) if oldPrice.credits is not None else ''
-        fmtOldCrystal = _ms(_template, Currency.CRYSTAL, {'value': _format(oldPrice.crystal)}) if oldPrice.crystal is not None else ''
-        if newPrice.isSet(Currency.GOLD) and newPrice.isSet(Currency.CREDITS):
+        _postfix = ''
+        if not self.__checkPriceIsAllowed(newPrice):
+            _postfix = 'Error'
+        fmtNewGold = _ms(_template, Currency.GOLD + _postfix, {'value': _format(newPrice.gold)}) if newPrice.gold is not None else ''
+        fmtNewCredits = _ms(_template, Currency.CREDITS + _postfix, {'value': _format(newPrice.credits)}) if newPrice.credits is not None else ''
+        fmtNewCrystal = _ms(_template, Currency.CRYSTAL + _postfix, {'value': _format(newPrice.crystal)}) if newPrice.crystal is not None else ''
+        if not self.__checkPriceIsAllowed(oldPrice):
+            _postfix = 'Error'
+        fmtOldGold = _ms(_template, Currency.GOLD + _postfix, {'value': _format(oldPrice.gold)}) if oldPrice.gold is not None else ''
+        fmtOldCredits = _ms(_template, Currency.CREDITS + _postfix, {'value': _format(oldPrice.credits)}) if oldPrice.credits is not None else ''
+        fmtOldCrystal = _ms(_template, Currency.CRYSTAL + _postfix, {'value': _format(oldPrice.crystal)}) if oldPrice.crystal is not None else ''
+        if newPrice.isCurrencyDefined(Currency.GOLD) and newPrice.isCurrencyDefined(Currency.CREDITS):
             formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCredits, gold=fmtNewGold)
-        elif newPrice.isSet(Currency.GOLD) and newPrice.isSet(Currency.CRYSTAL):
+        elif newPrice.isCurrencyDefined(Currency.GOLD) and newPrice.isCurrencyDefined(Currency.CRYSTAL):
             formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCrystal, gold=fmtNewGold)
-        elif newPrice.isSet(Currency.CREDITS) and newPrice.isSet(Currency.CRYSTAL):
+        elif newPrice.isCurrencyDefined(Currency.CREDITS) and newPrice.isCurrencyDefined(Currency.CRYSTAL):
             formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCredits, gold=fmtNewCrystal)
-        elif newPrice.isSet(Currency.GOLD):
+        elif newPrice.isCurrencyDefined(Currency.GOLD):
             formatedNewPrice = fmtNewGold
-        elif newPrice.isSet(Currency.CRYSTAL):
+        elif newPrice.isCurrencyDefined(Currency.CRYSTAL):
             formatedNewPrice = fmtNewCrystal
         else:
             formatedNewPrice = fmtNewCredits
-        if oldPrice.isSet(Currency.GOLD) and oldPrice.isSet(Currency.CREDITS):
+        if oldPrice.isCurrencyDefined(Currency.GOLD) and oldPrice.isCurrencyDefined(Currency.CREDITS):
             formatedOldPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtOldCredits, gold=fmtOldGold)
-        elif oldPrice.isSet(Currency.GOLD) and oldPrice.isSet(Currency.CRYSTAL):
+        elif oldPrice.isCurrencyDefined(Currency.GOLD) and oldPrice.isCurrencyDefined(Currency.CRYSTAL):
             formatedOldPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtOldCrystal, gold=fmtOldGold)
-        elif oldPrice.isSet(Currency.CRYSTAL) and oldPrice.isSet(Currency.CREDITS):
+        elif oldPrice.isCurrencyDefined(Currency.CRYSTAL) and oldPrice.isCurrencyDefined(Currency.CREDITS):
             formatedOldPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtOldCredits, gold=fmtOldCrystal)
-        elif oldPrice.isSet(Currency.GOLD):
+        elif oldPrice.isCurrencyDefined(Currency.GOLD):
             formatedOldPrice = fmtOldGold
-        elif oldPrice.isSet(Currency.CRYSTAL):
+        elif oldPrice.isCurrencyDefined(Currency.CRYSTAL):
             formatedOldPrice = fmtOldCrystal
         else:
             formatedOldPrice = fmtOldCredits
@@ -876,7 +888,7 @@ class ActionTooltipData(ToolTipBaseData):
                 else:
                     descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, actionName=actionUserName)
         if hasRentCompensation:
-            formattedRentCompensation = makeHtmlString('html_templates:lobby/quests/actions', Currency.GOLD, {'value': BigWorld.wg_getGoldFormat(rentCompensation)})
+            formattedRentCompensation = makeHtmlString(_template, Currency.GOLD, {'value': BigWorld.wg_getGoldFormat(rentCompensation)})
             descr += '\n' + i18n.makeString(TOOLTIPS.ACTIONPRICE_RENTCOMPENSATION, rentCompensation=formattedRentCompensation)
         if not isBuying and deviceName is not None:
             headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_HEADER)
@@ -889,6 +901,15 @@ class ActionTooltipData(ToolTipBaseData):
             bodyText = descr + '\n\n' + body if descr else body
         return {'header': headerText,
          'body': bodyText}
+
+    def __checkPriceIsAllowed(self, price):
+        isPurchaseAllowed = isIngameShopEnabled()
+        if isPurchaseAllowed:
+            for currencyType in Currency.ALL:
+                if price.get(currencyType):
+                    isPurchaseAllowed &= currencyType == Currency.GOLD
+
+        return self.itemsCache.items.stats.money >= price or isPurchaseAllowed
 
 
 class ToolTipFortWrongTime(ToolTipBaseData):

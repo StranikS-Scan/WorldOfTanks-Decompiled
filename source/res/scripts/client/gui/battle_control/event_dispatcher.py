@@ -50,6 +50,10 @@ def toggleFullStats(isDown):
     g_eventBus.handleEvent(GameEvent(GameEvent.FULL_STATS, _makeKeyCtx(isDown=isDown)), scope=_SCOPE)
 
 
+def toggleFullStatsQuestProgress(isDown):
+    g_eventBus.handleEvent(GameEvent(GameEvent.FULL_STATS_QUEST_PROGRESS, _makeKeyCtx(isDown=isDown)), scope=_SCOPE)
+
+
 def setNextPlayerPanelMode():
     g_eventBus.handleEvent(GameEvent(GameEvent.NEXT_PLAYERS_PANEL_MODE), scope=_SCOPE)
 

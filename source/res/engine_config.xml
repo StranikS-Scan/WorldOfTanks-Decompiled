@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -48,7 +48,7 @@
       <MIN>	0	</MIN>
     </streaming>
     <ObjectsFarPlaneManager>
-      <cullVolume>	10000	</cullVolume>
+      <cullVolume>	2800	</cullVolume>
       <decalCullDistance>	400	</decalCullDistance>
       <controlPointCullDistance>	1400	</controlPointCullDistance>
     </ObjectsFarPlaneManager>
@@ -134,7 +134,7 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
+    <fullDump>	false	</fullDump>
     <dxdiag>	true	</dxdiag>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
@@ -224,9 +224,6 @@
           <name>	explosive_objects.pck	</name>
         </project>
         <project>
-          <name>	ev_football.pck	</name>
-        </project>
-        <project>
           <name>	objects.pck	</name>
         </project>
         <project>
@@ -274,9 +271,6 @@
         <project>
           <name>	plugin_media.bnk	</name>
         </project>
-        <project>
-          <name>	ev_football.pck	</name>
-        </project>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
         <project>
@@ -290,6 +284,9 @@
         </project>
         <project>
           <name>	customization.bnk	</name>
+        </project>
+        <project>
+          <name>	shop.bnk	</name>
         </project>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>

@@ -292,6 +292,8 @@ class MainView(CustomizationMainViewMeta):
         self.fadeAnchorsOut = isFadeOut
 
     def onCloseWindow(self):
+        if self._isPropertySheetShown:
+            self.__clearItem()
         if self.__ctx.isOutfitsModified():
             DialogsInterface.showDialog(I18nConfirmDialogMeta('customization/close'), self.__onCloseWindow)
         else:
@@ -383,13 +385,12 @@ class MainView(CustomizationMainViewMeta):
         self._vehicleCustomizationAnchorsUpdater.startUpdater(self.settingsCore.interfaceScale.get())
         self.__ctx.refreshOutfit()
         self.settingsCore.interfaceScale.onScaleExactlyChanged += self.__onInterfaceScaleChanged
-        self.as_eventLayoutS(g_currentVehicle.isOnlyForEventBattles())
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
+        self._isPropertySheetShown = False
         if self.hangarSpace.spaceInited:
             self.hangarSpace.space.locateCameraToCustomizationPreview()
         self.__renderEnv = BigWorld.CustomizationEnvironment()
         self.__renderEnv.enable(True)
-        self._isPropertySheetShown = False
 
     def _dispose(self):
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -524,6 +525,9 @@ class MainView(CustomizationMainViewMeta):
         self.__setSeasonData()
 
     def __onChangesCanceled(self):
+        self.__setHeaderInitData()
+        self.__setSeasonData()
+        self.__setAnchorsInitData(True)
         self.__hidePropertiesSheet()
 
     def __onCaruselItemSelected(self, index, intCD):
@@ -602,18 +606,10 @@ class MainView(CustomizationMainViewMeta):
 
     def __setHeaderInitData(self):
         vehicle = g_currentVehicle.item
-        if g_currentVehicle.isEvent():
-            isElite = False
-            tankLevel = ''
-            tankType = vehicle.getFootballRole()
-        else:
-            isElite = vehicle.isElite
-            tankLevel = str(int2roman(vehicle.level))
-            tankType = vehicle.type
-        self.as_setHeaderDataS({'tankTier': tankLevel,
+        self.as_setHeaderDataS({'tankTier': str(int2roman(vehicle.level)),
          'tankName': vehicle.shortUserName,
-         'tankType': '{}_elite'.format(tankType) if isElite else tankType,
-         'isElite': isElite,
+         'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
+         'isElite': vehicle.isElite,
          'closeBtnTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_HEADERCLOSEBTN})
 
     def __showPropertiesSheet(self, areaId, slotId, regionId):
@@ -630,7 +626,7 @@ class MainView(CustomizationMainViewMeta):
         for tabIdx in self.__ctx.visibleTabs:
             itemTypeID = TABS_ITEM_MAPPING[tabIdx]
             typeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
-            showPlus = not self.__ctx.checkSlotsFilling(itemTypeID, self.__ctx.currentSeason)
+            showPlus = not self.__checkSlotsFilling(itemTypeID, self._currentSeason)
             data.append({'label': _ms(ITEM_TYPES.customizationPlural(typeName)),
              'tooltip': makeTooltip(ITEM_TYPES.customizationPlural(typeName), TOOLTIPS.customizationItemTab(typeName)),
              'id': tabIdx})
@@ -645,6 +641,8 @@ class MainView(CustomizationMainViewMeta):
     @async
     @adisp_process
     def __confirmHeaderNavigation(self, callback):
+        if self._isPropertySheetShown:
+            self.__clearItem()
         if self.__ctx.isOutfitsModified():
             result = yield DialogsInterface.showI18nConfirmDialog('customization/close')
         else:

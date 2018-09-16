@@ -20,6 +20,7 @@ from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.server_events.events_helpers import hasAtLeastOneAvailableQuest, isAllQuestsCompleted
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui import makeHtmlString
@@ -39,9 +40,9 @@ _QUESTS_MOVIE_ROUTES = {(2, 1): 'X2',
 _QUEST_MOVIE_GEN_PATH = '../flash/linkedSetVideo{}.swf'
 
 class LinkedSetPagePaginatorColor(CONST_CONTAINER):
-    COMPLETED = 'green'
-    AVAILABLE = 'gray'
-    NOT_AVAILABLE = 'red'
+    COMPLETED = 'done'
+    AVAILABLE = 'available'
+    NOT_AVAILABLE = 'notAvailable'
 
 
 class LinkedSetDetailsOverlay(LinkedSetDetailsOverlayMeta):
@@ -81,14 +82,14 @@ class LinkedSetDetailsOverlay(LinkedSetDetailsOverlayMeta):
         return questIndex or defaultIndex
 
     def setPage(self, pageID):
-        self._selectedQuestID = int(pageID)
+        self._selectedQuestID = pageID
         self._updateView()
 
     def updatePageCount(self, pageCount):
         if self._pageCount != pageCount:
             self._pageCount = pageCount
             if self._pageCount:
-                pages = [ self._getPaginatorColorStatusForQuest(quest) for quest in self._quests[:self._pageCount] ]
+                pages = [ self._getPaginatorPageData(index, quest) for index, quest in enumerate(self._quests[:self._pageCount]) ]
             else:
                 pages = []
             self.as_setColorPagesS(pages)
@@ -189,10 +190,17 @@ class LinkedSetDetailsOverlay(LinkedSetDetailsOverlayMeta):
         if self._pageCount:
             self.as_setPageS(self._selectedQuestID)
 
-    def _getPaginatorColorStatusForQuest(self, quest):
+    def _getPaginatorPageData(self, index, quest):
         if quest.isCompleted():
-            return LinkedSetPagePaginatorColor.COMPLETED
-        return LinkedSetPagePaginatorColor.AVAILABLE if quest.isAvailable().isValid else LinkedSetPagePaginatorColor.NOT_AVAILABLE
+            status = LinkedSetPagePaginatorColor.COMPLETED
+        elif quest.isAvailable().isValid:
+            status = LinkedSetPagePaginatorColor.AVAILABLE
+        else:
+            status = LinkedSetPagePaginatorColor.NOT_AVAILABLE
+        return {'buttonsGroup': 'linkedSetButtons',
+         'status': status,
+         'pageIndex': index,
+         'label': str(index + 1)}
 
     def _getViewDataForCompletedMission(self):
         missionName = _ms(LINKEDSET.getMissionName(self._missionID))
@@ -269,13 +277,13 @@ class LinkedSetDetailsOverlay(LinkedSetDetailsOverlayMeta):
     def _setupFlashAnimTexts(self):
         if not self._isSetupedFlashAnimTexts:
             self.as_setDataVideoS({'headerServiceText': MENU.HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EQUIPMENT_LABEL,
-             'headerDepotText': MENU.STORETAB_INVENTORY,
+             'headerDepotText': STORAGE.STORAGE_SECTIONTITLE,
              'headerConfirmSaleText': DIALOGS.SELLMODULECONFIRMATION_TITLE,
              'headerEquipmentText': MENU.OPTIONALDEVICEFITS_TITLE,
              'btnBattleText': MENU.HEADERBUTTONS_BATTLE,
              'btnAcceptText': MENU.HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_APPLY,
              'btnResearchText': MENU.CONTEXTMENU_UNLOCK,
-             'btnStoreText': MENU.HEADERBUTTONS_SHOP,
+             'btnStoreText': MENU.HEADERBUTTONS_STORAGE,
              'btnSellText': DIALOGS.SELLMODULECONFIRMATION_SUBMIT,
              'btnCancelText': DIALOGS.SELLCONFIRMATION_CANCEL,
              'txtTotalText': MENU.AMMORELOAD_TOTALCOST,

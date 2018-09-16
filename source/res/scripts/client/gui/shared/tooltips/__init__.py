@@ -24,7 +24,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     EQUIPMENT = 'equipment'
     EFFICIENCY = 'efficiency'
     FORTIFICATIONS = 'fortification'
-    FOOTBALL = 'football'
     IGR = 'igr'
     CYBER_SPORT = 'cyberSport'
     MAP = 'map'
@@ -99,6 +98,8 @@ class ToolTipBaseData(object):
         super(ToolTipBaseData, self).__init__()
         self._context = context
         self._toolTipType = toolTipType
+        self.calledBy = None
+        return
 
     @sf_lobby
     def app(self):

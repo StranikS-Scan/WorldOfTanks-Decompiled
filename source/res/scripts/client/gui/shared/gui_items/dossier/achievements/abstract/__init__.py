@@ -39,14 +39,14 @@ def achievementHasVehiclesList(achievement):
     return isinstance(achievement, _HasVehiclesList)
 
 
-def getCompletedPersonalMissionsCount(campaignID, vehClasses):
+def getCompletedPersonalMissionsCount(branch, classifiers):
     eventsCache = dependency.instance(IEventsCache)
 
     def _filter(quest):
-        return quest.isFullCompleted() and len(vehClasses & quest.getVehicleClasses())
+        return quest.isFullCompleted() and quest.getQuestClassifier().classificationAttr in classifiers
 
     result = 0
-    for operation in eventsCache.random.getCampaigns()[campaignID].getOperations().itervalues():
+    for operation in eventsCache.getPersonalMissions().getOperationsForBranch(branch).itervalues():
         result += len(operation.getQuestsByFilter(_filter))
 
     return result

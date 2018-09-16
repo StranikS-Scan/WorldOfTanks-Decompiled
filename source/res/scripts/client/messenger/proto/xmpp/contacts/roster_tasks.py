@@ -3,7 +3,8 @@
 from messenger.m_constants import USER_ACTION_ID, USER_TAG, PROTO_TYPE, CLIENT_ACTION_ID
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp import entities, errors
-from messenger.proto.xmpp.contacts.note_tasks import RemoveNotesTask, canNoteAutoDelete
+from messenger.proto.xmpp.contacts.note_tasks import RemoveNotesTask
+from messenger.proto.xmpp.contacts.note_tasks import canNoteAutoDelete
 from messenger.proto.xmpp.contacts.tasks import TASK_RESULT, ContactTask, SeqTask
 from messenger.proto.xmpp.find_criteria import ItemsFindCriteria
 from messenger.proto.xmpp.gloox_constants import ROSTER_CONTEXT
@@ -15,9 +16,9 @@ from soft_exception import SoftException
 def _syncRosterItem(storage, jid, name, groups, sub=None, clanInfo=None):
     dbID = jid.getDatabaseID()
     user = storage.getUser(dbID, PROTO_TYPE.XMPP)
-    if user:
+    if user is not None:
         if user.isCurrentPlayer():
-            return None
+            return
         if user.getItemType() in XMPP_ITEM_TYPE.ROSTER_ITEMS:
             user.update(name=name, groups=groups, sub=sub, trusted=True, clanInfo=clanInfo)
         else:
@@ -152,7 +153,7 @@ class EmptyGroupsTask(RosterItemTask):
 
 
 class ChangeRosterItemGroupsTask(RosterItemTask):
-    __slots__ = ('_exclude',)
+    __slots__ = ('_exclude', '_groups', '_result')
 
     def __init__(self, jid, name='', groups=None, exclude=None):
         super(ChangeRosterItemGroupsTask, self).__init__(jid, name, groups)

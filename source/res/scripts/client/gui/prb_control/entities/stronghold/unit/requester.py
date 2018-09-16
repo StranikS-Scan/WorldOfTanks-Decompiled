@@ -5,7 +5,7 @@ from debug_utils import LOG_ERROR
 from gui.prb_control import settings, prb_getters
 from gui.prb_control.entities.base.ctx import PrbCtrlRequestCtx
 from gui.prb_control.entities.base.requester import IUnitRequestProcessor
-from gui.wgcg.strongholds.contexts import StrongholdLeaveCtx, StrongholdAssignCtx, StrongholdChangeOpenedCtx, StrongholdSetVehicleCtx, StrongholdSetReadyCtx, StrongholdKickPlayerCtx, StrongholdBattleQueueCtx, StrongholdGiveLeadershipCtx, StrongholdSetReserveCtx, StrongholdSendInvitesCtx, StrongholdUnassignCtx, StrongholdUnsetReserveCtx, StrongholdJoinBattleCtx, StrongholdSetEquipmentCommanderCtx, StrongholdMatchmakingInfoCtx
+from gui.wgcg.strongholds.contexts import StrongholdLeaveCtx, StrongholdAssignCtx, StrongholdChangeOpenedCtx, StrongholdSetVehicleCtx, StrongholdSetReadyCtx, StrongholdKickPlayerCtx, StrongholdBattleQueueCtx, StrongholdGiveLeadershipCtx, StrongholdSetReserveCtx, StrongholdSendInvitesCtx, StrongholdUnassignCtx, StrongholdUnsetReserveCtx, StrongholdJoinBattleCtx, StrongholdSetEquipmentCommanderCtx, StrongholdMatchmakingInfoCtx, StrongholdSetSlotVehicleTypeFilter, StrongholdStopPlayersMatchingCtx, StrongholdSetSlotVehiclesFilter
 from helpers import dependency
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
@@ -29,7 +29,10 @@ class StrongholdUnitRequestProcessor(IUnitRequestProcessor):
          REQUEST_TYPE.SEND_INVITE: StrongholdSendInvitesCtx,
          REQUEST_TYPE.JOIN: StrongholdJoinBattleCtx,
          REQUEST_TYPE.SET_EQUIPMENT_COMMANDER: StrongholdSetEquipmentCommanderCtx,
-         REQUEST_TYPE.MATCHMAKING_INFO: StrongholdMatchmakingInfoCtx}
+         REQUEST_TYPE.MATCHMAKING_INFO: StrongholdMatchmakingInfoCtx,
+         REQUEST_TYPE.SET_SLOT_VEHICLE_TYPE_FILTER: StrongholdSetSlotVehicleTypeFilter,
+         REQUEST_TYPE.SET_SLOT_VEHICLES_FILTER: StrongholdSetSlotVehiclesFilter,
+         REQUEST_TYPE.STOP_PLAYERS_MATCHING: StrongholdStopPlayersMatchingCtx}
 
     def fini(self):
         self.__unitContextRemap.clear()

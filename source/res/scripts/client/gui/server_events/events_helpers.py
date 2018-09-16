@@ -1,24 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_helpers.py
 import time
-from collections import namedtuple
-from functools import partial
 import BigWorld
-from adisp import async
 from constants import EVENT_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters
-from gui.shared.gui_items import Vehicle
-from gui.shared.gui_items.processors import quests as quests_proc
-from gui.shared.utils.decorators import process
+from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from helpers import time_utils, i18n, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, FOOTBALL2018_PREFIX
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
@@ -186,71 +182,6 @@ def getConditionsDiffStructure(fullConditions, mainConditions):
     return result
 
 
-class _PMDependenciesResolver(object):
-    eventsCache = dependency.descriptor(IEventsCache)
-    _DEPENDENCIES_LIST = namedtuple('HandlersList', ['cache',
-     'progress',
-     'selectProcessor',
-     'refuseProcessor',
-     'rewardsProcessor',
-     'pawnProcessor',
-     'sorter'])
-
-    @classmethod
-    def _makeRandomDependencies(cls):
-        return cls._DEPENDENCIES_LIST(cls.eventsCache.random, cls.eventsCache.randomQuestsProgress, quests_proc.RandomQuestSelect, quests_proc.RandomQuestRefuse, quests_proc.PersonalMissionsGetRegularReward, quests_proc.PersonalMissionPawn, partial(sorted, cmp=Vehicle.compareByVehTypeName))
-
-    @classmethod
-    def chooseList(cls, _):
-        return cls._makeRandomDependencies()
-
-
-def getPersonalMissionsCache(questsType=None):
-    return _PMDependenciesResolver.chooseList(questsType).cache
-
-
-def getPersonalMissionsProgress(questsType=None):
-    return _PMDependenciesResolver.chooseList(questsType).progress
-
-
-def getPersonalMissionsSelectProcessor(questsType=None):
-    return _PMDependenciesResolver.chooseList(questsType).selectProcessor
-
-
-def getPersonalMissionsRefuseProcessor(questsType=None):
-    return _PMDependenciesResolver.chooseList(questsType).refuseProcessor
-
-
-def getPersonalMissionsRewardProcessor(questsType=None):
-    return _PMDependenciesResolver.chooseList(questsType).rewardsProcessor
-
-
-def getPersonalMissionsPawnProcessor(questsType=None):
-    return _PMDependenciesResolver.chooseList(questsType).pawnProcessor
-
-
-def sortWithQuestType(items, key, questsType=None):
-    return _PMDependenciesResolver.chooseList(questsType).sorter(items, key=key)
-
-
-@async
-@process('updating')
-def getPersonalMissionAward(quest, callback):
-    from gui.server_events.events_dispatcher import showTankwomanAward
-    tankman, isMainBonus = quest.getTankmanBonus()
-    needToGetTankman = quest.needToGetAddReward() and not isMainBonus or quest.needToGetMainReward() and isMainBonus
-    if needToGetTankman and tankman is not None:
-        for tmanData in tankman.getTankmenData():
-            showTankwomanAward(quest.getID(), tmanData)
-            break
-
-        result = None
-    else:
-        result = yield getPersonalMissionsRewardProcessor()(quest).request()
-    callback(result)
-    return
-
-
 def questsSortFunc(a, b):
     res = cmp(a.isCompleted(), b.isCompleted())
     if res:
@@ -280,14 +211,6 @@ def hasAtLeastOneCompletedQuest(quests):
 
 def isAllQuestsCompleted(quests):
     return all((quest.isCompleted() for quest in quests))
-
-
-def isFootball(eventID):
-    return eventID.startswith(FOOTBALL2018_PREFIX)
-
-
-def hasFootballQuests(eventsIDs):
-    return any((isFootball(eventID) for eventID in eventsIDs))
 
 
 def getMarathonPrefix(eventID):
@@ -357,6 +280,28 @@ def getLinkedSetMissionIDFromQuest(quest):
 
 def getLinkedSetQuestID(quest):
     return int(quest.getID().split('_')[2])
+
+
+class AwardSheetPresenter(object):
+
+    class Size(CONST_CONTAINER):
+        TINY = 'tiny'
+        SMALL = 'small'
+        MID = 'mid'
+        BIG = 'big'
+        X_16 = 'x16'
+
+    __navigation = PersonalMissionsNavigation()
+
+    @classmethod
+    def getIcon(cls, size, branch=None):
+        branchID = branch if branch is not None else cls.__navigation.getBranch()
+        return RES_ICONS.getFreesSheetImg(branchID, size)
+
+    @classmethod
+    def getPawnedIcon(cls, branch=None):
+        branchID = branch if branch is not None else cls.__navigation.getBranch()
+        return RES_ICONS.getPawnedSheetImg(branchID)
 
 
 def _getlocalizeLinkedSetQuestString(localizedKey, quest):

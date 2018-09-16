@@ -508,7 +508,7 @@ class FakeDataAccessor(base.BaseDataAccessor):
      'public': False,
      'selected_reserves': [None, None, None],
      'min_level': 1})
-    def get_wgsh_unit_info(self, periphery_id, unit_id, fields=None):
+    def get_wgsh_unit_info(self, periphery_id, unit_id, rev, fields=None):
         return self._request_data('wgsh_unit_info', unit_id)
 
     @fake_method(example={})
@@ -619,3 +619,20 @@ class FakeDataAccessor(base.BaseDataAccessor):
                  'position': 1}})
     def user_ranked_position(self, fields=None):
         return self._request_data('user_ranked_position', None)
+
+    @fake_method(example={'data': {'promo_name': 'Bang bang bang',
+              'type': 'news',
+              'image': '//webbrg-ru.wgcdn.co/dcont/fb/image/9.12.jpg',
+              'video': 'https://www.youtube.com/watch?v=_jGPljdFBqA',
+              'important': False,
+              'promoscreen_url': '/promoscreens/<slug>/'},
+     'unread': 3,
+     'sent_at': 1423813849})
+    def get_teaser(self, fields=None):
+        url = '/teaser/'
+        return self._request_data(url, None)
+
+    @fake_method(example={'unread': 3})
+    def get_unread_count(self, fields=None):
+        url = '/unread/'
+        return self._request_data(url, None)

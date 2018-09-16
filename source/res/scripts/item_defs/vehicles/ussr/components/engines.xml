@@ -120,6 +120,7 @@
     <M_850>	151	</M_850>
     <V_2_34E>	152	</V_2_34E>
     <V_11_NC>	153	</V_11_NC>
+    <V_54K_IS>	154	</V_54K_IS>
     <Engine_01_KV>	200	</Engine_01_KV>
     <V-54K_T>	201	</V-54K_T>
     <Engine_T-50-2>	202	</Engine_T-50-2>
@@ -130,7 +131,6 @@
     <V-12-5_shortened>	212	</V-12-5_shortened>
     <T-26_bot>	213	</T-26_bot>
     <V-5_W>	214	</V-5_W>
-    <V-55_sport>	500	</V-55_sport>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -346,6 +346,23 @@
       <rpm_min>	360	</rpm_min>
       <rpm_max>	2120	</rpm_max>
     </V-2IS_B>
+    <V_54K_IS>
+      <userString>	#ussr_vehicles:V_54K_IS	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	895	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
+    </V_54K_IS>
     <V-2IS_R>
       <userString>	#ussr_vehicles:V-2IS_R	</userString>
       <tags>	diesel	</tags>
@@ -2207,14 +2224,14 @@
       <price>	120000	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	580	</power>
+      <power>	610	</power>
       <weight>	1050	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	365	</rpm_min>
-      <rpm_max>	2104	</rpm_max>
+      <rpm_min>	357	</rpm_min>
+      <rpm_max>	2128	</rpm_max>
     </_4TDF>
     <_2xV-16>
       <userString>	#ussr_vehicles:_2xV-16	</userString>
@@ -2363,8 +2380,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	320	</rpm_min>
-      <rpm_max>	2240	</rpm_max>
+      <rpm_min>	290	</rpm_min>
+      <rpm_max>	2328	</rpm_max>
     </V_64>
     <M_850>
       <userString>	#ussr_vehicles:M_850	</userString>
@@ -2380,8 +2397,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	365	</rpm_min>
-      <rpm_max>	2104	</rpm_max>
+      <rpm_min>	266	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
     </M_850>
     <V_11_NC>
       <userString>	#ussr_vehicles:V_11_NC	</userString>
@@ -2536,22 +2553,5 @@
       <rpm_min>	240	</rpm_min>
       <rpm_max>	2480	</rpm_max>
     </M-50T_IGR>
-    <V-55_sport>
-      <userString>	#football2018:T62A_sport_engine_name	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <notInShop>	true	</notInShop>
-      <price>	132000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	1500	</power>
-      <weight>	700	</weight>
-      <maxHealth>	9999	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <fireStartingChance>	0	</fireStartingChance>
-      <rpm_min>	365	</rpm_min>
-      <rpm_max>	2104	</rpm_max>
-    </V-55_sport>
   </shared>
 </engines.xml>

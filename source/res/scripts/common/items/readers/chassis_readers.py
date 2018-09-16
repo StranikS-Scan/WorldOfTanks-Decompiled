@@ -78,7 +78,7 @@ def readTrackParams(xmlCtx, section):
     if section['trackNodes'] is not None:
         ctx = (xmlCtx, 'trackNodes')
         trackParams = chassis_components.TrackParams(thickness=_xml.readFloat(ctx, section, 'trackThickness'), maxAmplitude=_xml.readFloat(ctx, section, 'trackNodes/maxAmplitude'), maxOffset=_xml.readFloat(ctx, section, 'trackNodes/maxOffset'), gravity=_xml.readFloat(ctx, section, 'trackNodes/gravity'))
-    if section['trackNodes'] is None and section['splineDesc'] is not None:
+    elif section['splineDesc'] is not None or section['physicalTracks'] is not None:
         trackParams = chassis_components.TrackParams(thickness=_xml.readFloat(xmlCtx, section, 'trackThickness'), maxAmplitude=component_constants.ZERO_FLOAT, maxOffset=component_constants.ZERO_FLOAT, gravity=component_constants.ZERO_FLOAT)
     return trackParams
 

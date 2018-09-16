@@ -10,8 +10,10 @@ from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
 from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE
 from gui import makeHtmlString
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.prb_control import prb_getters
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
@@ -22,7 +24,6 @@ from gui.shared.gui_items.gui_item import HasStrCD
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.money import MONEY_UNDEFINED, Currency, Money
-from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
 from gui.shared.utils import makeSearchableString
 from helpers import i18n, time_utils, dependency
@@ -85,12 +86,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     UNRECOVERABLE = 'unrecoverable'
     CREW_LOCKED = 'lockCrew'
     OUTFIT_LOCKED = 'lockOutfit'
-    ROLE_STRIKER = 'role_striker'
-    ROLE_MIDFIELDER = 'role_midfielder'
-    ROLE_DEFENDER = 'role_defender'
 
-
-VEHICLE_FOOTBALL_ROLES = frozenset((VEHICLE_TAGS.ROLE_DEFENDER, VEHICLE_TAGS.ROLE_MIDFIELDER, VEHICLE_TAGS.ROLE_STRIKER))
 
 class Vehicle(FittingItem, HasStrCD):
     __slots__ = ('__descriptor', '__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_hasRentPackages', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_canTradeIn', '_canTradeOff', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_crew', '_lastCrew', '_hasModulesToSelect', '_customOutfits', '_styledOutfits')
@@ -224,7 +220,7 @@ class Vehicle(FittingItem, HasStrCD):
         if tradeInData is not None and tradeInData.isEnabled and self.isPremium and not self.isPremiumIGR:
             self._tradeOffPriceFactor = tradeInData.sellPriceFactor
             tradeInLevels = tradeInData.allowedVehicleLevels
-            self._canTradeIn = not self.isPurchased and not self.isHidden and self.isUnlocked and not self.isRestorePossible() and self.level in tradeInLevels
+            self._canTradeIn = not self.isInInventory and not self.isHidden and self.isUnlocked and not self.isRestorePossible() and self.level in tradeInLevels and not self.isRented
             self._canTradeOff = self.isPurchased and not self.canNotBeSold and self.intCD not in tradeInData.forbiddenVehicles and self.level in tradeInLevels
             if self.canTradeOff:
                 self._tradeOffPrice = Money(gold=int(math.ceil(self.tradeOffPriceFactor * self.buyPrices.itemPrice.price.gold)))
@@ -413,6 +409,10 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def iconUniqueLight(self):
         return getUniqueIconPath(self.name, withLightning=True)
+
+    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+        name = self.name.split(':')[1]
+        return RES_SHOP.getVehicleIcon(size, name) if RES_SHOP.hasVehicleIcon(size, name) else None
 
     @property
     def shellsLayoutIdx(self):
@@ -856,25 +856,6 @@ class Vehicle(FittingItem, HasStrCD):
         return self.isPremiumIGR and self.igrCtrl.getRoomType() != constants.IGR_TYPE.PREMIUM
 
     @property
-    def isFootballDefender(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.EVENT) and checkForTags(self.tags, VEHICLE_TAGS.ROLE_DEFENDER)
-
-    @property
-    def isFootballMidfielder(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.EVENT) and checkForTags(self.tags, VEHICLE_TAGS.ROLE_MIDFIELDER)
-
-    @property
-    def isFootballStriker(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.EVENT) and checkForTags(self.tags, VEHICLE_TAGS.ROLE_STRIKER)
-
-    @property
-    def isFootball(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.EVENT)
-
-    def getFootballRole(self):
-        return getFootballRole(self.tags)
-
-    @property
     def name(self):
         return self.descriptor.type.name
 
@@ -898,7 +879,18 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def fullDescription(self):
-        return self.descriptor.type.description if self.descriptor.type.description.find('_descr') == -1 else ''
+        description = self.descriptor.type.description
+        return description if description.find('_descr') == -1 else ''
+
+    @property
+    def shortDescriptionSpecial(self):
+        description = self.descriptor.type.shortDescriptionSpecial
+        return description if description.find('_short_special') == -1 else ''
+
+    @property
+    def longDescriptionSpecial(self):
+        description = self.descriptor.type.longDescriptionSpecial
+        return description if description.find('_long_special') == -1 else ''
 
     @property
     def tags(self):
@@ -1154,8 +1146,7 @@ class Vehicle(FittingItem, HasStrCD):
             if outfit and outfit.isActive():
                 return outfit
 
-        outfit = Outfit(isEnabled=True, isInstalled=True)
-        return outfit
+        return None
 
     def setCustomOutfit(self, season, outfit):
         self._customOutfits[season] = outfit
@@ -1372,14 +1363,6 @@ def getOrderByVehicleClass(className=None):
 
 def getVehicleClassTag(tags):
     subSet = vehicles.VEHICLE_CLASS_TAGS & tags
-    result = None
-    if subSet:
-        result = list(subSet).pop()
-    return result
-
-
-def getFootballRole(tags):
-    subSet = VEHICLE_FOOTBALL_ROLES & tags
     result = None
     if subSet:
         result = list(subSet).pop()

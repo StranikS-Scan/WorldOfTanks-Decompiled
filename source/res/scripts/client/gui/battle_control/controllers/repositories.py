@@ -4,6 +4,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS
 from gui.battle_control.battle_constants import getBattleCtrlName
+from gui.battle_control.controllers import arena_border_ctrl
 from gui.battle_control.controllers import arena_load_ctrl, battle_field_ctrl
 from gui.battle_control.controllers import avatar_stats_ctrl
 from gui.battle_control.controllers import bootcamp_ctrl
@@ -13,6 +14,7 @@ from gui.battle_control.controllers import debug_ctrl
 from gui.battle_control.controllers import drr_scale_ctrl
 from gui.battle_control.controllers import dyn_squad_functional
 from gui.battle_control.controllers import feedback_adaptor
+from gui.battle_control.controllers import game_messages_ctrl
 from gui.battle_control.controllers import hit_direction_ctrl
 from gui.battle_control.controllers import interfaces
 from gui.battle_control.controllers import msgs_ctrl
@@ -20,13 +22,11 @@ from gui.battle_control.controllers import period_ctrl
 from gui.battle_control.controllers import personal_efficiency_ctrl
 from gui.battle_control.controllers import respawn_ctrl
 from gui.battle_control.controllers import team_bases_ctrl
+from gui.battle_control.controllers import team_health_bar_ctrl
 from gui.battle_control.controllers import tmp_ignore_list_ctrl
 from gui.battle_control.controllers import vehicle_state_ctrl
 from gui.battle_control.controllers import view_points_ctrl
-from gui.battle_control.controllers import team_health_bar_ctrl
-from gui.battle_control.controllers import game_messages_ctrl
-from gui.battle_control.controllers import arena_border_ctrl
-from gui.battle_control.controllers import football_ctrl
+from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 from gui.battle_control.controllers import epic_respawn_ctrl
 from gui.battle_control.controllers import progress_circle_ctrl
@@ -166,6 +166,10 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     def viewPoints(self):
         return self._repository.getController(BATTLE_CTRL_ID.VIEW_POINTS)
 
+    @property
+    def questProgress(self):
+        return self._repository.getController(BATTLE_CTRL_ID.QUEST_PROGRESS)
+
 
 class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator):
     __slots__ = ()
@@ -221,14 +225,6 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     @property
     def gameNotifications(self):
         return self._repository.getController(BATTLE_CTRL_ID.GAME_NOTIFICATIONS)
-
-    @property
-    def footballCtrl(self):
-        return self._repository.getController(BATTLE_CTRL_ID.FOOTBALL_CTRL)
-
-    @property
-    def footballEntitiesCtrl(self):
-        return self._repository.getController(BATTLE_CTRL_ID.FOOTBALL_ENTITIES_CTRL)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -320,6 +316,7 @@ class SharedControllersRepository(_ControllersRepository):
         if tmpIgnoreListCtrl is not None:
             repository.addController(tmpIgnoreListCtrl)
         repository.addArenaController(bootcamp_ctrl.BootcampController(), setup)
+        repository.addArenaController(quest_progress_ctrl.createQuestProgressController(), setup)
         repository.addArenaController(view_points_ctrl.ViewPointsController(setup), setup)
         repository.addArenaController(arena_border_ctrl.ArenaBorderController(), setup)
         repository.addArenaViewController(arena_load_ctrl.ArenaLoadController(), setup)
@@ -371,19 +368,4 @@ class EpicControllersRepository(_ControllersRepository):
         repository.addViewController(game_notification_ctrl.EpicGameNotificationsController(setup), setup)
         repository.addViewController(epic_missions_ctrl.EpicMissionsController(setup), setup)
         repository.addArenaViewController(epic_team_bases_ctrl.createEpicTeamsBasesCtrl(setup), setup)
-        return repository
-
-
-class EventControllersRepository(_ControllersRepositoryByBonuses):
-    __slots__ = ()
-
-    @classmethod
-    def create(cls, setup):
-        repository = super(EventControllersRepository, cls).create(setup)
-        repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
-        repository.addViewController(debug_ctrl.DebugController(), setup)
-        repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
-        repository.addArenaViewController(football_ctrl.FootballCtrl(), setup)
-        repository.addArenaViewController(football_ctrl.FootballPeriodCtrl(), setup)
-        repository.addArenaViewController(football_ctrl.FootballEntitiesController(), setup)
         return repository

@@ -6,7 +6,7 @@ import varint
 import ResMgr
 from collections import namedtuple, OrderedDict, defaultdict
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
+from items.components.c11n_constants import ApplyArea, SeasonType, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, NO_OUTFIT_DATA
 from items.components import c11n_components as cn
 from constants import IS_CELLAPP, IS_BASEAPP
 from typing import List, Dict, Type, Tuple, Any, TypeVar, Optional, MutableMapping
@@ -650,3 +650,8 @@ class NamedVector(defaultdict):
 def makeLogOutfitValues(outfitDescr):
     outfit = parseOutfitDescr(outfitDescr)
     return OutfitLogEntry(outfit).toDict()
+
+
+def getVehicleOutfit(outfits, vehTypeDescr, outfitType):
+    result = outfits.get(vehTypeDescr, {}).get(outfitType, NO_OUTFIT_DATA)
+    return (result[0], bool(result[1] & StyleFlags.ENABLED)) if result[1] & StyleFlags.INSTALLED else ('', False)

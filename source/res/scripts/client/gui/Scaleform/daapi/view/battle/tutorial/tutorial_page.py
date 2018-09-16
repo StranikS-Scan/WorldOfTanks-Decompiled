@@ -93,6 +93,9 @@ class TutorialPage(SharedPage):
     def _handleToggleFullStats(self, event):
         pass
 
+    def _handleToggleFullStatsQuestProgress(self, event):
+        pass
+
     def _handleGUIToggled(self, event):
         pass
 

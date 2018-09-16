@@ -41,32 +41,40 @@ class QuestsProgressRequester(_QuestsProgressRequester):
         return self.getCacheValue('questsRewards', {})
 
 
-PersonalMissionProgress = namedtuple('PersonalMissionProgress', ('state', 'selected', 'unlocked', 'pawned'))
-
-class _PersonalMissionsProgressRequester(_QuestsProgressRequester):
+class PersonalMissionsProgressRequester(_QuestsProgressRequester):
+    PersonalMissionProgress = namedtuple('PersonalMissionProgress', ['state',
+     'selected',
+     'unlocked',
+     'pawned'])
+    _DefaultLastWomanIDs = (-1, -1, -1)
 
     def __init__(self, questsType):
-        super(_PersonalMissionsProgressRequester, self).__init__()
+        super(PersonalMissionsProgressRequester, self).__init__()
         self.__pmStorage = None
         self._questsType = questsType
         return
 
     def getPersonalMissionProgress(self, pqType, personalMissionID):
         personalMissionsProgress = self.__getQuestsData()
-        return PersonalMissionProgress(self.__pmStorage.get(personalMissionID, (0, personal_missions.PM_STATE.NONE))[1], personalMissionID in personalMissionsProgress['selected'], pqType.maySelectQuest(self.__pmStorage.keys()), self.getTokenCount(pqType.mainAwardListQuestID) > 0)
+        return self.PersonalMissionProgress(self.__pmStorage.get(personalMissionID, (0, personal_missions.PM_STATE.NONE))[1], personalMissionID in personalMissionsProgress['selected'], pqType.maySelectQuest(self.__pmStorage.keys()), self.getTokenCount(pqType.mainAwardListQuestID) > 0) if personalMissionsProgress else self.PersonalMissionProgress(personal_missions.PM_STATE.NONE, (), 0, False)
+
+    def getConditionsProgress(self, conditionsProgressID):
+        return self.__getConditionsProgress().get(conditionsProgressID, {})
 
     def getPersonalMissionsStorage(self):
         return self.__pmStorage
 
     def getPersonalMissionsFreeSlots(self, removedCount=0):
         pqProgress = self.__getQuestsData()
-        return pqProgress['slots'] - len(pqProgress['selected']) + removedCount
+        return pqProgress['slots'] - len(pqProgress['selected']) + removedCount if pqProgress else 0
 
     def getSelectedPersonalMissionsIDs(self):
-        return self.__getQuestsData()['selected']
+        pqProgress = self.__getQuestsData()
+        return self.__getQuestsData()['selected'] if pqProgress else []
 
     def getTankmanLastIDs(self, nationID):
-        return self.__getQuestsData()['lastIDs'].get(nationID, (-1, -1, -1))
+        pqProgress = self.__getQuestsData()
+        return self.__getQuestsData()['lastIDs'].get(nationID, self._DefaultLastWomanIDs) if pqProgress else self._DefaultLastWomanIDs
 
     def _response(self, resID, value, callback=None):
         if value is not None:
@@ -77,11 +85,8 @@ class _PersonalMissionsProgressRequester(_QuestsProgressRequester):
     def __getPersonalMissionsData(self):
         return self.getCacheValue('potapovQuests', {})
 
+    def __getConditionsProgress(self):
+        return self.getCacheValue('pm2_progress', {})
+
     def __getQuestsData(self):
         return self.__getPersonalMissionsData().get(self._questsType, {})
-
-
-class RandomQuestsProgressRequester(_PersonalMissionsProgressRequester):
-
-    def __init__(self):
-        super(RandomQuestsProgressRequester, self).__init__('regular')

@@ -21,6 +21,7 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'PurchaseForCredits',
  'Selling',
  'Remove',
+ 'MultipleSelling',
  'Repair',
  'CustomizationForGold',
  'CustomizationForCredits',
@@ -32,7 +33,8 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'DismantlingForCrystal',
  'OpenEventBoards',
  'tokenWithMarkAcquired',
- 'footballCardAcquired'])
+ 'PaymentMethodLink',
+ 'PaymentMethodUnlink'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
  Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal}

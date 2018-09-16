@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/gui_items.py
-from collections import namedtuple, defaultdict
+from collections import namedtuple
 from functools import partial
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
+from gui.promo.promo_logger import PromoLogSourceType
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import WGNCShowItemEvent
 from gui.shared.utils.decorators import ReprInjector
@@ -221,12 +222,18 @@ class PollItem(WindowItem):
 
 
 class BrowserItem(_GUIItem):
-    __slots__ = ('_handlers', '__browserID')
+    __slots__ = ('_handlers', '__closeCallbacks')
     promoCtrl = dependency.descriptor(IPromoController)
+    _CLOSE_CALLBACK_KEY = 'close_window'
 
     def __init__(self, name, body, topic='', handlers=None, buttons=None, hidden=True):
         super(BrowserItem, self).__init__(name, body, topic, buttons, hidden)
         self._handlers = handlers
+        if handlers:
+            handlersDict = dict(self._handlers)
+            self.__closeCallbacks = handlersDict.get(self._CLOSE_CALLBACK_KEY, [])
+        else:
+            self.__closeCallbacks = []
 
     def getHandlers(self):
         return self._handlers
@@ -237,16 +244,11 @@ class BrowserItem(_GUIItem):
     def show(self, notID):
         LOG_DEBUG('BrowserItem.show', notID, self._name)
         url = self._body
-        handlersData = defaultdict(list)
-        for gui_event, actions in self._handlers:
-            if gui_event in self.promoCtrl.GUI_EVENTS.ALL():
-                handlersData[gui_event] = partial(self.__handleActions, notID, actions)
-            LOG_WARNING('Unsupported browser gui event="{}"'.format(gui_event))
+        self.promoCtrl.showPromo(url, partial(self.__handleActions, notID), source=PromoLogSourceType.PRMP)
 
-        self.promoCtrl.showPromo(url, self.getTopic(), False, handlersData)
-
-    def __handleActions(self, notID, actionNames):
-        g_wgncEvents.onItemActionFired(notID, actionNames, self.getName())
+    def __handleActions(self, notID):
+        if self.__closeCallbacks:
+            g_wgncEvents.onItemActionFired(notID, self.__closeCallbacks, self.getName())
 
 
 @ReprInjector.simple(('__items', 'items'))

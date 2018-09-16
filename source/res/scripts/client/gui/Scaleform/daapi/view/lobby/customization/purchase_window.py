@@ -8,15 +8,17 @@ from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta, ExchangeCreditsMultiItemsMeta, InfoItemBase
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.CustomizationBuyWindowMeta import CustomizationBuyWindowMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
+from gui.ingame_shop import showBuyGoldForCustomization
 from gui.shared.formatters import text_styles, icons, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.money import Currency
 from gui.shared.events import LobbyHeaderMenuEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
@@ -81,6 +83,12 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
 
     @process
     def buy(self):
+        if self.__moneyState is _MoneyForPurchase.NOT_ENOUGH:
+            if isIngameShopEnabled():
+                cart = getTotalPurchaseInfo(self.__purchaseItems)
+                totalPriceGold = cart.totalPrice.price.get(Currency.GOLD, 0)
+                showBuyGoldForCustomization(totalPriceGold)
+            return
         if self.__moneyState is _MoneyForPurchase.ENOUGH_WITH_EXCHANGE:
             if self.__isStyle:
                 item = self.__purchaseItems[0].item
@@ -163,8 +171,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
             bigTitleTemplate = text_styles.grandTitle(titleTemplate)
         titleText = text_styles.promoTitle(bigTitleTemplate)
         titleTextSmall = text_styles.promoTitle(titleTemplate)
-        self.as_setInitDataS({'buyDisabledTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BUYDISABLED_BODY,
-         'windowTitle': VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_HEADER,
+        self.as_setInitDataS({'windowTitle': VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_HEADER,
          'isStyle': self.__isStyle,
          'titleText': titleText,
          'titleTextSmall': titleTextSmall})
@@ -204,15 +211,17 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         purchase = 1 if self.__isStyle else 0
         purchase += sum([ self.__counters[season][0] for season in SeasonType.COMMON_SEASONS ])
         inventory = sum([ self.__counters[season][1] for season in SeasonType.COMMON_SEASONS ])
+        tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BUYDISABLED_BODY
         if purchase > 0:
             label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNBUY
         else:
             label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNAPPLY
-        isEnabled = self.__moneyState != _MoneyForPurchase.NOT_ENOUGH
+        isEnabled = self.__moneyState is not _MoneyForPurchase.NOT_ENOUGH or isIngameShopEnabled()
         isAnySelected = purchase + inventory > 0
         if not isAnySelected:
             label = ''
-        self.as_setBuyBtnStateS(isEnabled and isAnySelected, label)
+            tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTSELECTEDITEMS
+        self.as_setBuyBtnStateS(isEnabled and isAnySelected, label, tooltip)
 
     def __onServerSettingChanged(self, diff):
         if 'isCustomizationEnabled' in diff and not diff.get('isCustomizationEnabled', True):
@@ -338,7 +347,7 @@ class _SeasonPurchaseInfo(object):
         items = []
         for key in self._ORDERED_KEYS:
             bucket = self.__buckets[key].values()
-            bucket.sort(key=self.__defaultKeyFunc)
+            bucket.sort(key=self.__keyFunc)
             items.extend(bucket)
 
         return items
@@ -393,7 +402,7 @@ class _SeparateItemsProcessor(_ItemsProcessor):
 
     @staticmethod
     def _getKey(item):
-        return (item.intCD, item.isFromInventory)
+        return (not item.isFromInventory, item.intCD)
 
 
 class _StyleItemsProcessor(_ItemsProcessor):

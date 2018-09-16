@@ -49,7 +49,7 @@ def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDeta
     assembler.addNode(TankNodeNames.TRACK_LEFT_MID, TankPartNames.CHASSIS, mathUtils.createTranslationMatrix((-cornerPoint[0], 0, 0)))
     assembler.addNode(TankNodeNames.TRACK_RIGHT_MID, TankPartNames.CHASSIS, mathUtils.createTranslationMatrix((cornerPoint[0], 0, 0)))
     assembler.addNode(TankNodeNames.CHASSIS_MID_TRAIL, TankPartNames.CHASSIS)
-    assembler.assemblerName = vehicleDesc.name
+    assembler.name = vehicleDesc.name
     assembler.spaceID = spaceID
     return assembler
 
@@ -285,7 +285,7 @@ def setupTurretRotations(appearance):
         compoundModel.node(TankPartNames.GUN, appearance.gunMatrix)
 
 
-def createEffects(appearance):
+def createEffects(appearance, isPlayer):
     if gEffectsDisabled():
         appearance.customEffectManager = None
         return
@@ -293,7 +293,7 @@ def createEffects(appearance):
         appearance.customEffectManager = CustomEffectManager(appearance)
         if not appearance.typeDescriptor.hasSiegeMode:
             return
-        appearance.siegeEffects = SiegeEffectsController(appearance)
+        appearance.siegeEffects = SiegeEffectsController(appearance, isPlayer)
         return
 
 
@@ -466,10 +466,10 @@ def __assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks):
         lodDist = vehicleDesc.chassis.splineDesc.lodDist
         lodSettings = LodSettings(lodDist, _SPLINE_TRACKS_MAX_COUNT)
         if splineTracksImpl[0] is not None:
-            leftSplineTrack = Vehicular.SplineTrack(splineTracksImpl[0], appearance.compoundModel)
+            leftSplineTrack = Vehicular.SplineTrack(splineTracksImpl[0], appearance.compoundModel, appearance.wheelsAnimator)
             tracks.addTrackComponent(True, leftSplineTrack, lodSettings)
         if splineTracksImpl[1] is not None:
-            rightSplineTrack = Vehicular.SplineTrack(splineTracksImpl[1], appearance.compoundModel)
+            rightSplineTrack = Vehicular.SplineTrack(splineTracksImpl[1], appearance.compoundModel, appearance.wheelsAnimator)
             tracks.addTrackComponent(False, rightSplineTrack, lodSettings)
         return
 
@@ -477,8 +477,8 @@ def __assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks):
 def assembleTracks(resourceRefs, vehicleDesc, appearance, splineTracksImpl, instantWarmup, lodLink=None):
     tracks = Vehicular.VehicleTracks(appearance.compoundModel, TankPartIndexes.CHASSIS, _AREA_LOD_FOR_NONSIMPLE_TRACKS)
     appearance.tracks = tracks
-    if not __assemblePhysicalTracks(resourceRefs, appearance, tracks, instantWarmup):
-        __assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks)
+    __assemblePhysicalTracks(resourceRefs, appearance, tracks, instantWarmup)
+    __assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks)
     __assembleSimpleTracks(vehicleDesc, appearance.fashion, appearance.wheelsAnimator, tracks)
     vehicleFilter = getattr(appearance, 'filter', None)
     if vehicleFilter is not None:

@@ -1,0 +1,173 @@
+<pm2_5_2_14.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_5_2_14_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions></conditions>
+      <scripts>	
+pass
+         	</scripts>
+      <bonus>
+        <credits>	50000	</credits>
+        <freeXP>	750	</freeXP>
+        <token>
+          <id>	token:pt:final:s2:t5:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_5_2_14_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pm2_5_2_14_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+        <freeXP>	750	</freeXP>
+        <token>
+          <id>	token:pt:final:s2:t5:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_5_2_14_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <results>
+            <key>	damageBlockedByArmor	</key>
+            <max>	1	</max>
+          </results>
+        </postBattle>
+      </conditions>
+      <scripts>	
+LOG = globals().get('LOG')
+""":type: typing.LOG_DEBUG_DEV"""
+
+QUEST_EVENT_TYPE = globals().get('QUEST_EVENT_TYPE')
+""":type: quest_definitions.QUEST_EVENT_TYPE"""
+
+quest_progress = globals().get('quest_progress')
+""":type: quest_progress"""
+
+server_constants = globals().get('server_constants')
+""":type: server_constants"""
+
+items = globals().get('items')
+""":type: items"""
+
+ATTACK_REASON = globals().get('ATTACK_REASON')
+""":type: constants.ATTACK_REASON"""
+
+filters = globals().get('filters')
+""":type: battle_result_event_list_helpers"""
+
+
+TOP_BY_BLOCKED_DAMAGE = 'topByBlockedDamage'
+TOP_BY_BLOCKED_DAMAGE_SERIES = 'topByBlockedDamageSeries'
+BLOCKED_DAMAGE_IN_BATTLE = 'blockedDamageInBattle'
+BLOCKED_DAMAGE_IN_BATTLE_SERIES = 'blockedDamageInBattleSeries'
+
+def onFinishBattle(eventType, eventData, quest, processor):
+    questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
+
+    avatarResults = eventData['avatarResults']
+
+    blockedDamagePosition = avatarResults['misc']['max']['damageBlockedByArmor']
+
+    if blockedDamagePosition &lt;= questProgress.getProgress(TOP_BY_BLOCKED_DAMAGE).getParam('desiredPosition'):
+        questProgress.setCompleted(TOP_BY_BLOCKED_DAMAGE)
+        questProgress.increaseUntilComplete(TOP_BY_BLOCKED_DAMAGE_SERIES, 1)
+
+    ownVehCD = next(iter(eventData['vehCompDescrs']))
+    accDBID = avatarResults['accountDBID']
+    ownVehicleHP = items.vehicles.VehicleDescr(
+        eventData['vehPublicResults']['accountCompDescr'][accDBID][0][1]).maxHealth
+    questProgress.getProgress(BLOCKED_DAMAGE_IN_BATTLE).setGoal(ownVehicleHP*2)
+
+    blockedDamage = avatarResults['damageBlockedByArmor']
+
+    if questProgress.increaseUntilComplete(BLOCKED_DAMAGE_IN_BATTLE, blockedDamage):
+        questProgress.increaseUntilComplete(BLOCKED_DAMAGE_IN_BATTLE_SERIES, 1)
+
+    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=TOP_BY_BLOCKED_DAMAGE_SERIES))
+
+    processor.setQuestProgress(quest.progressID, questProgress.save())
+
+
+def onInit(eventType, eventData, quest, processor):
+    for event in events.iterkeys():
+        processor.subscribe(event, quest)
+    return True
+
+
+events = {
+    QUEST_EVENT_TYPE.INIT: onInit,
+    QUEST_EVENT_TYPE.FINISH_BATTLE: onFinishBattle,
+}
+
+
+def quest(eventType, eventData, quest, processor):
+    LOG('QUEST EVENT:', eventType, quest.id)
+    return events.get(eventType, lambda *args: False)(eventType, eventData, quest, processor)
+         	</scripts>
+      <bonus>
+        <freeXP>	750	</freeXP>
+        <token>
+          <id>	token:pt:final:s2:t5:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_5_2_14_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pm2_5_2_14_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	addQuestCompleted	</key>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list_2	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm2_5_2_14.xml>

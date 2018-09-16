@@ -38,8 +38,6 @@ _HIST_BATTLEFIELD_POSTFIX = 'battlefield'
 TANK_EXPERT_GROUP = [_total(_TANK_EXPERT_PREFIX)]
 MECH_ENGINEER_GROUP = [_total(_MECH_ENGINEER_PREFIX)]
 for _nID, name in enumerate(nations.AVAILABLE_NAMES):
-    if name == 'poland':
-        continue
     TANK_EXPERT_GROUP.append(_total('%s%d' % (_TANK_EXPERT_PREFIX, _nID)))
     MECH_ENGINEER_GROUP.append(_total('%s%d' % (_MECH_ENGINEER_PREFIX, _nID)))
 
@@ -50,7 +48,12 @@ PERSONAL_MISSIONS_GROUP = [_single('firstMerit'),
  _total('readyForBattleSPG'),
  _total('readyForBattleATSPG'),
  _total('readyForBattleALL'),
- _total('tankwomenProgress')]
+ _total('tankwomenProgress'),
+ _total('readyForBattleAllianceUSSR'),
+ _total('readyForBattleAllianceGermany'),
+ _total('readyForBattleAllianceUSA'),
+ _total('readyForBattleAllianceFrance'),
+ _single('newMeritPM2')]
 CHRISTMAS_QUESTS_GROUP = [_single('xmasTreeBronze'), _single('xmasTreeSilver'), _single('xmasTreeGold')]
 HE17_QUESTS_GROUP = [_single('HE17A1'), _single('HE17A2'), _single('HE17A3')]
 NY18_QUESTS_GROUP = [_single('NY18A1'), _single('NY18A2'), _single('NY18A3')]
@@ -133,7 +136,11 @@ NEAREST_ACHIEVEMENTS = TANK_EXPERT_GROUP + MECH_ENGINEER_GROUP + [_total('mouseb
  _7x7('wolfAmongSheepMedal'),
  _7x7('fightingReconnaissanceMedal'),
  _7x7('crucialShotMedal'),
- _7x7('forTacticalOperations')]
+ _7x7('forTacticalOperations'),
+ _total('readyForBattleAllianceUSSR'),
+ _total('readyForBattleAllianceGermany'),
+ _total('readyForBattleAllianceUSA'),
+ _total('readyForBattleAllianceFrance')]
 
 def init():
     global _EXCLUDED_ACHIEVES

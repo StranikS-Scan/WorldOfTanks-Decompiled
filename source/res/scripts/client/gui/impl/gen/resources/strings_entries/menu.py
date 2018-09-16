@@ -10,48 +10,48 @@ class Menu(DynAccessor):
 
         class profile(DynAccessor):
             __slots__ = ()
-            emptyBattleList = 1509
+            emptyBattleList = 1526
 
     class accountInfo(DynAccessor):
         __slots__ = ()
-        credits = 536
-        crystal = 538
-        experience = 535
-        gold = 537
+        credits = 548
+        crystal = 550
+        experience = 547
+        gold = 549
 
     class accountTypes(DynAccessor):
         __slots__ = ()
-        base = 929
-        demo = 931
-        free = 928
-        guest = 927
-        premium = 930
+        base = 944
+        demo = 946
+        free = 943
+        guest = 942
+        premium = 945
 
     class ammoReload(DynAccessor):
         __slots__ = ()
-        additionBuy = 427
-        ammunition = 437
-        autoFill = 433
-        cancel = 435
-        clearAmmunition = 434
+        additionBuy = 439
+        ammunition = 449
+        autoFill = 445
+        cancel = 447
+        clearAmmunition = 446
 
         class damage(DynAccessor):
             __slots__ = ()
-            title = 431
-            units = 432
+            title = 443
+            units = 444
 
-        fill = 436
-        inTank = 428
-        onInventory = 426
+        fill = 448
+        inTank = 440
+        onInventory = 438
 
         class piercingPower(DynAccessor):
             __slots__ = ()
-            title = 429
-            units = 430
+            title = 441
+            units = 442
 
-        reloadTitle = 425
-        title = 424
-        totalcost = 438
+        reloadTitle = 437
+        title = 436
+        totalcost = 450
 
     class awardWindow(DynAccessor):
         __slots__ = ()
@@ -61,374 +61,381 @@ class Menu(DynAccessor):
 
             class activateBtn(DynAccessor):
                 __slots__ = ()
-                label = 1688
+                label = 1716
 
-            additional = 1687
+            additional = 1715
 
             class description(DynAccessor):
                 __slots__ = ()
-                tillTime = 1684
+                tillTime = 1712
 
                 class timeValue(DynAccessor):
                     __slots__ = ()
-                    defined = 1685
-                    undefined = 1686
+                    defined = 1713
+                    undefined = 1714
 
-            header = 1683
+            header = 1711
 
-        closeButton = 1645
+        closeButton = 1673
 
         class mission(DynAccessor):
             __slots__ = ()
-            additionalComplete = 1717
-            additionalNotComplete = 1718
-            available = 1713
-            complete = 1710
-            conditionComplete = 1711
-            mainConditionComplete = 1712
+            additionalComplete = 1745
+            additionalNotComplete = 1746
+            available = 1741
+            complete = 1738
+            conditionComplete = 1739
+            mainConditionComplete = 1740
 
             class nextButton(DynAccessor):
                 __slots__ = ()
 
                 class tooltip(DynAccessor):
                     __slots__ = ()
-                    body = 1716
-                    header = 1715
+                    body = 1744
+                    header = 1743
 
-            nextButton_ = 4974
+            nextButton_ = 1742
 
-        okButton = 1643
+        okButton = 1671
 
         class personalDiscountAward(DynAccessor):
             __slots__ = ()
 
             class activateBtn(DynAccessor):
                 __slots__ = ()
-                label = 1701
+                label = 1729
 
             class additional(DynAccessor):
                 __slots__ = ()
 
                 class experience(DynAccessor):
                     __slots__ = ()
-                    rent = 1699
+                    rent = 1727
 
-                slot = 1698
+                slot = 1726
 
             class award(DynAccessor):
                 __slots__ = ()
-                experience = 1696
-                slot = 1695
-                training = 1697
+                experience = 1724
+                slot = 1723
+                training = 1725
 
             class description(DynAccessor):
                 __slots__ = ()
 
                 class experience(DynAccessor):
                     __slots__ = ()
-                    rent = 1693
+                    rent = 1721
 
-                experience_ = 4975
-                slot = 1691
-                training = 1694
+                experience_ = 1720
+                slot = 1719
+                training = 1722
 
-            header = 1690
-            rewardText = 1700
-            title = 1689
+            header = 1718
+            rewardText = 1728
+            title = 1717
 
         class personalMission(DynAccessor):
             __slots__ = ()
-            alreadyCompleted = 1722
-            available = 1725
-            complete = 1719
-            completeWithHonors = 1720
-            mainConditionCompleted = 1721
+            alreadyCompleted = 1750
+            available = 1753
+            complete = 1747
+            completeWithHonors = 1748
+            mainConditionCompleted = 1749
 
             class nextButton(DynAccessor):
                 __slots__ = ()
 
                 class tooltip(DynAccessor):
                     __slots__ = ()
-                    body = 1728
-                    header = 1727
+                    body = 1756
+                    header = 1755
 
-            nextButton_ = 4976
+            nextButton_ = 1754
 
             class nextButtonAward(DynAccessor):
                 __slots__ = ()
 
                 class tooltip(DynAccessor):
                     __slots__ = ()
-                    body = 1731
-                    header = 1730
+                    body = 1759
+                    header = 1758
 
-            nextButtonAward_ = 4977
-            sideConditionCompleted = 1723
-            sideConditionNotCompleted = 1724
+            nextButtonAward_ = 1757
+            sideConditionCompleted = 1751
+            sideConditionNotCompleted = 1752
 
         class quests(DynAccessor):
             __slots__ = ()
 
             class medals(DynAccessor):
                 __slots__ = ()
-                header = 1654
+                header = 1682
 
             class taskComplete(DynAccessor):
                 __slots__ = ()
-                additional = 1650
-                additionalNotComplete = 1651
-                awardForComlete = 1652
-                awardRecieved = 1653
-                description = 1648
-                header = 1647
-                nextTaskAutoChoice = 1649
+                additional = 1678
+                additionalNotComplete = 1679
+                awardForComlete = 1680
+                awardRecieved = 1681
+                description = 1676
+                header = 1675
+                nextTaskAutoChoice = 1677
 
             class vehicle(DynAccessor):
                 __slots__ = ()
-                description = 1656
-                header = 1655
+                description = 1684
+                header = 1683
 
-        recruitButton = 1646
+        recruitButton = 1674
 
         class referral(DynAccessor):
             __slots__ = ()
-            complete = 1665
+            complete = 1693
 
             class credits(DynAccessor):
                 __slots__ = ()
-                description = 1667
-                header = 1666
+                description = 1695
+                header = 1694
 
-            nextTankman = 1664
+            nextTankman = 1692
 
             class tankman(DynAccessor):
                 __slots__ = ()
 
                 class description(DynAccessor):
                     __slots__ = ()
-                    normal = 1658
-                    noXp = 1659
+                    normal = 1686
+                    noXp = 1687
 
-                header = 1657
+                header = 1685
 
             class vehicle(DynAccessor):
                 __slots__ = ()
 
                 class description(DynAccessor):
                     __slots__ = ()
-                    bought = 1663
-                    normal = 1661
-                    noXp = 1662
+                    bought = 1691
+                    normal = 1689
+                    noXp = 1690
 
-                header = 1660
+                header = 1688
 
         class specialAchievement(DynAccessor):
             __slots__ = ()
 
             class battle(DynAccessor):
                 __slots__ = ()
-                description1 = 1676
-                description2 = 1677
-                description3 = 1678
-                description4 = 1679
+                description1 = 1704
+                description2 = 1705
+                description3 = 1706
+                description4 = 1707
 
-            header = 1681
+            header = 1709
 
             class pveBattle(DynAccessor):
                 __slots__ = ()
-                description = 1680
+                description = 1708
 
             class research(DynAccessor):
                 __slots__ = ()
-                description1 = 1668
-                description2 = 1669
-                description3 = 1670
-                description4 = 1671
+                description1 = 1696
+                description2 = 1697
+                description3 = 1698
+                description4 = 1699
 
             class victory(DynAccessor):
                 __slots__ = ()
-                description1 = 1672
-                description2 = 1673
-                description3 = 1674
-                description4 = 1675
+                description1 = 1700
+                description2 = 1701
+                description3 = 1702
+                description4 = 1703
 
-        takeNextButton = 1644
+        takeNextButton = 1672
 
         class telecomAward(DynAccessor):
             __slots__ = ()
 
             class button(DynAccessor):
                 __slots__ = ()
-                label = 1709
+                label = 1737
 
             class description(DynAccessor):
                 __slots__ = ()
-                prem = 1706
-                withBrotherhood = 1704
-                withoutCrew = 1705
+                prem = 1734
+                withBrotherhood = 1732
+                withoutCrew = 1733
 
-            description_ = 4978
-            header = 1702
-            subdescription = 1708
-            vehicles = 1707
+            description_ = 1731
+            header = 1730
+            subdescription = 1736
+            vehicles = 1735
 
         class title(DynAccessor):
             __slots__ = ()
-            boosterAward = 1682
-            credits = 1638
-            info = 1642
-            newMedals = 1637
-            newTankman = 1635
-            newVehicle = 1636
-            specialAchievement = 1641
-            taskComplete = 1640
-            tokens = 1639
+            boosterAward = 1710
+            credits = 1666
+            info = 1670
+            newMedals = 1665
+            newTankman = 1663
+            newVehicle = 1664
+            specialAchievement = 1669
+            taskComplete = 1668
+            tokens = 1667
 
     class barracks(DynAccessor):
         __slots__ = ()
 
         class barracksRenderer(DynAccessor):
             __slots__ = ()
-            placesCount = 1127
+            placesCount = 1144
 
-        btnBuyBerth = 1108
-        btnBuyBerthDecs = 1109
-        btnBuyTankman = 1107
-        btnDissmiss = 1130
-        btnNewPlace = 1128
-        btnRecovery = 1131
-        btnRecruit = 1124
-        btnUnload = 1129
-        dismissedTankmenCount = 1122
+        btnBuyBerth = 1125
+        btnBuyBerthDecs = 1126
+        btnBuyTankman = 1124
+        btnDissmiss = 1147
+        btnNewPlace = 1145
+        btnRecovery = 1148
+        btnRecruit = 1141
+        btnUnload = 1146
+        dismissedTankmenCount = 1139
 
         class menu(DynAccessor):
             __slots__ = ()
 
             class locationFilter(DynAccessor):
                 __slots__ = ()
-                barracks = 1119
-                barracksAndTanks = 1120
-                dismissed = 1121
-                tanks = 1118
-                textfield = 1117
+                barracks = 1136
+                barracksAndTanks = 1137
+                dismissed = 1138
+                tanks = 1135
+                textfield = 1134
 
             class roleFilter(DynAccessor):
                 __slots__ = ()
-                all = 1110
-                commander = 1111
-                driver = 1115
-                gunner = 1113
-                loader = 1114
-                radioman = 1112
-                textfield = 1106
+                all = 1127
+                commander = 1128
+                driver = 1132
+                gunner = 1130
+                loader = 1131
+                radioman = 1129
+                textfield = 1123
 
             class tankTypeFilter(DynAccessor):
                 __slots__ = ()
-                textfield = 1116
+                textfield = 1133
 
         class noFilteredRecoveryTankmen(DynAccessor):
             __slots__ = ()
-            message = 1134
+            message = 1151
 
         class noRecoveryTankmen(DynAccessor):
             __slots__ = ()
-            message = 1133
-            title = 1132
+            message = 1150
+            title = 1149
 
-        placesCount = 1125
-        recoveryCount = 1126
-        tankmenCount = 1123
+        placesCount = 1142
+        recoveryCount = 1143
+        tankmenCount = 1140
 
     class battleAbility(DynAccessor):
         __slots__ = ()
-        title = 839
+        title = 854
 
     class bonusType(DynAccessor):
         __slots__ = ()
-        c_0 = 1561
-        c_1 = 1562
-        c_10 = 1570
-        c_11 = 1571
-        c_12 = 1572
-        c_13 = 1573
-        c_16 = 1574
-        c_18 = 1575
-        c_19 = 1576
-        c_2 = 1563
-        c_20 = 1577
-        c_21 = 1578
-        c_22 = 1579
-        c_24 = 1580
-        c_4 = 1564
-        c_5 = 1565
-        c_6 = 1566
-        c_7 = 1567
-        c_8 = 1568
-        c_9 = 1569
+        c_0 = 1577
+        c_1 = 1578
+        c_10 = 1586
+        c_11 = 1587
+        c_12 = 1588
+        c_13 = 1589
+        c_16 = 1590
+        c_18 = 1591
+        c_19 = 1592
+        c_2 = 1579
+        c_20 = 1593
+        c_21 = 1594
+        c_22 = 1595
+        c_24 = 1596
+        c_4 = 1580
+        c_5 = 1581
+        c_6 = 1582
+        c_7 = 1583
+        c_8 = 1584
+        c_9 = 1585
 
     class booster(DynAccessor):
         __slots__ = ()
 
+        class bonus(DynAccessor):
+            __slots__ = ()
+            booster_credits = 1855
+            booster_crew_xp = 1852
+            booster_free_xp = 1849
+            booster_xp = 1846
+
         class description(DynAccessor):
             __slots__ = ()
-            booster_credits = 1811
-            booster_crew_xp = 1809
-            booster_free_xp = 1807
-            booster_repair = 1813
-            booster_xp = 1805
-            effectTime = 1814
+            booster_credits = 1854
+            booster_crew_xp = 1851
+            booster_free_xp = 1848
+            booster_repair = 1857
+            booster_xp = 1845
+            effectTime = 1858
 
         class quality(DynAccessor):
             __slots__ = ()
-            big = 1817
-            medium = 1816
-            small = 1815
+            big = 1861
+            medium = 1860
+            small = 1859
 
         class userName(DynAccessor):
             __slots__ = ()
-            booster_credits = 1810
-            booster_crew_xp = 1808
-            booster_free_xp = 1806
-            booster_repair = 1812
-            booster_xp = 1804
+            booster_credits = 1853
+            booster_crew_xp = 1850
+            booster_free_xp = 1847
+            booster_repair = 1856
+            booster_xp = 1844
 
     class boosterBuyWindow(DynAccessor):
         __slots__ = ()
-        buyButtonLabel = 1857
-        buyCount = 1860
-        cancelButtonLabel = 1858
-        inHangarCount = 1861
-        rearmCheckboxLabel = 1863
-        totalLabel = 1859
-        totalPrice = 1862
-        windowTitle = 1856
+        buyButtonLabel = 1902
+        buyCount = 1905
+        cancelButtonLabel = 1903
+        inHangarCount = 1906
+        rearmCheckboxLabel = 1908
+        totalLabel = 1904
+        totalPrice = 1907
+        windowTitle = 1901
 
     class boosterFittingRenderer(DynAccessor):
         __slots__ = ()
-        buyButton = 1845
-        removeButton = 1846
+        buyButton = 1889
+        removeButton = 1890
 
     class boosterInstallWindow(DynAccessor):
         __slots__ = ()
-        cantWorkStatus = 1843
-        installButton = 1844
-        message = 1842
-        title = 1841
+        cantWorkStatus = 1887
+        installButton = 1888
+        message = 1886
+        title = 1885
 
     class boosterSelectPopover(DynAccessor):
         __slots__ = ()
-        rearmCheckBoxLabel = 1838
+        rearmCheckBoxLabel = 1882
 
         class tabs(DynAccessor):
             __slots__ = ()
-            forCrew = 1839
-            forEquipment = 1840
+            forCrew = 1883
+            forEquipment = 1884
 
-        title = 1837
+        title = 1881
 
     class boostersWindow(DynAccessor):
         __slots__ = ()
-        activeBoosters = 1793
+        activeBoosters = 1833
 
         class boostersTable(DynAccessor):
             __slots__ = ()
@@ -438,46 +445,46 @@ class Menu(DynAccessor):
 
                 class empty(DynAccessor):
                     __slots__ = ()
-                    message = 1803
+                    message = 1843
 
                 class notFound(DynAccessor):
                     __slots__ = ()
-                    message = 1802
-                    title = 1801
+                    message = 1842
+                    title = 1841
 
         class boostersTableRenderer(DynAccessor):
             __slots__ = ()
-            activateBtnLabel = 1798
-            buyBtnLabel = 1799
-            goToQuestBtnLabel = 1800
-            header = 1794
-            questForOpen = 1797
-            time = 1795
-            undefineTime = 1796
+            activateBtnLabel = 1838
+            buyBtnLabel = 1839
+            goToQuestBtnLabel = 1840
+            header = 1834
+            questForOpen = 1837
+            time = 1835
+            undefineTime = 1836
 
         class closeBtn(DynAccessor):
             __slots__ = ()
-            label = 1786
+            label = 1826
 
         class levelFilters(DynAccessor):
             __slots__ = ()
-            label = 1788
+            label = 1828
 
         class returnBtn(DynAccessor):
             __slots__ = ()
-            label = 1787
+            label = 1827
 
         class tabs(DynAccessor):
             __slots__ = ()
-            availableLabel = 1790
-            buyLabel = 1792
-            notAvailableLabel = 1791
+            availableLabel = 1830
+            buyLabel = 1832
+            notAvailableLabel = 1831
 
-        title = 1785
+        title = 1825
 
         class typeFilters(DynAccessor):
             __slots__ = ()
-            label = 1789
+            label = 1829
 
     class browser(DynAccessor):
         __slots__ = ()
@@ -487,356 +494,376 @@ class Menu(DynAccessor):
 
             class fort(DynAccessor):
                 __slots__ = ()
-                congratulation = 1529
-                offensiveResult = 1528
+                congratulation = 1541
+                offensiveResult = 1540
 
         class dataUnavailable(DynAccessor):
             __slots__ = ()
-            description = 1527
-            header = 1526
+            description = 1539
+            header = 1538
 
         class window(DynAccessor):
             __slots__ = ()
-            title = 1525
+            title = 1537
 
     class carousel_tank_filter(DynAccessor):
         __slots__ = ()
-        all = 317
-        AT_SPG = 321
-        heavyTank = 320
-        lightTank = 318
-        mediumTank = 319
-        ready = 323
-        SPG = 322
+        all = 329
+        AT_SPG = 333
+        heavyTank = 332
+        lightTank = 330
+        mediumTank = 331
+        ready = 335
+        SPG = 334
 
     class carouselFilter(DynAccessor):
         __slots__ = ()
-        igr = 499
+        igr = 511
 
-    centerIsAvailable = 1507
-    centerIsUnAvailable = 1508
+    centerIsAvailable = 1524
+    centerIsUnAvailable = 1525
 
     class classes(DynAccessor):
         __slots__ = ()
-        anyType = 1554
-        AT_SPG = 1553
-        heavyTank = 1551
-        lightTank = 1549
-        mediumTank = 1550
+        anyType = 1570
+        AT_SPG = 1569
+        heavyTank = 1567
+        lightTank = 1565
+        mediumTank = 1566
 
         class short(DynAccessor):
             __slots__ = ()
-            AT_SPG = 1548
-            heavyTank = 1546
-            lightTank = 1544
-            mediumTank = 1545
-            SPG = 1547
+            Alliance_France = 1564
+            Alliance_Germany = 1562
+            Alliance_USA = 1563
+            Alliance_USSR = 1561
+            AT_SPG = 1560
+            heavyTank = 1558
+            lightTank = 1556
+            mediumTank = 1557
+            SPG = 1559
 
-        SPG = 1552
+        SPG = 1568
 
     class common(DynAccessor):
         __slots__ = ()
-        premiumBuy = 815
-        premiumContinue = 816
+        premiumBuy = 830
+        premiumContinue = 831
 
     class contextMenu(DynAccessor):
         __slots__ = ()
-        acceptInvitationToSquad = 1485
-        addToFriends = 1419
-        addToFriendsAgain = 1420
-        addToIgnored = 1423
-        appeal = 1455
-        assignOfficer = 1461
-        assignPrivate = 1460
-        bot = 1459
-        buy = 1437
-        buyAndEquip = 1443
-        buyOrTradeIn = 1438
-        cancelBuy = 1441
-        clanInfo = 1415
-        compare = 1477
-        copyClanName = 1821
-        copyToClipBoard = 1427
-        createContactNote = 1474
-        createEventSquad = 1453
-        createPrivateChannel = 1418
-        createSquad = 1452
-        disableCommunications = 1426
-        dismiss = 1468
-        editContactNote = 1475
-        enableCommunications = 1425
-        equip = 1444
-        excludedFromSquad = 1482
-        forbiddenNick = 1458
-        giveEquipmentCommander = 1450
-        giveLeadership = 1448
-        goToNationTree = 1405
-        goToNextVehicle = 1406
-        incorrectBehavior = 1456
-        inSquad = 1480
-        invite = 1454
-        kickPlayerFromPrebattle = 1446
-        kickPlayerFromUnit = 1447
-        leaveSquad = 1481
-        lockSlot = 1469
+        acceptInvitationToSquad = 1502
+        addToFriends = 1436
+        addToFriendsAgain = 1437
+        addToIgnored = 1440
+        appeal = 1472
+        assignOfficer = 1478
+        assignPrivate = 1477
+        bot = 1476
+        buy = 1454
+        buyAndEquip = 1460
+        buyOrTradeIn = 1455
+        cancelBuy = 1458
+        clanInfo = 1432
+        compare = 1494
+        copyClanName = 1865
+        copyToClipBoard = 1444
+        createContactNote = 1491
+        createEventSquad = 1470
+        createPrivateChannel = 1435
+        createSquad = 1469
+        disableCommunications = 1443
+        dismiss = 1485
+        editContactNote = 1492
+        enableCommunications = 1442
+        equip = 1461
+        excludedFromSquad = 1499
+        forbiddenNick = 1475
+        giveEquipmentCommander = 1467
+        giveLeadership = 1465
+        goToNationTree = 1422
+        goToNextVehicle = 1423
+        incorrectBehavior = 1473
+        inSquad = 1497
+        invite = 1471
+        kickPlayerFromPrebattle = 1463
+        kickPlayerFromUnit = 1464
+        leaveSquad = 1498
+        lockSlot = 1486
 
         class messenger(DynAccessor):
             __slots__ = ()
-            closeAllExceptCurrent = 1473
-            closeCurrent = 1472
-            minimizeAll = 1471
+            closeAllExceptCurrent = 1490
+            closeCurrent = 1489
+            minimizeAll = 1488
 
-        moduleInfo = 1430
-        moneyTransfer = 1417
-        notFairPlay = 1457
+        moduleInfo = 1447
+        moneyTransfer = 1434
+        notFairPlay = 1474
 
         class personalCase(DynAccessor):
             __slots__ = ()
 
             class stats(DynAccessor):
                 __slots__ = ()
-                firstInfo = 1464
-                secondInfo = 1465
+                firstInfo = 1481
+                secondInfo = 1482
 
-            statsBlockTitle = 1463
+            statsBlockTitle = 1480
 
-        personalCase_ = 4979
-        profileVehicleCompare = 1479
-        rejectFriendship = 1421
-        rejectInvitationToSquad = 1486
-        removeContactNote = 1476
-        removeFromFriends = 1422
-        removeFromIgnored = 1424
-        restore = 1439
-        selectVehicleInHangar = 1433
-        sell = 1431
-        sellFromInventory = 1432
-        sendClanInvite = 1416
-        sendInvitationToSquad = 1483
-        setMuted = 1428
-        showVehiclePreview = 1435
-        showVehicleStatistics = 1434
-        takeEquipmentCommander = 1449
-        takeLeadership = 1451
-        tankmanUnload = 1466
-        tankmanUnloadAll = 1467
-        unequip = 1442
-        unload = 1440
-        unlock = 1445
-        unlockSlot = 1470
-        unsetMuted = 1429
-        userInfo = 1414
-        userVehicleCompare = 1478
-        vehicleBuy = 1411
-        vehicleCheck = 1409
-        vehicleInfo = 1403
-        vehicleInfoEx = 1404
-        vehiclePreview = 1436
-        vehicleRemove = 1413
-        vehicleResearch = 1408
-        vehicleRestore = 1412
-        vehicleSell = 1407
-        vehicleUncheck = 1410
-        viewClanProfile = 1820
-        withdrawInvitationToSquad = 1484
+        personalCase_ = 1479
+        profileVehicleCompare = 1496
+        rejectFriendship = 1438
+        rejectInvitationToSquad = 1503
+        removeContactNote = 1493
+        removeFromFriends = 1439
+        removeFromIgnored = 1441
+        restore = 1456
+        selectVehicleInHangar = 1450
+        sell = 1448
+        sellFromInventory = 1449
+        sendClanInvite = 1433
+        sendInvitationToSquad = 1500
+        setMuted = 1445
+        showVehiclePreview = 1452
+        showVehicleStatistics = 1451
+        takeEquipmentCommander = 1466
+        takeLeadership = 1468
+        tankmanUnload = 1483
+        tankmanUnloadAll = 1484
+        unequip = 1459
+        unload = 1457
+        unlock = 1462
+        unlockSlot = 1487
+        unsetMuted = 1446
+        userInfo = 1431
+        userVehicleCompare = 1495
+        vehicleBuy = 1428
+        vehicleCheck = 1426
+        vehicleInfo = 1420
+        vehicleInfoEx = 1421
+        vehiclePreview = 1453
+        vehicleRemove = 1430
+        vehicleResearch = 1425
+        vehicleRestore = 1429
+        vehicleSell = 1424
+        vehicleUncheck = 1427
+        viewClanProfile = 1864
+        withdrawInvitationToSquad = 1501
 
-    copy = 88
+    copy = 102
 
     class crystals(DynAccessor):
         __slots__ = ()
 
         class promoWindow(DynAccessor):
             __slots__ = ()
-            closebtn = 1855
-            header = 1847
-            subDescr0 = 1850
-            subDescr1 = 1852
-            subDescr2 = 1854
-            subTitle0 = 1849
-            subTitle1 = 1851
-            subTitle2 = 1853
-            title = 1848
+            closebtn = 1899
+            header = 1891
+            openShopBtnLabel = 1900
+            subDescr0 = 1894
+            subDescr1 = 1896
+            subDescr2 = 1898
+            subTitle0 = 1893
+            subTitle1 = 1895
+            subTitle2 = 1897
+            title = 1892
 
     class cst_item_ctx_menu(DynAccessor):
         __slots__ = ()
-        buy = 1872
-        removeFromTank = 1874
-        sell = 1873
+        allowSale = 1922
+        buy = 1917
+        information = 1920
+        prohibitSale = 1921
+        removeFromTank = 1919
+        sell = 1918
 
     class currentVehicleStatus(DynAccessor):
         __slots__ = ()
-        ammoNotFull = 395
-        ammoNotFullEvents = 396
-        battle = 386
-        clanLocked = 394
-        crewNotFull = 404
-        damaged = 397
-        dealIsOver = 412
-        destroyed = 398
-        exploded = 399
-        fallout_broken = 410
-        fallout_max = 407
-        fallout_min = 406
-        fallout_only = 411
-        fallout_required = 409
-        group_is_not_ready = 405
-        igrRentalIsOver = 389
-        inPrebattle = 387
-        inPremiumIgrOnly = 391
-        isRentable = 390
-        locked = 393
-        notpresent = 400
-        notValidVehicle = 403
-        rentalIsOver = 388
-        rotationGroupLocked = 415
-        rotationGroupUnlocked = 414
-        serverRestriction = 392
-        undamaged = 401
-        unsuitableToQueue = 408
-        unsuitableToUnit = 413
-        waitingPlayer = 402
+        ammoNotFull = 407
+        ammoNotFullEvents = 408
+        battle = 398
+        clanLocked = 406
+        crewNotFull = 416
+        damaged = 409
+        dealIsOver = 424
+        destroyed = 410
+        exploded = 411
+        fallout_broken = 422
+        fallout_max = 419
+        fallout_min = 418
+        fallout_only = 423
+        fallout_required = 421
+        group_is_not_ready = 417
+        igrRentalIsOver = 401
+        inPrebattle = 399
+        inPremiumIgrOnly = 403
+        isRentable = 402
+        locked = 405
+        notpresent = 412
+        notValidVehicle = 415
+        rentalIsOver = 400
+        rotationGroupLocked = 427
+        rotationGroupUnlocked = 426
+        serverRestriction = 404
+        undamaged = 413
+        unsuitableToQueue = 420
+        unsuitableToUnit = 425
+        waitingPlayer = 414
 
     class customization(DynAccessor):
         __slots__ = ()
-        title = 1400
+        title = 1417
 
     class dateTime(DynAccessor):
         __slots__ = ()
 
         class months(DynAccessor):
             __slots__ = ()
+            c_1 = 1634
+            c_10 = 1643
+            c_11 = 1644
+            c_12 = 1645
+            c_2 = 1635
+            c_3 = 1636
+            c_4 = 1637
+            c_5 = 1638
+            c_6 = 1639
+            c_7 = 1640
+            c_8 = 1641
+            c_9 = 1642
 
             class full(DynAccessor):
                 __slots__ = ()
-                c_1 = 1606
-                c_10 = 1615
-                c_11 = 1616
-                c_12 = 1617
-                c_2 = 1607
-                c_3 = 1608
-                c_4 = 1609
-                c_5 = 1610
-                c_6 = 1611
-                c_7 = 1612
-                c_8 = 1613
-                c_9 = 1614
+                c_1 = 1622
+                c_10 = 1631
+                c_11 = 1632
+                c_12 = 1633
+                c_2 = 1623
+                c_3 = 1624
+                c_4 = 1625
+                c_5 = 1626
+                c_6 = 1627
+                c_7 = 1628
+                c_8 = 1629
+                c_9 = 1630
 
             class short(DynAccessor):
                 __slots__ = ()
-                c_1 = 1618
-                c_10 = 1627
-                c_11 = 1628
-                c_12 = 1629
-                c_2 = 1619
-                c_3 = 1620
-                c_4 = 1621
-                c_5 = 1622
-                c_6 = 1623
-                c_7 = 1624
-                c_8 = 1625
-                c_9 = 1626
+                c_1 = 1646
+                c_10 = 1655
+                c_11 = 1656
+                c_12 = 1657
+                c_2 = 1647
+                c_3 = 1648
+                c_4 = 1649
+                c_5 = 1650
+                c_6 = 1651
+                c_7 = 1652
+                c_8 = 1653
+                c_9 = 1654
 
-        shortDateFormatWithoutYear = 1630
+        shortDateFormatWithoutYear = 1658
 
         class weekDays(DynAccessor):
             __slots__ = ()
 
             class full(DynAccessor):
                 __slots__ = ()
-                c_1 = 1592
-                c_2 = 1593
-                c_3 = 1594
-                c_4 = 1595
-                c_5 = 1596
-                c_6 = 1597
-                c_7 = 1598
+                c_1 = 1608
+                c_2 = 1609
+                c_3 = 1610
+                c_4 = 1611
+                c_5 = 1612
+                c_6 = 1613
+                c_7 = 1614
 
             class short(DynAccessor):
                 __slots__ = ()
-                c_1 = 1599
-                c_2 = 1600
-                c_3 = 1601
-                c_4 = 1602
-                c_5 = 1603
-                c_6 = 1604
-                c_7 = 1605
+                c_1 = 1615
+                c_2 = 1616
+                c_3 = 1617
+                c_4 = 1618
+                c_5 = 1619
+                c_6 = 1620
+                c_7 = 1621
 
     class demonstrator(DynAccessor):
         __slots__ = ()
 
         class window(DynAccessor):
             __slots__ = ()
-            info = 1557
-            title = 1556
+            info = 1573
+            title = 1572
 
     class denunciation(DynAccessor):
         __slots__ = ()
-        c_1 = 1487
-        c_2 = 1488
-        c_3 = 1489
-        c_7 = 1490
+        c_1 = 1504
+        c_2 = 1505
+        c_3 = 1506
+        c_7 = 1507
 
     class descriptions(DynAccessor):
         __slots__ = ()
-        shell = 624
-        shellFull = 625
-        vehicle = 617
-        vehicleChassis = 622
-        vehicleEngine = 621
+        shell = 636
+        shellFull = 637
+        vehicle = 629
+        vehicleChassis = 634
+        vehicleEngine = 633
 
         class vehicleGun(DynAccessor):
             __slots__ = ()
-            autoReload = 619
+            autoReload = 631
 
-        vehicleGun_ = 4980
-        vehicleRadio = 623
-        vehicleTurret = 620
+        vehicleGun_ = 630
+        vehicleRadio = 635
+        vehicleTurret = 632
 
     class disconnect(DynAccessor):
         __slots__ = ()
 
         class codes(DynAccessor):
             __slots__ = ()
-            c_0 = 1530
-            c_1001 = 1531
-            c_1002 = 1532
-            c_1003 = 1533
-            c_1004 = 1534
-            c_1005 = 1535
-            c_1006 = 1536
-            c_1007 = 1537
-            c_1008 = 1538
-            c_1009 = 1539
-            c_1010 = 1540
-            c_1011 = 1541
-            c_1012 = 1542
-            c_1013 = 1543
+            c_0 = 1542
+            c_1001 = 1543
+            c_1002 = 1544
+            c_1003 = 1545
+            c_1004 = 1546
+            c_1005 = 1547
+            c_1006 = 1548
+            c_1007 = 1549
+            c_1008 = 1550
+            c_1009 = 1551
+            c_1010 = 1552
+            c_1011 = 1553
+            c_1012 = 1554
+            c_1013 = 1555
 
     class discount(DynAccessor):
         __slots__ = ()
 
         class description(DynAccessor):
             __slots__ = ()
-            vehicle = 1819
+            vehicle = 1863
 
         class userName(DynAccessor):
             __slots__ = ()
-            vehicle = 1818
+            vehicle = 1862
 
     class equipmentFits(DynAccessor):
         __slots__ = ()
-        title = 841
+        title = 856
 
     class exchange(DynAccessor):
         __slots__ = ()
-        cancel = 848
-        no_gold = 849
-        onhand = 844
-        rate = 843
-        result = 846
-        submit = 847
-        title = 842
-        toexchange = 845
+        cancel = 863
+        no_gold = 864
+        onhand = 859
+        rate = 858
+        result = 861
+        submit = 862
+        title = 857
+        toexchange = 860
 
     class exchangeXP(DynAccessor):
         __slots__ = ()
@@ -846,15 +873,15 @@ class Menu(DynAccessor):
 
             class forFree(DynAccessor):
                 __slots__ = ()
-                label = 856
-                value = 857
+                label = 871
+                value = 872
 
-        available_ = 4981
-        cancel = 855
-        change = 852
-        pay = 853
-        submit = 854
-        title = 850
+        available_ = 866
+        cancel = 870
+        change = 867
+        pay = 868
+        submit = 869
+        title = 865
 
     class finalStatistic(DynAccessor):
         __slots__ = ()
@@ -864,125 +891,120 @@ class Menu(DynAccessor):
 
             class resultlabel(DynAccessor):
                 __slots__ = ()
-                ended = 1519
-                football_1_lose = 1524
-                football_1_win = 1523
-                football_2_lose = 1521
-                football_2_win = 1520
-                football_tie = 1522
-                lose = 1516
-                techWin = 1518
-                tie = 1517
-                win = 1515
+                ended = 1536
+                lose = 1533
+                techWin = 1535
+                tie = 1534
+                win = 1532
 
         class tabs(DynAccessor):
             __slots__ = ()
-            commonStats = 1511
-            detailsStats = 1513
-            epicStats = 1514
-            teamStats = 1512
+            commonStats = 1528
+            detailsStats = 1530
+            epicStats = 1531
+            teamStats = 1529
 
         class window(DynAccessor):
             __slots__ = ()
-            title = 1510
+            title = 1527
 
     class fittingListItemRenderer(DynAccessor):
         __slots__ = ()
-        replace = 1397
-        unload = 1396
+        replace = 1414
+        unload = 1413
 
     class fittingPopover(DynAccessor):
         __slots__ = ()
-        manageAbilities = 840
+        manageAbilities = 855
 
     class fittingSelectPopover(DynAccessor):
         __slots__ = ()
 
         class descText(DynAccessor):
             __slots__ = ()
-            crystal = 1869
+            crystal = 1914
 
-        descText_ = 4982
-        okBtnLabel = 1867
-        titleText = 1866
+        descText_ = 1913
+        okBtnLabel = 1912
+        titleText = 1911
 
     class fortification(DynAccessor):
         __slots__ = ()
-        installName = 1590
-        unloadName = 1591
+        installName = 1606
+        unloadName = 1607
 
     class fortificationCtx(DynAccessor):
         __slots__ = ()
-        assignedPlayers = 1581
+        assignedPlayers = 1597
 
         class clanDescription(DynAccessor):
             __slots__ = ()
-            clanCrew = 1584
-            clanStatistics = 1585
-            openClanCard = 1583
+            clanCrew = 1600
+            clanStatistics = 1601
+            openClanCard = 1599
 
-        prepareOrder = 1582
+        prepareOrder = 1598
 
     class goldFish(DynAccessor):
         __slots__ = ()
-        buttonClose = 964
-        eventLink = 963
-        eventText = 962
-        eventTitle = 961
-        header = 960
-        windowHeader = 959
+        buttonClose = 981
+        eventLink = 980
+        eventText = 979
+        eventTitle = 978
+        header = 977
+        windowHeader = 976
 
     class hangar(DynAccessor):
         __slots__ = ()
 
         class ammunitionPanel(DynAccessor):
             __slots__ = ()
-            maitenanceBtn = 1374
+            maitenanceBtn = 1391
 
             class technicalMaitenance(DynAccessor):
                 __slots__ = ()
 
                 class ammo(DynAccessor):
                     __slots__ = ()
-                    checkboxAuto = 1380
-                    label = 1379
+                    checkboxAuto = 1397
+                    label = 1396
 
                     class list(DynAccessor):
                         __slots__ = ()
-                        buy = 1381
-                        inventory = 1382
-                        price = 1383
+                        buy = 1398
+                        inventory = 1399
+                        price = 1400
 
-                    not_ready = 1384
+                    not_ready = 1401
 
                 class buttons(DynAccessor):
                     __slots__ = ()
-                    ammo = 1391
-                    apply = 1393
-                    close = 1394
-                    equipment = 1392
-                    labelTotal = 1395
-                    repair = 1390
+                    ammo = 1408
+                    apply = 1410
+                    close = 1411
+                    equipment = 1409
+                    labelTotal = 1412
+                    repair = 1407
 
                 class equipment(DynAccessor):
                     __slots__ = ()
-                    checkboxAuto = 1386
-                    label = 1385
+                    checkboxAuto = 1403
+                    label = 1402
 
                     class list(DynAccessor):
                         __slots__ = ()
-                        buy = 1388
-                        inventory = 1387
-                        price = 1389
+                        buy = 1405
+                        inventory = 1404
+                        price = 1406
 
                 class repair(DynAccessor):
                     __slots__ = ()
-                    checkboxAuto = 1378
-                    label = 1377
+                    checkboxAuto = 1395
+                    label = 1394
 
-                title = 1376
+                title = 1393
 
-            tuningBtn = 1375
+            tuningBtn = 1392
 
         class crew(DynAccessor):
             __slots__ = ()
@@ -992,43 +1014,43 @@ class Menu(DynAccessor):
 
                 class dog(DynAccessor):
                     __slots__ = ()
-                    moreInfoLabel = 145
-                    name = 144
+                    moreInfoLabel = 159
+                    name = 158
 
                     class window(DynAccessor):
                         __slots__ = ()
-                        closeBtnLabel = 149
-                        description = 148
-                        header = 147
-                        title = 146
+                        closeBtnLabel = 163
+                        description = 162
+                        header = 161
+                        title = 160
 
             class tooltip(DynAccessor):
                 __slots__ = ()
-                drop_skill = 151
-                new_skill = 150
+                drop_skill = 165
+                new_skill = 164
 
-        vehicle_locked = 231
+        vehicle_locked = 245
 
         class xpToTmenCheckbox(DynAccessor):
             __slots__ = ()
-            tooltip = 152
+            tooltip = 166
 
     class hangar_header(DynAccessor):
         __slots__ = ()
 
         class battle_quests_label(DynAccessor):
             __slots__ = ()
-            active = 1831
-            inactive = 1832
+            active = 1875
+            inactive = 1876
 
-        million = 1830
+        million = 1874
 
         class personal_quests_label(DynAccessor):
             __slots__ = ()
-            active = 1833
-            all_done = 1836
-            empty = 1834
-            inactive = 1835
+            active = 1877
+            all_done = 1880
+            empty = 1878
+            inactive = 1879
 
     class header(DynAccessor):
         __slots__ = ()
@@ -1041,322 +1063,325 @@ class Menu(DynAccessor):
 
                 class achieves(DynAccessor):
                     __slots__ = ()
-                    battles = 809
-                    rating = 808
-                    wins = 810
+                    battles = 824
+                    rating = 823
+                    wins = 825
 
                 class boosters(DynAccessor):
                     __slots__ = ()
-                    blockTitle = 776
+                    blockTitle = 791
 
                 class clan(DynAccessor):
                     __slots__ = ()
-                    clanInvite = 793
+                    clanInvite = 808
 
                     class enabled(DynAccessor):
                         __slots__ = ()
-                        btnLabel = 783
+                        btnLabel = 798
 
-                    header = 781
+                    header = 796
 
                     class not_enabled(DynAccessor):
                         __slots__ = ()
-                        btnLabel = 782
+                        btnLabel = 797
 
                     class position(DynAccessor):
                         __slots__ = ()
-                        commander = 789
-                        diplomat = 788
-                        leader = 784
-                        private = 790
-                        recruit = 791
-                        recruiter = 786
-                        treasurer = 787
-                        vice_leader = 785
+                        commander = 804
+                        diplomat = 803
+                        leader = 799
+                        private = 805
+                        recruit = 806
+                        recruiter = 801
+                        treasurer = 802
+                        vice_leader = 800
 
-                    searchClan1 = 794
-                    searchClan2 = 795
+                    searchClan1 = 809
+                    searchClan2 = 810
 
                 class crew(DynAccessor):
                     __slots__ = ()
-                    btnLabel = 796
-                    header = 792
+                    btnLabel = 811
+                    header = 807
 
                     class position(DynAccessor):
                         __slots__ = ()
-                        commander = 803
-                        diplomat = 802
-                        leader = 798
-                        private = 804
-                        recruit = 805
-                        recruiter = 800
-                        treasurer = 801
-                        vice_leader = 799
+                        commander = 818
+                        diplomat = 817
+                        leader = 813
+                        private = 819
+                        recruit = 820
+                        recruiter = 815
+                        treasurer = 816
+                        vice_leader = 814
 
                 class crewButton(DynAccessor):
                     __slots__ = ()
-                    disabledTooltip = 797
+                    disabledTooltip = 812
 
                 class referral(DynAccessor):
                     __slots__ = ()
-                    invited = 806
-                    moreInfo = 807
+                    invited = 821
+                    moreInfo = 822
 
                 class stats(DynAccessor):
                     __slots__ = ()
-                    fights = 778
-                    rating = 777
-                    ratio = 779
+                    fights = 793
+                    rating = 792
+                    ratio = 794
 
-                toAllProgress = 780
+                toAllProgress = 795
 
                 class tutorial(DynAccessor):
                     __slots__ = ()
-                    newBadge = 811
+                    newBadge = 826
 
             class premium(DynAccessor):
                 __slots__ = ()
-                days = 744
-                hours = 745
+                days = 758
+                hours = 759
 
         class customization(DynAccessor):
             __slots__ = ()
 
             class season(DynAccessor):
                 __slots__ = ()
-                desert = 748
-                summer = 747
-                winter = 746
+                desert = 762
+                summer = 761
+                winter = 760
 
         class demonstration(DynAccessor):
             __slots__ = ()
-            btnLabel = 775
-            info = 774
+            btnLabel = 790
+            info = 789
 
         class level(DynAccessor):
             __slots__ = ()
-            c_1 = 751
-            c_10 = 760
-            c_2 = 752
-            c_3 = 753
-            c_4 = 754
-            c_5 = 755
-            c_6 = 756
-            c_7 = 757
-            c_8 = 758
-            c_9 = 759
+            c_1 = 765
+            c_10 = 774
+            c_2 = 766
+            c_3 = 767
+            c_4 = 768
+            c_5 = 769
+            c_6 = 770
+            c_7 = 771
+            c_8 = 772
+            c_9 = 773
 
-        level_ = 4983
-        notificationSign = 812
-        serverInfo = 749
+        level_ = 764
+        notificationSign = 827
+        serverInfo = 763
 
         class vehicleType(DynAccessor):
             __slots__ = ()
-            AT_SPG = 764
+            Alliance_France = 788
+            Alliance_Germany = 786
+            Alliance_USA = 787
+            Alliance_USSR = 785
+            AT_SPG = 778
 
             class elite(DynAccessor):
                 __slots__ = ()
-                AT_SPG = 772
-                heavyTank = 771
-                lightTank = 769
-                mediumTank = 770
-                SPG = 773
+                AT_SPG = 783
+                heavyTank = 782
+                lightTank = 780
+                mediumTank = 781
+                SPG = 784
 
-            heavyTank = 763
-            lightTank = 761
-            mediumTank = 762
-            role_defender = 766
-            role_midfielder = 767
-            role_striker = 768
-            SPG = 765
+            heavyTank = 777
+            lightTank = 775
+            mediumTank = 776
+            SPG = 779
 
     class headerButtons(DynAccessor):
         __slots__ = ()
 
         class account(DynAccessor):
             __slots__ = ()
-            accountRefill = 739
-            expGathering = 741
-            goldExchange = 740
-            premium = 738
+            accountRefill = 753
+            expGathering = 755
+            goldExchange = 754
+            premium = 752
 
-        barracks = 732
+        barracks = 745
 
         class battle(DynAccessor):
             __slots__ = ()
-            availableSince = 681
-            availableSinceSoon = 682
-            availableUntil = 683
-            availableUntilSoon = 684
+            availableSince = 693
+            availableSinceSoon = 694
+            availableUntil = 695
+            availableUntilSoon = 696
 
             class menu(DynAccessor):
                 __slots__ = ()
 
                 class attention(DynAccessor):
                     __slots__ = ()
-                    lowPerformance = 696
-                    reducedPerformance = 697
+                    lowPerformance = 708
+                    reducedPerformance = 709
 
-                battle_session = 692
-                epicBattle = 695
-                event = 687
+                battle_session = 704
+                epicBattle = 707
+                event = 699
 
                 class fallout(DynAccessor):
                     __slots__ = ()
-                    c_14 = 688
-                    c_15 = 689
+                    c_14 = 700
+                    c_15 = 701
 
-                fallout_ = 4984
-                historical = 694
-                squad = 690
-                standart = 685
-                training = 691
-                unit = 693
+                fallout_ = 698
+                historical = 706
+                squad = 702
+                standart = 697
+                training = 703
+                unit = 705
 
             class types(DynAccessor):
                 __slots__ = ()
-                battleTeaching = 666
-                battleTutorial = 679
+                battleTeaching = 678
+                battleTutorial = 691
 
                 class epic(DynAccessor):
                     __slots__ = ()
-                    descr = 1826
+                    descr = 1870
 
-                epic_ = 4985
+                epic_ = 1869
 
                 class epicBattle(DynAccessor):
                     __slots__ = ()
-                    descr = 1824
+                    descr = 1868
 
-                epicBattle_ = 4986
-                eventSquad = 664
-                fallout = 680
-                fort = 1586
-                fortLeave = 1587
+                epicBattle_ = 1867
+                eventSquad = 676
+                fallout = 692
+                fort = 1602
+                fortLeave = 1603
 
                 class historicalBattles(DynAccessor):
                     __slots__ = ()
-                    descr = 676
+                    descr = 688
 
-                historicalBattles_ = 4987
+                historicalBattles_ = 687
 
                 class historicalBattlesLeave(DynAccessor):
                     __slots__ = ()
-                    descr = 677
+                    descr = 689
 
-                historicalBattlesLeave_ = 4988
+                historicalBattlesLeave_ = 690
 
                 class leaveFort(DynAccessor):
                     __slots__ = ()
-                    descr = 1589
+                    descr = 1605
 
                 class leaveSpec(DynAccessor):
                     __slots__ = ()
-                    descr = 669
+                    descr = 681
 
                 class leaveTraining(DynAccessor):
                     __slots__ = ()
-                    descr = 661
+                    descr = 673
 
                 class leaveUnit(DynAccessor):
                     __slots__ = ()
-                    descr = 673
+                    descr = 685
 
                 class ranked(DynAccessor):
                     __slots__ = ()
 
                     class availability(DynAccessor):
                         __slots__ = ()
-                        days = 645
-                        ended = 641
-                        frozen = 643
-                        hours = 646
-                        lessMin = 648
-                        min = 647
-                        season = 640
-                        until = 642
+                        days = 657
+                        ended = 653
+                        frozen = 655
+                        hours = 658
+                        lessMin = 660
+                        min = 659
+                        season = 652
+                        until = 654
 
-                    availability_ = 4989
-                    descr = 639
+                    availability_ = 656
+                    descr = 651
 
-                ranked_ = 4990
+                ranked_ = 650
 
                 class rankedLeave(DynAccessor):
                     __slots__ = ()
-                    descr = 649
+                    descr = 661
 
-                simpleSquad = 663
+                simpleSquad = 675
 
                 class spec(DynAccessor):
                     __slots__ = ()
-                    descr = 668
+                    descr = 680
 
-                spec_ = 4991
-                specLeave = 670
+                spec_ = 679
+                specLeave = 682
 
                 class squad(DynAccessor):
                     __slots__ = ()
-                    descr = 656
-                    epic = 653
-                    event = 652
-                    randomBattle = 651
+                    descr = 668
+                    epic = 665
+                    event = 664
+                    randomBattle = 663
 
-                squad_ = 4992
-                squadBattle = 658
+                squad_ = 662
+                squadBattle = 670
 
                 class squadLeave(DynAccessor):
                     __slots__ = ()
-                    descr = 657
+                    descr = 669
 
-                squadLeave_ = 4993
-                squadLeaveOwner = 654
+                squadLeave_ = 667
+                squadLeaveOwner = 666
 
                 class standart(DynAccessor):
                     __slots__ = ()
-                    descr = 636
+                    descr = 648
 
-                standart_ = 4994
+                standart_ = 647
 
                 class standartLeave(DynAccessor):
                     __slots__ = ()
-                    descr = 637
+                    descr = 649
 
-                strongholds = 1588
+                strongholds = 1604
 
                 class training(DynAccessor):
                     __slots__ = ()
-                    descr = 660
+                    descr = 672
 
-                training_ = 4995
-                trainingLeave = 665
-                trainingLeaveOwner = 662
+                training_ = 671
+                trainingLeave = 677
+                trainingLeaveOwner = 674
 
                 class unit(DynAccessor):
                     __slots__ = ()
-                    descr = 672
+                    descr = 684
 
-                unit_ = 4996
-                unitLeave = 674
+                unit_ = 683
+                unitLeave = 686
 
-        battle_ = 4997
-        browser = 736
+        battle_ = 713
+        browser = 750
 
         class btnLabel(DynAccessor):
             __slots__ = ()
-            createSquad = 627
-            credits = 633
-            crystal = 632
-            freeXP = 634
-            gold = 631
-            inSquad = 626
-            premium = 628
-            premShop = 630
+            createSquad = 639
+            credits = 645
+            crystal = 644
+            freeXP = 646
+            gold = 643
+            inSquad = 638
+            premium = 640
+            premShop = 642
+
+        clans = 747
 
         class doLabel(DynAccessor):
             __slots__ = ()
-            premium = 629
+            premium = 641
 
-        encyclopedia = 734
+        encyclopedia = 748
 
         class fightBtn(DynAccessor):
             __slots__ = ()
@@ -1366,107 +1391,108 @@ class Menu(DynAccessor):
 
                 class falloutNotEnoughPlayer(DynAccessor):
                     __slots__ = ()
-                    body = 710
-                    header = 709
+                    body = 723
+                    header = 722
 
                 class falloutNotReady(DynAccessor):
                     __slots__ = ()
-                    body = 708
-                    header = 707
+                    body = 721
+                    header = 720
 
                 class falloutNotSelected(DynAccessor):
                     __slots__ = ()
-                    body = 706
-                    header = 705
+                    body = 719
+                    header = 718
 
                 class falloutOnly(DynAccessor):
                     __slots__ = ()
-                    body = 704
-                    header = 703
+                    body = 717
+                    header = 716
 
                 class falloutVehLevelRequired(DynAccessor):
                     __slots__ = ()
-                    body = 712
-                    header = 711
+                    body = 725
+                    header = 724
 
                 class falloutVehMin(DynAccessor):
                     __slots__ = ()
-                    body = 714
-                    header = 713
+                    body = 727
+                    header = 726
 
                 class rankedDisabled(DynAccessor):
                     __slots__ = ()
-                    body = 720
-                    header = 719
+                    body = 733
+                    header = 732
 
                 class rankedVehLevelRequired(DynAccessor):
                     __slots__ = ()
-                    body = 718
-                    header = 717
+                    body = 731
+                    header = 730
 
                 class sandbox(DynAccessor):
                     __slots__ = ()
 
                     class invalid(DynAccessor):
                         __slots__ = ()
-                        header = 715
+                        header = 728
 
                         class level(DynAccessor):
                             __slots__ = ()
-                            body = 716
+                            body = 729
 
-        hangar = 698
-        menu = 737
-        missions = 742
-        notReady = 702
-        personalMissions = 743
-        profile = 727
-        rating = 726
-        ready = 701
-        shop = 699
-        stronghold = 733
-        techtree = 731
-        wiki = 735
+        hangar = 710
+        menu = 751
+        missions = 756
+        notReady = 715
+        personalMissions = 757
+        profile = 740
+        rating = 739
+        ready = 714
+        shop = 711
+        storage = 712
+        stronghold = 746
+        techtree = 744
+        wiki = 749
 
     class igr(DynAccessor):
         __slots__ = ()
-        info = 1558
+        info = 1574
 
-    infinitySymbol = 1822
+    infinitySymbol = 1866
 
     class ingame_menu(DynAccessor):
         __slots__ = ()
 
         class buttons(DynAccessor):
             __slots__ = ()
-            back = 247
-            help = 246
-            logoff = 244
-            replayExit = 245
-            settings = 243
+            back = 262
+            help = 261
+            logoff = 259
+            replayExit = 260
+            settings = 258
 
         class links(DynAccessor):
             __slots__ = ()
-            report_bug = 248
+            report_bug = 263
 
         class serverStats(DynAccessor):
             __slots__ = ()
-            server = 241
+            server = 256
 
-        title = 242
+        title = 257
 
     class internet_provider(DynAccessor):
         __slots__ = ()
 
         class Beltelecom(DynAccessor):
             __slots__ = ()
-            name = 1879
-            tariff = 1880
+            name = 1927
+            tariff = 1928
 
         class Rostelecom(DynAccessor):
             __slots__ = ()
-            name = 1877
-            tariff = 1878
+            name = 1925
+            tariff = 1926
 
     class inventory(DynAccessor):
         __slots__ = ()
@@ -1476,64 +1502,64 @@ class Menu(DynAccessor):
 
             class errors(DynAccessor):
                 __slots__ = ()
-                not_removable = 1207
-                reserved = 1208
+                not_removable = 1224
+                reserved = 1225
 
         class errors(DynAccessor):
             __slots__ = ()
-            reserved = 1206
+            reserved = 1223
 
         class header(DynAccessor):
             __slots__ = ()
 
             class equipment(DynAccessor):
                 __slots__ = ()
-                myVehicle = 1203
-                myVehicles = 1204
-                otherVehicles = 1205
+                myVehicle = 1220
+                myVehicles = 1221
+                otherVehicles = 1222
 
             class module(DynAccessor):
                 __slots__ = ()
-                myVehicle = 1193
-                myVehicles = 1194
-                otherVehicles = 1195
+                myVehicle = 1210
+                myVehicles = 1211
+                otherVehicles = 1212
 
             class optionalDevice(DynAccessor):
                 __slots__ = ()
-                myVehicle = 1200
-                myVehicles = 1201
-                otherVehicles = 1202
+                myVehicle = 1217
+                myVehicles = 1218
+                otherVehicles = 1219
 
             class shell(DynAccessor):
                 __slots__ = ()
-                myInventoryGuns = 1197
-                myVehicleGun = 1196
-                myVehiclesInventoryGuns = 1198
-                otherGuns = 1199
+                myInventoryGuns = 1214
+                myVehicleGun = 1213
+                myVehiclesInventoryGuns = 1215
+                otherGuns = 1216
 
-            vehicle = 1192
+            vehicle = 1209
 
         class menu(DynAccessor):
             __slots__ = ()
 
             class battleBooster(DynAccessor):
                 __slots__ = ()
-                name = 1183
+                name = 1200
 
                 class targetType(DynAccessor):
                     __slots__ = ()
 
                     class allKind(DynAccessor):
                         __slots__ = ()
-                        name = 1184
+                        name = 1201
 
                     class forCrew(DynAccessor):
                         __slots__ = ()
-                        name = 1185
+                        name = 1202
 
                     class forEquipment(DynAccessor):
                         __slots__ = ()
-                        name = 1186
+                        name = 1203
 
             class equipment(DynAccessor):
                 __slots__ = ()
@@ -1543,103 +1569,103 @@ class Menu(DynAccessor):
 
                     class myVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1189
+                        name = 1206
 
                     class myVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1190
+                        name = 1207
 
-                    name = 1188
+                    name = 1205
 
                     class otherVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1191
+                        name = 1208
 
-                name = 1187
+                name = 1204
 
             class module(DynAccessor):
                 __slots__ = ()
 
                 class extra(DynAccessor):
                     __slots__ = ()
-                    name = 1162
+                    name = 1179
 
                     class onVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1163
+                        name = 1180
 
                 class fits(DynAccessor):
                     __slots__ = ()
 
                     class myVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1159
+                        name = 1176
 
                     class myVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1160
+                        name = 1177
 
-                    name = 1158
+                    name = 1175
 
                     class otherVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1161
+                        name = 1178
 
-                name = 1151
+                name = 1168
 
                 class types(DynAccessor):
                     __slots__ = ()
-                    name = 1152
+                    name = 1169
 
                     class vehicleChassis(DynAccessor):
                         __slots__ = ()
-                        name = 1153
+                        name = 1170
 
                     class vehicleEngine(DynAccessor):
                         __slots__ = ()
-                        name = 1156
+                        name = 1173
 
                     class vehicleGun(DynAccessor):
                         __slots__ = ()
-                        name = 1155
+                        name = 1172
 
                     class vehicleRadio(DynAccessor):
                         __slots__ = ()
-                        name = 1157
+                        name = 1174
 
                     class vehicleTurret(DynAccessor):
                         __slots__ = ()
-                        name = 1154
+                        name = 1171
 
             class optionalDevice(DynAccessor):
                 __slots__ = ()
 
                 class extra(DynAccessor):
                     __slots__ = ()
-                    name = 1181
+                    name = 1198
 
                     class onVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1182
+                        name = 1199
 
                 class fits(DynAccessor):
                     __slots__ = ()
 
                     class myVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1178
+                        name = 1195
 
                     class myVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1179
+                        name = 1196
 
-                    name = 1177
+                    name = 1194
 
                     class otherVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1180
+                        name = 1197
 
-                name = 1176
+                name = 1193
 
             class shell(DynAccessor):
                 __slots__ = ()
@@ -1649,48 +1675,48 @@ class Menu(DynAccessor):
 
                     class myInventoryGuns(DynAccessor):
                         __slots__ = ()
-                        name = 1173
+                        name = 1190
 
                     class myVehicleGun(DynAccessor):
                         __slots__ = ()
-                        name = 1172
+                        name = 1189
 
                     class myVehiclesInventoryGuns(DynAccessor):
                         __slots__ = ()
-                        name = 1174
+                        name = 1191
 
-                    name = 1171
+                    name = 1188
 
                     class otherGuns(DynAccessor):
                         __slots__ = ()
-                        name = 1175
+                        name = 1192
 
                 class kinds(DynAccessor):
                     __slots__ = ()
 
                     class ARMOR_PIERCING(DynAccessor):
                         __slots__ = ()
-                        name = 1166
+                        name = 1183
 
                     class ARMOR_PIERCING_CR(DynAccessor):
                         __slots__ = ()
-                        name = 1167
+                        name = 1184
 
                     class ARMOR_PIERCING_HE(DynAccessor):
                         __slots__ = ()
-                        name = 1168
+                        name = 1185
 
                     class HIGH_EXPLOSIVE(DynAccessor):
                         __slots__ = ()
-                        name = 1170
+                        name = 1187
 
                     class HOLLOW_CHARGE(DynAccessor):
                         __slots__ = ()
-                        name = 1169
+                        name = 1186
 
-                    name = 1165
+                    name = 1182
 
-                name = 1164
+                name = 1181
 
             class vehicle(DynAccessor):
                 __slots__ = ()
@@ -1700,730 +1726,744 @@ class Menu(DynAccessor):
 
                     class brocken(DynAccessor):
                         __slots__ = ()
-                        name = 1147
+                        name = 1164
 
                     class locked(DynAccessor):
                         __slots__ = ()
-                        name = 1148
+                        name = 1165
 
-                    name = 1146
+                    name = 1163
 
                     class premiumIGR(DynAccessor):
                         __slots__ = ()
-                        name = 1150
+                        name = 1167
 
                     class rentals(DynAccessor):
                         __slots__ = ()
-                        name = 1149
+                        name = 1166
 
-                name = 1138
+                name = 1155
 
                 class tags(DynAccessor):
                     __slots__ = ()
 
                     class all(DynAccessor):
                         __slots__ = ()
-                        name = 1140
+                        name = 1157
 
                     class at_spg(DynAccessor):
                         __slots__ = ()
-                        name = 1144
+                        name = 1161
 
                     class heavyTank(DynAccessor):
                         __slots__ = ()
-                        name = 1143
+                        name = 1160
 
                     class lightTank(DynAccessor):
                         __slots__ = ()
-                        name = 1141
+                        name = 1158
 
                     class mediumTank(DynAccessor):
                         __slots__ = ()
-                        name = 1142
+                        name = 1159
 
-                    name = 1139
+                    name = 1156
 
                     class spg(DynAccessor):
                         __slots__ = ()
-                        name = 1145
+                        name = 1162
 
         class table(DynAccessor):
             __slots__ = ()
-            buttonSell = 1211
+            buttonSell = 1228
 
             class header(DynAccessor):
                 __slots__ = ()
-                count = 1209
-                price = 1210
+                count = 1226
+                price = 1227
 
-    legal = 89
+    legal = 103
 
     class legalInfo(DynAccessor):
         __slots__ = ()
-        closeBtn = 90
+        closeBtn = 104
 
     class levels(DynAccessor):
         __slots__ = ()
-        c_1 = 500
-        c_10 = 509
-        c_2 = 501
-        c_3 = 502
-        c_4 = 503
-        c_5 = 504
-        c_6 = 505
-        c_7 = 506
-        c_8 = 507
-        c_9 = 508
-        all = 520
+        c_1 = 512
+        c_10 = 521
+        c_2 = 513
+        c_3 = 514
+        c_4 = 515
+        c_5 = 516
+        c_6 = 517
+        c_7 = 518
+        c_8 = 519
+        c_9 = 520
+        all = 532
 
         class roman(DynAccessor):
             __slots__ = ()
-            c_1 = 510
-            c_10 = 519
-            c_2 = 511
-            c_3 = 512
-            c_4 = 513
-            c_5 = 514
-            c_6 = 515
-            c_7 = 516
-            c_8 = 517
-            c_9 = 518
+            c_1 = 522
+            c_10 = 531
+            c_2 = 523
+            c_3 = 524
+            c_4 = 525
+            c_5 = 526
+            c_6 = 527
+            c_7 = 528
+            c_8 = 529
+            c_9 = 530
 
     class loading(DynAccessor):
         __slots__ = ()
 
         class battleTypes(DynAccessor):
             __slots__ = ()
-            c_0 = 184
-            c_1 = 186
-            c_10 = 202
-            c_11 = 204
-            c_12 = 206
-            c_13 = 208
-            c_14 = 210
-            c_15 = 212
-            c_16 = 214
-            c_17 = 216
-            c_19 = 218
-            c_2 = 188
-            c_20 = 220
-            c_21 = 222
-            c_22 = 224
-            c_4 = 190
-            c_5 = 192
-            c_6 = 194
-            c_7 = 196
-            c_8 = 198
-            c_9 = 200
+            c_0 = 198
+            c_1 = 200
+            c_10 = 216
+            c_11 = 218
+            c_12 = 220
+            c_13 = 222
+            c_14 = 224
+            c_15 = 226
+            c_16 = 228
+            c_17 = 230
+            c_19 = 232
+            c_2 = 202
+            c_20 = 234
+            c_21 = 236
+            c_22 = 238
+            c_4 = 204
+            c_5 = 206
+            c_6 = 208
+            c_7 = 210
+            c_8 = 212
+            c_9 = 214
 
             class desc(DynAccessor):
                 __slots__ = ()
-                c_0 = 185
-                c_1 = 187
-                c_10 = 203
-                c_11 = 205
-                c_12 = 207
-                c_13 = 209
-                c_14 = 211
-                c_15 = 213
-                c_16 = 215
-                c_17 = 217
-                c_19 = 219
-                c_2 = 189
-                c_20 = 221
-                c_21 = 223
-                c_22 = 225
-                c_4 = 191
-                c_5 = 193
-                c_6 = 195
-                c_7 = 197
-                c_8 = 199
-                c_9 = 201
+                c_0 = 199
+                c_1 = 201
+                c_10 = 217
+                c_11 = 219
+                c_12 = 221
+                c_13 = 223
+                c_14 = 225
+                c_15 = 227
+                c_16 = 229
+                c_17 = 231
+                c_19 = 233
+                c_2 = 203
+                c_20 = 235
+                c_21 = 237
+                c_22 = 239
+                c_4 = 205
+                c_5 = 207
+                c_6 = 209
+                c_7 = 211
+                c_8 = 213
+                c_9 = 215
 
-        game = 182
-        gameInfo = 183
-        helpTip = 230
-        team1 = 226
-        team2 = 227
+        game = 196
+        gameInfo = 197
+        helpTip = 244
+        team1 = 240
+        team2 = 241
 
         class teams(DynAccessor):
             __slots__ = ()
-            allies = 228
-            enemies = 229
+            allies = 242
+            enemies = 243
 
     class lobby_menu(DynAccessor):
         __slots__ = ()
 
         class buttons(DynAccessor):
             __slots__ = ()
-            back = 238
-            exit = 237
-            logoff = 236
-            refuse_training = 239
-            restart_training = 240
-            settings = 235
+            back = 252
+            exit = 251
+            logoff = 250
+            post = 253
+            refuse_training = 254
+            restart_training = 255
+            settings = 249
 
         class manyServers(DynAccessor):
             __slots__ = ()
-            title = 234
+            title = 248
 
         class oneServer(DynAccessor):
             __slots__ = ()
-            title = 233
+            title = 247
 
-        title = 232
+        title = 246
 
     class login(DynAccessor):
         __slots__ = ()
-        account = 93
-        auto = 106
-        caps = 107
-        changeAaccount = 94
-        fastEnter = 96
-        login = 97
-        ok = 105
-        password = 99
-        quitFromAutoLogin = 108
-        recoveryLink = 101
-        registrationLink = 100
-        rememberPassword = 102
-        rememberPasswordIgr = 103
-        rememberPasswordIgrWarning = 104
+        account = 107
+        auto = 120
+        caps = 121
+        changeAaccount = 108
+        fastEnter = 110
+        login = 111
+        ok = 119
+        password = 113
+        quitFromAutoLogin = 122
+        recoveryLink = 115
+        registrationLink = 114
+        rememberPassword = 116
+        rememberPasswordIgr = 117
+        rememberPasswordIgrWarning = 118
 
         class rss(DynAccessor):
             __slots__ = ()
-            readMore = 91
+            readMore = 105
 
-        server = 92
+        server = 106
 
         class social(DynAccessor):
             __slots__ = ()
 
             class status(DynAccessor):
                 __slots__ = ()
-                SYSTEM_ERROR = 142
-                WGC_ERROR = 143
+                SYSTEM_ERROR = 156
+                WGC_ERROR = 157
 
             class warning(DynAccessor):
                 __slots__ = ()
-                SOCIAL_NETWORK_LOGOUT = 140
-                SOCIAL_NETWORK_LOGOUT_BOTH = 139
+                SOCIAL_NETWORK_LOGOUT = 154
+                SOCIAL_NETWORK_LOGOUT_BOTH = 153
 
         class status(DynAccessor):
             __slots__ = ()
-            accountNotReady = 178
-            ALREADY_ONLINE_LOCALLY = 164
-            another_periphery = 118
-            CANCELLED = 125
-            centerRestart = 180
-            checkout_error = 117
-            CLIENT_SERVER_VERSIONS_ARE_DIFFERENT = 181
-            connecting = 116
-            CONNECTION_FAILED = 122
-            DNS_LOOKUP_FAILED = 123
-            empty_login = 109
-            empty_password = 113
-            empty_server = 115
-            invalid_login = 112
-            invalid_login_length = 110
-            invalid_nickname = 111
-            invalid_password = 114
-            launchernotfound = 175
-            LOGIN_BAD_PROTOCOL_VERSION = 131
-            LOGIN_CUSTOM_DEFINED_ERROR = 167
-            LOGIN_MALFORMED_REQUEST = 162
-            LOGIN_REJECTED_ACTIVATING = 127
-            LOGIN_REJECTED_ALREADY_LOGGED_IN = 121
-            LOGIN_REJECTED_BAD_DIGEST = 132
-            LOGIN_REJECTED_BAN = 165
-            LOGIN_REJECTED_BAN_UNLIMITED = 166
-            LOGIN_REJECTED_BASEAPP_OVERLOAD = 134
-            LOGIN_REJECTED_BASEAPP_TIMEOUT = 160
-            LOGIN_REJECTED_BASEAPPMGR_TIMEOUT = 161
-            LOGIN_REJECTED_CELLAPP_OVERLOAD = 135
-            LOGIN_REJECTED_DB_GENERAL_FAILURE = 155
-            LOGIN_REJECTED_DB_NOT_READY = 156
-            LOGIN_REJECTED_DBMGR_OVERLOAD = 136
-            LOGIN_REJECTED_ILLEGAL_CHARACTERS = 130
-            LOGIN_REJECTED_INACCESSIBLE_REALM = 172
-            LOGIN_REJECTED_INVALID_PASSWORD = 128
-            LOGIN_REJECTED_IP_ADDRESS_BAN = 173
-            LOGIN_REJECTED_LOGIN_QUEUE = 168
-            LOGIN_REJECTED_LOGINS_NOT_ALLOWED = 137
-            LOGIN_REJECTED_NICKNAME_ALREADY_EXIST = 169
-            LOGIN_REJECTED_NO_BASEAPP_RESPONSE = 129
-            LOGIN_REJECTED_NO_BASEAPPS = 157
-            LOGIN_REJECTED_NO_LOGINAPP = 159
-            LOGIN_REJECTED_NO_LOGINAPP_RESPONSE = 158
-            LOGIN_REJECTED_NO_SUCH_USER = 126
-            LOGIN_REJECTED_RATE_LIMITED = 153
-            LOGIN_REJECTED_REGISTRATION_NOT_ALLOWED = 171
-            LOGIN_REJECTED_REGISTRATION_NOT_CONFIRMED = 138
-            LOGIN_REJECTED_SERVER_NOT_READY = 133
-            LOGIN_REJECTED_UNABLE_TO_PARSE_JSON = 170
-            LOGIN_REJECTED_USERS_LIMIT = 154
-            NOT_SET = 119
-            PUBLIC_KEY_LOOKUP_FAILED = 163
-            SESSION_END = 176
-            SOCIAL_SESSION_END = 177
-            unavailable = 120
-            UNKNOWN_ERROR = 124
-            versionMismatch = 179
-            WGC_LOGOUT = 141
+            accountNotReady = 192
+            ALREADY_ONLINE_LOCALLY = 178
+            another_periphery = 132
+            CANCELLED = 139
+            centerRestart = 194
+            checkout_error = 131
+            CLIENT_SERVER_VERSIONS_ARE_DIFFERENT = 195
+            connecting = 130
+            CONNECTION_FAILED = 136
+            DNS_LOOKUP_FAILED = 137
+            empty_login = 123
+            empty_password = 127
+            empty_server = 129
+            invalid_login = 126
+            invalid_login_length = 124
+            invalid_nickname = 125
+            invalid_password = 128
+            launchernotfound = 189
+            LOGIN_BAD_PROTOCOL_VERSION = 145
+            LOGIN_CUSTOM_DEFINED_ERROR = 181
+            LOGIN_MALFORMED_REQUEST = 176
+            LOGIN_REJECTED_ACTIVATING = 141
+            LOGIN_REJECTED_ALREADY_LOGGED_IN = 135
+            LOGIN_REJECTED_BAD_DIGEST = 146
+            LOGIN_REJECTED_BAN = 179
+            LOGIN_REJECTED_BAN_UNLIMITED = 180
+            LOGIN_REJECTED_BASEAPP_OVERLOAD = 148
+            LOGIN_REJECTED_BASEAPP_TIMEOUT = 174
+            LOGIN_REJECTED_BASEAPPMGR_TIMEOUT = 175
+            LOGIN_REJECTED_CELLAPP_OVERLOAD = 149
+            LOGIN_REJECTED_DB_GENERAL_FAILURE = 169
+            LOGIN_REJECTED_DB_NOT_READY = 170
+            LOGIN_REJECTED_DBMGR_OVERLOAD = 150
+            LOGIN_REJECTED_ILLEGAL_CHARACTERS = 144
+            LOGIN_REJECTED_INACCESSIBLE_REALM = 186
+            LOGIN_REJECTED_INVALID_PASSWORD = 142
+            LOGIN_REJECTED_IP_ADDRESS_BAN = 187
+            LOGIN_REJECTED_LOGIN_QUEUE = 182
+            LOGIN_REJECTED_LOGINS_NOT_ALLOWED = 151
+            LOGIN_REJECTED_NICKNAME_ALREADY_EXIST = 183
+            LOGIN_REJECTED_NO_BASEAPP_RESPONSE = 143
+            LOGIN_REJECTED_NO_BASEAPPS = 171
+            LOGIN_REJECTED_NO_LOGINAPP = 173
+            LOGIN_REJECTED_NO_LOGINAPP_RESPONSE = 172
+            LOGIN_REJECTED_NO_SUCH_USER = 140
+            LOGIN_REJECTED_RATE_LIMITED = 167
+            LOGIN_REJECTED_REGISTRATION_NOT_ALLOWED = 185
+            LOGIN_REJECTED_REGISTRATION_NOT_CONFIRMED = 152
+            LOGIN_REJECTED_SERVER_NOT_READY = 147
+            LOGIN_REJECTED_UNABLE_TO_PARSE_JSON = 184
+            LOGIN_REJECTED_USERS_LIMIT = 168
+            NOT_SET = 133
+            PUBLIC_KEY_LOOKUP_FAILED = 177
+            SESSION_END = 190
+            SOCIAL_SESSION_END = 191
+            unavailable = 134
+            UNKNOWN_ERROR = 138
+            versionMismatch = 193
+            WGC_LOGOUT = 155
 
-        submitBySocial = 95
-        updateURLAvaialbleAt = 174
-        version = 98
+        submitBySocial = 109
+        updateURLAvaialbleAt = 188
+        version = 112
 
     class moduleFits(DynAccessor):
         __slots__ = ()
-        already_installed = 828
-        center_unavailable = 814
-        credits_error = 817
-        crystal_error = 819
-        destroyDescr = 832
-        destroyName = 831
-        destroyToolTip = 833
-        gold_error = 818
-        need_gun = 813
-        need_turret = 820
-        not_for_current_vehicle = 822
-        not_for_this_vehicle_type = 821
-        not_with_installed_equipment = 830
-        remove_too_heavy = 825
-        removeDescr = 835
-        removeName = 834
-        removeToolTip = 836
-        similar_device_already_installed = 829
-        title = 837
-        too_heavy = 823
-        too_heavy_chassis = 824
-        unlock_error = 826
-        wrong_slot = 827
+        already_installed = 843
+        center_unavailable = 829
+        credits_error = 832
+        crystal_error = 834
+        destroyDescr = 847
+        destroyName = 846
+        destroyToolTip = 848
+        gold_error = 833
+        need_gun = 828
+        need_turret = 835
+        not_for_current_vehicle = 837
+        not_for_this_vehicle_type = 836
+        not_with_installed_equipment = 845
+        remove_too_heavy = 840
+        removeDescr = 850
+        removeName = 849
+        removeToolTip = 851
+        similar_device_already_installed = 844
+        title = 852
+        too_heavy = 838
+        too_heavy_chassis = 839
+        unlock_error = 841
+        wrong_slot = 842
 
     class moduleInfo(DynAccessor):
         __slots__ = ()
-        additionalInfo = 988
-        autoReloadGunLabel = 969
-        clipGunLabel = 968
-        closeBtn = 1021
+        additionalInfo = 1005
+        autoReloadGunLabel = 986
+        clipGunLabel = 985
+        closeBtn = 1038
 
         class compatible(DynAccessor):
             __slots__ = ()
-            clipVehicles = 1020
-            guns = 1016
-            shellGuns = 1017
-            shells = 1015
-            turrets = 1014
-            uniChargedVehicles = 1019
-            vehicles = 1018
+            clipVehicles = 1037
+            guns = 1033
+            shellGuns = 1034
+            shells = 1032
+            turrets = 1031
+            uniChargedVehicles = 1036
+            vehicles = 1035
 
-        hydraulicChassisLabel = 970
-        parametersClipGunLabel = 967
-        parametersLabel = 966
+        hydraulicChassisLabel = 987
+        parametersClipGunLabel = 984
+        parametersLabel = 983
 
         class params(DynAccessor):
             __slots__ = ()
-            aimingTime = 997
-            areaRadius = 977
-            areaSquare = 973
-            armor = 994
-            artDelayRange = 978
-            autoReloadTime = 985
-            avgDamage = 992
-            avgDamageList = 991
-            avgDamagePerMinute = 993
-            avgPiercingPower = 990
-            bombDamage = 975
-            bombsNumberRange = 972
-            caliber = 981
-            circularVisionRadius = 1000
-            cooldownSeconds = 1013
-            damage = 989
-            dispertionRadius = 996
-            enginePower = 980
-            explosionRadius = 1002
-            fireStartingChance = 998
-            flyDelayRange = 974
-            level_lbl = 979
-            maxLoad = 971
+            aimingTime = 1014
+            areaRadius = 994
+            areaSquare = 990
+            armor = 1011
+            artDelayRange = 995
+            autoReloadTime = 1002
+            avgDamage = 1009
+            avgDamageList = 1008
+            avgDamagePerMinute = 1010
+            avgPiercingPower = 1007
+            bombDamage = 992
+            bombsNumberRange = 989
+            caliber = 998
+            circularVisionRadius = 1017
+            cooldownSeconds = 1030
+            damage = 1006
+            dispertionRadius = 1013
+            enginePower = 997
+            explosionRadius = 1019
+            fireStartingChance = 1015
+            flyDelayRange = 991
+            level_lbl = 996
+            maxLoad = 988
 
             class maxShotDistance(DynAccessor):
                 __slots__ = ()
-                footnote = 1006
+                footnote = 1023
 
-            maxShotDistance_ = 4998
+            maxShotDistance_ = 1022
 
             class noPiercingDistance(DynAccessor):
                 __slots__ = ()
 
                 class footnote(DynAccessor):
                     __slots__ = ()
-                    maxDistance = 1008
+                    maxDistance = 1025
 
-                footnote_ = 4999
+                footnote_ = 1024
 
-            piercingDistance = 1004
-            piercingDistanceHeader = 1003
-            piercingPower = 987
-            radioDistance = 999
-            reloadMagazineTime = 984
-            reloadTime = 986
-            rotationSpeed = 995
-            shellReloadingTime = 983
-            shellsCount = 982
-            shotsNumberRange = 976
-            stunMaxDuration = 1009
-            stunMaxDurationList = 1011
-            stunMinDuration = 1010
-            stunMinDurationList = 1012
-            weight = 1001
+            piercingDistance = 1021
+            piercingDistanceHeader = 1020
+            piercingPower = 1004
+            radioDistance = 1016
+            reloadMagazineTime = 1001
+            reloadTime = 1003
+            rotationSpeed = 1012
+            shellReloadingTime = 1000
+            shellsCount = 999
+            shotsNumberRange = 993
+            stunMaxDuration = 1026
+            stunMaxDurationList = 1028
+            stunMinDuration = 1027
+            stunMinDurationList = 1029
+            weight = 1018
 
-        title = 965
+        title = 982
 
     class nation_tree(DynAccessor):
         __slots__ = ()
 
         class title(DynAccessor):
             __slots__ = ()
-            china = 526
-            czech = 528
-            france = 524
-            germany = 522
-            italy = 531
-            japan = 527
-            poland = 530
-            sweden = 529
-            uk = 525
-            usa = 523
-            ussr = 521
+            china = 538
+            czech = 540
+            france = 536
+            germany = 534
+            italy = 543
+            japan = 539
+            poland = 542
+            sweden = 541
+            uk = 537
+            usa = 535
+            ussr = 533
 
     class nations(DynAccessor):
         __slots__ = ()
-        all = 498
-        china = 491
-        czech = 494
-        france = 490
-        germany = 488
-        italy = 497
-        japan = 492
-        poland = 496
-        sweden = 495
-        title = 486
-        uk = 493
-        usa = 489
-        ussr = 487
+        all = 510
+        china = 503
+        czech = 506
+        france = 502
+        germany = 500
+        italy = 509
+        japan = 504
+        poland = 508
+        sweden = 507
+        title = 498
+        uk = 505
+        usa = 501
+        ussr = 499
 
     class onlineCounter(DynAccessor):
         __slots__ = ()
-        delimiter = 1828
-        total = 1827
-        unavailable = 1829
+        delimiter = 1872
+        total = 1871
+        unavailable = 1873
 
-    opponents = 1555
+    opponents = 1571
 
     class optionalDeviceFits(DynAccessor):
         __slots__ = ()
-        title = 838
+        title = 853
 
     class optionalDeviceSelectPopover(DynAccessor):
         __slots__ = ()
 
         class tabs(DynAccessor):
             __slots__ = ()
-            deluxe = 1865
-            simple = 1864
+            deluxe = 1910
+            simple = 1909
 
     class prebattle(DynAccessor):
         __slots__ = ()
-        already_in_awaiting_battle = 461
+        already_in_awaiting_battle = 473
 
         class CompaniesTitle(DynAccessor):
             __slots__ = ()
-            ABSOLUTE = 468
-            CHAMPION = 467
-            EVENT = 469
-            EVENT_10x10 = 470
-            JUNIOR = 465
-            MIDDLE = 466
+            ABSOLUTE = 480
+            CHAMPION = 479
+            EVENT = 481
+            EVENT_10x10 = 482
+            JUNIOR = 477
+            MIDDLE = 478
 
-        description = 463
-        exitButton = 459
-        groupsLabel = 453
+        description = 475
+        exitButton = 471
+        groupsLabel = 465
 
         class invitations(DynAccessor):
             __slots__ = ()
 
             class buttons(DynAccessor):
                 __slots__ = ()
-                cancel = 477
-                search = 475
-                send = 476
+                cancel = 489
+                search = 487
+                send = 488
 
             class errors(DynAccessor):
                 __slots__ = ()
-                addIgnoredUser = 484
-                existsInReceiveList = 479
-                notFoundUsers = 485
-                receiverListEmpty = 483
-                selectUserToAdd = 480
-                selectUserToRemove = 481
-                userListEmpty = 482
-                userOffline = 478
+                addIgnoredUser = 496
+                existsInReceiveList = 491
+                notFoundUsers = 497
+                receiverListEmpty = 495
+                selectUserToAdd = 492
+                selectUserToRemove = 493
+                userListEmpty = 494
+                userOffline = 490
 
             class labels(DynAccessor):
                 __slots__ = ()
 
                 class defaultInviteText(DynAccessor):
                     __slots__ = ()
-                    tooltip = 474
+                    tooltip = 486
 
-                defaultInviteText_ = 5000
-                isOnline = 472
-                mailingList = 471
+                defaultInviteText_ = 485
+                isOnline = 484
+                mailingList = 483
 
-        playersLabel = 452
-        sideA = 454
-        sideB = 455
-        startButton = 460
-        startingTankLabel = 458
-        tankLabel = 457
-        timerLabel = 456
-        title = 462
-        waitingTimeWarning = 464
+        playersLabel = 464
+        sideA = 466
+        sideB = 467
+        startButton = 472
+        startingTankLabel = 470
+        tankLabel = 469
+        timerLabel = 468
+        title = 474
+        waitingTimeWarning = 476
 
     class premium(DynAccessor):
         __slots__ = ()
-        bonus = 940
-        buyMessage = 937
-        buyTitle = 932
-        cancel = 958
-        continueMessage = 938
-        continueTitle = 933
-        gold = 955
-        ofCreditsAndExperience = 934
+        bonus = 955
+        buyMessage = 952
+        buyTitle = 947
+        cancel = 975
+        continueMessage = 953
+        continueTitle = 948
+        gold = 972
+        ofCreditsAndExperience = 949
 
         class packet(DynAccessor):
             __slots__ = ()
-            days1 = 949
-            days180 = 953
-            days3 = 950
-            days30 = 952
-            days360 = 954
-            days7 = 951
+            days1 = 964
+            days180 = 968
+            days3 = 965
+            days30 = 967
+            days360 = 969
+            days7 = 966
+            longDescriptionSpecial = 971
+            shortDescriptionSpecial = 970
 
-        percentFactor = 939
-        perEverButtle = 935
+        percentFactor = 954
+        perEverButtle = 950
 
         class periods(DynAccessor):
             __slots__ = ()
-            days1 = 943
-            days180 = 947
-            days3 = 944
-            days30 = 946
-            days360 = 948
-            days7 = 945
+            days1 = 958
+            days180 = 962
+            days3 = 959
+            days30 = 961
+            days360 = 963
+            days7 = 960
 
-        promoMessage = 936
-        submitBuy = 956
-        submitContinue = 957
+        promoMessage = 951
+        submitBuy = 973
+        submitContinue = 974
 
         class tariffs(DynAccessor):
             __slots__ = ()
-            duration = 942
-            header = 941
+            duration = 957
+            header = 956
 
     class price(DynAccessor):
         __slots__ = ()
-        credits = 419
-        crystal = 421
-        gold = 420
-        received = 423
-        spent = 422
+        credits = 431
+        crystal = 433
+        gold = 432
+        received = 435
+        spent = 434
 
     class profile(DynAccessor):
         __slots__ = ()
 
         class clan(DynAccessor):
             __slots__ = ()
-            label = 869
+            label = 884
 
-        creationTime = 888
-        credits = 885
-        crystal = 887
-        exchange = 923
-        gold = 886
+        creationTime = 903
+        credits = 900
+        crystal = 902
+        exchange = 938
+        gold = 901
 
         class header(DynAccessor):
             __slots__ = ()
 
             class clan(DynAccessor):
                 __slots__ = ()
-                joinDate = 871
+                joinDate = 886
 
                 class position(DynAccessor):
                     __slots__ = ()
-                    commander = 877
-                    diplomat = 876
-                    junior = 881
-                    leader = 872
-                    private = 878
-                    recruit = 879
-                    recruiter = 874
-                    reservist = 882
-                    staff = 880
-                    treasurer = 875
-                    vice_leader = 873
+                    commander = 892
+                    diplomat = 891
+                    junior = 896
+                    leader = 887
+                    private = 893
+                    recruit = 894
+                    recruiter = 889
+                    reservist = 897
+                    staff = 895
+                    treasurer = 890
+                    vice_leader = 888
 
-                position_ = 5001
+                position_ = 885
 
-            fights = 883
-            lastBattleDateTitle = 868
-            registrationDateTitle = 867
-            wins = 884
+            fights = 898
+            lastBattleDateTitle = 883
+            registrationDateTitle = 882
+            wins = 899
 
         class list(DynAccessor):
             __slots__ = ()
-            descr = 890
-            totalName = 889
+            descr = 905
+            totalName = 904
 
-        premiumBuy = 924
-        premiumContinue = 925
-        premiunExpirationDate = 926
+        premiumBuy = 939
+        premiumContinue = 940
+        premiunExpirationDate = 941
 
         class stats(DynAccessor):
             __slots__ = ()
 
             class blocks(DynAccessor):
                 __slots__ = ()
-                battleeffect = 892
-                common = 891
-                credits = 893
-                studying = 894
+                battleeffect = 907
+                common = 906
+                credits = 908
+                studying = 909
 
             class items(DynAccessor):
                 __slots__ = ()
-                avgExperience = 904
-                battlesCount = 907
-                damageDealt = 913
-                defender = 918
-                effectiveShots = 912
-                empty = 901
-                frags = 899
-                fragsBeast = 903
-                heroes = 914
-                invader = 916
-                lastBattleTime = 911
-                losses = 909
-                maxFrags = 906
-                maxXP = 905
-                medalKay = 922
-                nextSkillBattlesLeft = 897
-                nextSkillXPLeft = 896
-                ready = 902
-                readyToLearn = 895
-                scout = 921
-                sniper = 917
-                steelwall = 919
-                supporter = 920
-                survivedBattles = 910
-                unknown = 900
-                warrior = 915
-                wins = 908
-                xp = 898
+                avgExperience = 919
+                battlesCount = 922
+                damageDealt = 928
+                defender = 933
+                effectiveShots = 927
+                empty = 916
+                frags = 914
+                fragsBeast = 918
+                heroes = 929
+                invader = 931
+                lastBattleTime = 926
+                losses = 924
+                maxFrags = 921
+                maxXP = 920
+                medalKay = 937
+                nextSkillBattlesLeft = 912
+                nextSkillXPLeft = 911
+                ready = 917
+                readyToLearn = 910
+                scout = 936
+                sniper = 932
+                steelwall = 934
+                supporter = 935
+                survivedBattles = 925
+                unknown = 915
+                warrior = 930
+                wins = 923
+                xp = 913
 
     class promo(DynAccessor):
         __slots__ = ()
 
         class patch(DynAccessor):
             __slots__ = ()
-            message = 1779
-            title = 1778
+            message = 1814
+            title = 1813
 
-        toArchive = 1780
+        class teaser(DynAccessor):
+            __slots__ = ()
+            title = 1820
+
+        class teaserTimeFormat(DynAccessor):
+            __slots__ = ()
+            days = 1816
+            hours = 1817
+            lessMin = 1819
+            min = 1818
+
+        toArchive = 1815
 
     class PromoPremiumIgrWindow(DynAccessor):
         __slots__ = ()
-        applyButtonLabel = 1784
-        text = 1783
-        title = 1782
-        windowTitle = 1781
+        applyButtonLabel = 1824
+        text = 1823
+        title = 1822
+        windowTitle = 1821
 
     class pveSandbox(DynAccessor):
         __slots__ = ()
 
         class queue(DynAccessor):
             __slots__ = ()
-            message = 723
-            more_n_minutes = 724
-            player_waiting_time = 725
-            title = 721
-            units = 722
+            message = 736
+            more_n_minutes = 737
+            player_waiting_time = 738
+            title = 734
+            units = 735
 
-    quote = 1870
+    quote = 1915
 
     class rating(DynAccessor):
         __slots__ = ()
 
         class messages(DynAccessor):
             __slots__ = ()
-            addToFriends = 448
-            addToIgnor = 450
-            createPrivate = 447
-            dropFromFriends = 449
-            dropFromIgnor = 451
-            userInfo = 446
+            addToFriends = 460
+            addToIgnor = 462
+            createPrivate = 459
+            dropFromFriends = 461
+            dropFromIgnor = 463
+            userInfo = 458
 
         class table(DynAccessor):
             __slots__ = ()
 
             class headers(DynAccessor):
                 __slots__ = ()
-                c1 = 440
-                c2 = 441
-                c3 = 442
-                c4 = 443
-                c5 = 444
-                c6 = 445
+                c1 = 452
+                c2 = 453
+                c3 = 454
+                c4 = 455
+                c5 = 456
+                c6 = 457
 
-        title = 439
+        title = 451
 
     class ReferralManagementWindow(DynAccessor):
         __slots__ = ()
-        closeBtnLabel = 1738
-        description = 1735
+        closeBtnLabel = 1766
+        description = 1763
 
         class infoHeader(DynAccessor):
             __slots__ = ()
-            haveNotTank = 1733
-            haveTank = 1734
+            haveNotTank = 1761
+            haveTank = 1762
 
-        invitedPlayers = 1736
-        inviteManagementLink = 1737
+        invitedPlayers = 1764
+        inviteManagementLink = 1765
 
         class progressIndicator(DynAccessor):
             __slots__ = ()
-            complete = 1748
-            progress = 1747
+            complete = 1776
+            progress = 1775
 
-        progressNotAvailable = 1749
+        progressNotAvailable = 1777
 
         class referralsTable(DynAccessor):
             __slots__ = ()
 
             class createSquadBtn(DynAccessor):
                 __slots__ = ()
-                label = 1745
+                label = 1773
 
-            emptyLine = 1746
-            exp = 1740
-            expMultiplier = 1741
-            leftDays = 1744
-            leftHours = 1743
-            leftTime = 1742
-            nick = 1739
+            emptyLine = 1774
+            exp = 1768
+            expMultiplier = 1769
+            leftDays = 1772
+            leftHours = 1771
+            leftTime = 1770
+            nick = 1767
 
-        title = 1732
+        title = 1760
 
     class ReferralReferralsIntroWindow(DynAccessor):
         __slots__ = ()
@@ -2433,41 +2473,41 @@ class Menu(DynAccessor):
 
             class body(DynAccessor):
                 __slots__ = ()
-                phenix = 1762
-                referrals = 1761
+                phenix = 1790
+                referrals = 1789
 
-            squad_text = 1763
-            title = 1760
+            squad_text = 1791
+            title = 1788
 
     class ReferralReferrerIntroWindow(DynAccessor):
         __slots__ = ()
 
         class applyButton(DynAccessor):
             __slots__ = ()
-            label = 1751
+            label = 1779
 
         class textBlock_body(DynAccessor):
             __slots__ = ()
-            invite_block = 1754
-            referrals_block = 1758
-            squad_block = 1756
+            invite_block = 1782
+            referrals_block = 1786
+            squad_block = 1784
 
-        textBlock_link = 1759
+        textBlock_link = 1787
 
         class textBlock_title(DynAccessor):
             __slots__ = ()
-            invite_block = 1753
-            referrals_block = 1757
-            squad_block = 1755
+            invite_block = 1781
+            referrals_block = 1785
+            squad_block = 1783
 
-        titleMessage = 1752
-        windowTitle = 1750
+        titleMessage = 1780
+        windowTitle = 1778
 
     class repair(DynAccessor):
         __slots__ = ()
-        button = 418
-        curiency = 417
-        repairstatus = 416
+        button = 430
+        curiency = 429
+        repairstatus = 428
 
     class research(DynAccessor):
         __slots__ = ()
@@ -2477,61 +2517,61 @@ class Menu(DynAccessor):
 
             class button(DynAccessor):
                 __slots__ = ()
-                addToCompare = 1098
-                restore = 1104
-                showInHangar = 1097
+                addToCompare = 1115
+                restore = 1121
+                showInHangar = 1114
 
-            freeXP = 1101
-            totalXP = 1102
-            vehXP = 1100
+            freeXP = 1118
+            totalXP = 1119
+            vehXP = 1117
 
         class premium(DynAccessor):
             __slots__ = ()
 
             class benefits(DynAccessor):
                 __slots__ = ()
-                fifth = 1093
-                first = 1089
-                fourth = 1092
-                head = 1087
-                premiumVehicleFirst = 1094
-                premiumVehicleSecond = 1095
-                second = 1090
-                third = 1091
+                fifth = 1110
+                first = 1106
+                fourth = 1109
+                head = 1104
+                premiumVehicleFirst = 1111
+                premiumVehicleSecond = 1112
+                second = 1107
+                third = 1108
 
             class description(DynAccessor):
                 __slots__ = ()
-                titte = 1096
+                titte = 1113
 
         class showInPreviewBtn(DynAccessor):
             __slots__ = ()
-            label = 1099
+            label = 1116
 
         class special(DynAccessor):
             __slots__ = ()
 
             class benefits(DynAccessor):
                 __slots__ = ()
-                head = 1088
+                head = 1105
 
         class status(DynAccessor):
             __slots__ = ()
-            historicalModules = 1103
+            historicalModules = 1120
 
     class screenshot(DynAccessor):
         __slots__ = ()
-        save = 1401
+        save = 1418
 
     class serverStats(DynAccessor):
         __slots__ = ()
-        arenasCount = 533
-        playersCount = 532
-        playersInArenaCount = 534
+        arenasCount = 545
+        playersCount = 544
+        playersInArenaCount = 546
 
     class shellListItemRenderer(DynAccessor):
         __slots__ = ()
-        replace = 1398
-        setAsDefault = 1399
+        replace = 1415
+        setAsDefault = 1416
 
     class shop(DynAccessor):
         __slots__ = ()
@@ -2541,65 +2581,65 @@ class Menu(DynAccessor):
 
             class filter(DynAccessor):
                 __slots__ = ()
-                label = 1297
+                label = 1314
 
         class errors(DynAccessor):
             __slots__ = ()
-            centerIsDown = 1283
-            inHangar = 1282
-            unlockNeeded = 1281
+            centerIsDown = 1300
+            inHangar = 1299
+            unlockNeeded = 1298
 
         class header(DynAccessor):
             __slots__ = ()
 
             class equipment(DynAccessor):
                 __slots__ = ()
-                myVehicle = 1278
-                myVehicles = 1279
-                otherVehicles = 1280
+                myVehicle = 1295
+                myVehicles = 1296
+                otherVehicles = 1297
 
             class module(DynAccessor):
                 __slots__ = ()
-                myVehicle = 1268
-                myVehicles = 1269
-                otherVehicles = 1270
+                myVehicle = 1285
+                myVehicles = 1286
+                otherVehicles = 1287
 
             class optionalDevice(DynAccessor):
                 __slots__ = ()
-                myVehicle = 1275
-                myVehicles = 1276
-                otherVehicles = 1277
+                myVehicle = 1292
+                myVehicles = 1293
+                otherVehicles = 1294
 
             class shell(DynAccessor):
                 __slots__ = ()
-                myInventoryGuns = 1272
-                myVehicleGun = 1271
-                myVehiclesInventoryGuns = 1273
-                otherGuns = 1274
+                myInventoryGuns = 1289
+                myVehicleGun = 1288
+                myVehiclesInventoryGuns = 1290
+                otherGuns = 1291
 
-            vehicle = 1267
+            vehicle = 1284
 
         class menu(DynAccessor):
             __slots__ = ()
 
             class battleBooster(DynAccessor):
                 __slots__ = ()
-                name = 1258
+                name = 1275
 
                 class targetType(DynAccessor):
                     __slots__ = ()
 
                     class allKind(DynAccessor):
                         __slots__ = ()
-                        name = 1259
+                        name = 1276
 
                     class forCrew(DynAccessor):
                         __slots__ = ()
-                        name = 1260
+                        name = 1277
 
                     class forEquipment(DynAccessor):
                         __slots__ = ()
-                        name = 1261
+                        name = 1278
 
             class equipment(DynAccessor):
                 __slots__ = ()
@@ -2609,19 +2649,19 @@ class Menu(DynAccessor):
 
                     class myVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1264
+                        name = 1281
 
                     class myVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1265
+                        name = 1282
 
-                    name = 1263
+                    name = 1280
 
                     class otherVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1266
+                        name = 1283
 
-                name = 1262
+                name = 1279
 
             class module(DynAccessor):
                 __slots__ = ()
@@ -2631,89 +2671,89 @@ class Menu(DynAccessor):
 
                     class inHangar(DynAccessor):
                         __slots__ = ()
-                        name = 1238
+                        name = 1255
 
                     class locked(DynAccessor):
                         __slots__ = ()
-                        name = 1236
+                        name = 1253
 
-                    name = 1235
+                    name = 1252
 
                     class onVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1237
+                        name = 1254
 
                 class fits(DynAccessor):
                     __slots__ = ()
 
                     class myVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1232
+                        name = 1249
 
                     class myVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1233
+                        name = 1250
 
-                    name = 1231
+                    name = 1248
 
                     class otherVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1234
+                        name = 1251
 
-                name = 1225
+                name = 1242
 
                 class types(DynAccessor):
                     __slots__ = ()
 
                     class vehicleChassis(DynAccessor):
                         __slots__ = ()
-                        name = 1226
+                        name = 1243
 
                     class vehicleEngine(DynAccessor):
                         __slots__ = ()
-                        name = 1229
+                        name = 1246
 
                     class vehicleGun(DynAccessor):
                         __slots__ = ()
-                        name = 1228
+                        name = 1245
 
                     class vehicleRadio(DynAccessor):
                         __slots__ = ()
-                        name = 1230
+                        name = 1247
 
                     class vehicleTurret(DynAccessor):
                         __slots__ = ()
-                        name = 1227
+                        name = 1244
 
             class optionalDevice(DynAccessor):
                 __slots__ = ()
 
                 class extra(DynAccessor):
                     __slots__ = ()
-                    name = 1256
+                    name = 1273
 
                     class onVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1257
+                        name = 1274
 
                 class fits(DynAccessor):
                     __slots__ = ()
 
                     class myVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1253
+                        name = 1270
 
                     class myVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1254
+                        name = 1271
 
-                    name = 1252
+                    name = 1269
 
                     class otherVehicles(DynAccessor):
                         __slots__ = ()
-                        name = 1255
+                        name = 1272
 
-                name = 1251
+                name = 1268
 
             class shell(DynAccessor):
                 __slots__ = ()
@@ -2723,48 +2763,48 @@ class Menu(DynAccessor):
 
                     class myInventoryGuns(DynAccessor):
                         __slots__ = ()
-                        name = 1248
+                        name = 1265
 
                     class myVehicleGun(DynAccessor):
                         __slots__ = ()
-                        name = 1247
+                        name = 1264
 
                     class myVehiclesInventoryGuns(DynAccessor):
                         __slots__ = ()
-                        name = 1249
+                        name = 1266
 
-                    name = 1246
+                    name = 1263
 
                     class otherGuns(DynAccessor):
                         __slots__ = ()
-                        name = 1250
+                        name = 1267
 
                 class kinds(DynAccessor):
                     __slots__ = ()
 
                     class ARMOR_PIERCING(DynAccessor):
                         __slots__ = ()
-                        name = 1241
+                        name = 1258
 
                     class ARMOR_PIERCING_CR(DynAccessor):
                         __slots__ = ()
-                        name = 1242
+                        name = 1259
 
                     class ARMOR_PIERCING_HE(DynAccessor):
                         __slots__ = ()
-                        name = 1243
+                        name = 1260
 
                     class HIGH_EXPLOSIVE(DynAccessor):
                         __slots__ = ()
-                        name = 1245
+                        name = 1262
 
                     class HOLLOW_CHARGE(DynAccessor):
                         __slots__ = ()
-                        name = 1244
+                        name = 1261
 
-                    name = 1240
+                    name = 1257
 
-                name = 1239
+                name = 1256
 
             class vehicle(DynAccessor):
                 __slots__ = ()
@@ -2774,541 +2814,538 @@ class Menu(DynAccessor):
 
                     class inHangar(DynAccessor):
                         __slots__ = ()
-                        name = 1223
+                        name = 1240
 
                     class locked(DynAccessor):
                         __slots__ = ()
-                        name = 1222
+                        name = 1239
 
-                    name = 1221
+                    name = 1238
 
                     class rentals(DynAccessor):
                         __slots__ = ()
-                        name = 1224
+                        name = 1241
 
                 class levels(DynAccessor):
                     __slots__ = ()
-                    header = 1220
+                    header = 1237
 
-                name = 1212
+                name = 1229
 
                 class obtainingType(DynAccessor):
                     __slots__ = ()
 
                     class restoreVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1214
+                        name = 1231
 
                     class tradeInVehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1215
+                        name = 1232
 
                     class vehicle(DynAccessor):
                         __slots__ = ()
-                        name = 1213
+                        name = 1230
 
                 class rent(DynAccessor):
                     __slots__ = ()
-                    available = 1310
-                    days = 1308
-                    discount = 1311
-                    forever = 1309
+                    available = 1327
+                    days = 1325
+                    discount = 1328
+                    forever = 1326
 
-                restore = 1312
+                restore = 1329
 
                 class tradeInVehicle(DynAccessor):
                     __slots__ = ()
-                    price = 1218
-                    saving = 1217
-                    vehForTrade = 1216
+                    price = 1235
+                    saving = 1234
+                    vehForTrade = 1233
 
                 class type(DynAccessor):
                     __slots__ = ()
-                    header = 1219
+                    header = 1236
 
         class table(DynAccessor):
             __slots__ = ()
-            buttonBuy = 1294
-            buyActionOr = 1295
-            find = 1284
+            buttonBuy = 1311
+            buyActionOr = 1312
+            find = 1301
 
             class header(DynAccessor):
                 __slots__ = ()
-                compare = 1292
+                compare = 1309
 
                 class count(DynAccessor):
                     __slots__ = ()
-                    battleBooster = 1290
-                    equipment = 1289
-                    module = 1286
-                    optionalDevice = 1288
-                    shell = 1287
-                    vehicle = 1285
+                    battleBooster = 1307
+                    equipment = 1306
+                    module = 1303
+                    optionalDevice = 1305
+                    shell = 1304
+                    vehicle = 1302
 
-                price = 1291
-                sale = 1293
+                price = 1308
+                sale = 1310
 
-            notForSale = 1296
+            notForSale = 1313
 
     class skillDropWindow(DynAccessor):
         __slots__ = ()
-        after = 1499
-        applyBtn = 1503
-        before = 1497
-        cancelBtn = 1504
-        freeDropLabel = 1505
-        freeDropPercent = 1506
-        multiplier = 1498
+        after = 1516
+        applyBtn = 1520
+        before = 1514
+        cancelBtn = 1521
+        freeDropLabel = 1522
+        freeDropPercent = 1523
+        multiplier = 1515
 
         class study(DynAccessor):
             __slots__ = ()
-            academy = 1500
-            free = 1502
-            scool = 1501
+            academy = 1517
+            free = 1519
+            scool = 1518
 
-        title = 1496
+        title = 1513
 
     class specPrebetles(DynAccessor):
         __slots__ = ()
-        listTitle = 1314
-        ownerTitle = 1315
-        playersTitle = 1316
-        title = 1313
+        listTitle = 1331
+        ownerTitle = 1332
+        playersTitle = 1333
+        title = 1330
 
     class steam(DynAccessor):
         __slots__ = ()
-        cancel = 1495
-        goldPacketSelect = 1492
-        otherMethods = 1493
-        submit = 1494
-        title = 1491
+        cancel = 1512
+        goldPacketSelect = 1509
+        otherMethods = 1510
+        submit = 1511
+        title = 1508
 
     class store(DynAccessor):
         __slots__ = ()
 
         class backButton(DynAccessor):
             __slots__ = ()
-            description = 1137
-            label = 1136
+            description = 1154
+            label = 1153
 
         class menu(DynAccessor):
             __slots__ = ()
-            noItems = 1135
+            noItems = 1152
 
         class vehicleStates(DynAccessor):
             __slots__ = ()
-            ammoNotFull = 360
-            ammoNotFullEvents = 361
-            battle = 356
-            buySlot = 374
-            buyTank = 372
-            buyTankEmptyCount = 373
-            clanLocked = 358
-            crewNotFull = 371
-            damaged = 362
-            dealIsOver = 382
-            destroyed = 363
-            exploded = 364
-            fallout_broken = 379
-            fallout_max = 377
-            fallout_min = 376
-            fallout_only = 381
-            fallout_required = 378
-            group_is_not_ready = 375
-            igrRentalIsOver = 366
-            inPrebattle = 359
-            inPremiumIgrOnly = 367
-            locked = 357
-            notpresent = 368
-            rentalIsOver = 365
-            rotationGroupLocked = 385
-            serverRestriction = 370
-            undamaged = 369
-            unsuitableToQueue = 380
+            ammoNotFull = 372
+            ammoNotFullEvents = 373
+            battle = 368
+            buySlot = 386
+            buyTank = 384
+            buyTankEmptyCount = 385
+            clanLocked = 370
+            crewNotFull = 383
+            damaged = 374
+            dealIsOver = 394
+            destroyed = 375
+            exploded = 376
+            fallout_broken = 391
+            fallout_max = 389
+            fallout_min = 388
+            fallout_only = 393
+            fallout_required = 390
+            group_is_not_ready = 387
+            igrRentalIsOver = 378
+            inPrebattle = 371
+            inPremiumIgrOnly = 379
+            locked = 369
+            notpresent = 380
+            rentalIsOver = 377
+            rotationGroupLocked = 397
+            serverRestriction = 382
+            undamaged = 381
+            unsuitableToQueue = 392
 
     class storeTab(DynAccessor):
         __slots__ = ()
-        actions = 730
-        inventory = 728
-        shop = 729
+        actions = 743
+        inventory = 741
+        shop = 742
 
     class tank_params(DynAccessor):
         __slots__ = ()
-        aimingTime = 580
-        attainableSpeed = 553
-        autoReloadTime = 558
-        avgDamage = 562
-        avgDamagePerMinute = 564
-        avgPiercingPower = 563
-        chassisRotationSpeed = 548
-        circularVisionRadius = 567
-        clipFireRate = 572
-        clipSec = 614
-        cnt = 610
-        damage = 561
-        enginePower = 545
-        enginePowerPerTon = 546
-        explosionRadius = 596
-        faceFrontBoardInMM = 555
-        gps = 601
-        grads = 611
-        gunRotationSpeed = 566
-        gunYawLimits = 571
-        h = 608
-        hullArmor = 554
-        invisibilityMovingFactor = 583
-        invisibilityStillFactor = 582
-        kg = 613
-        m = 607
-        maxAmmo = 581
-        maxHealth = 543
-        mm = 604
-        mph = 600
-        p = 598
-        param12 = 578
-        percent = 612
-        piercingPower = 560
-        pitchLimits = 570
-        pt = 599
-        radioDistance = 568
-        relativeArmor = 574
-        relativeCamouflage = 577
-        relativeMobility = 575
-        relativePower = 573
-        relativeVisibility = 576
-        reloadTime = 557
-        reloadTimeSecs = 559
-        s = 603
-        shotDispersionAngle = 579
-        speedLimits = 547
-        spm = 602
-        sqm = 609
-        stunMaxDuration = 615
-        stunMinDuration = 616
-        switchOffTime = 550
-        switchOnTime = 549
-        switchTime = 551
-        t = 597
-        timeOfReaching = 552
-        turretArmor = 556
-        turretRotationSpeed = 565
-        turretYawLimits = 569
-        val = 605
+        aimingTime = 592
+        attainableSpeed = 565
+        autoReloadTime = 570
+        avgDamage = 574
+        avgDamagePerMinute = 576
+        avgPiercingPower = 575
+        chassisRotationSpeed = 560
+        circularVisionRadius = 579
+        clipFireRate = 584
+        clipSec = 626
+        cnt = 622
+        damage = 573
+        enginePower = 557
+        enginePowerPerTon = 558
+        explosionRadius = 608
+        faceFrontBoardInMM = 567
+        gps = 613
+        grads = 623
+        gunRotationSpeed = 578
+        gunYawLimits = 583
+        h = 620
+        hullArmor = 566
+        invisibilityMovingFactor = 595
+        invisibilityStillFactor = 594
+        kg = 625
+        m = 619
+        maxAmmo = 593
+        maxHealth = 555
+        mm = 616
+        mph = 612
+        p = 610
+        param12 = 590
+        percent = 624
+        piercingPower = 572
+        pitchLimits = 582
+        pt = 611
+        radioDistance = 580
+        relativeArmor = 586
+        relativeCamouflage = 589
+        relativeMobility = 587
+        relativePower = 585
+        relativeVisibility = 588
+        reloadTime = 569
+        reloadTimeSecs = 571
+        s = 615
+        shotDispersionAngle = 591
+        speedLimits = 559
+        spm = 614
+        sqm = 621
+        stunMaxDuration = 627
+        stunMinDuration = 628
+        switchOffTime = 562
+        switchOnTime = 561
+        switchTime = 563
+        t = 609
+        timeOfReaching = 564
+        turretArmor = 568
+        turretRotationSpeed = 577
+        turretYawLimits = 581
+        val = 617
 
         class values(DynAccessor):
             __slots__ = ()
 
             class param10(DynAccessor):
                 __slots__ = ()
-                value0 = 588
-                value1 = 589
-                value2 = 590
-                value3 = 591
+                value0 = 600
+                value1 = 601
+                value2 = 602
+                value3 = 603
 
             class param11(DynAccessor):
                 __slots__ = ()
-                value0 = 592
-                value1 = 593
-                value2 = 594
-                value3 = 595
+                value0 = 604
+                value1 = 605
+                value2 = 606
+                value3 = 607
 
             class param12(DynAccessor):
                 __slots__ = ()
-                value0 = 584
-                value1 = 585
-                value2 = 586
-                value3 = 587
+                value0 = 596
+                value1 = 597
+                value2 = 598
+                value3 = 599
 
-        vehicleWeight = 544
-        vpm = 606
+        vehicleWeight = 556
+        vpm = 618
 
     class tankCarousel(DynAccessor):
         __slots__ = ()
 
         class statsStatus(DynAccessor):
             __slots__ = ()
-            unavailable = 352
+            unavailable = 364
 
         class vehicleStates(DynAccessor):
             __slots__ = ()
-            ammoNotFull = 328
-            ammoNotFullEvents = 329
-            battle = 324
-            buySlot = 347
-            buyTank = 345
-            buyTankEmptyCount = 346
-            clanLocked = 326
-            crewNotFull = 336
-            damaged = 330
-            dealIsOver = 351
-            destroyed = 331
-            exploded = 332
-            fallout_broken = 341
-            fallout_max = 339
-            fallout_min = 338
-            fallout_only = 350
-            fallout_required = 340
-            group_is_not_ready = 337
-            igrRentalIsOver = 343
-            inPrebattle = 327
-            inPremiumIgrOnly = 344
-            locked = 325
-            notpresent = 333
-            rentalIsOver = 342
-            rotationGroupLocked = 384
-            rotationGroupUnlocked = 383
-            serverRestriction = 335
-            unavailable = 348
-            undamaged = 334
-            unsuitableToQueue = 349
-            unsuitableToUnit = 353
+            ammoNotFull = 340
+            ammoNotFullEvents = 341
+            battle = 336
+            buySlot = 359
+            buyTank = 357
+            buyTankEmptyCount = 358
+            clanLocked = 338
+            crewNotFull = 348
+            damaged = 342
+            dealIsOver = 363
+            destroyed = 343
+            exploded = 344
+            fallout_broken = 353
+            fallout_max = 351
+            fallout_min = 350
+            fallout_only = 362
+            fallout_required = 352
+            group_is_not_ready = 349
+            igrRentalIsOver = 355
+            inPrebattle = 339
+            inPremiumIgrOnly = 356
+            locked = 337
+            notpresent = 345
+            rentalIsOver = 354
+            rotationGroupLocked = 396
+            rotationGroupUnlocked = 395
+            serverRestriction = 347
+            unavailable = 360
+            undamaged = 346
+            unsuitableToQueue = 361
+            unsuitableToUnit = 365
 
             class xpMultReceived(DynAccessor):
                 __slots__ = ()
-                c_not = 355
+                c_not = 367
 
-            xpMultReceived_ = 5002
+            xpMultReceived_ = 366
 
     class tankmanPersonalCase(DynAccessor):
         __slots__ = ()
-        accelerateTeachingOfSkill = 299
-        achivs = 294
-        btnReset = 275
-        btnRetraining = 284
-        btnTraining = 283
-        changeDocsBtn = 264
-        changeRoleBtn = 280
-        closeBtn = 279
-        crew = 260
+        accelerateTeachingOfSkill = 311
+        achivs = 306
+        btnReset = 287
+        btnRetraining = 296
+        btnTraining = 295
+        changeDocsBtn = 276
+        changeRoleBtn = 292
+        closeBtn = 291
+        crew = 272
 
         class docs(DynAccessor):
             __slots__ = ()
-            info = 262
+            info = 274
 
-        dropSkillsButtonLabel = 298
-        mainSpecialization = 261
+        dropSkillsButtonLabel = 310
+        mainSpecialization = 273
 
         class modifiers(DynAccessor):
             __slots__ = ()
-            customization = 268
-            fromCommander = 266
-            fromEquipment = 267
-            fromSkills = 269
-            penalty = 270
+            customization = 280
+            fromCommander = 278
+            fromEquipment = 279
+            fromSkills = 281
+            penalty = 282
 
-        modifiersHeader = 271
-        modifiersResult = 272
-        name = 259
-        noAchivs = 293
-        noModifiers = 290
-        personalDocs = 263
-        rank = 258
-        retrainingBtn = 276
-        retrainingWarning = 288
-        retrainingWarning2 = 289
+        modifiersHeader = 283
+        modifiersResult = 284
+        name = 271
+        noAchivs = 305
+        noModifiers = 302
+        personalDocs = 275
+        rank = 270
+        retrainingBtn = 288
+        retrainingWarning = 300
+        retrainingWarning2 = 301
 
         class skillsButton(DynAccessor):
             __slots__ = ()
-            additionText = 287
-            mainText = 286
+            additionText = 299
+            mainText = 298
 
-        skillsDesc = 297
-        specialization = 273
-        tabBattleInfo = 281
-        tabDocs = 295
-        tabSkills = 296
-        tabTraining = 282
-        title = 257
-        trainingBtn = 274
-        usingLevel = 265
-        vehicle = 278
-        vehicleType = 277
-        vehicleTypeID = 285
+        skillsDesc = 309
+        specialization = 285
+        tabBattleInfo = 293
+        tabDocs = 307
+        tabSkills = 308
+        tabTraining = 294
+        title = 269
+        trainingBtn = 286
+        usingLevel = 277
+        vehicle = 290
+        vehicleType = 289
+        vehicleTypeID = 297
 
     class tankmanRecruitRenderer(DynAccessor):
         __slots__ = ()
-        commander = 310
-        descr = 315
-        driver = 313
-        gunner = 311
-        loader = 312
-        personalCase = 309
-        radioman = 314
-        unload = 316
+        commander = 322
+        descr = 327
+        driver = 325
+        gunner = 323
+        loader = 324
+        personalCase = 321
+        radioman = 326
+        unload = 328
 
     class tankmanRetrainingBtn(DynAccessor):
         __slots__ = ()
-        free = 1365
+        free = 1382
 
     class tankmanTrainingButton2(DynAccessor):
         __slots__ = ()
-        retrainingTo = 307
-        trainingTo = 306
+        retrainingTo = 319
+        trainingTo = 318
 
     class tankmanTrainingWindow(DynAccessor):
         __slots__ = ()
-        academy = 301
-        closeBtn = 308
+        academy = 313
+        closeBtn = 320
 
         class free(DynAccessor):
             __slots__ = ()
-            price = 304
+            price = 316
 
-        free_ = 5003
-        scool = 302
-        title = 300
-        trainingTo = 305
+        free_ = 315
+        scool = 314
+        title = 312
+        trainingTo = 317
 
     class tankmen(DynAccessor):
         __slots__ = ()
-        AT_SPG = 252
-        heavyTank = 251
-        lightTank = 249
+        AT_SPG = 267
+        heavyTank = 266
+        lightTank = 264
 
         class lockReason(DynAccessor):
             __slots__ = ()
-            broken = 1373
-            inbattle = 1371
-            prebattle = 1372
+            broken = 1390
+            inbattle = 1388
+            prebattle = 1389
 
-        mediumTank = 250
-        role_defender = 254
-        role_midfielder = 256
-        role_striker = 255
-        SPG = 253
+        mediumTank = 265
+        SPG = 268
 
     class tankmsnPersonalCase(DynAccessor):
         __slots__ = ()
-        lackOfSkillsForLearn = 291
-        loadingInfo = 292
+        lackOfSkillsForLearn = 303
+        loadingInfo = 304
 
     class teachingSkill(DynAccessor):
         __slots__ = ()
-        after = 861
-        before = 859
-        cancel = 863
-        cost = 860
-        freeXpIsTight = 866
-        submit = 862
-        teachToLevel = 864
-        title = 858
-        totalPay = 865
+        after = 876
+        before = 874
+        cancel = 878
+        cost = 875
+        freeXpIsTight = 881
+        submit = 877
+        teachToLevel = 879
+        title = 873
+        totalPay = 880
 
     class technicalMaintenance(DynAccessor):
         __slots__ = ()
-        ammoTitleEx = 1402
+        ammoTitleEx = 1419
 
     class techtree(DynAccessor):
         __slots__ = ()
-        Announcement = 1871
+        Announcement = 1916
 
     class Time(DynAccessor):
         __slots__ = ()
 
         class timeValue(DynAccessor):
             __slots__ = ()
-            days = 1766
-            hours = 1767
-            lessMin = 1769
-            min = 1768
+            days = 1801
+            hours = 1802
+            lessMin = 1804
+            min = 1803
 
         class timeValueShort(DynAccessor):
             __slots__ = ()
-            days = 1770
-            hours = 1771
-            lessMin = 1773
-            min = 1772
+            days = 1805
+            hours = 1806
+            lessMin = 1808
+            min = 1807
 
         class timeValueWithSecs(DynAccessor):
             __slots__ = ()
-            days = 1774
-            hours = 1775
-            lessMin = 1777
-            min = 1776
+            days = 1809
+            hours = 1810
+            lessMin = 1812
+            min = 1811
 
     class trade(DynAccessor):
         __slots__ = ()
-        c_in = 1105
+        c_in = 1122
 
     class training(DynAccessor):
         __slots__ = ()
 
         class create(DynAccessor):
             __slots__ = ()
-            battleTime = 1332
-            closeButton = 1329
-            createButton = 1328
-            description = 1334
-            mapSelect = 1330
-            maxPlayers = 1331
-            privacy = 1333
-            title = 1327
+            battleTime = 1349
+            closeButton = 1346
+            createButton = 1345
+            description = 1351
+            mapSelect = 1347
+            maxPlayers = 1348
+            privacy = 1350
+            title = 1344
 
-        createButton = 1319
-        description = 1318
+        createButton = 1336
+        description = 1335
 
         class info(DynAccessor):
             __slots__ = ()
-            deleteButton = 1340
-            exitButton = 1339
-            inviteButton = 1338
-            map = 1347
-            maxPlayers = 1350
-            notUseChat = 1363
-            observer = 1341
-            otherLabel = 1344
-            owner = 1351
+            deleteButton = 1357
+            exitButton = 1356
+            inviteButton = 1355
+            map = 1364
+            maxPlayers = 1367
+            notUseChat = 1380
+            observer = 1358
+            otherLabel = 1361
+            owner = 1368
 
             class settings(DynAccessor):
                 __slots__ = ()
-                okButton = 1346
-                title = 1345
+                okButton = 1363
+                title = 1362
 
-            settingsButton = 1337
-            startButton = 1336
+            settingsButton = 1354
+            startButton = 1353
 
             class states(DynAccessor):
                 __slots__ = ()
-                state0 = 1353
-                state1 = 1354
-                state17 = 1358
-                state2 = 1355
-                state20 = 1359
-                state24 = 1360
-                state4 = 1356
-                state8 = 1357
+                state0 = 1370
+                state1 = 1371
+                state17 = 1375
+                state2 = 1372
+                state20 = 1376
+                state24 = 1377
+                state4 = 1373
+                state8 = 1374
 
-            team1Label = 1342
-            team2Label = 1343
+            team1Label = 1359
+            team2Label = 1360
 
             class timeout(DynAccessor):
                 __slots__ = ()
-                label = 1348
-                value = 1349
+                label = 1365
+                value = 1366
 
-            title = 1335
-            useCommonVoiceChat = 1361
-            useSeparateVoipChat = 1362
-            voiceChat = 1352
+            title = 1352
+            useCommonVoiceChat = 1378
+            useSeparateVoipChat = 1379
+            voiceChat = 1369
 
         class invitations(DynAccessor):
             __slots__ = ()
-            title = 1364
+            title = 1381
 
-        joinButton = 1321
-        leaveButton = 1320
-        listTitle = 1322
-        ownerTitle = 1325
-        playersLabel = 1323
-        playersTitle = 1326
-        roomsLabel = 1324
-        title = 1317
+        joinButton = 1338
+        leaveButton = 1337
+        listTitle = 1339
+        ownerTitle = 1342
+        playersLabel = 1340
+        playersTitle = 1343
+        roomsLabel = 1341
+        title = 1334
 
     class unlocks(DynAccessor):
         __slots__ = ()
-        exchangeButton = 1085
-        unlockButton = 1084
-        xpToTmenCheckbox = 1086
+        exchangeButton = 1102
+        unlockButton = 1101
+        xpToTmenCheckbox = 1103
 
     class validation(DynAccessor):
         __slots__ = ()
@@ -3321,150 +3358,166 @@ class Menu(DynAccessor):
 
                 class invalid(DynAccessor):
                     __slots__ = ()
-                    CN = 1632
-                    KR = 1633
+                    CN = 1660
+                    KR = 1661
 
-                invalid_ = 5004
-                ours = 1634
+                invalid_ = 1659
+                ours = 1662
 
     class vehicle(DynAccessor):
         __slots__ = ()
 
         class igrRentLeft(DynAccessor):
             __slots__ = ()
-            days = 1764
-            hours = 1765
+            days = 1792
+            hours = 1793
 
         class rentLeft(DynAccessor):
             __slots__ = ()
-            battles = 1300
-            days = 1298
-            hours = 1299
-            wins = 1301
+            battles = 1317
+            days = 1315
+            hours = 1316
+            wins = 1318
 
         class restoreCooldownLeft(DynAccessor):
             __slots__ = ()
-            days = 1306
-            hours = 1307
+            days = 1323
+            hours = 1324
 
         class restoreLeft(DynAccessor):
             __slots__ = ()
-            days = 1304
-            disabledByRent = 1302
-            hours = 1305
-            unlim = 1303
+            days = 1321
+            disabledByRent = 1319
+            hours = 1322
+            unlim = 1320
 
     class vehicleIgr(DynAccessor):
         __slots__ = ()
-        days = 1559
-        hours = 1560
+        days = 1575
+        hours = 1576
 
     class vehicleInfo(DynAccessor):
         __slots__ = ()
-        closeBtn = 1080
+        closeBtn = 1097
 
         class compareBtn(DynAccessor):
             __slots__ = ()
-            label = 1081
+            label = 1098
 
             class tooltip(DynAccessor):
                 __slots__ = ()
-                body = 1083
-                header = 1082
+                body = 1100
+                header = 1099
 
         class params(DynAccessor):
             __slots__ = ()
-            aimingTime = 1041
-            autoReloadTime = 1031
-            avgDamage = 1033
-            avgDamagePerMinute = 1043
-            avgPiercingPower = 1034
-            chassisRotationSpeed = 1027
-            circularVisionRadius = 1037
-            clipFireRate = 1045
-            enginePower = 1025
-            enginePowerPerTon = 1044
-            gunRotationSpeed = 1036
-            gunYawLimits = 1040
-            hullArmor = 1028
-            invisibility = 1047
-            invisibilityMovingFactor = 1049
-            invisibilityStillFactor = 1048
-            maxHealth = 1023
-            piercingPower = 1032
-            pitchLimits = 1039
-            radioDistance = 1038
-            reloadTime = 1030
-            reloadTimeSecs = 1050
-            shotDispersionAngle = 1042
-            speedLimits = 1026
-            stunMaxDuration = 1054
-            stunMinDuration = 1055
-            switchOffTime = 1052
-            switchOnTime = 1051
-            switchTime = 1053
-            turretArmor = 1029
-            turretRotationSpeed = 1035
-            turretYawLimits = 1046
-            vehicleWeight = 1024
+            aimingTime = 1058
+            autoReloadTime = 1048
+            avgDamage = 1050
+            avgDamagePerMinute = 1060
+            avgPiercingPower = 1051
+            chassisRotationSpeed = 1044
+            circularVisionRadius = 1054
+            clipFireRate = 1062
+            enginePower = 1042
+            enginePowerPerTon = 1061
+            gunRotationSpeed = 1053
+            gunYawLimits = 1057
+            hullArmor = 1045
+            invisibility = 1064
+            invisibilityMovingFactor = 1066
+            invisibilityStillFactor = 1065
+            maxHealth = 1040
+            piercingPower = 1049
+            pitchLimits = 1056
+            radioDistance = 1055
+            reloadTime = 1047
+            reloadTimeSecs = 1067
+            shotDispersionAngle = 1059
+            speedLimits = 1043
+            stunMaxDuration = 1071
+            stunMinDuration = 1072
+            switchOffTime = 1069
+            switchOnTime = 1068
+            switchTime = 1070
+            turretArmor = 1046
+            turretRotationSpeed = 1052
+            turretYawLimits = 1063
+            vehicleWeight = 1041
 
         class stats(DynAccessor):
             __slots__ = ()
-            avgExperience = 1057
-            battlesCount = 1058
-            damageDealt = 1066
-            defender = 1071
-            frags = 1063
-            heroes = 1067
-            hits = 1065
-            invader = 1069
-            lastBattleTime = 1062
-            losses = 1060
-            medalKay = 1075
-            scout = 1074
-            shots = 1064
-            sniper = 1070
-            steelwall = 1072
-            supporter = 1073
-            survivedBattles = 1061
-            warrior = 1068
-            wins = 1059
-            xp = 1056
+            avgExperience = 1074
+            battlesCount = 1075
+            damageDealt = 1083
+            defender = 1088
+            frags = 1080
+            heroes = 1084
+            hits = 1082
+            invader = 1086
+            lastBattleTime = 1079
+            losses = 1077
+            medalKay = 1092
+            scout = 1091
+            shots = 1081
+            sniper = 1087
+            steelwall = 1089
+            supporter = 1090
+            survivedBattles = 1078
+            warrior = 1085
+            wins = 1076
+            xp = 1073
 
         class tabs(DynAccessor):
             __slots__ = ()
-            base = 1077
-            crew = 1079
-            properties = 1076
-            statistic = 1078
+            base = 1094
+            crew = 1096
+            properties = 1093
+            statistic = 1095
 
-        title = 1022
+        title = 1039
+
+    class vehiclePreview(DynAccessor):
+        __slots__ = ()
+        endTime = 1794
+
+        class timeLeft(DynAccessor):
+            __slots__ = ()
+            hours = 1795
+            lessMin = 1797
+            min = 1796
+
+        class timeLeftShort(DynAccessor):
+            __slots__ = ()
+            hours = 1798
+            lessMin = 1800
+            min = 1799
 
     class vehiclesCarousel(DynAccessor):
         __slots__ = ()
 
         class contextMenu(DynAccessor):
             __slots__ = ()
-            vehicleCheck = 1369
-            vehicleInfo = 1366
-            vehicleResearch = 1368
-            vehicleSell = 1367
-            vehicleUncheck = 1370
+            vehicleCheck = 1386
+            vehicleInfo = 1383
+            vehicleResearch = 1385
+            vehicleSell = 1384
+            vehicleUncheck = 1387
 
     class vehParams(DynAccessor):
         __slots__ = ()
-        armor = 540
-        firepower = 539
-        mobility = 541
-        reconnaissance = 542
+        armor = 552
+        firepower = 551
+        mobility = 553
+        reconnaissance = 554
 
     class viewHeader(DynAccessor):
         __slots__ = ()
 
         class backBtn(DynAccessor):
             __slots__ = ()
-            label = 1875
+            label = 1923
 
         class closeBtn(DynAccessor):
             __slots__ = ()
-            label = 1876
+            label = 1924

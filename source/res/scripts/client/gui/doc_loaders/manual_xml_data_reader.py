@@ -20,6 +20,11 @@ def getChapters(isBootcampEnabled):
     return chapters
 
 
+def getChaptersIndexesList(isBootcampEnabled):
+    chaptersData = getChapters(isBootcampEnabled)
+    return [ chapter['uiData']['index'] for chapter in chaptersData ]
+
+
 def getChapterData(chapterFileName, isBootcampEnabled, bootcampRunCount):
     _logger.debug('ManualXMLDataReader: requested chapter data: %s', chapterFileName)
     chapterPath = _CHAPTERS_DATA_PATH + chapterFileName

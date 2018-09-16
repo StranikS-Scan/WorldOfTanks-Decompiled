@@ -11,7 +11,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.settings import BADGES_ICONS, getBadgeIconPath
 from gui.server_events.finders import getQuestsByTokenAndBonus, pmTokenDetector, badgeBonusFinder
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
-from gui.server_events.pm_constants import SOUNDS, FIRST_ENTRY_STATE, PERSONAL_MISSIONS_SOUND_SPACE
+from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SOUND_SPACE, PM_TUTOR_FIELDS
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from helpers.i18n import makeString
@@ -36,7 +36,7 @@ class PersonalMissionFirstEntryAwardView(LobbySubView, PersonalMissionsNavigatio
 
     def bigBtnClicked(self):
         settingsCore = dependency.instance(ISettingsCore)
-        settingsCore.serverSettings.setPersonalMissionsFirstEntryState(FIRST_ENTRY_STATE.AWARDS_WAS_SHOWN)
+        settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: True})
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onEscapePress(self):
@@ -47,7 +47,7 @@ class PersonalMissionFirstEntryAwardView(LobbySubView, PersonalMissionsNavigatio
 
     def _populate(self):
         super(PersonalMissionFirstEntryAwardView, self)._populate()
-        operations = self._eventsCache.personalMissions.getOperations()
+        operations = self._eventsCache.getPersonalMissions().getOperationsForBranch(self.getBranch())
         awards = self.__getAwards(operations)
         if len(awards) == 1:
             titleLabel = makeString(PERSONAL_MISSIONS.PERSONALMISSIONAWARDVIEW_TITLE_ONE, vehicleName=first(awards)['title'])
@@ -65,7 +65,7 @@ class PersonalMissionFirstEntryAwardView(LobbySubView, PersonalMissionsNavigatio
 
     def __getAwards(self, operations):
         badgesToShow = {}
-        badgeQuests = getQuestsByTokenAndBonus(self._eventsCache.getHiddenQuests(), tokenFinder=pmTokenDetector(len(operations)), bonusFinder=badgeBonusFinder())
+        badgeQuests = getQuestsByTokenAndBonus(self._eventsCache.getHiddenQuests(), tokenFinder=pmTokenDetector(operations), bonusFinder=badgeBonusFinder())
         for quest in badgeQuests.itervalues():
             for bonus in quest.getBonuses('dossier'):
                 for badge in bonus.getBadges():

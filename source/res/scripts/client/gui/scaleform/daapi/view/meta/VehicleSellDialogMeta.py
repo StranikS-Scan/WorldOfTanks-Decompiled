@@ -19,6 +19,9 @@ class VehicleSellDialogMeta(AbstractWindowView):
     def checkControlQuestion(self, dismiss):
         self._printOverrideError('checkControlQuestion')
 
+    def onChangeConfiguration(self, optDevices):
+        self._printOverrideError('onChangeConfiguration')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 

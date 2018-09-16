@@ -68,7 +68,7 @@ class CrashedTrackController(Component):
         modelNames = getPartModelsFromDesc(self.__vehicleDesc, ModelsSetParams(None, 'destroyed'))
         compoundAssembler = BigWorld.CompoundAssembler()
         compoundAssembler.addRootPart(modelNames.chassis, TankPartNames.CHASSIS, entity.filter.groundPlacingMatrix)
-        compoundAssembler.assemblerName = TankPartNames.CHASSIS
+        compoundAssembler.name = TankPartNames.CHASSIS
         compoundAssembler.spaceID = entity.spaceID
         return compoundAssembler
 

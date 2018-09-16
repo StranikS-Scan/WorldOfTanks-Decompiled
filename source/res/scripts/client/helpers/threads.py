@@ -22,7 +22,7 @@ class Worker(threading.Thread):
 
     def __init__(self, jobsQueue, name=None):
         super(Worker, self).__init__(name=name)
-        self._jobsQueue = weakref.proxy(jobsQueue)
+        self.__queueRef = weakref.ref(jobsQueue)
         self._terminated = False
 
     def __del__(self):
@@ -34,12 +34,19 @@ class Worker(threading.Thread):
     def run(self):
         while not self._terminated:
             try:
-                job = self._jobsQueue.get()
-                job.doWork(self)
-                self._jobsQueue.task_done()
+                queue = self.__queueRef()
+                if queue is not None:
+                    job = queue.get()
+                    job.doWork(self)
+                    queue.task_done()
+                else:
+                    self.terminate()
+                    break
                 time.sleep(0.001)
             except Exception:
                 LOG_CURRENT_EXCEPTION()
+
+        return
 
     def __repr__(self):
         return '%s(name = %s)' % (self.__class__.__name__, self.name) if not self._terminated else '%s(terminated)' % self.__class__.__name__
@@ -82,7 +89,7 @@ class ThreadPool(object):
     def _createNewWorker(self):
         return Worker(self._jobs)
 
-    def _putJob(self, job):
+    def putJob(self, job):
         if not self._running:
             LOG_ERROR('Thread pool is not running. Trying to put new job', job)
             return

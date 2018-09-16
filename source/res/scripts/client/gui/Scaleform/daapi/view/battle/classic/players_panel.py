@@ -38,11 +38,8 @@ class PlayersPanel(PlayersPanelMeta, IAbstractPeriodView):
     def __init__(self):
         super(PlayersPanel, self).__init__()
         self._mode = PLAYERS_PANEL_STATE.SHORT
-        self.__isEvent = self.sessionProvider.arenaVisitor.gui.isEventBattle()
 
     def tryToSetPanelModeByMouse(self, mode):
-        if self.__isEvent:
-            return
         if mode != self._mode and PlayerPanelStateSetting.write(mode):
             self._mode = mode
             self.as_setPanelModeS(mode)
@@ -51,15 +48,10 @@ class PlayersPanel(PlayersPanelMeta, IAbstractPeriodView):
         self.guiSessionProvider.shared.viewPoints.selectVehicle(int(vehicleID))
 
     def setInitialMode(self):
-        if self.__isEvent:
-            self.as_setPanelModeS(PLAYERS_PANEL_STATE.MEDIUM)
-        else:
-            self._mode = PlayerPanelStateSetting.read()
-            self.as_setPanelModeS(self._mode)
+        self._mode = PlayerPanelStateSetting.read()
+        self.as_setPanelModeS(self._mode)
 
     def setLargeMode(self):
-        if self.__isEvent:
-            return
         self.as_setPanelModeS(PLAYERS_PANEL_STATE.FULL)
 
     def _populate(self):
@@ -71,8 +63,6 @@ class PlayersPanel(PlayersPanelMeta, IAbstractPeriodView):
         super(PlayersPanel, self)._dispose()
 
     def _handleNextMode(self, _):
-        if self.__isEvent:
-            return
         mode = (self._mode + 1) % (PLAYERS_PANEL_STATE.FULL + 1)
         if PlayerPanelStateSetting.write(mode):
             self._mode = mode

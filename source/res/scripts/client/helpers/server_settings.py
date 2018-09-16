@@ -8,6 +8,7 @@ from constants import IS_TUTORIAL_ENABLED, SWITCH_STATE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.shared.utils.decorators import ReprInjector
+from personal_missions import PM_BRANCH
 from shared_utils import makeTupleByDict, updateDict
 _CLAN_EMBLEMS_SIZE_MAPPING = {16: 'clan_emblems_16',
  32: 'clan_emblems_small',
@@ -226,6 +227,19 @@ class _BwHallOfFame(namedtuple('_BwHallOfFame', ('hofHostUrl', 'isHofEnabled', '
         return cls()
 
 
+class _BwIngameShop(namedtuple('_BwIngameShop', ('hostUrl', 'shopMode', 'isStorageEnabled', 'isPreviewEnabled'))):
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
+_BwIngameShop.__new__.__defaults__ = ('',
+ 'disabled',
+ False,
+ False)
+
 class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'peripheryIDs', 'winnerRankChanges', 'loserRankChanges', 'minXP', 'unburnableRanks', 'unburnableStepRanks', 'unburnableVehRanks', 'unburnableVehStepRanks', 'minLevel', 'maxLevel', 'accRanks', 'accSteps', 'vehRanks', 'vehSteps', 'cycleFinishSeconds', 'primeTimes', 'seasons', 'cycleTimes', 'accLadderPts', 'vehLadderPts', 'shields'))):
     __slots__ = ()
 
@@ -365,6 +379,10 @@ class ServerSettings(object):
             self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, self.__serverSettings['hallOfFame'])
         else:
             self.__bwHallOfFame = _BwHallOfFame.defaults()
+        if 'ingameShop' in self.__serverSettings:
+            self.__bwIngameShop = makeTupleByDict(_BwIngameShop, self.__serverSettings['ingameShop'])
+        else:
+            self.__bwIngameShop = _BwIngameShop()
         if 'ranked_config' in self.__serverSettings:
             self.__rankedBattlesSettings = makeTupleByDict(_RankedBattlesConfig, self.__serverSettings['ranked_config'])
         else:
@@ -404,6 +422,12 @@ class ServerSettings(object):
             self.__updateEpic(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
+        if 'disabledPMOperations' in serverSettingsDiff:
+            self.__serverSettings['disabledPMOperations'] = serverSettingsDiff['disabledPMOperations']
+        if 'ingameShop' in serverSettingsDiff:
+            self.__updateIngameShop(serverSettingsDiff)
+        if 'disabledPersonalMissions' in serverSettingsDiff:
+            self.__serverSettings['disabledPersonalMissions'] = serverSettingsDiff['disabledPersonalMissions']
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -479,11 +503,19 @@ class ServerSettings(object):
     def isEpicBattleEnabled(self):
         return self.epicBattles.enabled > 0
 
-    def isPersonalMissionsEnabled(self):
-        return self.isRegularQuestEnabled()
+    def isPersonalMissionsEnabled(self, branch=None):
+        if branch == PM_BRANCH.REGULAR:
+            return self.__getGlobalSetting('isRegularQuestEnabled', True)
+        return self.__getGlobalSetting('isPM2QuestEnabled', True) if branch == PM_BRANCH.PERSONAL_MISSION_2 else self.__getGlobalSetting('isRegularQuestEnabled', True) or self.__getGlobalSetting('isPM2QuestEnabled', True)
 
-    def isRegularQuestEnabled(self):
-        return self.__getGlobalSetting('isRegularQuestEnabled', True)
+    def isPMBattleProgressEnabled(self):
+        return self.__getGlobalSetting('isPMBattleProgressEnabled', True)
+
+    def getDisabledPMOperations(self):
+        return self.__getGlobalSetting('disabledPMOperations', dict())
+
+    def getDisabledPersonalMissions(self):
+        return self.__getGlobalSetting('disabledPersonalMissions', set())
 
     def isStrongholdsEnabled(self):
         return self.__getGlobalSetting('strongholdSettings', {}).get('isStrongholdsEnabled', False)
@@ -497,14 +529,27 @@ class ServerSettings(object):
     def elenUpdateInterval(self):
         return self.__getGlobalSetting('elenSettings', {}).get('elenUpdateInterval', 60)
 
-    def isFootballEnabled(self):
-        return self.__getGlobalSetting('footballSettings', {}).get('isFootballEnabled', False)
-
-    def footballHostUrl(self):
-        return self.__getGlobalSetting('footballSettings', {}).get('hostUrl', '')
-
     def isGoldFishEnabled(self):
         return self.__getGlobalSetting('isGoldFishEnabled', False)
+
+    def isIngameStorageEnabled(self):
+        return self.__bwIngameShop.isStorageEnabled
+
+    def isIngamePreviewEnabled(self):
+        return self.__bwIngameShop.isPreviewEnabled
+
+    @property
+    def ingameShop(self):
+        return self.__bwIngameShop
+
+    def isIngameDataChangedInDiff(self, diff, fieldName=None):
+        if 'ingameShop' in diff:
+            if fieldName is not None:
+                if fieldName in diff['ingameShop']:
+                    return True
+            else:
+                return True
+        return False
 
     def isTutorialEnabled(self):
         return self.__getGlobalSetting('isTutorialEnabled', IS_TUTORIAL_ENABLED)
@@ -529,13 +574,6 @@ class ServerSettings(object):
 
     def isEpicRandomMarksOnGunEnabled(self):
         return self.__getGlobalSetting('isEpicRandomMarksOnGunEnabled', False)
-
-    def isPromoAutoViewsEnabled(self):
-        if self.isBootcampEnabled():
-            from bootcamp.Bootcamp import g_bootcamp
-            if g_bootcamp.isRunning():
-                return False
-        return True
 
     def isHofEnabled(self):
         return self.__getGlobalSetting('hallOfFame', {}).get('isHofEnabled', False)
@@ -580,6 +618,12 @@ class ServerSettings(object):
     def isManualEnabled(self):
         return self.__getGlobalSetting('isManualEnabled', False)
 
+    def isFieldPostEnabled(self):
+        return self.__getGlobalSetting('isFieldPostEnabled', True)
+
+    def isPromoLoggingEnabled(self):
+        return self.__getGlobalSetting('isPromoLoggingEnabled', False)
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -597,3 +641,6 @@ class ServerSettings(object):
     def __updateEpic(self, targetSettings):
         self.__epicMetaGameSettings = self.__epicMetaGameSettings.replace(targetSettings['epic_config'])
         self.__epicGameSettings = self.__epicGameSettings.replace(targetSettings['epic_config'])
+
+    def __updateIngameShop(self, targetSettings):
+        self.__bwIngameShop = self.__bwIngameShop.replace(targetSettings['ingameShop'])

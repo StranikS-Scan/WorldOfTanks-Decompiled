@@ -3,14 +3,18 @@
 import BigWorld
 from account_helpers.settings_core.settings_constants import GAME
 from account_helpers.settings_core.settings_constants import GRAPHICS
-from gui.Scaleform.daapi.view.meta.BattleStatisticDataControllerMeta import BattleStatisticDataControllerMeta
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import broker
+from gui.Scaleform.daapi.view.meta.BattleStatisticDataControllerMeta import BattleStatisticDataControllerMeta
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_control.arena_info import team_overrides
 from gui.battle_control.arena_info import vos_collections
 from gui.battle_control.arena_info.interfaces import IVehiclesAndPersonalInvitationsController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.battle_control.arena_info.settings import PERSONAL_STATUS
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, BATTLE_CTRL_ID
+from gui.server_events.events_helpers import MISSIONS_STATES
+from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -60,6 +64,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         self.__personalStatus = PERSONAL_STATUS.DEFAULT
         self.__reusable = {}
         self.__avatarTeam = None
+        self.__isPMBattleProgressEnabled = False
         return
 
     def getControllerID(self):
@@ -264,6 +269,15 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        self.__isPMBattleProgressEnabled = self.lobbyContext.getServerSettings().isPMBattleProgressEnabled()
+        qProgressCtrl = self.sessionProvider.shared.questProgress
+        if qProgressCtrl is not None and self.__isPMBattleProgressEnabled:
+            qProgressCtrl.onConditionProgressUpdate += self.__onQuestProgressUpdate
+            qProgressCtrl.onFullConditionsUpdate += self.__onFullConditionsUpdate
+            qProgressCtrl.onQuestProgressInited += self.__onFullConditionsUpdate
+            qProgressCtrl.onHeaderProgressesUpdate += self.__onHeaderProgressesUpdate
+            if qProgressCtrl.isInited():
+                self.__onFullConditionsUpdate()
         if self._battleCtx is not None:
             self.__setPersonalStatus()
         return
@@ -273,6 +287,12 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        qProgressCtrl = self.sessionProvider.shared.questProgress
+        if qProgressCtrl is not None and self.__isPMBattleProgressEnabled:
+            qProgressCtrl.onConditionProgressUpdate -= self.__onQuestProgressUpdate
+            qProgressCtrl.onFullConditionsUpdate -= self.__onFullConditionsUpdate
+            qProgressCtrl.onQuestProgressInited -= self.__onFullConditionsUpdate
+            qProgressCtrl.onHeaderProgressesUpdate -= self.__onHeaderProgressesUpdate
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.sessionProvider.removeArenaCtrl(self)
         self.__clearTeamOverrides()
@@ -305,22 +325,28 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_updatePersonalStatusS(PERSONAL_STATUS.SQUAD_RESTRICTIONS, PERSONAL_STATUS.DEFAULT)
 
     def __setArenaDescription(self):
-        arenaInfoData = {'mapName': self._battleCtx.getArenaTypeName(),
-         'mapIcon': self._battleCtx.getArenaSmallIcon(),
-         'winText': self._battleCtx.getArenaWinString(),
-         'battleTypeLocaleStr': self._battleCtx.getArenaDescriptionString(isInBattle=False),
-         'battleTypeFrameLabel': self._battleCtx.getArenaFrameLabel(),
-         'allyTeamName': self._battleCtx.getTeamName(enemy=False),
-         'enemyTeamName': self._battleCtx.getTeamName(enemy=True)}
-        settings = self.lobbyContext.getServerSettings()
-        if settings is not None and settings.isPersonalMissionsEnabled():
-            info = self._battleCtx.getQuestInfo()
-            if info is not None:
-                arenaInfoData['questsTipStr'] = {'title': info.name,
-                 'mainCondition': info.condition,
-                 'additionalCondition': info.additional}
+        battleCtx = self._battleCtx
+        questProgress = self.sessionProvider.shared.questProgress
+        arenaInfoData = {'mapName': battleCtx.getArenaTypeName(),
+         'winText': battleCtx.getArenaWinString(),
+         'battleTypeLocaleStr': battleCtx.getArenaDescriptionString(isInBattle=False),
+         'battleTypeFrameLabel': battleCtx.getFrameLabel(),
+         'allyTeamName': battleCtx.getTeamName(enemy=False),
+         'enemyTeamName': battleCtx.getTeamName(enemy=True)}
         self.as_setArenaInfoS(arenaInfoData)
-        return
+        selectedQuest = questProgress.getSelectedQuest()
+        if selectedQuest:
+            self.as_setQuestStatusS(self.__getStatusData(selectedQuest))
+
+    def __getStatusData(self, selectedQuest):
+        status = MISSIONS_STATES.IN_PROGRESS
+        icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INPROGRESSICON, 16, 16, -2, 8)
+        text = text_styles.neutral(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_INPROGRESS)
+        if selectedQuest.isMainCompleted():
+            text = text_styles.neutral(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_INCREASERESULT)
+        statusLabel = text_styles.concatStylesToSingleLine(icon, text)
+        return {'statusLabel': statusLabel,
+         'status': status}
 
     def __getTeamOverrides(self, vo, arenaDP):
         team = vo.team
@@ -355,3 +381,16 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
     def __onVOIPStateToggled(self, _):
         arenaDP = self._battleCtx.getArenaDP()
         self.invalidatePlayerStatus(INVALIDATE_OP.PLAYER_STATUS, arenaDP.getVehicleInfo(), arenaDP)
+
+    def __onQuestProgressUpdate(self, progressID, conditionVO):
+        self.as_updateQuestProgressS(progressID, conditionVO)
+
+    def __onFullConditionsUpdate(self, *args):
+        questProgress = self.sessionProvider.shared.questProgress
+        selectedQuest = questProgress.getSelectedQuest()
+        if selectedQuest:
+            self.as_setQuestStatusS(self.__getStatusData(selectedQuest))
+        self.as_setQuestsInfoS(questProgress.getQuestFullData(), self.sessionProvider.isReplayPlaying)
+
+    def __onHeaderProgressesUpdate(self, *args):
+        self.as_updateQuestHeaderProgressS(self.sessionProvider.shared.questProgress.getQuestHeaderProgresses())

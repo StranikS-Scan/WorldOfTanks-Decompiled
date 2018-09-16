@@ -29,6 +29,9 @@ class IGoodiesCache(object):
     def getBooster(self, boosterID):
         raise NotImplementedError
 
+    def haveBooster(self, boosterID):
+        raise NotImplementedError
+
     def getDiscount(self, discoutID):
         raise NotImplementedError
 

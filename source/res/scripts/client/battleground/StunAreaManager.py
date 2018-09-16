@@ -1,9 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/battleground/StunAreaManager.py
 from collections import namedtuple
-from functools import partial
 import BigWorld
-import BattleReplay
 import Math
 import ResMgr
 from avatar_components.CombatEquipmentManager import CombatEquipmentManager
@@ -35,7 +33,6 @@ class StunAreaManager(object):
 
     def __init__(self):
         super(StunAreaManager, self).__init__()
-        self.__callbackDelayer = CallbackDelayer.CallbackDelayer()
         self.__callbacksSet = CallbackDelayer.CallbacksSetByID()
         self.__stunAreas = {}
         self.__isGUIVisible = True
@@ -53,16 +50,35 @@ class StunAreaManager(object):
                     area.destroy()
 
         self.__stunAreas = {}
-        self.__callbackDelayer.destroy()
         self.__callbacksSet.clear()
         return
 
     def manageStunArea(self, position, senderID):
-        if BattleReplay.isPlaying():
-            self.__callbackDelayer.delayCallback(0.0, partial(self.__addStunAreaImpl, senderID, position))
+        areaID = senderID
+        if areaID in self.__stunAreas:
+            self.__callbacksSet.stopCallback(areaID)
+            self.__removeArea(areaID)
+        distanceFromPlayer = (position - BigWorld.player().position).length
+        showArea = distanceFromPlayer <= AOI.VEHICLE_CIRCULAR_AOI_RADIUS
+        if showArea:
+            areas = []
+            for i in xrange(0, self.__stunAreaParams['areasNum']):
+                area = self.__createStunArea(position, areaIndex=i)
+                if area is not None:
+                    area.setGUIVisible(self.__isGUIVisible)
+                    areas.append(area)
+
+            self.__stunAreas[areaID] = areas
+            if areas:
+                areas[0].addLine(position, self.__stunAreaParams['lineColor'], self.__stunAreaParams['lineWidth'], self.__stunAreaParams['lineHeight'])
         else:
-            self.__addStunAreaImpl(senderID, position)
-        return senderID
+            self.__stunAreas[areaID] = []
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            position.y += self.__stunAreaParams['lineHeight'] * 1.1
+            ctrl.onStaticMarkerAdded(areaID, position, STUN_AREA_STATIC_MARKER, showArea)
+        self.__callbacksSet.delayCallback(areaID, self.__stunAreaParams['lifetime'], self.__removeArea)
+        return
 
     def setGUIVisible(self, visible):
         self.__isGUIVisible = visible
@@ -91,34 +107,13 @@ class StunAreaManager(object):
         else:
             LOG_WARNING('Resource is not found', self.__stunAreaParams['visual'])
 
-    def __addStunAreaImpl(self, areaID, position):
-        if areaID in self.__stunAreas:
-            self.__callbacksSet.stopCallback(areaID)
-            self.__removeArea(areaID)
-        distanceFromPlayer = (position - BigWorld.player().position).length
-        showArea = distanceFromPlayer <= AOI.VEHICLE_CIRCULAR_AOI_RADIUS
-        if showArea:
-            areas = []
-            offset = self.__stunAreaParams['radius'] / self.__stunAreaParams['areasNum']
-            for i in xrange(0, self.__stunAreaParams['areasNum']):
-                areaDiameter = 2.0 * (self.__stunAreaParams['radius'] - i * offset)
-                adaptedAreaDesc = _EquipmentAdapter(areaDiameter, areaDiameter, self.__stunAreaParams['visual'], self.__stunAreaParams['color'], None)
-                area = CombatEquipmentManager.createEquipmentSelectedArea(position, _DIR_UP, adaptedAreaDesc)
-                if area is not None:
-                    area.setGUIVisible(self.__isGUIVisible)
-                    areas.append(area)
-
-            self.__stunAreas[areaID] = areas
-            if areas:
-                areas[0].addLine(position, self.__stunAreaParams['lineColor'], self.__stunAreaParams['lineWidth'], self.__stunAreaParams['lineHeight'])
-        else:
-            self.__stunAreas[areaID] = []
-        ctrl = self.sessionProvider.shared.feedback
-        if ctrl is not None:
-            position.y += self.__stunAreaParams['lineHeight'] * 1.1
-            ctrl.onStaticMarkerAdded(areaID, position, STUN_AREA_STATIC_MARKER, showArea)
-        self.__callbacksSet.delayCallback(areaID, self.__stunAreaParams['lifetime'], self.__removeArea)
-        return
+    def __createStunArea(self, position, areaIndex):
+        markerRadius = self.__stunAreaParams['radius']
+        offset = markerRadius / self.__stunAreaParams['areasNum']
+        areaDiameter = 2.0 * (markerRadius - areaIndex * offset)
+        adaptedAreaDesc = _EquipmentAdapter(areaDiameter, areaDiameter, self.__stunAreaParams['visual'], self.__stunAreaParams['color'], None)
+        area = CombatEquipmentManager.createEquipmentSelectedArea(position, _DIR_UP, adaptedAreaDesc)
+        return area
 
     def __removeArea(self, areaID):
         if areaID in self.__stunAreas:

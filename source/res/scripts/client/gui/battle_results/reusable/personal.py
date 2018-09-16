@@ -300,7 +300,7 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '__economicsRecords', '__isPremium', '__questsProgress', '__rankInfo')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '__economicsRecords', '__isPremium', '__questsProgress', '__PM2Progress', '__rankInfo')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, personal):
@@ -316,6 +316,7 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__economicsRecords = _EconomicsRecordsChains()
         self.__lifeTimeInfo = _LifeTimeInfo(False, 0)
         self.__questsProgress = {}
+        self.__PM2Progress = {}
         self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, 0, {}, {})
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
@@ -369,6 +370,9 @@ class PersonalInfo(shared.UnpackedInfo):
     def getQuestsProgress(self):
         return self.__questsProgress
 
+    def getPM2Progress(self):
+        return self.__PM2Progress
+
     def getRankInfo(self):
         return self.__rankInfo
 
@@ -407,12 +411,13 @@ class PersonalInfo(shared.UnpackedInfo):
 
     def __collectRequiredData(self, info):
         getItemByCD = self.itemsCache.items.getItemByCD
-        items = [ key for key in info.keys() if isinstance(key, (int, long, float)) ]
-        items = sorted((getItemByCD(item) for item in items))
+        itemCDs = [ key for key in info.keys() if isinstance(key, (int, long, float)) ]
+        items = sorted((getItemByCD(itemCD) for itemCD in itemCDs))
         lifeTimes = []
         infoAvatar = info['avatar']
         if infoAvatar:
             self.__questsProgress.update(infoAvatar.get('questsProgress', {}))
+            self.__PM2Progress.update(infoAvatar.get('PM2Progress', {}))
             self.__rankInfo = PostBattleRankInfo.fromDict(infoAvatar)
         for item in items:
             intCD = item.intCD
@@ -431,6 +436,7 @@ class PersonalInfo(shared.UnpackedInfo):
             if not self.__isPremium and data.get('isPremium', False):
                 self.__isPremium = True
             self.__questsProgress.update(data.get('questsProgress', {}))
+            self.__PM2Progress.update(data.get('PM2Progress', {}))
 
         if lifeTimes:
             self.__lifeTimeInfo = _LifeTimeInfo(True, min(lifeTimes))

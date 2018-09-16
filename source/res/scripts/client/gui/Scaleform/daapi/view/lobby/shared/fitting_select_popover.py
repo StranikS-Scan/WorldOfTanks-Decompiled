@@ -259,6 +259,7 @@ class HangarFittingSelectPopover(CommonFittingSelectPopover):
     def __init__(self, ctx=None, logicProvider=None):
         data_ = ctx['data']
         slotType = data_.slotType
+        self.__preferredLayout = data_.preferredLayout
         self.__slotIndex = data_.slotIndex
         if g_currentPreviewVehicle.isPresent():
             _logicProvider = _PreviewLogicProvider(slotType, self.__slotIndex)
@@ -273,6 +274,11 @@ class HangarFittingSelectPopover(CommonFittingSelectPopover):
             logicProvider = _logicProvider
         super(HangarFittingSelectPopover, self).__init__(vehicle, logicProvider, ctx)
         return
+
+    def _prepareInitialData(self):
+        result = super(HangarFittingSelectPopover, self)._prepareInitialData()
+        result['preferredLayout'] = self.__preferredLayout
+        return result
 
     def _getSlotIndex(self):
         return self.__slotIndex

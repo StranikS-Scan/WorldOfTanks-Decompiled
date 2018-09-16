@@ -1246,6 +1246,14 @@ class VehicleType(object):
         return self.i18nInfo.description
 
     @property
+    def shortDescriptionSpecial(self):
+        return self.i18nInfo.shortDescriptionSpecial
+
+    @property
+    def longDescriptionSpecial(self):
+        return self.i18nInfo.longDescriptionSpecial
+
+    @property
     def isCustomizationLocked(self):
         return 'lockOutfit' in self.tags
 
@@ -1727,6 +1735,10 @@ def getVehicleType(compactDescr):
 
 def getVehicleClass(compactDescr):
     return getVehicleClassFromVehicleType(getVehicleType(compactDescr))
+
+
+def getVehicleAlliance(vehTypeCompDescr):
+    return nations.ALLIANCES_TAGS_ORDER[nations.NATION_TO_ALLIANCE_IDS_MAP[parseIntCompactDescr(vehTypeCompDescr)[1]]]
 
 
 def getVehicleClassFromVehicleType(vehicleType):
@@ -2277,7 +2289,7 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.sounds = sounds
         item.physicalTracks = physicalTracksDict = {}
         physicalTracksSection = section['physicalTracks']
-        if physicalTracksSection is not None and False:
+        if physicalTracksSection is not None:
             physicalTracksDict['left'] = shared_readers.readBuilder(xmlCtx, physicalTracksSection, 'left', Vehicular.PhysicalTrackBuilder)
             physicalTracksDict['right'] = shared_readers.readBuilder(xmlCtx, physicalTracksSection, 'right', Vehicular.PhysicalTrackBuilder)
         item.wheels = chassis_components.WheelsConfig(shared_readers.readLodDist(xmlCtx, section, 'wheels/lodDist', g_cache), wheelGroups, wheels)

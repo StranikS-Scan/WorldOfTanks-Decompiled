@@ -7,10 +7,8 @@ from helpers import time_utils
 from gui import makeHtmlString
 FLAG_ICON_TEMPLATE = '../maps/icons/battle/respawn/optimize_flags_160x100/%s.png'
 VEHICLE_TYPE_TEMPLATE = '../maps/icons/vehicleTypes/%s.png'
-VEHICLE_TYPE_ELITE_TEMPLATE = '../maps/icons/vehicleTypes/elite/%s.png'
 VEHICLE_LEVEL_TEMPLATE = '../maps/icons/levels/tank_level_%d.png'
 VEHICLE_FORMAT = makeHtmlString('html_templates:igr/premium-vehicle', 'name', {})
-VEHICLE_TYPE_BIG_TEMPLATE = '../maps/icons/vehicleTypes/big/%s.png'
 VEHICLE_ELITE_TYPE_TEMPLATE = '../maps/icons/vehicleTypes/elite/%s.png'
 
 def getVehicleName(vehicle):

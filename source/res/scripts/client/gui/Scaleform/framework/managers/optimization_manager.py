@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/optimization_manager.py
+import logging
 import GUI
 import Math
 from debug_utils import LOG_ERROR
@@ -10,6 +11,7 @@ from helpers import dependency
 from ids_generators import Int32IDGenerator
 from skeletons.account_helpers.settings_core import ISettingsCore
 _PERMANENT_SETTING_ID = ''
+_logger = logging.getLogger(__name__)
 
 class OptimizationSetting(object):
     __slots__ = ('__id', '__isInvert')
@@ -53,7 +55,9 @@ class GraphicsOptimizationManager(GraphicsOptimizationManagerMeta):
         self.__settingsNames = _getSettingsNames(self.__config)
 
     def registerOptimizationArea(self, x, y, width, height):
-        bounds = _getRectBounds(x, y, width, height)
+        if width < 0 or height < 0:
+            _logger.warning('Optimization rect width and height can not be less than 0')
+        bounds = _getRectBounds(x, y, max(0, width), max(0, height))
         optimizationID = self.__idsGenerator.next()
         self.__cache[optimizationID] = bounds
         self.__optimizer.registerRect(optimizationID, bounds)

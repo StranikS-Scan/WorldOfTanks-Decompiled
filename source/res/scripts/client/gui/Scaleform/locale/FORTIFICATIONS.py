@@ -29,6 +29,8 @@ class FORTIFICATIONS(object):
     SORTIE_ROOM_NOTREADY = '#fortifications:sortie/room/notReady'
     SORTIE_ROOM_FIGHT = '#fortifications:sortie/room/fight'
     SORTIE_ROOM_LEVEL = '#fortifications:sortie/room/level'
+    SORTIE_MEMBER_SLOT_FOR_LEGIONARY = '#fortifications:sortie/member/slot_for_legionary'
+    SORTIE_MEMBER_SLOT_FOR_LEGIONARY_SEARCH = '#fortifications:sortie/member/slot_for_legionary_search'
     SORTIE_VEHICLESELECTOR_DESCRIPTION = '#fortifications:sortie/vehicleSelector/description'
     CLANLISTWINDOW_TABLE_MEMBERNAME = '#fortifications:ClanListWindow/table/memberName'
     CLANLISTWINDOW_TABLE_ROLE = '#fortifications:ClanListWindow/table/role'
@@ -115,6 +117,12 @@ class FORTIFICATIONS(object):
     BATTLEQUEUE_CLANPOSITION = '#fortifications:battleQueue/clanPosition'
     BATTLEQUEUE_SEARCHENEMY = '#fortifications:battleQueue/searchEnemy'
     BATTLEQUEUE_WAITBATTLE = '#fortifications:battleQueue/waitBattle'
+    STRONGHOLDPOPOVER_COMMANDERHEADER = '#fortifications:strongholdPopover/commanderHeader'
+    STRONGHOLDPOPOVER_HEADER = '#fortifications:strongholdPopover/header'
+    STRONGHOLDSLOT_SELECTEDVEHICLESCOUNT = '#fortifications:strongholdSlot/selectedVehiclesCount'
+    ROSTER_CLANMEMBERSNOTENOUGH = '#fortifications:roster/clanMembersNotEnough'
+    UNIT_WINDOW_WILLSEARCHPLAYERS = '#fortifications:unit/window/willSearchPlayers'
+    FORTVEHPOPOVER_BTNSAVE = '#fortifications:fortVehPopover/btnSave'
     STRONGHOLDDIRECTION_ENUM = (STRONGHOLDDIRECTION_A,
      STRONGHOLDDIRECTION_B,
      STRONGHOLDDIRECTION_C,

@@ -7,14 +7,15 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import formatters
-from gui.server_events.cond_formatters import CONDITION_ICON, FORMATTER_IDS, FormattableField, CONDITION_SIZE, getCondIconBySize
+from gui.server_events.cond_formatters import FORMATTER_IDS, FormattableField, CONDITION_SIZE, getCondIconBySize
 from gui.server_events.cond_formatters.formatters import ConditionsFormatter
-from gui.server_events.cond_formatters.mixed_formatters import MissionBonusAndPostBattleCondFormatter, PersonalMissionConditionsFormatter
+from gui.server_events.cond_formatters.mixed_formatters import MissionBonusAndPostBattleCondFormatter
 from gui.server_events.cond_formatters.tokens import TokensConditionFormatter
 from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
+from personal_missions_constants import CONDITION_ICON
 from soft_exception import SoftException
 MAX_ACHIEVEMENTS_IN_TOOLTIP = 5
 CARD_FIELDS_FORMATTERS = {FORMATTER_IDS.SIMPLE_TITLE: formatters.minimizedTitleFormat,
@@ -338,25 +339,3 @@ class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):
          'rendererLinkage': MISSIONS_ALIASES.TOKEN_CONDITION,
          'data': result,
          'isDetailed': True}
-
-
-class PMCardConditionsFormatter(PersonalMissionConditionsFormatter):
-
-    def format(self, event, isMain=None):
-        results = super(PMCardConditionsFormatter, self).format(event, isMain)
-        if isMain is not None and not isMain and event.isMainCompleted():
-            results.insert(0, self.__packAdditionalCondition(self._isConditionBlockAvailable(event, isMain)))
-        return results
-
-    def _packCondition(self, preFormattedCondition, isAvailable, isInOrGroup):
-        return {'icon': getCondIconBySize(CONDITION_SIZE.NORMAL, preFormattedCondition.iconKey),
-         'title': self._getFormattedField(preFormattedCondition.titleData),
-         'description': self._getFormattedField(preFormattedCondition.descrData),
-         'isEnabled': isAvailable,
-         'isInOrGroup': isInOrGroup}
-
-    def __packAdditionalCondition(self, isAvailable):
-        return {'icon': getCondIconBySize(CONDITION_SIZE.NORMAL, CONDITION_ICON.FOLDER),
-         'title': self._formatters[FORMATTER_IDS.SIMPLE_TITLE](QUESTS.DETAILS_CONDITIONS_ADDITIONAL_TITLE),
-         'description': '',
-         'isEnabled': isAvailable}

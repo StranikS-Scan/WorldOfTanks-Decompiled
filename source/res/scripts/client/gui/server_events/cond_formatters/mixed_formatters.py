@@ -1,17 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/mixed_formatters.py
 from collections import namedtuple
+from constants import QUEST_PROGRESS_STATE
 from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
+from gui.Scaleform.genConsts.QUEST_PROGRESS_BASE import QUEST_PROGRESS_BASE
+from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events import formatters
-from gui.server_events.cond_formatters import FormattableField, FORMATTER_IDS, CONDITION_ICON, BATTLE_RESULTS_KEYS
+from gui.server_events.cond_formatters import FormattableField, FORMATTER_IDS, BATTLE_RESULTS_KEYS
 from gui.server_events.cond_formatters import postbattle
 from gui.server_events.cond_formatters.bonus import MissionsBonusConditionsFormatter, BattlesCountFormatter
 from gui.server_events.cond_formatters.formatters import ConditionsFormatter
 from gui.server_events.cond_formatters.postbattle import GroupResult
 from gui.server_events.cond_formatters.prebattle import PersonalMissionsVehicleConditionsFormatter
 from gui.server_events.formatters import PreFormattedCondition
+from gui.shared.formatters import text_styles
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
+from personal_missions_constants import CONDITION_ICON, DISPLAY_TYPE
 
 def _packPlayBattleCondition():
     titleArgs = (i18n.makeString(QUESTS.DETAILS_CONDITIONS_PLAYBATTLE_TITLE),)
@@ -144,3 +150,131 @@ class StringPersonalMissionConditionsFormatter(PersonalMissionConditionsFormatte
         else:
             text = title
         return self._CONDITION(text, isInOrGroup)
+
+
+def _wrapToNewConditionsFormat(result, isMain, isCompleted):
+    if isMain:
+        orderType = QUEST_PROGRESS_BASE.MAIN_ORDER_TYPE
+    else:
+        orderType = QUEST_PROGRESS_BASE.ADD_ORDER_TYPE
+    return {'progressID': None,
+     'initData': {'title': result.get('title'),
+                  'description': result.get('description'),
+                  'iconID': result.get('icon'),
+                  'orderType': orderType,
+                  'progressType': 'regular',
+                  'isInOrGroup': result.get('isInOrGroup', False),
+                  'topMetricIndex': -1},
+     'progressData': {'current': 0,
+                      'state': QUEST_PROGRESS_STATE.COMPLETED if isCompleted else QUEST_PROGRESS_STATE.NOT_STARTED,
+                      'goal': 1,
+                      'metrics': []}}
+
+
+class PM1ConditionsFormatter(PersonalMissionConditionsFormatter):
+
+    def format(self, event, isMain=None):
+        results = super(PM1ConditionsFormatter, self).format(event, isMain)
+        isCompleted = self._markAsCompleted(event, isMain)
+        return [ self._getWrappedData(res, isMain, isCompleted) for res in results ]
+
+    @classmethod
+    def _getWrappedData(cls, res, isMain, isCompleted):
+        return _wrapToNewConditionsFormat(res, isMain, isCompleted)
+
+    def _packCondition(self, preFormattedCondition, isAvailable, isInOrGroup):
+        return {'icon': preFormattedCondition.iconKey,
+         'title': self._getFormattedField(preFormattedCondition.titleData),
+         'description': self._getFormattedField(preFormattedCondition.descrData),
+         'isEnabled': isAvailable,
+         'isInOrGroup': isInOrGroup}
+
+    @classmethod
+    def _markAsCompleted(cls, event, isMain):
+        raise NotImplementedError
+
+
+class PM1AwardScreenConditionsFormatter(PM1ConditionsFormatter):
+
+    @classmethod
+    def _getWrappedData(cls, res, isMain, isCompleted):
+        title = res.get('title')
+        description = res.get('description')
+        tooltip = ''
+        if title and description:
+            tooltip = makeTooltip(title, description)
+        return {'initData': {'title': text_styles.middleTitle(title),
+                      'iconID': res.get('icon'),
+                      'progressType': 'regular',
+                      'tooltip': tooltip},
+         'progressData': {'current': 0,
+                          'state': QUEST_PROGRESS_STATE.COMPLETED if isCompleted else QUEST_PROGRESS_STATE.FAILED,
+                          'goal': 1}}
+
+    @classmethod
+    def _markAsCompleted(cls, event, isMain):
+        return event.isMainCompleted() if isMain else event.isFullCompleted()
+
+
+class PM1CardConditionsFormatter(PM1ConditionsFormatter):
+
+    @classmethod
+    def _markAsCompleted(cls, event, isMain):
+        return (event.isMainCompleted() if isMain else event.isFullCompleted()) and not event.isInProgress()
+
+
+class PM1BattleConditionsFormatter(PM1CardConditionsFormatter):
+
+    @classmethod
+    def _markAsCompleted(cls, event, isMain):
+        return False
+
+
+def _addDummyHeaderProgress(isMain):
+    orderType = QUEST_PROGRESS_BASE.ADD_ORDER_TYPE
+    key = PERSONAL_MISSIONS.CONDITIONS_UNLIMITED_LABEL_ADD
+    if isMain:
+        orderType = QUEST_PROGRESS_BASE.MAIN_ORDER_TYPE
+        key = PERSONAL_MISSIONS.CONDITIONS_UNLIMITED_LABEL_MAIN
+    return {'progressType': DISPLAY_TYPE.NONE,
+     'orderType': orderType,
+     'header': i18n.makeString(key)}
+
+
+class PM1ConditionsFormatterAdapter(object):
+
+    def __init__(self, event, conditionsFormatter):
+        self.__event = event
+        self.__conditionsFormatter = conditionsFormatter
+
+    def bodyFormat(self, isMain=None):
+        formatFunc = self.__conditionsFormatter.format
+        return formatFunc(self.__event, isMain) if isMain is not None else formatFunc(self.__event, True) + formatFunc(self.__event, False)
+
+    def headerFormat(self, isMain=None):
+        return [self.addDummyHeaderProgress(isMain)] if isMain is not None else [self.addDummyHeaderProgress(True), self.addDummyHeaderProgress(False)]
+
+    @classmethod
+    def addDummyHeaderProgress(cls, isMain):
+        orderType = QUEST_PROGRESS_BASE.MAIN_ORDER_TYPE if isMain else QUEST_PROGRESS_BASE.ADD_ORDER_TYPE
+        return {'progressType': DISPLAY_TYPE.NONE,
+         'orderType': orderType,
+         'header': None}
+
+
+class PM1CardConditionsFormatterAdapter(PM1ConditionsFormatterAdapter):
+
+    def __init__(self, event):
+        super(PM1CardConditionsFormatterAdapter, self).__init__(event, PM1CardConditionsFormatter())
+
+
+class PM1BattleConditionsFormatterAdapter(PM1ConditionsFormatterAdapter):
+
+    def __init__(self, event):
+        super(PM1BattleConditionsFormatterAdapter, self).__init__(event, PM1BattleConditionsFormatter())
+
+
+class PM1AwardScreenConditionsFormatterAdapter(PM1ConditionsFormatterAdapter):
+
+    def __init__(self, event):
+        super(PM1AwardScreenConditionsFormatterAdapter, self).__init__(event, PM1AwardScreenConditionsFormatter())

@@ -37,9 +37,7 @@ def getGameControllersConfig(manager):
     from gui.marathon.marathon_event_controller import MarathonEventsController as _MarathonEventsController
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController as _EpicMeta
     from gui.game_control.manual_controller import ManualController as _ManualController
-    from gui.game_control.football_meta_game import FootballMetaGame as _FootballMetaGame
     from skeletons.gui import game_control as _interface
-    from gui.game_control.calendar_controller import CalendarController as _Calendar
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -77,11 +75,9 @@ def getGameControllersConfig(manager):
     _config(_interface.IRankedBattlesController, _Ranked())
     _config(_interface.IEpicModeController, _Epic())
     _config(_interface.IHeroTankController, _HeroTankController())
-    _config(_interface.ICalendarController, _Calendar())
     _config(_interface.IMarathonEventsController, _MarathonEventsController())
     _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
     _config(_interface.IManualController, _ManualController())
-    _config(_interface.IFootballMetaGame, _FootballMetaGame())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:

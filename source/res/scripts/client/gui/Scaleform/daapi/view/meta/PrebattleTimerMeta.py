@@ -10,11 +10,8 @@ class PrebattleTimerMeta(BaseDAAPIComponent):
     def as_setMessageS(self, msg):
         return self.flashObject.as_setMessage(msg) if self._isDAAPIInited() else None
 
-    def as_hideTimerS(self):
-        return self.flashObject.as_hideTimer() if self._isDAAPIInited() else None
+    def as_hideAllS(self, useAnim):
+        return self.flashObject.as_hideAll(useAnim) if self._isDAAPIInited() else None
 
-    def as_hideAllS(self, speed):
-        return self.flashObject.as_hideAll(speed) if self._isDAAPIInited() else None
-
-    def as_setWinConditionTextS(self, msg):
-        return self.flashObject.as_setWinConditionText(msg) if self._isDAAPIInited() else None
+    def as_setWinConditionTextS(self, winCondition):
+        return self.flashObject.as_setWinConditionText(winCondition) if self._isDAAPIInited() else None

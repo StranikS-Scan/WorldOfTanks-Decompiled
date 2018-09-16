@@ -1,14 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/battle_timers.py
+import BigWorld
 import SoundGroups
+from constants import ARENA_PERIOD
 from gui.Scaleform.daapi.view.meta.BattleTimerMeta import BattleTimerMeta
 from gui.Scaleform.daapi.view.meta.PrebattleTimerMeta import PrebattleTimerMeta
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-from gui.battle_control.battle_constants import COUNTDOWN_STATE
+from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
+from gui.battle_control.battle_constants import COUNTDOWN_STATE, BATTLE_CTRL_ID
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.battle_session import IBattleSessionProvider
+_TIMER_ANIMATION_SHIFT = 0.4
 
 class _WWISE_EVENTS(object):
     BATTLE_ENDING_SOON = 'time_buzzer_02'
@@ -21,21 +25,85 @@ _STATE_TO_MESSAGE = {COUNTDOWN_STATE.WAIT: INGAME_GUI.TIMER_WAITING,
  COUNTDOWN_STATE.START: INGAME_GUI.TIMER_STARTING,
  COUNTDOWN_STATE.STOP: INGAME_GUI.TIMER_STARTED}
 
-class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView):
+class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView, IArenaVehiclesController):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self):
+        self._state = COUNTDOWN_STATE.WAIT
+        self._battleTypeStr = None
+        self.__timeLeft = None
+        self.__callbackID = None
+        self.__arenaPeriod = None
+        self.__notReadyCount = 0
+        super(PreBattleTimer, self).__init__()
+        return
+
+    def getControllerID(self):
+        return BATTLE_CTRL_ID.GUI
 
     def updateBattleCtx(self, battleCtx):
+        self._battleTypeStr = battleCtx.getArenaDescriptionString(isInBattle=False)
+        self.as_setMessageS(self._getMessage())
         self.as_setWinConditionTextS(battleCtx.getArenaWinString())
 
+    def setPeriod(self, period):
+        if self.__arenaPeriod is None and period == ARENA_PERIOD.BATTLE:
+            self.as_hideAllS(False)
+        self.__arenaPeriod = period
+        return
+
     def setCountdown(self, state, timeLeft):
-        self.as_setMessageS(i18n.makeString(_STATE_TO_MESSAGE[state]))
+        self.__timeLeft = timeLeft
+        if self._state != state:
+            self._state = state
+            self.as_setMessageS(self._getMessage())
         if state == COUNTDOWN_STATE.WAIT:
-            self.as_hideTimerS()
+            self.__clearTimeShiftCallback()
+            self.as_setTimerS(self.__notReadyCount)
         else:
-            self.as_setTimerS(timeLeft)
+            self.__setTimeShitCallback()
+
+    def invalidateVehicleStatus(self, flags, vo, arenaDP):
+        self.__notReadyCount = sum([ not vInfo.isReady() for vInfo in arenaDP.getVehiclesInfoIterator() ])
+        if self._state == COUNTDOWN_STATE.WAIT:
+            self.as_setTimerS(self.__notReadyCount)
 
     def hideCountdown(self, state, speed):
         self.as_setMessageS(i18n.makeString(_STATE_TO_MESSAGE[state]))
-        self.as_hideAllS(speed)
+        self.__clearTimeShiftCallback()
+        self.as_hideAllS(speed != 0)
+
+    def _getMessage(self):
+        if self._state == COUNTDOWN_STATE.WAIT:
+            msg = _STATE_TO_MESSAGE[self._state]
+        else:
+            msg = self._battleTypeStr
+        return i18n.makeString(msg)
+
+    def _populate(self):
+        super(PreBattleTimer, self)._populate()
+        self.sessionProvider.addArenaCtrl(self)
+
+    def _dispose(self):
+        self.sessionProvider.removeArenaCtrl(self)
+        self.__clearTimeShiftCallback()
+        super(PreBattleTimer, self)._dispose()
+
+    def __setTimeShitCallback(self):
+        self.__callbackID = BigWorld.callback(_TIMER_ANIMATION_SHIFT, self.__updateTimer)
+
+    def __updateTimer(self):
+        self.__callbackID = None
+        if self.__timeLeft > 0:
+            timeLeftWithShift = self.__timeLeft - 1
+            self.as_setTimerS(timeLeftWithShift)
+        return
+
+    def __clearTimeShiftCallback(self):
+        if self.__callbackID is not None:
+            BigWorld.cancelCallback(self.__callbackID)
+            self.__callbackID = None
+        return
 
 
 class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
@@ -70,7 +138,7 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
                 if totalTime == self.__endingSoonTime:
                     self._callWWISE(_WWISE_EVENTS.BATTLE_ENDING_SOON)
             elif self.__isTicking:
-                self._stopTicking()
+                self.__stopTicking()
         self._sendTime(minutes, seconds)
 
     def setState(self, state):
@@ -100,7 +168,7 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         self.__isTicking = True
         self._setColor()
 
-    def _stopTicking(self):
+    def __stopTicking(self):
         self._callWWISE(_WWISE_EVENTS.STOP_TICKING)
         self.__isTicking = False
         self._setColor()

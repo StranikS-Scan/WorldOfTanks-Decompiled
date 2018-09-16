@@ -11,9 +11,8 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehiclePreviewParameters
     from gui.Scaleform.daapi.view.lobby.vehiclePreview.ModulesPanel import ModulesPanel
-    return (ViewSettings(VEHPREVIEW_CONSTANTS.MODULES_PY_ALIAS, ModulesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE), ViewSettings(VEHPREVIEW_CONSTANTS.PARAMETERS_PY_ALIAS, VehiclePreviewParameters, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+    return (ViewSettings(VEHPREVIEW_CONSTANTS.MODULES_PY_ALIAS, ModulesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),)
 
 
 def getBusinessHandlers():

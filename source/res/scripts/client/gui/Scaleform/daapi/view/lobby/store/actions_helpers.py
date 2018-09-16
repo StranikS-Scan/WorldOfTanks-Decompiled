@@ -68,7 +68,7 @@ class ActionInfo(EventInfoModel):
 
     def getID(self):
         if not self._id:
-            self._id = '{}/{}/{}'.format(self.event.getID(), self.discount.getName(), self.discount.getParamName())
+            self._id = '/'.join((self.event.getID(), self.discount.getName(), self.discount.getParamName()))
         return self._id
 
     def isAvailable(self):
@@ -85,6 +85,12 @@ class ActionInfo(EventInfoModel):
 
     def getFinishTime(self):
         return self.event.getFinishTime()
+
+    def getExactStartTime(self):
+        return self.event.getData().get('startTime', time.time())
+
+    def getExactFinishTime(self):
+        return self.event.getData().get('finishTime', time.time())
 
     def getTitle(self):
         return self.event.getUserName()
@@ -251,7 +257,7 @@ class ActionInfo(EventInfoModel):
         return formatPercentValue(discount.discountValue) if discount else None
 
     def _formatFinishTime(self):
-        return '{} {}'.format(text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_FINISH)), BigWorld.wg_getShortDateFormat(self.getFinishTime()))
+        return ' '.join((text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_FINISH)), BigWorld.wg_getShortDateFormat(self.getFinishTime())))
 
     def _getActiveDateTimeString(self):
         if self.event.getFinishTimeLeft() <= time_utils.ONE_DAY:
@@ -262,26 +268,11 @@ class ActionInfo(EventInfoModel):
                 fmt = i18n.makeString(QUESTS.ITEM_TIMER_TILLFINISH_SHORTFORMAT)
             fmt %= {'hours': time.strftime('%H', gmtime),
              'min': time.strftime('%M', gmtime)}
-            return '{} {}'.format(text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_LEFT)), fmt)
+            return ' '.join((text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_LEFT)), fmt))
         return self._formatFinishTime()
 
     def __modifyName(self, stepName):
         return self._compositionType or stepName
-
-
-class CalendarActionInfo(ActionInfo):
-
-    def isDiscountVisible(self):
-        return True
-
-    def getTitle(self):
-        return i18n.makeString(QUESTS.ACTION_SHORT_CALENDAR)
-
-    def getTriggerChainID(self):
-        pass
-
-    def getAutoDescription(self, useBigIco=False, forNormalCard=False):
-        return i18n.makeString(QUESTS.ACTION_SUBHEADER_CALENDAR)
 
 
 class EconomicsActionsInfo(ActionInfo):
@@ -382,7 +373,7 @@ class VehPriceActionInfo(ActionInfo):
         if vehsLen > 1:
             discValue = formatPercentValue(vehs[0]['discount'])
             paramKey = 'two' if vehsLen == 2 else 'more'
-            vehicles = '{}, {}'.format(vehs[0]['title'], vehs[1]['title'])
+            vehicles = ', '.join((vehs[0]['title'], vehs[1]['title']))
         elif vehsLen == 1:
             discValue = vehs[0]['price']
             paramKey = 'one'
@@ -391,8 +382,17 @@ class VehPriceActionInfo(ActionInfo):
             return ''
         values = {'vehicles': vehicles,
          'discount': discValue}
-        paramName = '{}/{}'.format(self.discount.getParamName(), paramKey)
+        paramName = '/'.join((self.getTriggerChainID(), paramKey))
         return self._getShortDescription(paramName, **values)
+
+    def getActionBtnLabel(self):
+        return self._getButtonName(self.getTriggerChainID())
+
+    def getPicture(self):
+        picture = getDecoration(self.uiDecoration)
+        return {'isWeb': True,
+         'src': picture} if picture else {'isWeb': False,
+         'src': _PARAM_TO_IMG_DICT.get(self.getTriggerChainID(), '')}
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
         vehiclesCount = len(self._getPackedDiscounts())
@@ -407,8 +407,8 @@ class VehPriceActionInfo(ActionInfo):
             else:
                 iconFunc = RES_ICONS.maps_icons_vehicletypes
             item = {'icon': _VEHICLE_NATION_ICON_PATH % nations.NAMES[veh.nationID],
-             'additionalIcon': iconFunc(veh.type + '.png'),
-             'title': '{} {}'.format(i18n.makeString(TOOLTIPS.level(veh.level)), veh.shortUserName),
+             'additionalIcon': iconFunc(''.join((veh.type, '.png'))),
+             'title': ' '.join((i18n.makeString(TOOLTIPS.level(veh.level)), veh.shortUserName)),
              'discount': formatStrDiscount(item),
              'price': self._getPrice(veh, False)}
             result.append(item)
@@ -424,7 +424,7 @@ class VehPriceActionInfo(ActionInfo):
         for item in self._sortVehicles():
             veh = item.discountName
             level = formatVehicleLevel(i18n.makeString(TOOLTIPS.level(veh.level)))
-            item = {'title': '{} {}'.format(level, veh.shortUserName),
+            item = {'title': ' '.join((level, veh.shortUserName)),
              'discount': item.discountValue,
              'price': self._getPrice(veh, useBigIco, forNormalCard)}
             if addVehInfo:
@@ -437,68 +437,18 @@ class VehPriceActionInfo(ActionInfo):
         return self._formatPriceIcon(veh, useBigIco, forNormalCard)
 
     def _sortVehicles(self):
-
-        def __sortByNameFunc(item):
-            return item.discountName.shortUserName
-
-        def __sortByVehicleParams(item):
-            veh = item.discountName
-            dscnt = item.discountValue
-            return (dscnt, (veh.buyPrices.itemPrice.price.gold, veh.buyPrices.itemPrice.price.credits), veh.level)
-
         discountItems = self._getPackedDiscounts()
-        return sorted(sorted(discountItems.values(), key=__sortByNameFunc), key=__sortByVehicleParams, reverse=True)[:3]
+        return sorted(sorted(discountItems.values(), key=self._sortByNameFunc), key=self._sortByVehicleParams, reverse=True)[:3]
 
-    def __getCardWithTTCForVehicle(self, vehItemDict):
-        result = {}
-        items = []
-        context = contexts.ToolTipContext(None)
-        statsConfig = context.getStatsConfiguration(vehItemDict['veh'])
-        leftPadding = 20
-        rightPadding = 20
-        blockTopPadding = -4
-        leftRightPadding = formatters.packPadding(left=leftPadding, right=rightPadding)
-        blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
-        valueWidth = 75
-        textGap = -2
-        items.append(formatters.packBuildUpBlockData(self.__getHeaderBlock(vehItemDict), padding=leftRightPadding))
-        items.append(formatters.packBuildUpBlockData(self._getPriceBlock(vehItemDict['veh'], statsConfig, valueWidth), gap=textGap, padding=blockPadding))
-        items.append(formatters.packBuildUpBlockData(self.__getCommonStatsBlock(vehItemDict['veh']), gap=textGap, padding=blockPadding))
-        result.update({'blocksData': items,
-         'marginAfterBlock': self._DEFAULT_MARGIN_AFTER_BLOCK,
-         'marginAfterSeparator': self._DEFAULT_MARGIN_AFTER_SEPARATOR,
-         'width': 600,
-         'highlightType': SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT})
-        return result
+    @staticmethod
+    def _sortByNameFunc(item):
+        return item.discountName.shortUserName
 
-    def __getHeaderBlock(self, vehItemDict):
-        block = []
-        icon = getTypeBigIconPath(vehItemDict['veh'].type, vehItemDict['veh'].isElite)
-        paramName = '{}/{}'.format(self.discount.getParamName(), 'one')
-        values = {'vehicles': vehItemDict['title'],
-         'discount': vehItemDict['price']}
-        titleDescr = text_styles.superPromoTitle(self._getShortDescription(paramName, **values))
-        block.append(formatters.packImageTextBlockData(title=titleDescr, img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-6, txtOffset=84, padding=formatters.packPadding(top=15, bottom=-17)))
-        return block
-
-    def __getCommonStatsBlock(self, vehicle):
-        _params = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'circularVisionRadius'),
-         VEHICLE_CLASS_NAME.MEDIUM_TANK: ('avgDamagePerMinute', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed'),
-         VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage', 'avgPiercingPower', 'hullArmor', 'turretArmor'),
-         VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
-         VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime'),
-         'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}
-        block = []
-        paramsDict = params_helper.getParameters(vehicle)
-        comparator = params_helper.idealCrewComparator(vehicle)
-        for paramName in _params.get(vehicle.type, 'default'):
-            if paramName in paramsDict:
-                paramInfo = comparator.getExtendedData(paramName)
-                fmtValue = param_formatter.colorizedFormatParameter(paramInfo, None)
-                if fmtValue is not None:
-                    block.append(formatters.packTextParameterBlockData(name=param_formatter.formatVehicleParamName(paramName), value=fmtValue, valueWidth=80, padding=formatters.packPadding(left=-1)))
-
-        return block
+    @staticmethod
+    def _sortByVehicleParams(item):
+        veh = item.discountName
+        dscnt = item.discountValue
+        return (dscnt, (veh.buyPrices.itemPrice.price.gold, veh.buyPrices.itemPrice.price.credits), veh.level)
 
     def _getPriceBlock(self, vehicle, configuration, valueWidth):
         block = []
@@ -536,32 +486,65 @@ class VehPriceActionInfo(ActionInfo):
     def _getDefaultPriceLabelConst(self):
         return TOOLTIPS.ACTIONPRICE_BUYPRICE_DEFAULTPRICE
 
+    def __getCardWithTTCForVehicle(self, vehItemDict):
+        result = {}
+        items = []
+        context = contexts.ToolTipContext(None)
+        statsConfig = context.getStatsConfiguration(vehItemDict['veh'])
+        leftPadding = 20
+        rightPadding = 20
+        blockTopPadding = -4
+        leftRightPadding = formatters.packPadding(left=leftPadding, right=rightPadding)
+        blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
+        valueWidth = 75
+        textGap = -2
+        items.append(formatters.packBuildUpBlockData(self.__getHeaderBlock(vehItemDict), padding=leftRightPadding))
+        items.append(formatters.packBuildUpBlockData(self._getPriceBlock(vehItemDict['veh'], statsConfig, valueWidth), gap=textGap, padding=blockPadding))
+        items.append(formatters.packBuildUpBlockData(self.__getCommonStatsBlock(vehItemDict['veh']), gap=textGap, padding=blockPadding))
+        result.update({'blocksData': items,
+         'marginAfterBlock': self._DEFAULT_MARGIN_AFTER_BLOCK,
+         'marginAfterSeparator': self._DEFAULT_MARGIN_AFTER_SEPARATOR,
+         'width': 600,
+         'highlightType': SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT})
+        return result
+
+    def __getHeaderBlock(self, vehItemDict):
+        block = []
+        icon = getTypeBigIconPath(vehItemDict['veh'].type, vehItemDict['veh'].isElite)
+        paramName = '/'.join((self.getTriggerChainID(), 'one'))
+        values = {'vehicles': vehItemDict['title'],
+         'discount': vehItemDict['price']}
+        titleDescr = text_styles.superPromoTitle(self._getShortDescription(paramName, **values))
+        block.append(formatters.packImageTextBlockData(title=titleDescr, img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-6, txtOffset=84, padding=formatters.packPadding(top=15, bottom=-17)))
+        return block
+
+    def __getCommonStatsBlock(self, vehicle):
+        _params = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'circularVisionRadius'),
+         VEHICLE_CLASS_NAME.MEDIUM_TANK: ('avgDamagePerMinute', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed'),
+         VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage', 'avgPiercingPower', 'hullArmor', 'turretArmor'),
+         VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
+         VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime'),
+         'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}
+        block = []
+        paramsDict = params_helper.getParameters(vehicle)
+        comparator = params_helper.idealCrewComparator(vehicle)
+        for paramName in _params.get(vehicle.type, 'default'):
+            if paramName in paramsDict:
+                paramInfo = comparator.getExtendedData(paramName)
+                fmtValue = param_formatter.colorizedFormatParameter(paramInfo, None)
+                if fmtValue is not None:
+                    block.append(formatters.packTextParameterBlockData(name=param_formatter.formatVehicleParamName(paramName), value=fmtValue, valueWidth=80, padding=formatters.packPadding(left=-1)))
+
+        return block
+
 
 class VehRentActionInfo(VehPriceActionInfo):
 
     def getTriggerChainID(self):
         pass
 
-    def getAutoDescription(self, useBigIco=False, forNormalCard=False):
-        vehs = self._getAdditionalDescriptionData(useBigIco, forNormalCard=forNormalCard)
-        vehsLen = len(vehs)
-        if vehsLen > 1:
-            rentDiscount = formatPercentValue(vehs[0]['discount'])
-            paramKey = 'two' if vehsLen == 2 else 'more'
-            vehicles = '{}, {}'.format(vehs[0]['title'], vehs[1]['title'])
-        elif vehsLen == 1:
-            paramKey = 'one'
-            vehicles = vehs[0]['title']
-            rentDiscount = vehs[0]['price']
-        else:
-            return ''
-        values = {'vehicles': vehicles,
-         'discount': rentDiscount}
-        paramName = '{}/{}'.format(self.discount.getParamName(), paramKey)
-        return self._getShortDescription(paramName, **values)
-
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
-        return self._getFullDescription(self.discount.getParamName(), forHeroCard=forHeroCard)
+        return self._getFullDescription(self.getTriggerChainID(), forHeroCard=forHeroCard)
 
     def getTableData(self):
         return None
@@ -596,21 +579,14 @@ class VehRentActionInfo(VehPriceActionInfo):
 
         return [formatters.packBuildUpBlockData(block, gap=2, padding=formatters.packPadding(top=-2))]
 
-    def _sortVehicles(self):
+    @staticmethod
+    def _sortByVehicleParams(item):
+        veh = item.discountName
+        dscnt = item.discountValue
+        return (dscnt, (veh.minRentPrice.gold, veh.minRentPrice.credits), veh.level)
 
-        def __sortByNameFunc(item):
-            return item.discountName.shortUserName
-
-        def __sortByVehicleParams(item):
-            veh = item.discountName
-            dscnt = item.discountValue
-            return (dscnt, (veh.minRentPrice.gold, veh.minRentPrice.credits), veh.level)
-
-        res = {}
-        for (intCD, _), vehicle in self._getPackedDiscounts().items():
-            res[intCD] = vehicle
-
-        return sorted(sorted(res.values(), key=__sortByNameFunc), key=__sortByVehicleParams, reverse=True)[:3]
+    def _getDefaultPriceLabelConst(self):
+        return TOOLTIPS.ACTIONPRICE_RENTPRICE_DEFAULTPRICE
 
     def __makeRentBlock(self, price, currencySetting, days, percent=0):
         _int = BigWorld.wg_getIntegralFormat
@@ -632,9 +608,6 @@ class VehRentActionInfo(VehPriceActionInfo):
                 text = text_styles.main(_ms(TOOLTIPS.ACTIONPRICE_RENTPRICE_DAYS, days=days, value=text_styles.expText(percent)))
             return formatters.packActionTextParameterBlockData(name=text, value=valueFormatted, icon=_getCurrencySetting(currencySetting).frame, padding=formatters.packPadding(left=20, bottom=-20), currency=newPrice.getCurrency())
 
-    def _getDefaultPriceLabelConst(self):
-        return TOOLTIPS.ACTIONPRICE_RENTPRICE_DEFAULTPRICE
-
 
 class EquipmentActionInfo(ActionInfo):
 
@@ -652,7 +625,7 @@ class EquipmentActionInfo(ActionInfo):
             equip = data.discountName
             item = {'icon': '',
              'additionalIcon': '',
-             'title': '{} {}'.format(icons.makeImageTag(equip.icon, vSpace=-3), equip.userName),
+             'title': ' '.join((icons.makeImageTag(equip.icon, vSpace=-3), equip.userName)),
              'discount': formatStrDiscount(data),
              'price': self._formatPriceIcon(equip, False)}
             res.append(item)
@@ -676,7 +649,7 @@ class OptDeviceActionInfo(ActionInfo):
             optDevice = data.discountName
             item = {'icon': '',
              'additionalIcon': '',
-             'title': '{} {}'.format(icons.makeImageTag(optDevice.icon, vSpace=-3), optDevice.userName),
+             'title': ' '.join((icons.makeImageTag(optDevice.icon, vSpace=-3), optDevice.userName)),
              'discount': formatStrDiscount(data),
              'price': self._formatPriceIcon(optDevice, False)}
             res.append(item)
@@ -747,7 +720,7 @@ class C11nPriceGroupPriceActionInfo(ActionInfo):
             c11n = data.discountName
             item = {'icon': '',
              'additionalIcon': '',
-             'title': '{} {}'.format(c11n.userType, c11n.userName),
+             'title': ' '.join((c11n.userType, c11n.userName)),
              'discount': formatStrDiscount(data),
              'price': self._formatPriceIcon(c11n, False)}
             res.append(item)
@@ -783,7 +756,7 @@ class ComingSoonActionInfo(ActionInfo):
         super(ComingSoonActionInfo, self).__init__(object, ActionData(object, _PRIORITY_FOR_FUTURE_ACTION, 0))
 
     def getID(self):
-        return '{}/{}/{}'.format(self.__announceTime, self.__startTime, self._getParamName())
+        return '/'.join((self.__announceTime, self.__startTime, self._getParamName()))
 
     def getStartTime(self):
         return self.__startTime
@@ -856,25 +829,36 @@ class ComingSoonActionInfo(ActionInfo):
 class MarathonEventActionInfo(ActionInfo):
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
 
-    def __init__(self):
-        super(MarathonEventActionInfo, self).__init__()
-        self._marathonCtrl = self._marathonsCtrl.getPrimaryMarathon()
+    def __init__(self, event, actionData):
+        super(MarathonEventActionInfo, self).__init__(event, actionData)
+        prefix = self.__getPrefix(event)
+        if prefix is not None:
+            self._marathonEvent = self._marathonsCtrl.getMarathon(prefix)
+        else:
+            self._marathonEvent = self._marathonsCtrl.getPrimaryMarathon()
+        return
 
     def getTitle(self):
-        return i18n.makeString(QUESTS.ACTIONCARD_TITLE_SET_MARATHONINPROGRESS)
+        return i18n.makeString(self._marathonEvent.data.quests.titleSetProgress) if self._marathonEvent else ''
 
     def getAutoDescription(self, useBigIco=False, forNormalCard=False):
+        if self._marathonEvent is None:
+            return ''
         values = {'level': formatVehicleLevel(i18n.makeString(TOOLTIPS.level(8)))}
         name = self.discount.getParamName()
         if name == 'set_MarathonAnnounce':
-            return i18n.makeString(QUESTS.ACTION_AUTO_SET_MARATHONANNOUNCE, **values)
-        return i18n.makeString(QUESTS.ACTION_AUTO_SET_MARATHONINPROGRESS, **values) if name == 'set_MarathonInProgress' else i18n.makeString(QUESTS.ACTION_AUTO_SET_MARATHONFINISHED, **values)
+            return i18n.makeString(self._marathonEvent.data.quests.autoSetAnnounce, **values)
+        else:
+            return i18n.makeString(self._marathonEvent.data.quests.autoSetProgress, **values) if name == 'set_MarathonInProgress' else i18n.makeString(self._marathonEvent.data.quests.autoSetFinished, **values)
 
     def _getFullDescription(self, stepName, discount=None, forHeroCard=False):
-        if stepName == 'set_MarathonFinished':
+        if self._marathonEvent is None:
+            return ''
+        elif stepName == 'set_MarathonFinished':
             locKey = QUESTS.getActionDescription('hero/full/{}'.format(stepName))
-            return i18n.makeString(locKey, value=self._marathonCtrl.getExtraDaysToBuy())
-        return super(MarathonEventActionInfo, self)._getFullDescription(stepName, discount, forHeroCard)
+            return i18n.makeString(locKey, value=self._marathonEvent.getExtraDaysToBuy())
+        else:
+            return super(MarathonEventActionInfo, self)._getFullDescription(stepName, discount, forHeroCard)
 
     def getDiscount(self):
         _ActionDiscountValue = namedtuple('_ActionDiscountValue', 'discountName, discountValue, discountType')
@@ -884,24 +868,28 @@ class MarathonEventActionInfo(ActionInfo):
         pass
 
     def isDiscountVisible(self):
-        return not self._marathonCtrl.isVehicleObtained()
+        return self._marathonEvent and not self._marathonEvent.isVehicleObtained()
 
     def _getActiveDateTimeString(self):
         name = self.discount.getParamName()
         if name == 'set_MarathonAnnounce':
             timeStr = BigWorld.wg_getLongDateFormat(self.getFinishTime())
-            if timeStr is not None:
-                return text_styles.main(i18n.makeString(QUESTS.ACTION_MARATHON_ANNOUNCETIME, startTime=timeStr))
+            if timeStr is not None and self._marathonEvent:
+                return text_styles.main(i18n.makeString(self._marathonEvent.data.quests.announceTime, startTime=timeStr))
         elif name == 'set_MarathonInProgress':
             return super(MarathonEventActionInfo, self)._getActiveDateTimeString()
         return ''
 
     def _formatFinishTime(self):
-        return '{} {}'.format(text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_FINISH)), BigWorld.wg_getLongDateFormat(self.getFinishTime()))
+        return '' if self._marathonEvent is None else ' '.join((text_styles.main(i18n.makeString(self._marathonEvent.data.quests.timeFinish)), BigWorld.wg_getLongDateFormat(self.getFinishTime())))
 
     def _showTimerIco(self):
         name = self.discount.getParamName()
         return False if name == 'set_MarathonFinished' else self.event.getFinishTimeLeft() <= time_utils.ONE_DAY
+
+    def __getPrefix(self, event):
+        modifier = next(iter(event.getModifiers()), None)
+        return modifier.getParams().get('prefix', None) if modifier is not None else None
 
 
 def getEconomicalStatsDict():
@@ -953,16 +941,8 @@ _PARAM_TO_IMG_DICT = {'exchangeRate': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CONVE
  'winXPFactorMode/daily': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TANK_EXP,
  'freeXPToTManXPRate': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CREW_EXP,
  'clanCreationCost': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CLAN,
- 'cond_VehPrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_VEHICLES,
- 'mul_VehPrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_VEHICLES,
- 'set_VehPrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_VEHICLES,
- 'mul_VehPriceAll': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_VEHICLES,
- 'mul_VehPriceNation': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_VEHICLES,
- 'set_VehSellPrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_VEHICLES,
- 'cond_VehRentPrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TANK_CLOCK,
- 'mul_VehRentPrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TANK_CLOCK,
- 'mul_VehRentPriceAll': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TANK_CLOCK,
- 'mul_VehRentPriceNation': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TANK_CLOCK,
+ 'vehicleBuyPrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_VEHICLES,
+ 'vehicleRentPrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TANK_CLOCK,
  'equipment/goldPrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CONSUMABLES,
  'equipment/creditsPrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CONSUMABLES,
  'mul_EquipmentPriceAll': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CONSUMABLES,
@@ -987,19 +967,32 @@ _PARAM_TO_IMG_DICT = {'exchangeRate': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CONVE
  'tradeInSellPriceFactor': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TRADE_IN,
  'set_MarathonAnnounce': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_MARATHON_ITALY,
  'set_MarathonInProgress': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_MARATHON_ITALY,
- 'set_MarathonFinished': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_MARATHON_ITALY,
- 'calendar': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_SUMMERSALES}
+ 'set_MarathonFinished': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_MARATHON_ITALY}
 _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'set_EconomicsParams': EconomicsActionsInfo,
  'mul_EconomicsPrices': EconomicsActionsInfo,
  'set_EconomicsPrices': EconomicsActionsInfo,
  'set_TradeInParams': EconomicsActionsInfo,
+ 'set_VehPrice': VehPriceActionInfo,
+ 'mul_VehPriceNation': VehPriceActionInfo,
+ 'mul_VehPriceAll': VehPriceActionInfo,
  'cond_VehPrice': VehPriceActionInfo,
  'mul_VehPrice': VehPriceActionInfo,
+ 'set_VehRentPrice': VehRentActionInfo,
+ 'mul_VehRentPriceNation': VehRentActionInfo,
+ 'mul_VehRentPriceAll': VehRentActionInfo,
  'mul_VehRentPrice': VehRentActionInfo,
+ 'cond_VehRentPrice': VehRentActionInfo,
  'mul_EquipmentPriceAll': EquipmentActionInfo,
+ 'mul_EquipmentPrice': EquipmentActionInfo,
+ 'set_EquipmentPrice': EquipmentActionInfo,
  'mul_OptionalDevicePriceAll': OptDeviceActionInfo,
+ 'mul_OptionalDevicePrice': OptDeviceActionInfo,
+ 'set_OptionalDevicePrice': OptDeviceActionInfo,
  'mul_ShellPriceAll': ShellPriceActionInfo,
+ 'set_ShellPrice': ShellPriceActionInfo,
+ 'mul_ShellPriceNation': ShellPriceActionInfo,
+ 'mul_ShellPrice': ShellPriceActionInfo,
  'set_PriceGroupPrice': C11nPriceGroupPriceActionInfo,
  'mul_PriceGroupPrice': C11nPriceGroupPriceActionInfo,
  'mul_PriceGroupPriceByTag': C11nPriceGroupPriceActionInfo,
@@ -1009,8 +1002,7 @@ _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'mul_GoodiePriceAll': BoosterPriceActionInfo,
  'set_MarathonAnnounce': MarathonEventActionInfo,
  'set_MarathonInProgress': MarathonEventActionInfo,
- 'set_MarathonFinished': MarathonEventActionInfo,
- 'calendar': CalendarActionInfo}
+ 'set_MarathonFinished': MarathonEventActionInfo}
 
 def getModifierObj(name, event, modifier):
     return _MODIFIERS_DICT[name](event, modifier) if name in _MODIFIERS_DICT else None

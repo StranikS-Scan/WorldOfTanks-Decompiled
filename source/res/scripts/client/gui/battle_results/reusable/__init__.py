@@ -185,23 +185,6 @@ class _ReusableInfo(object):
             teamResult = _TEAM_RESULT.DEFEAT
         return teamResult
 
-    def getFootballPersonalTeamResult(self):
-        winnerTeam = self.__common.winnerTeam
-        playerTeam = self.__personal.avatar.team
-        if not winnerTeam:
-            teamResult = _TEAM_RESULT.FOOTBALL_TIE
-        elif winnerTeam == playerTeam and winnerTeam == 1:
-            teamResult = _TEAM_RESULT.FOOTBALL_RED_WIN
-        elif winnerTeam == playerTeam and winnerTeam == 2:
-            teamResult = _TEAM_RESULT.FOOTBALL_BLUE_WIN
-        elif winnerTeam != playerTeam and winnerTeam == 1:
-            teamResult = _TEAM_RESULT.FOOTBALL_BLUE_LOSE
-        elif winnerTeam != playerTeam and winnerTeam == 2:
-            teamResult = _TEAM_RESULT.FOOTBALL_RED_LOSE
-        else:
-            teamResult = _TEAM_RESULT.FOOTBALL_TIE
-        return teamResult
-
     def getPlayerInfo(self, dbID=0):
         if not dbID:
             dbID = self.__personal.avatar.accountDBID

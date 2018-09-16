@@ -5,14 +5,13 @@ from gui.clans import items
 from gui.clans.settings import DEFAULT_COOLDOWN
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgcg.base.contexts import CommonWebRequestCtx
-from gui.wgcg.clan.contexts import WebRequestBaseCtx
+from gui.wgcg.clan.contexts import ClanRequestBaseCtx
 from gui.wgcg.settings import WebRequestDataType
 from shared_utils import makeTupleByDict
 from soft_exception import SoftException
-_STRONGHOLD_REQUEST_TYPE = WebRequestDataType
 
 @ReprInjector.withParent()
-class StrongholdInfoCtx(WebRequestBaseCtx):
+class StrongholdInfoCtx(ClanRequestBaseCtx):
 
     def getRequestType(self):
         return WebRequestDataType.STRONGHOLD_INFO
@@ -26,7 +25,7 @@ class StrongholdInfoCtx(WebRequestBaseCtx):
 
 
 @ReprInjector.withParent()
-class StrongholdStatisticsCtx(WebRequestBaseCtx):
+class StrongholdStatisticsCtx(ClanRequestBaseCtx):
 
     def getRequestType(self):
         return WebRequestDataType.STRONGHOLD_STATISTICS
@@ -73,10 +72,11 @@ class StrongholdLeaveCtx(StrongholdRequestCtx):
         return cls(unitMgrId=unitMgrId, waitingID=prbCtx.getWaitingID())
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_LEAVE
+        return WebRequestDataType.STRONGHOLD_LEAVE
 
 
 class StrongholdSetVehicleCtx(StrongholdRequestCtx):
+    __slots__ = ('__vehTypeCD',)
 
     def __init__(self, vehTypeCD, **kwargs):
         super(StrongholdSetVehicleCtx, self).__init__(**kwargs)
@@ -89,7 +89,7 @@ class StrongholdSetVehicleCtx(StrongholdRequestCtx):
         return cls(vehTypeCD, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_SET_VEHICLE
+        return WebRequestDataType.STRONGHOLD_SET_VEHICLE
 
     def getVehTypeCD(self):
         return self.__vehTypeCD
@@ -113,7 +113,7 @@ class StrongholdAssignCtx(StrongholdRequestCtx):
         return cls(pID, isRemove, slotIdx, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_ASSIGN if not self.__isRemove else _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_UNASSIGN
+        return WebRequestDataType.STRONGHOLD_ASSIGN if not self.__isRemove else WebRequestDataType.STRONGHOLD_UNASSIGN
 
     def getPlayerID(self):
         return self.__pID
@@ -138,7 +138,7 @@ class StrongholdUnassignCtx(StrongholdRequestCtx):
         return cls(pID, isRemove, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_UNASSIGN
+        return WebRequestDataType.STRONGHOLD_UNASSIGN
 
     def getPlayerID(self):
         return self.__pID
@@ -158,7 +158,7 @@ class StrongholdChangeOpenedCtx(StrongholdRequestCtx):
         return cls(isOpened, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_CHANGE_OPENED
+        return WebRequestDataType.STRONGHOLD_CHANGE_OPENED
 
     def isOpened(self):
         return self.__isOpened
@@ -178,7 +178,7 @@ class StrongholdSetReadyCtx(StrongholdRequestCtx):
         return cls(isReady, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_SET_PLAYER_STATE
+        return WebRequestDataType.STRONGHOLD_SET_PLAYER_STATE
 
     def isReady(self):
         return self.__isReady
@@ -200,7 +200,7 @@ class StrongholdSetReserveCtx(StrongholdRequestCtx):
         return cls(reserveID, isRemove, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_SET_RESERVE
+        return WebRequestDataType.STRONGHOLD_SET_RESERVE
 
     def getReserveID(self):
         return self.__reserveID
@@ -225,7 +225,7 @@ class StrongholdUnsetReserveCtx(StrongholdRequestCtx):
         return cls(reserveID, isRemove, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_UNSET_RESERVE
+        return WebRequestDataType.STRONGHOLD_UNSET_RESERVE
 
     def getReserveID(self):
         return self.__reserveID
@@ -248,7 +248,7 @@ class StrongholdBattleQueueCtx(StrongholdRequestCtx):
         return cls(action, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_BATTLE_QUEUE
+        return WebRequestDataType.STRONGHOLD_BATTLE_QUEUE
 
     def isRequestToStart(self):
         return self.__action > 0
@@ -268,7 +268,7 @@ class StrongholdKickPlayerCtx(StrongholdRequestCtx):
         return cls(pID, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_KICK
+        return WebRequestDataType.STRONGHOLD_KICK
 
     def getPlayerID(self):
         return self.__pID
@@ -288,7 +288,7 @@ class StrongholdGiveLeadershipCtx(StrongholdRequestCtx):
         return cls(pID, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_GIVE_LEADERSHIP if self.__pID != getAccountDatabaseID() else _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_TAKE_LEADERSHIP
+        return WebRequestDataType.STRONGHOLD_GIVE_LEADERSHIP if self.__pID != getAccountDatabaseID() else WebRequestDataType.STRONGHOLD_TAKE_LEADERSHIP
 
     def getPlayerID(self):
         return self.__pID
@@ -308,20 +308,27 @@ class StrongholdSetEquipmentCommanderCtx(StrongholdRequestCtx):
         return cls(pID, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_SET_EQUIPMENT_COMMANDER
+        return WebRequestDataType.STRONGHOLD_SET_EQUIPMENT_COMMANDER
 
     def getPlayerID(self):
         return self.__pID
 
 
 class StrongholdUpdateCtx(StrongholdRequestCtx):
-    __slots__ = ()
+    __slots__ = ('__rev',)
+
+    def __init__(self, rev, **kwargs):
+        super(StrongholdUpdateCtx, self).__init__(**kwargs)
+        self.__rev = rev
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_UPDATE
+        return WebRequestDataType.STRONGHOLD_UPDATE
 
     def getCooldown(self):
         return DEFAULT_COOLDOWN
+
+    def getRev(self):
+        return self.__rev
 
     @classmethod
     def fromPrbCtx(cls, prbCtx):
@@ -329,6 +336,7 @@ class StrongholdUpdateCtx(StrongholdRequestCtx):
 
 
 class StrongholdSendInvitesCtx(StrongholdRequestCtx):
+    __slots__ = ('__databaseIDs', '__comment')
 
     def __init__(self, databaseIDs, comment, **args):
         super(StrongholdSendInvitesCtx, self).__init__(**args)
@@ -349,13 +357,13 @@ class StrongholdSendInvitesCtx(StrongholdRequestCtx):
         return self.__comment
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_SEND_INVITE
+        return WebRequestDataType.STRONGHOLD_SEND_INVITE
 
 
 class StrongholdJoinBattleCtx(StrongholdRequestCtx):
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_JOIN_BATTLE
+        return WebRequestDataType.STRONGHOLD_JOIN_BATTLE
 
     @classmethod
     def fromPrbCtx(cls, prbCtx):
@@ -365,7 +373,90 @@ class StrongholdJoinBattleCtx(StrongholdRequestCtx):
 class StrongholdMatchmakingInfoCtx(StrongholdRequestCtx):
 
     def getRequestType(self):
-        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_MATCHMAKING_INFO
+        return WebRequestDataType.STRONGHOLD_MATCHMAKING_INFO
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx):
+        raise SoftException('This method should not be reached in this context')
+
+
+class StrongholdSetSlotVehicleTypeFilter(StrongholdRequestCtx):
+    __slots__ = ('__slotIdx', '__vehicleTypes')
+
+    def __init__(self, slotIdx, vehicleTypes, **args):
+        super(StrongholdSetSlotVehicleTypeFilter, self).__init__(**args)
+        self.__slotIdx = slotIdx
+        self.__vehicleTypes = vehicleTypes
+
+    def getRequestType(self):
+        return WebRequestDataType.STRONGHOLD_SET_SLOT_VEHICLE_TYPE_FILTER
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        vehTypes = prbCtx.getVehTypes()
+        slotIdx = prbCtx.getSlotIdx()
+        return cls(slotIdx, vehTypes, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getSlotIdx(self):
+        return self.__slotIdx
+
+    def getVehicleTypes(self):
+        return self.__vehicleTypes
+
+
+class StrongholdSetSlotVehiclesFilter(StrongholdRequestCtx):
+    __slots__ = ('__slotIdx', '__vehicles')
+
+    def __init__(self, slotIdx, vehicles, **args):
+        super(StrongholdSetSlotVehiclesFilter, self).__init__(**args)
+        self.__slotIdx = slotIdx
+        self.__vehicles = vehicles
+
+    def getRequestType(self):
+        return WebRequestDataType.STRONGHOLD_SET_SLOT_VEHICLES_FILTER
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        vehicles = prbCtx.getVehicles()
+        slotIdx = prbCtx.getSlotIdx()
+        return cls(slotIdx, vehicles, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getSlotIdx(self):
+        return self.__slotIdx
+
+    def getVehicles(self):
+        return self.__vehicles
+
+
+class StrongholdStopPlayersMatchingCtx(StrongholdRequestCtx):
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        return cls(unitMgrId=unitMgrId, waitingID=prbCtx.getWaitingID())
+
+    def getRequestType(self):
+        return WebRequestDataType.STRONGHOLD_STOP_PLAYERS_MATCHING
+
+
+class SlotVehicleFiltersUpdateCtx(StrongholdRequestCtx):
+
+    def getRequestType(self):
+        return WebRequestDataType.STRONGHOLD_SLOT_VEHICLE_FILTERS_UPDATE
+
+    def getCooldown(self):
+        return DEFAULT_COOLDOWN
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx):
+        raise SoftException('This method should not be reached in this context')
+
+
+class StrongholdLeaveModeCtx(StrongholdRequestCtx):
+
+    def getRequestType(self):
+        return WebRequestDataType.STRONGHOLD_LEAVE_MODE
 
     @classmethod
     def fromPrbCtx(cls, prbCtx):

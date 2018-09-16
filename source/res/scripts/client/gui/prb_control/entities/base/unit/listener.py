@@ -108,3 +108,9 @@ class IStrongholdListener(IPrbListener):
 
     def onStrongholdDoBattleQueue(self, isFirstBattle, readyButtonEnabled, reserveOrder):
         pass
+
+    def onPlayersMatching(self, state):
+        pass
+
+    def onSlotVehileFiltersChanged(self):
+        pass

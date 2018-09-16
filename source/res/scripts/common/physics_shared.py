@@ -9,7 +9,7 @@ import collections
 from items import vehicles, vehicle_items
 from math import pi
 from constants import IS_CLIENT, IS_CELLAPP, VEHICLE_PHYSICS_MODE, SERVER_TICK_LENGTH
-from debug_utils import *
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
 import copy
 from items.components import gun_components
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES
@@ -157,9 +157,9 @@ g_defaultTankXPhysicsCfg = {'vehicleType': VEHICLE_TYPE_TANK,
                                      1.0,
                                      _cosDeg(29.0),
                                      0.1),
-             'slopeGripLngStaticObject': (_cosDeg(27.5),
+             'slopeGripLngStaticObject': (_cosDeg(20),
                                           1.0,
-                                          _cosDeg(32.0),
+                                          _cosDeg(25),
                                           0.1),
              'slopeGripSdwStaticObject': (_cosDeg(20),
                                           1.0,

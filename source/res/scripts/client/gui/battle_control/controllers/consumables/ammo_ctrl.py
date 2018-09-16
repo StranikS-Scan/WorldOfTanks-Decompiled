@@ -316,7 +316,7 @@ class AmmoController(MethodsRules, IBattleController):
         self.triggerReloadEffect(timeLeft, baseTime)
         if interval > 0:
             shellsInClip = self.__ammo[self.__currShellCD][1]
-            if not (shellsInClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or shellsInClip == 0 and timeLeft > 0):
+            if not (shellsInClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or shellsInClip == 0 and timeLeft != 0):
                 baseTime = interval
         isIgnored = False
         if CommandMapping.g_instance.isActive(CommandMapping.CMD_CM_SHOOT):

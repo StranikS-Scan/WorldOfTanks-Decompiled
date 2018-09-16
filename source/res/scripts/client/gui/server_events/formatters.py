@@ -85,8 +85,7 @@ class DECORATION_SIZES(CONST_CONTAINER):
     CARDS = '482x222'
     BONUS = '300x110'
     DISCOUNT = '480x280'
-    DETAILS = '750x250'
-    DETAILS_EX = '750x264'
+    DETAILS = '750x264'
 
 
 class UiElement(object):
@@ -268,6 +267,10 @@ def packAchieveElementByItem(item):
     return _packAchieveElement(item.getUserName(), item.getIcon32x32(), item.getBlock(), item.getName(), item.getValue())
 
 
+def packBadgeElementByItem(item):
+    return _packAchieveElement(item.getUserName(), item.getSmallIcon(), None, item.getName())
+
+
 def _packAchieveElement(userName, iconPath, block, record, value=0):
     return _packIconTextElement(label=userName, icon=iconPath, dataType='battleStatsAchievementData', dataValue=[block, record, value])
 
@@ -283,10 +286,10 @@ def packProgressData(rendererLinkage, progressList):
     return ProgressData(rendererLinkage, progressList)
 
 
-PreFormattedCondition = namedtuple('PreForamttedCondition', 'titleData, descrData, iconKey, current, total, progressData, conditionData, progressType, sortKey')
+PreFormattedCondition = namedtuple('PreForamttedCondition', 'titleData, descrData, iconKey, current, total, progressData, conditionData, progressType, sortKey, progressID')
 
-def packMissionIconCondition(titleData, progressType, descrData, iconKey, current=None, total=None, progressData=None, conditionData=None, sortKey=''):
-    return PreFormattedCondition(titleData, descrData, iconKey, current, total, progressData, conditionData, progressType, sortKey)
+def packMissionIconCondition(titleData, progressType, descrData, iconKey, current=None, total=None, progressData=None, conditionData=None, sortKey='', progressID=None):
+    return PreFormattedCondition(titleData, descrData, iconKey, current, total, progressData, conditionData, progressType, sortKey, progressID)
 
 
 _IconData = namedtuple('_IconData', 'icon, iconLabel')

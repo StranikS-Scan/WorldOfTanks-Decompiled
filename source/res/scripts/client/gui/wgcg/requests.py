@@ -13,6 +13,7 @@ from gui.wgcg.base.handlers import BaseRequestHandlers
 from gui.wgcg.clan.handlers import ClanRequestHandlers
 from gui.wgcg.elen.handlers import ElenRequestHandlers
 from gui.wgcg.hof.handlers import HofRequestHandlers
+from gui.wgcg.promo_screens.handlers import PromoScreensRequestHandlers
 from gui.wgcg.rank.handlers import RankRequestHandlers
 from gui.wgcg.settings import WebRequestDataType
 from gui.wgcg.strongholds.handlers import StrongholdsRequestHandlers
@@ -35,7 +36,7 @@ class WgcgRequester(ClientRequestsByIDProcessor):
         super(WgcgRequester, self).__init__(sender, WgcgRequestResponse)
 
     def doRequestEx(self, ctx, callback, methodName, *args, **kwargs):
-        LOG_DEBUG('ClanRequester, do request:')
+        LOG_DEBUG('WgcgRequester, do request:')
         LOG_DEBUG('   ctx        :', ctx)
         LOG_DEBUG('   methodName :', methodName)
         LOG_DEBUG('   Args       :', args)
@@ -58,10 +59,6 @@ class WgcgRequester(ClientRequestsByIDProcessor):
 
         method(_callback, *args, **kwargs)
         return requestID
-
-    def makeInternalError(self, code, ctx):
-        self._makeResponse(code, 'Internal error {}'.format(code), None, ctx)
-        return
 
 
 class WgcgCooldownManager(RequestCooldownManager):
@@ -96,6 +93,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(ElenRequestHandlers(requester).get())
         self.__handlers.update(HofRequestHandlers(requester).get())
         self.__handlers.update(RankRequestHandlers(requester).get())
+        self.__handlers.update(PromoScreensRequestHandlers(requester).get())
 
     def fini(self):
         super(WgcgRequestsController, self).fini()

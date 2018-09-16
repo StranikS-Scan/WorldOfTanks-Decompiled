@@ -4,6 +4,7 @@ import logging
 from collections import defaultdict
 import nations
 from constants import IS_DEVELOPMENT, HAS_DEV_RESOURCES
+from gui import promo
 from gui.GuiSettings import GuiSettings as _GuiSettings
 from helpers.html.templates import XMLCollection
 _logger = logging.getLogger(__name__)
@@ -42,7 +43,7 @@ def onRepeatKeyEvent(event):
 
 NONE_NATION_NAME = 'none'
 ALL_NATION_INDEX = -1
-GUI_NATIONS = tuple((n for i, n in enumerate(nations.AVAILABLE_NAMES)))
+GUI_NATIONS = tuple(nations.AVAILABLE_NAMES)
 try:
     new_order_list = [ x for x in GUI_SETTINGS.nations_order if x in nations.AVAILABLE_NAMES ]
     for i, n in enumerate(nations.AVAILABLE_NAMES):
@@ -131,11 +132,11 @@ def getGuiServicesConfig(manager):
     from gui import impl
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(shared.getSharedServices)
-    manager.addConfig(server_events.getServerEventsConfig)
     manager.addConfig(game_control.getGameControllersConfig)
     manager.addConfig(_sf.getScaleformConfig)
     manager.addConfig(impl.getGuiImplConfig)
     manager.addConfig(login.getLoginManagerConfig)
+    manager.addConfig(server_events.getServerEventsConfig)
     manager.addConfig(server_events.getLinkedSetController)
     manager.addConfig(battle_control.getBattleSessionConfig)
     manager.addConfig(sounds.getSoundsConfig)
@@ -145,6 +146,7 @@ def getGuiServicesConfig(manager):
     manager.addConfig(battle_results.getBattleResultsServiceConfig)
     manager.addConfig(customization.getCustomizationServiceConfig)
     manager.addConfig(hangar_cameras.getHangarCamerasConfig)
+    manager.addConfig(promo.getPromoConfig)
     manager.addInstance(ILobbyContext, lobby_context.LobbyContext(), finalizer='clear')
     if HAS_DEV_RESOURCES:
         try:

@@ -5,7 +5,7 @@ from shared_utils import CONST_CONTAINER
 from constants import SECTOR_STATE
 
 class BATTLE_CTRL_ID(object):
-    AMMO, EQUIPMENTS, OPTIONAL_DEVICES, OBSERVED_VEHICLE_STATE, ARENA_LOAD_PROGRESS, ARENA_PERIOD, TEAM_BASES, DEBUG, HIT_DIRECTION, FEEDBACK, CHAT_COMMANDS, MESSAGES, DRR_SCALE, RESPAWN, REPAIR, DYN_SQUADS, AVATAR_PRIVATE_STATS, FLAG_NOTS, CROSSHAIR, MOD, GUI, PERSONAL_EFFICIENCY, TMP_IGNORE_LIST_CTRL, VIEW_POINTS, BATTLE_FIELD_CTRL, PLAYER_GAME_MODE_DATA, TEAM_HEALTH_BAR, ARENA_BORDER, PROGRESS_TIMER, MAPS, SPECTATOR, GAME_NOTIFICATIONS, EPIC_MISSIONS, GAME_MESSAGES_PANEL, FOOTBALL_CTRL, FOOTBALL_PERIOD_CTRL, FOOTBALL_ENTITIES_CTRL = range(1, 38)
+    AMMO, EQUIPMENTS, OPTIONAL_DEVICES, OBSERVED_VEHICLE_STATE, ARENA_LOAD_PROGRESS, ARENA_PERIOD, TEAM_BASES, DEBUG, HIT_DIRECTION, FEEDBACK, CHAT_COMMANDS, MESSAGES, DRR_SCALE, RESPAWN, REPAIR, DYN_SQUADS, AVATAR_PRIVATE_STATS, FLAG_NOTS, CROSSHAIR, MOD, GUI, PERSONAL_EFFICIENCY, TMP_IGNORE_LIST_CTRL, VIEW_POINTS, BATTLE_FIELD_CTRL, PLAYER_GAME_MODE_DATA, TEAM_HEALTH_BAR, ARENA_BORDER, PROGRESS_TIMER, MAPS, SPECTATOR, GAME_NOTIFICATIONS, EPIC_MISSIONS, GAME_MESSAGES_PANEL, QUEST_PROGRESS = range(1, 36)
 
 
 REUSABLE_BATTLE_CTRL_IDS = (BATTLE_CTRL_ID.MOD, BATTLE_CTRL_ID.GUI)
@@ -52,13 +52,11 @@ class VEHICLE_VIEW_STATE(object):
     CRUISE_MODE = 128
     REPAIRING = 256
     PLAYER_INFO = 512
-    SHOW_DESTROY_TIMER = 1024
-    HIDE_DESTROY_TIMER = 2048
+    DESTROY_TIMER = 1024
     OBSERVED_BY_ENEMY = 4096
     RESPAWNING = 8192
     SWITCHING = 16384
-    SHOW_DEATHZONE_TIMER = 32768
-    HIDE_DEATHZONE_TIMER = 65536
+    DEATHZONE_TIMER = 32768
     DEATH_INFO = 131072
     VEHICLE_CHANGED = 262144
     SIEGE_MODE = 524288
@@ -256,3 +254,58 @@ class STRATEGIC_CAMERA_ID(object):
     UNDEFINED = 0
     AERIAL = 1
     TRAJECTORY = 2
+
+
+class DestroyTimerViewState(object):
+    __slots__ = ('code', 'totalTime', 'level', 'startTime')
+
+    def __init__(self, code, totalTime, level, startTime=None):
+        self.code = code
+        self.totalTime = totalTime
+        self.level = level
+        self.startTime = startTime
+
+    def needToShow(self):
+        return self.code is not None and self.level is not None
+
+    def needToCloseTimer(self):
+        return self.code is not None and self.level is None
+
+    def needToCloseAll(self):
+        return self.code is None
+
+    @classmethod
+    def makeCloseTimerState(cls, code):
+        return cls(code, 0, None)
+
+    @classmethod
+    def makeCloseAllState(cls):
+        return cls.makeCloseTimerState(code=None)
+
+
+class DeathZoneTimerViewState(object):
+    __slots__ = ('zoneID', 'totalTime', 'level', 'finishTime', 'entered')
+
+    def __init__(self, zoneID, totalTime, level, finishTime, entered=None):
+        self.zoneID = zoneID
+        self.totalTime = totalTime
+        self.level = level
+        self.finishTime = finishTime
+        self.entered = entered
+
+    def needToShow(self):
+        return self.zoneID is not None and self.level is not None
+
+    def needToCloseTimer(self):
+        return self.zoneID is not None and self.level is None
+
+    def needToCloseAll(self):
+        return self.zoneID is None
+
+    @classmethod
+    def makeCloseTimerState(cls, zoneID):
+        return cls(zoneID, 0, None, 0)
+
+    @classmethod
+    def makeCloseAllState(cls):
+        return cls.makeCloseTimerState(zoneID=None)

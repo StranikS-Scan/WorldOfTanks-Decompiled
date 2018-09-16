@@ -200,16 +200,6 @@ class EventsSettings(object):
 
         return False
 
-    def hasActiveOrSoonEvents(self):
-        if self.hasActiveEvents():
-            return True
-        for event in self.__events:
-            value, _ = event_boards_timer.getTimeStatus(event.getStartDate())
-            if value > 0:
-                return True
-
-        return False
-
     def hasAnotherActiveEvents(self, eventID):
         for event in self.__events:
             if event.isActive() and event.getEventID() != eventID:

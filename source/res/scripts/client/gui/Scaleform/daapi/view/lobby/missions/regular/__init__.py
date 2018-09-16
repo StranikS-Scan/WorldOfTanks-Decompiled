@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/__init__.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.missions.personal.vehicle_selector import PersonalMissionVehicleSelector, PersonalVehicleSelectorCarousel
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
@@ -44,9 +43,7 @@ def getViewSettings():
      ViewSettings(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, MissionsCategoriesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, CurrentVehicleMissionsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(QUESTS_ALIASES.MISSIONS_VEHICLE_SELECTOR_ALIAS, RegularMissionVehicleSelector, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(QUESTS_ALIASES.PERSONAL_MISSIONS_VEHICLE_SELECTOR_ALIAS, PersonalMissionVehicleSelector, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(QUESTS_ALIASES.VEHICLE_SELECTOR_CAROUSEL_ALIAS, RegularVehicleSelectorCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(QUESTS_ALIASES.PERSONAL_MISSIONS_VEHICLE_SELECTOR_CAROUSEL_ALIAS, PersonalVehicleSelectorCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(QUESTS_ALIASES.MISSIONS_FILTER_POPOVER_ALIAS, MissionsFilterPopoverView, 'missionsFilterPopoverView.swf', ViewTypes.WINDOW, QUESTS_ALIASES.MISSIONS_FILTER_POPOVER_ALIAS, QUESTS_ALIASES.MISSIONS_FILTER_POPOVER_ALIAS, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(QUESTS_ALIASES.MISSIONS_TOKEN_POPOVER_ALIAS, MissionsTokenPopover, 'missionsTokenPopover.swf', ViewTypes.WINDOW, QUESTS_ALIASES.MISSIONS_TOKEN_POPOVER_ALIAS, QUESTS_ALIASES.MISSIONS_TOKEN_POPOVER_ALIAS, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.VEHICLES_FILTER_POPOVER, VehiclesFilterPopover, 'vehiclesFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.VEHICLES_FILTER_POPOVER, VIEW_ALIAS.VEHICLES_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE))

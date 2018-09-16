@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/boosters/booster_tabs.py
-from collections import defaultdict
 from operator import attrgetter
 from Event import EventManager, Event
 from adisp import process
@@ -14,9 +13,6 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.goodies.goodie_items import BOOSTERS_ORDERS
-from gui.server_events import events_dispatcher as quests_events
-from gui.server_events import events_helpers
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.money import Money
@@ -35,8 +31,7 @@ DEFAULT_SHOP_COUNT = 1
 
 class TABS_IDS(object):
     INVENTORY = 0
-    QUESTS = 1
-    SHOP = 2
+    SHOP = 1
 
 
 class _PRICE_STATE(object):
@@ -119,7 +114,7 @@ class InventoryBoostersTab(BoosterTab):
         booster = self.goodiesCache.getBooster(boosterID)
         activeBooster = self.__getActiveBoosterByType(booster.boosterType)
         if activeBooster is not None:
-            canActivate = yield DialogsInterface.showDialog(I18nConfirmDialogMeta(BOOSTER_CONSTANTS.BOOSTER_ACTIVATION_CONFORMATION_TEXT_KEY, messageCtx={'newBoosterName': text_styles.middleTitle(booster.description),
+            canActivate = yield DialogsInterface.showDialog(I18nConfirmDialogMeta(BOOSTER_CONSTANTS.BOOSTER_REPLACE_CONFORMATION_TEXT_KEY, messageCtx={'newBoosterName': text_styles.middleTitle(booster.description),
              'curBoosterName': text_styles.middleTitle(activeBooster.description)}, focusedID=DIALOG_BUTTON_ID.CLOSE))
         else:
             canActivate = True
@@ -129,7 +124,7 @@ class InventoryBoostersTab(BoosterTab):
 
     def _processBoostersData(self):
         criteria = REQ_CRITERIA.BOOSTER.IN_ACCOUNT | REQ_CRITERIA.BOOSTER.ENABLED
-        boosters = sorted(self.goodiesCache.getBoosters(criteria=criteria).values(), self._sort)
+        boosters = sorted(self.goodiesCache.getBoosters(criteria=criteria).values(), cmp=self._sort)
         self._boosters = []
         self._count = 0
         self._totalCount = 0
@@ -189,7 +184,7 @@ class ShopBoostersTab(BoosterTab):
 
     def _processBoostersData(self):
         criteria = REQ_CRITERIA.BOOSTER.ENABLED | ~REQ_CRITERIA.HIDDEN
-        boosters = sorted(self.goodiesCache.getBoosters(criteria=criteria).values(), self._sort)
+        boosters = sorted(self.goodiesCache.getBoosters(criteria=criteria).values(), cmp=self._sort)
         self._boosters = []
         self._count = 0
         self._totalCount = 0
@@ -232,91 +227,12 @@ class ShopBoostersTab(BoosterTab):
         return _PRICE_STATE.NORMAL if isPurchaseEnabled else _PRICE_STATE.ERROR
 
 
-class QuestsBoostersTab(BoosterTab):
-    eventsCache = dependency.descriptor(IEventsCache)
-
-    def __init__(self):
-        super(QuestsBoostersTab, self).__init__()
-        self.__boosterQuests = self.__getBoosterQuests()
-
-    def getID(self):
-        return TABS_IDS.QUESTS
-
-    def fini(self):
-        self.__boosterQuests = None
-        super(QuestsBoostersTab, self).fini()
-        return
-
-    def updateQuests(self):
-        self.__boosterQuests = self.__getBoosterQuests()
-
-    def doAction(self, boosterID, questID):
-        quests_events.showMission(questID)
-        g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_BOOSTERS_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def _sort(self, qBoosterInfoA, qBoosterInfoB):
-        _, _, boosterA, _ = qBoosterInfoA
-        _, _, boosterB, _ = qBoosterInfoB
-        return super(QuestsBoostersTab, self)._sort(boosterA, boosterB)
-
-    def _makeBoosterVO(self, qBoosterInfo):
-        questID, qUserName, booster, count = qBoosterInfo
-        isBtnEnabled = questID is not None
-        activateBtnLabel = MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_GOTOQUESTBTNLABEL
-        addDescriptionText = ''
-        btnTooltip = ''
-        if qUserName is not None:
-            btnTooltip = makeTooltip(None, _ms(TOOLTIPS.BOOSTER_QUESTLINKBTN_BODY, questName=qUserName))
-            addDescriptionText = text_styles.standard(_ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_QUESTFOROPEN, questName=qUserName))
-        return {'id': booster.boosterID,
-         'questID': str(questID) if questID else None,
-         'actionBtnEnabled': isBtnEnabled,
-         'actionBtnTooltip': btnTooltip,
-         'headerText': text_styles.middleTitle(booster.fullUserName),
-         'descriptionText': text_styles.main(booster.description),
-         'addDescriptionText': addDescriptionText,
-         'actionBtnLabel': _ms(activateBtnLabel),
-         'tooltip': TOOLTIPS_CONSTANTS.BOOSTERS_QUESTS,
-         'boosterSlotVO': _makeBoosterSlotVO(booster, count),
-         'rendererState': BOOSTER_CONSTANTS.RENDERER_STATE_DEFAULT}
-
-    def _processBoostersData(self):
-        self._boosters = []
-        self._count = 0
-        self._totalCount = 0
-        for (questID, qUserName), boosters in self.__boosterQuests.iteritems():
-            for booster, count in boosters:
-                self._totalCount += count
-                if self._isBoosterValid(booster):
-                    self._count += count
-                    self._boosters.append((questID,
-                     qUserName,
-                     booster,
-                     count))
-
-        self._boosters = sorted(self._boosters, self._sort)
-
-    @staticmethod
-    def __getBoosterQuests():
-        result = defaultdict(list)
-        quests = events_helpers.getBoosterQuests()
-        for q in quests.itervalues():
-            bonuses = q.getBonuses('goodies')
-            for b in bonuses:
-                boosters = b.getBoosters()
-                for booster, count in boosters.iteritems():
-                    result[q.getID(), q.getUserName()].append((booster, count))
-
-        return result
-
-
 class TabsContainer(object):
     eventsCache = dependency.descriptor(IEventsCache)
     goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self):
         self.__tabs = {TABS_IDS.INVENTORY: InventoryBoostersTab(),
-         TABS_IDS.QUESTS: QuestsBoostersTab(),
          TABS_IDS.SHOP: ShopBoostersTab()}
         self.__currentTabIdx = None
         self.__activeBoostersCount = None
@@ -329,7 +245,6 @@ class TabsContainer(object):
         g_clientUpdateManager.addCallbacks({'goodies': self.__onUpdateBoosters,
          'shop': self.__onUpdateBoosters,
          'stats': self.__onStatsChanged})
-        self.eventsCache.onSyncCompleted += self.__onQuestsUpdate
 
     def setCurrentTabIdx(self, currentTabIdx):
         self.__currentTabIdx = currentTabIdx
@@ -346,10 +261,6 @@ class TabsContainer(object):
     def shopTab(self):
         return self.__tabs[TABS_IDS.SHOP]
 
-    @property
-    def questsTab(self):
-        return self.__tabs[TABS_IDS.QUESTS]
-
     def getTabs(self):
         return self.__tabs
 
@@ -364,7 +275,6 @@ class TabsContainer(object):
         self.__currentTabIdx = None
         self.__eManager.clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
-        self.eventsCache.onSyncCompleted -= self.__onQuestsUpdate
         for tab in self.__tabs.itervalues():
             tab.fini()
 
@@ -378,10 +288,6 @@ class TabsContainer(object):
 
         self.__activeBoostersCount = len(self.goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values())
         self.onTabsUpdate()
-
-    def __onQuestsUpdate(self, *args):
-        self.questsTab.updateQuests()
-        self.__onUpdateBoosters()
 
     def __onStatsChanged(self, stats):
         if Money.hasMoney(stats):

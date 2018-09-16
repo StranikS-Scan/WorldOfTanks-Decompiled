@@ -115,8 +115,14 @@ class BattleContext(IBattleContext):
     def getArenaFrameLabel(self):
         return '../maps/icons/battleTypes/136x136/%s.png' % self.__arenaDP.getPersonalDescription().getFrameLabel()
 
+    def getFrameLabel(self):
+        return self.__arenaDP.getPersonalDescription().getFrameLabel()
+
     def getGuiEventType(self):
         return self.__arenaDP.getPersonalDescription().getGuiEventType()
+
+    def areQuestsEnabledForArena(self):
+        return self.__arenaDP.getPersonalDescription().isQuestEnabled()
 
     def isInvitationEnabled(self):
         return self.__arenaDP.getPersonalDescription().isInvitationEnabled()
@@ -135,8 +141,11 @@ class BattleContext(IBattleContext):
                 limit = True
         return limit
 
-    def getQuestInfo(self):
-        return self.__arenaDP.getPersonalDescription().getQuestInfo()
+    def getSelectedQuestIDs(self):
+        return self.__arenaDP.getPersonalDescription().getSelectedQuestIDs()
+
+    def getSelectedQuestInfo(self):
+        return self.__arenaDP.getPersonalDescription().getSelectedQuestInfo()
 
     def getTeamName(self, enemy=False):
         return self.__arenaDP.getPersonalDescription().getTeamName(self.__arenaDP.getNumberOfTeam(enemy=enemy))

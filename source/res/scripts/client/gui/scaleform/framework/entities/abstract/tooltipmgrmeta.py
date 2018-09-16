@@ -15,3 +15,6 @@ class ToolTipMgrMeta(BaseDAAPIComponent):
 
     def as_showS(self, tooltipData, linkage, redraw=False):
         return self.flashObject.as_show(tooltipData, linkage, redraw) if self._isDAAPIInited() else None
+
+    def as_hideS(self):
+        return self.flashObject.as_hide() if self._isDAAPIInited() else None

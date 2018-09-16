@@ -18,7 +18,7 @@ from helpers import dependency
 from shared_utils import nextTick
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
-from gui.customization.shared import createCustomizationBaseRequestCriteria
+from gui.customization.shared import createCustomizationBaseRequestCriteria, isServiceItem
 from skeletons.gui.server_events import IEventsCache
 from gui.customization.shared import getAppliedRegionsForCurrentHangarVehicle
 from shared_utils import first
@@ -193,7 +193,8 @@ class CustomizationContext(object):
         outfit = self._modifiedOutfits[season]
         slot = outfit.getContainer(areaId).slotFor(slotType)
         if slot.capacity() > regionId:
-            slot.remove(idx=regionId)
+            if not isServiceItem(slot.getItem(regionId)):
+                slot.remove(idx=regionId)
         self.refreshOutfit()
         self.onCustomizationItemsRemoved()
 
@@ -232,7 +233,7 @@ class CustomizationContext(object):
         for slot in outfit.slots():
             for idx in range(slot.capacity()):
                 item = slot.getItem(idx)
-                if item and (not filterMethod or filterMethod(item)):
+                if item and (not filterMethod or filterMethod(item)) and not isServiceItem(item):
                     slot.remove(idx)
 
         if refresh:
@@ -331,7 +332,7 @@ class CustomizationContext(object):
         notModifiedItems = df.diff(self._originalOutfits[self.currentSeason])
         return notModifiedItems
 
-    @process('buyAndInstall')
+    @process('customizationApply')
     def applyItems(self, purchaseItems):
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
         groupHasItems = {AdditionalPurchaseGroups.STYLES_GROUP_ID: False,
@@ -392,7 +393,8 @@ class CustomizationContext(object):
             self._mode = C11nMode.STYLE
         else:
             self._mode = C11nMode.CUSTOM
-            if not self._originalOutfits[self._currentSeason].isInstalled() and not self.isOutfitsEmpty(self._modifiedOutfits) and not self._modifiedStyle:
+            notInst = all([ not self._originalOutfits[season].isInstalled() for season in SeasonType.COMMON_SEASONS ])
+            if notInst and not self.isOutfitsEmpty(self._modifiedOutfits) and not self._modifiedStyle:
                 self._mode = C11nMode.STYLE
         self._originalMode = self._mode
         if self._mode == C11nMode.STYLE:
@@ -532,7 +534,7 @@ class CustomizationContext(object):
     def __updateVisibleTabsList(self):
         visibleTabs = defaultdict(set)
         anchorsData = g_currentVehicle.hangarSpace.getSlotPositions()
-        requirement = createCustomizationBaseRequestCriteria(g_currentVehicle.item, self.eventsCache.randomQuestsProgress, self.getAppliedItems())
+        requirement = createCustomizationBaseRequestCriteria(g_currentVehicle.item, self.eventsCache.questsProgress, self.getAppliedItems())
         items = self.service.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria=requirement)
         for item in sorted(items.itervalues(), key=comparisonKey):
             tabIndex = TYPE_TO_TAB_IDX.get(item.itemTypeID)

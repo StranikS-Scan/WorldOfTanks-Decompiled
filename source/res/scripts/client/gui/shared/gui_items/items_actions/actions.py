@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
 import BigWorld
+from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.shared.economics import getGUIPrice
+from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
+from gui.shared.gui_items.processors.goodies import BoosterBuyer
 from helpers import dependency
 from items import vehicles
 from adisp import process
@@ -10,8 +13,8 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared import event_dispatcher as shared_events
-from gui.shared.gui_items.processors.module import getInstallerProcessor, BuyAndInstallItemProcessor
-from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout, VehicleLayoutProcessor, VehicleBattleBoosterLayoutProcessor, BuyAndInstallBattleBoosterProcessor
+from gui.shared.gui_items.processors.module import getInstallerProcessor, BuyAndInstallItemProcessor, MultipleModulesSeller
+from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout, VehicleLayoutProcessor, VehicleBattleBoosterLayoutProcessor, BuyAndInstallBattleBoosterProcessor, VehicleSlotBuyer
 from gui.shared.gui_items.vehicle_equipment import ShellLayoutHelper, EquipmentLayoutHelper
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.techtree import unlock
@@ -123,6 +126,21 @@ class SellItemAction(CachedItemAction):
         return
 
 
+class SellMultipleItems(IGUIItemAction):
+
+    def __init__(self, itemSellSpecs):
+        super(SellMultipleItems, self).__init__()
+        self.__item = itemSellSpecs
+
+    @process
+    def doAction(self):
+        Waiting.show(STORAGE.FORSELL_WAITING)
+        result = yield MultipleModulesSeller(self.__item).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        Waiting.hide(STORAGE.FORSELL_WAITING)
+
+
 class ModuleBuyAction(BuyAction):
 
     def __init__(self, intCD):
@@ -148,10 +166,11 @@ class ModuleBuyAction(BuyAction):
 
 class VehicleBuyAction(BuyAction):
 
-    def __init__(self, vehCD, isTradeIn=False):
+    def __init__(self, vehCD, isTradeIn=False, previousAlias=None):
         super(VehicleBuyAction, self).__init__()
         self.__vehCD = vehCD
         self.__isTradeIn = isTradeIn
+        self.__previousAlias = previousAlias
 
     @process
     def doAction(self):
@@ -179,7 +198,7 @@ class VehicleBuyAction(BuyAction):
                     else:
                         showShopMsg('common_rent_or_buy_error', item)
                 if self._mayObtainForMoney(item):
-                    shared_events.showVehicleBuyDialog(item, self.__isTradeIn)
+                    shared_events.showVehicleBuyDialog(item, self.__isTradeIn, self.__previousAlias)
                 yield lambda callback=None: callback
             return
 
@@ -431,3 +450,38 @@ class BuyAndInstallItemVehicleLayout(SetVehicleLayoutAction):
         else:
             LOG_ERROR('Extend BuyAndInstallItemVehicleLayout action to support a new type of item!')
         return
+
+
+class BuyVehicleSlotAction(CachedItemAction):
+
+    @decorators.process('buySlot')
+    def doAction(self):
+        result = yield VehicleSlotBuyer().request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+
+class BuyBerthsAction(CachedItemAction):
+
+    @decorators.process('buyBerths')
+    def doAction(self):
+        items = self.itemsCache.items
+        berthPrice, berthsCount = items.shop.getTankmanBerthPrice(items.stats.tankmenBerthsCount)
+        result = yield TankmanBerthsBuyer(berthPrice, berthsCount).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+
+class BuyBoosterAction(CachedItemAction):
+
+    def __init__(self, boosterID, count, currency):
+        super(BuyBoosterAction, self).__init__()
+        self.__boosterID = boosterID
+        self.__count = count
+        self.__currency = currency
+
+    @decorators.process('buyItem')
+    def doAction(self):
+        result = yield BoosterBuyer(self.__boosterID, self.__count, self.__currency).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)

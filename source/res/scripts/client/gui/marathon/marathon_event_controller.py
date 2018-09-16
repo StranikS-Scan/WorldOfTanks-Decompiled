@@ -10,33 +10,27 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.links import URLMarcos
-from gui.marathon.marathon_constants import MARATHONS_DATA, MARATHON_STATE, MAP_FLAG_HEADER_ICON, MARATHON_WARNING, PROGRESS_TOOLTIP_HEADER, COUNTDOWN_TOOLTIP_HEADER
+from gui.marathon.marathon_constants import MARATHONS_DATA, MARATHON_STATE, MAP_FLAG_HEADER_ICON, MARATHON_WARNING, PROGRESS_TOOLTIP_HEADER, COUNTDOWN_TOOLTIP_HEADER, ZERO_TIME
 from gui.prb_control import prbEntityProperty
-from gui.server_events.events_constants import FOOTBALL2018_PREFIX
 from gui.shared.formatters import text_styles
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import ONE_DAY, ONE_HOUR
-from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IMarathonEventsController, IMarathonEventController, IBootcampController
-from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_control import IMarathonEventsController, IBootcampController
 from skeletons.gui.server_events import IEventsCache
 
-class MarathonEventsController(IMarathonEventsController):
+class MarathonEventsController(IMarathonEventsController, Notifiable):
+    _eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         super(MarathonEventsController, self).__init__()
         self.__eventManager = Event.EventManager()
         self.onFlagUpdateNotify = Event.Event(self.__eventManager)
-        self.__marathons = []
-        for data in MARATHONS_DATA:
-            marathon = MarathonEventController(data)
-            marathon.onFlagUpdateNotify += self.onFlagUpdateNotify
-            self.__marathons.append(marathon)
+        self.__marathons = [ MarathonEvent(data) for data in MARATHONS_DATA ]
 
     def addMarathon(self, data):
-        self.__marathons.append(MarathonEventController(data))
+        self.__marathons.append(MarathonEvent(data))
 
     def delMarathon(self, prefix):
         self.__marathons.remove(self.__findByPrefix(prefix))
@@ -64,7 +58,7 @@ class MarathonEventsController(IMarathonEventsController):
 
         return None
 
-    def getShowedPostBattleQuests(self):
+    def getVisibleInPostBattleQuests(self):
         result = {}
         for marathon in self.__marathons:
             if marathon.isShowInPostBattle():
@@ -73,33 +67,60 @@ class MarathonEventsController(IMarathonEventsController):
         return result
 
     def getQuestsData(self, prefix=None, postfix=None):
-        return self.getPrimaryMarathon().getQuestsData(prefix, postfix)
+        return self.getPrimaryMarathon().getQuestsData(prefix, postfix) if self.isAnyActive() else {}
 
     def getTokensData(self, prefix=None, postfix=None):
-        return self.getPrimaryMarathon().getTokensData(prefix, postfix)
+        return self.getPrimaryMarathon().getTokensData(prefix, postfix) if self.isAnyActive() else {}
 
     def isAnyActive(self):
         return any((marathon.isAvailable() for marathon in self.__marathons))
 
     def fini(self):
-        self.__applyOnAll(self.__marathons, 'fini')
+        self.__stop()
         super(MarathonEventsController, self).fini()
 
     def onDisconnected(self):
         super(MarathonEventsController, self).onDisconnected()
-        self.__applyOnAll(self.__marathons, 'onDisconnected')
+        self.__stop()
 
     def onAvatarBecomePlayer(self):
         super(MarathonEventsController, self).onAvatarBecomePlayer()
-        self.__applyOnAll(self.__marathons, 'onAvatarBecomePlayer')
+        self.__stop()
 
     def onLobbyStarted(self, ctx):
         super(MarathonEventsController, self).onLobbyStarted(ctx)
-        self.__applyOnAll(self.__marathons, 'onLobbyStarted', ctx)
+        self._eventsCache.onSyncCompleted += self.__onSyncCompleted
+        self._eventsCache.onProgressUpdated += self.__onSyncCompleted
+        self.__onSyncCompleted()
 
-    def __applyOnAll(self, seq, method, *args, **kwargs):
-        for obj in seq:
-            getattr(obj, method)(*args, **kwargs)
+    def __onSyncCompleted(self, *args):
+        self.__checkEvents()
+        self.__reloadNotification()
+
+    def __checkEvents(self):
+        for marathon in self.__marathons:
+            marathon.updateQuestsData()
+            marathon.setState()
+
+    def __updateFlagState(self):
+        self.__checkEvents()
+        self.onFlagUpdateNotify()
+
+    def __getClosestStatusUpdateTime(self):
+        if self.__marathons:
+            return min([ marathon.getClosestStatusUpdateTime() for marathon in self.__marathons ])
+
+    def __reloadNotification(self):
+        self.clearNotification()
+        timePeriod = self.__getClosestStatusUpdateTime()
+        if timePeriod:
+            self.addNotificator(PeriodicNotifier(self.__getClosestStatusUpdateTime, self.__updateFlagState))
+            self.startNotification()
+
+    def __stop(self):
+        self.clearNotification()
+        self._eventsCache.onSyncCompleted -= self.__onSyncCompleted
+        self._eventsCache.onProgressUpdated -= self.__onSyncCompleted
 
     def __findByPrefix(self, prefix):
         for marathon in self.__marathons:
@@ -109,26 +130,22 @@ class MarathonEventsController(IMarathonEventsController):
         return None
 
 
-class MarathonEventController(IMarathonEventController, Notifiable):
+class MarathonEvent(object):
     _eventsCache = dependency.descriptor(IEventsCache)
     _bootcamp = dependency.descriptor(IBootcampController)
-    _eventsController = dependency.descriptor(IEventBoardController)
-    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, data):
-        super(MarathonEventController, self).__init__()
+        super(MarathonEvent, self).__init__()
         self.__data = data
         self.__isEnabled = False
         self.__isAvailable = False
         self.__vehInInventory = False
         self.__state = ''
         self.__suspendFlag = False
-        self.__marathonQuest = None
-        self.__marathonGroup = None
+        self.__quest = None
+        self.__group = None
         self.__urlMacros = URLMarcos()
         self.__baseUrl = GUI_SETTINGS.lookup(data.url)
-        self.__eventManager = Event.EventManager()
-        self.onFlagUpdateNotify = Event.Event(self.__eventManager)
         return
 
     @property
@@ -139,20 +156,6 @@ class MarathonEventController(IMarathonEventController, Notifiable):
     def data(self):
         return self.__data
 
-    def fini(self):
-        self.__stop()
-
-    def onLobbyStarted(self, ctx):
-        self._eventsCache.onSyncCompleted += self.__onSyncCompleted
-        self._eventsCache.onProgressUpdated += self.__onSyncCompleted
-        self.__onSyncCompleted()
-
-    def onAvatarBecomePlayer(self):
-        self.__stop()
-
-    def onDisconnected(self):
-        self.__stop()
-
     @prbEntityProperty
     def prbEntity(self):
         return None
@@ -160,24 +163,18 @@ class MarathonEventController(IMarathonEventController, Notifiable):
     @async
     @process
     def getUrl(self, callback):
-        if self.prefix == FOOTBALL2018_PREFIX:
-            callback(self._lobbyContext.getServerSettings().footballHostUrl())
-        elif self.__baseUrl is None:
+        if self.__baseUrl is None:
             LOG_ERROR('Requesting URL for marathon when base URL is not specified')
-            yield lambda clb: clb(False)
+            yield lambda clb: clb(None)
         else:
             url = yield self.__urlMacros.parse(self.__baseUrl)
             callback(url)
         return
 
     def isEnabled(self):
-        return self._lobbyContext.getServerSettings().isFootballEnabled() if self.prefix == FOOTBALL2018_PREFIX else self.__isEnabled and not self._bootcamp.isInBootcamp()
+        return self.__isEnabled and not self._bootcamp.isInBootcamp()
 
     def isAvailable(self):
-        if self.prefix == FOOTBALL2018_PREFIX:
-            eventsData = self._eventsController.getFootballSettingsData()
-            isFootballEvents = eventsData and eventsData.getEvents()
-            return self._lobbyContext.getServerSettings().isFootballEnabled() and isFootballEvents
         return self.__isAvailable
 
     def getTooltipData(self):
@@ -268,19 +265,8 @@ class MarathonEventController(IMarathonEventController, Notifiable):
     def isShowInPostBattle(self):
         return self.__data.showInPostBattle
 
-    def __marathonFilterFunc(self, q):
-        return q.getID().startswith(self.prefix)
-
-    def __onSyncCompleted(self, *args):
-        self.__checkEvents()
-        self.__reloadNotification()
-
-    def __checkEvents(self):
-        self.__updateQuestsData()
-        self.__setState()
-
-    def __setState(self):
-        if not self.__marathonGroup:
+    def setState(self):
+        if not self.__group:
             self.__isEnabled = False
             self.__isAvailable = False
             self.__state = MARATHON_STATE.UNKNOWN
@@ -291,7 +277,7 @@ class MarathonEventController(IMarathonEventController, Notifiable):
             self.__isAvailable = False
             return self.__state
         groupStartTimeLeft, groupFinishTimeLeft = self.__getGroupTimeInterval()
-        zeroTime = self.data.zeroTime
+        zeroTime = ZERO_TIME
         if groupStartTimeLeft > zeroTime or groupFinishTimeLeft <= zeroTime:
             self.__isEnabled = False
             self.__isAvailable = False
@@ -309,7 +295,7 @@ class MarathonEventController(IMarathonEventController, Notifiable):
             self.__state = MARATHON_STATE.FINISHED
         return self.__state
 
-    def __updateQuestsData(self):
+    def updateQuestsData(self):
         self.__suspendFlag = False
         quests = self._eventsCache.getHiddenQuests(self.__marathonFilterFunc)
         if quests:
@@ -319,16 +305,30 @@ class MarathonEventController(IMarathonEventController, Notifiable):
                     self.__suspendFlag = True
                     break
 
-            self.__marathonQuest = quests[sortedIndexList[0]]
+            self.__quest = quests[sortedIndexList[0]]
         groups = self._eventsCache.getGroups(self.__marathonFilterFunc)
         if groups:
             sortedGroups = sorted(groups)
-            self.__marathonGroup = groups[sortedGroups[0]]
+            self.__group = groups[sortedGroups[0]]
         else:
-            self.__marathonGroup = None
+            self.__group = None
         tokens = self.getTokensData(prefix=self.prefix).keys()
         self.__vehInInventory = any((t in tokens for t in self.data.awardTokens))
         return
+
+    def getClosestStatusUpdateTime(self):
+        if self.__state == MARATHON_STATE.NOT_STARTED:
+            timeLeft, _ = self.__getQuestTimeInterval()
+            return timeLeft + 1
+        if self.__state == MARATHON_STATE.IN_PROGRESS:
+            _, timeLeft = self.__getQuestTimeInterval()
+            return timeLeft + 1
+        if self.__state == MARATHON_STATE.FINISHED:
+            _, timeLeft = self.__getGroupTimeInterval()
+            return timeLeft
+
+    def __marathonFilterFunc(self, q):
+        return q.getID().startswith(self.prefix)
 
     def __getProgress(self, progressType, prefix=None, postfix=None):
         progress = self._eventsCache.questsProgress.getCacheValue(progressType, {})
@@ -362,7 +362,7 @@ class MarathonEventController(IMarathonEventController, Notifiable):
                 return self.data.icons.iconFlag
             if firstQuestFinishTimeLeft <= ONE_DAY:
                 return self.data.icons.timeIcon
-        return self.data.icons.saleIcon if self.__state == MARATHON_STATE.FINISHED else None
+        return self.data.icons.saleIcon if self.__state == MARATHON_STATE.FINISHED else ''
 
     def __getTillTimeEnd(self, value):
         return self.__getFormattedTillTimeString(value, self.data.tooltips.stateEnd)
@@ -397,43 +397,16 @@ class MarathonEventController(IMarathonEventController, Notifiable):
         return TOOLTIPS_CONSTANTS.MARATHON_QUESTS_PREVIEW if self.isAvailable() else TOOLTIPS.MARATHON_OFF
 
     def __getTimeFromGroupStart(self):
-        return self.__marathonGroup.getTimeFromStartTillNow() if self.__marathonGroup else self.data.zeroTime
+        return self.__group.getTimeFromStartTillNow() if self.__group else ZERO_TIME
 
     def __getGroupTimeInterval(self):
-        if self.__marathonGroup:
-            return (self.__marathonGroup.getStartTimeLeft(), self.__marathonGroup.getFinishTimeLeft())
-        zeroTime = self.data.zeroTime
+        if self.__group:
+            return (self.__group.getStartTimeLeft(), self.__group.getFinishTimeLeft())
+        zeroTime = ZERO_TIME
         return (zeroTime, zeroTime)
 
     def __getQuestTimeInterval(self):
-        if self.__marathonQuest:
-            return (self.__marathonQuest.getStartTimeLeft(), self.__marathonQuest.getFinishTimeLeft())
-        zeroTime = self.data.zeroTime
+        if self.__quest:
+            return (self.__quest.getStartTimeLeft(), self.__quest.getFinishTimeLeft())
+        zeroTime = ZERO_TIME
         return (zeroTime, zeroTime)
-
-    def __stop(self):
-        self.clearNotification()
-        self._eventsCache.onSyncCompleted -= self.__onSyncCompleted
-        self._eventsCache.onProgressUpdated -= self.__onSyncCompleted
-
-    def __getClosestStatusUpdateTime(self):
-        if self.__state == MARATHON_STATE.NOT_STARTED:
-            timeLeft, _ = self.__getQuestTimeInterval()
-            return timeLeft + 1
-        if self.__state == MARATHON_STATE.IN_PROGRESS:
-            _, timeLeft = self.__getQuestTimeInterval()
-            return timeLeft + 1
-        if self.__state == MARATHON_STATE.FINISHED:
-            _, timeLeft = self.__getGroupTimeInterval()
-            return timeLeft
-
-    def __updateFlagState(self):
-        self.__checkEvents()
-        self.onFlagUpdateNotify()
-
-    def __reloadNotification(self):
-        self.clearNotification()
-        timePeriod = self.__getClosestStatusUpdateTime()
-        if timePeriod:
-            self.addNotificator(PeriodicNotifier(self.__getClosestStatusUpdateTime, self.__updateFlagState))
-            self.startNotification()

@@ -150,15 +150,6 @@ class BootcampStatsComposer(IStatsComposer):
         return None
 
 
-class FootballStatsComposer(StatsComposer):
-
-    def __init__(self, reusable):
-        super(FootballStatsComposer, self).__init__(reusable, templates.FOOTBALL_COMMON_STATS_BLOCK.clone(), templates.FOOTBALL_PERSONAL_STATS_BLOCK.clone(), templates.FOOTBALL_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
-
-    def _registerTabs(self, reusable):
-        self._block.addNextComponent(templates.FOOTBALL_TABS_BLOCK.clone())
-
-
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
     if bonusType == ARENA_BONUS_TYPE.CYBERSPORT:
@@ -175,8 +166,6 @@ def createComposer(reusable):
         composer = BootcampStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.EPIC_BATTLE:
         composer = EpicStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.EVENT_BATTLES:
-        composer = FootballStatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

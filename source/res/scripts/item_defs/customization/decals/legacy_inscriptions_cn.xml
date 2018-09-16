@@ -187,9 +187,7 @@
     <priceGroup>	legacy IGR notInShop	</priceGroup>
     <type>	INSCRIPTION	</type>
     <vehicleFilter>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
+      <include></include>
     </vehicleFilter>
     <tags>	premiumIGR	</tags>
     <decal>
@@ -244,9 +242,7 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <type>	INSCRIPTION	</type>
     <vehicleFilter>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
+      <include></include>
     </vehicleFilter>
     <decal>
       <id>	14428	</id>
@@ -291,9 +287,7 @@
     <historical>	true	</historical>
     <type>	INSCRIPTION	</type>
     <vehicleFilter>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
+      <include></include>
     </vehicleFilter>
     <decal>
       <id>	14435	</id>
@@ -336,9 +330,6 @@
       <include>
         <nations>	france	</nations>
       </include>
-      <exclude>
-        <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	14973	</id>
@@ -391,9 +382,6 @@
       <include>
         <nations>	germany	</nations>
       </include>
-      <exclude>
-        <vehicles>	germany:G56_E-100_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	14672	</id>
@@ -612,9 +600,6 @@
       <include>
         <nations>	ussr	</nations>
       </include>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	14572	</id>

@@ -227,7 +227,8 @@ _viewIdsGen = None
 
 def getViewName(viewAlias, *args):
     l = list(args)
-    l.insert(0, viewAlias)
+    if viewAlias:
+        l.insert(0, viewAlias)
     return '_'.join(map(str, l))
 
 

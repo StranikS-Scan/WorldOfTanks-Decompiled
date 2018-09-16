@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.lobby.event_boards.event_helpers import LEVELS_RAN
 from gui.Scaleform.daapi.view.meta.EventBoardsVehiclesOverlayMeta import EventBoardsVehiclesOverlayMeta
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
 from gui.event_boards.event_boards_items import EVENT_TYPE
-from gui.shared.formatters.vehicle_filters import packVehicleTypesFilter, packVehicleLevelsFilter
+from gui.shared.formatters.vehicle_filters import packVehicleTypesFilter, packVehicleLevelsFilter, packNationsFilter
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import int2roman, dependency
 from helpers.i18n import makeString as _ms
@@ -28,6 +28,7 @@ class EventBoardsVehiclesOverlay(EventBoardsVehiclesOverlayMeta):
             filtersVO = self.__filters.copy()
             filtersVO['vehicleTypesDP'] = packVehicleTypesFilter(defaultVehType='none')
             filtersVO['levelsDP'] = packVehicleLevelsFilter(LEVELS_RANGE)
+            filtersVO['nationDP'] = packNationsFilter()
             self.as_setFiltersS(filtersVO)
             self.applyFilters(**self.__filters)
         else:

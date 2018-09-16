@@ -21,6 +21,7 @@ from gui.event_boards import event_boards_timer
 from gui.event_boards.event_boards_items import CALCULATION_METHODS as _cm, OBJECTIVE_PARAMETERS as _op, EVENT_TYPE as _et, PLAYER_STATE_REASON as _psr, EVENT_STATE as _es, EVENT_DATE_TYPE, WOODEN_RIBBON
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_vos import makeCantJoinReasonTextVO, makeParameterTooltipVO, makePrimeTimesTooltipVO
@@ -594,7 +595,7 @@ class EventHeader(object):
         finished = event.isFinished()
         if not finished:
             icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_DATE_ICON)
-            timePeriod = '{} {} {} - {} {} {}'.format(str(sday), _ms(EVENT_BOARDS.datetime_months(str(smonth))), event_boards_timer.getShortTimeString(event.getStartDate()), str(eday), _ms(EVENT_BOARDS.datetime_months(str(emonth))), event_boards_timer.getShortTimeString(event.getEndDate()))
+            timePeriod = '{} {} {} - {} {} {}'.format(str(sday), _ms(MENU.datetime_months(str(smonth))), event_boards_timer.getShortTimeString(event.getStartDate()), str(eday), _ms(MENU.datetime_months(str(emonth))), event_boards_timer.getShortTimeString(event.getEndDate()))
             result = '{} {}    '.format(icon, text_styles.vehicleStatusInfoText(timePeriod))
             startSoon = event.isStartSoon()
             if startSoon:

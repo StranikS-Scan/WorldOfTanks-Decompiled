@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/cybersport.py
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
-from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
+from gui.Scaleform.daapi.view.lobby.rally.action_button_state_vo import ActionButtonStateVO
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.dispatcher import g_prbLoader

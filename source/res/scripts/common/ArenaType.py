@@ -14,7 +14,6 @@ from typing import Dict
 from soft_exception import SoftException
 from collections import defaultdict
 from data_structures import DictObj
-from FootballModeSettings import FootballModeSettings
 from Math import Vector2
 if IS_CLIENT:
     from helpers import i18n
@@ -194,10 +193,6 @@ def __readGameplayCfg(gameplayName, section, defaultXml, geometryCfg):
 
         if gameplayName == 'nations':
             raise SoftException('national battles are disabled')
-        if gameplayName == 'football':
-            cfg['football'] = __readFootballModeSettings(section)
-        else:
-            cfg['football'] = None
         cfg.update(__readCommonCfg(section, defaultXml, False, geometryCfg))
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
@@ -853,16 +848,3 @@ def __readGameplayPoints(section, geometryCfg):
 
 def __readWinPoints(section):
     return {'winPointsSettings': section.readString('winPoints', 'DEFAULT')}
-
-
-def __readFootballModeSettings(section):
-    settings = FootballModeSettings()
-    if section.has_key('ballSpawnPoint'):
-        settings.setBallSpawnPoint(section.readVector3('ballSpawnPoint'))
-    if section.has_key('fieldPosition'):
-        settings.setFieldPosition(section.readVector3('fieldPosition'))
-    if section.has_key('cellModel'):
-        settings.setCellModel(section.readString('cellModel'))
-    if section.has_key('cellPosition'):
-        settings.setCellPosition(section.readVector3('cellPosition'))
-    return settings

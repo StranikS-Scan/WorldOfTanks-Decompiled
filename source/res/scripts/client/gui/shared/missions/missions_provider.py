@@ -95,5 +95,3 @@ class ClientMissionsProvider(IGlobalListener):
     def __requestEventboardsData(self):
         if ServicesLocator.lobbyContext.getServerSettings().isElenEnabled():
             yield ServicesLocator.eventsController.getEvents(onlySettings=True)
-        if ServicesLocator.lobbyContext.getServerSettings().isFootballEnabled():
-            yield ServicesLocator.eventsController.getFootballEvents()

@@ -13,6 +13,7 @@ class APP_CONTAINERS_NAMES(object):
     BROWSER = 'browser'
     DIALOGS = 'topWindow'
     OVERLAY = 'overlay'
+    IME = 'ime'
     SERVICE_LAYOUT = 'serviceLayout'
     TOOL_TIPS = 'toolTips'
     CURSOR = 'cursor'
@@ -28,6 +29,7 @@ class APP_CONTAINERS_NAMES(object):
      BROWSER,
      DIALOGS,
      OVERLAY,
+     IME,
      SERVICE_LAYOUT,
      TOOL_TIPS,
      CURSOR,

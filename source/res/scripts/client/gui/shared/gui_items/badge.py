@@ -62,6 +62,9 @@ class Badge(GUIItem):
     def getBigIcon(self):
         return getBadgeIconPath(BADGES_ICONS.X80, self.badgeID)
 
+    def getIconX110(self):
+        return getBadgeIconPath(BADGES_ICONS.X110, self.badgeID)
+
     def getSmallIcon(self):
         return getBadgeIconPath(BADGES_ICONS.X48, self.badgeID)
 

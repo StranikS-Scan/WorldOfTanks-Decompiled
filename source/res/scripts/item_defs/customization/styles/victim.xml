@@ -12,9 +12,6 @@
         <include>
           <nations>	ussr	</nations>
         </include>
-        <exclude>
-          <vehicles>	ussr:R87_T62A_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -35,9 +32,6 @@
         <include>
           <nations>	ussr	</nations>
         </include>
-        <exclude>
-          <vehicles>	ussr:R87_T62A_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -58,9 +52,6 @@
         <include>
           <nations>	ussr	</nations>
         </include>
-        <exclude>
-          <vehicles>	ussr:R87_T62A_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -81,9 +72,6 @@
         <include>
           <nations>	ussr	</nations>
         </include>
-        <exclude>
-          <vehicles>	ussr:R87_T62A_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -104,9 +92,6 @@
         <include>
           <nations>	germany	</nations>
         </include>
-        <exclude>
-          <vehicles>	germany:G56_E-100_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -127,9 +112,6 @@
         <include>
           <nations>	germany	</nations>
         </include>
-        <exclude>
-          <vehicles>	germany:G56_E-100_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -150,9 +132,6 @@
         <include>
           <nations>	germany	</nations>
         </include>
-        <exclude>
-          <vehicles>	germany:G56_E-100_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -173,9 +152,6 @@
         <include>
           <nations>	germany	</nations>
         </include>
-        <exclude>
-          <vehicles>	germany:G56_E-100_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -356,9 +332,6 @@
         <include>
           <nations>	france	</nations>
         </include>
-        <exclude>
-          <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -379,9 +352,6 @@
         <include>
           <nations>	france	</nations>
         </include>
-        <exclude>
-          <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -402,9 +372,6 @@
         <include>
           <nations>	france	</nations>
         </include>
-        <exclude>
-          <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -425,9 +392,6 @@
         <include>
           <nations>	france	</nations>
         </include>
-        <exclude>
-          <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
-        </exclude>
       </vehicleFilter>
       <outfits>
         <outfit>
@@ -835,6 +799,86 @@
           <camouflages>
             <item>
               <id>	529	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	425	</id>
+      <tags>	blackVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <vehicleFilter>
+        <include>
+          <nations>	poland	</nations>
+        </include>
+      </vehicleFilter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	595	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	426	</id>
+      <tags>	redVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <vehicleFilter>
+        <include>
+          <nations>	poland	</nations>
+        </include>
+      </vehicleFilter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	597	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	427	</id>
+      <tags>	goldVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <vehicleFilter>
+        <include>
+          <nations>	poland	</nations>
+        </include>
+      </vehicleFilter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	596	</id>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	428	</id>
+      <tags>	silverVictim	</tags>
+      <userString>	#vehicle_customization:victim_style/default	</userString>
+      <vehicleFilter>
+        <include>
+          <nations>	poland	</nations>
+        </include>
+      </vehicleFilter>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	598	</id>
             </item>
           </camouflages>
         </outfit>

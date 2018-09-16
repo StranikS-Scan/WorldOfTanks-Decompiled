@@ -27,15 +27,13 @@ class RecruitParamsComponent(RecruitParametersMeta):
         self.__selectedVehClass = DEFAULT_CLASS
         self.__selectedVehicle = DEFAULT_VEHICLE
         self.__selectedTmanRole = DEFAULT_ROLE
-        self.__isRoleLocked = False
 
     def init(self):
         Waiting.show('updating')
         self.__setNationsData()
         self.__setVehicleClassesData()
         self.as_setVehicleDataS(self.__getSendingData([self.__getVehicleEmptyRow()], False, 0))
-        if not self.__isRoleLocked:
-            self.as_setTankmanRoleDataS(self.__getSendingData([self.__getTankmanRoleEmptyRow()], False, 0))
+        self.as_setTankmanRoleDataS(self.__getSendingData([self.__getTankmanRoleEmptyRow()], False, 0))
         Waiting.hide('updating')
         self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
 
@@ -46,8 +44,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
         self.__selectedNation = nationID
         self.__setVehicleClassesData()
         self.as_setVehicleDataS(self.__getSendingData([self.__getVehicleEmptyRow()], False, 0))
-        if not self.__isRoleLocked:
-            self.as_setTankmanRoleDataS(self.__getSendingData([self.__getTankmanRoleEmptyRow()], False, 0))
+        self.as_setTankmanRoleDataS(self.__getSendingData([self.__getTankmanRoleEmptyRow()], False, 0))
         Waiting.hide('updating')
         self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
 
@@ -57,8 +54,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
         Waiting.show('updating')
         self.__selectedVehClass = vehClass
         self.__setVehicleData()
-        if not self.__isRoleLocked:
-            self.as_setTankmanRoleDataS(self.__getSendingData([self.__getTankmanRoleEmptyRow()], False, 0))
+        self.as_setTankmanRoleDataS(self.__getSendingData([self.__getTankmanRoleEmptyRow()], False, 0))
         Waiting.hide('updating')
         self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
 
@@ -128,35 +124,25 @@ class RecruitParamsComponent(RecruitParametersMeta):
         self.as_setVehicleDataS(self.__getSendingData(data, len(data) > 1, selectedIndex))
 
     def __setTankmenData(self):
-        if not self.__isRoleLocked:
-            modulesAll = self.itemsCache.items.getVehicles(self.__getRoleCriteria(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle)).values()
-            roles = []
-            data = [self.__getTankmanRoleEmptyRow()]
-            modulesAll.sort()
-            selectedIndex = 0
-            counter = 0
-            skillsConfig = getSkillsConfig()
-            for module in modulesAll:
-                for role in module.descriptor.type.crewRoles:
-                    if role[0] in roles:
-                        continue
-                    roles.append(role[0])
-                    data.append({'id': role[0],
-                     'label': convert(skillsConfig.getSkill(role[0]).userString)})
-                    if self.__selectedTmanRole == role[0]:
-                        selectedIndex = counter
-                    counter = counter + 1
-
-            self.as_setTankmanRoleDataS(self.__getSendingData(data, len(data) > 1, selectedIndex))
-
-    def setLockedRole(self, role):
-        self.__isRoleLocked = True
-        skillsConfig = getSkillsConfig()
+        modulesAll = self.itemsCache.items.getVehicles(self.__getRoleCriteria(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle)).values()
+        roles = []
         data = [self.__getTankmanRoleEmptyRow()]
-        self.__selectedTmanRole = role
-        data.append({'id': role,
-         'label': convert(skillsConfig.getSkill(role).userString)})
-        self.as_setTankmanRoleDataS(self.__getSendingData(data, False, 1))
+        modulesAll.sort()
+        selectedIndex = 0
+        counter = 0
+        skillsConfig = getSkillsConfig()
+        for module in modulesAll:
+            for role in module.descriptor.type.crewRoles:
+                if role[0] in roles:
+                    continue
+                roles.append(role[0])
+                data.append({'id': role[0],
+                 'label': convert(skillsConfig.getSkill(role[0]).userString)})
+                if self.__selectedTmanRole == role[0]:
+                    selectedIndex = counter
+                counter = counter + 1
+
+        self.as_setTankmanRoleDataS(self.__getSendingData(data, len(data) > 1, selectedIndex))
 
     def __getSendingData(self, data, enabled, selectedIndex):
         return {'enabled': enabled,

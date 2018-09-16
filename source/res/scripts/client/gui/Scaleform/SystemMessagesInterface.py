@@ -43,7 +43,7 @@ class SystemMessagesInterface(ISystemMessages):
         g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         self.aogas.onNotifyAccount -= self.__AOGAS_onNotifyAccount
         self.gameSession.onClientNotify -= self.__gameSession_onClientNotify
-        self.eventsNotification.onEventNotificationsChanged += self.__onReceiveEventNotification
+        self.eventsNotification.onEventNotificationsChanged -= self.__onReceiveEventNotification
         self.__clearLobbyListeners()
 
     @proto_getter(PROTO_TYPE.BW)

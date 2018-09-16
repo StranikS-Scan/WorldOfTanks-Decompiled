@@ -4,7 +4,6 @@ from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from debug_utils import LOG_ERROR
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
-from gui.Scaleform.genConsts.FOOTBAL2018_CONSTANTS import FOOTBAL2018_CONSTANTS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.shared.items_parameters import formatters
 from gui.shared.utils import AUTO_RELOAD_PROP_NAME
@@ -13,8 +12,6 @@ from items import tankmen
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
-from helpers.i18n import makeString as _ms
 
 class VehicleInfoWindow(VehicleInfoMeta):
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -50,35 +47,13 @@ class VehicleInfoWindow(VehicleInfoMeta):
                  'value': tankmanLabel})
 
             paramsList = formatters.getFormattedParamsList(vehicle.descriptor, params['parameters'], excludeRelative=True)
-            vehicleType = vehicle.type
-            if vehicle.isFootball:
-                sportsTypeStr = ''
-                vehicleLevel = -1
-                if vehicle.isFootballStriker:
-                    sportsTypeStr = FOOTBALL2018.SPORT_ROLE_STRIKER
-                    vehicleType = FOOTBAL2018_CONSTANTS.ROLE_SHORT_STRIKER
-                elif vehicle.isFootballMidfielder:
-                    sportsTypeStr = FOOTBALL2018.SPORT_ROLE_MIDFIELDER
-                    vehicleType = FOOTBAL2018_CONSTANTS.ROLE_SHORT_MIDFIELDER
-                elif vehicle.isFootballDefender:
-                    sportsTypeStr = FOOTBALL2018.SPORT_ROLE_DEFENDER
-                    vehicleType = FOOTBAL2018_CONSTANTS.ROLE_SHORT_DEFENDER
-                vehicleTitle = ''
-                isElite = False
-                vehicleName = '{} {}'.format(_ms(sportsTypeStr), vehicle.userName)
-            else:
-                vehicleTitle = vehicle.longUserName
-                vehicleLevel = vehicle.level
-                vehicleName = vehicle.longUserName
-                isElite = vehicle.isElite
-            info = {'vehicleTitle': vehicleTitle,
-             'vehicleName': vehicleName,
+            info = {'vehicleName': vehicle.longUserName,
              'vehicleDescription': vehicle.fullDescription,
              'vehicleImage': vehicle.icon,
-             'vehicleLevel': vehicleLevel,
+             'vehicleLevel': vehicle.level,
              'vehicleNation': vehicle.nationID,
-             'vehicleElite': isElite,
-             'vehicleType': vehicleType,
+             'vehicleElite': vehicle.isElite,
+             'vehicleType': vehicle.type,
              'propsData': self.__packParams(paramsList),
              'baseData': params['base'],
              'crewData': tankmenParams}

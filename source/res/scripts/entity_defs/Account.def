@@ -27,13 +27,14 @@
     <Interface>	AccountUnitAssembler	</Interface>
     <Interface>	AccountUnitBrowser	</Interface>
     <Interface>	AccountDebugger	</Interface>
+    <Interface>	QuestProcessor	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_10200>
+    <requiredVersion_11000>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.0.2_6	</Default>
-    </requiredVersion_10200>
+      <Default>	ct_1.1.0	</Default>
+    </requiredVersion_11000>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -450,6 +451,11 @@
       <Arg>	INT32	</Arg>
       <Arg>	PYTHON	</Arg>
     </processWGMoneyResponse>
+    <processReceiptServiceNotification>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </processReceiptServiceNotification>
     <extraWriteToDB>
       <Arg>	UINT8	</Arg>
     </extraWriteToDB>

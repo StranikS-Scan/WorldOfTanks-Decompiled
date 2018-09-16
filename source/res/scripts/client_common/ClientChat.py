@@ -294,7 +294,7 @@ class ClientChat(object):
                 elif messageType == SYS_MESSAGE_TYPE.battleResults.index():
                     if 'arenaCreateTime' in messageData['data']:
                         messageData['data']['arenaCreateTime'] = tm.makeLocalServerTime(messageData['data']['arenaCreateTime'])
-                elif messageType == SYS_MESSAGE_TYPE.goldReceived.index():
+                elif messageType == SYS_MESSAGE_TYPE.currencyUpdate.index():
                     messageData['data']['date'] = tm.makeLocalServerTime(messageData['data']['date'])
                 elif messageType in (SYS_MESSAGE_TYPE.accountTypeChanged.index(),
                  SYS_MESSAGE_TYPE.premiumBought.index(),

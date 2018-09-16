@@ -7,82 +7,96 @@ from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.server_events.pm_constants import SOUNDS
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
+from personal_missions import PM_BRANCH
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
-class _PersonalMissionNavigationInfo(object):
+class _PMNavigationInfo(object):
+    _DEFAULT_OPERATIONS = {PM_BRANCH.REGULAR: 1,
+     PM_BRANCH.PERSONAL_MISSION_2: 5}
 
     def __init__(self):
-        self.__operationID = 1
-        self.__chainID = 1
+        self.__operationIDs = self._DEFAULT_OPERATIONS.copy()
+        self.__chainIDs = {q:1 for q in PM_BRANCH.ACTIVE_BRANCHES}
+        self.__branch = PM_BRANCH.REGULAR
 
-    def getOperationID(self):
-        return self.__operationID
+    def getOperationID(self, branchID=None):
+        return self.__operationIDs[branchID or self.__branch]
 
-    def setOperationID(self, operationID):
-        self.__operationID = operationID
+    def setOperationID(self, operationID, branchID=None):
+        self.__operationIDs[branchID or self.__branch] = operationID
 
-    def getChainID(self):
-        return self.__chainID
+    def getChainID(self, branchID=None):
+        return self.__chainIDs[branchID or self.__branch]
 
-    def setChainID(self, chainID):
-        self.__chainID = chainID
+    def setChainID(self, chainID, branchID=None):
+        self.__chainIDs[branchID or self.__branch] = chainID
+
+    def setBranchID(self, branchID):
+        self.__branch = branchID
+
+    def getBranchID(self):
+        return self.__branch
 
 
 class PersonalMissionsNavigation(EventSystemEntity):
-    __navigationInfo = _PersonalMissionNavigationInfo()
+    __navigationInfo = _PMNavigationInfo()
     _eventsCache = dependency.descriptor(IEventsCache)
     _lobbyCtx = dependency.descriptor(ILobbyContext)
 
-    @classmethod
-    def getOperationID(cls):
-        return cls.__navigationInfo.getOperationID()
+    def __init__(self, *args, **kwargs):
+        super(PersonalMissionsNavigation, self).__init__()
 
-    @classmethod
-    def getOperation(cls):
-        return cls._eventsCache.personalMissions.getOperations().get(cls.getOperationID())
+    def getOperationID(self):
+        return self.__navigationInfo.getOperationID()
 
-    @classmethod
-    def setOperationID(cls, operationID):
-        cls.__navigationInfo.setOperationID(operationID)
-        cls.__setWWISEGlobal()
+    def getOperation(self):
+        return self._eventsCache.getPersonalMissions().getAllOperations().get(self.getOperationID())
 
-    @classmethod
-    def getChainID(cls):
-        return cls.__navigationInfo.getChainID()
+    def setOperationID(self, operationID):
+        self.__navigationInfo.setOperationID(operationID)
+        self.__setWWISEGlobal()
 
-    @classmethod
-    def getChain(cls):
-        return cls.getOperation().getQuests()[cls.getChainID()]
+    def getChainID(self):
+        return self.__navigationInfo.getChainID()
 
-    @classmethod
-    def setChainID(cls, chainID):
-        cls.__navigationInfo.setChainID(chainID)
-        cls.__setWWISEGlobal()
+    def getChain(self):
+        return self.getOperation().getQuests()[self.getChainID()]
+
+    def setChainID(self, chainID):
+        self.__navigationInfo.setChainID(chainID)
+
+    def setBranch(self, branch):
+        self.__navigationInfo.setBranchID(branch)
+
+    def getBranch(self):
+        return self.__navigationInfo.getBranchID()
 
     def _populate(self):
         super(PersonalMissionsNavigation, self)._populate()
         self.__setWWISEGlobal()
-        self._lobbyCtx.getServerSettings().onServerSettingsChange += self.__onSettingsChanged
+        self._lobbyCtx.getServerSettings().onServerSettingsChange += self._onSettingsChanged
         self._eventsCache.onProgressUpdated += self.__onProgressUpdated
 
     def _dispose(self):
-        self._eventsCache.onProgressUpdated += self.__onProgressUpdated
-        self._lobbyCtx.getServerSettings().onServerSettingsChange -= self.__onSettingsChanged
+        self._eventsCache.onProgressUpdated -= self.__onProgressUpdated
+        self._lobbyCtx.getServerSettings().onServerSettingsChange -= self._onSettingsChanged
         super(PersonalMissionsNavigation, self)._dispose()
 
-    @classmethod
-    def __setWWISEGlobal(cls):
-        operation = cls.getOperation()
+    def _onSettingsChanged(self, diff):
+        disabledOp = False
+        if 'disabledPMOperations' in diff and diff['disabledPMOperations']:
+            disabledOp = self.getOperationID() in diff['disabledPMOperations'].keys()
+        if 'isRegularQuestEnabled' in diff and not diff['isRegularQuestEnabled'] or 'isPM2QuestEnabled' in diff and not diff['isPM2QuestEnabled'] or disabledOp:
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __setWWISEGlobal(self):
+        operation = self.getOperation()
         if operation:
-            completedCount = len(operation.getQuestsInChainByFilter(cls.getChainID(), methodcaller('isCompleted')))
+            completedCount = len(operation.getQuestsInChainByFilter(self.getChainID(), methodcaller('isCompleted')))
         else:
             completedCount = 0
         WWISE.WW_setRTCPGlobal(SOUNDS.RTCP_MISSIONS_NUMBER, completedCount)
-
-    def __onSettingsChanged(self, diff):
-        if 'isRegularQuestEnabled' in diff and not diff['isRegularQuestEnabled']:
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onProgressUpdated(self, _):
         self.__setWWISEGlobal()

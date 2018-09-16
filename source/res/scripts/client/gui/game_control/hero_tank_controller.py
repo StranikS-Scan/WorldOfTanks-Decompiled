@@ -25,6 +25,7 @@ class HeroTankController(IHeroTankController):
         self.__isEnabled = False
         self.__currentTankCD = None
         self.onUpdated = Event.Event()
+        self.onInteractive = Event.Event()
         return
 
     def init(self):
@@ -65,6 +66,9 @@ class HeroTankController(IHeroTankController):
             if vehicleCD in self.__data:
                 return self.__data[vehicleCD].url
             return ''
+
+    def setInteractive(self, interactive):
+        self.onInteractive(interactive)
 
     def __fullUpdate(self):
         self.__invVehsIntCD = []

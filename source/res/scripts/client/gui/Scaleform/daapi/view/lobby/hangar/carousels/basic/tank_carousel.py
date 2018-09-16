@@ -2,31 +2,26 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/tank_carousel.py
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
-from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts, FilterSetupContext
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
+from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
+from gui.ingame_shop import showBuyGoldForSlot
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
-from gui.shared.utils import decorators
+from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.server_events import IEventsCache
-from gui.shared.tutorial_helper import getTutorialGlobalStorage
-_HAVE_NEW_FILTER_HINT = '_HaveNewFilterHint'
-_EVENT_ID_STRING = 'event'
-_EVENT_ID_INDEX = 2
 
 class TankCarousel(TankCarouselMeta):
     itemsCache = dependency.descriptor(IItemsCache)
-    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         super(TankCarousel, self).__init__()
@@ -36,9 +31,12 @@ class TankCarousel(TankCarouselMeta):
         self.as_rowCountS(value)
 
     def buyTank(self):
-        ctx = {'tabId': STORE_TYPES.SHOP,
-         'component': STORE_CONSTANTS.VEHICLE}
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+        if isIngameShopEnabled():
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE), EVENT_BUS_SCOPE.LOBBY)
+        else:
+            ctx = {'tabId': STORE_TYPES.SHOP,
+             'component': STORE_CONSTANTS.VEHICLE}
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE_OLD, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
 
     def buySlot(self):
         self.__buySlot()
@@ -75,7 +73,6 @@ class TankCarousel(TankCarouselMeta):
         super(TankCarousel, self)._populate()
         g_playerEvents.onBattleResultsReceived += self.__onFittingUpdate
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
-        self.eventsCache.onSyncCompleted += self.__onEventsSyncCompleted
         g_clientUpdateManager.addCallbacks({'stats.credits': self.__onFittingUpdate,
          'stats.gold': self.__onFittingUpdate,
          'stats.vehicleSellsLeft': self.__onFittingUpdate,
@@ -85,17 +82,11 @@ class TankCarousel(TankCarouselMeta):
         self.as_rowCountS(setting.getRowCount())
         setting = self.settingsCore.options.getSetting(settings_constants.GAME.DOUBLE_CAROUSEL_TYPE)
         self.as_setSmallDoubleCarouselS(setting.enableSmallCarousel())
-        self.__updateFilterEntitiesList()
         self.as_initCarouselFilterS(self._getInitialFilterVO(getFilterSetupContexts(self.itemsCache.items.shop.dailyXPFactor)))
-        tutorStorage = getTutorialGlobalStorage()
-        if tutorStorage is not None:
-            tutorStorage.setValue(_HAVE_NEW_FILTER_HINT, self.eventsCache.isEventEnabled())
-        return
 
     def _dispose(self):
-        self.eventsCache.onSyncCompleted -= self.__onEventsSyncCompleted
-        self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         g_playerEvents.onBattleResultsReceived -= self.__onFittingUpdate
+        self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(TankCarousel, self)._dispose()
 
@@ -114,10 +105,9 @@ class TankCarousel(TankCarouselMeta):
     def _getInitialFilterVO(self, contexts):
         filters = self.filter.getFilters(self._usedFilters)
         filtersVO = {'mainBtn': {'value': getButtonsAssetPath('params'),
-                     'tooltip': '#tank_carousel_filter:tooltip/params'},
+                     'tooltip': TANK_CAROUSEL_FILTER.TOOLTIP_PARAMS},
          'hotFilters': [],
-         'isVisible': self._getFiltersVisible(),
-         'hasEventFilter': self.eventsCache.isEventEnabled()}
+         'isVisible': self._getFiltersVisible()}
         for entry in self._usedFilters:
             filterCtx = contexts.get(entry, FilterSetupContext())
             filtersVO['hotFilters'].append({'id': entry,
@@ -128,11 +118,13 @@ class TankCarousel(TankCarouselMeta):
 
         return filtersVO
 
-    @decorators.process('buySlot')
     def __buySlot(self):
-        result = yield VehicleSlotBuyer().request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        price = self.itemsCache.items.shop.getVehicleSlotsPrice(self.itemsCache.items.stats.vehicleSlots)
+        availableMoney = self.itemsCache.items.stats.money
+        if price and availableMoney.gold < price and isIngameShopEnabled():
+            showBuyGoldForSlot(price)
+        else:
+            ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
 
     def __onFittingUpdate(self, *args):
         self.updateParams()
@@ -140,17 +132,3 @@ class TankCarousel(TankCarouselMeta):
     def __onViewLoaded(self, view, *args, **kwargs):
         if view.alias == VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER:
             view.setTankCarousel(self)
-
-    def __onEventsSyncCompleted(self, *args):
-        self.__updateFilterEntitiesList()
-        self.as_initCarouselFilterS(self._getInitialFilterVO(getFilterSetupContexts(self.itemsCache.items.shop.dailyXPFactor)))
-
-    def __updateFilterEntitiesList(self):
-        filtersList = list(self._usedFilters)
-        if self.eventsCache.isEventEnabled():
-            if _EVENT_ID_STRING not in self._usedFilters:
-                filtersList.insert(_EVENT_ID_INDEX, _EVENT_ID_STRING)
-                self._usedFilters = filtersList
-        elif _EVENT_ID_STRING in self._usedFilters:
-            filtersList.remove(_EVENT_ID_STRING)
-            self._usedFilters = filtersList

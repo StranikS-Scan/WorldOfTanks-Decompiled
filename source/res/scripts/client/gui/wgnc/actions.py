@@ -3,6 +3,7 @@
 import BigWorld
 from adisp import process
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING, LOG_DEBUG
+from gui.promo.promo_logger import PromoLogSourceType
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_GUI_TYPE
@@ -95,8 +96,8 @@ class OpenPromoBrowser(OpenInternalBrowser):
     __slots__ = ()
     promoCtrl = dependency.descriptor(IPromoController)
 
-    def _doInvoke(self, title):
-        self.promoCtrl.showPromo(self._url, title, True)
+    def _doInvoke(self, _):
+        self.promoCtrl.showPromo(self._url, source=PromoLogSourceType.PRMP)
 
 
 @ReprInjector.withParent()

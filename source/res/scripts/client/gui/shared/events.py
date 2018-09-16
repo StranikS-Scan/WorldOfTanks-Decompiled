@@ -42,6 +42,7 @@ class GameEvent(HasCtxEvent):
     GUN_MARKER_VISIBILITY = 'game/gunMarkerVisibility'
     CROSSHAIR_VIEW = 'game/crosshairView'
     FULL_STATS = 'game/fullStats'
+    FULL_STATS_QUEST_PROGRESS = 'game/fullStats/questProgress'
     SHOW_CURSOR = 'game/showCursor'
     HIDE_CURSOR = 'game/hideCursor'
     NEXT_PLAYERS_PANEL_MODE = 'game/nextPlayersPanelMode'
@@ -50,9 +51,9 @@ class GameEvent(HasCtxEvent):
     SHOW_EXTERNAL_COMPONENTS = 'game/showExternalComponents'
     HIDE_EXTERNAL_COMPONENTS = 'game/hideExternalComponents'
     BATTLE_LOADING = 'game/battleLoading'
-    SHOW_COLOR_SETTINGS_TIP = 'game/showColorSettingsTip'
-    HIDE_COLOR_SETTINGS_TIP = 'game/hideColorSettingsTip'
     EPIC_GLOBAL_MSG_CMD = 'game/setGlobalMessageCmd'
+    SHOW_BTN_HINT = 'game/showBtnHint'
+    HIDE_BTN_HINT = 'game/hideBtnHint'
 
 
 class GUICommonEvent(SharedEvent):
@@ -169,6 +170,7 @@ class ShowDialogEvent(SharedEvent):
     SHOW_ICON_PRICE_DIALOG = 'showIconPriceDialog'
     SHOW_DEMOUNT_DEVICE_DIALOG = 'showDemountDeviceDialog'
     SHOW_DESTROY_DEVICE_DIALOG = 'showDestroyDeviceDialog'
+    SHOW_PM_CONFIRMATION_DIALOG = 'showPMConfirmationDialog'
     SHOW_CONFIRM_MODULE = 'showConfirmModule'
     SHOW_CONFIRM_BOOSTER = 'showConfirmBooster'
     SHOW_SYSTEM_MESSAGE_DIALOG = 'showSystemMessageDialog'
@@ -247,9 +249,9 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_BATTLE_RESULT_WINDOW = 'hideBattleResultsWindow'
     HIDE_BATTLE_SESSION_WINDOW = 'hideBattleSessionWindow'
     HIDE_UNIT_WINDOW = 'hideUnitWindow'
-    HIDE_LEGAL_INFO_WINDOW = 'showLegalInfoWindow'
-    HIDE_VEHICLE_SELECTOR_WINDOW = 'showVehicleSelectorWindow'
-    HIDE_ROSTER_SLOT_SETTINGS_WINDOW = 'showRosterSlotSettingsWindow'
+    HIDE_LEGAL_INFO_WINDOW = 'hideLegalInfoWindow'
+    HIDE_VEHICLE_SELECTOR_WINDOW = 'hideVehicleSelectorWindow'
+    HIDE_ROSTER_SLOT_SETTINGS_WINDOW = 'hideRosterSlotSettingsWindow'
     HIDE_SANDBOX_QUEUE_DIALOG = 'hideSandboxQueueDialog'
     HIDE_MISSION_DETAILS_VIEW = 'hideMissionDetailsView'
     HIDE_PERSONAL_MISSION_DETAILS_VIEW = 'hidePersonalMissionDetailsView'
@@ -286,6 +288,11 @@ class MissionsEvent(HasCtxEvent):
     ON_TAB_CHANGED = 'onTabChanged'
     PAGE_INVALIDATE = 'pageInvalidate'
     ON_LINKEDSET_STATE_UPDATED = 'onLinkedSetStateUpdated'
+
+
+class PersonalMissionsEvent(HasCtxEvent):
+    ON_DETAILS_VIEW_OPEN = 'onDetailsViewOpen'
+    ON_DETAILS_VIEW_CLOSE = 'onDetailsViewClose'
 
 
 class TrainingSettingsEvent(HasCtxEvent):
@@ -408,6 +415,11 @@ class BootcampEvent(SharedEvent):
         self.eventArg = eventArg
 
 
+class ShopEvent(HasCtxEvent):
+    CONFIRM_TRADE_IN = 'confirmTradeIn'
+    SELECT_RENT_TERM = 'selectRentTerm'
+
+
 class MessengerEvent(HasCtxEvent):
     PRB_CHANNEL_CTRL_INITED = 'prbChannelCtrlInited'
     PRB_CHANNEL_CTRL_DESTROYED = 'prbChannelCtrlDestroyed'
@@ -484,6 +496,14 @@ class StrongholdEvent(HasCtxEvent):
     STRONGHOLD_DEACTIVATED = 'strongholdDeactivated'
     STRONGHOLD_DATA_UNAVAILABLE = 'strongholdDataUnavailable'
     STRONGHOLD_ON_TIMER = 'strongholdOnTimer'
+    STRONGHOLD_VEHICLES_SELECTED = 'strongholdVehicleSelected'
+
+
+class IngameShopEvent(HasCtxEvent):
+    INGAMESHOP_ACTIVATED = 'ingameshopActivated'
+    INGAMESHOP_DEACTIVATED = 'ingameshopDeactivated'
+    INGAMESHOP_DATA_UNAVAILABLE = 'ingameshopDataUnavailable'
+    INGAMESHOP_ON_TIMER = 'ingameshopOnTimer'
 
 
 class OpenLinkEvent(SharedEvent):
@@ -507,7 +527,6 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_PROMO = 'globalMapPromo'
     PREM_SHOP = 'premShopURL'
     TOKEN_SHOP = 'tokenShopUrl'
-    BUFFON_CARD_PURCHASE = 'buffonCardPurchaseURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -586,6 +605,10 @@ class LinkedSetEvent(HasCtxEvent):
 
 class ManualEvent(HasCtxEvent):
     CHAPTER_CLOSED = 'manual/chapterClosed'
+
+
+class StorageEvent(HasCtxEvent):
+    SELECT_MODULE_FOR_SELL = 'storage/forSellView/selectModule'
 
 
 class HangarCustomizationEvent(HasCtxEvent):

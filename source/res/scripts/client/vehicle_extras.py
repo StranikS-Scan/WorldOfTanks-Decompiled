@@ -5,17 +5,11 @@ import weakref
 from functools import partial
 import BigWorld
 import Math
-from AvatarInputHandler import mathUtils
 from helpers.EffectsList import EffectsListPlayer
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
-from helpers import i18n, dependency
+from helpers import i18n
 from helpers.EntityExtra import EntityExtra
 import material_kinds
-from items import vehicles
-from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.shared.utils.TimeInterval import TimeInterval
-_DYNAMIC_OBJECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml'
-_FOOTBALL_VISUAL_SECTION = 'footballBattle'
 
 def reload():
     modNames = (reload.__module__,)
@@ -36,34 +30,17 @@ class NoneExtra(EntityExtra):
 
 
 class ShowShooting(EntityExtra):
-    __slots__ = ('__eventEffectsStorage',)
-    _sessionProvider = dependency.descriptor(IBattleSessionProvider)
-
-    def prerequisites(self):
-        if self._sessionProvider.arenaVisitor.gui.isEventBattle():
-            self.__eventEffectsStorage = self._sessionProvider.dynamic.footballCtrl.eventEffectsStorage
-        return []
+    __slots__ = ()
 
     def _start(self, data, burstCount):
         vehicle = data['entity']
         gunDescr = vehicle.typeDescriptor.gun
         stages, effects, _ = gunDescr.effects
         data['entity_id'] = vehicle.id
-        if self._sessionProvider.arenaVisitor.gui.isEventBattle():
-            if self.__eventEffectsStorage is not None:
-                stages, effectsList, _ = self.__eventEffectsStorage.getGunEffectForVehicle(vehicle)
-            else:
-                effectsList = None
-            if effectsList:
-                data['_effectsListPlayer'] = EffectsListPlayer(effectsList, stages, **data)
-            else:
-                data['_effectsListPlayer'] = EffectsListPlayer(effects, stages, **data)
-        else:
-            data['_effectsListPlayer'] = EffectsListPlayer(effects, stages, **data)
+        data['_effectsListPlayer'] = EffectsListPlayer(effects, stages, **data)
         data['_burst'] = (burstCount, gunDescr.burst[1])
         data['_gunModel'] = vehicle.appearance.compoundModel
         self.__doShot(data)
-        return
 
     def _cleanup(self, data):
         if data.get('_effectsListPlayer') is not None:
@@ -234,97 +211,3 @@ class Fire(EntityExtra):
         if not isVehicleUnderwater:
             self.__playEffect(data)
         return
-
-
-class Afterburning(EntityExtra):
-    _EFFECT_NAME = 'effect'
-
-    def _readConfig(self, dataSection, containerName):
-        effectsName = dataSection.readString(Afterburning._EFFECT_NAME)
-        if not effectsName:
-            self._raiseWrongConfig(Afterburning._EFFECT_NAME, containerName)
-        vehEffects = vehicles.g_cache._vehicleEffects
-        self.afterburningEffectsList = vehEffects.get(effectsName, None)
-        if self.afterburningEffectsList is None:
-            self._raiseWrongConfig(Afterburning._EFFECT_NAME, containerName)
-        self.__vehicleTimerMap = {}
-        return
-
-    def _start(self, data, args):
-        vehicle = data['entity']
-        vehicleID = vehicle.id
-        if vehicleID in self.__vehicleTimerMap:
-            self.__vehicleTimerMap[vehicleID].stop()
-        self.__vehicleTimerMap[vehicleID] = AfterburningTimer(vehicle, self)
-        self.__vehicleTimerMap[vehicleID].start()
-
-    def __onEffect(self, data):
-        vehicle = data['entity']
-        data['entity_id'] = vehicle.id
-        effects = random.choice(self.afterburningEffectsList)
-        data['_effectsListPlayer'] = effectsPlayer = EffectsListPlayer(effects.effectsList, effects.keyPoints, **data)
-        effectsPlayer.play(vehicle.appearance.compoundModel, None, None, True)
-        return
-
-    def __offEffect(self, data):
-        data['_effectsListPlayer'].keyOff()
-
-    def _cleanup(self, data):
-        vehicle = data['entity']
-        vehicleID = vehicle.id
-        if vehicleID in self.__vehicleTimerMap:
-            self.__vehicleTimerMap[vehicleID].stop()
-            if self.__vehicleTimerMap[vehicleID].onMove():
-                self.__offEffect(data)
-            del self.__vehicleTimerMap[vehicleID]
-
-    def onMoveChanged(self, vehicle, onMove):
-        data = vehicle.extras[self.index]
-        if onMove:
-            self.__onEffect(data)
-        else:
-            self.__offEffect(data)
-
-
-class AfterburningTimer(object):
-    __TIME_INTERVAL = 0.1
-    __EPSILON_SPEED = 1
-
-    def __init__(self, vehicle, extra):
-        self.__vehicle = vehicle
-        self.__extra = extra
-        self.__timer = TimeInterval(self.__TIME_INTERVAL, self, '_timerUpdate')
-        self.__onMove = False
-
-    def start(self):
-        self.__timer.start()
-
-    def stop(self):
-        self.__timer.stop()
-        self.__vehicle = None
-        self.__extra = None
-        return
-
-    def onMove(self):
-        return self.__onMove
-
-    def _timerUpdate(self):
-        speed = self.__vehicle.getSpeed()
-        onMove = self.__onMove
-        if mathUtils.almostZero(speed, self.__EPSILON_SPEED) and self.__onMove or not mathUtils.almostZero(speed, self.__EPSILON_SPEED) and not self.__onMove:
-            onMove = not self.__onMove
-        if onMove != self.__onMove:
-            self.__extra.onMoveChanged(self.__vehicle, onMove)
-            self.__onMove = onMove
-
-
-class LastChance(EntityExtra):
-
-    def _readConfig(self, dataSection, containerName):
-        pass
-
-    def _start(self, data, args):
-        pass
-
-    def _cleanup(self, data):
-        pass

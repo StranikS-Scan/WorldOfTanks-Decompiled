@@ -247,6 +247,11 @@ def alignText(text, align):
      'align': align})
 
 
+def leadingText(text, leading):
+    return _getStyle('leadingText', {'message': text,
+     'leading': leading})
+
+
 def alignStandartText(text, align):
     return alignText(standard(text), align)
 

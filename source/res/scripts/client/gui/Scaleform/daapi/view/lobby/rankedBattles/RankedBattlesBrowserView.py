@@ -43,7 +43,7 @@ class RankedBattlesBrowserView(RankedBattlesBrowserViewMeta):
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(RankedBattlesBrowserView, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VIEW_ALIAS.BROWSER:
-            viewPy.init(self.__browserId, createRankedBattlesWebHandlers(ctx=self.__ctx), alias=self.alias)
+            viewPy.init(self.__browserId, createRankedBattlesWebHandlers(self.__ctx), alias=self.alias)
 
     @process
     def __loadBrowser(self, width, height):

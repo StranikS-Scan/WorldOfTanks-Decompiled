@@ -178,8 +178,9 @@ class TutorialManager(TutorialManagerMeta):
         self.__doHideEffect(componentID, _EFFECT_TYPES.BOOTCAMP_HINT)
 
     def setupViewContextHints(self, viewTutorialID, hintsData):
-        builder = hintsData.pop('builderLnk', TUTORIAL_EFFECT_BUILDERS.DEFAULT_OVERLAY)
-        effectData = {'data': hintsData,
+        hintsDataCopy = hintsData.copy()
+        builder = hintsDataCopy.pop('builderLnk', TUTORIAL_EFFECT_BUILDERS.DEFAULT_OVERLAY)
+        effectData = {'data': hintsDataCopy,
          'builderLnk': builder}
         self.as_showEffectS(viewTutorialID, '', effectData)
 

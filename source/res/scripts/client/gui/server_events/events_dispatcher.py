@@ -4,12 +4,14 @@ import constants
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.marathon.marathon_constants import MARATHONS_DATA
+from gui.marathon.marathon_constants import DEFAULT_MARATHON_PREFIX
 from gui.server_events import awards, events_helpers
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
+OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
+ PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
 
 def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
@@ -24,20 +26,44 @@ def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, an
      'showMissionDetails': showMissionDetails}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def canOpenPMPage(branch=None, operationID=None, missionID=None):
+    _lobbyContext = dependency.instance(ILobbyContext)
+    result = True
+    if branch:
+        result &= _lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch)
+    if operationID:
+        disbl = _lobbyContext.getServerSettings().getDisabledPMOperations().keys()
+        result &= operationID not in disbl
+    if missionID:
+        result &= missionID not in _lobbyContext.getServerSettings().getDisabledPersonalMissions()
+    return result
+
+
 def showPersonalMission(missionID=None):
+    if not canOpenPMPage(missionID=missionID):
+        return
     g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ctx={'eventID': missionID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showPersonalMissionsChain(operationID, chainID):
+    if not canOpenPMPage(operationID=operationID):
+        return
     g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ctx={'operationID': operationID,
      'chainID': chainID}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showPersonalMissionOperationsPage(branch, operationID=None):
+    if not canOpenPMPage(branch=branch, operationID=operationID):
+        return
+    g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ctx={'branch': branch,
+     'operationID': operationID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showMissionsGrouped(missionID=None, groupID=None, anchor=None):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
 
 
-def showMissionsMarathon(marathonPrefix=MARATHONS_DATA[0].prefix):
+def showMissionsMarathon(marathonPrefix=DEFAULT_MARATHON_PREFIX):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, marathonPrefix=marathonPrefix)
 
 
@@ -49,7 +75,7 @@ def showMissionsForCurrentVehicle(missionID=None, groupID=None, anchor=None):
     showMissions(tab=QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
 
 
-def showMissionsElen(eventQuestsID):
+def showMissionsElen(eventQuestsID=None):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, missionID=eventQuestsID, groupID=eventQuestsID, showMissionDetails=False)
 
 
@@ -70,7 +96,11 @@ def showPersonalMissionDetails(missionID):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PERSONAL_MISSION_DETAILS, ctx={'eventID': missionID}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showPersonalMissionOperationsPage():
+def showPersonalMissionAwards():
+    g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showPersonalMissionStartPage():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -121,14 +151,6 @@ def showTankwomanAward(questID, tankmanData):
      'iGroupID': tankmanData.iGroupID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showCardCollection():
-    g_eventBus.handleEvent(events.LoadViewEvent(HANGAR_ALIASES.FOOTBALL_CARD_COLLECTION), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showFootballAward(quest, ctx):
-    shared_events.showMissionAwardWindow(awards.FootballMissionAward(quest, ctx, showCardCollection))
-
-
 def showMissionAward(quest, ctx):
     missionAward = awards.MissionAward(quest, ctx, showMissionsForCurrentVehicle)
     if missionAward.getAwards():
@@ -136,7 +158,7 @@ def showMissionAward(quest, ctx):
 
 
 def showPersonalMissionAward(quest, ctx):
-    shared_events.showMissionAwardWindow(awards.PersonalMissionAward(quest, ctx, showPersonalMission))
+    shared_events.showPersonalMissionsQuestAwardScreen(quest, ctx, showPersonalMission)
 
 
 def showRankedBoobyAward(quest):
@@ -147,9 +169,14 @@ def showOperationUnlockedAward(quest, ctx):
     shared_events.showAwardWindow(awards.OperationUnlockedAward(quest, ctx, showPersonalMissionsChain))
 
 
-def showPersonalMissionCongratulationAward(ctx):
-    alias = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_AWARD_CONGRATULATION_VIEW_ALIAS
-    g_eventBus.handleEvent(events.LoadViewEvent(alias, name='%s%d' % (alias, ctx['operationID']), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+def showPersonalMissionsOperationAwardsScreen(ctx):
+    alias = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS
+    g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showPersonalMissionFirstEntryAwardView(ctx):
+    alias = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS
+    g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showActions(tab=None, anchor=None):

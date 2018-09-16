@@ -18,9 +18,6 @@
       <include>
         <nations>	ussr	</nations>
       </include>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	512	</id>
@@ -79,9 +76,6 @@
       <include>
         <nations>	germany france czech poland	</nations>
       </include>
-      <exclude>
-        <vehicles>	france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	518	</id>
@@ -136,11 +130,7 @@
     <userString>	#vehicle_customization:emblem/special	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <type>	EMBLEM	</type>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
-    </vehicleFilter>
+    <vehicleFilter></vehicleFilter>
     <decal>
       <id>	526	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_360.dds	</texture>
@@ -196,11 +186,7 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <type>	EMBLEM	</type>
     <historical>	false	</historical>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
-    </vehicleFilter>
+    <vehicleFilter></vehicleFilter>
     <decal>
       <id>	544	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_369.dds	</texture>
@@ -216,11 +202,8 @@
     <historical>	false	</historical>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
       </include>
-      <exclude>
-        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	545	</id>
@@ -255,12 +238,9 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	germany italy japan	</nations>
       </include>
-      <exclude>
-        <vehicles>	germany:G56_E-100_sport	</vehicles>
-      </exclude>
     </vehicleFilter>
     <decal>
       <id>	552	</id>
@@ -365,6 +345,54 @@
       <id>	569	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_396.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_396	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	LBZ 2	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	580	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_398.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_398	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	581	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_399.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_399	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	WG anniversary	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	582	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_400.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_400	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Sabaton	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	sabaton emblems notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	585	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_401.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_401	</userString>
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>

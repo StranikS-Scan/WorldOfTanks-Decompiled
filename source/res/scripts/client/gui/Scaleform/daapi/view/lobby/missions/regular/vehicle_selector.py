@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.view.lobby.missions.vehicle_selector import MissionVehi
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter, EventCriteriesGroup
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
 from gui.server_events import caches
 from gui.shared.formatters import text_styles
 from helpers.i18n import makeString as ms
@@ -40,9 +41,9 @@ class RegularVehicleSelectorCarousel(MissionVehicleSelectorCarousel):
         filters = self.filter.getFilters(self._usedFilters)
         self.as_initCarouselFilterS({'isVisible': True,
          'mainBtn': {'value': getButtonsAssetPath('params'),
-                     'tooltip': '#tank_carousel_filter:tooltip/params'},
+                     'tooltip': TANK_CAROUSEL_FILTER.TOOLTIP_PARAMS},
          'hotFilters': [{'value': QUESTS.QUESTS_TABLE_INHANGAR,
-                         'tooltip': '#tank_carousel_filter:tooltip/inventory',
+                         'tooltip': TANK_CAROUSEL_FILTER.TOOLTIP_INVENTORY,
                          'selected': filters['inventory']}]})
 
 

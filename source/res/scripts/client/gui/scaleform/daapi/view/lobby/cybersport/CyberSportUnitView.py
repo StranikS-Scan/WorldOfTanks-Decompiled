@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportUnitView.py
 from UnitBase import UNIT_OP
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
-from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
+from gui.Scaleform.daapi.view.lobby.rally.action_button_state_vo import ActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters, rally_dps
 from gui.Scaleform.daapi.view.meta.CyberSportUnitMeta import CyberSportUnitMeta
 from gui.Scaleform.framework import ViewTypes

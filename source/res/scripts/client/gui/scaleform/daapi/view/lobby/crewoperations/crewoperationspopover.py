@@ -46,7 +46,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         crew = vehicle.crew
         if self.__isNoCrew(crew):
             return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'noCrew')
-        return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'alreadyRetrained') if self.__isTopCrew(crew, vehicle) else self.__getInitCrewOperationObject(OPERATION_RETRAIN)
+        return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'alreadyRetrained') if self.__isTopCrewForCurrentVehicle(crew, vehicle) else self.__getInitCrewOperationObject(OPERATION_RETRAIN)
 
     def __getReturnOperationData(self, vehicle):
         crew = vehicle.crew
@@ -60,15 +60,14 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
         freeBerths = berths - tankmenInBarracks
         tankmenToBarracksCount = 0
-        for i in xrange(len(crew)):
-            if crew[i][1] is not None:
+        for tankman in crew:
+            if tankman[1] is not None:
                 tankmenToBarracksCount += 1
 
         demobilizedMembersCounter = 0
         isCrewAlreadyInCurrentVehicle = True
         if lastCrewIDs is not None:
-            for i in xrange(len(lastCrewIDs)):
-                lastTankmenInvID = lastCrewIDs[i]
+            for lastTankmenInvID in lastCrewIDs:
                 actualLastTankman = self.itemsCache.items.getTankman(lastTankmenInvID)
                 if actualLastTankman is not None:
                     if actualLastTankman.isInTank:
@@ -102,10 +101,10 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         else:
             return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_NOSPACE_TOOLTIP) if self.__isNotEnoughSpaceInBarrack(crew) else self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK)
 
-    def __isTopCrew(self, crew, vehicle):
+    def __isTopCrewForCurrentVehicle(self, crew, vehicle):
         for _, tman in crew:
             if tman is not None:
-                if tman.vehicleNativeDescr.type.compactDescr != vehicle.intCD or tman.efficiencyRoleLevel < tankmen.MAX_SKILL_LEVEL:
+                if tman.efficiencyRoleLevel < tankmen.MAX_SKILL_LEVEL or tman.vehicleNativeDescr.type.compactDescr != vehicle.intCD and not vehicle.isPremium:
                     return False
 
         return True

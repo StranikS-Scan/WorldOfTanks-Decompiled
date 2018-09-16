@@ -348,6 +348,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
 
         self.__playingMusicID = None
         self._initialized = False
+        self.__previouslySatisfied = None
         return
 
     @_delegate
@@ -399,6 +400,9 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
             condition = self._conditions.pop()
             condition.onValidChangedInternally -= self.__onConditionChangedItself
             condition.dispose()
+
+        self.__previouslySatisfied = None
+        return
 
     def _initializeMusicData(self, arenaType):
         wwSetup = arenaType.wwmusicSetup
@@ -469,10 +473,13 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
             self._validateConditions()
 
     def _validateConditions(self):
-        isPlaying = self.__isMusicCurrentlyPlaying()
         satisfied = [ c for c in self._conditions if c.isSatisfied() ]
+        if self.__isMusicCurrentlyPlaying() and self.__previouslySatisfied is not None:
+            if any((condition not in satisfied for condition in self.__previouslySatisfied)):
+                self.__stopMusic()
+        self.__previouslySatisfied = satisfied
         if satisfied:
-            if not isPlaying:
+            if not self.__isMusicCurrentlyPlaying():
                 for condition in satisfied:
                     if condition.getSeverity() == _Severity.MEDIUM:
                         self.__playingMusicID = _MusicID.INTENSIVE
@@ -482,8 +489,9 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
 
                 LOG_DEBUG('[Drone] Satisfied conditions: {}'.format(satisfied))
                 self.__playMusic()
-        elif isPlaying:
+        elif self.__isMusicCurrentlyPlaying():
             self.__stopMusic()
+        return
 
     def __checkInitialization(self):
         if self.__isProperBattlePeroid():

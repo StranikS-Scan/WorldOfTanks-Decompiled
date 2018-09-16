@@ -1,44 +1,45 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Account.py
 import cPickle
-import zlib
 import copy
+import zlib
 from collections import namedtuple
-import BigWorld
-import Event
 import AccountCommands
+import BigWorld
 import ClientPrebattle
+import Event
+from ChatManager import chatManager
+from ClientChat import ClientChat
+from ClientGlobalMap import ClientGlobalMap
+from ClientSelectableObject import ClientSelectableObject
+from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
+from ContactInfo import ContactInfo
+from OfflineMapCreator import g_offlineMapCreator
+from PlayerEvents import g_playerEvents as events
 from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_recycle_bin, AccountSettings
+from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import ClientRanked, ClientBadges
 from account_helpers import client_epic_meta_game
-from account_helpers import ClientInvitations, vehicle_rotation
-from PlayerEvents import g_playerEvents as events
 from account_helpers.AccountSettings import CURRENT_VEHICLE
-from account_helpers.settings_core import IntUserSettings
 from account_helpers.settings_core import ISettingsCore
+from account_helpers.settings_core import IntUserSettings
+from account_shared import NotificationItem, readClientServerVersion
 from adisp import process
+from bootcamp.Bootcamp import g_bootcamp
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
-from helpers import dependency, uniprof
 from gui.Scaleform.Waiting import Waiting
+from gui.shared.ClanCache import g_clanCache
+from gui.wgnc import g_wgncProvider
+from helpers import dependency
+from helpers import uniprof
 from messenger import MessengerEntry
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
-from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
-from ContactInfo import ContactInfo
-from ClientChat import ClientChat
-from ChatManager import chatManager
-from account_shared import NotificationItem, readClientServerVersion
-from OfflineMapCreator import g_offlineMapCreator
-from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
-from gui.wgnc import g_wgncProvider
-from gui.shared.ClanCache import g_clanCache
-from ClientSelectableObject import ClientSelectableObject
-from ClientGlobalMap import ClientGlobalMap
-from bootcamp.Bootcamp import g_bootcamp
 from soft_exception import SoftException
+from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
 StreamData = namedtuple('StreamData', ['data',
  'isCorrupted',
  'origPacketLen',
@@ -1237,7 +1238,7 @@ class _AccountRepository(object):
         self.clanMembers = {}
         self.eventsData = {}
         self.personalMissionsLock = {}
-        self.customFilesCache = CustomFilesCache.CustomFilesCache()
+        self.customFilesCache = CustomFilesCache.CustomFilesCache('custom_data')
         self.eventNotifications = []
         self.intUserSettings = IntUserSettings.IntUserSettings()
         self.prebattleInvitations = ClientInvitations.ClientInvitations(events)

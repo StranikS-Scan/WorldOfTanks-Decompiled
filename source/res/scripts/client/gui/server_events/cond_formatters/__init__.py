@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/__init__.py
 from collections import namedtuple
 import nations
+from personal_missions_constants import CONDITION_ICON
 from soft_exception import SoftException
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -9,7 +10,6 @@ from gui.server_events.conditions import GROUP_TYPE
 from gui.server_events.formatters import RELATIONS_SCHEME, RELATIONS
 from gui.shared.formatters import text_styles
 from helpers import i18n, int2roman
-from shared_utils import CONST_CONTAINER
 MAX_CONDITIONS_IN_OR_SECTION_SUPPORED = 2
 TOP_RANGE_HIGHEST = 1
 TOP_RANGE_LOWEST = 15
@@ -17,47 +17,6 @@ TOP_RANGE_LOWEST = 15
 class CONDITION_SIZE(object):
     NORMAL = 'normal'
     MINIMIZED = 'minimized'
-
-
-class CONDITION_ICON(CONST_CONTAINER):
-    ASSIST = 'assist'
-    ASSIST_RADIO = 'assist_radio'
-    ASSIST_TRACK = 'assist_track'
-    ASSIST_STUN = 'assist_stun'
-    ASSIST_STUN_DURATION = 'assist_stun_time'
-    ASSIST_STUN_MULTY = 'assist_stun_multy'
-    AWARD = 'award'
-    BASE_CAPTURE = 'base_capture'
-    BASE_DEF = 'base_def'
-    BATTLES = 'battles'
-    CREDITS = 'credits'
-    DAMAGE = 'damage'
-    DAMAGE_BLOCK = 'damage_block'
-    DISCOVER = 'discover'
-    EXPERIENCE = 'experience'
-    FIRE = 'fire'
-    GET_DAMAGE = 'get_damage'
-    GET_HIT = 'get_hit'
-    HIT = 'hit'
-    HURT_1SHOT = 'hurt_1shot'
-    HURT_VEHICLES = 'hurt_vehicles'
-    KILL_1SHOT = 'kill_1shot'
-    KILL_VEHICLES = 'kill_vehicles'
-    MASTER = 'master'
-    METERS = 'meters'
-    MODULE_CRIT = 'module_crit'
-    PREPARATION = 'preparation'
-    SAVE_HP = 'save_hp'
-    SEC_ALIVE = 'sec_alive'
-    SURVIVE = 'survive'
-    TIMES_GET_DAMAGE = 'times_get_damage'
-    TOP = 'top'
-    WIN = 'win'
-    FOLDER = 'folder'
-    BARREL_MARK = 'barrel_mark'
-    RAM = 'ram'
-    FB18_GOALS = 'goals'
-    FB18_ASSISTS = 'assists'
 
 
 UNSUPORTED_BATTLE_RESUTLS_KEYS = ('finishReason', 'gold', 'creditsToDraw', 'orderFreeXPFactor100', 'orderXPFactor100', 'winPoints', 'creditsContributionIn', 'achievementXP', 'igrXPFactor10', 'aogasFactor10', 'originalCreditsContributionIn', 'originalCreditsPenalty', 'originalTMenXP', 'boosterCredits', 'originalGold', 'avatarDamaged', 'team', 'deathCount', 'isAnyHitReceivedWhileCapturing', 'boosterCreditsFactor100', 'premiumCreditsFactor10', 'orderFortResource', 'originalCreditsContributionOut', 'factualXP', 'creditsContributionOut', 'orderTMenXP', 'orderFreeXP', 'boosterXP', 'avatarKills', 'boosterTMenXPFactor100', 'resourceAbsorbed', 'credits', 'tkillRating', 'creditsPenalty', 'percentFromSecondBestDamage', 'avatarDamageDealt', 'factualFreeXP', 'dailyXPFactor10', 'damageRating', 'repair', 'xpPenalty', 'fairplayFactor10', 'subtotalTMenXP', 'boosterXPFactor100', 'refSystemXPFactor10', 'originalXPPenalty', 'orderTMenXPFactor100', 'originalFortResource', 'subtotalXP', 'originalFreeXP', 'orderXP', 'premiumVehicleXP', 'flagCapture', 'premiumVehicleXPFactor100', 'factualCredits', 'inBattleMaxKillingSeries', 'subtotalFreeXP', 'achievementFreeXP', 'subtotalCredits', 'killsBeforeTeamWasDamaged', 'boosterTMenXP', 'premiumXPFactor10', 'personalFortResource', 'typeCompDescr', 'deathReason', 'damageBeforeTeamWasDamaged', 'achievementCredits', 'isPremium', 'committedSuicide', 'rolloutsCount', 'index', 'subtotalGold', 'appliedPremiumCreditsFactor10', 'orderFortResourceFactor100', 'isTeamKiller', 'firstDamageTime', 'tmenXP', 'boosterFreeXP', 'appliedPremiumXPFactor10', 'boosterFreeXPFactor100', 'subtotalFortResource', 'orderCreditsFactor100', 'battleNum', 'aimerSeries')
@@ -133,11 +92,9 @@ BATTLE_RESULTS_KEYS = {'capturePoints': CONDITION_ICON.BASE_CAPTURE,
  'spottedBeforeWeBecameSpotted': CONDITION_ICON.DISCOVER,
  'isEnemyBaseCaptured': CONDITION_ICON.BASE_CAPTURE,
  'isAnyOurCrittedInnerModules': CONDITION_ICON.SURVIVE,
- 'isNotSpotted': CONDITION_ICON.SURVIVE,
- 'assists': CONDITION_ICON.FB18_ASSISTS,
- 'goals': CONDITION_ICON.FB18_GOALS}
-BATTLE_RESULTS_AGGREGATED_KEYS = {tuple(sorted(['damagedVehicleCntAssistedTrack', 'damagedVehicleCntAssistedRadio'])): CONDITION_ICON.ASSIST_RADIO,
- tuple(sorted(['killsAssistedTrack', 'killsAssistedRadio'])): CONDITION_ICON.ASSIST_RADIO,
+ 'isNotSpotted': CONDITION_ICON.SURVIVE}
+BATTLE_RESULTS_AGGREGATED_KEYS = {tuple(sorted(['damagedVehicleCntAssistedTrack', 'damagedVehicleCntAssistedRadio'])): CONDITION_ICON.ASSIST,
+ tuple(sorted(['killsAssistedTrack', 'killsAssistedRadio'])): CONDITION_ICON.ASSIST,
  tuple(sorted(['damageAssistedStun', 'damageAssistedTrack'])): CONDITION_ICON.ASSIST,
  tuple(sorted(['killsAssistedStun', 'killsAssistedTrack'])): CONDITION_ICON.ASSIST,
  tuple(sorted(['damagedVehicleCntAssistedStun', 'damagedVehicleCntAssistedTrack'])): CONDITION_ICON.ASSIST}

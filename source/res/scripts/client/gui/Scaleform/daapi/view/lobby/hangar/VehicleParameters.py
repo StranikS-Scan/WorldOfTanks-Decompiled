@@ -221,8 +221,7 @@ class _VehParamsDataProvider(SortableDAAPIDataProvider):
             self._buildSimplifiedList()
 
     def _getComparator(self):
-        vehicle = self._cache.item
-        return params_helper.noSkillsVehicleComparator(vehicle) if vehicle.isEvent else params_helper.idealCrewComparator(vehicle)
+        return params_helper.idealCrewComparator(self._cache.item)
 
     def _getSimplifiedValue(self, param):
         return formatters.colorizedFormatParameter(param, formatters.NO_BONUS_SIMPLIFIED_SCHEME)

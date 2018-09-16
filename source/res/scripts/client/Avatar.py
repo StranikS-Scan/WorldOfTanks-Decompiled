@@ -600,6 +600,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     if key == Keys.KEY_V:
                         self.base.setDevelopmentFeature('setSignal', 3, '')
                         return True
+                    if key == Keys.KEY_C:
+                        self.base.setDevelopmentFeature('navigateTo', 0, cPickle.dumps((tuple(self.inputHandler.getDesiredShotPoint()), None), -1))
+                        return True
                 if constants.HAS_DEV_RESOURCES and cmdMap.isFired(CommandMapping.CMD_SWITCH_SERVER_MARKER, key) and isDown:
                     self.gunRotator.showServerMarker = not self.gunRotator.showServerMarker
                     return True
@@ -822,12 +825,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__isVehicleAlive = vehicle.isAlive()
             self.__isC11nHistorical = bool(self.settingsCore.getSetting(GAME.C11N_HISTORICALLY_ACCURATE))
         if self.__initProgress & _INIT_STEPS.INIT_COMPLETED and not vehicle.isStarted:
-            self.__startVehicleVisual(vehicle)
+            self.__startVehicleVisual(vehicle, resetControllers=True)
         else:
             self.consistentMatrices.notifyVehicleLoaded(self, vehicle)
         return
 
-    def __startVehicleVisual(self, vehicle):
+    def __startVehicleVisual(self, vehicle, resetControllers=False):
         vehicle.startVisual()
         self.onVehicleEnterWorld(vehicle)
         self.consistentMatrices.notifyVehicleLoaded(self, vehicle)
@@ -850,10 +853,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 if vehicle.id == vehicleID:
                     vehicle.onSiegeStateUpdated(newState, timeToNextState)
                     self.__pendingSiegeSettings = None
-            repo = self.guiSessionProvider.shared
-            for ctrl in (repo.ammo, repo.equipments, repo.optionalDevices):
-                if ctrl is not None:
-                    ctrl.clear(False)
+            if resetControllers:
+                repo = self.guiSessionProvider.shared
+                for ctrl in (repo.ammo, repo.equipments, repo.optionalDevices):
+                    if ctrl is not None:
+                        ctrl.clear(False)
 
             self.guiSessionProvider.setPlayerVehicle(self.playerVehicleID, self.vehicleTypeDescriptor)
         return
@@ -2167,10 +2171,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             timeout = min(_SHOT_WAITING_MAX_TIMEOUT, timeout)
             timeout = max(_SHOT_WAITING_MIN_TIMEOUT, timeout)
             self.__shotWaitingTimerID = BigWorld.callback(timeout, self.__showTimedOutShooting)
-        self.__isWaitingForShot = True
-        self.inputHandler.setAimingMode(True, AIMING_MODE.SHOOTING)
-        if not self.inputHandler.getAimingMode(AIMING_MODE.USER_DISABLED):
-            self.gunRotator.targetLastShotPoint = True
+            self.__isWaitingForShot = True
+            self.inputHandler.setAimingMode(True, AIMING_MODE.SHOOTING)
+            if not self.inputHandler.getAimingMode(AIMING_MODE.USER_DISABLED):
+                self.gunRotator.targetLastShotPoint = True
         self.__gunReloadCommandWaitEndTime = BigWorld.time() + 2.0
         return
 

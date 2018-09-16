@@ -142,6 +142,40 @@ def getInterfaceScalesList(size, powerOfTwo=True):
     return result
 
 
+def getNativeResolutionIndex():
+    nativeResolution = BigWorld.wg_getNativeScreenResoulution(g_monitorSettings.currentMonitor)
+    result = []
+    for modes in getSuitableVideoModes():
+        resolutions = set()
+        for mode in modes:
+            resolutions.add((mode.width, mode.height))
+
+        result.append(sorted(tuple(resolutions)))
+
+    idx = -1
+    for idx, (w, h) in enumerate(result[g_monitorSettings.currentMonitor]):
+        if w == nativeResolution[0] and h == nativeResolution[1]:
+            return idx
+
+    return idx
+
+
+def isGammaSupported():
+    isFullscreen = g_monitorSettings.isFullscreen()
+    if isFullscreen:
+        cVideoMode = g_monitorSettings.currentVideoMode
+        nativeResolution = BigWorld.wg_getNativeScreenResoulution(g_monitorSettings.currentMonitor)
+        if nativeResolution is not None:
+            isNativeSelected = cVideoMode.width == nativeResolution[0] and cVideoMode.height == nativeResolution[1]
+        else:
+            isNativeSelected = False
+        return isNativeSelected
+    else:
+        pipelineType = BigWorld.getGraphicsSetting('RENDER_PIPELINE')
+        return pipelineType == 0
+        return
+
+
 class MonitorSettings(object):
 
     def __init__(self):

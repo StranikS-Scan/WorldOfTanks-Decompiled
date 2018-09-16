@@ -2246,6 +2246,8 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
         self.connectionMgr.onConnected -= self.onConnected
 
     def get(self):
+        if BattleReplay.isPlaying():
+            return self._get()
         self.__checkAndCorrectScaleValue(self.__interfaceScale)
         return self.__interfaceScale
 
@@ -2260,7 +2262,7 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
         g_monitorSettings.setGlyphCache(scale)
 
     def onConnected(self):
-        self.setSystemValue(super(InterfaceScaleSetting, self).get())
+        self.setSystemValue(self._get())
 
     def onDisconnected(self):
         self.setSystemValue(0)

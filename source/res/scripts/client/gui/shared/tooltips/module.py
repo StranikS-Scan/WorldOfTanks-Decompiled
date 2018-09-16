@@ -352,8 +352,13 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
             if isOptionalDevice and not module.isRemovable and not self.configuration.isAwardWindow:
                 removalPrice = module.getRemovalPrice(self.itemsCache.items)
                 removalPriceCurrency = removalPrice.getCurrency()
-                currencyTextFormatter = getattr(text_styles, removalPriceCurrency, text_styles.gold)
-                block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE), value=currencyTextFormatter(removalPrice.price.get(removalPriceCurrency)), icon=removalPriceCurrency, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
+                removalActionPercent = removalPrice.getActionPrc()
+                value = removalPrice.price.getSignValue(removalPriceCurrency)
+                defValue = removalPrice.defPrice.getSignValue(removalPriceCurrency)
+                needValue = value - money.getSignValue(removalPriceCurrency)
+                if needValue <= 0:
+                    needValue = None
+                block.append(makePriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=self._valueWidth, leftPadding=leftPadding))
             hasAction |= module.sellPrices.itemPrice.isActionPrice()
             return (block, notEnoughMoney or hasAction)
 

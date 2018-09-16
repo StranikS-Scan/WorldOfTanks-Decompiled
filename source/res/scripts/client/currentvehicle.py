@@ -306,7 +306,7 @@ class _CurrentVehicle(_CachedVehicle):
     def _selectVehicle(self, vehInvID):
         if vehInvID == self.__vehInvID:
             return
-        Waiting.show('updateCurrentVehicle', isSingle=True)
+        Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False)
         self.onChangeStarted()
         self.__vehInvID = vehInvID
         AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
@@ -431,7 +431,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     @process
     def installComponent(self, newId):
         newComponentItem = self.itemsCache.items.getItemByCD(newId)
-        Waiting.show('applyModule')
+        Waiting.show('applyModule', overlapsUI=False)
         conflictedEqs = newComponentItem.getConflictedEquipments(self.item)
         result = yield getPreviewInstallerProcessor(self.item, newComponentItem, conflictedEqs).request()
         from gui.shared.gui_items.items_actions.actions import processMsg
@@ -454,7 +454,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         if self.isPresent() and self.item.intCD == vehicleCD:
             return
         else:
-            Waiting.show('updateCurrentVehicle', isSingle=True)
+            Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False)
             self.onChangeStarted()
             self.__defaultItem = self.__getPreviewVehicle(vehicleCD)
             if vehicleStrCD is not None:

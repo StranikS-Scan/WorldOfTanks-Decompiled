@@ -10,9 +10,11 @@ from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS as customizationSounds
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -22,22 +24,27 @@ from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.shared import event_dispatcher as shared_events
 from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from skeletons.helpers.statistics import IStatisticsCollector
 from hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 import BigWorld
 from HeroTank import HeroTank
 
 class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __background_alpha__ = 0.0
+    __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={customizationSounds.STATE_PLACE: customizationSounds.STATE_PLACE_GARAGE}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
     rankedController = dependency.descriptor(IRankedBattlesController)
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    statsCollector = dependency.descriptor(IStatisticsCollector)
+    _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
         LobbySelectableView.__init__(self, 0)
@@ -62,6 +69,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
         self._onPopulateEnd()
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_UI_READY, showSummaryNow=True)
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
@@ -135,7 +143,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return
 
     def __updateHeader(self):
-        if not self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) and not self.headerComponent:
+        if self.prbDispatcher is not None and not self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) and not self.headerComponent:
             self.as_setDefaultHeaderS(True)
         if self.headerComponent is not None:
             self.headerComponent.update()
@@ -147,7 +155,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return
 
     def __updateRankedWidget(self):
-        if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) and not self.rankedWidget:
+        if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) and not self.rankedWidget:
             self.as_setDefaultHeaderS(False)
         if self.rankedWidget is not None:
             vehicle = g_currentVehicle.item
@@ -158,7 +166,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return
 
     def __updateAlertMessage(self):
-        if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+        if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
             status, timeLeft = self.rankedController.getPrimeTimeStatus()
             visible = status == PRIME_TIME_STATUS.NOT_AVAILABLE
             self.as_setAlertMessageBlockVisibleS(visible)

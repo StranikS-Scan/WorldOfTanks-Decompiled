@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/TechnicalMaintenance.py
 from CurrentVehicle import g_currentVehicle
+from adisp import process
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -259,6 +260,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             if result and result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
+    @process
     def fillVehicle(self, needRepair, needAmmo, needEquipment, isPopulate, isUnload, isOrderChanged, shells, equipment):
         shellsLayout = []
         eqsLayout = []
@@ -292,16 +294,14 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 msgPrefix = msgPrefix.format('')
             msg = i18n.makeString(''.join(['#dialogs:technicalMaintenanceConfirm/msg', msgPrefix]))
             if not self.__isConfirmDialogShown:
-
-                def fillConfirmationCallback(isConfirmed):
-                    if isConfirmed:
-                        if needRepair:
-                            self.repair()
-                        self.__setVehicleLayouts(g_currentVehicle.item, shellsLayout, eqsLayout)
+                isConfirmed = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('technicalMaintenanceConfirm', messageCtx={'content': msg}))
+                if isConfirmed:
+                    if needRepair:
+                        self.repair()
+                    self.__setVehicleLayouts(g_currentVehicle.item, shellsLayout, eqsLayout)
+                    self.__isConfirmDialogShown = True
+                else:
                     self.__isConfirmDialogShown = False
-
-                DialogsInterface.showDialog(I18nConfirmDialogMeta('technicalMaintenanceConfirm', messageCtx={'content': msg}), fillConfirmationCallback)
-                self.__isConfirmDialogShown = True
         return
 
     def _setEquipment(self, installed, setup, modules):

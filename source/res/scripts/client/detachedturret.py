@@ -6,6 +6,7 @@ import Math
 from debug_utils import LOG_ERROR
 import material_kinds
 from VehicleEffects import DamageFromShotDecoder
+from VehicleStickers import VehicleStickers
 from svarog_script.py_component import Component
 from svarog_script.py_component_system import ComponentSystem, ComponentDescriptor
 from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, ColliderTypes
@@ -74,20 +75,17 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         collisionData = ((TankPartNames.getIdx(TankPartNames.TURRET), self.model.matrix), (TankPartNames.getIdx(TankPartNames.GUN), self.model.node(TankPartNames.GUN)))
         self.collisions.connect(self.id, ColliderTypes.DYNAMIC_COLLIDER, collisionData)
         ComponentSystem.activate(self)
-        BigWorld.callback(0.0, self.__createAndAttachStickers)
         return
 
     def __createAndAttachStickers(self):
-        if self.__vehicleStickers is not None:
+        vehicle = BigWorld.entity(self.vehicleID)
+        if not vehicle:
             return
-        else:
-            from VehicleStickers import VehicleStickers
-            vehicle = BigWorld.entity(self.vehicleID)
-            if vehicle is not None:
-                self.__vehicleStickers = VehicleStickers(self.__vehDescr, vehicle.publicInfo['marksOnGun'])
-                self.__vehicleStickers.alpha = vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha']
-                self.__vehicleStickers.attach(self.model, True, False, True)
+        if self.__vehicleStickers:
             return
+        self.__vehicleStickers = VehicleStickers(self.__vehDescr, vehicle.publicInfo['marksOnGun'])
+        self.__vehicleStickers.alpha = vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha']
+        self.__vehicleStickers.attach(self.model, True, False, True)
 
     def onLeaveWorld(self):
         ComponentSystem.deactivate(self)
@@ -134,7 +132,8 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
 
     def changeAppearanceVisibility(self, isVisible):
         self.model.visible = isVisible
-        self.__createAndAttachStickers()
+        if isVisible:
+            self.__createAndAttachStickers()
 
     def __checkIsBeingPulled(self):
         if self.__detachmentEffects is not None:

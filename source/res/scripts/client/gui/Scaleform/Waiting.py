@@ -5,9 +5,10 @@ from helpers import i18n
 
 class _WaitingEntity(object):
 
-    def __init__(self, message, interruptCallback=None):
+    def __init__(self, message, interruptCallback=None, overlapsUI=True):
         super(_WaitingEntity, self).__init__()
         self.__message = message
+        self.__overlapsUI = overlapsUI
         if interruptCallback is not None:
             self.__interruptCallbacks = [interruptCallback]
         else:
@@ -15,7 +16,11 @@ class _WaitingEntity(object):
         return
 
     def __repr__(self):
-        return '{}: message={}, interruptCallbacks={}'.format(super(_WaitingEntity, self).__repr__(), self.__message, self.__interruptCallbacks)
+        return '{}: message={}, interruptCallbacks={}, isOnTop={}'.format(super(_WaitingEntity, self).__repr__(), self.__message, self.__interruptCallbacks, self.__overlapsUI)
+
+    @property
+    def overlapsUI(self):
+        return self.__overlapsUI
 
     @property
     def message(self):
@@ -62,6 +67,14 @@ class Waiting(object):
         return cls.getWaiting(msg) is not None
 
     @classmethod
+    def _hasOverlapsUIWaiting(cls):
+        for w in cls.__waitingStack:
+            if w.overlapsUI:
+                return True
+
+        return False
+
+    @classmethod
     def getWaiting(cls, msg):
         for w in cls.__waitingStack:
             if w.message == msg:
@@ -78,17 +91,17 @@ class Waiting(object):
         return None
 
     @classmethod
-    def show(cls, message, isSingle=False, interruptCallback=None):
+    def show(cls, message, isSingle=False, interruptCallback=None, overlapsUI=True):
         BigWorld.Screener.setEnabled(False)
         w = cls.getWaiting(message)
         if w is not None:
             if isSingle:
                 w.addInterruptCallback(interruptCallback)
             else:
-                w = _WaitingEntity(message, interruptCallback)
+                w = _WaitingEntity(message, interruptCallback, overlapsUI)
                 Waiting.__waitingStack.append(w)
         else:
-            w = _WaitingEntity(message, interruptCallback)
+            w = _WaitingEntity(message, interruptCallback, overlapsUI)
             Waiting.__waitingStack.append(w)
         Waiting._showWaiting(w)
         return
@@ -120,9 +133,9 @@ class Waiting(object):
     def resume(cls):
         if not Waiting.isSuspended():
             return
-        for w in Waiting.__suspendStack:
-            Waiting._showWaiting(w)
-
+        if Waiting.__suspendStack:
+            Waiting._showWaiting(Waiting.__suspendStack[-1])
+            Waiting.__waitingStack = Waiting.__suspendStack[:]
         Waiting.__suspendStack = []
 
     @classmethod
@@ -160,7 +173,7 @@ class Waiting(object):
     def _showWaiting(cls, waiting):
         view = Waiting.getWaitingView()
         if view is not None:
-            view.showS(i18n.makeString('#waiting:%s' % waiting.message))
+            view.showS(i18n.makeString('#waiting:%s' % waiting.message), cls._hasOverlapsUIWaiting() or waiting.overlapsUI)
             Waiting.__isVisible = True
             view.setCallback(waiting.interrupt)
             from gui.shared.events import LobbySimpleEvent

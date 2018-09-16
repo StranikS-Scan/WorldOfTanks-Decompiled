@@ -138,7 +138,7 @@ class _HangarSpace(object):
         self.__spaceDestroyedDuringLoad = False
         if not self.__spaceInited:
             LOG_DEBUG('_HangarSpace::init')
-            Waiting.show('loadHangarSpace')
+            Waiting.show('loadHangarSpace', overlapsUI=False)
             self.__inited = True
             self.__isSpacePremium = isPremium
             self.__igrSpaceType = self.igrCtrl.getRoomType()
@@ -195,7 +195,7 @@ class _HangarSpace(object):
     @uniprof.regionDecorator(label='hangar.vehicle.loading', scope='enter')
     def updateVehicle(self, vehicle):
         if self.__inited:
-            Waiting.show('loadHangarSpaceVehicle', True)
+            Waiting.show('loadHangarSpaceVehicle', True, overlapsUI=False)
             self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_VEHICLE)
             self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState)
             self.__lastUpdatedVehicle = vehicle
@@ -209,7 +209,7 @@ class _HangarSpace(object):
 
     def updatePreviewVehicle(self, vehicle):
         if self.__inited:
-            Waiting.show('loadHangarSpaceVehicle', True)
+            Waiting.show('loadHangarSpaceVehicle', True, overlapsUI=False)
             self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState)
             self.__lastUpdatedVehicle = vehicle
 
@@ -225,7 +225,7 @@ class _HangarSpace(object):
 
     def removeVehicle(self):
         if self.__inited:
-            Waiting.show('loadHangarSpaceVehicle')
+            Waiting.show('loadHangarSpaceVehicle', overlapsUI=False)
             if self.__space is not None:
                 self.__space.removeVehicle()
             Waiting.hide('loadHangarSpaceVehicle')
@@ -247,7 +247,7 @@ class _HangarSpace(object):
         self.onSpaceCreate()
         Waiting.hide('loadHangarSpace')
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_SPACE)
-        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_READY, showSummaryNow=True)
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_READY)
         stats = self.statsCollector.getStatistics()
         player = BigWorld.player()
         if player is not None:

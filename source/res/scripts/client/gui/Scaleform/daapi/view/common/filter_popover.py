@@ -36,7 +36,7 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
         return
 
     def setTankCarousel(self, carousel):
-        self.__mapping = self._generateMapping(carousel.hasRentedVehicles(), carousel.hasEventVehicles())
+        self.__mapping = self._generateMapping(carousel.hasRentedVehicles() or not carousel.filter.isDefault(('rented',)), carousel.hasEventVehicles() or not carousel.filter.isDefault(('event',)))
         self.__usedFilters = list(itertools.chain.from_iterable(self.__mapping.itervalues()))
         self._carousel = carousel
         self._update(isInitial=True)

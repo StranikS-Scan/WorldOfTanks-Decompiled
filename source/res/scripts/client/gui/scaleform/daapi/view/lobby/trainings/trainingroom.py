@@ -27,6 +27,7 @@ from gui.shared.formatters import text_styles
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import dependency
 from helpers import int2roman, i18n
+from helpers.statistics import HANGAR_LOADING_STATE
 from messenger.ext import passCensor
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -35,10 +36,12 @@ from messenger.storage import storage_getter
 from prebattle_shared import decodeRoster
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES, PREBATTLE_ERRORS, PREBATTLE_TYPE
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.helpers.statistics import IStatisticsCollector
 
 class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
     __sound_env__ = LobbySubViewEnv
     lobbyContext = dependency.descriptor(ILobbyContext)
+    statsCollector = dependency.descriptor(IStatisticsCollector)
 
     def __init__(self, _=None):
         super(TrainingRoom, self).__init__()
@@ -67,6 +70,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
         self.addListener(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, self.__updateTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
         self.as_setObserverS(entity.getPlayerInfo().getVehicle().isObserver)
         g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.TRAINING_UI_READY, showSummaryNow=True)
 
     def _dispose(self):
         self.stopPrbListening()
@@ -255,12 +259,14 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
             vContourIcon = vehicle.iconContour
             vShortName = vehicle.shortUserName
             vLevel = int2roman(vehicle.level)
+        badgeID = accountInfo.getBadgeID()
+        badgeIcon = accountInfo.getBadgeImgStr()
         if roster == PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1:
-            self.as_setPlayerStateInTeam1S(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType)
+            self.as_setPlayerStateInTeam1S(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType, badgeID, badgeIcon)
         elif roster == PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2:
-            self.as_setPlayerStateInTeam2S(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType)
+            self.as_setPlayerStateInTeam2S(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType, badgeID, badgeIcon)
         else:
-            self.as_setPlayerStateInOtherS(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType)
+            self.as_setPlayerStateInOtherS(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType, badgeID, badgeIcon)
         creator = self.__getCreatorFromRosters()
         if accountInfo.dbID == creator.dbID:
             self.__showSettings(entity)

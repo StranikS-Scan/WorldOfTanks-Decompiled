@@ -64,7 +64,6 @@ def getVehicleDataVO(vehicle):
         bonusImage = ''
     label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
     labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
-    isVehicleAvailable = vState not in Vehicle.VEHICLE_STATE.CUSTOM
     return {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
@@ -83,7 +82,7 @@ def getVehicleDataVO(vehicle):
      'xpImgSource': bonusImage,
      'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
      'rentLeft': rentInfoText,
-     'clickEnabled': vehicle.isInInventory and isVehicleAvailable,
+     'clickEnabled': vehicle.isInInventory,
      'alpha': 1,
      'infoImgSrc': getVehicleStateIcon(vState),
      'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL}

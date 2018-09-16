@@ -12,7 +12,7 @@
   <xmlns:italy>	italy	</xmlns:italy>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
-    <season>	summer	</season>
+    <season>	desert	</season>
     <invisibilityFactor>	1	</invisibilityFactor>
     <priceGroup>	legacy notInShop	</priceGroup>
     <historical>	true	</historical>
@@ -23,14 +23,14 @@
     </vehicleFilter>
     <camouflage>
       <id>	526	</id>
-      <texture>	vehicles/italy/Camouflage/Italy_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <texture>	vehicles/italy/Camouflage/Italian_Victim.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/italy/italian_victim_black/label	</userString>
+      <description>	#vehicle_customization:camouflage/italy/italian_victim_black/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
-          <c0>	35 32 29 255	</c0>
-          <c1>	35 32 29 255	</c1>
+          <c0>	40 43 38 255	</c0>
+          <c1>	16 20 16 255	</c1>
           <c2>	0 0 0 0	</c2>
           <c3>	0 0 0 0	</c3>
         </palette>
@@ -39,14 +39,14 @@
     </camouflage>
     <camouflage>
       <id>	527	</id>
-      <texture>	vehicles/italy/Camouflage/Italy_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <texture>	vehicles/italy/Camouflage/Italian_Victim.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/italy/italian_victim_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/italy/italian_victim_gold/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
-          <c0>	145 137 38 255	</c0>
-          <c1>	108 94 26 255	</c1>
+          <c0>	159 157 53 255	</c0>
+          <c1>	112 120 54 255	</c1>
           <c2>	0 0 0 0	</c2>
           <c3>	0 0 0 0	</c3>
         </palette>
@@ -55,14 +55,14 @@
     </camouflage>
     <camouflage>
       <id>	528	</id>
-      <texture>	vehicles/italy/Camouflage/Italy_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <texture>	vehicles/italy/Camouflage/Italian_Victim.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/italy/italian_victim_red/label	</userString>
+      <description>	#vehicle_customization:camouflage/italy/italian_victim_red/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
-          <c0>	112 35 33 255	</c0>
-          <c1>	77 33 32 255	</c1>
+          <c0>	113 48 39 255	</c0>
+          <c1>	79 43 34 255	</c1>
           <c2>	0 0 0 0	</c2>
           <c3>	0 0 0 0	</c3>
         </palette>
@@ -71,14 +71,342 @@
     </camouflage>
     <camouflage>
       <id>	529	</id>
-      <texture>	vehicles/italy/Camouflage/Italy_Victim.dds	</texture>
-      <userString>	/label	</userString>
-      <description>	/description	</description>
+      <texture>	vehicles/italy/Camouflage/Italian_Victim.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/italy/italian_victim_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/italy/italian_victim_silver/description	</description>
       <scales>	1.3 1 0.7	</scales>
       <palettes>
         <palette>
-          <c0>	140 147 147 255	</c0>
-          <c1>	84 90 87 255	</c1>
+          <c0>	138 138 138 255	</c0>
+          <c1>	107 109 107 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <invisibilityFactor>	1	</invisibilityFactor>
+    <priceGroup>	camo italy	</priceGroup>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	536	</id>
+      <texture>	vehicles/italy/Camouflage/Italian_Winter.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/italy/italian_winter/label	</userString>
+      <description>	#vehicle_customization:camouflage/italy/italian_winter/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	175 175 175 255	</c0>
+          <c1>	63 60 41 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+    <camouflage>
+      <id>	537	</id>
+      <texture>	vehicles/italy/Camouflage/Italian_Winter_2.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/italy/italian_winter_2/label	</userString>
+      <description>	#vehicle_customization:camouflage/italy/italian_winter_2/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	175 175 175 255	</c0>
+          <c1>	63 60 41 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <invisibilityFactor>	1	</invisibilityFactor>
+    <priceGroup>	camo italy	</priceGroup>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	538	</id>
+      <texture>	vehicles/italy/Camouflage/Ariete_Summer.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/italy/ariete_summer/label	</userString>
+      <description>	#vehicle_customization:camouflage/italy/ariete_summer/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	85 93 72 255	</c0>
+          <c1>	103 58 25 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+    <camouflage>
+      <id>	539	</id>
+      <texture>	vehicles/italy/Camouflage/Summer_Tricolor.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/italy/summer_tricolor/label	</userString>
+      <description>	#vehicle_customization:camouflage/italy/summer_tricolor/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	85 93 72 255	</c0>
+          <c1>	103 58 25 255	</c1>
+          <c2>	202 171 108 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <invisibilityFactor>	1	</invisibilityFactor>
+    <priceGroup>	camo italy	</priceGroup>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	540	</id>
+      <texture>	vehicles/italy/Camouflage/African_Bicolor.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/italy/african_bicolor/label	</userString>
+      <description>	#vehicle_customization:camouflage/italy/african_bicolor/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	85 93 72 255	</c0>
+          <c1>	202 171 108 255	</c1>
+          <c2>	246 202 96 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+    <camouflage>
+      <id>	541	</id>
+      <texture>	vehicles/italy/Camouflage/Desert_Bicolor.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/italy/desert_bicolor/label	</userString>
+      <description>	#vehicle_customization:camouflage/italy/desert_bicolor/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	202 171 108 255	</c0>
+          <c1>	85 93 72 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <invisibilityFactor>	1	</invisibilityFactor>
+    <priceGroup>	camo italy notInShop	</priceGroup>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <tags>	vehicleBound	</tags>
+    <camouflage>
+      <id>	542	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_01.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	72 48 35 255	</c0>
+          <c1>	101 83 50 255	</c1>
+          <c2>	46 52 40 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+    <camouflage>
+      <id>	543	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	66 78 58 255	</c0>
+          <c1>	35 43 32 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+    <camouflage>
+      <id>	544	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	58 85 32 255	</c0>
+          <c1>	85 103 52 255	</c1>
+          <c2>	35 46 31 255	</c2>
+          <c3>	108 108 85 255	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+    <camouflage>
+      <id>	549	</id>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
+      <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	100 80 43 255	</c0>
+          <c1>	64 62 36 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <invisibilityFactor>	1	</invisibilityFactor>
+    <priceGroup>	camo italy notInShop	</priceGroup>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <tags>	vehicleBound	</tags>
+    <camouflage>
+      <id>	545	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	58 69 50 0	</c0>
+          <c1>	149 153 145 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+    <camouflage>
+      <id>	546	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	40 71 94 255	</c0>
+          <c1>	143 148 139 255	</c1>
+          <c2>	36 46 47 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+    <camouflage>
+      <id>	550	</id>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
+      <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	175 177 173 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <invisibilityFactor>	1	</invisibilityFactor>
+    <priceGroup>	camo italy notInShop	</priceGroup>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <tags>	vehicleBound	</tags>
+    <camouflage>
+      <id>	547	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	85 74 30 255	</c0>
+          <c1>	128 124 57 255	</c1>
+          <c2>	48 47 31 255	</c2>
+          <c3>	133 135 131 255	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	desert	</season>
+    <invisibilityFactor>	1	</invisibilityFactor>
+    <priceGroup>	camo italy notInShop	</priceGroup>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <tags>	vehicleBound	</tags>
+    <camouflage>
+      <id>	548	</id>
+      <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
+      <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	112 96 58 255	</c0>
+          <c1>	0 0 0 0	</c1>
           <c2>	0 0 0 0	</c2>
           <c3>	0 0 0 0	</c3>
         </palette>

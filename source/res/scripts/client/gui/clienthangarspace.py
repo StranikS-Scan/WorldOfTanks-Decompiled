@@ -251,6 +251,7 @@ class ClientHangarSpace(object):
 
     def destroy(self):
         self.__onLoadedCallback = None
+        self.__closeOptimizedRegion()
         if self.__waitCallback is not None:
             BigWorld.cancelCallback(self.__waitCallback)
             self.__waitCallback = None
@@ -307,9 +308,7 @@ class ClientHangarSpace(object):
             self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         else:
             BigWorld.uniprofSceneStart()
-            self.__gfxOptimizerMgr.unregisterOptimizationArea(self.__optimizerID)
-            self.__gfxOptimizerMgr = None
-            self.__optimizerID = None
+            self.__closeOptimizedRegion()
             self.__waitCallback = None
             if self.__onLoadedCallback is not None:
                 self.__onLoadedCallback()
@@ -318,6 +317,13 @@ class ClientHangarSpace(object):
                 self.__destroyFunc()
                 self.__destroyFunc = None
             SoundGroups.LSstartAll()
+        return
+
+    def __closeOptimizedRegion(self):
+        if self.__gfxOptimizerMgr is not None:
+            self.__gfxOptimizerMgr.unregisterOptimizationArea(self.__optimizerID)
+            self.__gfxOptimizerMgr = None
+            self.__optimizerID = None
         return
 
     def setCameraLocation(self, *args):

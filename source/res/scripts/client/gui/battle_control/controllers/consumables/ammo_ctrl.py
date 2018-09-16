@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/ammo_ctrl.py
 import weakref
-from math import fabs
 from collections import namedtuple
+from math import fabs
 import BigWorld
 import CommandMapping
 import Event
@@ -93,29 +93,37 @@ class IGunReloadingState(IGunReloadingSnapshot):
 
 @ReprInjector.simple(('_actualTime', 'actual'), ('_baseTime', 'base'), ('getTimePassed', 'timePassed'), ('isReloading', 'reloading'))
 class ReloadingTimeSnapshot(IGunReloadingSnapshot):
-    __slots__ = ('_actualTime', '_baseTime', '_startTime', '_updateTime')
+    __slots__ = ('_actualTime', '_baseTime', '_startTime', '_updateTime', '_waitReloadingStartResponse')
 
-    def __init__(self, actualTime=0.0, baseTime=0.0, startTime=0.0, updateTime=0.0):
+    def __init__(self, actualTime=0.0, baseTime=0.0, startTime=0.0, updateTime=0.0, waitReloadingStartResponse=False):
         super(ReloadingTimeSnapshot, self).__init__()
         self._actualTime = actualTime
         self._baseTime = baseTime
         self._startTime = startTime
         self._updateTime = updateTime
+        self._waitReloadingStartResponse = waitReloadingStartResponse
+
+    def startPredictedReloading(self):
+        self._waitReloadingStartResponse = True
+
+    def stopPredicateReloading(self):
+        self._waitReloadingStartResponse = False
 
     def clear(self):
         self._actualTime = 0.0
         self._baseTime = 0.0
         self._startTime = 0.0
         self._updateTime = 0.0
+        self._waitReloadingStartResponse = False
 
     def getValueType(self):
         return GUN_RELOADING_VALUE_TYPE.TIME
 
     def isReloading(self):
-        return self._actualTime > 0
+        return True if self._waitReloadingStartResponse else self._actualTime > 0
 
     def isReloadingFinished(self):
-        return self._actualTime == 0
+        return False if self._waitReloadingStartResponse else self._actualTime == 0
 
     def getActualValue(self):
         return self._actualTime
@@ -136,10 +144,10 @@ class ReloadingTimeSnapshot(IGunReloadingSnapshot):
 _TIME_CORRECTION_THRESHOLD = 0.01
 
 class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
-    __slots__ = ('_startTime', '_baseTime', '_actualTime', '_updateTime')
+    __slots__ = ('_startTime', '_baseTime', '_actualTime', '_updateTime', '_waitReloadingStartResponse')
 
     def getSnapshot(self):
-        return ReloadingTimeSnapshot(actualTime=self._actualTime, baseTime=self._baseTime, startTime=self._startTime, updateTime=self._updateTime)
+        return ReloadingTimeSnapshot(actualTime=self._actualTime, baseTime=self._baseTime, startTime=self._startTime, updateTime=self._updateTime, waitReloadingStartResponse=self._waitReloadingStartResponse)
 
     def setTimes(self, actualTime, baseTime):
         if actualTime > 0:
@@ -153,6 +161,8 @@ class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
         else:
             self._startTime = 0.0
             self._updateTime = 0.0
+        if actualTime == 0:
+            self._waitReloadingStartResponse = False
         self._actualTime = actualTime
         self._baseTime = baseTime
 
@@ -359,6 +369,7 @@ class AmmoController(MethodsRules, IBattleController):
         if intCD in self.__ammo:
             if self.__currShellCD != intCD:
                 self.__currShellCD = intCD
+                self._reloadingState.startPredictedReloading()
                 self.onCurrentShellChanged(intCD)
                 result = True
         else:
@@ -526,6 +537,7 @@ class AmmoController(MethodsRules, IBattleController):
     def useLoaderIntuition(self):
         quantity, _ = self.__ammo[self.__currShellCD]
         clipSize = self.__gunSettings.clip.size
+        self._reloadingState.stopPredicateReloading()
         if clipSize > 0 and not self.isGunReloading():
             for _cd, (_quantity, _) in self.__ammo.iteritems():
                 self.__ammo[_cd] = (_quantity, 0)

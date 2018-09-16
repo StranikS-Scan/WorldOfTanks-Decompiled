@@ -151,6 +151,7 @@ class SettingsCore(ISettingsCore):
          (GRAPHICS.GRAPHICS_QUALITY_HD_SD, options.GraphicsQualityNote()),
          (GRAPHICS.GRAPHICS_QUALITY_HD_SD_HIGH, options.GraphicsHigtQualityNote()),
          (GRAPHICS.GAMMA_SETTING, options.ReadOnlySetting(lambda : SETTINGS.GAMMABTN_LABEL)),
+         (GRAPHICS.NATIVE_RESOLUTION, options.ReadOnlySetting(graphics.getNativeResolutionIndex)),
          (GRAPHICS.COLOR_FILTER_INTENSITY, options.ColorFilterIntensitySetting()),
          (GRAPHICS.COLOR_FILTER_IMAGES, options.ReadOnlySetting(lambda : graphics.getGraphicSettingImages('COLOR_GRADING_TECHNIQUE'))),
          (GRAPHICS.FOV, options.FOVSetting(GRAPHICS.FOV, storage=FOV_SETTINGS_STORAGE)),

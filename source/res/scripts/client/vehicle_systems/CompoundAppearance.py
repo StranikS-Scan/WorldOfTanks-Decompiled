@@ -229,7 +229,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.__createAndAttachStickers()
             if self.__currentDamageState.isCurrentModelDamaged:
                 self.__chassisColisionMatrix.target = self.__compoundModel.matrix
-                gunNodeName = TankNodeNames.GUN_JOINT
+                gunNodeName = 'gun'
             else:
                 self.__chassisColisionMatrix.target = self.__vehicle.filter.groundPlacingMatrix
                 gunNodeName = TankNodeNames.GUN_INCLINATION

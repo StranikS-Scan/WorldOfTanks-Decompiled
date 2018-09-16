@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MapActivities.py
-import sys
 import math
 import random
+import sys
 import BigWorld
 import ResMgr
 import PlayerEvents
@@ -69,13 +69,10 @@ class MapActivities(object):
         return
 
     def destroy(self):
-        BigWorld.cancelCallback(self.__cbID)
-        self.__cbID = None
         self.stop()
         PlayerEvents.g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         PlayerEvents.g_playerEvents.onAvatarBecomeNonPlayer -= self._onAvatarBecomeNonPlayer
         PlayerEvents.g_playerEvents.onAvatarReady -= self.__onAvatarReady
-        return
 
     def start(self, name):
         for activity in self.__pendingActivities:
@@ -83,14 +80,18 @@ class MapActivities(object):
                 activity.setStartTime(Timer.getTime())
 
     def stop(self):
+        if self.__cbID is not None:
+            BigWorld.cancelCallback(self.__cbID)
+            self.__cbID = None
         for activity in self.__currActivities:
             activity.stop()
 
         for activity in self.__pendingActivities:
             activity.stop()
 
-        self.__currActivities = []
-        self.__pendingActivities = []
+        del self.__currActivities[:]
+        del self.__pendingActivities[:]
+        return
 
     def generateOfflineActivities(self, spacePath, usePossibility=True):
         xmlName = spacePath.split('/')[-1]
@@ -110,6 +111,9 @@ class MapActivities(object):
             startTimes.append(Timer.getTime() + chooser(timeframe[0], timeframe[1]))
 
         self.__generateActivities(settings, startTimes)
+        if self.__cbID is not None:
+            BigWorld.cancelCallback(self.__cbID)
+            self.__cbID = None
         self.__onPeriodicTimer()
         return
 
@@ -160,6 +164,7 @@ class MapActivities(object):
     def __onAvatarReady(self):
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
+            self.__cbID = None
         self.__onPeriodicTimer()
         return
 
@@ -180,9 +185,13 @@ class WaveImpulse(object):
         return
 
     def start(self, position):
+        if self.__cbkId is not None:
+            BigWorld.cancelCallback(self.__cbkId)
+            self.__cbkId = None
         if self.__deltaImpulse < 0.0:
             self.__position = position
             self.__cbkId = BigWorld.callback(self.__deltaTime, self.__loop)
+        return
 
     def __loop(self):
         player = BigWorld.player()
@@ -205,6 +214,7 @@ class WaveImpulse(object):
 class WarplaneActivity(IMapActivity):
 
     def create(self, settings, startTime):
+        self.__isStopped = False
         self.__settings = settings
         self.__curve = None
         self.__model = None
@@ -250,6 +260,7 @@ class WarplaneActivity(IMapActivity):
         self.__period = period
 
     def start(self):
+        self.__isStopped = False
         if self.isPeriodic() and self.__possibility < random.uniform(0.0, 1.0):
             self.__startTime += self.__period
             return
@@ -271,18 +282,20 @@ class WarplaneActivity(IMapActivity):
                     self.__model.addMotor(self.__motor)
                     self.__motor.restart()
                     self.__endTime = self.__motor.totalTime + self.__startTime
-                if self.__cbID is not None:
-                    BigWorld.cancelCallback(self.__cbID)
                 if self.__sound is not None:
                     self.__sound.stopAll()
                     self.__sound = None
                 self.__fadedIn = False
             self.__model.visible = 1
             self.__startTime += self.__period
+            if self.__cbID is not None:
+                BigWorld.cancelCallback(self.__cbID)
+                self.__cbID = None
             self.__waitEnterWorld()
             return
 
     def stop(self):
+        self.__isStopped = True
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
             self.__cbID = None
@@ -344,7 +357,7 @@ class WarplaneActivity(IMapActivity):
         return
 
     def __onModelLoaded(self, resourceRefs):
-        if self.__modelName not in resourceRefs.failedIDs:
+        if self.__modelName not in resourceRefs.failedIDs and not self.__isStopped:
             self.__model = resourceRefs[self.__modelName]
         else:
             LOG_ERROR('Could not load model %s' % self.__modelName)
@@ -388,6 +401,7 @@ class WarplaneActivity(IMapActivity):
 class ExplosionActivity(IMapActivity):
 
     def create(self, settings, startTime):
+        self.__isStopped = False
         self.__settings = settings
         self.__model = None
         self.__sound = None
@@ -458,17 +472,23 @@ class ExplosionActivity(IMapActivity):
         if self.isPeriodic() and self.__possibility < random.uniform(0.0, 1.0):
             self.__startTime += self.__period
             return
-        if self.__firstLaunch is True:
-            BigWorld.addModel(self.__model)
-            self.__model.forceReflect = True
-            self.__firstLaunch = False
         else:
-            self.pause()
-        self.__model.visible = 1
-        self.__startTime += self.__period
-        self.__waitEnterWorld()
+            if self.__firstLaunch is True:
+                BigWorld.addModel(self.__model)
+                self.__model.forceReflect = True
+                self.__firstLaunch = False
+            else:
+                self.pause()
+            self.__model.visible = 1
+            self.__startTime += self.__period
+            if self.__cbID is not None:
+                BigWorld.cancelCallback(self.__cbID)
+                self.__cbID = None
+            self.__waitEnterWorld()
+            return
 
     def stop(self):
+        self.__isStopped = True
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
             self.__cbID = None
@@ -482,6 +502,9 @@ class ExplosionActivity(IMapActivity):
             self.__sound.releaseMatrix()
             self.__sound = None
         self.__firstLaunch = True
+        if self.__waveImpulse is not None:
+            self.__waveImpulse.destroy()
+            self.__waveImpulse = None
         return
 
     def pause(self):
@@ -519,7 +542,7 @@ class ExplosionActivity(IMapActivity):
         return
 
     def __onModelLoaded(self, resourceRefs):
-        if self.__modelName not in resourceRefs.failedIDs:
+        if self.__modelName not in resourceRefs.failedIDs and not self.__isStopped:
             self.__model = resourceRefs[self.__modelName]
             self.__model.position = self.__position
         else:
@@ -586,17 +609,25 @@ class ScenarioActivity(IMapActivity):
             activity.setStartTime(self.__startTime)
 
         self.__startTime += self.__period
+        if self.__cbID is not None:
+            BigWorld.cancelCallback(self.__cbID)
+            self.__cbID = None
         self.__onPeriodicTimer()
+        return
 
     def stop(self):
+        if self.__cbID is not None:
+            BigWorld.cancelCallback(self.__cbID)
+            self.__cbID = None
         for activity in self.__currentActivities:
             activity.stop()
 
         for activity in self.__pendingActivities:
             activity.stop()
 
-        self.__currentActivities = []
-        self.__pendingActivities = []
+        del self.__currentActivities[:]
+        del self.__pendingActivities[:]
+        return
 
     def canStart(self):
         return Timer.getTime() >= self.__startTime
@@ -622,7 +653,7 @@ class ScenarioActivity(IMapActivity):
                     self.__currentActivities.append(activity)
                     self.__pendingActivities.remove(activity)
 
-        BigWorld.callback(0.1, self.__onPeriodicTimer)
+        self.__cbID = BigWorld.callback(0.1, self.__onPeriodicTimer)
         return
 
 

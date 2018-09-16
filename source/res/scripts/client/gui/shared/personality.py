@@ -116,7 +116,7 @@ def onAccountShowGUI(ctx):
     if serverSettings.wgcg.getLoginOnStart():
         yield ServicesLocator.webCtrl.login()
     if serverSettings.isElenEnabled():
-        yield ServicesLocator.eventsController.getEvents(onlySettings=True, onLogin=True)
+        yield ServicesLocator.eventsController.getEvents(onlySettings=True, onLogin=True, prefetchKeyArtBig=False)
         yield ServicesLocator.eventsController.getHangarFlag(onLogin=True)
     g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
     g_clanCache.onAccountShowGUI()

@@ -4,8 +4,8 @@ from gui.Scaleform.framework.entities.View import View
 
 class WaitingViewMeta(View):
 
-    def showS(self, data):
-        return self.flashObject.show(data) if self._isDAAPIInited() else None
+    def showS(self, data, isFrontWaiting):
+        return self.flashObject.show(data, isFrontWaiting) if self._isDAAPIInited() else None
 
     def hideS(self, data):
         return self.flashObject.hide(data) if self._isDAAPIInited() else None

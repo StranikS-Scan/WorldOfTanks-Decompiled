@@ -6,12 +6,12 @@ from abc import ABCMeta, abstractmethod
 from collections import defaultdict
 import ArenaType
 import BigWorld
+import GammaWizard
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
 from PlayerEvents import g_playerEvents
-from account_helpers.AccountSettings import AccountSettings, AWARDS, SPEAKERS_DEVICE, GUI_START_BEHAVIOR
-from account_helpers.settings_core.options import VideoModeSettings
-from account_helpers.settings_core.settings_constants import SOUND, GRAPHICS
+from account_helpers.AccountSettings import AccountSettings, AWARDS, SPEAKERS_DEVICE
+from account_helpers.settings_core.settings_constants import SOUND
 from account_shared import getFairPlayViolationName
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import EVENT_TYPE, INVOICE_ASSET
@@ -24,6 +24,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.DialogsInterface import showDialog
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta, I18GammaDialogMeta
+from gui.Scaleform.daapi.view.common.settings.gamma_wizard import GammaWizardView
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -37,6 +38,7 @@ from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
+from gui.shared.utils.graphics import isGammaSupported
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.transport import z_loads
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
@@ -53,6 +55,7 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
+import Settings
 
 class AwardController(IAwardController, IGlobalListener):
     refSystem = dependency.descriptor(IRefSystemController)
@@ -947,21 +950,14 @@ class GammaDialogHandler(AwardHandler):
         self.handle()
 
     def _needToShowAward(self, ctx):
-        isAdvanced = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE) == self.DEFERRED_RENDER_PIPELINE
-        isFullscreen = self.settingsCore.getSetting(GRAPHICS.VIDEO_MODE) == VideoModeSettings.FULLSCREEN
-        availableGamma = isAdvanced or isFullscreen
-        filters = self.__getFilters()
-        return not filters['isGammaDialogShowed'] and availableGamma and not BigWorld.checkUnattended()
+        if Settings.g_instance.userPrefs.readBool(Settings.KEY_GAMMA_DIALOG_IS_SHOWN, False):
+            return False
+        GammaWizard.resetSettingsUsingDefault(GammaWizardView.DEFAULT_VALUE)
+        return isGammaSupported() and not BigWorld.checkUnattended()
 
     def _showAward(self, ctx):
         showDialog(I18GammaDialogMeta('gammaDialog'), self.__dialogCallback)
-        filters = self.__getFilters()
-        filters['isGammaDialogShowed'] = True
-        self.settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
-
-    def __getFilters(self):
-        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-        return self.settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+        Settings.g_instance.userPrefs.writeBool(Settings.KEY_GAMMA_DIALOG_IS_SHOWN, True)
 
     def __dialogCallback(self, result):
         if result:

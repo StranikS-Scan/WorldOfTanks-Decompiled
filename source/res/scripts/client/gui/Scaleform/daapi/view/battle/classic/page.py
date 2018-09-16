@@ -101,10 +101,11 @@ class ClassicPage(SharedPage):
         self._toggleFullStats(event.ctx['isDown'])
 
     def _onBattleLoadingStart(self):
-        self._toggleFullStats(False)
+        self._toggleFullStats(isShown=False)
         super(ClassicPage, self)._onBattleLoadingStart()
 
     def _onBattleLoadingFinish(self):
+        self._toggleFullStats(isShown=False)
         super(ClassicPage, self)._onBattleLoadingFinish()
         battleCtx = self.sessionProvider.getCtx()
         periodCtrl = self.sessionProvider.shared.arenaPeriod

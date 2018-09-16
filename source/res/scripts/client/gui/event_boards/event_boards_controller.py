@@ -96,14 +96,14 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
 
     @async
     @process
-    def getEvents(self, callback, onlySettings=False, isTabVisited=False, onLogin=False):
+    def getEvents(self, callback, onlySettings=False, isTabVisited=False, onLogin=False, prefetchKeyArtBig=True):
         statusCode = SET_DATA_STATUS_CODE.ERROR
         eventsSettings = self.__eventBoardsSettings.getEventsSettings()
         playerData = self.__eventBoardsSettings.getPlayerEventsData()
         if not self.__isLoggedIn or self.__isLoggedIn and not onLogin:
             edResponse = yield self.sendRequest(EventBoardsGetEventDataCtx(needShowErrorNotification=not onlySettings))
             if edResponse is not None:
-                statusCode = eventsSettings.setData(edResponse.getData())
+                statusCode = eventsSettings.setData(edResponse.getData(), prefetchKeyArtBig)
                 if statusCode == SET_DATA_STATUS_CODE.OK:
                     self.__checkStartedFinishedEvents(isTabVisited)
                     if onlySettings:

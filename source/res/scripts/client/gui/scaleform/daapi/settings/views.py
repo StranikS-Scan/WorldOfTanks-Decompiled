@@ -80,6 +80,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     DEMONSTRATOR_WINDOW = 'demonstratorWindow'
     VEHICLE_PREVIEW = 'vehiclePreview'
     HERO_VEHICLE_PREVIEW = 'heroVehiclePreview'
+    AUTHORS_VIEW = 'authorsView'
     VEHICLE_COMPARE = 'vehicleCompare'
     VEHICLE_COMPARE_MAIN_CONFIGURATOR = 'vehicleCompareConfigurator'
     LOBBY_ACADEMY = 'academy'

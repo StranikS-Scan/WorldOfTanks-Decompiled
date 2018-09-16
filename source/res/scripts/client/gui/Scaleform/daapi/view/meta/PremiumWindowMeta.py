@@ -7,8 +7,8 @@ class PremiumWindowMeta(SimpleWindowMeta):
     def onRateClick(self, rateId):
         self._printOverrideError('onRateClick')
 
-    def as_setHeaderS(self, prc, bonus1, bonus2):
-        return self.flashObject.as_setHeader(prc, bonus1, bonus2) if self._isDAAPIInited() else None
+    def as_setHeaderS(self, prc, bonus):
+        return self.flashObject.as_setHeader(prc, bonus) if self._isDAAPIInited() else None
 
     def as_setRatesS(self, data):
         return self.flashObject.as_setRates(data) if self._isDAAPIInited() else None

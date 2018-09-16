@@ -53,7 +53,7 @@ def _extendByModuleData(targetData, module, vehDescr):
     targetData['paramValues'] = '\n'.join(values)
     targetData['paramNames'] = '\n'.join(names)
     targetData['name'] = text_styles.middleTitle(module.userName)
-    targetData[EXTRA_MODULE_INFO] = module.getExtraIconInfo()
+    targetData[EXTRA_MODULE_INFO] = module.getExtraIconInfo(vehDescr)
     return
 
 

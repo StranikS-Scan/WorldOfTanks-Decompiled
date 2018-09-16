@@ -176,29 +176,29 @@ class _ConfigFittingSlotVO(FittingSlotVO):
 
     def _prepareModule(self, modulesData, vehicle, slotType, slotId):
         if slotType == FITTING_TYPES.BOOSTER:
-            module = vehicle.equipment.battleBoosterConsumables[0]
-            if module is not None:
-                affectsAtTTC = module.isAffectsOnVehicle(vehicle)
+            vehicleModule = vehicle.equipment.battleBoosterConsumables[0]
+            if vehicleModule is not None:
+                affectsAtTTC = vehicleModule.isAffectsOnVehicle(vehicle)
                 self['affectsAtTTC'] = affectsAtTTC
                 if affectsAtTTC:
-                    if module.isCrewBooster():
-                        isPerkReplace = not module.isAffectedSkillLearnt(vehicle)
+                    if vehicleModule.isCrewBooster():
+                        isPerkReplace = not vehicleModule.isAffectedSkillLearnt(vehicle)
                         bgType = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE if isPerkReplace else SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
                         self['bgHighlightType'] = bgType
                     else:
                         self['highlight'] = affectsAtTTC
                         self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
         elif slotType == FITTING_TYPES.OPTIONAL_DEVICE:
-            module = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
+            vehicleModule = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
             for battleBooster in vehicle.equipment.battleBoosterConsumables:
-                if battleBooster is not None and battleBooster.isOptionalDeviceCompatible(module):
+                if battleBooster is not None and battleBooster.isOptionalDeviceCompatible(vehicleModule):
                     self['highlight'] = True
                     break
 
-            module = super(_ConfigFittingSlotVO, self)._prepareModule(modulesData, vehicle, slotType, slotId)
+            vehicleModule = super(_ConfigFittingSlotVO, self)._prepareModule(modulesData, vehicle, slotType, slotId)
         else:
-            module = super(_ConfigFittingSlotVO, self)._prepareModule(modulesData, vehicle, slotType, slotId)
-        return module
+            vehicleModule = super(_ConfigFittingSlotVO, self)._prepareModule(modulesData, vehicle, slotType, slotId)
+        return vehicleModule
 
 
 class _DefaultSkillCompletenessChecker(object):

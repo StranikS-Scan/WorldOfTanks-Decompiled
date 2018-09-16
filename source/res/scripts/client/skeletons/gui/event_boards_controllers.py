@@ -42,7 +42,7 @@ class IEventBoardController(object):
 
     @async
     @process
-    def getEvents(self, callback, onlySettings=True, isTabVisited=False, onLogin=False):
+    def getEvents(self, callback, onlySettings=True, isTabVisited=False, onLogin=False, prefetchKeyArtBig=True):
         raise NotImplementedError
 
     @async

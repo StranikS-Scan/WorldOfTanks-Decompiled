@@ -263,7 +263,7 @@ class _BaseCaptureCondition(_Condition):
             if points >= criticalPointsCount:
                 return self._updateValidValue(True)
 
-        if self.isSatisfied():
+        if self.isSatisfied() and self.__stopCapturingCooldown is None:
             LOG_DEBUG('[Drone] Base Capturing. Stop music cooldown has been started')
             self.__stopCapturingCooldown = BigWorld.callback(musicStopPredelay, partial(self.__onCooldownOver, time.time()))
         return False

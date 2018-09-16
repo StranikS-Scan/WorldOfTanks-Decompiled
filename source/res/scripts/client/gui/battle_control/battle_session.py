@@ -224,7 +224,7 @@ class BattleSessionProvider(IBattleSessionProvider):
             ctrl.clear(False)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
-            ctrl.clear(noRespawnPossible)
+            ctrl.clear(False)
         ctrl = self.__sharedRepo.optionalDevices
         if ctrl is not None:
             ctrl.clear(False)

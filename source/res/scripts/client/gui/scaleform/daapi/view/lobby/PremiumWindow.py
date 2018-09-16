@@ -109,7 +109,7 @@ class PremiumWindow(PremiumWindowMeta):
     def __populateData(self):
         self.as_setImageS(RES_ICONS.MAPS_ICONS_WINDOWS_PREM_PREMHEADER, 0)
         self.as_setWindowTitleS(self.__getTitle())
-        self.as_setHeaderS(MENU.PREMIUM_PERCENTFACTOR, MENU.PREMIUM_BONUS1, MENU.PREMIUM_BONUS2)
+        self.as_setHeaderS(MENU.PREMIUM_PERCENTFACTOR, MENU.PREMIUM_BONUS)
         self.__updateData()
 
     def __getTitle(self):

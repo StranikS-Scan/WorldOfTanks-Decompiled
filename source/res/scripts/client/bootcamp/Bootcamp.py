@@ -320,7 +320,7 @@ class Bootcamp(EventSystemEntity):
         if self.__replayController is not None:
             self.__replayController.fini()
             self.__replayController = None
-        MC.g_musicController.stopAmbient()
+        MC.g_musicController.stopAmbient(True)
         for bankName in self.BOOTCAMP_SOUND_BANKS:
             SoundGroups.g_instance.unLoadSoundBank(bankName)
 

@@ -77,9 +77,9 @@ class BackgroundMode(object):
 
     def showWallpaper(self, showSwitchButton):
         self.__view.as_showWallpaperS(self.__show, self.__randomImage(), showSwitchButton, self.__isSoundMuted)
-        WWISE.WW_eventGlobalSync('loginscreen_ambient_start')
+        WWISE.WW_eventGlobal('loginscreen_ambient_start')
         if self.__isSoundMuted:
-            WWISE.WW_eventGlobalSync('loginscreen_mute')
+            WWISE.WW_eventGlobal('loginscreen_mute')
 
     def show(self):
         self.__loadFromPrefs()
@@ -92,15 +92,14 @@ class BackgroundMode(object):
         self.__applyWindowParams()
 
     def hide(self):
-        WWISE.WW_eventGlobalSync(('loginscreen_music_stop_longfade', 'loginscreen_ambient_stop')[self.__bgMode])
         self.__saveToPrefs()
 
     def toggleMute(self, value):
         self.__isSoundMuted = value
-        WWISE.WW_eventGlobalSync(('loginscreen_unmute', 'loginscreen_mute')[self.__isSoundMuted])
+        WWISE.WW_eventGlobal(('loginscreen_unmute', 'loginscreen_mute')[self.__isSoundMuted])
 
     def fadeSound(self):
-        WWISE.WW_eventGlobalSync(('loginscreen_music_pause', 'loginscreen_ambient_stop')[self.__bgMode])
+        WWISE.WW_eventGlobal(('loginscreen_music_pause', 'loginscreen_ambient_stop')[self.__bgMode])
         self.__inSwitchToMode = _BG_MODE_VIDEO if self.__bgMode != _BG_MODE_VIDEO else _BG_MODE_WALLPAPER
 
     def switch(self):
@@ -111,16 +110,16 @@ class BackgroundMode(object):
             self.__bgMode = _BG_MODE_WALLPAPER
             self.__view.as_showWallpaperS(self.__show, self.__randomImage(), self.__switchButton, self.__isSoundMuted)
         self.__inSwitchToMode = None
-        WWISE.WW_eventGlobalSync(('loginscreen_music_resume', 'loginscreen_ambient_start')[self.__bgMode])
+        WWISE.WW_eventGlobal(('loginscreen_music_resume', 'loginscreen_ambient_start')[self.__bgMode])
         if self.__isSoundMuted:
-            WWISE.WW_eventGlobalSync('loginscreen_mute')
+            WWISE.WW_eventGlobal('loginscreen_mute')
         self.__applyWindowParams()
         return
 
     def startVideoSound(self):
-        WWISE.WW_eventGlobalSync('loginscreen_music_start')
+        WWISE.WW_eventGlobal('loginscreen_music_start')
         if self.__isSoundMuted:
-            WWISE.WW_eventGlobalSync('loginscreen_mute')
+            WWISE.WW_eventGlobal('loginscreen_mute')
         self.__applyWindowParams()
 
     def onWindowSizeMove(self, isInSizeMove):
@@ -138,10 +137,10 @@ class BackgroundMode(object):
             isActive = self.__isWindowActive and not self.__isWindowInSizeMove
             if isActive:
                 self.__view.as_resumePlaybackS()
-                WWISE.WW_eventGlobalSync('loginscreen_music_resume')
+                WWISE.WW_eventGlobal('loginscreen_music_resume')
             else:
                 self.__view.as_pausePlaybackS()
-                WWISE.WW_eventGlobalSync('loginscreen_music_pause')
+                WWISE.WW_eventGlobal('loginscreen_music_pause')
 
     def __loadFromPrefs(self):
         if self.__userPrefs.has_key(Settings.KEY_LOGINPAGE_PREFERENCES):

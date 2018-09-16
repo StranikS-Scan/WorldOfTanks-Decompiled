@@ -342,6 +342,7 @@ class PersonalInvitationsListener(_Listener):
 
 _MAX_PROGRESS_VALUE = 1.0
 _SPACE_INVALIDATION_PERIOD = 0.5
+_ADDITIONAL_LOAD_WAIT = 2.0
 _INFLUX_INVALIDATION_PERIOD = 0.5
 
 class _LOAD_STATE_FLAG(object):
@@ -381,6 +382,19 @@ class ArenaSpaceLoadListener(_Listener):
                     controller.arenaLoadCompleted()
         return result
 
+    def __loadCompleteDelayed(self):
+        self.__clearSpaceCallback()
+        progress = 1.0
+        import BattleReplay
+        if not BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+            progress = BigWorld.spaceLoadStatus()
+        if progress > self.__progress:
+            self.__progress = progress
+            self.__onSpaceLoadUpdated(progress)
+        self.__onSpaceLoadCompleted()
+        BigWorld.SetDrawInflux(True)
+        self.__loadInfluxCallback()
+
     def __loadSpaceCallback(self):
         self.__clearSpaceCallback()
         progress = 1.0
@@ -394,9 +408,7 @@ class ArenaSpaceLoadListener(_Listener):
             self.__spaceLoadCB = BigWorld.callback(_SPACE_INVALIDATION_PERIOD, self.__loadSpaceCallback)
             BigWorld.SetDrawInflux(False)
         else:
-            self.__onSpaceLoadCompleted()
-            BigWorld.SetDrawInflux(True)
-            self.__loadInfluxCallback()
+            self.__spaceLoadCB = BigWorld.callback(_ADDITIONAL_LOAD_WAIT, self.__loadCompleteDelayed)
 
     def __loadInfluxCallback(self):
         self.__clearInfluxCallback()

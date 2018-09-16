@@ -1030,11 +1030,15 @@ class CURRENCY_SETTINGS(object):
     RENT_GOLD_PRICE = 'rentGoldPrice'
     SELL_PRICE = 'sellPrice'
     UNLOCK_PRICE = 'unlockPrice'
+    REMOVAL_CREDITS_PRICE = 'removalCreditsPrice'
+    REMOVAL_GOLD_PRICE = 'removalGoldPrice'
     __BUY_SETTINGS = {Currency.CREDITS: BUY_CREDITS_PRICE,
      Currency.GOLD: BUY_GOLD_PRICE,
      Currency.CRYSTAL: BUY_CRYSTAL_PRICE}
     __RENT_SETTINGS = {Currency.CREDITS: RENT_CREDITS_PRICE,
      Currency.GOLD: RENT_GOLD_PRICE}
+    __REMOVAL_SETTINGS = {Currency.CREDITS: REMOVAL_CREDITS_PRICE,
+     Currency.GOLD: REMOVAL_GOLD_PRICE}
 
     @classmethod
     def getRentSetting(cls, currency):
@@ -1044,6 +1048,10 @@ class CURRENCY_SETTINGS(object):
     def getBuySetting(cls, currency):
         return cls.__BUY_SETTINGS.get(currency, cls.BUY_CREDITS_PRICE)
 
+    @classmethod
+    def getRemovalSetting(cls, currency):
+        return cls.__REMOVAL_SETTINGS.get(currency, cls.REMOVAL_GOLD_PRICE)
+
 
 _OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
  CURRENCY_SETTINGS.RESTORE_PRICE: _CurrencySetting('#tooltips:vehicle/restore_price', icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
@@ -1052,7 +1060,9 @@ _OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TO
  CURRENCY_SETTINGS.RENT_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_MINRENTALSPRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
  CURRENCY_SETTINGS.RENT_GOLD_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_MINRENTALSPRICE, icons.gold(), text_styles.gold, ICON_TEXT_FRAMES.GOLD),
  CURRENCY_SETTINGS.SELL_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_SELL_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
- CURRENCY_SETTINGS.UNLOCK_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_UNLOCK_PRICE, icons.xp(), text_styles.expText, ICON_TEXT_FRAMES.XP)}
+ CURRENCY_SETTINGS.UNLOCK_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_UNLOCK_PRICE, icons.xp(), text_styles.expText, ICON_TEXT_FRAMES.XP),
+ CURRENCY_SETTINGS.REMOVAL_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
+ CURRENCY_SETTINGS.REMOVAL_GOLD_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE, icons.gold(), text_styles.gold, ICON_TEXT_FRAMES.GOLD)}
 
 def _getCurrencySetting(key):
     if key not in _OPERATIONS_SETTINGS:

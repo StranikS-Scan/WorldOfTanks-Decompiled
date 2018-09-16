@@ -45,6 +45,7 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.LOBBY_TECHTREE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.PERSONAL_CASE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_PREVIEW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.AUTHORS_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_BUY_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.FITTING_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOTCAMP_QUESTS_VIEW, self.loadViewByCtxEvent),

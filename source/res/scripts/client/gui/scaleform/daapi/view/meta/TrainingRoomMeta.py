@@ -97,14 +97,14 @@ class TrainingRoomMeta(View):
     def as_startCoolDownSwapButtonS(self, time):
         return self.flashObject.as_startCoolDownSwapButton(time) if self._isDAAPIInited() else None
 
-    def as_setPlayerStateInTeam1S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType):
-        return self.flashObject.as_setPlayerStateInTeam1(uid, stateString, vContourIcon, vShortName, vLevel, igrType) if self._isDAAPIInited() else None
+    def as_setPlayerStateInTeam1S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr):
+        return self.flashObject.as_setPlayerStateInTeam1(uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr) if self._isDAAPIInited() else None
 
-    def as_setPlayerStateInTeam2S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType):
-        return self.flashObject.as_setPlayerStateInTeam2(uid, stateString, vContourIcon, vShortName, vLevel, igrType) if self._isDAAPIInited() else None
+    def as_setPlayerStateInTeam2S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr):
+        return self.flashObject.as_setPlayerStateInTeam2(uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr) if self._isDAAPIInited() else None
 
-    def as_setPlayerStateInOtherS(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType):
-        return self.flashObject.as_setPlayerStateInOther(uid, stateString, vContourIcon, vShortName, vLevel, igrType) if self._isDAAPIInited() else None
+    def as_setPlayerStateInOtherS(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr):
+        return self.flashObject.as_setPlayerStateInOther(uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr) if self._isDAAPIInited() else None
 
     def as_setPlayerTagsInTeam1S(self, uid, tags):
         return self.flashObject.as_setPlayerTagsInTeam1(uid, tags) if self._isDAAPIInited() else None

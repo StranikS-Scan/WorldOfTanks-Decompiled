@@ -156,7 +156,7 @@ class EventsSettings(object):
 
         self.__events = []
 
-    def setData(self, rawData):
+    def setData(self, rawData, prefetchKeyArtBig=True):
         oldEvents = {event.getEventID():event for event in self.__events}
         self.__events = []
         if not self.__isDataStructureValid(rawData):
@@ -168,7 +168,7 @@ class EventsSettings(object):
                 eventSettings = EventSettings()
                 eventSettings.setData(event)
                 oldEvent = oldEvents.pop(eventSettings.getEventID(), None)
-                eventSettings.setImages(oldEvent.getImages() if oldEvent else {})
+                eventSettings.setImages(oldEvent.getImages() if oldEvent else {}, prefetchKeyArtBig)
                 self.__events.append(eventSettings)
 
             for event in oldEvents.values():
@@ -278,9 +278,9 @@ class EventSettings(object):
         self.__images = {}
         return
 
-    def setImages(self, images):
+    def setImages(self, images, prefetchKeyArtBig):
         self.__images = images
-        self.__prefetchImages()
+        self.__prefetchImages(prefetchKeyArtBig)
 
     def getImages(self):
         return self.__images
@@ -474,8 +474,9 @@ class EventSettings(object):
             return default
         return 'img://{}'.format(self.__images[url])
 
-    def __prefetchImages(self):
-        self.getKeyArtBig()
+    def __prefetchImages(self, prefetchKeyArtBig):
+        if prefetchKeyArtBig:
+            self.getKeyArtBig()
         self.getKeyArtSmall()
         self.getPromoBonuses()
 

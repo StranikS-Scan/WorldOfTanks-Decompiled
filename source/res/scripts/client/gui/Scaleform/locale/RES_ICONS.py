@@ -151,6 +151,8 @@ class RES_ICONS(object):
     MAPS_ICONS_ARTEFACT_BIG_HANDEXTINGUISHERS = '../maps/icons/artefact/big/handExtinguishers.png'
     MAPS_ICONS_ARTEFACT_BIG_LARGEMEDKIT = '../maps/icons/artefact/big/largeMedkit.png'
     MAPS_ICONS_ARTEFACT_BIG_LARGEREPAIRKIT = '../maps/icons/artefact/big/largeRepairkit.png'
+    MAPS_ICONS_AUTHORS_BG_EN = '../maps/icons/authors/bg_en.png'
+    MAPS_ICONS_AUTHORS_BG_RU = '../maps/icons/authors/bg_ru.png'
     MAPS_ICONS_AWARDS_BATTLESWORDS = '../maps/icons/awards/battleSwords.png'
     MAPS_ICONS_AWARDS_USSR_R127_T44_100_P = '../maps/icons/awards/ussr-R127_T44_100_P.png'
     MAPS_ICONS_AWARDS_VEHICLESRESEARCH = '../maps/icons/awards/vehiclesResearch.png'

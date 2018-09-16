@@ -479,7 +479,8 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__reset()
         if noRespawnPossible:
-            self.__removeListeners()
+            if not BigWorld.player().isObserver():
+                self.__removeListeners()
             self.as_switchToPosmortemS()
 
     def __onRespawnBaseMoving(self):

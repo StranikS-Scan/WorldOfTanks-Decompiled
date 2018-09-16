@@ -135,9 +135,12 @@ class MusicController(object):
         def isPlaying(self):
             return self.__event.isPlaying if self.__event is not None else False
 
-        def destroy(self):
+        def destroy(self, force=False):
             if self.__event is not None:
-                self.__event.unlink()
+                if force:
+                    self.__event.stop(5.0)
+                else:
+                    self.__event.unlink()
                 self.__event = None
                 self.__eventID = None
             return
@@ -199,9 +202,9 @@ class MusicController(object):
         musicEvent = self.__musicEvents[MusicController._MUSIC_EVENT]
         musicEvent.destroy()
 
-    def stopAmbient(self):
+    def stopAmbient(self, force=False):
         ambientEvent = self.__musicEvents[MusicController._AMBIENT_EVENT]
-        ambientEvent.destroy()
+        ambientEvent.destroy(force)
 
     def stop(self):
         self.stopAmbient()

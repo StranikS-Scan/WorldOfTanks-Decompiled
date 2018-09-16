@@ -12,6 +12,7 @@ class GRAPHICS(CONST_CONTAINER):
     BORDERLESS_SIZE = 'borderlessSize'
     REFRESH_RATE = 'refreshRate'
     GAMMA_SETTING = 'gammaSetting'
+    NATIVE_RESOLUTION = 'nativeResolution'
     VERTICAL_SYNC = 'vertSync'
     TRIPLE_BUFFERED = 'tripleBuffered'
     COLOR_BLIND = 'isColorBlind'

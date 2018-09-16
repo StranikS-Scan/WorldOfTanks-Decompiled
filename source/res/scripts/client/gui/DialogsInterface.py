@@ -7,7 +7,16 @@ from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDial
 
 @dialog
 def showDialog(meta, callback):
-    g_eventBus.handleEvent(events.ShowDialogEvent(meta, callback))
+
+    def cbwrapper(cb):
+
+        def callback(result):
+            Waiting.resume()
+            cb(result)
+
+        return callback
+
+    g_eventBus.handleEvent(events.ShowDialogEvent(meta, cbwrapper(callback)))
 
 
 @dialog

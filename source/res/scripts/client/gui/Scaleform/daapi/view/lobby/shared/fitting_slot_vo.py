@@ -25,8 +25,8 @@ class FittingSlotVO(dict):
         self['tooltipType'] = ttType
         self['slotType'] = slotType
         self['removable'] = True
-        module = self._prepareModule(modulesData, vehicle, slotType, slotId)
-        if module is None:
+        vehicleModule = self._prepareModule(modulesData, vehicle, slotType, slotId)
+        if vehicleModule is None:
             self['id'] = _SlotVOConstants.UNRESOLVED_LIST_INDEX
             self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
             if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
@@ -39,21 +39,21 @@ class FittingSlotVO(dict):
                 self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY
                 self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY
         else:
-            self['id'] = module.intCD
-            self['removable'] = module.isRemovable
-            self['moduleLabel'] = module.getGUIEmblemID()
+            self['id'] = vehicleModule.intCD
+            self['removable'] = vehicleModule.isRemovable
+            self['moduleLabel'] = vehicleModule.getGUIEmblemID()
         return
 
     def _prepareModule(self, modulesData, vehicle, slotType, slotId):
         if slotId is not None:
-            module = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
+            vehicleModule = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
             self['slotIndex'] = slotId
         else:
-            module = modulesData[0]
+            vehicleModule = modulesData[0]
             self['slotIndex'] = 0
-            self['level'] = module.level
-            self[EXTRA_MODULE_INFO] = module.getExtraIconInfo()
-        return module
+            self['level'] = vehicleModule.level
+            self[EXTRA_MODULE_INFO] = vehicleModule.getExtraIconInfo(vehicle.descriptor)
+        return vehicleModule
 
 
 class HangarFittingSlotVO(FittingSlotVO):

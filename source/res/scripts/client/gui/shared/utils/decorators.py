@@ -58,16 +58,7 @@ def dialog(func):
 
     def wrapper(*kargs, **kwargs):
         Waiting.suspend()
-
-        def cbwrapper(cb):
-
-            def callback(result):
-                Waiting.resume()
-                cb(result)
-
-            return callback
-
-        return async(func, 'callback', cbwrapper)(*kargs, **kwargs)
+        return async(func, 'callback')(*kargs, **kwargs)
 
     return wrapper
 

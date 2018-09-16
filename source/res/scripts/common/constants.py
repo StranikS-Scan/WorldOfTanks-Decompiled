@@ -24,6 +24,41 @@ IS_KOREA = CURRENT_REALM == 'KR'
 IS_SINGAPORE = CURRENT_REALM == 'ASIA'
 IS_SANDBOX = CURRENT_REALM == 'SB'
 IS_QUALIFIERS_ENABLED = False
+REALMS = frozenset(['RU',
+ 'EU',
+ 'NA',
+ 'ASIA',
+ 'CN',
+ 'KR',
+ 'CT',
+ 'ST',
+ 'QA',
+ 'DEV',
+ 'SB'])
+OVERRIDE_CODES = frozenset(['RU',
+ 'EU',
+ 'NA',
+ 'ASIA',
+ 'CN',
+ 'KR',
+ 'CT',
+ 'ST',
+ 'QA',
+ 'DEV',
+ 'SB',
+ 'PC'])
+
+class REALM_HELPER:
+
+    @staticmethod
+    def toRealm(override_code):
+        return override_code
+
+    @staticmethod
+    def toOverride(realm):
+        return realm
+
+
 if CURRENT_REALM == 'NA':
     DEFAULT_LANGUAGE = 'en'
     AUTH_REALM = 'NA'

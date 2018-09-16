@@ -241,7 +241,7 @@ def _doLog(category, msg, args=None, kwargs={}):
     tags = kwargs.pop('tags', None)
     logFunc(category, _addTagsToMsg(tags, output), None)
     if kwargs.get('stack', False):
-        traceback.print_stack()
+        traceback.print_stack(file=sys.stdout)
     return
 
 

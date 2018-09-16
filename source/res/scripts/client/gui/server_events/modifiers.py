@@ -21,7 +21,7 @@ _VEH_TYPE_IDX = 1
 _VEH_TYPE_NAME = ITEM_TYPE_NAMES[_VEH_TYPE_IDX]
 _DT = formatters.DISCOUNT_TYPE
 _MULTIPLIER = 'Multiplier'
-_COMMON_CRITERIA = REQ_CRITERIA.EMPTY | ~REQ_CRITERIA.HIDDEN
+_COMMON_CRITERIA = ~REQ_CRITERIA.HIDDEN
 
 class ACTION_MODIFIER_TYPE(CONST_CONTAINER):
     DISCOUNT = 1
@@ -598,8 +598,7 @@ class EconomicsSet(ActionModifier):
 
     def packDiscounts(self, sorting=True):
         data = self.parse()
-        for sectionName in data.keys():
-            value = data[sectionName]
+        for sectionName, value in data.iteritems():
             paramCtx = self._makeParamCtx(sectionName, value)
             wrappedName = paramCtx.getName()
             if wrappedName in self.__handlers:
@@ -1112,6 +1111,8 @@ class _C11nPrice(_ItemsPrice):
         namePattern = self._getParamPattern()
         if namePattern:
             patternLen = len(namePattern)
+            criteria = _COMMON_CRITERIA
+            items = self.itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria=criteria, nationID=nations.NONE_INDEX)
             for paramName in self._params:
                 if paramName.startswith(namePattern):
                     try:
@@ -1120,9 +1121,8 @@ class _C11nPrice(_ItemsPrice):
                         return result
 
                     priceGroup = self._params[paramName]
-                    criteria = _COMMON_CRITERIA | REQ_CRITERIA.CUSTOMIZATION.PRICE_GROUP(priceGroup)
-                    items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria)
-                    for item in items.itervalues():
+                    criteria = REQ_CRITERIA.CUSTOMIZATION.PRICE_GROUP(priceGroup)
+                    for item in filter(criteria, items.itervalues()):
                         result[item] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
 
         return result
@@ -1151,6 +1151,8 @@ class C11nPriceGroupPriceByTagMul(C11nPriceGroupPriceMul):
         namePattern = self._getParamPattern()
         if namePattern:
             patternLen = len(namePattern)
+            criteria = _COMMON_CRITERIA
+            items = self.itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria=criteria, nationID=nations.NONE_INDEX)
             for paramName in self._params:
                 if paramName.startswith(namePattern):
                     try:
@@ -1159,9 +1161,8 @@ class C11nPriceGroupPriceByTagMul(C11nPriceGroupPriceMul):
                         return result
 
                     tag = self._params[paramName]
-                    criteria = _COMMON_CRITERIA | REQ_CRITERIA.CUSTOMIZATION.PRICE_GROUP_TAG(tag)
-                    items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria)
-                    for item in items.itervalues():
+                    criteria = REQ_CRITERIA.CUSTOMIZATION.PRICE_GROUP_TAG(tag)
+                    for item in filter(criteria, items.itervalues()):
                         result[item] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
 
         return result
@@ -1225,5 +1226,27 @@ def compareModifiers(modName1, modName2):
     return 1 if modName2 not in _MODIFIERS_ORDER else _MODIFIERS_ORDER[modName1] - _MODIFIERS_ORDER[modName2]
 
 
+_g_cache = {}
+
+def _freeze(obj):
+    if isinstance(obj, dict):
+        return frozenset({key:_freeze(value) for key, value in obj.items()}.items())
+    if isinstance(obj, list):
+        return tuple([ _freeze(value) for value in obj ])
+    return obj
+
+
 def getModifierObj(name, params):
-    return _MODIFIERS_DICT[name](name, params) if name in _MODIFIERS_DICT else None
+    key = (name, _freeze(params))
+    if key in _g_cache:
+        return _g_cache[key]
+    else:
+        modifier = None
+        if name in _MODIFIERS_DICT:
+            modifier = _MODIFIERS_DICT[name](name, params)
+            _g_cache[key] = modifier
+        return modifier
+
+
+def clearModifiersCache():
+    _g_cache.clear()

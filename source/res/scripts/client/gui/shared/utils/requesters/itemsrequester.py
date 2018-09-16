@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
+import operator
 import constants
 import dossiers2
 import nations
@@ -60,16 +61,28 @@ class CompoundPredicateCondition(PredicateCondition):
         self.predicates = predicates
 
     def lookInInventory(self):
-        return all((predicate.lookInInventory() for predicate in self.predicates))
+        for predicate in self.predicates:
+            if not predicate.lookInInventory():
+                return False
+
+        return True
 
     def __call__(self, item):
-        return all((predicate(item) for predicate in self.predicates))
+        for predicate in self.predicates:
+            if not predicate(item):
+                return False
+
+        return True
 
 
 class NegativeCompoundPredicateCondition(CompoundPredicateCondition):
 
     def __call__(self, item):
-        return not super(NegativeCompoundPredicateCondition, self).__call__(item)
+        for predicate in self.predicates:
+            if not predicate(item):
+                return True
+
+        return False
 
 
 class IntCDProtector(object):
@@ -143,11 +156,11 @@ class VehsSuitableCriteria(RequestCriteria):
 class REQ_CRITERIA(object):
     EMPTY = RequestCriteria()
     CUSTOM = staticmethod(lambda predicate: RequestCriteria(PredicateCondition(predicate)))
-    HIDDEN = RequestCriteria(PredicateCondition(lambda item: item.isHidden))
-    SECRET = RequestCriteria(PredicateCondition(lambda item: item.isSecret))
+    HIDDEN = RequestCriteria(PredicateCondition(operator.attrgetter('isHidden')))
+    SECRET = RequestCriteria(PredicateCondition(operator.attrgetter('isSecret')))
     DISCLOSABLE = RequestCriteria(PredicateCondition(lambda item: item.inventoryCount > 0 or not item.isSecret))
-    UNLOCKED = RequestCriteria(PredicateCondition(lambda item: item.isUnlocked))
-    REMOVABLE = RequestCriteria(PredicateCondition(lambda item: item.isRemovable))
+    UNLOCKED = RequestCriteria(PredicateCondition(operator.attrgetter('isUnlocked')))
+    REMOVABLE = RequestCriteria(PredicateCondition(operator.attrgetter('isRemovable')))
     INVENTORY = RequestCriteria(InventoryPredicateCondition(lambda item: item.inventoryCount > 0))
     NATIONS = staticmethod(lambda nationIDs=nations.INDICES.keys(): RequestCriteria(PredicateCondition(lambda item: item.nationID in nationIDs)))
     INNATION_IDS = staticmethod(lambda innationIDs: RequestCriteria(PredicateCondition(lambda item: item.innationID in innationIDs)))
@@ -733,5 +746,5 @@ class ItemsRequester(IItemsRequester):
          self.__goodies,
          self.__vehicleRotation,
          self.ranked)
-        unsyncedList = [ r.__class__.__name__ for r in [ r for r in requesters if r.isSynced() ] ]
+        unsyncedList = [ r.__class__.__name__ for r in [ r for r in requesters if not r.isSynced() ] ]
         LOG_ERROR('Trying to create fitting item when requesters are not fully synced:', unsyncedList, stack=True)

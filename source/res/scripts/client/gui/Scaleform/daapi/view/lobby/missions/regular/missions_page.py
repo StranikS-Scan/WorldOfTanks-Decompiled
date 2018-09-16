@@ -345,7 +345,9 @@ class MissionView(MissionViewBase):
 
     def markVisited(self):
         super(MissionView, self).markVisited()
-        self.eventsCache.onEventsVisited()
+        quests = self.eventsCache.getAdvisableQuests()
+        counter = len(settings.getNewCommonEvents(quests.values()))
+        self.eventsCache.onEventsVisited({'missions': counter})
 
     def _populate(self):
         super(MissionView, self)._populate()

@@ -90,9 +90,9 @@ class _VehicleCustomizationAnchorsUpdater(object):
         self.__processedAnchors = set()
         return
 
-    def startUpdater(self):
+    def startUpdater(self, interfaceScale):
         if self.__vehicleCustomizationAnchors is None:
-            self.__vehicleCustomizationAnchors = GUI.WGVehicleCustomizationAnchors()
+            self.__vehicleCustomizationAnchors = GUI.WGVehicleCustomizationAnchors(interfaceScale)
         return
 
     def stopUpdater(self):
@@ -135,6 +135,9 @@ class _VehicleCustomizationAnchorsUpdater(object):
 
             self.__processedAnchors = processedObjectIds
         return
+
+    def setInterfaceScale(self, scale):
+        self.__vehicleCustomizationAnchors.setInterfaceScale(scale)
 
     def _delAllAnchors(self):
         if self.__vehicleCustomizationAnchors is not None:
@@ -552,8 +555,9 @@ class MainView(CustomizationMainViewMeta):
         self.__setBuyingPanelData()
         self.__setSeasonData()
         self._vehicleCustomizationAnchorsUpdater = _VehicleCustomizationAnchorsUpdater(self.service)
-        self._vehicleCustomizationAnchorsUpdater.startUpdater()
+        self._vehicleCustomizationAnchorsUpdater.startUpdater(self.settingsCore.interfaceScale.get())
         self.refreshOutfit()
+        self.settingsCore.interfaceScale.onScaleExactlyChanged += self.__onInterfaceScaleChanged
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.__updateCameraParalaxFlag()
 
@@ -562,6 +566,7 @@ class MainView(CustomizationMainViewMeta):
             self.__releaseItemSound()
             self.soundManager.playInstantSound(SOUNDS.EXIT)
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCore.interfaceScale.onScaleExactlyChanged -= self.__onInterfaceScaleChanged
         self._vehicleCustomizationAnchorsUpdater.stopUpdater()
         self._vehicleCustomizationAnchorsUpdater = None
         if self.__locatedOnEmbelem and g_hangarSpace.spaceInited:
@@ -728,16 +733,17 @@ class MainView(CustomizationMainViewMeta):
 
     def __setBuyingPanelData(self, *_):
         purchaseItems = self.getPurchaseItems()
-        cart = getTotalPurchaseInfo(purchaseItems)
-        totalPriceVO = getItemPricesVO(cart.totalPrice)
-        if cart.totalPrice != ITEM_PRICE_EMPTY:
+        cartInfo = getTotalPurchaseInfo(purchaseItems)
+        totalPriceVO = getItemPricesVO(cartInfo.totalPrice)
+        accountMoney = self.itemsCache.items.stats.money
+        if cartInfo.totalPrice != ITEM_PRICE_EMPTY:
             label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_BUY)
             self.as_showBuyingPanelS()
         else:
             label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_APPLY)
             self.as_hideBuyingPanelS()
-        isApplyEnabled = bool(cart.numTotal) or self._mode == C11nMode.CUSTOM and bool(self._originalStyle)
-        shortage = self.itemsCache.items.stats.money.getShortage(cart.totalPrice.price)
+        isApplyEnabled = cartInfo.minPriceItem.isDefined() and cartInfo.minPriceItem <= accountMoney or cartInfo.isAtLeastOneItemFromInventory or cartInfo.isAtLeastOneItemDismantled or self._mode == C11nMode.CUSTOM and bool(self._originalStyle)
+        shortage = self.itemsCache.items.stats.money.getShortage(cartInfo.totalPrice.price)
         self.as_setBottomPanelHeaderS({'buyBtnEnabled': isApplyEnabled,
          'buyBtnLabel': label,
          'enoughMoney': getItemPricesVO(ItemPrice(shortage, shortage))[0],
@@ -913,3 +919,8 @@ class MainView(CustomizationMainViewMeta):
     def __updateCameraParalaxFlag(self):
         paralaxEnabled = bool(self.settingsCore.getSetting(GAME.HANGAR_CAM_PARALLAX_ENABLED))
         self.as_setParallaxFlagS(paralaxEnabled)
+
+    def __onInterfaceScaleChanged(self, scale):
+        if self._vehicleCustomizationAnchorsUpdater is not None:
+            self._vehicleCustomizationAnchorsUpdater.setInterfaceScale(scale)
+        return

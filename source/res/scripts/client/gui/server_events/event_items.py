@@ -499,21 +499,36 @@ class Action(ServerEventAbstract):
 
     def getActions(self):
         result = {}
-        for stepData in self._data.get('steps'):
-            mName = stepData.get('name')
-            priority = stepData.get('priority')
-            params = stepData.get('params')
-            uiDecoration = stepData.get('uiDecoration')
-            m = getModifierObj(mName, params)
-            if m is None:
-                continue
-            modifiers = m.splitModifiers()
-            for modifier in modifiers:
-                if mName in result:
-                    result[mName].extend([ActionData(modifier, priority, uiDecoration)])
-                result[mName] = [ActionData(modifier, priority, uiDecoration)]
+        if 'steps' not in self._data:
+            return result
+        else:
+            for stepData in self._data['steps']:
+                if 'name' in stepData:
+                    mName = stepData['name']
+                else:
+                    mName = None
+                if 'priority' in stepData:
+                    priority = stepData['priority']
+                else:
+                    priority = None
+                if 'params' in stepData:
+                    params = stepData['params']
+                else:
+                    params = None
+                if 'uiDecoration' in stepData:
+                    uiDecoration = stepData['uiDecoration']
+                else:
+                    uiDecoration = None
+                m = getModifierObj(mName, params)
+                if m is None:
+                    continue
+                modifiers = m.splitModifiers()
+                for modifier in modifiers:
+                    if mName in result:
+                        result[mName].extend([ActionData(modifier, priority, uiDecoration)])
+                    result[mName] = [ActionData(modifier, priority, uiDecoration)]
 
-        return result
+            return result
 
     def getModifiers(self):
         result = {}

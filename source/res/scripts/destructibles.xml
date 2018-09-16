@@ -159,8 +159,8 @@
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_acacia_african_fall_med	</fractureEffect>
-      <touchdownEffect>	inf_tree_acacia_african_touchdown_med	</touchdownEffect>
+      <fractureEffect>	tree_Acacia_African_01_fall	</fractureEffect>
+      <touchdownEffect>	tree_Acacia_African_01_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Acacia_African/Acacia_African_02.srt	</filename>
@@ -169,8 +169,8 @@
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_acacia_african_fall_med	</fractureEffect>
-      <touchdownEffect>	inf_tree_acacia_african_touchdown_med	</touchdownEffect>
+      <fractureEffect>	tree_Acacia_African_01_fall	</fractureEffect>
+      <touchdownEffect>	tree_Acacia_African_01_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Apple/Apple_6m_Classic.srt	</filename>
@@ -293,84 +293,44 @@
       <touchdownEffect>	inf_appletree_touchdown	</touchdownEffect>
     </entry>
     <entry>
-      <filename>	vegetation/Broadleaves/Birch/Birch_16m.srt	</filename>
-      <health>	60	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_birch_fall_med	</fractureEffect>
-      <touchdownEffect>	inf_tree_birch_touchdown_med	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/Birch/Birch_17m.srt	</filename>
-      <health>	60	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_birch_fall_big	</fractureEffect>
-      <touchdownEffect>	inf_tree_birch_touchdown_big	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/Birch/Birch_bush_large_01.srt	</filename>
-      <health>	3	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Birch_Colored_bush_single_01_fall	</fractureEffect>
-      <touchdownEffect>	tree_Maple_Autumn_2m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/Birch/Birch_bush_small_01.srt	</filename>
-      <health>	3	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Birch_Colored_bush_single_01_fall	</fractureEffect>
-      <touchdownEffect>	tree_Maple_Autumn_2m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
       <filename>	vegetation/Broadleaves/BrokenTree_Burned/BrokenTree_Burned_02.srt	</filename>
-      <health>	20	</health>
+      <health>	15	</health>
       <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_BrokenTree_Burned_02_fall	</fractureEffect>
-      <touchdownEffect>	tree_BrokenTree_Burned_02_touchdown	</touchdownEffect>
+      <fractureEffect>	inf_deadtree_small_fall	</fractureEffect>
+      <touchdownEffect>	inf_deadtree_small_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/BrokenTree_Burned/BrokenTree_Burned_03.srt	</filename>
-      <health>	20	</health>
+      <health>	15	</health>
       <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_BrokenTree_Burned_03_fall	</fractureEffect>
-      <touchdownEffect>	tree_BrokenTree_Burned_03_touchdown	</touchdownEffect>
+      <fractureEffect>	inf_deadtree_small_fall	</fractureEffect>
+      <touchdownEffect>	inf_deadtree_small_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/BrokenTree_Burned/BrokenTree_Burned_04.srt	</filename>
-      <health>	20	</health>
+      <health>	15	</health>
       <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_BrokenTree_Burned_03_fall	</fractureEffect>
-      <touchdownEffect>	tree_BrokenTree_Burned_03_touchdown	</touchdownEffect>
+      <fractureEffect>	inf_deadtree_small_fall	</fractureEffect>
+      <touchdownEffect>	inf_deadtree_small_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/BrokenTree_Burned/BrokenTree_Burned_05.srt	</filename>
-      <health>	20	</health>
+      <health>	15	</health>
       <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_BrokenTree_Burned_03_fall	</fractureEffect>
-      <touchdownEffect>	tree_BrokenTree_Burned_03_touchdown	</touchdownEffect>
+      <fractureEffect>	inf_deadtree_small_fall	</fractureEffect>
+      <touchdownEffect>	inf_deadtree_small_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/BrokenTree/BrokenTree_02.srt	</filename>
@@ -384,13 +344,13 @@
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/BrokenTree/BrokenTree_01.srt	</filename>
-      <health>	20	</health>
+      <health>	3	</health>
       <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Maple_9m_dry_fall	</fractureEffect>
-      <touchdownEffect>	tree_Maple_9m_dry_touchdown	</touchdownEffect>
+      <fractureEffect>	tree_BrokenTree_Burned_02_fall	</fractureEffect>
+      <touchdownEffect>	tree_BrokenTree_Burned_02_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/BrokenTree/BrokenTree_03.srt	</filename>
@@ -431,46 +391,6 @@
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
       <fractureEffect>	tree_BrokenTree_Burned_02_fall	</fractureEffect>
       <touchdownEffect>	tree_BrokenTree_Burned_02_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/BrokenTree_Burned/BrokenTree_Burned_02.srt	</filename>
-      <health>	15	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_deadtree_small_fall	</fractureEffect>
-      <touchdownEffect>	inf_deadtree_small_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/BrokenTree_Burned/BrokenTree_Burned_03.srt	</filename>
-      <health>	15	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_deadtree_small_fall	</fractureEffect>
-      <touchdownEffect>	inf_deadtree_small_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/BrokenTree_Burned/BrokenTree_Burned_04.srt	</filename>
-      <health>	15	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_deadtree_small_fall	</fractureEffect>
-      <touchdownEffect>	inf_deadtree_small_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/BrokenTree_Burned/BrokenTree_Burned_05.srt	</filename>
-      <health>	15	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_deadtree_small_fall	</fractureEffect>
-      <touchdownEffect>	inf_deadtree_small_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Chestnut/Chestnut_4m.srt	</filename>
@@ -591,16 +511,6 @@
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
       <fractureEffect>	tree_Linden_Town_Dry_16m_fall	</fractureEffect>
       <touchdownEffect>	tree_Linden_Town_Dry_16m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/BrokenTree/BrokenTree_01.srt	</filename>
-      <health>	3	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_BrokenTree_Burned_02_fall	</fractureEffect>
-      <touchdownEffect>	tree_BrokenTree_Burned_02_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/DryTree/DryTree_Bush_var1.srt	</filename>
@@ -1105,37 +1015,37 @@
     <entry>
       <filename>	vegetation/Broadleaves/Shrubs/Bush_thorny_dry/Bush_thorny_dry_1m.srt	</filename>
       <health>	3	</health>
-      <density>	0.5	</density>
+      <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_bush_dry_fall_small	</fractureEffect>
-      <touchdownEffect>	inf_tree_bush_dry_touchdown_small	</touchdownEffect>
+      <fractureEffect>	none	</fractureEffect>
+      <touchdownEffect>	none	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Shrubs/Bush_thorny_dry/Bush_thorny_dry_3m.srt	</filename>
       <health>	3	</health>
-      <density>	0.5	</density>
+      <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_bush_dry_fall_small	</fractureEffect>
-      <touchdownEffect>	inf_tree_bush_dry_touchdown_small	</touchdownEffect>
+      <fractureEffect>	none	</fractureEffect>
+      <touchdownEffect>	none	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Shrubs/Bush_thorny_dry/Bush_thorny_dry_4m.srt	</filename>
       <health>	3	</health>
-      <density>	0.5	</density>
+      <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_bush_dry_fall	</fractureEffect>
-      <touchdownEffect>	inf_tree_bush_dry_touchdown	</touchdownEffect>
+      <fractureEffect>	none	</fractureEffect>
+      <touchdownEffect>	none	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Shrubs/Bush_thorny_dry/Bush_thorny_dry_1m_small.srt	</filename>
       <health>	3	</health>
-      <density>	0.5	</density>
+      <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
@@ -1195,16 +1105,6 @@
     <entry>
       <filename>	vegetation/Misc/Blackcurrant/Blackcurrant_02.srt	</filename>
       <health>	3	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	none	</fractureEffect>
-      <touchdownEffect>	none	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Misc/Dune_Grass/Dune_Grass_02.srt	</filename>
-      <health>	3	</health>
       <density>	0.50	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
@@ -1213,7 +1113,7 @@
       <touchdownEffect>	none	</touchdownEffect>
     </entry>
     <entry>
-      <filename>	vegetation/Misc/Blackcurrant/Blackcurrant_02.srt	</filename>
+      <filename>	vegetation/Misc/Dune_Grass/Dune_Grass_02.srt	</filename>
       <health>	3	</health>
       <density>	0.50	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
@@ -1983,46 +1883,6 @@
       <touchdownEffect>	none	</touchdownEffect>
     </entry>
     <entry>
-      <filename>	vegetation/Broadleaves/Shrubs/Bush_thorny_dry/Bush_thorny_dry_1m.srt	</filename>
-      <health>	3	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	none	</fractureEffect>
-      <touchdownEffect>	none	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/Shrubs/Bush_thorny_dry/Bush_thorny_dry_1m_small.srt	</filename>
-      <health>	3	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	none	</fractureEffect>
-      <touchdownEffect>	none	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/Shrubs/Bush_thorny_dry/Bush_thorny_dry_3m.srt	</filename>
-      <health>	3	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	none	</fractureEffect>
-      <touchdownEffect>	none	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/Shrubs/Bush_thorny_dry/Bush_thorny_dry_4m.srt	</filename>
-      <health>	3	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	none	</fractureEffect>
-      <touchdownEffect>	none	</touchdownEffect>
-    </entry>
-    <entry>
       <filename>	vegetation/Broadleaves/Shrubs/Hedge_Dry/Hedge_Dry_01.srt	</filename>
       <health>	3	</health>
       <density>	0.25	</density>
@@ -2464,7 +2324,7 @@
     </entry>
     <entry>
       <filename>	vegetation/Conifers/Spruce_Fall/Spruce_Fall_Dry_Bottom_10m.srt	</filename>
-      <health>	30	</health>
+      <health>	10	</health>
       <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
@@ -2531,36 +2391,6 @@
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
       <fractureEffect>	tree_Spruce_8m_fall	</fractureEffect>
       <touchdownEffect>	tree_Spruce_8m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Conifers/Spruce_Fall/Spruce_Fall_Dry_Bottom_10m.srt	</filename>
-      <health>	10	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Spruce_8m_fall	</fractureEffect>
-      <touchdownEffect>	tree_Spruce_8m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Conifers/Spruce_Fall/Spruce_Fall_24m.srt	</filename>
-      <health>	60	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Spruce_24m_fall	</fractureEffect>
-      <touchdownEffect>	tree_Spruce_24m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Conifers/Spruce_Fall/Spruce_Fall_ragged_24m.srt	</filename>
-      <health>	60	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Spruce_24m_fall	</fractureEffect>
-      <touchdownEffect>	tree_Spruce_24m_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Misc/GrapeVine/GrapeVine_01.srt	</filename>
@@ -2853,26 +2683,6 @@
       <touchdownEffect>	tree_Maple_Autumn_2m_touchdown	</touchdownEffect>
     </entry>
     <entry>
-      <filename>	vegetation/Broadleaves/Shrubs/Swamp_Reed/Swamp_reed_Cluster.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	none	</fractureEffect>
-      <touchdownEffect>	none	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/Shrubs/Swamp_Reed/Swamp_reed_bush.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	none	</fractureEffect>
-      <touchdownEffect>	none	</touchdownEffect>
-    </entry>
-    <entry>
       <filename>	vegetation/palms_cacti/AloeVera/AloeVera_01.srt	</filename>
       <health>	10	</health>
       <density>	0.5	</density>
@@ -2993,7 +2803,7 @@
       <touchdownEffect>	inf_tree_palm_fall_touchdown_small	</touchdownEffect>
     </entry>
     <entry>
-      <filename>	vegetation/palms_cacti/PheonixPalm/PheonixPalm_Decor_02.srt	</filename>
+      <filename>	vegetation/palms_cacti/PheonixPalm/PheonixPalm_Decor_01.srt	</filename>
       <health>	10	</health>
       <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
@@ -3003,84 +2813,14 @@
       <touchdownEffect>	inf_tree_scots_pine_touchdown_small	</touchdownEffect>
     </entry>
     <entry>
-      <filename>	vegetation/Misc/ivy/ivy_flat_01.srt	</filename>
-      <health>	3	</health>
+      <filename>	vegetation/palms_cacti/PheonixPalm/PheonixPalm_Decor_02.srt	</filename>
+      <health>	10	</health>
       <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Birch_Colored_bush_single_01_fall	</fractureEffect>
-      <touchdownEffect>	tree_Maple_Autumn_2m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Misc/ivy/ivy_ground_down_v1.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Birch_Colored_bush_single_01_fall	</fractureEffect>
-      <touchdownEffect>	tree_Maple_Autumn_2m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Misc/ivy/ivy_ground_down_v2.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Birch_Colored_bush_single_01_fall	</fractureEffect>
-      <touchdownEffect>	tree_Maple_Autumn_2m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Misc/ivy/ivy_ground_down_v3.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Birch_Colored_bush_single_01_fall	</fractureEffect>
-      <touchdownEffect>	tree_Maple_Autumn_2m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Misc/ivy/ivy_ground_up_v1.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Birch_Colored_bush_single_01_fall	</fractureEffect>
-      <touchdownEffect>	tree_Maple_Autumn_2m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Misc/ivy/ivy_left.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Birch_Colored_bush_single_01_fall	</fractureEffect>
-      <touchdownEffect>	tree_Maple_Autumn_2m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Misc/ivy/ivy_long.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Birch_Colored_bush_single_01_fall	</fractureEffect>
-      <touchdownEffect>	tree_Maple_Autumn_2m_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Misc/ivy/ivy_right.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Birch_Colored_bush_single_01_fall	</fractureEffect>
-      <touchdownEffect>	tree_Maple_Autumn_2m_touchdown	</touchdownEffect>
+      <fractureEffect>	inf_tree_scots_pine_fall_small	</fractureEffect>
+      <touchdownEffect>	inf_tree_scots_pine_touchdown_small	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/LyciumArabian_Semydry/LyciumArabian_small.srt	</filename>
@@ -3596,6 +3336,16 @@
       <effectScale>	1	</effectScale>
     </entry>
     <entry>
+      <filename>	content/Environment/hd_env_UNI_632_DoraEnv/normal/lod0/hd_env_UNI_632_DoraEnv_06.model	</filename>
+      <health>	20	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	inf_env201_Loudspeaker_fracture	</fractureEffect>
+      <touchdownEffect>	inf_env201_Loudspeaker_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	inf_env201_Loudspeaker_touchdown	</touchdownBreakEffect>
+      <effectScale>	1	</effectScale>
+    </entry>
+    <entry>
       <filename>	content/Environment/hd_env_EU_461_Decor/normal/lod0/hd_env_EU_461_Decor.model	</filename>
       <health>	5	</health>
       <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
@@ -4015,20 +3765,11 @@
       <hitEffect>	inf_env407_Clock1_01	</hitEffect>
     </entry>
     <entry>
-      <filename>	content/Environment/hd_env403_TownEnv/normal/lod0/hd_env403_TownEnv_WallLamp.model	</filename>
-      <health>	5	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	inf_env422_WallLamp	</effect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1	</effectScale>
-      <matName>	n_metal0	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
       <filename>	content/Environment/hd_env020_Boat/normal/lod0/hd_env020_Boat1.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_env020_boat_1_01	</effect>
+      <effectHP>	HP_module0	</effectHP>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
@@ -4186,21 +3927,23 @@
       <filename>	content/Environment/env_19_05_Barell/normal/lod0/env_19_05_Barell_2.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_env005_Tun_03	</effect>
+      <effect>	inf_env_19_05_Barell_2	</effect>
       <effectHP>	HP_module_0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood_0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
+      <hitEffect>	inf_env_19_05_Barell_2	</hitEffect>
     </entry>
     <entry>
       <filename>	content/Environment/env_19_05_Barell/normal/lod0/env_19_05_Barell_3.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_env005_Tun_04	</effect>
+      <effect>	inf_env_19_05_Barell_3	</effect>
       <effectHP>	HP_module_0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood_0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
+      <hitEffect>	inf_env_19_05_Barell_3	</hitEffect>
     </entry>
     <entry>
       <filename>	content/Environment/env_19_09_Bench_01-03/normal/lod0/env_19_09_Bench_01.model	</filename>
@@ -9107,7 +8850,8 @@
       <filename>	content/Environment/hd_env_EU_039_CityEnvironment/normal/lod0/hd_env_EU_039_CityEnvironment_09.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_envSU_83_03_OldFurniture_2_04	</effect>
+      <effect>	inf_env019_Rubbish3	</effect>
+      <hitEffect>	inf_env019_Rubbish3	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
@@ -9408,7 +9152,7 @@
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
-      <hitEffect>	none	</hitEffect>
+      <hitEffect>	inf_envAM_003_Dustbin_01	</hitEffect>
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_AM_003_Dustbin/normal/lod0/hd_env_AM_003_Dustbin_02.model	</filename>
@@ -9419,7 +9163,7 @@
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
-      <hitEffect>	none	</hitEffect>
+      <hitEffect>	inf_envAM_003_Dustbin_01_01	</hitEffect>
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_AM_003_Dustbin/normal/lod0/hd_env_AM_003_Dustbin_03.model	</filename>
@@ -9556,7 +9300,8 @@
       <filename>	content/Environment/hd_env_EU_443_ColumnEagle/normal/lod0/hd_env_EU_443_ColumnEagle.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gaf021_CastleArch_01	</effect>
+      <effect>	hd_env_EU_443_ColumnEagle	</effect>
+      <hitEffect>	hd_env_EU_443_ColumnEagle	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -9717,8 +9462,8 @@
       <filename>	content/Environment/hd_env_EU_443_ColumnEagle/normal/lod0/hd_env_EU_443_LinenFlag_right.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_bldSU_001_Outhouse_02	</effect>
-      <hitEffect>	none	</hitEffect>
+      <effect>	hd_env_EU_443_LinenFlag_right	</effect>
+      <hitEffect>	hd_env_EU_443_LinenFlag_right	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	d_stone0	</matName>
@@ -11277,11 +11022,12 @@
       <filename>	content/Environment/hd_env_EU_450_BridgeTrolley/normal/lod0/hd_env_EU_450_BridgeTrolley_Trolley_01.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	none	</effect>
+      <effect>	hd_mle_UNI_001_SdKfz	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
+      <hitEffect>	hd_mle_UNI_001_SdKfz	</hitEffect>
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_010_LittleBobbin/normal/lod0/hd_mle_UNI_010_LittleBobbin_01.model	</filename>
@@ -11419,8 +11165,8 @@
       <filename>	content/Environment/env_19_17_Gravestones/normal/lod0/env_19_17_Gravestones01.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_407_Clock_02_01	</effect>
-      <hitEffect>	none	</hitEffect>
+      <effect>	inf_envBR_005_Graves_1	</effect>
+      <hitEffect>	inf_envBR_005_Graves_1	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -11430,18 +11176,19 @@
       <filename>	content/Environment/env_19_17_Gravestones/normal/lod0/env_19_17_Gravestones02.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_407_Clock_02_02	</effect>
+      <effect>	inf_envBR_005_Graves_1	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
+      <hitEffect>	inf_envBR_005_Graves_1	</hitEffect>
     </entry>
     <entry>
       <filename>	content/Environment/env_19_17_Gravestones/normal/lod0/env_19_17_Gravestones03.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_407_Clock_02_03	</effect>
-      <hitEffect>	none	</hitEffect>
+      <effect>	inf_envBR_005_Graves_1	</effect>
+      <hitEffect>	inf_envBR_005_Graves_1	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -11717,6 +11464,28 @@
       <decayEffect>	none	</decayEffect>
       <effect>	inf_env030_MilkCans1_01	</effect>
       <hitEffect>	inf_env030_MilkCans1_01_hit	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env030_MilkCans/normal/lod0/hd_env030_MilkCans1.model	</filename>
+      <health>	5	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env030_MilkCans1_01	</effect>
+      <hitEffect>	inf_env030_MilkCans1_01_hit	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env403_TownEnv/normal/lod0/hd_env403_TownEnv_WallLamp.model	</filename>
+      <health>	5	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env422_WallLamp	</effect>
+      <hitEffect>	inf_env422_WallLamp	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>

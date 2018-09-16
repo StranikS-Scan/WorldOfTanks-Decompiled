@@ -61,6 +61,7 @@ class BattleReplay(object):
     isServerAim = property(lambda self: self.__replayCtrl.isServerAim)
     playerVehicleID = property(lambda self: self.__replayCtrl.playerVehicleID)
     isLoading = property(lambda self: self.__replayCtrl.getAutoStartFileName() is not None and self.__replayCtrl.getAutoStartFileName() != '')
+    isPaused = property(lambda self: self.__replayCtrl.playbackSpeed == 0)
     fps = property(lambda self: self.__replayCtrl.fps)
     ping = property(lambda self: self.__replayCtrl.ping)
     compressed = property(lambda self: self.__replayCtrl.isFileCompressed())

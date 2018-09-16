@@ -254,7 +254,7 @@ class ActionsBuilder(object):
         cards = self.__visibleCards[_VISIBLE_CARDS.ACTIONS]
         visitedCard = findFirst(lambda x: x.getID() == actionID, cards)
         if visitedCard:
-            visitEventGUI(visitedCard)
+            visitEventGUI(visitedCard, counters=(_getNewActiveActionsCounter,))
 
     @classmethod
     def _getAllVisibleDiscounts(cls, actions, entities, announced):
@@ -307,3 +307,7 @@ def getActiveActions(eventsCache):
 
 def getNewActiveActions(eventsCache):
     return [ info for info in getActiveActions(eventsCache) if info.getIsNew() ]
+
+
+def _getNewActiveActionsCounter(eventsCache):
+    return ('actions', len(getNewActiveActions(eventsCache)))

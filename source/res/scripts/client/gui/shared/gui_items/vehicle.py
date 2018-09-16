@@ -162,6 +162,10 @@ class Vehicle(FittingItem, HasStrCD):
         self._canTradeOff = False
         self._tradeOffPriceFactor = 0
         self._tradeOffPrice = MONEY_UNDEFINED
+        self._rotationGroupNum = 0
+        self._rotationBattlesLeft = 0
+        self._isRotationGroupLocked = False
+        self._isInfiniteRotationGroup = False
         self._customOutfits = {}
         self._styledOutfits = {}
         if self.isPremiumIGR:

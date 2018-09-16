@@ -128,7 +128,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         return
 
     def closeView(self):
-        self.__processBackClick()
+        event_dispatcher.showHangar()
 
     def onBackClick(self):
         self.__processBackClick()

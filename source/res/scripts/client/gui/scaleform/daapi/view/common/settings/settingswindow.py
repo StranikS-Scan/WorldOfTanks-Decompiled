@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsWindow.py
 import functools
+import BattleReplay
 import BigWorld
 import VOIP
 from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
@@ -39,6 +40,13 @@ def _getLastTabIndex():
 def _setLastTabIndex(idx):
     global _g_lastTabIdx
     _g_lastTabIdx = idx
+
+
+def _delayCall(delay, function):
+    if BattleReplay.g_replayCtrl.isPaused:
+        function()
+    else:
+        BigWorld.callback(delay, function)
 
 
 class SettingsWindow(SettingsWindowMeta):
@@ -101,12 +109,12 @@ class SettingsWindow(SettingsWindowMeta):
         if isRestart:
             BigWorld.savePreferences()
             if restartApproved:
-                BigWorld.callback(0.3, self.__restartGame)
+                _delayCall(0.3, self.__restartGame)
             elif self.settingsCore.isDeviseRecreated:
                 self.onRecreateDevice()
                 self.settingsCore.isDeviseRecreated = False
             else:
-                BigWorld.callback(0.0, functools.partial(BigWorld.changeVideoMode, -1, BigWorld.getWindowMode()))
+                _delayCall(0.0, functools.partial(BigWorld.changeVideoMode, -1, BigWorld.getWindowMode()))
         elif not isPresetApplied:
             DialogsInterface.showI18nInfoDialog('graphicsPresetNotInstalled', None)
         return

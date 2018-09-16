@@ -90,6 +90,12 @@ class IGunReloadingState(IGunReloadingSnapshot):
     def getSnapshot(self):
         raise NotImplementedError
 
+    def startPredictedReloading(self):
+        raise NotImplementedError
+
+    def stopPredicateReloading(self):
+        raise NotImplementedError
+
 
 @ReprInjector.simple(('_actualTime', 'actual'), ('_baseTime', 'base'), ('getTimePassed', 'timePassed'), ('isReloading', 'reloading'))
 class ReloadingTimeSnapshot(IGunReloadingSnapshot):
@@ -102,12 +108,6 @@ class ReloadingTimeSnapshot(IGunReloadingSnapshot):
         self._startTime = startTime
         self._updateTime = updateTime
         self._waitReloadingStartResponse = waitReloadingStartResponse
-
-    def startPredictedReloading(self):
-        self._waitReloadingStartResponse = True
-
-    def stopPredicateReloading(self):
-        self._waitReloadingStartResponse = False
 
     def clear(self):
         self._actualTime = 0.0
@@ -149,6 +149,12 @@ class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
     def getSnapshot(self):
         return ReloadingTimeSnapshot(actualTime=self._actualTime, baseTime=self._baseTime, startTime=self._startTime, updateTime=self._updateTime, waitReloadingStartResponse=self._waitReloadingStartResponse)
 
+    def startPredictedReloading(self):
+        self._waitReloadingStartResponse = True
+
+    def stopPredicateReloading(self):
+        self._waitReloadingStartResponse = False
+
     def setTimes(self, actualTime, baseTime):
         if actualTime > 0:
             if self._actualTime <= 0:
@@ -162,7 +168,7 @@ class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
             self._startTime = 0.0
             self._updateTime = 0.0
         if actualTime == 0:
-            self._waitReloadingStartResponse = False
+            self.stopPredicateReloading()
         self._actualTime = actualTime
         self._baseTime = baseTime
 
@@ -230,6 +236,12 @@ class ReloadingPercentState(IGunReloadingState):
 
     def isReloadingFinished(self):
         return self.getActualValue() == 0
+
+    def startPredictedReloading(self):
+        pass
+
+    def stopPredicateReloading(self):
+        pass
 
 
 _IGNORED_RELOADING_TIME = 0.15
@@ -402,8 +414,8 @@ class AmmoController(MethodsRules, IBattleController):
             clipCapacity = self.__gunSettings.clip.size
             canBeFull = shellCounts[0] >= clipCapacity
             lastShell = shellsInClip == clipCapacity - 1
-            loadingStart = timeLeft > 0.0
-            if loadingStart:
+            reloadStart = fabs(timeLeft - baseTime) < 0.001
+            if timeLeft > 0.0 and reloadStart:
                 self.__gunSettings.reloadEffect.onClipLoad(timeLeft, shellsInClip, lastShell, canBeFull)
             elif self.__gunSettings.clip.size == shellsInClip:
                 self.__gunSettings.reloadEffect.onFull()

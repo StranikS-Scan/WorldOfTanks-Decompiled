@@ -64,7 +64,6 @@ class EpicModeController(IEpicModeController):
         self.settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
 
     def __validateEpicRandomUsage(self):
-        return
         recomPreset = BigWorld.detectGraphicsPresetFromSystemSettings()
         currentVirtualMemory = BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_VIRTUAL_MEMORY)
         epicCtfEnabled = self.settingsCore.getSetting(GAME.GAMEPLAY_EPIC_STANDARD)

@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.lobby.store.actions_formatters import getActiveAct
 from gui.Scaleform.daapi.view.meta.StoreViewMeta import StoreViewMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.sounds.ambients import ShopEnv
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -58,13 +58,21 @@ class StoreView(StoreViewMeta):
         return
 
     def __addHandlers(self):
-        g_eventBus.addListener(events.LobbySimpleEvent.EVENTS_UPDATED, self.__onActionVisitedChange, scope=EVENT_BUS_SCOPE.DEFAULT)
+        self.eventsCache.onSyncCompleted += self.__updateActionsCounter
+        self.eventsCache.onEventsVisited += self.__onActionVisitedChange
 
     def __removeHandlers(self):
-        g_eventBus.removeListener(events.LobbySimpleEvent.EVENTS_UPDATED, self.__onActionVisitedChange, scope=EVENT_BUS_SCOPE.DEFAULT)
+        self.eventsCache.onSyncCompleted -= self.__updateActionsCounter
+        self.eventsCache.onEventsVisited -= self.__onActionVisitedChange
 
-    def __onActionVisitedChange(self, event):
-        self.__updateActionsCounter()
+    def __onActionVisitedChange(self, counters):
+        if 'actions' in counters:
+            counter = counters['actions']
+            if counter:
+                self.as_setBtnTabCountersS(({'componentId': STORE_CONSTANTS.STORE_ACTIONS,
+                  'count': str(counter)},))
+            else:
+                self.as_removeBtnTabCountersS((STORE_CONSTANTS.STORE_ACTIONS,))
 
     def __updateActionsCounter(self):
         newActions = getNewActiveActions(self.eventsCache)

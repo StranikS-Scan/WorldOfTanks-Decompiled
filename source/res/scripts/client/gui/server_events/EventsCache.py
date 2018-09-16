@@ -18,9 +18,8 @@ from gui.server_events import caches as quests_caches
 from gui.server_events.personal_missions_controller import PersonalMissionsController
 from gui.server_events.event_items import EventBattles, createQuest, createAction, MotiveQuest
 from gui.server_events.formatters import isMarathon, getLinkedActionID
-from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
+from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE, clearModifiersCache
 from gui.server_events.prefetcher import Prefetcher
-from gui.shared import events
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM as aei
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
@@ -68,6 +67,7 @@ class EventsCache(IEventsCache):
         self.onSelectedQuestsChanged = Event(self.__em)
         self.onSlotsCountChanged = Event(self.__em)
         self.onProgressUpdated = Event(self.__em)
+        self.onMissionVisited = Event(self.__em)
         self.onEventsVisited = Event(self.__em)
         self.onProfileVisited = Event(self.__em)
         self.onPersonalQuestsVisited = Event(self.__em)
@@ -138,6 +138,7 @@ class EventsCache(IEventsCache):
     @async
     @process
     def update(self, diff=None, callback=None):
+        clearModifiersCache()
         yield self.randomQuestsProgress.request()
         if not self.randomQuestsProgress.isSynced():
             callback(False)
@@ -581,8 +582,6 @@ class EventsCache(IEventsCache):
         self.__invalidateCompensations()
         self.onSyncCompleted()
         callback(True)
-        from gui.shared import g_eventBus
-        g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.EVENTS_UPDATED))
         return
 
     def __invalidateCompensations(self):
@@ -687,6 +686,8 @@ class EventsCache(IEventsCache):
         self.__actionsCache.clear()
         for storage in self.__cache.itervalues():
             storage.clear()
+
+        clearModifiersCache()
 
     def __getPersonalMissionsHiddenQuests(self):
         if not self.__personalMissionsHidden:

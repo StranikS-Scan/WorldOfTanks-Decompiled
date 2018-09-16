@@ -299,6 +299,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
         self.eventsCache.onSyncCompleted += self.__onEventsCacheResync
         self.eventsCache.onProgressUpdated += self.__onEventsCacheResync
+        self.eventsCache.onEventsVisited += self.__onEventsVisited
         self.eventsCache.onProfileVisited += self.__onProfileVisited
         self.eventsCache.onPersonalQuestsVisited += self.__onPersonalVisited
         self.boosters.onBoosterChangeNotify += self.__onUpdateGoodies
@@ -307,7 +308,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.LobbySimpleEvent.EVENTS_UPDATED, self.__onEventsVisited, scope=EVENT_BUS_SCOPE.DEFAULT)
         g_clientUpdateManager.addCurrencyCallback(Currency.CREDITS, self.__setCredits)
         g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.__setGold)
         g_clientUpdateManager.addCurrencyCallback(Currency.CRYSTAL, self.__setCrystal)
@@ -345,7 +345,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.LobbySimpleEvent.EVENTS_UPDATED, self.__onEventsVisited, scope=EVENT_BUS_SCOPE.DEFAULT)
         self.gameSession.onPremiumNotify -= self.__onPremiumTimeChanged
         self.wallet.onWalletStatusChanged -= self.__onWalletChanged
         self.igrCtrl.onIgrTypeChanged -= self.__onIGRChanged
@@ -752,16 +751,29 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.updateMoneyStats()
         self.updateXPInfo()
 
-    def __onEventsVisited(self, *args):
-        quests = self.eventsCache.getAdvisableQuests()
-        newQuests = quest_settings.getNewCommonEvents(quests.values())
-        if newQuests:
-            self.__setCounter(self.TABS.MISSIONS, len(newQuests))
+    def __onEventsVisited(self, counters=None):
+        if counters is not None:
+            if 'missions' in counters:
+                self.__onMissionVisited(counters['missions'])
+            if 'actions' in counters:
+                self.__onActionVisited(counters['actions'])
+        else:
+            quests = self.eventsCache.getAdvisableQuests()
+            counter = len(quest_settings.getNewCommonEvents(quests.values()))
+            self.__onMissionVisited(counter)
+            counter = len(getNewActiveActions(self.eventsCache))
+            self.__onActionVisited(counter)
+        return
+
+    def __onMissionVisited(self, counter):
+        if counter:
+            self.__setCounter(self.TABS.MISSIONS, counter)
         else:
             self.__hideCounter(self.TABS.MISSIONS)
-        newActions = getNewActiveActions(self.eventsCache)
-        if newActions:
-            self.__setCounter(self.TABS.STORE, len(newActions))
+
+    def __onActionVisited(self, counter):
+        if counter:
+            self.__setCounter(self.TABS.STORE, counter)
         else:
             self.__hideCounter(self.TABS.STORE)
 

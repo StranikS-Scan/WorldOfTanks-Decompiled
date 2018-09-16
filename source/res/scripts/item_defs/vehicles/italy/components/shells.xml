@@ -7,4 +7,48 @@
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
   </icons>
+  <_90mm_c_p_90_50_AP_T_T33E4>
+    <id>	0	</id>
+    <userString>	#italy_vehicles:_90mm_c_p_90_50_AP_T_T33E4	</userString>
+    <icon>	ap	</icon>
+    <price>	430	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_c_p_90_50_AP_T_T33E4>
+  <_90mm_c_p_90_50_HVAP_T_M332_T67>
+    <id>	1	</id>
+    <userString>	#italy_vehicles:_90mm_c_p_90_50_HVAP_T_M332_T67	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	11	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_c_p_90_50_HVAP_T_M332_T67>
+  <_90mm_c_g_90_50_HE_T_COMP_B_T91>
+    <id>	2	</id>
+    <userString>	#italy_vehicles:_90mm_c_g_90_50_HE_T_COMP_B_T91	</userString>
+    <icon>	he	</icon>
+    <price>	300	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_c_g_90_50_HE_T_COMP_B_T91>
 </shells.xml>

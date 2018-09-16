@@ -554,7 +554,11 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         return
 
     def __prepareOutfit(self):
-        self.__outfit = self.__outfit or Outfit(self.__vehicle.publicInfo['outfit'] if self.__vehicle else Outfit())
+        if self.__vehicle:
+            if self.__outfit.isEmpty():
+                self.__outfit = Outfit(self.__vehicle.publicInfo['outfit'])
+        else:
+            self.__outfit = Outfit()
         if not self.__vehicle.isPlayerVehicle and BigWorld.player().isC11nHistorical:
             if not self.__outfit.isHistorical():
                 self.__outfit = Outfit()

@@ -226,12 +226,13 @@ def packSaleTextParameterBlockData(name, saleData, actionStyle=ACTION_PRICE_CONS
     return packBlockDataItem(linkage, data, padding)
 
 
-def packActionTextParameterBlockData(name, value, icon, actionStyle=ACTION_PRICE_CONSTANTS.STATE_ALIGN_TOP, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ACTION_TEXT_PARAMETER_BLOCK_LINKAGE, padding=None, currency=None):
+def packActionTextParameterBlockData(name, value, icon, actionStyle=ACTION_PRICE_CONSTANTS.STATE_ALIGN_TOP, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ACTION_TEXT_PARAMETER_BLOCK_LINKAGE, padding=None, currency=None, valueWidth=-1):
     data = {'name': name,
      'value': value,
      'icon': icon,
      'actionStyle': actionStyle,
-     'currency': currency}
+     'currency': currency,
+     'valueWidth': valueWidth}
     return packBlockDataItem(linkage, data, padding)
 
 

@@ -472,7 +472,7 @@ class VehPriceActionInfo(ActionInfo):
             currency = price.getCurrency()
             buyPriceValue = price.get(currency)
             oldPriceValue = defaultPrice.get(currency)
-            block.append(self.__makePriceBlock(oldPriceValue, CURRENCY_SETTINGS.getBuySetting(currency), valueWidth=valueWidth))
+            block.append(self.__makePriceBlock(oldPriceValue, CURRENCY_SETTINGS.getBuySetting(currency), percent=0, valueWidth=valueWidth))
             block.append(self.__makePriceBlock(buyPriceValue, CURRENCY_SETTINGS.getBuySetting(currency), percent=actionPrc, valueWidth=valueWidth))
         return [formatters.packBuildUpBlockData(block, gap=2, padding=formatters.packPadding(top=-2))]
 
@@ -490,7 +490,7 @@ class VehPriceActionInfo(ActionInfo):
                     newPrice = MONEY_UNDEFINED.replace(settingsFrame, price)
                 else:
                     newPrice = Money(credits=price)
-                return formatters.packActionTextParameterBlockData(name=text_styles.main(_ms(TOOLTIPS.ACTIONPRICE_BUYPRICE_ACTIONPRICE, value=text_styles.expText(percent))), value=valueFormatted, icon=_getCurrencySetting(currencySetting).frame, padding=formatters.packPadding(left=20, bottom=-20), currency=newPrice.getCurrency())
+                return formatters.packActionTextParameterBlockData(name=text_styles.main(_ms(TOOLTIPS.ACTIONPRICE_BUYPRICE_ACTIONPRICE, value=text_styles.expText(percent))), value=valueFormatted, icon=_getCurrencySetting(currencySetting).frame, padding=formatters.packPadding(left=20, bottom=-20), currency=newPrice.getCurrency(), valueWidth=valueWidth)
             return formatters.packTextParameterWithIconBlockData(name=text_styles.main(_ms(TOOLTIPS.ACTIONPRICE_BUYPRICE_DEFAULTPRICE)), value=valueFormatted, icon=settings.frame, valueWidth=valueWidth)
             return
 
@@ -499,6 +499,24 @@ class VehRentActionInfo(VehPriceActionInfo):
 
     def getTriggerChainID(self):
         pass
+
+    def getAutoDescription(self, useBigIco=False):
+        vehs = self._getAdditionalDescriptionData(useBigIco)
+        vehsLen = len(vehs)
+        if vehsLen > 1:
+            rentDiscount = formatPercentValue(vehs[0]['discount'])
+            paramKey = 'two' if vehsLen == 2 else 'more'
+            vehicles = '{}, {}'.format(vehs[0]['title'], vehs[1]['title'])
+        elif vehsLen == 1:
+            paramKey = 'one'
+            vehicles = vehs[0]['title']
+            rentDiscount = vehs[0]['price']
+        else:
+            return ''
+        values = {'vehicles': vehicles,
+         'discount': rentDiscount}
+        paramName = '{}/{}'.format(self.discount.getParamName(), paramKey)
+        return self._getShortDescription(paramName, **values)
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
         return self._getFullDescription(self.discount.getParamName(), forHeroCard=forHeroCard)
@@ -911,12 +929,11 @@ def getAnnouncedActionInfo(info):
 
 
 def _parseAction(event):
-    result = []
     modifiers = event.getActions()
     for modifierName, modifierData in modifiers.iteritems():
         for actionData in modifierData:
             modifier = getModifierObj(modifierName, event, actionData)
-            if modifier:
-                result.append(modifier)
+            if modifier is not None:
+                yield modifier
 
-    return result
+    return

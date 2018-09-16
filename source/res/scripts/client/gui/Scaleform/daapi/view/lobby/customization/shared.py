@@ -12,6 +12,7 @@ from helpers import dependency
 from items.components.c11n_constants import SeasonType
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.shared import IItemsCache
+from gui.shared.money import Money
 
 class C11nMode(CONST_CONTAINER):
     STYLE, CUSTOM = range(2)
@@ -86,7 +87,7 @@ class PurchaseItem(object):
         self.isDismantling = isDismantling
 
 
-Cart = namedtuple('Cart', 'totalPrice numSelected numApplying numTotal')
+CartInfo = namedtuple('CartInfo', 'totalPrice numSelected numApplying numTotal minPriceItem isAtLeastOneItemFromInventory isAtLeastOneItemDismantled')
 
 class AdditionalPurchaseGroups(object):
     STYLES_GROUP_ID = -1
@@ -195,12 +196,21 @@ def getTotalPurchaseInfo(purchaseItems):
     totalPrice = ITEM_PRICE_EMPTY
     numSelectedItems = 0
     numApplyingItems = 0
+    isAtLeastOneItemFromInventory = False
+    isAtLeastOneItemDismantled = False
+    minPriceItem = Money()
     for purchaseItem in purchaseItems:
         if not purchaseItem.isDismantling:
             numApplyingItems += 1
+        else:
+            isAtLeastOneItemDismantled = True
         if purchaseItem.selected and not purchaseItem.isDismantling:
             numSelectedItems += 1
             if not purchaseItem.isFromInventory:
                 totalPrice += purchaseItem.price
+                if not minPriceItem.isDefined() or purchaseItem.price.price < minPriceItem:
+                    minPriceItem = purchaseItem.price.price
+            else:
+                isAtLeastOneItemFromInventory = True
 
-    return Cart(totalPrice, numSelectedItems, numApplyingItems, len(purchaseItems))
+    return CartInfo(totalPrice, numSelectedItems, numApplyingItems, len(purchaseItems), minPriceItem, isAtLeastOneItemFromInventory, isAtLeastOneItemDismantled)

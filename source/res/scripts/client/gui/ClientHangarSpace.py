@@ -23,11 +23,7 @@ _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
 
 def _getDefaultHangarPath(isPremium):
-    if isPremium:
-        template = '%s/hangar_v3'
-    else:
-        template = '%s/hangar_v3'
-    return template % _DEFAULT_SPACES_PATH
+    return '%s/hangar_v3' % _DEFAULT_SPACES_PATH
 
 
 def _getHangarPath(isPremium, isPremIGR):

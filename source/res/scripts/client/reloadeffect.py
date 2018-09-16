@@ -103,11 +103,6 @@ def playByName(soundName):
     SoundGroups.g_instance.playSound2D(soundName)
 
 
-def inTimeCallback(invokeTime, func, *args):
-    if fabs(invokeTime - BigWorld.time()) <= 0.1:
-        func(*args)
-
-
 class SimpleReload(CallbackDelayer):
     __slots__ = ('_desc', '_sound', '_startLoopT')
 
@@ -146,7 +141,7 @@ class SimpleReload(CallbackDelayer):
         self.stopCallback(self.__playSound)
         return
 
-    def onClipLoad(self):
+    def onClipLoad(self, timeLeft, shellsInClip, lastShell, canBeFull):
         pass
 
     def onFull(self):
@@ -183,6 +178,7 @@ class BarrelReload(SimpleReload):
         SoundGroups.g_instance.setSwitch('SWITCH_ext_rld_automat_caliber', self._desc.caliber)
         currentTime = BigWorld.time()
         if shellCount == 0:
+            self.stopCallback(self._startOneShoot)
             self.__reloadSequence.schedule(shellReloadTime, reloadShellCount)
             if reloadStart:
                 playByName(self._desc.startLong)
@@ -206,7 +202,7 @@ class BarrelReload(SimpleReload):
         self.stopCallback(self._startOneShoot)
         self.__reloadSequence.stop()
 
-    def onClipLoad(self):
+    def onClipLoad(self, timeLeft, shellsInClip, lastShell, canBeFull):
         pass
 
     def onFull(self):
@@ -241,6 +237,7 @@ class LoopSequence(CallbackDelayer):
         CallbackDelayer.destroy(self)
 
     def schedule(self, reloadD, shellCount):
+        self.stop()
         time = BigWorld.time()
         if BARREL_DEBUG_ENABLED:
             LOG_DEBUG('LoopSequence::schedule time = {0} end time = {1} duration = {2}'.format(BigWorld.time(), time + reloadD, reloadD))
@@ -260,9 +257,10 @@ class LoopSequence(CallbackDelayer):
         self.__start()
 
     def stop(self):
-        self.stopCallback(self.__start)
-        playByName(self.__stopLoop)
-        self.__sequence = []
+        self.stopCallback(self.__startCallback)
+        if self.__sequence:
+            playByName(self.__stopLoop)
+            self.__sequence = []
 
     def __start(self):
         if self.__sequence:
@@ -278,6 +276,8 @@ class LoopSequence(CallbackDelayer):
         else:
             invokeTime, name = self.__sequence.pop(0)
             if fabs(invokeTime - BigWorld.time()) > 0.1:
+                self.__sequence = []
+                playByName(self.__stopLoop)
                 return None
             if BARREL_DEBUG_ENABLED:
                 LOG_DEBUG('LoopSequence::__startCallback time = {0} {1}'.format(BigWorld.time(), name))
@@ -355,7 +355,7 @@ class AutoReload(CallbackDelayer):
             time = shellReloadTime - self._desc.duration
             if time < 0.0:
                 time = 0.0
-            self.delayCallback(time, inTimeCallback, BigWorld.time() + time, self.__onShellInTheBarrel, shellCount)
+            self.delayCallback(time, self.__onShellInTheBarrel, shellCount, BigWorld.time() + time)
             return
 
     def stop(self):
@@ -377,12 +377,12 @@ class AutoReload(CallbackDelayer):
             time = timeLeft - self._desc.clipShellLoadT
             if time < 0.0:
                 time = 0.0
-            self.delayCallback(time, inTimeCallback, BigWorld.time() + time, self.__onClipShellLoad)
+            self.delayCallback(time, self.__onClipShellLoad, BigWorld.time() + time)
         if lastShell and canBeFull:
             time = timeLeft - self._desc.almostCompleteT
             if time < 0.0:
                 time = 0.0
-            self.delayCallback(time, inTimeCallback, BigWorld.time() + time, self.__onAlmostComplete)
+            self.delayCallback(time, self.__onAlmostComplete, BigWorld.time() + time)
 
     def onFull(self):
         if BARREL_DEBUG_ENABLED:
@@ -392,24 +392,31 @@ class AutoReload(CallbackDelayer):
     def shotFail(self):
         playByName(self._desc.shotFail)
 
-    def __onShellInTheBarrel(self, shellCount):
-        if self._sound is not None:
-            self._sound.stop()
-            import BattleReplay
-            replayCtrl = BattleReplay.g_replayCtrl
-            if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
-                return
-            self._sound.play()
-            if shellCount == 1:
-                SoundGroups.g_instance.playSound2D(self._desc.lastShellAlert)
-        return
+    def __onShellInTheBarrel(self, shellCount, time):
+        if fabs(time - BigWorld.time()) > 0.1:
+            return
+        else:
+            if self._sound is not None:
+                self._sound.stop()
+                import BattleReplay
+                replayCtrl = BattleReplay.g_replayCtrl
+                if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+                    return
+                self._sound.play()
+                if shellCount == 1:
+                    SoundGroups.g_instance.playSound2D(self._desc.lastShellAlert)
+            return
 
-    def __onClipShellLoad(self):
+    def __onClipShellLoad(self, time):
+        if fabs(time - BigWorld.time()) > 0.1:
+            return
         if BARREL_DEBUG_ENABLED:
             LOG_DEBUG('AutoReload::__onClipShellLoad')
         playByName(self._desc.clipShellLoad)
 
-    def __onAlmostComplete(self):
+    def __onAlmostComplete(self, time):
+        if fabs(time - BigWorld.time()) > 0.1:
+            return
         if BARREL_DEBUG_ENABLED:
             LOG_DEBUG('AutoReload::__onAlmostComplete')
         self._almostCompleteSnd = SoundGroups.g_instance.getSound2D(self._desc.almostComplete)

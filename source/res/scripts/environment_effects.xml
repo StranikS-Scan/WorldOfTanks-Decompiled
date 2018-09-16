@@ -1450,6 +1450,16 @@
       <offset>	0.000000 0.500000 0.000000	</offset>
       <wwsound>	amb_map_burn_static_big	</wwsound>
     </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Olive/Olive_02.srt	</modelName>
+      <offset>	0.000000 2.500000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Olive/Olive_01.srt	</modelName>
+      <offset>	0.000000 2.500000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+    </model>
   </lightSounds>
   <birds>
     <seagull>
@@ -1537,7 +1547,7 @@
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	none	</effectName>
+        <effectName></effectName>
       </channel0>
       <point>
         <position>	-940.693848 79.603874 -205.296005	</position>
@@ -1575,7 +1585,7 @@
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	none	</effectName>
+        <effectName></effectName>
       </channel0>
       <point>
         <position>	-956.809021 70.000000 -177.919006	</position>
@@ -1607,7 +1617,7 @@
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	none	</effectName>
+        <effectName></effectName>
       </channel0>
       <point>
         <position>	-939.424927 66.193756 -239.983978	</position>
@@ -1645,7 +1655,7 @@
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	none	</effectName>
+        <effectName></effectName>
       </channel0>
       <point>
         <position>	-985.726929 46.210026 -289.222961	</position>
@@ -1683,7 +1693,7 @@
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	none	</effectName>
+        <effectName></effectName>
       </channel0>
       <point>
         <position>	-1017.909851 53.851635 -344.360962	</position>
@@ -1721,7 +1731,7 @@
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	none	</effectName>
+        <effectName></effectName>
       </channel0>
       <point>
         <position>	-1081.569946 72.733002 -195.132004	</position>
@@ -1759,7 +1769,7 @@
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	none	</effectName>
+        <effectName></effectName>
       </channel0>
       <point>
         <position>	-1053.270020 87.161003 -369.524994	</position>
@@ -2759,7 +2769,7 @@
         <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 20.000000	</alphaFadeDistances>
+        <alphaFadeDistances>	200.000000 200.000000	</alphaFadeDistances>
         <effectName>	particles/Environment/plane_engine_1.xml	</effectName>
         <effectHardpoint>	HP_0	</effectHardpoint>
         <wwsoundName>	aircraft_loop_01	</wwsoundName>
@@ -2801,7 +2811,25 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	742.185913 42.584751 509.227722	</position>
+        <position>	572.827148 85.268089 330.213654	</position>
+        <speed0>	30.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	741.637878 177.013107 667.080750	</position>
+        <speed0>	30.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	826.042969 464.809845 1344.679199	</position>
+        <speed0>	30.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	910.448364 480.347076 2329.663574	</position>
         <speed0>	30.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
         <animAction></animAction>
@@ -2815,7 +2843,7 @@
         <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 20.000000	</alphaFadeDistances>
+        <alphaFadeDistances>	200.000000 200.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_0	</effectHardpoint>
         <effectName>	particles/Environment/plane_engine_1.xml	</effectName>
         <wwsoundName>	aircraft_loop_01	</wwsoundName>

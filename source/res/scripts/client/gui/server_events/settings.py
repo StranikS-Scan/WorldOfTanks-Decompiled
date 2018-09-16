@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/settings.py
 import time
-from gui.shared import utils, events as gui_events, g_eventBus
+from gui.shared import utils
+from helpers import dependency
+from skeletons.gui.server_events import IEventsCache
 
 class _PMSettings(utils.SettingRecord):
 
@@ -72,7 +74,8 @@ def getNewCommonEvents(events):
     return [ e for e in events if isNewCommonEvent(e, settings) ]
 
 
-def visitEventGUI(event):
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def visitEventGUI(event, counters=(), eventsCache=None):
     if event is None:
         return
     else:
@@ -84,7 +87,12 @@ def visitEventGUI(event):
             isVisitedChanged = False
         if isNaVisitedChanged or isVisitedChanged:
             s.save()
-            g_eventBus.handleEvent(gui_events.LobbySimpleEvent(gui_events.LobbySimpleEvent.EVENTS_UPDATED))
+            converted = {}
+            for counter in counters:
+                key, value = counter(eventsCache)
+                converted[key] = value
+
+            eventsCache.onEventsVisited(converted)
         return
 
 

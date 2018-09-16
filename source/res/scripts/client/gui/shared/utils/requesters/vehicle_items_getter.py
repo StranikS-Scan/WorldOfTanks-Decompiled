@@ -136,7 +136,8 @@ def getItemsIterator(data, nationID=None, itemTypeID=None):
         for typeID in itemTypeIDs:
             getter = getters[typeID]
             for item in getter(nextID):
-                if item.compactDescr in prices:
-                    yield item.compactDescr
+                intCD = item.compactDescr
+                if intCD in prices:
+                    yield intCD
 
     return

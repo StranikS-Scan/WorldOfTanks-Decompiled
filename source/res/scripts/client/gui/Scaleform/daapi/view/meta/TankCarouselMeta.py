@@ -4,6 +4,9 @@ from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_environment impor
 
 class TankCarouselMeta(CarouselEnvironment):
 
+    def restoreTank(self):
+        self._printOverrideError('restoreTank')
+
     def buyTank(self):
         self._printOverrideError('buyTank')
 

@@ -151,6 +151,7 @@ class DIALOGS(object):
     CONFIRMMODULEDIALOG_REZULTLABEL1 = '#dialogs:confirmModuleDialog/rezultLabel1'
     BUYCONFIRMATION_TITLE = '#dialogs:buyConfirmation/title'
     BUYCONFIRMATION_MESSAGECOMBINE = '#dialogs:buyConfirmation/messageCombine'
+    BUYCONFIRMATION_MESSAGE = '#dialogs:buyConfirmation/message'
     BUYCONFIRMATION_SUBMIT = '#dialogs:buyConfirmation/submit'
     BUYCONFIRMATION_CANCEL = '#dialogs:buyConfirmation/cancel'
     XPTOTMENCHECKBOX_TITLE = '#dialogs:xpToTmenCheckbox/title'
@@ -1058,6 +1059,7 @@ class DIALOGS(object):
      CONFIRMMODULEDIALOG_REZULTLABEL1,
      BUYCONFIRMATION_TITLE,
      BUYCONFIRMATION_MESSAGECOMBINE,
+     BUYCONFIRMATION_MESSAGE,
      BUYCONFIRMATION_SUBMIT,
      BUYCONFIRMATION_CANCEL,
      XPTOTMENCHECKBOX_TITLE,

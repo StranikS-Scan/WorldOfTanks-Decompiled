@@ -9,19 +9,25 @@ from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContex
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
 from gui.ingame_shop import showBuyGoldForSlot
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showStorage, showOldShop
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 class TankCarousel(TankCarouselMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    restoreCtrl = dependency.descriptor(IRestoreController)
 
     def __init__(self):
         super(TankCarousel, self).__init__()
@@ -37,6 +43,17 @@ class TankCarousel(TankCarouselMeta):
             ctx = {'tabId': STORE_TYPES.SHOP,
              'component': STORE_CONSTANTS.VEHICLE}
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE_OLD, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+
+    def restoreTank(self):
+        serverSettings = self.lobbyContext.getServerSettings()
+        storageEnabled = serverSettings.isIngameStorageEnabled()
+        shopEnabled = isIngameShopEnabled()
+        if storageEnabled and shopEnabled:
+            showStorage(STORAGE_CONSTANTS.IN_HANGAR, STORAGE_CONSTANTS.VEHICLES_TAB_RESTORE)
+        else:
+            ctx = {'tabId': STORE_TYPES.SHOP,
+             'component': STORE_CONSTANTS.RESTORE_VEHICLE}
+            showOldShop(ctx=ctx)
 
     def buySlot(self):
         self.__buySlot()
@@ -72,6 +89,8 @@ class TankCarousel(TankCarouselMeta):
     def _populate(self):
         super(TankCarousel, self)._populate()
         g_playerEvents.onBattleResultsReceived += self.__onFittingUpdate
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onFittingUpdate
+        self.restoreCtrl.onRestoreChangeNotify += self.__onFittingUpdate
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
         g_clientUpdateManager.addCallbacks({'stats.credits': self.__onFittingUpdate,
          'stats.gold': self.__onFittingUpdate,
@@ -86,6 +105,8 @@ class TankCarousel(TankCarouselMeta):
 
     def _dispose(self):
         g_playerEvents.onBattleResultsReceived -= self.__onFittingUpdate
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onFittingUpdate
+        self.restoreCtrl.onRestoreChangeNotify -= self.__onFittingUpdate
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(TankCarousel, self)._dispose()

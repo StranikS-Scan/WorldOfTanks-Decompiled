@@ -160,8 +160,9 @@ def showOldShop(ctx=None):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE_OLD, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showStorage(defaultSection=STORAGE_CONSTANTS.FOR_SELL):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORAGE, ctx={'defaultSection': defaultSection}), scope=EVENT_BUS_SCOPE.LOBBY)
+def showStorage(defaultSection=STORAGE_CONSTANTS.FOR_SELL, tabId=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORAGE, ctx={'defaultSection': defaultSection,
+     'defaultTab': tabId}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None):

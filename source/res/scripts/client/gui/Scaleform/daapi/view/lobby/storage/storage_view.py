@@ -41,8 +41,15 @@ class StorageView(LobbySubView, StorageViewMeta):
         self.__showDummyScreen = False
         self.__isItemsForSellEmpty = self.__getItemsForSellEmpty()
         self.__activeSectionIdx = 0
-        self.__switchSection(sectionName=(ctx or {}).get('defaultSection', STORAGE_CONSTANTS.FOR_SELL), skipRefresh=True)
+        self.__activeTab = None
+        self.__switchSection(sectionName=(ctx or {}).get('defaultSection', STORAGE_CONSTANTS.FOR_SELL), sectionTab=(ctx or {}).get('defaultTab'), skipRefresh=True)
         self.__addHandlers()
+        return
+
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        super(StorageView, self)._onRegisterFlashComponent(viewPy, alias)
+        if alias == STORAGE_CONSTANTS.IN_HANGAR_VIEW:
+            viewPy.setActiveTab(self.__activeTab)
 
     def onClose(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -89,7 +96,7 @@ class StorageView(LobbySubView, StorageViewMeta):
         if diff:
             self.__isItemsForSellEmpty = self.__getItemsForSellEmpty()
 
-    def __switchSection(self, sectionName, skipRefresh=False):
+    def __switchSection(self, sectionName, sectionTab=None, skipRefresh=False):
         if sectionName == STORAGE_CONSTANTS.FOR_SELL and self.__isItemsForSellEmpty:
             sectionName = STORAGE_CONSTANTS.STORAGE
         for i, section in enumerate(self.sections):
@@ -99,6 +106,7 @@ class StorageView(LobbySubView, StorageViewMeta):
 
         if not skipRefresh:
             self.as_selectSectionS(self.__activeSectionIdx)
+        self.__activeTab = sectionTab
 
     def __getItemsForSellEmpty(self):
         invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()

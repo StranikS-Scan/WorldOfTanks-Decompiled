@@ -71,6 +71,18 @@ def _formatImagePaths(item):
      'large': _pathsanitize(item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_LARGE))}
 
 
+def _formatVehicleRestore(item):
+    if item.hasLimitedRestore():
+        restoreInfo = item.restoreInfo
+        restorePrice = item.restorePrice
+        currency = restorePrice.getCurrency()
+        restoreEndDate = time_utils.timestampToISO(restoreInfo.changedAt + restoreInfo.getRestoreTimeLeft())
+        return {'price': {currency: restorePrice.getSignValue(currency)},
+         'endDate': restoreEndDate}
+    else:
+        return None
+
+
 Field = namedtuple('Field', ('name', 'getter'))
 idField = Field('id', lambda i: i.intCD)
 nameField = Field('name', lambda i: _strsanitize(i.userName))
@@ -128,6 +140,7 @@ def makeVehicleFormatter(includeInventoryFields=False, itemsCache=None):
     levelField = Field('level', lambda i: i.level)
     isUnlockedField = Field('isUnlocked', lambda i: i.isUnlocked)
     shortName = Field('shortName', lambda i: _strsanitize(i.shortUserName))
+    restore = Field('restore', _formatVehicleRestore)
 
     def isTradeInAvailable(vehicle):
         tradeIn = itemsCache.items.shop.tradeIn
@@ -151,7 +164,8 @@ def makeVehicleFormatter(includeInventoryFields=False, itemsCache=None):
      sellPriceField,
      isUnlockedField,
      imagesField,
-     isTradeInAvailableField]
+     isTradeInAvailableField,
+     restore]
     if includeInventoryFields:
         shellFormatter = makeShellFormatter(includeCount=True)
         shellsField = Field('shells', lambda i: [ shellFormatter.format(s) for s in i.shells ])

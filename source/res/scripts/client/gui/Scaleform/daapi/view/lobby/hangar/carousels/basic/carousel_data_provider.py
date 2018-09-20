@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/carousel_data_provider.py
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider, getStatusStrings
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import getStatusStrings
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -9,11 +10,14 @@ from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 
 class _SUPPLY_ITEMS(object):
     BUY_TANK = 0
-    BUY_SLOT = 1
-    ALL = (BUY_TANK, BUY_SLOT)
+    RESTORE_TANK = 1
+    BUY_SLOT = 2
+    ALL = (BUY_TANK, RESTORE_TANK, BUY_SLOT)
 
 
 class HangarCarouselDataProvider(CarouselDataProvider):
@@ -23,6 +27,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._baseCriteria = REQ_CRITERIA.INVENTORY
         self._supplyItems = []
         self._emptySlotsCount = 0
+        self._restorableVehiclesCount = 0
 
     @property
     def collection(self):
@@ -47,9 +52,15 @@ class HangarCarouselDataProvider(CarouselDataProvider):
 
     def _getAdditionalItemsIndexes(self):
         supplyIndices = self.__getSupplyIndices()
+        serverSettings = dependency.instance(ILobbyContext).getServerSettings()
+        restoreEnabled = serverSettings.isVehicleRestoreEnabled()
+        storageEnabled = serverSettings.isIngameStorageEnabled()
+        pruneIndices = set()
         if not self._emptySlotsCount:
-            supplyIndices.pop(_SUPPLY_ITEMS.BUY_TANK)
-        return supplyIndices
+            pruneIndices.add(_SUPPLY_ITEMS.BUY_TANK)
+        if self._restorableVehiclesCount == 0 or not restoreEnabled or not storageEnabled and isIngameShopEnabled():
+            pruneIndices.add(_SUPPLY_ITEMS.RESTORE_TANK)
+        return [ suppIdx for suppIdx in supplyIndices if supplyIndices.index(suppIdx) not in pruneIndices ]
 
     def _buildSupplyItems(self):
         self._supplyItems = []
@@ -58,19 +69,28 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         vehicles = self.getTotalVehiclesCount()
         slotPrice = items.shop.getVehicleSlotsPrice(slots)
         defaultSlotPrice = items.shop.defaults.getVehicleSlotsPrice(slots)
+        self._emptySlotsCount = slots - vehicles
+        criteria = REQ_CRITERIA.IN_CD_LIST(items.recycleBin.getVehiclesIntCDs()) | REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE
+        self._restorableVehiclesCount = len(items.getVehicles(criteria))
         if slotPrice != defaultSlotPrice:
             discount = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'slotsPrices', True, Money(gold=slotPrice), Money(gold=defaultSlotPrice))
         else:
             discount = None
-        self._emptySlotsCount = slots - vehicles
         smallBuySlotString, buySlotString = getStatusStrings('buySlot')
         smallBuyTankString, buyTankString = getStatusStrings('buyTank')
+        smallRestoreTankString, restoreTankString = getStatusStrings('restoreTank')
+        smallRestoreTankCountString, restoreTankCountString = getStatusStrings('restoreTankCount', style=text_styles.main, ctx={'count': self._restorableVehiclesCount})
         smallEmptySlotsString, emptySlotsString = getStatusStrings('buyTankEmptyCount', style=text_styles.main, ctx={'count': self._emptySlotsCount})
         self._supplyItems.append({'buyTank': True,
          'smallInfoText': text_styles.concatStylesToMultiLine(smallBuyTankString, smallEmptySlotsString),
          'infoText': text_styles.concatStylesToMultiLine(buyTankString, emptySlotsString),
          'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK,
          'tooltip': TOOLTIPS.TANKS_CAROUSEL_BUY_VEHICLE_NEW if isIngameShopEnabled() else TOOLTIPS.TANKS_CAROUSEL_BUY_VEHICLE})
+        self._supplyItems.append({'restoreTank': True,
+         'smallInfoText': text_styles.concatStylesToMultiLine(smallRestoreTankString, smallRestoreTankCountString),
+         'infoText': text_styles.concatStylesToMultiLine(restoreTankString, restoreTankCountString),
+         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK,
+         'tooltip': TOOLTIPS.TANKS_CAROUSEL_RESTORE_VEHICLE})
         buySlotVO = {'buySlot': True,
          'slotPrice': slotPrice,
          'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_SLOT,

@@ -4,8 +4,11 @@ import time
 from collections import namedtuple
 import BigWorld
 from CurrentVehicle import g_currentPreviewVehicle
+from adisp import process
+from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.vehicle_preview_dp import DefaultVehPreviewDataProvider
@@ -20,7 +23,7 @@ from gui.ingame_shop import canBuyGoldForVehicleThroughWeb, showBuyVehicleOverla
 from gui.shared import event_dispatcher
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.economics import getGUIPrice
-from gui.shared.formatters import icons, text_styles
+from gui.shared.formatters import icons, text_styles, formatPrice
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
@@ -69,14 +72,17 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         self.__timeLeftIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIME_ICON, 16, 16)
         return
 
+    @process
     def onBuyOrResearchClick(self):
         vehicle = g_currentPreviewVehicle.item
         if self.__packItems is not None:
-            goldPrice = self.__packPrice.get(Currency.GOLD, 0)
-            if goldPrice > self.itemsCache.items.stats.gold:
-                showBuyGoldForBundle(goldPrice, self.__buyParams)
-            else:
-                showBuyVehicleOverlay(self.__buyParams)
+            requestConfirmed = yield self.__requestConfirmation()
+            if requestConfirmed:
+                goldPrice = self.__packPrice.get(Currency.GOLD, 0)
+                if goldPrice > self.itemsCache.items.stats.gold:
+                    showBuyGoldForBundle(goldPrice, self.__buyParams)
+                else:
+                    showBuyVehicleOverlay(self.__buyParams)
         elif canBuyGoldForVehicleThroughWeb(vehicle):
             event_dispatcher.showVehicleBuyDialog(vehicle)
         elif self.__isHeroTank:
@@ -164,6 +170,10 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         self.__stopTimer()
         super(VehiclePreviewBuyingPanel, self)._dispose()
+
+    def __requestConfirmation(self):
+        return DialogsInterface.showDialog(meta=I18nConfirmDialogMeta(key='buyConfirmation', messageCtx={'product': self.__packTitle or '"This Pack"',
+         'price': formatPrice(self.__packPrice, reverse=True, useIcon=True)}, focusedID=DIALOG_BUTTON_ID.SUBMIT))
 
     def __onVehicleLoading(self, _):
         vehicle = g_currentPreviewVehicle.item

@@ -1730,6 +1730,7 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_ICON_ALERT_90X84 = '../maps/icons/library/icon_alert_90x84.png'
     MAPS_ICONS_LIBRARY_ICON_BUTTON_LIST = '../maps/icons/library/icon_button_list.png'
     MAPS_ICONS_LIBRARY_ICON_PROXY_16X16 = '../maps/icons/library/icon_proxy_16x16.png'
+    MAPS_ICONS_LIBRARY_ICON_SAND_WATCH = '../maps/icons/library/icon_sand_watch.png'
     MAPS_ICONS_LIBRARY_IGRLOGO = '../maps/icons/library/igrLogo.png'
     MAPS_ICONS_LIBRARY_IGR_32X13 = '../maps/icons/library/igr_32x13.png'
     MAPS_ICONS_LIBRARY_INFO = '../maps/icons/library/info.png'

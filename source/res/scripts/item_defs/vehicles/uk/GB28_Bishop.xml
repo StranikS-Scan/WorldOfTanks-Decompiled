@@ -71,45 +71,72 @@
       <collisionModelServer>	vehicles/british/GB28_Bishop/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB28_Bishop/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/british/GB28_Bishop/Bishop_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	1.40733 0.039529 2.2792	</rayStart>
         <rayEnd>	1.20415 -0.0126872 2.28858	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.17907 1.41133 -0.011261	</rayStart>
         <rayEnd>	-0.779064 1.41133 -0.011261	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.507738 1.50061 1.32211	</rayStart>
         <rayEnd>	0.505285 1.42274 1.1778	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-1.17906 0.985292 0.173218	</rayStart>
         <rayEnd>	-0.77906 0.985292 0.173218	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.76	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.5267 0.0429393 0.552137	</rayStart>
         <rayEnd>	1.1415 -0.0647779 0.55614	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.76	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/british/GB28_Bishop/Bishop_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	10	</slotId>
+        <anchorPosition>	0.000015 0.567816 -1.55039	</anchorPosition>
+        <anchorDirection>	-0.000001 0.614012 -0.789297	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_GB28_Bishop>
@@ -1123,6 +1150,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	-0.000000 2.6036 0.281732	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB28_Bishop>
     <Chassis_GB28_Bishop_2>
       <userString>	#gb_vehicles:Chassis_GB28_Bishop_2	</userString>
@@ -2131,6 +2172,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	0.000110269 2.60386 0.28189	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB28_Bishop_2>
   </chassis>
   <turrets0>
@@ -2190,16 +2245,32 @@
             <collisionModelServer>	vehicles/british/GB28_Bishop/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB28_Bishop/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.000000 -0.0158268 0.943328	</rayStart>
               <rayEnd>	-0.00894572 -0.223804 0.94333	</rayEnd>
               <rayUp>	0.074 0.072 5	</rayUp>
               <size>	0.301	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	0.000000 -0.00791311 0.825926	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.25 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2231,17 +2302,33 @@
             <collisionModelServer>	vehicles/british/GB28_Bishop/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB28_Bishop/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_large_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	-0.000047 -0.0171885 0.565598	</rayStart>
               <rayEnd>	-0.00715911 -0.0166205 0.564287	</rayEnd>
               <rayUp>	0.08 0.079 4	</rayUp>
               <size>	0.263	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_large_mb	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	13	</slotId>
+              <anchorPosition>	-0.000024 -0.000638723 0.677194	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.43 0.25 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2257,10 +2344,15 @@
         <collisionModelClient>	vehicles/british/GB28_Bishop/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 -0.013365 -0.057149	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_GB28_Bishop>
   </turrets0>
   <engines>

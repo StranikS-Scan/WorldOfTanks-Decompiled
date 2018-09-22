@@ -70,23 +70,35 @@
       <collisionModelServer>	vehicles/german/G06_PzII/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G06_PzII/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G06_PzII/PzII_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.226255 0.269283 1.77373	</rayStart>
         <rayEnd>	-0.226255 0.117566 1.72291	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.22	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.16511 0.26086 2.17672	</rayStart>
         <rayEnd>	-0.16511 -0.118428 2.04969	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.54	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G06_PzII/PzII_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2.14 2.14 0.000000 0.000000	</tiling>
     </camouflage>
@@ -258,9 +270,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1149	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -350,6 +359,12 @@
           <name>	Track_VD_R1	</name>
         </node>
       </trackNodes>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </PzII_ketten_Ausf_A_bot>
   </chassis>
   <turrets0>
@@ -419,6 +434,12 @@
             <collisionModelServer>	vehicles/german/G06_PzII/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G06_PzII/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
           </camouflage>
@@ -434,18 +455,27 @@
         <collisionModelClient>	vehicles/german/G06_PzII/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.1458 0.263255 0.6217	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 0.985 0.000 0.828 -0.060 0.867 0.448 0.108 0.500 0.291 0.500 0.182 0.742 0.246	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.73118 0.30574 0.28051	</rayStart>
           <rayEnd>	-0.546821 0.230472 0.261902	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 0.985 0.000 0.828 -0.060 0.867 0.448 0.108 0.500 0.291 0.500 0.182 0.742 0.246	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <exclusionMask>	vehicles/german/G06_PzII/PzII_turret_01_AM.dds	</exclusionMask>
         <tiling>	1 0.49 0.000000 0.000000	</tiling>

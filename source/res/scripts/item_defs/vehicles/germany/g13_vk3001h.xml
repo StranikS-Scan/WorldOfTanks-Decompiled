@@ -72,23 +72,41 @@
       <collisionModelServer>	vehicles/german/G13_VK3001H/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G13_VK3001H/VK3001H_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.0239569 0.482634 1.86625	</rayStart>
         <rayEnd>	0.0239569 0.418905 1.47135	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.440231 0.305331 2.22452	</rayStart>
         <rayEnd>	-0.440231 0.107055 2.19832	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.78	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G13_VK3001H/VK3001H_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	21	</slotId>
+        <anchorPosition>	0.000000 0.575788 -2.07696	</anchorPosition>
+        <anchorDirection>	0.000000 0.26715 -0.963655	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <VK3001H>
@@ -241,9 +259,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	900	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -751,6 +766,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	19	</slotId>
+          <anchorPosition>	0.000165052 2.42319 -0.121398	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </VK3001H>
     <VK3001H_ausf_B>
       <userString>	#germany_vehicles:VK3001H_ausf_B	</userString>
@@ -899,9 +928,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	900	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -1409,6 +1435,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	20	</slotId>
+          <anchorPosition>	0.000123677 2.42321 -0.121432	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </VK3001H_ausf_B>
   </chassis>
   <turrets0>
@@ -1489,16 +1529,32 @@
             <collisionModelServer>	vehicles/german/G13_VK3001H/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.000175981 0.0154993 1.1285	</rayStart>
               <rayEnd>	-0.187098 -0.0232794 1.09908	</rayEnd>
               <rayUp>	0.064 0.052 3	</rayUp>
               <size>	0.192	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	23	</slotId>
+              <anchorPosition>	0.000088 0.0215418 0.70331	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_75mm_KwK_37_L24>
         <_50mm_KwK_39_L60>	shared	  <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -1534,16 +1590,32 @@
             <collisionModelServer>	vehicles/german/G13_VK3001H/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	0.000176237 0.015652 2.21369	</rayStart>
               <rayEnd>	0.0460636 -0.00366935 2.21305	</rayEnd>
               <rayUp>	0.051 0.05 4	</rayUp>
               <size>	0.263	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	34	</slotId>
+              <anchorPosition>	0.000088 0.0217497 1.20085	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_50mm_KwK_39_L60>
         <_75mm_KwK_40_L43>	shared	  <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -1578,17 +1650,33 @@
             <collisionModelServer>	vehicles/german/G13_VK3001H/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_medium_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	8	</slotId>
               <rayStart>	0.000176237 0.015652 2.34843	</rayStart>
               <rayEnd>	0.0368294 -0.00273788 2.34731	</rayEnd>
               <rayUp>	0.063 0.061 4	</rayUp>
               <size>	0.28	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_medium_mb	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	24	</slotId>
+              <anchorPosition>	0.000247881 0.034806 1.443	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1604,33 +1692,54 @@
         <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.032918 0.367317 0.936795	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.046 0.968 -0.000 0.613 0.230 0.489 0.617 0.293 0.500 0.170 0.500 0.197 0.527 0.245	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.923025 0.416958 0.542217	</rayStart>
           <rayEnd>	-0.732194 0.362124 0.518196	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	1.04077 0.419487 0.43321	</rayStart>
           <rayEnd>	0.65814 0.312519 0.386832	</rayEnd>
           <rayUp>	-0.00389063 0.999434 0.033403	</rayUp>
           <size>	0.66	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.875753 0.423541 -0.450185	</rayStart>
           <rayEnd>	0.685165 0.37379 -0.41553	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.046 0.968 -0.000 0.613 0.230 0.489 0.617 0.293 0.500 0.170 0.500 0.197 0.527 0.245	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	22	</slotId>
+          <anchorPosition>	0.000000 0.685837 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1710,17 +1819,33 @@
             <collisionModelServer>	vehicles/german/G13_VK3001H/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_medium	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	12	</slotId>
               <rayStart>	0.00730974 0.0278576 1.14598	</rayStart>
               <rayEnd>	0.0394315 0.00677238 1.13485	</rayEnd>
               <rayUp>	0.062 0.053 4	</rayUp>
               <size>	0.16	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_medium	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	27	</slotId>
+              <anchorPosition>	0.00365488 0.0373592 0.785464	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1759,16 +1884,32 @@
             <collisionModelServer>	vehicles/german/G13_VK3001H/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	13	</slotId>
               <rayStart>	0.00720939 0.0256471 2.29434	</rayStart>
               <rayEnd>	0.0571048 0.0109201 2.29368	</rayEnd>
               <rayUp>	0.05 0.05 4	</rayUp>
               <size>	0.241	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	28	</slotId>
+              <anchorPosition>	0.00360467 0.027987 1.36661	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_50mm_KwK_39_L60>
         <_75mm_KwK_40_L43>	shared	  <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -1803,17 +1944,33 @@
             <collisionModelServer>	vehicles/german/G13_VK3001H/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_medium_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	14	</slotId>
               <rayStart>	0.00752873 0.0256402 2.42494	</rayStart>
               <rayEnd>	0.0284267 -0.00742768 2.42382	</rayEnd>
               <rayUp>	0.063 0.062 4	</rayUp>
               <size>	0.28	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_medium_mb	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	29	</slotId>
+              <anchorPosition>	0.00376443 0.0351603 1.5967	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1859,17 +2016,33 @@
             <collisionModelServer>	vehicles/german/G13_VK3001H/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_medium_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	15	</slotId>
               <rayStart>	0.00720939 0.0256471 2.73495	</rayStart>
               <rayEnd>	0.050513 0.0116548 2.73306	</rayEnd>
               <rayUp>	0.058 0.055 4	</rayUp>
               <size>	0.285	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_medium_mb	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	25	</slotId>
+              <anchorPosition>	0.00360473 0.0331497 1.70491	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1908,16 +2081,32 @@
             <collisionModelServer>	vehicles/german/G13_VK3001H/collision/Gun_09.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	16	</slotId>
               <rayStart>	0.00699098 0.0251212 3.61474	</rayStart>
               <rayEnd>	0.0312417 0.0289635 3.61298	</rayEnd>
               <rayUp>	0.066 0.062 4	</rayUp>
               <size>	0.345	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	30	</slotId>
+              <anchorPosition>	0.00349545 0.0426576 2.19427	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1956,17 +2145,33 @@
             <collisionModelServer>	vehicles/german/G13_VK3001H/collision/Gun_10.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Gun_10.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_medium	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	17	</slotId>
               <rayStart>	0.00701253 0.0247432 2.80107	</rayStart>
               <rayEnd>	0.0442414 0.0231995 2.79664	</rayEnd>
               <rayUp>	0.065 0.058 4	</rayUp>
               <size>	0.334	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_medium	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	31	</slotId>
+              <anchorPosition>	0.00350627 0.0426664 1.51722	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2003,17 +2208,33 @@
             <collisionModelServer>	vehicles/german/G13_VK3001H/collision/Gun_08.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_large_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	18	</slotId>
               <rayStart>	0.00719854 0.0260851 1.30624	</rayStart>
               <rayEnd>	0.0124852 -0.0391409 1.30179	</rayEnd>
               <rayUp>	0.083 0.076 4	</rayUp>
               <size>	0.3	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_large_mb	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	33	</slotId>
+              <anchorPosition>	0.00359928 0.0334325 0.948763	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.865 0.865 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2029,33 +2250,54 @@
         <collisionModelClient>	vehicles/german/G13_VK3001H/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.032918 0.367317 0.936795	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.650 0.190 0.500 0.782 0.282 0.500 0.223 0.500 0.207 0.590 0.176	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	9	</slotId>
           <rayStart>	-0.912133 0.444232 0.462271	</rayStart>
           <rayEnd>	-0.721269 0.390261 0.436617	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	10	</slotId>
           <rayStart>	0.923691 0.459127 -0.318643	</rayStart>
           <rayEnd>	0.733245 0.404943 -0.290457	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.6	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	11	</slotId>
           <rayStart>	0.908129 0.455928 0.467447	</rayStart>
           <rayEnd>	0.717265 0.401957 0.441794	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 0.650 0.190 0.500 0.782 0.282 0.500 0.223 0.500 0.207 0.590 0.176	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	26	</slotId>
+          <anchorPosition>	0.000000 0.781305 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.535 0.535 0.000000 0.000000	</tiling>
       </camouflage>

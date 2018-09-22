@@ -100,11 +100,14 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.__addListeners()
         isElite = self.__vehicle.isElite
         vehType = self.__vehicle.type.replace('-', '_')
+        isRestoreAvailable = self.__vehicle.isRestoreAvailable()
         with self.viewModel.transaction() as model:
             model.setTankType('{}_elite'.format(vehType) if isElite else vehType)
             vehicleTooltip = i18n.makeString(getTypeUserName(self.__vehicle.type, isElite))
+            noCrewLabelPath = R.strings.store.buyVehicleWindow.checkBox
             model.setVehicleNameTooltip(vehicleTooltip)
             model.setNation(nations.NAMES[self.__vehicle.nationID])
+            model.setNoCrewCheckboxLabel(noCrewLabelPath.restore.withoutCrew if isRestoreAvailable else noCrewLabelPath.buy.withoutCrew)
             model.setTankLvl(int2roman(self.__vehicle.level))
             model.setTankName(self.__vehicle.shortUserName)
             model.setCountCrew(len(self.__vehicle.crew))
@@ -121,8 +124,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             equipmentBlock.setTradeInIsEnabled(self.__isTradeIn())
             emtySlotAvailable = self.itemsCache.items.inventory.getFreeSlots(self.__stats.vehicleSlots) > 0
             equipmentBlock.setEmtySlotAvailable(emtySlotAvailable)
-            equipmentBlock.setIsRestore(self.__vehicle.isRestoreAvailable())
-            if self.__vehicle.hasRentPackages and not self.__vehicle.isRestoreAvailable():
+            equipmentBlock.setIsRestore(isRestoreAvailable)
+            if self.__vehicle.hasRentPackages and not isRestoreAvailable:
                 self.__selectedRentIdx = 0
                 self.__selectedRentTerm = self.__vehicle.rentPackages[self.__selectedRentIdx]['days']
             tankPriceArray = model.tankPrice.getItems()
@@ -561,7 +564,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
 
     def __showHangar(self):
         if not self.bootcamp.isInBootcamp() and self.__successOperation and self.__previousAlias in (VIEW_ALIAS.VEHICLE_PREVIEW, VIEW_ALIAS.VEHICLE_PREVIEW_20):
-            event_dispatcher.showHangar()
+            event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
 
     def __onShowInHangar(self, *args):
         event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
@@ -681,11 +684,12 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             if not result.success:
                 return
+        isRestore = self.__vehicle.isRestoreAvailable()
         if not isTradeIn:
             self.__purchaseInProgress = True
             emtySlotAvailable = self.itemsCache.items.inventory.getFreeSlots(self.__stats.vehicleSlots) > 0
             if self.__isBuying():
-                if self.__vehicle.isRestoreAvailable():
+                if isRestore:
                     result = yield self.getRestoreVehicleProcessor(crewType).request()
                 else:
                     result = yield self.__getObtainVehicleProcessor(crewType).request()
@@ -702,7 +706,9 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             if self.__isRenting() or self.bootcamp.isInBootcamp():
                 self.__onWindowClose()
             else:
-                self.__showCongratulations()
+                self.__showCongratulations(isRestore)
+        else:
+            self.__onWindowClose()
         return
 
     def __isBuying(self):
@@ -717,13 +723,13 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             return
         self.viewModel.equipmentBlock.setIsSlotAnimPlaying(True)
 
-    def __showCongratulations(self):
+    def __showCongratulations(self, isRestore):
         if self.viewStatus != ViewStatus.LOADED:
             _logger.warning('Can not show congratulations! The view is not loaded anymore.')
             return
         else:
             self.viewModel.setIsContentHidden(True)
-            with self.viewModel.congradulationAnim.transaction() as model:
+            with self.viewModel.congratulationAnim.transaction() as model:
                 vehicleType = '{}_elite'.format(self.__vehicle.type) if self.__vehicle.isElite else self.__vehicle.type
                 image = self.__vehicle.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_LARGE)
                 defaultImage = RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_LARGE, 'empty_tank')
@@ -733,8 +739,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 model.setVName(self.__vehicle.userName)
                 model.setImage(image if image is not None else defaultImage)
                 model.setImageAlt(defaultImage)
-                model.setTitle(R.strings.store.congradulationAnim.titleLabel)
-                model.setBtnLbl(R.strings.store.congradulationAnim.showPreviewBtn)
+                model.setTitle(R.strings.store.congratulationAnim.restoreLabel if isRestore else R.strings.store.congratulationAnim.buyingLabel)
+                model.setBtnLbl(R.strings.store.congratulationAnim.showPreviewBtn)
             return
 
     def __getObtainVehicleProcessor(self, crewType):

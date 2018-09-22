@@ -66,16 +66,31 @@
       <collisionModelServer>	vehicles/italy/It06_M14_41/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/italy/It06_M14_41/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/italy/It06_M14_41/M14_41_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.00081414 0.280352 1.51527	</rayStart>
         <rayEnd>	-0.000814125 0.0828147 1.48398	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/italy/It06_M14_41/M14_41_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	11	</slotId>
+        <anchorPosition>	0.000000 0.595425 -1.58368	</anchorPosition>
+        <anchorDirection>	0.000000 0.351923 -0.936029	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2.8 2.8 0.000000 0.000000	</tiling>
     </camouflage>
@@ -768,6 +783,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	-0.000514886 2.20234 0.105845	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_It06_M14_41>
     <Chassis_It06_M14_41_2>
       <userString>	#italy_vehicles:Chassis_It06_M14_41_2	</userString>
@@ -1452,6 +1481,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	-0.000520577 2.20234 0.105934	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_It06_M14_41_2>
   </chassis>
   <turrets0>
@@ -1516,6 +1559,21 @@
             <collisionModelServer>	vehicles/italy/It06_M14_41/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It06_M14_41/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	6	</slotId>
+              <anchorPosition>	-0.00704619 0.00133264 0.652075	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.15663 1.15663 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1551,6 +1609,21 @@
             <collisionModelClient>	vehicles/italy/It06_M14_41/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_small	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	8	</slotId>
+              <anchorPosition>	-0.00639986 0.0585065 0.671871	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </Cannone_da_47_32>
       </guns>
       <models>
@@ -1563,40 +1636,64 @@
         <collisionModelClient>	vehicles/italy/It06_M14_41/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.002245 0.242515 0.618962	</gunPosition>
-      <emblemSlots>
-        <player>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.992 -0.019 1.007 0.000 0.318 0.440 0.828 0.246 0.500 0.500 0.249 0.500 0.224 0.562 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.800856 0.251735 -0.0597034	</rayStart>
           <rayEnd>	-0.620042 0.188618 -0.117339	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.247	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.564005 0.346108 0.486796	</rayStart>
           <rayEnd>	-0.386426 0.284312 0.418642	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.432	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.800856 0.251735 -0.0597034	</rayStart>
           <rayEnd>	0.620042 0.188618 -0.117339	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.247	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.561988 0.336965 0.500554	</rayStart>
           <rayEnd>	0.384426 0.27526 0.432273	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.405	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.992 -0.019 1.007 0.000 0.318 0.440 0.828 0.246 0.500 0.500 0.249 0.500 0.224 0.562 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.000000 0.523229 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	1.37349 0.7 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1708,7 +1805,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	1	</alpha>
   </emblems>
-  <customization>
-    <customizableVehicleAreas>	CHASSIS HULL TURRET GUN	</customizableVehicleAreas>
-  </customization>
 </It06_M14_41.xml>

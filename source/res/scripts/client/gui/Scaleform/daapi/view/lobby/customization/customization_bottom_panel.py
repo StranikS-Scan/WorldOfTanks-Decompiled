@@ -3,6 +3,7 @@
 from collections import namedtuple
 from CurrentVehicle import g_currentVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
+from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
@@ -12,9 +13,10 @@ from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
-from gui.shared.formatters import text_styles, icons, getItemPricesVO
+from gui.shared.formatters import text_styles, icons, getItemPricesVO, getMoneyVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
+from gui.shared.money import Money
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from helpers import dependency
@@ -22,6 +24,7 @@ from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
+from gui.customization.shared import QUANTITY_LIMITED_CUSTOMIZATION_TYPES
 CustomizationCarouselDataVO = namedtuple('CustomizationCarouselDataVO', ('displayString', 'isZeroCount', 'shouldShow', 'itemLayoutSize', 'bookmarks'))
 
 class CustomizationBottomPanel(CustomizationBottomPanelMeta):
@@ -51,15 +54,17 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.onCustomizationModeChanged += self.__onModeChanged
         self.__ctx.onChangesCanceled += self.__onChangesCanceled
         self.__ctx.onCustomizationItemSold += self.__onItemSold
+        self.__ctx.onCustomizationItemDataChanged += self.__onItemDataChanged
         g_clientUpdateManager.addMoneyCallback(self.__setBottomPanelBillData)
         self.__updateTabs(self.__ctx.currentTab)
         self.__setFooterInitData()
         self.__setBottomPanelBillData()
-        self.as_showSeasonBtnIconS(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16)
+        self.as_showPopoverBtnIconS(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16)
 
     def _dispose(self):
         super(CustomizationBottomPanel, self)._dispose()
         g_clientUpdateManager.removeObjectCallbacks(self)
+        self.__ctx.onCustomizationItemDataChanged -= self.__onItemDataChanged
         self.__ctx.onCustomizationItemSold -= self.__onItemSold
         self.__ctx.onChangesCanceled -= self.__onChangesCanceled
         self.__ctx.onCustomizationModeChanged -= self.__onModeChanged
@@ -77,10 +82,12 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         return self.as_getDataProviderS()
 
     def switchToStyle(self):
-        return self.__ctx.switchToStyle()
+        self.__ctx.switchToStyle()
+        self.__updatePopoverBtnIcon()
 
     def switchToCustom(self):
-        return self.__ctx.switchToCustom()
+        self.__ctx.switchToCustom()
+        self.__updatePopoverBtnIcon()
 
     def onSelectHotFilter(self, index, value):
         (self._carouselDP.setOwnedFilter, self._carouselDP.setAppliedFilter)[index](value)
@@ -101,6 +108,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def refreshFilterData(self):
         self.as_setFilterDataS(self._carouselDP.getFilterData())
+
+    @property
+    def carouselItems(self):
+        return self._carouselDP.collection
 
     def __updateTabs(self, selectedTab=-1):
         tabsDP, _ = self.__getItemTabsData()
@@ -177,7 +188,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
          'billVO': {'title': text_styles.highlightText(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_RESULT)),
                     'priceLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_PRICE), toByeCount)),
                     'fromStorageLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_FROMSTORAGE), fromStorageCount)),
-                    'enoughMoney': outfitsModified,
+                    'isEnoughStatuses': getMoneyVO(Money(outfitsModified, outfitsModified, outfitsModified)),
                     'pricePanel': totalPriceVO[0]}})
 
     def __showBill(self):
@@ -201,12 +212,16 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def _carouseItemWrapper(self, itemCD):
         item = self.service.getItemByCD(itemCD)
         itemInventoryCount = self.__ctx.getItemInventoryCount(item)
+        purchaseLimit = self.__ctx.getPurchaseLimit(item)
         if item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION:
             showUnsupportedAlert = not isRendererPipelineDeferred()
         else:
             showUnsupportedAlert = False
         isCurrentlyApplied = itemCD in self._carouselDP.getCurrentlyApplied()
-        return buildCustomizationItemDataVO(item, itemInventoryCount, showUnsupportedAlert=showUnsupportedAlert, isCurrentlyApplied=isCurrentlyApplied)
+        noPrice = item.buyCount <= 0
+        isDarked = purchaseLimit == 0 and itemInventoryCount == 0
+        isAlreadyUsed = isDarked and not isCurrentlyApplied
+        return buildCustomizationItemDataVO(item, itemInventoryCount, showUnsupportedAlert=showUnsupportedAlert, isCurrentlyApplied=isCurrentlyApplied, isAlreadyUsed=isAlreadyUsed, forceLocked=isAlreadyUsed, isDarked=isDarked, noPrice=noPrice)
 
     def __getItemTabsData(self):
         data = []
@@ -216,6 +231,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             typeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
             showPlus = not self.__ctx.checkSlotsFilling(itemTypeID, self.__ctx.currentSeason)
             data.append({'label': _ms(ITEM_TYPES.customizationPlural(typeName)),
+             'icon': RES_ICONS.getCustomizationIcon(typeName),
              'tooltip': makeTooltip(ITEM_TYPES.customizationPlural(typeName), TOOLTIPS.customizationItemTab(typeName)),
              'id': tabIdx})
             pluses.append(showPlus)
@@ -242,21 +258,36 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__refreshCarousel(force=self.__needCaruselFullRebuild)
         self.__needCaruselFullRebuild = False
 
-    def __onSeasonChanged(self, seasonIdx):
-        self.__updateTabs()
+    def __onSeasonChanged(self, seasonType):
+        self.__updateTabs(self.__ctx.currentTab)
         self.__refreshCarousel(force=True)
-        imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DESERT_LIST30X16
-        if self.__ctx.currentSeason == SeasonType.WINTER:
-            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_WINTER_LIST30X16
-        elif self.__ctx.currentSeason == SeasonType.SUMMER:
-            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16
-        self.as_showSeasonBtnIconS(imgSrc)
+        self.__updatePopoverBtnIcon()
         self.__setBottomPanelBillData()
 
-    def __onItemsInstalled(self):
+    def __updatePopoverBtnIcon(self):
+        if self.__ctx.currentTab == 0:
+            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DEFAULT_LIST30X16
+        else:
+            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DESERT_LIST30X16
+            if self.__ctx.currentSeason == SeasonType.WINTER:
+                imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_WINTER_LIST30X16
+            elif self.__ctx.currentSeason == SeasonType.SUMMER:
+                imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16
+        self.as_showPopoverBtnIconS(imgSrc)
+
+    def __onItemsInstalled(self, item, slotId, buyLimitReached):
         self.__updateTabsPluses()
         self.__setBottomPanelBillData()
         self.__refreshCarousel()
+        if item.itemTypeID in QUANTITY_LIMITED_CUSTOMIZATION_TYPES:
+            outfit = self.__ctx.getModifiedOutfit(self.__ctx.currentSeason)
+            if self.__ctx.isC11nItemsQuantityLimitReached(outfit, item.itemTypeID):
+                custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
+                hintShownField = 'isMaxQtyDecalsAppliedHintShown'
+                if not custSett.get(hintShownField, False):
+                    self.as_showNotificationS(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_HINT_MAXQTYDECALSAPPLIED)
+                    custSett[hintShownField] = True
+                    AccountSettings.setSettings(CUSTOMIZATION_SECTION, custSett)
 
     def __onTabChanged(self, tabIndex):
         self.__refreshCarousel(force=True)
@@ -280,3 +311,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def __onItemSold(self, item, count):
         self._needCaruselFullRebuild = self._carouselDP.getOwnedFilter()
+
+    def __onItemDataChanged(self, areaId, slotId, regionIdx):
+        self.__setBottomPanelBillData()

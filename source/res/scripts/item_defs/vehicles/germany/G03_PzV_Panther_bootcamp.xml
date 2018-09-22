@@ -72,16 +72,25 @@
       <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G03_PzV_Panther/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G03_PzV_Panther/PzV_Panther_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.457764 0.677167 2.42992	</rayStart>
         <rayEnd>	-0.457764 0.3528 2.19586	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G03_PzV_Panther/PzV_Panther_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.6 1.6 0.7 0.7	</tiling>
     </camouflage>
@@ -769,6 +778,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Pz-V_Standardketten_bootcamp>
   </chassis>
   <turrets0>
@@ -841,16 +856,25 @@
             <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G03_PzV_Panther/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.00329885 0.00630247 3.5	</rayStart>
               <rayEnd>	0.0890514 -0.0354112 3.41937	</rayEnd>
               <rayUp>	0.076 0.066 4	</rayUp>
               <size>	0.782	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
           </camouflage>
@@ -866,40 +890,58 @@
         <collisionModelClient>	vehicles/german/G03_PzV_Panther/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.4563 1.0316	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.962 -0.137 1.028 0.000 0.509 0.125 0.884 0.299 0.144 0.531 0.304 0.500 0.228 0.607 0.054	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-1.1837 0.432568 0.512182	</rayStart>
           <rayEnd>	-0.823122 0.264206 0.471667	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	1.20998 0.522291 -0.093362	</rayStart>
           <rayEnd>	0.849401 0.353929 -0.133877	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.74	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	1.1837 0.432568 0.512182	</rayStart>
           <rayEnd>	0.823122 0.264206 0.471667	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	-1.20998 0.522291 -0.093362	</rayStart>
           <rayEnd>	-0.849401 0.353929 -0.133877	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.74	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.962 -0.137 1.028 0.000 0.509 0.125 0.884 0.299 0.144 0.531 0.304 0.500 0.228 0.607 0.054	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
       </camouflage>

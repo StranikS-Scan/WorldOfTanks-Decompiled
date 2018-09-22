@@ -78,6 +78,7 @@ class Tankman(GUIItem, HasStrCD):
      ROLES.DRIVER: 2,
      ROLES.RADIOMAN: 3,
      ROLES.LOADER: 4}
+    _NON_COMMANDER_SKILLS = skills_constants.ACTIVE_SKILLS.difference(skills_constants.COMMANDER_SKILLS)
 
     def __init__(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None):
         GUIItem.__init__(self, proxy)
@@ -267,7 +268,10 @@ class Tankman(GUIItem, HasStrCD):
         if self.hasNewSkill(useCombinedRoles=True):
             tmanDescr = tankmen.TankmanDescr(self.strCD)
             i = 0
-            skills_list = list(skills_constants.ACTIVE_SKILLS)
+            if self.role == self.ROLES.COMMANDER:
+                skills_list = list(skills_constants.ACTIVE_SKILLS)
+            else:
+                skills_list = list(self._NON_COMMANDER_SKILLS)
             while 1:
                 if tmanDescr.roleLevel == 100 and (tmanDescr.lastSkillLevel == 100 or not tmanDescr.skills) and skills_list:
                     skillname = skills_list.pop()

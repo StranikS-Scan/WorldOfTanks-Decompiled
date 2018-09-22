@@ -79,6 +79,7 @@ COLOR_SETTINGS_SHOWS_COUNT = 'colorSettingsShowsCount'
 QUEST_PROGRESS_SHOWS_COUNT = 'questProgressShowsCount'
 APPLIED_COLOR_SETTINGS = 'appliedColorSettings'
 SELECTED_QUEST_IN_REPLAY = 'SELECTED_QUEST_IN_REPLAY'
+CUSTOMIZATION_SECTION = 'customization'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -426,7 +427,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                 'headerAlert': False}},
                 'checkBoxConfirmator': {'questsConfirmDialogShow': True,
                                         'questsConfirmDialogShowPM2': True},
-                'customization': {},
+                CUSTOMIZATION_SECTION: {},
                 'showVehModelsOnMap': 0,
                 'battleLoadingInfo': 1,
                 'battleLoadingRankedInfo': 1,

@@ -801,7 +801,7 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
 
     def _format(self, bonus):
         result = []
-        for item, count in bonus.getItems().iteritems():
+        for item, count in sorted(bonus.getItems().items(), key=lambda i: i[0]):
             if item is not None and count:
                 if item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT and 'avatar' in item.tags:
                     alias = TOOLTIPS_CONSTANTS.BATTLE_CONSUMABLE

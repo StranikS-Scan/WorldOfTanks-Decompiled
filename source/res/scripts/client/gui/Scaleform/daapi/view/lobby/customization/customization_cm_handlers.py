@@ -62,7 +62,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
                 break
 
         accountMoney = self.itemsCache.items.stats.money
-        availableForPurchase = not item.isHidden and not item.getBuyPrice() == ITEM_PRICE_EMPTY and item.getBuyPrice().price <= accountMoney
+        availableForPurchase = item.buyCount > 0 and not item.getBuyPrice() == ITEM_PRICE_EMPTY and item.getBuyPrice().price <= accountMoney
         showAlert = len(sellPriceVO[0]) > 1
         tooltipVO = None
         if showAlert:

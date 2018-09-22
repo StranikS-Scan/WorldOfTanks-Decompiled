@@ -54,7 +54,7 @@ from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from helpers import dependency
 from helpers import i18n, time_utils, isPlayerAccount
 from predefined_hosts import g_preDefinedHosts, PING_STATUSES
-from shared_utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER, BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IBootcampController
@@ -81,6 +81,14 @@ class TOOLTIP_TYPES(object):
     COMPLEX = 'complex'
     SPECIAL = 'special'
     NONE = 'none'
+
+
+class HeaderMenuVisibilityState(BitmaskHelper):
+    NOTHING = 0
+    BG_OVERLAY = 1
+    BUTTON_BAR = 2
+    ONLINE_COUNTER = 4
+    ALL = BG_OVERLAY | BUTTON_BAR | ONLINE_COUNTER
 
 
 class _RankedBattlesWelcomeViewLifecycleHandler(IViewLifecycleHandler):
@@ -367,7 +375,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.encyclopedia.onStateChanged += self._updateHangarMenuData
         self.addListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.LobbyHeaderMenuEvent.MENY_HIDE, self.__onHideMenuBar, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
 
     def _removeListeners(self):
@@ -403,7 +411,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.encyclopedia.onNewRecommendationReceived -= self.__onNewEncyclopediaRecommendation
         self.removeListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.LobbyHeaderMenuEvent.MENY_HIDE, self.__onHideMenuBar, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
 
     def __updateIngameShopState(self):
@@ -795,9 +803,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if inited and self.bootcampController.isInBootcamp():
             self.as_disableFightButtonS(True)
 
-    def __onHideMenuBar(self, event):
-        hide = event.ctx['hide']
-        self.as_hideMenuS(hide)
+    def __onToggleVisibilityMenu(self, event):
+        state = event.ctx['state']
+        self.as_toggleVisibilityMenuS(state)
 
     def _checkFightButtonDisabled(self, canDo, isFightButtonForcedDisabled):
         return not canDo or isFightButtonForcedDisabled

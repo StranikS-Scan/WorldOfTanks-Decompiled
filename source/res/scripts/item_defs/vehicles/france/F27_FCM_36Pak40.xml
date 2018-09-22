@@ -78,45 +78,72 @@
       <collisionModelServer>	vehicles/french/F27_FCM_36Pak40/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F27_FCM_36Pak40/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F27_FCM_36Pak40/FCM_36Pak40_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.129162 0.299564 1.80992	</rayStart>
         <rayEnd>	0.127552 -0.0766973 1.67419	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.2	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.0902 0.976067 0.511556	</rayStart>
         <rayEnd>	-1.05204 0.964078 0.511363	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.10798 0.92189 -0.241578	</rayStart>
         <rayEnd>	-1.06975 0.910152 -0.241614	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.26	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.10423 0.930383 -0.244922	</rayStart>
         <rayEnd>	1.06981 0.919819 -0.244954	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.26	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.0942 0.959399 0.501572	</rayStart>
         <rayEnd>	1.05989 0.94849 0.501327	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F27_FCM_36Pak40/FCM_36Pak40_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	0.000000 0.651697 -0.857981	</anchorPosition>
+        <anchorDirection>	0.000000 0.604866 -0.796327	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
     </camouflage>
@@ -323,6 +350,11 @@
           <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
           <forwardElastK>	2	</forwardElastK>
@@ -355,11 +387,6 @@
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
           <offset>	-0.051	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -862,6 +889,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	-0.000000 2.12097 0.432919	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_FCM_36Pak40>
   </chassis>
   <turrets0>
@@ -920,6 +961,21 @@
             <collisionModelServer>	vehicles/french/F27_FCM_36Pak40/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F27_FCM_36Pak40/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	-0.000115492 -0.0078374 1.55506	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
           </camouflage>
@@ -935,10 +991,23 @@
         <collisionModelClient>	vehicles/french/F27_FCM_36Pak40/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.421417 0.033508	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.051 0.000 1.000 0.000 0.963 0.624 0.500 0.500 0.133 0.500 0.359 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 0.621958 0.451777	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.49 0.25 0.000000 0.000000	</tiling>
       </camouflage>

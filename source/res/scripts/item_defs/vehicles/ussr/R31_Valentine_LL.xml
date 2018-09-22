@@ -73,16 +73,31 @@
       <collisionModelServer>	vehicles/russian/R31_Valentine_LL/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R31_Valentine_LL/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R31_Valentine_LL/Valentine_LL_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.251007 0.334996 2.15276	</rayStart>
         <rayEnd>	0.251007 0.334996 1.75276	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.165	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R31_Valentine_LL/Valentine_LL_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.00694743 0.338193 -1.72475	</anchorPosition>
+        <anchorDirection>	0.000001 0.996192 -0.0871897	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
     </camouflage>
@@ -836,6 +851,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	4	</slotId>
+          <anchorPosition>	0.000241154 2.08252 0.624295	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </ValentineMK_I>
   </chassis>
   <turrets0>
@@ -902,6 +931,21 @@
             <collisionModelServer>	vehicles/russian/R31_Valentine_LL/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R31_Valentine_LL/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	7	</slotId>
+              <anchorPosition>	0.000000 0.000010 0.714387	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.1 0.1 0.000000 0.000000	</tiling>
           </camouflage>
@@ -917,25 +961,43 @@
         <collisionModelClient>	vehicles/russian/R31_Valentine_LL/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.304885 0.541376	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.943 -0.030 1.000 0.000 0.568 0.239 0.829 0.542 0.473 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.838006 0.380849 -0.0589871	</rayStart>
           <rayEnd>	-0.638059 0.380849 -0.0543797	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.27	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	0.918804 0.323664 0.164515	</rayStart>
           <rayEnd>	0.52953 0.323663 0.072542	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.454	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.943 -0.030 1.000 0.000 0.568 0.239 0.829 0.542 0.473 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.000000 0.651594 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.5 0.2 0.000000 0.000000	</tiling>
       </camouflage>

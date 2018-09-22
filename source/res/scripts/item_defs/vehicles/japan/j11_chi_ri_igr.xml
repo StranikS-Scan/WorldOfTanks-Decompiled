@@ -68,16 +68,25 @@
       <collisionModelServer>	vehicles/japan/J11_Chi_Ri/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/japan/J11_Chi_Ri/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/japan/J11_Chi_Ri/Chi_Ri_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.111454 0.494911 2.43289	</rayStart>
         <rayEnd>	0.111486 0.391939 2.04637	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/japan/J11_Chi_Ri/Chi_Ri_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_Chi_Ri_2_IGR>
@@ -778,6 +787,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_Chi_Ri_2_IGR>
   </chassis>
   <turrets0>
@@ -851,17 +866,26 @@
             <collisionModelServer>	vehicles/japan/J11_Chi_Ri/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J11_Chi_Ri/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.00122585 -0.008763 1.43	</rayStart>
               <rayEnd>	-0.536527 -0.508383 1.45337	</rayEnd>
               <rayUp>	0.072 0.069 4	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.3 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -877,40 +901,58 @@
         <collisionModelClient>	vehicles/japan/J11_Chi_Ri/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.101 0.417757 1.03001	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.960 -0.070 1.010 0.005 0.550 0.210 0.995 0.715 0.350 0.500 0.220 0.500 0.050 0.000 0.050	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-1.12034 0.725965 0.409472	</rayStart>
           <rayEnd>	-0.804981 0.619531 0.187629	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.994928 0.625625 -1.66148	</rayStart>
           <rayEnd>	-0.615241 0.51981 -1.59335	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.96	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	1.12034 0.725965 0.409472	</rayStart>
           <rayEnd>	0.804981 0.619531 0.187629	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.994928 0.625625 -1.66148	</rayStart>
           <rayEnd>	0.615241 0.51981 -1.59335	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.96	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.960 -0.070 1.010 0.005 0.550 0.210 0.995 0.715 0.350 0.500 0.220 0.500 0.050 0.000 0.050	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
       </camouflage>

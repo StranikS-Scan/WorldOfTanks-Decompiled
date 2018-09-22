@@ -65,16 +65,25 @@
       <collisionModelServer>	vehicles/chinese/Ch04_T34_1/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/chinese/Ch04_T34_1/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/chinese/Ch04_T34_1/T34_1_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.306321 0.355402 2.46219	</rayStart>
         <rayEnd>	-0.306321 0.0190621 2.24569	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.208	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/chinese/Ch04_T34_1/T34_1_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_Ch04_T34_1_training>
@@ -752,6 +761,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_Ch04_T34_1_training>
   </chassis>
   <turrets0>
@@ -820,16 +835,25 @@
             <collisionModelServer>	vehicles/chinese/Ch04_T34_1/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch04_T34_1/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.000034 -0.000785722 1.08	</rayStart>
               <rayEnd>	-0.296373 -0.106576 1.07957	</rayEnd>
               <rayUp>	0.07 0.068 4	</rayUp>
               <size>	0.45	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
         </_100mm_44-100JTtraining>
       </guns>
       <models>
@@ -842,40 +866,58 @@
         <collisionModelClient>	vehicles/chinese/Ch04_T34_1/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000001 0.284179 0.900031	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.936 0.000 1.021 0.000 0.543 0.170 0.660 0.383 0.500 0.500 0.324 0.500 0.186 0.350 0.197	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.871205 0.452257 0.464138	</rayStart>
           <rayEnd>	-0.522843 0.280723 0.368128	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.882922 0.366407 -0.721784	</rayStart>
           <rayEnd>	-0.612745 0.258179 -0.649044	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.54	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.882922 0.366407 -0.721784	</rayStart>
           <rayEnd>	0.612745 0.258179 -0.649044	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.54	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.871205 0.452257 0.464138	</rayStart>
           <rayEnd>	0.522843 0.280723 0.368128	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.936 0.000 1.021 0.000 0.543 0.170 0.660 0.383 0.500 0.500 0.324 0.500 0.186 0.350 0.197	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
     </Turret_1_Ch04_T34_1_training>
   </turrets0>
   <engines>

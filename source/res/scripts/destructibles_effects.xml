@@ -23807,6 +23807,30 @@
         </effects>
       </variant1>
     </inf_rwAM_002_AmericanLocomotive_03>
+    <inf_rwAM_003_AmericanFreightCar>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_rwAM_003_AmericanFreightCar.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	40	</metal_1>
+              <metal_2>	25	</metal_2>
+              <debrisAmount>	50	</debrisAmount>
+              <weight>	9000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_rwAM_003_AmericanFreightCar>
     <inf_envEU_011_Bus>
       <variant1>
         <stages>

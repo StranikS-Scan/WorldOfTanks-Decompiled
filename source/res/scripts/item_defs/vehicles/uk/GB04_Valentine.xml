@@ -72,16 +72,31 @@
       <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/british/GB04_Valentine/Valentine_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.274996 0.331373 2.15111	</rayStart>
         <rayEnd>	0.274996 0.331373 1.75111	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.181	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/british/GB04_Valentine/Valentine_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	-0.00660774 0.371565 -1.66829	</anchorPosition>
+        <anchorDirection>	-0.000001 0.687945 -0.725763	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.7 1.7 0.000000 0.000000	</tiling>
     </camouflage>
@@ -979,6 +994,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.00251456 2.06181 0.608805	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB04_Valentine>
     <Chassis_GB04_Valentine_2>
       <userString>	#gb_vehicles:Chassis_GB04_Valentine_2	</userString>
@@ -1868,6 +1897,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000305704 2.05413 0.617714	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB04_Valentine_2>
   </chassis>
   <turrets0>
@@ -1938,6 +1981,21 @@
             <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	-0.00875254 -0.0482972 0.806127	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.2 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1953,26 +2011,44 @@
         <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.3047 0.5435	</gunPosition>
-      <emblemSlots>
-        <inscription>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.893 0.000 1.000 0.000 0.520 0.264 0.736 0.589 0.463 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.988338 0.303638 -0.345234	</rayStart>
           <rayEnd>	-0.411389 0.303638 -0.180523	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.56	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	0.890844 0.416251 0.272982	</rayStart>
           <rayEnd>	0.516423 0.416251 0.132246	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.893 0.000 1.000 0.000 0.520 0.264 0.736 0.589 0.463 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	0.000000 0.652649 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.9 0.4 0.000000 0.000000	</tiling>
       </camouflage>
@@ -2046,6 +2122,21 @@
             <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	0.000000 -0.00780773 0.91092	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2082,6 +2173,21 @@
             <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	12	</slotId>
+              <anchorPosition>	0.000000 -0.00687993 0.850307	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.895 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2123,6 +2229,21 @@
             <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	13	</slotId>
+              <anchorPosition>	0.000000 -0.00702941 1.05575	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2155,6 +2276,21 @@
             <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	0.000048 -0.00775638 1.06229	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2170,25 +2306,43 @@
         <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.257933 0.68783	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.010 -0.055 1.000 0.000 0.507 0.258 0.780 0.600 0.597 0.500 0.036 0.500 0.078 0.000 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.900827 0.437203 0.253094	</rayStart>
           <rayEnd>	-0.52157 0.437202 0.125965	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	-0.77681 0.517697 -0.584432	</rayStart>
           <rayEnd>	-0.438427 0.517697 -0.371134	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.52	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.010 -0.055 1.000 0.000 0.507 0.258 0.780 0.600 0.597 0.500 0.036 0.500 0.078 0.000 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	0.000000 0.667328 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
       </camouflage>

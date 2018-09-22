@@ -71,30 +71,51 @@
       <collisionModelServer>	vehicles/german/G35_B-1bis_captured/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G35_B-1bis_captured/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G35_B-1bis_captured/B-1bis_captured_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.41 0.416284 1.83589	</rayStart>
         <rayEnd>	0.410066 0.0787392 1.62127	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.43742 -0.490792 0.468693	</rayStart>
         <rayEnd>	-1.03742 -0.491219 0.468947	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.78	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.44034 -0.438741 -0.883391	</rayStart>
         <rayEnd>	1.04033 -0.438741 -0.883392	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.7	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G35_B-1bis_captured/B-1bis_captured_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	0.000000 0.309477 -1.96007	</anchorPosition>
+        <anchorDirection>	0.000000 0.155959 -0.987764	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	3 3 0.000000 0.000000	</tiling>
     </camouflage>
@@ -784,6 +805,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.000370327 2.73991 0.732819	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </B2ketten>
   </chassis>
   <turrets0>
@@ -842,6 +877,21 @@
             <collisionModelServer>	vehicles/german/G35_B-1bis_captured/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G35_B-1bis_captured/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	-0.203756 0.0195036 0.554543	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.9 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -857,25 +907,43 @@
         <collisionModelClient>	vehicles/german/G35_B-1bis_captured/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.379124 0.213611 0.580474	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.954 -0.006 1.043 0.017 0.681 0.249 0.547 0.316 0.638 0.500 0.532 0.404 0.172 1.000 0.520	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.668583 0.344636 0.425105	</rayStart>
           <rayEnd>	-0.336947 0.221876 0.238163	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.266	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.668583 0.344636 0.425105	</rayStart>
           <rayEnd>	0.336947 0.221876 0.238163	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.266	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.954 -0.006 1.043 0.017 0.681 0.249 0.547 0.316 0.638 0.500 0.532 0.404 0.172 1.000 0.520	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 0.814411 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </B2_740Fturm>
   </turrets0>
   <engines>

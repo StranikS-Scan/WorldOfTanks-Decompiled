@@ -73,6 +73,12 @@
     </hitTester>
     <emblemSlots></emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R11_MS-1/MS-1_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
     <camouflage>
       <tiling>	1.12 0.58 0.000000 0.000000	</tiling>
     </camouflage>
@@ -325,6 +331,12 @@
           <offset>	-0.027	</offset>
         </node>
       </trackNodes>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Observer>
   </chassis>
   <turrets0>
@@ -398,6 +410,12 @@
             <collisionModelServer>	vehicles/russian/R11_MS-1/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R11_MS-1/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
           </camouflage>
@@ -417,6 +435,12 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.497 0.094 0.410 0.602 1.000 0.500 0.198 0.500 0.242 0.515 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	0.685 0.37 0.000000 0.000000	</tiling>
       </camouflage>

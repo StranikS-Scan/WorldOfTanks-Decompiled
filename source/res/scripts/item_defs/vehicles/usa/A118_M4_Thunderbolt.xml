@@ -78,32 +78,59 @@
       <collisionModelServer>	vehicles/american/A118_M4_Thunderbolt/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/american/A118_M4_Thunderbolt/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/american/A118_M4_Thunderbolt/M4_Thunderbolt_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.557218 0.874243 1.88665	</rayStart>
         <rayEnd>	-0.557362 0.541256 1.57411	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <fixedInscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	fixedInscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.446 0.567653 0.953602	</rayStart>
         <rayEnd>	-1.4 0.567653 0.953602	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <emblemId>	921	</emblemId>
         <size>	1	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </fixedInscription>
-      <fixedInscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	fixedInscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.424 0.563153 0.836302	</rayStart>
         <rayEnd>	1.422 0.563153 0.836302	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <emblemId>	921	</emblemId>
         <size>	1.05	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </fixedInscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/american/A118_M4_Thunderbolt/M4_Thunderbolt_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	16	</slotId>
+        <anchorPosition>	0.00216921 0.757585 -2.39948	</anchorPosition>
+        <anchorDirection>	-0.00048327 0.764246 -0.644924	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	9	</slotId>
+        <anchorPosition>	0.00026739 0.757585 -2.39942	</anchorPosition>
+        <anchorDirection>	0.000000 0.764281 -0.644883	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2.4 2.4 0.000000 0.000000	</tiling>
     </camouflage>
@@ -949,6 +976,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	-1.4438 0.594827 -0.0880901	</anchorPosition>
+          <anchorDirection>	-0.923138 0.380321 -0.0563231	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.00011577 2.70071 -0.177417	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_A118_M4_Thunderbolt>
   </chassis>
   <turrets0>
@@ -1027,16 +1074,46 @@
             <collisionModelServer>	vehicles/american/A118_M4_Thunderbolt/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A118_M4_Thunderbolt/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.000002 -0.00428102 1.64933	</rayStart>
               <rayEnd>	0.0110377 -0.0761275 1.64766	</rayEnd>
               <rayUp>	0.077 0.071 5	</rayUp>
               <size>	0.45	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	13	</slotId>
+              <anchorPosition>	-0.000001 -0.00364051 1.6883	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	14	</slotId>
+              <anchorPosition>	0.000000 0.218287 0.218287	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	-0.000001 -0.00364051 1.6883	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.2 0.6 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1052,16 +1129,30 @@
         <collisionModelClient>	vehicles/american/A118_M4_Thunderbolt/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000565 0.482816 0.837156	</gunPosition>
-      <emblemSlots>
-        <fixedEmblem>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.986 -0.029 0.952 0.000 0.505 0.201 0.713 0.590 0.428 0.504 0.139 0.500 0.036 0.000 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	fixedEmblem	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.990146 0.469296 0.312252	</rayStart>
           <rayEnd>	-0.947218 0.459698 0.300236	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <emblemId>	2901	</emblemId>
           <size>	0.5	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </fixedEmblem>
-        <fixedEmblem>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	fixedEmblem	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.990146 0.469296 0.312252	</rayStart>
           <rayEnd>	0.947218 0.459698 0.300236	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1069,11 +1160,21 @@
           <size>	0.5	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </fixedEmblem>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.986 -0.029 0.952 0.000 0.505 0.201 0.713 0.590 0.428 0.504 0.139 0.500 0.036 0.000 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	0.000000 0.866051 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	0.000000 0.866051 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	1.5 1.5 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1143,4 +1244,5 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.886275	</alpha>
   </emblems>
+  <baseColorID>	3	</baseColorID>
 </A118_M4_Thunderbolt.xml>

@@ -168,6 +168,7 @@ def _loadCustomizationConfig(cfg, xml):
     loadConfigValue('cam_start_target_pos', xml, xml.readVector3, cfg, cfg)
     loadConfigValue('shadow_forward_y_offset', xml, xml.readFloat, cfg, defaultFakeShadowOffsetsCfg)
     loadConfigValue('shadow_deferred_y_offset', xml, xml.readFloat, cfg, defaultFakeShadowOffsetsCfg)
+    loadConfigValue('cam_fluency', xml, xml.readFloat, cfg, cfg)
 
 
 def loadConfigValue(name, xml, fn, cfg, defaultCfg=None):
@@ -362,20 +363,8 @@ class ClientHangarSpace(object):
     def getCameraLocation(self):
         return self.__cameraManager.getCameraLocation()
 
-    def locateCameraToPreview(self):
-        self.__cameraManager.locateCameraToPreview()
-
-    def locateCameraToCustomizationPreview(self):
-        self.__cameraManager.locateCameraToCustomizationPreview()
-
-    def locateCameraToStartState(self):
-        self.__cameraManager.locateCameraToStartState()
-
-    def locateCameraOnEmblem(self, onHull, emblemType, emblemIdx, relativeSize=0.5):
-        return self.__cameraManager.locateCameraOnEmblem(onHull, emblemType, emblemIdx, relativeSize)
-
-    def clearSelectedEmblemInfo(self):
-        self.__cameraManager.clearSelectedEmblemInfo()
+    def getCameraManager(self):
+        return self.__cameraManager
 
     @property
     def camera(self):

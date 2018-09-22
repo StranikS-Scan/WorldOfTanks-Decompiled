@@ -65,23 +65,47 @@
       <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.647 0.524153 1.7881	</rayStart>
         <rayEnd>	0.647 0.338808 1.71295	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	0.374811 0.441128 2.259	</rayStart>
         <rayEnd>	0.374811 0.0704407 2.1087	</rayEnd>
         <rayUp>	0.160924 -0.00529012 -0.986953	</rayUp>
         <size>	0.656	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	4	</slotId>
+        <anchorPosition>	0.000000 0.415163 1.79076	</anchorPosition>
+        <anchorDirection>	0.000000 0.225846 0.974163	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	12	</slotId>
+        <anchorPosition>	0.000000 0.415163 1.79076	</anchorPosition>
+        <anchorDirection>	0.000000 0.225846 0.974163	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <hangarShadowTexture>	vehicles/french/F18_Bat_Chatillon25t/Bat_Chatillon25t_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
     <camouflage>
       <tiling>	1.7 1.7 0.000000 0.000000	</tiling>
     </camouflage>
@@ -796,6 +820,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	-1.58018 0.52405 -0.00366998	</anchorPosition>
+          <anchorDirection>	-0.949162 0.31478 -0.00220443	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	3	</slotId>
+          <anchorPosition>	0.000000 2.21565 -1.17567	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Bat_Chatillon25t_2>
   </chassis>
   <turrets0>
@@ -881,15 +925,39 @@
             <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
-          <emblemSlots>
-            <insigniaOnGun>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.00210497 0.0171946 2.92755	</rayStart>
               <rayEnd>	-0.293814 -0.293385 2.91638	</rayEnd>
               <rayUp>	0.076 0.069 5	</rayUp>
               <size>	0.492	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	8	</slotId>
+              <anchorPosition>	-0.00105249 0.0085973 2.1601	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	-0.00105249 0.0085973 2.1601	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	-0.00211812 0.300586 -0.435878	</anchorPosition>
+              <anchorDirection>	-0.000000 1 -0.000001	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+          </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>
@@ -919,6 +987,12 @@
               </slaves>
             </master>
           </drivenJoints>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	2 1 0.000000 0.000000	</tiling>
           </camouflage>
@@ -969,15 +1043,39 @@
             <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
-          <emblemSlots>
-            <insigniaOnGun>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	13	</slotId>
               <rayStart>	-0.00421142 0.0163037 4.48	</rayStart>
               <rayEnd>	-0.0603312 0.0267817 2.97924	</rayEnd>
               <rayUp>	0.087 0.084 5	</rayUp>
               <size>	0.705	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	14	</slotId>
+              <anchorPosition>	-0.00210571 0.00815187 3.15949	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	-0.00210937 0.300495 -0.435822	</anchorPosition>
+              <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	-0.00210571 0.00815177 3.15949	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>
@@ -1007,6 +1105,12 @@
               </slaves>
             </master>
           </drivenJoints>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	2 1 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1052,15 +1156,39 @@
             <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	17	</slotId>
               <rayStart>	-0.00421142 0.0165037 3.5	</rayStart>
               <rayEnd>	0.00793971 -0.0284059 3.18401	</rayEnd>
               <rayUp>	0.094 0.09 5	</rayUp>
               <size>	0.438	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	-0.00210571 0.00824611 2.56181	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	19	</slotId>
+              <anchorPosition>	0.000003 0.300495 -0.435841	</anchorPosition>
+              <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	20	</slotId>
+              <anchorPosition>	-0.00210571 0.00824611 2.56181	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>
@@ -1090,6 +1218,12 @@
               </slaves>
             </master>
           </drivenJoints>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	2 1 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1105,33 +1239,60 @@
         <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.002258 0.494202 0.029392	</gunPosition>
-      <emblemSlots>
-        <inscription>
+      <customizationSlots>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	22	</slotId>
           <rayStart>	1.19461 0.0895254 -0.900221	</rayStart>
           <rayEnd>	0.79462 0.0895253 -0.900221	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.556	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	23	</slotId>
           <rayStart>	-1.19509 0.0940748 -0.498199	</rayStart>
           <rayEnd>	-0.795086 0.0940748 -0.498199	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	24	</slotId>
           <rayStart>	1.19506 0.0955622 -0.497894	</rayStart>
           <rayEnd>	0.795055 0.0955622 -0.497894	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.000000 0.472288 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	5	</slotId>
+          <anchorPosition>	0.000000 0.472288 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <showEmblemsOnGun>	true	</showEmblemsOnGun>
       <physicsShape>	1.318 -0.105 1.190 0.000 1.353 0.100 0.249 0.000 0.500 0.500 0.094 0.500 0.424 0.000 0.014	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	1 0.5 0.000000 0.000000	</tiling>
       </camouflage>

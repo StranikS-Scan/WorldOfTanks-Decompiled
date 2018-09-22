@@ -31,11 +31,23 @@ class CustomizationMainViewMeta(View):
     def onAnchorsShown(self, anchors):
         self._printOverrideError('onAnchorsShown')
 
+    def propertiesSheetSet(self, sheet, width, height, crnterX, centerY):
+        self._printOverrideError('propertiesSheetSet')
+
     def onPressClearBtn(self):
         self._printOverrideError('onPressClearBtn')
 
     def onPressEscBtn(self):
         self._printOverrideError('onPressEscBtn')
+
+    def onPressSelectNextItem(self):
+        self._printOverrideError('onPressSelectNextItem')
+
+    def onPressSelectPrevItem(self):
+        self._printOverrideError('onPressSelectPrevItem')
+
+    def playCustomSound(self, sound):
+        self._printOverrideError('playCustomSound')
 
     def as_hideS(self, value):
         return self.flashObject.as_hide(value) if self._isDAAPIInited() else None
@@ -49,14 +61,11 @@ class CustomizationMainViewMeta(View):
     def as_updateAnchorDataS(self, data):
         return self.flashObject.as_updateAnchorData(data) if self._isDAAPIInited() else None
 
-    def as_onRegionHighlightedS(self, slotId):
-        return self.flashObject.as_onRegionHighlighted(slotId) if self._isDAAPIInited() else None
+    def as_onRegionHighlightedS(self, slotId, highlightingType, highlightingResult):
+        return self.flashObject.as_onRegionHighlighted(slotId, highlightingType, highlightingResult) if self._isDAAPIInited() else None
 
     def as_updateSelectedRegionsS(self, slotId):
         return self.flashObject.as_updateSelectedRegions(slotId) if self._isDAAPIInited() else None
-
-    def as_cameraAutoRotateChangedS(self, autoRotate):
-        return self.flashObject.as_cameraAutoRotateChanged(autoRotate) if self._isDAAPIInited() else None
 
     def as_setAnchorsDataS(self, data):
         return self.flashObject.as_setAnchorsData(data) if self._isDAAPIInited() else None
@@ -66,3 +75,12 @@ class CustomizationMainViewMeta(View):
 
     def as_enableDNDS(self, value):
         return self.flashObject.as_enableDND(value) if self._isDAAPIInited() else None
+
+    def as_selectSeasonS(self, value):
+        return self.flashObject.as_selectSeason(value) if self._isDAAPIInited() else None
+
+    def as_setAnchorSwitchersVisibleS(self, value, slotId, isNarrowSlot=False):
+        return self.flashObject.as_setAnchorSwitchersVisible(value, slotId, isNarrowSlot) if self._isDAAPIInited() else None
+
+    def as_releaseItemS(self):
+        return self.flashObject.as_releaseItem() if self._isDAAPIInited() else None

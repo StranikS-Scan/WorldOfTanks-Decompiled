@@ -74,24 +74,48 @@
       <collisionModelServer>	vehicles/russian/R140_M4_Loza/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R140_M4_Loza/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R140_M4_Loza/M4_Loza_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.669942 0.703299 1.82351	</rayStart>
         <rayEnd>	-0.669978 0.557029 1.68711	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <fixedInscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	fixedInscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	1.41564 0.600791 0.82836	</rayStart>
         <rayEnd>	1.21564 0.600791 0.82836	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <emblemId>	851	</emblemId>
         <size>	1.1	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </fixedInscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R140_M4_Loza/M4_Loza_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	13	</slotId>
+        <anchorPosition>	-0.00110525 0.746925 -2.69144	</anchorPosition>
+        <anchorDirection>	0.000000 0.573577 -0.819152	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	6	</slotId>
+        <anchorPosition>	0.00352335 0.746608 -2.69396	</anchorPosition>
+        <anchorDirection>	0.000000 0.573577 -0.819152	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -1012,6 +1036,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	4	</slotId>
+          <anchorPosition>	-1.2651 0.551008 -0.16279	</anchorPosition>
+          <anchorDirection>	-0.9105 0.396564 -0.117161	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	5	</slotId>
+          <anchorPosition>	0.000267772 2.70753 -0.178322	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_R140_M4_Loza>
   </chassis>
   <turrets0>
@@ -1082,16 +1126,46 @@
             <collisionModelServer>	vehicles/russian/R140_M4_Loza/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R140_M4_Loza/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	3	</slotId>
               <rayStart>	-0.00411575 0.00345349 1.02209	</rayStart>
               <rayEnd>	-0.0261016 0.00257619 1.01954	</rayEnd>
               <rayUp>	0.089 0.079 5	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	-0.00205788 0.00172675 1.66739	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	0.000000 0.186013 0.186013	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	12	</slotId>
+              <anchorPosition>	-0.00205788 0.00172675 1.66739	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1107,10 +1181,29 @@
         <collisionModelClient>	vehicles/russian/R140_M4_Loza/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000014 0.327537 0.985351	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.936 -0.088 1.015 0.000 0.529 0.245 0.500 0.500 0.500 0.500 0.120 0.500 0.000 0.100 0.110	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 0.723085 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	0.000000 0.723085 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	1.0 1.0 0.0 0.000000	</tiling>
       </camouflage>

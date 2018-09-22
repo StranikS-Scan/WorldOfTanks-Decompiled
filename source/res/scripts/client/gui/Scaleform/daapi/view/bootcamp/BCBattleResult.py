@@ -69,10 +69,7 @@ class BCBattleResult(BCBattleResultMeta):
         self.__populated = True
         if self.battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__setBattleResults()
-        if g_bootcamp.transitionFlash:
-            g_bootcamp.transitionFlash.active(False)
-            g_bootcamp.transitionFlash.close()
-            g_bootcamp.transitionFlash = None
+        g_bootcamp.hideBattleResultTransition()
         self.app.as_loadLibrariesS(['guiControlsLobbyBattleDynamic.swf', 'guiControlsLobbyDynamic.swf'])
         return
 

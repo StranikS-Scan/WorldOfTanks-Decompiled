@@ -73,45 +73,78 @@
       <collisionModelServer>	vehicles/german/G02_Hummel/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G02_Hummel/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G02_Hummel/Hummel_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.00298952 0.574702 2.1748	</rayStart>
         <rayEnd>	-0.00247027 0.487172 1.99497	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.30419 0.999523 -1.65247	</rayStart>
         <rayEnd>	-1.24638 0.983444 -1.65247	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.29636 1.02755 -0.555693	</rayStart>
         <rayEnd>	-1.23855 1.01147 -0.555695	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.88	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.28669 0.993111 -1.65444	</rayStart>
         <rayEnd>	1.26742 0.987752 -1.65444	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.2995 1.02154 -0.551011	</rayStart>
         <rayEnd>	1.24169 1.00547 -0.551013	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.88	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G02_Hummel/Hummel_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	12	</slotId>
+        <anchorPosition>	0.000000 0.742142 1.93186	</anchorPosition>
+        <anchorDirection>	0.000000 0.358608 0.933488	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	13	</slotId>
+        <anchorPosition>	0.000000 0.742142 1.93186	</anchorPosition>
+        <anchorDirection>	0.000000 0.358608 0.933488	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Hummel_Ausf_1943>
@@ -781,6 +814,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	-1.46619 0.601119 0.0396401	</anchorPosition>
+          <anchorDirection>	-0.924967 0.379225 0.0250075	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	24	</slotId>
+          <anchorPosition>	0.000000 2.59483 -0.511869	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Hummel_Ausf_1943>
     <Hummel_Ausf_1944>
       <userString>	#germany_vehicles:Hummel_Ausf_1944	</userString>
@@ -1445,6 +1498,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	-1.46619 0.601119 0.0396401	</anchorPosition>
+          <anchorDirection>	-0.924967 0.379225 0.0250075	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	0.00010969 2.5951 -0.51166	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Hummel_Ausf_1944>
   </chassis>
   <turrets0>
@@ -1505,17 +1578,45 @@
             <collisionModelServer>	vehicles/german/G02_Hummel/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G02_Hummel/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.000557633 -0.0215567 1.88528	</rayStart>
               <rayEnd>	-0.0143494 -0.0163539 1.88528	</rayEnd>
               <rayUp>	0.104 0.104 5	</rayUp>
               <size>	0.23	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	false	</isUVProportional>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	-0.000278811 -0.0110292 1.33652	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	0.000000 -0.153979 -0.153979	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	-0.000278811 -0.0110292 1.33652	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.685 0.445 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1531,10 +1632,29 @@
         <collisionModelClient>	vehicles/german/G02_Hummel/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.002121 0.662594 -0.136024	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.798 0.234 1.000 0.000 1.000 0.000 0.500 0.023 0.471 0.500 0.268 0.500 0.649 0.082 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	0.000000 0.869843 0.583385	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	0.000000 0.869843 0.583384	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	1 0.64 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1596,16 +1716,46 @@
             <destroyed>	vehicles/german/G02_Hummel/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/german/G02_Hummel/crash/lod0/Gun_03.model	</exploded>
           </models>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	-0.000590633 -0.0210966 3.70241	</rayStart>
               <rayEnd>	-0.00767752 -0.0831617 3.70032	</rayEnd>
               <rayUp>	0.11 0.106 4	</rayUp>
               <size>	0.356	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	21	</slotId>
+              <anchorPosition>	-0.000295314 -0.0107012 2.05641	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	23	</slotId>
+              <anchorPosition>	0.000000 0.308176 0.308176	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	20	</slotId>
+              <anchorPosition>	-0.000295314 -0.0107012 2.05641	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.805 0.805 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1621,10 +1771,29 @@
         <collisionModelClient>	vehicles/german/G02_Hummel/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.002121 0.662594 -0.136024	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.798 0.234 1.000 0.000 1.000 0.000 0.500 0.023 0.471 0.500 0.268 0.500 0.649 0.082 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	19	</slotId>
+          <anchorPosition>	0.000008 0.825702 0.59515	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	17	</slotId>
+          <anchorPosition>	0.00198782 1.51884 0.286469	</anchorPosition>
+          <anchorDirection>	0.000039 1 0.000001	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	1 0.64 0.000000 0.000000	</tiling>
       </camouflage>

@@ -2,11 +2,14 @@
 # Embedded file name: scripts/common/items/customizations.py
 from cStringIO import StringIO
 from string import lower
+import math
+import base64
 import varint
 import ResMgr
 from collections import namedtuple, OrderedDict, defaultdict
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, NO_OUTFIT_DATA
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
+from items.components.c11n_constants import ApplyArea, SeasonType, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, NO_OUTFIT_DATA, MAX_USERS_PROJECTION_DECALS
 from items.components import c11n_components as cn
 from constants import IS_CELLAPP, IS_BASEAPP
 from typing import List, Dict, Type, Tuple, Any, TypeVar, Optional, MutableMapping
@@ -20,28 +23,37 @@ class FieldTypes(object):
     CUSTOM_TYPE_OFFSET = 128
     TYPED_ARRAY = 64
     APPLY_AREA_ENUM = 32
+    FLOAT = 16
 
 
-FieldType = namedtuple('FieldType', 'type default deprecated  weak_equal_ignored')
+FieldType = namedtuple('FieldType', 'type default deprecated  weakEqualIgnored xmlOnly')
 
-def arrayField(itemType, default=None):
-    return FieldType(FieldTypes.TYPED_ARRAY | itemType, default or [], False, False)
+def arrayField(itemType, default=None, xmlOnly=False):
+    return FieldType(FieldTypes.TYPED_ARRAY | itemType, default or [], False, False, xmlOnly)
 
 
 def intField(default=0):
-    return FieldType(FieldTypes.VARINT, default, False, False)
+    return FieldType(FieldTypes.VARINT, default, False, False, False)
+
+
+def xmlOnlyFloatField(default=0):
+    return FieldType(FieldTypes.FLOAT, default, False, False, True)
+
+
+def xmlOnlyFloatArrayField(default=None):
+    return FieldType(FieldTypes.TYPED_ARRAY | FieldTypes.FLOAT, default or [], False, False, True)
 
 
 def applyAreaEnumField(default=0):
-    return FieldType(FieldTypes.APPLY_AREA_ENUM, default, False, True)
+    return FieldType(FieldTypes.APPLY_AREA_ENUM, default, False, True, False)
 
 
 def customFieldType(customType):
-    return FieldType(FieldTypes.CUSTOM_TYPE_OFFSET * customType, None, False, False)
+    return FieldType(FieldTypes.CUSTOM_TYPE_OFFSET * customType, None, False, False, False)
 
 
-def intArrayField(default=None):
-    return arrayField(FieldTypes.VARINT, default or [])
+def intArrayField(default=None, xmlOnly=False):
+    return arrayField(FieldTypes.VARINT, default or [], xmlOnly=xmlOnly)
 
 
 def customArrayField(customType, default=None):
@@ -82,6 +94,8 @@ class SerializableComponent(object):
             if ftype.deprecated:
                 continue
             v1 = getattr(self, name)
+            if isinstance(v1, list):
+                v1 = tuple(v1)
             result = (result * 31 + hash(v1)) % 18446744073709551616L
 
         return result
@@ -97,7 +111,7 @@ class SerializableComponent(object):
         for name, ftype in self.fields.iteritems():
             if ftype.deprecated:
                 continue
-            if ftype.weak_equal_ignored:
+            if ftype.weakEqualIgnored:
                 continue
             v1 = getattr(self, name)
             v2 = getattr(o, name)
@@ -150,6 +164,8 @@ class ComponentBinSerializer(object):
             if fieldInfo.deprecated:
                 offset <<= 1
                 continue
+            if fieldInfo.xmlOnly:
+                continue
             value = getattr(obj, fieldName)
             if value != fieldInfo.default:
                 hasValue |= offset
@@ -185,8 +201,12 @@ class ComponentBinDeserializer(object):
 
     def decode(self, data):
         self.__stream = StringIO(data)
-        code = varint.decode_stream(self.__stream)
-        obj = self.__decodeCustomType(code)
+        try:
+            code = varint.decode_stream(self.__stream)
+            obj = self.__decodeCustomType(code)
+        except EOFError:
+            raise SerializationException('Cannot parse given stream')
+
         return obj
 
     def __decodeCustomType(self, itemType):
@@ -197,6 +217,8 @@ class ComponentBinDeserializer(object):
         valueMap = varint.decode_stream(io)
         offset = 1
         for k, t in fields.iteritems():
+            if t.xmlOnly:
+                continue
             if valueMap & offset:
                 ftype = t.type
                 if ftype == FieldTypes.VARINT:
@@ -282,6 +304,8 @@ class ComponentXmlDeserializer(object):
                 continue
             if ftype == FieldTypes.VARINT:
                 value = section.readInt(fname)
+            elif ftype == FieldTypes.FLOAT:
+                value = section.readFloat(fname)
             elif ftype == FieldTypes.APPLY_AREA_ENUM:
                 value = self.__decodeApplyAreaEnum(section.readString(fname))
             elif ftype & FieldTypes.TYPED_ARRAY:
@@ -302,6 +326,8 @@ class ComponentXmlDeserializer(object):
         for i, (iname, isection) in enumerate(section.items()):
             if itemType == FieldTypes.VARINT:
                 result.append(isection.asInt)
+            if itemType == FieldTypes.FLOAT:
+                result.append(isection.asFloat)
             if itemType >= FieldTypes.CUSTOM_TYPE_OFFSET:
                 customType = itemType / FieldTypes.CUSTOM_TYPE_OFFSET
                 ictx = (ctx, '{0} {1}'.format(iname, isection))
@@ -376,35 +402,58 @@ class DecalComponent(SerializableComponent):
         super(DecalComponent, self).__init__()
 
 
+class ProjectionDecalComponent(SerializableComponent):
+    customType = 7
+    fields = OrderedDict((('id', intField()),
+     ('showOn', applyAreaEnumField(ApplyArea.NONE)),
+     ('slotId', intField(0)),
+     ('scaleFactorId', intField(0)),
+     ('scale', xmlOnlyFloatArrayField()),
+     ('rotation', xmlOnlyFloatArrayField()),
+     ('position', xmlOnlyFloatArrayField()),
+     ('tintColor', intArrayField(xmlOnly=True))))
+    __slots__ = ('id', 'showOn', 'slotId', 'scaleFactorId', 'position', 'rotation', 'scale', 'tintColor')
+
+    def __init__(self, id=0, showOn=ApplyArea.NONE, slotId=0, scaleFactorId=0, scale=(1, 10, 1), rotation=(0, 0, 0), position=(0, 0, 0), tintColor=(255, 255, 255, 255)):
+        self.id = id
+        self.showOn = showOn
+        self.slotId = slotId
+        self.scaleFactorId = scaleFactorId
+        self.scale = scale
+        self.rotation = rotation
+        self.position = position
+        self.tintColor = tintColor
+        super(ProjectionDecalComponent, self).__init__()
+
+    def __str__(self):
+        return 'ProjectionDecalComponent(id={0}, showOn={1}, slotId={2}, scaleFactorId={3}, scale={4}, rotation={5}, position={6}, tintColor={7})'.format(self.id, self.showOn, self.slotId, self.scaleFactorId, self.scale, self.rotation, self.position, self.tintColor)
+
+
 class CustomizationOutfit(SerializableComponent):
     customType = 4
     fields = OrderedDict((('modifications', intArrayField()),
      ('paints', customArrayField(PaintComponent.customType)),
      ('camouflages', customArrayField(CamouflageComponent.customType)),
      ('decals', customArrayField(DecalComponent.customType)),
-     ('styleId', intField())))
-    __slots__ = ('modifications', 'paints', 'camouflages', 'decals', 'styleId')
+     ('styleId', intField()),
+     ('projection_decals', customArrayField(ProjectionDecalComponent.customType))))
+    __slots__ = ('modifications', 'paints', 'camouflages', 'decals', 'styleId', 'projection_decals')
 
-    def __init__(self, modifications=None, paints=None, camouflages=None, decals=None, styleId=0):
+    def __init__(self, modifications=None, paints=None, camouflages=None, decals=None, projection_decals=None, styleId=0):
         self.modifications = modifications or []
         self.paints = paints or []
         self.camouflages = camouflages or []
         self.decals = decals or []
         self.styleId = styleId or 0
+        self.projection_decals = projection_decals or []
         super(CustomizationOutfit, self).__init__()
 
     def __nonzero__(self):
-        return bool(self.modifications or self.paints or self.decals or self.styleId or self.camouflages)
+        for v in getattr(type(self), '__slots__'):
+            if getattr(self, v):
+                return True
 
-    def mergeOutfit(self, otherOutfit, inverse=False):
-        selfOutfit = self if not inverse else otherOutfit
-        otherOutfit = otherOutfit if not inverse else self
-        selfOutfit.styleId = otherOutfit.styleId
-        if otherOutfit.modifications:
-            selfOutfit.modifications[:] = otherOutfit.modifications
-        CustomizationOutfit.__overwrite(selfOutfit.paints, otherOutfit.paints, ApplyArea.RANGE)
-        CustomizationOutfit.__overwrite(selfOutfit.decals, otherOutfit.decals, ApplyArea.DECAL_REGIONS)
-        CustomizationOutfit.__overwrite(selfOutfit.camouflages, otherOutfit.camouflages, ApplyArea.CAMOUFLAGE_REGIONS)
+        return False
 
     def getInvisibilityCamouflageId(self):
         for ce in self.camouflages:
@@ -496,6 +545,8 @@ class CustomizationOutfit(SerializableComponent):
         elif typeId in CustomizationType._INT_TYPES:
             if typeId == CustomizationType.STYLE and self.styleId == componentId:
                 result += 1
+            elif typeId == CustomizationType.PROJECTION_DECAL:
+                result += len([ component for component in self.projection_decals if componentId == component.id ])
             elif typeId == CustomizationType.MODIFICATION and componentId in self.modifications:
                 result += 1
         return result
@@ -514,7 +565,13 @@ def parseCompDescr(customizationElementCompDescr):
 def parseOutfitDescr(outfitDescr):
     if not outfitDescr:
         return CustomizationOutfit()
-    outfit = parseCompDescr(outfitDescr)
+    try:
+        outfit = parseCompDescr(outfitDescr)
+    except SerializationException:
+        LOG_CURRENT_EXCEPTION()
+        LOG_ERROR('Bad outfit descr', base64.b64encode(outfitDescr))
+        outfit = CustomizationOutfit()
+
     if outfit.customType != CustomizationOutfit.customType:
         raise SoftException('Wrong customization item type')
     return outfit
@@ -539,6 +596,9 @@ def getAllItemsFromOutfit(cc, outfit, ignoreHiddenCamouflage=True):
         for i in ApplyArea.RANGE:
             if i & d.appliedTo:
                 result[cn.DecalItem.makeIntDescr(d.id)] += 1
+
+    for d in outfit.projection_decals:
+        result[cn.ProjectionDecalItem.makeIntDescr(d.id)] += 1
 
     for p in outfit.paints:
         result[cn.PaintItem.makeIntDescr(p.id)] += cc.paints[p.id].getAmount(p.appliedTo)
@@ -576,6 +636,7 @@ class OutfitLogEntry(object):
         self.modification_cd = cn.ModificationItem.makeIntDescr(outfit.modifications[0]) if outfit.modifications else 0
         self._paints = CustomizationOutfit.applyAreaBitmaskToDict(outfit.paints)
         self._decals = CustomizationOutfit.applyAreaBitmaskToDict(outfit.decals)
+        self._projection_decals = outfit.projection_decals
         self._camouflages = CustomizationOutfit.applyAreaBitmaskToDict(outfit.camouflages)
         self.chassis_paint_cd = self.__getPaintCd(ApplyArea.CHASSIS)
         self.hull_paint_cd = self.__getPaintCd(ApplyArea.HULL)
@@ -593,6 +654,8 @@ class OutfitLogEntry(object):
         self.turret_decal_cd1 = self.__getDecalCd(ApplyArea.TURRET_1)
         self.turret_decal_cd2 = self.__getDecalCd(ApplyArea.TURRET_2)
         self.turret_decal_cd3 = self.__getDecalCd(ApplyArea.TURRET_3)
+        for number in xrange(0, MAX_USERS_PROJECTION_DECALS):
+            setattr(self, 'projection_decal{0}'.format(number), self.__getProjectionDecalData(number))
 
     @staticmethod
     def __getItemCompDescr(storage, area, cdFormatter):
@@ -607,6 +670,22 @@ class OutfitLogEntry(object):
 
     def __getDecalCd(self, area):
         return OutfitLogEntry.__getItemCompDescr(self._decals, area, cn.DecalItem.makeIntDescr)
+
+    def __getProjectionDecalData(self, number):
+        value = {'projection_decal_slot': 0,
+         'projection_decal_cd': 0,
+         'projection_decal_showOn': 0,
+         'projection_decal_scaleFactorId': 0}
+        try:
+            projectionDecal = self._projection_decals[number]
+            value['projection_decal_slot'] = projectionDecal.slotId
+            value['projection_decal_cd'] = cn.ProjectionDecalItem.makeIntDescr(projectionDecal.id)
+            value['projection_decal_showOn'] = projectionDecal.showOn
+            value['projection_decal_scaleFactorId'] = projectionDecal.scaleFactorId
+        except IndexError:
+            pass
+
+        return value
 
     def toDict(self):
         return {k:v for k, v in self.__dict__.iteritems() if not k.startswith('_')}
@@ -655,3 +734,20 @@ def makeLogOutfitValues(outfitDescr):
 def getVehicleOutfit(outfits, vehTypeDescr, outfitType):
     result = outfits.get(vehTypeDescr, {}).get(outfitType, NO_OUTFIT_DATA)
     return (result[0], bool(result[1] & StyleFlags.ENABLED)) if result[1] & StyleFlags.INSTALLED else ('', False)
+
+
+def _clamp(value, minValue, maxValue, limit):
+    value = int(round((min(max(float(value), minValue), maxValue) - minValue) / (maxValue - minValue) * limit))
+    return value
+
+
+def _unclamp(value, minValue, maxValue, limit):
+    return float(value) * (maxValue - minValue) / limit + minValue
+
+
+def _clamp16(value, minValue, maxValue):
+    return _clamp(value, minValue, maxValue, 65535)
+
+
+def _unclamp16(value, minValue, maxValue):
+    return _unclamp(value, minValue, maxValue, 65535)

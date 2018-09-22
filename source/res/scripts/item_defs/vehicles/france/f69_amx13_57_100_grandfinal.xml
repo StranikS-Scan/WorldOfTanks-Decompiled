@@ -69,16 +69,25 @@
       <collisionModelServer>	vehicles/french/F69_AMX13_57_100/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F69_AMX13_57_100/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F69_AMX13_57_100/AMX13_57_100_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.509641 0.473883 1.53496	</rayStart>
         <rayEnd>	-0.509641 0.105442 1.37924	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.22	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F69_AMX13_57_100/AMX13_57_100_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.96 0.82 0.000000 0.000000	</tiling>
     </camouflage>
@@ -823,6 +832,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_AMX13_57_100_GrandFinal>
   </chassis>
   <turrets0>
@@ -901,16 +916,25 @@
             <collisionModelServer>	vehicles/french/F69_AMX13_57_100/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F69_AMX13_57_100/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.0245862 -0.00185698 4.36811	</rayStart>
               <rayEnd>	0.110729 -0.0285648 4.36517	</rayEnd>
               <rayUp>	0.065 0.062 4	</rayUp>
               <size>	0.339	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
           </camouflage>
@@ -926,43 +950,61 @@
         <collisionModelClient>	vehicles/french/F69_AMX13_57_100/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.0245 0.576803 -0.004636	</gunPosition>
-      <emblemSlots>
-        <fixedInscription>
+      <showEmblemsOnGun>	true	</showEmblemsOnGun>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.412 -0.382 0.971 0.000 0.735 0.529 0.743 0.735 0.500 0.500 0.279 0.500 0.309 0.000 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	fixedInscription	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.808433 0.00086465 -0.899797	</rayStart>
           <rayEnd>	-0.608565 -0.000167033 -0.892608	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <emblemId>	822	</emblemId>
           <size>	0.85	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </fixedInscription>
-        <fixedInscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	fixedInscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	0.808433 0.00086465 -0.899797	</rayStart>
           <rayEnd>	0.608565 -0.000167033 -0.892608	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <emblemId>	822	</emblemId>
           <size>	0.85	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </fixedInscription>
-        <fixedEmblem>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	fixedEmblem	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.88794 -0.00036098 -1.47048	</rayStart>
           <rayEnd>	-0.488208 -0.00226615 -1.45606	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <emblemId>	822	</emblemId>
           <size>	0.27	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </fixedEmblem>
-        <fixedEmblem>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	fixedEmblem	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.88794 -0.00036098 -1.47048	</rayStart>
           <rayEnd>	0.488208 -0.00226615 -1.45606	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <emblemId>	822	</emblemId>
           <size>	0.27	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </fixedEmblem>
-      </emblemSlots>
-      <showEmblemsOnGun>	true	</showEmblemsOnGun>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.412 -0.382 0.971 0.000 0.735 0.529 0.743 0.735 0.500 0.500 0.279 0.500 0.309 0.000 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.745 0.475 0.000000 0.000000	</tiling>
       </camouflage>

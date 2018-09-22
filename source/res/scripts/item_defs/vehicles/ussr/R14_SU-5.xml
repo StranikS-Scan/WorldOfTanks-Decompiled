@@ -74,38 +74,62 @@
       <collisionModelServer>	vehicles/russian/R14_SU-5/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R14_SU-5/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R14_SU-5/SU-5_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.556479 0.35991 0.938658	</rayStart>
         <rayEnd>	-0.556479 0.35991 0.53866	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.605158 1.14707 -0.826088	</rayStart>
         <rayEnd>	-0.605079 1.10199 -0.903985	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.272077 0.215452 1.67969	</rayStart>
         <rayEnd>	0.272072 -0.178473 1.61025	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.78	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.08396 0.686272 -0.97986	</rayStart>
         <rayEnd>	1.02415 0.686272 -1.01624	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R14_SU-5/SU-5_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	5	</slotId>
+        <anchorPosition>	0.00674741 0.0602791 1.40787	</anchorPosition>
+        <anchorDirection>	-0.000053 0.573574 0.819154	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <SU-5>
@@ -1067,6 +1091,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.000000 1.52288 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </SU-5>
     <SU-5bis>
       <userString>	#ussr_vehicles:SU-5bis	</userString>
@@ -2023,13 +2061,27 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.000054 1.52242 0.000005	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </SU-5bis>
   </chassis>
   <turrets0>
     <SU-5>
       <ceilless>	true	</ceilless>
       <userString>	#ussr_vehicles:SU-18	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	4	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -2093,6 +2145,21 @@
             <collisionModelServer>	vehicles/russian/R14_SU-5/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R14_SU-5/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	0.000395462 0.171576 0.863466	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2131,6 +2198,21 @@
             <collisionModelServer>	vehicles/russian/R14_SU-5/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R14_SU-5/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.000230663 0.159968 1.29652	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2172,6 +2254,21 @@
             <collisionModelServer>	vehicles/russian/R14_SU-5/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R14_SU-5/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	0.000235028 0.146686 0.78046	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2206,6 +2303,21 @@
             <collisionModelServer>	vehicles/russian/R14_SU-5/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R14_SU-5/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	12	</slotId>
+              <anchorPosition>	0.000234968 0.118164 0.679711	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2221,10 +2333,23 @@
         <collisionModelClient>	vehicles/russian/R14_SU-5/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.59778 -0.00043	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.796 0.374 1.000 0.000 0.961 -0.617 0.500 0.358 0.515 0.500 0.000 0.500 0.433 0.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	-0.0106411 1.4657 -1.06224	</anchorPosition>
+          <anchorDirection>	0.000000 0.499917 0.866073	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.7 0.3 0.000000 0.000000	</tiling>
       </camouflage>

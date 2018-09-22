@@ -75,16 +75,31 @@
       <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/british/GB41_Challenger/Challenger_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.00294316 0.0721207 2.9358	</rayStart>
         <rayEnd>	-0.00294316 0.0227485 2.91689	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/british/GB41_Challenger/Challenger_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	17	</slotId>
+        <anchorPosition>	0.000000 0.53459 -2.35968	</anchorPosition>
+        <anchorDirection>	0.000000 0.220952 -0.975285	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.9 1.9 0.000000 0.000000	</tiling>
     </camouflage>
@@ -1025,6 +1040,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	15	</slotId>
+          <anchorPosition>	0.000185907 2.66482 0.395534	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB41_Challenger>
     <Chassis_GB41_Challenger_2>
       <userString>	#gb_vehicles:Chassis_GB41_Challenger_2	</userString>
@@ -1957,6 +1986,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	16	</slotId>
+          <anchorPosition>	0.000186573 2.66482 0.395521	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB41_Challenger_2>
   </chassis>
   <turrets0>
@@ -2029,16 +2072,32 @@
             <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.000125939 -0.00601501 2.27349	</rayStart>
               <rayEnd>	0.203867 -0.0359393 2.27003	</rayEnd>
               <rayUp>	0.067 0.065 5	</rayUp>
               <size>	0.35	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	19	</slotId>
+              <anchorPosition>	0.000063 -0.00351856 1.90372	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2073,16 +2132,32 @@
             <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	0.000125939 -0.00501502 2.2611	</rayStart>
               <rayEnd>	0.0608865 -0.0735235 2.25909	</rayEnd>
               <rayUp>	0.068 0.066 5	</rayUp>
               <size>	0.35	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	20	</slotId>
+              <anchorPosition>	0.000063 -0.00351856 1.90372	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_17pdr_OQF_AT_1>
       </guns>
       <models>
@@ -2095,40 +2170,64 @@
         <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.008166 0.549053 0.785555	</gunPosition>
-      <emblemSlots>
-        <inscription>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.000 -0.070 1.004 0.000 0.545 0.381 0.642 0.716 0.447 0.500 0.000 0.510 0.074 0.089 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-1.00022 0.376955 0.121083	</rayStart>
           <rayEnd>	-0.947352 0.376834 0.121242	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.7	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.613225 0.806547 -1.0979	</rayStart>
           <rayEnd>	-0.594981 0.80651 -1.0897	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	1.00022 0.376955 0.121083	</rayStart>
           <rayEnd>	0.947352 0.376834 0.121242	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.7	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.592164 0.789982 -1.10793	</rayStart>
           <rayEnd>	0.573933 0.789982 -1.09971	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.000 -0.070 1.004 0.000 0.545 0.381 0.642 0.716 0.447 0.500 0.000 0.510 0.074 0.089 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	18	</slotId>
+          <anchorPosition>	0.000000 1.04699 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Turret_1_GB41_Challenger>
     <Turret_2_GB41_Challenger>
       <userString>	#gb_vehicles:Turret_2_GB41_Challenger	</userString>
@@ -2202,16 +2301,32 @@
             <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	12	</slotId>
               <rayStart>	0.000000 0.000732867 2.07746	</rayStart>
               <rayEnd>	0.100311 -0.017389 2.07495	</rayEnd>
               <rayUp>	0.069 0.067 5	</rayUp>
               <size>	0.35	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	22	</slotId>
+              <anchorPosition>	0.000000 0.000018 1.79202	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_17pdr_OQF_AT_Mk_II>
         <_17pdr_OQF_AT_1>	shared	  <maxAmmo>	55	</maxAmmo>
           <armor>
@@ -2239,16 +2354,32 @@
             <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	13	</slotId>
               <rayStart>	0.000000 0.000732867 2.1082	</rayStart>
               <rayEnd>	0.0421859 -0.0291265 2.10645	</rayEnd>
               <rayUp>	0.07 0.067 5	</rayUp>
               <size>	0.35	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	23	</slotId>
+              <anchorPosition>	0.000000 0.000366511 1.79202	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_17pdr_OQF_AT_1>
         <_32_pounder_AT_Gun_OQF_Mk_II>	shared	  <maxAmmo>	30	</maxAmmo>
           <armor>
@@ -2277,16 +2408,32 @@
             <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	14	</slotId>
               <rayStart>	0.00211782 -0.00700102 2.30948	</rayStart>
               <rayEnd>	-0.0364467 0.0188863 2.30948	</rayEnd>
               <rayUp>	0.076 0.074 5	</rayUp>
               <size>	0.35	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	24	</slotId>
+              <anchorPosition>	0.00105891 -0.00350051 2.02588	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_32_pounder_AT_Gun_OQF_Mk_II>
       </guns>
       <models>
@@ -2299,40 +2446,64 @@
         <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.003579 0.497747 1.10468	</gunPosition>
-      <emblemSlots>
-        <inscription>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	0.926 -0.039 1.000 0.000 0.576 0.412 0.500 0.500 0.500 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	8	</slotId>
           <rayStart>	-1.09183 0.312355 0.163142	</rayStart>
           <rayEnd>	-1.03896 0.312355 0.163142	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.55	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	9	</slotId>
           <rayStart>	-1.09184 0.462804 -0.36202	</rayStart>
           <rayEnd>	-1.03897 0.462804 -0.36202	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.26	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	10	</slotId>
           <rayStart>	1.08466 0.657006 0.164543	</rayStart>
           <rayEnd>	1.03179 0.657006 0.164543	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.55	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	11	</slotId>
           <rayStart>	1.09184 0.462804 -0.36202	</rayStart>
           <rayEnd>	1.03897 0.462804 -0.36202	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.26	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	0.926 -0.039 1.000 0.000 0.576 0.412 0.500 0.500 0.500 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	21	</slotId>
+          <anchorPosition>	0.000000 1.10965 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Turret_2_GB41_Challenger>
   </turrets0>
   <engines>

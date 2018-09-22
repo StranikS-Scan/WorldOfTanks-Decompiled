@@ -67,17 +67,38 @@
       <collisionModelServer>	vehicles/german/G126_HWK_12/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G126_HWK_12/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G126_HWK_12/HWK_12_HangarShadowMap.dds	</hangarShadowTexture>
+    <animateEmblemSlots>	true	</animateEmblemSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.254031 0.519169 1.99723	</rayStart>
         <rayEnd>	0.253934 0.343847 1.901	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G126_HWK_12/HWK_12_HangarShadowMap.dds	</hangarShadowTexture>
-    <animateEmblemSlots>	true	</animateEmblemSlots>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	16	</slotId>
+        <anchorPosition>	0.000000 0.671926 1.32191	</anchorPosition>
+        <anchorDirection>	0.000000 0.453124 0.891448	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	17	</slotId>
+        <anchorPosition>	0.000000 0.671926 1.32191	</anchorPosition>
+        <anchorDirection>	0.000000 0.453124 0.891448	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	5.1 5.1 0.000000 0.000000	</tiling>
     </camouflage>
@@ -958,6 +979,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	-1.25286 0.499171 -0.0215	</anchorPosition>
+          <anchorDirection>	-0.928862 0.370082 -0.01594	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.000183244 2.14176 -1.01324	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_G126_HWK_12>
     <Chassis_G126_HWK_12_2>
       <userString>	#germany_vehicles:Chassis_G126_HWK_12_2	</userString>
@@ -1843,6 +1884,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	-1.25286 0.499171 -0.0215	</anchorPosition>
+          <anchorDirection>	-0.928862 0.370082 -0.01594	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	15	</slotId>
+          <anchorPosition>	0.000232498 2.14176 -1.01329	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_G126_HWK_12_2>
   </chassis>
   <turrets0>
@@ -1918,16 +1979,46 @@
             <collisionModelServer>	vehicles/german/G126_HWK_12/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G126_HWK_12/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.000001 0.0064458 1.76963	</rayStart>
               <rayEnd>	0.0458281 -0.0242198 1.76963	</rayEnd>
               <rayUp>	0.056 0.055 5	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	20	</slotId>
+              <anchorPosition>	0.000000 0.0032229 1.16916	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	21	</slotId>
+              <anchorPosition>	0.000000 0.20569 0.20569	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	22	</slotId>
+              <anchorPosition>	0.000000 0.0032229 1.16916	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	2 2 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1943,40 +2034,70 @@
         <collisionModelClient>	vehicles/german/G126_HWK_12/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.322638 0.97883	</gunPosition>
-      <emblemSlots>
-        <player>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.019 -0.024 1.027 0.000 0.354 0.472 0.500 0.500 0.500 0.500 0.270 0.500 0.152 0.918 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.664314 0.370955 0.691962	</rayStart>
           <rayEnd>	-0.537499 0.269358 0.575372	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.87539 0.338325 -0.0301317	</rayStart>
           <rayEnd>	-0.693236 0.255759 -0.0301317	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.675	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.87539 0.338325 -0.0301317	</rayStart>
           <rayEnd>	0.693236 0.255759 -0.0301317	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.675	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.664314 0.370955 0.691962	</rayStart>
           <rayEnd>	0.537499 0.269358 0.575372	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.019 -0.024 1.027 0.000 0.354 0.472 0.500 0.500 0.500 0.500 0.270 0.500 0.152 0.918 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	18	</slotId>
+          <anchorPosition>	0.000000 0.560274 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	19	</slotId>
+          <anchorPosition>	0.000000 0.560274 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	2.6 2.6 0.000000 0.000000	</tiling>
       </camouflage>
@@ -2060,15 +2181,6 @@
             <collisionModelServer>	vehicles/german/G126_HWK_12/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G126_HWK_12/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000001 0.0064458 1.76891	</rayStart>
-              <rayEnd>	-0.0258403 0.00901199 1.76891	</rayEnd>
-              <rayUp>	0.055 0.055 5	</rayUp>
-              <size>	0.5	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>
@@ -2090,6 +2202,45 @@
               </slaves>
             </master>
           </drivenJoints>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	11	</slotId>
+              <rayStart>	0.000001 0.0064458 1.76891	</rayStart>
+              <rayEnd>	-0.0258403 0.00901199 1.76891	</rayEnd>
+              <rayUp>	0.055 0.055 5	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	25	</slotId>
+              <anchorPosition>	0.000000 0.0032229 1.16916	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	26	</slotId>
+              <anchorPosition>	0.000000 0.20569 0.20569	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	27	</slotId>
+              <anchorPosition>	0.000000 0.0032229 1.16916	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	2 2 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2105,40 +2256,70 @@
         <collisionModelClient>	vehicles/german/G126_HWK_12/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.322638 0.97883	</gunPosition>
-      <emblemSlots>
-        <player>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.019 -0.024 1.027 0.000 0.345 0.426 0.500 0.500 0.500 0.500 0.270 0.500 0.181 1.000 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	7	</slotId>
           <rayStart>	-0.638126 0.456776 0.64544	</rayStart>
           <rayEnd>	-0.51131 0.355181 0.528851	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	8	</slotId>
           <rayStart>	-0.782891 0.328974 -0.0400518	</rayStart>
           <rayEnd>	-0.761032 0.319066 -0.0400518	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.672	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	9	</slotId>
           <rayStart>	0.863038 0.365302 -0.0400518	</rayStart>
           <rayEnd>	0.680884 0.282737 -0.0400518	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.672	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	10	</slotId>
           <rayStart>	0.638126 0.456776 0.64544	</rayStart>
           <rayEnd>	0.51131 0.355181 0.528851	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.019 -0.024 1.027 0.000 0.345 0.426 0.500 0.500 0.500 0.500 0.270 0.500 0.181 1.000 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	28	</slotId>
+          <anchorPosition>	0.000000 0.557385 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	24	</slotId>
+          <anchorPosition>	0.000000 0.557385 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	2 2 0.000000 0.000000	</tiling>
       </camouflage>

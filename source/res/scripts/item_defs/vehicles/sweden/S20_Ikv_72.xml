@@ -72,45 +72,72 @@
       <collisionModelServer>	vehicles/sweden/S20_Ikv_72/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/sweden/S20_Ikv_72/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/sweden/S20_Ikv_72/Ikv_72_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.222662 0.167664 2.11122	</rayStart>
         <rayEnd>	0.222664 0.036842 1.95994	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.03699 0.377877 0.0847168	</rayStart>
         <rayEnd>	-1.0298 0.374367 0.0847168	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.536	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.03699 0.377877 0.0847168	</rayStart>
         <rayEnd>	1.0298 0.374367 0.0847168	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.536	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-1.04363 0.364097 1.07393	</rayStart>
         <rayEnd>	-1.03644 0.360587 1.07393	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.263	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.0514 0.362033 1.07169	</rayStart>
         <rayEnd>	1.03343 0.353259 1.07169	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.263	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/sweden/S20_Ikv_72/Ikv_72_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.000000 0.689882 -0.532857	</anchorPosition>
+        <anchorDirection>	-0.000000 0.791415 -0.61128	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_S20_Ikv_72>
@@ -870,6 +897,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	-0.000000 1.60082 0.802366	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_S20_Ikv_72>
     <Chassis_S20_Ikv_72_2>
       <userString>	#sweden_vehicles:Chassis_S20_Ikv_72_2	</userString>
@@ -1624,6 +1665,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000553258 1.60132 0.802311	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_S20_Ikv_72_2>
   </chassis>
   <turrets0>
@@ -1680,6 +1735,21 @@
             <collisionModelServer>	vehicles/sweden/S20_Ikv_72/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S20_Ikv_72/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	-0.000000 0.000761271 0.832759	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1712,6 +1782,21 @@
             <collisionModelServer>	vehicles/sweden/S20_Ikv_72/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S20_Ikv_72/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	-0.000000 0.000761509 1.5454	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1728,10 +1813,15 @@
         <collisionModelClient>	vehicles/sweden/S20_Ikv_72/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000010 0.310343 0.000019	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.100 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_S20_Ikv_72>
   </turrets0>
   <engines>

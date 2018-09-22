@@ -70,23 +70,35 @@
       <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/british/GB05_Vickers_Medium_Mk_II/Vickers_Medium_Mk_II_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.631775 0.923775 1.53973	</rayStart>
         <rayEnd>	0.631775 0.752535 1.4364	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.0707398 0.57461 2.057	</rayStart>
         <rayEnd>	-0.0707397 0.388597 1.98352	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.498	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/british/GB05_Vickers_Medium_Mk_II/Vickers_Medium_Mk_II_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2.3 2.3 0.000000 0.000000	</tiling>
     </camouflage>
@@ -936,6 +948,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_GB05_Vickers_Medium_Mk_II_bot>
   </chassis>
   <turrets0>
@@ -1000,6 +1018,12 @@
             <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1015,33 +1039,48 @@
         <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000058 0.385437 0.573161	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.081 0.000 1.102 0.000 0.496 0.114 0.579 0.500 0.593 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-1.1689 0.231346 0.132857	</rayStart>
           <rayEnd>	-0.770428 0.231319 0.0979171	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.67627 0.71757 0.000171696	</rayStart>
           <rayEnd>	0.598571 0.53328 0.000072	</rayEnd>
           <rayUp>	-0.921644 0.388037 0.000000	</rayUp>
           <size>	0.64	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	1.06928 0.231339 0.124122	</rayStart>
           <rayEnd>	0.870046 0.231326 0.106652	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.081 0.000 1.102 0.000 0.496 0.114 0.579 0.500 0.593 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
     </Turret_1_GB05_Vickers_Medium_Mk_II_bot>
   </turrets0>
   <engines>

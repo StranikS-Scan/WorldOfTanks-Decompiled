@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/camouflages.py
 from collections import namedtuple
+import logging
 import BigWorld
 import Math
+import Vehicular
 import items.vehicles
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
-from items.components.c11n_constants import ModificationType, C11N_MASK_REGION
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS
+_logger = logging.getLogger(__name__)
 RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
 RepaintParams.__new__.__defaults__ = (False,
  0,
@@ -16,51 +19,44 @@ RepaintParams.__new__.__defaults__ = (False,
  Math.Vector4(0.0),
  0.0,
  0.0)
-CamoParams = namedtuple('CamoParams', ('mask', 'excludeMap', 'tiling', 'weights', 'c0', 'c1', 'c2', 'c3'))
+CamoParams = namedtuple('CamoParams', ('mask', 'excludeMap', 'tiling', 'rotation', 'weights', 'c0', 'c1', 'c2', 'c3'))
 CamoParams.__new__.__defaults__ = ('',
  '',
  Math.Vector4(0.0),
+ 0,
  Math.Vector4(0.0),
  0,
  0,
  0,
  0)
+ProjectionDecalParams = namedtuple('ProjectionDecalParams', ('slot', 'mirrored', 'decalMap', 'fixTransform', 'tintColor', 'decalMatrix', 'partMatrix'))
+ProjectionDecalGenericParams = namedtuple('ProjectionDecalGenericParams', ('tintColor', 'position', 'rotation', 'scale', 'decalMap', 'applyAreas', 'doubleSided'))
+ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
+ Math.Vector3(0.0),
+ Math.Vector3(0.0, 1.0, 0.0),
+ '',
+ 1.0,
+ 0.0,
+ False)
 _DEFAULT_GLOSS = 0.509
 _DEFAULT_METALLIC = 0.23
+_DEAD_VEH_WEIGHT_COEFF = 0.5
 
 def prepareFashions(isDamaged):
-    if isDamaged:
-        fashions = [None,
-         None,
-         None,
-         None]
-    else:
-        fashions = [BigWorld.WGVehicleFashion(False),
-         BigWorld.WGBaseFashion(),
-         BigWorld.WGBaseFashion(),
-         BigWorld.WGBaseFashion()]
+    fashions = [BigWorld.WGVehicleFashion(isDamaged),
+     BigWorld.WGBaseFashion(),
+     BigWorld.WGBaseFashion(),
+     BigWorld.WGBaseFashion()]
     return VehiclePartsTuple(*fashions)
 
 
-def updateFashions(fashions, vDesc, isDamaged, outfit):
-    fashions = list(fashions)
-    for fashionIdx, descId in enumerate(TankPartNames.ALL):
-        fashion = fashions[fashionIdx]
-        if fashion is None:
-            continue
-        camo = getCamo(outfit, fashionIdx, vDesc, descId, isDamaged)
-        if camo:
-            camoHandler = BigWorld.PyCamoHandler()
-            fashion.setCamouflage()
-            fashion.addMaterialHandler(camoHandler)
-            camoHandler.setCamoParams(camo)
-        repaint = getRepaint(outfit, fashionIdx, vDesc)
-        if repaint:
-            repaintHandler = BigWorld.PyRepaintHandler()
-            fashion.addMaterialHandler(repaintHandler)
-            repaintHandler.setRepaintParams(repaint)
-
-    return
+def updateFashions(appearance):
+    fashions = list(appearance.fashions)
+    vDesc = appearance.typeDescriptor
+    outfit = appearance.outfit
+    isDamaged = not appearance.isAlive
+    outfitData = getOutfitData(outfit, vDesc, isDamaged)
+    appearance.c11nComponent = Vehicular.C11nComponent(fashions, appearance.compoundModel, outfitData)
 
 
 def getCamoPrereqs(outfit, vDesc):
@@ -105,7 +101,7 @@ def getCamo(outfit, containerId, vDesc, descId, isDamaged, default=None):
 
             weights = Math.Vector4(*[ (c >> 24) / 255.0 for c in palette ])
             if isDamaged:
-                weights *= 0.1
+                weights *= _DEAD_VEH_WEIGHT_COEFF
             tiling = camouflage.tiling.get(vDesc.type.compactDescr)
             if tiling is None:
                 tiling = vDesc.type.camouflage.tiling
@@ -133,7 +129,8 @@ def getCamo(outfit, containerId, vDesc, descId, isDamaged, default=None):
                         tiling = coeff
                 if compDesc.camouflage.exclusionMask:
                     exclusionMap = compDesc.camouflage.exclusionMask
-            result = CamoParams(camouflage.texture, exclusionMap or '', tiling, weights, palette[0], palette[1], palette[2], palette[3])
+            camoAngle = camouflage.rotation[descId]
+            result = CamoParams(camouflage.texture, exclusionMap or '', tiling, camoAngle, weights, palette[0], palette[1], palette[2], palette[3])
         return result
 
 
@@ -174,3 +171,66 @@ def getRepaint(outfit, containerId, vDesc):
     metallics = tuple(metallics)
     glosses = tuple(glosses)
     return RepaintParams(enabled, defaultColor, colors, metallics, glosses, fading, quality) if enabled else RepaintParams(enabled, defaultColor)
+
+
+def getGenericProjectionDecals(outfit, vehicleDescr):
+
+    def createVehSlotsMap(vehDescr):
+        vehSlots = {}
+        slotTypeName = 'projectionDecal'
+        for vehiclePartSlots in (vehDescr.hull.slotsAnchors,
+         vehDescr.chassis.slotsAnchors,
+         vehDescr.turret.slotsAnchors,
+         vehDescr.gun.slotsAnchors):
+            for vehicleSlot in vehiclePartSlots:
+                if vehicleSlot.type == slotTypeName:
+                    vehSlots[vehicleSlot.slotId] = vehicleSlot
+
+        return vehSlots
+
+    decalsParams = []
+    projectionDecalsSlot = outfit.misc.slotFor(GUI_ITEM_TYPE.PROJECTION_DECAL)
+    if projectionDecalsSlot is None:
+        return decalsParams
+    else:
+        vehSlotMap = createVehSlotsMap(vehicleDescr)
+        capacity = projectionDecalsSlot.capacity()
+        for idx in range(capacity):
+            decal = projectionDecalsSlot.getSlotData(idx)
+            if not decal.isEmpty():
+                if decal.component.slotId != 0:
+                    if decal.component.slotId in vehSlotMap:
+                        slotParams = vehSlotMap[decal.component.slotId]
+                        position = slotParams.position
+                        scale = slotParams.scale
+                        rotation = slotParams.rotation
+                        showOn = slotParams.showOn
+                        factors = slotParams.scaleFactors or DEFAULT_DECAL_SCALE_FACTORS
+                    else:
+                        _logger.warning('Wrong slotId in ProjectDecalComponent (slotId=%(slotId)d component=%(component)s)', {'slotId': decal.component.slotId,
+                         'component': decal.component})
+                        continue
+                else:
+                    position = decal.component.position
+                    scale = decal.component.scale
+                    rotation = decal.component.rotation
+                    showOn = decal.component.showOn
+                    factors = DEFAULT_DECAL_SCALE_FACTORS
+                if decal.component.scaleFactorId != 0:
+                    factor = factors[decal.component.scaleFactorId - 1]
+                    scale = Math.Vector3(scale[0] * factor, scale[1], scale[2] * factor)
+                params = ProjectionDecalGenericParams(tintColor=Math.Vector4(decal.component.tintColor) / 255, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=scale, decalMap=decal.item.texture, applyAreas=showOn, doubleSided=decal.item.isMirrored)
+                decalsParams.append(params)
+
+        return decalsParams
+
+
+def getOutfitData(outfit, vehicleDescr, isDamaged):
+    camos = []
+    paints = []
+    for fashionIdx, descId in enumerate(TankPartNames.ALL):
+        camos.append(getCamo(outfit, fashionIdx, vehicleDescr, descId, isDamaged))
+        paints.append(getRepaint(outfit, fashionIdx, vehicleDescr))
+
+    decals = getGenericProjectionDecals(outfit, vehicleDescr)
+    return (camos, paints, decals)

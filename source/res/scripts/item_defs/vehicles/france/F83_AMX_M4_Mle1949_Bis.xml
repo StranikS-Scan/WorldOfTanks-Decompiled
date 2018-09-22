@@ -56,22 +56,6 @@
         <turretHardPoints>
           <hardPoint>	HP_turretJoint_2	</hardPoint>
         </turretHardPoints>
-        <emblemSlots>
-          <clan>
-            <rayStart>	-0.553028 0.526934 2.78452	</rayStart>
-            <rayEnd>	-0.553028 0.234558 2.57449	</rayEnd>
-            <rayUp>	0.000000 0.000000 -1	</rayUp>
-            <size>	0.3	</size>
-            <hideIfDamaged>	false	</hideIfDamaged>
-          </clan>
-          <inscription>
-            <rayStart>	0.262685 0.3594 3.01797	</rayStart>
-            <rayEnd>	0.262685 0.066758 2.80832	</rayEnd>
-            <rayUp>	0.000000 0.000000 -1	</rayUp>
-            <size>	0.7	</size>
-            <hideIfDamaged>	true	</hideIfDamaged>
-          </inscription>
-        </emblemSlots>
         <camouflage>
           <tiling>	1.5 1.5 1.5 0.000000	</tiling>
         </camouflage>
@@ -102,23 +86,47 @@
       <collisionModelServer>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F83_AMX_M4_Mle1949_Bis/AMX_M4_Mle1949_Bis_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.561635 0.542334 2.76316	</rayStart>
         <rayEnd>	-0.561635 0.249958 2.55313	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	0.270383 0.361615 3.01486	</rayStart>
         <rayEnd>	0.270383 0.0689734 2.80521	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.7	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F83_AMX_M4_Mle1949_Bis/AMX_M4_Mle1949_Bis_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	18	</slotId>
+        <anchorPosition>	0.000000 0.86013 -3.1502	</anchorPosition>
+        <anchorDirection>	0.000000 0.263398 -0.964687	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	19	</slotId>
+        <anchorPosition>	0.000000 0.86013 -3.1502	</anchorPosition>
+        <anchorDirection>	0.000000 0.263398 -0.964687	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.5 1.5 1.5 0.000000	</tiling>
     </camouflage>
@@ -885,6 +893,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	-1.68899 0.642383 0.036535	</anchorPosition>
+          <anchorDirection>	-0.934488 0.355419 0.0202142	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	15	</slotId>
+          <anchorPosition>	0.000099 2.92846 -0.369004	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_F83_AMX_M4_Mle1949_Bis>
     <Chassis_F83_AMX_M4_Mle1949_Bis_2>
       <userString>	#france_vehicles:Chassis_F83_AMX_M4_Mle1949_Bis_2	</userString>
@@ -1643,6 +1671,26 @@
           </transform>
         </decal>
       </AODecals>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	16	</slotId>
+          <anchorPosition>	-1.68899 0.642383 0.036535	</anchorPosition>
+          <anchorDirection>	-0.934488 0.355419 0.0202142	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	17	</slotId>
+          <anchorPosition>	0.000041 2.92846 -0.369007	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_F83_AMX_M4_Mle1949_Bis_2>
   </chassis>
   <turrets0>
@@ -1733,16 +1781,46 @@
             <collisionModelServer>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	8	</slotId>
               <rayStart>	0.000174843 0.000289755 4.71028	</rayStart>
               <rayEnd>	-0.0683849 -0.0135683 4.70806	</rayEnd>
               <rayUp>	0.116 0.113 5	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	24	</slotId>
+              <anchorPosition>	0.000087 0.00136092 3.52234	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	25	</slotId>
+              <anchorPosition>	0.000000 0.254227 0.480898	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	26	</slotId>
+              <anchorPosition>	0.000087 0.00136092 3.52234	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1758,33 +1836,60 @@
         <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.005531 0.734196 -0.247918	</gunPosition>
-      <emblemSlots>
-        <player>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.030 -0.052 1.059 0.000 0.735 -0.169 0.348 0.447 0.359 0.500 0.341 0.500 0.484 0.330 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	-1.48162 0.838934 -0.386888	</rayStart>
           <rayEnd>	-1.16461 0.687052 -0.464552	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	6	</slotId>
           <rayStart>	1.48162 0.838934 -0.386888	</rayStart>
           <rayEnd>	1.16461 0.687052 -0.464552	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	7	</slotId>
           <rayStart>	-1.44813 0.817651 -1.16736	</rayStart>
           <rayEnd>	-1.12987 0.655657 -1.12195	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.76	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.030 -0.052 1.059 0.000 0.735 -0.169 0.348 0.447 0.359 0.500 0.341 0.500 0.484 0.330 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	22	</slotId>
+          <anchorPosition>	0.000000 1.16918 -0.837634	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	35	</slotId>
+          <anchorPosition>	0.000000 1.16918 -0.837634	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.8 0.8 0.9 0.000000	</tiling>
       </camouflage>
@@ -1875,16 +1980,39 @@
             <collisionModelServer>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	12	</slotId>
               <rayStart>	0.000174063 0.0716265 3.88191	</rayStart>
               <rayEnd>	-0.0627676 -0.0271342 3.87969	</rayEnd>
               <rayUp>	0.117 0.114 5	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	29	</slotId>
+              <anchorPosition>	0.000087 0.00136092 3.52234	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	31	</slotId>
+              <anchorPosition>	0.000087 0.00136092 3.52234	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1936,17 +2064,40 @@
             <collisionModelServer>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <effects>	shot_largeext	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	13	</slotId>
               <rayStart>	0.000474063 0.0716265 3.56783	</rayStart>
               <rayEnd>	-0.0569227 -0.00565288 3.56584	</rayEnd>
               <rayUp>	0.127 0.123 5	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <effects>	shot_largeext	</effects>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	32	</slotId>
+              <anchorPosition>	0.000213136 0.00149807 3.08052	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	34	</slotId>
+              <anchorPosition>	0.000213136 0.00149807 3.08052	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1963,33 +2114,60 @@
         <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.005531 0.519983 1.11236	</gunPosition>
-      <emblemSlots>
-        <player>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.069 -0.111 1.021 0.006 0.712 0.264 0.293 0.095 0.330 0.590 0.392 0.517 0.267 0.444 0.314	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	9	</slotId>
           <rayStart>	-1.19492 0.963252 -1.46237	</rayStart>
           <rayEnd>	-0.85478 0.845355 -1.46377	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	10	</slotId>
           <rayStart>	1.22021 0.959393 -0.764375	</rayStart>
           <rayEnd>	0.884733 0.828906 -0.7601	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.8	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	11	</slotId>
           <rayStart>	1.19492 0.963252 -1.46237	</rayStart>
           <rayEnd>	0.85478 0.845355 -1.46377	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.069 -0.111 1.021 0.006 0.712 0.264 0.293 0.095 0.330 0.590 0.392 0.517 0.267 0.444 0.314	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	27	</slotId>
+          <anchorPosition>	0.000000 1.16918 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	28	</slotId>
+          <anchorPosition>	0.000000 1.16918 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	1.4 0.7 2.9 0.000000	</tiling>
       </camouflage>
@@ -2114,7 +2292,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	1	</alpha>
   </emblems>
-  <customization>
-    <customizableVehicleAreas>	CHASSIS HULL TURRET GUN	</customizableVehicleAreas>
-  </customization>
 </F83_AMX_M4_Mle1949_Bis.xml>

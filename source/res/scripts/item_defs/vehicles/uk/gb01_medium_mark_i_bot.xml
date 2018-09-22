@@ -68,23 +68,35 @@
       <collisionModelServer>	vehicles/british/GB01_Medium_Mark_I/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB01_Medium_Mark_I/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/british/GB01_Medium_Mark_I/Medium_Mark_I_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.563565 0.230986 2.3526	</rayStart>
         <rayEnd>	0.563565 0.192433 2.21801	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.17902 0.760303 -1.87351	</rayStart>
         <rayEnd>	-0.779018 0.759717 -1.8735	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/british/GB01_Medium_Mark_I/Medium_Mark_I_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_GB01_Medium_Mark_I_bot>
@@ -887,6 +899,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_GB01_Medium_Mark_I_bot>
   </chassis>
   <turrets0>
@@ -953,6 +971,12 @@
             <collisionModelServer>	vehicles/british/GB01_Medium_Mark_I/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB01_Medium_Mark_I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
           </camouflage>
@@ -968,25 +992,37 @@
         <collisionModelClient>	vehicles/british/GB01_Medium_Mark_I/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.001016 0.33699 0.662835	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.004 0.000 1.002 0.000 0.559 0.273 0.566 0.500 0.615 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-1.0951 0.26738 0.0688084	</rayStart>
           <rayEnd>	-0.698521 0.267379 0.0165975	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.739331 0.769667 -0.0267676	</rayStart>
           <rayEnd>	0.542455 0.421475 -0.0267677	</rayEnd>
           <rayUp>	-0.870485 0.492194 0.000000	</rayUp>
           <size>	0.64	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.004 0.000 1.002 0.000 0.559 0.273 0.566 0.500 0.615 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
     </Turret_1_GB01_Medium_Mark_I_bot>
   </turrets0>
   <engines>

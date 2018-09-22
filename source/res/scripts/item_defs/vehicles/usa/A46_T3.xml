@@ -64,44 +64,6 @@
         <turretHardPoints>
           <hardPoint>	HP_turretJoint_2	</hardPoint>
         </turretHardPoints>
-        <emblemSlots>
-          <clan>
-            <rayStart>	-0.00536323 0.181697 1.2558	</rayStart>
-            <rayEnd>	-0.00539926 -0.0065276 1.18819	</rayEnd>
-            <rayUp>	0.000000 0.000000 -1	</rayUp>
-            <size>	0.26	</size>
-            <hideIfDamaged>	false	</hideIfDamaged>
-          </clan>
-          <player>
-            <rayStart>	-0.866369 1.22461 0.0228949	</rayStart>
-            <rayEnd>	-0.681771 1.22458 -0.05407	</rayEnd>
-            <rayUp>	0.000000 1 0.000000	</rayUp>
-            <size>	0.23	</size>
-            <hideIfDamaged>	false	</hideIfDamaged>
-          </player>
-          <player>
-            <rayStart>	0.0398631 1.19413 -0.00839242	</rayStart>
-            <rayEnd>	-0.157022 1.1941 -0.0435282	</rayEnd>
-            <rayUp>	0.000000 1 0.000000	</rayUp>
-            <size>	0.23	</size>
-            <hideIfDamaged>	true	</hideIfDamaged>
-            <isMirrored>	true	</isMirrored>
-          </player>
-          <inscription>
-            <rayStart>	-1.2168 0.604276 -0.495248	</rayStart>
-            <rayEnd>	-1.0168 0.604238 -0.495248	</rayEnd>
-            <rayUp>	0.000000 1 0.000000	</rayUp>
-            <size>	0.55	</size>
-            <hideIfDamaged>	false	</hideIfDamaged>
-          </inscription>
-          <inscription>
-            <rayStart>	1.21801 0.605204 -0.138545	</rayStart>
-            <rayEnd>	1.01802 0.605166 -0.138545	</rayEnd>
-            <rayUp>	0.000000 1 0.000000	</rayUp>
-            <size>	0.55	</size>
-            <hideIfDamaged>	true	</hideIfDamaged>
-          </inscription>
-        </emblemSlots>
       </hull2>
       <hull3>
         <turret0>	Turret_3_A46_T3	</turret0>
@@ -111,44 +73,6 @@
         <turretHardPoints>
           <hardPoint>	HP_turretJoint_3	</hardPoint>
         </turretHardPoints>
-        <emblemSlots>
-          <clan>
-            <rayStart>	-0.00536323 0.181697 1.2558	</rayStart>
-            <rayEnd>	-0.00539926 -0.0065276 1.18819	</rayEnd>
-            <rayUp>	0.000000 0.000000 -1	</rayUp>
-            <size>	0.26	</size>
-            <hideIfDamaged>	false	</hideIfDamaged>
-          </clan>
-          <player>
-            <rayStart>	-0.866369 1.22461 0.0228949	</rayStart>
-            <rayEnd>	-0.681771 1.22458 -0.05407	</rayEnd>
-            <rayUp>	0.000000 1 0.000000	</rayUp>
-            <size>	0.23	</size>
-            <hideIfDamaged>	false	</hideIfDamaged>
-          </player>
-          <player>
-            <rayStart>	0.0398631 1.19413 -0.00839242	</rayStart>
-            <rayEnd>	-0.157022 1.1941 -0.0435282	</rayEnd>
-            <rayUp>	0.000000 1 0.000000	</rayUp>
-            <size>	0.23	</size>
-            <hideIfDamaged>	true	</hideIfDamaged>
-            <isMirrored>	true	</isMirrored>
-          </player>
-          <inscription>
-            <rayStart>	-1.2168 0.604276 -0.495248	</rayStart>
-            <rayEnd>	-1.0168 0.604238 -0.495248	</rayEnd>
-            <rayUp>	0.000000 1 0.000000	</rayUp>
-            <size>	0.55	</size>
-            <hideIfDamaged>	false	</hideIfDamaged>
-          </inscription>
-          <inscription>
-            <rayStart>	1.21801 0.605204 -0.138545	</rayStart>
-            <rayEnd>	1.01802 0.605166 -0.138545	</rayEnd>
-            <rayUp>	0.000000 1 0.000000	</rayUp>
-            <size>	0.55	</size>
-            <hideIfDamaged>	true	</hideIfDamaged>
-          </inscription>
-        </emblemSlots>
       </hull3>
     </variants>
     <models>
@@ -176,45 +100,72 @@
       <collisionModelServer>	vehicles/american/A46_T3/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/american/A46_T3/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/american/A46_T3/T3_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.00536323 0.181697 1.2558	</rayStart>
         <rayEnd>	-0.00539926 -0.0065276 1.18819	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.26	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.866369 1.22461 0.0228949	</rayStart>
         <rayEnd>	-0.681771 1.22458 -0.05407	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.23	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.0398631 1.19413 -0.00839242	</rayStart>
         <rayEnd>	-0.157022 1.1941 -0.0435282	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.23	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-1.2168 0.604276 -0.495248	</rayStart>
         <rayEnd>	-1.0168 0.604238 -0.495248	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.55	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.21801 0.605204 -0.138545	</rayStart>
         <rayEnd>	1.01802 0.605166 -0.138545	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.55	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/american/A46_T3/T3_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	21	</slotId>
+        <anchorPosition>	-0.0331198 0.66789 -1.6888	</anchorPosition>
+        <anchorDirection>	0.000057 0.47926 -0.877673	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_A46_T3>
@@ -357,9 +308,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1400	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -891,6 +839,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	16	</slotId>
+          <anchorPosition>	-0.396711 2.37463 -0.233379	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_A46_T3>
     <Chassis_A46_T3_2>
       <userString>	#usa_vehicles:Chassis_A46_T3_2	</userString>
@@ -1028,9 +990,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1400	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -1562,12 +1521,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	17	</slotId>
+          <anchorPosition>	-0.396618 2.37497 -0.233743	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_A46_T3_2>
   </chassis>
   <turrets0>
     <Turret_1_A46_T3>
       <userString>	#usa_vehicles:Turret_1_A46_T3	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	2	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -1624,6 +1597,21 @@
             <collisionModelServer>	vehicles/american/A46_T3/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A46_T3/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	22	</slotId>
+              <anchorPosition>	0.00405586 0.265093 0.489918	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_37mm_M-3_antitank_gun>
       </guns>
       <models>
@@ -1636,14 +1624,19 @@
         <collisionModelClient>	vehicles/american/A46_T3/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.008132 0.057476 0.052862	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
       <physicsShape>	1.065 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_A46_T3>
     <Turret_2_A46_T3>
       <userString>	#usa_vehicles:Turret_2_A46_T3	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	2	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -1702,6 +1695,21 @@
             <collisionModelServer>	vehicles/american/A46_T3/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A46_T3/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	0.109722 0.0742654 0.708419	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_75mm_Howitzer_M1A1>
       </guns>
       <models>
@@ -1714,14 +1722,19 @@
         <collisionModelClient>	vehicles/american/A46_T3/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.121175 0.24357 -0.241936	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
       <physicsShape>	1.239 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_2_A46_T3>
     <Turret_3_A46_T3>
       <userString>	#usa_vehicles:Turret_3_A46_T3	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	2	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -1781,6 +1794,21 @@
             <collisionModelServer>	vehicles/american/A46_T3/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A46_T3/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	23	</slotId>
+              <anchorPosition>	0.0118314 0.106713 0.768327	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </Ordnance_QF_2pdr_AT_Gun_Mk.X>
       </guns>
       <models>
@@ -1793,10 +1821,15 @@
         <collisionModelClient>	vehicles/american/A46_T3/collision_client/Turret_03.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.011083 0.197227 -0.052061	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
       <physicsShape>	1.283 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_3_A46_T3>
   </turrets0>
   <engines>

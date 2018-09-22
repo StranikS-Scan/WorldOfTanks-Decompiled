@@ -55,8 +55,14 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_setCarouselFiltersDataS(self, data):
         return self.flashObject.as_setCarouselFiltersData(data) if self._isDAAPIInited() else None
 
-    def as_showSeasonBtnIconS(self, src):
-        return self.flashObject.as_showSeasonBtnIcon(src) if self._isDAAPIInited() else None
+    def as_showPopoverBtnIconS(self, src):
+        return self.flashObject.as_showPopoverBtnIcon(src) if self._isDAAPIInited() else None
 
     def as_getDataProviderS(self):
         return self.flashObject.as_getDataProvider() if self._isDAAPIInited() else None
+
+    def as_showNotificationS(self, text):
+        return self.flashObject.as_showNotification(text) if self._isDAAPIInited() else None
+
+    def as_removeCountersS(self):
+        return self.flashObject.as_removeCounters() if self._isDAAPIInited() else None

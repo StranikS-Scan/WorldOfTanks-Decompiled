@@ -69,32 +69,47 @@
       <collisionModelServer>	vehicles/japan/J30_Edelweiss/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/japan/J30_Edelweiss/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/japan/J30_Edelweiss/Edelweiss_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.731018 0.121257 2.73623	</rayStart>
         <rayEnd>	0.731018 -0.0360348 2.6127	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <fixedEmblem>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	fixedEmblem	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.72505 0.210214 0.965741	</rayStart>
         <rayEnd>	-1.6593 0.209237 0.959979	</rayEnd>
         <rayUp>	-0.00458983 0.99863 -0.0521286	</rayUp>
         <emblemId>	3501	</emblemId>
         <size>	0.249	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </fixedEmblem>
-      <fixedEmblem>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	fixedEmblem	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.7863 0.190632 0.957354	</rayStart>
         <rayEnd>	1.60103 0.187879 0.941114	</rayEnd>
         <rayUp>	0.00612655 0.997565 -0.0694792	</rayUp>
         <emblemId>	3501	</emblemId>
         <size>	0.255	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </fixedEmblem>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/japan/J30_Edelweiss/Edelweiss_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
   </hull>
   <chassis>
     <Chassis_J30_Edelweiss>
@@ -667,6 +682,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_J30_Edelweiss>
   </chassis>
   <turrets0>
@@ -744,15 +765,6 @@
             <collisionModelServer>	vehicles/japan/J30_Edelweiss/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J30_Edelweiss/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000000 0.000002 1.60107	</rayStart>
-              <rayEnd>	0.343085 -0.152283 1.57939	</rayEnd>
-              <rayUp>	0.131 0.124 5	</rayUp>
-              <size>	0.37	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
           <drivenJoints>
             <master>
               <node>	Gun	</node>
@@ -775,6 +787,24 @@
           </drivenJoints>
           <effects>	shot_main	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	5	</slotId>
+              <rayStart>	0.000000 0.000002 1.60107	</rayStart>
+              <rayEnd>	0.343085 -0.152283 1.57939	</rayEnd>
+              <rayUp>	0.131 0.124 5	</rayUp>
+              <size>	0.37	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
         </_88mm_Edelweiss_Gun>
       </guns>
       <models>
@@ -787,19 +817,28 @@
         <collisionModelClient>	vehicles/japan/J30_Edelweiss/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.49754 0.716675	</gunPosition>
-      <emblemSlots>
-        <fixedEmblem>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.993 -0.101 1.017 -0.000 0.464 0.333 0.801 0.518 0.510 0.500 0.350 0.500 0.322 0.219 0.000	</physicsShape>
+      <customizationSlots>
+        <slot>
+          <slotType>	fixedEmblem	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.652515 0.389731 0.914683	</rayStart>
           <rayEnd>	-0.476146 0.311055 0.862676	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <emblemId>	3502	</emblemId>
           <size>	0.454	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </fixedEmblem>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.993 -0.101 1.017 -0.000 0.464 0.333 0.801 0.518 0.510 0.500 0.350 0.500 0.322 0.219 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_J30_Edelweiss>
   </turrets0>
   <engines>

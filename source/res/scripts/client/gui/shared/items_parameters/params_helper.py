@@ -183,10 +183,11 @@ def camouflageComparator(vehicle, camo, factory=None):
             vehicle.setCustomOutfit(season, outfit)
         slot = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
         oldCamo = slot.getItem()
+        oldComponent = slot.getComponent()
         slot.set(camo)
         newParams = params.VehicleParams(vehicle).getParamsDict(preload=True)
         if oldCamo:
-            slot.set(oldCamo)
+            slot.set(oldCamo, component=oldComponent)
         else:
             slot.clear()
     else:

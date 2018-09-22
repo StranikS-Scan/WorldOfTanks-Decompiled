@@ -13,10 +13,11 @@ from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from goodies.goodie_constants import GOODIE_STATE
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
 from gui.shared.utils.requesters import vehicle_items_getter
+from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr
-from items.components.c11n_constants import SeasonType
+from items.components.c11n_constants import SeasonType, CustomizationType
 from skeletons.gui.shared import IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
@@ -484,7 +485,35 @@ class ItemsRequester(IItemsRequester):
                 for vehicleIntCD, outfitsData in itemsDiff.get(CustomizationInvData.OUTFITS, {}).iteritems():
                     invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
                     seasons = (outfitsData or {}).keys() or SeasonType.RANGE
+                    vehicle = self.getItemByCD(vehicleIntCD)
                     for season in seasons:
+                        outfitCompactDescr = None
+                        if outfitsData:
+                            outfitData = outfitsData.get(season)
+                            if outfitData:
+                                outfitCompactDescr, _ = outfitData
+                        newOutfit = Outfit(outfitCompactDescr)
+                        if season == SeasonType.ALL:
+                            prevOutfit = vehicle.getOutfit(SeasonType.SUMMER) or Outfit()
+                            prevStyleId = prevOutfit.id
+                            newStyleId = newOutfit.id
+                            if prevStyleId != newStyleId:
+                                invalidStyles = set()
+                                invalidStyles.add(self.__updateStyleAppliedCount(prevStyleId, vehicleIntCD, 0))
+                                invalidStyles.add(self.__updateStyleAppliedCount(newStyleId, vehicleIntCD, 1))
+                                for styleIntCD in invalidStyles:
+                                    if styleIntCD is not None:
+                                        invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(styleIntCD)
+
+                        else:
+                            prevOutfit = vehicle.getCustomOutfit(season) or Outfit()
+                            prevItemsCounter = prevOutfit.itemsCounter
+                            newItemsCounter = newOutfit.itemsCounter
+                            newItemsCounter.subtract(prevItemsCounter)
+                            for itemCD, count in newItemsCounter.iteritems():
+                                self.__inventory.updateC11nItemAppliedCount(itemCD, vehicleIntCD, count)
+                                invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(itemCD)
+
                         invalidate[GUI_ITEM_TYPE.OUTFIT].add((vehicleIntCD, season))
 
                 for cType, items in itemsDiff.get(CustomizationInvData.ITEMS, {}).iteritems():
@@ -768,3 +797,11 @@ class ItemsRequester(IItemsRequester):
          self.ranked)
         unsyncedList = [ r.__class__.__name__ for r in [ r for r in requesters if not r.isSynced() ] ]
         LOG_ERROR('Trying to create fitting item when requesters are not fully synced:', unsyncedList, stack=True)
+
+    def __updateStyleAppliedCount(self, styleId, vehicleIntCD, count):
+        if styleId == 0:
+            return None
+        else:
+            styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styleId)
+            self.__inventory.updateC11nItemAppliedCount(styleIntCD, vehicleIntCD, count)
+            return styleIntCD

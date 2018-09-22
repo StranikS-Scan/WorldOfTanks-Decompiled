@@ -80,45 +80,72 @@
       <collisionModelServer>	vehicles/british/GB78_Sexton_I/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB78_Sexton_I/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/british/GB78_Sexton_I/GB78_Sexton_I_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.0154824 0.313415 2.53775	</rayStart>
         <rayEnd>	-0.0154824 0.0303599 2.25513	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.414 1.24995 0.988463	</rayStart>
         <rayEnd>	-1.304 1.24995 0.988463	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.42532 0.724435 0.67404	</rayStart>
         <rayEnd>	-1.19532 0.724435 0.67404	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.43632 0.724435 0.67404	</rayStart>
         <rayEnd>	1.18432 0.724435 0.67404	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.409 1.24995 0.988463	</rayStart>
         <rayEnd>	1.309 1.24995 0.988463	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/british/GB78_Sexton_I/GB78_Sexton_I_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	0.00217476 0.861866 -2.30095	</anchorPosition>
+        <anchorDirection>	0.000000 0.529741 -0.848159	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -973,6 +1000,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.000000 2.16866 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Sexton_I>
   </chassis>
   <turrets0>
@@ -1033,6 +1074,21 @@
             <collisionModelServer>	vehicles/british/GB78_Sexton_I/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB78_Sexton_I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	-0.000318274 0.0633585 0.88844	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_25pdr_Field_Gun>
       </guns>
       <models>
@@ -1045,10 +1101,23 @@
         <collisionModelClient>	vehicles/british/GB78_Sexton_I/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000040 0.53345 -0.04187	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.986 0.028 1.157 -0.063 1.000 0.206 0.405 0.100 0.500 0.500 0.000 0.500 0.000 1.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	-0.000000 0.869813 0.0504294	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	1 0.5 0.000000 0.000000	</tiling>
       </camouflage>

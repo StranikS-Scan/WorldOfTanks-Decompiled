@@ -83,45 +83,78 @@
       <collisionModelServer>	vehicles/french/F89_Canon_dassaut_de_105/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F89_Canon_dassaut_de_105/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F89_Canon_dassaut_de_105/Canon_dassaut_de_105_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	12	</slotId>
         <rayStart>	0.553463 0.388762 2.14197	</rayStart>
         <rayEnd>	0.553463 0.201374 2.07208	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-1.48289 0.996462 0.0731854	</rayStart>
         <rayEnd>	-1.31477 0.888127 0.0729804	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.244	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	1.48289 0.996462 0.0731854	</rayStart>
         <rayEnd>	1.31477 0.888127 0.0729804	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.244	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.49652 0.976305 -0.395974	</rayStart>
         <rayEnd>	-1.32841 0.86796 -0.396179	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.57	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.49652 0.976305 -0.395974	</rayStart>
         <rayEnd>	1.32841 0.86796 -0.396179	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.57	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F89_Canon_dassaut_de_105/Canon_dassaut_de_105_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11	</slotId>
+        <anchorPosition>	0.00473434 0.699941 -1.86325	</anchorPosition>
+        <anchorDirection>	0.000000 0.620875 -0.78391	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	13	</slotId>
+        <anchorPosition>	0.000001 0.699787 -1.86323	</anchorPosition>
+        <anchorDirection>	0.000000 0.620884 -0.783903	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
     <camouflage>
       <tiling>	5 5 0.000000 0.000000	</tiling>
     </camouflage>
@@ -760,6 +793,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	-1.55468 0.575885 -0.0700999	</anchorPosition>
+          <anchorDirection>	-0.936896 0.347046 -0.0422443	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	19	</slotId>
+          <anchorPosition>	0.000000 2.07979 -0.160262	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_F89_Canon_dassaut_de_105>
   </chassis>
   <turrets0>
@@ -829,17 +882,47 @@
             <collisionModelServer>	vehicles/french/F89_Canon_dassaut_de_105/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F89_Canon_dassaut_de_105/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_large	</effects>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	5	</slotId>
               <rayStart>	-0.000124309 -0.000104915 3.29742	</rayStart>
               <rayEnd>	-0.0375293 0.0160016 3.29742	</rayEnd>
               <rayUp>	0.114 0.113 5	</rayUp>
               <size>	0.7	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_large	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	-0.000060 -0.000055 2.28237	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	0.000000 0.329327 0.329326	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	-0.000060 -0.000055 2.28237	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
           </camouflage>
@@ -855,10 +938,15 @@
         <collisionModelClient>	vehicles/french/F89_Canon_dassaut_de_105/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000314 -0.011629 0.100906	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_F89_Canon_dassaut_de_105>
   </turrets0>
   <engines>

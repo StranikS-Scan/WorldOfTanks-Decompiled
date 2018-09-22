@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofRatingUrlForVehicle, getHofDisabledKeys, onServerSettingsChange, isHofButtonNew, setHofButtonOld
 from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils, STATISTICS_LAYOUT, FORT_STATISTICS_LAYOUT, FALLOUT_STATISTICS_LAYOUT
+from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils, STATISTICS_LAYOUT, FALLOUT_STATISTICS_LAYOUT
 from gui.Scaleform.daapi.view.meta.ProfileTechniqueMeta import ProfileTechniqueMeta
 from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
@@ -245,9 +245,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         if achievementsList is not None:
             achievementsList.insert(0, specialRankedStats)
             achievementsList.insert(1, specialMarksStats)
-        if self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES:
-            layout = FORT_STATISTICS_LAYOUT
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
+        if self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
             layout = FALLOUT_STATISTICS_LAYOUT
         else:
             layout = STATISTICS_LAYOUT

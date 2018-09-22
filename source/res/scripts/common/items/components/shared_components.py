@@ -22,6 +22,7 @@ __all__ = ('MaterialInfo', 'DEFAULT_MATERIAL_INFO', 'EmblemSlot', 'LodSettings',
 MaterialInfo = namedtuple('MaterialInfo', ('kind', 'armor', 'extra', 'vehicleDamageFactor', 'useArmorHomogenization', 'useHitAngle', 'useAntifragmentationLining', 'mayRicochet', 'collideOnceOnly', 'checkCaliberForRichet', 'checkCaliberForHitAngleNorm', 'damageKind', 'chanceToHitByProjectile', 'chanceToHitByExplosion', 'continueTraceIfNoHit'))
 DEFAULT_MATERIAL_INFO = MaterialInfo(0, 0, None, 0.0, False, False, False, False, False, False, False, 0, 0.0, 0.0, False)
 EmblemSlot = namedtuple('EmblemSlot', ('rayStart', 'rayEnd', 'rayUp', 'size', 'hideIfDamaged', 'type', 'isMirrored', 'isUVProportional', 'emblemId'))
+SlotsAnchor = namedtuple('SlotsAnchor', ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'applyTo', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'showOn'))
 LodSettings = namedtuple('LodSettings', ('maxLodDistance', 'maxPriority'))
 NodesAndGroups = namedtuple('NodesAndGroups', ('nodes', 'groups'))
 Camouflage = namedtuple('Camouflage', ('tiling', 'exclusionMask'))

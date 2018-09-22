@@ -227,6 +227,17 @@ def readVector3(xmlCtx, section, subsectionName):
     return v
 
 
+def readVector3OrNone(xmlCtx, section, subsectionName):
+    wrongVal = (-1000000.0, -1000000.0, -1000000.0)
+    v = section.readVector3(subsectionName, wrongVal)
+    if wrongVal == tuple(v):
+        return None
+    else:
+        if v[0] < wrongVal[0] + 1.0:
+            raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+        return v
+
+
 @cacheFloatTuples
 def readTupleOfFloats(xmlCtx, section, subsectionName, count=None):
     strings = getSubsection(xmlCtx, section, subsectionName).asString.split()

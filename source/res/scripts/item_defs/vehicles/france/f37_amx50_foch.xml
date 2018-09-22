@@ -92,45 +92,78 @@
       <collisionModelServer>	vehicles/french/F37_AMX50_Foch/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F37_AMX50_Foch/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F37_AMX50_Foch/AMX50_Foch_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-1.08703 0.859692 1.84818	</rayStart>
         <rayEnd>	-1.08498 0.532996 1.61739	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.6799 0.821092 -2.77124	</rayStart>
         <rayEnd>	-1.2936 0.717303 -2.77108	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.70145 0.820456 -1.71777	</rayStart>
         <rayEnd>	1.31523 0.716376 -1.71774	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.78	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-1.70145 0.820456 -1.71777	</rayStart>
         <rayEnd>	-1.31523 0.716376 -1.71774	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.78	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.6799 0.821092 -2.77124	</rayStart>
         <rayEnd>	1.2936 0.717303 -2.77108	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F37_AMX50_Foch/AMX50_Foch_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11	</slotId>
+        <anchorPosition>	0.000186192 1.15102 -2.55953	</anchorPosition>
+        <anchorDirection>	0.000001 0.695008 -0.719002	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12	</slotId>
+        <anchorPosition>	0.000035 1.15112 -2.55905	</anchorPosition>
+        <anchorDirection>	0.000000 0.695035 -0.718976	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.8 1.8 0.000000 0.000000	</tiling>
     </camouflage>
@@ -905,6 +938,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	-1.70324 0.623363 -0.00041008	</anchorPosition>
+          <anchorDirection>	-0.939083 0.343692 -0.000226098	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 2.2507 -0.828522	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_AMX50_Foch>
     <Chassis_AMX50_Foch_2>
       <userString>	#france_vehicles:Chassis_AMX50_Foch_2	</userString>
@@ -1671,6 +1724,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	-1.70324 0.623363 -0.00041008	</anchorPosition>
+          <anchorDirection>	-0.939083 0.343692 -0.000226098	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.000000 0.000000 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_AMX50_Foch_2>
   </chassis>
   <turrets0>
@@ -1745,16 +1818,46 @@
             <collisionModelServer>	vehicles/french/F37_AMX50_Foch/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F37_AMX50_Foch/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.00290582 -0.02727 4.67535	</rayStart>
               <rayEnd>	0.11209 -0.108242 4.67295	</rayEnd>
               <rayUp>	0.092 0.088 4	</rayUp>
               <size>	0.82	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	0.00145291 -0.013635 3.18905	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	0.000000 0.378285 0.378285	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	0.00145291 -0.013635 3.18905	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1770,10 +1873,15 @@
         <collisionModelClient>	vehicles/french/F37_AMX50_Foch/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0044 0.045968 0.113997	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_AMX50_Foch>
   </turrets0>
   <engines>

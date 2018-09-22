@@ -284,6 +284,7 @@ class DamageIndicatorMeta(Flash):
         self._as_hide = None
         self._as_setScreenSettings = None
         self._as_setPosition = None
+        self.movie.root.dmgIndicator.dispose()
         return
 
     def as_updateSettingsS(self, isStandard, isWithTankInfo, isWithAnimation, isWithValue):

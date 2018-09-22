@@ -55,16 +55,31 @@
       <collisionModelServer>	vehicles/japan/J01_NC27/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/japan/J01_NC27/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/japan/J01_NC27/NC27_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.173939 0.302582 1.34454	</rayStart>
         <rayEnd>	0.173939 0.111377 1.28589	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.22	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/japan/J01_NC27/NC27_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	-0.000000 0.467544 -1.11654	</anchorPosition>
+        <anchorDirection>	0.000000 0.386248 -0.922395	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	4 2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -729,6 +744,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.00129775 1.93999 0.578785	</anchorPosition>
+          <anchorDirection>	0.00013403 1 0.000003	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_NC27_2>
   </chassis>
   <turrets0>
@@ -770,6 +799,21 @@
             <collisionModelServer>	vehicles/japan/J01_NC27/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J01_NC27/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	6	</slotId>
+              <anchorPosition>	0.027279 0.0174968 0.61291	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 1.9	</tiling>
           </camouflage>
@@ -813,6 +857,21 @@
             <collisionModelServer>	vehicles/japan/J01_NC27/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J01_NC27/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	0.0209225 0.000691891 0.46396	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 1.9	</tiling>
           </camouflage>
@@ -860,33 +919,54 @@
         <collisionModelClient>	vehicles/japan/J01_NC27/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.232351 0.476	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.706 0.390 0.688 0.481 0.563 0.500 0.253 0.500 0.207 0.473 0.588	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.570576 0.258313 -0.20808	</rayStart>
           <rayEnd>	-0.389027 0.221107 -0.13288	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.01635 0.569602 0.285877	</rayStart>
           <rayEnd>	-0.0173634 0.377194 0.231314	</rayEnd>
           <rayUp>	0.000000 0.000000 -1	</rayUp>
           <size>	0.5	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.563346 0.252976 -0.233489	</rayStart>
           <rayEnd>	0.381762 0.215967 -0.158275	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 0.706 0.390 0.688 0.481 0.563 0.500 0.253 0.500 0.207 0.473 0.588	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	5	</slotId>
+          <anchorPosition>	0.000174631 0.503498 0.141569	</anchorPosition>
+          <anchorDirection>	0.0828366 0.996562 -0.00173605	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Turret_2_NC27>
   </turrets0>
   <crew>

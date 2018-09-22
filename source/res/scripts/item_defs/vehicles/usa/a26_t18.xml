@@ -76,30 +76,45 @@
       <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R00_Placeholder/Placeholder_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.240297 0.269644 1.74953	</rayStart>
         <rayEnd>	-0.240297 -0.104919 1.60916	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.32061 0.833605 0.0223886	</rayStart>
         <rayEnd>	-0.920613 0.833604 0.0223885	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.32061 0.833605 0.0223886	</rayStart>
         <rayEnd>	0.920613 0.833604 0.0223885	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.82	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R00_Placeholder/Placeholder_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_T18>
@@ -209,6 +224,12 @@
           </transform>
         </decal>
       </AODecals>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_T18>
   </chassis>
   <turrets0>
@@ -273,6 +294,12 @@
             <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
           </camouflage>
@@ -283,7 +310,6 @@
         <destroyed>	vehicles/russian/R00_Placeholder/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R00_Placeholder/crash/lod0/Turret_01.model	</exploded>
       </models>
-      <emblemSlots></emblemSlots>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Turret_01.model	</collisionModelClient>
@@ -292,6 +318,12 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.954 -0.027 0.500 0.100 0.553 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </T18T47>
   </turrets0>
   <engines>

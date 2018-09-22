@@ -12,7 +12,7 @@ from gui.customization.shared import C11N_ITEM_TYPE_MAP, HighlightingMode, MODE_
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE, ItemsCollection
 from gui.shared.gui_items.customization.c11n_items import Customization, Style
-from gui.shared.gui_items.customization.outfit import Outfit
+from gui.shared.gui_items.customization.outfit import Outfit, Area
 from gui.shared.gui_items.processors.common import OutfitApplier, StyleApplier, CustomizationsBuyer, CustomizationsSeller
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.decorators import process
@@ -22,7 +22,7 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
-from items.components.c11n_constants import SeasonType
+from items.components.c11n_constants import SeasonType, ApplyArea
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 _logger = logging.getLogger(__name__)
@@ -133,6 +133,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._isDraggingInProcess = False
         self._notHandleHighlighterEvent = False
         self.__showCustomizationCallbackId = None
+        self._isRegionSelected = False
         return
 
     def init(self):
@@ -225,25 +226,29 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def getPointForRegionLeaderLine(self, areaId):
         return self.hangarSpace.getCentralPointForArea(areaId)
 
-    def getPointForAnchorLeaderLine(self, areaId, slotId, regionId):
-        anchorPos = None
-        if self._anchorPositions is None:
-            self._anchorPositions = g_currentVehicle.hangarSpace.getSlotPositions()
-        area = self._anchorPositions.get(areaId, {})
-        slot = area.get(slotId, ())
-        if regionId < len(slot):
-            anchorPos = slot[regionId].pos
-        return anchorPos
+    def getAnchorParams(self, areaId, slotId, regionId):
 
-    def getNormalForAnchorLeaderLine(self, areaId, slotId, regionId):
-        anchorNorm = None
+        def getAnchor(area, slotId, regionId):
+            slot = area.get(slotId, {})
+            return slot.get(regionId, None)
+
         if self._anchorPositions is None:
             self._anchorPositions = g_currentVehicle.hangarSpace.getSlotPositions()
-        area = self._anchorPositions.get(areaId, {})
-        slot = area.get(slotId, ())
-        if regionId < len(slot):
-            anchorNorm = slot[regionId].normal
-        return anchorNorm
+        if areaId == Area.MISC:
+            anchors = []
+            for area in self._anchorPositions.itervalues():
+                slot = area.get(slotId, {})
+                anchors.extend(slot.itervalues())
+                if regionId < len(anchors):
+                    anchor = anchors[regionId]
+                    return anchor
+
+        else:
+            area = self._anchorPositions.get(areaId, {})
+            anchor = getAnchor(area, slotId, regionId)
+            if anchor is not None:
+                return anchor
+        return self.getAnchorParams(areaId, GUI_ITEM_TYPE.STYLE, regionId) if slotId == GUI_ITEM_TYPE.MODIFICATION else None
 
     def setSelectHighlighting(self, value):
         if self._helper:
@@ -252,6 +257,18 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def resetHighlighting(self):
         if self._helper:
             self._helper.resetHighlighting()
+
+    def highlightRegions(self, regionsMask):
+        if self._helper:
+            self._helper.highlightRegions(regionsMask)
+
+    def selectRegions(self, regionsMask):
+        if self._helper:
+            self._helper.selectRegions(regionsMask)
+            self._isRegionSelected = regionsMask != ApplyArea.NONE
+
+    def isRegionSelected(self):
+        return self._isRegionSelected
 
     def getHightlighter(self):
         return self._helper
@@ -268,17 +285,21 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
          'rotateYPR': (yaw, pitch, roll),
          'shadowYOffset': shadowYOffset}), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def setSelectingRegionEnabled(self, enable):
+        if self._helper:
+            self._helper.setSelectingRegionEnabled(enable)
+
     def __onRegionHighlighted(self, args):
         if self._notHandleHighlighterEvent:
             self._notHandleHighlighterEvent = False
             return
-        areaID, regionID, selected, hovered = (-1,
+        areaID, regionID, highlightingType, highlightingResult = (-1,
          -1,
-         False,
+         True,
          False)
         if args:
-            areaID, regionID, selected, hovered = args
-        self.onRegionHighlighted(MODE_TO_C11N_TYPE[self._mode], areaID, regionID, selected, hovered)
+            areaID, regionID, highlightingType, highlightingResult = args
+        self.onRegionHighlighted(MODE_TO_C11N_TYPE[self._mode], areaID, regionID, highlightingType, highlightingResult)
 
     def __onSpaceCreate(self):
         self.resumeHighlighter()

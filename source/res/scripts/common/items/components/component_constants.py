@@ -37,4 +37,5 @@ KMH_TO_MS = 0.27778
 KG_TO_NEWTON = 9.81
 HP_TO_WATTS = 735.5
 ALLOWED_EMBLEM_SLOTS = ('player', 'clan', 'inscription', 'insigniaOnGun', 'fixedEmblem', 'fixedInscription')
+ALLOWED_SLOTS_ANCHORS = ('paint', 'camouflage', 'projectionDecal', 'effect', 'style')
 TANKMEN_GROUPS = ('normalGroups', 'premiumGroups')

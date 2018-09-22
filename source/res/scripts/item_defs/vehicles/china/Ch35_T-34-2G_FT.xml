@@ -74,46 +74,73 @@
       <collisionModelServer>	vehicles/chinese/Ch35_T-34-2G_FT/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/chinese/Ch35_T-34-2G_FT/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/chinese/Ch35_T-34-2G_FT/T-34-2G_FT_HangarShadowMap.dds	</hangarShadowTexture>
+    <animateEmblemSlots>	true	</animateEmblemSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.130287 0.195851 2.43947	</rayStart>
         <rayEnd>	0.130287 0.0241018 2.33699	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.07171 0.81146 0.867132	</rayStart>
         <rayEnd>	-0.877331 0.764343 0.867121	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.176	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.07171 0.81146 0.867132	</rayStart>
         <rayEnd>	0.877331 0.764343 0.867121	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.176	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-1.06603 0.834932 -0.0458531	</rayStart>
         <rayEnd>	-0.871667 0.787783 -0.0458523	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.46	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.06603 0.834932 -0.0458531	</rayStart>
         <rayEnd>	0.871667 0.787783 -0.0458523	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.46	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/chinese/Ch35_T-34-2G_FT/T-34-2G_FT_HangarShadowMap.dds	</hangarShadowTexture>
-    <animateEmblemSlots>	true	</animateEmblemSlots>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	11	</slotId>
+        <anchorPosition>	0.000000 0.954367 -0.59003	</anchorPosition>
+        <anchorDirection>	0.000000 0.850571 -0.525859	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -907,6 +934,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	0.000000 1.69924 -0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Ch35_T-34-2G_FT>
     <Chassis_Ch35_T-34-2G_FT_2>
       <userString>	#china_vehicles:Chassis_Ch35_T-34-2G_FT_2	</userString>
@@ -1692,6 +1733,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.000082 1.69931 0.000001	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Ch35_T-34-2G_FT_2>
   </chassis>
   <turrets0>
@@ -1756,17 +1811,33 @@
             <collisionModelServer>	vehicles/chinese/Ch35_T-34-2G_FT/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch35_T-34-2G_FT/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <effects>	shot_mainext	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.000216925 -0.0184811 1.3	</rayStart>
               <rayEnd>	0.0253352 -0.0220397 1.13112	</rayEnd>
               <rayUp>	0.079 0.075 5	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <effects>	shot_mainext	</effects>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	13	</slotId>
+              <anchorPosition>	0.000108463 -0.00924056 2.13336	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_100mm_59_100TG_FT>
         <_100mm_60_100TG_FT>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
@@ -1805,16 +1876,32 @@
             <collisionModelServer>	vehicles/chinese/Ch35_T-34-2G_FT/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch35_T-34-2G_FT/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	-0.000152885 -0.018483 1.3	</rayStart>
               <rayEnd>	0.00819176 -0.161989 1.27001	</rayEnd>
               <rayUp>	0.102 0.093 5	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	14	</slotId>
+              <anchorPosition>	-0.000076 -0.00924151 2.1299	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_100mm_60_100TG_FT>
         <_122mm_D25_TG_FT>	shared	  <maxAmmo>	30	</maxAmmo>
           <unlocks>
@@ -1853,16 +1940,32 @@
             <collisionModelServer>	vehicles/chinese/Ch35_T-34-2G_FT/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch35_T-34-2G_FT/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	8	</slotId>
               <rayStart>	0.000513091 -0.0148725 1.3	</rayStart>
               <rayEnd>	-0.00667229 -0.0846986 1.24975	</rayEnd>
               <rayUp>	0.106 0.105 5	</rayUp>
               <size>	0.7	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	0.000256546 -0.00743623 2.14276	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_122mm_D25_TG_FT>
       </guns>
       <models>
@@ -1875,10 +1978,15 @@
         <collisionModelClient>	vehicles/chinese/Ch35_T-34-2G_FT/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 -0.0125	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.100 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_Ch35_T-34-2G_FT>
   </turrets0>
   <engines>

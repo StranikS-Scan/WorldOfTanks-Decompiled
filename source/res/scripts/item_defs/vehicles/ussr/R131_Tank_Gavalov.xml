@@ -65,16 +65,31 @@
       <collisionModelServer>	vehicles/russian/R131_Tank_Gavalov/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R131_Tank_Gavalov/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R131_Tank_Gavalov/Tank_Gavalov_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.553733 0.250086 2.02911	</rayStart>
         <rayEnd>	-0.553733 0.050086 2.02911	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R131_Tank_Gavalov/Tank_Gavalov_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	10	</slotId>
+        <anchorPosition>	0.000000 0.279297 -2.14341	</anchorPosition>
+        <anchorDirection>	0.000000 0.129213 -0.991617	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_R131_Tank_Gavalov>
@@ -915,6 +930,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000029 1.73946 0.367984	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_R131_Tank_Gavalov>
     <Chassis_R131_Tank_Gavalov_2>
       <userString>	#ussr_vehicles:Chassis_R131_Tank_Gavalov_2	</userString>
@@ -1750,6 +1779,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	0.000049 1.73945 0.367963	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_R131_Tank_Gavalov_2>
   </chassis>
   <turrets0>
@@ -1824,16 +1867,32 @@
             <collisionModelServer>	vehicles/russian/R131_Tank_Gavalov/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R131_Tank_Gavalov/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.0712124 -0.0344756 1.13687	</rayStart>
               <rayEnd>	-0.0420476 -0.0547213 1.13205	</rayEnd>
               <rayUp>	0.091 0.084 5	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	14	</slotId>
+              <anchorPosition>	0.0718612 -0.0172375 1.95359	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1877,16 +1936,32 @@
             <collisionModelServer>	vehicles/russian/R131_Tank_Gavalov/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R131_Tank_Gavalov/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	0.0712132 -0.0325918 1.15369	</rayStart>
               <rayEnd>	-0.0215537 -0.101985 1.13959	</rayEnd>
               <rayUp>	0.095 0.077 5	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	13	</slotId>
+              <anchorPosition>	0.0698226 -0.0257665 2.19711	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1902,40 +1977,64 @@
         <collisionModelClient>	vehicles/russian/R131_Tank_Gavalov/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.162299 0.404723 0.828297	</gunPosition>
-      <emblemSlots>
-        <player>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.004 0.005 1.020 0.000 0.610 0.250 1.000 0.582 0.481 0.465 0.000 0.505 0.006 1.000 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.916318 0.483426 0.602074	</rayStart>
           <rayEnd>	-0.732698 0.483426 0.522804	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.214	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	0.957149 0.524798 0.507561	</rayStart>
           <rayEnd>	0.773529 0.524798 0.428291	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.214	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-1.06055 0.520779 -0.338666	</rayStart>
           <rayEnd>	-0.870902 0.520779 -0.275164	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.5	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	1.06055 0.520779 -0.338666	</rayStart>
           <rayEnd>	0.870902 0.520779 -0.275164	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.5	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.004 0.005 1.020 0.000 0.610 0.250 1.000 0.582 0.481 0.465 0.000 0.505 0.006 1.000 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	0.000000 0.90461 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
       </camouflage>

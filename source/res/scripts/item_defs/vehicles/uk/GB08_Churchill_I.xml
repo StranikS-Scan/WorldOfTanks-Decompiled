@@ -77,23 +77,41 @@
       <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/british/GB08_Churchill_I/Churchill_I_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	1.4966 -0.297713 1.75928	</rayStart>
         <rayEnd>	1.29659 -0.297713 1.75928	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	1.49659 -0.307171 0.245667	</rayStart>
         <rayEnd>	1.29659 -0.307171 0.245667	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/british/GB08_Churchill_I/Churchill_I_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	19	</slotId>
+        <anchorPosition>	0.000000 0.179886 -2.41469	</anchorPosition>
+        <anchorDirection>	0.000000 0.0742907 -0.997237	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.7 1.7 0.000000 0.000000	</tiling>
     </camouflage>
@@ -696,6 +714,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	17	</slotId>
+          <anchorPosition>	0.000214651 2.35629 0.231942	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB08_Churchill_I>
     <Chassis_GB08_Churchill_I_2>
       <userString>	#gb_vehicles:Chassis_GB08_Churchill_I_2	</userString>
@@ -1294,6 +1326,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	18	</slotId>
+          <anchorPosition>	0.000217076 2.35629 0.231933	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB08_Churchill_I_2>
   </chassis>
   <turrets0>
@@ -1369,16 +1415,32 @@
             <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.113264 -0.000153728 0.925669	</rayStart>
               <rayEnd>	0.47625 -0.00850749 0.91849	</rayEnd>
               <rayUp>	0.038 0.036 3	</rayUp>
               <size>	0.25	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	30	</slotId>
+              <anchorPosition>	-0.056634 -0.000155449 0.820649	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.67 0.7 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1411,16 +1473,32 @@
             <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	-0.113238 -0.000296865 1.00982	</rayStart>
               <rayEnd>	0.0425262 -0.0813524 1.00982	</rayEnd>
               <rayUp>	0.05 0.05 4	</rayUp>
               <size>	0.329	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	21	</slotId>
+              <anchorPosition>	-0.0566467 -0.000059 0.857444	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.36 0.805 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1436,33 +1514,54 @@
         <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.107054 0.355941 0.752321	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.993 -0.014 0.946 -0.095 0.714 0.163 0.719 0.369 0.462 0.797 0.092 0.469 0.083 0.473 0.190	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.777698 0.460391 0.51063	</rayStart>
           <rayEnd>	-0.599066 0.440399 0.422932	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.840769 0.483413 -0.96242	</rayStart>
           <rayEnd>	0.503309 0.483413 -0.747663	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.26	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	-0.962503 0.464076 -0.102345	</rayStart>
           <rayEnd>	-0.764559 0.445397 -0.124004	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.74	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.993 -0.014 0.946 -0.095 0.714 0.163 0.719 0.369 0.462 0.797 0.092 0.469 0.083 0.473 0.190	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	20	</slotId>
+          <anchorPosition>	0.000000 0.82426 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.6 0.6 0.4 1.5	</tiling>
       </camouflage>
@@ -1538,16 +1637,32 @@
             <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	11	</slotId>
               <rayStart>	0.000002 -0.00348712 0.900106	</rayStart>
               <rayEnd>	0.495046 -0.273405 0.892927	</rayEnd>
               <rayUp>	0.038 0.036 3	</rayUp>
               <size>	0.29	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	22	</slotId>
+              <anchorPosition>	-0.000001 -0.00182211 0.761645	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1 0.52 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1582,16 +1697,32 @@
             <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	12	</slotId>
               <rayStart>	0.000028 -0.00365528 0.971161	</rayStart>
               <rayEnd>	0.152937 -0.0902338 0.971161	</rayEnd>
               <rayUp>	0.05 0.05 4	</rayUp>
               <size>	0.361	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	24	</slotId>
+              <anchorPosition>	-0.000014 -0.00173795 0.797767	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1 0.58 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1630,16 +1761,32 @@
             <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	13	</slotId>
               <rayStart>	-0.000000 -0.00209035 1.05541	</rayStart>
               <rayEnd>	0.325297 -0.400642 1.0575	</rayEnd>
               <rayUp>	0.045 0.045 4	</rayUp>
               <size>	0.361	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	25	</slotId>
+              <anchorPosition>	-0.000000 -0.00104511 0.860522	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1 0.58 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1680,16 +1827,32 @@
             <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	14	</slotId>
               <rayStart>	-0.000001 -0.00209034 1.20057	</rayStart>
               <rayEnd>	-0.0411048 -0.243352 1.20067	</rayEnd>
               <rayUp>	0.041 0.041 4	</rayUp>
               <size>	0.361	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	27	</slotId>
+              <anchorPosition>	-0.000000 -0.00104515 0.883613	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1 0.55 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1728,16 +1891,32 @@
             <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	15	</slotId>
               <rayStart>	0.000065 -0.00196002 1.16728	</rayStart>
               <rayEnd>	0.00802704 0.00349925 1.1667	</rayEnd>
               <rayUp>	0.067 0.065 4	</rayUp>
               <size>	0.4	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	28	</slotId>
+              <anchorPosition>	0.000033 -0.000979988 1.04446	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1 0.565 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1772,16 +1951,32 @@
             <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_08.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	16	</slotId>
               <rayStart>	0.000001 -0.00321812 1.77533	</rayStart>
               <rayEnd>	0.0249538 -0.0116694 1.775	</rayEnd>
               <rayUp>	0.055 0.054 4	</rayUp>
               <size>	0.427	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	29	</slotId>
+              <anchorPosition>	0.000000 -0.00210907 1.50314	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.3 0.3 0.000000 0.7	</tiling>
           </camouflage>
@@ -1797,33 +1992,54 @@
         <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.023538 0.403355 0.640064	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.027 0.000 1.000 0.000 0.687 0.136 0.862 0.388 0.288 0.710 0.002 0.512 0.054 0.604 0.048	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	8	</slotId>
           <rayStart>	1.15932 0.599581 -0.00860037	</rayStart>
           <rayEnd>	0.563181 0.599581 -0.076577	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	9	</slotId>
           <rayStart>	-1.03088 0.436179 0.422504	</rayStart>
           <rayEnd>	-0.636156 0.434972 0.357727	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.64	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	10	</slotId>
           <rayStart>	-1.22603 0.592793 -0.150138	</rayStart>
           <rayEnd>	-0.633596 0.592793 -0.245154	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.027 0.000 1.000 0.000 0.687 0.136 0.862 0.388 0.288 0.710 0.002 0.512 0.054 0.604 0.048	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	23	</slotId>
+          <anchorPosition>	0.000000 0.834078 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.6 0.6 0.000000 0.6	</tiling>
       </camouflage>

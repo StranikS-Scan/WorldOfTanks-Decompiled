@@ -71,45 +71,72 @@
       <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/sweden/S19_Sav_M43/Sav_M43_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.00266163 0.194547 1.94208	</rayStart>
         <rayEnd>	0.00266163 0.0152503 1.85348	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.219	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.10117 0.456124 0.290974	</rayStart>
         <rayEnd>	-0.906954 0.408429 0.292628	</rayEnd>
         <rayUp>	0.000109072 0.999856 -0.0169485	</rayUp>
         <size>	0.558	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.01474 0.4349 0.29171	</rayStart>
         <rayEnd>	0.993379 0.429653 0.291892	</rayEnd>
         <rayUp>	-0.000147564 0.999425 -0.0338926	</rayUp>
         <size>	0.558	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-1.01906 0.797189 0.37544	</rayStart>
         <rayEnd>	-0.825079 0.748543 0.377039	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.219	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.01906 0.797189 0.37544	</rayStart>
         <rayEnd>	0.825079 0.748543 0.377039	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.219	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/sweden/S19_Sav_M43/Sav_M43_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.000000 1.12541 -0.583602	</anchorPosition>
+        <anchorDirection>	0.000000 0.887737 -0.460351	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2.6 2.6 0.000000 0.000000	</tiling>
     </camouflage>
@@ -745,6 +772,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	-0.000000 2.00515 -0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_S19_Sav_M43>
     <Chassis_S19_Sav_M43_2>
       <userString>	#sweden_vehicles:Chassis_S19_Sav_M43_2	</userString>
@@ -1372,6 +1413,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000364706 2.00505 0.000008	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_S19_Sav_M43_2>
   </chassis>
   <turrets0>
@@ -1426,6 +1481,21 @@
             <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.000000 0.150727 0.811524	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_75mm_kan_m_02>
         <_75mm_kan_m_41_ikv_L_50_neglkrut>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
@@ -1455,6 +1525,21 @@
             <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	-0.000000 -0.00140119 1.51413	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_75mm_kan_m_41_ikv_L_50_neglkrut>
         <_105mm_kan_m_44_sav>	shared	  <maxAmmo>	41	</maxAmmo>
           <unlocks>
@@ -1493,6 +1578,21 @@
             <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	6	</slotId>
+              <anchorPosition>	0.000001 -0.000606894 1.00061	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_105mm_kan_m_44_sav>
       </guns>
       <models>
@@ -1505,10 +1605,15 @@
         <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 -0.012335	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.600 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_S19_Sav_M43>
   </turrets0>
   <engines>

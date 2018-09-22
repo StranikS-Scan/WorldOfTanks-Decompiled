@@ -77,45 +77,72 @@
       <collisionModelServer>	vehicles/chinese/Ch32_SU-76G_FT/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/chinese/Ch32_SU-76G_FT/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/chinese/Ch32_SU-76G_FT/SU-76G_FT_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.0010376 0.21797 2.15666	</rayStart>
         <rayEnd>	-0.0010376 0.0455052 2.05538	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.10531 0.84339 -0.969709	</rayStart>
         <rayEnd>	-0.90531 0.84339 -0.969709	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.10531 0.84339 -0.969709	</rayStart>
         <rayEnd>	0.90531 0.84339 -0.969709	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	0.343201 0.516298 1.77963	</rayStart>
         <rayEnd>	0.343201 0.375825 1.63726	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.697	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.10476 0.78631 -1.70301	</rayStart>
         <rayEnd>	0.904761 0.78631 -1.70301	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.853	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/chinese/Ch32_SU-76G_FT/SU-76G_FT_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.000000 0.687815 1.25258	</anchorPosition>
+        <anchorDirection>	0.000000 0.481325 0.876542	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -860,6 +887,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.000000 2.18091 -1.66791	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Ch32_SU-76G_FT>
     <Chassis_Ch32_SU-76G_FT_2>
       <userString>	#china_vehicles:Chassis_Ch32_SU-76G_FT_2	</userString>
@@ -1596,12 +1637,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.00101546 2.1812 -1.66786	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Ch32_SU-76G_FT_2>
   </chassis>
   <turrets0>
     <Turret_1_Ch32_SU-76G_FT>
       <userString>	#china_vehicles:Turret_1_Ch32_SU-76G_FT	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	4	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -1665,6 +1720,21 @@
             <collisionModelServer>	vehicles/chinese/Ch32_SU-76G_FT/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch32_SU-76G_FT/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	6	</slotId>
+              <anchorPosition>	-0.000063 0.178561 1.70176	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_57mm_ZiS_2>
         <_76mm_ZiS_3>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
@@ -1706,6 +1776,21 @@
             <collisionModelClient>	vehicles/chinese/Ch32_SU-76G_FT/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.000000 0.178423 1.56216	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_76mm_ZiS_3>
         <_85mm_56_85TG_FT>	shared	  <maxAmmo>	42	</maxAmmo>
           <unlocks>
@@ -1747,6 +1832,21 @@
             <collisionModelClient>	vehicles/chinese/Ch32_SU-76G_FT/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	0.000029 0.184691 2.18498	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_85mm_56_85TG_FT>
       </guns>
       <models>
@@ -1759,10 +1859,23 @@
         <collisionModelClient>	vehicles/chinese/Ch32_SU-76G_FT/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.050916 -0.224076 -0.139434	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.100 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	0.000000 0.21746 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.2 0.2 0.000000 0.000000	</tiling>
       </camouflage>

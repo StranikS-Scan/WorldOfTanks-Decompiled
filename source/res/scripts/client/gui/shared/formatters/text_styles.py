@@ -11,6 +11,7 @@ __all__ = ('standard',
  'stats',
  'statInfo',
  'statusAlert',
+ 'statusAttention',
  'middleTitle',
  'highTitle',
  'disabled',
@@ -92,6 +93,10 @@ def statInfo(text):
 
 def statusAlert(text):
     return _formatText('statusAlert', text)
+
+
+def statusAttention(text):
+    return _formatText('statusAttention', text)
 
 
 def middleTitle(text):

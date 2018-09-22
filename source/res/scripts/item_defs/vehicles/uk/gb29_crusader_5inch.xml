@@ -71,37 +71,61 @@
       <collisionModelServer>	vehicles/british/GB29_Crusader_5inch/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB29_Crusader_5inch/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/british/GB29_Crusader_5inch/Crusader_5inch_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	1.56608 0.0165848 1.87173	</rayStart>
         <rayEnd>	1.16622 0.007122 1.8769	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.639954 0.64018 0.615399	</rayStart>
         <rayEnd>	-0.633471 0.4643 0.615399	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-0.00657613 0.662493 2.41378	</rayStart>
         <rayEnd>	-0.00657605 0.262495 2.41378	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.72	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-1.55987 0.101234 -2.29361	</rayStart>
         <rayEnd>	-1.16013 0.0869824 -2.29535	</rayEnd>
         <rayUp>	-0.000276457 0.998631 -0.052302	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/british/GB29_Crusader_5inch/Crusader_5inch_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	9	</slotId>
+        <anchorPosition>	0.000000 0.510307 1.15021	</anchorPosition>
+        <anchorDirection>	0.000000 0.405542 0.914076	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
     </camouflage>
@@ -917,6 +941,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	-0.000000 1.43606 0.34513	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB29_Crusader_5inch>
     <Chassis_GB29_Crusader_5inch_2>
       <userString>	#gb_vehicles:Chassis_GB29_Crusader_5inch_2	</userString>
@@ -1720,6 +1758,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000086 1.43561 0.344762	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB29_Crusader_5inch_2>
   </chassis>
   <turrets0>
@@ -1781,16 +1833,32 @@
             <collisionModelServer>	vehicles/british/GB29_Crusader_5inch/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB29_Crusader_5inch/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	5	</slotId>
               <rayStart>	0.000000 0.00229827 0.507961	</rayStart>
               <rayEnd>	0.0523819 0.0454136 0.507292	</rayEnd>
               <rayUp>	0.09 0.081 4	</rayUp>
               <size>	0.356	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	-0.000050 0.0081383 0.504219	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1806,10 +1874,23 @@
         <collisionModelClient>	vehicles/british/GB29_Crusader_5inch/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.672501 0.297409	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 0.602 0.000 1.000 0.000 0.114 0.100 0.500 0.500 0.000 0.500 0.600 0.306 1.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	0.000000 0.453453 0.305485	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1873,15 +1954,6 @@
             <collisionModelServer>	vehicles/british/GB29_Crusader_5inch/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB29_Crusader_5inch/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	-0.000000 0.140985 2.27667	</rayStart>
-              <rayEnd>	-0.00485389 0.161217 2.2733	</rayEnd>
-              <rayUp>	0.123 0.111 5	</rayUp>
-              <size>	0.667	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>
@@ -1914,6 +1986,31 @@
               </slaves>
             </master>
           </drivenJoints>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
+              <rayStart>	-0.000000 0.140985 2.27667	</rayStart>
+              <rayEnd>	-0.00485389 0.161217 2.2733	</rayEnd>
+              <rayUp>	0.123 0.111 5	</rayUp>
+              <size>	0.667	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	0.000000 0.158147 1.76632	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.2 1.2 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1929,10 +2026,23 @@
         <collisionModelClient>	vehicles/british/GB29_Crusader_5inch/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.614197 0.264862	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 0.824 0.000 1.000 0.000 0.089 0.100 0.500 0.500 0.320 0.500 0.447 0.114 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	0.000000 0.415709 0.326649	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
       </camouflage>

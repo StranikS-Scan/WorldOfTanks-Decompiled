@@ -79,38 +79,62 @@
       <collisionModelServer>	vehicles/american/A04_M3_Grant/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/american/A04_M3_Grant/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/american/A04_M3_Grant/M3_Grant_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.604166 1.07114 1.35858	</rayStart>
         <rayEnd>	-0.604122 0.974586 1.18343	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.21222 1.56948 -0.34541	</rayStart>
         <rayEnd>	-1.01411 1.54558 -0.331934	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-0.258052 0.640904 1.75175	</rayStart>
         <rayEnd>	-0.258052 0.484816 1.6267	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.82	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	0.554604 1.58371 -0.390581	</rayStart>
         <rayEnd>	0.355874 1.56478 -0.402739	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/american/A04_M3_Grant/M3_Grant_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	0.00279005 0.829022 -2.14589	</anchorPosition>
+        <anchorDirection>	0.000074 0.778671 -0.627432	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <VVSST41>
@@ -891,6 +915,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	5	</slotId>
+          <anchorPosition>	0.000000 2.84404 -0.491087	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </VVSST41>
     <VVSST48>
       <userString>	#usa_vehicles:VVSST48	</userString>
@@ -1683,12 +1721,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.00083412 2.84428 -0.490621	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </VVSST48>
   </chassis>
   <turrets0>
     <M3_S>
       <userString>	#usa_vehicles:M3_S	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	3	</level>
       <price>	2880	</price>
       <notInShop>	true	</notInShop>
@@ -1739,6 +1791,21 @@
             <collisionModelServer>	vehicles/american/A04_M3_Grant/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A04_M3_Grant/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	8	</slotId>
+              <anchorPosition>	0.0123919 -0.000166178 0.91761	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.295 0.295 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1771,6 +1838,21 @@
             <collisionModelServer>	vehicles/american/A04_M3_Grant/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A04_M3_Grant/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.0123919 -0.000218502 1.06979	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.355 0.355 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1786,10 +1868,23 @@
         <collisionModelClient>	vehicles/american/A04_M3_Grant/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.356168 0.148096	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.244 1.000 0.000 0.932 -0.027 1.000 0.100 0.500 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	0.000000 0.424947 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </M3_S>
   </turrets0>
   <engines>

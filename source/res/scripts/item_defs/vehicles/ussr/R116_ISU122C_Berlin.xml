@@ -80,45 +80,72 @@
       <collisionModelServer>	vehicles/russian/R116_ISU122C_Berlin/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R116_ISU122C_Berlin/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R116_ISU122C_Berlin/ISU122C_Berlin_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.687813 1.16912 2.15793	</rayStart>
         <rayEnd>	-0.687813 0.969097 1.81154	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.41072 0.84772 1.67472	</rayStart>
         <rayEnd>	-1.04213 0.753857 1.55098	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.56	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.47707 0.867518 0.930742	</rayStart>
         <rayEnd>	-1.09335 0.760863 0.967878	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.41072 0.84772 1.67472	</rayStart>
         <rayEnd>	1.04213 0.753857 1.55098	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.56	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.47707 0.867518 0.930742	</rayStart>
         <rayEnd>	1.09335 0.760863 0.967878	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R116_ISU122C_Berlin/ISU122C_Berlin_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	11	</slotId>
+        <anchorPosition>	0.000070 0.646023 -2.5822	</anchorPosition>
+        <anchorDirection>	0.000000 0.573577 -0.819152	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
     </camouflage>
@@ -260,14 +287,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.01	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
         <gravity>	-4	</gravity>
         <elasticity>	1500	</elasticity>
-        <damping>	8	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
+        <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -784,6 +808,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	-0.000000 2.31836 0.484481	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_R116_ISU122C_Berlin>
   </chassis>
   <turrets0>
@@ -841,16 +879,32 @@
             <collisionModelServer>	vehicles/russian/R116_ISU122C_Berlin/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R116_ISU122C_Berlin/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.014058 -0.0087198 1.32617	</rayStart>
               <rayEnd>	-0.0334152 -0.0548349 1.32588	</rayEnd>
               <rayUp>	0.097 0.095 5	</rayUp>
               <size>	0.503	</size>
               <hideIfDamaged>	true	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.00702249 -0.0045882 2.27488	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.34 0.34 0.000000 0.000000	</tiling>
           </camouflage>
@@ -866,10 +920,15 @@
         <collisionModelClient>	vehicles/russian/R116_ISU122C_Berlin/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_R116_ISU122C_Berlin>
   </turrets0>
   <engines>

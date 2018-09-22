@@ -67,23 +67,41 @@
       <collisionModelServer>	vehicles/german/G08_Pz38t/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G08_Pz38t/Pz38t_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.213595 0.251965 1.83552	</rayStart>
         <rayEnd>	0.213595 -0.0883003 1.7454	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.610133 0.636923 -0.970468	</rayStart>
         <rayEnd>	-0.48513 0.256959 -0.970554	</rayEnd>
         <rayUp>	0.949835 0.312263 -0.0174523	</rayUp>
         <size>	0.78	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G08_Pz38t/Pz38t_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	9	</slotId>
+        <anchorPosition>	0.000000 0.418791 -1.50695	</anchorPosition>
+        <anchorDirection>	0.000000 0.267759 -0.963486	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.6 1.6 0.000000 0.000000	</tiling>
     </camouflage>
@@ -257,9 +275,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
@@ -810,6 +825,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.00161194 2.17618 0.232234	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Pz38t_Standardketten>
     <Pz38t_Vetstaerktketten>
       <userString>	#germany_vehicles:Pz38t_Vetstaerktketten	</userString>
@@ -951,9 +980,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
@@ -1528,6 +1554,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.00172958 2.17619 0.232176	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Pz38t_Vetstaerktketten>
   </chassis>
   <turrets0>
@@ -1608,6 +1648,21 @@
             <collisionModelServer>	vehicles/german/G08_Pz38t/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	-0.000034 -0.00123729 0.662947	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.52 0.34 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1645,6 +1700,21 @@
             <collisionModelServer>	vehicles/german/G08_Pz38t/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	12	</slotId>
+              <anchorPosition>	0.000075 -0.00126407 0.820032	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.625 0.31 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1660,26 +1730,44 @@
         <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.001796 0.273741 0.519247	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.928 -0.043 0.976 0.000 0.699 0.144 0.860 0.632 0.407 0.500 0.167 0.500 0.146 0.544 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.830619 0.325189 -0.0771469	</rayStart>
           <rayEnd>	-0.436061 0.262997 -0.0557902	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.830619 0.325189 -0.0771469	</rayStart>
           <rayEnd>	0.436061 0.262997 -0.0557902	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.928 -0.043 0.976 0.000 0.699 0.144 0.860 0.632 0.407 0.500 0.167 0.500 0.146 0.544 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.000000 0.744249 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.76 0.43 0.000000 0.000000	</tiling>
         <exclusionMask>	vehicles/german/G08_Pz38t/Pz38t_chassis_01_AM.dds	</exclusionMask>
@@ -1760,6 +1848,21 @@
             <collisionModelServer>	vehicles/german/G08_Pz38t/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	14	</slotId>
+              <anchorPosition>	-0.000050 -0.00123729 0.63692	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.64 0.31 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1798,6 +1901,21 @@
             <collisionModelServer>	vehicles/german/G08_Pz38t/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	0.000027 -0.00126407 0.794	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.64 0.31 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1836,6 +1954,21 @@
             <collisionModelServer>	vehicles/german/G08_Pz38t/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	0.000192981 -0.00127262 0.686457	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.61 0.31 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1851,26 +1984,44 @@
         <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000013 0.273741 0.571307	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.005 -0.105 0.995 0.000 0.689 0.144 0.818 0.684 0.474 0.500 0.172 0.500 0.100 0.453 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.836358 0.332555 -0.106603	</rayStart>
           <rayEnd>	0.445074 0.270559 -0.0514938	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	6	</slotId>
           <rayStart>	-0.836358 0.332555 -0.106603	</rayStart>
           <rayEnd>	-0.445074 0.270559 -0.0514938	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.005 -0.105 0.995 0.000 0.689 0.144 0.818 0.684 0.474 0.500 0.172 0.500 0.100 0.453 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.000000 0.749363 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <exclusionMask>	vehicles/german/G08_Pz38t/Pz38t_chassis_01_AM.dds	</exclusionMask>
         <tiling>	0.805 0.415 0.000000 0.000000	</tiling>

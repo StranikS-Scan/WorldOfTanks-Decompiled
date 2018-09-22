@@ -76,38 +76,62 @@
       <collisionModelServer>	vehicles/german/G48_E-25/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G48_E-25/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G48_E-25/E-25_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.859982 0.563407 1.58053	</rayStart>
         <rayEnd>	0.859982 0.409948 1.45227	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.522566 0.404494 1.77066	</rayStart>
         <rayEnd>	-0.522566 0.251036 1.6424	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.454	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.00298 0.736779 -0.141544	</rayStart>
         <rayEnd>	-0.879829 0.579194 -0.141544	</rayEnd>
         <rayUp>	0.787933 0.615761 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.00194 0.737593 -0.143421	</rayStart>
         <rayEnd>	0.878786 0.580008 -0.143421	</rayEnd>
         <rayUp>	-0.787926 0.61577 -0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G48_E-25/E-25_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	0.000000 0.725086 -0.306971	</anchorPosition>
+        <anchorDirection>	0.000000 0.920875 -0.389859	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.24 0.595 0.000000 0.000000	</tiling>
     </camouflage>
@@ -264,9 +288,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	950	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
@@ -721,6 +742,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 1.55219 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_E-25>
   </chassis>
   <turrets0>
@@ -786,16 +821,32 @@
             <collisionModelServer>	vehicles/german/G48_E-25/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G48_E-25/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	5	</slotId>
               <rayStart>	0.00655747 -0.110762 3.14387	</rayStart>
               <rayEnd>	0.391426 -0.224964 3.13868	</rayEnd>
               <rayUp>	0.058 0.054 4	</rayUp>
               <size>	0.487	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.00327888 -0.0984347 1.74835	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.58 0.25 0.000000 0.000000	</tiling>
           </camouflage>
@@ -812,10 +863,15 @@
       </hitTester>
       <gunPosition>	0.000005 -0.108257 0.004047	</gunPosition>
       <gunCamPosition>	0.000005 -0.108257 -0.1	</gunCamPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_07	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_E-25>
   </turrets0>
   <engines>

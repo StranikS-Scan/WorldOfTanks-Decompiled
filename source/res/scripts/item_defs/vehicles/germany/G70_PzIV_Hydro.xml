@@ -75,23 +75,41 @@
       <collisionModelServer>	vehicles/german/G70_PzIV_Hydro/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G70_PzIV_Hydro/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G70_PzIV_Hydro/PzIV_Hydro_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.402061 0.392001 1.89693	</rayStart>
         <rayEnd>	-0.402061 0.0115826 1.77332	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.000701201 0.328133 -3.00232	</rayStart>
         <rayEnd>	-0.000701178 0.0491123 -2.71571	</rayEnd>
         <rayUp>	0.0997217 0.995003 -0.00486422	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G70_PzIV_Hydro/PzIV_Hydro_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	0.000000 0.182968 1.89306	</anchorPosition>
+        <anchorDirection>	0.000000 0.0962037 0.995362	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	3 3 0.000000 0.000000	</tiling>
     </camouflage>
@@ -822,6 +840,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.000106338 2.3227 -0.251463	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_PzIV_Hydro>
   </chassis>
   <turrets0>
@@ -898,16 +930,32 @@
             <collisionModelServer>	vehicles/german/G70_PzIV_Hydro/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G70_PzIV_Hydro/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	5	</slotId>
               <rayStart>	-0.00799927 0.0104618 2.70747	</rayStart>
               <rayEnd>	-0.183497 -0.0851697 2.70399	</rayEnd>
               <rayUp>	0.052 0.05 4	</rayUp>
               <size>	0.29	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	-0.00399964 0.0052309 1.66014	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -923,26 +971,44 @@
         <collisionModelClient>	vehicles/german/G70_PzIV_Hydro/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.346366 0.936487	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.924 0.025 1.000 0.000 0.534 0.225 0.755 0.556 0.337 0.500 0.034 0.500 0.000 0.100 0.317	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-1.06756 0.283892 0.859134	</rayStart>
           <rayEnd>	-0.951515 0.28361 0.828567	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	1.06756 0.283892 0.859134	</rayStart>
           <rayEnd>	0.951515 0.28361 0.828567	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.924 0.025 1.000 0.000 0.534 0.225 0.755 0.556 0.337 0.500 0.034 0.500 0.000 0.100 0.317	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 0.63417 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	1.5 1.5 0.000000 0.000000	</tiling>
       </camouflage>

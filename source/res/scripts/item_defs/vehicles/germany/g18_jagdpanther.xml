@@ -78,45 +78,72 @@
       <collisionModelServer>	vehicles/german/G18_JagdPanther/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G18_JagdPanther/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G18_JagdPanther/JagdPanther_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.877674 0.680927 2.22129	</rayStart>
         <rayEnd>	-0.877675 0.353265 1.99186	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.26247 1.12753 -0.932968	</rayStart>
         <rayEnd>	-0.91606 0.927534 -0.932968	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.26023 1.13141 -0.135018	</rayStart>
         <rayEnd>	-0.913821 0.931411 -0.135019	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.82	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.26247 1.12753 -0.932968	</rayStart>
         <rayEnd>	0.91606 0.927534 -0.932968	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.26023 1.13141 -0.135018	</rayStart>
         <rayEnd>	0.913821 0.931411 -0.135019	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.82	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G18_JagdPanther/JagdPanther_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12	</slotId>
+        <anchorPosition>	0.000000 1.33297 -1.17936	</anchorPosition>
+        <anchorDirection>	0.000000 0.748941 -0.662636	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <JgPzV_Standardketten>
@@ -256,14 +283,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.09	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-7.4	</gravity>
         <elasticity>	1094	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1.01	</forwardElastK>
-        <backwardElastK>	0.61	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -849,6 +873,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	18	</slotId>
+          <anchorPosition>	0.000000 2.51404 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </JgPzV_Standardketten>
     <JgPzV_Vetstaerktketten>
       <userString>	#germany_vehicles:JgPzV_Vetstaerktketten	</userString>
@@ -989,14 +1027,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.09	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-7.4	</gravity>
         <elasticity>	1094	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1.01	</forwardElastK>
-        <backwardElastK>	0.61	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -1569,6 +1604,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	0.000097 2.51384 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </JgPzV_Vetstaerktketten>
   </chassis>
   <turrets0>
@@ -1628,17 +1677,33 @@
             <collisionModelServer>	vehicles/german/G18_JagdPanther/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G18_JagdPanther/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_medium	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.000017 0.00100339 3.12116	</rayStart>
               <rayEnd>	0.132346 -0.0153147 3.11919	</rayEnd>
               <rayUp>	0.062 0.06 3	</rayUp>
               <size>	0.4	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_medium	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	14	</slotId>
+              <anchorPosition>	0.000008 0.000501697 1.79277	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.37 0.37 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1678,16 +1743,32 @@
             <collisionModelClient>	vehicles/german/G18_JagdPanther/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main_mb	</effects>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	-0.000000 0.000004 2.49391	</rayStart>
               <rayEnd>	0.172911 -0.0532069 2.48785	</rayEnd>
               <rayUp>	0.069 0.065 3	</rayUp>
               <size>	0.41	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	-0.000000 0.0142634 1.68336	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.37 0.37 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1727,16 +1808,32 @@
             <collisionModelServer>	vehicles/german/G18_JagdPanther/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G18_JagdPanther/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	8	</slotId>
               <rayStart>	-0.000000 0.000328226 3.86788	</rayStart>
               <rayEnd>	0.0176151 -0.0173518 3.86497	</rayEnd>
               <rayUp>	0.072 0.064 3	</rayUp>
               <size>	0.421	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	-0.000000 0.000164189 2.34301	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1769,16 +1866,32 @@
             <collisionModelServer>	vehicles/german/G18_JagdPanther/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G18_JagdPanther/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	9	</slotId>
               <rayStart>	0.000102377 -0.000414122 2.61788	</rayStart>
               <rayEnd>	0.185382 -0.040069 2.61788	</rayEnd>
               <rayUp>	0.113 0.113 4	</rayUp>
               <size>	0.591	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	13	</slotId>
+              <anchorPosition>	0.000051 0.0135914 1.86435	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1794,10 +1907,15 @@
         <collisionModelClient>	vehicles/german/G18_JagdPanther/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </JgPzPanther>
   </turrets0>
   <engines>

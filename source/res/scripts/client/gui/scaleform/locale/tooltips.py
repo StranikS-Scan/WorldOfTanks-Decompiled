@@ -13,6 +13,7 @@ class TOOLTIPS(object):
     TANKS_CAROUSEL_BUY_SLOT = '#tooltips:tanks_carousel/buy_slot'
     TANKS_CAROUSEL_BUY_VEHICLE = '#tooltips:tanks_carousel/buy_vehicle'
     TANKS_CAROUSEL_BUY_VEHICLE_NEW = '#tooltips:tanks_carousel/buy_vehicle_new'
+    TANKS_CAROUSEL_RESTORE_VEHICLE = '#tooltips:tanks_carousel/restore_vehicle'
     VEHICLEPREVIEW_MODULSNOMODULES = '#tooltips:vehiclePreview/modulsnoModules'
     VEHICLEPREVIEW_MODULS = '#tooltips:vehiclePreview/moduls'
     BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN = '#tooltips:battleResults/FortResource/resultsShareBtn'
@@ -794,6 +795,8 @@ class TOOLTIPS(object):
     TANKS_CAROUSEL_BUY_VEHICLE_BODY = '#tooltips:tanks_carousel/buy_vehicle/body'
     TANKS_CAROUSEL_BUY_VEHICLE_NEW_HEADER = '#tooltips:tanks_carousel/buy_vehicle_new/header'
     TANKS_CAROUSEL_BUY_VEHICLE_NEW_BODY = '#tooltips:tanks_carousel/buy_vehicle_new/body'
+    TANKS_CAROUSEL_RESTORE_VEHICLE_HEADER = '#tooltips:tanks_carousel/restore_vehicle/header'
+    TANKS_CAROUSEL_RESTORE_VEHICLE_BODY = '#tooltips:tanks_carousel/restore_vehicle/body'
     TANKS_CAROUSEL_BUY_SLOT_HEADER = '#tooltips:tanks_carousel/buy_slot/header'
     TANKS_CAROUSEL_BUY_SLOT_BODY = '#tooltips:tanks_carousel/buy_slot/body'
     TANKS_CAROUSEL_VEHICLESTATES_BATTLE = '#tooltips:tanks_carousel/vehicleStates/battle'
@@ -1755,6 +1758,7 @@ class TOOLTIPS(object):
     CUSTOMIZATION_TABS_EMBLEM_BODY = '#tooltips:customization/tabs/emblem/body'
     CUSTOMIZATION_TABS_INSCRIPTION_BODY = '#tooltips:customization/tabs/inscription/body'
     CUSTOMIZATION_TABS_MODIFICATION_BODY = '#tooltips:customization/tabs/modification/body'
+    CUSTOMIZATION_TABS_PROJECTIONDECAL_BODY = '#tooltips:customization/tabs/projectionDecal/body'
     CUSTOMIZATION_CAROUSEL_FILTER_HEADER = '#tooltips:customization/carousel/filter/header'
     CUSTOMIZATION_CAROUSEL_FILTER_BODY = '#tooltips:customization/carousel/filter/body'
     CUSTOMIZATION_FILTERPOPOVER_REFRESH_HEADER = '#tooltips:customization/filterPopover/refresh/header'
@@ -2580,7 +2584,8 @@ class TOOLTIPS(object):
      CUSTOMIZATION_TABS_CAMOUFLAGE_BODY,
      CUSTOMIZATION_TABS_EMBLEM_BODY,
      CUSTOMIZATION_TABS_INSCRIPTION_BODY,
-     CUSTOMIZATION_TABS_MODIFICATION_BODY)
+     CUSTOMIZATION_TABS_MODIFICATION_BODY,
+     CUSTOMIZATION_TABS_PROJECTIONDECAL_BODY)
     ELEN_TASK_EVENTTYPE_NOTFULL_ENUM = (ELEN_TASK_EVENTTYPE_NOTFULL_NATION,
      ELEN_TASK_EVENTTYPE_NOTFULL_LEVEL,
      ELEN_TASK_EVENTTYPE_NOTFULL_CLASS,

@@ -3,35 +3,42 @@
 from collections import namedtuple
 from itertools import islice
 from CurrentVehicle import g_currentVehicle
-from gui.Scaleform.daapi.view.lobby.customization.shared import SEASONS_ORDER, SEASON_TYPE_TO_NAME, TABS_ITEM_MAPPING, CAMO_SCALE_SIZE
+from gui.Scaleform.daapi.view.lobby.customization.shared import SCALE_SIZE
 from gui.Scaleform.daapi.view.meta.CustomizationPropertiesSheetMeta import CustomizationPropertiesSheetMeta
 from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, C11nTabs
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
-from gui.shared.formatters import text_styles, currency
-from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
+from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
+from gui.shared import EVENT_BUS_SCOPE
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.vehicle import VehicleAutoStyleEquipProcessor
+from gui.shared.formatters import text_styles
 from gui.shared.utils import decorators
 from helpers import dependency
 from skeletons.gui.customization import ICustomizationService
-from helpers.i18n import makeString as _ms
 from gui.shared.gui_items.customization.c11n_items import camoIconTemplate
 from skeletons.gui.shared import IItemsCache
 from items.components.c11n_constants import SeasonType
-from gui.customization.shared import getAppliedRegionsForCurrentHangarVehicle, getCustomizationTankPartName
+from gui.customization.shared import getAppliedRegionsForCurrentHangarVehicle, getCustomizationTankPartName, C11nId
 from gui.shared.gui_items.customization.outfit import Area
+from skeletons.gui.shared.utils import IHangarSpace
 CustomizationCamoSwatchVO = namedtuple('CustomizationCamoSwatchVO', 'paletteIcon selected')
 _MAX_PALETTES = 3
 _PALETTE_TEXTURE = 'gui/maps/vehicles/camouflages/camo_palette_{colornum}.dds'
 _DEFAULT_COLORNUM = 1
 _PALETTE_BACKGROUND = 'gui/maps/vehicles/camouflages/camo_palettes_back.dds'
-_PALETTE_WIDTH = 75
-_PALETTE_HEIGHT = 18
+_PALETTE_WIDTH = 42
+_PALETTE_HEIGHT = 42
+_C11nEditModes = {CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_DEFAULT: 0,
+ CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_MOVE: 1,
+ CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_SCALE: 2,
+ CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_ROTATION: 3}
 
 class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     itemsCache = dependency.instance(IItemsCache)
     service = dependency.descriptor(ICustomizationService)
+    _hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         super(CustomizationPropertiesSheet, self).__init__()
@@ -40,14 +47,34 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._regionID = -1
         self._areaID = -1
         self._isVisible = False
+        self._editMode = False
         self._extraMoney = None
         self._isItemAppliedToAll = False
         self.__autoRentEnabled = False
+        self.__interactionType = CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_DEFAULT
+        self.__changes = [False] * 3
         return
 
     @property
     def isVisible(self):
         return self._isVisible
+
+    def editMode(self, value, interactionType):
+        self._editMode = value
+        if self._editMode:
+            self.__interactionType = interactionType
+        else:
+            self.interactionStatusUpdate(False)
+            self.__interactionType = -1
+
+    def interactionStatusUpdate(self, value):
+        self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_CAMERA_MOVEMENT, ctx={'disable': value}), EVENT_BUS_SCOPE.DEFAULT)
+
+    def setScale(self, value):
+        pass
+
+    def setRotation(self, value):
+        pass
 
     def _populate(self):
         super(CustomizationPropertiesSheet, self)._populate()
@@ -60,6 +87,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self.__ctx.onCustomizationItemsRemoved += self.__onItemsRemoved
         self.__ctx.onCustomizationCamouflageColorChanged += self.__onCamouflageColorChanged
         self.__ctx.onCustomizationCamouflageScaleChanged += self.__onCamouflageScaleChanged
+        self.__ctx.onCustomizationProjectionDecalScaleChanged += self.__onProjectionDecalScaleChanged
         self.__ctx.onCustomizationItemsBought += self.__onItemsBought
         self.__ctx.onCustomizationItemSold += self.__onItemSold
         return
@@ -69,6 +97,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self.__ctx.onCustomizationItemsBought -= self.__onItemsBought
         self.__ctx.onCustomizationCamouflageScaleChanged -= self.__onCamouflageScaleChanged
         self.__ctx.onCustomizationCamouflageColorChanged -= self.__onCamouflageColorChanged
+        self.__ctx.onCustomizationProjectionDecalScaleChanged -= self.__onProjectionDecalScaleChanged
         self.__ctx.onCustomizationItemsRemoved -= self.__onItemsRemoved
         self.__ctx.onCustomizationItemInstalled -= self.__onItemsInstalled
         self.__ctx.onCustomizationSeasonChanged -= self.__onSeasonChanged
@@ -91,6 +120,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._isVisible = True
         if self.__update():
             self.__ctx.onPropertySheetShown()
+        self.__ctx.vehicleAnchorsUpdater.displayMenu(True)
 
     def hide(self):
         if not self.isVisible:
@@ -98,50 +128,57 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._isVisible = False
         self.as_hideS()
         self.__ctx.onPropertySheetHidden()
+        self.__ctx.vehicleAnchorsUpdater.displayMenu(False)
 
-    def onActionBtnClick(self, actionType, applyToAll):
+    def onActionBtnClick(self, actionType, actionData):
         if actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_PARTS:
-            self.__applyToOtherAreas(applyToAll)
+            self._isItemAppliedToAll = not self._isItemAppliedToAll
+            self.__applyToOtherAreas(self._isItemAppliedToAll)
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_SEASONS:
-            self.__applyToOtherSeasons(applyToAll)
+            self._isItemAppliedToAll = not self._isItemAppliedToAll
+            self.__applyToOtherSeasons(self._isItemAppliedToAll)
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_ONE:
             self.__removeElement()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_RENT_CHECKBOX_CHANGE:
             self.__autoRentEnabled = not self.__autoRentEnabled
             self.__setAutoRent(self.__autoRentEnabled)
-
-    def setCamouflageColor(self, paletteIdx):
-        if self._currentComponent.palette != paletteIdx:
-            self.__ctx.changeCamouflageColor(self._areaID, self._regionID, paletteIdx)
+        elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_FROM_ALL_PARTS:
+            self.__removeFromAllAreas()
+        elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_SCALE_CHANGE:
+            if self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
+                if self._currentComponent.patternSize != actionData:
+                    self.__ctx.changeCamouflageScale(self._areaID, self._regionID, actionData)
+            elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+                actionData += 1
+                if self._currentComponent.scaleFactorId != actionData:
+                    self.__ctx.changeProjectionDecalScale(self._areaID, self._regionID, actionData)
+        elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_COLOR_CHANGE:
+            if self._currentComponent.palette != actionData:
+                self.__ctx.changeCamouflageColor(self._areaID, self._regionID, actionData)
 
     def onClose(self):
         self.hide()
 
-    def setCamouflageScale(self, scale, scaleIndex):
-        if self._currentComponent.patternSize != scale:
-            self.__ctx.changeCamouflageScale(self._areaID, self._regionID, scale)
-
-    @property
-    def _currentMultiSlot(self):
-        if self._slotID == -1 or self._areaID == -1:
-            return None
-        else:
-            return self.__ctx.currentOutfit.getContainer(self._areaID).slotFor(self._slotID) if self._slotID != GUI_ITEM_TYPE.STYLE else None
-
     @property
     def _currentSlotData(self):
-        slot = self._currentMultiSlot
-        return None if not slot or self._regionID == -1 else slot.getSlotData(self._regionID)
+        if self._slotID == -1 or self._areaID == -1 or self._slotID == GUI_ITEM_TYPE.STYLE:
+            return
+        else:
+            slot = self.__ctx.currentOutfit.getContainer(self._areaID).slotFor(self._slotID)
+            if slot is None or self._regionID == -1:
+                return
+            slotId = self.__ctx.getSlotIdByAnchorId(C11nId(self._areaID, self._slotID, self._regionID))
+            return slot.getSlotData(slotId.regionIdx)
 
     @property
     def _currentItem(self):
-        slot = self._currentMultiSlot
-        return None if not slot or self._regionID == -1 else slot.getItem(self._regionID)
+        slotData = self._currentSlotData
+        return None if slotData is None else slotData.item
 
     @property
     def _currentComponent(self):
-        slot = self._currentMultiSlot
-        return None if not slot or self._regionID == -1 else slot.getComponent(self._regionID)
+        slotData = self._currentSlotData
+        return None if slotData is None else slotData.component
 
     @property
     def _currentStyle(self):
@@ -153,6 +190,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__updateExtraPrice()
             self.__autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
             self.as_setDataAndShowS(self.__makeVO())
+            self.__ctx.caruselItemUnselected()
+            self.__ctx.onPropertySheetShown()
             return True
         return False
 
@@ -166,8 +205,16 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__ctx.removeItemFromAllTankAreas(currentSeason, self._slotID)
         self.__update()
 
+    def __removeFromAllAreas(self):
+        currentSeason = self.__ctx.currentSeason
+        self.__ctx.removeItemFromAllTankAreas(currentSeason, self._slotID)
+        self.__update()
+
     def __applyToOtherSeasons(self, installItem):
-        if self.__ctx.currentTab not in (C11nTabs.EFFECT, C11nTabs.EMBLEM, C11nTabs.INSCRIPTION):
+        if self.__ctx.currentTab not in (C11nTabs.EFFECT,
+         C11nTabs.EMBLEM,
+         C11nTabs.INSCRIPTION,
+         C11nTabs.PROJECTION_DECAL):
             return
         if installItem:
             self.__ctx.installItemForAllSeasons(self._areaID, self._slotID, self._regionID, self._currentSlotData)
@@ -179,7 +226,10 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         if self._slotID == GUI_ITEM_TYPE.STYLE:
             self.__ctx.removeStyle(self._currentStyle.intCD)
         else:
-            self.__ctx.removeItemFromRegion(self.__ctx.currentSeason, self._areaID, self._slotID, self._regionID)
+            slotId = self.__ctx.getSlotIdByAnchorId(C11nId(areaId=self._areaID, slotType=self._slotID, regionIdx=self._regionID))
+            if slotId is not None:
+                self.__ctx.removeItemFromSlot(self.__ctx.currentSeason, slotId)
+        return
 
     def __updateItemAppliedToAllFlag(self):
         self._isItemAppliedToAll = False
@@ -217,18 +267,10 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
 
     def __makeVO(self):
         currentElement = self._currentStyle if self._slotID == GUI_ITEM_TYPE.STYLE else self._currentItem
-        titleText, descrText = self.__getTitleDescrTexts(currentElement)
-        slotImgSrc = ''
-        if not currentElement:
-            slotImgSrc = RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK_POPOVER_SMALL
-        elif self._slotID == GUI_ITEM_TYPE.STYLE and self._currentStyle.isHiddenInUI():
-            slotImgSrc = self._currentStyle.icon
         vo = {'intCD': -1 if not currentElement else currentElement.intCD,
-         'titleImageSrc': self.__getTitleImage(),
-         'titleText': titleText,
-         'descrText': descrText,
-         'slotImgSrc': slotImgSrc,
-         'renderers': self.__makeRenderersVOs() if currentElement else []}
+         'renderersData': self.__makeRenderersVOs() if currentElement else [],
+         'isProjectionEnable': self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL,
+         'isBigRadius': self._slotID in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.EMBLEM)}
         return vo
 
     def __makeSlotVO(self):
@@ -237,59 +279,25 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             vo = {'imgIconSrc': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK_POPOVER_SMALL}
         return vo
 
-    def __getTitleImage(self):
-        if self._slotID == GUI_ITEM_TYPE.STYLE:
-            return ''
-        seasonName = SEASON_TYPE_TO_NAME.get(self.__ctx.currentSeason)
-        return RES_ICONS.getSeasonTopImage(seasonName)
-
-    def __getTitleDescrTexts(self, currentElement):
-        if self._slotID == GUI_ITEM_TYPE.STYLE:
-            if not currentElement:
-                titleText = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ELEMENTTYPE_ALL
-            else:
-                titleText = currentElement.userName
-        elif self._slotID == GUI_ITEM_TYPE.MODIFICATION:
-            titleText = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ELEMENTTYPE_ALL
-        elif self._slotID == GUI_ITEM_TYPE.INSCRIPTION:
-            titleText = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ELEMENTTYPE_INSCRIPTION
-        elif self._slotID == GUI_ITEM_TYPE.EMBLEM:
-            titleText = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ELEMENTTYPE_EMBLEM
-        else:
-            titleText = VEHICLE_CUSTOMIZATION.getSheetVehPartName(getCustomizationTankPartName(self._areaID, self._regionID))
-        if not currentElement:
-            itemTypeID = TABS_ITEM_MAPPING.get(self.__ctx.currentTab)
-            itemTypeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
-            descrText = text_styles.neutral(VEHICLE_CUSTOMIZATION.getSheetEmptyDescription(itemTypeName))
-        elif self._slotID == GUI_ITEM_TYPE.STYLE:
-            descrText = text_styles.main(currentElement.userType)
-        elif self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
-            descrText = text_styles.main(currentElement.userName)
-        else:
-            descrText = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_DESCRIPTION, itemType=currentElement.userType, itemName=currentElement.userName))
-        return (text_styles.highTitle(titleText), descrText)
-
     def __makeRenderersVOs(self):
         renderers = []
-        isExtentionEnabled = False
         if self._slotID == GUI_ITEM_TYPE.PAINT:
             renderers.append(self.__makeSetOnOtherTankPartsRendererVO())
         elif self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
             vo = self.__makeCamoColorRendererVO()
             if vo is not None:
                 renderers.append(vo)
-            renderers.append(self.__makeCamoScaleRendererVO())
+            renderers.append(self.__makeScaleRendererVO())
             renderers.append(self.__makeSetOnOtherTankPartsRendererVO())
-        elif self._slotID == GUI_ITEM_TYPE.EMBLEM or self._slotID == GUI_ITEM_TYPE.INSCRIPTION or self._slotID == GUI_ITEM_TYPE.MODIFICATION:
+        elif self._slotID in (GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.MODIFICATION):
             renderers.append(self.__makeSetOnOtherSeasonsRendererVO())
-        elif self._slotID == GUI_ITEM_TYPE.STYLE and not self._currentStyle.isHiddenInUI():
-            vo = self.__makeStyleRendererVO()
-            if vo is not None:
-                renderers += vo
+        elif self._slotID == GUI_ITEM_TYPE.STYLE:
             isExtentionEnabled = self._currentStyle and self._currentStyle.isRentable
             if isExtentionEnabled:
                 renderers.append(self.__makeExtensionRendererVO())
-        renderers.append(self.__makeRemoveRendererVO(not isExtentionEnabled))
+        elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            renderers.append(self.__makeScaleRendererVO())
+        renderers.append(self.__makeRemoveRendererVO())
         return renderers
 
     def __updateExtraPrice(self):
@@ -310,65 +318,63 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         return
 
     def __makeSetOnOtherTankPartsRendererVO(self):
-        if not self._isItemAppliedToAll:
-            currPartName = VEHICLE_CUSTOMIZATION.getSheetVehPartName(getCustomizationTankPartName(self._areaID, self._regionID))
-            titleText = text_styles.standard(_ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_TITLE_APPLIEDTO, elementType=text_styles.neutral(currPartName)))
-            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_APPLYTOWHOLETANK
-            actionBtnIconSrc = ''
-            extraPriceText = ''
-            extraPriceCurrency = ''
-        else:
-            titleText = text_styles.neutral(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_TITLE_ALLTANKPAINTED)
+        icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_TANK
+        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_TANK_HOVER
+        actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_APPLYTOWHOLETANK
+        if self._isItemAppliedToAll:
+            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_TANK
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_TANK_HOVER
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_CANCEL
-            actionBtnIconSrc = RES_ICONS.MAPS_ICONS_LIBRARY_ASSET_1
-            extraPriceCurrency = ''
-            extraPriceText = ''
-            if self._extraMoney:
-                extraPriceCurrency = self._extraMoney.getCurrency()
-                if self._extraMoney.get(extraPriceCurrency):
-                    extraPriceText = '{}{}'.format(currency.getStyle(extraPriceCurrency)('+'), currency.applyAll(extraPriceCurrency, self._extraMoney.get(extraPriceCurrency)))
-        return {'titleText': titleText,
-         'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_TANK,
-         'actionBtnLabel': actionBtnLabel,
-         'actionBtnIconSrc': actionBtnIconSrc,
-         'isAppliedToAll': self._isItemAppliedToAll,
+        return {'iconSrc': icon,
+         'iconHoverSrc': hoverIcon,
+         'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_PARTS,
-         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
-         'extraPriceText': extraPriceText,
-         'extraPriceIcon': extraPriceCurrency}
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI}
 
-    def __makeRemoveRendererVO(self, separatorVisible=True):
+    def __removeAllTankPartsRendererVO(self):
+        icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_TANK
+        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_TANK_HOVER
+        actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_CLEAR
+        return {'iconSrc': icon,
+         'iconHoverSrc': hoverIcon,
+         'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
+         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_FROM_ALL_PARTS,
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI}
+
+    def __makeRemoveRendererVO(self):
         iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_CROSS
+        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_CROSS_HOVER
         if self._slotID == GUI_ITEM_TYPE.STYLE:
-            titleText = ''
-            iconSrc = ''
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVESTYLE
+        elif self._slotID == GUI_ITEM_TYPE.MODIFICATION:
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_TANK
+        elif self._slotID == GUI_ITEM_TYPE.EMBLEM:
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_EMBLEM
+        elif self._slotID == GUI_ITEM_TYPE.INSCRIPTION:
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_INSCRIPTION
+        elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_PROJECTIONDECAL
         else:
-            itemTypeID = TABS_ITEM_MAPPING.get(self.__ctx.currentTab)
-            itemTypeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
-            titleText = VEHICLE_CUSTOMIZATION.getSheetRemoveText(itemTypeName)
-            if self._slotID == GUI_ITEM_TYPE.MODIFICATION:
-                actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_TANK
-            elif self._slotID == GUI_ITEM_TYPE.EMBLEM:
-                actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_EMBLEM
-            elif self._slotID == GUI_ITEM_TYPE.INSCRIPTION:
-                actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_INSCRIPTION
-            else:
-                actionBtnLabel = VEHICLE_CUSTOMIZATION.getSheetBtnRemoveText(getCustomizationTankPartName(self._areaID, self._regionID))
-        return {'titleText': text_styles.standard(titleText),
-         'iconSrc': iconSrc,
-         'actionBtnLabel': actionBtnLabel,
-         'actionBtnIconSrc': RES_ICONS.MAPS_ICONS_LIBRARY_ASSET_1,
-         'isAppliedToAll': False,
-         'separatorVisible': separatorVisible,
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.getSheetBtnRemoveText(getCustomizationTankPartName(self._areaID, self._regionID))
+        return {'iconSrc': iconSrc,
+         'iconHoverSrc': hoverIcon,
+         'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_ONE}
 
     def __makeExtensionRendererVO(self):
-        return {'actionBtnLabel': _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_AUTOPROLONGATIONLABEL),
+        icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_RENT
+        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_RENT_HOVER
+        label = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_AUTOPROLONGATIONLABEL
+        if self.__autoRentEnabled:
+            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_RENT
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_RENT_HOVER
+            label = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_NOTAUTOPROLONGATIONLABEL
+        return {'iconSrc': icon,
+         'iconHoverSrc': hoverIcon,
+         'actionBtnLabel': text_styles.tutorial(label),
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_RENT_CHECKBOX_CHANGE,
-         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_CHECKBOX_RENDERER_UI,
-         'isSelected': self.__autoRentEnabled}
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI}
 
     def __makeCamoColorRendererVO(self):
         btnsBlockVO = []
@@ -381,88 +387,43 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             icon = camoIconTemplate(texture, _PALETTE_WIDTH, _PALETTE_HEIGHT, palette, background=_PALETTE_BACKGROUND)
             btnsBlockVO.append(CustomizationCamoSwatchVO(icon, idx == self._currentComponent.palette)._asdict())
 
-        return {'titleText': text_styles.standard(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_TITLE_COLOR),
-         'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_COLORS,
-         'isAppliedToAll': False,
+        return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_COLORS,
+         'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_COLORS_HOVER,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_COLOR_CHANGE,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_SCALE_COLOR_RENDERER_UI,
-         'btnsBlockVO': btnsBlockVO,
-         'btnsGroupName': CUSTOMIZATION_ALIASES.COLOR_BTNS_GROUP} if len(btnsBlockVO) == _MAX_PALETTES else None
+         'btnsBlockVO': btnsBlockVO} if len(btnsBlockVO) == _MAX_PALETTES else None
 
-    def __makeCamoScaleRendererVO(self):
+    def __makeScaleRendererVO(self):
         btnsBlockVO = []
-        for idx in xrange(len(CAMO_SCALE_SIZE)):
+        if self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
+            selected = self._currentComponent.patternSize
+        else:
+            selected = self._currentComponent.scaleFactorId - 1
+        for idx, scaleSizeLabel in enumerate(SCALE_SIZE):
             btnsBlockVO.append({'paletteIcon': '',
-             'label': CAMO_SCALE_SIZE[idx],
-             'selected': self._currentComponent.patternSize == idx,
+             'label': scaleSizeLabel,
+             'selected': selected == idx,
              'value': idx})
 
-        return {'titleText': text_styles.standard(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_TITLE_SCALE),
-         'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_SCALE,
-         'isAppliedToAll': False,
+        return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_SCALE,
+         'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_SCALE_HOVER,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_SCALE_CHANGE,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_SCALE_COLOR_RENDERER_UI,
-         'btnsBlockVO': btnsBlockVO,
-         'btnsGroupName': CUSTOMIZATION_ALIASES.SCALE_BTNS_GROUP}
+         'btnsBlockVO': btnsBlockVO}
 
     def __makeSetOnOtherSeasonsRendererVO(self):
-        activeSeason = SEASON_TYPE_TO_NAME.get(self.__ctx.currentSeason)
+        icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_ALL_SEASON
+        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_ALL_SEASON_HOVER
         actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_APPLYTOALLMAPS
-        actionBtnIconSrc = ''
         if self._isItemAppliedToAll:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_SEASONS
-            actionBtnIconSrc = RES_ICONS.MAPS_ICONS_LIBRARY_ASSET_1
-            titleText = text_styles.neutral(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_TITLE_ALLMAPS)
-            extraPriceCurrency = ''
-            extraPriceText = ''
-            if self._extraMoney:
-                extraPriceCurrency = self._extraMoney.getCurrency()
-                if self._extraMoney.get(extraPriceCurrency):
-                    extraPriceText = '{}{}'.format(currency.getStyle(extraPriceCurrency)('+'), currency.applyAll(extraPriceCurrency, self._extraMoney.get(extraPriceCurrency)))
-        else:
-            titleText = text_styles.standard(_ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_TITLE_APPLIEDTOMAP, mapType=text_styles.neutral(VEHICLE_CUSTOMIZATION.getSheetSeasonName(activeSeason))))
-            extraPriceText = ''
-            extraPriceCurrency = ''
-        return {'titleText': titleText,
-         'iconSrc': RES_ICONS.getSeasonIcon(activeSeason),
-         'actionBtnLabel': actionBtnLabel,
-         'actionBtnIconSrc': actionBtnIconSrc,
-         'isAppliedToAll': self._isItemAppliedToAll,
+            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_ALL_SEASON
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_ALL_SEASON_HOVER
+        return {'iconSrc': icon,
+         'iconHoverSrc': hoverIcon,
+         'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_SEASONS,
-         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
-         'extraPriceText': extraPriceText,
-         'extraPriceIcon': extraPriceCurrency}
-
-    def __makeStyleRendererVO(self):
-        seasonItemData = []
-        allUnique = set()
-        if self._currentStyle:
-            smallRenderers = True
-            for season in SEASONS_ORDER:
-                seasonName = SEASON_TYPE_TO_NAME.get(season)
-                seasonUnique = set()
-                outfit = self._currentStyle.getOutfit(season)
-                items = []
-                for item, component in outfit.itemsFull():
-                    if item.intCD not in seasonUnique and not item.isHiddenInUI():
-                        items.append({'image': item.getIconApplied(component),
-                         'specialArgs': item.getSpecialArgs(component),
-                         'isWide': item.isWide(),
-                         'intCD': item.intCD})
-                    allUnique.add(item.intCD)
-                    seasonUnique.add(item.intCD)
-                    if len(items) > 1 and smallRenderers:
-                        smallRenderers = False
-
-                titleText = VEHICLE_CUSTOMIZATION.getSheetSeasonName(seasonName)
-                seasonItemData.append({'titleText': text_styles.standard(titleText),
-                 'itemRendererVOs': items,
-                 'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_STYLE_RENDERER_UI})
-
-            for item in seasonItemData:
-                item['isSmall'] = smallRenderers
-
-            return seasonItemData
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI}
 
     @decorators.process('loadStats')
     def __setAutoRent(self, autoRent):
@@ -477,8 +438,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         else:
             self.__update()
 
-    def __onSeasonChanged(self, seasonIdx):
-        self.__update()
+    def __onSeasonChanged(self, seasonType):
+        self.hide()
 
     def __onCamouflageColorChanged(self, areaId, regionIdx, paletteIdx):
         self.__update()
@@ -486,11 +447,14 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def __onCamouflageScaleChanged(self, areaId, regionIdx, scale):
         self.__update()
 
-    def __onItemsInstalled(self):
+    def __onProjectionDecalScaleChanged(self, areaId, regionIdx, scale):
+        self.__update()
+
+    def __onItemsInstalled(self, item, slotId, buyLimitReached):
         self.__update()
 
     def __onItemsRemoved(self):
-        self.__update()
+        self.hide()
 
     def __onItemsBought(self, purchaseItems, results):
         self.__update()

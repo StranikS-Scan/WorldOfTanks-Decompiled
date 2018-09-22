@@ -114,3 +114,6 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_hideMenuS(self, value):
         return self.flashObject.as_hideMenu(value) if self._isDAAPIInited() else None
+
+    def as_toggleVisibilityMenuS(self, state):
+        return self.flashObject.as_toggleVisibilityMenu(state) if self._isDAAPIInited() else None

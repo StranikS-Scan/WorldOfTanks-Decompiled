@@ -75,30 +75,51 @@
       <collisionModelServer>	vehicles/french/F11_Renault_G1R/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F11_Renault_G1R/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F11_Renault_G1R/Renault_G1R_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.462497 0.430529 1.44737	</rayStart>
         <rayEnd>	-0.457961 0.344792 1.39609	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.351195 0.110529 2.10443	</rayStart>
         <rayEnd>	-0.350739 0.0168449 2.06946	</rayEnd>
         <rayUp>	0.162706 -0.00418568 -0.986666	</rayUp>
         <size>	0.5	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.32261 0.00297844 0.24986	</rayStart>
         <rayEnd>	1.22261 0.00297844 0.24986	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.7	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F11_Renault_G1R/Renault_G1R_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	14	</slotId>
+        <anchorPosition>	0.000000 0.407007 -1.5586	</anchorPosition>
+        <anchorDirection>	0.000000 0.252663 -0.967554	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_Renault_G1R>
@@ -249,14 +270,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.25	</maxAmplitude>
         <maxOffset>	0.25	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -868,6 +886,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	0.000130676 2.28719 0.173347	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Renault_G1R>
     <Chassis_Renault_G1R_2>
       <userString>	#france_vehicles:Chassis_Renault_G1R_2	</userString>
@@ -1013,14 +1045,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.25	</maxAmplitude>
         <maxOffset>	0.25	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -1632,6 +1661,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.000149937 2.28719 0.173329	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Renault_G1R_2>
   </chassis>
   <turrets0>
@@ -1711,17 +1754,33 @@
             <collisionModelServer>	vehicles/french/F11_Renault_G1R/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F11_Renault_G1R/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_medium	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.000004 -0.0016637 0.820701	</rayStart>
               <rayEnd>	0.132615 -0.119681 0.819586	</rayEnd>
               <rayUp>	0.055 0.055 3	</rayUp>
               <size>	0.2	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_medium	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	0.000002 -0.00083185 0.563731	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1737,26 +1796,44 @@
         <collisionModelClient>	vehicles/french/F11_Renault_G1R/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.002108 0.153941 0.96582	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.428 0.105 0.500 0.495 0.500 0.500 0.319 0.712 0.317 0.335 0.229	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.730274 0.294325 0.152056	</rayStart>
           <rayEnd>	-0.583018 0.162727 0.120471	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.805683 0.2437 0.0273378	</rayStart>
           <rayEnd>	0.627272 0.157361 0.000602836	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 0.428 0.105 0.500 0.495 0.500 0.500 0.319 0.712 0.317 0.335 0.229	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	15	</slotId>
+          <anchorPosition>	0.000000 0.749426 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.37 0.37 0.17 0.000000	</tiling>
       </camouflage>
@@ -1846,17 +1923,33 @@
             <collisionModelServer>	vehicles/french/F11_Renault_G1R/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F11_Renault_G1R/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_medium	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	9	</slotId>
               <rayStart>	-0.000000 -0.0241657 1.2138	</rayStart>
               <rayEnd>	-0.0635475 -0.0510529 1.2138	</rayEnd>
               <rayUp>	0.081 0.081 3	</rayUp>
               <size>	0.176	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_medium	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	-0.000000 -0.0120828 0.700475	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1903,16 +1996,32 @@
             <collisionModelServer>	vehicles/french/F11_Renault_G1R/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F11_Renault_G1R/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	10	</slotId>
               <rayStart>	-0.000001 -0.0241648 1.87224	</rayStart>
               <rayEnd>	-0.0324492 0.0168597 1.87196	</rayEnd>
               <rayUp>	0.065 0.059 3	</rayUp>
               <size>	0.307	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	19	</slotId>
+              <anchorPosition>	-0.000000 -0.0120824 1.18385	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1955,16 +2064,32 @@
             <collisionModelServer>	vehicles/french/F11_Renault_G1R/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F11_Renault_G1R/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	11	</slotId>
               <rayStart>	0.000000 -0.0241657 1.31803	</rayStart>
               <rayEnd>	0.000327855 -0.0322142 1.31803	</rayEnd>
               <rayUp>	0.081 0.081 4	</rayUp>
               <size>	0.26	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	20	</slotId>
+              <anchorPosition>	0.000000 -0.0120829 0.81302	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1980,26 +2105,44 @@
         <collisionModelClient>	vehicles/french/F11_Renault_G1R/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.079262 0.407992 0.885515	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 -0.040 1.039 0.000 0.495 -0.085 0.614 0.577 0.395 0.310 0.167 0.500 0.118 0.528 0.168	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	7	</slotId>
           <rayStart>	-0.0782383 1.07043 -0.230434	</rayStart>
           <rayEnd>	0.103897 0.98784 -0.232604	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	8	</slotId>
           <rayStart>	0.736284 0.415818 0.72716	</rayStart>
           <rayEnd>	0.597851 0.382005 0.586829	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 -0.040 1.039 0.000 0.495 -0.085 0.614 0.577 0.395 0.310 0.167 0.500 0.118 0.528 0.168	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	21	</slotId>
+          <anchorPosition>	-0.0722337 0.725279 0.173697	</anchorPosition>
+          <anchorDirection>	0.00506983 0.99698 0.077493	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
       </camouflage>

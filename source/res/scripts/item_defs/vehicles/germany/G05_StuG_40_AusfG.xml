@@ -79,45 +79,72 @@
       <collisionModelServer>	vehicles/german/G05_StuG_40_AusfG/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G05_StuG_40_AusfG/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G05_StuG_40_AusfG/StuG_40_AusfG_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.632481 0.204002 2.43598	</rayStart>
         <rayEnd>	-0.632481 0.0464219 2.31282	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	1.23196 0.60482 -0.304597	</rayStart>
         <rayEnd>	1.13348 0.587456 -0.304595	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.28115 0.613848 0.337509	</rayStart>
         <rayEnd>	1.08419 0.579134 0.337508	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-1.23196 0.60482 -0.304597	</rayStart>
         <rayEnd>	-1.13348 0.587456 -0.304595	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	-1.28161 0.611253 0.338455	</rayStart>
         <rayEnd>	-1.08464 0.576539 0.338455	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G05_StuG_40_AusfG/StuG_40_AusfG_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12	</slotId>
+        <anchorPosition>	0.00199665 0.506662 -1.674	</anchorPosition>
+        <anchorDirection>	0.000000 0.595693 -0.803212	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <StuGIII_Ausf_1940>
@@ -282,14 +309,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxAmplitude>	0.3	</maxAmplitude>
         <maxOffset>	0.3	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1049	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -1009,6 +1033,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.000000 2.0369 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </StuGIII_Ausf_1940>
     <StuGIII_Ausf_1943>
       <userString>	#germany_vehicles:StuGIII_Ausf_1943	</userString>
@@ -1168,14 +1206,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxAmplitude>	0.3	</maxAmplitude>
         <maxOffset>	0.3	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1049	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -1895,6 +1930,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	0.000074 2.03688 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </StuGIII_Ausf_1943>
   </chassis>
   <turrets0>
@@ -1957,16 +2006,32 @@
             <collisionModelServer>	vehicles/german/G05_StuG_40_AusfG/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G05_StuG_40_AusfG/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.0116013 -0.00151406 2.022	</rayStart>
               <rayEnd>	-0.363178 -0.26682 1.8107	</rayEnd>
               <rayUp>	0.067 0.062 5	</rayUp>
               <size>	0.25	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	14	</slotId>
+              <anchorPosition>	0.00580077 -0.00075703 1.34559	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2006,16 +2071,32 @@
             <collisionModelServer>	vehicles/german/G05_StuG_40_AusfG/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G05_StuG_40_AusfG/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	0.0120716 0.0120263 2.39	</rayStart>
               <rayEnd>	-0.500315 0.0146162 2.3343	</rayEnd>
               <rayUp>	0.065 0.062 5	</rayUp>
               <size>	0.279	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	0.0060359 0.00601313 1.54236	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.595 0.595 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2049,16 +2130,32 @@
             <collisionModelServer>	vehicles/german/G05_StuG_40_AusfG/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G05_StuG_40_AusfG/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	8	</slotId>
               <rayStart>	0.0120577 0.0140145 1.72254	</rayStart>
               <rayEnd>	0.0710105 -0.13318 1.70371	</rayEnd>
               <rayUp>	0.094 0.082 5	</rayUp>
               <size>	0.329	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.00602886 0.0259987 1.33155	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.625 0.625 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2094,16 +2191,32 @@
             <collisionModelClient>	vehicles/german/G05_StuG_40_AusfG/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main	</effects>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	9	</slotId>
               <rayStart>	0.0120676 0.0143873 3.87666	</rayStart>
               <rayEnd>	-0.172354 -0.00527085 3.87412	</rayEnd>
               <rayUp>	0.062 0.06 5	</rayUp>
               <size>	0.405	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	0.00603381 0.0188806 2.16626	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2119,10 +2232,15 @@
         <collisionModelClient>	vehicles/german/G05_StuG_40_AusfG/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
       </camouflage>

@@ -68,30 +68,57 @@
       <collisionModelServer>	vehicles/german/G125_Spz_57_Rh/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G125_Spz_57_Rh/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G125_Spz_57_Rh/Spz_57_Rh_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.676758 0.433901 2.76215	</rayStart>
         <rayEnd>	-0.676758 0.405123 2.73733	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	0.00506592 0.251755 3.09389	</rayStart>
         <rayEnd>	0.00506592 0.107081 2.9558	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.35246 0.457884 0.684733	</rayStart>
         <rayEnd>	-1.31307 0.434126 0.684732	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G125_Spz_57_Rh/Spz_57_Rh_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	13	</slotId>
+        <anchorPosition>	0.000000 0.624849 -2.11452	</anchorPosition>
+        <anchorDirection>	0.000000 0.28339 -0.959005	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	14	</slotId>
+        <anchorPosition>	0.000000 0.624849 -2.11452	</anchorPosition>
+        <anchorDirection>	0.000000 0.28339 -0.959005	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
     <camouflage>
       <tiling>	2.2 2.2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -1023,6 +1050,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	-1.49482 0.596064 0.0888749	</anchorPosition>
+          <anchorDirection>	-0.927462 0.369828 0.0551425	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	0.00012295 2.29945 0.689868	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_G125_Spz_57_Rh>
   </chassis>
   <turrets0>
@@ -1098,15 +1145,6 @@
             <collisionModelServer>	vehicles/german/G125_Spz_57_Rh/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G125_Spz_57_Rh/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	-0.0505358 -0.000788584 2.6289	</rayStart>
-              <rayEnd>	0.00779209 -0.109039 2.6289	</rayEnd>
-              <rayUp>	0.08 0.08 5	</rayUp>
-              <size>	0.5	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
           <drivenJoints>
             <master>
               <node>	Gun	</node>
@@ -1142,6 +1180,45 @@
             </master>
           </drivenJoints>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
+              <rayStart>	-0.0505358 -0.000788584 2.6289	</rayStart>
+              <rayEnd>	0.00779209 -0.109039 2.6289	</rayEnd>
+              <rayUp>	0.08 0.08 5	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	-0.0252678 -0.000394344 1.67053	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	0.000000 0.16519 0.165189	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	-0.0252678 -0.000394344 1.67053	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
         </_105mm_Kanone>
       </guns>
       <models>
@@ -1154,25 +1231,49 @@
         <collisionModelClient>	vehicles/german/G125_Spz_57_Rh/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.050166 0.315859 1.24533	</gunPosition>
-      <emblemSlots>
-        <player>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.977 -0.007 1.089 0.020 0.455 0.271 0.695 0.472 0.386 0.574 0.314 0.218 0.118 1.000 0.049	</physicsShape>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.900469 0.340775 0.434619	</rayStart>
           <rayEnd>	-0.765059 0.213128 0.361338	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.968176 0.4046 0.47126	</rayStart>
           <rayEnd>	0.697352 0.149303 0.324697	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.977 -0.007 1.089 0.020 0.455 0.271 0.695 0.472 0.386 0.574 0.314 0.218 0.118 1.000 0.049	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	15	</slotId>
+          <anchorPosition>	0.000000 0.562566 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	20	</slotId>
+          <anchorPosition>	0.000000 0.562566 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_G125_Spz_57_Rh>
   </turrets0>
   <engines>

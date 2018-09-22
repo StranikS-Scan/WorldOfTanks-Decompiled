@@ -7,7 +7,7 @@ class VehicleSellDialogMeta(AbstractWindowView):
     def setDialogSettings(self, isOpen):
         self._printOverrideError('setDialogSettings')
 
-    def sell(self, vehicleData, shells, eqs, optDevices, inventory, isDismissCrew):
+    def sell(self, vehicleData, shells, eqs, optDevices, inventory, customizationItems, isDismissCrew):
         self._printOverrideError('sell')
 
     def setUserInput(self, value):

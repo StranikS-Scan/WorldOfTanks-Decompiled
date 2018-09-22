@@ -8,6 +8,7 @@ from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta, ExchangeCreditsMultiItemsMeta, InfoItemBase
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
+from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.CustomizationBuyWindowMeta import CustomizationBuyWindowMeta
 from gui.Scaleform.framework import ViewTypes
@@ -131,10 +132,10 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         self.__setTitlesData()
         self.__setTotalData()
         self.__blur.enable = True
-        self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.MENY_HIDE, ctx={'hide': True}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
-        self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.MENY_HIDE, ctx={'hide': False}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ONLINE_COUNTER}), EVENT_BUS_SCOPE.LOBBY)
         self.service.resumeHighlighter()
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -328,6 +329,7 @@ class _SeasonPurchaseInfo(object):
      GUI_ITEM_TYPE.MODIFICATION,
      GUI_ITEM_TYPE.PAINT,
      GUI_ITEM_TYPE.CAMOUFLAGE,
+     GUI_ITEM_TYPE.PROJECTION_DECAL,
      GUI_ITEM_TYPE.EMBLEM)
 
     def __init__(self, keyFunc=None):

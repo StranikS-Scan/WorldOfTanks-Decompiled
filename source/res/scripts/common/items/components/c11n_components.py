@@ -4,7 +4,7 @@ import items
 import items.vehicles as iv
 from items.components import shared_components
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType
+from items.components.c11n_constants import ApplyArea, SeasonType, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames
 from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar, FrozenSet
 Item = TypeVar('TypeVar')
 
@@ -115,9 +115,20 @@ class DecalItem(BaseCustomizationItem):
         super(DecalItem, self).__init__(parentGroup)
 
 
+class ProjectionDecalItem(BaseCustomizationItem):
+    itemType = CustomizationType.PROJECTION_DECAL
+    __slots__ = ('isMirrored', 'texture')
+    allSlots = BaseCustomizationItem.__slots__ + __slots__
+
+    def __init__(self, parentGroup=None):
+        self.isMirrored = False
+        self.texture = ''
+        super(ProjectionDecalItem, self).__init__(parentGroup)
+
+
 class CamouflageItem(BaseCustomizationItem):
     itemType = CustomizationType.CAMOUFLAGE
-    __slots__ = ('palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'texture', 'tiling', 'scales')
+    __slots__ = ('palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'texture', 'tiling', 'scales', 'rotation')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
@@ -126,6 +137,9 @@ class CamouflageItem(BaseCustomizationItem):
         self.palettes = []
         self.invisibilityFactor = 1.0
         self.texture = ''
+        self.rotation = {'hull': 0.0,
+         'turret': 0.0,
+         'gun': 0.0}
         self.tiling = ()
         self.scales = (1.2, 1, 0.7)
         super(CamouflageItem, self).__init__(parentGroup)
@@ -264,13 +278,14 @@ class VehicleFilter(object):
 
 
 class CustomizationCache(object):
-    __slots__ = ('paints', 'camouflages', 'decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'styles', 'defaultColors', 'itemTypes', 'priceGroupTags', '__victimStyles')
+    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'styles', 'defaultColors', 'itemTypes', 'priceGroupTags', '__victimStyles')
 
     def __init__(self):
         self.priceGroupTags = {}
         self.paints = {}
         self.camouflages = {}
         self.decals = {}
+        self.projection_decals = {}
         self.modifications = {}
         self.itemToPriceGroup = {}
         self.priceGroups = {}
@@ -282,7 +297,8 @@ class CustomizationCache(object):
          CustomizationType.STYLE: self.styles,
          CustomizationType.DECAL: self.decals,
          CustomizationType.CAMOUFLAGE: self.camouflages,
-         CustomizationType.PAINT: self.paints}
+         CustomizationType.PAINT: self.paints,
+         CustomizationType.PROJECTION_DECAL: self.projection_decals}
         super(CustomizationCache, self).__init__()
 
     def isVehicleBound(self, itemId):
@@ -344,27 +360,39 @@ class CustomizationCache(object):
                 if d.appliedTo & ApplyArea.INSCRIPTION_REGIONS_VALUE != d.appliedTo:
                     return (False, 'inscription {} wrong appliedTo {}'.format(d.id, d.appliedTo))
 
-        for ce in outfitDescr.camouflages:
-            valid, camo = validateItem('camouflage', self.camouflages, ce.id)
-            if not valid:
-                return (valid, camo)
-            at = ce.appliedTo
-            if camo.componentsCovering and at != camo.componentsCovering:
-                return (False, 'camouflage {} wrong covering'.format(camo.id))
-            cp = camo.compatibleParts
-            if at & cp != at:
-                return (False, 'camouflage {} wrong appliedTo {}'.format(camo.id, at))
-            if ce.patternSize < 0 or ce.patternSize > MAX_CAMOUFLAGE_PATTERN_SIZE:
-                return (False, 'camouflage has wrong pattern size {}'.format(ce.patternSize))
-            if ce.palette < 0 or ce.palette >= len(camo.palettes):
-                return (False, 'camouflage {} has wrong palette number {}'.format(ce.id, ce.palette))
+        if len(outfitDescr.projection_decals) > MAX_USERS_PROJECTION_DECALS:
+            return (False, 'projection decals quantity greater than acceptable')
+        else:
+            for d in outfitDescr.projection_decals:
+                valid, decal = validateItem('projection_decal', self.projection_decals, d.id)
+                if not valid:
+                    return (valid, decal)
+                if d.showOn & ApplyArea.PROJECTION_DECAL_REGIONS_VALUE != d.showOn:
+                    return (False, 'projection decal {} wrong showOn {}'.format(d.id, d.showOn))
+                if d.scaleFactorId not in PROJECTION_DECALS_SCALE_ID_VALUES:
+                    return (False, 'projection decal {} wrong scaleFactorId {}'.format(d.id, d.scaleFactorId))
 
-        for m in outfitDescr.modifications:
-            valid, mod = validateItem('modification', self.modifications, m)
-            if not valid:
-                return (valid, mod)
+            for ce in outfitDescr.camouflages:
+                valid, camo = validateItem('camouflage', self.camouflages, ce.id)
+                if not valid:
+                    return (valid, camo)
+                at = ce.appliedTo
+                if camo.componentsCovering and at != camo.componentsCovering:
+                    return (False, 'camouflage {} wrong covering'.format(camo.id))
+                cp = camo.compatibleParts
+                if at & cp != at:
+                    return (False, 'camouflage {} wrong appliedTo {}'.format(camo.id, at))
+                if ce.patternSize < 0 or ce.patternSize > MAX_CAMOUFLAGE_PATTERN_SIZE:
+                    return (False, 'camouflage has wrong pattern size {}'.format(ce.patternSize))
+                if ce.palette < 0 or ce.palette >= len(camo.palettes):
+                    return (False, 'camouflage {} has wrong palette number {}'.format(ce.id, ce.palette))
 
-        return (True, '')
+            for m in outfitDescr.modifications:
+                valid, mod = validateItem('modification', self.modifications, m)
+                if not valid:
+                    return (valid, mod)
+
+            return (True, '')
 
 
 def splitIntDescr(intDescr):
@@ -372,3 +400,7 @@ def splitIntDescr(intDescr):
     if itemType != 12 or customizationType not in CustomizationType.RANGE:
         raise SoftException('intDescr is not correct customization item int descriptor', intDescr)
     return (customizationType, id)
+
+
+def validateCustomizationTypeEnabled(gameParams, customizationType):
+    return CustomizationTypeNames[customizationType] not in gameParams['misc_settings']['disabledCustomizations']

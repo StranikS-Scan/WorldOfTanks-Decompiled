@@ -70,16 +70,25 @@
       <collisionModelServer>	vehicles/american/A90_T69/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/american/A90_T69/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/american/A90_T69/T69_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.00349473 0.285863 2.78349	</rayStart>
         <rayEnd>	-0.00349485 -0.0352801 2.54503	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/american/A90_T69/T69_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	0.94 0.94 0.24 0.58	</tiling>
     </camouflage>
@@ -685,6 +694,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_T69_2_IGR>
   </chassis>
   <turrets0>
@@ -769,16 +784,25 @@
             <collisionModelServer>	vehicles/american/A90_T69/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A90_T69/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.000025 -0.0493455 3.06951	</rayStart>
               <rayEnd>	0.0875754 -0.0953482 3.06695	</rayEnd>
               <rayUp>	0.095 0.089 4	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.64 0.64 0.06 0.000000	</tiling>
           </camouflage>
@@ -794,40 +818,58 @@
         <collisionModelClient>	vehicles/american/A90_T69/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.534891 0.052173	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	true	</showEmblemsOnGun>
+      <physicsShape>	1.457 -0.287 1.000 0.000 1.473 0.149 0.705 0.726 0.245 0.500 0.293 0.500 0.386 0.194 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-1.11749 0.213656 -1.4671	</rayStart>
           <rayEnd>	-0.745138 0.0703055 -1.43872	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-1.13888 0.144899 -0.888908	</rayStart>
           <rayEnd>	-0.741298 0.101048 -0.889589	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.58	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	1.13888 0.144899 -0.888908	</rayStart>
           <rayEnd>	0.741298 0.101048 -0.889589	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.58	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	1.11749 0.213656 -1.4671	</rayStart>
           <rayEnd>	0.745138 0.0703055 -1.43872	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	true	</showEmblemsOnGun>
-      <physicsShape>	1.457 -0.287 1.000 0.000 1.473 0.149 0.705 0.726 0.245 0.500 0.293 0.500 0.386 0.194 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.46 0.28 0.000000 0.000000	</tiling>
       </camouflage>

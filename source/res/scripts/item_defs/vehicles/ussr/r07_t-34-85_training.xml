@@ -70,16 +70,25 @@
       <collisionModelServer>	vehicles/russian/R07_T-34-85/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R07_T-34-85/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R07_T-34-85/T-34-85_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.792425 0.604756 1.95639	</rayStart>
         <rayEnd>	-0.792425 0.430894 1.85753	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R07_T-34-85/T-34-85_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <T-34-85Bis2>
@@ -211,9 +220,6 @@
         <gravity>	-9	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -835,6 +841,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </T-34-85Bis2>
   </chassis>
   <turrets0>
@@ -905,16 +917,25 @@
             <collisionModelServer>	vehicles/russian/R07_T-34-85/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R07_T-34-85/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.0536333 -0.0418606 1.05535	</rayStart>
               <rayEnd>	-0.0023176 -0.0736174 1.0543	</rayEnd>
               <rayUp>	0.098 0.092 5	</rayUp>
               <size>	0.46	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
         </_85mm_ZiS_S-53T>
       </guns>
       <models>
@@ -926,41 +947,59 @@
         <collisionModelServer>	vehicles/russian/R07_T-34-85/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R07_T-34-85/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000059 0.507411 1.0388	</gunPosition>
-      <emblemSlots>
-        <player>
+      <gunPosition>	0.000059 0.507411 1.03876	</gunPosition>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.037 -0.095 1.058 0.000 0.831 -0.096 0.931 0.484 0.375 0.500 0.217 0.500 0.132 0.585 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.998999 0.615161 -0.105563	</rayStart>
           <rayEnd>	-0.819085 0.539455 -0.149144	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.851234 0.556204 0.567432	</rayStart>
           <rayEnd>	-0.673425 0.483373 0.511936	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.76	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	1.00245 0.62 -0.101607	</rayStart>
           <rayEnd>	0.820674 0.547506 -0.142861	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.847556 0.566941 0.57455	</rayStart>
           <rayEnd>	0.669747 0.49411 0.519054	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.76	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.037 -0.095 1.058 0.000 0.831 -0.096 0.931 0.484 0.375 0.500 0.217 0.500 0.132 0.585 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
     </T-34_mod_100_2>
   </turrets0>
   <engines>

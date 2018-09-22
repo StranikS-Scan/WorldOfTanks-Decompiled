@@ -76,8 +76,27 @@
       <collisionModelServer>	vehicles/american/A104_M4A3E8A/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/american/A104_M4A3E8A/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots></emblemSlots>
     <hangarShadowTexture>	vehicles/american/A104_M4A3E8A/M4A3E8A_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11	</slotId>
+        <anchorPosition>	0.000067 0.739157 -2.49066	</anchorPosition>
+        <anchorDirection>	0.000000 0.573576 -0.819152	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	4	</slotId>
+        <anchorPosition>	0.000067 0.739095 -2.49115	</anchorPosition>
+        <anchorDirection>	0.000000 0.573576 -0.819152	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	0.865 0.865 0.42 0.000000	</tiling>
     </camouflage>
@@ -1112,6 +1131,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	2	</slotId>
+          <anchorPosition>	-1.44373 0.543555 -0.1059	</anchorPosition>
+          <anchorDirection>	-0.933671 0.351521 -0.0684863	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	3	</slotId>
+          <anchorPosition>	0.000137711 2.66043 -0.126635	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_A104_M4A3E8A>
   </chassis>
   <turrets0>
@@ -1185,16 +1224,46 @@
             <collisionModelServer>	vehicles/american/A104_M4A3E8A/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A104_M4A3E8A/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	1	</slotId>
               <rayStart>	-0.00411578 0.00347019 2.39	</rayStart>
               <rayEnd>	-0.436173 -0.0809215 2.26849	</rayEnd>
               <rayUp>	0.065 0.06 5	</rayUp>
               <size>	0.416	</size>
               <hideIfDamaged>	true	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	8	</slotId>
+              <anchorPosition>	-0.00205789 0.0017351 1.66739	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	0.000000 0.186012 0.186012	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	-0.00205789 0.0017351 1.66739	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.355 0.355 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1210,10 +1279,29 @@
         <collisionModelClient>	vehicles/american/A104_M4A3E8A/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000014 0.327537 0.985351	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	0.947 0.000 1.000 0.000 0.704 0.018 0.695 0.500 0.407 0.500 0.128 0.500 0.022 0.420 0.080	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.000000 0.723087 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000000 0.723087 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.925 0.685 0.12 0.000000	</tiling>
       </camouflage>
@@ -1285,4 +1373,5 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
+  <baseColorID>	2	</baseColorID>
 </A104_M4A3E8A.xml>

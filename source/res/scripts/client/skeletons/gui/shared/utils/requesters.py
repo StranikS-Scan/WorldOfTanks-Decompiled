@@ -19,6 +19,18 @@ class IInventoryRequester(IRequester):
     def invalidateItem(self, itemTypeID, invIdx):
         raise NotImplementedError
 
+    def updateC11nItemsAppliedCounts(self):
+        raise NotImplementedError
+
+    def updateC11nItemAppliedCount(self, itemCD, vehicleIntCD, count):
+        raise NotImplementedError
+
+    def getC11nItemAppliedVehicles(self, itemCD):
+        raise NotImplementedError
+
+    def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleCD):
+        raise NotImplementedError
+
     def getItemsData(self, itemTypeID):
         raise NotImplementedError
 

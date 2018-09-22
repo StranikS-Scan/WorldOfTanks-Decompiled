@@ -69,16 +69,37 @@
       <collisionModelServer>	vehicles/chinese/Ch25_121_mod_1971B/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/chinese/Ch25_121_mod_1971B/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/chinese/Ch25_121_mod_1971B/121_mod_1971B_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.428658 0.503819 2.3004	</rayStart>
         <rayEnd>	-0.428667 0.417213 2.2504	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.26	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/chinese/Ch25_121_mod_1971B/121_mod_1971B_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11	</slotId>
+        <anchorPosition>	0.000000 0.633036 -2.49658	</anchorPosition>
+        <anchorDirection>	0.000000 0.245783 -0.969325	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12	</slotId>
+        <anchorPosition>	0.000000 0.633036 -2.49658	</anchorPosition>
+        <anchorDirection>	0.000000 0.245783 -0.969325	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
     <camouflage>
       <tiling>	0.79 0.79 0.47 0.44	</tiling>
     </camouflage>
@@ -784,6 +805,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	2	</slotId>
+          <anchorPosition>	-1.61746 0.565277 0.02615	</anchorPosition>
+          <anchorDirection>	-0.9439 0.329878 0.0152603	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.000072 2.27312 -0.055314	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Ch25_121_mod_1971B>
   </chassis>
   <turrets0>
@@ -862,16 +903,46 @@
             <collisionModelServer>	vehicles/chinese/Ch25_121_mod_1971B/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch25_121_mod_1971B/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.0427639 -0.0731174 1.10263	</rayStart>
               <rayEnd>	-0.00262963 -0.151855 1.10155	</rayEnd>
               <rayUp>	0.107 0.102 4	</rayUp>
               <size>	0.541	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	0.0213794 -0.0349188 2.2186	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	0.0398184 0.144729 0.39828	</anchorPosition>
+              <anchorDirection>	0.0270336 0.790321 0.612097	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	0.0213794 -0.0349188 2.2186	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	0.34 0.34 0.98 0.88	</tiling>
           </camouflage>
@@ -887,40 +958,70 @@
         <collisionModelClient>	vehicles/chinese/Ch25_121_mod_1971B/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.011813 0.404734 1.1442	</gunPosition>
-      <emblemSlots>
-        <inscription>
-          <rayStart>	-1.27358 0.39734 0.111755	</rayStart>
-          <rayEnd>	-1.19138 0.342934 0.0949061	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.509	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <inscription>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.598 0.195 0.457 0.500 0.598 0.500 0.335 0.500 0.238 0.488 0.256	</physicsShape>
+      <customizationSlots>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	1.31673 0.350343 0.128622	</rayStart>
           <rayEnd>	1.2214 0.32761 0.108699	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.509	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.914649 0.392374 1.06259	</rayStart>
           <rayEnd>	-0.849959 0.335375 1.01193	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.931416 0.407987 1.0739	</rayStart>
           <rayEnd>	0.862761 0.352821 1.02654	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.000 0.000 1.000 0.000 0.598 0.195 0.457 0.500 0.598 0.500 0.335 0.500 0.238 0.488 0.256	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.000000 0.815439 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	0.000000 0.815439 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	19	</slotId>
+          <rayStart>	-1.27358 0.39734 0.111755	</rayStart>
+          <rayEnd>	-1.19138 0.342934 0.0949061	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.509	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	0.395 0.395 0.32 0.7	</tiling>
       </camouflage>

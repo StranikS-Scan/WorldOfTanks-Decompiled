@@ -24,22 +24,16 @@ class StateResultScreen(AbstractState):
     def _doActivate(self):
         from bootcamp.Bootcamp import g_bootcamp
         from gui.battle_results.context import RequestResultsContext
-        from bootcamp.BattleResultTransition import BattleResultTransition
         from gui.shared.personality import ServicesLocator
         sessionProvider = dependency.instance(IBattleSessionProvider)
         battleResultProvider = dependency.instance(IBattleResultsService)
         battleCtx = sessionProvider.getCtx()
-        if g_bootcamp.transitionFlash is not None:
-            g_bootcamp.transitionFlash.close()
-        g_bootcamp.transitionFlash = BattleResultTransition()
-        g_bootcamp.transitionFlash.active(True)
+        g_bootcamp.showBattleResultTransition()
         yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
         resultType = g_bootcamp.getBattleResults().type
         if resultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.FAILURE:
             g_bootcampEvents.onResultScreenFinished()
-            g_bootcamp.transitionFlash.active(False)
-            g_bootcamp.transitionFlash.close()
-            g_bootcamp.transitionFlash = None
+            g_bootcamp.hideBattleResultTransition()
             return
         else:
             if battleCtx.lastArenaUniqueID:
@@ -48,4 +42,5 @@ class StateResultScreen(AbstractState):
             return
 
     def _doDeactivate(self):
-        pass
+        from bootcamp.Bootcamp import g_bootcamp
+        g_bootcamp.hideBattleResultTransition()

@@ -11,6 +11,7 @@ class TEXT_MANAGER_STYLES(object):
     STATUS_CRITICAL_TEXT = 'statusCriticalText'
     STATUS_WARNING_TEXT = 'statusWarningText'
     STATUS_INFO_TEXT = 'statusInfoText'
+    STATUS_ATTENTION = 'statusAttention'
     MAIN_TEXT = 'mainText'
     STANDARD_TEXT = 'standardText'
     DISABLED_TEXT = 'disabledText'

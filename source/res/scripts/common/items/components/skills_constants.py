@@ -7,11 +7,11 @@ ROLE_LIMITS = {'commander': 1,
  'driver': 1}
 COMMON_SKILLS = frozenset(('repair', 'fireFighting', 'camouflage', 'brotherhood'))
 ROLES_AND_COMMON_SKILLS = ROLES | COMMON_SKILLS
-SKILLS_BY_ROLES = {'commander': COMMON_SKILLS.union(('commander_tutor', 'commander_expert', 'commander_universalist', 'commander_sixthSense', 'commander_eagleEye')),
+COMMANDER_SKILLS = frozenset(('commander_tutor', 'commander_expert', 'commander_universalist', 'commander_sixthSense', 'commander_eagleEye'))
+SKILLS_BY_ROLES = {'commander': COMMON_SKILLS.union(COMMANDER_SKILLS),
  'driver': COMMON_SKILLS.union(('driver_tidyPerson', 'driver_smoothDriving', 'driver_virtuoso', 'driver_badRoadsKing', 'driver_rammingMaster')),
  'gunner': COMMON_SKILLS.union(('gunner_smoothTurret', 'gunner_sniper', 'gunner_rancorous', 'gunner_gunsmith')),
  'loader': COMMON_SKILLS.union(('loader_pedant', 'loader_desperado', 'loader_intuition')),
  'radioman': COMMON_SKILLS.union(('radioman_finder', 'radioman_inventor', 'radioman_lastEffort', 'radioman_retransmitter'))}
-COMMANDER_SKILLS = SKILLS_BY_ROLES['commander'].difference(COMMON_SKILLS)
 ACTIVE_SKILLS = SKILLS_BY_ROLES['commander'] | SKILLS_BY_ROLES['radioman'] | SKILLS_BY_ROLES['driver'] | SKILLS_BY_ROLES['gunner'] | SKILLS_BY_ROLES['loader']
 PERKS = frozenset(('brotherhood', 'commander_sixthSense', 'commander_expert', 'driver_tidyPerson', 'gunner_rancorous', 'gunner_sniper', 'loader_pedant', 'loader_desperado', 'loader_intuition', 'radioman_lastEffort'))

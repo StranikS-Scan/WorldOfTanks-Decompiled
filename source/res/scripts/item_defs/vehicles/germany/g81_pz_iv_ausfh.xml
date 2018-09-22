@@ -74,30 +74,51 @@
       <collisionModelServer>	vehicles/german/G81_Pz_IV_AusfH/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G81_Pz_IV_AusfH/Pz_IV_AusfH_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.822216 0.459117 1.83166	</rayStart>
         <rayEnd>	-0.822854 0.396218 1.43664	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.62641 0.245017 -0.00262194	</rayStart>
         <rayEnd>	-1.52708 0.233504 -0.00201493	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.88	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.5772 0.234207 -0.00117784	</rayStart>
         <rayEnd>	1.47787 0.222886 0.00108046	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.88	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G81_Pz_IV_AusfH/Pz_IV_AusfH_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	15	</slotId>
+        <anchorPosition>	0.000000 0.201223 1.80638	</anchorPosition>
+        <anchorDirection>	0.000000 0.110711 0.993853	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
     </camouflage>
@@ -270,9 +291,6 @@
         <gravity>	-9	</gravity>
         <elasticity>	1200	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -909,6 +927,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.000126906 2.32857 -0.275703	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Pz_IV_AusfH>
     <Chassis_Pz_IV_AusfH_2>
       <userString>	#germany_vehicles:Chassis_Pz_IV_AusfH_2	</userString>
@@ -1073,9 +1105,6 @@
         <gravity>	-9	</gravity>
         <elasticity>	1200	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -1712,6 +1741,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	0.000129162 2.32857 -0.274724	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Pz_IV_AusfH_2>
   </chassis>
   <turrets0>
@@ -1790,16 +1833,32 @@
             <collisionModelServer>	vehicles/german/G81_Pz_IV_AusfH/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.00763038 0.0119772 2.25625	</rayStart>
               <rayEnd>	0.0376211 -0.016893 2.25447	</rayEnd>
               <rayUp>	0.053 0.051 3	</rayUp>
               <size>	0.28	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	-0.00381518 0.00548895 1.37852	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1839,16 +1898,32 @@
             <collisionModelServer>	vehicles/german/G81_Pz_IV_AusfH/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	-0.00799927 0.0105313 2.60557	</rayStart>
               <rayEnd>	0.0262575 -0.0330656 2.60397	</rayEnd>
               <rayUp>	0.053 0.051 3	</rayUp>
               <size>	0.3	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	-0.00399963 0.00476598 1.61371	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1864,26 +1939,44 @@
         <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.016282 0.357942 0.933989	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.254 -0.269 1.000 0.000 0.433 0.137 0.590 1.000 0.369 0.500 0.332 0.500 0.056 0.000 0.142	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-1.09356 0.28692 0.28006	</rayStart>
           <rayEnd>	-0.75611 0.0722866 0.27258	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	1.09356 0.28692 0.28006	</rayStart>
           <rayEnd>	0.75611 0.0722866 0.27258	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.254 -0.269 1.000 0.000 0.433 0.137 0.590 1.000 0.369 0.500 0.332 0.500 0.056 0.000 0.142	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	16	</slotId>
+          <anchorPosition>	0.000000 0.634096 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.625 0.625 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1965,16 +2058,32 @@
             <collisionModelServer>	vehicles/german/G81_Pz_IV_AusfH/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	10	</slotId>
               <rayStart>	-0.00763038 0.0119772 2.25315	</rayStart>
               <rayEnd>	0.037506 -0.0511971 2.25135	</rayEnd>
               <rayUp>	0.053 0.051 3	</rayUp>
               <size>	0.28	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	20	</slotId>
+              <anchorPosition>	-0.00381518 0.00548895 1.37852	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2013,16 +2122,32 @@
             <collisionModelServer>	vehicles/german/G81_Pz_IV_AusfH/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	11	</slotId>
               <rayStart>	-0.00799927 0.0105313 2.60386	</rayStart>
               <rayEnd>	0.0160746 -0.0511941 2.60205	</rayEnd>
               <rayUp>	0.052 0.051 3	</rayUp>
               <size>	0.28	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	21	</slotId>
+              <anchorPosition>	-0.00399963 0.00476598 1.61371	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2061,16 +2186,32 @@
             <collisionModelServer>	vehicles/german/G81_Pz_IV_AusfH/collision/Gun_08.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	12	</slotId>
               <rayStart>	-0.00788087 0.0136568 1.49541	</rayStart>
               <rayEnd>	-0.0780389 0.00350575 1.49504	</rayEnd>
               <rayUp>	0.084 0.077 4	</rayUp>
               <size>	0.329	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	22	</slotId>
+              <anchorPosition>	-0.00394043 0.00682865 1.11405	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2086,26 +2227,44 @@
         <collisionModelClient>	vehicles/german/G81_Pz_IV_AusfH/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.016282 0.357942 0.933989	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.932 0.000 0.915 0.000 0.444 0.116 0.500 0.696 0.266 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	8	</slotId>
           <rayStart>	-1.23779 0.322857 0.449897	</rayStart>
           <rayEnd>	-1.00568 0.322857 0.388867	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	9	</slotId>
           <rayStart>	1.23779 0.322857 0.449897	</rayStart>
           <rayEnd>	1.00568 0.322857 0.388867	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.932 0.000 0.915 0.000 0.444 0.116 0.500 0.696 0.266 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	19	</slotId>
+          <anchorPosition>	0.000000 0.634092 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
       </camouflage>

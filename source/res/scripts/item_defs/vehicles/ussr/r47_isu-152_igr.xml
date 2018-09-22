@@ -76,45 +76,66 @@
       <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R47_ISU-152/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R47_ISU-152/ISU-152_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.796183 1.16471 2.08856	</rayStart>
         <rayEnd>	-0.796183 0.964697 1.74216	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.26848 1.0534 0.425873	</rayStart>
         <rayEnd>	-1.07669 0.999853 0.444568	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.22238 1.01727 -0.252435	</rayStart>
         <rayEnd>	-1.03059 0.963728 -0.23374	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.26848 1.0534 0.425873	</rayStart>
         <rayEnd>	1.07669 0.999853 0.444568	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.22238 1.01727 -0.252435	</rayStart>
         <rayEnd>	1.03059 0.963728 -0.23374	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R47_ISU-152/ISU-152_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.4 1.4 0.000000 0.000000	</tiling>
     </camouflage>
@@ -775,6 +796,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </ISU-152_mod_1945_IGR>
   </chassis>
   <turrets0>
@@ -830,17 +857,26 @@
             <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R47_ISU-152/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_huge_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.0264194 -0.00925501 1.75217	</rayStart>
               <rayEnd>	-0.00162107 -0.0289426 1.75042	</rayEnd>
               <rayUp>	0.121 0.114 5	</rayUp>
               <size>	0.645	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_huge_mb	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
           </camouflage>
@@ -856,10 +892,15 @@
         <collisionModelClient>	vehicles/russian/R47_ISU-152/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.003733 -0.002294 -0.0125	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </ISU-152_01_IGR>
   </turrets0>
   <engines>

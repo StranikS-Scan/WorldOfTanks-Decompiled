@@ -73,45 +73,66 @@
       <collisionModelServer>	vehicles/french/F28_105_leFH18B2/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F28_105_leFH18B2/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F28_105_leFH18B2/105_leFH18B2_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.243849 -0.30415 2.46226	</rayStart>
         <rayEnd>	-0.243849 -0.438722 2.31431	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.22	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.829332 0.852585 1.41973	</rayStart>
         <rayEnd>	-0.655844 0.809303 1.33013	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.885907 0.746398 0.474766	</rayStart>
         <rayEnd>	0.791847 0.721961 0.498333	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-0.885528 0.7589 0.480268	</rayStart>
         <rayEnd>	-0.791489 0.734306 0.503757	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	0.829332 0.852585 1.41973	</rayStart>
         <rayEnd>	0.655844 0.809303 1.33013	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F28_105_leFH18B2/105_leFH18B2_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
     </camouflage>
@@ -721,6 +742,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_105_leFH18B2_IGR>
   </chassis>
   <turrets0>
@@ -782,16 +809,25 @@
             <collisionModelServer>	vehicles/french/F28_105_leFH18B2/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F28_105_leFH18B2/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.000001 -0.097986 1.87494	</rayStart>
               <rayEnd>	-0.0079731 -0.0864744 1.87288	</rayEnd>
               <rayUp>	0.084 0.079 4	</rayUp>
               <size>	0.38	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
           </camouflage>
@@ -807,10 +843,15 @@
         <collisionModelClient>	vehicles/french/F28_105_leFH18B2/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000001 0.641496 0.009704	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.209 0.000 1.000 0.000 0.932 0.068 0.816 0.785 0.500 0.500 0.359 0.500 0.376 0.100 0.031	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	0.58 0.25 0.000000 0.000000	</tiling>
       </camouflage>

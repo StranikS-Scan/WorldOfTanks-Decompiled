@@ -79,6 +79,8 @@ class ConfirmC11nBuyMeta(IDialogMeta):
         modulePrice = self.getActualPrices(item)
         if modulePrice.get(currency, 0) > 0:
             result = math.floor(balance.get(currency, 0) / modulePrice.get(currency))
+        if item.isLimited:
+            result = min(result, item.buyCount)
         return min(result, MAX_ITEMS_FOR_BUY_OPERATION)
 
 

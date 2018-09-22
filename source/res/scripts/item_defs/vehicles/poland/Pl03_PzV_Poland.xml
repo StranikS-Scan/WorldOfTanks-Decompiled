@@ -72,16 +72,25 @@
       <collisionModelServer>	vehicles/poland/Pl03_PzV_Poland/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/poland/Pl03_PzV_Poland/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/poland/Pl03_PzV_Poland/PzV_Poland_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-1.13683 0.627118 2.24196	</rayStart>
         <rayEnd>	-1.13677 0.546101 2.18334	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/poland/Pl03_PzV_Poland/PzV_Poland_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.6 1.6 0.7 0.7	</tiling>
     </camouflage>
@@ -776,6 +785,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_1_Pl03_PzV_Poland>
   </chassis>
   <turrets0>
@@ -848,16 +863,25 @@
             <collisionModelServer>	vehicles/poland/Pl03_PzV_Poland/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl03_PzV_Poland/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	2	</slotId>
               <rayStart>	-0.00329885 -0.00569758 1.48	</rayStart>
               <rayEnd>	0.0890514 -0.0354112 3.41937	</rayEnd>
               <rayUp>	0.096 0.092 4	</rayUp>
               <size>	0.492	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
           </camouflage>
@@ -873,10 +897,15 @@
         <collisionModelClient>	vehicles/poland/Pl03_PzV_Poland/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.4563 1.0316	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.967 -0.127 1.011 0.000 0.539 0.127 0.924 0.272 0.155 0.478 0.309 0.500 0.154 1.000 0.064	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
       </camouflage>

@@ -459,8 +459,8 @@
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	tree_Poplar_3m_fall	</fractureEffect>
-      <touchdownEffect>	tree_Poplar_3m_touchdown	</touchdownEffect>
+      <fractureEffect>	inf_tree_chestnut_fall_small	</fractureEffect>
+      <touchdownEffect>	inf_tree_chestnut_touchdown_small	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Chestnut/Chestnut_7m.srt	</filename>
@@ -12175,32 +12175,35 @@
     <entry>
       <filename>	content/Railway/hd_rw_UNI_607_AmericanLocomotive/normal/lod0/hd_rw_UNI_607_AmericanLocomotive_01.model	</filename>
       <health>	5	</health>
-      <decayEffect>	inf_rwAM_002_AmericanLocomotive	</decayEffect>
-      <effect>	inf_rwAM_002_AmericanLocomotive_01	</effect>
+      <decayEffect>	inf_rwAM_003_AmericanFreightCar	</decayEffect>
+      <effect>	inf_rwAM_003_AmericanFreightCar	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
+      <hitEffect>	inf_rwAM_002_AmericanLocomotive	</hitEffect>
     </entry>
     <entry>
       <filename>	content/Railway/hd_rw_UNI_607_AmericanLocomotive/normal/lod0/hd_rw_UNI_607_AmericanLocomotive_02.model	</filename>
       <health>	5	</health>
-      <decayEffect>	inf_rwAM_002_AmericanLocomotive	</decayEffect>
-      <effect>	inf_rwAM_002_AmericanLocomotive_02	</effect>
+      <decayEffect>	inf_rwAM_003_AmericanFreightCar	</decayEffect>
+      <effect>	inf_rwAM_003_AmericanFreightCar	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
+      <hitEffect>	inf_rwAM_002_AmericanLocomotive	</hitEffect>
     </entry>
     <entry>
       <filename>	content/Railway/hd_rw_UNI_607_AmericanLocomotive/normal/lod0/hd_rw_UNI_607_AmericanLocomotive_03.model	</filename>
       <health>	5	</health>
-      <decayEffect>	inf_rwAM_002_AmericanLocomotive	</decayEffect>
-      <effect>	inf_rwAM_002_AmericanLocomotive_03	</effect>
+      <decayEffect>	inf_rwAM_003_AmericanFreightCar	</decayEffect>
+      <effect>	inf_rwAM_003_AmericanFreightCar	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
+      <hitEffect>	inf_rwAM_002_AmericanLocomotive	</hitEffect>
     </entry>
     <entry>
       <filename>	content/Environment/env_19_17_Gravestones/normal/lod0/env_19_17_Gravestones01.model	</filename>
@@ -14041,7 +14044,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_AM_037_Bridge/normal/lod0/hd_env_AM_037_Bridge_FenceTile_01.model	</filename>
-      <health>	1.000000	</health>
+      <health>	1	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_env_AM_037_Bridge_FenceTile_01	</effect>
       <hitEffect>	hd_env_AM_037_Bridge_FenceTile_01	</hitEffect>
@@ -14052,7 +14055,7 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_AM_037_Bridge/normal/lod0/hd_env_AM_037_Bridge_FenceEnd_01.model	</filename>
-      <health>	1.000000	</health>
+      <health>	1	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_bld_EU_038_PortWall_FenceEnd	</effect>
       <hitEffect>	hd_bld_EU_038_PortWall_FenceEnd_hit	</hitEffect>
@@ -18920,7 +18923,7 @@
       <modules>
         <module>
           <matName>	n_metal1	</matName>
-          <health>	15.000000	</health>
+          <health>	15	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_env_AM_067_GasStation_01_h1	</ramEffect>
           <hitEffect>	hd_env_AM_067_GasStation_01_h1	</hitEffect>
@@ -18929,7 +18932,7 @@
         </module>
         <module>
           <matName>	n_metal2	</matName>
-          <health>	15.000000	</health>
+          <health>	15	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_env_AM_067_GasStation_01_h1	</ramEffect>
           <hitEffect>	hd_env_AM_067_GasStation_01_h1	</hitEffect>
@@ -18938,7 +18941,7 @@
         </module>
         <module>
           <matName>	n_metal3	</matName>
-          <health>	15.000000	</health>
+          <health>	15	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_env_AM_067_GasStation_01_h1	</ramEffect>
           <hitEffect>	hd_env_AM_067_GasStation_01_h1	</hitEffect>
@@ -18947,7 +18950,7 @@
         </module>
         <module>
           <matName>	n_metal4	</matName>
-          <health>	15.000000	</health>
+          <health>	15	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_env_AM_067_GasStation_01_h1	</ramEffect>
           <hitEffect>	hd_env_AM_067_GasStation_01_h1	</hitEffect>

@@ -70,23 +70,47 @@
       <collisionModelServer>	vehicles/french/F09_AMX_50_120/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F09_AMX_50_120/AMX_50_120_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.484141 0.494064 2.54648	</rayStart>
         <rayEnd>	0.405081 0.175316 2.31813	</rayEnd>
         <rayUp>	-0.477478 0.0310943 -0.878093	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.482788 0.501766 2.5356	</rayStart>
         <rayEnd>	-0.404094 0.183536 2.30641	</rayEnd>
         <rayUp>	0.373477 0.03963 -0.926793	</rayUp>
         <size>	0.75	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F09_AMX_50_120/AMX_50_120_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	13	</slotId>
+        <anchorPosition>	0.000000 0.832958 -2.61734	</anchorPosition>
+        <anchorDirection>	0.000000 0.303259 -0.952908	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	14	</slotId>
+        <anchorPosition>	0.000000 0.832958 -2.61734	</anchorPosition>
+        <anchorDirection>	0.000000 0.303259 -0.952908	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
     </camouflage>
@@ -268,14 +292,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.09	</maxAmplitude>
+        <maxAmplitude>	0.08	</maxAmplitude>
         <maxOffset>	0.08	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -809,6 +830,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	-1.75504 0.589134 -0.0391101	</anchorPosition>
+          <anchorDirection>	-0.947802 0.318159 -0.0211212	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	26	</slotId>
+          <anchorPosition>	0.000000 2.9025 -0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_AMX_50_120>
     <Chassis_AMX_50_120_2>
       <userString>	#france_vehicles:Chassis_AMX_50_120_2	</userString>
@@ -982,14 +1023,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.09	</maxAmplitude>
+        <maxAmplitude>	0.08	</maxAmplitude>
         <maxOffset>	0.08	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -1523,6 +1561,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	-1.75504 0.589134 -0.0391101	</anchorPosition>
+          <anchorDirection>	-0.947802 0.318159 -0.0211212	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	0.000096 2.90291 -0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_AMX_50_120_2>
   </chassis>
   <turrets0>
@@ -1609,16 +1667,46 @@
             <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.000810579 0.0161144 5.75876	</rayStart>
               <rayEnd>	0.101199 -0.0812127 5.7544	</rayEnd>
               <rayUp>	0.084 0.078 4	</rayUp>
               <size>	0.62	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	-0.0011554 0.0080568 3.79906	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	0.000000 0.327177 0.327177	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	19	</slotId>
+              <anchorPosition>	-0.0011554 0.0080568 3.79906	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_90mm_canon_DCA_45>
         <_100mm_SA_47>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
@@ -1674,16 +1762,46 @@
             <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	-0.000070 0.0157696 5.63531	</rayStart>
               <rayEnd>	-0.0192232 0.0359325 5.63461	</rayEnd>
               <rayUp>	0.091 0.087 4	</rayUp>
               <size>	0.62	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	20	</slotId>
+              <anchorPosition>	-0.000035 0.00788478 3.73413	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	21	</slotId>
+              <anchorPosition>	0.000000 0.327177 0.327177	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	22	</slotId>
+              <anchorPosition>	-0.000035 0.00788478 3.73413	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_100mm_SA_47>
         <_120mm_SA_46>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
@@ -1739,16 +1857,46 @@
             <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	8	</slotId>
               <rayStart>	-0.000000 0.0137547 5.51487	</rayStart>
               <rayEnd>	-0.0323089 0.0246393 5.51399	</rayEnd>
               <rayUp>	0.109 0.104 4	</rayUp>
               <size>	0.607	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	23	</slotId>
+              <anchorPosition>	-0.000000 0.00768009 3.76961	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	24	</slotId>
+              <anchorPosition>	0.000000 0.327177 0.327177	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	25	</slotId>
+              <anchorPosition>	-0.000000 0.00768009 3.76961	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_120mm_SA_46>
       </guns>
       <models>
@@ -1761,33 +1909,60 @@
         <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000000 0.80996 -0.086297	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	true	</showEmblemsOnGun>
+      <physicsShape>	1.565 -0.621 0.936 0.000 1.362 0.136 0.904 0.720 0.181 0.500 0.000 0.500 0.316 0.008 0.025	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-1.28619 0.0196622 -1.24204	</rayStart>
           <rayEnd>	-1.08698 0.0123913 -1.2259	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	1.38137 0.0250926 -1.24325	</rayStart>
           <rayEnd>	0.983097 0.0148812 -1.20746	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.82	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	1.22 0.0266092 -2.00166	</rayStart>
           <rayEnd>	1.02087 0.0266092 -1.98306	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	true	</showEmblemsOnGun>
-      <physicsShape>	1.565 -0.621 0.936 0.000 1.362 0.136 0.904 0.720 0.181 0.500 0.000 0.500 0.316 0.008 0.025	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	15	</slotId>
+          <anchorPosition>	0.000000 0.419991 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	16	</slotId>
+          <anchorPosition>	0.000000 0.419991 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
       </camouflage>

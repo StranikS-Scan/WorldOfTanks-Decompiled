@@ -103,6 +103,10 @@ def _getStyles(_):
     return vehicles.g_cache.customization20().styles.itervalues()
 
 
+def _getProjectionDecal(_):
+    return vehicles.g_cache.customization20().projection_decals.itervalues()
+
+
 _MODULES_GETTERS = {GUI_ITEM_TYPE.VEHICLE: _getVehicles,
  GUI_ITEM_TYPE.CHASSIS: _getChassis,
  GUI_ITEM_TYPE.ENGINE: _getEngines,
@@ -120,7 +124,8 @@ _MODULES_GETTERS = {GUI_ITEM_TYPE.VEHICLE: _getVehicles,
  GUI_ITEM_TYPE.DECAL: _getDecals,
  GUI_ITEM_TYPE.EMBLEM: _getEmblems,
  GUI_ITEM_TYPE.INSCRIPTION: _getInscriptions,
- GUI_ITEM_TYPE.STYLE: _getStyles}
+ GUI_ITEM_TYPE.STYLE: _getStyles,
+ GUI_ITEM_TYPE.PROJECTION_DECAL: _getProjectionDecal}
 
 def getItemsIterator(data, nationID=None, itemTypeID=None):
     if 'itemPrices' in data:

@@ -98,7 +98,7 @@ class AccountValidator(object):
             for outfitData in outfitsData.itervalues():
                 try:
                     outfitCD, flags = outfitData
-                    self.itemsFactory.createOutfit(outfitCD, bool(flags & StyleFlags.ENABLED), bool(flags & StyleFlags.INSTALLED))
+                    self.itemsFactory.createOutfit(strCompactDescr=outfitCD, isEnabled=bool(flags & StyleFlags.ENABLED), isInstalled=bool(flags & StyleFlags.INSTALLED))
                 except Exception as e:
                     raise ValidateException(e.message, self.CODES.INVENTORY_OUTFIT_MISMATCH, self.__packItemData(GUI_ITEM_TYPE.CUSTOMIZATION, (vehCD, outfitData)))
 

@@ -56,12 +56,15 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
                 self.__tutorStorage.setValue(HAVE_NEW_BADGE, self.__checkNewBadges())
         return
 
+    @process
     def openBoostersWindow(self, idx):
         slotID = self.components.get(VIEW_ALIAS.BOOSTERS_PANEL).getBoosterSlotID(idx)
         settings = self.lobbyContext.getServerSettings()
         shouldOpenStorage = isIngameShopEnabled() and settings.isIngameStorageEnabled()
         if shouldOpenStorage:
-            showStorage(defaultSection=STORAGE_CONSTANTS.PERSONAL_RESERVES)
+            navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
+            if navigationPossible:
+                showStorage(defaultSection=STORAGE_CONSTANTS.PERSONAL_RESERVES)
         else:
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW, ctx={'slotID': slotID}), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()

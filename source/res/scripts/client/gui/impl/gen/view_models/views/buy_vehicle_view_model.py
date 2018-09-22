@@ -23,7 +23,7 @@ class BuyVehicleViewModel(ViewModel):
         return self._getViewModel(2)
 
     @property
-    def congradulationAnim(self):
+    def congratulationAnim(self):
         return self._getViewModel(3)
 
     def getNation(self):
@@ -116,24 +116,30 @@ class BuyVehicleViewModel(ViewModel):
     def setPriceDescription(self, value):
         self._setResource(18, value)
 
+    def getNoCrewCheckboxLabel(self):
+        return self._getResource(19)
+
+    def setNoCrewCheckboxLabel(self, value):
+        self._setResource(19, value)
+
     def getIsMovingTextEnabled(self):
-        return self._getBool(19)
-
-    def setIsMovingTextEnabled(self, value):
-        self._setBool(19, value)
-
-    def getIsContentHidden(self):
         return self._getBool(20)
 
-    def setIsContentHidden(self, value):
+    def setIsMovingTextEnabled(self, value):
         self._setBool(20, value)
+
+    def getIsContentHidden(self):
+        return self._getBool(21)
+
+    def setIsContentHidden(self, value):
+        self._setBool(21, value)
 
     def _initialize(self):
         super(BuyVehicleViewModel, self)._initialize()
         self._addViewModelProperty('tankPrice', ListModel())
         self._addViewModelProperty('commanderLvlCards', ListModel())
         self._addViewModelProperty('equipmentBlock', EquipmentBlockModel())
-        self._addViewModelProperty('congradulationAnim', VehicleCongratulationModel())
+        self._addViewModelProperty('congratulationAnim', VehicleCongratulationModel())
         self._addStringProperty('nation', '')
         self._addStringProperty('tankLvl', '')
         self._addStringProperty('tankName', '')
@@ -149,6 +155,7 @@ class BuyVehicleViewModel(ViewModel):
         self._addResourceProperty('withoutCommanderAltText', Resource.INVALID)
         self._addBoolProperty('isInBootcamp', False)
         self._addResourceProperty('priceDescription', Resource.INVALID)
+        self._addResourceProperty('noCrewCheckboxLabel', Resource.INVALID)
         self._addBoolProperty('isMovingTextEnabled', False)
         self._addBoolProperty('isContentHidden', False)
         self.onCloseBtnClick = self._addCommand('onCloseBtnClick')

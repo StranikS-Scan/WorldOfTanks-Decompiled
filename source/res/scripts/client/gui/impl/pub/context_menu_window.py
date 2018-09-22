@@ -27,10 +27,14 @@ class ContextMenuContent(View):
             separators = len([ element for element in tx.contextMenuList.getItems() if element.getIsSeparator() ])
             tx.setItemsCount(total - separators)
             tx.setSeparatorsCount(separators)
-            tx.onItemClicked += self.__onItemClicked
+            tx.contextMenuList.onItemClicked += self.__onItemClicked
 
     def _finalize(self):
-        self.viewModel.onItemClicked -= self.__onItemClicked
+        items = self.viewModel.contextMenuList.getItems()
+        for item in items:
+            item.subItemsList.onItemClicked -= self.__onItemClicked
+
+        self.viewModel.contextMenuList.onItemClicked -= self.__onItemClicked
         super(ContextMenuContent, self)._finalize()
 
     def _addItem(self, actionID, label, icon=None, isEnabled=True):
@@ -57,6 +61,7 @@ class ContextMenuContent(View):
             if icon is not None:
                 subItem.setIcon(icon)
             item.subItemsList.getItems().addViewModel(subItem)
+            item.subItemsList.onItemClicked += self.__onItemClicked
             total = len(item.subItemsList.getItems())
             item.setSubItemsCount(total)
             return
@@ -88,16 +93,16 @@ class ContextMenuContent(View):
         raise NotImplementedError('Method _onAction should be overridden in {}'.format(self))
 
     def __onItemClicked(self, args=None):
-        if 'actionID' not in args:
-            _logger.error('%r: Argument "actionID" is not defined in %r', self, args)
+        if 'id' not in args:
+            _logger.error('%r: Argument "id" is not defined in %r', self, args)
             return
         else:
-            self._onAction(int(args['actionID']))
-            window = self.getParentWindow()
-            if window is not None:
-                window.destroy()
-            else:
-                _logger.error('%r: This is unexpected case, content does not have parent window', self)
+            if self._onAction(int(args['id'])):
+                window = self.getParentWindow()
+                if window is not None:
+                    window.destroy()
+                else:
+                    _logger.error('%r: This is unexpected case, content does not have parent window', self)
             return
 
 

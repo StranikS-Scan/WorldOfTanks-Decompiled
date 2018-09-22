@@ -68,16 +68,25 @@
       <collisionModelServer>	vehicles/american/A115_Chrysler_K/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/american/A115_Chrysler_K/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/american/A115_Chrysler_K/Chrysler_K_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.930443 0.605958 2.99129	</rayStart>
         <rayEnd>	-0.930443 0.432787 2.89122	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/american/A115_Chrysler_K/Chrysler_K_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -972,6 +981,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_A115_Chrysler_K>
   </chassis>
   <turrets0>
@@ -1056,16 +1071,25 @@
             <collisionModelServer>	vehicles/american/A115_Chrysler_K/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A115_Chrysler_K/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	2	</slotId>
               <rayStart>	-0.0013139 -0.0736716 2.61533	</rayStart>
               <rayEnd>	0.00761542 -0.128481 2.61343	</rayEnd>
               <rayUp>	0.114 0.109 5	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.2 0.6 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1081,10 +1105,15 @@
         <collisionModelClient>	vehicles/american/A115_Chrysler_K/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000025 0.491709 1.40896	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.960 -0.013 1.027 0.000 0.607 0.084 0.610 0.560 0.483 0.470 0.380 0.550 0.397 0.510 0.070	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	1.2 1.2 0.000000 0.000000	</tiling>
       </camouflage>

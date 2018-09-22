@@ -73,16 +73,25 @@
       <collisionModelServer>	vehicles/chinese/Ch03_WZ_111_A/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/chinese/Ch03_WZ_111_A/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/chinese/Ch03_WZ_111_A/WZ-111_A_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	0	</slotId>
         <rayStart>	0.216664 0.398741 2.92205	</rayStart>
         <rayEnd>	0.172621 0.227645 2.82832	</rayEnd>
         <rayUp>	-0.224933 0.043335 -0.97341	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/chinese/Ch03_WZ_111_A/WZ-111_A_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
     <camouflage>
       <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
     </camouflage>
@@ -932,6 +941,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_Ch03_WZ_111_A>
   </chassis>
   <turrets0>
@@ -1009,16 +1024,25 @@
             <collisionModelServer>	vehicles/chinese/Ch03_WZ_111_A/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch03_WZ_111_A/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	1	</slotId>
               <rayStart>	0.000000 0.001 1.398	</rayStart>
               <rayEnd>	0.00437656 0.0038909 1.37506	</rayEnd>
               <rayUp>	0.108 0.108 5	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1034,10 +1058,15 @@
         <collisionModelClient>	vehicles/chinese/Ch03_WZ_111_A/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000741 0.303148 1.24726	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.016 0.073 0.995 0.000 0.746 0.022 0.523 0.381 0.500 0.500 0.288 0.500 0.259 0.474 0.199	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_Ch03_WZ_111_A>
   </turrets0>
   <engines>

@@ -68,45 +68,72 @@
       <collisionModelServer>	vehicles/french/F20_RenaultBS/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F20_RenaultBS/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F20_RenaultBS/RenaultBS_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.00205652 -0.0941967 1.77683	</rayStart>
         <rayEnd>	0.00205652 -0.230701 1.40085	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.22	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.534585 0.750867 0.68713	</rayStart>
         <rayEnd>	-0.227907 0.693385 0.436842	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.241	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.378822 0.70121 -0.805397	</rayStart>
         <rayEnd>	0.258098 0.319865 -0.805397	</rayEnd>
         <rayUp>	-0.953367 0.301812 0.000000	</rayUp>
         <size>	0.52	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-0.684677 0.257068 0.0595083	</rayStart>
         <rayEnd>	-0.284669 0.257068 0.0595083	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.55	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	0.589398 0.757905 0.670209	</rayStart>
         <rayEnd>	0.257495 0.698941 0.454888	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.241	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F20_RenaultBS/RenaultBS_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.000000 0.539759 -1.50008	</anchorPosition>
+        <anchorDirection>	0.000000 0.33857 -0.940941	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	4 4 0.000000 0.000000	</tiling>
     </camouflage>
@@ -423,6 +450,20 @@
           <maxOffset>	0.0267857	</maxOffset>
         </group>
       </groundNodes>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	-0.000000 2.19403 0.173448	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_RenaultBS>
     <Chassis_RenaultBS2>
       <userString>	#france_vehicles:Chassis_RenaultBS2	</userString>
@@ -735,6 +776,20 @@
           <maxOffset>	0.0267857	</maxOffset>
         </group>
       </groundNodes>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000075 2.19452 0.173805	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_RenaultBS2>
   </chassis>
   <turrets0>
@@ -792,6 +847,21 @@
             <collisionModelClient>	vehicles/french/F20_RenaultBS/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	-0.00271155 -0.0424424 0.252805	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.5 0.2 3.5 3.1	</tiling>
           </camouflage>
@@ -807,10 +877,15 @@
         <collisionModelClient>	vehicles/french/F20_RenaultBS/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_RenaultBS>
   </turrets0>
   <engines>

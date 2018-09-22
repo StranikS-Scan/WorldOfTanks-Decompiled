@@ -65,45 +65,72 @@
       <collisionModelServer>	vehicles/british/GB25_Loyd_Gun_Carriage/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB25_Loyd_Gun_Carriage/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/british/GB25_Loyd_Gun_Carriage/Loyd_Gun_Carriage_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.287186 -0.215931 1.58475	</rayStart>
         <rayEnd>	0.287186 -0.215931 1.48475	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.22	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.02271 0.17622 -1.09675	</rayStart>
         <rayEnd>	-0.822709 0.17613 -1.09674	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.02273 0.178776 0.699843	</rayStart>
         <rayEnd>	-0.822731 0.178736 0.699843	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.86	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.02273 0.178776 0.699843	</rayStart>
         <rayEnd>	0.822731 0.178736 0.699843	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.86	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.02271 0.17622 -1.09675	</rayStart>
         <rayEnd>	0.822709 0.17613 -1.09674	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/british/GB25_Loyd_Gun_Carriage/Loyd_Gun_Carriage_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	-0.0030108 0.385524 -1.53216	</anchorPosition>
+        <anchorDirection>	-0.000000 0.804133 -0.59445	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
     </camouflage>
@@ -259,9 +286,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1150	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -909,6 +933,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.000000 1.39734 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB25_Loyd_Carrier>
     <Chassis_GB25_Loyd_Carrier_2>
       <userString>	#gb_vehicles:Chassis_GB25_Loyd_Carrier_2	</userString>
@@ -1073,9 +1111,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1150	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -1706,13 +1741,27 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000049 1.39685 -0.000004	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB25_Loyd_Carrier_2>
   </chassis>
   <turrets0>
     <Turret_1_GB25_Loyd_Carrier>
       <ceilless>	true	</ceilless>
       <userString>	#gb_vehicles:Turret_1_GB25_Loyd_Carrier	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	1	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -1768,6 +1817,21 @@
             <collisionModelServer>	vehicles/british/GB25_Loyd_Gun_Carriage/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB25_Loyd_Gun_Carriage/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	0.00195405 -0.0651107 0.546539	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.925 0.52 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1783,10 +1847,15 @@
         <collisionModelClient>	vehicles/british/GB25_Loyd_Gun_Carriage/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.001358 0.769744 -0.164075	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.214 0.038 1.000 0.000 1.095 0.038 0.500 0.100 0.000 0.500 0.000 0.500 0.600 0.195 1.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
       </camouflage>

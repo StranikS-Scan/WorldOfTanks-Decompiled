@@ -78,45 +78,78 @@
       <collisionModelServer>	vehicles/german/G37_Ferdinand/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G37_Ferdinand/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <player>
+    <hangarShadowTexture>	vehicles/german/G37_Ferdinand/Ferdinand_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	1.29487 1.32751 -2.06647	</rayStart>
         <rayEnd>	1.13669 1.24162 -2.06618	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.36069 1.3548 -2.05143	</rayStart>
         <rayEnd>	-1.01137 1.15992 -2.05141	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <clan>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-0.673612 0.581527 2.61925	</rayStart>
         <rayEnd>	-0.673612 0.498581 2.22796	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.2	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.36585 1.34441 -0.981524	</rayStart>
         <rayEnd>	1.0159 1.15065 -0.980927	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.92	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	-1.36585 1.34441 -0.981524	</rayStart>
         <rayEnd>	-1.0159 1.15065 -0.980927	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.92	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G37_Ferdinand/Ferdinand_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	13	</slotId>
+        <anchorPosition>	0.000000 0.715099 1.67285	</anchorPosition>
+        <anchorDirection>	0.000000 0.393066 0.91951	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	14	</slotId>
+        <anchorPosition>	0.000000 0.715099 1.67285	</anchorPosition>
+        <anchorDirection>	0.000000 0.393066 0.91951	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Ferdinandstandardketten>
@@ -254,14 +287,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.09	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-7.4	</gravity>
         <elasticity>	1094	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1.01	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -907,6 +937,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	-1.63656 0.657444 0.137285	</anchorPosition>
+          <anchorDirection>	-0.925126 0.371645 0.0776054	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.000002 2.88768 -1.30633	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Ferdinandstandardketten>
     <Ferdinandvetstaerktketten>
       <userString>	#germany_vehicles:Ferdinandvetstaerktketten	</userString>
@@ -1039,14 +1089,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.09	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-7.4	</gravity>
         <elasticity>	1094	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1.01	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -1692,6 +1739,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	-1.63656 0.657444 0.137285	</anchorPosition>
+          <anchorDirection>	-0.925126 0.371645 0.0776054	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	0.000148984 2.88818 -1.30633	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Ferdinandvetstaerktketten>
   </chassis>
   <turrets0>
@@ -1754,16 +1821,46 @@
             <collisionModelServer>	vehicles/german/G37_Ferdinand/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G37_Ferdinand/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.000001 -0.00295231 3.79161	</rayStart>
               <rayEnd>	0.430435 -0.102961 3.77331	</rayEnd>
               <rayUp>	0.072 0.064 3	</rayUp>
               <size>	0.405	</size>
               <hideIfDamaged>	true	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	0.000000 -0.00197615 2.31667	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	0.000000 0.292531 0.451466	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	19	</slotId>
+              <anchorPosition>	0.000000 -0.00197615 2.31667	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1804,16 +1901,46 @@
             <collisionModelServer>	vehicles/german/G37_Ferdinand/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G37_Ferdinand/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	0.000000 -0.0050989 2.59186	</rayStart>
               <rayEnd>	0.122732 -0.0442695 2.59186	</rayEnd>
               <rayUp>	0.114 0.113 4	</rayUp>
               <size>	0.46	</size>
               <hideIfDamaged>	true	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	20	</slotId>
+              <anchorPosition>	0.000000 -0.00215822 1.82074	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	0.000000 0.279319 0.465194	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	22	</slotId>
+              <anchorPosition>	0.000000 -0.00215822 1.82074	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1852,16 +1979,46 @@
             <collisionModelServer>	vehicles/german/G37_Ferdinand/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G37_Ferdinand/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	8	</slotId>
               <rayStart>	0.000000 -0.0358441 4.65264	</rayStart>
               <rayEnd>	-0.0811165 -0.157317 4.65054	</rayEnd>
               <rayUp>	0.11 0.107 4	</rayUp>
               <size>	0.536	</size>
               <hideIfDamaged>	true	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	23	</slotId>
+              <anchorPosition>	0.000000 -0.017922 2.57715	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	24	</slotId>
+              <anchorPosition>	0.000000 0.408445 0.408444	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	25	</slotId>
+              <anchorPosition>	0.000000 -0.017922 2.57715	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1877,10 +2034,15 @@
         <collisionModelClient>	vehicles/german/G37_Ferdinand/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000000 0.00194 0.010203	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_07	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Ferdinandturm>
   </turrets0>
   <engines>

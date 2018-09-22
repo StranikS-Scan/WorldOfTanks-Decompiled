@@ -164,6 +164,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     CUSTOMIZATION_FILTER_POPOVER = 'CustomizationFilterPopover'
     CUSTOMIZATION_ANCHOR_POPOVER = 'CustomizationAnchorPopover'
     CUSTOMIZATION_ITEMS_POPOVER = 'CustomizationItemsPopover'
+    CUSTOMIZATION_KIT_POPOVER = 'CustomizationKitPopover'
     TANK_CAROUSEL_FILTER_POPOVER = 'TankCarouselFilterPopover'
     VEHICLES_FILTER_POPOVER = 'VehiclesFilterPopover'
     STORAGE_VEHICLES_FILTER_POPOVER = 'StorageVehiclesFilterPopover'

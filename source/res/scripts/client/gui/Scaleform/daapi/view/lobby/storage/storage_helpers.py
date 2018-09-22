@@ -35,7 +35,7 @@ def getStorageItemDescr(item):
         return text_styles.main(desc)
 
 
-def createStorageDefVO(itemID, title, description, count, price, imageSmall, imageMedium, imageAlt, itemType='', nationFlagIcon='', level='', enabled=True, infoImgSrc='', infoText=''):
+def createStorageDefVO(itemID, title, description, count, price, imageSmall, imageMedium, imageAlt, itemType='', nationFlagIcon='', level='', enabled=True, infoImgSrc='', infoText='', timerText='', timerIcon=''):
     return {'id': itemID,
      'title': title,
      'description': description,
@@ -48,6 +48,8 @@ def createStorageDefVO(itemID, title, description, count, price, imageSmall, ima
      'nationFlagIcon': nationFlagIcon,
      'enabled': enabled,
      'level': level,
+     'timerText': timerText,
+     'timerIcon': timerIcon,
      'infoImgSrc': infoImgSrc,
      'infoText': infoText}
 

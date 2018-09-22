@@ -116,6 +116,8 @@ class ItemsCache(IItemsCache):
                     invalidItems = self.__items.invalidateCache()
                 else:
                     invalidItems = {}
+                if updateReason == CACHE_SYNC_REASON.SHOW_GUI:
+                    self.__items.inventory.updateC11nItemsAppliedCounts()
                 if notify:
                     self.onSyncCompleted(updateReason, invalidItems)
             callback(*args)

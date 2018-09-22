@@ -63,31 +63,52 @@
       <collisionModelServer>	vehicles/sweden/S03_Strv_M38/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/sweden/S03_Strv_M38/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/sweden/S03_Strv_M38/Strv_M38_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.395335 0.151249 1.83866	</rayStart>
         <rayEnd>	-0.395328 -0.01762 1.7315	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.845174 0.285666 0.60125	</rayStart>
         <rayEnd>	-0.79165 0.270644 0.594501	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.2	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.845174 0.285666 0.60125	</rayStart>
         <rayEnd>	0.79165 0.270644 0.594501	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.2	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/sweden/S03_Strv_M38/Strv_M38_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	10	</slotId>
+        <anchorPosition>	0.000000 0.402439 -1.67441	</anchorPosition>
+        <anchorDirection>	0.000000 0.233691 -0.972311	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_S03_Strv_M38>
@@ -782,6 +803,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000236759 2.00038 0.207664	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_S03_Strv_M38>
     <Chassis_S03_Strv_M38_2>
       <userString>	#sweden_vehicles:Chassis_S03_Strv_M38_2	</userString>
@@ -1471,6 +1506,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	0.000287156 2.00038 0.207603	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_S03_Strv_M38_2>
   </chassis>
   <turrets0>
@@ -1550,6 +1599,21 @@
             <collisionModelServer>	vehicles/sweden/S03_Strv_M38/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S03_Strv_M38/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	12	</slotId>
+              <anchorPosition>	0.105591 0.0603013 0.715556	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.3 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1590,6 +1654,21 @@
             <collisionModelServer>	vehicles/sweden/S03_Strv_M38/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S03_Strv_M38/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	13	</slotId>
+              <anchorPosition>	0.0999337 0.0591046 0.694331	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.3 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1605,25 +1684,43 @@
         <collisionModelClient>	vehicles/sweden/S03_Strv_M38/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000003 0.316113 0.683457	</gunPosition>
-      <emblemSlots>
-        <inscription>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.960 -0.051 1.023 0.000 0.639 0.239 0.439 0.601 0.371 0.514 0.268 0.443 0.000 0.000 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.677731 0.28682 0.280713	</rayStart>
           <rayEnd>	-0.502732 0.232924 0.200275	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.4	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.000935085 0.470365 -0.977338	</rayStart>
           <rayEnd>	0.000941527 0.399158 -0.790445	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.960 -0.051 1.023 0.000 0.639 0.239 0.439 0.601 0.371 0.514 0.268 0.443 0.000 0.000 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	0.000000 0.691748 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.5 0.2 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1708,6 +1805,21 @@
             <collisionModelServer>	vehicles/sweden/S03_Strv_M38/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S03_Strv_M38/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	-0.0170044 0.000018 0.767784	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.3 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1747,6 +1859,21 @@
             <collisionModelServer>	vehicles/sweden/S03_Strv_M38/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S03_Strv_M38/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	-0.0194135 -0.000291586 0.655203	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.3 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1762,25 +1889,43 @@
         <collisionModelClient>	vehicles/sweden/S03_Strv_M38/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.12446 0.33186 0.762583	</gunPosition>
-      <emblemSlots>
-        <inscription>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.034 0.011 1.108 0.057 0.639 0.256 0.455 0.514 0.457 0.477 0.234 0.506 0.021 0.469 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	6	</slotId>
           <rayStart>	-0.70871 0.330642 0.441799	</rayStart>
           <rayEnd>	-0.351698 0.227744 0.293629	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.454	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	7	</slotId>
           <rayStart>	0.000091 0.468453 -0.993609	</rayStart>
           <rayEnd>	0.000091 0.397389 -0.806664	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.034 0.011 1.108 0.057 0.639 0.256 0.455 0.514 0.457 0.477 0.234 0.506 0.021 0.469 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	0.000000 0.691196 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
       </camouflage>

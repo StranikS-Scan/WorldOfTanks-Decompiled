@@ -64,30 +64,51 @@
       <collisionModelServer>	vehicles/sweden/S15_L_60/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/sweden/S15_L_60/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/sweden/S15_L_60/L_60_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.405894 0.218605 1.80169	</rayStart>
         <rayEnd>	-0.405895 0.0474499 1.69822	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.2	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.96951 0.3345 0.610676	</rayStart>
         <rayEnd>	-0.778554 0.283128 0.58073	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.432	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.96951 0.3345 0.610676	</rayStart>
         <rayEnd>	0.778554 0.283128 0.58073	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.432	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/sweden/S15_L_60/L_60_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	0.000000 0.438089 -1.36396	</anchorPosition>
+        <anchorDirection>	0.000000 0.305803 -0.952095	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	5.1 5.1 0.000000 0.000000	</tiling>
     </camouflage>
@@ -826,6 +847,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.000318105 1.84152 0.256933	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_S15_L_60>
   </chassis>
   <turrets0>
@@ -901,6 +936,21 @@
             <collisionModelServer>	vehicles/sweden/S15_L_60/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S15_L_60/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.177028 0.00609183 0.496321	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.8 0.9 0.000000 0.000000	</tiling>
           </camouflage>
@@ -916,26 +966,44 @@
         <collisionModelClient>	vehicles/sweden/S15_L_60/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.040515 0.260572 0.670925	</gunPosition>
-      <emblemSlots>
-        <player>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.986 0.014 1.008 0.005 0.493 0.200 0.780 0.433 0.451 0.469 0.258 0.479 0.233 0.466 0.063	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.643081 0.331397 0.15761	</rayStart>
           <rayEnd>	-0.455824 0.281138 0.108533	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.2	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.643452 0.332066 0.157248	</rayStart>
           <rayEnd>	0.456736 0.281836 0.106119	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.2	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.986 0.014 1.008 0.005 0.493 0.200 0.780 0.433 0.451 0.469 0.258 0.479 0.233 0.466 0.063	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 0.54104 -0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	3 1.5 0.000000 0.000000	</tiling>
       </camouflage>

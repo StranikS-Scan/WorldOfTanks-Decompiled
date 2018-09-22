@@ -70,23 +70,35 @@
       <collisionModelServer>	vehicles/american/A35_Pershing/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/american/A35_Pershing/Pershing_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.407087 0.497543 2.26241	</rayStart>
         <rayEnd>	0.402525 0.229834 1.96525	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.0054512 0.306623 2.56927	</rayStart>
         <rayEnd>	-0.0054512 -0.0741714 2.10561	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.7	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/american/A35_Pershing/Pershing_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.42 1.42 0.63 0.84	</tiling>
     </camouflage>
@@ -740,6 +752,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Pershingchassis2_IGR>
   </chassis>
   <turrets0>
@@ -818,16 +836,25 @@
             <collisionModelServer>	vehicles/american/A35_Pershing/collision/Gun_09.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	4	</slotId>
               <rayStart>	0.0164977 0.0140687 2.66656	</rayStart>
               <rayEnd>	-0.111291 -0.0314494 2.66656	</rayEnd>
               <rayUp>	0.094 0.094 3	</rayUp>
               <size>	0.52	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.4 0.565 0.55 0.35	</tiling>
           </camouflage>
@@ -843,19 +870,28 @@
         <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.427038 0.938862	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.969 -0.024 1.023 0.015 0.694 0.069 0.895 0.571 0.421 0.526 0.102 0.500 0.000 0.100 0.069	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	1.25441 0.772955 -0.122696	</rayStart>
           <rayEnd>	0.857552 0.741393 -0.161547	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.969 -0.024 1.023 0.015 0.694 0.069 0.895 0.571 0.421 0.526 0.102 0.500 0.000 0.100 0.069	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.79 0.79 0.86 0.74	</tiling>
       </camouflage>

@@ -69,45 +69,72 @@
       <collisionModelServer>	vehicles/chinese/Ch30_T-26G_FT/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/chinese/Ch30_T-26G_FT/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/chinese/Ch30_T-26G_FT/T-26G_FT_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.517818 0.677099 1.01942	</rayStart>
         <rayEnd>	0.517827 0.633876 0.931017	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.225	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.886911 0.517083 0.777009	</rayStart>
         <rayEnd>	-0.788504 0.517069 0.77701	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.225	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.886911 0.517083 0.777009	</rayStart>
         <rayEnd>	0.788504 0.517069 0.77701	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.225	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-0.886972 0.522837 -0.115754	</rayStart>
         <rayEnd>	-0.788565 0.522821 -0.115754	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.623	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	0.886972 0.522837 -0.115754	</rayStart>
         <rayEnd>	0.788565 0.522821 -0.115754	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.623	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/chinese/Ch30_T-26G_FT/T-26G_FT_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.000000 0.209696 -0.783791	</anchorPosition>
+        <anchorDirection>	-0.000000 0.25845 -0.966024	</anchorDirection>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_Ch30_T-26G_FT>
@@ -286,6 +313,13 @@
           <offset>	-0.053	</offset>
         </node>
         <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
           <forwardElastK>	2.8	</forwardElastK>
@@ -310,13 +344,6 @@
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
           <forwardElastK>	2.2	</forwardElastK>
-          <backwardElastK>	0.8	</backwardElastK>
-          <offset>	-0.053	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	3	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.053	</offset>
         </node>
@@ -1047,6 +1074,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	0.000000 1.77111 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Ch30_T-26G_FT>
     <Chassis_Ch30_T-26G_FT_2>
       <userString>	#china_vehicles:Chassis_Ch30_T-26G_FT_2	</userString>
@@ -1217,6 +1258,10 @@
           <name>	Track_VT_L0	</name>
         </node>
         <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L1	</name>
         </node>
@@ -1239,10 +1284,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -1951,12 +1992,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000195682 1.77066 0.000004	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Ch30_T-26G_FT_2>
   </chassis>
   <turrets0>
     <Turret_1_Ch30_T-26G_FT>
       <userString>	#china_vehicles:Turret_1_Ch30_T-26G_FT	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	2	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -2015,6 +2070,21 @@
             <collisionModelServer>	vehicles/chinese/Ch30_T-26G_FT/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch30_T-26G_FT/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	-0.00799375 0.0377419 0.742014	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2056,6 +2126,21 @@
             <collisionModelServer>	vehicles/chinese/Ch30_T-26G_FT/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch30_T-26G_FT/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	6	</slotId>
+              <anchorPosition>	-0.00786858 0.0289909 0.935535	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2071,10 +2156,23 @@
         <collisionModelClient>	vehicles/chinese/Ch30_T-26G_FT/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 0.242807	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.008 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	-0.0116127 0.187827 0.380062	</anchorPosition>
+          <anchorDirection>	0.000000 0.000075 1	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.7 0.3 0.000000 0.000000	</tiling>
       </camouflage>

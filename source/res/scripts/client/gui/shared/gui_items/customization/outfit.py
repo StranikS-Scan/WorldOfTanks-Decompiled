@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/customization/outfit.py
+from collections import Counter
+from soft_exception import SoftException
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.containers import OutfitContainer, MultiSlot
 from gui.shared.gui_items.gui_item import HasStrCD
 from vehicle_systems.tankStructure import TankPartIndexes
-from items.components.c11n_constants import ApplyArea, CustomizationType
-from items.customizations import parseCompDescr, CustomizationOutfit
+from items.components.c11n_constants import ApplyArea, CustomizationType, MAX_PROJECTION_DECALS
+from items.customizations import parseOutfitDescr, CustomizationOutfit
 from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
 from helpers import dependency
 from shared_utils import isEmpty
@@ -32,20 +34,26 @@ def scaffold():
       MultiSlot(slotType=GUI_ITEM_TYPE.CAMOUFLAGE, regions=ApplyArea.GUN_CAMOUFLAGE_REGIONS),
       MultiSlot(slotType=GUI_ITEM_TYPE.EMBLEM, regions=ApplyArea.GUN_EMBLEM_REGIONS),
       MultiSlot(slotType=GUI_ITEM_TYPE.INSCRIPTION, regions=ApplyArea.GUN_INSCRIPTION_REGIONS))),
-     OutfitContainer(areaID=Area.MISC, slots=(MultiSlot(slotType=GUI_ITEM_TYPE.MODIFICATION, regions=(ApplyArea.NONE,)),)))
+     OutfitContainer(areaID=Area.MISC, slots=(MultiSlot(slotType=GUI_ITEM_TYPE.MODIFICATION, regions=(ApplyArea.NONE,)), MultiSlot(slotType=GUI_ITEM_TYPE.PROJECTION_DECAL, regions=tuple(range(MAX_PROJECTION_DECALS))))))
 
+
+REGIONS_BY_SLOT_TYPE = {container.getAreaID():{slot.getType():slot.getRegions() for slot in container.slots()} for container in scaffold()}
 
 class Outfit(HasStrCD):
     __slots__ = ('_id', '_styleDescr', '_containers', '_isEnabled', '_isInstalled')
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, strCompactDescr=None, isEnabled=False, isInstalled=False, proxy=None):
+    def __init__(self, strCompactDescr=None, component=None, isEnabled=False, isInstalled=False, proxy=None):
         super(Outfit, self).__init__(strCompactDescr)
         self._containers = {}
+        self._isEnabled = isEnabled
+        self._isInstalled = isInstalled
+        if strCompactDescr is not None and component is not None:
+            raise SoftException("'strCompactDescr' and 'component' arguments are mutually exclusive!")
         if strCompactDescr:
-            component = parseCompDescr(strCompactDescr)
-        else:
+            component = parseOutfitDescr(strCompactDescr)
+        elif component is None:
             component = CustomizationOutfit()
         self._id = component.styleId
         if self._id:
@@ -53,8 +61,6 @@ class Outfit(HasStrCD):
             self._styleDescr = getItemByCompactDescr(intCD)
         else:
             self._styleDescr = None
-        self._isEnabled = isEnabled
-        self._isInstalled = isInstalled
         for container in scaffold():
             container.unpack(component, proxy)
             self._containers[container.getAreaID()] = container
@@ -71,7 +77,7 @@ class Outfit(HasStrCD):
         return component
 
     def copy(self):
-        return self.itemsFactory.createOutfit(self.pack().makeCompDescr(), isEnabled=self._isEnabled, isInstalled=self._isInstalled, proxy=self.itemsCache.items)
+        return self.itemsFactory.createOutfit(component=self.pack(), isEnabled=self._isEnabled, isInstalled=self._isInstalled, proxy=self.itemsCache.items)
 
     def diff(self, other):
         result = Outfit()
@@ -121,6 +127,10 @@ class Outfit(HasStrCD):
     @property
     def modelsSet(self):
         return self._styleDescr.modelsSet if self._styleDescr else ''
+
+    @property
+    def itemsCounter(self):
+        return Counter((i.intCD for i in self.items()))
 
     def containers(self):
         for container in self._containers.itervalues():

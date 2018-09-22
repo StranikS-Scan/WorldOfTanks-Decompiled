@@ -74,16 +74,25 @@
       <collisionModelServer>	vehicles/german/G119_Pz58_Mutz/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G119_Pz58_Mutz/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G119_Pz58_Mutz/Pz58_Mutz_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.0125732 0.314778 2.97705	</rayStart>
         <rayEnd>	-0.0125732 0.160575 2.8497	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.26	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G119_Pz58_Mutz/Pz58_Mutz_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.12 1.12 0.76 0.84	</tiling>
     </camouflage>
@@ -251,9 +260,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1137	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -765,6 +771,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_G119_Pz58_Mutz>
   </chassis>
   <turrets0>
@@ -862,16 +874,25 @@
             <collisionModelServer>	vehicles/german/G119_Pz58_Mutz/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G119_Pz58_Mutz/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	2	</slotId>
               <rayStart>	0.000000 0.0251727 4.58434	</rayStart>
               <rayEnd>	0.0320479 -0.0681278 4.58434	</rayEnd>
               <rayUp>	0.058 0.058 5	</rayUp>
               <size>	0.28	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.925 0.37 0.000000 0.000000	</tiling>
           </camouflage>
@@ -887,10 +908,15 @@
         <collisionModelClient>	vehicles/german/G119_Pz58_Mutz/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.267142 1.13856	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.985 0.049 1.000 0.000 0.512 0.010 0.640 0.502 0.498 0.500 0.374 0.500 0.128 0.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	0.565 0.565 0.000000 0.000000	</tiling>
       </camouflage>

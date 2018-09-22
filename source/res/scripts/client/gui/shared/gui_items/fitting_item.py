@@ -36,7 +36,7 @@ class RentalInfoProvider(_RentalInfoProvider):
 
 
 class FittingItem(GUIItem, HasIntCD):
-    __slots__ = ('_buyPrices', '_sellPrices', '_mayConsumeWalletResources', '_personalDiscountPrice', '_isHidden', '_inventoryCount', '_isUnlocked', '_isBoughtForAltPrice', '_rentInfo', '_restoreInfo', '_fullyConfigured', '_isInitiallyUnlocked')
+    __slots__ = ('_buyPrices', '_sellPrices', '_mayConsumeWalletResources', '_personalDiscountPrice', '_isHidden', '_inventoryCount', '_isUnlocked', '_isBoughtForAltPrice', '_rentInfo', '_restoreInfo', '_fullyConfigured', '_isInitiallyUnlocked', '_descriptor')
 
     class TARGETS(object):
         CURRENT = 1
@@ -50,6 +50,7 @@ class FittingItem(GUIItem, HasIntCD):
         self._rentInfo = RentalInfoProvider()
         self._restoreInfo = None
         self._personalDiscountPrice = None
+        self._descriptor = self._getDescriptor()
         if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced():
             self._mayConsumeWalletResources = proxy.stats.mayConsumeWalletResources
             defaultPrice = proxy.shop.defaults.getItemPrice(self.intCD)
@@ -154,7 +155,7 @@ class FittingItem(GUIItem, HasIntCD):
 
     @property
     def descriptor(self):
-        return vehicles.getItemByCompactDescr(self.intCD)
+        return self._descriptor
 
     @property
     def isRemovable(self):
@@ -353,6 +354,9 @@ class FittingItem(GUIItem, HasIntCD):
 
     def _sortByType(self, other):
         pass
+
+    def _getDescriptor(self):
+        return vehicles.getItemByCompactDescr(self.intCD)
 
     def _getShortInfo(self, vehicle=None, expanded=False):
         try:

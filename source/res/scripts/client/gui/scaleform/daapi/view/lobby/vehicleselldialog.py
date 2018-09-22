@@ -203,6 +203,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
              'toInventory': s in otherVehsShells or s.isPremium,
              'action': action})
 
+        customizationOnVehicle = []
         settings = self.getDialogSettings()
         isSlidingComponentOpened = settings['isOpened']
         self.as_setDataS({'accountMoney': items.stats.money.toMoneyTuple(),
@@ -213,7 +214,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'modulesInInventory': inInventoryModules,
          'shellsInInventory': inInventoryShells,
          'isSlidingComponentOpened': isSlidingComponentOpened,
-         'battleBoostersOnVehicle': onVehicleBattleBoosters})
+         'battleBoostersOnVehicle': onVehicleBattleBoosters,
+         'customizationOnVehicle': customizationOnVehicle})
         return
 
     def onChangeConfiguration(self, optDevicesToStorage):
@@ -261,7 +263,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
                 SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
             self.destroy()
 
-    def sell(self, vehicleCD, shells, eqs, optDevicesToSell, inventory, isDismissCrew):
+    def sell(self, vehicleCD, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew):
 
         def getItem(data):
             return self.itemsCache.items.getItemByCD(int(data['intCD']))

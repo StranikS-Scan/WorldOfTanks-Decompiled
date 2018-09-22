@@ -76,45 +76,72 @@
       <collisionModelServer>	vehicles/american/A18_M41/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/american/A18_M41/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/american/A18_M41/M41_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.00330324 0.204914 2.24749	</rayStart>
         <rayEnd>	0.00330324 0.203185 2.24648	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.23	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.4945 0.761109 -0.576244	</rayStart>
         <rayEnd>	-1.2945 0.761109 -0.576244	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.50784 0.798311 -1.4961	</rayStart>
         <rayEnd>	1.30784 0.798311 -1.4961	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.54	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.4945 0.761109 -0.576244	</rayStart>
         <rayEnd>	1.2945 0.761109 -0.576244	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	-1.50784 0.798311 -1.4961	</rayStart>
         <rayEnd>	-1.30784 0.798311 -1.4961	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.54	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/american/A18_M41/M41_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	9	</slotId>
+        <anchorPosition>	-0.00430637 0.501882 1.69397	</anchorPosition>
+        <anchorDirection>	0.000000 0.565242 0.824925	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
     </camouflage>
@@ -286,46 +313,38 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.123	</maxAmplitude>
+        <maxAmplitude>	0.000000	</maxAmplitude>
         <maxOffset>	0.000000	</maxOffset>
         <gravity>	-3	</gravity>
         <elasticity>	2022	</elasticity>
-        <damping>	1.98	</damping>
-        <forwardElastK>	3	</forwardElastK>
-        <backwardElastK>	1.87	</backwardElastK>
-        <offset>	-0.065	</offset>
+        <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <elasticity>	703	</elasticity>
           <forwardElastK>	0.71	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <elasticity>	703	</elasticity>
           <forwardElastK>	0.71	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <elasticity>	804	</elasticity>
           <forwardElastK>	3	</forwardElastK>
           <backwardElastK>	0.71	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <elasticity>	804	</elasticity>
           <forwardElastK>	3	</forwardElastK>
           <backwardElastK>	0.71	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <elasticity>	644	</elasticity>
           <backwardElastK>	1.42	</backwardElastK>
           <offset>	-0.075	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
@@ -351,7 +370,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L4	</name>
-          <elasticity>	652	</elasticity>
           <backwardElastK>	1.4	</backwardElastK>
           <offset>	-0.075	</offset>
           <leftSibling>	Track_VT_L3	</leftSibling>
@@ -359,7 +377,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <elasticity>	644	</elasticity>
           <backwardElastK>	1.42	</backwardElastK>
           <offset>	-0.075	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
@@ -385,7 +402,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
-          <elasticity>	652	</elasticity>
           <backwardElastK>	1.4	</backwardElastK>
           <offset>	-0.075	</offset>
           <leftSibling>	Track_VT_R3	</leftSibling>
@@ -1108,6 +1124,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	0.000000 1.59008 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </T72>
     <T72E1>
       <userString>	#usa_vehicles:T72E1	</userString>
@@ -1271,46 +1301,38 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.123	</maxAmplitude>
+        <maxAmplitude>	0.000000	</maxAmplitude>
         <maxOffset>	0.000000	</maxOffset>
         <gravity>	-3	</gravity>
         <elasticity>	2022	</elasticity>
-        <damping>	1.98	</damping>
-        <forwardElastK>	3	</forwardElastK>
-        <backwardElastK>	1.87	</backwardElastK>
-        <offset>	-0.065	</offset>
+        <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <elasticity>	703	</elasticity>
           <forwardElastK>	0.71	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <elasticity>	703	</elasticity>
           <forwardElastK>	0.71	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <elasticity>	804	</elasticity>
           <forwardElastK>	3	</forwardElastK>
           <backwardElastK>	0.71	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <elasticity>	804	</elasticity>
           <forwardElastK>	3	</forwardElastK>
           <backwardElastK>	0.71	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <elasticity>	644	</elasticity>
           <backwardElastK>	1.42	</backwardElastK>
           <offset>	-0.075	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
@@ -1336,7 +1358,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L4	</name>
-          <elasticity>	652	</elasticity>
           <backwardElastK>	1.4	</backwardElastK>
           <offset>	-0.075	</offset>
           <leftSibling>	Track_VT_L3	</leftSibling>
@@ -1344,7 +1365,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <elasticity>	644	</elasticity>
           <backwardElastK>	1.42	</backwardElastK>
           <offset>	-0.075	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
@@ -1370,7 +1390,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
-          <elasticity>	652	</elasticity>
           <backwardElastK>	1.4	</backwardElastK>
           <offset>	-0.075	</offset>
           <leftSibling>	Track_VT_R3	</leftSibling>
@@ -2093,13 +2112,27 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000059 1.58961 0.000002	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </T72E1>
   </chassis>
   <turrets0>
     <M14>
       <ceilless>	true	</ceilless>
       <userString>	#usa_vehicles:T51D1	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	5	</level>
       <price>	200	</price>
       <notInShop>	true	</notInShop>
@@ -2150,16 +2183,32 @@
             <collisionModelServer>	vehicles/american/A18_M41/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A18_M41/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.000000 0.00858583 2.36314	</rayStart>
               <rayEnd>	0.0281009 -0.0259147 2.36314	</rayEnd>
               <rayUp>	0.13 0.13 4	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.000000 0.0134275 1.54227	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2175,10 +2224,23 @@
         <collisionModelClient>	vehicles/american/A18_M41/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000031 0.5339 -0.584602	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	2.000 0.000 0.966 -0.011 1.268 0.045 0.550 0.299 0.131 0.500 0.257 0.500 0.159 0.000 0.581	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000000 0.49722 -0.596347	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
       </camouflage>

@@ -122,6 +122,12 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
     def filter(self):
         return self._filter
 
+    @filter.setter
+    def filter(self, newFilter):
+        self.clear()
+        self._filter = newFilter
+        self._filter.load()
+
     @property
     def collection(self):
         return self._vehicleItems
@@ -196,12 +202,13 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
                     self._selectedIdx = len(self._filteredIndices) - 1
 
         self._filteredIndices += self._getAdditionalItemsIndexes()
-        needUpdate = prevFilteredIndices != self._filteredIndices or prevSelectedIdx != self._selectedIdx
+        needUpdate = not self._filteredIndices or prevFilteredIndices != self._filteredIndices or prevSelectedIdx != self._selectedIdx
         if needUpdate:
             self._filterByIndices()
 
     def _filterByIndices(self):
-        self.flashObject.as_setFilter(self._filteredIndices)
+        if self._filteredIndices:
+            self.flashObject.as_setFilter(self._filteredIndices)
 
     def _getSortedIndices(self):
         return self._getCachedSortedIndices(False)

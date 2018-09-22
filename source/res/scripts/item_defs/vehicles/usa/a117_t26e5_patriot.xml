@@ -72,16 +72,25 @@
       <collisionModelServer>	vehicles/american/A117_T26E5_Patriot/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/american/A117_T26E5_Patriot/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/american/A117_T26E5_Patriot/T26E5_Patriot_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.0110493 0.470071 2.19786	</rayStart>
         <rayEnd>	0.0110455 0.380405 2.01909	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/american/A117_T26E5_Patriot/T26E5_Patriot_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_A117_T26E5_Patriot>
@@ -873,6 +882,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_A117_T26E5_Patriot>
   </chassis>
   <turrets0>
@@ -960,16 +975,25 @@
             <collisionModelServer>	vehicles/american/A117_T26E5_Patriot/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A117_T26E5_Patriot/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	2	</slotId>
               <rayStart>	0.000001 -0.0124329 2.63681	</rayStart>
               <rayEnd>	-0.0466955 -0.00596546 2.63681	</rayEnd>
               <rayUp>	0.091 0.092 5	</rayUp>
               <size>	0.64	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
         </_90mm_Gun_T7E1>
       </guns>
       <notInShop>	true	</notInShop>
@@ -983,10 +1007,15 @@
         <collisionModelClient>	vehicles/american/A117_T26E5_Patriot/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.435495 0.978393	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.877 -0.131 1.000 0.000 0.631 0.066 0.500 0.500 0.500 0.500 0.115 0.500 0.000 0.455 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_A117_T26E5_Patriot>
   </turrets0>
   <engines>

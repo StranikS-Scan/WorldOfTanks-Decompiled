@@ -64,16 +64,31 @@
       <collisionModelServer>	vehicles/czech/Cz03_LT_vz35/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/czech/Cz03_LT_vz35/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/czech/Cz03_LT_vz35/LT_vz35_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.267451 0.128855 2.00421	</rayStart>
         <rayEnd>	-0.267451 -0.0683061 1.97064	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.22	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/czech/Cz03_LT_vz35/LT_vz35_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	15	</slotId>
+        <anchorPosition>	0.000000 0.41596 -1.48919	</anchorPosition>
+        <anchorDirection>	0.000000 0.269023 -0.963134	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	0.82 0.82 0.64 0.72	</tiling>
     </camouflage>
@@ -227,15 +242,16 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1400	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.65	</forwardElastK>
           <backwardElastK>	1.2	</backwardElastK>
           <offset>	-0.055	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -276,10 +292,6 @@
           <name>	Track_VT_L6	</name>
           <forwardElastK>	0.65	</forwardElastK>
           <backwardElastK>	2.4	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -1059,6 +1071,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	0.00549013 2.01366 0.701917	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Cz03_LT_vz35>
     <Chassis_Cz03_LT_vz35_2>
       <userString>	#czech_vehicles:Chassis_Cz03_LT_vz35_2	</userString>
@@ -1204,15 +1230,16 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1400	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.65	</forwardElastK>
           <backwardElastK>	1.2	</backwardElastK>
           <offset>	-0.055	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -1253,10 +1280,6 @@
           <name>	Track_VT_L6	</name>
           <forwardElastK>	0.65	</forwardElastK>
           <backwardElastK>	2.4	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -2036,6 +2059,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.00581679 2.01366 0.701867	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Cz03_LT_vz35_2>
   </chassis>
   <turrets0>
@@ -2113,6 +2150,21 @@
             <collisionModelServer>	vehicles/czech/Cz03_LT_vz35/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz03_LT_vz35/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	12	</slotId>
+              <anchorPosition>	-0.00418186 -0.0330293 0.620538	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.25 0.25 0.62 0.42	</tiling>
           </camouflage>
@@ -2147,6 +2199,21 @@
             <collisionModelServer>	vehicles/czech/Cz03_LT_vz35/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz03_LT_vz35/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	-0.0044278 -0.0672575 0.737464	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.31 0.31 0.21 1	</tiling>
           </camouflage>
@@ -2162,41 +2229,65 @@
         <collisionModelClient>	vehicles/czech/Cz03_LT_vz35/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.008352 0.2899 0.520474	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	0.939 -0.063 0.911 0.017 0.801 0.110 0.412 1.000 0.524 0.395 0.285 0.496 0.254 0.605 0.075	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.682013 0.326051 -0.0397057	</rayStart>
           <rayEnd>	-0.488248 0.276964 -0.033018	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.553751 0.312348 -0.490939	</rayStart>
           <rayEnd>	-0.370571 0.26623 -0.42523	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.5	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.553751 0.312348 -0.490939	</rayStart>
           <rayEnd>	0.370571 0.26623 -0.42523	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.5	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.68159 0.327074 -0.0339757	</rayStart>
           <rayEnd>	0.487829 0.278037 -0.0268155	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	0.939 -0.063 0.911 0.017 0.801 0.110 0.412 1.000 0.524 0.395 0.285 0.496 0.254 0.605 0.075	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.00515548 0.565498 0.323354	</anchorPosition>
+          <anchorDirection>	-0.000000 0.999999 0.00139815	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.4 0.4 0.24 0.83	</tiling>
       </camouflage>
@@ -2276,6 +2367,21 @@
             <collisionModelServer>	vehicles/czech/Cz03_LT_vz35/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz03_LT_vz35/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	-0.00418186 -0.0329064 0.642508	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.25 0.25 0.84 0.000000	</tiling>
           </camouflage>
@@ -2315,6 +2421,21 @@
             <collisionModelServer>	vehicles/czech/Cz03_LT_vz35/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz03_LT_vz35/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	14	</slotId>
+              <anchorPosition>	-0.0044278 -0.0673248 0.689857	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.25 0.25 0.41 0.11	</tiling>
           </camouflage>
@@ -2330,41 +2451,65 @@
         <collisionModelClient>	vehicles/czech/Cz03_LT_vz35/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.008352 0.2899 0.520474	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	0.939 -0.063 0.911 0.017 0.801 0.110 0.412 1.000 0.524 0.395 0.285 0.496 0.254 0.605 0.075	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	6	</slotId>
           <rayStart>	-0.682013 0.326051 -0.0397057	</rayStart>
           <rayEnd>	-0.488248 0.276964 -0.033018	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	7	</slotId>
           <rayStart>	-0.553751 0.312348 -0.490939	</rayStart>
           <rayEnd>	-0.370571 0.26623 -0.42523	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.5	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	8	</slotId>
           <rayStart>	0.553751 0.312348 -0.490939	</rayStart>
           <rayEnd>	0.370571 0.26623 -0.42523	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.5	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	9	</slotId>
           <rayStart>	0.682013 0.326051 -0.0397057	</rayStart>
           <rayEnd>	0.488248 0.276964 -0.033018	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	0.939 -0.063 0.911 0.017 0.801 0.110 0.412 1.000 0.524 0.395 0.285 0.496 0.254 0.605 0.075	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	25	</slotId>
+          <anchorPosition>	0.0067118 0.565967 0.322722	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.415 0.415 0.33 0.08	</tiling>
       </camouflage>

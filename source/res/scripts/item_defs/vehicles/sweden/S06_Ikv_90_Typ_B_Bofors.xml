@@ -72,45 +72,72 @@
       <collisionModelServer>	vehicles/sweden/S06_Ikv_90_Typ_B_Bofors/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/sweden/S06_Ikv_90_Typ_B_Bofors/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/sweden/S06_Ikv_90_Typ_B_Bofors/Ikv_90_Typ_B_Bofors_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.850233 0.913804 -0.244483	</rayStart>
         <rayEnd>	0.850233 0.913804 -0.444482	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.55341 0.439737 -0.467712	</rayStart>
         <rayEnd>	-1.35341 0.439737 -0.467712	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.585	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.55343 0.434087 -1.68509	</rayStart>
         <rayEnd>	-1.35343 0.434087 -1.68509	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.55341 0.439737 -0.467712	</rayStart>
         <rayEnd>	1.35341 0.439737 -0.467712	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.585	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.55343 0.434087 -1.68509	</rayStart>
         <rayEnd>	1.35343 0.434087 -1.68509	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/sweden/S06_Ikv_90_Typ_B_Bofors/Ikv_90_Typ_B_Bofors_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	10	</slotId>
+        <anchorPosition>	-0.000000 0.4177 1.26505	</anchorPosition>
+        <anchorDirection>	0.000000 0.313534 0.949577	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2.3 2.3 0.000000 0.000000	</tiling>
     </camouflage>
@@ -847,6 +874,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 2.03747 -1.30115	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_S06_Ikv_90_Typ_B_Bofors>
     <Chassis_S06_Ikv_90_Typ_B_Bofors_2>
       <userString>	#sweden_vehicles:Chassis_S06_Ikv_90_Typ_B_Bofors_2	</userString>
@@ -1575,6 +1616,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	0.000754329 2.03713 -1.3008	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_S06_Ikv_90_Typ_B_Bofors_2>
   </chassis>
   <turrets0>
@@ -1634,17 +1689,33 @@
             <collisionModelServer>	vehicles/sweden/S06_Ikv_90_Typ_B_Bofors/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S06_Ikv_90_Typ_B_Bofors/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <effects>	shot_main	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.000154353 -0.000788728 2.96293	</rayStart>
               <rayEnd>	-0.0163072 -0.0393298 2.96293	</rayEnd>
               <rayUp>	0.062 0.06 4	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <effects>	shot_main	</effects>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	12	</slotId>
+              <anchorPosition>	0.000077 -0.000394344 2.19841	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_90mm_Bofors_L_53>
         <_90mm_kan_m_F>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
@@ -1672,16 +1743,32 @@
             <collisionModelServer>	vehicles/sweden/S06_Ikv_90_Typ_B_Bofors/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S06_Ikv_90_Typ_B_Bofors/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
               <rayStart>	0.000075 -0.000083 2.37849	</rayStart>
               <rayEnd>	0.0175794 -0.0875289 2.37614	</rayEnd>
               <rayUp>	0.08 0.073 5	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	13	</slotId>
+              <anchorPosition>	0.000037 -0.000041 1.94438	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_90mm_kan_m_F>
       </guns>
       <models>
@@ -1694,10 +1781,15 @@
         <collisionModelClient>	vehicles/sweden/S06_Ikv_90_Typ_B_Bofors/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 -0.0125	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.100 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_S06_Ikv_90_Typ_B_Bofors>
   </turrets0>
   <engines>

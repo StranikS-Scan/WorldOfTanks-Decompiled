@@ -69,23 +69,41 @@
       <collisionModelServer>	vehicles/french/F12_Hotchkiss_H35/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F12_Hotchkiss_H35/Hotchkiss_H35_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.383335 0.138065 2.08082	</rayStart>
         <rayEnd>	0.383335 -0.0909285 1.75285	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.198	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	0.985126 0.646115 0.403392	</rayStart>
         <rayEnd>	0.455357 0.39042 0.285225	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.465	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F12_Hotchkiss_H35/Hotchkiss_H35_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	0.000000 0.516687 -1.33072	</anchorPosition>
+        <anchorDirection>	0.000000 0.361951 -0.932197	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	3 3 0.000000 0.000000	</tiling>
     </camouflage>
@@ -940,6 +958,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	5	</slotId>
+          <anchorPosition>	0.000363166 2.04435 0.165092	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Hotchkiss_H35>
     <Chassis_Hotchkiss_H35_2>
       <userString>	#france_vehicles:Chassis_Hotchkiss_H35_2	</userString>
@@ -1786,6 +1818,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.000434852 2.04435 0.165028	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Hotchkiss_H35_2>
   </chassis>
   <turrets0>
@@ -1858,6 +1904,21 @@
             <collisionModelServer>	vehicles/french/F12_Hotchkiss_H35/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	-0.000484031 -0.0281495 0.223763	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.2 0.7 2.2 4.2	</tiling>
           </camouflage>
@@ -1892,6 +1953,21 @@
             <collisionModelServer>	vehicles/french/F12_Hotchkiss_H35/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.106793 -0.0515524 0.582145	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.2 0.7 2.2 4.2	</tiling>
           </camouflage>
@@ -1924,6 +2000,21 @@
             <collisionModelServer>	vehicles/french/F12_Hotchkiss_H35/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	-0.00244635 0.00179806 0.439854	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.2 0.7 2.2 1.6	</tiling>
           </camouflage>
@@ -1939,26 +2030,44 @@
         <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.108435 0.231121 0.430981	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.054 0.000 1.092 0.000 0.822 -0.073 0.430 0.376 0.439 0.500 0.437 0.500 0.306 0.768 0.196	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.663698 0.411167 0.158666	</rayStart>
           <rayEnd>	-0.289419 0.270073 0.156118	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.214	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.59558 0.391751 0.186059	</rayStart>
           <rayEnd>	0.216607 0.270545 0.144996	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.214	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.054 0.000 1.092 0.000 0.822 -0.073 0.430 0.376 0.439 0.500 0.437 0.500 0.306 0.768 0.196	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 0.645512 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	2 1 0.000000 0.000000	</tiling>
       </camouflage>

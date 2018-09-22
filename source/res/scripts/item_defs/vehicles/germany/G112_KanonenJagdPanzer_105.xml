@@ -84,45 +84,78 @@
       <collisionModelServer>	vehicles/german/G112_KanonenJagdPanzer_105/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G112_KanonenJagdPanzer_105/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G112_KanonenJagdPanzer_105/KanonenJagdPanzer_105_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	15	</slotId>
         <rayStart>	-0.795688 0.574604 2.327	</rayStart>
         <rayEnd>	-0.795688 0.529991 2.28688	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-1.40339 0.541171 0.382211	</rayStart>
         <rayEnd>	-1.23385 0.435076 0.382206	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
+        <rayStart>	-1.40678 0.535563 1.19679	</rayStart>
+        <rayEnd>	-1.23734 0.429318 1.19676	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.52	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	1.40339 0.541171 0.382211	</rayStart>
         <rayEnd>	1.23385 0.435076 0.382206	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.40678 0.535563 1.19679	</rayStart>
         <rayEnd>	1.23734 0.429318 1.19676	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.52	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
-        <rayStart>	-1.40678 0.535563 1.19679	</rayStart>
-        <rayEnd>	-1.23734 0.429318 1.19676	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.52	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G112_KanonenJagdPanzer_105/KanonenJagdPanzer_105_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	12	</slotId>
+        <anchorPosition>	0.000000 0.853205 -0.440929	</anchorPosition>
+        <anchorDirection>	0.000000 0.888381 -0.459107	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	13	</slotId>
+        <anchorPosition>	0.000000 0.853205 -0.440929	</anchorPosition>
+        <anchorDirection>	0.000000 0.888381 -0.459107	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
   </hull>
   <chassis>
     <Chassis_G112_KanonenJagdPanzer_105>
@@ -1312,6 +1345,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	-1.49392 0.59317 -0.0466551	</anchorPosition>
+          <anchorDirection>	-0.929026 0.368875 -0.0290134	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	-0.000000 1.87159 0.592259	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_G112_KanonenJagdPanzer_105>
   </chassis>
   <turrets0>
@@ -1386,16 +1439,46 @@
             <collisionModelServer>	vehicles/german/G112_KanonenJagdPanzer_105/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G112_KanonenJagdPanzer_105/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	5	</slotId>
               <rayStart>	-0.000000 0.0779544 3.70771	</rayStart>
               <rayEnd>	0.0685711 0.0919988 3.70771	</rayEnd>
               <rayUp>	0.104 0.104 5	</rayUp>
               <size>	0.7	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	-0.000000 0.110586 2.23566	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	0.000000 0.292245 0.292245	</anchorPosition>
+              <anchorDirection>	0.000000 0.740559 0.671991	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	14	</slotId>
+              <anchorPosition>	-0.000000 0.110586 2.23566	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1418,10 +1501,15 @@
         <collisionModelClient>	vehicles/german/G112_KanonenJagdPanzer_105/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_G112_KanonenJagdPanzer_105>
   </turrets0>
   <engines>

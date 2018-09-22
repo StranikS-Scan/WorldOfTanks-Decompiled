@@ -65,30 +65,45 @@
       <collisionModelServer>	vehicles/chinese/Ch06_Renault_NC31/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/chinese/Ch06_Renault_NC31/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/chinese/Ch06_Renault_NC31/Renault_NC31_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.00587464 -0.00520698 2.11801	</rayStart>
         <rayEnd>	-0.00587463 -0.141711 1.74202	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.22	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.685168 0.187826 0.404922	</rayStart>
         <rayEnd>	-0.285169 0.187826 0.404922	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.58	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.685168 0.187826 0.404922	</rayStart>
         <rayEnd>	0.285169 0.187826 0.404922	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.58	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/chinese/Ch06_Renault_NC31/Renault_NC31_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	4 4 0.000000 0.000000	</tiling>
     </camouflage>
@@ -690,6 +705,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_Ch06_Renault_NC31_bot>
   </chassis>
   <turrets0>
@@ -752,6 +773,12 @@
             <collisionModelServer>	vehicles/chinese/Ch06_Renault_NC31/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch06_Renault_NC31/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
           </camouflage>
@@ -767,26 +794,38 @@
         <collisionModelClient>	vehicles/chinese/Ch06_Renault_NC31/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.00091 0.250686 0.448522	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.010 0.987 0.000 0.534 0.130 0.500 0.441 0.500 0.500 0.207 0.500 0.234 0.426 0.277	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.690999 0.236423 0.00941993	</rayStart>
           <rayEnd>	-0.298747 0.158351 0.00300072	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.690999 0.236423 0.00941993	</rayStart>
           <rayEnd>	0.298747 0.158351 0.00300072	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.010 0.987 0.000 0.534 0.130 0.500 0.441 0.500 0.500 0.207 0.500 0.234 0.426 0.277	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
     </Turret_1_Ch06_Renault_NC31_bot>
   </turrets0>
   <engines>

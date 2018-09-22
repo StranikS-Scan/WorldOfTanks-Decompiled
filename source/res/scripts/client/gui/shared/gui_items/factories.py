@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/factories.py
+import logging
 from debug_utils import LOG_WARNING
 from items import vehicles, EQUIPMENT_TYPES, getTypeOfCompactDescr
 from items.components.c11n_constants import CustomizationType, DecalType
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.customization.c11n_items import Customization, Paint, Camouflage, Modification, Decal, Emblem, Inscription, Style
+from gui.shared.gui_items.customization.c11n_items import Customization, Paint, Camouflage, Modification, Decal, Emblem, Inscription, Style, ProjectionDecal
 from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.dossier import TankmanDossier, AccountDossier, VehicleDossier
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChassis, VehicleEngine, VehicleRadio, VehicleTurret, VehicleFuelTank
@@ -13,6 +14,7 @@ from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.badge import Badge
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+_logger = logging.getLogger(__name__)
 _NONE_GUI_ITEM_TYPE = 0
 
 class GuiItemFactory(IGuiItemsFactory):
@@ -101,13 +103,19 @@ class GuiItemFactory(IGuiItemsFactory):
             else:
                 LOG_WARNING('Unknown decal type', descriptor.type)
                 cls = Decal
+        elif descriptor.itemType == CustomizationType.PROJECTION_DECAL:
+            cls = ProjectionDecal
         else:
             LOG_WARNING('Unknown customization type', descriptor.itemType)
             cls = Customization
         return cls(intCompactDescr, proxy)
 
-    def createOutfit(self, strCompactDescr=None, isEnabled=False, isInstalled=False, proxy=None):
-        return Outfit(strCompactDescr, isEnabled, isInstalled, proxy)
+    def createOutfit(self, strCompactDescr=None, component=None, isEnabled=False, isInstalled=False, proxy=None):
+        if strCompactDescr is not None and component is not None:
+            _logger.error("'strCompactDescr' and 'component' arguments are mutually exclusive!")
+            return
+        else:
+            return Outfit(strCompactDescr=strCompactDescr, component=component, isEnabled=isEnabled, isInstalled=isInstalled, proxy=proxy)
 
 
 _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
@@ -134,4 +142,5 @@ _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.MODIFICATION: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.DECAL: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.STYLE: GuiItemFactory.createCustomization,
+ GUI_ITEM_TYPE.PROJECTION_DECAL: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.OUTFIT: GuiItemFactory.createOutfit}

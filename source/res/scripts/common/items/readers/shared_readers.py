@@ -5,7 +5,48 @@ from constants import IS_CLIENT, IS_BOT
 from items import _xml
 from items.components import component_constants
 from items.components import shared_components
+from items.components import c11n_constants
 _ALLOWED_EMBLEM_SLOTS = component_constants.ALLOWED_EMBLEM_SLOTS
+_ALLOWED_SLOTS_ANCHORS = component_constants.ALLOWED_SLOTS_ANCHORS
+
+def _readEmblemSlot(ctx, subsection, slotType):
+    descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), slotType, subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'))
+    return descr
+
+
+def _readSlotsAnchor(ctx, subsection, slotType):
+    applyTo = _xml.readIntOrNone(ctx, subsection, 'applyTo')
+    if applyTo is not None:
+        if applyTo not in c11n_constants.ApplyArea.RANGE:
+            _xml.raiseWrongSection(ctx, 'applyTo')
+    showOn = _xml.readIntOrNone(ctx, subsection, 'showOn')
+    if showOn is not None:
+        availableShowOnRegions = c11n_constants.ApplyArea.HULL | c11n_constants.ApplyArea.TURRET | c11n_constants.ApplyArea.GUN
+        if showOn | availableShowOnRegions != availableShowOnRegions:
+            _xml.raiseWrongSection(ctx, 'showOn')
+    descr = shared_components.SlotsAnchor(type=slotType, anchorPosition=_xml.readVector3(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3(ctx, subsection, 'anchorDirection'), applyTo=applyTo, slotId=_xml.readInt(ctx, subsection, 'slotId'), position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3OrNone(ctx, subsection, 'scaleFactors'), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), showOn=showOn)
+    return descr
+
+
+def readCustomizationSlots(xmlCtx, section, subsectionName):
+    slots = []
+    anchors = []
+    slot_tag_name = 'slot'
+    for sname, subsection in _xml.getChildren(xmlCtx, section, subsectionName):
+        if sname != slot_tag_name:
+            _xml.raiseWrongXml(xmlCtx, 'customizationSlots/{}'.format(sname), 'expected {}'.format(slot_tag_name))
+        ctx = (xmlCtx, 'customizationSlots/{}'.format(sname))
+        slotType = _xml.readString(ctx, subsection, 'slotType')
+        if slotType in component_constants.ALLOWED_EMBLEM_SLOTS:
+            descr = _readEmblemSlot(ctx, subsection, slotType)
+            slots.append(descr)
+        if slotType in component_constants.ALLOWED_SLOTS_ANCHORS:
+            descr = _readSlotsAnchor(ctx, subsection, slotType)
+            anchors.append(descr)
+        _xml.raiseWrongXml(xmlCtx, 'customizationSlots/{}/{}'.format(sname, slotType), 'expected value is {}'.format(_ALLOWED_EMBLEM_SLOTS + _ALLOWED_SLOTS_ANCHORS))
+
+    return (tuple(slots), tuple(anchors))
+
 
 def readEmblemSlots(xmlCtx, section, subsectionName):
     slots = []
@@ -16,7 +57,7 @@ def readEmblemSlots(xmlCtx, section, subsectionName):
         descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), _ALLOWED_EMBLEM_SLOTS[_ALLOWED_EMBLEM_SLOTS.index(sname)], subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'))
         slots.append(descr)
 
-    return tuple(slots)
+    return (tuple(slots), tuple())
 
 
 def readLodDist(xmlCtx, section, subsectionName, cache):

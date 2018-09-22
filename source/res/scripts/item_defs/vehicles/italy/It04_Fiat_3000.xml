@@ -66,23 +66,41 @@
       <collisionModelServer>	vehicles/italy/It04_Fiat_3000/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/italy/It04_Fiat_3000/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/italy/It04_Fiat_3000/Fiat_3000_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.00448652 0.0975657 1.49578	</rayStart>
         <rayEnd>	-0.00448652 -0.0889956 1.42371	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.630999 0.239171 0.202229	</rayStart>
         <rayEnd>	-0.431001 0.239171 0.202229	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.536	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/italy/It04_Fiat_3000/Fiat_3000_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	-0.000000 0.507889 -1.1411	</anchorPosition>
+        <anchorDirection>	0.000000 0.359311 -0.933218	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2 1 0.000000 0.000000	</tiling>
     </camouflage>
@@ -763,6 +781,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	-0.000403908 1.9907 0.346841	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_It04_Fiat_3000>
   </chassis>
   <turrets0>
@@ -825,6 +857,21 @@
             <collisionModelServer>	vehicles/italy/It04_Fiat_3000/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It04_Fiat_3000/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	-0.000000 0.00666106 0.293236	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </Cannone_da_37_20>
         <Cannone_da_37_40>	shared	  <maxAmmo>	68	</maxAmmo>
           <unlocks>
@@ -853,6 +900,21 @@
             <collisionModelServer>	vehicles/italy/It04_Fiat_3000/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It04_Fiat_3000/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	5	</slotId>
+              <anchorPosition>	-0.0125 -0.0473146 0.57337	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </Cannone_da_37_40>
       </guns>
       <models>
@@ -865,26 +927,44 @@
         <collisionModelClient>	vehicles/italy/It04_Fiat_3000/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.196663 0.298249 0.430145	</gunPosition>
-      <emblemSlots>
-        <player>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.983 0.000 1.006 0.000 0.650 0.038 0.625 0.472 0.623 0.500 0.166 0.500 0.180 0.420 0.217	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.530688 0.312762 0.262346	</rayStart>
           <rayEnd>	-0.361626 0.288462 0.158295	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.530688 0.312762 0.262346	</rayStart>
           <rayEnd>	0.361626 0.288462 0.158295	</rayEnd>
           <rayUp>	-0.0180944 0.9994 0.0295397	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.983 0.000 1.006 0.000 0.650 0.038 0.625 0.472 0.623 0.500 0.166 0.500 0.180 0.420 0.217	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.000000 0.585211 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
       </camouflage>

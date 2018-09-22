@@ -99,25 +99,26 @@ class HangarCameraManager(object):
     def __init__(self, spaceId):
         self.__spaceId = spaceId
         self.__cam = None
-        self.__selectedEmblemInfo = None
-        self.__prevDirection = 0.0
-        self.__locatedOnEmbelem = False
         self.__cameraIdle = None
         self.__cameraParallax = None
         self.__yawCameraFilter = None
         self.__camConstraints = [ None for _ in range(3) ]
         self.__isMouseDown = False
         self.__currentEntityId = None
+        self.__movementDisabled = False
+        self.__isPreviewMode = False
         return
 
     def init(self):
         self.__setupCamera()
+        self.__isPreviewMode = False
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreated
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
         self.settingsCore.onSettingsChanged += self.__handleSettingsChange
         g_eventBus.addListener(CameraRelatedEvents.IDLE_CAMERA, self.__handleIdleCameraActivation)
         g_eventBus.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__handleVehicleLoading)
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
+        g_eventBus.addListener(CameraRelatedEvents.FORCE_DISABLE_CAMERA_MOVEMENT, self.__handleDisableMovement)
 
     def destroy(self):
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreated
@@ -126,6 +127,7 @@ class HangarCameraManager(object):
         g_eventBus.removeListener(CameraRelatedEvents.IDLE_CAMERA, self.__handleIdleCameraActivation)
         g_eventBus.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__handleVehicleLoading)
         g_eventBus.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
+        g_eventBus.removeListener(CameraRelatedEvents.FORCE_DISABLE_CAMERA_MOVEMENT, self.__handleDisableMovement)
         if self.__cameraIdle:
             self.__cameraIdle.destroy()
             self.__cameraIdle = None
@@ -150,7 +152,7 @@ class HangarCameraManager(object):
             g_keyEventHandlers.remove(self.__handleKeyEvent)
             g_eventBus.removeListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
 
-    def setCameraLocation(self, targetPos=None, pivotPos=None, yaw=None, pitch=None, dist=None, camConstraints=None, ignoreConstraints=False, smothiedTransition=True):
+    def setCameraLocation(self, targetPos=None, pivotPos=None, yaw=None, pitch=None, dist=None, camConstraints=None, ignoreConstraints=False, smothiedTransition=True, previewMode=False):
         from gui.ClientHangarSpace import hangarCFG
         cfg = hangarCFG()
         sourceMat = Math.Matrix(self.__cam.source)
@@ -174,7 +176,7 @@ class HangarCameraManager(object):
             camPitchConstr = self.__camConstraints[0]
             startPitch, endPitch = camPitchConstr
             pitch = mathUtils.clamp(math.radians(startPitch), math.radians(endPitch), pitch)
-            distConstr = cfg['preview_cam_dist_constr'] if self.__selectedEmblemInfo else self.__camConstraints[2]
+            distConstr = cfg['preview_cam_dist_constr'] if self.__isPreviewMode else self.__camConstraints[2]
             minDist, maxDist = distConstr
             dist = mathUtils.clamp(minDist, maxDist, dist)
         mat = Math.Matrix()
@@ -188,7 +190,17 @@ class HangarCameraManager(object):
             self.__cam.pivotPosition = pivotPos
         if not smothiedTransition:
             self.__cam.forceUpdate()
+        self.setPreviewMode(previewMode)
         return
+
+    def setPreviewMode(self, previewMode):
+        self.__isPreviewMode = previewMode
+
+    def isPreviewMode(self):
+        return self.__isPreviewMode
+
+    def getCurrentEntityId(self):
+        return self.__currentEntityId
 
     def getCameraLocation(self):
         sourceMat = Math.Matrix(self.__cam.source)
@@ -201,53 +213,11 @@ class HangarCameraManager(object):
          'camConstraints': self.__camConstraints,
          'pivotDist': self.__getCameraPivotDistance()}
 
-    def locateCameraToPreview(self):
-        from gui.ClientHangarSpace import hangarCFG
-        cfg = hangarCFG()
-        self.setCameraLocation(targetPos=cfg['preview_cam_start_target_pos'], pivotPos=cfg['preview_cam_pivot_pos'], yaw=math.radians(cfg['preview_cam_start_angles'][0]), pitch=math.radians(cfg['preview_cam_start_angles'][1]), dist=cfg['preview_cam_start_dist'])
-
-    def locateCameraToCustomizationPreview(self):
-        from gui.ClientHangarSpace import customizationHangarCFG, hangarCFG
-        cfg = customizationHangarCFG()
-        hangarConfig = hangarCFG()
-        self.setCameraLocation(targetPos=cfg['cam_start_target_pos'], pivotPos=cfg['cam_pivot_pos'], yaw=math.radians(cfg['cam_start_angles'][0]), pitch=math.radians(cfg['cam_start_angles'][1]), dist=cfg['cam_start_dist'], camConstraints=[hangarConfig['cam_pitch_constr'], hangarConfig['cam_yaw_constr'], cfg['cam_dist_constr']])
-
-    def locateCameraToStartState(self):
-        from gui.ClientHangarSpace import hangarCFG
-        cfg = hangarCFG()
-        self.setCameraLocation(targetPos=cfg['cam_start_target_pos'], pivotPos=cfg['cam_pivot_pos'], yaw=math.radians(cfg['cam_start_angles'][0]), pitch=math.radians(cfg['cam_start_angles'][1]), dist=cfg['cam_start_dist'], camConstraints=[cfg['cam_pitch_constr'], cfg['cam_yaw_constr'], cfg['cam_dist_constr']])
-
-    def locateCameraOnEmblem(self, onHull, emblemType, emblemIdx, relativeSize=0.5):
-        self.__selectedEmblemInfo = (onHull,
-         emblemType,
-         emblemIdx,
-         relativeSize)
-        vEntity = BigWorld.entity(self.__currentEntityId)
-        from HangarVehicle import HangarVehicle
-        if not isinstance(vEntity, HangarVehicle):
-            return False
-        else:
-            emblemPositionParams = vEntity.appearance.getEmblemPos(onHull, emblemType, emblemIdx)
-            if emblemPositionParams is None:
-                return False
-            position = emblemPositionParams.position
-            direction = emblemPositionParams.direction
-            emblemPositionParams = emblemPositionParams.emblemDescription
-            from gui.ClientHangarSpace import hangarCFG
-            cfg = hangarCFG()
-            emblemSize = emblemPositionParams[3] * cfg['v_scale']
-            halfF = emblemSize / (2 * relativeSize)
-            dist = halfF / math.tan(BigWorld.projection().fov / 2)
-            self.setCameraLocation(position, Math.Vector3(0, 0, 0), direction.yaw, -direction.pitch, dist, None, False)
-            self.__locatedOnEmbelem = True
-            return True
-
-    def clearSelectedEmblemInfo(self):
-        self.__selectedEmblemInfo = None
-        return
+    def getCameraPosition(self):
+        return self.__cam.position
 
     def __updateCameraByMouseMove(self, dx, dy, dz):
-        if self.__cam is not BigWorld.camera():
+        if self.__cam is not BigWorld.camera() or self.__movementDisabled:
             return
         sourceMat = Math.Matrix(self.__cam.source)
         yaw = sourceMat.yaw
@@ -263,10 +233,9 @@ class HangarCameraManager(object):
         camPitchConstr = self.__camConstraints[0]
         startPitch, endPitch = camPitchConstr
         pitch = mathUtils.clamp(math.radians(startPitch), math.radians(endPitch), pitch)
-        distConstr = cfg['preview_cam_dist_constr'] if self.__selectedEmblemInfo else self.__camConstraints[2]
+        distConstr = cfg['preview_cam_dist_constr'] if self.__isPreviewMode else self.__camConstraints[2]
         minDist, maxDist = distConstr
         dist = mathUtils.clamp(minDist, maxDist, dist)
-        self.__locatedOnEmbelem = False
         mat = Math.Matrix()
         mat.setRotateYPR((yaw, pitch, 0.0))
         self.__cam.source = mat
@@ -358,6 +327,9 @@ class HangarCameraManager(object):
         if ctx['state'] != CameraMovementStates.FROM_OBJECT:
             self.__currentEntityId = ctx['entityId']
             self.__updateCameraDistanceLimits()
+
+    def __handleDisableMovement(self, event):
+        self.__movementDisabled = event.ctx['disable']
 
     def __updateCameraDistanceLimits(self):
         from gui.ClientHangarSpace import hangarCFG

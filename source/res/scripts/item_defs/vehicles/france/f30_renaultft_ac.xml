@@ -69,45 +69,72 @@
       <collisionModelServer>	vehicles/french/F30_RenaultFT_AC/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F30_RenaultFT_AC/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F30_RenaultFT_AC/RenaultFT_AC_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.000883302 -0.126359 1.6792	</rayStart>
         <rayEnd>	-0.000883261 -0.208263 1.45361	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	1.02714 1.27255 -0.0957642	</rayStart>
         <rayEnd>	0.427151 1.27255 -0.0957642	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.747105 0.869372 -0.0032959	</rayStart>
         <rayEnd>	0.707105 0.869372 -0.0032959	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.7	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-0.469907 0.905648 0.48405	</rayStart>
         <rayEnd>	-0.469899 0.902507 0.444173	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.5	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	-1.02714 1.27255 -0.0957642	</rayStart>
         <rayEnd>	-0.427151 1.27255 -0.0957642	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F30_RenaultFT_AC/RenaultFT_AC_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.000000 0.558895 -1.47351	</anchorPosition>
+        <anchorDirection>	0.000000 0.354641 -0.935002	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -424,6 +451,20 @@
           <maxOffset>	0.0326732	</maxOffset>
         </group>
       </groundNodes>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	-0.000000 2.55873 -0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_RenaultFT_AC>
     <Chassis_RenaultFT_AC_2>
       <userString>	#france_vehicles:Chassis_RenaultFT_AC_2	</userString>
@@ -732,13 +773,27 @@
           <maxOffset>	0.0326732	</maxOffset>
         </group>
       </groundNodes>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000041 2.55906 -0.000001	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_RenaultFT_AC_2>
   </chassis>
   <turrets0>
     <Turret_1_RenaultFT_AC>
       <ceilless>	true	</ceilless>
       <userString>	#france_vehicles:Turret_1_RenaultFT_AC	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	2	</level>
       <price>	120	</price>
       <notInShop>	true	</notInShop>
@@ -803,6 +858,21 @@
             <collisionModelServer>	vehicles/french/F30_RenaultFT_AC/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F30_RenaultFT_AC/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	6	</slotId>
+              <anchorPosition>	-0.000021 -0.0298831 0.72401	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.8 0.8 0.000000 1.7	</tiling>
           </camouflage>
@@ -841,6 +911,21 @@
             <collisionModelServer>	vehicles/french/F30_RenaultFT_AC/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F30_RenaultFT_AC/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.000113349 0.0732431 0.849222	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 1.7	</tiling>
           </camouflage>
@@ -883,6 +968,21 @@
             <collisionModelServer>	vehicles/french/F30_RenaultFT_AC/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F30_RenaultFT_AC/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	0.00023988 -0.0300965 0.635476	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.8 0.8 1.9 0.8	</tiling>
           </camouflage>
@@ -898,10 +998,15 @@
         <collisionModelClient>	vehicles/french/F30_RenaultFT_AC/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.228641 0.000000	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.400 -0.070 1.100 0.000 2.000 0.066 0.000 0.554 0.500 0.500 0.000 0.500 0.000 0.540 0.020	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
       </camouflage>

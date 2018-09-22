@@ -71,16 +71,25 @@
       <collisionModelServer>	vehicles/sweden/S23_Strv_81_sabaton/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/sweden/S23_Strv_81_sabaton/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/sweden/S23_Strv_81_sabaton/Strv_81_sabaton_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.640202 0.32245 2.7029	</rayStart>
         <rayEnd>	0.640202 0.217778 2.63497	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/sweden/S23_Strv_81_sabaton/Strv_81_sabaton_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_S23_Strv_81_sabaton>
@@ -1143,6 +1152,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_S23_Strv_81_sabaton>
   </chassis>
   <turrets0>
@@ -1220,16 +1235,25 @@
             <collisionModelServer>	vehicles/sweden/S23_Strv_81_sabaton/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S23_Strv_81_sabaton/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	3	</slotId>
               <rayStart>	0.0708198 0.0180447 3.3192	</rayStart>
               <rayEnd>	-0.0529365 0.00234985 3.31628	</rayEnd>
               <rayUp>	0.078 0.076 5	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1246,19 +1270,28 @@
         <collisionModelClient>	vehicles/sweden/S23_Strv_81_sabaton/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0708 0.446491 1.06242	</gunPosition>
-      <emblemSlots>
-        <fixedInscription>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.126 0.119 1.119 0.000 0.726 0.163 0.678 0.648 0.541 0.504 0.270 0.507 0.144 0.000 0.222	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	fixedInscription	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.912988 0.995604 -0.658022	</rayStart>
           <rayEnd>	-0.794895 0.836418 -0.631364	</rayEnd>
           <rayUp>	0.695141 0.705913 0.135887	</rayUp>
           <emblemId>	20	</emblemId>
           <size>	0.945	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </fixedInscription>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.126 0.119 1.119 0.000 0.726 0.163 0.678 0.648 0.541 0.504 0.270 0.507 0.144 0.000 0.222	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
     </Turret_1_S23_Strv_81_sabaton>
   </turrets0>
   <engines>

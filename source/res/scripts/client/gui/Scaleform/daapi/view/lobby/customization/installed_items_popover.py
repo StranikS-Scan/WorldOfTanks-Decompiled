@@ -12,7 +12,7 @@ from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
 from CurrentVehicle import g_currentVehicle
-from gui.customization.shared import isServiceItem, isOutfitVisuallyEmpty
+from gui.customization.shared import isOutfitVisuallyEmpty
 _PopoverHeadersVO = namedtuple('_PopoverHeadersVO', ('title', 'checkBoxText', 'counterText', 'currentSeasonImage'))
 _RegionId = namedtuple('_RegionId', ('areaId', 'slotType', 'regionIdx'))
 _DisplayedItemsVO = namedtuple('_DisplayedItemsVO', ('id', 'icon', 'userName', 'numItems', 'isHistoric', 'price', 'isApplied', 'isWide', 'itemsList'))
@@ -29,7 +29,7 @@ class InstalledItemsPopover(CustomizationItemsPopoverMeta):
 
     def remove(self, intCD, itemsList):
         for item in itemsList:
-            self.__ctx.removeItemFromRegion(self.__ctx.currentSeason, item.areaId, item.slotType, item.regionIdx)
+            self.__ctx.removeItemFromSlot(self.__ctx.currentSeason, item)
 
     def removeAll(self):
 
@@ -92,7 +92,7 @@ class InstalledItemsPopover(CustomizationItemsPopoverMeta):
         self.as_showClearMessageS(isClear, text_styles.main(clearMessage))
         self.as_setHeaderDataS(_PopoverHeadersVO(title, checkBoxText, counterText, currentSeasonImage)._asdict())
 
-    def __update(self):
+    def __update(self, *args):
         self._assignedDP.rebuildList(self._isNonHistoric)
         self.__setHeader()
 
@@ -152,7 +152,7 @@ class InstalledItemsPopoverDataProvider(SortableDAAPIDataProvider):
                 for idx in range(slot.capacity()):
                     item = slot.getItem(idx)
                     if item:
-                        if isServiceItem(item) and hasCustomDefaultCamouflage:
+                        if item.isHiddenInUI() and hasCustomDefaultCamouflage:
                             continue
                         if not isNonHistoric or not item.isHistorical():
                             if item.intCD not in notModifiedItemsGroups:

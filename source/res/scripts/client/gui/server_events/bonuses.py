@@ -960,10 +960,11 @@ class CustomizationsBonus(SimpleBonus):
                     substitutes.append(substituteItem)
                 compensation = customizationItem.get('customCompensation')
                 money = Money.makeMoney(compensation)
-                for currency, value in money.iteritems():
-                    if value:
-                        cls = _BONUSES.get(currency)
-                        bonuses.append(cls(currency, value * compensationCount, isCompensation=True))
+                if money is not None:
+                    for currency, value in money.iteritems():
+                        if value:
+                            cls = _BONUSES.get(currency)
+                            bonuses.append(cls(currency, value * compensationCount, isCompensation=True))
 
             substitutes.append(copy.deepcopy(customizationItem))
 

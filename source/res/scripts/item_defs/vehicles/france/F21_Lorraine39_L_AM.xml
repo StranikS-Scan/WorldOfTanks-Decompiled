@@ -71,45 +71,72 @@
       <collisionModelServer>	vehicles/french/F21_Lorraine39_L_AM/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F21_Lorraine39_L_AM/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F21_Lorraine39_L_AM/Lorraine39_L_AM_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.223222 0.798438 1.08195	</rayStart>
         <rayEnd>	-0.223222 0.517906 0.796818	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.2	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.000836372 0.532102 1.34665	</rayStart>
         <rayEnd>	-0.000836372 0.251452 1.06163	</rayEnd>
         <rayUp>	0.228428 -0.0272374 -0.97318	</rayUp>
         <size>	0.481	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-0.984808 0.491161 -0.503436	</rayStart>
         <rayEnd>	-0.584808 0.49116 -0.503436	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	0.984858 0.451861 -1.34621	</rayStart>
         <rayEnd>	0.584855 0.451861 -1.34621	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.7	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	0.984808 0.491161 -0.503436	</rayStart>
         <rayEnd>	0.584808 0.49116 -0.503436	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F21_Lorraine39_L_AM/Lorraine39_L_AM_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.000000 0.762972 0.724308	</anchorPosition>
+        <anchorDirection>	0.000000 0.725244 0.688492	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -1058,6 +1085,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.000000 1.42592 -0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Lorraine39_L_AM>
     <Chassis_Lorraine39_L_AM_2>
       <userString>	#france_vehicles:Chassis_Lorraine39_L_AM_2	</userString>
@@ -1998,13 +2039,27 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000194458 1.42561 -0.000005	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Lorraine39_L_AM_2>
   </chassis>
   <turrets0>
     <Turret_1_Lorraine39_L_AM>
       <ceilless>	true	</ceilless>
       <userString>	#france_vehicles:Turret_1_Lorraine39_L_AM	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	3	</level>
       <notInShop>	true	</notInShop>
       <price>	120	</price>
@@ -2060,6 +2115,21 @@
             <collisionModelServer>	vehicles/french/F21_Lorraine39_L_AM/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F21_Lorraine39_L_AM/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	0.017645 0.033548 0.663772	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </Canon_de_105_court_mle_1935B>
         <Canon_de_105_court_mle_1934S>	shared	  <unlocks>
             <vehicle>	F66_AMX_Ob_Am105	  <cost>	3100	</cost>
@@ -2094,6 +2164,21 @@
             <collisionModelServer>	vehicles/french/F21_Lorraine39_L_AM/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F21_Lorraine39_L_AM/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	6	</slotId>
+              <anchorPosition>	0.000000 0.0359197 0.828691	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </Canon_de_105_court_mle_1934S>
       </guns>
       <models>
@@ -2106,10 +2191,15 @@
         <collisionModelClient>	vehicles/french/F21_Lorraine39_L_AM/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.678329 -0.227076	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.067 0.068 0.966 0.000 1.418 0.159 0.500 0.150 0.500 0.500 0.000 0.500 0.000 0.100 0.802	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
       </camouflage>

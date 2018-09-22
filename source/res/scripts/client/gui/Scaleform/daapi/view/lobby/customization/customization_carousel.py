@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_carousel.py
-from gui.Scaleform.daapi.view.lobby.customization.shared import TABS_ITEM_MAPPING, TYPE_TO_TAB_IDX, TYPES_ORDER
+from collections import defaultdict
+from gui.Scaleform.daapi.view.lobby.customization.shared import TABS_ITEM_MAPPING, TYPE_TO_TAB_IDX, TYPES_ORDER, C11nTabs
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -11,8 +12,7 @@ from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
-from gui.customization.shared import createCustomizationBaseRequestCriteria, isServiceItem
-from CurrentVehicle import g_currentVehicle
+from gui.customization.shared import createCustomizationBaseRequestCriteria
 
 def comparisonKey(item):
     return (TYPES_ORDER.index(item.itemTypeID), item.groupID, item.id)
@@ -57,7 +57,9 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._proxy = proxy
         self._currentlyApplied = set()
         self._allSeasonAndTabFilterData = {}
-        hasCustomDefaultCamouflage = g_currentVehicle.item.descriptor.type.hasCustomDefaultCamouflage
+        visibleTabs = defaultdict(set)
+        c11nContext = self.service.getCtx()
+        anchorsData = c11nContext.hangarSpace.getSlotPositions()
         requirement = createCustomizationBaseRequestCriteria(self._currentVehicle.item, self.eventsCache.questsProgress, self._proxy.getAppliedItems())
         allItems = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, requirement)
         for tabIndex in TABS_ITEM_MAPPING.iterkeys():
@@ -66,7 +68,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
                 self._allSeasonAndTabFilterData[tabIndex][season] = CustomizationSeasonAndTypeFilterData()
 
         for item in sorted(allItems.itervalues(), key=comparisonKey):
-            if isServiceItem(item) and hasCustomDefaultCamouflage:
+            if item.isHiddenInUI():
                 continue
             groupName = item.groupUserName
             tabIndex = TYPE_TO_TAB_IDX.get(item.itemTypeID)
@@ -76,7 +78,21 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
                     if groupName and groupName not in seasonAndTabData.allGroups:
                         seasonAndTabData.allGroups.append(groupName)
                     seasonAndTabData.itemCount += 1
+                    if tabIndex not in C11nTabs.VISIBLE:
+                        continue
+                    if item.itemTypeID in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM):
+                        for areaData in anchorsData.itervalues():
+                            if areaData.get(item.itemTypeID):
+                                hasSlots = True
+                                break
+                        else:
+                            hasSlots = False
 
+                        if not hasSlots:
+                            continue
+                    visibleTabs[seasonType].add(tabIndex)
+
+        c11nContext.updateVisibleTabsList(visibleTabs)
         for tabIndex in TABS_ITEM_MAPPING.iterkeys():
             for seasonType in SeasonType.COMMON_SEASONS:
                 seasonAndTabData = self._allSeasonAndTabFilterData[tabIndex][seasonType]
@@ -215,6 +231,8 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._customizationBookmarks = []
         lastGroupID = None
         for idx, item in enumerate(sorted(allItems.itervalues(), key=comparisonKey)):
+            if item.isHiddenInUI():
+                continue
             groupID = item.groupID
             if item.intCD == self._selectIntCD:
                 self._selectedIdx = len(self._customizationItems)

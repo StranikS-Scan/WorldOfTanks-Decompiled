@@ -13,7 +13,8 @@ class STORE(object):
     BUYVEHICLEWINDOW_BOOTCAMP_TOPCOMMANDERFREE = '#store:buyVehicleWindow/bootcamp/topCommanderFree'
     BUYVEHICLEWINDOW_SLOT_1 = '#store:buyVehicleWindow/slot/1'
     BUYVEHICLEWINDOW_SLOT_2 = '#store:buyVehicleWindow/slot/2'
-    BUYVEHICLEWINDOW_CHECKBOX_WITHOUTCREW = '#store:buyVehicleWindow/checkBox/withoutCrew'
+    BUYVEHICLEWINDOW_CHECKBOX_BUY_WITHOUTCREW = '#store:buyVehicleWindow/checkBox/buy/withoutCrew'
+    BUYVEHICLEWINDOW_CHECKBOX_RESTORE_WITHOUTCREW = '#store:buyVehicleWindow/checkBox/restore/withoutCrew'
     BUYVEHICLEWINDOW_COUNTCREWLBL = '#store:buyVehicleWindow/countCrewLbl'
     BUYVEHICLEWINDOW_EQUIPMENT_AMMO = '#store:buyVehicleWindow/equipment/ammo'
     BUYVEHICLEWINDOW_EQUIPMENT_SLOT = '#store:buyVehicleWindow/equipment/slot'
@@ -37,8 +38,9 @@ class STORE(object):
     RENTALTERMSELECTIONPOPOVER_TERMSLOT30DAYS = '#store:rentalTermSelectionPopover/termSlot30Days'
     RENTALTERMSELECTIONPOPOVER_TERMSLOTANY = '#store:rentalTermSelectionPopover/termSlotAny'
     RENTALTERMSELECTIONPOPOVER_TERMSLOTUNLIM = '#store:rentalTermSelectionPopover/termSlotUnlim'
-    CONGRADULATIONANIM_TITLELABEL = '#store:congradulationAnim/titleLabel'
-    CONGRADULATIONANIM_SHOWPREVIEWBTN = '#store:congradulationAnim/showPreviewBtn'
+    CONGRATULATIONANIM_BUYINGLABEL = '#store:congratulationAnim/buyingLabel'
+    CONGRATULATIONANIM_RESTORELABEL = '#store:congratulationAnim/restoreLabel'
+    CONGRATULATIONANIM_SHOWPREVIEWBTN = '#store:congratulationAnim/showPreviewBtn'
     RENTALTERMSELECTIONPOPOVER_TERMSLOTALLDAYS_ENUM = (RENTALTERMSELECTIONPOPOVER_TERMSLOT3DAYS, RENTALTERMSELECTIONPOPOVER_TERMSLOT7DAYS, RENTALTERMSELECTIONPOPOVER_TERMSLOT30DAYS)
     BUYVEHICLEWINDOW_SLOT_ENUM = (BUYVEHICLEWINDOW_SLOT_0, BUYVEHICLEWINDOW_SLOT_1, BUYVEHICLEWINDOW_SLOT_2)
 

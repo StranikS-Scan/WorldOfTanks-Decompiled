@@ -86,45 +86,78 @@
       <collisionModelServer>	vehicles/russian/R93_Object263/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R93_Object263/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R93_Object263/Object263_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.633728 0.535967 2.98678	</rayStart>
         <rayEnd>	0.633728 0.362287 2.88761	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	1.77742 0.810933 -2.98236	</rayStart>
         <rayEnd>	1.62342 0.810933 -2.98236	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.84	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.75992 0.921956 -0.929565	</rayStart>
         <rayEnd>	-1.63991 0.921956 -0.929565	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	-1.77742 0.810933 -2.98236	</rayStart>
         <rayEnd>	-1.62342 0.810933 -2.98236	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.84	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.76047 0.663244 -1.05597	</rayStart>
         <rayEnd>	1.64047 0.663244 -1.05597	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R93_Object263/Object263_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	13	</slotId>
+        <anchorPosition>	-0.000091 0.36379 3.08657	</anchorPosition>
+        <anchorDirection>	0.000000 0.573577 0.819152	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	15	</slotId>
+        <anchorPosition>	-0.000090 0.372968 3.0705	</anchorPosition>
+        <anchorDirection>	0.000000 0.573576 0.819152	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -972,13 +1005,33 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	-1.7082 0.541418 -0.04581	</anchorPosition>
+          <anchorDirection>	-0.952952 0.302041 -0.025556	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	0.000000 2.40087 -0.79082	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Object263B>
   </chassis>
   <turrets0>
     <Turret_1_Object263B>
       <ceilless>	true	</ceilless>
       <userString>	#ussr_vehicles:Turret_1_Object263B	</userString>
-      <tags>	cannotDetach gunCarriage	</tags>
+      <tags>	cannotDetach	</tags>
       <level>	10	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -1034,16 +1087,46 @@
             <collisionModelServer>	vehicles/russian/R93_Object263/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R93_Object263/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.000043 -0.000697875 2.75791	</rayStart>
               <rayEnd>	0.278495 -0.0873639 2.75348	</rayEnd>
               <rayUp>	0.14 0.135 5	</rayUp>
               <size>	0.733	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	-0.000022 -0.00034114 3.3933	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	0.000000 0.0597155 -0.835943	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	-0.000022 -0.00034114 3.3933	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	1 0.9 0.000000 0.2	</tiling>
           </camouflage>
@@ -1058,11 +1141,24 @@
         <collisionModelServer>	vehicles/russian/R93_Object263/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R93_Object263/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.848047 -0.300765	</gunPosition>
-      <emblemSlots></emblemSlots>
+      <gunPosition>	0.000000 0.84803 -0.300762	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.913 0.238 0.831 -0.025 0.906 -0.087 0.500 0.100 0.000 0.500 0.009 0.500 0.758 0.047 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_07	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	0.000000 0.000000 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Turret_1_Object263B>
   </turrets0>
   <engines>

@@ -78,45 +78,72 @@
       <collisionModelServer>	vehicles/german/G93_GW_Mk_VIe/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G93_GW_Mk_VIe/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G93_GW_Mk_VIe/GW_Mk_VIe_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.403919 0.380556 1.77151	</rayStart>
         <rayEnd>	0.404732 0.213983 1.66082	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.01474 0.847314 -1.10003	</rayStart>
         <rayEnd>	-0.960585 0.821555 -1.09804	</rayEnd>
         <rayUp>	0.00120677 0.998882 -0.0472547	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.04105 0.918004 -0.408935	</rayStart>
         <rayEnd>	-0.933239 0.865503 -0.404515	</rayEnd>
         <rayUp>	0.00161157 0.99803 -0.0627124	</rayUp>
         <size>	0.88	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.01474 0.847314 -1.10003	</rayStart>
         <rayEnd>	0.960585 0.821555 -1.09804	</rayEnd>
         <rayUp>	0.00120677 0.998882 -0.0472547	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.0141 0.904879 -0.40783	</rayStart>
         <rayEnd>	0.960192 0.878628 -0.40562	</rayEnd>
         <rayUp>	0.00161157 0.99803 -0.0627124	</rayUp>
         <size>	0.88	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G93_GW_Mk_VIe/GW_Mk_VIe_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.000000 0.396011 1.05521	</anchorPosition>
+        <anchorDirection>	0.000000 0.351361 0.93624	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
     </camouflage>
@@ -272,14 +299,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxAmplitude>	0.000000	</maxAmplitude>
         <maxOffset>	0.000000	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1500	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	3	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -959,6 +983,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.000000 1.93832 -0.617155	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GW_Mk_IVe>
     <Chassis_GW_Mk_IVe_2>
       <userString>	#germany_vehicles:Chassis_GW_Mk_IVe_2	</userString>
@@ -1106,14 +1144,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxAmplitude>	0.000000	</maxAmplitude>
         <maxOffset>	0.000000	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1500	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	3	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -1793,6 +1828,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000028 1.93846 -0.617301	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GW_Mk_IVe_2>
   </chassis>
   <turrets0>
@@ -1861,6 +1910,21 @@
             <collisionModelServer>	vehicles/german/G93_GW_Mk_VIe/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G93_GW_Mk_VIe/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	-0.000035 0.231516 1.24811	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.37 0.37 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1876,10 +1940,23 @@
         <collisionModelClient>	vehicles/german/G93_GW_Mk_VIe/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.00086 0.082107 0.110639	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	-0.000000 0.518245 0.32007	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Turret_1_GW_Mk_IVe>
   </turrets0>
   <engines>

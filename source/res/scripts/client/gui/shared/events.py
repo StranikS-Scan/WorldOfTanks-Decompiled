@@ -329,7 +329,7 @@ class FightButtonEvent(LobbySimpleEvent):
 
 
 class LobbyHeaderMenuEvent(LobbySimpleEvent):
-    MENY_HIDE = 'hideLobbyHeaderMenu'
+    TOGGLE_VISIBILITY = 'toggleVisibilityHeaderMenu'
 
 
 class SkillDropEvent(SharedEvent):

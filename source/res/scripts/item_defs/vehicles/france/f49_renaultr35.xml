@@ -72,23 +72,41 @@
       <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F49_RenaultR35/RenaultR35_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.448596 0.408894 0.790267	</rayStart>
         <rayEnd>	0.448849 0.248611 0.670658	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.2	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.250127 0.0970242 1.48576	</rayStart>
         <rayEnd>	-0.250658 -0.094486 1.42814	</rayEnd>
         <rayUp>	0.0834559 -0.00128149 -0.996511	</rayUp>
         <size>	0.4	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F49_RenaultR35/RenaultR35_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	9	</slotId>
+        <anchorPosition>	0.000000 0.0674782 1.23389	</anchorPosition>
+        <anchorDirection>	0.000000 0.0546057 0.998508	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1 0.61 0.000000 0.000000	</tiling>
     </camouflage>
@@ -256,14 +274,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxAmplitude>	0.095	</maxAmplitude>
         <maxOffset>	0.095	</maxOffset>
         <gravity>	-8.9	</gravity>
         <elasticity>	1203	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -997,6 +1012,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000395392 1.9618 -0.0795065	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_RenaultR35>
     <Chassis_RenaultR35_2>
       <userString>	#france_vehicles:Chassis_RenaultR35_2	</userString>
@@ -1156,14 +1185,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxAmplitude>	0.095	</maxAmplitude>
         <maxOffset>	0.095	</maxOffset>
         <gravity>	-8.9	</gravity>
         <elasticity>	1203	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -1897,6 +1923,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000468915 1.9618 -0.07957	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_RenaultR35_2>
   </chassis>
   <turrets0>
@@ -1966,6 +2006,21 @@
             <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	-0.000181481 0.0118265 0.214696	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.73 0.475 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2000,6 +2055,21 @@
             <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	0.121883 -0.0123582 0.482342	</anchorPosition>
+              <anchorDirection>	0.000001 0.000001 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2034,6 +2104,21 @@
             <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	12	</slotId>
+              <anchorPosition>	-0.00267131 0.0389603 0.484195	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2049,26 +2134,44 @@
         <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.102622 0.233055 0.430115	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.095 0.000 0.896 0.027 0.507 0.081 0.448 0.500 0.416 0.500 0.258 0.500 0.416 0.480 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.576203 0.353214 0.151347	</rayStart>
           <rayEnd>	-0.389427 0.282183 0.143223	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.18	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.463724 0.316609 0.340381	</rayStart>
           <rayEnd>	0.287492 0.275739 0.255129	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.18	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.095 0.000 0.896 0.027 0.507 0.081 0.448 0.500 0.416 0.500 0.258 0.500 0.416 0.480 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.000000 0.647125 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.55 0.28 0.000000 0.000000	</tiling>
       </camouflage>
@@ -2137,6 +2240,21 @@
             <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	13	</slotId>
+              <anchorPosition>	-0.000187777 -0.0111492 0.220938	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2171,6 +2289,21 @@
             <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	0.125086 -0.0499059 0.583029	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2201,6 +2334,21 @@
             <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	-0.00757647 0.00163376 0.440762	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2216,26 +2364,44 @@
         <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.102622 0.248442 0.430115	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.525 0.081 0.507 0.500 0.312 0.500 0.321 0.500 0.371 0.575 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	-0.588857 0.342552 0.150121	</rayStart>
           <rayEnd>	-0.401633 0.272247 0.149089	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.18	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	6	</slotId>
           <rayStart>	0.519414 0.329064 0.150933	</rayStart>
           <rayEnd>	0.329933 0.268463 0.130403	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.18	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.000 0.000 1.000 0.000 0.525 0.081 0.507 0.500 0.312 0.500 0.321 0.500 0.371 0.575 0.000	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	0.000000 0.662661 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.475 0.25 0.000000 0.000000	</tiling>
       </camouflage>

@@ -90,7 +90,7 @@ class Bootcamp(EventSystemEntity):
         self.__bonuses = None
         self.__isIntroVideoPlayed = False
         self.__requestBootcampFinishFromBattle = False
-        self.transitionFlash = None
+        self.__transitionFlash = None
         self.__isSniperModeUsed = False
         self.__showingWaitingActionWindow = False
         self.__nation = 0
@@ -568,6 +568,21 @@ class Bootcamp(EventSystemEntity):
     def removePointcut(self, pointcutIndex):
         if pointcutIndex is not None:
             self.__weaver.clear(pointcutIndex)
+        return
+
+    def showBattleResultTransition(self):
+        from .BattleResultTransition import BattleResultTransition
+        if self.__transitionFlash is not None:
+            self.__transitionFlash.close()
+        self.__transitionFlash = BattleResultTransition()
+        self.__transitionFlash.active(True)
+        return
+
+    def hideBattleResultTransition(self):
+        if self.__transitionFlash is not None:
+            self.__transitionFlash.active(False)
+            self.__transitionFlash.close()
+            self.__transitionFlash = None
         return
 
     def __setupPreferences(self, isNewbie):

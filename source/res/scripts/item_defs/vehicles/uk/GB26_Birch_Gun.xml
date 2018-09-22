@@ -73,30 +73,51 @@
       <collisionModelServer>	vehicles/british/GB26_Birch_Gun/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB26_Birch_Gun/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/british/GB26_Birch_Gun/Birch_Gun_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.351311 0.00580013 2.61676	</rayStart>
         <rayEnd>	0.351311 0.00580013 2.41676	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.27806 0.385737 -1.09173	</rayStart>
         <rayEnd>	-1.07806 0.385737 -1.09173	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.0177746 0.312099 -2.03956	</rayStart>
         <rayEnd>	0.0177122 0.139426 -1.93864	</rayEnd>
         <rayUp>	0.000315151 0.871271 0.490802	</rayUp>
         <size>	0.92	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/british/GB26_Birch_Gun/Birch_Gun_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.000086 0.426324 -1.65823	</anchorPosition>
+        <anchorDirection>	0.000085 0.72972 -0.683746	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
     </camouflage>
@@ -869,6 +890,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.000000 1.47598 -0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB26_Birch_Gun>
     <Chassis_GB26_Birch_Gun_2>
       <userString>	#gb_vehicles:Chassis_GB26_Birch_Gun_2	</userString>
@@ -1633,6 +1668,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000200938 1.47568 0.000010	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_GB26_Birch_Gun_2>
   </chassis>
   <turrets0>
@@ -1698,6 +1747,21 @@
             <collisionModelServer>	vehicles/british/GB26_Birch_Gun/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB26_Birch_Gun/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.000171754 0.217941 1.0061	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.715 0.385 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1713,19 +1777,34 @@
         <collisionModelClient>	vehicles/british/GB26_Birch_Gun/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.00035 0.317002 0.41837	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.623 0.407 1.000 0.000 0.737 0.255 0.000 0.100 0.500 0.500 0.000 0.500 0.718 1.000 0.393	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.491589 0.714835 1.32131	</rayStart>
           <rayEnd>	0.491589 0.636635 1.13724	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.26	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.623 0.407 1.000 0.000 0.737 0.255 0.000 0.100 0.500 0.500 0.000 0.500 0.718 1.000 0.393	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	0.00014642 0.66942 0.592088	</anchorPosition>
+          <anchorDirection>	0.000000 0.576778 0.816901	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1793,6 +1872,21 @@
             <collisionModelServer>	vehicles/british/GB26_Birch_Gun/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB26_Birch_Gun/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	0.000362087 0.140591 1.01866	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.73 0.46 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1808,18 +1902,33 @@
         <collisionModelClient>	vehicles/british/GB26_Birch_Gun/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.00054 0.317002 0.41837	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.623 0.407 1.000 0.000 0.737 0.255 0.000 0.100 0.500 0.500 0.000 0.500 0.718 1.000 0.393	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.494315 0.647905 1.3476	</rayStart>
           <rayEnd>	0.494315 0.583661 1.1582	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.26	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.623 0.407 1.000 0.000 0.737 0.255 0.000 0.100 0.500 0.500 0.000 0.500 0.718 1.000 0.393	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	-0.0116836 0.642832 0.617171	</anchorPosition>
+          <anchorDirection>	0.000000 0.732472 0.680797	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
       </camouflage>

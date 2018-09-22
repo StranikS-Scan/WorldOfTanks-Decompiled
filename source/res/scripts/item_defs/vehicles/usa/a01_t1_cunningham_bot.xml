@@ -67,30 +67,45 @@
       <collisionModelServer>	vehicles/american/A01_T1_Cunningham/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/american/A01_T1_Cunningham/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/american/A01_T1_Cunningham/T1_Cunningham_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.0262288 0.170632 1.82587	</rayStart>
         <rayEnd>	0.0262288 0.170608 1.66587	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.26	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	0.972806 0.430871 -1.08261	</rayStart>
         <rayEnd>	0.772807 0.430871 -1.08261	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.52	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-0.972806 0.430871 -1.08261	</rayStart>
         <rayEnd>	-0.772807 0.430871 -1.08261	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.52	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/american/A01_T1_Cunningham/T1_Cunningham_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Cunningham_E1_bot>
@@ -692,6 +707,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Cunningham_E1_bot>
   </chassis>
   <turrets0>
@@ -747,6 +768,12 @@
             <collisionModelServer>	vehicles/american/A01_T1_Cunningham/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A01_T1_Cunningham/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
         </_37mm_Gun_M1916_bot>
       </guns>
       <models>
@@ -759,25 +786,37 @@
         <collisionModelClient>	vehicles/american/A01_T1_Cunningham/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.116975 0.208094 0.535951	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.903 -0.047 0.963 0.000 0.609 0.200 0.601 0.391 0.617 0.609 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.587596 0.266962 0.157434	</rayStart>
           <rayEnd>	-0.395072 0.266843 0.103264	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.26	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.58066 0.267611 0.193771	</rayStart>
           <rayEnd>	0.388825 0.267494 0.137209	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.26	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.903 -0.047 0.963 0.000 0.609 0.200 0.601 0.391 0.617 0.609 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
     </Cunningham_D1_bot>
   </turrets0>
   <engines>

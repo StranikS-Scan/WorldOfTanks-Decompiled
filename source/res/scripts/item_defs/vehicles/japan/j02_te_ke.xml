@@ -74,23 +74,41 @@
       <collisionModelServer>	vehicles/japan/J02_Te_Ke/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/japan/J02_Te_Ke/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/japan/J02_Te_Ke/Te_Ke_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.348458 0.222388 1.5605	</rayStart>
         <rayEnd>	-0.348456 0.0360888 1.48775	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.22	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	0.853645 0.361066 -0.96315	</rayStart>
         <rayEnd>	0.68158 0.259123 -0.96315	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.48	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/japan/J02_Te_Ke/Te_Ke_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	0.000153638 0.549585 -1.16082	</anchorPosition>
+        <anchorDirection>	0.000001 0.202847 -0.97921	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	0.8 0.4 0.000000 0.000000	</tiling>
     </camouflage>
@@ -244,14 +262,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxAmplitude>	0.095	</maxAmplitude>
         <maxOffset>	0.095	</maxOffset>
         <gravity>	-9.9	</gravity>
         <elasticity>	1073	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	0.9	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -538,6 +553,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	-0.102122 1.80227 0.0876605	</anchorPosition>
+          <anchorDirection>	-0.000335438 1 -0.000103311	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Te_Ke>
   </chassis>
   <turrets0>
@@ -611,6 +640,21 @@
             <collisionModelServer>	vehicles/japan/J02_Te_Ke/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J02_Te_Ke/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	0.0258335 0.0108175 0.530457	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
@@ -626,33 +670,54 @@
         <collisionModelClient>	vehicles/japan/J02_Te_Ke/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.013921 0.238853 0.570313	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.433 0.321 0.613 0.355 0.468 0.500 0.203 0.500 0.169 0.672 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-0.538395 0.241667 -0.0395971	</rayStart>
           <rayEnd>	-0.340695 0.211799 -0.0349574	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	0.3723 0.224185 0.395035	</rayStart>
           <rayEnd>	0.218997 0.197883 0.269318	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.21	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.493768 0.226265 -0.201188	</rayStart>
           <rayEnd>	0.306273 0.19375 -0.139648	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.389	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 0.433 0.321 0.613 0.355 0.468 0.500 0.203 0.500 0.169 0.672 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	0.000000 0.481426 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
       </camouflage>

@@ -70,16 +70,31 @@
       <collisionModelServer>	vehicles/russian/R146_STG_Tday/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R146_STG_Tday/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R146_STG_Tday/STG_Tday_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	1.05139 0.528067 2.69765	</rayStart>
         <rayEnd>	1.05139 0.331209 2.66233	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R146_STG_Tday/STG_Tday_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	3	</slotId>
+        <anchorPosition>	-0.000017 0.343973 3.14054	</anchorPosition>
+        <anchorDirection>	0.000000 0.707106 0.707108	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -799,6 +814,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	4	</slotId>
+          <anchorPosition>	0.000060 2.07725 -0.67508	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_R146_STG_Tday>
   </chassis>
   <turrets0>
@@ -885,16 +914,32 @@
             <collisionModelServer>	vehicles/russian/R146_STG_Tday/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R146_STG_Tday/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	2	</slotId>
               <rayStart>	0.000000 -0.000454099 1.71875	</rayStart>
               <rayEnd>	-0.00386569 -0.027464 1.71753	</rayEnd>
               <rayUp>	0.11 0.105 5	</rayUp>
               <size>	0.73	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	0.000000 -0.00022705 2.38157	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_122mm_D_25TS>
       </guns>
       <models>
@@ -907,10 +952,23 @@
         <collisionModelClient>	vehicles/russian/R146_STG_Tday/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.001826 0.322242 1.18767	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.077 -0.101 1.120 0.000 0.597 0.149 0.500 0.500 0.500 0.500 0.385 0.500 0.409 0.500 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 0.78343 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	2 1 0.000000 0.000000	</tiling>
       </camouflage>

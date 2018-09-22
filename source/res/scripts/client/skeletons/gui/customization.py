@@ -39,10 +39,7 @@ class ICustomizationService(object):
     def getPointForRegionLeaderLine(self, areaId):
         raise NotImplementedError
 
-    def getPointForAnchorLeaderLine(self, areaId, slotId, regionId):
-        raise NotImplementedError
-
-    def getNormalForAnchorLeaderLine(self, areaId, slotId, regionId):
+    def getAnchorParams(self, areaId, slotId, regionId):
         raise NotImplementedError
 
     def getHightlighter(self):
@@ -96,6 +93,9 @@ class ICustomizationService(object):
     def isCurrentStyleInstalled(self):
         raise NotImplementedError
 
+    def isRegionSelected(self):
+        raise NotImplementedError
+
     def buyItems(self, items, vehicle=None):
         raise NotImplementedError
 
@@ -114,5 +114,14 @@ class ICustomizationService(object):
     def resetHighlighting(self):
         raise NotImplementedError
 
+    def highlightRegions(self, regionsMask):
+        raise NotImplementedError
+
+    def selectRegions(self, regionsMask):
+        raise NotImplementedError
+
     def moveHangarVehicleToCustomizationRoom(self):
+        raise NotImplementedError
+
+    def setSelectingRegionEnabled(self, enable):
         raise NotImplementedError

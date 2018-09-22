@@ -73,45 +73,66 @@
       <collisionModelServer>	vehicles/german/G02_Hummel/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G02_Hummel/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/german/G02_Hummel/Hummel_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.00298952 0.574702 2.1748	</rayStart>
         <rayEnd>	-0.00247027 0.487172 1.99497	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.30419 0.999523 -1.65247	</rayStart>
         <rayEnd>	-1.24638 0.983444 -1.65247	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-1.29636 1.02755 -0.555693	</rayStart>
         <rayEnd>	-1.23855 1.01147 -0.555695	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.88	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	1.28669 0.993111 -1.65444	</rayStart>
         <rayEnd>	1.26742 0.987752 -1.65444	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	1.2995 1.02154 -0.551011	</rayStart>
         <rayEnd>	1.24169 1.00547 -0.551013	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.88	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G02_Hummel/Hummel_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <exclusionMask></exclusionMask>
     </camouflage>
@@ -253,14 +274,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxAmplitude>	0.3	</maxAmplitude>
         <maxOffset>	0.3	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1049	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -380,6 +398,12 @@
           </transform>
         </decal>
       </AODecals>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_Env_Artillery>
   </chassis>
   <turrets0>
@@ -436,16 +460,25 @@
             <destroyed>	vehicles/german/G02_Hummel/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/german/G02_Hummel/crash/lod0/Gun_03.model	</exploded>
           </models>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.000590633 -0.0210966 3.70241	</rayStart>
               <rayEnd>	-0.00767752 -0.0831617 3.70032	</rayEnd>
               <rayUp>	0.11 0.106 4	</rayUp>
               <size>	0.356	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.805 0.805 0.000000 0.000000	</tiling>
             <exclusionMask></exclusionMask>
@@ -462,10 +495,15 @@
         <collisionModelClient>	vehicles/german/G02_Hummel/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.002121 0.662594 -0.136024	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.798 0.234 1.000 0.000 1.000 0.000 0.500 0.023 0.471 0.500 0.268 0.500 0.649 0.082 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_Env_Artillery>
   </turrets0>
   <engines>

@@ -5,8 +5,10 @@ import BigWorld
 from adisp import async
 from constants import CustomizationInvData
 from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr
+from items.components.c11n_constants import SeasonType, CustomizationType
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IInventoryRequester
 
@@ -22,12 +24,14 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         self.__itemsPreviousCache = defaultdict(dict)
         self.__vehsCDsByID = {}
         self.__vehsIDsByCD = {}
+        self.__c11nItemsAppliedCounts = defaultdict(lambda : defaultdict(int))
 
     def clear(self):
         self.__itemsCache.clear()
         self.__itemsPreviousCache.clear()
         self.__vehsCDsByID.clear()
         self.__vehsIDsByCD.clear()
+        self.__c11nItemsAppliedCounts.clear()
         super(InventoryRequester, self).clear()
 
     def invalidateItem(self, itemTypeID, invIdx):
@@ -37,6 +41,33 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             del cache[invIdx]
             return True
         return False
+
+    def updateC11nItemsAppliedCounts(self):
+        self.__c11nItemsAppliedCounts.clear()
+        hangarVehicles = self.getItems(GUI_ITEM_TYPE.VEHICLE)
+        if hangarVehicles:
+            for vehInvID in hangarVehicles:
+                vehicleIntCD = self.__vehsCDsByID[vehInvID]
+                for season in SeasonType.RANGE:
+                    outfitData = self.getOutfitData(vehicleIntCD, season)
+                    if outfitData:
+                        outfit = Outfit(strCompactDescr=outfitData.compDescr)
+                        for itemCD, count in outfit.itemsCounter.iteritems():
+                            self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] = count
+
+                        styleId = outfit.id
+                        if styleId != 0:
+                            styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styleId)
+                            self.__c11nItemsAppliedCounts[styleIntCD][vehicleIntCD] = 1
+
+    def updateC11nItemAppliedCount(self, itemCD, vehicleIntCD, count):
+        self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] = count
+
+    def getC11nItemAppliedVehicles(self, itemCD):
+        return [ vehicleCD for vehicleCD, count in self.__c11nItemsAppliedCounts[itemCD].items() if count > 0 ]
+
+    def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleCD):
+        return self.__c11nItemsAppliedCounts[itemCD][vehicleCD]
 
     def getItemsData(self, itemTypeID):
         invData = self.getCacheValue(itemTypeID, {})

@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 
 class ContextMenuItemModel(ViewModel):
-    __slots__ = ('onItemClicked',)
+    __slots__ = ()
 
     @property
     def subItemsList(self):
@@ -57,4 +57,3 @@ class ContextMenuItemModel(ViewModel):
         self._addBoolProperty('isSeparator', False)
         self._addNumberProperty('id', 0)
         self._addNumberProperty('subItemsCount', 0)
-        self.onItemClicked = self._addCommand('onItemClicked')

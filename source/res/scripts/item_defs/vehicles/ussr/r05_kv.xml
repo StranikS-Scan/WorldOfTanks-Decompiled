@@ -71,16 +71,25 @@
       <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R00_Placeholder/Placeholder_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.0209436 5.03019 4.36902	</rayStart>
         <rayEnd>	0.0209436 -4.43685 1.14798	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R00_Placeholder/Placeholder_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <KV_1>
@@ -190,6 +199,12 @@
           </transform>
         </decal>
       </AODecals>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </KV_1>
   </chassis>
   <turrets0>
@@ -255,7 +270,12 @@
             <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots></emblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	0.76 0.76 0.000000 0.000000	</tiling>
           </camouflage>
@@ -271,26 +291,38 @@
         <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.019607 0.457312 1.01427	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.952 -0.064 1.000 0.000 0.624 0.071 0.828 0.640 0.093 0.500 0.225 0.500 0.148 0.608 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.950314 0.558178 -0.885143	</rayStart>
           <rayEnd>	-0.565803 0.45015 -0.863205	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.4	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	0.950314 0.558178 -0.885143	</rayStart>
           <rayEnd>	0.565803 0.45015 -0.863205	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.4	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.952 -0.064 1.000 0.000 0.624 0.071 0.828 0.640 0.093 0.500 0.225 0.500 0.148 0.608 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
       </camouflage>

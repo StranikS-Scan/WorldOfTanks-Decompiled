@@ -73,17 +73,26 @@
       <collisionModelServer>	vehicles/japan/J29_Nameless/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/japan/J29_Nameless/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/japan/J29_Nameless/Nameless_HangarShadowMap.dds	</hangarShadowTexture>
+    <animateEmblemSlots>	true	</animateEmblemSlots>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.649725 0.558443 2.41518	</rayStart>
         <rayEnd>	0.64062 0.448152 2.35753	</rayEnd>
         <rayUp>	-0.0463042 0.00325924 -0.998922	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/japan/J29_Nameless/Nameless_HangarShadowMap.dds	</hangarShadowTexture>
-    <animateEmblemSlots>	true	</animateEmblemSlots>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
   </hull>
   <chassis>
     <Chassis_J29_Nameless>
@@ -676,6 +685,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_J29_Nameless>
   </chassis>
   <turrets0>
@@ -756,16 +771,25 @@
             <collisionModelServer>	vehicles/japan/J29_Nameless/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J29_Nameless/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	3	</slotId>
               <rayStart>	0.00919999 0.00203466 2.32	</rayStart>
               <rayEnd>	-0.042598 -0.00872579 2.36021	</rayEnd>
               <rayUp>	0.116 0.116 5	</rayUp>
               <size>	0.35	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
         </_88mm_Nameless_Gun>
       </guns>
       <models>
@@ -778,19 +802,28 @@
         <collisionModelClient>	vehicles/japan/J29_Nameless/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0092 0.302969 1.32267	</gunPosition>
-      <emblemSlots>
-        <fixedEmblem>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.037 0.018 1.024 0.000 0.521 0.293 0.835 0.519 0.415 0.500 0.314 0.500 0.184 0.630 0.210	</physicsShape>
+      <customizationSlots>
+        <slot>
+          <slotType>	fixedEmblem	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.732268 0.359852 1.22704	</rayStart>
           <rayEnd>	-0.560108 0.283171 1.1601	</rayEnd>
           <rayUp>	0.0433704 0.991699 0.121049	</rayUp>
           <emblemId>	3601	</emblemId>
           <size>	0.528	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </fixedEmblem>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.037 0.018 1.024 0.000 0.521 0.293 0.835 0.519 0.415 0.500 0.314 0.500 0.184 0.630 0.210	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_J29_Nameless>
   </turrets0>
   <engines>

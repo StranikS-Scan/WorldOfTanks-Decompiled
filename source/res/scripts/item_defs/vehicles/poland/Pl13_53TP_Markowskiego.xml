@@ -76,16 +76,37 @@
       <collisionModelServer>	vehicles/poland/Pl13_53TP_Markowskiego/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/poland/Pl13_53TP_Markowskiego/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/poland/Pl13_53TP_Markowskiego/53TP_Markowskiego_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.102328 0.276823 3.19865	</rayStart>
         <rayEnd>	-0.102322 0.107183 3.09272	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/poland/Pl13_53TP_Markowskiego/53TP_Markowskiego_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	18	</slotId>
+        <anchorPosition>	-0.000000 0.572906 -2.27774	</anchorPosition>
+        <anchorDirection>	0.000000 0.243926 -0.969794	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	19	</slotId>
+        <anchorPosition>	-0.000000 0.572906 -2.27774	</anchorPosition>
+        <anchorDirection>	0.000000 0.243926 -0.969794	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.43 1.43 0.000000 0.000000	</tiling>
     </camouflage>
@@ -1056,6 +1077,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	-1.52197 0.621838 0.0663999	</anchorPosition>
+          <anchorDirection>	-0.92496 0.377915 0.0403538	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	15	</slotId>
+          <anchorPosition>	0.000137816 2.58463 1.01681	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Pl13_53TP_Markowskiego>
     <Chassis_Pl13_53TP_Markowskiego_2>
       <userString>	#poland_vehicles:Chassis_Pl13_53TP_Markowskiego_2	</userString>
@@ -2018,6 +2059,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	16	</slotId>
+          <anchorPosition>	-1.52197 0.621838 0.0663999	</anchorPosition>
+          <anchorDirection>	-0.92496 0.377915 0.0403538	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	17	</slotId>
+          <anchorPosition>	0.000141654 2.58464 1.0168	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Pl13_53TP_Markowskiego_2>
   </chassis>
   <turrets0>
@@ -2091,15 +2152,6 @@
             <collisionModelServer>	vehicles/poland/Pl13_53TP_Markowskiego/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl13_53TP_Markowskiego/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	-0.00249559 0.00315243 1.943	</rayStart>
-              <rayEnd>	-0.010933 -0.00951854 1.9397	</rayEnd>
-              <rayUp>	0.097 0.088 5	</rayUp>
-              <size>	0.5	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
           <drivenJoints>
             <master>
               <node>	Gun	</node>
@@ -2122,6 +2174,45 @@
           </drivenJoints>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
+              <rayStart>	-0.00249559 0.00315243 1.943	</rayStart>
+              <rayEnd>	-0.010933 -0.00951854 1.9397	</rayEnd>
+              <rayUp>	0.097 0.088 5	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	22	</slotId>
+              <anchorPosition>	-0.00124779 0.00207627 1.42465	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	23	</slotId>
+              <anchorPosition>	0.000000 0.175928 0.175928	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	24	</slotId>
+              <anchorPosition>	-0.00124779 0.00207627 1.42465	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_105mm_Bofors_wz_34>
       </guns>
       <models>
@@ -2134,40 +2225,70 @@
         <collisionModelClient>	vehicles/poland/Pl13_53TP_Markowskiego/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.002667 0.143164 1.24885	</gunPosition>
-      <emblemSlots>
-        <player>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.077 -0.005 1.103 0.000 0.682 0.026 0.887 0.278 0.372 0.500 0.341 0.500 0.281 0.372 0.103	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-0.946528 0.249704 0.793042	</rayStart>
           <rayEnd>	-0.751714 0.249704 0.74779	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	0.946528 0.249704 0.793042	</rayStart>
           <rayEnd>	0.751714 0.249704 0.74779	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.918221 0.693967 -0.380586	</rayStart>
           <rayEnd>	-0.793029 0.541103 -0.41156	</rayEnd>
           <rayUp>	0.832818 0.518638 -0.193467	</rayUp>
           <size>	0.607	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.918221 0.693967 -0.380586	</rayStart>
           <rayEnd>	0.793029 0.541103 -0.41156	</rayEnd>
           <rayUp>	-0.832818 0.518638 -0.193467	</rayUp>
           <size>	0.607	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.077 -0.005 1.103 0.000 0.682 0.026 0.887 0.278 0.372 0.500 0.341 0.500 0.281 0.372 0.103	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	20	</slotId>
+          <anchorPosition>	0.000000 0.787894 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	21	</slotId>
+          <anchorPosition>	0.000000 0.787895 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Turret_1_Pl13_53TP_Markowskiego>
     <Turret_2_Pl13_53TP_Markowskiego>
       <userString>	#poland_vehicles:Turret_2_Pl13_53TP_Markowskiego	</userString>
@@ -2264,15 +2385,6 @@
             <collisionModelServer>	vehicles/poland/Pl13_53TP_Markowskiego/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl13_53TP_Markowskiego/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000174414 -0.00458135 2.51507	</rayStart>
-              <rayEnd>	-0.00290288 -0.0205042 2.51177	</rayEnd>
-              <rayUp>	0.098 0.088 5	</rayUp>
-              <size>	0.5	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
           <drivenJoints>
             <master>
               <node>	Gun	</node>
@@ -2293,6 +2405,45 @@
           </drivenJoints>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	11	</slotId>
+              <rayStart>	0.000174414 -0.00458135 2.51507	</rayStart>
+              <rayEnd>	-0.00290288 -0.0205042 2.51177	</rayEnd>
+              <rayUp>	0.098 0.088 5	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	27	</slotId>
+              <anchorPosition>	0.000087 -0.001791 1.73273	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	28	</slotId>
+              <anchorPosition>	0.000000 0.273269 0.273269	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	29	</slotId>
+              <anchorPosition>	0.000087 -0.001791 1.73273	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_105mm_Bofors_wz_34>
         <_122mm_D_25T_P>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
@@ -2349,15 +2500,6 @@
             <collisionModelServer>	vehicles/poland/Pl13_53TP_Markowskiego/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl13_53TP_Markowskiego/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	-0.000902997 -0.00564839 3.10957	</rayStart>
-              <rayEnd>	-0.0096471 -0.00778956 3.10811	</rayEnd>
-              <rayUp>	0.1 0.094 5	</rayUp>
-              <size>	0.5	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
           <drivenJoints>
             <master>
               <node>	Gun	</node>
@@ -2377,6 +2519,45 @@
             </master>
           </drivenJoints>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	12	</slotId>
+              <rayStart>	-0.000902997 -0.00564839 3.10957	</rayStart>
+              <rayEnd>	-0.0096471 -0.00778956 3.10811	</rayEnd>
+              <rayUp>	0.1 0.094 5	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	30	</slotId>
+              <anchorPosition>	-0.000451499 -0.00282431 2.3559	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	31	</slotId>
+              <anchorPosition>	-0.000000 0.27327 0.273271	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	32	</slotId>
+              <anchorPosition>	-0.000451499 -0.00282431 2.3559	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_122mm_D_25T_P>
         <_122mm_wz_53>	shared	  <maxAmmo>	34	</maxAmmo>
           <unlocks>
@@ -2433,15 +2614,6 @@
             <collisionModelServer>	vehicles/poland/Pl13_53TP_Markowskiego/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl13_53TP_Markowskiego/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.00207337 -0.00549863 3.69837	</rayStart>
-              <rayEnd>	-0.00011852 -0.0178601 3.69695	</rayEnd>
-              <rayUp>	0.096 0.093 5	</rayUp>
-              <size>	0.5	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
           <drivenJoints>
             <master>
               <node>	Gun	</node>
@@ -2461,6 +2633,45 @@
             </master>
           </drivenJoints>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	13	</slotId>
+              <rayStart>	0.00207337 -0.00549863 3.69837	</rayStart>
+              <rayEnd>	-0.00011852 -0.0178601 3.69695	</rayEnd>
+              <rayUp>	0.096 0.093 5	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	33	</slotId>
+              <anchorPosition>	0.00103668 -0.0027492 2.59644	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	34	</slotId>
+              <anchorPosition>	0.000000 0.27327 0.273271	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	35	</slotId>
+              <anchorPosition>	0.00103668 -0.0027492 2.59644	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_122mm_wz_53>
       </guns>
       <models>
@@ -2473,40 +2684,70 @@
         <collisionModelClient>	vehicles/poland/Pl13_53TP_Markowskiego/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.1899 1.11835	</gunPosition>
-      <emblemSlots>
-        <player>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.005 -0.005 1.103 0.000 0.610 0.087 0.487 0.389 0.668 0.500 0.341 0.500 0.112 0.347 0.138	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	7	</slotId>
           <rayStart>	-0.72367 0.29572 1.19712	</rayStart>
           <rayEnd>	-0.582837 0.229056 1.07173	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	8	</slotId>
           <rayStart>	0.72367 0.29572 1.19712	</rayStart>
           <rayEnd>	0.582837 0.229056 1.07173	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	9	</slotId>
           <rayStart>	-1.17399 0.406224 0.029148	</rayStart>
           <rayEnd>	-1.05228 0.250302 -0.000442161	</rayEnd>
           <rayUp>	0.858827 0.500937 -0.107137	</rayUp>
           <size>	0.7	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	10	</slotId>
           <rayStart>	1.17399 0.406224 0.029148	</rayStart>
           <rayEnd>	1.05228 0.250302 -0.000442161	</rayEnd>
           <rayUp>	-0.869641 0.493199 -0.0218891	</rayUp>
           <size>	0.7	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.005 -0.005 1.103 0.000 0.610 0.087 0.487 0.389 0.668 0.500 0.341 0.500 0.112 0.347 0.138	</physicsShape>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	25	</slotId>
+          <anchorPosition>	0.000000 0.689361 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	26	</slotId>
+          <anchorPosition>	0.000000 0.689361 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Turret_2_Pl13_53TP_Markowskiego>
   </turrets0>
   <engines>

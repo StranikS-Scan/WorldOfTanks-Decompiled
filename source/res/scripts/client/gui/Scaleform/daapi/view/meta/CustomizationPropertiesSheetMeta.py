@@ -4,14 +4,14 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class CustomizationPropertiesSheetMeta(BaseDAAPIComponent):
 
-    def onActionBtnClick(self, actionType, applyToAll):
+    def onActionBtnClick(self, actionType, actionData):
         self._printOverrideError('onActionBtnClick')
 
-    def setCamouflageColor(self, index):
-        self._printOverrideError('setCamouflageColor')
+    def editMode(self, value, interactionType):
+        self._printOverrideError('editMode')
 
-    def setCamouflageScale(self, scale, index):
-        self._printOverrideError('setCamouflageScale')
+    def interactionStatusUpdate(self, value):
+        self._printOverrideError('interactionStatusUpdate')
 
     def onClose(self):
         self._printOverrideError('onClose')

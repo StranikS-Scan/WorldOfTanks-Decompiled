@@ -67,16 +67,31 @@
       <collisionModelServer>	vehicles/chinese/Ch16_WZ_131/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/chinese/Ch16_WZ_131/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/chinese/Ch16_WZ_131/WZ_131_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.00600815 0.213508 2.50998	</rayStart>
         <rayEnd>	-0.00600815 0.0420232 2.40705	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/chinese/Ch16_WZ_131/WZ_131_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	15	</slotId>
+        <anchorPosition>	0.000000 0.550884 -2.39542	</anchorPosition>
+        <anchorDirection>	0.000000 0.224123 -0.974561	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
     </camouflage>
@@ -236,13 +251,9 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1178	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.092	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
@@ -250,7 +261,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.128	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
@@ -259,7 +269,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
@@ -268,7 +277,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_R2	</leftSibling>
@@ -277,7 +285,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_R3	</leftSibling>
@@ -286,7 +293,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R5	</name>
-          <damping>	2	</damping>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_R4	</leftSibling>
           <rightSibling>	Track_VT_R6	</rightSibling>
@@ -294,7 +300,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R6	</name>
-          <damping>	2	</damping>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_R5	</leftSibling>
           <rightSibling>	Track_VT_R7	</rightSibling>
@@ -302,7 +307,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R7	</name>
-          <damping>	2	</damping>
           <offset>	-0.128	</offset>
           <leftSibling>	Track_VT_R6	</leftSibling>
           <rightSibling>	Track_VT_R8	</rightSibling>
@@ -310,14 +314,12 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R8	</name>
-          <damping>	2	</damping>
           <offset>	-0.092	</offset>
           <leftSibling>	Track_VT_R7	</leftSibling>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.092	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
@@ -325,7 +327,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.128	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
@@ -334,7 +335,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L2	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
@@ -343,7 +343,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L3	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
@@ -352,7 +351,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L4	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_L3	</leftSibling>
@@ -361,7 +359,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L5	</name>
-          <damping>	2	</damping>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_L4	</leftSibling>
           <rightSibling>	Track_VT_L6	</rightSibling>
@@ -369,7 +366,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L6	</name>
-          <damping>	2	</damping>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_L5	</leftSibling>
           <rightSibling>	Track_VT_L7	</rightSibling>
@@ -377,7 +373,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L7	</name>
-          <damping>	2	</damping>
           <offset>	-0.128	</offset>
           <leftSibling>	Track_VT_L6	</leftSibling>
           <rightSibling>	Track_VT_L8	</rightSibling>
@@ -385,29 +380,24 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L8	</name>
-          <damping>	2	</damping>
           <offset>	-0.092	</offset>
           <leftSibling>	Track_VT_L7	</leftSibling>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <damping>	2	</damping>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <damping>	2	</damping>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <damping>	2	</damping>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <damping>	2	</damping>
         </node>
       </trackNodes>
       <physicalTracks>
@@ -821,6 +811,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	13	</slotId>
+          <anchorPosition>	0.000236799 2.13425 0.067721	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Ch16_WZ_131>
     <Chassis_Ch16_WZ_131_2>
       <userString>	#china_vehicles:Chassis_Ch16_WZ_131_2	</userString>
@@ -971,33 +975,25 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1178	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <damping>	2	</damping>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <damping>	2	</damping>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <damping>	2	</damping>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <damping>	2	</damping>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.092	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
@@ -1005,7 +1001,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.128	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
@@ -1014,7 +1009,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L2	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
@@ -1023,7 +1017,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L3	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
@@ -1032,7 +1025,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L4	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_L3	</leftSibling>
@@ -1041,7 +1033,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L5	</name>
-          <damping>	2	</damping>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_L4	</leftSibling>
           <rightSibling>	Track_VT_L6	</rightSibling>
@@ -1049,7 +1040,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L6	</name>
-          <damping>	2	</damping>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_L5	</leftSibling>
           <rightSibling>	Track_VT_L7	</rightSibling>
@@ -1057,7 +1047,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L7	</name>
-          <damping>	2	</damping>
           <offset>	-0.128	</offset>
           <leftSibling>	Track_VT_L6	</leftSibling>
           <rightSibling>	Track_VT_L8	</rightSibling>
@@ -1065,14 +1054,12 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L8	</name>
-          <damping>	2	</damping>
           <offset>	-0.092	</offset>
           <leftSibling>	Track_VT_L7	</leftSibling>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.092	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
@@ -1080,7 +1067,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.128	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
@@ -1089,7 +1075,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
@@ -1098,7 +1083,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_R2	</leftSibling>
@@ -1107,7 +1091,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_R3	</leftSibling>
@@ -1116,7 +1099,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R5	</name>
-          <damping>	2	</damping>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_R4	</leftSibling>
           <rightSibling>	Track_VT_R6	</rightSibling>
@@ -1124,7 +1106,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R6	</name>
-          <damping>	2	</damping>
           <offset>	-0.155	</offset>
           <leftSibling>	Track_VT_R5	</leftSibling>
           <rightSibling>	Track_VT_R7	</rightSibling>
@@ -1132,7 +1113,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R7	</name>
-          <damping>	2	</damping>
           <offset>	-0.128	</offset>
           <leftSibling>	Track_VT_R6	</leftSibling>
           <rightSibling>	Track_VT_R8	</rightSibling>
@@ -1140,7 +1120,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R8	</name>
-          <damping>	2	</damping>
           <offset>	-0.092	</offset>
           <leftSibling>	Track_VT_R7	</leftSibling>
         </node>
@@ -1557,6 +1536,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	0.000193586 2.13425 0.0676916	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_Ch16_WZ_131_2>
   </chassis>
   <turrets0>
@@ -1631,16 +1624,32 @@
             <collisionModelServer>	vehicles/chinese/Ch16_WZ_131/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch16_WZ_131/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	0.00117532 -0.0110378 1.16692	</rayStart>
               <rayEnd>	0.317449 -0.209571 1.15613	</rayEnd>
               <rayUp>	0.089 0.082 4	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	0.000573467 -0.00563467 1.74272	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1656,40 +1665,64 @@
         <collisionModelClient>	vehicles/chinese/Ch16_WZ_131/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.011827 0.295211 1.08244	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.048 0.042 1.050 0.000 0.541 0.233 0.692 0.369 0.611 0.500 0.289 0.500 0.267 0.375 0.269	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
           <rayStart>	-1.03445 0.251671 0.402533	</rayStart>
           <rayEnd>	-0.859055 0.174327 0.345491	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	0.987581 0.206041 0.353769	</rayStart>
           <rayEnd>	0.894985 0.184747 0.322584	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-1.14166 0.252171 -0.478375	</rayStart>
           <rayEnd>	-0.953846 0.192216 -0.444755	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.54	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	1.11725 0.245709 -0.500334	</rayStart>
           <rayEnd>	0.930588 0.189663 -0.455429	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.54	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.048 0.042 1.050 0.000 0.541 0.233 0.692 0.369 0.611 0.500 0.289 0.500 0.267 0.375 0.269	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	16	</slotId>
+          <anchorPosition>	0.000000 0.731737 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1766,16 +1799,32 @@
             <collisionModelServer>	vehicles/chinese/Ch16_WZ_131/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch16_WZ_131/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	11	</slotId>
               <rayStart>	0.00114693 -0.0112695 1.16967	</rayStart>
               <rayEnd>	0.347433 -0.0960101 1.15754	</rayEnd>
               <rayUp>	0.09 0.081 5	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	19	</slotId>
+              <anchorPosition>	0.000573467 -0.00563467 1.74272	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1818,16 +1867,32 @@
             <collisionModelServer>	vehicles/chinese/Ch16_WZ_131/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch16_WZ_131/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	12	</slotId>
               <rayStart>	0.000775251 -0.0109118 1.20469	</rayStart>
               <rayEnd>	0.351218 -0.0394214 1.20469	</rayEnd>
               <rayUp>	0.081 0.081 4	</rayUp>
               <size>	0.4	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	20	</slotId>
+              <anchorPosition>	0.000387625 -0.00545585 1.79635	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
           <camouflage>
             <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1843,40 +1908,64 @@
         <collisionModelClient>	vehicles/chinese/Ch16_WZ_131/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.011827 0.305211 1.08244	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.048 0.042 1.050 0.000 0.512 0.271 0.692 0.369 0.611 0.500 0.289 0.500 0.267 0.375 0.269	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	7	</slotId>
           <rayStart>	-1.00752 0.290716 0.445904	</rayStart>
           <rayEnd>	-0.836108 0.209103 0.382999	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	8	</slotId>
           <rayStart>	-1.14357 0.280737 -0.450389	</rayStart>
           <rayEnd>	-0.953757 0.228993 -0.41444	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.58	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	9	</slotId>
           <rayStart>	1.1421 0.28304 -0.454865	</rayStart>
           <rayEnd>	0.952286 0.231296 -0.418915	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.58	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	10	</slotId>
           <rayStart>	1.00752 0.290716 0.445904	</rayStart>
           <rayEnd>	0.836108 0.209103 0.382999	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.048 0.042 1.050 0.000 0.512 0.271 0.692 0.369 0.611 0.500 0.289 0.500 0.267 0.375 0.269	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	21	</slotId>
+          <anchorPosition>	-0.00954018 0.747387 -0.0612229	</anchorPosition>
+          <anchorDirection>	0.000078 1 0.000001	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	1.06 1.06 0.26 0.71	</tiling>
       </camouflage>

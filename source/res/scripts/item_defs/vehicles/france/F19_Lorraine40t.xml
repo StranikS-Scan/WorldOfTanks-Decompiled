@@ -66,23 +66,47 @@
       <collisionModelServer>	vehicles/french/F19_Lorraine40t/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/french/F19_Lorraine40t/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/french/F19_Lorraine40t/Lorraine40t_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.770825 0.513489 2.12616	</rayStart>
         <rayEnd>	0.719178 0.348788 2.02514	</rayEnd>
         <rayUp>	-0.31799 0.0664487 -0.945763	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-1.52832 0.469161 0.189537	</rayStart>
         <rayEnd>	-1.35511 0.369185 0.189537	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.749	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F19_Lorraine40t/Lorraine40t_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	13	</slotId>
+        <anchorPosition>	0.000000 0.750036 -2.45469	</anchorPosition>
+        <anchorDirection>	0.000000 0.292215 -0.956353	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	14	</slotId>
+        <anchorPosition>	0.000000 0.750036 -2.45469	</anchorPosition>
+        <anchorDirection>	0.000000 0.292215 -0.956353	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
   </hull>
   <chassis>
     <Chassis_F19_Lorraine40t>
@@ -761,6 +785,26 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	11	</slotId>
+          <anchorPosition>	-1.6558 0.575424 -0.08266	</anchorPosition>
+          <anchorDirection>	-0.943538 0.327898 -0.0471028	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	12	</slotId>
+          <anchorPosition>	0.000000 2.49982 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_F19_Lorraine40t>
   </chassis>
   <turrets0>
@@ -836,18 +880,48 @@
             <collisionModelServer>	vehicles/french/F19_Lorraine40t/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F19_Lorraine40t/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+          <effects>	shot_mainext_mb	</effects>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
               <rayStart>	-0.000003 0.00419621 4.39148	</rayStart>
               <rayEnd>	0.386354 -0.136471 4.3876	</rayEnd>
               <rayUp>	0.068 0.066 4	</rayUp>
               <size>	0.618	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
-          <effects>	shot_mainext_mb	</effects>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	-0.000002 0.0020981 3.28412	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	8	</slotId>
+              <anchorPosition>	0.0001 0.363873 -0.427206	</anchorPosition>
+              <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	19	</slotId>
+              <anchorPosition>	-0.000002 0.0020981 3.28412	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
           </camouflage>
@@ -863,34 +937,61 @@
         <collisionModelClient>	vehicles/french/F19_Lorraine40t/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.510099 0.1011	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	true	</showEmblemsOnGun>
+      <physicsShape>	1.218 0.000 0.945 0.000 1.338 0.135 0.195 0.000 0.500 0.500 0.225 0.500 0.370 0.000 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
           <rayStart>	-1.19481 0.118435 -1.27031	</rayStart>
           <rayEnd>	-0.794815 0.118435 -1.27049	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.198	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	1.19481 0.119028 -1.26202	</rayStart>
           <rayEnd>	0.794815 0.119028 -1.26201	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.198	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.734346 0.205245 0.528773	</rayStart>
           <rayEnd>	0.684111 0.0450557 0.420087	</rayEnd>
           <rayUp>	-0.432032 0.0671937 -0.899351	</rayUp>
           <size>	0.476	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	true	</showEmblemsOnGun>
-      <physicsShape>	1.218 0.000 0.945 0.000 1.338 0.135 0.195 0.000 0.500 0.500 0.225 0.500 0.370 0.000 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	15	</slotId>
+          <anchorPosition>	0.000000 0.390653 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	20	</slotId>
+          <anchorPosition>	0.000000 0.390653 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	0.5 0.3 0.000000 0.000000	</tiling>
       </camouflage>

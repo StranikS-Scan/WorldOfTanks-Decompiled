@@ -4,7 +4,7 @@ from frameworks.wulf import Resource
 from frameworks.wulf import ViewModel
 
 class ContextMenuSubItemModel(ViewModel):
-    __slots__ = ('onItemClicked',)
+    __slots__ = ()
 
     def getLabel(self):
         return self._getResource(0)
@@ -36,4 +36,3 @@ class ContextMenuSubItemModel(ViewModel):
         self._addResourceProperty('icon', Resource.INVALID)
         self._addBoolProperty('isEnabled', True)
         self._addNumberProperty('id', 0)
-        self.onItemClicked = self._addCommand('onItemClicked')

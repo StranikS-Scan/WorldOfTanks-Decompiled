@@ -6,7 +6,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType
-from items.customizations import PaintComponent, CamouflageComponent, DecalComponent
+from items.customizations import PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
 def pickPacker(itemTypeID):
@@ -20,6 +20,8 @@ def pickPacker(itemTypeID):
         return DecalPacker
     if itemTypeID == GUI_ITEM_TYPE.MODIFICATION:
         return ModificationPacker
+    if itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+        return ProjectionDecalPacker
     LOG_WARNING('Unsupported packer for the given type', itemTypeID)
     return CustomizationPacker
 
@@ -167,3 +169,29 @@ class ModificationPacker(CustomizationPacker):
     @staticmethod
     def getRawComponent():
         return None
+
+
+class ProjectionDecalPacker(CustomizationPacker):
+    _LOCK_SUBCOMP_ID = 0
+
+    @staticmethod
+    def pack(slot, component):
+        for _, decal, subcomp in slot.items():
+            component.projection_decals.append(ProjectionDecalComponent(id=decal.id, showOn=subcomp.showOn, slotId=subcomp.slotId, scaleFactorId=subcomp.scaleFactorId, position=subcomp.position, scale=subcomp.scale, rotation=subcomp.rotation))
+
+    @classmethod
+    def unpack(cls, slot, component, proxy=None):
+        for slotIdx, subcomp in enumerate(component.projection_decals):
+            if subcomp.id == ProjectionDecalPacker._LOCK_SUBCOMP_ID:
+                slot.lock(slotIdx)
+            item = cls.create(subcomp, CustomizationType.PROJECTION_DECAL, proxy)
+            slot.set(item, slotIdx, component=subcomp)
+
+    @classmethod
+    def invalidate(cls, slot):
+        for _, decal, comp in slot.items():
+            comp.id = decal.id
+
+    @staticmethod
+    def getRawComponent():
+        return ProjectionDecalComponent

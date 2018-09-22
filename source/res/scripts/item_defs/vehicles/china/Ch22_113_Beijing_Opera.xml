@@ -72,16 +72,25 @@
       <collisionModelServer>	vehicles/chinese/Ch22_113_Beijing_Opera/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/chinese/Ch22_113_Beijing_Opera/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/chinese/Ch22_113_Beijing_Opera/113_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.578815 0.618819 2.49624	</rayStart>
         <rayEnd>	-0.578815 0.247411 2.34773	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/chinese/Ch22_113_Beijing_Opera/113_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
   </hull>
   <chassis>
     <Chassis_Ch22_113_Beijing_Opera>
@@ -876,6 +885,12 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Chassis_Ch22_113_Beijing_Opera>
   </chassis>
   <turrets0>
@@ -952,16 +967,25 @@
             <collisionModelServer>	vehicles/chinese/Ch22_113_Beijing_Opera/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch22_113_Beijing_Opera/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	2	</slotId>
               <rayStart>	0.000007 0.000289122 1.38561	</rayStart>
               <rayEnd>	-0.0533893 0.0459478 1.38555	</rayEnd>
               <rayUp>	0.14 0.14 5	</rayUp>
               <size>	0.694	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
         </_122-mm_60-122TP>
       </guns>
       <models>
@@ -974,10 +998,15 @@
         <collisionModelClient>	vehicles/chinese/Ch22_113_Beijing_Opera/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.276083 1.35962	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.057 0.031 1.072 0.000 0.689 0.175 0.618 0.439 0.468 0.500 0.457 0.487 0.243 0.346 0.275	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_Ch22_113_Beijing_Opera>
   </turrets0>
   <engines>

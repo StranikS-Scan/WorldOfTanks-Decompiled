@@ -124,6 +124,20 @@ class DecalXmlReader(BaseCustomizationItemXmlReader):
             target.isMirrored = ix.readBool(xmlCtx, section, 'mirror')
 
 
+class ProjectionDecalXmlReader(BaseCustomizationItemXmlReader):
+    __slots__ = ()
+
+    def _readFromXml(self, target, xmlCtx, section):
+        super(ProjectionDecalXmlReader, self)._readFromXml(target, xmlCtx, section)
+
+    def _readClientOnlyFromXml(self, target, xmlCtx, section):
+        super(ProjectionDecalXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
+        if section.has_key('texture'):
+            target.texture = section.readString('texture')
+        if section.has_key('mirror'):
+            target.isMirrored = ix.readBool(xmlCtx, section, 'mirror')
+
+
 class ModificationXmlReader(BaseCustomizationItemXmlReader):
     __slots__ = ()
 
@@ -175,6 +189,11 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
             target.tiling = iv._readCamouflageTilings(xmlCtx, section, 'tiling', self.getDefaultNationId(target))
         if section.has_key('scales'):
             target.scales = ix.readTupleOfFloats(xmlCtx, section, 'scales')
+        if section.has_key('rotation'):
+            rotation = section['rotation']
+            target.rotation = {'hull': rotation.readFloat('HULL', 0.0),
+             'turret': rotation.readFloat('TURRET', 0.0),
+             'gun': rotation.readFloat('GUN', 0.0)}
 
     @staticmethod
     def getDefaultNationId(target):
@@ -241,6 +260,7 @@ def readCustomizationCacheFromXml(cache, folder):
     __readItemFolder(cc.CamouflageItem, folder, 'camouflage', cache.camouflages)
     __readItemFolder(cc.ModificationItem, folder, 'modification', cache.modifications)
     __readItemFolder(cc.DecalItem, folder, 'decal', cache.decals)
+    __readItemFolder(cc.ProjectionDecalItem, folder, 'projection_decal', cache.projection_decals)
     __readItemFolder(cc.StyleItem, folder, 'style', cache.styles)
     return None
 
@@ -347,6 +367,7 @@ def readEnum(xmlCtx, section, subsectionName, enumClass, defaultValue=None):
 
 __xmlReaders = {cc.PaintItem: PaintXmlReader(),
  cc.DecalItem: DecalXmlReader(),
+ cc.ProjectionDecalItem: ProjectionDecalXmlReader(),
  cc.CamouflageItem: CamouflageXmlReader(),
  cc.ModificationItem: ModificationXmlReader(),
  cc.StyleItem: StyleXmlReader()}

@@ -3,7 +3,7 @@
 from debug_utils import LOG_WARNING
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import packers
-from items.customizations import EmptyComponent, PaintComponent, CamouflageComponent, DecalComponent
+from items.customizations import EmptyComponent, PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent
 
 class SlotData(object):
     __slots__ = ('item', 'component')
@@ -36,13 +36,18 @@ class SlotData(object):
             citem, ccomp = bitem, bcomp
         return SlotData(item=citem, component=ccomp)
 
+    def isEmpty(self):
+        return not (self.item or self.component)
+
 
 def emptyComponent(itemTypeID):
     if itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
         return CamouflageComponent()
     if itemTypeID == GUI_ITEM_TYPE.PAINT:
         return PaintComponent()
-    return DecalComponent() if itemTypeID in (GUI_ITEM_TYPE.DECAL, GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION) else EmptyComponent()
+    if itemTypeID in (GUI_ITEM_TYPE.DECAL, GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION):
+        return DecalComponent()
+    return ProjectionDecalComponent() if itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL else EmptyComponent()
 
 
 class OutfitContainer(object):
@@ -98,14 +103,13 @@ class OutfitContainer(object):
 
 
 class MultiSlot(object):
-    __slots__ = ('_regions', '_slotType', '_items', '_components', '_locks')
+    __slots__ = ('_regions', '_slotType', '_items', '_locks')
 
     def __init__(self, slotType, regions):
         super(MultiSlot, self).__init__()
         self._regions = regions
         self._slotType = slotType
         self._items = {}
-        self._components = {}
         self._locks = {}
 
     def getType(self):

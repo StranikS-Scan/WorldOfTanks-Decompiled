@@ -68,30 +68,45 @@
       <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/russian/R08_BT-2/BT-2_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	-0.000517845 0.237263 2.26212	</rayStart>
         <rayEnd>	-0.000517845 -0.11259 2.0682	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.782222 0.511275 0.216103	</rayStart>
         <rayEnd>	-0.762222 0.511275 0.216103	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.46	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	0.782222 0.511275 0.216103	</rayStart>
         <rayEnd>	0.762222 0.511275 0.216103	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.46	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R08_BT-2/BT-2_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	3.4 3.4 0.000000 0.000000	</tiling>
     </camouflage>
@@ -386,6 +401,12 @@
           <maxOffset>	0.06	</maxOffset>
         </group>
       </groundNodes>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </BT-2_bootcamp>
   </chassis>
   <turrets0>
@@ -454,6 +475,12 @@
             <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
           <camouflage>
             <tiling>	1.5 2.5 0.000000 0.000000	</tiling>
           </camouflage>
@@ -469,26 +496,38 @@
         <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.05719 0.325445 0.424378	</gunPosition>
-      <emblemSlots>
-        <player>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.869 -0.059 1.000 0.000 0.619 0.254 0.500 0.464 0.603 0.500 0.000 0.500 0.000 0.100 0.139	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
           <rayStart>	-0.763179 0.340431 -0.172675	</rayStart>
           <rayEnd>	-0.376807 0.340431 -0.0691517	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
           <rayStart>	0.763179 0.340431 -0.172675	</rayStart>
           <rayEnd>	0.376807 0.340431 -0.0691517	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.869 -0.059 1.000 0.000 0.619 0.254 0.500 0.464 0.603 0.500 0.000 0.500 0.000 0.100 0.139	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
     </BT-2_cylindrical_bootcamp>
   </turrets0>
   <engines>

@@ -538,6 +538,7 @@ class DIALOGS(object):
     VEHICLESELLDIALOG_COMPLEXOPTIONALDEVICE = '#dialogs:vehicleSellDialog/complexOptionalDevice'
     VEHICLESELLDIALOG_EQUIPMENT = '#dialogs:vehicleSellDialog/equipment'
     VEHICLESELLDIALOG_BATTLEBOSTER = '#dialogs:vehicleSellDialog/battleBoster'
+    VEHICLESELLDIALOG_CUSTOMIZATION = '#dialogs:vehicleSellDialog/customization'
     VEHICLESELLDIALOG_AMMO_LABEL = '#dialogs:vehicleSellDialog/ammo/label'
     VEHICLESELLDIALOG_COMMONRESULT = '#dialogs:vehicleSellDialog/commonResult'
     VEHICLESELLDIALOG_INVENTORY = '#dialogs:vehicleSellDialog/inventory'
@@ -1449,6 +1450,7 @@ class DIALOGS(object):
      VEHICLESELLDIALOG_COMPLEXOPTIONALDEVICE,
      VEHICLESELLDIALOG_EQUIPMENT,
      VEHICLESELLDIALOG_BATTLEBOSTER,
+     VEHICLESELLDIALOG_CUSTOMIZATION,
      VEHICLESELLDIALOG_AMMO_LABEL,
      VEHICLESELLDIALOG_COMMONRESULT,
      VEHICLESELLDIALOG_INVENTORY,

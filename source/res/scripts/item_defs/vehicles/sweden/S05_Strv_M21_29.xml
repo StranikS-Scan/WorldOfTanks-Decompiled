@@ -68,45 +68,72 @@
       <collisionModelServer>	vehicles/sweden/S05_Strv_M21_29/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/sweden/S05_Strv_M21_29/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots>
-      <clan>
+    <hangarShadowTexture>	vehicles/sweden/S05_Strv_M21_29/Strv_M21_29_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
         <rayStart>	0.539874 0.515914 2.61116	</rayStart>
         <rayEnd>	0.396524 0.376585 2.605	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.252	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </clan>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
         <rayStart>	-0.837334 0.277197 -0.390597	</rayStart>
         <rayEnd>	-0.651639 0.277197 -0.464872	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.465	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	3	</slotId>
         <rayStart>	-0.725533 0.350587 -1.18687	</rayStart>
         <rayEnd>	-0.525534 0.350587 -1.18687	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.282	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <player>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	4	</slotId>
         <rayStart>	0.00269473 0.337418 -2.15905	</rayStart>
         <rayEnd>	0.00269473 0.248907 -1.9797	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
-      </player>
-      <inscription>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	5	</slotId>
         <rayStart>	0.837334 0.277197 -0.390597	</rayStart>
         <rayEnd>	0.651639 0.277197 -0.464872	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.465	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
-    </emblemSlots>
-    <hangarShadowTexture>	vehicles/sweden/S05_Strv_M21_29/Strv_M21_29_HangarShadowMap.dds	</hangarShadowTexture>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	0.000000 0.676752 1.34338	</anchorPosition>
+        <anchorDirection>	0.000000 0.449903 0.893077	</anchorDirection>
+      </slot>
+    </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 1.8	</tiling>
     </camouflage>
@@ -157,27 +184,31 @@
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.228636	</radius>
-          <isLeading>	true	</isLeading>
+          <syncAngle>	60	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
           <radius>	0.0817832	</radius>
-          <isLeading>	true	</isLeading>
+          <syncAngle>	60	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_L2	</name>
           <radius>	0.0745793	</radius>
-          <isLeading>	true	</isLeading>
+          <syncAngle>	60	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_L3	</name>
           <radius>	0.0817831	</radius>
-          <isLeading>	true	</isLeading>
+          <syncAngle>	60	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -188,9 +219,9 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_L9	</name>
           <radius>	0.295286	</radius>
-          <isLeading>	true	</isLeading>
           <syncAngle>	30	</syncAngle>
         </wheel>
         <group>
@@ -202,27 +233,31 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.228636	</radius>
-          <isLeading>	true	</isLeading>
+          <syncAngle>	60	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
           <radius>	0.0817832	</radius>
-          <isLeading>	true	</isLeading>
+          <syncAngle>	60	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_R2	</name>
           <radius>	0.0745793	</radius>
-          <isLeading>	true	</isLeading>
+          <syncAngle>	60	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_R3	</name>
           <radius>	0.0817831	</radius>
-          <isLeading>	true	</isLeading>
+          <syncAngle>	60	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -233,9 +268,9 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_R9	</name>
           <radius>	0.295286	</radius>
-          <isLeading>	true	</isLeading>
           <syncAngle>	30	</syncAngle>
         </wheel>
         <group>
@@ -730,6 +765,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.000446646 2.59876 -0.946554	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_S05_Strv_M21_29>
   </chassis>
   <turrets0>
@@ -799,6 +848,21 @@
             <collisionModelServer>	vehicles/sweden/S05_Strv_M21_29/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S05_Strv_M21_29/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	0.000000 0.000000 0.497686	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_37mm_kanon_m_Skoda>
         <_20mm_akan_m_Madsen>	shared	  <maxAmmo>	480	</maxAmmo>
           <unlocks>
@@ -839,6 +903,21 @@
             <collisionModelServer>	vehicles/sweden/S05_Strv_M21_29/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S05_Strv_M21_29/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	9	</slotId>
+              <anchorPosition>	0.000000 0.000000 0.603175	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
         </_20mm_akan_m_Madsen>
       </guns>
       <models>
@@ -851,10 +930,23 @@
         <collisionModelClient>	vehicles/sweden/S05_Strv_M21_29/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.012558 0.187298 0.615309	</gunPosition>
-      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.964 0.000 0.971 0.000 0.348 0.551 0.500 0.500 0.500 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 0.554568 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <tiling>	1 0.5 0.000000 0.000000	</tiling>
       </camouflage>

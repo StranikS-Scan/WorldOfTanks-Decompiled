@@ -89,7 +89,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
 
 
 class Vehicle(FittingItem, HasStrCD):
-    __slots__ = ('__descriptor', '__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_hasRentPackages', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_canTradeIn', '_canTradeOff', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_crew', '_lastCrew', '_hasModulesToSelect', '_customOutfits', '_styledOutfits')
+    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_hasRentPackages', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_canTradeIn', '_canTradeOff', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_crew', '_lastCrew', '_hasModulesToSelect', '_customOutfits', '_styledOutfits')
     NOT_FULL_AMMO_MULTIPLIER = 0.2
     MAX_RENT_MULTIPLIER = 2
 
@@ -144,9 +144,9 @@ class Vehicle(FittingItem, HasStrCD):
         else:
             _, nID, innID = vehicles.parseIntCompactDescr(typeCompDescr)
             vehDescr = vehicles.VehicleDescr(typeID=(nID, innID))
-        self.__descriptor = vehDescr
         HasStrCD.__init__(self, strCompactDescr)
         FittingItem.__init__(self, vehDescr.type.compactDescr, proxy)
+        self._descriptor = vehDescr
         self._inventoryID = inventoryID
         self._xp = 0
         self._dailyXPFactor = -1
@@ -284,6 +284,9 @@ class Vehicle(FittingItem, HasStrCD):
 
         return price
 
+    def _getDescriptor(self):
+        return None
+
     def _calcDefaultSellPrice(self, proxy):
         if self.isRented:
             return MONEY_UNDEFINED
@@ -371,7 +374,7 @@ class Vehicle(FittingItem, HasStrCD):
         for season in SeasonType.SEASONS:
             outfitData = proxy.inventory.getOutfitData(compactDescr, season)
             if outfitData:
-                outfits[season] = cls.itemsFactory.createOutfit(outfitData.compDescr, bool(outfitData.flags & StyleFlags.ENABLED), bool(outfitData.flags & StyleFlags.INSTALLED), proxy)
+                outfits[season] = cls.itemsFactory.createOutfit(strCompactDescr=outfitData.compDescr, isEnabled=bool(outfitData.flags & StyleFlags.ENABLED), isInstalled=bool(outfitData.flags & StyleFlags.INSTALLED), proxy=proxy)
             outfits[season] = cls.itemsFactory.createOutfit()
 
         return outfits
@@ -386,8 +389,8 @@ class Vehicle(FittingItem, HasStrCD):
         styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
         style = vehicles.getItemByCompactDescr(styleIntCD)
         for styleSeason in SeasonType.SEASONS:
-            compDescr = style.outfits.get(styleSeason).makeCompDescr()
-            outfits[styleSeason] = cls.itemsFactory.createOutfit(compDescr, bool(outfitData.flags & StyleFlags.ENABLED), bool(outfitData.flags & StyleFlags.INSTALLED), proxy)
+            outfitComp = style.outfits.get(styleSeason)
+            outfits[styleSeason] = cls.itemsFactory.createOutfit(component=outfitComp, isEnabled=bool(outfitData.flags & StyleFlags.ENABLED), isInstalled=bool(outfitData.flags & StyleFlags.INSTALLED), proxy=proxy)
 
         return outfits
 
@@ -679,10 +682,6 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def rentExpiryState(self):
         return self.rentInfo.getExpiryState()
-
-    @property
-    def descriptor(self):
-        return self.__descriptor
 
     @property
     def type(self):

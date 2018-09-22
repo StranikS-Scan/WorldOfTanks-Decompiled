@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/customization/c11n_items.py
+from collections import defaultdict
 import Math
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -7,7 +8,7 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from helpers import i18n, dependency
-from items.components.c11n_constants import SeasonType
+from items.components.c11n_constants import SeasonType, ItemTags
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 _UNBOUND_VEH = 0
@@ -60,7 +61,7 @@ class ConcealmentBonus(object):
 
 
 class Customization(FittingItem):
-    __slots__ = ('_boundInventoryCount', '_bonus')
+    __slots__ = ('_boundInventoryCount', '_bonus', '_installledVehicles')
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, intCompactDescr, proxy=None):
@@ -68,8 +69,13 @@ class Customization(FittingItem):
         self._inventoryCount = 0
         self._boundInventoryCount = {}
         self._bonus = None
-        if proxy and proxy.inventory.isSynced():
+        self._installledVehicles = defaultdict(int)
+        if proxy is not None and proxy.inventory.isSynced():
+            installledVehicles = proxy.inventory.getC11nItemAppliedVehicles(self.intCD)
             invCount = proxy.inventory.getItems(GUI_ITEM_TYPE.CUSTOMIZATION, self.intCD)
+            for vehicleCD in installledVehicles:
+                self._installledVehicles[vehicleCD] = proxy.inventory.getC11nItemAppliedOnVehicleCount(self.intCD, vehicleCD)
+
             for vehIntCD, count in invCount.iteritems():
                 self._boundInventoryCount[vehIntCD] = count
 
@@ -139,8 +145,32 @@ class Customization(FittingItem):
     def icon(self):
         return self.descriptor.texture.replace('gui/', '../', 1)
 
+    @property
+    def isVehicleBound(self):
+        return ItemTags.VEHICLE_BOUND in self.tags
+
+    @property
+    def isLimited(self):
+        return self.descriptor.maxNumber > 0
+
+    @property
+    def buyCount(self):
+        if self.isHidden:
+            return 0
+        return max(self.descriptor.maxNumber - self.boundInventoryCount.get(-1, 0), 0) if self.isLimited else float('inf')
+
+    @property
+    def mayApply(self):
+        return self.inventoryCount > 0 or self.buyCount > 0
+
     def getIconApplied(self, component):
         return self.icon
+
+    def getInstalledVehicles(self, vehs=None):
+        return [ vehicleCD for vehicleCD, count in self._installledVehicles.items() if count > 0 ]
+
+    def getInstalledOnVehicleCount(self, vehicleIntCD):
+        return self._installledVehicles[vehicleIntCD]
 
     def isHistorical(self):
         return self.descriptor.historical
@@ -232,6 +262,10 @@ class Camouflage(Customization):
         return self.descriptor.tiling
 
     @property
+    def rotation(self):
+        return self.descriptor.rotation
+
+    @property
     def scales(self):
         return self.descriptor.scales
 
@@ -292,6 +326,13 @@ class Inscription(Decal):
         return True
 
 
+class ProjectionDecal(Decal):
+
+    def __init__(self, *args, **kwargs):
+        super(ProjectionDecal, self).__init__(*args, **kwargs)
+        self.itemTypeID = GUI_ITEM_TYPE.PROJECTION_DECAL
+
+
 class Style(Customization):
     __slots__ = ('_outfits',)
 
@@ -299,9 +340,6 @@ class Style(Customization):
         super(Style, self).__init__(intCompactDescr, proxy)
         self.itemTypeID = GUI_ITEM_TYPE.STYLE
         self._outfits = {}
-        for season, component in self.descriptor.outfits.iteritems():
-            outfitDescr = component.makeCompDescr()
-            self._outfits[season] = self.itemsFactory.createOutfit(outfitDescr, proxy=proxy)
 
     @property
     def isRentable(self):
@@ -330,6 +368,8 @@ class Style(Customization):
         return RentalInfoProvider(battles=battlesLeft)
 
     def getOutfit(self, season):
+        component = self.descriptor.outfits[season]
+        self._outfits[season] = self.itemsFactory.createOutfit(component=component)
         return self._outfits.get(season)
 
     def isWide(self):

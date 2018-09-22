@@ -56,6 +56,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     id = property(lambda self: self.__vID)
     isAlive = property(lambda self: self.__isAlive)
     isObserver = property(lambda self: self.__isObserver)
+    outfit = property(lambda self: self.__outfit)
 
     def __setFashions(self, fashions, isTurretDetached=False):
         self.__fashions = fashions
@@ -102,6 +103,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     gunLinkedNodesAnimator = ComponentDescriptor()
     swingingAnimator = ComponentDescriptor()
     dirtComponent = ComponentDescriptor()
+    c11nComponent = ComponentDescriptor()
     suspensionSound = ComponentDescriptor()
     siegeEffects = ComponentDescriptor()
     lodCalculator = ComponentDescriptor()
@@ -381,7 +383,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.leveredSuspension = None
         self.trackNodesAnimator = None
         self.wheelsAnimator = None
-        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(True), None, None, None)
+        fashions = camouflages.prepareFashions(True)
         self.__setFashions(fashions, isTurretDetached)
         model_assembler.setupTracksFashion(self.__typeDesc, self.__fashion)
         self.customEffectManager = None
@@ -570,7 +572,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__outfit = Outfit() if forceHistorical else outfit
 
     def __applyVehicleOutfit(self):
-        camouflages.updateFashions(self.__fashions, self.__typeDesc, self.__currentDamageState.isCurrentModelDamaged, self.__outfit)
+        camouflages.updateFashions(self)
 
     def getBounds(self, partIdx):
         return self.collisions.getBoundingBox(partIdx) if self.collisions is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)

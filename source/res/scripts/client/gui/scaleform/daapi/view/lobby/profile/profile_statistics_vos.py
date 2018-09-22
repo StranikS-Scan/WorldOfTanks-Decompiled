@@ -4,7 +4,7 @@ import BigWorld
 import nations
 from dossiers2.ui import layouts
 from gui import GUI_NATIONS, getNationIndex
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils, FALLOUT_STATISTICS_LAYOUT, FORT_STATISTICS_LAYOUT, STATISTICS_LAYOUT
+from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils, FALLOUT_STATISTICS_LAYOUT, STATISTICS_LAYOUT
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import DetailedStatisticsUtils as DSUtils
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
@@ -239,7 +239,7 @@ class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
         targetData = data[0]
         dataList = []
         if self.lobbyContext.getServerSettings().isStrongholdsEnabled():
-            dataList.append(_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTBATTLES, self.__fortBattlesTargetData, isCurrentUser=self._isCurrentUser, layout=FORT_STATISTICS_LAYOUT))
+            dataList.append(_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTBATTLES, self.__fortBattlesTargetData, isCurrentUser=self._isCurrentUser))
         dataList.append(_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTSORTIE, targetData, isCurrentUser=self._isCurrentUser))
         return dataList
 

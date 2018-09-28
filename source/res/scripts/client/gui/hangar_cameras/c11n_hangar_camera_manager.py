@@ -3,9 +3,15 @@
 import math
 import BigWorld
 import Math
+from gui import g_guiResetters
+from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
+from skeletons.account_helpers.settings_core import ISettingsCore
+from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
+_VERTICAL_OFFSET = 0.2
 
 class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
+    _settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, hangarCameraManager):
         CallbackDelayer.__init__(self)
@@ -15,6 +21,14 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
         self.__selectedEmblemInfo = None
         self.__prevPitch = None
         return
+
+    def init(self):
+        g_guiResetters.add(self.__onProjectionChanged)
+        self._settingsCore.onSettingsApplied += self.__onProjectionChanged
+
+    def fini(self):
+        g_guiResetters.remove(self.__onProjectionChanged)
+        self._settingsCore.onSettingsApplied -= self.__onProjectionChanged
 
     def locateCameraToPreview(self):
         if self.__hangarCameraManager is None or self.__hangarCameraManager.camera is None:
@@ -36,10 +50,14 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             from HangarVehicle import HangarVehicle
             pivotPos = cfg['cam_pivot_pos']
             if isinstance(vEntity, HangarVehicle):
-                cm = vEntity.appearance.compoundModel
-                if cm is not None:
-                    turretJointHeight = max(0.2, cm.node('HP_turretJoint').localMatrix.translation[1])
-                    pivotPos = Math.Vector3(0.0, turretJointHeight, 0.0)
+                appearance = vEntity.appearance
+                hullAABB = appearance.collisions.getBoundingBox(TankPartIndexes.HULL)
+                position = Math.Vector3((hullAABB[1].x + hullAABB[0].x) / 2.0, hullAABB[1].y / 2.0, (hullAABB[1].z + hullAABB[0].z) / 2.0)
+                m = Math.Matrix(appearance.compoundModel.node(TankPartNames.HULL))
+                worldPos = m.applyPoint(position)
+                pivotPos = Math.Vector3(0, 0, 0)
+            else:
+                worldPos = cfg['cam_start_target_pos']
             if preserveAngles:
                 matrix = Math.Matrix(self.__hangarCameraManager.camera.invViewMatrix)
                 previewYaw = matrix.yaw
@@ -47,7 +65,7 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             else:
                 previewYaw = math.radians(cfg['cam_start_angles'][0])
                 previewPitch = math.radians(cfg['cam_start_angles'][1])
-            self._setCameraLocation(targetPos=cfg['cam_start_target_pos'], pivotPos=pivotPos, yaw=previewYaw, pitch=previewPitch, dist=cfg['cam_start_dist'], camConstraints=[hangarConfig['cam_pitch_constr'], hangarConfig['cam_yaw_constr'], cfg['cam_dist_constr']], smothiedTransition=not forceLocate)
+            self._setCameraLocation(targetPos=worldPos, pivotPos=pivotPos, yaw=previewYaw, pitch=previewPitch, dist=cfg['cam_start_dist'], camConstraints=[hangarConfig['cam_pitch_constr'], hangarConfig['cam_yaw_constr'], cfg['cam_dist_constr']], smothiedTransition=not forceLocate)
             self.__prevPitch = None
             return
 
@@ -65,7 +83,7 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             return False
         else:
             currentMatrix = Math.Matrix(self.__hangarCameraManager.camera.invViewMatrix)
-            self.__prevPitch = -currentMatrix.pitch
+            self.__prevPitch = -(currentMatrix.pitch - self.__hangarCameraManager.camera.pitchOffset)
             vEntity = BigWorld.entity(self.__hangarCameraManager.getCurrentEntityId())
             from HangarVehicle import HangarVehicle
             if not isinstance(vEntity, HangarVehicle):
@@ -89,7 +107,7 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             return False
         else:
             currentMatrix = Math.Matrix(self.__hangarCameraManager.camera.invViewMatrix)
-            self.__prevPitch = -currentMatrix.pitch
+            self.__prevPitch = -(currentMatrix.pitch - self.__hangarCameraManager.camera.pitchOffset)
             if normal is not None:
                 direction = -normal
                 yaw = direction.yaw
@@ -111,7 +129,7 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
         self.__hangarCameraManager.camera.maxDistHalfLife = customCfg['cam_fluency']
         self.__hangarCameraManager.camera.turningHalfLife = customCfg['cam_fluency']
         self.__hangarCameraManager.camera.movementHalfLife = customCfg['cam_fluency']
-        self.__hangarCameraManager.setCameraLocation(targetPos=targetPos, pivotPos=pivotPos, yaw=yaw, pitch=pitch, dist=dist, camConstraints=camConstraints, ignoreConstraints=ignoreConstraints, smothiedTransition=smothiedTransition, previewMode=previewMode)
+        self.__hangarCameraManager.setCameraLocation(targetPos=targetPos, pivotPos=pivotPos, yaw=yaw, pitch=pitch, dist=dist, camConstraints=camConstraints, ignoreConstraints=ignoreConstraints, smothiedTransition=smothiedTransition, previewMode=previewMode, verticalOffset=_VERTICAL_OFFSET)
         self._startCameraMovement()
 
     def _startCameraMovement(self):
@@ -144,3 +162,6 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             return None
         else:
             return 0.1
+
+    def __onProjectionChanged(self, *args, **kwargs):
+        self.__hangarCameraManager.updateProjection()

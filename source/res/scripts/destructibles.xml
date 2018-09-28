@@ -10075,6 +10075,7 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAM_011_Truck_01_04	</effect>
+      <hitEffect>	inf_fuel_envAM_011_Truck_01	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
@@ -10085,6 +10086,7 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAM_011_Truck_02_01	</effect>
+      <hitEffect>	inf_fuel_envAM_011_Truck_01	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal1	</matName>
@@ -10095,6 +10097,7 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAM_011_Truck_03_04	</effect>
+      <hitEffect>	inf_fuel_envAM_011_Truck_01	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal2	</matName>
@@ -13349,6 +13352,17 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
+      <filename>	content/GatesAndFences/hd_gaf_SU_005_IronFence/normal/lod0/hd_gaf_SU_005_IronFence_BigTile_04.model	</filename>
+      <health>	5	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_gafSU_92_03_IronFence_big_tile_01	</effect>
+      <hitEffect>	none	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_stone0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
       <filename>	content/Environment/hd_env_SU_045_GAZm20/normal/lod0/hd_env_SU_045_GAZm20_02.model	</filename>
       <health>	20	</health>
       <decayEffect>	none	</decayEffect>
@@ -14070,6 +14084,17 @@
       <decayEffect>	none	</decayEffect>
       <effect>	hd_env_AM_067_GasStation_Pump_01	</effect>
       <hitEffect>	hd_env_AM_067_GasStation_Pump_01	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_AM_069_WaterTowerBig/normal/lod0/hd_env_AM_069_WaterTowerBig.model	</filename>
+      <health>	50	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_AM_069_WaterTower	</effect>
+      <hitEffect>	hd_env_AM_069_WaterTower	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
       <matName>	n_metal0	</matName>
@@ -18922,39 +18947,39 @@
       <filename>	content/Environment/hd_env_AM_067_GasStation/normal/lod0/hd_env_AM_067_GasStation_01.model	</filename>
       <modules>
         <module>
-          <matName>	n_metal1	</matName>
+          <matName>	n_metal0_1	</matName>
           <health>	15	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_env_AM_067_GasStation_01_h1	</ramEffect>
           <hitEffect>	hd_env_AM_067_GasStation_01_h1	</hitEffect>
-          <effectHP>	HP_module1	</effectHP>
+          <effectHP>	HP_module0_1	</effectHP>
           <effectScale>	1.000000	</effectScale>
         </module>
         <module>
-          <matName>	n_metal2	</matName>
+          <matName>	n_metal0_2	</matName>
           <health>	15	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_env_AM_067_GasStation_01_h1	</ramEffect>
           <hitEffect>	hd_env_AM_067_GasStation_01_h1	</hitEffect>
-          <effectHP>	HP_module2	</effectHP>
+          <effectHP>	HP_module0_2	</effectHP>
           <effectScale>	1.000000	</effectScale>
         </module>
         <module>
-          <matName>	n_metal3	</matName>
+          <matName>	n_metal0_3	</matName>
           <health>	15	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_env_AM_067_GasStation_01_h1	</ramEffect>
           <hitEffect>	hd_env_AM_067_GasStation_01_h1	</hitEffect>
-          <effectHP>	HP_module3	</effectHP>
+          <effectHP>	HP_module0_3	</effectHP>
           <effectScale>	1.000000	</effectScale>
         </module>
         <module>
-          <matName>	n_metal4	</matName>
+          <matName>	n_metal0_4	</matName>
           <health>	15	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_env_AM_067_GasStation_01_h1	</ramEffect>
           <hitEffect>	hd_env_AM_067_GasStation_01_h1	</hitEffect>
-          <effectHP>	HP_module4	</effectHP>
+          <effectHP>	HP_module0_4	</effectHP>
           <effectScale>	1.000000	</effectScale>
         </module>
       </modules>

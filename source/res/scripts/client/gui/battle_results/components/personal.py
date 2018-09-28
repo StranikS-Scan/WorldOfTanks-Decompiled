@@ -161,8 +161,19 @@ class EpicVehiclesBlock(PersonalVehiclesBlock):
         super(EpicVehiclesBlock, self).setRecord(result, reusable)
 
 
-class DamageDetailsBlock(base.StatsBlock):
-    __slots__ = ('piercings', 'damageDealtValues', 'damageDealtNames')
+class _DetailsBlock(base.StatsBlock):
+    __slots__ = ('_isEmpty',)
+
+    def __init__(self, meta=None, field='', *path):
+        super(_DetailsBlock, self).__init__(meta, field, *path)
+        self._isEmpty = True
+
+    def isEmpty(self):
+        return self._isEmpty
+
+
+class DamageDetailsBlock(_DetailsBlock):
+    __slots__ = ('piercings', 'damageDealtValues', 'damageDealtNames', '_isEmpty')
 
     def __init__(self, meta=None, field='', *path):
         super(DamageDetailsBlock, self).__init__(meta, field, *path)
@@ -175,13 +186,15 @@ class DamageDetailsBlock(base.StatsBlock):
         piercings = result.piercings
         damageDealt = result.damageDealt
         self.piercings = piercings
+        self._isEmpty = piercings <= 0
         if damageDealt > 0:
+            self._isEmpty = False
             self.damageDealtValues = [BigWorld.wg_getIntegralFormat(damageDealt), BigWorld.wg_getIntegralFormat(piercings)]
             self.damageDealtNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_PART1, vals=style.getTooltipParamsStyle()), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_PART2)]
 
 
-class ArmorUsingDetailsBlock(base.StatsBlock):
-    __slots__ = ('usedArmorCount', 'armorValues', 'armorNames')
+class ArmorUsingDetailsBlock(_DetailsBlock):
+    __slots__ = ('usedArmorCount', 'armorValues', 'armorNames', '_isEmpty')
 
     def __init__(self, meta=None, field='', *path):
         super(ArmorUsingDetailsBlock, self).__init__(meta, field, *path)
@@ -195,13 +208,14 @@ class ArmorUsingDetailsBlock(base.StatsBlock):
         damageBlocked = result.damageBlockedByArmor
         self.usedArmorCount = noDamage
         if noDamage > 0 or damageBlocked > 0:
+            self._isEmpty = False
             rickochets = result.rickochetsReceived
             self.armorValues = [BigWorld.wg_getIntegralFormat(rickochets), BigWorld.wg_getIntegralFormat(noDamage), BigWorld.wg_getIntegralFormat(damageBlocked)]
             self.armorNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART1), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART2), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART3, vals=style.getTooltipParamsStyle())]
 
 
-class AssistDetailsBlock(base.StatsBlock):
-    __slots__ = ('damageAssisted', 'damageAssistedValues', 'damageAssistedNames')
+class AssistDetailsBlock(_DetailsBlock):
+    __slots__ = ('damageAssisted', 'damageAssistedValues', 'damageAssistedNames', '_isEmpty')
 
     def __init__(self, meta=None, field='', *path):
         super(AssistDetailsBlock, self).__init__(meta, field, *path)
@@ -216,13 +230,14 @@ class AssistDetailsBlock(base.StatsBlock):
         damageAssisted = damageAssistedTrack + damageAssistedRadio
         self.damageAssisted = damageAssisted
         if damageAssisted > 0:
+            self._isEmpty = False
             self.damageAssistedValues = [BigWorld.wg_getIntegralFormat(damageAssistedRadio), BigWorld.wg_getIntegralFormat(damageAssistedTrack), BigWorld.wg_getIntegralFormat(damageAssisted)]
             tooltipStyle = style.getTooltipParamsStyle()
             self.damageAssistedNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART1, vals=tooltipStyle), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART2, vals=tooltipStyle), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_TOTAL, vals=tooltipStyle)]
 
 
-class StunDetailsBlock(base.StatsBlock):
-    __slots__ = ('stunNum', 'stunValues', 'stunNames', 'stunDuration')
+class StunDetailsBlock(_DetailsBlock):
+    __slots__ = ('stunNum', 'stunValues', 'stunNames', 'stunDuration', '_isEmpty')
 
     def __init__(self, meta=None, field='', *path):
         super(StunDetailsBlock, self).__init__(meta, field, *path)
@@ -239,12 +254,13 @@ class StunDetailsBlock(base.StatsBlock):
         self.stunNum = count
         self.stunDuration = duration
         if count > 0 or assisted > 0 or duration > 0:
+            self._isEmpty = False
             self.stunValues = [BigWorld.wg_getIntegralFormat(assisted), BigWorld.wg_getIntegralFormat(count), BigWorld.wg_getFractionalFormat(duration)]
             self.stunNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART1, vals=style.getTooltipParamsStyle()), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART2), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART3, vals=style.getTooltipParamsStyle(BATTLE_RESULTS.COMMON_TOOLTIP_PARAMS_VAL_SECONDS))]
 
 
-class CritsDetailsBlock(base.StatsBlock):
-    __slots__ = ('critsCount', 'criticalDevices', 'destroyedDevices', 'destroyedTankmen')
+class CritsDetailsBlock(_DetailsBlock):
+    __slots__ = ('critsCount', 'criticalDevices', 'destroyedDevices', 'destroyedTankmen', '_isEmpty')
 
     def __init__(self, meta=None, field='', *path):
         super(CritsDetailsBlock, self).__init__(meta, field, *path)
@@ -260,12 +276,15 @@ class CritsDetailsBlock(base.StatsBlock):
         destroyedDevices = []
         destroyedTankmen = []
         for device in crits[CRIT_MASK_SUB_TYPES.CRITICAL_DEVICES]:
+            self._isEmpty = False
             criticalDevices.append(style.makeCriticalModuleTooltipLabel(device))
 
         for device in crits[CRIT_MASK_SUB_TYPES.DESTROYED_DEVICES]:
+            self._isEmpty = False
             destroyedDevices.append(style.makeDestroyedModuleTooltipLabel(device))
 
         for tankman in crits[CRIT_MASK_SUB_TYPES.DESTROYED_TANKMENS]:
+            self._isEmpty = False
             destroyedTankmen.append(style.makeTankmenTooltipLabel(tankman))
 
         self.critsCount = BigWorld.wg_getIntegralFormat(crits['critsCount'])
@@ -324,8 +343,8 @@ class AllyTeamBaseDetailBlock(TeamBaseDetailsBlock):
         self.isEnemyBase = False
 
 
-class EnemyDetailsBlock(base.StatsBlock):
-    __slots__ = ('vehicleIcon', 'vehicleName', 'vehicleIntCD', 'vehicleID', 'deathReason', 'spotted', 'piercings', 'damageDealt', 'killCount')
+class EnemyDetailsBlock(_DetailsBlock):
+    __slots__ = ('vehicleIcon', 'vehicleName', 'vehicleIntCD', 'vehicleID', 'deathReason', 'spotted', 'piercings', 'damageDealt', 'killCount', '_isEmpty')
 
     def setRecord(self, result, reusable):
         if result.vehicle is not None:
@@ -342,8 +361,11 @@ class EnemyDetailsBlock(base.StatsBlock):
          AssistDetailsBlock(),
          CritsDetailsBlock(),
          StunDetailsBlock())
+        self._isEmpty = self.spotted <= 0
         for block in blocks:
             block.setRecord(result, reusable)
+            if self._isEmpty:
+                self._isEmpty = block.isEmpty()
             self.addComponent(self.getNextComponentIndex(), block)
 
         return
@@ -442,12 +464,17 @@ class TotalEfficiencyDetailsBlock(base.StatsBlock):
                     components.append(component)
 
             block = base.StatsBlock(base.ListMeta())
-            if enemies:
-                block.addComponent(block.getNextComponentIndex(), style.GroupMiddleLabelBlock(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_TECHNIQUE))
+            detailedBlocks = []
             for info in enemies:
                 component = EnemyDetailsBlock()
                 component.setRecord(info, reusable)
-                block.addComponent(block.getNextComponentIndex(), component)
+                if not component.isEmpty():
+                    detailedBlocks.append(component)
+
+            if detailedBlocks:
+                block.addComponent(block.getNextComponentIndex(), style.GroupMiddleLabelBlock(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_TECHNIQUE))
+                for db in detailedBlocks:
+                    block.addComponent(block.getNextComponentIndex(), db)
 
             for component in components:
                 block.addComponent(block.getNextComponentIndex(), component)

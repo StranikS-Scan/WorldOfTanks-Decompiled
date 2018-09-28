@@ -1188,7 +1188,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     def getAnyOutfitSeason(self):
         activeSeasons = []
-        for season in SeasonType.SEASONS:
+        for season in SeasonType.COMMON_SEASONS:
             if self.hasOutfitWithItems(season):
                 activeSeasons.append(season)
 

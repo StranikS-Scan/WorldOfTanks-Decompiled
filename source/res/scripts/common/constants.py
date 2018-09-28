@@ -2018,4 +2018,4 @@ class LOCALIZABLE_BOT_NAME:
 
     @staticmethod
     def parse(name):
-        return (int(token) for token in name.split('_')[1:]) if name.startswith(LOCALIZABLE_BOT_NAME.PREFIX) else None
+        return (int(token) for token in name.split('_')[1:]) if name and name.startswith(LOCALIZABLE_BOT_NAME.PREFIX) else None

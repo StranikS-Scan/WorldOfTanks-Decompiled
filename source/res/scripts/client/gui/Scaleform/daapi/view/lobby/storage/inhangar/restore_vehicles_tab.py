@@ -10,7 +10,9 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.shared import event_dispatcher as shared_events
+from gui.shared.formatters import getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, i18n, time_utils
@@ -70,9 +72,11 @@ class _RestoreVehiclesDataProvider(StorageCarouselDataProvider):
     def _buildVehicle(self, item):
         vo = super(_RestoreVehiclesDataProvider, self)._buildVehicle(item)
         restoreCreditsPrice = item.restorePrice.credits
+        restorePrice = ItemPrice(item.restorePrice, item.restorePrice)
         enoughCredits, _ = _enoughCreditsForRestore(restoreCreditsPrice, self._itemsCache)
         restoreAvailable, timerText, description, timerIcon = _getVehicleRestoreInfo(item)
-        vo.update({'isMoneyEnough': enoughCredits,
+        vo.update({'price': getItemPricesVO(restorePrice)[0],
+         'isMoneyEnough': enoughCredits,
          'enabled': enoughCredits and restoreAvailable,
          'description': description,
          'timerText': timerText,

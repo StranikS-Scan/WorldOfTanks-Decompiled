@@ -12,9 +12,7 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.processors.vehicle import VehicleAutoStyleEquipProcessor
 from gui.shared.formatters import text_styles
-from gui.shared.utils import decorators
 from helpers import dependency
 from skeletons.gui.customization import ICustomizationService
 from gui.shared.gui_items.customization.c11n_items import camoIconTemplate
@@ -50,7 +48,6 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._editMode = False
         self._extraMoney = None
         self._isItemAppliedToAll = False
-        self.__autoRentEnabled = False
         self.__interactionType = CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_DEFAULT
         self.__changes = [False] * 3
         return
@@ -140,8 +137,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_ONE:
             self.__removeElement()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_RENT_CHECKBOX_CHANGE:
-            self.__autoRentEnabled = not self.__autoRentEnabled
-            self.__setAutoRent(self.__autoRentEnabled)
+            self.__ctx.changeAutoRent()
+            self.__update()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_FROM_ALL_PARTS:
             self.__removeFromAllAreas()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_SCALE_CHANGE:
@@ -155,6 +152,9 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_COLOR_CHANGE:
             if self._currentComponent.palette != actionData:
                 self.__ctx.changeCamouflageColor(self._areaID, self._regionID, actionData)
+        elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_CLOSE:
+            self.hide()
+            self.__ctx.onClearItem()
 
     def onClose(self):
         self.hide()
@@ -188,7 +188,6 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         if self._isVisible and self._slotID != -1 and self._regionID != -1 and self._areaID != -1:
             self.__updateItemAppliedToAllFlag()
             self.__updateExtraPrice()
-            self.__autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
             self.as_setDataAndShowS(self.__makeVO())
             self.__ctx.caruselItemUnselected()
             self.__ctx.onPropertySheetShown()
@@ -298,6 +297,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
             renderers.append(self.__makeScaleRendererVO())
         renderers.append(self.__makeRemoveRendererVO())
+        renderers.append(self.__makeCloseeRendererVO())
         return renderers
 
     def __updateExtraPrice(self):
@@ -346,30 +346,58 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_CROSS_HOVER
         if self._slotID == GUI_ITEM_TYPE.STYLE:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVESTYLE
-        elif self._slotID == GUI_ITEM_TYPE.MODIFICATION:
-            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_TANK
-        elif self._slotID == GUI_ITEM_TYPE.EMBLEM:
-            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_EMBLEM
-        elif self._slotID == GUI_ITEM_TYPE.INSCRIPTION:
-            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_INSCRIPTION
-        elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
-            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_PROJECTIONDECAL
+            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_STYLE_X
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_STYLE_X_HOVER
         else:
-            actionBtnLabel = VEHICLE_CUSTOMIZATION.getSheetBtnRemoveText(getCustomizationTankPartName(self._areaID, self._regionID))
+            if self._slotID == GUI_ITEM_TYPE.MODIFICATION:
+                actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_TANK
+                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EFFECTS_X
+                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EFFECTS_X_HOVER
+            elif self._slotID == GUI_ITEM_TYPE.EMBLEM:
+                actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_EMBLEM
+                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EMBLEM_X
+                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EMBLEM_X_HOVER
+            elif self._slotID == GUI_ITEM_TYPE.INSCRIPTION:
+                actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_INSCRIPTION
+                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_TYPE_X
+                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_TYPE_X_HOVER
+            elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+                actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_PROJECTIONDECAL
+                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EFFECTS_X
+                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EFFECTS_X_HOVER
+            else:
+                actionBtnLabel = VEHICLE_CUSTOMIZATION.getSheetBtnRemoveText(getCustomizationTankPartName(self._areaID, self._regionID))
+            if self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
+                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_CAMO_X
+                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_CAMO_X_HOVER
+            elif self._slotID == GUI_ITEM_TYPE.PAINT:
+                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_COLORS_X
+                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_COLORS_X_HOVER
         return {'iconSrc': iconSrc,
          'iconHoverSrc': hoverIcon,
          'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_ONE}
 
+    def __makeCloseeRendererVO(self):
+        iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_CROSS
+        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_CROSS_HOVER
+        actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_CLOSE
+        return {'iconSrc': iconSrc,
+         'iconHoverSrc': hoverIcon,
+         'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
+         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_CLOSE}
+
     def __makeExtensionRendererVO(self):
-        icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_RENT
-        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_RENT_HOVER
-        label = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_AUTOPROLONGATIONLABEL
-        if self.__autoRentEnabled:
+        if self.__ctx.autoRentEnabled():
             icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_RENT
             hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_RENT_HOVER
             label = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_NOTAUTOPROLONGATIONLABEL
+        else:
+            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_RENT
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_RENT_HOVER
+            label = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_AUTOPROLONGATIONLABEL
         return {'iconSrc': icon,
          'iconHoverSrc': hoverIcon,
          'actionBtnLabel': text_styles.tutorial(label),
@@ -424,10 +452,6 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_SEASONS,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI}
-
-    @decorators.process('loadStats')
-    def __setAutoRent(self, autoRent):
-        yield VehicleAutoStyleEquipProcessor(g_currentVehicle.item, autoRent).request()
 
     def __onCacheResync(self, *_):
         if not g_currentVehicle.isPresent():

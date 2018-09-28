@@ -136,6 +136,7 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, carousel_environment.ICarouselE
     def __onCacheResync(self, reason, diff):
         if reason == CACHE_SYNC_REASON.CLIENT_UPDATE:
             self._dataProvider.buildList()
+            self.__updateCounter(not self.filter.isDefault())
         elif reason in (CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.DOSSIER_RESYNC):
             self.__updateVehicles()
         elif GUI_ITEM_TYPE.VEHICLE in diff:

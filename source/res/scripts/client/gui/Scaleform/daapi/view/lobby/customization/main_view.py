@@ -246,6 +246,10 @@ class MainView(CustomizationMainViewMeta):
     def __onItemsInstalled(self, item, slotId, limitReached):
         if self.itemIsPicked:
             self.soundManager.playInstantSound(SOUNDS.APPLY)
+        else:
+            areaId, slotType, regionIdx = self.__ctx.selectedAnchor
+            self.__locateCameraOnAnchor(areaId, slotType, regionIdx)
+            self.__showPropertiesSheet(areaId, slotType, regionIdx)
         self.__setHeaderInitData()
         self.__setSeasonData()
         self.__setAnchorsInitData(True)
@@ -327,9 +331,9 @@ class MainView(CustomizationMainViewMeta):
                 self.__locatedOnEmbelem = self.__ctx.c11CameraManager.locateCameraOnEmblem(areaId == Area.HULL, emblemType, regionIdx, zoom)
             else:
                 anchorParams = self.service.getAnchorParams(areaId, slotType, regionIdx)
-                if slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL,):
+                if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
                     self.__locatedOnEmbelem = self.__ctx.c11CameraManager.locateCameraOnAnchor(anchorParams.pos, anchorParams.normal)
-                elif slotType in (GUI_ITEM_TYPE.PAINT, GUI_ITEM_TYPE.CAMOUFLAGE):
+                else:
                     self.__locatedOnEmbelem = self.__ctx.c11CameraManager.locateCameraOnAnchor(anchorParams.pos, None)
             return
 
@@ -375,6 +379,7 @@ class MainView(CustomizationMainViewMeta):
         self.__ctx.onCaruselItemSelected += self.__onCarouselItemSelected
         self.__ctx.onPropertySheetHidden += self.__onPropertySheetHidden
         self.__ctx.onPropertySheetShown += self.__onPropertySheetShown
+        self.__ctx.onClearItem += self.__onClearItem
         self.soundManager.playInstantSound(SOUNDS.ENTER)
         self.__viewLifecycleWatcher.start(self.app.containerManager, [_ModalWindowsPopupHandler(), _C11ViewsPopupHandler(self.__hidePropertiesSheet)])
         self.lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
@@ -437,6 +442,7 @@ class MainView(CustomizationMainViewMeta):
         self.__ctx.onCustomizationTabChanged -= self.__onTabChanged
         self.__ctx.onCustomizationModeChanged -= self.__onModeChanged
         self.__ctx.onCustomizationSeasonChanged -= self.__onSeasonChanged
+        self.__ctx.onClearItem -= self.__onClearItem
         self.__ctx = None
         self.service.destroyCtx()
         super(MainView, self)._dispose()
@@ -502,21 +508,21 @@ class MainView(CustomizationMainViewMeta):
                     self.service.highlightRegions(self.__ctx.getEmptyRegions())
                     if slotFilled and anchorSelected and not itemInstalled:
                         self.service.selectRegions(applyArea)
-                        self.__showPropertiesSheet(areaId, slotType, regionIdx)
                         self.__locateCameraOnAnchor(areaId, slotType, regionIdx)
+                        self.__showPropertiesSheet(areaId, slotType, regionIdx)
                         self.soundManager.playInstantSound(SOUNDS.CHOOSE)
                     else:
                         self.service.selectRegions(ApplyArea.NONE)
                         self.__hidePropertiesSheet()
                         self.soundManager.playInstantSound(SOUNDS.CHOOSE)
                 else:
-                    self.service.selectRegions(applyArea)
-                    self.__locateCameraOnAnchor(areaId, slotType, regionIdx)
                     if slotFilled:
+                        self.__locateCameraOnAnchor(areaId, slotType, regionIdx)
                         self.__showPropertiesSheet(areaId, slotType, regionIdx)
                     else:
+                        self.__resetCameraFocus()
                         self.__hidePropertiesSheet()
-                        self.soundManager.playInstantSound(SOUNDS.CHOOSE)
+                    self.service.selectRegions(applyArea)
             else:
                 self.__clearItem()
         elif highlightingResult:
@@ -559,6 +565,8 @@ class MainView(CustomizationMainViewMeta):
         tabIndex = self.__ctx.currentTab
         if tabIndex == C11nTabs.STYLE or tabIndex == C11nTabs.EFFECT:
             self.service.selectRegions(ApplyArea.ALL)
+            areaId, slotType, regionIdx = self.__ctx.selectedAnchor
+            self.onSelectAnchor(areaId, slotType, regionIdx)
         if not self.__propertiesSheet.isVisible and not self.itemIsPicked:
             self.soundManager.playInstantSound(SOUNDS.PICK)
             self.itemIsPicked = True
@@ -734,6 +742,9 @@ class MainView(CustomizationMainViewMeta):
 
     def __resetUIFocus(self):
         self.as_onRegionHighlightedS(-1, True, False)
+
+    def __onClearItem(self):
+        self.__clearItem()
 
     def __clearItem(self):
         self.service.highlightRegions(ApplyArea.NONE)

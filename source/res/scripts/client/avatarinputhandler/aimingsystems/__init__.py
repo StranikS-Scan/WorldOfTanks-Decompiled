@@ -12,6 +12,7 @@ from constants import SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT
 from ProjectileMover import collideDynamicAndStatic, collideVehiclesAndStaticScene
 from projectile_trajectory import computeProjectileTrajectory
 from vehicle_systems.tankStructure import TankPartNames
+from ClientArena import CollisionResult
 _logger = logging.getLogger(__name__)
 
 class IAimingSystem(object):
@@ -221,11 +222,17 @@ def getShotTargetInfo(vehicle, preferredTargetPoint, gunRotator):
                 endPos = testRes[0]
                 bBreak = True
                 break
-            _, intersection = collideWithArenaBB(prevCheckPoint, curCheckPoint)
-            if intersection is not None:
+            collisionResult, intersection = collideWithArenaBB(prevCheckPoint, curCheckPoint)
+            if collisionResult is CollisionResult.INTERSECTION:
                 maxDistCheckFlag = True
                 dir_ = intersection - prevCheckPoint
                 endPos = intersection
+                bBreak = True
+                break
+            elif collisionResult is CollisionResult.OUTSIDE:
+                maxDistCheckFlag = True
+                dir_ = prevVelocity
+                endPos = prevPos + prevVelocity
                 bBreak = True
                 break
             prevCheckPoint = curCheckPoint

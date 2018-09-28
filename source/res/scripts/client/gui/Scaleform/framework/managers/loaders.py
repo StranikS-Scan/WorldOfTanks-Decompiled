@@ -270,7 +270,7 @@ class LoaderManager(LoaderManagerMeta):
         layoutID = loadParams.viewKey.alias
         viewClass = loadParams.viewClass
         scope = loadParams.scope
-        if manager.getView(layoutID) is not None:
+        if manager.getViewByLayoutID(layoutID) is not None:
             raise SoftException('There is unexpected behavior,we have unbound view, but adaptor is not created: %r'.format(loadParams))
         ubView = viewClass(layoutID, *args, **kwargs)
         adaptor = UnboundViewAdaptor()

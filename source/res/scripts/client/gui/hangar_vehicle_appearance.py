@@ -23,7 +23,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from vehicle_systems import camouflages
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
-from vehicle_systems.tankStructure import ModelsSetParams, TankPartNames, ColliderTypes
+from vehicle_systems.tankStructure import ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from svarog_script.py_component_system import ComponentDescriptor, ComponentSystem
 from vehicle_systems.stricted_loading import makeCallbackWeak
@@ -488,12 +488,9 @@ class HangarVehicleAppearance(ComponentSystem):
          turretSlotsAnchors,
          gunSlotsAnchors):
             for slotsAnchor in emblemSlotHelper.tankAreaSlot:
-                worldEmblemPos = emblemSlotHelper.worldMatrix.applyPoint(slotsAnchor.anchorPosition)
-                worldEmblemNormal = emblemSlotHelper.worldMatrix.applyVector(slotsAnchor.anchorDirection)
-                worldEmblemNormal = worldEmblemNormal
-                container = slots[emblemSlotHelper.tankAreaId]
                 slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP.get(slotsAnchor.type, None)
                 if slotType is not None:
+                    container = slots[emblemSlotHelper.tankAreaId]
                     if slotsAnchor.applyTo is not None:
                         index = -1
                         if slotType in REGIONS_BY_SLOT_TYPE[emblemSlotHelper.tankAreaId]:
@@ -501,8 +498,17 @@ class HangarVehicleAppearance(ComponentSystem):
                             index = next((i for i, region in enumerate(regions) if slotsAnchor.applyTo == region), -1)
                     else:
                         index = len(container[slotType])
-                    if index != -1:
-                        container[slotType][index] = Anchor(worldEmblemPos, worldEmblemNormal, slotsAnchor.applyTo, slotsAnchor.slotId, slotsAnchor)
+                    if index == -1:
+                        continue
+                    if slotType in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
+                        hullAABB = self.collisions.getBoundingBox(TankPartIndexes.HULL)
+                        anchorPosition = Math.Vector3((hullAABB[1].x + hullAABB[0].x) / 2.0, hullAABB[1].y / 2.0, (hullAABB[1].z + hullAABB[0].z) / 2.0)
+                        worldEmblemPos = hullSlotsAnchors.worldMatrix.applyPoint(anchorPosition)
+                    else:
+                        worldEmblemPos = emblemSlotHelper.worldMatrix.applyPoint(slotsAnchor.anchorPosition)
+                    worldEmblemNormal = emblemSlotHelper.worldMatrix.applyVector(slotsAnchor.anchorDirection)
+                    worldEmblemNormal.normalise()
+                    container[slotType][index] = Anchor(worldEmblemPos, worldEmblemNormal, slotsAnchor.applyTo, slotsAnchor.slotId, slotsAnchor)
 
         return slots
 

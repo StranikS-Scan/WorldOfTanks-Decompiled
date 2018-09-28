@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/vehicle_anchors_updater.py
 import GUI
+import Math
 from gui.customization.shared import C11nId
 from gui.shared.gui_items.customization.outfit import Area
 from gui.Scaleform.daapi.view.lobby.customization.shared import C11nTabs
@@ -35,8 +36,8 @@ class VehicleAnchorsUpdater(object):
                     customSlotId = C11nId(areaId=slotId.areaId, slotType=slotId.slotId, regionIdx=slotId.regionId)
                     anchorParams = self.__getAnchorParams(customSlotId)
                     if anchorParams is not None:
-                        anchorWorldPos = anchorParams.pos
-                        normal = anchorParams.normal
+                        anchorWorldPos = Math.Vector3(anchorParams.pos)
+                        normal = Math.Vector3(anchorParams.normal)
                         if self.__ctx.currentTab in C11nTabs.REGIONS:
                             if customSlotId.areaId != Area.GUN:
                                 normal.normalise()

@@ -11,6 +11,7 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -28,7 +29,7 @@ from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
-from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_NAME, C11nMode
+from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_NAME
 
 class SimplifiedStatsBlockConstructor(object):
 
@@ -51,6 +52,9 @@ class SimplifiedStatsBlockConstructor(object):
 
 class NonHistoricTooltip(BlocksTooltipData):
     service = dependency.descriptor(ICustomizationService)
+    isNonHistoric = False
+    isInfo = False
+    isCustomStyleMode = False
 
     def __init__(self, context):
         super(NonHistoricTooltip, self).__init__(context, TOOLTIP_TYPE.TECH_CUSTOMIZATION)
@@ -58,37 +62,40 @@ class NonHistoricTooltip(BlocksTooltipData):
         self._setMargins(afterBlock=14)
         self._setWidth(440)
 
-    def _packBlocks(self, isNonHistoric, isInfo, isCallByCarusel=False):
-        return self._packItemBlocks(isNonHistoric, isInfo, isCallByCarusel)
+    def _packBlocks(self, isNonHistoric, isInfo, isCustomStyleMode):
+        self.isNonHistoric = isNonHistoric
+        self.isInfo = isInfo
+        self.isCustomStyleMode = isCustomStyleMode
+        return self._packItemBlocks()
 
-    def _packItemBlocks(self, isNonHistoric, isInfo, isCallByCarusel):
-        return [self._packDescriptionBlock(isNonHistoric, isInfo, isCallByCarusel)]
+    def _packItemBlocks(self):
+        items = []
+        items.append(self._packDescriptionBlock())
+        return items
 
-    def _packDescriptionBlock(self, isNonHistoric, isInfo, isCallByCarusel):
+    def _packDescriptionBlock(self):
         img = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_NON_HISTORICAL
         nonHistoricTitle = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_HISTORICCHECKBOX_ITEMS
-        if isCallByCarusel:
-            nonHistoricTitle = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NONHISTORIC_INDICATORTEXT
         nonHistoricDesc = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_DESCRIPTION_HISTORIC_FALSE_DESCRIPTION
-        if self.service.getCtx().mode == C11nMode.CUSTOM:
+        if self.isCustomStyleMode:
             seasonName = SEASON_TYPE_TO_NAME.get(self.service.getCtx().currentSeason)
+            mapName = _ms(VEHICLE_CUSTOMIZATION.getMapName(seasonName))
         else:
-            seasonName = 'all'
-        mapName = _ms(VEHICLE_CUSTOMIZATION.getMapName(seasonName))
+            mapName = _ms(VEHICLE_CUSTOMIZATION.SEASON_SELECTION_MAPNAME_ALL)
         title = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN)
         desc = _ms(VEHICLE_CUSTOMIZATION.SEASON_SELECTION_TOOLTIP, mapName=mapName)
         blocks = []
-        if not isInfo:
+        if not self.isInfo:
             blocks.append(formatters.packTextBlockData(text=text_styles.middleTitle(title)))
             blocks.append(formatters.packTextBlockData(text=text_styles.main(desc), padding={'top': 10}))
-        if isNonHistoric:
+        if self.isNonHistoric:
             blocks.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(nonHistoricTitle), img=img, imgPadding={'left': -3,
-             'top': -4}, padding={'top': 20 if not isInfo else 0}))
+             'top': -4}, padding={'top': 20 if not self.isInfo else 0}))
             blocks.append(formatters.packTextBlockData(text=text_styles.main(nonHistoricDesc)))
         return formatters.packBuildUpBlockData(blocks, gap=-6, padding={'bottom': -5})
 
 
-class ElementTooltip(BlocksTooltipData):
+class BaseElementTooltip(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
     service = dependency.descriptor(ICustomizationService)
@@ -99,8 +106,8 @@ class ElementTooltip(BlocksTooltipData):
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG = 228
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_INSCRIPTION = 278
 
-    def __init__(self, context):
-        super(ElementTooltip, self).__init__(context, TOOLTIP_TYPE.TECH_CUSTOMIZATION)
+    def __init__(self, context, tooltipType):
+        super(BaseElementTooltip, self).__init__(context, tooltipType)
         self._setContentMargin(top=20, left=19, bottom=20, right=20)
         self._setMargins(afterBlock=14)
         self._setWidth(self.CUSTOMIZATION_TOOLTIP_WIDTH)
@@ -183,6 +190,9 @@ class ElementTooltip(BlocksTooltipData):
         if self._item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION and not isRendererPipelineDeferred():
             items.append(self._packUnsupportedBlock())
         return items
+
+    def _packSuitableBlock(self):
+        pass
 
     def _packAppliedBlock(self):
         vehicles = set(self.installedToVehs)
@@ -332,6 +342,30 @@ class ElementTooltip(BlocksTooltipData):
             blocks = [formatters.packTextBlockData(text=text_styles.main(desc))]
             return formatters.packBuildUpBlockData(blocks, gap=-6, padding=formatters.packPadding(bottom=-5))
 
+    def _packUnsupportedBlock(self):
+        return formatters.packImageTextBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON, imgPadding=formatters.packPadding(top=3, right=3), desc=text_styles.alert(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_WARNING_TITLE)))
+
+    def __makeVehiclesShortNamesString(self, vehiclesCDs, flat=False):
+        getVehicleShortName = lambda vehicleCD: self.itemsCache.items.getItemByCD(vehicleCD).shortUserName
+        vehiclesShortNames = []
+        if self.currentVehicle.intCD in vehiclesCDs and not flat:
+            vehiclesCDs.remove(self.currentVehicle.intCD)
+            vehiclesShortNames.append(self.currentVehicle.shortUserName + _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_CURRENT_VEHICLE))
+        vehiclesShortNames.extend(map(getVehicleShortName, vehiclesCDs))
+        return ', '.join(vehiclesShortNames)
+
+
+class ElementIconTooltip(BaseElementTooltip):
+
+    def __init__(self, context):
+        super(ElementIconTooltip, self).__init__(context, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_ICON)
+
+
+class ElementTooltip(BaseElementTooltip):
+
+    def __init__(self, context):
+        super(ElementTooltip, self).__init__(context, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM)
+
     def _packSuitableBlock(self):
         blocks = []
         if self._item.isVehicleBound and not self._item.mayApply:
@@ -369,6 +403,9 @@ class ElementTooltip(BlocksTooltipData):
                     if VEHICLE_TAGS.PREMIUM_IGR in node.tags:
                         conditions.append(icons.premiumIgrSmall())
                         conditions.append(separator)
+                if node.vehicles:
+                    conditions.append(text_styles.standard(self.__makeVehiclesShortNamesString(set(node.vehicles), flat=True)))
+                    conditions.append(separator)
                 if not conditions:
                     continue
                 icn = text_styles.concatStylesToSingleLine(*conditions[:-1])
@@ -379,15 +416,3 @@ class ElementTooltip(BlocksTooltipData):
                 return None
             blocks.insert(0, formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE)))
             return formatters.packBuildUpBlockData(blocks=blocks[:-1], padding=formatters.packPadding(top=-3))
-
-    def _packUnsupportedBlock(self):
-        return formatters.packImageTextBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON, imgPadding=formatters.packPadding(top=3, right=3), desc=text_styles.alert(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_WARNING_TITLE)))
-
-    def __makeVehiclesShortNamesString(self, vehiclesCDs):
-        getVehicleShortName = lambda vehicleCD: self.itemsCache.items.getItemByCD(vehicleCD).shortUserName
-        vehiclesShortNames = []
-        if self.currentVehicle.intCD in vehiclesCDs:
-            vehiclesCDs.remove(self.currentVehicle.intCD)
-            vehiclesShortNames.append(self.currentVehicle.shortUserName + _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_CURRENT_VEHICLE))
-        vehiclesShortNames.extend(map(getVehicleShortName, vehiclesCDs))
-        return ', '.join(vehiclesShortNames)

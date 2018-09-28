@@ -129,7 +129,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         camTarget = MatrixProduct()
         self.__cam.target = camTarget
         self.__cam.source = self.__sourceMatrix
-        self.__cam.wg_applyParams()
+        self.__cam.forceUpdate()
         BigWorld.camera(self.__cam)
         BigWorld.player().positionControl.moveTo(self.__aimingSystem.hitPoint)
         BigWorld.player().positionControl.followCamera(False)

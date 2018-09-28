@@ -14,6 +14,7 @@ from gui.Scaleform.daapi.view.lobby.customization.vehicle_anchors_updater import
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import OutfitApplier, StyleApplier, CustomizationsSeller
+from gui.shared.gui_items.processors.vehicle import VehicleAutoStyleEquipProcessor
 from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.gui_items.customization.containers import emptyComponent
 from items.components.c11n_constants import ApplyArea, SeasonType, DEFAULT_SCALE_FACTOR_ID
@@ -112,6 +113,7 @@ class CustomizationContext(object):
         self._eventsManager = Event.EventManager()
         self._vehicleAnchorsUpdater = None
         self._c11CameraManager = None
+        self._autoRentEnabled = False
         self.onCustomizationSeasonChanged = Event.Event(self._eventsManager)
         self.onCustomizationModeChanged = Event.Event(self._eventsManager)
         self.onCustomizationTabChanged = Event.Event(self._eventsManager)
@@ -131,12 +133,20 @@ class CustomizationContext(object):
         self.onPropertySheetShown = Event.Event(self._eventsManager)
         self.onPropertySheetHidden = Event.Event(self._eventsManager)
         self.onCustomizationItemDataChanged = Event.Event(self._eventsManager)
+        self.onClearItem = Event.Event(self._eventsManager)
         return
 
     def changeSeason(self, seasonType):
         self._currentSeason = seasonType
         self.refreshOutfit()
         self.onCustomizationSeasonChanged(self._currentSeason)
+
+    def changeAutoRent(self):
+        self._autoRentEnabled = not self._autoRentEnabled
+        self.itemDataChanged(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
+
+    def autoRentEnabled(self):
+        return self._autoRentEnabled
 
     def refreshOutfit(self):
         if self._mode == C11nMode.STYLE:
@@ -455,6 +465,8 @@ class CustomizationContext(object):
         if groupHasItems[AdditionalPurchaseGroups.STYLES_GROUP_ID]:
             result = yield StyleApplier(g_currentVehicle.item, self._modifiedStyle).request()
             results.append(result)
+        if self._autoRentEnabled != g_currentVehicle.item.isAutoRentStyle:
+            yield VehicleAutoStyleEquipProcessor(g_currentVehicle.item, self._autoRentEnabled).request()
         self.onCustomizationItemsBought(purchaseItems, results)
         self.__onCacheResync()
         self.itemsCache.onSyncCompleted += self.__onCacheResync
@@ -478,10 +490,12 @@ class CustomizationContext(object):
     def init(self):
         if not g_currentVehicle.isPresent():
             raise SoftException('There is not vehicle in hangar for customization.')
+        self._autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
         self._vehicleAnchorsUpdater = VehicleAnchorsUpdater(self.service, self)
         self._vehicleAnchorsUpdater.startUpdater(self.settingsCore.interfaceScale.get())
         if self.hangarSpace.spaceInited:
             self._c11CameraManager = C11nHangarCameraManager(self.hangarSpace.space.getCameraManager())
+            self._c11CameraManager.init()
         self.settingsCore.interfaceScale.onScaleExactlyChanged += self.__onInterfaceScaleChanged
         self.service.onOutfitChanged += self.__onOutfitChanged
         self.itemsCache.onSyncCompleted += self.__onCacheResync
@@ -505,6 +519,8 @@ class CustomizationContext(object):
         self.service.onOutfitChanged -= self.__onOutfitChanged
         self._eventsManager.clear()
         self.settingsCore.interfaceScale.onScaleExactlyChanged -= self.__onInterfaceScaleChanged
+        if self._c11CameraManager is not None:
+            self._c11CameraManager.fini()
         self._c11CameraManager = None
         self._vehicleAnchorsUpdater.stopUpdater()
         self._vehicleAnchorsUpdater = None
@@ -543,7 +559,7 @@ class CustomizationContext(object):
             if self._mode == C11nMode.STYLE:
                 currentStyle = self.service.getCurrentStyle()
                 if self._modifiedStyle and currentStyle:
-                    return self._modifiedStyle.intCD != currentStyle.intCD
+                    return self._modifiedStyle.intCD != currentStyle.intCD or self._autoRentEnabled != g_currentVehicle.item.isAutoRentStyle
                 return not (self._modifiedStyle is None and currentStyle is None)
             for season in SeasonType.COMMON_SEASONS:
                 outfit = self._modifiedOutfits[season]

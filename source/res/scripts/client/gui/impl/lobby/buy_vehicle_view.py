@@ -707,8 +707,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 self.__onWindowClose()
             else:
                 self.__showCongratulations(isRestore)
-        else:
-            self.__onWindowClose()
         return
 
     def __isBuying(self):

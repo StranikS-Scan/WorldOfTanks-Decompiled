@@ -4,7 +4,7 @@ from gui.impl.gen_utils import DynAccessor
 
 class Videos(DynAccessor):
     __slots__ = ()
-    Logo_All = 9547
-    _bootcampFinish = 9548
-    _login = 9549
-    _tutorialInitial = 9550
+    Logo_All = 9549
+    _bootcampFinish = 9550
+    _login = 9551
+    _tutorialInitial = 9552

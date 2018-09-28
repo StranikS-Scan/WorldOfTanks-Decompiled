@@ -98,7 +98,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         camTarget = Math.MatrixProduct()
         camTarget.b = self.__aimingSystem.matrix
         self.__cam.target = camTarget
-        self.__cam.wg_applyParams()
+        self.__cam.forceUpdate()
         BigWorld.camera(self.__cam)
         BigWorld.player().positionControl.moveTo(self.__aimingSystem.matrix.translation)
         BigWorld.player().positionControl.followCamera(True)

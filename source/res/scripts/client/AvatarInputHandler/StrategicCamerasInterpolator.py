@@ -44,7 +44,7 @@ class StrategicCamerasInterpolator(CallbackDelayer):
         self.__cam.movementHalfLife = 0.0
         self.__cam.turningHalfLife = -1
         self.__cam.pivotPosition = self.__initialState.pivotPosition
-        self.__cam.wg_applyParams()
+        self.__cam.forceUpdate()
         BigWorld.camera(self.__cam)
         BigWorld.projection().fov = self.__initialFov
         return

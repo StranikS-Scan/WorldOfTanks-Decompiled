@@ -273,7 +273,7 @@ def readTupleOfInts(xmlCtx, section, subsectionName, count=None):
     if count is not None and len(strings) != count:
         raiseWrongXml(xmlCtx, subsectionName, '%d ints expected' % count)
     try:
-        return tuple(map(int, strings))
+        return tuple((int(float(s)) for s in strings))
     except Exception:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
 

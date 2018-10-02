@@ -627,8 +627,8 @@ class EventListener(object):
         return self.__browserProxy.onResourceLoadRequest(url)
 
     def onWhitelistMiss(self, isMainFrame, failedURL):
+        _logger.error('Unable to load resource: %s. Main frame: %r', failedURL, isMainFrame)
         if isMainFrame:
-            _logger.debug('onWhitelistMiss(isMainFrame) %s', failedURL)
             self.onLoadStart(failedURL)
             self.onLoadEnd(failedURL, False)
 

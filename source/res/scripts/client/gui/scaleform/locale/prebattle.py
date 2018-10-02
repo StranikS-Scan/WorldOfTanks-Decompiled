@@ -35,3 +35,4 @@ class PREBATTLE(object):
     SWITCHPERIPHERYWINDOW_RANKED_APPLYSWITCHLABEL = '#prebattle:switchPeripheryWindow/ranked/applySwitchLabel'
     COMPANYLISTVIEW_FILTERBUTTON_LABEL = '#prebattle:companyListView/filterButton/label'
     MEMBERLIST_EMPTY_LABEL = '#prebattle:memberList/empty/label'
+    BATTLEPROGRESS_HINT = '#prebattle:battleProgress/hint'

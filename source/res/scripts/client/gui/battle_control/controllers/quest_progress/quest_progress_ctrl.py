@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/quest_progress/quest_progress_ctrl.py
 import logging
 import BigWorld
+import CommandMapping
 from Event import EventManager, Event
 from constants import ARENA_PERIOD
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -16,6 +17,9 @@ from personal_missions import PM_STATE
 from shared_utils import first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from gui.Scaleform.locale.PREBATTLE import PREBATTLE
+from helpers.i18n import makeString as _ms
+from gui.shared.utils.key_mapping import getReadableKey
 _logger = logging.getLogger(__name__)
 
 class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
@@ -115,6 +119,7 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
              'questID': selectedQuest.getID(),
              'questIndexStr': str(selectedQuest.getInternalID()),
              'questIcon': RES_ICONS.getAllianceGoldIcon(selectedQuest.getMajorTag()),
+             'questHint': _ms(PREBATTLE.BATTLEPROGRESS_HINT, hintKey=getReadableKey(CommandMapping.CMD_QUEST_PROGRESS_SHOW)),
              'headerProgress': formatter.headerFormat(),
              'bodyProgress': formatter.bodyFormat()}
         return {}

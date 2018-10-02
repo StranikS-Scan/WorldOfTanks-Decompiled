@@ -95,7 +95,7 @@ class NonHistoricTooltip(BlocksTooltipData):
         return formatters.packBuildUpBlockData(blocks, gap=-6, padding={'bottom': -5})
 
 
-class BaseElementTooltip(BlocksTooltipData):
+class ElementTooltip(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
     service = dependency.descriptor(ICustomizationService)
@@ -106,8 +106,8 @@ class BaseElementTooltip(BlocksTooltipData):
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG = 228
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_INSCRIPTION = 278
 
-    def __init__(self, context, tooltipType):
-        super(BaseElementTooltip, self).__init__(context, tooltipType)
+    def __init__(self, context, tooltipType=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM):
+        super(ElementTooltip, self).__init__(context, tooltipType)
         self._setContentMargin(top=20, left=19, bottom=20, right=20)
         self._setMargins(afterBlock=14)
         self._setWidth(self.CUSTOMIZATION_TOOLTIP_WIDTH)
@@ -192,7 +192,55 @@ class BaseElementTooltip(BlocksTooltipData):
         return items
 
     def _packSuitableBlock(self):
-        pass
+        blocks = []
+        if self._item.isVehicleBound and not self._item.mayApply:
+            return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.standard(self.__makeVehiclesShortNamesString(set(self.boundVehs + self.installedToVehs))), padding=formatters.packPadding(top=-2))
+        else:
+            for node in self._item.descriptor.filter.include:
+                conditions = []
+                separator = ' '.join(['&nbsp;&nbsp;', icons.makeImageTag(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_TOOLTIP_SEPARATOR, 3, 21, -6), '  '])
+                if node.levels:
+                    conditions.append(text_styles.main(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TIER))
+                    for level in node.levels:
+                        conditions.append(text_styles.stats(int2roman(level)))
+                        conditions.append(text_styles.stats(',&nbsp;'))
+
+                    conditions = conditions[:-1]
+                    conditions.append(separator)
+                if node.nations:
+                    for nation in node.nations:
+                        name = nations.NAMES[nation]
+                        conditions.append(icons.makeImageTag(getNationsFilterAssetPath(name), 26, 16, -4))
+                        conditions.append('  ')
+
+                    conditions = conditions[:-1]
+                    conditions.append(separator)
+                if node.tags:
+                    for vehType in VEHICLE_TYPES_ORDER:
+                        if vehType in node.tags:
+                            conditions.append(icons.makeImageTag(RES_ICONS.getFilterVehicleType(vehType), 27, 17, -4))
+
+                    if VEHICLE_CLASS_TAGS & node.tags:
+                        conditions.append(separator)
+                    if VEHICLE_TAGS.PREMIUM in node.tags:
+                        conditions.append(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_PREM_SMALL_ICON, 20, 17, -4))
+                        conditions.append(separator)
+                    if VEHICLE_TAGS.PREMIUM_IGR in node.tags:
+                        conditions.append(icons.premiumIgrSmall())
+                        conditions.append(separator)
+                if node.vehicles:
+                    conditions.append(text_styles.standard(self.__makeVehiclesShortNamesString(set(node.vehicles), flat=True)))
+                    conditions.append(separator)
+                if not conditions:
+                    continue
+                icn = text_styles.concatStylesToSingleLine(*conditions[:-1])
+                blocks.append(formatters.packTextBlockData(text=icn, padding=formatters.packPadding(top=-2)))
+                blocks.append(formatters.packTextBlockData(text=text_styles.neutral(VEHICLE_CUSTOMIZATION.FILTER_OR), padding=formatters.packPadding(top=-4)))
+
+            if not blocks:
+                return None
+            blocks.insert(0, formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE)))
+            return formatters.packBuildUpBlockData(blocks=blocks[:-1], padding=formatters.packPadding(top=-3))
 
     def _packAppliedBlock(self):
         vehicles = set(self.installedToVehs)
@@ -355,64 +403,10 @@ class BaseElementTooltip(BlocksTooltipData):
         return ', '.join(vehiclesShortNames)
 
 
-class ElementIconTooltip(BaseElementTooltip):
+class ElementIconTooltip(ElementTooltip):
 
     def __init__(self, context):
         super(ElementIconTooltip, self).__init__(context, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_ICON)
 
-
-class ElementTooltip(BaseElementTooltip):
-
-    def __init__(self, context):
-        super(ElementTooltip, self).__init__(context, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM)
-
     def _packSuitableBlock(self):
-        blocks = []
-        if self._item.isVehicleBound and not self._item.mayApply:
-            return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.standard(self.__makeVehiclesShortNamesString(set(self.boundVehs + self.installedToVehs))), padding=formatters.packPadding(top=-2))
-        else:
-            for node in self._item.descriptor.filter.include:
-                conditions = []
-                separator = ' '.join(['&nbsp;&nbsp;', icons.makeImageTag(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_TOOLTIP_SEPARATOR, 3, 21, -6), '  '])
-                if node.levels:
-                    conditions.append(text_styles.main(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TIER))
-                    for level in node.levels:
-                        conditions.append(text_styles.stats(int2roman(level)))
-                        conditions.append(text_styles.stats(',&nbsp;'))
-
-                    conditions = conditions[:-1]
-                    conditions.append(separator)
-                if node.nations:
-                    for nation in node.nations:
-                        name = nations.NAMES[nation]
-                        conditions.append(icons.makeImageTag(getNationsFilterAssetPath(name), 26, 16, -4))
-                        conditions.append('  ')
-
-                    conditions = conditions[:-1]
-                    conditions.append(separator)
-                if node.tags:
-                    for vehType in VEHICLE_TYPES_ORDER:
-                        if vehType in node.tags:
-                            conditions.append(icons.makeImageTag(RES_ICONS.getFilterVehicleType(vehType), 27, 17, -4))
-
-                    if VEHICLE_CLASS_TAGS & node.tags:
-                        conditions.append(separator)
-                    if VEHICLE_TAGS.PREMIUM in node.tags:
-                        conditions.append(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_PREM_SMALL_ICON, 20, 17, -4))
-                        conditions.append(separator)
-                    if VEHICLE_TAGS.PREMIUM_IGR in node.tags:
-                        conditions.append(icons.premiumIgrSmall())
-                        conditions.append(separator)
-                if node.vehicles:
-                    conditions.append(text_styles.standard(self.__makeVehiclesShortNamesString(set(node.vehicles), flat=True)))
-                    conditions.append(separator)
-                if not conditions:
-                    continue
-                icn = text_styles.concatStylesToSingleLine(*conditions[:-1])
-                blocks.append(formatters.packTextBlockData(text=icn, padding=formatters.packPadding(top=-2)))
-                blocks.append(formatters.packTextBlockData(text=text_styles.neutral(VEHICLE_CUSTOMIZATION.FILTER_OR), padding=formatters.packPadding(top=-4)))
-
-            if not blocks:
-                return None
-            blocks.insert(0, formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE)))
-            return formatters.packBuildUpBlockData(blocks=blocks[:-1], padding=formatters.packPadding(top=-3))
+        return None

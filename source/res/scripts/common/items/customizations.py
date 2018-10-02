@@ -64,6 +64,10 @@ class SerializationException(SoftException):
     pass
 
 
+class FoundItemException(SoftException):
+    pass
+
+
 class SerializableComponent(object):
     fields = OrderedDict()
     __slots__ = ()
@@ -209,9 +213,24 @@ class ComponentBinDeserializer(object):
 
         return obj
 
-    def __decodeCustomType(self, itemType):
+    def hasItem(self, data, path, value):
+        self.__stream = StringIO(data)
+        try:
+            code = varint.decode_stream(self.__stream)
+            self.__decodeCustomType(code, path, value)
+        except EOFError:
+            raise SerializationException('Cannot parse given stream')
+        except FoundItemException:
+            return True
+
+        return False
+
+    def __decodeCustomType(self, itemType, path=None, wanted=None):
         cls = self.customTypes.get(itemType, None)
-        obj = cls()
+        if wanted is None:
+            obj = cls()
+        else:
+            obj = None
         fields = cls.fields
         io = self.__stream
         valueMap = varint.decode_stream(io)
@@ -219,6 +238,7 @@ class ComponentBinDeserializer(object):
         for k, t in fields.iteritems():
             if t.xmlOnly:
                 continue
+            next = None if not path or path[0] != k else path[1]
             if valueMap & offset:
                 ftype = t.type
                 if ftype == FieldTypes.VARINT:
@@ -226,25 +246,33 @@ class ComponentBinDeserializer(object):
                 elif ftype == FieldTypes.APPLY_AREA_ENUM:
                     value = varint.decode_stream(io)
                 elif ftype & FieldTypes.TYPED_ARRAY:
-                    value = self.__decodeArray(ftype ^ FieldTypes.TYPED_ARRAY)
+                    value = self.__decodeArray(ftype ^ FieldTypes.TYPED_ARRAY, k, path, next, wanted)
                 elif ftype >= FieldTypes.CUSTOM_TYPE_OFFSET:
-                    value = self.__decodeCustomType(ftype / FieldTypes.CUSTOM_TYPE_OFFSET)
+                    value = self.__decodeCustomType(ftype / FieldTypes.CUSTOM_TYPE_OFFSET, next, wanted)
                 else:
                     raise SerializationException('Unsupported field type index')
-                if not t.deprecated or hasattr(obj, k):
-                    setattr(obj, k, value)
+                if not t.deprecated or hasattr(obj, k) or obj is None:
+                    if wanted is None:
+                        setattr(obj, k, value)
+                    elif path and path[1] is None and path[0] == k and value == wanted:
+                        raise FoundItemException()
             offset <<= 1
 
         return obj
 
-    def __decodeArray(self, itemType):
+    def __decodeArray(self, itemType, k, path, next, wanted):
         n = varint.decode_stream(self.__stream)
         if itemType == FieldTypes.VARINT:
-            return [ varint.decode_stream(self.__stream) for _ in xrange(n) ]
-        if itemType >= FieldTypes.CUSTOM_TYPE_OFFSET:
+            array = [ varint.decode_stream(self.__stream) for _ in xrange(n) ]
+            if path and path[1] is None and path[0] == k and wanted in array:
+                raise FoundItemException()
+            return array
+        elif itemType >= FieldTypes.CUSTOM_TYPE_OFFSET:
             customType = itemType / FieldTypes.CUSTOM_TYPE_OFFSET
-            return [ self.__decodeCustomType(customType) for _ in xrange(n) ]
-        raise SerializationException('Unsupported item type')
+            return [ self.__decodeCustomType(customType, next, wanted) for _ in xrange(n) ]
+        else:
+            raise SerializationException('Unsupported item type')
+            return
 
 
 class ComponentXmlSerializer(object):
@@ -463,6 +491,8 @@ class CustomizationOutfit(SerializableComponent):
         return None
 
     def makeCompDescr(self):
+        if not self:
+            return ''
         for typeId in CustomizationType._APPLIED_TO_TYPES:
             componentsAttrName = '{}s'.format(lower(CustomizationTypeNames[typeId]))
             components = CustomizationOutfit.applyAreaBitmaskToDict(getattr(self, componentsAttrName))
@@ -551,6 +581,44 @@ class CustomizationOutfit(SerializableComponent):
                 result += 1
         return result
 
+    def removeComponent(self, componentId, typeId, count):
+        countBefore = count
+        if count > 0:
+            if typeId in CustomizationType._APPLIED_TO_TYPES:
+                attr = '{}s'.format(lower(CustomizationTypeNames[typeId]))
+                outfitComponents = getattr(self, attr)
+                for component in outfitComponents:
+                    if componentId == component.id:
+                        for area in ApplyArea.RANGE:
+                            if area & component.appliedTo:
+                                component.appliedTo &= ~area
+                                count -= 1
+                                if not count:
+                                    break
+
+                    if not count:
+                        break
+
+                if count != countBefore:
+                    setattr(self, attr, [ component for component in outfitComponents if component.appliedTo ])
+            elif typeId in CustomizationType._INT_TYPES:
+                if typeId == CustomizationType.STYLE and self.styleId == componentId:
+                    self.styleId = 0
+                    count -= 1
+                elif typeId == CustomizationType.PROJECTION_DECAL:
+                    projection_decals = []
+                    for component in self.projection_decals:
+                        if componentId != component.id or count == 0:
+                            projection_decals.append(component)
+                            continue
+                        count -= 1
+
+                    self.projection_decals = projection_decals
+                elif typeId == CustomizationType.MODIFICATION and componentId in self.modifications:
+                    self.modifications.remove(componentId)
+                    count -= 1
+        return countBefore - count
+
 
 _CUSTOMIZATION_CLASSES = {t.customType:t for t in SerializableComponent.__subclasses__()}
 
@@ -560,6 +628,18 @@ def makeCompDescr(customizationItem):
 
 def parseCompDescr(customizationElementCompDescr):
     return ComponentBinDeserializer(_CUSTOMIZATION_CLASSES).decode(customizationElementCompDescr)
+
+
+def checkItemInCompDescr(item, customizationElementCompDescr):
+    item = cn.splitIntDescr(item) if isinstance(item, int) else item
+    itemType = item[0]
+    if itemType == CustomizationType.STYLE:
+        path = ('styleId', None)
+    elif itemType == CustomizationType.MODIFICATION:
+        path = ('modifications', None)
+    else:
+        path = ('{}s'.format(lower(CustomizationTypeNames[itemType])), ('id', None))
+    return ComponentBinDeserializer(_CUSTOMIZATION_CLASSES).hasItem(customizationElementCompDescr, path, item[1])
 
 
 def parseOutfitDescr(outfitDescr):

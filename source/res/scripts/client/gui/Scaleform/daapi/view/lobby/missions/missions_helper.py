@@ -814,7 +814,7 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
          'titleTooltip': self.__getDescription(),
          'holdAwardSheetBtnTooltipData': self.__getHoldAwardSheetBtnTooltipData()})
         data.update({'buttonState': self.__getBtnStates(isAvailable)})
-        data.update({'onPauseBtnLabel': self.__getPauseBtnLabel()})
+        data.update({'onPauseBtnIcon': self.__getPauseBtnIcon()})
         return data
 
     def __getAddBottomInfo(self):
@@ -899,12 +899,12 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
                 states |= PERSONAL_MISSIONS_BUTTONS.HOLD_AWARD_SHEET_BTN_ENABLED
         return states
 
-    def __getPauseBtnLabel(self):
+    def __getPauseBtnIcon(self):
         quest = self.event
         if quest.getOperationID() in self.PAUSABLE_OPERATIONS_IDS:
             if quest.isOnPause:
-                return icons.makeImageTag(RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_BTN_ICON_PLAY, 16, 16, -4, 0)
-            return icons.makeImageTag(RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_BTN_ICON_PAUSE, 16, 16, -4, 0)
+                return RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_BTN_ICON_PLAY
+            return RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_BTN_ICON_PAUSE
 
     def __isPawnAvailable(self, quest):
         return self.eventsCache.getPersonalMissions().getFreeTokensCount(quest.getPMType().branch) >= quest.getPawnCost()

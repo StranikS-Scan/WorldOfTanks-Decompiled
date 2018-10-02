@@ -142,8 +142,6 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
 
     def changeAppearanceVisibility(self, isVisible):
         self.model.visible = isVisible
-        if isVisible:
-            self.__createAndAttachStickers()
 
     def __checkIsBeingPulled(self):
         if self.__detachmentEffects is not None:

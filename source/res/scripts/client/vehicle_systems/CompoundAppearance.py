@@ -383,9 +383,10 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.leveredSuspension = None
         self.trackNodesAnimator = None
         self.wheelsAnimator = None
-        fashions = camouflages.prepareFashions(True)
+        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(True), None, None, None)
         self.__setFashions(fashions, isTurretDetached)
         model_assembler.setupTracksFashion(self.__typeDesc, self.__fashion)
+        self.showStickers(False)
         self.customEffectManager = None
         self.__destroyEngineAudition()
         self.detailedEngineState = None

@@ -6480,7 +6480,8 @@ EPIC_MEDAL_SET = {RECORD_DB_IDS[achievementDescriptor] for achievementDescriptor
  ('achievements', 'medalDeLanglade'),
  ('achievements', 'medalGore'),
  ('achievements', 'huntsman'),
- ('achievements', 'medalTamadaYoshio')]}
+ ('achievements', 'medalTamadaYoshio'),
+ ('achievements', 'medalStark')]}
 BIT_STORAGES = {}
 map(lambda rec: BIT_STORAGES.setdefault((rec[0], rec[3]), []).append(rec[1]), (rec for rec in RECORDS if rec[2] == 'b'))
 RECORD_MAX_VALUES = dict([ (rec[:2], rec[4]) for rec in RECORDS if rec[2] == 'p' ])

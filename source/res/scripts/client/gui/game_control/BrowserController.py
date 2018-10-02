@@ -58,8 +58,12 @@ class BrowserController(IBrowserController):
     def onAvatarBecomePlayer(self):
         self.__stop()
 
+    def onConnected(self):
+        BigWorld.connectBrowser()
+
     def onDisconnected(self):
         self.__stop()
+        BigWorld.disconnectBrowser()
 
     def addFilterHandler(self, handler):
         self.__filters.add(handler)

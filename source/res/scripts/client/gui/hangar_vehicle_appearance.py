@@ -330,15 +330,15 @@ class HangarVehicleAppearance(ComponentSystem):
                     self.__fashions[fashionIdx].addMaterialHandler(dirtHandlers[fashionIdx])
 
                 self.dirtComponent.setBase()
+            outfitData = camouflages.getOutfitData(self.__outfit, self.__vDesc, self.__vState != 'undamaged')
+            self.c11nComponent = Vehicular.C11nEditComponent(self.__fashions, self.compoundModel, outfitData)
+            self.__updateDecals(self.__outfit)
         else:
             self.__fashions = VehiclePartsTuple(BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
             self.__vEntity.model.setupFashions(self.__fashions)
             self.wheelsAnimator = None
             self.trackNodesAnimator = None
             self.dirtComponent = None
-        outfitData = camouflages.getOutfitData(self.__outfit, self.__vDesc, self.__vState != 'undamaged')
-        self.c11nComponent = Vehicular.C11nEditComponent(self.__fashions, self.compoundModel, outfitData)
-        self.updateCustomization(self.__outfit)
         cfg = hangarCFG()
         turretYaw = self.__vDesc.gun.staticTurretYaw
         gunPitch = self.__vDesc.gun.staticPitch
@@ -608,6 +608,8 @@ class HangarVehicleAppearance(ComponentSystem):
         return dir
 
     def updateCustomization(self, outfit=None, callback=None):
+        if self.__isVehicleDestroyed:
+            return
         outfit = outfit or self.itemsFactory.createOutfit()
         if self.__outfit.modelsSet != outfit.modelsSet:
             self.refresh(outfit, callback)

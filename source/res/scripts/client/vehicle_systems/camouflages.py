@@ -40,17 +40,25 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  False)
 _DEFAULT_GLOSS = 0.509
 _DEFAULT_METALLIC = 0.23
-_DEAD_VEH_WEIGHT_COEFF = 0.5
+_DEAD_VEH_WEIGHT_COEFF = 0.1
 
 def prepareFashions(isDamaged):
-    fashions = [BigWorld.WGVehicleFashion(isDamaged),
-     BigWorld.WGBaseFashion(),
-     BigWorld.WGBaseFashion(),
-     BigWorld.WGBaseFashion()]
+    if isDamaged:
+        fashions = [None,
+         None,
+         None,
+         None]
+    else:
+        fashions = [BigWorld.WGVehicleFashion(False),
+         BigWorld.WGBaseFashion(),
+         BigWorld.WGBaseFashion(),
+         BigWorld.WGBaseFashion()]
     return VehiclePartsTuple(*fashions)
 
 
 def updateFashions(appearance):
+    if not appearance.isAlive:
+        return
     fashions = list(appearance.fashions)
     vDesc = appearance.typeDescriptor
     outfit = appearance.outfit

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/complex_formatters.py
 from gui import makeHtmlString
+from gui.shared.utils.functions import stripColorTagDescrTags
 from helpers import i18n
 _TEXT_FORMAT = "{0[0]}{1}{0[1]}\n<font size='1' > </font>\n"
 _TOOLTIP_KIND = ('header', 'body', 'note', 'attention')
@@ -47,7 +48,7 @@ def _doFormatToolTipFromText(tooltipID, formatType):
          'end': tooltipID.find(tags['close'])}
         if indicies['start'] != -1 and indicies['end'] != -1:
             indicies['start'] += len(tags['open'])
-            result += _getFormattedText(tooltipID[indicies['start']:indicies['end']], tooltipBlock, formatType)
+            result += _getFormattedText(stripColorTagDescrTags(tooltipID[indicies['start']:indicies['end']]), tooltipBlock, formatType)
 
     return result
 

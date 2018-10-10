@@ -11,6 +11,7 @@ from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
+from gui.shared.utils.functions import stripColorTagDescrTags
 from items import artefacts, vehicles as vehicleItems, tankmen
 from items.tankmen import PERKS
 from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
@@ -51,7 +52,7 @@ class VehicleArtefact(FittingItem):
         return description.format(**formatter)
 
     def _getShortInfo(self, vehicle=None, expanded=False):
-        return self.shortDescription
+        return stripColorTagDescrTags(self.shortDescription)
 
     @property
     def isForSale(self):

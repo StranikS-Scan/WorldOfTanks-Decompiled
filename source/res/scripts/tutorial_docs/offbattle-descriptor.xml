@@ -1,0 +1,18 @@
+<offbattle-descriptor.xml>
+  <gui>	gui/tutorial-lobby-gui.xml	</gui>
+  <initial-chapter>	Offbattle	</initial-chapter>
+  <chapters>
+    <chapter>
+      <title>	_(#battle_tutorial:chapters/offbattle/title)	</title>
+      <description>	_(#battle_tutorial:chapters/offbattle/description)	</description>
+      <chapter-id>	Offbattle	</chapter-id>
+      <bonus>
+        <id>	2	</id>
+        <message>	start-training	</message>
+      </bonus>
+      <forced-loading>	2	</forced-loading>
+      <file-path>	scripts/tutorial_docs/offbattle.xml	  <after-battle>	scripts/tutorial_docs/offbattle-ab.xml	</after-battle>
+      </file-path>
+    </chapter>
+  </chapters>
+</offbattle-descriptor.xml>

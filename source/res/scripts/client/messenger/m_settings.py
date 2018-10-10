@@ -1,15 +1,23 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/m_settings.py
 from collections import namedtuple, defaultdict
-import Account
 import Event
 from debug_utils import LOG_ERROR
+from helpers import dependency
 from helpers.html.templates import XMLCollection
 from messenger import doc_loaders
 from messenger.doc_loaders.html_templates import MessageTemplates
+from messenger.m_constants import BATTLE_CHANNEL
+from skeletons.account_helpers.settings_core import ISettingsCore
+
+def _getAccountRepository():
+    import Account
+    return Account.g_accountRepository
+
 
 class _ColorScheme(defaultdict):
 
-    def __init__(self, names, default_factory = None, **kwargs):
+    def __init__(self, names, default_factory=None, **kwargs):
         self.__colorsNames = names
         self.__current = names[0]
         super(_ColorScheme, self).__init__(default_factory, **kwargs)
@@ -28,7 +36,7 @@ class _ColorScheme(defaultdict):
         return self[key][self.__current]
 
     def getColors(self, key):
-        return map(lambda name: self[key][name], self.__colorsNames)
+        return [ self[key][name] for name in self.__colorsNames ]
 
     def setCurrent(self, name):
         result = False
@@ -66,10 +74,10 @@ class _LobbySettings(object):
             return self.__messageFormats[key]
         except KeyError:
             LOG_ERROR('Message formatter not found', key)
-            return self.messageRawFormat % {'user': '000000'}
+            return self.messageRawFormat
 
-    def _onSettingsLoaded(self, root):
-        for key in ['groups', 'rosters']:
+    def onSettingsLoaded(self, root):
+        for key in ('groups', 'rosters'):
             colorScheme = root.getColorScheme(key)
             for name, userColor in colorScheme.iterHexs():
                 if name == 'breaker':
@@ -83,7 +91,7 @@ class _LobbySettings(object):
 _BattleMessageLifeCycle = namedtuple('_MessageInBattle', ('lifeTime', 'alphaSpeed'))
 
 class _BattleSettings(object):
-    __slots__ = ('messageLifeCycle', 'messageFormat', 'targetFormat', 'inactiveStateAlpha', 'hintText', 'toolTipText', 'numberOfMessagesInHistory', 'receivers', 'alphaForLastMessages', 'chatIsLockedToolTipText', 'recoveredLatestMessages', 'lifeTimeRecoveredMessages')
+    __slots__ = ('messageLifeCycle', 'messageFormat', 'targetFormat', 'inactiveStateAlpha', 'hintText', 'toolTipText', 'numberOfMessagesInHistory', 'receivers', 'alphaForLastMessages', 'chatIsLockedToolTipText', 'recoveredLatestMessages', 'lifeTimeRecoveredMessages', 'lastReceiver', 'toolTipTextWithMuteInfo')
 
     def __init__(self):
         super(_BattleSettings, self).__init__()
@@ -94,28 +102,32 @@ class _BattleSettings(object):
         self.hintText = ''
         self.toolTipText = ''
         self.chatIsLockedToolTipText = ''
+        self.toolTipTextWithMuteInfo = ''
         self.numberOfMessagesInHistory = 6
         self.receivers = {}
         self.alphaForLastMessages = 20
         self.recoveredLatestMessages = 5
         self.lifeTimeRecoveredMessages = 1
+        self.lastReceiver = BATTLE_CHANNEL.TEAM.name
 
 
-_UserPrefs = namedtuple('_UserPrefs', ('version', 'datetimeIdx', 'enableOlFilter', 'enableSpamFilter', 'invitesFromFriendsOnly', 'storeReceiverInBattle', 'disableBattleChat'))
+_UserPrefs = namedtuple('_UserPrefs', ('version', 'datetimeIdx', 'enableOlFilter', 'enableSpamFilter', 'invitesFromFriendsOnly', 'storeReceiverInBattle', 'disableBattleChat', 'chatContactsListOnly', 'receiveFriendshipRequest', 'receiveInvitesInBattle'))
+
+def _makeDefUserPrefs():
+    return _UserPrefs(version=1, datetimeIdx=2, enableOlFilter=True, enableSpamFilter=False, invitesFromFriendsOnly=False, storeReceiverInBattle=False, disableBattleChat=False, chatContactsListOnly=False, receiveFriendshipRequest=True, receiveInvitesInBattle=True)
+
 
 class MessengerSettings(object):
-    __messageFormat = '<font color="#%(user)s">{0:>s}</font><font color="#%(user)s">{1:>s}</font> <font color="#%(message)s">{2:>s}</font>'
-    __slots__ = ('__colorsSchemes', '__messageFormatters', '__eManager', 'lobby', 'battle', 'userPrefs', 'htmlTemplates', 'msgTemplates', 'server', 'onUserPreferencesUpdated', 'onColorsSchemesUpdated')
+    __slots__ = ('__colorsSchemes', '__messageFormatters', '__eManager', '__isUserPrefsInited', '__defaultUserPrefsSnapshot', 'lobby', 'battle', 'userPrefs', 'htmlTemplates', 'msgTemplates', 'server', 'onUserPreferencesUpdated', 'onColorsSchemesUpdated')
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
-        self.__colorsSchemes = {'groups': _ColorScheme(['default']),
-         'rosters': _ColorScheme(['online', 'offline']),
-         'battle/player': _ColorScheme(['default', 'colorBlind']),
-         'battle/message': _ColorScheme(['default', 'colorBlind']),
-         'battle/receiver': _ColorScheme(['default', 'colorBlind'])}
+        self.__colorsSchemes = {}
         self.lobby = _LobbySettings()
         self.battle = _BattleSettings()
-        self.userPrefs = _UserPrefs(1, 2, True, False, False, False, False)
+        self.userPrefs = _makeDefUserPrefs()
+        self.__isUserPrefsInited = False
+        self.__defaultUserPrefsSnapshot = ()
         self.htmlTemplates = XMLCollection('', '')
         self.msgTemplates = MessageTemplates('', '')
         self.__messageFormatters = {}
@@ -126,28 +138,33 @@ class MessengerSettings(object):
         return
 
     def init(self):
+        self.__colorsSchemes.update({'groups': _ColorScheme(['default']),
+         'rosters': _ColorScheme(['online', 'offline']),
+         'contacts': _ColorScheme(['online', 'offline']),
+         'battle/player': _ColorScheme(['default', 'colorBlind']),
+         'battle/message': _ColorScheme(['default', 'colorBlind']),
+         'battle/receiver': _ColorScheme(['default', 'colorBlind'])})
         from messenger.proto import ServerSettings
         self.server = ServerSettings()
         doc_loaders.load(self)
-        self.lobby._onSettingsLoaded(self)
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged += self.__accs_onSettingsChanged
+        self.__defaultUserPrefsSnapshot = self.userPrefs[:]
+        self.lobby.onSettingsLoaded(self)
+        self.settingsCore.onSettingsChanged += self.__accs_onSettingsChanged
 
     def fini(self):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged -= self.__accs_onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__accs_onSettingsChanged
         self.__eManager.clear()
         self.__colorsSchemes.clear()
         self.__messageFormatters.clear()
 
     def update(self):
-        if Account.g_accountRepository:
-            settings = Account.g_accountRepository.serverSettings
+        repository = _getAccountRepository()
+        if repository:
+            settings = repository.serverSettings
         else:
             settings = {}
         self.server.update(settings)
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        if g_settingsCore.getSetting('isColorBlind'):
+        if self.settingsCore.getSetting('isColorBlind'):
             csName = 'colorBlind'
         else:
             csName = 'default'
@@ -163,9 +180,21 @@ class MessengerSettings(object):
 
         return None
 
+    def resetUserPreferences(self):
+        if self.__defaultUserPrefsSnapshot:
+            self.userPrefs = _UserPrefs(*self.__defaultUserPrefsSnapshot)
+        else:
+            self.userPrefs = _makeDefUserPrefs()
+        self.__isUserPrefsInited = False
+
     def saveUserPreferences(self, data):
-        if doc_loaders.user_prefs.flush(self, data):
+        if doc_loaders.user_prefs.flush(self, data) or not self.__isUserPrefsInited:
+            self.__isUserPrefsInited = True
             self.onUserPreferencesUpdated()
+
+    def resetBattleReceiverIfNeed(self):
+        if not self.userPrefs.storeReceiverInBattle:
+            self.battle.lastReceiver = BATTLE_CHANNEL.TEAM.name
 
     def __accs_onSettingsChanged(self, diff):
         if 'isColorBlind' in diff:

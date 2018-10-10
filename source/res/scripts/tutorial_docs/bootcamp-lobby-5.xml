@@ -1,0 +1,220 @@
+<bootcamp-lobby-5.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	DefaultScene	</initial-scene>
+  <scenes>
+    <scene>	DefaultScene	  <post-effects></post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+    <scene>	Hangar	  <post-effects></post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <global-runtime-effects></global-runtime-effects>
+  <has-id>
+    <dialog>	IntroDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	INTRO	</preset>
+            <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
+            <label>	#bootcamp:message/intro/lesson/v/label	</label>
+            <voiceover>	vo_bc_hangar_gold_premium	</voiceover>
+          </data>
+        </message>
+        <message>
+          <data>
+            <preset>	BLUE	</preset>
+            <icon>	../maps/icons/bootcamp/lines/bcGold.png	</icon>
+            <label>	#bootcamp:message/gold/label	</label>
+            <text>	#bootcamp:message/gold/text	</text>
+            <voiceover>	vo_bc_hangar_gold	</voiceover>
+          </data>
+        </message>
+        <message>
+          <data>
+            <preset>	BLUE	</preset>
+            <icon>	../maps/icons/bootcamp/lines/bcPremium.png	</icon>
+            <label>	#bootcamp:message/premium/label	</label>
+            <text>	#bootcamp:message/premium/text	</text>
+            <voiceover>	vo_bc_hangar_premium	</voiceover>
+          </data>
+        </message>
+        <message>
+          <data>
+            <preset>	ORANGE	</preset>
+            <icon>	../maps/icons/bootcamp/lines/bcMission.png	</icon>
+            <label>	#bootcamp:message/mission/accomplished/label	</label>
+            <text>	#bootcamp:message/mission/accomplished/text	</text>
+            <voiceover>	vo_bc_hangar_mission_accomplished	</voiceover>
+            <bottom_renderer>	rewards	</bottom_renderer>
+            <only_first_bootcamp_bottom>	True	</only_first_bootcamp_bottom>
+            <bottom>
+              <data>
+                <icon>	../maps/icons/bootcamp/rewards/bcGold.png	</icon>
+                <labelTooltip>	#bootcamp:message/gold/label	</labelTooltip>
+                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcGold.png	</iconTooltip>
+                <description>	#bootcamp:message/gold/text	</description>
+                <label>	{}	</label>
+                <label_format>	getGold	</label_format>
+              </data>
+              <data>
+                <icon>	../maps/icons/bootcamp/rewards/bcPremium3d.png	</icon>
+                <labelTooltip>	#bootcamp:message/premium/label	</labelTooltip>
+                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcPremium3d.png	</iconTooltip>
+                <description>	#bootcamp:message/premium/text	</description>
+                <label>	{0}	</label>
+                <label_format>	getPremiumHours	</label_format>
+              </data>
+            </bottom>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <dialog>	MissionAccomplishedDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	ORANGE	</preset>
+            <icon>	../maps/icons/bootcamp/lines/bcMission.png	</icon>
+            <label>	#bootcamp:message/mission/accomplished/label	</label>
+            <text>	#bootcamp:message/mission/accomplished/text	</text>
+            <voiceover>	vo_bc_hangar_mission_accomplished	</voiceover>
+            <bottom_renderer>	rewards	</bottom_renderer>
+            <only_first_bootcamp_bottom>	True	</only_first_bootcamp_bottom>
+            <bottom>
+              <data>
+                <icon>	../maps/icons/bootcamp/rewards/bcGold.png	</icon>
+                <labelTooltip>	#bootcamp:message/gold/label	</labelTooltip>
+                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcGold.png	</iconTooltip>
+                <description>	#bootcamp:message/gold/text	</description>
+                <label>	{}	</label>
+                <label_format>	getGold	</label_format>
+              </data>
+              <data>
+                <icon>	../maps/icons/bootcamp/rewards/bcPremium3d.png	</icon>
+                <labelTooltip>	#bootcamp:message/premium/label	</labelTooltip>
+                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcPremium3d.png	</iconTooltip>
+                <description>	#bootcamp:message/premium/text	</description>
+                <label>	{0}	</label>
+                <label_format>	getPremiumHours	</label_format>
+              </data>
+            </bottom>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <dialog>	GraduateDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	FINISH	</preset>
+            <icon>	../maps/icons/bootcamp/lines/bcFinishBC.png	</icon>
+            <label>	#bootcamp:message/bootcamp/graduate/label	</label>
+            <text>	#bootcamp:message/bootcamp/graduate/text	</text>
+            <voiceover>	vo_bc_hangar_congratulations	</voiceover>
+            <background>	../maps/bootcamp/message/bgFinishBC.png	</background>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <game-attribute>	SecondVehicleSetter	  <var-ref>	SecondVehicleCD	</var-ref>
+      <name>	BootcampNationDataField	</name>
+      <args>	vehicle_second	</args>
+    </game-attribute>
+    <checkpoint>	StartCheckpoint	  <condition></condition>
+      <effects>
+        <invoke-gui-cmd>	OverrideHangarMenuButtons	</invoke-gui-cmd>
+        <set-visible>	VehicleResearchPanel	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	VehicleResearchPanelBG	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	VehicleResearchButton	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarParams	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleGun	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleTurret	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleEngine	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleChassis	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleRadio	  <val>	True	</val>
+        </set-visible>
+        <update-layout>	AmmunitionPanel	</update-layout>
+        <set-visible>	TankCarouselContainer	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	TankCarouselContainerBG	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	CrewPanel	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarEquipment1	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarEquipment2	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarEquipment3	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	OptionalDevice1DropDown	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	OptionalDevice2DropDown	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	OptionalDevice3DropDown	  <val>	True	</val>
+        </set-visible>
+        <set-var>	SecondVehicleSetter	</set-var>
+        <select-in-hangar>	SecondVehicleCD	</select-in-hangar>
+        <show-dialog>	IntroDialog	</show-dialog>
+      </effects>
+    </checkpoint>
+    <checkpoint>	VideoCheckpoint	  <condition></condition>
+      <effects>
+        <show-dialog>	MissionAccomplishedDialog	  <condition>
+            <effect-not-triggered>	IntroDialog	</effect-not-triggered>
+          </condition>
+        </show-dialog>
+        <play-final-video></play-final-video>
+      </effects>
+    </checkpoint>
+    <checkpoint>	AfterVideoCheckpoint	  <condition></condition>
+      <effects>
+        <show-dialog>	GraduateDialog	</show-dialog>
+        <finish-training></finish-training>
+      </effects>
+    </checkpoint>
+  </has-id>
+  <vars>
+    <var-set>	EnabledHangarMenuButtons	  <asList>
+        <asString>	hangar	</asString>
+        <asString>	techtree	</asString>
+      </asList>
+    </var-set>
+    <var-set>	EnabledHeaderMenuButtons	  <asList>
+        <asString>	settings	</asString>
+        <asString>	account	</asString>
+        <asString>	credits	</asString>
+        <asString>	prem	</asString>
+      </asList>
+    </var-set>
+  </vars>
+  <triggers>
+    <trigger>	CheckpointController	  <type>	linear-checkpoint-controller	</type>
+      <validate-var></validate-var>
+      <sequence>
+        <checkpoint>	StartCheckpoint	</checkpoint>
+        <checkpoint>	VideoCheckpoint	</checkpoint>
+        <checkpoint>	AfterVideoCheckpoint	</checkpoint>
+      </sequence>
+      <on-effects>
+        <save-checkpoint></save-checkpoint>
+      </on-effects>
+    </trigger>
+  </triggers>
+</bootcamp-lobby-5.xml>

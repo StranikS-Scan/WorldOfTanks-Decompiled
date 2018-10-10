@@ -1,0 +1,1062 @@
+<G117_Toldi_III.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	35	</armor_1>
+      <armor_2>	20	</armor_2>
+      <armor_3>	13	</armor_3>
+      <armor_4>	10	</armor_4>
+      <armor_5>	6	</armor_5>
+      <armor_6>	6	</armor_6>
+      <armor_7>	35	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	6	</armor_9>
+      <armor_10>	6	</armor_10>
+      <armor_11>	35	</armor_11>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	3938	</weight>
+    <maxHealth>	184	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G117_Toldi_III/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G117_Toldi_III/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G117_Toldi_III/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.30 32.00 0.38 1.00 0.06 0.34	</pitchParams>
+      <rollParams>	1.00 0.30 32.00 0.38 1.00 0.06 0.34	</rollParams>
+      <sensitivityToImpulse>	0.78	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000691 0.451489 0.297647	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G117_Toldi_III/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G117_Toldi_III/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/german/G117_Toldi_III/Toldi_III_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
+        <rayStart>	0.262252 0.112142 2.08594	</rayStart>
+        <rayEnd>	0.262252 -0.0567218 1.97876	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.26	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
+        <rayStart>	-0.341332 0.106644 2.09466	</rayStart>
+        <rayEnd>	-0.341332 -0.0622203 1.98749	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.509	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
+        <rayStart>	0.902041 0.336547 0.85176	</rayStart>
+        <rayEnd>	0.710783 0.282869 0.828538	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.421	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	7	</slotId>
+        <anchorPosition>	0.000000 0.460228 -1.62475	</anchorPosition>
+        <anchorDirection>	0.000000 0.272539 -0.962145	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <camouflage>
+      <tiling>	4 4 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_G117_Toldi_III>
+      <userString>	#germany_vehicles:Chassis_G117_Toldi_III	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	2500	</weight>
+      <maxLoad>	12000	</maxLoad>
+      <terrainResistance>	0.9 1.1 1.7	</terrainResistance>
+      <brakeForce>	9500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	45	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G117_Toldi_III/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G117_Toldi_III/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G117_Toldi_III/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.32 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.3	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.41411	</radius>
+          <syncAngle>	12.8571	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.126924	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.307743	</radius>
+          <syncAngle>	12.8571	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.312461	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.41411	</radius>
+          <syncAngle>	12.8571	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.126924	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.307743	</radius>
+          <syncAngle>	12.8571	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.312461	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0499093	</minOffset>
+          <maxOffset>	0.102541	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0499093	</minOffset>
+          <maxOffset>	0.102541	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G117_Toldi_III/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G117_Toldi_III/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G117_Toldi_III/track/left.track	</left>
+        <right>	vehicles/german/G117_Toldi_III/track/right.track	</right>
+        <segmentLength>	0.078	</segmentLength>
+        <segmentOffset>	0.05	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.000000	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.3	</maxAmplitude>
+        <maxOffset>	0.3	</maxOffset>
+        <gravity>	-9	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1.99	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.012	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.012	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.012	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.012	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.012	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1.99	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.012	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.012	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.012	</offset>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.003332 0.868484 -0.090205	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G117_Toldi_III/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G117_Toldi_III/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.894914 1.3509	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.872810 0.000000 0.000000	</row0>
+            <row1>	0.000000 0.988272 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.967980	</row2>
+            <row3>	0.000000 0.000000 -0.000006	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	130	</segmentsCount>
+          <segmentsOuterThickness>	0.016981	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0127502	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-0.89158	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.0777845	</back>
+              <top>	0.0733224	</top>
+              <front>	0.0703047	</front>
+              <bottom>	0.00712598	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0745162	</back>
+              <top>	0.0649733	</top>
+              <front>	0.0775302	</front>
+              <bottom>	0.0142427	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/german/G117_Toldi_III/track/segment.model	</model>
+            <length>	0.0776718	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-0.775972	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.557036 0.557724 0.559054 0.561045 0.563722 0.567123 0.571298	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.715972	</xStart>
+                <xStep>	0.038836	</xStep>
+                <ySamples>	0.571298 0.596582	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.677136	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.596582 0.606247 0.617886 0.632331 0.65147 0.682833 0.793789	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.855135	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.661002 0.661778 0.663199 0.665284 0.668059 0.671564 0.675853	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.915135	</xStart>
+                <xStep>	0.038836	</xStep>
+                <ySamples>	0.675853 0.701737	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.953971	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.701737 0.711644 0.723612 0.738556 0.758656 0.794414 0.897359	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-2.19174	</xStart>
+                <xStep>	0.0388359	</xStep>
+                <ySamples>	0.799512 0.817032 0.828169 0.832986 0.835662 0.838325 0.840988 0.843651 0.846314 0.848978 0.851641 0.854304 0.856967 0.85963 0.862293 0.864956 0.867619 0.870271 0.872803 0.875467 0.87813 0.880762 0.883426 0.88609 0.888721 0.891385 0.894049 0.896713 0.899344 0.902008 0.904672 0.907303 0.909967 0.912631 0.915263 0.917926 0.92059 0.923222 0.925886 0.92855 0.931213 0.933845 0.936509 0.939173 0.941804 0.944468 0.947132 0.949763 0.952427 0.955091 0.957722 0.960386 0.96305 0.965699 0.968346 0.971009 0.973673 0.976305 0.978969 0.981632 0.984264 0.986928 0.989592 0.992223 0.994887 0.997551 1.00018 1.00285 1.00551 1.00817 1.01081 1.01347 1.01613 1.0188 1.02146 1.02412 1.02679 1.02945 1.03212 1.03478 1.03744 1.04011 1.04277 1.04544 1.0481 1.05076 1.05343 1.05609 1.05876 1.06142 1.06408 1.06675 1.06941 1.07207 1.07474 1.0774 1.08007 1.08273 1.08539 1.08806 1.09072 1.09392 1.09725 1.10058 1.10391 1.10724 1.11056 1.11389 1.11729 1.121 1.12471 1.12756 1.12326 1.11109 1.09253 1.07495 1.05006	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L3	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	1.99603 0.678953	</basePos>
+              <shiftVec>	0.359098 0.0962885	</shiftVec>
+              <jointIdx>	19	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L3	</wheelName>
+              <basePos>	-1.8813 0.347352	</basePos>
+              <shiftVec>	-0.318395 0.0271861	</shiftVec>
+              <jointIdx>	82	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L3	</wheelName>
+              <basePos>	-1.19171 0.332564	</basePos>
+              <shiftVec>	0.0218351 -0.325211	</shiftVec>
+              <jointIdx>	98	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.19286 0.332561	</basePos>
+              <shiftVec>	0.0663654 -0.318368	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L3	</name>
+              <radius>	0.319176	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.371459	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	-0.895	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	-247.722	</startAngle>
+              <teethCount>	28	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-0.957074 0.82601 -2.19161	</point>
+                <point>	-0.957074 0.84353 -2.15277	</point>
+                <point>	-0.947074 0.854668 -2.11393	</point>
+                <point>	-0.957074 0.859484 -2.0751	</point>
+                <point>	-0.957074 0.862161 -2.03626	</point>
+                <point>	-0.957074 0.864824 -1.99743	</point>
+                <point>	-0.957074 0.867487 -1.95859	</point>
+                <point>	-0.957074 0.87015 -1.91975	</point>
+                <point>	-0.957074 0.872813 -1.88092	</point>
+                <point>	-0.957074 0.875477 -1.84208	</point>
+                <point>	-0.957073 0.87814 -1.80325	</point>
+                <point>	-0.957073 0.880803 -1.76441	</point>
+                <point>	-0.957073 0.883466 -1.72557	</point>
+                <point>	-0.957073 0.886129 -1.68674	</point>
+                <point>	-0.957073 0.888793 -1.6479	</point>
+                <point>	-0.957073 0.891456 -1.60907	</point>
+                <point>	-0.957073 0.894119 -1.57023	</point>
+                <point>	-0.957073 0.896771 -1.5314	</point>
+                <point>	-0.957073 0.899303 -1.49256	</point>
+                <point>	-0.957072 0.901967 -1.45372	</point>
+                <point>	-0.957072 0.904631 -1.41489	</point>
+                <point>	-0.947072 0.907263 -1.37605	</point>
+                <point>	-0.947072 0.909926 -1.33722	</point>
+                <point>	-0.947072 0.91259 -1.29838	</point>
+                <point>	-0.937072 0.915222 -1.25954	</point>
+                <point>	-0.937072 0.917886 -1.22071	</point>
+                <point>	-0.937072 0.92055 -1.18187	</point>
+                <point>	-0.937072 0.923214 -1.14304	</point>
+                <point>	-0.927072 0.925846 -1.1042	</point>
+                <point>	-0.927071 0.92851 -1.06537	</point>
+                <point>	-0.927071 0.931174 -1.02653	</point>
+                <point>	-0.917071 0.933806 -0.987693	</point>
+                <point>	-0.917071 0.93647 -0.948858	</point>
+                <point>	-0.917071 0.939134 -0.910022	</point>
+                <point>	-0.907071 0.941766 -0.871186	</point>
+                <point>	-0.907071 0.94443 -0.83235	</point>
+                <point>	-0.907071 0.947094 -0.793514	</point>
+                <point>	-0.897071 0.949726 -0.754678	</point>
+                <point>	-0.897071 0.95239 -0.715842	</point>
+                <point>	-0.89707 0.955054 -0.677006	</point>
+                <point>	-0.89707 0.957717 -0.638171	</point>
+                <point>	-0.88707 0.960349 -0.599335	</point>
+                <point>	-0.88707 0.963013 -0.560499	</point>
+                <point>	-0.88707 0.965677 -0.521663	</point>
+                <point>	-0.87707 0.968309 -0.482827	</point>
+                <point>	-0.87707 0.970973 -0.443991	</point>
+                <point>	-0.87707 0.973637 -0.405155	</point>
+                <point>	-0.86707 0.976269 -0.366319	</point>
+                <point>	-0.867069 0.978933 -0.327484	</point>
+                <point>	-0.867069 0.981597 -0.288648	</point>
+                <point>	-0.857069 0.984229 -0.249812	</point>
+                <point>	-0.857069 0.986893 -0.210976	</point>
+                <point>	-0.857069 0.989557 -0.17214	</point>
+                <point>	-0.847069 0.992206 -0.133305	</point>
+                <point>	-0.847069 0.994853 -0.0944685	</point>
+                <point>	-0.847069 0.997517 -0.0556326	</point>
+                <point>	-0.847069 1.00018 -0.016797	</point>
+                <point>	-0.837069 1.00281 0.0220389	</point>
+                <point>	-0.837068 1.00548 0.0608749	</point>
+                <point>	-0.837068 1.00814 0.0997109	</point>
+                <point>	-0.827068 1.01077 0.138547	</point>
+                <point>	-0.827068 1.01344 0.177382	</point>
+                <point>	-0.827068 1.0161 0.216218	</point>
+                <point>	-0.817068 1.01873 0.255054	</point>
+                <point>	-0.817068 1.0214 0.29389	</point>
+                <point>	-0.817068 1.02406 0.332726	</point>
+                <point>	-0.807068 1.02669 0.371562	</point>
+                <point>	-0.807068 1.02936 0.410398	</point>
+                <point>	-0.807067 1.03202 0.449234	</point>
+                <point>	-0.807067 1.03468 0.488069	</point>
+                <point>	-0.797067 1.03732 0.526905	</point>
+                <point>	-0.797067 1.03998 0.565741	</point>
+                <point>	-0.797067 1.04264 0.604577	</point>
+                <point>	-0.797067 1.04531 0.643413	</point>
+                <point>	-0.797067 1.04797 0.682249	</point>
+                <point>	-0.797067 1.05064 0.721085	</point>
+                <point>	-0.797067 1.0533 0.759921	</point>
+                <point>	-0.797067 1.05596 0.798756	</point>
+                <point>	-0.797066 1.05863 0.837592	</point>
+                <point>	-0.797066 1.06129 0.876428	</point>
+                <point>	-0.797066 1.06396 0.915264	</point>
+                <point>	-0.797066 1.06662 0.9541	</point>
+                <point>	-0.797066 1.06928 0.992936	</point>
+                <point>	-0.797066 1.07195 1.03177	</point>
+                <point>	-0.797066 1.07461 1.07061	</point>
+                <point>	-0.797066 1.07728 1.10944	</point>
+                <point>	-0.797066 1.07994 1.14828	</point>
+                <point>	-0.797065 1.0826 1.18712	</point>
+                <point>	-0.797065 1.08527 1.22595	</point>
+                <point>	-0.797065 1.08793 1.26479	</point>
+                <point>	-0.797065 1.0906 1.30362	</point>
+                <point>	-0.797065 1.09326 1.34246	</point>
+                <point>	-0.797065 1.09592 1.38129	</point>
+                <point>	-0.797065 1.09859 1.42013	</point>
+                <point>	-0.797065 1.10125 1.45897	</point>
+                <point>	-0.797065 1.10391 1.4978	</point>
+                <point>	-0.797065 1.10658 1.53664	</point>
+                <point>	-0.797064 1.10924 1.57547	</point>
+                <point>	-0.797064 1.11191 1.61431	</point>
+                <point>	-0.797064 1.11457 1.65315	</point>
+                <point>	-0.797064 1.11723 1.69198	</point>
+                <point>	-0.797064 1.12043 1.73082	</point>
+                <point>	-0.797064 1.12376 1.76965	</point>
+                <point>	-0.797064 1.12709 1.80849	</point>
+                <point>	-0.797064 1.13042 1.84732	</point>
+                <point>	-0.797064 1.13375 1.88616	</point>
+                <point>	-0.797064 1.13708 1.925	</point>
+                <point>	-0.797064 1.14041 1.96383	</point>
+                <point>	-0.797064 1.1438 2.00267	</point>
+                <point>	-0.797063 1.14752 2.0415	</point>
+                <point>	-0.797063 1.15123 2.08034	</point>
+                <point>	-0.797063 1.15408 2.11918	</point>
+                <point>	-0.957063 1.14977 2.15801	</point>
+                <point>	-0.957062 1.13759 2.19685	</point>
+                <point>	-0.957061 1.11904 2.23568	</point>
+                <point>	-0.95706 1.10146 2.27452	</point>
+                <point>	-0.957059 1.07657 2.31336	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	-0.797063 0.752133 -0.715842	</point>
+                <point>	-0.797063 0.758706 -0.677006	</point>
+              </range>
+              <range>
+                <point>	-0.797059 0.857482 0.915264	</point>
+                <point>	-0.797058 0.86228 0.9541	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	130	</segmentsCount>
+          <segmentsOuterThickness>	0.0170443	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0127269	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	0.898244	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.0777845	</back>
+              <top>	0.0733224	</top>
+              <front>	0.0703047	</front>
+              <bottom>	0.00712598	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0745162	</back>
+              <top>	0.0649733	</top>
+              <front>	0.0775302	</front>
+              <bottom>	0.0142427	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/german/G117_Toldi_III/track/segment.model	</model>
+            <length>	0.0764874	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-0.768176	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.557536 0.558724 0.560567 0.563091 0.566328 0.570328 0.575156	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.708176	</xStart>
+                <xStep>	0.0382437	</xStep>
+                <ySamples>	0.575156 0.603395	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.669932	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.603395 0.614424 0.627967 0.64548 0.671538 0.789767 0.779767	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-2.19968	</xStart>
+                <xStep>	0.0382437	</xStep>
+                <ySamples>	0.789911 0.811425 0.8227 0.83384 0.83673 0.839348 0.841947 0.844537 0.847192 0.849819 0.852438 0.855057 0.857675 0.860294 0.862913 0.865532 0.86815 0.870769 0.873388 0.876001 0.878285 0.880569 0.882854 0.885138 0.887422 0.889707 0.891991 0.894276 0.89656 0.898844 0.901129 0.903665 0.906288 0.908982 0.911611 0.914311 0.916934 0.919635 0.92226 0.924958 0.927599 0.930281 0.932938 0.935604 0.938277 0.940928 0.943615 0.946251 0.948951 0.951574 0.954274 0.956897 0.959598 0.962232 0.96492 0.967571 0.970244 0.97291 0.975567 0.978249 0.98089 0.983588 0.986214 0.988926 0.991664 0.994402 0.99714 0.999878 1.00262 1.00535 1.00809 1.01071 1.01333 1.01596 1.01858 1.0212 1.02382 1.02645 1.02907 1.03131 1.03311 1.03491 1.03655 1.03772 1.04007 1.04516 1.04889 1.05262 1.0553 1.05793 1.06055 1.06317 1.0658 1.06842 1.07104 1.07367 1.07629 1.07891 1.08154 1.08416 1.08678 1.08941 1.09142 1.0947 1.09797 1.10125 1.10453 1.10781 1.11108 1.11436 1.1124 1.10986 1.10731 1.10458 1.10016 1.09197 1.07849 1.06262 1.04262	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R3	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	1.99603 0.678953	</basePos>
+              <shiftVec>	0.358643 0.0955071	</shiftVec>
+              <jointIdx>	19	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R3	</wheelName>
+              <basePos>	-1.8813 0.347325	</basePos>
+              <shiftVec>	-0.318582 0.0269317	</shiftVec>
+              <jointIdx>	82	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R3	</wheelName>
+              <basePos>	-1.12678 0.332537	</basePos>
+              <shiftVec>	0.0338846 -0.325188	</shiftVec>
+              <jointIdx>	99	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.25779 0.332534	</basePos>
+              <shiftVec>	0.00449598 -0.325157	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R3	</name>
+              <radius>	0.319352	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.370826	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.895	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	-247.715	</startAngle>
+              <teethCount>	28	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	0.957095 0.816481 -2.19956	</point>
+                <point>	0.957094 0.837995 -2.16132	</point>
+                <point>	0.957094 0.84927 -2.12307	</point>
+                <point>	0.957094 0.86041 -2.08483	</point>
+                <point>	0.797094 0.863294 -2.04658	</point>
+                <point>	0.797094 0.865913 -2.00834	</point>
+                <point>	0.797094 0.868511 -1.9701	</point>
+                <point>	0.797094 0.871102 -1.93185	</point>
+                <point>	0.797094 0.873757 -1.89361	</point>
+                <point>	0.797095 0.876384 -1.85537	</point>
+                <point>	0.797095 0.879003 -1.81712	</point>
+                <point>	0.797095 0.881622 -1.77888	</point>
+                <point>	0.797095 0.884241 -1.74064	</point>
+                <point>	0.797095 0.886859 -1.70239	</point>
+                <point>	0.797095 0.889478 -1.66415	</point>
+                <point>	0.797095 0.892097 -1.6259	</point>
+                <point>	0.797095 0.894716 -1.58766	</point>
+                <point>	0.797095 0.897335 -1.54942	</point>
+                <point>	0.797095 0.899953 -1.51117	</point>
+                <point>	0.957095 0.902572 -1.47293	</point>
+                <point>	0.957096 0.904857 -1.43469	</point>
+                <point>	0.957096 0.907141 -1.39644	</point>
+                <point>	0.957096 0.909425 -1.3582	</point>
+                <point>	0.957096 0.91171 -1.31996	</point>
+                <point>	0.957096 0.913994 -1.28171	</point>
+                <point>	0.957096 0.916279 -1.24347	</point>
+                <point>	0.957096 0.918563 -1.20522	</point>
+                <point>	0.957096 0.920848 -1.16698	</point>
+                <point>	0.957096 0.923132 -1.12874	</point>
+                <point>	0.957097 0.925417 -1.09049	</point>
+                <point>	0.957097 0.927701 -1.05225	</point>
+                <point>	0.957097 0.930238 -1.01401	</point>
+                <point>	0.957097 0.932861 -0.975762	</point>
+                <point>	0.957097 0.935555 -0.937518	</point>
+                <point>	0.947097 0.938184 -0.899275	</point>
+                <point>	0.937097 0.940883 -0.861031	</point>
+                <point>	0.937097 0.943507 -0.822787	</point>
+                <point>	0.927097 0.946207 -0.784544	</point>
+                <point>	0.927098 0.948832 -0.7463	</point>
+                <point>	0.917098 0.951529 -0.708056	</point>
+                <point>	0.917098 0.954171 -0.669812	</point>
+                <point>	0.907098 0.956853 -0.631568	</point>
+                <point>	0.907098 0.959509 -0.593325	</point>
+                <point>	0.897098 0.962175 -0.555081	</point>
+                <point>	0.897098 0.964848 -0.516837	</point>
+                <point>	0.887098 0.967499 -0.478594	</point>
+                <point>	0.887098 0.970187 -0.44035	</point>
+                <point>	0.877099 0.972822 -0.402106	</point>
+                <point>	0.867099 0.975521 -0.363862	</point>
+                <point>	0.867099 0.978145 -0.325619	</point>
+                <point>	0.857099 0.980844 -0.287375	</point>
+                <point>	0.857099 0.983468 -0.249131	</point>
+                <point>	0.847099 0.986168 -0.210887	</point>
+                <point>	0.847099 0.988803 -0.172643	</point>
+                <point>	0.837099 0.99149 -0.1344	</point>
+                <point>	0.837099 0.994141 -0.0961563	</point>
+                <point>	0.8271 0.996813 -0.0579125	</point>
+                <point>	0.8271 0.99948 -0.0196688	</point>
+                <point>	0.8171 1.00214 0.0185751	</point>
+                <point>	0.8171 1.00482 0.0568188	</point>
+                <point>	0.8071 1.00746 0.0950626	</point>
+                <point>	0.8071 1.01016 0.133306	</point>
+                <point>	0.7971 1.01278 0.17155	</point>
+                <point>	0.7971 1.0155 0.209794	</point>
+                <point>	0.7971 1.01823 0.248037	</point>
+                <point>	0.7971 1.02097 0.286281	</point>
+                <point>	0.7971 1.02371 0.324525	</point>
+                <point>	0.797101 1.02645 0.362769	</point>
+                <point>	0.797101 1.02919 0.401012	</point>
+                <point>	0.797101 1.03192 0.439256	</point>
+                <point>	0.957101 1.03466 0.477499	</point>
+                <point>	0.957101 1.03728 0.515742	</point>
+                <point>	0.957101 1.03991 0.553986	</point>
+                <point>	0.957101 1.04253 0.59223	</point>
+                <point>	0.957101 1.04515 0.630474	</point>
+                <point>	0.957101 1.04778 0.668717	</point>
+                <point>	0.957101 1.0504 0.706961	</point>
+                <point>	0.957101 1.05302 0.745205	</point>
+                <point>	0.957102 1.05565 0.783449	</point>
+                <point>	0.957102 1.05789 0.821692	</point>
+                <point>	0.957102 1.05969 0.859936	</point>
+                <point>	0.957102 1.06149 0.898179	</point>
+                <point>	0.957102 1.06312 0.936423	</point>
+                <point>	0.957102 1.06429 0.974667	</point>
+                <point>	0.957102 1.06665 1.01291	</point>
+                <point>	0.957102 1.07173 1.05115	</point>
+                <point>	0.957102 1.07546 1.0894	</point>
+                <point>	0.957102 1.0792 1.12764	</point>
+                <point>	0.957103 1.08188 1.16589	</point>
+                <point>	0.957103 1.0845 1.20413	</point>
+                <point>	0.957103 1.08713 1.24237	</point>
+                <point>	0.957103 1.08975 1.28062	</point>
+                <point>	0.957103 1.09238 1.31886	</point>
+                <point>	0.957103 1.095 1.3571	</point>
+                <point>	0.957103 1.09762 1.39535	</point>
+                <point>	0.957103 1.10025 1.43359	</point>
+                <point>	0.957103 1.10287 1.47184	</point>
+                <point>	0.957103 1.10549 1.51008	</point>
+                <point>	0.957104 1.10812 1.54832	</point>
+                <point>	0.957104 1.11074 1.58657	</point>
+                <point>	0.957104 1.11336 1.62481	</point>
+                <point>	0.957104 1.11599 1.66305	</point>
+                <point>	0.797104 1.11799 1.7013	</point>
+                <point>	0.797104 1.12127 1.73954	</point>
+                <point>	0.797104 1.12455 1.77779	</point>
+                <point>	0.797104 1.12782 1.81603	</point>
+                <point>	0.797104 1.1311 1.85427	</point>
+                <point>	0.797105 1.13438 1.89252	</point>
+                <point>	0.797105 1.13766 1.93076	</point>
+                <point>	0.797105 1.14094 1.969	</point>
+                <point>	0.957105 1.13898 2.00725	</point>
+                <point>	0.957105 1.13643 2.04549	</point>
+                <point>	0.957105 1.13389 2.08373	</point>
+                <point>	0.957106 1.13116 2.12198	</point>
+                <point>	0.957106 1.12674 2.16022	</point>
+                <point>	0.957107 1.11855 2.19847	</point>
+                <point>	0.957107 1.10507 2.23671	</point>
+                <point>	0.957108 1.0892 2.27495	</point>
+                <point>	0.957109 1.0692 2.3132	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	0.867105 0.747851 -0.708055	</point>
+                <point>	0.867106 0.744747 -0.669812	</point>
+              </range>
+              <range>
+                <point>	0.86711 0.858721 0.936424	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	0.000288526 1.98233 0.20635	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_G117_Toldi_III>
+  </chassis>
+  <turrets0>
+    <Turret_1_G117_Toldi_III>
+      <guns>
+        <_40mm_37_42_M_L45_A>	shared	  <maxAmmo>	87	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	13	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <invisibilityFactorAtShot>	0.285	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <reloadTime>	4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/german/G117_Toldi_III/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G117_Toldi_III/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G117_Toldi_III/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G117_Toldi_III/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G117_Toldi_III/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.101396 0.0188972 0.862269	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.865 0.55 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_40mm_37_42_M_L45_A>
+      </guns>
+      <userString>	#germany_vehicles:Turret_1_G117_Toldi_III	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2000	</price>
+      <notInShop>	true	</notInShop>
+      <yawLimits>	-180 180	</yawLimits>
+      <armor>
+        <armor_1>	20	</armor_1>
+        <armor_2>	25	</armor_2>
+        <armor_3>	25	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	6	</armor_6>
+        <armor_7>	13	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	13	</armor_9>
+        <armor_10>	10	</armor_10>
+        <armor_11>	13	</armor_11>
+        <armor_12>	35	</armor_12>
+      </armor>
+      <primaryArmor>	armor_12 armor_3 armor_4	</primaryArmor>
+      <weight>	2000	</weight>
+      <maxHealth>	46	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	270	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <models>
+        <undamaged>	vehicles/german/G117_Toldi_III/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G117_Toldi_III/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G117_Toldi_III/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G117_Toldi_III/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G117_Toldi_III/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.086596 0.322202 0.576575	</gunPosition>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	0.913 0.051 0.964 0.000 0.472 0.182 0.739 0.595 0.252 0.500 0.275 0.500 0.000 0.500 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
+          <rayStart>	-0.642574 0.378563 -0.295488	</rayStart>
+          <rayEnd>	-0.45365 0.325158 -0.257324	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
+          <rayStart>	0.642574 0.378563 -0.295488	</rayStart>
+          <rayEnd>	0.45365 0.325158 -0.257324	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 0.671827 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <camouflage>
+        <tiling>	2.8 1.66 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_G117_Toldi_III>
+  </turrets0>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner>	loader	</gunner>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	45	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.338	</moving>
+    <still>	0.338	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.507	</firePenalty>
+  </invisibility>
+  <repairCost>	2.5	</repairCost>
+  <premiumVehicleXPFactor>	0.6	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <engines>
+    <Ganz_VIII_VGT_107>	shared	</Ganz_VIII_VGT_107>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <R_5a>	shared	</R_5a>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ganz_VIII_VGT_107>
+          <smplEnginePower>	163.8786	</smplEnginePower>
+        </Ganz_VIII_VGT_107>
+      </engines>
+      <chassis>
+        <Chassis_G117_Toldi_III>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G117_Toldi_III>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <armour>	0.592518163	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+</G117_Toldi_III.xml>

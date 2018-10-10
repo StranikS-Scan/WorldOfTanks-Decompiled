@@ -1,0 +1,58 @@
+<29_el_hallouf.xml>
+  <name>	#arenas:29_el_hallouf/name	</name>
+  <description>	#arenas:29_el_hallouf/description	</description>
+  <geometry>	spaces/29_el_hallouf	</geometry>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/29_el_hallouf/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	desert	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_el_halluf_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_el_halluf_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_el_halluf_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_el_halluf_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_el_halluf_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_el_halluf_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	301.446869 316.445740	</position1>
+        </team1>
+        <team2>
+          <position1>	-338.937134 -320.331482	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	325.469 296.668	</position>
+        </team1>
+        <team2>
+          <position>	-295.601 -340.312	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	-195.523697 193.398712	</controlPoint>
+    </domination>
+  </gameplayTypes>
+</29_el_hallouf.xml>

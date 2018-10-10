@@ -1,0 +1,1285 @@
+<customization.xml>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <armorColor>	15 36 36 0	</armorColor>
+  <inscriptions>
+    <swedenhidden>
+      <userString>	#vehicle_customization:inscription/historical	</userString>
+      <notInShop>	true	</notInShop>
+      <priceFactor>	1.0	</priceFactor>
+      <inscriptions>
+        <inscription>
+          <id>	5	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_05.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/gittan	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </swedenhidden>
+    <S23_Strv_81_sabaton>
+      <userString>	#vehicle_customization:inscription/special	</userString>
+      <notInShop>	true	</notInShop>
+      <priceFactor>	0.0	</priceFactor>
+      <allow>	sweden:S23_Strv_81_sabaton	</allow>
+      <inscriptions>
+        <inscription>
+          <id>	20	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_20.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/primovictoria	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </S23_Strv_81_sabaton>
+    <sweden>
+      <userString>	#vehicle_customization:inscription/historical	</userString>
+      <priceFactor>	1.0	</priceFactor>
+      <inscriptions>
+        <inscription>
+          <id>	1	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_01.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/arvet_forpliktar	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	2	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_02.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/fort_och_fel	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	3	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_03.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/framat	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	4	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_04.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/gamla_bettan	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	6	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_06.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/heja_sverige	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	7	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_07.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/kunglig_hovleverantor	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	8	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_08.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/lisa	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	9	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_09.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/lollo	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	10	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_10.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/lotta	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	11	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_11.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/maggan	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	12	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_12.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/maja	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	13	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_13.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/moder_svea	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	14	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_14.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/nettan	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	15	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_15.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/nulli_secundus	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	16	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_16.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/ring_sa_kommer_vi	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	17	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_17.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/sla_snabbt_sla_hart	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	18	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_18.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/ulla	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	19	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_19.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/v_gurra	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </sweden>
+  </inscriptions>
+  <insigniaOnGun>
+    <insignia>
+      <id>	1	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_sweden_1.dds	</texName>
+    </insignia>
+    <insignia>
+      <id>	2	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_sweden_2.dds	</texName>
+    </insignia>
+    <insignia>
+      <id>	3	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_sweden_3.dds	</texName>
+    </insignia>
+  </insigniaOnGun>
+  <camouflageGroups>
+    <winter>
+      <userString>	#vehicle_customization:camouflage/winter	</userString>
+    </winter>
+    <summer>
+      <userString>	#vehicle_customization:camouflage/summer	</userString>
+    </summer>
+    <desert>
+      <userString>	#vehicle_customization:camouflage/desert	</userString>
+    </desert>
+    <IGRwinter>
+      <userString>	#vehicle_customization:camouflage/winter	</userString>
+      <igrType>	2	</igrType>
+    </IGRwinter>
+    <IGRsummer>
+      <userString>	#vehicle_customization:camouflage/summer	</userString>
+      <igrType>	2	</igrType>
+    </IGRsummer>
+    <IGRdesert>
+      <userString>	#vehicle_customization:camouflage/desert	</userString>
+      <igrType>	2	</igrType>
+    </IGRdesert>
+  </camouflageGroups>
+  <camouflages>
+    <Sw_winter_01>
+      <texture>	vehicles/sweden/Camouflage/Sw_Winter_01.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_winter_01	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	133	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	170 172 168 255	</c0>
+        <c1>	59 64 51 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	2.5 2.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S13_Leo>	2.3 2.3 0.000000 0.000000	</S13_Leo>
+        <S12_Strv_M40>	3.6 3.6 0.000000 0.000000	</S12_Strv_M40>
+        <S05_Strv_M21_29>	1 1 0.9 2.6	</S05_Strv_M21_29>
+        <S14_Ikv_103>	10 10 0.000000 0.000000	</S14_Ikv_103>
+        <S03_Strv_M38>	1 1 0.000000 0.000000	</S03_Strv_M38>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	6.4 6.4 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	2.3 2.3 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S09_L_120_TD>	1 1 0.000000 0.000000	</S09_L_120_TD>
+        <S07_Strv_74>	1 1 0.000000 0.000000	</S07_Strv_74>
+        <S18_EMIL_1951_E1>	2.1 2.1 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S20_Ikv_72>	2.9 2.9 0.000000 0.000000	</S20_Ikv_72>
+        <S11_Strv_103B>	5.9 5.9 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.3 2.3 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.8 1.8 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S23_Strv_81>	1 1 0.000000 0.000000	</S23_Strv_81>
+        <S22_Strv_S1>	3 3 0.000000 0.000000	</S22_Strv_S1>
+      </tiling>
+    </Sw_winter_01>
+    <Sw_winter_02>
+      <texture>	vehicles/sweden/Camouflage/Sw_Winter_02.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_winter_02	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	134	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	170 172 168 255	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.5 0.5 4.7 2.6	</S15_L_60>
+        <S07_Strv_74>	0.9 0.9 0.000000 0.000000	</S07_Strv_74>
+        <S03_Strv_M38>	3.7 3.7 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 0.000000 0.000000	</S13_Leo>
+        <S12_Strv_M40>	4.4 4.4 0.000000 0.000000	</S12_Strv_M40>
+        <S05_Strv_M21_29>	1.1 1.1 0.7 0.2	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 2 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	1.6 1.6 0.000000 2.1	</S09_L_120_TD>
+        <S02_Strv_M42>	0.9 0.9 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.4 1.4 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S08_Ikv_65_Alt_2>	1 1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S17_EMIL_1952_E2>	1.2 1.2 1 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	3.7 3.7 0.000000 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.4 1.4 4.7 0.000000	</S18_EMIL_1951_E1>
+        <S21_UDES_03>	2.2 2.2 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.6 1.6 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	3.7 3.7 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Sw_winter_02>
+    <Sw_summer_01>
+      <texture>	vehicles/sweden/Camouflage/Sw_summer_01.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_summer_01	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	135	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	64 69 52 255	</c0>
+        <c1>	64 61 49 255	</c1>
+        <c2>	114 105 77 255	</c2>
+        <c3>	21 23 19 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.9 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.4 0.4 6 4	</S15_L_60>
+        <S07_Strv_74>	1.1 1.1 0.7 4.3	</S07_Strv_74>
+        <S03_Strv_M38>	2.8 2.8 3.9 6.7	</S03_Strv_M38>
+        <S13_Leo>	1.8 1.8 2.1 2.5	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.7 1.7 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S12_Strv_M40>	4.1 4.1 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1 1 3 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	2.3 2.3 1.2 0.5	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 3.5 6.5	</S14_Ikv_103>
+        <S09_L_120_TD>	1.6 1.6 0.2 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.5 1.5 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	1 1 1.8 1.4	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.4 1.4 3.8 2.7	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	3.7 3.7 0.6 2.9	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.9 1.9 1.3 3.2	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.8 1.8 1.2 0.9	</S11_Strv_103B>
+        <S21_UDES_03>	4.8 4.8 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.6 1.6 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.1 1.1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.3 2.3 1.8 0.000000	</S23_Strv_81>
+      </tiling>
+    </Sw_summer_01>
+    <Sw_summer_02>
+      <texture>	vehicles/sweden/Camouflage/Sw_summer_02.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_summer_02	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	136	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	69 59 41 255	</c0>
+        <c1>	69 78 61 255	</c1>
+        <c2>	42 49 35 255	</c2>
+        <c3>	108 99 69 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 7.7 4.8	</S15_L_60>
+        <S07_Strv_74>	0.9 0.9 0.000000 1.2	</S07_Strv_74>
+        <S03_Strv_M38>	2.9 2.9 3.3 6	</S03_Strv_M38>
+        <S13_Leo>	2 2 3.2 4.6	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.8 0.8 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.7 0.7 0.000000 1.1	</S04_Lago_I>
+        <S12_Strv_M40>	3.5 3.5 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.5 1.5 1.7 0.1	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.8 1.8 3.4 1.7	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 0.8 0.8	</S14_Ikv_103>
+        <S09_L_120_TD>	2.2 2.2 0.000000 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.8 0.8 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 4.2 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.3 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.4 1.4 2.4 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.2 1.2 1.7 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	3.2 3.2 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.1 1.1 3.6 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.7 2.7 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Sw_summer_02>
+    <Sw_desert_01>
+      <texture>	vehicles/sweden/Camouflage/Sw_desert_01.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_desert_01	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	137	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	0 0 0 0	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	112 94 58 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.7 1.7 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.5 0.5 3.3 0.000000	</S15_L_60>
+        <S03_Strv_M38>	5.1 5.1 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 2.5 0.000000	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.1 1.1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	6.8 6.8 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.1 1.1 2.9 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.8 1.8 2.5 3.2	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.8 1.8 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	1.7 1.7 0.000000 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.1 1.1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.8 0.8 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.4 1.4 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	5.1 5.1 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.5 1.5 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.3 1.3 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	3.3 3.3 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.2 1.2 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.6 2.6 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Sw_desert_01>
+    <Sw_desert_02>
+      <texture>	vehicles/sweden/Camouflage/Sw_desert_02.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_desert_02	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	138	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	82 80 67 255	</c0>
+        <c1>	126 118 103 255	</c1>
+        <c2>	46 48 43 255	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.5 0.5 5.1 4.7	</S15_L_60>
+        <S07_Strv_74>	1 1 1.8 0.000000	</S07_Strv_74>
+        <S03_Strv_M38>	4.4 4.4 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 0.000000 0.000000	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.1 1.1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	5.6 5.6 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.1 1.1 0.000000 2.7	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.8 1.8 2.5 3.8	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	1.6 1.6 0.000000 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.4 1.4 4.1 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.7 1.7 4.1 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.3 1.3 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.7 2.7 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.2 1.2 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.6 2.6 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Sw_desert_02>
+    <IGR_Winter>
+      <texture>	vehicles/german/Camouflage/IGR_Winter.dds	</texture>
+      <priceFactor>	0.0	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Winter	</description>
+      <id>	139	</id>
+      <kind>	winter	</kind>
+      <group>	IGRwinter	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	71 74 67 255	</c0>
+        <c1>	29 31 25 255	</c1>
+        <c2>	164 166 160 255	</c2>
+        <c3>	130 133 127 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 2.6 5.2	</S15_L_60>
+        <S07_Strv_74>	1 1 0.000000 1.7	</S07_Strv_74>
+        <S03_Strv_M38>	5.2 5.2 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 2.6 7.4	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.8 0.8 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	6 6 0.000000 0.000000	</S12_Strv_M40>
+        <S05_Strv_M21_29>	1.5 1.5 3.8 3.6	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 5.8 6.1	</S14_Ikv_103>
+        <S09_L_120_TD>	1.8 1.8 0.000000 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 1.8	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.3 1.3 1.9 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.6 1.6 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.5 1.5 0.2 1.1	</S11_Strv_103B>
+        <S21_UDES_03>	3.7 3.7 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.4 1.4 0.7 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	3.3 3.3 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Winter>
+    <IGR_Summer>
+      <texture>	vehicles/german/Camouflage/IGR_Summer.dds	</texture>
+      <priceFactor>	0.0	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Summer	</description>
+      <id>	140	</id>
+      <kind>	summer	</kind>
+      <group>	IGRsummer	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	109 88 44 255	</c0>
+        <c1>	148 142 106 255	</c1>
+        <c2>	33 35 29 255	</c2>
+        <c3>	61 78 44 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 1.7 0.000000	</S15_L_60>
+        <S07_Strv_74>	1 1 1.7 2.6	</S07_Strv_74>
+        <S03_Strv_M38>	6.7 6.7 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	1.5 1.5 2.9 3.8	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.1 1.1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.7 0.7 1.8 1.6	</S04_Lago_I>
+        <S12_Strv_M40>	7.4 7.4 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.1 1.1 4 5.6	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.2 1.2 4.4 4.1	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 4.6 1.8	</S14_Ikv_103>
+        <S09_L_120_TD>	2 2 0.4 0.4	</S09_L_120_TD>
+        <S02_Strv_M42>	0.8 0.8 1.8 4.1	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.2 1.2 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 2.5 0.1	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.4 2	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.6	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.5 1.5 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.5 1.5 1.3 1.3	</S11_Strv_103B>
+        <S21_UDES_03>	3.4 3.4 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.4 1.4 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.2 2.2 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Summer>
+    <IGR_Desert>
+      <texture>	vehicles/german/Camouflage/IGR_Desert.dds	</texture>
+      <priceFactor>	0.0	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Desert	</description>
+      <id>	141	</id>
+      <kind>	desert	</kind>
+      <group>	IGRdesert	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	126 96 44 255	</c0>
+        <c1>	151 145 108 255	</c1>
+        <c2>	30 33 26 255	</c2>
+        <c3>	86 78 55 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 3 0.000000	</S15_L_60>
+        <S07_Strv_74>	1 1 1.9 2.4	</S07_Strv_74>
+        <S03_Strv_M38>	5.9 5.9 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	1.5 1.5 2.3 2.2	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.1 1.1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	7.4 7.4 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.9 1.9 5.1 3.4	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.9 1.9 0.000000 0.3	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 3.7 1.2	</S14_Ikv_103>
+        <S09_L_120_TD>	2.1 2.1 0.3 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.8 0.8 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.1 1.1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 4 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 1.2	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.6 1.6 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.1 1.1 0.5 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	3.4 3.4 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.7 1.7 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.1 2.1 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Desert>
+    <IGR_K_Winter>
+      <texture>	vehicles/chinese/Camouflage/IGR_K_Winter.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_K_Winter	</description>
+      <id>	142	</id>
+      <kind>	winter	</kind>
+      <group>	IGRwinter	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	46 51 48 255	</c0>
+        <c1>	83 71 52 255	</c1>
+        <c2>	97 102 92 255	</c2>
+        <c3>	139 143 135 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	2 2 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 2.4 4.9	</S15_L_60>
+        <S07_Strv_74>	1.2 1.2 3 1.5	</S07_Strv_74>
+        <S03_Strv_M38>	5.6 5.6 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 3.8 1.8	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.1 1.1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S12_Strv_M40>	7.5 7.5 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.3 1.3 0.000000 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	2.5 2.5 3.3 3.2	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 0.2 5.3	</S14_Ikv_103>
+        <S09_L_120_TD>	1.8 1.8 0.2 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	1 1 5.1 8.4	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.4 1.4 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.1	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.4	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	2.2 2.2 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.3 1.3 1.8 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	3.8 3.8 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.3 1.3 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.5 1.5 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.3 2.3 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_K_Winter>
+    <IGR_K_Desert>
+      <texture>	vehicles/chinese/Camouflage/IGR_K_Desert.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_K_Desert	</description>
+      <id>	143	</id>
+      <kind>	desert	</kind>
+      <group>	IGRdesert	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	98 78 61 255	</c0>
+        <c1>	138 104 61 255	</c1>
+        <c2>	126 114 85 255	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.2 1.2 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 2.1 0.000000	</S15_L_60>
+        <S03_Strv_M38>	6.7 6.7 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	1.5 1.5 3.4 4.8	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S12_Strv_M40>	9.5 9.5 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.8 1.8 0.2 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.8 1.8 2.3 0.6	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 7.9 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	1.8 1.8 0.1 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.8 0.8 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.3 1.3 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.5 1.5 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S21_UDES_03>	3.4 3.4 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1 1 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.7 1.7 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.5 2.5 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_K_Desert>
+    <IGR_Ch_Winter>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Winter.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Winter	</description>
+      <id>	144	</id>
+      <kind>	winter	</kind>
+      <group>	IGRwinter	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	52 49 38 255	</c0>
+        <c1>	83 71 52 255	</c1>
+        <c2>	125 113 73 255	</c2>
+        <c3>	146 138 106 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 6.9 5.1	</S15_L_60>
+        <S03_Strv_M38>	4.9 4.9 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	1.5 1.5 3.8 0.000000	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.2 1.2 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	6.4 6.4 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.1 1.1 0.000000 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	2 2 0.000000 1.3	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	1.8 1.8 0.3 0.3	</S09_L_120_TD>
+        <S02_Strv_M42>	1.1 1.1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.1 1.1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 1.4 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.4 1.4 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.1 1.1 3.2 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	3.7 3.7 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.1 1.1 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.4 1.4 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.5 2.5 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Ch_Winter>
+    <IGR_Ch_Summer>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Summer.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Summer	</description>
+      <id>	145	</id>
+      <kind>	summer	</kind>
+      <group>	IGRsummer	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	57 73 47 255	</c0>
+        <c1>	86 70 36 255	</c1>
+        <c2>	49 52 40 255	</c2>
+        <c3>	138 135 104 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.6 1.6 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 3.7 5.5	</S15_L_60>
+        <S03_Strv_M38>	3 3 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	1.5 1.5 0.000000 6.6	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.1 1.1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.8 0.8 0.000000 3.8	</S04_Lago_I>
+        <S12_Strv_M40>	4.9 4.9 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1 1 3.3 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.9 1.9 0.000000 0.000000	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 2.6 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	2.1 2.1 0.4 0.3	</S09_L_120_TD>
+        <S02_Strv_M42>	1.2 1.2 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	0.9 0.9 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.3 1.3 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.4 1.4 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.3 1.3 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	3.3 3.3 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.7 1.7 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.2 2.2 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Ch_Summer>
+    <IGR_Ch_Desert>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Desert.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Desert	</description>
+      <id>	146	</id>
+      <kind>	desert	</kind>
+      <group>	IGRdesert	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	48 49 39 255	</c0>
+        <c1>	111 94 57 255	</c1>
+        <c2>	133 119 87 255	</c2>
+        <c3>	85 67 50 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 2.2 0.000000	</S15_L_60>
+        <S07_Strv_74>	1.1 1.1 2 3.4	</S07_Strv_74>
+        <S03_Strv_M38>	6.5 6.5 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	1.5 1.5 3.6 2.1	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.8 0.8 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	6.9 6.9 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.3 1.3 0.000000 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.4 1.4 0.000000 0.000000	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 2.9 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	2 2 0.000000 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.8 0.8 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.5 1.5 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.2 1.2 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	3.4 3.4 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.6 1.6 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	3 3 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Ch_Desert>
+    <Clan_camuflage_01>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_01.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_01	</description>
+      <id>	147	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	72 48 35 255	</c0>
+        <c1>	101 83 50 255	</c1>
+        <c2>	46 52 40 255	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1.8 1.8 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.6 0.6 4.1 0.000000	</S15_L_60>
+        <S07_Strv_74>	1.2 1.2 2.4 1.2	</S07_Strv_74>
+        <S03_Strv_M38>	5.1 5.1 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	3 3 3.3 6	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.8 1.8 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	1.2 1.2 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	7.7 7.7 0.000000 0.000000	</S12_Strv_M40>
+        <S05_Strv_M21_29>	2.5 2.5 2 0.6	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.4 1.4 5.4 3.6	</S14_Ikv_103>
+        <S09_L_120_TD>	1.7 1.7 0.000000 0.000000	</S09_L_120_TD>
+        <S19_Sav_M43>	2 2 3 0.000000	</S19_Sav_M43>
+        <S02_Strv_M42>	1.1 1.1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.9 1.9 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 3.6 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.6 1.6 3.5 1.5	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	2.1 2.1 1.5 0.6	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.7 1.7 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.5 1.5 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	4.8 4.8 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.6 1.6 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	2.4 2.4 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	1.8 1.8 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Clan_camuflage_01>
+    <Clan_camuflage_02>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_2.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_02	</description>
+      <id>	148	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	58 69 50 0	</c0>
+        <c1>	149 153 145 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	0.9 0.9 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.6 0.6 3.1 2.5	</S15_L_60>
+        <S07_Strv_74>	0.7 0.7 0.000000 0.000000	</S07_Strv_74>
+        <S03_Strv_M38>	3 3 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 0.000000 0.000000	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 3.7 3.3	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.8 0.8 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	4.5 4.5 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	0.9 0.9 3.3 0.5	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.1 1.1 0.2 0.000000	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.2 1.2 1.7 4.6	</S14_Ikv_103>
+        <S09_L_120_TD>	1.8 1.8 0.000000 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.7 0.7 2.9 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.6 0.6 3.1 2.1	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.1 1.1 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	2.2 2.2 0.000000 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.1 1.1 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	0.7 0.7 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.5 2.5 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	0.7 0.7 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.3 1.3 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.3 2.3 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Clan_camuflage_02>
+    <Clan_camuflage_03>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_3.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_03	</description>
+      <id>	149	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	66 78 58 255	</c0>
+        <c1>	35 43 32 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.5 0.5 3 0.000000	</S15_L_60>
+        <S03_Strv_M38>	4.6 4.6 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 5 3.1	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.6 1.6 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.6 0.6 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	4.8 4.8 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.2 1.2 3.9 4.9	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.9 1.9 0.000000 0.2	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	2 2 0.000000 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	1.1 1.1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.9 1.9 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.3 1.3 0.7 4.8	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.4 1.4 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.2 1.2 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.7 2.7 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.1 1.1 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	0.9 0.9 4 2.1	</S22_Strv_S1>
+        <S23_Strv_81>	2.7 2.7 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Clan_camuflage_03>
+    <Clan_camuflage_04>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_4.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04	</description>
+      <id>	150	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	58 85 32 255	</c0>
+        <c1>	85 103 52 255	</c1>
+        <c2>	35 46 31 255	</c2>
+        <c3>	108 108 85 255	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1 1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 3.2 0.000000	</S15_L_60>
+        <S03_Strv_M38>	4.3 4.3 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 6.5 5.3	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.5 0.5 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	4.8 4.8 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.4 1.4 0.000000 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.4 1.4 0.5 0.000000	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.2 1.2 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	2 2 0.4 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.7 0.7 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.2 1.2 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 2.5	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.1 1.1 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	2.7 2.7 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.1 1.1 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	0.7 0.7 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.3 2.3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.1 1.1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.3 2.3 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Clan_camuflage_04>
+    <Cracked_ice>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Cracked_ice	</description>
+      <id>	151	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	175 177 173 255	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 4 9.8	</S15_L_60>
+        <S03_Strv_M38>	3.8 3.8 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 5.3 4.3	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.1 1.1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	4.2 4.2 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1 1 2.1 5.1	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.8 1.8 0.000000 0.3	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 4.1 3.9	</S14_Ikv_103>
+        <S09_L_120_TD>	2 2 1 0.7	</S09_L_120_TD>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.5 1.5 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 2.1 0.1	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	3.7 3.7 0.000000 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.2 1.2 4.1 3.1	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1 1 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.7 2.7 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.6 1.6 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	1.9 1.9 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Cracked_ice>
+    <summer_camo>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/summer_camo	</description>
+      <id>	152	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	100 80 43 255	</c0>
+        <c1>	64 62 36 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.5 0.5 4.5 6.7	</S15_L_60>
+        <S03_Strv_M38>	4.8 4.8 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 5.9 8	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.6 0.6 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	5.2 5.2 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.8 1.8 4.5 0.2	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.4 1.4 5.4 1.1	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 5.4 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	2 2 0.2 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 8 2.2	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	3.6 3.6 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.6 1.6 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	1.3 1.3 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	3.3 3.3 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.9 1.9 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.6 2.6 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </summer_camo>
+    <Desert_camou>
+      <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Desert_camou	</description>
+      <id>	153	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	112 96 58 255	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.8 0.8 3.4 0.000000	</S15_L_60>
+        <S07_Strv_74>	1.2 1.2 0.000000 2.6	</S07_Strv_74>
+        <S03_Strv_M38>	5.4 5.4 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 3.2 0.000000	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	1.2 1.2 0.1 1.6	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.8 0.8 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	8.2 8.2 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	2 2 2.8 3	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.6 1.6 1.1 3.8	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 2.3 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	1.8 1.8 0.1 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.9 0.9 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.2 1.2 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 7.3 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.4 1.4 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.9 1.9 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S21_UDES_03>	3.3 3.3 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.4 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1 1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.9 2.9 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Desert_camou>
+    <Sweden_Victim_Black>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <notInShop>	true	</notInShop>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	154	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	22 24 20 255	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.2 1.2 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.5 0.5 0.000000 0.000000	</S15_L_60>
+        <S03_Strv_M38>	2.7 2.7 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 3.8 0.000000	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.8 0.8 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S12_Strv_M40>	4.6 4.6 0.000000 0.000000	</S12_Strv_M40>
+        <S05_Strv_M21_29>	1.6 1.6 1.2 2.1	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	1.5 1.5 0.000000 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	2.3 2.3 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S11_Strv_103B>	1.6 1.6 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.9 2.9 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.6 1.6 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.4 2.4 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Sweden_Victim_Black>
+    <Sweden_Victim_Gold>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <notInShop>	true	</notInShop>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	155	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	0 0 0 0	</c0>
+        <c1>	75 71 31 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	130 130 30 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.5 0.5 1.7 0.000000	</S15_L_60>
+        <S03_Strv_M38>	2.1 2.1 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	1.5 1.5 3.9 3.9	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	3.6 3.6 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.2 1.2 0.000000 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.1 1.1 1.8 2.8	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	1.5 1.5 0.000000 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.8 0.8 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.3 1.3 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S11_Strv_103B>	1.6 1.6 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.9 2.9 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.4 1.4 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.4 2.4 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Sweden_Victim_Gold>
+    <Sweden_Victim_Red>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <notInShop>	true	</notInShop>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	156	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	0 0 0 0	</c0>
+        <c1>	61 14 14 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	105 27 27 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.5 0.5 7 0.000000	</S15_L_60>
+        <S03_Strv_M38>	2.2 2.2 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	1.5 1.5 2.8 6.1	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.8 0.8 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	3.8 3.8 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.2 1.2 0.6 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.6 1.6 0.000000 0.000000	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	1.6 1.6 0.2 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.9 0.9 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	3.2 3.2 1.5 0.7	</S20_Ikv_72>
+        <S11_Strv_103B>	1.6 1.6 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.9 2.9 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.6 1.6 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.4 2.4 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Sweden_Victim_Red>
+    <Sweden_Victim_Silver>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <notInShop>	true	</notInShop>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	157	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	0 0 0 0	</c0>
+        <c1>	61 78 75 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	138 138 138 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.5 0.5 3 1.5	</S15_L_60>
+        <S03_Strv_M38>	2.3 2.3 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	1.5 1.5 3.8 4.7	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.8 0.8 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	3.5 3.5 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.1 1.1 0.000000 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.5 1.5 0.9 2.9	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	1.7 1.7 0.000000 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.3 1.3 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	3.6 3.6 1.5 0.7	</S20_Ikv_72>
+        <S11_Strv_103B>	1.6 1.6 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.9 2.9 0.000000 0.000000	</S21_UDES_03>
+        <S10_Strv_103_0_Series>	1.6 1.6 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.4 2.4 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Sweden_Victim_Silver>
+    <Clan_camuflage_04_winter>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_4.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter	</description>
+      <id>	158	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	40 71 94 255	</c0>
+        <c1>	143 148 139 255	</c1>
+        <c2>	36 46 47 255	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1 1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 3.2 0.000000	</S15_L_60>
+        <S03_Strv_M38>	4.3 4.3 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 6.5 5.3	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.5 0.5 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	4.8 4.8 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.4 1.4 0.000000 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.4 1.4 0.5 0.000000	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.2 1.2 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	2 2 0.4 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.7 0.7 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.2 1.2 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 2.5	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.1 1.1 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	2.7 2.7 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.1 1.1 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	0.7 0.7 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.3 2.3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.1 1.1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.3 2.3 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Clan_camuflage_04_winter>
+    <Clan_camuflage_04_desert>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_4.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert	</description>
+      <id>	159	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	85 74 30 255	</c0>
+        <c1>	128 124 57 255	</c1>
+        <c2>	48 47 31 255	</c2>
+        <c3>	133 135 131 255	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1 1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 3.2 0.000000	</S15_L_60>
+        <S03_Strv_M38>	4.3 4.3 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 6.5 5.3	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.5 0.5 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	4.8 4.8 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.4 1.4 0.000000 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.4 1.4 0.5 0.000000	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.2 1.2 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	2 2 0.4 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.7 0.7 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.2 1.2 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 2.5	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.1 1.1 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	2.7 2.7 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.1 1.1 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	0.7 0.7 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.3 2.3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.1 1.1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.3 2.3 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Clan_camuflage_04_desert>
+  </camouflages>
+</customization.xml>

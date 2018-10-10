@@ -1,0 +1,71 @@
+<Artillery.def>
+  <Domain>	BASE	</Domain>
+  <Properties>
+    <yaw>
+      <Type>	FLOAT	</Type>
+      <Editable>	false	</Editable>
+      <EditorCalculated>	true	</EditorCalculated>
+    </yaw>
+    <pitch>
+      <Type>	FLOAT	</Type>
+      <Editable>	false	</Editable>
+      <EditorCalculated>	true	</EditorCalculated>
+    </pitch>
+    <yawRange>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </yawRange>
+    <pitchRange>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </pitchRange>
+    <delayFrom>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </delayFrom>
+    <delayTo>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </delayTo>
+    <durationFrom>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </durationFrom>
+    <durationTo>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </durationTo>
+    <shotsNumberFrom>
+      <Type>	UINT16	</Type>
+      <Editable>	true	</Editable>
+    </shotsNumberFrom>
+    <shotsNumberTo>
+      <Type>	UINT16	</Type>
+      <Editable>	true	</Editable>
+    </shotsNumberTo>
+    <shellCompactDescr>
+      <Type>	INT32	</Type>
+      <Editable>	true	</Editable>
+    </shellCompactDescr>
+    <piercingPower100>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+    </piercingPower100>
+    <piercingPower500>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+    </piercingPower500>
+    <speed>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </speed>
+    <gravity>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </gravity>
+    <maxDist>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </maxDist>
+  </Properties>
+</Artillery.def>

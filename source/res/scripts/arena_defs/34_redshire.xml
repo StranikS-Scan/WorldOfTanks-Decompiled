@@ -1,0 +1,115 @@
+<34_redshire.xml>
+  <name>	#arenas:34_redshire/name	</name>
+  <description>	#arenas:34_redshire/description	</description>
+  <geometry>	spaces/34_redshire	</geometry>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/34_redshire/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_redshire_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_redshire_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_redshire_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_redshire_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_redshire_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_redshire_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-3.300018 -422.899994	</position1>
+        </team1>
+        <team2>
+          <position1>	-0.016998 410.252899	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	201.271 -332.916	</position>
+        </team1>
+        <team2>
+          <position>	138.443 428.573	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	-199.817276 39.766937	</controlPoint>
+    </domination>
+  </gameplayTypes>
+  <mapActivities>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	450	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	himmelsdorf_bomber	</name>
+      <trajectories>
+        <warplane>
+          <preset>	himmelsdorf_bomber_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	-179.999954	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+          <interval>	0	</interval>
+        </warplane>
+        <warplane>
+          <preset>	himmelsdorf_bomber_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	-179.999954	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+          <interval>	0	</interval>
+        </warplane>
+        <warplane>
+          <preset>	himmelsdorf_bomber_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	-179.999954	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	11.000000 30.000000	</startTime>
+          <interval>	0	</interval>
+        </warplane>
+        <warplane>
+          <preset>	himmelsdorf_bomber_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	-179.999954	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+          <interval>	0	</interval>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	0.00000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	redshire_zepelin	</name>
+      <trajectories>
+        <warplane>
+          <preset>	redshire_zepelin_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	-179.999954	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</34_redshire.xml>

@@ -1,13 +1,15 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/errors.py
 import BigWorld
-from chat_shared import CHAT_RESPONSES, CHAT_COMMANDS
+from chat_shared import CHAT_RESPONSES
 from debug_utils import LOG_ERROR, LOG_WARNING
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from helpers import i18n
 from helpers.time_utils import makeLocalServerTime
 import messenger
 from messenger.m_constants import MESSENGER_I18N_FILE
 from messenger.proto.bw.cooldown import getOperationInCooldownMsg
-from messenger.proto.interfaces import IServerError
+from messenger.proto.interfaces import IChatError
 
 class ChannelNotFound(messenger.error):
 
@@ -19,9 +21,9 @@ class ChannelNotFound(messenger.error):
         return 'Not found a channel with id = %d, the first request from the server information on the channel with this id' % self.cid
 
 
-class ChatActionError(IServerError):
+class ChatActionError(IChatError):
 
-    def __init__(self, title, message, isModal = False):
+    def __init__(self, title, message, isModal=False):
         super(ChatActionError, self).__init__()
         self._title = title
         self._message = message
@@ -68,7 +70,7 @@ class ChatActionError(IServerError):
 
             else:
                 fullMessage = message
-            return ChatActionError(title, fullMessage, isModal=True)
+            return ChatActionError(title, fullMessage, isModal=False)
 
 
 class MemberBannedError(ChatActionError):
@@ -116,3 +118,20 @@ class CommandInCooldownError(ChatActionError):
         else:
             LOG_ERROR('CommandInCooldown', chatActionDict)
         return result
+
+
+class I18nError(IChatError):
+    __slots__ = ('__message',)
+
+    def __init__(self, key, **kwargs):
+        super(I18nError, self).__init__()
+        self.__message = i18n.makeString(key, **kwargs)
+
+    def getMessage(self):
+        return self.__message
+
+
+class ChannelLimitReachedError(I18nError):
+
+    def __init__(self):
+        super(ChannelLimitReachedError, self).__init__(MESSENGER.CLIENT_ERROR_CHANNEL_LIMIT_REACHED)

@@ -1,0 +1,71 @@
+<premiumPacket.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	DefaultScene	</initial-scene>
+  <scenes>
+    <scene>	DefaultScene	  <post-effects>
+        <load-view>	PremiumWindow	</load-view>
+        <set-gui-item-criteria>	PremiumPeriodCriteria	  <condition>
+            <var>	PremiumDays	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	PremiumPeriodRendererCriteria	</effect-not-triggered>
+          </condition>
+        </set-gui-item-criteria>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	PremiumPeriodRendererHint	  <condition>
+            <active>	PremiumPeriodRendererOnScene	</active>
+            <effect-triggered>	PremiumPeriodCriteria	</effect-triggered>
+            <var>	PremiumDays	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	PremiumPeriodRendererHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	PremiumPeriodRenderer	  <on-scene-effects>
+            <activate>	PremiumPeriodRendererOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	PremiumPeriodRendererOnScene	</inactivate>
+            <refuse-training>
+              <condition>
+                <effect-triggered>	PremiumPeriodRendererHint	</effect-triggered>
+              </condition>
+            </refuse-training>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <view-data>	PremiumWindow	  <alias>	premiumWindow	</alias>
+      <scope>	1	</scope>
+    </view-data>
+    <gui-item-criteria>	PremiumPeriodCriteria	  <item-id>	FindPremiumPeriod	</item-id>
+      <value>	id=$PremiumDays$	</value>
+    </gui-item-criteria>
+    <hint>	PremiumPeriodRendererHint	  <item-id>	PremiumPeriodRenderer	</item-id>
+      <text>	_(#quests:action/chain/hint/premDays)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	PremiumPeriodRenderer	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	PremiumPeriodRenderer	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	PremiumPeriodRenderer	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+  </has-id>
+  <triggers></triggers>
+  <vars></vars>
+</premiumPacket.xml>

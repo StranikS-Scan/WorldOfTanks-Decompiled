@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/__init__.py
 import ResMgr
 from messenger.doc_loaders import colors_schemes, html_templates, settings_set
@@ -20,7 +21,8 @@ def load(messengerSettings):
         if tag in tags:
             subSec = section[tag]
             loader(xmlCtx.next(subSec), subSec, messengerSettings)
-        elif isRequired:
+        if isRequired:
             raise XMLError(xmlCtx, 'Tag "{0:>s}" not found'.format(tag))
 
+    ResMgr.purge(MESSENGER_XML_FILE_PATH, True)
     return

@@ -1,36 +1,42 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/persistent_caches.py
-import BigWorld
+import weakref
 import cPickle
 import os
 import base64
+import BigWorld
 import constants
+from soft_exception import SoftException
 
 class SimpleCache(object):
 
-    def __init__(self, cacheType, cacheName, accountName = None):
+    def __init__(self, cacheType, cacheName):
         self.__cacheType = cacheType
         self.__cacheName = cacheName
-        self.__accountName = accountName
+        self.__account = None
+        self.__memcache = {}
+        return
 
     def clear(self):
         try:
-            os.remove(self.getFileName())
-        except:
+            fileName = self.getFileName()
+            self.__memcache.pop(fileName, None)
+            os.remove(fileName)
+        except Exception:
             pass
 
-    def setAccount(self, account = None):
-        self.__accountName = account.name if account is not None else None
         return
 
-    def setAccountName(self, accountName = None):
-        self.__accountName = accountName
+    def setAccount(self, account=None):
+        self.__account = account and weakref.proxy(account)
 
-    def getAccountName(self):
-        return self.__accountName
+    def getAccount(self):
+        return self.__account
 
     def getFileName(self):
-        raise self.__accountName is not None or AssertionError
-        return cacheFileName(self.__accountName, self.__cacheType, self.__cacheName)
+        if self.__account is None:
+            raise SoftException('Account is not defined')
+        return cacheFileName(self.__account, self.__cacheType, self.__cacheName)
 
     def get(self):
         return self.__load()
@@ -42,11 +48,16 @@ class SimpleCache(object):
         return self.__load()[1]
 
     def __load(self):
-        if self.__accountName is not None:
+        if self.__account is not None:
+            fileName = self.getFileName()
+            mcacheData = self.__memcache.get(fileName, None)
+            if mcacheData:
+                return mcacheData
             try:
-                with open(self.getFileName(), 'rb') as f:
+                with open(fileName, 'rb') as f:
                     descr = cPickle.load(f)
                     data = cPickle.load(f)
+                    self.__memcache[fileName] = (descr, data)
                     return (descr, data)
             except IOError:
                 pass
@@ -56,12 +67,13 @@ class SimpleCache(object):
         return (None, None)
 
     def save(self, descr, data):
-        if not self.__accountName is not None:
-            raise AssertionError
-            return self.__accountName is None and None
+        if self.__account is None:
+            return
         else:
             try:
-                with open(self.getFileName(), 'wb') as f:
+                fileName = self.getFileName()
+                self.__memcache[fileName] = (descr, data)
+                with open(fileName, 'wb') as f:
                     cPickle.dump(descr, f, -1)
                     cPickle.dump(data, f, -1)
                     return True
@@ -71,14 +83,17 @@ class SimpleCache(object):
             return False
 
 
-def cacheFileName(accountName, cacheType, cacheName):
+def cacheFileName(account, cacheType, cacheName):
     p = os.path
     prefsFilePath = unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')
     cacheDir = p.join(p.dirname(prefsFilePath), cacheType)
     if not os.path.isdir(cacheDir):
         os.makedirs(cacheDir)
-    cacheFileName = p.join(cacheDir, base64.b32encode('%s:%s:%s' % (constants.AUTH_REALM, accountName, cacheName)) + '.dat')
-    return cacheFileName
+    cache = p.join(cacheDir, base64.b32encode('%s_%s_%s_%s' % (constants.AUTH_REALM,
+     account.name,
+     account.__class__.__name__,
+     cacheName)) + '.dat')
+    return cache
 
 
 def readFile(filename):

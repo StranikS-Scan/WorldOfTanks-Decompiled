@@ -1,107 +1,179 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/personality.py
-import time
-import SoundGroups
 import BigWorld
-import MusicController
-from gui.BattleContext import g_battleContext
-from gui.shared.ClanCache import g_clanCache
-from predefined_hosts import g_preDefinedHosts
-from account_helpers.settings_core.SettingsCache import g_settingsCache
-from account_helpers.settings_core.SettingsCore import g_settingsCore
-from account_helpers.AccountValidator import AccountValidator
-from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.LogitechMonitor import LogitechMonitor
-from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
-from helpers import isPlayerAccount
-from adisp import process
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
+import SoundGroups
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers import isPremiumAccount
-from CurrentVehicle import g_currentVehicle
-from ConnectionManager import connectionManager
-from gui import SystemMessages, g_guiResetters, game_control
+from account_helpers.AccountValidator import AccountValidator
+from adisp import process
+from constants import HAS_DEV_RESOURCES
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
+from gui import SystemMessages, g_guiResetters, miniclient
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.app_loader import g_appLoader
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared import g_eventBus, g_itemsCache, g_eventsCache, events
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.WindowsManager import g_windowsManager
-from gui.Scaleform.Waiting import Waiting
-from gui.shared.utils import ParametersCache
-from gui.shared.utils.HangarSpace import g_hangarSpace
-from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.ClanCache import g_clanCache
+from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.shared.items_parameters.params_cache import g_paramsCache
+from gui.shared.utils import requesters
+from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
+from gui.wgnc import g_wgncProvider
+from helpers import isPlayerAccount, time_utils, dependency
+from helpers.statistics import HANGAR_LOADING_STATE
+from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gameplay import IGameplayLogic, PlayerEventID
+from skeletons.gui.battle_results import IBattleResultsService
+from skeletons.gui.shared.utils import IHangarSpace, IRaresCache
+from skeletons.gui.web import IWebController
+from skeletons.gui.game_control import IGameStateTracker
+from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.login_manager import ILoginManager
+from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
+from skeletons.gui.sounds import ISoundsController
+from skeletons.gui.event_boards_controllers import IEventBoardController
+from skeletons.helpers.statistics import IStatisticsCollector
+try:
+    from gui import mods
+    guiModsInit = mods.init
+    guiModsFini = mods.fini
+    guiModsSendEvent = mods.sendEvent
+except ImportError:
+    LOG_DEBUG('There is not mods package in the scripts')
+    guiModsInit = guiModsFini = guiModsSendEvent = lambda *args: None
+
+class ServicesLocator(object):
+    itemsCache = dependency.descriptor(IItemsCache)
+    gameState = dependency.descriptor(IGameStateTracker)
+    loginManager = dependency.descriptor(ILoginManager)
+    eventsCache = dependency.descriptor(IEventsCache)
+    soundCtrl = dependency.descriptor(ISoundsController)
+    webCtrl = dependency.descriptor(IWebController)
+    settingsCache = dependency.descriptor(ISettingsCache)
+    settingsCore = dependency.descriptor(ISettingsCore)
+    goodiesCache = dependency.descriptor(IGoodiesCache)
+    battleResults = dependency.descriptor(IBattleResultsService)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    connectionMgr = dependency.descriptor(IConnectionManager)
+    statsCollector = dependency.descriptor(IStatisticsCollector)
+    eventsController = dependency.descriptor(IEventBoardController)
+    gameplay = dependency.descriptor(IGameplayLogic)
+    hangarSpace = dependency.descriptor(IHangarSpace)
+    rareAchievesCache = dependency.descriptor(IRaresCache)
+
+    @classmethod
+    def clear(cls):
+        cls.itemsCache.clear()
+        cls.goodiesCache.clear()
+        cls.eventsCache.clear()
+        cls.lobbyContext.clear()
+
 
 @process
 def onAccountShowGUI(ctx):
     global onCenterIsLongDisconnected
-    g_lobbyContext.onAccountShowGUI(ctx)
-    yield g_itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
-    yield g_eventsCache.update()
-    yield g_settingsCache.update()
-    if not g_itemsCache.isSynced():
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
+    ServicesLocator.lobbyContext.onAccountShowGUI(ctx)
+    yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False)
+    Waiting.show('enter')
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
+    ServicesLocator.eventsCache.start()
+    yield ServicesLocator.eventsCache.update()
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
+    yield ServicesLocator.settingsCache.update()
+    if not ServicesLocator.itemsCache.isSynced():
+        ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/0')
         return
+    eula = EULADispatcher()
+    yield eula.processLicense()
+    eula.fini()
+    g_playerEvents.onGuiCacheSyncCompleted(ctx)
+    code = yield AccountValidator().validate()
+    if code > 0:
+        ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/%d' % code)
+        return
+    ServicesLocator.itemsCache.onSyncCompleted(CACHE_SYNC_REASON.SHOW_GUI, {})
+    ServicesLocator.settingsCore.serverSettings.applySettings()
+    ServicesLocator.gameState.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
+    accDossier = ServicesLocator.itemsCache.items.getAccountDossier()
+    ServicesLocator.rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
+    premium = isPremiumAccount(ServicesLocator.itemsCache.items.stats.attributes)
+    if ServicesLocator.hangarSpace.inited:
+        ServicesLocator.hangarSpace.refreshSpace(premium)
     else:
-        code = yield AccountValidator().validate()
-        if code > 0:
-            from gui import DialogsInterface
-            DialogsInterface.showDisconnect('#menu:disconnect/codes/%d' % code)
-            return
-        g_settingsCore.serverSettings.applySettings()
-        game_control.g_instance.onAccountShowGUI(g_lobbyContext.getGuiCtx())
-        accDossier = g_itemsCache.items.getAccountDossier()
-        g_rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
-        eula = EULADispatcher()
-        yield eula.processLicense()
-        eula.fini()
-        eula = None
-        MusicController.g_musicController.setAccountAttrs(g_itemsCache.items.stats.attributes)
-        MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
-        MusicController.g_musicController.play(MusicController.AMBIENT_EVENT_LOBBY)
-        premium = isPremiumAccount(g_itemsCache.items.stats.attributes)
-        if g_hangarSpace.inited:
-            g_hangarSpace.refreshSpace(premium)
-        else:
-            g_hangarSpace.init(premium)
-        g_currentVehicle.init()
-        g_windowsManager.onAccountShowGUI(g_lobbyContext.getGuiCtx())
-        g_prbLoader.onAccountShowGUI(g_lobbyContext.getGuiCtx())
-        g_clanCache.onAccountShowGUI()
-        SoundGroups.g_instance.enableLobbySounds(True)
-        onCenterIsLongDisconnected(True)
-        Waiting.hide('enter')
-        return
+        ServicesLocator.hangarSpace.init(premium)
+    g_currentVehicle.init()
+    g_currentPreviewVehicle.init()
+    ServicesLocator.webCtrl.start()
+    ServicesLocator.soundCtrl.start()
+    ServicesLocator.gameplay.postStateEvent(PlayerEventID.ACCOUNT_SHOW_GUI)
+    serverSettings = ServicesLocator.lobbyContext.getServerSettings()
+    g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
+    g_clanCache.onAccountShowGUI()
+    SoundGroups.g_instance.enableLobbySounds(True)
+    onCenterIsLongDisconnected(True)
+    guiModsSendEvent('onAccountShowGUI', ctx)
+    if serverSettings.wgcg.getLoginOnStart():
+        yield ServicesLocator.webCtrl.login()
+    if serverSettings.isElenEnabled():
+        yield ServicesLocator.eventsController.getEvents(onlySettings=True, onLogin=True, prefetchKeyArtBig=False)
+        yield ServicesLocator.eventsController.getHangarFlag(onLogin=True)
 
 
 def onAccountBecomeNonPlayer():
-    g_itemsCache.clear()
+    g_clanCache.clear()
+    ServicesLocator.itemsCache.clear()
+    ServicesLocator.goodiesCache.clear()
     g_currentVehicle.destroy()
-    g_hangarSpace.destroy()
+    g_currentPreviewVehicle.destroy()
+    ServicesLocator.hangarSpace.destroy()
+    g_prbLoader.onAccountBecomeNonPlayer()
+    guiModsSendEvent('onAccountBecomeNonPlayer')
+    UsersInfoHelper.clear()
 
 
 @process
 def onAvatarBecomePlayer():
-    yield g_settingsCache.update()
-    g_settingsCore.serverSettings.applySettings()
-    g_battleContext.createEnv()
+    ServicesLocator.battleResults.clear()
+    yield ServicesLocator.settingsCache.update()
+    ServicesLocator.settingsCore.serverSettings.applySettings()
+    ServicesLocator.soundCtrl.stop()
+    ServicesLocator.webCtrl.stop(logout=False)
+    ServicesLocator.eventsCache.stop()
     g_prbLoader.onAvatarBecomePlayer()
-    game_control.g_instance.onAvatarBecomePlayer()
+    ServicesLocator.gameState.onAvatarBecomePlayer()
     g_clanCache.onAvatarBecomePlayer()
+    ServicesLocator.loginManager.writePeripheryLifetime()
+    guiModsSendEvent('onAvatarBecomePlayer')
     Waiting.cancelCallback()
 
 
 def onAccountBecomePlayer():
-    game_control.g_instance.onAccountBecomePlayer()
+    ServicesLocator.lobbyContext.onAccountBecomePlayer()
+    ServicesLocator.gameState.onAccountBecomePlayer()
+    guiModsSendEvent('onAccountBecomePlayer')
 
 
 @process
-def onClientUpdate(diff):
+def onClientUpdate(diff, updateOnlyLobbyCtx):
     yield lambda callback: callback(None)
-    if isPlayerAccount():
-        yield g_itemsCache.update(CACHE_SYNC_REASON.CLIENT_UPDATE, diff)
-        yield g_eventsCache.update(diff)
-        yield g_clanCache.update(diff)
-    g_clientUpdateManager.update(diff)
+    if updateOnlyLobbyCtx:
+        ServicesLocator.lobbyContext.update(diff)
+    else:
+        if isPlayerAccount():
+            yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.CLIENT_UPDATE, diff)
+            yield ServicesLocator.eventsCache.update(diff)
+            yield g_clanCache.update(diff)
+        ServicesLocator.lobbyContext.update(diff)
+        g_clientUpdateManager.update(diff)
 
 
 def onShopResyncStarted():
@@ -110,44 +182,41 @@ def onShopResyncStarted():
 
 @process
 def onShopResync():
-    yield g_itemsCache.update(CACHE_SYNC_REASON.SHOP_RESYNC)
-    if not g_itemsCache.isSynced():
+    yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOP_RESYNC)
+    if not ServicesLocator.itemsCache.isSynced():
         Waiting.hide('sinhronize')
         return
-    yield g_eventsCache.update()
+    yield ServicesLocator.eventsCache.update()
     Waiting.hide('sinhronize')
-    now = time.time()
-    SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.SHOP_RESYNC, date=BigWorld.wg_getLongDateFormat(now), time=BigWorld.wg_getShortTimeFormat(now), type=SystemMessages.SM_TYPE.Information)
+    now = time_utils.getCurrentTimestamp()
+    SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.SHOP_RESYNC, date=BigWorld.wg_getLongDateFormat(now), time=BigWorld.wg_getShortTimeFormat(now), type=SystemMessages.SM_TYPE.Information)
 
 
 def onCenterIsLongDisconnected(isLongDisconnected):
     isAvailable = not BigWorld.player().isLongDisconnectedFromCenter
     if isAvailable and not isLongDisconnected:
-        SystemMessages.g_instance.pushI18nMessage(MENU.CENTERISAVAILABLE, type=SystemMessages.SM_TYPE.Information)
+        SystemMessages.pushI18nMessage(MENU.CENTERISAVAILABLE, type=SystemMessages.SM_TYPE.Information)
     elif not isAvailable:
-        SystemMessages.g_instance.pushI18nMessage(MENU.CENTERISUNAVAILABLE, type=SystemMessages.SM_TYPE.Warning)
+        SystemMessages.pushI18nMessage(MENU.CENTERISUNAVAILABLE, type=SystemMessages.SM_TYPE.Warning)
 
 
 def onIGRTypeChanged(roomType, xpFactor):
-    g_lobbyContext.updateGuiCtx({'igrData': {'roomType': roomType,
+    ServicesLocator.lobbyContext.updateGuiCtx({'igrData': {'roomType': roomType,
                  'igrXPFactor': xpFactor}})
 
 
-@process
-def onAppStarted(args):
-    yield lambda callback: callback(None)
-    if not connectionManager.isConnected():
-        return
-
-
-def init(loadingScreenGUI = None):
-    global onIGRTypeChanged
+def init(loadingScreenGUI=None):
     global onShopResyncStarted
+    global onAccountShowGUI
+    global onScreenShotMade
+    global onIGRTypeChanged
+    global onAccountBecomeNonPlayer
     global onAvatarBecomePlayer
     global onAccountBecomePlayer
-    global onAccountBecomeNonPlayer
-    global onAccountShowGUI
+    global onKickedFromServer
     global onShopResync
+    miniclient.configure_state()
+    ServicesLocator.connectionMgr.onKickedFromServer += onKickedFromServer
     g_playerEvents.onAccountShowGUI += onAccountShowGUI
     g_playerEvents.onAccountBecomeNonPlayer += onAccountBecomeNonPlayer
     g_playerEvents.onAccountBecomePlayer += onAccountBecomePlayer
@@ -157,50 +226,41 @@ def init(loadingScreenGUI = None):
     g_playerEvents.onShopResync += onShopResync
     g_playerEvents.onCenterIsLongDisconnected += onCenterIsLongDisconnected
     g_playerEvents.onIGRTypeChanged += onIGRTypeChanged
-    game_control.g_instance.init()
-    from gui.Scaleform import SystemMessagesInterface
-    SystemMessages.g_instance = SystemMessagesInterface.SystemMessagesInterface()
-    SystemMessages.g_instance.init()
-    ParametersCache.g_instance.init()
+    from gui.Scaleform.app_factory import createAppFactory
+    g_appLoader.init(createAppFactory())
+    g_paramsCache.init()
     if loadingScreenGUI and loadingScreenGUI.script:
         loadingScreenGUI.script.active(False)
     g_prbLoader.init()
-    LogitechMonitor.init()
-    g_itemsCache.init()
-    g_settingsCache.init()
-    g_settingsCore.init()
-    g_eventsCache.init()
     g_clanCache.init()
-    from constants import IS_DEVELOPMENT
-    if IS_DEVELOPMENT:
+    BigWorld.wg_setScreenshotNotifyCallback(onScreenShotMade)
+    if HAS_DEV_RESOURCES:
         try:
-            from gui.development import init
+            from gui.development import init as dev_init
         except ImportError:
             LOG_ERROR('Development features not found.')
-            init = lambda : None
 
-        init()
+            def dev_init():
+                pass
+
+        dev_init()
+    guiModsInit()
 
 
 def start():
-    g_eventBus.addListener(events.GUICommonEvent.APP_STARTED, onAppStarted)
-    g_windowsManager.start()
+    pass
 
 
 def fini():
+    guiModsFini()
     Waiting.close()
-    g_eventBus.removeListener(events.GUICommonEvent.APP_STARTED, onAppStarted)
-    game_control.g_instance.fini()
-    g_settingsCore.fini()
-    g_settingsCache.fini()
-    g_eventsCache.fini()
-    g_itemsCache.fini()
-    LogitechMonitor.destroy()
-    g_windowsManager.destroy()
-    SystemMessages.g_instance.destroy()
+    g_appLoader.fini()
     g_eventBus.clear()
     g_prbLoader.fini()
     g_clanCache.fini()
+    requesters.fini()
+    UsersInfoHelper.fini()
+    ServicesLocator.connectionMgr.onKickedFromServer -= onKickedFromServer
     g_playerEvents.onIGRTypeChanged -= onIGRTypeChanged
     g_playerEvents.onAccountShowGUI -= onAccountShowGUI
     g_playerEvents.onAccountBecomeNonPlayer -= onAccountBecomeNonPlayer
@@ -210,22 +270,53 @@ def fini():
     g_playerEvents.onShopResyncStarted -= onShopResyncStarted
     g_playerEvents.onShopResync -= onShopResync
     g_playerEvents.onCenterIsLongDisconnected -= onCenterIsLongDisconnected
+    BigWorld.wg_setScreenshotNotifyCallback(None)
+    if HAS_DEV_RESOURCES:
+        try:
+            from gui.development import fini as dev_fini
+        except ImportError:
+            LOG_ERROR('Development features not found.')
+
+            def dev_fini():
+                pass
+
+        dev_fini()
+    return
 
 
 def onConnected():
-    pass
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.CONNECTED)
+    guiModsSendEvent('onConnected')
+    ServicesLocator.gameState.onConnected()
 
 
 def onDisconnected():
-    if game_control.g_instance.roaming.isInRoaming():
-        g_preDefinedHosts.savePeripheryTL(connectionManager.peripheryID)
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.DISCONNECTED)
+    guiModsSendEvent('onDisconnected')
+    ServicesLocator.gameplay.goToLoginByEvent()
+    ServicesLocator.battleResults.clear()
     g_prbLoader.onDisconnected()
     g_clanCache.onDisconnected()
-    game_control.g_instance.onDisconnected()
-    g_itemsCache.clear()
-    g_lobbyContext.clear()
+    ServicesLocator.soundCtrl.stop(isDisconnected=True)
+    ServicesLocator.gameState.onDisconnected()
+    ServicesLocator.webCtrl.stop()
+    ServicesLocator.eventsCache.getPersonalMissions().stop()
+    g_wgncProvider.clear()
+    ServicesLocator.clear()
+    UsersInfoHelper.clear()
     Waiting.rollback()
     Waiting.cancelCallback()
+    if ServicesLocator.lobbyContext.getServerSettings().isElenEnabled():
+        ServicesLocator.eventsController.cleanEventsData()
+    BigWorld.purgeUrlRequestCache()
+
+
+def onKickedFromServer(reason, isBan, expiryTime):
+    ServicesLocator.gameplay.goToLoginByKick(reason, isBan, expiryTime)
+
+
+def onScreenShotMade(path):
+    g_eventBus.handleEvent(events.GameEvent(events.GameEvent.SCREEN_SHOT_MADE, {'path': path}), scope=EVENT_BUS_SCOPE.GLOBAL)
 
 
 def onRecreateDevice():

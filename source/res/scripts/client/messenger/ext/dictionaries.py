@@ -1,7 +1,9 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/dictionaries.py
-from debug_utils import *
-import re, sre_compile
+import re
+import sre_compile
 import ResMgr
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 _defaultReplacementFunction = lambda word: '*' * len(word)
 
 class ObsceneLanguageDictionary(object):
@@ -9,16 +11,10 @@ class ObsceneLanguageDictionary(object):
 
     @staticmethod
     def overrideReplacementFunction(function):
-        """
-        Overrides replacement method.
-        """
         ObsceneLanguageDictionary.replace = staticmethod(function)
 
     @staticmethod
     def resetReplacementFunction():
-        """
-        Resets to default replacement method.
-        """
         ObsceneLanguageDictionary.replace = staticmethod(_defaultReplacementFunction)
 
     def searchAndReplace(self, text):
@@ -32,11 +28,6 @@ class BasicOLDictionary(ObsceneLanguageDictionary):
 
     @classmethod
     def load(cls, resourceId):
-        """
-        Load obscene dictionary for the specified language.
-        @resourceId: the id of the resource to open.
-        @return: ObsceneLanguageDictionary object.
-        """
         obj = BasicOLDictionary.__new__(cls)
         dSection = ResMgr.openSection(resourceId)
         if dSection is None:
@@ -73,20 +64,10 @@ class BasicOLDictionary(ObsceneLanguageDictionary):
                     except sre_compile.error:
                         LOG_CURRENT_EXCEPTION()
 
+            ResMgr.purge(resourceId, True)
             return obj
 
     def searchAndReplace(self, text):
-        """
-        Search bad words and if find, than replace by replacement function.
-        Search stages:
-                1. splits string using space.
-                2. for each word: removed non-alphanumeric character, 
-                find and replace equivalents to required characters
-                3. try finds bad words. If find, than replace, else do nothing.
-        
-        @param text: string to search for bad words (unicode).
-        @return: parsed string (unicode).
-        """
         words = text.split(' ')
         for idx, word in enumerate(words):
             parsing = self.__nonAlphaNumPattern.sub('', word.lower())
@@ -107,11 +88,6 @@ class SpecialOLDictionary(ObsceneLanguageDictionary):
 
     @classmethod
     def load(cls, resourceId):
-        """
-        Load obscene dictionary for the specified language.
-        @resourceId: the id of the resource to open.
-        @return: ObsceneLanguageDictionary object.
-        """
         obj = SpecialOLDictionary.__new__(cls)
         dSection = ResMgr.openSection(resourceId)
         if dSection is None:
@@ -126,6 +102,7 @@ class SpecialOLDictionary(ObsceneLanguageDictionary):
                     except sre_compile.error:
                         LOG_CURRENT_EXCEPTION()
 
+            ResMgr.purge(resourceId, True)
             return obj
 
     def searchAndReplace(self, text):
@@ -143,7 +120,7 @@ class SpecialOLDictionary(ObsceneLanguageDictionary):
 
                 if offset:
                     processed.append(text[offset:])
-                if len(processed):
+                if processed:
                     text = ''.join(processed)
 
         except Exception:
@@ -160,11 +137,6 @@ class DomainNameDictionary(object):
 
     @classmethod
     def load(cls, resourceId):
-        """
-        Load domain names dictionary for the specified language.
-        @resourceId: the id of the resource to open.
-        @return: DomainNameDictionary object.
-        """
         obj = DomainNameDictionary.__new__(cls)
         dSection = ResMgr.openSection(resourceId)
         if dSection is None:
@@ -179,32 +151,18 @@ class DomainNameDictionary(object):
                     except sre_compile.error:
                         LOG_CURRENT_EXCEPTION()
 
+            ResMgr.purge(resourceId, True)
             return obj
 
     @staticmethod
     def overrideReplacementFunction(function):
-        """
-        Overrides replacement method.
-        """
         DomainNameDictionary.replace = staticmethod(function)
 
     @staticmethod
     def resetReplacementFunction():
-        """
-        Resets to default replacement method.
-        """
         DomainNameDictionary.replace = staticmethod(_defaultReplacementFunction)
 
     def searchAndReplace(self, text):
-        """
-        Search domain names and if find, than replace by replacement function.
-        Search stages:
-                1. splits string using space.
-                2. try finds domain names. If found, than replace, else do nothing.
-        
-        @param text: string to search for domain names (unicode).
-        @return: parsed string (unicode).
-        """
         words = text.split(' ')
         for idx, word in enumerate(words):
             for pattern in self.__domainNamePatterns:

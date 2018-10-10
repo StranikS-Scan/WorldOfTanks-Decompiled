@@ -1,0 +1,46 @@
+<99_poland.xml>
+  <name>	#arenas:99_poland/name	</name>
+  <description>	#arenas:99_poland/description	</description>
+  <geometry>	spaces/99_poland	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/99_poland/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_poland_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_poland_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_poland_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_poland_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_poland_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_poland_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <artilleryPreparationChance>	0.6	</artilleryPreparationChance>
+      <teamBasePositions>
+        <team1>
+          <position1>	-391.191132 -32.941086	</position1>
+        </team1>
+        <team2>
+          <position2>	403.926056 -44.092266	</position2>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <useAdvancedPhysics>	true	</useAdvancedPhysics>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
+</99_poland.xml>

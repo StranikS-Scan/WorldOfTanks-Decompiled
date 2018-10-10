@@ -1,0 +1,313 @@
+<quests-shared-entities.xml>
+  <has-id>
+    <hint>	TankAcademyButtonHint	  <item-id>	TankAcademyButton	</item-id>
+      <text>	#tutorial:chain3/hint/selectTankAcademy	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	TankAcademyButton	  <effects>
+            <close-hint>	TankAcademyButtonHint	</close-hint>
+          </effects>
+        </click>
+        <click-outside>	TankAcademyButton	  <effects>
+            <close-hint>	TankAcademyButtonHint	</close-hint>
+          </effects>
+        </click-outside>
+        <esc>	TankAcademyButton	  <effects>
+            <close-hint>	TankAcademyButtonHint	</close-hint>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	QuestsControlHint	  <item-id>	QuestsControl	</item-id>
+      <text>	_(#tutorial:tutorialQuest/questsControl/hint)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	QuestsControl	  <effects>
+            <close-hint>	QuestsControlHint	</close-hint>
+            <inactivate>	ShowQuestsControlHint	</inactivate>
+          </effects>
+        </click>
+        <click-outside>	QuestsControl	  <effects>
+            <close-hint>	QuestsControlHint	</close-hint>
+            <inactivate>	ShowQuestsControlHint	</inactivate>
+          </effects>
+        </click-outside>
+        <esc>	QuestsControl	  <effects>
+            <close-hint>	QuestsControlHint	</close-hint>
+            <inactivate>	ShowQuestsControlHint	</inactivate>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	BattleButtonHint	  <item-id>	FightButton	</item-id>
+      <text>	_(#tutorial:chain1/hint/goToBattle)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	FightButton	  <effects>
+            <close-hint>	BattleButtonHint	</close-hint>
+            <global-activate>	BattleButtonHintCooldown	</global-activate>
+          </effects>
+        </click>
+        <click-outside>	FightButton	  <effects>
+            <close-hint>	BattleButtonHint	</close-hint>
+            <global-activate>	BattleButtonHintCooldown	</global-activate>
+          </effects>
+        </click-outside>
+        <esc>	FightButton	  <effects>
+            <close-hint>	BattleButtonHint	</close-hint>
+            <global-activate>	BattleButtonHintCooldown	</global-activate>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	ResearchHelpButtonHint	  <item-id>	ResearchHelpButton	</item-id>
+      <text>	_(#tutorial:tutorialQuest/helpBtn/hint)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <has-box>	False	</has-box>
+      <actions>
+        <click>	ResearchHelpButton	  <effects>
+            <close-hint>	ResearchHelpButtonHint	</close-hint>
+            <inactivate>	ShowResearchHint	</inactivate>
+          </effects>
+        </click>
+        <click-outside>	ResearchHelpButton	  <effects>
+            <close-hint>	ResearchHelpButtonHint	</close-hint>
+            <inactivate>	ShowResearchHint	</inactivate>
+          </effects>
+        </click-outside>
+        <esc>	ResearchHelpButton	  <effects>
+            <close-hint>	ResearchHelpButtonHint	</close-hint>
+            <inactivate>	ShowResearchHint	</inactivate>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	TechTreeHelpButtonHint	  <item-id>	TechTreeHelpButton	</item-id>
+      <text>	_(#tutorial:tutorialQuest/helpBtn/hint)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <has-box>	False	</has-box>
+      <actions>
+        <click>	TechTreeHelpButton	  <effects>
+            <close-hint>	TechTreeHelpButtonHint	</close-hint>
+            <inactivate>	ShowTechTreeHint	</inactivate>
+          </effects>
+        </click>
+        <click-outside>	TechTreeHelpButton	  <effects>
+            <close-hint>	TechTreeHelpButtonHint	</close-hint>
+            <inactivate>	ShowTechTreeHint	</inactivate>
+          </effects>
+        </click-outside>
+        <esc>	TechTreeHelpButton	  <effects>
+            <close-hint>	TechTreeHelpButtonHint	</close-hint>
+            <inactivate>	ShowTechTreeHint	</inactivate>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	PersonalCaseHelpButtonHint	  <item-id>	PersonalCaseHelpButton	</item-id>
+      <text>	_(#tutorial:tutorialQuest/helpBtn/hint)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <has-box>	False	</has-box>
+      <actions>
+        <click>	PersonalCaseHelpButton	  <effects>
+            <close-hint>	PersonalCaseHelpButtonHint	</close-hint>
+            <inactivate>	ShowPersonalCaseHint	</inactivate>
+          </effects>
+        </click>
+        <click-outside>	PersonalCaseHelpButton	  <effects>
+            <close-hint>	PersonalCaseHelpButtonHint	</close-hint>
+            <inactivate>	ShowPersonalCaseHint	</inactivate>
+          </effects>
+        </click-outside>
+        <esc>	PersonalCaseHelpButton	  <effects>
+            <close-hint>	PersonalCaseHelpButtonHint	</close-hint>
+            <inactivate>	ShowPersonalCaseHint	</inactivate>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	TechnicalMaintenanceHelpButtonHint	  <item-id>	TechnicalMaintenanceHelpButton	</item-id>
+      <text>	_(#tutorial:tutorialQuest/helpBtn/hint)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <has-box>	False	</has-box>
+      <actions>
+        <click>	TechnicalMaintenanceHelpButton	  <effects>
+            <close-hint>	TechnicalMaintenanceHelpButtonHint	</close-hint>
+            <inactivate>	ShowTechnicalMaintenanceHint	</inactivate>
+          </effects>
+        </click>
+        <click-outside>	TechnicalMaintenanceHelpButton	  <effects>
+            <close-hint>	TechnicalMaintenanceHelpButtonHint	</close-hint>
+            <inactivate>	ShowTechnicalMaintenanceHint	</inactivate>
+          </effects>
+        </click-outside>
+        <esc>	TechnicalMaintenanceHelpButton	  <effects>
+            <close-hint>	TechnicalMaintenanceHelpButtonHint	</close-hint>
+            <inactivate>	ShowTechnicalMaintenanceHint	</inactivate>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	CustomizationHelpButtonHint	  <item-id>	CustomizationHelpButton	</item-id>
+      <text>	_(#tutorial:tutorialQuest/helpBtn/hint)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <has-box>	False	</has-box>
+      <actions>
+        <click>	CustomizationHelpButton	  <effects>
+            <close-hint>	CustomizationHelpButtonHint	</close-hint>
+            <inactivate>	ShowCustomizationHint	</inactivate>
+          </effects>
+        </click>
+        <click-outside>	CustomizationHelpButton	  <effects>
+            <close-hint>	CustomizationHelpButtonHint	</close-hint>
+            <inactivate>	ShowCustomizationHint	</inactivate>
+          </effects>
+        </click-outside>
+        <esc>	CustomizationHelpButton	  <effects>
+            <close-hint>	CustomizationHelpButtonHint	</close-hint>
+            <inactivate>	ShowCustomizationHint	</inactivate>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	BattleSelectorHint	  <item-id>	BattleSelectorBar	</item-id>
+      <text>	_(#tutorial:pveChain/hint/selector)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	False	</loop>
+      </arrow>
+      <actions>
+        <click>	BattleSelectorBar	  <effects>
+            <close-hint>	BattleSelectorHint	</close-hint>
+            <save-account-setting>	PveTriggerShown	</save-account-setting>
+          </effects>
+        </click>
+        <click-outside>	BattleSelectorBar	  <effects>
+            <close-hint>	BattleSelectorHint	</close-hint>
+            <save-account-setting>	PveTriggerShown	</save-account-setting>
+          </effects>
+        </click-outside>
+        <esc>	BattleSelectorBar	  <effects>
+            <close-hint>	BattleSelectorHint	</close-hint>
+            <save-account-setting>	PveTriggerShown	</save-account-setting>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <tutorial-setting>	ResearchHintSetting	  <setting-name>	research	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	TechTreeHintSetting	  <setting-name>	researchTree	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	PersonalCaseHintSetting	  <setting-name>	personalCase	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	TechnicalMaintenanceHintSetting	  <setting-name>	technicalMaintenance	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	CustomizationHintSetting	  <setting-name>	customization	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	MedKitInstalledSetting	  <setting-name>	medKitInstalled	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	MedKitUninstalledSetting	  <setting-name>	medKitInstalled	</setting-name>
+      <setting-value>	False	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	RepairKitInstalledSetting	  <setting-name>	repairKitInstalled	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	RepairKitUninstalledSetting	  <setting-name>	repairKitInstalled	</setting-name>
+      <setting-value>	False	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	FireExtinguisherInstalledSetting	  <setting-name>	fireExtinguisherInstalled	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	FireExtinguisherUninstalledSetting	  <setting-name>	fireExtinguisherInstalled	</setting-name>
+      <setting-value>	False	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	TutorialStartSetting	  <setting-name>	wasQuestsTutorialStarted	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
+    <tutorial-setting>	PveTriggerShown	  <setting-name>	PveTriggerShown	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
+    <simple-window>	TutorialAwardWindow2	  <type>	awardWindow	</type>
+      <var-ref>	Chapter2Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest2)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow3	  <type>	awardWindow	</type>
+      <var-ref>	Chapter3Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest3)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow4	  <type>	awardWindow	</type>
+      <var-ref>	Chapter4Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest4)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow5	  <type>	awardWindow	</type>
+      <var-ref>	Chapter5Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest5)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow6	  <type>	awardWindow	</type>
+      <var-ref>	Chapter6Var	</var-ref>
+      <description>	_(tutorialQuest/awardWindow/description/quest6)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow7	  <type>	awardWindow	</type>
+      <var-ref>	Chapter7Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest7)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow8	  <type>	awardWindow	</type>
+      <var-ref>	Chapter8Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest8)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow9	  <type>	awardWindow	</type>
+      <var-ref>	Chapter9Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest9)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow10	  <type>	awardWindow	</type>
+      <var-ref>	Chapter10Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest10)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow11	  <type>	awardWindow	</type>
+      <var-ref>	Chapter11Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest11)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow12	  <type>	awardWindow	</type>
+      <var-ref>	Chapter12Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest12)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow13	  <type>	awardWindow	</type>
+      <var-ref>	Chapter13Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest13)	</description>
+    </simple-window>
+    <simple-window>	TutorialAwardWindow14	  <type>	awardWindow	</type>
+      <var-ref>	Chapter14Var	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest14)	</description>
+    </simple-window>
+  </has-id>
+</quests-shared-entities.xml>

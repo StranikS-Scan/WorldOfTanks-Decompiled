@@ -1,0 +1,145 @@
+<offbattle.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	DefaultScene	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <post-effects>
+        <inactivate>	GreetingInitiated	</inactivate>
+        <inactivate>	ExitFromQueueClicked	</inactivate>
+        <inactivate>	RefuseButtonClicked	</inactivate>
+        <run-trigger>	BonusTrigger	</run-trigger>
+        <run-trigger>	QueueTrigger	</run-trigger>
+        <run-trigger>	ModeTrigger	</run-trigger>
+      </post-effects>
+      <runtime-effects>
+        <request-bonus>
+          <condition>
+            <inactive>	GreetingInitiated	</inactive>
+            <inactive>	BonusReceived	</inactive>
+          </condition>
+        </request-bonus>
+        <enter-mode>	EnteringToMode	  <condition>
+            <inactive>	GreetingInitiated	</inactive>
+            <inactive>	RefuseButtonClicked	</inactive>
+            <inactive>	InMode	</inactive>
+            <active>	BonusReceived	</active>
+            <global-active>	_TutorialModeIsAvailable	</global-active>
+          </condition>
+        </enter-mode>
+      </runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <dialog>	GreetingDialog	  <type>	greeting	</type>
+      <image>	../maps/tutorial/dialog-image-10.png	</image>
+      <title>	_(#battle_tutorial:dialogs/greeting/title)	</title>
+      <text>	&lt;p&gt;&lt;font size="18" color="#FDF4CE" face="$FieldFont"&gt;_(#battle_tutorial:dialogs/greeting/text/side-01)&lt;/font&gt;&lt;/p&gt;&lt;p&gt;&lt;font size="14" face="$FieldFont"&gt;&lt;font face="$TitleFont"&gt;_(#battle_tutorial:dialogs/greeting/text/side-02)&lt;/font&gt; _(#battle_tutorial:dialogs/greeting/text/side-03)&lt;/font&gt;&lt;/p&gt;	</text>
+      <time-note>	_(#battle_tutorial:dialogs/greeting/notes/time) &lt;font face="$TitleFont"&gt;{0:&gt;s}&lt;/font&gt;	</time-note>
+      <buttons>
+        <submit>	ContinueTraining	</submit>
+        <cancel>	RefuseTraining	</cancel>
+      </buttons>
+      <actions>
+        <click>	ContinueTraining	  <effects>
+            <activate>	GreetingInitiated	</activate>
+            <enter-queue>	EnteringToBattle	</enter-queue>
+          </effects>
+        </click>
+        <click>	RefuseTraining	  <effects>
+            <activate>	RefuseButtonClicked	</activate>
+            <refuse-training>
+              <condition>
+                <global-active>	_AllBonusesReceived	</global-active>
+              </condition>
+            </refuse-training>
+            <show-dialog>	ConfirmRefuseDialog	  <condition>
+                <global-inactive>	_AllBonusesReceived	</global-inactive>
+              </condition>
+            </show-dialog>
+          </effects>
+        </click>
+      </actions>
+    </dialog>
+    <dialog>	QueueDialog	  <type>	queue	</type>
+      <var-ref>	AvgWaitingTime	</var-ref>
+      <title>	_(#battle_tutorial:dialogs/queue/title)	</title>
+      <text>	&lt;font color="#FF0000"&gt;_(#battle_tutorial:dialogs/queue/server-overloaded/text)&lt;/font&gt;&lt;br/&gt;_(#battle_tutorial:dialogs/queue/wait/text)&lt;br/&gt;&lt;br/&gt;	</text>
+      <player-time-text>
+        <start>	_(#battle_tutorial:labels/player-waiting-time) &lt;b&gt;	</start>
+        <end>	&lt;/b&gt;&lt;br/&gt;	</end>
+      </player-time-text>
+      <avg-time-text>	&lt;i&gt;_(#battle_tutorial:labels/avg-waiting-time)&lt;/i&gt;	</avg-time-text>
+      <time-pointcuts>
+        <pointcut>	1	</pointcut>
+        <pointcut>	3	</pointcut>
+        <pointcut>	5	</pointcut>
+        <pointcut>	10	</pointcut>
+        <pointcut>	15	</pointcut>
+        <pointcut>	30	</pointcut>
+      </time-pointcuts>
+      <buttons>
+        <submit>	ExitFromQueue	</submit>
+        <cancel>	ExitFromQueue	</cancel>
+      </buttons>
+      <actions>
+        <click>	ExitFromQueue	  <effects>
+            <activate>	ExitFromQueueClicked	</activate>
+            <exit-queue>	EnteringToBattle	</exit-queue>
+          </effects>
+        </click>
+      </actions>
+    </dialog>
+    <dialog>	ConfirmRefuseDialog	  <type>	confirmRefuse	</type>
+      <title>	_(#battle_tutorial:dialogs/confirmRefuse/title)	</title>
+      <text>	_(#battle_tutorial:dialogs/confirmRefuse/message/text)	</text>
+      <checkbox-label>	_(#battle_tutorial:dialogs/confirmRefuse/checkbox/label)	</checkbox-label>
+      <buttons>
+        <submit>	ConfirmRefuseButton	</submit>
+        <cancel>	CancelRefuseButton	</cancel>
+      </buttons>
+      <actions>
+        <click>	ConfirmRefuseButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click>	CancelRefuseButton	  <effects>
+            <show-dialog>	GreetingDialog	</show-dialog>
+          </effects>
+        </click>
+      </actions>
+    </dialog>
+  </has-id>
+  <triggers>
+    <trigger>	BonusTrigger	  <type>	bonus	</type>
+      <on-effects>
+        <activate>	BonusReceived	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	BonusReceived	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	QueueTrigger	  <type>	queue	</type>
+      <pop-up>	QueueDialog	</pop-up>
+      <on-effects>
+        <show-dialog>	QueueDialog	</show-dialog>
+      </on-effects>
+      <off-effects>
+        <refuse-training>
+          <condition>
+            <active>	ExitFromQueueClicked	</active>
+          </condition>
+        </refuse-training>
+      </off-effects>
+    </trigger>
+    <trigger>	ModeTrigger	  <type>	mode	</type>
+      <on-effects>
+        <activate>	InMode	</activate>
+        <show-dialog>	GreetingDialog	</show-dialog>
+      </on-effects>
+      <off-effects>
+        <inactivate>	InMode	</inactivate>
+      </off-effects>
+    </trigger>
+  </triggers>
+  <vars></vars>
+</offbattle.xml>

@@ -1,0 +1,76 @@
+<112_eiffel_tower_ctf.xml>
+  <name>	#arenas:112_eiffel_tower_ctf/name	</name>
+  <description>	#arenas:112_eiffel_tower_ctf/description	</description>
+  <geometry>	spaces/112_eiffel_tower_ctf	</geometry>
+  <boundingBox>
+    <bottomLeft>	-400.0 -400.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/112_eiffel_tower_ctf/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_paris_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_paris_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_paris_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_paris_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_paris_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_paris_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-346.074402 -22.522881	</position1>
+        </team1>
+        <team2>
+          <position1>	341.269104 -19.863823	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	50.000000	</possibility>
+      <interval>	250.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	prohorovka_defense	</name>
+      <trajectories>
+        <warplane>
+          <preset>	prohorovka_defense_sc1_a1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc1_a2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc1_a3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</112_eiffel_tower_ctf.xml>

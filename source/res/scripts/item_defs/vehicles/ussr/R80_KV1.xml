@@ -1,0 +1,2207 @@
+<R80_KV1.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <radioman></radioman>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	34	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.064	</moving>
+    <still>	0.128	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.192	</firePenalty>
+  </invisibility>
+  <repairCost>	5.2	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	75	</armor_1>
+      <armor_2>	75	</armor_2>
+      <armor_3>	75	</armor_3>
+      <armor_4>	70	</armor_4>
+      <armor_5>	40	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	40	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_10>	30	</armor_10>
+      <armor_11>	40	</armor_11>
+      <armor_12>	50	</armor_12>
+      <armor_13>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_13>
+      <armor_14>	40	</armor_14>
+      <armor_15>	65	</armor_15>
+      <armor_16>	100	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	27670	</weight>
+    <maxHealth>	472	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R80_KV1/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 36.00 0.48 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.26 36.00 0.48 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.28	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <tags>
+        <diesel>	diesel_large	</diesel>
+      </tags>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.005355 0.480594 0.441424	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/russian/R80_KV1/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/russian/R80_KV1/KV1_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
+        <rayStart>	-0.00344938 0.114399 2.82073	</rayStart>
+        <rayEnd>	-0.00344938 -0.0676871 2.73799	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	19	</slotId>
+        <anchorPosition>	0.000000 0.55197 -2.36719	</anchorPosition>
+        <anchorDirection>	0.000000 0.227083 -0.973875	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <camouflage>
+      <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_KV1>
+      <userString>	#ussr_vehicles:Chassis_KV1	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4020	</price>
+      <unlocks>
+        <chassis>	Chassis_KV1_2	  <cost>	2325	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	10600	</weight>
+      <maxLoad>	47800	</maxLoad>
+      <terrainResistance>	1.1 1.7 3	</terrainResistance>
+      <brakeForce>	39500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	18	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.27	</vehicleMovement>
+        <vehicleRotation>	0.27	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R80_KV1/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.44 0.76	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.55	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.341589	</radius>
+          <syncAngle>	25	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.20648	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.446507	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.302502	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.341589	</radius>
+          <syncAngle>	25	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.20648	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.446507	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.302502	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.07654 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R80_KV1/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.30926 2.12967	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.689320 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.340390	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R80_KV1/track/KV_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R80_KV1/track/KV_track.model	</segmentModelRight>
+        <left>	vehicles/russian/R80_KV1/track/left.track	</left>
+        <right>	vehicles/russian/R80_KV1/track/right.track	</right>
+        <segmentLength>	0.154	</segmentLength>
+        <segmentOffset>	0.053	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.07	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.07	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.01	</maxAmplitude>
+        <maxOffset>	0.01	</maxOffset>
+        <gravity>	-8	</gravity>
+        <elasticity>	1680	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.83	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2.05	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2.05	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.83	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+        </node>
+      </trackNodes>
+      <trackThickness>	0.000000	</trackThickness>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	94	</segmentsCount>
+          <segmentsOuterThickness>	0.0518119	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.0082967	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.309	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.156829	</back>
+              <top>	0.137436	</top>
+              <front>	0.142392	</front>
+              <bottom>	0.119737	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.146393	</back>
+              <top>	0.150258	</top>
+              <front>	0.155604	</front>
+              <bottom>	0.119737	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/russian/R80_KV1/track/KV_track.model	</model>
+            <length>	0.14009	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-3.18713	</xStart>
+                <xStep>	0.070045	</xStep>
+                <ySamples>	1.15774 1.231 1.27388 1.29765 1.30275 1.30274 1.30273 1.30287 1.30303 1.3032 1.30337 1.30474 1.30474 1.2987 1.29939 1.28973 1.29314 1.29752 1.30177 1.30167 1.30181 1.30206 1.30206 1.30206 1.30254 1.30314 1.30378 1.30493 1.30504 1.30516 1.30528 1.30539 1.30551 1.30562 1.30574 1.30543 1.30097 1.29506 1.29593 1.29672 1.30155 1.3034 1.3034 1.3034 1.30341 1.30238 1.29792 1.28937 1.28521 1.28026 1.27341 1.27291 1.27512 1.27991 1.28717 1.29446 1.29897 1.3014 1.3034 1.30325 1.30265 1.30134 1.29994 1.29835 1.29518 1.29035 1.28553 1.28399 1.283 1.28187 1.28001 1.29465 1.29994 1.30164 1.30335 1.30344 1.30345 1.30347 1.30348 1.30374 1.29881 1.29969 1.30401 1.29695 1.30462 1.30469 1.30413 1.3008 1.3009 1.28095 1.21594	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L4	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	2.95153 0.840155	</basePos>
+              <shiftVec>	0.258969 0.203677	</shiftVec>
+              <jointIdx>	10	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L4	</wheelName>
+              <basePos>	-2.89071 0.774408	</basePos>
+              <shiftVec>	-0.374854 0.114542	</shiftVec>
+              <jointIdx>	54	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L5	</wheelName>
+              <basePos>	-2.12946 0.323577	</basePos>
+              <shiftVec>	-0.0506873 -0.289806	</shiftVec>
+              <jointIdx>	64	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	2.26548 0.323578	</basePos>
+              <shiftVec>	0.0568588 -0.288659	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.390961	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.328275	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L4	</name>
+              <startAngle>	-217.264	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	-237.748	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.55189 1.23291 -3.18711	</point>
+                <point>	-1.55189 1.30616 -3.11706	</point>
+                <point>	-1.55189 1.34904 -3.04702	</point>
+                <point>	-1.34189 1.37282 -2.97697	</point>
+                <point>	-1.34189 1.37792 -2.90693	</point>
+                <point>	-1.34189 1.37791 -2.83688	</point>
+                <point>	-1.34189 1.37789 -2.76684	</point>
+                <point>	-1.34189 1.37804 -2.69679	</point>
+                <point>	-1.34189 1.3782 -2.62675	</point>
+                <point>	-1.34189 1.37837 -2.5567	</point>
+                <point>	-1.34189 1.37854 -2.48666	</point>
+                <point>	-1.34189 1.37991 -2.41661	</point>
+                <point>	-1.34189 1.37991 -2.34657	</point>
+                <point>	-1.55189 1.37387 -2.27652	</point>
+                <point>	-1.55189 1.37455 -2.20648	</point>
+                <point>	-1.55189 1.3649 -2.13643	</point>
+                <point>	-1.55189 1.3683 -2.06639	</point>
+                <point>	-1.55189 1.37269 -1.99634	</point>
+                <point>	-1.34189 1.37694 -1.9263	</point>
+                <point>	-1.34189 1.37683 -1.85625	</point>
+                <point>	-1.34189 1.37698 -1.78621	</point>
+                <point>	-1.34189 1.37723 -1.71616	</point>
+                <point>	-1.34189 1.37723 -1.64612	</point>
+                <point>	-1.34189 1.37723 -1.57607	</point>
+                <point>	-1.39189 1.37771 -1.50603	</point>
+                <point>	-1.45189 1.37831 -1.43598	</point>
+                <point>	-1.52189 1.37895 -1.36593	</point>
+                <point>	-1.34189 1.3801 -1.29589	</point>
+                <point>	-1.34189 1.38021 -1.22584	</point>
+                <point>	-1.34189 1.38033 -1.1558	</point>
+                <point>	-1.34189 1.38044 -1.08575	</point>
+                <point>	-1.34189 1.38056 -1.01571	</point>
+                <point>	-1.34189 1.38068 -0.945665	</point>
+                <point>	-1.34189 1.38079 -0.87562	</point>
+                <point>	-1.34189 1.38091 -0.805575	</point>
+                <point>	-1.55189 1.3806 -0.73553	</point>
+                <point>	-1.55189 1.37614 -0.665485	</point>
+                <point>	-1.53189 1.37022 -0.59544	</point>
+                <point>	-1.44189 1.3711 -0.525395	</point>
+                <point>	-1.36189 1.37189 -0.45535	</point>
+                <point>	-1.34189 1.37671 -0.385305	</point>
+                <point>	-1.34189 1.37857 -0.31526	</point>
+                <point>	-1.34189 1.37857 -0.245215	</point>
+                <point>	-1.34189 1.37857 -0.17517	</point>
+                <point>	-1.34189 1.37858 -0.105125	</point>
+                <point>	-1.34189 1.37755 -0.0350796	</point>
+                <point>	-1.34189 1.37308 0.0349654	</point>
+                <point>	-1.55189 1.36454 0.10501	</point>
+                <point>	-1.55189 1.36038 0.175055	</point>
+                <point>	-1.55189 1.35542 0.2451	</point>
+                <point>	-1.55189 1.34858 0.315145	</point>
+                <point>	-1.55189 1.34808 0.385191	</point>
+                <point>	-1.55189 1.35028 0.455236	</point>
+                <point>	-1.55189 1.35508 0.525281	</point>
+                <point>	-1.55189 1.36234 0.595326	</point>
+                <point>	-1.55189 1.36962 0.665371	</point>
+                <point>	-1.55189 1.37413 0.735416	</point>
+                <point>	-1.34189 1.37656 0.805461	</point>
+                <point>	-1.34189 1.37857 0.875506	</point>
+                <point>	-1.34189 1.37842 0.945551	</point>
+                <point>	-1.34189 1.37782 1.0156	</point>
+                <point>	-1.34189 1.37651 1.08564	</point>
+                <point>	-1.34189 1.37511 1.15569	</point>
+                <point>	-1.34189 1.37352 1.22573	</point>
+                <point>	-1.55189 1.37034 1.29578	</point>
+                <point>	-1.55189 1.36552 1.36582	</point>
+                <point>	-1.55189 1.3607 1.43587	</point>
+                <point>	-1.55189 1.35916 1.50591	</point>
+                <point>	-1.55189 1.35816 1.57596	</point>
+                <point>	-1.55189 1.35703 1.646	</point>
+                <point>	-1.55189 1.35518 1.71605	</point>
+                <point>	-1.55189 1.36981 1.78609	</point>
+                <point>	-1.34189 1.37511 1.85614	</point>
+                <point>	-1.34189 1.37681 1.92618	</point>
+                <point>	-1.34189 1.37852 1.99623	</point>
+                <point>	-1.34189 1.37861 2.06627	</point>
+                <point>	-1.34189 1.37862 2.13632	</point>
+                <point>	-1.34189 1.37863 2.20636	</point>
+                <point>	-1.34189 1.37865 2.27641	</point>
+                <point>	-1.34189 1.37891 2.34645	</point>
+                <point>	-1.42189 1.37398 2.4165	</point>
+                <point>	-1.34189 1.37486 2.48654	</point>
+                <point>	-1.34189 1.37918 2.55659	</point>
+                <point>	-1.34189 1.37212 2.62663	</point>
+                <point>	-1.34189 1.37979 2.69668	</point>
+                <point>	-1.34189 1.37986 2.76672	</point>
+                <point>	-1.55189 1.3793 2.83677	</point>
+                <point>	-1.55189 1.37596 2.90681	</point>
+                <point>	-1.55189 1.37607 2.97686	</point>
+                <point>	-1.34189 1.35612 3.0469	</point>
+                <point>	-1.51189 1.29111 3.11695	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	94	</segmentsCount>
+          <segmentsOuterThickness>	0.0518296	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00829652	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.309	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.156829	</back>
+              <top>	0.137436	</top>
+              <front>	0.142392	</front>
+              <bottom>	0.119737	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.146393	</back>
+              <top>	0.150258	</top>
+              <front>	0.155604	</front>
+              <bottom>	0.119737	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/russian/R80_KV1/track/KV_track.model	</model>
+            <length>	0.160974	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-3.20017	</xStart>
+                <xStep>	0.0804868	</xStep>
+                <ySamples>	1.15146 1.24001 1.2815 1.30294 1.30355 1.30346 1.3034 1.3034 1.3034 1.3034 1.3034 1.30335 1.30328 1.30294 1.30117 1.29728 1.29007 1.29664 1.3033 1.3034 1.3034 1.3034 1.3034 1.30341 1.3034 1.3034 1.30076 1.29783 1.29569 1.29583 1.29697 1.29933 1.30178 1.30263 1.30263 1.30285 1.3034 1.30384 1.30435 1.30489 1.30543 1.30194 1.30371 1.29981 1.29496 1.2909 1.29478 1.29866 1.30253 1.30341 1.30341 1.30341 1.30341 1.30344 1.30346 1.30349 1.30351 1.3104 1.3035 1.30344 1.30279 1.30166 1.30053 1.2994 1.29946 1.30066 1.30185 1.30304 1.30361 1.30155 1.29671 1.29497 1.29351 1.29204 1.29505 1.29974 1.30354 1.29533 1.24009	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R4	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	2.95153 0.840155	</basePos>
+              <shiftVec>	0.258445 0.204905	</shiftVec>
+              <jointIdx>	11	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R4	</wheelName>
+              <basePos>	-2.89071 0.774408	</basePos>
+              <shiftVec>	-0.373476 0.118616	</shiftVec>
+              <jointIdx>	55	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R5	</wheelName>
+              <basePos>	-2.26546 0.323549	</basePos>
+              <shiftVec>	0.0640655 -0.294205	</shiftVec>
+              <jointIdx>	65	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	2.12948 0.32355	</basePos>
+              <shiftVec>	0.0207005 -0.293476	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.390535	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.328243	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R4	</name>
+              <startAngle>	-217.272	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	-238.2	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	1.50191 1.22668 -3.20015	</point>
+                <point>	1.55191 1.31523 -3.11966	</point>
+                <point>	1.34191 1.35671 -3.03917	</point>
+                <point>	1.55191 1.37816 -2.95869	</point>
+                <point>	1.34191 1.37876 -2.8782	</point>
+                <point>	1.34191 1.37868 -2.79771	</point>
+                <point>	1.34191 1.37862 -2.71723	</point>
+                <point>	1.34191 1.37862 -2.63674	</point>
+                <point>	1.34191 1.37862 -2.55625	</point>
+                <point>	1.34191 1.37862 -2.47577	</point>
+                <point>	1.34191 1.37862 -2.39528	</point>
+                <point>	1.34191 1.37857 -2.31479	</point>
+                <point>	1.34191 1.3785 -2.23431	</point>
+                <point>	1.55191 1.37816 -2.15382	</point>
+                <point>	1.55191 1.37639 -2.07333	</point>
+                <point>	1.55191 1.3725 -1.99284	</point>
+                <point>	1.55191 1.36529 -1.91236	</point>
+                <point>	1.55191 1.37186 -1.83187	</point>
+                <point>	1.34191 1.37851 -1.75138	</point>
+                <point>	1.34191 1.37862 -1.6709	</point>
+                <point>	1.34191 1.37862 -1.59041	</point>
+                <point>	1.34191 1.37862 -1.50992	</point>
+                <point>	1.34191 1.37862 -1.42944	</point>
+                <point>	1.34191 1.37863 -1.34895	</point>
+                <point>	1.34191 1.37862 -1.26846	</point>
+                <point>	1.34191 1.37862 -1.18798	</point>
+                <point>	1.55191 1.37598 -1.10749	</point>
+                <point>	1.55191 1.37305 -1.027	</point>
+                <point>	1.55191 1.37091 -0.946517	</point>
+                <point>	1.55191 1.37105 -0.86603	</point>
+                <point>	1.55191 1.37219 -0.785543	</point>
+                <point>	1.55191 1.37455 -0.705056	</point>
+                <point>	1.55191 1.377 -0.624569	</point>
+                <point>	1.34191 1.37784 -0.544082	</point>
+                <point>	1.34191 1.37784 -0.463595	</point>
+                <point>	1.34191 1.37806 -0.383108	</point>
+                <point>	1.34191 1.37862 -0.302622	</point>
+                <point>	1.34191 1.37905 -0.222135	</point>
+                <point>	1.34191 1.37956 -0.141648	</point>
+                <point>	1.34191 1.38011 -0.0611614	</point>
+                <point>	1.34191 1.38065 0.0193254	</point>
+                <point>	1.55191 1.37716 0.0998125	</point>
+                <point>	1.34191 1.37892 0.180299	</point>
+                <point>	1.55191 1.37503 0.260786	</point>
+                <point>	1.55191 1.37018 0.341273	</point>
+                <point>	1.55191 1.36612 0.42176	</point>
+                <point>	1.55191 1.37 0.502246	</point>
+                <point>	1.55191 1.37388 0.582733	</point>
+                <point>	1.55191 1.37775 0.66322	</point>
+                <point>	1.34191 1.37863 0.743707	</point>
+                <point>	1.34191 1.37863 0.824194	</point>
+                <point>	1.34191 1.37863 0.90468	</point>
+                <point>	1.34191 1.37863 0.985168	</point>
+                <point>	1.34191 1.37865 1.06565	</point>
+                <point>	1.34191 1.37868 1.14614	</point>
+                <point>	1.34191 1.37871 1.22663	</point>
+                <point>	1.34191 1.37872 1.30711	</point>
+                <point>	1.34191 1.38561 1.3876	</point>
+                <point>	1.34191 1.37871 1.46809	</point>
+                <point>	1.34191 1.37866 1.54858	</point>
+                <point>	1.34191 1.37801 1.62906	</point>
+                <point>	1.34191 1.37688 1.70955	</point>
+                <point>	1.34191 1.37574 1.79004	</point>
+                <point>	1.34191 1.37461 1.87052	</point>
+                <point>	1.34191 1.37468 1.95101	</point>
+                <point>	1.34191 1.37587 2.0315	</point>
+                <point>	1.34191 1.37707 2.11198	</point>
+                <point>	1.34191 1.37826 2.19247	</point>
+                <point>	1.34191 1.37882 2.27296	</point>
+                <point>	1.55191 1.37677 2.35344	</point>
+                <point>	1.55191 1.37193 2.43393	</point>
+                <point>	1.55191 1.37019 2.51442	</point>
+                <point>	1.55191 1.36872 2.5949	</point>
+                <point>	1.55191 1.36726 2.67539	</point>
+                <point>	1.55191 1.37027 2.75588	</point>
+                <point>	1.55191 1.37496 2.83636	</point>
+                <point>	1.55191 1.37876 2.91685	</point>
+                <point>	1.39191 1.37055 2.99734	</point>
+                <point>	1.44191 1.31531 3.07782	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	17	</slotId>
+          <anchorPosition>	0.000093 2.49953 0.440098	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_KV1>
+    <Chassis_KV1_2>
+      <userString>	#ussr_vehicles:Chassis_KV1_2	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9550	</price>
+      <unlocks>
+        <vehicle>	R72_T150	  <cost>	24500	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	10600	</weight>
+      <maxLoad>	55800	</maxLoad>
+      <terrainResistance>	1.1 1.4 2	</terrainResistance>
+      <brakeForce>	37500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R80_KV1/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.44 0.76	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.55	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.341589	</radius>
+          <syncAngle>	25	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.20648	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.446507	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.302502	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.341589	</radius>
+          <syncAngle>	25	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.20648	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.446507	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.302502	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.07654 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R80_KV1/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.30926 2.12967	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.676120 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.340390	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R80_KV1/track/KV_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R80_KV1/track/KV_track.model	</segmentModelRight>
+        <left>	vehicles/russian/R80_KV1/track/left.track	</left>
+        <right>	vehicles/russian/R80_KV1/track/right.track	</right>
+        <segmentLength>	0.154	</segmentLength>
+        <segmentOffset>	0.053	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.07	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.07	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.01	</maxAmplitude>
+        <maxOffset>	0.01	</maxOffset>
+        <gravity>	-8	</gravity>
+        <elasticity>	1680	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.83	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2.05	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2.05	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.83	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.086	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+        </node>
+      </trackNodes>
+      <trackThickness>	0.000000	</trackThickness>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	94	</segmentsCount>
+          <segmentsOuterThickness>	0.0518119	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.0082967	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.309	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.156829	</back>
+              <top>	0.137436	</top>
+              <front>	0.142392	</front>
+              <bottom>	0.119737	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.146393	</back>
+              <top>	0.150258	</top>
+              <front>	0.155604	</front>
+              <bottom>	0.119737	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/russian/R80_KV1/track/KV_track.model	</model>
+            <length>	0.14009	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-3.18713	</xStart>
+                <xStep>	0.070045	</xStep>
+                <ySamples>	1.15774 1.231 1.27388 1.29765 1.30275 1.30274 1.30273 1.30287 1.30303 1.3032 1.30337 1.30474 1.30474 1.2987 1.29939 1.28973 1.29314 1.29752 1.30177 1.30167 1.30181 1.30206 1.30206 1.30206 1.30254 1.30314 1.30378 1.30493 1.30504 1.30516 1.30528 1.30539 1.30551 1.30562 1.30574 1.30543 1.30097 1.29506 1.29593 1.29672 1.30155 1.3034 1.3034 1.3034 1.30341 1.30238 1.29792 1.28937 1.28521 1.28026 1.27341 1.27291 1.27512 1.27991 1.28717 1.29446 1.29897 1.3014 1.3034 1.30325 1.30265 1.30134 1.29994 1.29835 1.29518 1.29035 1.28553 1.28399 1.283 1.28187 1.28001 1.29465 1.29994 1.30164 1.30335 1.30344 1.30345 1.30347 1.30348 1.30374 1.29881 1.29969 1.30401 1.29695 1.30462 1.30469 1.30413 1.3008 1.3009 1.28095 1.21594	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L4	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	2.95153 0.840155	</basePos>
+              <shiftVec>	0.258969 0.203677	</shiftVec>
+              <jointIdx>	10	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L4	</wheelName>
+              <basePos>	-2.89071 0.774408	</basePos>
+              <shiftVec>	-0.374854 0.114542	</shiftVec>
+              <jointIdx>	54	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L5	</wheelName>
+              <basePos>	-2.12946 0.323577	</basePos>
+              <shiftVec>	-0.0506873 -0.289806	</shiftVec>
+              <jointIdx>	64	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	2.26548 0.323578	</basePos>
+              <shiftVec>	0.0568588 -0.288659	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.390961	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.328275	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L4	</name>
+              <startAngle>	-217.264	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	-237.748	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.55189 1.23291 -3.18711	</point>
+                <point>	-1.55189 1.30616 -3.11706	</point>
+                <point>	-1.55189 1.34904 -3.04702	</point>
+                <point>	-1.34189 1.37282 -2.97697	</point>
+                <point>	-1.34189 1.37792 -2.90693	</point>
+                <point>	-1.34189 1.37791 -2.83688	</point>
+                <point>	-1.34189 1.37789 -2.76684	</point>
+                <point>	-1.34189 1.37804 -2.69679	</point>
+                <point>	-1.34189 1.3782 -2.62675	</point>
+                <point>	-1.34189 1.37837 -2.5567	</point>
+                <point>	-1.34189 1.37854 -2.48666	</point>
+                <point>	-1.34189 1.37991 -2.41661	</point>
+                <point>	-1.34189 1.37991 -2.34657	</point>
+                <point>	-1.55189 1.37387 -2.27652	</point>
+                <point>	-1.55189 1.37455 -2.20648	</point>
+                <point>	-1.55189 1.3649 -2.13643	</point>
+                <point>	-1.55189 1.3683 -2.06639	</point>
+                <point>	-1.55189 1.37269 -1.99634	</point>
+                <point>	-1.34189 1.37694 -1.9263	</point>
+                <point>	-1.34189 1.37683 -1.85625	</point>
+                <point>	-1.34189 1.37698 -1.78621	</point>
+                <point>	-1.34189 1.37723 -1.71616	</point>
+                <point>	-1.34189 1.37723 -1.64612	</point>
+                <point>	-1.34189 1.37723 -1.57607	</point>
+                <point>	-1.39189 1.37771 -1.50603	</point>
+                <point>	-1.45189 1.37831 -1.43598	</point>
+                <point>	-1.52189 1.37895 -1.36593	</point>
+                <point>	-1.34189 1.3801 -1.29589	</point>
+                <point>	-1.34189 1.38021 -1.22584	</point>
+                <point>	-1.34189 1.38033 -1.1558	</point>
+                <point>	-1.34189 1.38044 -1.08575	</point>
+                <point>	-1.34189 1.38056 -1.01571	</point>
+                <point>	-1.34189 1.38068 -0.945665	</point>
+                <point>	-1.34189 1.38079 -0.87562	</point>
+                <point>	-1.34189 1.38091 -0.805575	</point>
+                <point>	-1.55189 1.3806 -0.73553	</point>
+                <point>	-1.55189 1.37614 -0.665485	</point>
+                <point>	-1.53189 1.37022 -0.59544	</point>
+                <point>	-1.44189 1.3711 -0.525395	</point>
+                <point>	-1.36189 1.37189 -0.45535	</point>
+                <point>	-1.34189 1.37671 -0.385305	</point>
+                <point>	-1.34189 1.37857 -0.31526	</point>
+                <point>	-1.34189 1.37857 -0.245215	</point>
+                <point>	-1.34189 1.37857 -0.17517	</point>
+                <point>	-1.34189 1.37858 -0.105125	</point>
+                <point>	-1.34189 1.37755 -0.0350796	</point>
+                <point>	-1.34189 1.37308 0.0349654	</point>
+                <point>	-1.55189 1.36454 0.10501	</point>
+                <point>	-1.55189 1.36038 0.175055	</point>
+                <point>	-1.55189 1.35542 0.2451	</point>
+                <point>	-1.55189 1.34858 0.315145	</point>
+                <point>	-1.55189 1.34808 0.385191	</point>
+                <point>	-1.55189 1.35028 0.455236	</point>
+                <point>	-1.55189 1.35508 0.525281	</point>
+                <point>	-1.55189 1.36234 0.595326	</point>
+                <point>	-1.55189 1.36962 0.665371	</point>
+                <point>	-1.55189 1.37413 0.735416	</point>
+                <point>	-1.34189 1.37656 0.805461	</point>
+                <point>	-1.34189 1.37857 0.875506	</point>
+                <point>	-1.34189 1.37842 0.945551	</point>
+                <point>	-1.34189 1.37782 1.0156	</point>
+                <point>	-1.34189 1.37651 1.08564	</point>
+                <point>	-1.34189 1.37511 1.15569	</point>
+                <point>	-1.34189 1.37352 1.22573	</point>
+                <point>	-1.55189 1.37034 1.29578	</point>
+                <point>	-1.55189 1.36552 1.36582	</point>
+                <point>	-1.55189 1.3607 1.43587	</point>
+                <point>	-1.55189 1.35916 1.50591	</point>
+                <point>	-1.55189 1.35816 1.57596	</point>
+                <point>	-1.55189 1.35703 1.646	</point>
+                <point>	-1.55189 1.35518 1.71605	</point>
+                <point>	-1.55189 1.36981 1.78609	</point>
+                <point>	-1.34189 1.37511 1.85614	</point>
+                <point>	-1.34189 1.37681 1.92618	</point>
+                <point>	-1.34189 1.37852 1.99623	</point>
+                <point>	-1.34189 1.37861 2.06627	</point>
+                <point>	-1.34189 1.37862 2.13632	</point>
+                <point>	-1.34189 1.37863 2.20636	</point>
+                <point>	-1.34189 1.37865 2.27641	</point>
+                <point>	-1.34189 1.37891 2.34645	</point>
+                <point>	-1.42189 1.37398 2.4165	</point>
+                <point>	-1.34189 1.37486 2.48654	</point>
+                <point>	-1.34189 1.37918 2.55659	</point>
+                <point>	-1.34189 1.37212 2.62663	</point>
+                <point>	-1.34189 1.37979 2.69668	</point>
+                <point>	-1.34189 1.37986 2.76672	</point>
+                <point>	-1.55189 1.3793 2.83677	</point>
+                <point>	-1.55189 1.37596 2.90681	</point>
+                <point>	-1.55189 1.37607 2.97686	</point>
+                <point>	-1.34189 1.35612 3.0469	</point>
+                <point>	-1.51189 1.29111 3.11695	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	94	</segmentsCount>
+          <segmentsOuterThickness>	0.0518296	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00829652	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.309	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.156829	</back>
+              <top>	0.137436	</top>
+              <front>	0.142392	</front>
+              <bottom>	0.119737	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.146393	</back>
+              <top>	0.150258	</top>
+              <front>	0.155604	</front>
+              <bottom>	0.119737	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/russian/R80_KV1/track/KV_track.model	</model>
+            <length>	0.160974	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-3.20017	</xStart>
+                <xStep>	0.0804868	</xStep>
+                <ySamples>	1.15146 1.24001 1.2815 1.30294 1.30355 1.30346 1.3034 1.3034 1.3034 1.3034 1.3034 1.30335 1.30328 1.30294 1.30117 1.29728 1.29007 1.29664 1.3033 1.3034 1.3034 1.3034 1.3034 1.30341 1.3034 1.3034 1.30076 1.29783 1.29569 1.29583 1.29697 1.29933 1.30178 1.30263 1.30263 1.30285 1.3034 1.30384 1.30435 1.30489 1.30543 1.30194 1.30371 1.29981 1.29496 1.2909 1.29478 1.29866 1.30253 1.30341 1.30341 1.30341 1.30341 1.30344 1.30346 1.30349 1.30351 1.3104 1.3035 1.30344 1.30279 1.30166 1.30053 1.2994 1.29946 1.30066 1.30185 1.30304 1.30361 1.30155 1.29671 1.29497 1.29351 1.29204 1.29505 1.29974 1.30354 1.29533 1.24009	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R4	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	2.95153 0.840155	</basePos>
+              <shiftVec>	0.258445 0.204905	</shiftVec>
+              <jointIdx>	11	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R4	</wheelName>
+              <basePos>	-2.89071 0.774408	</basePos>
+              <shiftVec>	-0.373476 0.118616	</shiftVec>
+              <jointIdx>	55	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R5	</wheelName>
+              <basePos>	-2.26546 0.323549	</basePos>
+              <shiftVec>	0.0640655 -0.294205	</shiftVec>
+              <jointIdx>	65	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	2.12948 0.32355	</basePos>
+              <shiftVec>	0.0207005 -0.293476	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.390535	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.328243	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R4	</name>
+              <startAngle>	-217.272	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	-238.2	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	1.50191 1.22668 -3.20015	</point>
+                <point>	1.55191 1.31523 -3.11966	</point>
+                <point>	1.34191 1.35671 -3.03917	</point>
+                <point>	1.55191 1.37816 -2.95869	</point>
+                <point>	1.34191 1.37876 -2.8782	</point>
+                <point>	1.34191 1.37868 -2.79771	</point>
+                <point>	1.34191 1.37862 -2.71723	</point>
+                <point>	1.34191 1.37862 -2.63674	</point>
+                <point>	1.34191 1.37862 -2.55625	</point>
+                <point>	1.34191 1.37862 -2.47577	</point>
+                <point>	1.34191 1.37862 -2.39528	</point>
+                <point>	1.34191 1.37857 -2.31479	</point>
+                <point>	1.34191 1.3785 -2.23431	</point>
+                <point>	1.55191 1.37816 -2.15382	</point>
+                <point>	1.55191 1.37639 -2.07333	</point>
+                <point>	1.55191 1.3725 -1.99284	</point>
+                <point>	1.55191 1.36529 -1.91236	</point>
+                <point>	1.55191 1.37186 -1.83187	</point>
+                <point>	1.34191 1.37851 -1.75138	</point>
+                <point>	1.34191 1.37862 -1.6709	</point>
+                <point>	1.34191 1.37862 -1.59041	</point>
+                <point>	1.34191 1.37862 -1.50992	</point>
+                <point>	1.34191 1.37862 -1.42944	</point>
+                <point>	1.34191 1.37863 -1.34895	</point>
+                <point>	1.34191 1.37862 -1.26846	</point>
+                <point>	1.34191 1.37862 -1.18798	</point>
+                <point>	1.55191 1.37598 -1.10749	</point>
+                <point>	1.55191 1.37305 -1.027	</point>
+                <point>	1.55191 1.37091 -0.946517	</point>
+                <point>	1.55191 1.37105 -0.86603	</point>
+                <point>	1.55191 1.37219 -0.785543	</point>
+                <point>	1.55191 1.37455 -0.705056	</point>
+                <point>	1.55191 1.377 -0.624569	</point>
+                <point>	1.34191 1.37784 -0.544082	</point>
+                <point>	1.34191 1.37784 -0.463595	</point>
+                <point>	1.34191 1.37806 -0.383108	</point>
+                <point>	1.34191 1.37862 -0.302622	</point>
+                <point>	1.34191 1.37905 -0.222135	</point>
+                <point>	1.34191 1.37956 -0.141648	</point>
+                <point>	1.34191 1.38011 -0.0611614	</point>
+                <point>	1.34191 1.38065 0.0193254	</point>
+                <point>	1.55191 1.37716 0.0998125	</point>
+                <point>	1.34191 1.37892 0.180299	</point>
+                <point>	1.55191 1.37503 0.260786	</point>
+                <point>	1.55191 1.37018 0.341273	</point>
+                <point>	1.55191 1.36612 0.42176	</point>
+                <point>	1.55191 1.37 0.502246	</point>
+                <point>	1.55191 1.37388 0.582733	</point>
+                <point>	1.55191 1.37775 0.66322	</point>
+                <point>	1.34191 1.37863 0.743707	</point>
+                <point>	1.34191 1.37863 0.824194	</point>
+                <point>	1.34191 1.37863 0.90468	</point>
+                <point>	1.34191 1.37863 0.985168	</point>
+                <point>	1.34191 1.37865 1.06565	</point>
+                <point>	1.34191 1.37868 1.14614	</point>
+                <point>	1.34191 1.37871 1.22663	</point>
+                <point>	1.34191 1.37872 1.30711	</point>
+                <point>	1.34191 1.38561 1.3876	</point>
+                <point>	1.34191 1.37871 1.46809	</point>
+                <point>	1.34191 1.37866 1.54858	</point>
+                <point>	1.34191 1.37801 1.62906	</point>
+                <point>	1.34191 1.37688 1.70955	</point>
+                <point>	1.34191 1.37574 1.79004	</point>
+                <point>	1.34191 1.37461 1.87052	</point>
+                <point>	1.34191 1.37468 1.95101	</point>
+                <point>	1.34191 1.37587 2.0315	</point>
+                <point>	1.34191 1.37707 2.11198	</point>
+                <point>	1.34191 1.37826 2.19247	</point>
+                <point>	1.34191 1.37882 2.27296	</point>
+                <point>	1.55191 1.37677 2.35344	</point>
+                <point>	1.55191 1.37193 2.43393	</point>
+                <point>	1.55191 1.37019 2.51442	</point>
+                <point>	1.55191 1.36872 2.5949	</point>
+                <point>	1.55191 1.36726 2.67539	</point>
+                <point>	1.55191 1.37027 2.75588	</point>
+                <point>	1.55191 1.37496 2.83636	</point>
+                <point>	1.55191 1.37876 2.91685	</point>
+                <point>	1.39191 1.37055 2.99734	</point>
+                <point>	1.44191 1.31531 3.07782	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	18	</slotId>
+          <anchorPosition>	0.000092 2.49953 0.440091	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_KV1_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_KV1>
+      <userString>	#ussr_vehicles:Turret_1_KV1	</userString>
+      <shortUserString>	#ussr_vehicles:Turret_1_KV1_short	</shortUserString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9380	</price>
+      <unlocks>
+        <turret>	Turret_2_KV1	  <cost>	2600	</cost>
+        </turret>
+      </unlocks>
+      <armor>
+        <armor_1>	75	</armor_1>
+        <armor_2>	90	</armor_2>
+        <armor_3>	75	</armor_3>
+        <armor_4>	75	</armor_4>
+        <armor_5>	40	</armor_5>
+        <armor_6>	40	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+        <armor_10>	35	</armor_10>
+      </armor>
+      <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+      <weight>	7020	</weight>
+      <maxHealth>	118	</maxHealth>
+      <rotationSpeed>	24	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_ZiS-5>	shared	  <maxAmmo>	114	</maxAmmo>
+          <unlocks>
+            <gun>	_57mm_413	  <cost>	2300	</cost>
+            </gun>
+            <gun>	_122mm_cannon_U-11	  <cost>	3750	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	4	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R80_KV1/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R80_KV1/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
+              <rayStart>	-0.000981839 0.138496 1.02789	</rayStart>
+              <rayEnd>	0.0161415 0.115633 1.02617	</rayEnd>
+              <rayUp>	0.067 0.06 4	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	21	</slotId>
+              <anchorPosition>	0.000009 0.14716 1.30238	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.88 0.595 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_ZiS-5>
+        <_57mm_413>	shared	  <maxAmmo>	174	</maxAmmo>
+          <armor>
+            <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R80_KV1/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R80_KV1/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
+              <rayStart>	-0.000115599 0.138277 1.06545	</rayStart>
+              <rayEnd>	-0.0104449 0.141459 1.06313	</rayEnd>
+              <rayUp>	0.065 0.06 4	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	29	</slotId>
+              <anchorPosition>	-0.000058 0.14334 1.60524	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.955 0.535 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_57mm_413>
+        <_122mm_cannon_U-11>	shared	  <maxAmmo>	50	</maxAmmo>
+          <unlocks>
+            <vehicle>	R77_KV2	  <cost>	26700	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	50	</gun>
+          </armor>
+          <shotDispersionRadius>	0.57	</shotDispersionRadius>
+          <reloadTime>	11.4	</reloadTime>
+          <aimingTime>	2.9	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/russian/R80_KV1/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R80_KV1/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	8	</slotId>
+              <rayStart>	-0.026869 0.00145878 1.02917	</rayStart>
+              <rayEnd>	-0.0393586 0.00570226 1.02917	</rayEnd>
+              <rayUp>	0.077 0.077 4	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	23	</slotId>
+              <anchorPosition>	-0.0134345 0.00909519 1.21359	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	1.06 0.52 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_122mm_cannon_U-11>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R80_KV1/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R80_KV1/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.005355 0.526464 0.794646	</gunPosition>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.997 -0.070 1.000 0.000 0.738 0.011 0.396 0.000 0.126 0.500 0.223 0.500 0.113 0.785 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
+          <rayStart>	-0.8158 0.621128 0.500361	</rayStart>
+          <rayEnd>	-0.721337 0.595817 0.479482	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
+          <rayStart>	0.858371 0.644053 -0.665569	</rayStart>
+          <rayEnd>	0.76198 0.618225 -0.659108	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
+          <rayStart>	0.863155 0.634237 0.509687	</rayStart>
+          <rayEnd>	0.674228 0.583614 0.467928	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
+          <rayStart>	-0.858371 0.644053 -0.665569	</rayStart>
+          <rayEnd>	-0.76198 0.618225 -0.659108	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	20	</slotId>
+          <anchorPosition>	0.000000 0.964641 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <camouflage>
+        <tiling>	0.475 0.475 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_KV1>
+    <Turret_2_KV1>
+      <userString>	#ussr_vehicles:Turret_2_KV1	</userString>
+      <shortUserString>	#ussr_vehicles:Turret_2_KV1_short	</shortUserString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9900	</price>
+      <unlocks>
+        <gun>	_85mm_F-30	  <cost>	4250	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	110	</armor_1>
+        <armor_2>	90	</armor_2>
+        <armor_3>	110	</armor_3>
+        <armor_4>	110	</armor_4>
+        <armor_6>	40	</armor_6>
+        <armor_8>	0	</armor_8>
+        <armor_10>	35	</armor_10>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	8220	</weight>
+      <maxHealth>	168	</maxHealth>
+      <rotationSpeed>	24	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_ZiS-5>	shared	  <maxAmmo>	114	</maxAmmo>
+          <armor>
+            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/russian/R80_KV1/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R80_KV1/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	13	</slotId>
+              <rayStart>	0.000018 0.138496 1.03978	</rayStart>
+              <rayEnd>	-0.0165772 -0.00333461 1.03978	</rayEnd>
+              <rayUp>	0.065 0.06 3	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	25	</slotId>
+              <anchorPosition>	0.000009 0.146025 1.3364	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	1 0.535 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_ZiS-5>
+        <_57mm_413>	shared	  <maxAmmo>	174	</maxAmmo>
+          <armor>
+            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_12>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_12>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R80_KV1/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R80_KV1/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	14	</slotId>
+              <rayStart>	-0.000115062 0.138277 0.97625	</rayStart>
+              <rayEnd>	0.04979 0.139102 0.975899	</rayEnd>
+              <rayUp>	0.066 0.058 4	</rayUp>
+              <size>	0.416	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	22	</slotId>
+              <anchorPosition>	-0.000058 0.134028 1.60524	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	1 0.52 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_57mm_413>
+        <_122mm_cannon_U-11>	shared	  <maxAmmo>	50	</maxAmmo>
+          <armor>
+            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	50	</gun>
+          </armor>
+          <shotDispersionRadius>	0.57	</shotDispersionRadius>
+          <reloadTime>	11.4	</reloadTime>
+          <aimingTime>	2.9	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/russian/R80_KV1/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R80_KV1/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Gun_06.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	15	</slotId>
+              <rayStart>	-0.026869 0.00145878 1.04619	</rayStart>
+              <rayEnd>	-0.0217856 -0.0256918 1.04619	</rayEnd>
+              <rayUp>	0.077 0.077 4	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	27	</slotId>
+              <anchorPosition>	-0.0293201 0.000728846 1.18201	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	1 0.52 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_122mm_cannon_U-11>
+        <_85mm_F-30>	shared	  <maxAmmo>	76	</maxAmmo>
+          <armor>
+            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_12>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_12>
+            <gun>	30	</gun>
+          </armor>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	5	</reloadTime>
+          <aimingTime>	2.9	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -24 1 -24	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/russian/R80_KV1/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R80_KV1/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Gun_07.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	16	</slotId>
+              <rayStart>	-0.0225042 0.0273076 0.787384	</rayStart>
+              <rayEnd>	-0.0762252 0.00997848 0.787384	</rayEnd>
+              <rayUp>	0.074 0.074 4	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	28	</slotId>
+              <anchorPosition>	-0.0112521 0.0136538 1.58977	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	1 0.505 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_85mm_F-30>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R80_KV1/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/russian/R80_KV1/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/russian/R80_KV1/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R80_KV1/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R80_KV1/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.005355 0.526464 0.794646	</gunPosition>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.003 0.000 1.000 0.000 0.645 0.066 0.819 0.623 0.222 0.500 0.199 0.500 0.104 0.533 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	9	</slotId>
+          <rayStart>	-0.890873 0.564079 0.326348	</rayStart>
+          <rayEnd>	-0.700726 0.510013 0.296004	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	10	</slotId>
+          <rayStart>	0.836685 0.62957 -0.549915	</rayStart>
+          <rayEnd>	0.740444 0.602993 -0.544328	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	11	</slotId>
+          <rayStart>	0.890873 0.564079 0.326348	</rayStart>
+          <rayEnd>	0.700726 0.510013 0.296004	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	12	</slotId>
+          <rayStart>	-0.969861 0.663625 -0.595135	</rayStart>
+          <rayEnd>	-0.584916 0.557272 -0.572794	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	24	</slotId>
+          <anchorPosition>	0.000000 0.955582 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <camouflage>
+        <tiling>	0.535 0.535 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_KV1>
+  </turrets0>
+  <engines>
+    <M-17T>	shared	  <unlocks>
+        <engine>	M-17F	  <cost>	850	</cost>
+        </engine>
+      </unlocks>
+    </M-17T>
+    <M-17F>	shared	  <unlocks>
+        <engine>	V-2K	  <cost>	5100	</cost>
+        </engine>
+      </unlocks>
+    </M-17F>
+    <V-2K>	shared	  <unlocks>
+        <vehicle>	R13_KV-1s	  <cost>	10650	</cost>
+        </vehicle>
+      </unlocks>
+    </V-2K>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <_10R>	shared	  <unlocks>
+        <radio>	_10RK	  <cost>	3100	</cost>
+        </radio>
+      </unlocks>
+    </_10R>
+    <_10RK>	shared	</_10RK>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <M-17T>
+          <smplEnginePower>	475.7765	</smplEnginePower>
+        </M-17T>
+        <M-17F>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </M-17F>
+        <V-2K>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V-2K>
+      </engines>
+      <chassis>
+        <Chassis_KV1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_KV1>
+        <Chassis_KV1_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_KV1_2>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <guns>
+      <_85mm_F-30>
+        <delta>	1.36	</delta>
+      </_85mm_F-30>
+    </guns>
+    <armour>	1.001280575	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+</R80_KV1.xml>

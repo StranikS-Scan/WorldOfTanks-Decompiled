@@ -1,0 +1,1122 @@
+<guns.xml>
+  <ids>
+    <_75mm_KwK_L70>	0	</_75mm_KwK_L70>
+    <_20mm_n_k_m_20_A>	1	</_20mm_n_k_m_20_A>
+    <_122_mm_wz_43_50>	3	</_122_mm_wz_43_50>
+    <_20mm_wz_38_FKA>	4	</_20mm_wz_38_FKA>
+    <_47mm_QFSA>	5	</_47mm_QFSA>
+    <_37mm_Bofors_wz_37>	6	</_37mm_Bofors_wz_37>
+    <_40mm_DL55>	7	</_40mm_DL55>
+    <_47mm_kan_m_38_strv>	10	</_47mm_kan_m_38_strv>
+    <_40mm_auto_Boforsa>	11	</_40mm_auto_Boforsa>
+    <_47mm_armata_wz_39>	12	</_47mm_armata_wz_39>
+    <_75mm_wz_1897>	13	</_75mm_wz_1897>
+    <_75mm_wz_22_24>	14	</_75mm_wz_22_24>
+    <_75mm_wz_36_37>	15	</_75mm_wz_36_37>
+    <_90mm_wz_39_40>	16	</_90mm_wz_39_40>
+    <_105mm_Bofors_wz_34>	18	</_105mm_Bofors_wz_34>
+    <_122mm_D_25T_P>	20	</_122mm_D_25T_P>
+    <_122mm_wz_53>	21	</_122mm_wz_53>
+    <_130mm_R_14_wz_56>	22	</_130mm_R_14_wz_56>
+    <_152mm_J_2>	23	</_152mm_J_2>
+  </ids>
+  <shared>
+    <_20mm_n_k_m_20_A>
+      <userString>	#poland_vehicles:_20mm_n_k_m_20_A	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	3160	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.06	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.1	</amplitude>
+        <recoilEffect>	auto	</recoilEffect>
+      </recoil>
+      <effects>	shot_auto	</effects>
+      <reloadEffect>	reload12_25	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-13 13	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	250	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <clip>
+        <count>	10	</count>
+        <rate>	320	</rate>
+      </clip>
+      <burst>
+        <count>	2	</count>
+        <rate>	320	</rate>
+      </burst>
+      <weight>	57	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	1.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_20mm_z_pociskiem_wybuchowo_B>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	820	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	43 33	</piercingPower>
+        </_20mm_z_pociskiem_wybuchowo_B>
+        <_20mm_z_pociskiem_wybuchowo_ulepszony_B>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	858	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	55 44	</piercingPower>
+        </_20mm_z_pociskiem_wybuchowo_ulepszony_B>
+      </shots>
+    </_20mm_n_k_m_20_A>
+    <_20mm_wz_38_FKA>
+      <userString>	#poland_vehicles:_20mm_wz_38_FKA	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <impulse>	0.06	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.1	</amplitude>
+        <recoilEffect>	auto	</recoilEffect>
+      </recoil>
+      <effects>	shot_auto	</effects>
+      <reloadEffect>	reload12_25	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-13 13	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	250	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <clip>
+        <count>	10	</count>
+        <rate>	320	</rate>
+      </clip>
+      <burst>
+        <count>	2	</count>
+        <rate>	320	</rate>
+      </burst>
+      <weight>	57	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	1.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_20mm_z_pociskiem_wybuchowo>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	820	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	30 19	</piercingPower>
+        </_20mm_z_pociskiem_wybuchowo>
+        <_20mm_z_pociskiem_wybuchowo_ulepszony>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	858	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	47 18	</piercingPower>
+        </_20mm_z_pociskiem_wybuchowo_ulepszony>
+      </shots>
+    </_20mm_wz_38_FKA>
+    <_37mm_Bofors_wz_37>
+      <userString>	#poland_vehicles:_37mm_Bofors_wz_37	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	2200	</price>
+      <impulse>	0.26	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.2	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	2.51428571428571	</reloadTime>
+      <maxAmmo>	100	</maxAmmo>
+      <aimingTime>	1.94285714285714	</aimingTime>
+      <weight>	70	</weight>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.48	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_37mm_AP_Bofors>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	705	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	34 27	</piercingPower>
+        </_37mm_AP_Bofors>
+        <_37mm_APCR_Bofors>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	881	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	67 36	</piercingPower>
+        </_37mm_APCR_Bofors>
+        <_37mm_HE_Bofors>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	705	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	24 24	</piercingPower>
+        </_37mm_HE_Bofors>
+      </shots>
+    </_37mm_Bofors_wz_37>
+    <_40mm_DL55>
+      <userString>	#poland_vehicles:_40mm_DL55	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	7900	</price>
+      <impulse>	0.26	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.14	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	2.8	</reloadTime>
+      <maxAmmo>	100	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	160	</weight>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	35	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.42	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.14	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_40mm_AP>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	732	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	55 42	</piercingPower>
+        </_40mm_AP>
+        <_40mm_APCR>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	915	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	71 61	</piercingPower>
+        </_40mm_APCR>
+        <_40mm_HE>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	732	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	23 23	</piercingPower>
+        </_40mm_HE>
+      </shots>
+    </_40mm_DL55>
+    <_40mm_auto_Boforsa>
+      <userString>	#poland_vehicles:_40mm_auto_Boforsa	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	22700	</price>
+      <impulse>	0.26	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.3	</amplitude>
+        <recoilEffect>	auto	</recoilEffect>
+      </recoil>
+      <effects>	shot_auto	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -30.0 1.0 -30.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	120	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <clip>
+        <count>	4	</count>
+        <rate>	320	</rate>
+      </clip>
+      <burst>
+        <count>	2	</count>
+        <rate>	320	</rate>
+      </burst>
+      <weight>	470	</weight>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	35	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_40mm_pocisk_przeciwpancerny_wz_36>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	829	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	52 38	</piercingPower>
+        </_40mm_pocisk_przeciwpancerny_wz_36>
+        <_40mm_pocisk_podkalibrowy>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1036	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	85 68	</piercingPower>
+        </_40mm_pocisk_podkalibrowy>
+        <_40mm_pocisk_wybuchowy_wz_36>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	829	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	23 23	</piercingPower>
+        </_40mm_pocisk_wybuchowy_wz_36>
+      </shots>
+    </_40mm_auto_Boforsa>
+    <_47mm_QFSA>
+      <userString>	#poland_vehicles:_47mm_QFSA	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	2350	</price>
+      <impulse>	0.24	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.18	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	4.3	</reloadTime>
+      <maxAmmo>	84	</maxAmmo>
+      <aimingTime>	2.5	</aimingTime>
+      <weight>	100	</weight>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	35	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.44	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_47mm_AP>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	488	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 23	</piercingPower>
+        </_47mm_AP>
+        <_47mm_APCR>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	610	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	70 45	</piercingPower>
+        </_47mm_APCR>
+        <_47mm_HE>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	488	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	23 23	</piercingPower>
+        </_47mm_HE>
+      </shots>
+    </_47mm_QFSA>
+    <_47mm_kan_m_38_strv>
+      <userString>	#poland_vehicles:_47mm_kan_m_38_strv	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	16300	</price>
+      <impulse>	0.24	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.32	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	4.5	</reloadTime>
+      <maxAmmo>	100	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	200	</weight>
+      <maxHealth>	76	</maxHealth>
+      <maxRegenHealth>	38	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.14	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_47mm_slpprj_m_38>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	782	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	56 46	</piercingPower>
+        </_47mm_slpprj_m_38>
+        <_47mm_slpprj_m_39>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	782	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	72 56	</piercingPower>
+        </_47mm_slpprj_m_39>
+        <_47mm_sgr_m_38>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	660	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	24 24	</piercingPower>
+        </_47mm_sgr_m_38>
+      </shots>
+    </_47mm_kan_m_38_strv>
+    <_47mm_armata_wz_39>
+      <userString>	#poland_vehicles:_47mm_armata_wz_39	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	24000	</price>
+      <impulse>	0.26	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.26	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	39.375	</rotationSpeed>
+      <reloadTime>	3.9	</reloadTime>
+      <maxAmmo>	120	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	400	</weight>
+      <maxHealth>	76	</maxHealth>
+      <maxRegenHealth>	38	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.38	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	3	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_47mm_slpprj_m_38>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	885	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	62 52	</piercingPower>
+        </_47mm_slpprj_m_38>
+        <_47mm_slpprj_m_39>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1106	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	92 63	</piercingPower>
+        </_47mm_slpprj_m_39>
+        <_47mm_sgr_m_38>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	885	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	24 24	</piercingPower>
+        </_47mm_sgr_m_38>
+      </shots>
+    </_47mm_armata_wz_39>
+    <_75mm_KwK_L70>
+      <userString>	#poland_vehicles:_75mm_KwK_L70	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	53000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.48	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	4.57142857142857	</reloadTime>
+      <maxAmmo>	55	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	955	</weight>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.354285714285714	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_Pzgr39L>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	925	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	150 132	</piercingPower>
+        </_75mm_Pzgr39L>
+        <_75mm_Pzgr.40L>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1156	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	194 174	</piercingPower>
+        </_75mm_Pzgr.40L>
+        <_75mm_Sprg.18L>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	925	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_75mm_Sprg.18L>
+      </shots>
+    </_75mm_KwK_L70>
+    <_75mm_wz_1897>
+      <userString>	#poland_vehicles:_75mm_wz_1897	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	31200	</price>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	87	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	1390	</weight>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_APCBC_K>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	385	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	98 82	</piercingPower>
+        </_75mm_APCBC_K>
+        <_Gr_38_HL_A_K>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	308	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	120 120	</piercingPower>
+        </_Gr_38_HL_A_K>
+        <_75mm_Sprg.18_K>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	385	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_75mm_Sprg.18_K>
+      </shots>
+    </_75mm_wz_1897>
+    <_75mm_wz_22_24>
+      <userString>	#poland_vehicles:_75mm_wz_22_24	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	31500	</price>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	87	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	1390	</weight>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_Pzgr39_K>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	685	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	108 92	</piercingPower>
+        </_75mm_Pzgr39_K>
+        <_75mm_Pzgr.40_K>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	850	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	124 104	</piercingPower>
+        </_75mm_Pzgr.40_K>
+        <_75mm_Sprg.18_K2>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	685	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_75mm_Sprg.18_K2>
+      </shots>
+    </_75mm_wz_22_24>
+    <_75mm_wz_36_37>
+      <userString>	#poland_vehicles:_75mm_wz_36_37	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	51000	</price>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.48	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	4.57142857142857	</reloadTime>
+      <maxAmmo>	55	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	1450	</weight>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.354285714285714	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.14	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_Pzgr39L_K>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	925	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	135 120	</piercingPower>
+        </_75mm_Pzgr39L_K>
+        <_75mm_Pzgr.40L_K>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1156	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	175 148	</piercingPower>
+        </_75mm_Pzgr.40L_K>
+        <_75mm_Sprg.18L_K>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	925	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_75mm_Sprg.18L_K>
+      </shots>
+    </_75mm_wz_36_37>
+    <_90mm_wz_39_40>
+      <userString>	#poland_vehicles:_90mm_wz_39_40	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	78500	</price>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.32	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	39.375	</rotationSpeed>
+      <reloadTime>	8.5	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	2.7	</aimingTime>
+      <weight>	1850	</weight>
+      <maxHealth>	134	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.42	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.14	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_90mm_AP>
+          <defaultPortion>	0.80	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	156 135	</piercingPower>
+        </_90mm_AP>
+        <_90mm_APCR>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1188	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	198 172	</piercingPower>
+        </_90mm_APCR>
+        <_90mm_HE>
+          <defaultPortion>	0.20	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 45	</piercingPower>
+        </_90mm_HE>
+      </shots>
+    </_90mm_wz_39_40>
+    <_105mm_Bofors_wz_34>
+      <userString>	#poland_vehicles:_105mm_Bofors_wz_34	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	92000	</price>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.26	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	33.25	</rotationSpeed>
+      <reloadTime>	11	</reloadTime>
+      <maxAmmo>	24	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	1245	</weight>
+      <maxHealth>	148	</maxHealth>
+      <maxRegenHealth>	74	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_slpgr_m_43_1>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	785	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	192 178	</piercingPower>
+        </_105mm_slpgr_m_43_1>
+        <_105mm_slpprj_fm_49>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	930	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	225 205	</piercingPower>
+        </_105mm_slpprj_fm_49>
+        <_105mm_tung_sgr_m_34>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	785	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_tung_sgr_m_34>
+      </shots>
+    </_105mm_Bofors_wz_34>
+    <_122_mm_wz_43_50>
+      <userString>	#poland_vehicles:_122_mm_wz_43_50	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	170000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	13.2571428571429	</reloadTime>
+      <maxAmmo>	28	</maxAmmo>
+      <aimingTime>	3.42857142857143	</aimingTime>
+      <weight>	2790	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_122mm_BR-471_B>
+          <defaultPortion>	0.60	</defaultPortion>
+          <speed>	1007	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	218 198	</piercingPower>
+        </_122mm_BR-471_B>
+        <_122mm_BR-471_D>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1259	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	245 225	</piercingPower>
+        </_122mm_BR-471_D>
+        <_122mm_OF-471>
+          <defaultPortion>	0.40	</defaultPortion>
+          <speed>	1007	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	68 68	</piercingPower>
+        </_122mm_OF-471>
+      </shots>
+    </_122_mm_wz_43_50>
+    <_122mm_D_25T_P>
+      <userString>	#poland_vehicles:_122mm_D_25T_P	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	108000	</price>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	12.3428571428571	</reloadTime>
+      <maxAmmo>	24	</maxAmmo>
+      <aimingTime>	3.42857142857143	</aimingTime>
+      <weight>	2800	</weight>
+      <maxHealth>	192	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.457142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_122mm_UBR-471_PB>
+          <defaultPortion>	0.60	</defaultPortion>
+          <speed>	780	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	175 152	</piercingPower>
+        </_122mm_UBR-471_PB>
+        <_122mm_UBR-471_PBP>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	975	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	217 204	</piercingPower>
+        </_122mm_UBR-471_PBP>
+        <_122mm_UOF-471_P>
+          <defaultPortion>	0.40	</defaultPortion>
+          <speed>	780	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	61 61	</piercingPower>
+        </_122mm_UOF-471_P>
+      </shots>
+    </_122mm_D_25T_P>
+    <_122mm_wz_53>
+      <userString>	#poland_vehicles:_122mm_wz_53	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	185000	</price>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	13.2571428571429	</reloadTime>
+      <maxAmmo>	28	</maxAmmo>
+      <aimingTime>	3.42857142857143	</aimingTime>
+      <weight>	2790	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_122mm_UBR-471P_P>
+          <defaultPortion>	0.60	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	218 198	</piercingPower>
+        </_122mm_UBR-471P_P>
+        <_122mm_UBR-471P_PB>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	245 225	</piercingPower>
+        </_122mm_UBR-471P_PB>
+        <_122mm_UOF-471P_P>
+          <defaultPortion>	0.40	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	61 61	</piercingPower>
+        </_122mm_UOF-471P_P>
+      </shots>
+    </_122mm_wz_53>
+    <_130mm_R_14_wz_56>
+      <userString>	#poland_vehicles:_130mm_R_14_wz_56	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	325000	</price>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	15.4285714285714	</reloadTime>
+      <maxAmmo>	28	</maxAmmo>
+      <aimingTime>	3.42857142857143	</aimingTime>
+      <weight>	2980	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_AZ_PB_46>
+          <defaultPortion>	0.60	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	250 235	</piercingPower>
+        </_130mm_AZ_PB_46>
+        <_130mm_AZ_PB_46_A>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1125	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	303 263	</piercingPower>
+        </_130mm_AZ_PB_46_A>
+        <_130mm_AZ_OF_46>
+          <defaultPortion>	0.40	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	68 68	</piercingPower>
+        </_130mm_AZ_OF_46>
+      </shots>
+    </_130mm_R_14_wz_56>
+    <_152mm_J_2>
+      <userString>	#poland_vehicles:_152mm_J_2	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	340000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	24	</rotationSpeed>
+      <reloadTime>	16.5	</reloadTime>
+      <maxAmmo>	20	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	4370	</weight>
+      <maxHealth>	252	</maxHealth>
+      <maxRegenHealth>	126	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_152mm_pocisk_przeciwpancerny>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	250 235	</piercingPower>
+        </_152mm_pocisk_przeciwpancerny>
+        <_152mm_pocisk_kumulacyjny>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	317 317	</piercingPower>
+        </_152mm_pocisk_kumulacyjny>
+        <_152mm_pocisk_wybuchowy>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	90 90	</piercingPower>
+        </_152mm_pocisk_wybuchowy>
+      </shots>
+    </_152mm_J_2>
+  </shared>
+</guns.xml>

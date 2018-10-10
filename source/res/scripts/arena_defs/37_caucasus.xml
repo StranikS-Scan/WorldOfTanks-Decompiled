@@ -1,0 +1,42 @@
+<37_caucasus.xml>
+  <name>	#arenas:37_caucasus/name	</name>
+  <description>	#arenas:37_caucasus/description	</description>
+  <geometry>	spaces/37_caucasus	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/37_caucasus/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <batchingEnabled>	0	</batchingEnabled>
+  <umbraEnabled>	1	</umbraEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_caucasus_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_caucasus_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_caucasus_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_caucasus_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_caucasus_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_caucasus_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-376.743073 371.289215	</position1>
+        </team1>
+        <team2>
+          <position1>	345.804749 -399.466736	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+</37_caucasus.xml>

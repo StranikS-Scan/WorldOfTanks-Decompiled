@@ -1,6 +1,6 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/data/descriptor.py
 from tutorial.data.chapter import ChapterProgress
-from tutorial.settings import TUTORIAL_STOP_REASON_NAMES
 
 class DescriptorData(object):
 
@@ -10,7 +10,6 @@ class DescriptorData(object):
         self.__contents = []
         self.__idMapping = {}
         self.__initialChapterID = ''
-        self.__itemsRevertSR = set(TUTORIAL_STOP_REASON_NAMES.values())
 
     def __iter__(self):
         return iter(self.__contents)
@@ -35,10 +34,7 @@ class DescriptorData(object):
         return result
 
     def getChapterIdx(self, chapterID):
-        if chapterID in self.__idMapping.keys():
-            return self.__idMapping[chapterID]
-        else:
-            return -1
+        return self.__idMapping[chapterID] if chapterID in self.__idMapping.keys() else -1
 
     def getNumberOfChapters(self):
         return len(self.__contents)
@@ -52,15 +48,15 @@ class DescriptorData(object):
                 result = chapter.ignoreBonus(completed) or not chapter.isBonusReceived(completed)
         return result
 
-    def getInitialChapterID(self, completed = None):
+    def getInitialChapterID(self, completed=None):
         result = None
-        if len(self.__initialChapterID):
+        if self.__initialChapterID:
             index = self.__idMapping.get(self.__initialChapterID, -1)
             if -1 < index < len(self.__contents):
                 result = self.__contents[index].getID()
         if result is None:
             if completed is None:
-                if len(self.__contents):
+                if self.__contents:
                     result = self.__contents[0].getID()
             else:
                 result = self.getNextChapterID(completed)
@@ -92,7 +88,7 @@ class DescriptorData(object):
 
         return result
 
-    def hasReceivedBonuses(self, completed, minimum = 1):
+    def hasReceivedBonuses(self, completed, minimum=1):
         if not completed:
             return False
         result = False
@@ -106,14 +102,14 @@ class DescriptorData(object):
 
         return result
 
-    def getProgress(self, completed, failed = -1):
+    def getProgress(self, completed, failed=-1):
         result = 0
         offset = 0
         for chapter in self.__contents:
             if chapter.hasBonus():
                 if chapter.isBonusReceived(completed):
                     bit = ChapterProgress.PROGRESS_FLAG_COMPLETED
-                elif failed is not -1 and chapter.isBonusReceived(failed):
+                elif failed != -1 and chapter.isBonusReceived(failed):
                     bit = ChapterProgress.PROGRESS_FLAG_FAILED
                 else:
                     bit = ChapterProgress.PROGRESS_FLAG_UNDEFINED
@@ -124,8 +120,5 @@ class DescriptorData(object):
 
         return result
 
-    def setItemsRevertIfStop(self, reasons):
-        self.__itemsRevertSR = reasons
-
-    def isItemsRevertIfStop(self, reason):
-        return reason in self.__itemsRevertSR
+    def getChapterByIdx(self, idx):
+        return self.__contents[idx] if idx < len(self.__contents) else None

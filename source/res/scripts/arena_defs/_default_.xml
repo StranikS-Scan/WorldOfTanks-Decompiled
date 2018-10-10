@@ -1,0 +1,248 @@
+<_default_.xml>
+  <minPlayersInTeam>	0	</minPlayersInTeam>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <maxTeamsInArena>	2	</maxTeamsInArena>
+  <minTeamsInArena>	2	</minTeamsInArena>
+  <runDelay>	30	</runDelay>
+  <roundLength>	900	</roundLength>
+  <winnerIfTimeout>	0	</winnerIfTimeout>
+  <winnerIfExtermination>	0	</winnerIfExtermination>
+  <artilleryPreparationChance>	0.0	</artilleryPreparationChance>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_ruinberg_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_ruinberg_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_ruinberg_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultReverbPreset></defaultReverbPreset>
+  <explicitRequestOnly>	false	</explicitRequestOnly>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <wwbattleCountdownTimerSound>	timer	</wwbattleCountdownTimerSound>
+  <waypoints></waypoints>
+  <battleScenarios></battleScenarios>
+  <wwmusicDroneSetup>
+    <timeRemained>
+      <value>	180	</value>
+    </timeRemained>
+    <timeRemained>
+      <value>	0	</value>
+      <arena_type_label>	special	</arena_type_label>
+    </timeRemained>
+    <timeRemained>
+      <value>	0	</value>
+      <arena_type_label>	epic_random_training	</arena_type_label>
+    </timeRemained>
+    <timeRemained>
+      <value>	0	</value>
+      <arena_type_label>	training	</arena_type_label>
+    </timeRemained>
+    <timeRemained>
+      <value>	180	</value>
+      <arena_type_label>	epic_random	</arena_type_label>
+    </timeRemained>
+    <hpPercentRemained>
+      <value>	15	</value>
+    </hpPercentRemained>
+    <hpPercentRemained>
+      <value>	0	</value>
+      <arena_type_label>	special	</arena_type_label>
+    </hpPercentRemained>
+    <hpPercentRemained>
+      <value>	0	</value>
+      <arena_type_label>	epic_random_training	</arena_type_label>
+    </hpPercentRemained>
+    <hpPercentRemained>
+      <value>	0	</value>
+      <arena_type_label>	training	</arena_type_label>
+    </hpPercentRemained>
+    <hpPercentRemained>
+      <value>	20	</value>
+      <arena_type_label>	epic_random	</arena_type_label>
+    </hpPercentRemained>
+    <vehiclesRemained>
+      <value>	5	</value>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	10	</value>
+      <arena_type_label>	epic_random	</arena_type_label>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	3	</value>
+      <arena_type_label>	ranked	</arena_type_label>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	2	</value>
+      <arena_type_label>	team7x7	</arena_type_label>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	0	</value>
+      <arena_type_label>	special	</arena_type_label>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	0	</value>
+      <arena_type_label>	epic_random_training	</arena_type_label>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	0	</value>
+      <arena_type_label>	training	</arena_type_label>
+    </vehiclesRemained>
+    <capturedPoints>
+      <value>	15	</value>
+    </capturedPoints>
+    <capturedPoints>
+      <value>	101	</value>
+      <arena_type_label>	epic_random_training	</arena_type_label>
+    </capturedPoints>
+    <capturedPoints>
+      <value>	101	</value>
+      <arena_type_label>	training	</arena_type_label>
+    </capturedPoints>
+    <capturedPoints>
+      <value>	20	</value>
+      <arena_type_label>	epic_random	</arena_type_label>
+    </capturedPoints>
+    <musicStopPredelay>
+      <value>	10	</value>
+    </musicStopPredelay>
+  </wwmusicDroneSetup>
+  <capturePointsLimit>	100	</capturePointsLimit>
+  <defencePointsLimit>	100	</defencePointsLimit>
+  <resetLocalTeamKillerAtRespawn>	False	</resetLocalTeamKillerAtRespawn>
+  <leaveDisconnectedTimeout>	-1	</leaveDisconnectedTimeout>
+  <gameplayTypes>
+    <ctf>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+    </ctf>
+    <domination>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+    </domination>
+    <assault>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+      <roundLength>	600	</roundLength>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+    </assault>
+    <ctf2>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+    </ctf2>
+    <domination2>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+    </domination2>
+    <assault2>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+      <roundLength>	420	</roundLength>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+    </assault2>
+    <bootcamp>
+      <roundLength>	900	</roundLength>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+    </bootcamp>
+    <epic>
+      <stopVehiclesAtArenaFreeze>	True	</stopVehiclesAtArenaFreeze>
+      <addGameTimePerDestructible>	0	</addGameTimePerDestructible>
+      <enabledChatCommandFlags>	EPIC_BATTLE_COMMANDS	</enabledChatCommandFlags>
+      <unlockUnusedVehiclesOnLeave>	True	</unlockUnusedVehiclesOnLeave>
+      <frontLinesAlgorithm>
+        <defenderTeam>	2	</defenderTeam>
+        <columnWidth>	50	</columnWidth>
+        <frontEdgeExtendColumns>	1	</frontEdgeExtendColumns>
+        <frontDropPerColumn>	35	</frontDropPerColumn>
+        <outlierFraction>	0.2	</outlierFraction>
+        <outlierVerticalDistance>	300	</outlierVerticalDistance>
+        <intrusionVerticalTolerance>	-10000	</intrusionVerticalTolerance>
+        <intrusionCheckExtendBounds>	150	</intrusionCheckExtendBounds>
+      </frontLinesAlgorithm>
+      <sectorSettings>
+        <transitionTime>	60	</transitionTime>
+        <maxStayTime>	30	</maxStayTime>
+        <destructionDuration>	7	</destructionDuration>
+        <closedZoneFireDelay>	4	</closedZoneFireDelay>
+        <numBombs>	20	</numBombs>
+        <bombingHeight>	70.	</bombingHeight>
+        <bombingWidth>	50.	</bombingWidth>
+        <maxRandomBombsPerTarget>	3	</maxRandomBombsPerTarget>
+        <bombShellNation>	germany	</bombShellNation>
+        <bombShellName>	sector_bomber_shell	</bombShellName>
+        <protectionZone>
+          <maxStayTime>	5.0	</maxStayTime>
+          <numberOfTurrets>	2	</numberOfTurrets>
+          <minShootingTime>	15.0	</minShootingTime>
+          <shotPiercingPower>	45.0	</shotPiercingPower>
+          <minShootingInterval>	1.0	</minShootingInterval>
+          <shotShellNation>	germany	</shotShellNation>
+          <shotShellName>	sector_artillery_shell	</shotShellName>
+          <shotRadius>	5.0	</shotRadius>
+          <shotDuration>	1.0	</shotDuration>
+          <minTurretShootInterval>	2.0	</minTurretShootInterval>
+        </protectionZone>
+      </sectorSettings>
+      <epicSectorSettings>
+        <addGameTimePerCapture>	120. 120.	</addGameTimePerCapture>
+        <addGameTimeAllCaptured>	120.	</addGameTimeAllCaptured>
+        <frontLineInit>	400.	</frontLineInit>
+        <transitionFrontLineBoundBackward>	300.	</transitionFrontLineBoundBackward>
+        <transitionFrontLineBoundForward>	250.	</transitionFrontLineBoundForward>
+        <defenderMotivationFactors>	1.0 0.55 0.25	</defenderMotivationFactors>
+        <overtimeMaxFrontlineOffset>	-600.	</overtimeMaxFrontlineOffset>
+      </epicSectorSettings>
+      <winnerIfTimeout>	2	</winnerIfTimeout>
+      <winnerIfExtermination>	2	</winnerIfExtermination>
+      <playerGroupLimit>	12	</playerGroupLimit>
+      <respawnType>	epic	</respawnType>
+      <ironShieldDefenderTeam>	2	</ironShieldDefenderTeam>
+      <defenderBonusTeam>	2	</defenderBonusTeam>
+      <defenderBonusInterval>	300	</defenderBonusInterval>
+      <battleEndWarningAppearTime>	300	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	15	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+      <capturePointsLimit>	200	</capturePointsLimit>
+      <defencePointsLimit>	200	</defencePointsLimit>
+      <recoveryMechanic>
+        <recoveryCounter>	15	</recoveryCounter>
+        <recoveryBlockingCounter>	30	</recoveryBlockingCounter>
+      </recoveryMechanic>
+      <overtimeMechanic>
+        <overtimeLimit>	90	</overtimeLimit>
+      </overtimeMechanic>
+      <resetLocalTeamKillerAtRespawn>	True	</resetLocalTeamKillerAtRespawn>
+      <leaveDisconnectedTimeout>	300	</leaveDisconnectedTimeout>
+    </epic>
+    <sandbox>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+    </sandbox>
+    <ctf30x30>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+      <crystalRewardFactor>	1.	</crystalRewardFactor>
+    </ctf30x30>
+    <domination30x30>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+      <crystalRewardFactor>	1.	</crystalRewardFactor>
+    </domination30x30>
+  </gameplayTypes>
+</_default_.xml>

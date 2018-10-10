@@ -1,0 +1,311 @@
+<chain-5.xml>	&gt;	  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Hangar	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <gui-items>
+        <gui-item>	OptionalDevice1DropDown	  <on-scene-effects>
+            <activate>	OptionalDevice1DropDownOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	OptionalDevice1DropDownOnScene	</inactivate>
+            <refuse-training>
+              <condition>
+                <inactive>	OptionalDevice1RendererClicked	</inactive>
+              </condition>
+            </refuse-training>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	OptionalDevice1DropDownList	  <on-scene-effects></on-scene-effects>
+          <not-on-scene-effects>
+            <refuse-training>
+              <condition>
+                <inactive>	OptionalDevice1RendererClicked	</inactive>
+              </condition>
+            </refuse-training>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	AmmunitionPanel	  <on-scene-effects>
+            <activate>	AmmunitionPanelOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	AmmunitionPanelOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	OptionalDevice1Renderer	  <on-scene-effects>
+            <activate>	OptionalDevice1RendererOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <refuse-training>
+              <condition>
+                <inactive>	OptionalDevice1RendererClicked	</inactive>
+              </condition>
+            </refuse-training>
+            <inactivate>	OptionalDevice1RendererOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	TankCarousel	  <on-scene-effects>
+            <activate>	TankCarouselOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	TankCarouselOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+      <post-effects>
+        <clear-scene></clear-scene>
+        <inactivate>	OptionalDeviceInstalled	</inactivate>
+        <inactivate>	OptionalDevice1DropDownClicked	</inactivate>
+        <inactivate>	OptionalDevice1RendererClicked	</inactivate>
+        <set-var>	SelectedVehicleSetter	</set-var>
+        <set-var>	SelectedOptionalDeviceSetter	</set-var>
+        <run-trigger>	BonusTrigger	</run-trigger>
+        <run-trigger>	MaintenanceStateTrigger	</run-trigger>
+      </post-effects>
+      <runtime-effects>
+        <set-gui-item-criteria>	OptionalDevice1RendererCriteria	  <condition>
+            <var>	FindOptionalDeviceID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	OptionalDevice1RendererCriteria	</effect-not-triggered>
+          </condition>
+        </set-gui-item-criteria>
+        <run-trigger>	OptionalDeviceInstalledTrigger	  <condition>
+            <var>	FindOptionalDeviceID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	OptionalDeviceInstalledTrigger	</effect-not-triggered>
+          </condition>
+        </run-trigger>
+        <run-trigger>	SimpleDialogTrigger	  <condition>
+            <var>	FindOptionalDeviceID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	SimpleDialogTrigger	</effect-not-triggered>
+          </condition>
+        </run-trigger>
+        <show-hint>	BuyVehicleHint	  <condition>
+            <active>	TankCarouselOnScene	</active>
+            <var>	SelectedVehicleID	  <is-none></is-none>
+            </var>
+            <effect-not-triggered>	BuyVehicleHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	OptionalDevice1DropDownHint	  <condition>
+            <active>	OptionalDevice1DropDownOnScene	</active>
+            <active>	MaintenanceIsEnabled	</active>
+            <var>	FindOptionalDeviceID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	OptionalDevice1DropDownHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	AmmunitionPanelHint	  <condition>
+            <active>	AmmunitionPanelOnScene	</active>
+            <inactive>	MaintenanceIsEnabled	</inactive>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	AmmunitionPanelHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	OptionalDevice1RendererHint	  <condition>
+            <active>	OptionalDevice1RendererOnScene	</active>
+            <var>	FindOptionalDeviceID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	OptionalDevice1RendererHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <activate>	ShowCongratulation	  <condition>
+            <active>	OptionalDeviceInstalled	</active>
+            <active>	OptionalDevice1RendererClicked	</active>
+            <inactive>	BonusReceived	</inactive>
+          </condition>
+        </activate>
+        <request-bonus>
+          <condition>
+            <active>	OptionalDeviceInstalled	</active>
+            <active>	OptionalDevice1RendererClicked	</active>
+            <inactive>	BonusReceived	</inactive>
+          </condition>
+        </request-bonus>
+        <show-award-window>	CongratulationWindow	  <condition>
+            <active>	OptionalDeviceInstalled	</active>
+            <active>	OptionalDevice1RendererClicked	</active>
+            <active>	BonusReceived	</active>
+            <active>	ShowCongratulation	</active>
+          </condition>
+        </show-award-window>
+        <refuse-training>
+          <condition>
+            <active>	OptionalDeviceInstalled	</active>
+            <active>	OptionalDevice1RendererClicked	</active>
+            <active>	BonusReceived	</active>
+            <active>	ShowCongratulation	</active>
+          </condition>
+        </refuse-training>
+      </runtime-effects>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <game-attribute>	SelectedVehicleSetter	  <var-ref>	SelectedVehicleID	</var-ref>
+      <name>	CurrentVehicleCD	</name>
+    </game-attribute>
+    <game-attribute>	SelectedOptionalDeviceSetter	  <var-ref>	FindOptionalDeviceID	</var-ref>
+      <name>	OptionalDeviceCD	</name>
+      <args>	SelectedOptionalDeviceName	</args>
+    </game-attribute>
+    <gui-item-criteria>	OptionalDevice1RendererCriteria	  <item-id>	OptionalDeviceItemID	</item-id>
+      <value>	id=$FindOptionalDeviceID$	</value>
+    </gui-item-criteria>
+    <hint>	BuyVehicleHint	  <item-id>	TankCarousel	</item-id>
+      <text>	BuyVehicleText	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	OptionalDevice1DropDownHint	  <item-id>	OptionalDevice1DropDown	</item-id>
+      <text>	_(#tutorial:chain5/hint/openOptDevicesDropDown)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	OptionalDevice1DropDown	  <effects>
+            <close-hint>	OptionalDevice1DropDownHint	</close-hint>
+            <activate>	OptionalDevice1DropDownClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	OptionalDevice1DropDown	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	OptionalDevice1DropDown	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	AmmunitionPanelHint	  <item-id>	AmmunitionPanel	</item-id>
+      <text></text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <padding>
+        <left>	200	</left>
+        <top>	0	</top>
+        <right>	200	</right>
+        <bottom>	100	</bottom>
+      </padding>
+      <actions>
+        <click>	AmmunitionPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	AmmunitionPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	AmmunitionPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	OptionalDevice1RendererHint	  <item-id>	OptionalDevice1Renderer	</item-id>
+      <text></text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	OptionalDevice1Renderer	  <effects>
+            <close-hint>	OptionalDevice1RendererHint	</close-hint>
+            <activate>	OptionalDevice1RendererClicked	</activate>
+            <refuse-training>
+              <condition>
+                <either>
+                  <game-item>	FindOptionalDeviceID	  <money-not-enough></money-not-enough>
+                  </game-item>
+                  <game-item>	FindOptionalDeviceID	  <may-not-install>	SelectedVehicleID	</may-not-install>
+                  </game-item>
+                  <active>	BonusReceived	</active>
+                </either>
+              </condition>
+            </refuse-training>
+          </effects>
+        </click>
+        <click-outside>	OptionalDevice1Renderer	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	OptionalDevice1Renderer	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <simple-window>	CongratulationWindow	  <type>	awardWindow	</type>
+      <var-ref>	ChapterVar	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest14)	</description>
+    </simple-window>
+  </has-id>
+  <triggers>
+    <trigger>	MaintenanceStateTrigger	  <type>	optionalDevicesState	</type>
+      <on-effects>
+        <activate>	MaintenanceIsEnabled	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	MaintenanceIsEnabled	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	OptionalDeviceInstalledTrigger	  <type>	installed	</type>
+      <validate-var>	FindOptionalDeviceID	</validate-var>
+      <validate-update-only></validate-update-only>
+      <vehicle-var>	SelectedVehicleID	</vehicle-var>
+      <on-effects>
+        <activate>	OptionalDeviceInstalled	</activate>
+      </on-effects>
+      <off-effects>
+        <refuse-training></refuse-training>
+      </off-effects>
+    </trigger>
+    <trigger>	SimpleDialogTrigger	  <type>	simpleDialog	</type>
+      <on-effects></on-effects>
+      <off-effects>
+        <refuse-training></refuse-training>
+      </off-effects>
+    </trigger>
+    <trigger>	BonusTrigger	  <type>	bonus	</type>
+      <on-effects>
+        <activate>	BonusReceived	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	BonusReceived	</inactivate>
+      </off-effects>
+    </trigger>
+  </triggers>
+  <vars>
+    <var-set>	BuyVehicleText	  <asString>	_(#tutorial:chain/hint/buyVehicle)	</asString>
+    </var-set>
+  </vars>
+</chain-5.xml>

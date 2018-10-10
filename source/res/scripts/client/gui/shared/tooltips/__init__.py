@@ -1,30 +1,57 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/__init__.py
 import weakref
 import sys
+from helpers import dependency
+from shared_utils import CONST_CONTAINER
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.Scaleform.framework import AppRef
-from gui.shared import g_itemsCache
-from gui.shared.utils import CONST_CONTAINER
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.app_loader import sf_lobby
+from gui.shared.formatters import icons
 from helpers.i18n import makeString
 from items import vehicles
+from skeletons.gui.shared import IItemsCache
 
 class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE = 'vehicle'
     TANKMAN = 'tankman'
+    NOT_RECRUITED_TANKMAN = 'notRecruitedTankman'
     SKILL = 'skill'
     ACHIEVEMENT = 'achievement'
     ACHIEVEMENT_ATTR = 'achievementAttr'
     MODULE = 'module'
     SHELL = 'shell'
+    EQUIPMENT = 'equipment'
     EFFICIENCY = 'efficiency'
     FORTIFICATIONS = 'fortification'
     IGR = 'igr'
     CYBER_SPORT = 'cyberSport'
     MAP = 'map'
-    HISTORICAL_AMMO = 'historicalAmmo'
-    HISTORICAL_MODULES = 'historicalModules'
     CONTROL = 'control'
+    REF_SYSTEM = 'refSystem'
+    PRIVATE_QUESTS = 'privateQuests'
+    CONTACT = 'contact'
+    QUESTS = 'quests'
+    HANGAR_TUTORIAL = 'hangarTutorial'
+    CLAN_PROFILE = 'clanProfile'
+    TECH_CUSTOMIZATION = 'techCustomization'
+    BOOSTER = 'booster'
+    VEHICLE_FILTER = 'vehicleFilter'
+    VEH_CMP_CUSTOMIZATION = 'vehCmpCustomization'
+    RESERVE = 'reserve'
+    RANKED_STEP = 'rankedStep'
+    RANKED_RANK = 'rankedRank'
+    RANKED_CALENDAR_DAY = 'rankedCalendarDayInfo'
+    RANKED_SELECTOR_INFO = 'rankedSelectorInfo'
+    FAKE = 'fake'
+    VEHICLE_ELITE_BONUS = 'vehicleEliteBonus'
+    VEHICLE_HISTORICAL_REFERENCE = 'vehicleHistoricalReference'
+    MARATHON = 'marathon'
+    EPIC_SKILL_INFO = 'epicSkillInfo'
+    EPIC_SELECTOR_INFO = 'epicSelectorInfo'
+    EPIC_SELECTOR_UNAVAILABLE_INFO = 'epicSelectorUnavailableInfo'
+    EPIC_META_LEVEL_PROGRESS_INFO = 'epicMetaLevelProgressInfo'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -40,15 +67,25 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     FINAL_STATISTIC = 'FinalStatistic'
     CYBER_SPORT_UNIT = 'CyberSportUnit'
     FORTIFICATIONS = 'fortification'
+    CLAN_PROFILE = 'clanProfile'
     SETTINGS = 'settings'
+    CUSTOMIZATION = 'customization'
+    CONTACT = 'contact'
+    HANGAR_TUTORIAL = 'hangarTutorial'
+    TECH_CUSTOMIZATION = 'techCustomization'
+    BOOSTER = 'booster'
+    RANK = 'ranked'
+    RESERVE = 'reserve'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):
     ECONOMICS = 'economics'
     ITEM = 'item'
+    BOOSTER = 'booster'
     CAMOUFLAGE = 'camouflage'
     EMBLEMS = 'emblems'
     AMMO = 'ammo'
+    RENT = 'rent'
 
 
 class ACTION_TOOLTIPS_STATE(CONST_CONTAINER):
@@ -56,15 +93,25 @@ class ACTION_TOOLTIPS_STATE(CONST_CONTAINER):
     PENALTY = 'penalty'
 
 
-class ToolTipBaseData(AppRef):
+class ToolTipBaseData(object):
 
     def __init__(self, context, toolTipType):
+        super(ToolTipBaseData, self).__init__()
         self._context = context
         self._toolTipType = toolTipType
+        self.calledBy = None
+        return
+
+    @sf_lobby
+    def app(self):
+        return None
 
     @property
     def context(self):
         return self._context
+
+    def isDynamic(self):
+        return False
 
     def getDisplayableData(self, *args, **kwargs):
         return None
@@ -117,7 +164,7 @@ class ToolTipDataField(object):
 
 class ToolTipAttrField(ToolTipDataField):
 
-    def __init__(self, context, name, attr = None):
+    def __init__(self, context, name, attr=None):
         super(ToolTipAttrField, self).__init__(context, name)
         self._attr = attr
 
@@ -127,14 +174,12 @@ class ToolTipAttrField(ToolTipDataField):
     def _getValue(self):
         attr = self._attr or self._name
         item = self._getItem()
-        if hasattr(item, attr):
-            return getattr(item, attr)
-        return super(ToolTipAttrField, self)._getValue()
+        return getattr(item, attr) if hasattr(item, attr) else super(ToolTipAttrField, self)._getValue()
 
 
 class ToolTipMethodField(ToolTipDataField):
 
-    def __init__(self, context, name, method = None, args = None):
+    def __init__(self, context, name, method=None, args=None):
         super(ToolTipMethodField, self).__init__(context, name)
         self._method = method
         self._args = args or tuple()
@@ -145,14 +190,12 @@ class ToolTipMethodField(ToolTipDataField):
     def _getValue(self):
         attr = self._method or self._name
         item = self._getItem()
-        if hasattr(item, attr):
-            return getattr(item, attr)(*self._args)
-        return super(ToolTipMethodField, self)._getValue()
+        return getattr(item, attr)(*self._args) if hasattr(item, attr) else super(ToolTipMethodField, self)._getValue()
 
 
 class ToolTipAttrCheckField(ToolTipAttrField):
 
-    def __init__(self, context, name, value, attr = None):
+    def __init__(self, context, name, value, attr=None):
         super(ToolTipAttrCheckField, self).__init__(context, name, attr)
         self._value = value
 
@@ -162,7 +205,7 @@ class ToolTipAttrCheckField(ToolTipAttrField):
 
 class ToolTipMethodCheckField(ToolTipMethodField):
 
-    def __init__(self, context, name, value, method = None, args = None):
+    def __init__(self, context, name, value, method=None, args=None):
         super(ToolTipMethodCheckField, self).__init__(context, name, method, args)
         self._value = value
 
@@ -176,14 +219,17 @@ class ToolTipParameterField(ToolTipDataField):
         return None
 
 
-def getComplexStatus(statusKey):
+def getComplexStatus(statusKey, **kwargs):
     try:
         if not statusKey:
             return (None, None)
         headerKey = statusKey + '/header'
         textKey = statusKey + '/text'
-        header = makeString(headerKey)
-        text = makeString(textKey)
+        header = makeString(headerKey, **kwargs)
+        text = makeString(textKey, **kwargs)
+        if headerKey == TOOLTIPS.VEHICLESTATUS_INPREMIUMIGRONLY_HEADER:
+            icon = icons.premiumIgrSmall()
+            header = makeString(headerKey, icon=icon)
         if header == headerKey.split(':', 1)[1]:
             header = None
         if text == textKey.split(':', 1)[1]:
@@ -196,11 +242,12 @@ def getComplexStatus(statusKey):
     return
 
 
-def getUnlockPrice(compactDescr, parentCD = None):
+def getUnlockPrice(compactDescr, parentCD=None):
     item_type_id, _, _ = vehicles.parseIntCompactDescr(compactDescr)
-    freeXP = g_itemsCache.items.stats.actualFreeXP
-    unlocks = g_itemsCache.items.stats.unlocks
-    xpVehs = g_itemsCache.items.stats.vehiclesXPs
+    itemsCache = dependency.instance(IItemsCache)
+    freeXP = itemsCache.items.stats.actualFreeXP
+    unlocks = itemsCache.items.stats.unlocks
+    xpVehs = itemsCache.items.stats.vehiclesXPs
     g_techTreeDP.load()
     pricesDict = g_techTreeDP.getUnlockPrices(compactDescr)
 
@@ -212,7 +259,6 @@ def getUnlockPrice(compactDescr, parentCD = None):
         return (isAvailable, unlockPrice, min(need, needWithFreeXP))
 
     if item_type_id == vehicles._VEHICLE:
-        g_techTreeDP.load()
         isAvailable, props = g_techTreeDP.isNext2Unlock(compactDescr, unlocks, xpVehs, freeXP)
         if parentCD is not None:
             return getUnlockProps(isAvailable, parentCD)
@@ -237,24 +283,3 @@ def getUnlockPrice(compactDescr, parentCD = None):
             return (isAvailable, 0, 0)
         return getUnlockProps(isAvailable, minUnlockPriceVehCD)
         return
-
-
-def getItemActionTooltipData(item, isBuying = True):
-    creditsState = None
-    goldState = None
-    if isBuying:
-        price = item.altPrice or item.buyPrice
-        defaultPrice = item.defaultAltPrice or item.defaultPrice
-    else:
-        price = item.sellPrice
-        defaultPrice = item.defaultSellPrice
-    if defaultPrice[0] or price[0]:
-        creditsState = ACTION_TOOLTIPS_STATE.DISCOUNT if price[0] > defaultPrice[0] or isBuying else ACTION_TOOLTIPS_STATE.PENALTY
-    if defaultPrice[1] or price[1]:
-        goldState = ACTION_TOOLTIPS_STATE.DISCOUNT if price[1] > defaultPrice[1] or isBuying else ACTION_TOOLTIPS_STATE.PENALTY
-    return {'type': ACTION_TOOLTIPS_TYPE.ITEM,
-     'key': str(item.intCD),
-     'isBuying': isBuying,
-     'state': (creditsState, goldState),
-     'newPrice': price,
-     'oldPrice': defaultPrice}

@@ -1,37 +1,43 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/__init__.py
-from ConnectionManager import connectionManager
-from PlayerEvents import g_playerEvents
 import Event
 from debug_utils import LOG_ERROR
-from gui.prb_control import getClientUnitMgr, ctrl_events
 
-class GUIEvent(object):
-
-    def __init__(self, guiType, targetID):
-        super(GUIEvent, self).__init__()
-        self.type = guiType
-        self.targetID = targetID
-
-
-class GUI_EFFECT_NAME:
+class GUI_EFFECT_NAME(object):
     SHOW_DIALOG = 'ShowDialog'
     SHOW_WINDOW = 'ShowWindow'
+    SHOW_HINT = 'ShowHint'
     UPDATE_CONTENT = 'UpdateContent'
+    SET_CRITERIA = 'SetCriteria'
+    SET_VIEW_CRITERIA = 'SetViewCriteria'
+    SET_TRIGGER = 'SetTrigger'
+    SHOW_GREETING = 'ShowGreeting'
+    NEXT_TASK = 'NextTask'
+    SET_ITEM_PROPS = 'SetItemProps'
+    PLAY_ANIMATION = 'PlayAnimation'
 
 
 class GUIProxy(object):
-    eManager = Event.EventManager()
-    onGUILoaded = Event.Event(eManager)
-    onMouseClicked = Event.Event(eManager)
-    onPageChanging = Event.Event(eManager)
+
+    def __init__(self):
+        super(GUIProxy, self).__init__()
+        self.eManager = Event.EventManager()
+        self.onGUILoaded = Event.Event(self.eManager)
+        self.onGUIInput = Event.Event(self.eManager)
+        self.onPageChanging = Event.Event(self.eManager)
+        self.onPageReady = Event.Event(self.eManager)
+        self.onItemFound = Event.Event(self.eManager)
+        self.onItemLost = Event.Event(self.eManager)
+        self.onViewLoaded = Event.Event(self.eManager)
+        self.onViewDisposed = Event.Event(self.eManager)
 
     def init(self):
-        pass
+        return True
 
     def show(self):
         pass
 
-    def fini(self, isItemsRevert = True):
+    def fini(self):
         pass
 
     def clear(self):
@@ -55,19 +61,28 @@ class GUIProxy(object):
     def goToScene(self, sceneID):
         pass
 
-    def playEffect(self, effectName, args, itemRef = None, containerRef = None):
+    def isViewPresent(self, viewType, criteria):
         return False
 
-    def stopEffect(self, effectName, effectID):
+    def closeView(self, viewType, criteria):
         pass
 
-    def showWaiting(self, messageID, isSingle = False):
+    def playEffect(self, effectName, args):
+        return False
+
+    def stopEffect(self, effectName, effectID, effectSubType=None):
         pass
 
-    def hideWaiting(self, messageID = None):
+    def isEffectRunning(self, effectName, effectID=None, effectSubType=None):
+        return False
+
+    def showWaiting(self, messageID, isSingle=False):
         pass
 
-    def showMessage(self, text, lookupType = None):
+    def hideWaiting(self, messageID=None):
+        pass
+
+    def showMessage(self, text, lookupType=None):
         pass
 
     def showI18nMessage(self, key, *args, **kwargs):
@@ -76,7 +91,10 @@ class GUIProxy(object):
     def showServiceMessage(self, data, msgTypeName):
         pass
 
-    def setItemProps(self, itemRef, props, revert = False):
+    def getItemsOnScene(self):
+        return set()
+
+    def closePopUps(self):
         pass
 
     def isGuiDialogDisplayed(self):
@@ -97,26 +115,16 @@ class GUIProxy(object):
     def getGuiRoot(self):
         return None
 
-    @classmethod
-    def windowsManager(cls):
-        from gui import WindowsManager
-        return WindowsManager.g_windowsManager
-
-    @classmethod
-    def setDispatcher(cls, dispatcher):
+    def setDispatcher(self, dispatcher):
         pass
 
-    @classmethod
-    def getDispatcher(cls):
+    def getDispatcher(self):
         return None
 
     def setChapterInfo(self, title, description):
         pass
 
     def clearChapterInfo(self):
-        pass
-
-    def setPlayerXPLevel(self, level):
         pass
 
     def setTrainingPeriod(self, currentIdx, total):
@@ -128,60 +136,60 @@ class GUIProxy(object):
     def setChapterProgress(self, total, mask):
         pass
 
-    def setTrainingRestartMode(self):
-        pass
-
-    def setTrainingRunMode(self):
-        pass
-
 
 class GUIDispatcher(object):
-    DEFAULT_MODE = 0
-    RUN_MODE = 1
-    RESTART_MODE = 2
 
     def __init__(self):
         super(GUIDispatcher, self).__init__()
-        self._mode = GUIDispatcher.DEFAULT_MODE
+        self._loader = None
         self._isDisabled = False
+        self._isStarted = False
+        return
 
-    def start(self, ctx):
-        pass
+    def start(self, loader):
+        if self._isStarted:
+            return False
+        self._isStarted = True
+        self._loader = loader
+        return True
 
     def stop(self):
-        pass
+        if not self._isStarted:
+            return False
+        else:
+            self.clearGUI()
+            self._loader = None
+            return True
 
-    def findGUI(self, root = None):
+    def findGUI(self, root=None):
         return False
 
     def clearGUI(self):
         pass
 
-    def refuseTraining(self):
-        result = True
-        if self._mode == GUIDispatcher.RUN_MODE:
-            from tutorial.loader import g_loader
-            g_loader.refuse()
-        else:
-            result = False
-            LOG_ERROR('TUTORIAL. Tutorial is not run.', self._mode)
-        return result
-
-    def restartTraining(self, afterBattle = False):
+    def stopTraining(self):
         result = False
-        if self._mode == GUIDispatcher.RESTART_MODE:
-            if self._isDisabled:
-                LOG_ERROR('Tutorial is not enabled')
-            else:
-                from tutorial.loader import g_loader
-                result = True
-                g_loader.restart(afterBattle=afterBattle)
+        if self._loader:
+            result = self._loader.stop()
         else:
-            LOG_ERROR('TUTORIAL. Tutorial is not stopped.', self._mode)
+            LOG_ERROR('Tutorial can not be stopped, loader is not defined')
         return result
 
-    def setPlayerXPLevel(self, level):
-        pass
+    def refuseTraining(self):
+        result = False
+        if self._loader:
+            result = self._loader.refuse()
+        else:
+            LOG_ERROR('Tutorial can not be refuse, loader is not defined')
+        return result
+
+    def startTraining(self, settingsID, state):
+        result = False
+        if self._loader:
+            result = self._loader.run(settingsID, state)
+        else:
+            LOG_ERROR('Tutorial can not be run, loader is not defined')
+        return result
 
     def setChapterInfo(self, title, description):
         pass
@@ -191,102 +199,3 @@ class GUIDispatcher(object):
 
     def setDisabled(self, disabled):
         self._isDisabled = disabled
-
-    def setTrainingRestartMode(self):
-        self._mode = GUIDispatcher.RESTART_MODE
-
-    def setTrainingRunMode(self):
-        self._mode = GUIDispatcher.RUN_MODE
-
-
-class LobbyDispatcher(GUIDispatcher):
-
-    def _subscribe(self):
-        g_playerEvents.onEnqueuedRandom += self.__pe_onEnqueued
-        g_playerEvents.onDequeuedRandom += self.__pe_onDequeued
-        g_playerEvents.onEnqueuedHistorical += self.__pe_onEnqueued
-        g_playerEvents.onDequeuedHistorical += self.__pe_onDequeued
-        g_playerEvents.onEnqueuedEventBattles += self.__pe_onEnqueued
-        g_playerEvents.onDequeuedEventBattles += self.__pe_onDequeued
-        g_playerEvents.onKickedFromRandomQueue += self.__pe_onKickedFromQueue
-        g_playerEvents.onPrebattleJoined += self.__pe_onPrebattleJoined
-        g_playerEvents.onPrebattleLeft += self.__pe_onPrebattleLeft
-        g_playerEvents.onKickedFromPrebattle += self.__pe_onKickedFromPrebattle
-        g_playerEvents.onEnqueuedUnitAssembler += self.__pe_onEnqueuedUnitAssembler
-        g_playerEvents.onDequeuedUnitAssembler += self.__pe_onDequeuedUnitAssembler
-        g_playerEvents.onKickedFromUnitAssembler += self.__pe_onKickedFromUnitAssembler
-        connectionManager.onDisconnected += self.__cm_onDisconnected
-        ctrl_events.g_prbCtrlEvents.onPreQueueFunctionalCreated += self.__prb_onPreQueueFunctionalCreated
-        ctrl_events.g_prbCtrlEvents.onPreQueueFunctionalDestroyed += self.__prb_onPreQueueFunctionalDestroyed
-        unitMgr = getClientUnitMgr()
-        if unitMgr:
-            unitMgr.onUnitJoined += self.__cum_onUnitJoined
-            unitMgr.onUnitLeft += self.__cum_onUnitLeft
-        else:
-            LOG_ERROR('Unit manager is not defined')
-
-    def _unsubscribe(self):
-        g_playerEvents.onEnqueuedRandom -= self.__pe_onEnqueued
-        g_playerEvents.onDequeuedRandom -= self.__pe_onDequeued
-        g_playerEvents.onEnqueuedHistorical -= self.__pe_onEnqueued
-        g_playerEvents.onDequeuedHistorical -= self.__pe_onDequeued
-        g_playerEvents.onEnqueuedEventBattles -= self.__pe_onEnqueued
-        g_playerEvents.onDequeuedEventBattles -= self.__pe_onDequeued
-        g_playerEvents.onKickedFromRandomQueue -= self.__pe_onKickedFromQueue
-        g_playerEvents.onPrebattleJoined -= self.__pe_onPrebattleJoined
-        g_playerEvents.onPrebattleLeft -= self.__pe_onPrebattleLeft
-        g_playerEvents.onKickedFromPrebattle -= self.__pe_onKickedFromPrebattle
-        g_playerEvents.onEnqueuedUnitAssembler -= self.__pe_onEnqueuedUnitAssembler
-        g_playerEvents.onDequeuedUnitAssembler -= self.__pe_onDequeuedUnitAssembler
-        g_playerEvents.onKickedFromUnitAssembler -= self.__pe_onKickedFromUnitAssembler
-        connectionManager.onDisconnected -= self.__cm_onDisconnected
-        ctrl_events.g_prbCtrlEvents.onPreQueueFunctionalCreated -= self.__prb_onPreQueueFunctionalCreated
-        ctrl_events.g_prbCtrlEvents.onPreQueueFunctionalDestroyed -= self.__prb_onPreQueueFunctionalDestroyed
-        unitMgr = getClientUnitMgr()
-        if unitMgr:
-            unitMgr.onUnitJoined -= self.__cum_onUnitJoined
-            unitMgr.onUnitLeft -= self.__cum_onUnitLeft
-
-    def __pe_onEnqueued(self, *args):
-        self.setDisabled(True)
-
-    def __pe_onDequeued(self, *args):
-        self.setDisabled(False)
-
-    def __prb_onPreQueueFunctionalCreated(self, queueType, *args):
-        if queueType is not None:
-            self.setDisabled(True)
-        return
-
-    def __prb_onPreQueueFunctionalDestroyed(self, *args):
-        self.setDisabled(False)
-
-    def __pe_onKickedFromQueue(self, *args):
-        self.setDisabled(False)
-
-    def __pe_onPrebattleJoined(self, *args):
-        self.setDisabled(True)
-
-    def __pe_onPrebattleLeft(self, *args):
-        self.setDisabled(False)
-
-    def __pe_onKickedFromPrebattle(self, *args):
-        self.setDisabled(False)
-
-    def __cm_onDisconnected(self):
-        self.clearChapterInfo()
-
-    def __cum_onUnitJoined(self, unitMgrID, unitIdx):
-        self.setDisabled(True)
-
-    def __cum_onUnitLeft(self, unitMgrID, unitIdx):
-        self.setDisabled(False)
-
-    def __pe_onEnqueuedUnitAssembler(self):
-        self.setDisabled(True)
-
-    def __pe_onDequeuedUnitAssembler(self):
-        self.setDisabled(False)
-
-    def __pe_onKickedFromUnitAssembler(self):
-        self.setDisabled(False)

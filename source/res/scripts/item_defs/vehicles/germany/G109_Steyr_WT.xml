@@ -1,0 +1,1054 @@
+<G109_Steyr_WT.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	35	</forward>
+    <backward>	15	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.238	</moving>
+    <still>	0.397	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.596	</firePenalty>
+  </invisibility>
+  <repairCost>	6.5	</repairCost>
+  <premiumVehicleXPFactor>	0.2	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle></battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	20	</armor_1>
+      <armor_2>	20	</armor_2>
+      <armor_3>	10	</armor_3>
+      <armor_4>	8	</armor_4>
+      <armor_5>	15	</armor_5>
+      <armor_6>	15	</armor_6>
+      <armor_7>	10	</armor_7>
+      <armor_8>	10	</armor_8>
+      <armor_9>	5	</armor_9>
+      <armor_10>	10	</armor_10>
+      <armor_11>	4	</armor_11>
+      <armor_12>	4	</armor_12>
+      <armor_13>	20	</armor_13>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	5493	</weight>
+    <maxHealth>	640	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G109_Steyr_WT/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G109_Steyr_WT/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G109_Steyr_WT/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.34 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.34 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.74	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.556249 -1.11991	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G109_Steyr_WT/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G109_Steyr_WT/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/german/G109_Steyr_WT/Steyr_WT_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
+        <rayStart>	0.849367 0.500482 2.78098	</rayStart>
+        <rayEnd>	0.849367 -0.206669 2.07394	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.000000 0.527088 1.3621	</anchorPosition>
+        <anchorDirection>	0.000000 0.360889 0.932609	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <camouflage>
+      <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_G109_Steyr_WT>
+      <userString>	#germany_vehicles:Chassis_G109_Steyr_WT	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	20000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	16000	</maxLoad>
+      <terrainResistance>	1 1.1 2.1	</terrainResistance>
+      <brakeForce>	16000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G109_Steyr_WT/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G109_Steyr_WT/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G109_Steyr_WT/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.5 0.52	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.3	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.272715	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.271251	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.272715	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.271251	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.394548	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.394998	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.76081 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G109_Steyr_WT/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G109_Steyr_WT/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.32187 1.50788	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.355900 0.000000 0.000000	</row0>
+            <row1>	0.000000 0.892622 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.958050	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G109_Steyr_WT/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G109_Steyr_WT/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G109_Steyr_WT/track/left.track	</left>
+        <right>	vehicles/german/G109_Steyr_WT/track/right.track	</right>
+        <segmentLength>	0.11	</segmentLength>
+        <segmentOffset>	0.053	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0243	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9	</gravity>
+        <elasticity>	1400	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	1.1	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+          <rightSibling>	Track_VT_L8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L8	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_L7	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	1.1	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+          <rightSibling>	Track_VT_R8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R8	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <leftSibling>	Track_VT_R7	</leftSibling>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	100	</segmentsCount>
+          <segmentsOuterThickness>	0.0302332	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00251146	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.32181	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.108465	</back>
+              <top>	0.105076	</top>
+              <front>	0.105131	</front>
+              <bottom>	0.0889596	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.102157	</back>
+              <top>	0.0961974	</top>
+              <front>	0.108492	</front>
+              <bottom>	0.0889596	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/german/G109_Steyr_WT/track/segment.model	</model>
+            <length>	0.110141	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-2.55177	</xStart>
+                <xStep>	0.0550704	</xStep>
+                <ySamples>	0.997963 0.997966 0.997967 0.997969 0.99797 0.997971 0.997973 0.997972 0.997974 0.997975 0.997976 0.997978 0.997979 0.99798 0.997982 0.997983 0.997985 0.997986 0.997987 0.997989 0.997988 0.997989 0.997991 0.997992 0.997994 0.997995 0.997996 0.997998 0.997999 0.998001 0.998002 0.998003 0.998005 0.998004 0.998006 0.998007 0.998008 0.99801 0.998011 0.998012 0.998014 0.998015 0.998017 0.998018 0.998019 0.998021 0.99802 0.998021 0.998022 0.998024 0.998025 0.998027 0.998028 0.998029 0.998031 0.998022 0.998023 0.998025 0.998026 0.998028 0.998029 0.99803 0.997191 0.997192 0.997193 0.997194 0.997076 0.995918 0.994759 0.9936 0.980577 0.991283 0.990124 0.988965 0.984786 0.979708 0.970949 0.96742 0.953421 0.942152 0.927144 0.91597 0.907969 0.903658 0.918143 0.943867 0.968447	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L1	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	2.23628 0.610294	</basePos>
+              <shiftVec>	0.162657 0.131823	</shiftVec>
+              <jointIdx>	12	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L1	</wheelName>
+              <basePos>	-2.31786 0.610272	</basePos>
+              <shiftVec>	-0.186605 0.0947219	</shiftVec>
+              <jointIdx>	59	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L3	</wheelName>
+              <basePos>	-1.50437 0.446584	</basePos>
+              <shiftVec>	-0.0389582 -0.390096	</shiftVec>
+              <jointIdx>	71	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.49645 0.446584	</basePos>
+              <shiftVec>	0.0129216 -0.391824	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L1	</name>
+              <radius>	0.208107	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.208205	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	-1.32181	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L1	</name>
+              <startAngle>	-344.684	</startAngle>
+              <teethCount>	12	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	-341.886	</startAngle>
+              <teethCount>	12	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.3493 1.05782 -2.55202	</point>
+                <point>	-1.3993 1.05782 -2.49695	</point>
+                <point>	-1.4093 1.05782 -2.44188	</point>
+                <point>	-1.4193 1.05782 -2.38681	</point>
+                <point>	-1.4293 1.05782 -2.33174	</point>
+                <point>	-1.4293 1.05782 -2.27667	</point>
+                <point>	-1.4393 1.05782 -2.2216	</point>
+                <point>	-1.3493 1.05782 -2.16653	</point>
+                <point>	-1.3593 1.05782 -2.11146	</point>
+                <point>	-1.3693 1.05782 -2.05639	</point>
+                <point>	-1.3793 1.05782 -2.00132	</point>
+                <point>	-1.3793 1.05782 -1.94624	</point>
+                <point>	-1.3893 1.05782 -1.89117	</point>
+                <point>	-1.3993 1.05782 -1.8361	</point>
+                <point>	-1.4093 1.05782 -1.78103	</point>
+                <point>	-1.4093 1.05782 -1.72596	</point>
+                <point>	-1.4193 1.05782 -1.67089	</point>
+                <point>	-1.4293 1.05782 -1.61582	</point>
+                <point>	-1.4293 1.05782 -1.56075	</point>
+                <point>	-1.4393 1.05782 -1.50568	</point>
+                <point>	-1.3493 1.05782 -1.45061	</point>
+                <point>	-1.3593 1.05782 -1.39554	</point>
+                <point>	-1.3693 1.05782 -1.34047	</point>
+                <point>	-1.3793 1.05782 -1.2854	</point>
+                <point>	-1.3793 1.05782 -1.23033	</point>
+                <point>	-1.3893 1.05782 -1.17526	</point>
+                <point>	-1.3993 1.05782 -1.12019	</point>
+                <point>	-1.4093 1.05782 -1.06512	</point>
+                <point>	-1.4093 1.05782 -1.01005	</point>
+                <point>	-1.4193 1.05782 -0.954978	</point>
+                <point>	-1.4293 1.05782 -0.899908	</point>
+                <point>	-1.4393 1.05782 -0.844838	</point>
+                <point>	-1.4393 1.05782 -0.789768	</point>
+                <point>	-1.3493 1.05782 -0.734697	</point>
+                <point>	-1.3593 1.05782 -0.679627	</point>
+                <point>	-1.3693 1.05782 -0.624557	</point>
+                <point>	-1.3793 1.05782 -0.569486	</point>
+                <point>	-1.3793 1.05782 -0.514416	</point>
+                <point>	-1.3893 1.05782 -0.459346	</point>
+                <point>	-1.3993 1.05782 -0.404275	</point>
+                <point>	-1.4093 1.05782 -0.349205	</point>
+                <point>	-1.4093 1.05782 -0.294135	</point>
+                <point>	-1.4193 1.05782 -0.239064	</point>
+                <point>	-1.4293 1.05782 -0.183994	</point>
+                <point>	-1.4393 1.05782 -0.128923	</point>
+                <point>	-1.4393 1.05782 -0.0738529	</point>
+                <point>	-1.3293 1.05782 -0.0187832	</point>
+                <point>	-1.3393 1.05782 0.0362873	</point>
+                <point>	-1.3493 1.05782 0.0913577	</point>
+                <point>	-1.3493 1.05782 0.146428	</point>
+                <point>	-1.3593 1.05782 0.201499	</point>
+                <point>	-1.3693 1.05782 0.256569	</point>
+                <point>	-1.3693 1.05782 0.311639	</point>
+                <point>	-1.3793 1.05782 0.366709	</point>
+                <point>	-1.3893 1.05782 0.42178	</point>
+                <point>	-1.3993 1.05781 0.47685	</point>
+                <point>	-1.3993 1.05781 0.53192	</point>
+                <point>	-1.4093 1.05781 0.586991	</point>
+                <point>	-1.4193 1.05781 0.642061	</point>
+                <point>	-1.4293 1.05781 0.697132	</point>
+                <point>	-1.4293 1.05781 0.752202	</point>
+                <point>	-1.4393 1.05781 0.807273	</point>
+                <point>	-1.4093 1.05697 0.862342	</point>
+                <point>	-1.4093 1.05697 0.917413	</point>
+                <point>	-1.3693 1.05697 0.972483	</point>
+                <point>	-1.3693 1.05697 1.02755	</point>
+                <point>	-1.4393 1.05685 1.08262	</point>
+                <point>	-1.4393 1.05569 1.13769	</point>
+                <point>	-1.4393 1.05453 1.19276	</point>
+                <point>	-1.4393 1.05337 1.24783	</point>
+                <point>	-1.19929 1.04035 1.3029	</point>
+                <point>	-1.4393 1.05105 1.35798	</point>
+                <point>	-1.4393 1.04989 1.41305	</point>
+                <point>	-1.4393 1.04873 1.46812	</point>
+                <point>	-1.43929 1.04455 1.52319	</point>
+                <point>	-1.43929 1.03947 1.57826	</point>
+                <point>	-1.43929 1.03071 1.63333	</point>
+                <point>	-1.43929 1.02718 1.6884	</point>
+                <point>	-1.43929 1.01318 1.74347	</point>
+                <point>	-1.43929 1.00191 1.79854	</point>
+                <point>	-1.43929 0.9869 1.85361	</point>
+                <point>	-1.43929 0.975725 1.90868	</point>
+                <point>	-1.43929 0.967723 1.96375	</point>
+                <point>	-1.42929 0.963411 2.01882	</point>
+                <point>	-1.36929 0.977896 2.07389	</point>
+                <point>	-1.29929 1.00362 2.12896	</point>
+                <point>	-1.22929 1.0282 2.18403	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	98	</segmentsCount>
+          <segmentsOuterThickness>	0.0302619	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00296144	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.32187	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.109018	</back>
+              <top>	0.107295	</top>
+              <front>	0.103804	</front>
+              <bottom>	0.0889596	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.102157	</back>
+              <top>	0.0961974	</top>
+              <front>	0.1098	</front>
+              <bottom>	0.0889596	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/german/G109_Steyr_WT/track/segment.model	</model>
+            <length>	0.110143	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-2.55199	</xStart>
+                <xStep>	0.0550716	</xStep>
+                <ySamples>	0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.998019 0.991825 0.981845 0.984459 0.988791 0.992417 0.996042 0.996568 0.989199 0.989198 0.996535 0.996524 0.996513 0.996456 0.995975 0.995494 0.995013 0.994531 0.988168 0.982352 0.980799 0.981573 0.979843 0.983215 0.9836 0.993914	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R1	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	2.23628 0.610377	</basePos>
+              <shiftVec>	0.167552 0.125569	</shiftVec>
+              <jointIdx>	11	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R1	</wheelName>
+              <basePos>	-2.31786 0.610187	</basePos>
+              <shiftVec>	-0.18661 0.094705	</shiftVec>
+              <jointIdx>	57	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R3	</wheelName>
+              <basePos>	-1.50437 0.417728	</basePos>
+              <shiftVec>	-0.0227499 -0.391376	</shiftVec>
+              <jointIdx>	69	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.49645 0.417735	</basePos>
+              <shiftVec>	0.0981686 -0.379547	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R1	</name>
+              <radius>	0.208103	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.208221	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	1.322	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R1	</name>
+              <startAngle>	-344.684	</startAngle>
+              <teethCount>	12	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	-341.886	</startAngle>
+              <teethCount>	12	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	1.32938 1.05788 -2.55195	</point>
+                <point>	1.38938 1.05788 -2.49688	</point>
+                <point>	1.38938 1.05788 -2.44181	</point>
+                <point>	1.42938 1.05788 -2.38674	</point>
+                <point>	1.42938 1.05788 -2.33167	</point>
+                <point>	1.43938 1.05788 -2.2766	</point>
+                <point>	1.37938 1.05788 -2.22153	</point>
+                <point>	1.42938 1.05788 -2.16645	</point>
+                <point>	1.40938 1.05788 -2.11138	</point>
+                <point>	1.37938 1.05788 -2.05631	</point>
+                <point>	1.42938 1.05788 -2.00124	</point>
+                <point>	1.40938 1.05788 -1.94617	</point>
+                <point>	1.41938 1.05788 -1.8911	</point>
+                <point>	1.42938 1.05788 -1.83602	</point>
+                <point>	1.43938 1.05788 -1.78095	</point>
+                <point>	1.41938 1.05788 -1.72588	</point>
+                <point>	1.39938 1.05788 -1.67081	</point>
+                <point>	1.37938 1.05788 -1.61574	</point>
+                <point>	1.39938 1.05788 -1.56067	</point>
+                <point>	1.37938 1.05788 -1.50559	</point>
+                <point>	1.39938 1.05788 -1.45052	</point>
+                <point>	1.40938 1.05788 -1.39545	</point>
+                <point>	1.39938 1.05788 -1.34038	</point>
+                <point>	1.40938 1.05788 -1.28531	</point>
+                <point>	1.39938 1.05788 -1.23024	</point>
+                <point>	1.40938 1.05788 -1.17517	</point>
+                <point>	1.39938 1.05788 -1.12009	</point>
+                <point>	1.40938 1.05788 -1.06502	</point>
+                <point>	1.38938 1.05788 -1.00995	</point>
+                <point>	1.40938 1.05788 -0.954879	</point>
+                <point>	1.38938 1.05788 -0.899807	</point>
+                <point>	1.40938 1.05788 -0.844736	</point>
+                <point>	1.38938 1.05788 -0.789664	</point>
+                <point>	1.40938 1.05788 -0.734592	</point>
+                <point>	1.38938 1.05788 -0.67952	</point>
+                <point>	1.40938 1.05788 -0.624449	</point>
+                <point>	1.38938 1.05788 -0.569378	</point>
+                <point>	1.40938 1.05788 -0.514306	</point>
+                <point>	1.38938 1.05788 -0.459234	</point>
+                <point>	1.40938 1.05788 -0.404163	</point>
+                <point>	1.38938 1.05788 -0.349091	</point>
+                <point>	1.39938 1.05788 -0.29402	</point>
+                <point>	1.38938 1.05788 -0.238948	</point>
+                <point>	1.39938 1.05788 -0.183876	</point>
+                <point>	1.38938 1.05788 -0.128805	</point>
+                <point>	1.43938 1.05788 -0.0737333	</point>
+                <point>	1.41938 1.05788 -0.0186614	</point>
+                <point>	1.37938 1.05788 0.03641	</point>
+                <point>	1.36938 1.05787 0.0914814	</point>
+                <point>	1.42938 1.05788 0.146553	</point>
+                <point>	1.42938 1.05788 0.201625	</point>
+                <point>	1.43938 1.05788 0.256696	</point>
+                <point>	1.42938 1.05788 0.311768	</point>
+                <point>	1.37938 1.05787 0.36684	</point>
+                <point>	1.42938 1.05788 0.421911	</point>
+                <point>	1.37938 1.05787 0.476983	</point>
+                <point>	1.42938 1.05787 0.532054	</point>
+                <point>	1.43938 1.05787 0.587126	</point>
+                <point>	1.38938 1.05787 0.642198	</point>
+                <point>	1.43938 1.05787 0.697269	</point>
+                <point>	1.38938 1.05787 0.75234	</point>
+                <point>	1.43938 1.05787 0.807412	</point>
+                <point>	1.35938 1.05168 0.862484	</point>
+                <point>	1.42938 1.0417 0.917555	</point>
+                <point>	1.43938 1.04431 0.972627	</point>
+                <point>	1.43938 1.04865 1.0277	</point>
+                <point>	1.43938 1.05227 1.08277	</point>
+                <point>	1.43938 1.0559 1.13784	</point>
+                <point>	1.43938 1.05642 1.19291	</point>
+                <point>	1.19938 1.04905 1.24799	</point>
+                <point>	1.20938 1.04905 1.30306	</point>
+                <point>	1.43938 1.05639 1.35813	</point>
+                <point>	1.43938 1.05638 1.4132	</point>
+                <point>	1.43938 1.05637 1.46827	</point>
+                <point>	1.43938 1.05631 1.52334	</point>
+                <point>	1.43938 1.05583 1.57841	</point>
+                <point>	1.43938 1.05535 1.63349	</point>
+                <point>	1.43938 1.05487 1.68856	</point>
+                <point>	1.43938 1.05438 1.74363	</point>
+                <point>	1.43938 1.04802 1.7987	</point>
+                <point>	1.43938 1.0422 1.85377	</point>
+                <point>	1.43938 1.04065 1.90884	</point>
+                <point>	1.40938 1.04143 1.96392	</point>
+                <point>	1.43938 1.0397 2.01899	</point>
+                <point>	1.35938 1.04307 2.07406	</point>
+                <point>	1.29938 1.04345 2.12913	</point>
+                <point>	1.21938 1.05376 2.1842	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	0.000048 2.04746 -1.17607	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_G109_Steyr_WT>
+  </chassis>
+  <turrets0>
+    <Turret_1_G109_Steyr_WT>
+      <userString>	#germany_vehicles:Turret_1_G109_Steyr_WT	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	7	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	20	</armor_1>
+        <armor_2>	10	</armor_2>
+        <armor_3>	10	</armor_3>
+        <armor_4>	10	</armor_4>
+        <armor_5>	4	</armor_5>
+        <armor_6>	4	</armor_6>
+        <armor_7>	15	</armor_7>
+        <armor_8>	4	</armor_8>
+        <armor_9>	0	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2000	</weight>
+      <maxHealth>	160	</maxHealth>
+      <rotationSpeed>	27	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	360	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_88mm_KwK_43_L71A>	shared	  <maxAmmo>	50	</maxAmmo>
+          <armor>
+            <armor_1>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	10	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -45 1 -45	</minPitch>
+            <maxPitch>	0 8 0.027778 8 0.033333 2 0.069444 2 0.075 8 0.925 8 0.930556 2 0.966667 2 0.972222 8 1 8	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <reloadTime>	7.2	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G109_Steyr_WT/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G109_Steyr_WT/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G109_Steyr_WT/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G109_Steyr_WT/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G109_Steyr_WT/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
+              <rayStart>	0.000000 0.0131617 5.05037	</rayStart>
+              <rayEnd>	0.0310546 0.00429188 5.04897	</rayEnd>
+              <rayUp>	0.071 0.068 4	</rayUp>
+              <size>	0.4	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	-0.000000 0.0301372 2.90664	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+        </_88mm_KwK_43_L71A>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G109_Steyr_WT/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G109_Steyr_WT/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G109_Steyr_WT/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G109_Steyr_WT/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G109_Steyr_WT/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.391832 0.70423	</gunPosition>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.039 -0.030 0.500 0.500 0.500 0.500 0.239 0.500 0.000 0.000 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
+          <rayStart>	-0.836944 0.418249 -0.463438	</rayStart>
+          <rayEnd>	-0.820308 0.410401 -0.455586	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
+          <rayStart>	0.825475 0.412538 -0.49155	</rayStart>
+          <rayEnd>	0.808852 0.404657 -0.483704	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
+          <rayStart>	-0.961772 0.442485 0.409122	</rayStart>
+          <rayEnd>	-0.795113 0.362144 0.33316	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.6	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
+          <rayStart>	0.961772 0.442485 0.409122	</rayStart>
+          <rayEnd>	0.795113 0.362144 0.33316	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.6	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	0.000000 0.730738 -0.0562197	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Turret_1_G109_Steyr_WT>
+  </turrets0>
+  <engines>
+    <V12_cylinder_Boxer_Motor>	shared	</V12_cylinder_Boxer_Motor>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <FuG7A>	shared	</FuG7A>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V12_cylinder_Boxer_Motor>
+          <smplEnginePower>	220	</smplEnginePower>
+        </V12_cylinder_Boxer_Motor>
+      </engines>
+      <chassis>
+        <Chassis_G109_Steyr_WT>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G109_Steyr_WT>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <armour>	0.703179268	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+</G109_Steyr_WT.xml>

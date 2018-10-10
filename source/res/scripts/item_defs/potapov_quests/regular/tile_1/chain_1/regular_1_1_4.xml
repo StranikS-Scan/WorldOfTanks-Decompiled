@@ -1,0 +1,146 @@
+<regular_1_1_4.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_1_4_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <crits>
+              <destroyed>
+                <crit>
+                  <title>
+                    <key>	#personal_missions_details:quest_1_1_4_condition_title_crit_track	</key>
+                  </title>
+                  <description>
+                    <key>	#personal_missions_details:quest_1_1_4_condition_description_crit_track	</key>
+                  </description>
+                  <critName>	track	</critName>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </crit>
+              </destroyed>
+            </crits>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t1:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_1_4_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_1_1_4_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t1:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_1_4_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <crits>
+              <destroyed>
+                <crit>
+                  <title>
+                    <key>	#personal_missions_details:quest_1_1_4_condition_title_crit_track	</key>
+                  </title>
+                  <description>
+                    <key>	#personal_missions_details:quest_1_1_4_condition_description_crit_track	</key>
+                  </description>
+                  <critName>	track	</critName>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </crit>
+              </destroyed>
+            </crits>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_damageAssistedTrack	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_1_1_4_condition_description_damageAssistedTrack	</key>
+              </description>
+              <key>	damageAssistedTrack	</key>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t1:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_1_4_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_1_1_4_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <crits>
+              <destroyed>
+                <crit>
+                  <critName>	track	</critName>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </crit>
+              </destroyed>
+            </crits>
+            <results>
+              <key>	damageAssistedTrack	</key>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_1_1_4.xml>

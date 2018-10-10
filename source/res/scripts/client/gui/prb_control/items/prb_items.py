@@ -1,14 +1,19 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/prb_items.py
 from collections import namedtuple
-from account_helpers import getPlayerDatabaseID, getPlayerID
+from account_helpers import getAccountDatabaseID, getPlayerID
+from gui.prb_control.prb_helpers import BadgesHelper
+from helpers import dependency
 from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TEAM_STATE
-from gui.LobbyContext import g_lobbyContext
+from gui.prb_control.settings import PREBATTLE_PLAYERS_COMPARATORS
 from gui.shared.gui_items.Vehicle import Vehicle
+from skeletons.gui.lobby_context import ILobbyContext
 
 class PlayerPrbInfo(object):
-    __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode')
+    __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode', 'badges', 'group')
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, accID, name = '', dbID = 0L, state = PREBATTLE_ACCOUNT_STATE.UNKNOWN, time = 0.0, vehCompDescr = 0, igrType = 0L, clanDBID = 0L, clanAbbrev = '', roster = 0, functional = None):
+    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, entity=None, badges=None, group=0):
         self.accID = accID
         self.name = name
         self.dbID = dbID
@@ -19,16 +24,18 @@ class PlayerPrbInfo(object):
         self.clanDBID = clanDBID
         self.clanAbbrev = clanAbbrev
         self.roster = roster
-        if functional is not None:
-            self.isCreator = functional.isCreator(pDatabaseID=self.dbID)
+        self.badges = BadgesHelper(badges or [])
+        self.group = group
+        if entity is not None:
+            self.isCreator = entity.isCommander(pDatabaseID=self.dbID)
         else:
             self.isCreator = False
         return
 
     def __repr__(self):
-        return 'PlayerPrbInfo(accID = {0:n}, dbID = {1:n}, fullName = {2:>s}, state = {3:n}, isCreator = {4!r:s}, time = {5:n}, vehCompDescr = {6!r:s})'.format(self.accID, self.dbID, self.getFullName(), self.state, self.isCreator, self.time, self.getVehicle().name if self.isVehicleSpecified() else None)
+        return 'PlayerPrbInfo(accID = {0:n}, dbID = {1:n}, fullName = {2:>s}, state = {3:n}, isCreator = {4!r:s}, time = {5:n}, vehCompDescr = {6!r:s}, badgeID = {7})'.format(self.accID, self.dbID, self.getFullName(), self.state, self.isCreator, self.time, self.getVehicle().name if self.isVehicleSpecified() else None, self.badges.getBadgeID())
 
-    def getFullName(self, isClan = True, isRegion = True):
+    def getFullName(self, isClan=True, isRegion=True):
         if isClan:
             clanAbbrev = self.clanAbbrev
         else:
@@ -37,7 +44,7 @@ class PlayerPrbInfo(object):
             pDBID = self.dbID
         else:
             pDBID = None
-        return g_lobbyContext.getPlayerFullName(self.name, clanAbbrev=clanAbbrev, pDBID=pDBID)
+        return self.lobbyContext.getPlayerFullName(self.name, clanAbbrev=clanAbbrev, pDBID=pDBID)
 
     def isVehicleSpecified(self):
         return self.isReady() or self.inBattle()
@@ -47,7 +54,7 @@ class PlayerPrbInfo(object):
 
     def isCurrentPlayer(self):
         if self.dbID > 0:
-            result = self.dbID == getPlayerDatabaseID()
+            result = self.dbID == getAccountDatabaseID()
         else:
             result = self.accID == getPlayerID()
         return result
@@ -60,6 +67,12 @@ class PlayerPrbInfo(object):
 
     def isOffline(self):
         return self.state & PREBATTLE_ACCOUNT_STATE.OFFLINE != 0
+
+    def getBadgeID(self):
+        return self.badges.getBadgeID()
+
+    def getBadgeImgStr(self, size=24, vspace=-7):
+        return self.badges.getBadgeImgStr(size, vspace)
 
 
 class TeamStateInfo(object):
@@ -90,7 +103,7 @@ PlayersStateStats = namedtuple('PlayersStateStats', ('notReadyCount', 'haveInBat
 class PrbPropsInfo(object):
     __slots__ = ('wins', 'battlesCount', 'createTime')
 
-    def __init__(self, wins = None, battlesCount = 0, createTime = None):
+    def __init__(self, wins=None, battlesCount=0, createTime=None):
         super(PrbPropsInfo, self).__init__()
         self.wins = wins or [0, 0, 0]
         self.battlesCount = battlesCount
@@ -103,7 +116,7 @@ class PrbPropsInfo(object):
         return 'PrbPropsInfo(wins = {0!r:s}, battlesCount = {1:n}, createTime = {2:n}'.format(self.wins, self.battlesCount, self.createTime)
 
 
-def getPlayersComparator():
+def getPlayersComparator(playerComparatorType=PREBATTLE_PLAYERS_COMPARATORS.REGULAR):
 
     def comparator(player, other):
         if player.isCreator ^ other.isCreator:
@@ -112,4 +125,15 @@ def getPlayersComparator():
             result = cmp(player.time, other.time)
         return result
 
-    return comparator
+    def comparator_observers_to_bottom(player, other):
+        player_is_observer = player.isVehicleSpecified() and player.getVehicle().isObserver
+        other_is_observer = other.isVehicleSpecified() and other.getVehicle().isObserver
+        if player_is_observer ^ other_is_observer:
+            result = 1 if player_is_observer else -1
+        else:
+            result = cmp(player.time, other.time)
+        return result
+
+    comparators = {PREBATTLE_PLAYERS_COMPARATORS.REGULAR: comparator,
+     PREBATTLE_PLAYERS_COMPARATORS.OBSERVERS_TO_BOTTOM: comparator_observers_to_bottom}
+    return comparators.get(playerComparatorType, comparator)

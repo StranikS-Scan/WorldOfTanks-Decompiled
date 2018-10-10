@@ -1,8 +1,9 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/logger.py
 from constants import IS_DEVELOPMENT
 from debug_utils import _doLog, LOG_CURRENT_EXCEPTION
 
-class LOG_LEVEL:
+class LOG_LEVEL(object):
     ERROR = 1
     WARNING = 2
     DEBUG = 4

@@ -1,0 +1,83 @@
+<once-only-hints.xml>
+  <gui>	gui/tutorial-lobby-gui.xml	</gui>
+  <hints>
+    <hint>	FalloutQuestsTab	  <item-id>	FalloutQuestsTabButton	</item-id>
+      <text>	_(#tutorial:onceOnlyHints/falloutQuestsTab)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+    </hint>
+    <hint>	CustomizationSlotsHint	  <item-id>	CustomizationSlots	</item-id>
+      <text>	_(#tutorial:customization/slots)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+    </hint>
+    <hint>	ShopTradeInHint	  <item-id>	ShopTradeIn	</item-id>
+      <text>	_(#tutorial:tradeIn/shop)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <condition>
+        <service>	ITradeInController	  <path>	skeletons.gui.game_control	</path>
+        </service>
+      </condition>
+    </hint>
+    <hint>	VehCompareConfigHint	  <item-id>	VehCompareConfig	</item-id>
+      <text>	_(#veh_compare:vehConf/confAvailable)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+    </hint>
+    <hint>	HoldSheetHint	  <item-id>	HoldSheetBtn	</item-id>
+      <text>	_(#quests:quest/chain/hint/holdAwardSheet)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <condition>
+        <global-active>	_MayPawnPersonalMission	</global-active>
+      </condition>
+      <equal-actions>	True	</equal-actions>
+    </hint>
+    <hint>	PauseHint	  <item-id>	PauseHintBtn	</item-id>
+      <text>	_(#quests:quest/chain/hint/pause)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <equal-actions>	True	</equal-actions>
+    </hint>
+    <hint>	HaveNewBadgeHint	  <item-id>	NewBadgeHintBtn	</item-id>
+      <text>	_(#menu:header/account/popover/tutorial/newBadge)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <condition>
+        <global-active>	_HaveNewBadge	</global-active>
+      </condition>
+      <equal-actions>	True	</equal-actions>
+    </hint>
+    <hint>	EpicReservesSlotHint	  <item-id>	EpicReservesSlot	</item-id>
+      <text>	_(#epic_battle:tutorial/hint/epicReservesSlotHint)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <equal-actions>	True	</equal-actions>
+    </hint>
+    <hint>	EpicReservesBtnHint	  <item-id>	EpicReservesBtn	</item-id>
+      <text>	_(#epic_battle:tutorial/hint/epicReservesBtnHint)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <equal-actions>	True	</equal-actions>
+    </hint>
+  </hints>
+</once-only-hints.xml>

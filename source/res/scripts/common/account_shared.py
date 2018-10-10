@@ -1,12 +1,13 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/account_shared.py
-import time
 import collections
+import re
 from items import vehicles, ITEM_TYPES
-from constants import IGR_TYPE
+from constants import FAIRPLAY_VIOLATIONS_NAMES, FAIRPLAY_VIOLATIONS_MASKS
+from items.components.c11n_constants import CustomizationType
 from debug_utils import *
-import ArenaType
-_ITEM_TYPE_GUN = ITEM_TYPES['vehicleGun']
-_ITEM_TYPE_TURRET = ITEM_TYPES['vehicleTurret']
+from typing import Union, Tuple
+from soft_exception import SoftException
 
 class AmmoIterator(object):
 
@@ -46,10 +47,12 @@ class LayoutIterator(object):
 def getAmmoDiff(ammo1, ammo2):
     diff = collections.defaultdict(int)
     for compDescr, count in AmmoIterator(ammo1):
-        diff[abs(compDescr)] += count
+        if compDescr != 0:
+            diff[abs(compDescr)] += count
 
     for compDescr, count in AmmoIterator(ammo2):
-        diff[abs(compDescr)] -= count
+        if compDescr != 0:
+            diff[abs(compDescr)] -= count
 
     return diff
 
@@ -68,7 +71,7 @@ def getEquipmentsDiff(eqs1, eqs2):
 
 
 def currentWeekPlayDaysCount(curTime, newDayStart, newWeekStart):
-    curTime += newDayStart
+    curTime -= newDayStart
     wday = time.gmtime(curTime).tm_wday + 1
     curWeekPlayDaysCnt = wday - newWeekStart
     if newWeekStart >= 0:
@@ -83,103 +86,151 @@ def currentWeekPlayDaysCount(curTime, newDayStart, newWeekStart):
     return curWeekPlayDaysCnt
 
 
-def getIGRCustomization(igrCustomizationsLayout, vehInvID, cutName, accountIGRType, position, defID):
-    if cutName == 'camouflage':
-        default = (None, vehicles._CUSTOMIZATION_EPOCH, 0)
-    elif cutName == 'emblem':
-        default = (defID, vehicles._CUSTOMIZATION_EPOCH, 0)
-    elif cutName == 'inscription':
-        default = (None,
-         vehicles._CUSTOMIZATION_EPOCH,
-         0,
-         0)
+def getFairPlayViolationName(violationsMask):
+    if violationsMask == 0:
+        return None
     else:
-        raise False or AssertionError
-    vehInfo = igrCustomizationsLayout.get(vehInvID, None)
-    if vehInfo is None:
-        return default
-    igrTypeInfo = vehInfo.get(accountIGRType, None)
-    if igrTypeInfo is None:
-        return default
-    customInfo = igrTypeInfo.get(cutName, None)
-    if customInfo is None:
-        return default
+        for name in FAIRPLAY_VIOLATIONS_NAMES:
+            if violationsMask & FAIRPLAY_VIOLATIONS_MASKS[name] != 0:
+                return name
+
+        return None
+
+
+def getCustomizationItem(custType, custID):
+    custTypeID = getattr(CustomizationType, str(custType).upper(), None)
+    if not custTypeID:
+        return (None, 'Invalid customization type = {0}'.format(custType))
     else:
-        return customInfo.get(position, default)
+        c11nItems = vehicles.g_cache.customization20().itemTypes.get(custTypeID, None)
+        if not c11nItems:
+            return (None, 'Unknown customization typeID = {0}. custType = {1}'.format(custTypeID, custType))
+        c11nItem = c11nItems.get(custID)
+        return (None, 'Invalid customization item id = {0}. typeID = {1}, custType = {2}'.format(custID, custTypeID, custType)) if not c11nItem else (c11nItem, '')
 
 
-def getIGRCustomizedVehCompDescr(igrCustomizationsLayout, vehInvID, accountIGRType, vehCompDescr):
-    if accountIGRType == IGR_TYPE.NONE:
-        return vehCompDescr
+def validateCustomizationItem(custData):
+    custID = custData.get('id', None)
+    custType = custData.get('custType', None)
+    value = custData.get('value', None)
+    vehTypeCompDescr = custData.get('vehTypeCompDescr', None)
+    if custID is None:
+        return (False, 'Cust id is not specified')
+    elif not custType:
+        return (False, 'Cust type is not specified')
+    elif value == 0 or not isinstance(value, int):
+        return (False, 'Invalid value')
     else:
-        vehDescr = vehicles.VehicleDescr(vehCompDescr)
-        defID = vehDescr.type.defaultPlayerEmblemID
-        for propName, positions in (('playerInscriptions', 4), ('playerEmblems', 4), ('camouflages', 3)):
-            propValue = getattr(vehDescr, propName, None)
-            if propValue is None:
-                continue
-            for pos in range(0, positions):
-                if propName == 'playerEmblems':
-                    data = getIGRCustomization(igrCustomizationsLayout, vehInvID, 'emblem', accountIGRType, pos, defID)
-                    if data[0] != defID:
-                        vehDescr.setPlayerEmblem(pos, *data)
-                elif propName == 'playerInscriptions':
-                    data = getIGRCustomization(igrCustomizationsLayout, vehInvID, 'inscription', accountIGRType, pos, None)
-                    if data[0] is not None:
-                        vehDescr.setPlayerInscription(pos, *data)
-                elif propName == 'camouflages':
-                    data = getIGRCustomization(igrCustomizationsLayout, vehInvID, 'camouflage', accountIGRType, pos, None)
-                    if data[0] is not None:
-                        vehDescr.setCamouflage(pos, *data)
+        c11nItem, errStr = getCustomizationItem(custType, custID)
+        if not c11nItem:
+            return (False, errStr)
+        if vehTypeCompDescr is not None:
+            itemTypeID, vehNationID, vehInnationID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
+            if itemTypeID != ITEM_TYPES.vehicle:
+                return (False, 'Invalid type compact descriptor')
+            try:
+                vehTypeDescr = vehicles.g_cache.vehicle(vehNationID, vehInnationID)
+            except:
+                LOG_CURRENT_EXCEPTION()
+                return (False, 'Invalid type compact descriptor')
 
-        return vehDescr.makeCompactDescr()
+            if not c11nItem.matchVehicleType(vehTypeDescr):
+                return (False, 'Customization item {} and vehTypeCompDescr {} mismatch'.format(c11nItem.id, vehTypeCompDescr))
+        return (True, c11nItem)
 
 
-def getHistoricalCustomization(igrCustomizationsLayout, vehInvID, accountIGRType, vehCompDescr, battleDef):
+class NotificationItem(object):
 
-    def log(*args):
-        pass
+    def __init__(self, item):
+        self.item = item
+        cont = []
+        cont.append(item['type'])
+        text = item['text']
+        for k in sorted(text.keys()):
+            cont.append(k)
+            cont.append(text[k])
 
-    vehTypeCompDescr = vehicles.getVehicleTypeCompactDescr(vehCompDescr)
-    vehicleDef = battleDef['vehicles'].get(vehTypeCompDescr)
-    if not vehicleDef:
-        LOG_WARNING('No historical vehicle def for vehType=%s, battleID=%s' % (vehTypeCompDescr, battleDef['id']))
-        return
-    else:
-        vehDescr = vehicles.VehicleDescr(compactDescr=vehCompDescr)
-        vehDefModules = vehicleDef['modules'].copy()
-        gunCompDescr = vehDefModules.pop(_ITEM_TYPE_GUN)
-        turretCompDescr = vehDefModules.pop(_ITEM_TYPE_TURRET)
-        for itemType, itemCompDescr in vehDefModules.iteritems():
-            log('Changing component', vehTypeCompDescr, itemType, itemCompDescr)
-            vehDescr.installComponent(itemCompDescr)
+        cont.append(item['data'])
+        for s in sorted(item['requiredTokens']):
+            cont.append(s)
 
-        log('Changing turret/gun', vehTypeCompDescr, turretCompDescr, gunCompDescr)
-        vehDescr.installTurret(turretCompDescr, gunCompDescr)
-        histCamouflageID = vehicleDef.get('camouflageID')
-        arenaGeometryID = battleDef['arenaTypeID']
-        camouflageSeasonKind = ArenaType.g_cache[arenaGeometryID].vehicleCamouflageKind
-        currentCamouflageID = vehDescr.camouflages[camouflageSeasonKind][0]
-        if currentCamouflageID is None:
-            igrCamoData = getIGRCustomization(igrCustomizationsLayout, vehInvID, 'camouflage', accountIGRType, camouflageSeasonKind, 0)
-            if igrCamoData[0] is not None:
-                currentCamouflageID = igrCamoData[0]
-                log('Igr camoID=%s [%s]' % (currentCamouflageID, camouflageSeasonKind))
-        if currentCamouflageID is not None:
-            log('Replacing camoID=%s [%s] with historical camoID=%s' % (currentCamouflageID, camouflageSeasonKind, histCamouflageID))
-            vehDescr.setCamouflage(camouflageSeasonKind, histCamouflageID, time.time(), 1)
+        self.asString = ''.join(cont)
+
+    def __cmp__(self, other):
+        if other is None:
+            return 1
+        left = self.asString
+        right = other.asString
+        if left == right:
+            return 0
         else:
-            log('No current camoID=%s [%s]' % (currentCamouflageID, camouflageSeasonKind))
-        for position in xrange(0, 4):
-            vehDescr.setPlayerEmblem(position, None, 0, 0)
+            return -1 if left < right else 1
 
-        return vehDescr
+    def __hash__(self):
+        return hash(self.asString)
 
 
-def getCustomizedVehCompDescr(igrCustomizationsLayout, vehInvID, accountIGRType, vehCompDescr, historicalBattleDef = None):
-    if historicalBattleDef is not None:
-        vehDescr = getHistoricalCustomization(igrCustomizationsLayout, vehInvID, accountIGRType, vehCompDescr, historicalBattleDef)
-        return vehDescr.makeCompactDescr()
-    else:
-        return getIGRCustomizedVehCompDescr(igrCustomizationsLayout, vehInvID, accountIGRType, vehCompDescr)
+_VERSION_REGEXP = re.compile('^([a-z]{2,4}_)?(([0-9]+\\.){2,4}[0-9]+)(_[0-9]+)?$')
+
+def parseVersion(version):
+    result = _VERSION_REGEXP.search(version)
+    if result is None:
         return
+    else:
+        realmCode, mainVersion, _, patchVersion = result.groups()
+        if mainVersion:
+            realmCode = realmCode.replace('_', '') if realmCode else ''
+            patchVersion = int(patchVersion.replace('_', '')) if patchVersion else 0
+            return (realmCode, mainVersion, patchVersion)
+        return
+
+
+def isValidClientVersion(clientVersion, serverVersion):
+    if clientVersion != serverVersion:
+        if clientVersion is None or serverVersion is None:
+            return False
+        clientParsedVersion = parseVersion(clientVersion)
+        serverParsedVersion = parseVersion(serverVersion)
+        if clientParsedVersion is None or serverParsedVersion is None:
+            return False
+        clientRealmCode, clientMainVersion, clientPatchVersion = clientParsedVersion
+        serverRealmCode, serverMainVersion, serverPatchVersion = serverParsedVersion
+        if clientRealmCode != serverRealmCode:
+            return False
+        if clientMainVersion != serverMainVersion:
+            return False
+        if clientPatchVersion < serverPatchVersion:
+            return False
+    return True
+
+
+def getClientMainVersion():
+    mainVersion = None
+    try:
+        _, clentVersion = readClientServerVersion()
+        parsedVersion = parseVersion(clentVersion)
+        _, mainVersion, _ = parsedVersion
+    except:
+        LOG_ERROR('Can not read or parse client-server version')
+
+    return mainVersion
+
+
+def readClientServerVersion():
+    import ResMgr
+    fileName = 'scripts/entity_defs/Account.def'
+    section = ResMgr.openSection(fileName)
+    if section is None:
+        raise SoftException('Cannot open ' + fileName)
+    for attrName, section in section['Properties'].items():
+        if not attrName.startswith('requiredVersion_'):
+            continue
+        version = section.readString('Default')
+        if not version:
+            raise SoftException('Subsection Account.def/Properties/%s/Default is missing or empty' % attrName)
+        section = None
+        ResMgr.purge(fileName)
+        return (attrName, version)
+
+    raise SoftException('Field Account.def/Properties/requiredVersion_* is not found')
+    return

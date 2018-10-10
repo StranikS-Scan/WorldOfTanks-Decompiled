@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/settings_set.py
 from collections import namedtuple
 from messenger.doc_loaders import _xml_helpers
@@ -64,9 +65,9 @@ def _readBattleMessageLifeCycle(xmlCtx, section, settings):
     settings.messageLifeCycle = settings.messageLifeCycle._replace(**result)
 
 
-_ReceiverInBattle = namedtuple('_ReceiverInBattle', ('label', 'modifiers', 'order'))
+_ReceiverInBattle = namedtuple('_ReceiverInBattle', ('name', 'label', 'modifiers', 'bwModifiers', 'order'))
 
-def _readReceiverValue(xmlCtx, section, settings = None):
+def _readReceiverValue(xmlCtx, section, settings=None):
     name = _xml_helpers.readNoEmptyStr(xmlCtx, section, 'name', 'Receiver name is not defined')
     valueSec = section['value']
     if not valueSec:
@@ -74,17 +75,21 @@ def _readReceiverValue(xmlCtx, section, settings = None):
     modifiers = []
     modifiersSec = valueSec['modifiers']
     if modifiersSec:
-        modifiers = map(lambda section: section.asInt, modifiersSec.values())
+        modifiers = [ s.asInt for s in modifiersSec.values() ]
+    bwModifiers = []
+    modifiersSec = valueSec['bw-modifiers']
+    if modifiersSec:
+        bwModifiers = [ s.asInt for s in modifiersSec.values() ]
     label = _xml_helpers.readNoEmptyI18nStr(xmlCtx.next(valueSec), valueSec, 'label', 'Label is not defined')
-    return (name, _ReceiverInBattle(label, modifiers, valueSec.readInt('order')))
+    return (name, _ReceiverInBattle(name, label, modifiers, bwModifiers, valueSec.readInt('order')))
 
 
 def _readReceivers(xmlCtx, section, settings):
     readers = {}
     receivers = {}
-    for flag, name, label in BATTLE_CHANNEL.ALL:
+    for _, name, label in BATTLE_CHANNEL.ALL:
         readers[name] = _readReceiverValue
-        receivers[name] = _ReceiverInBattle(label, [], 0)
+        receivers[name] = _ReceiverInBattle(name, label, [], [], 0)
 
     result = dict(_readSet(xmlCtx, section, settings, readers))
     receivers.update(result)
@@ -98,11 +103,12 @@ _BATTLE_ITEM_READERS = {'messageFormat': _xml_helpers.readUnicodeItem,
  'inactiveStateAlpha': _xml_helpers.readIntItem,
  'hintText': _xml_helpers.readI18nStringItem,
  'toolTipText': _xml_helpers.readI18nStringItem,
+ 'toolTipTextWithMuteInfo': _xml_helpers.readI18nStringItem,
  'numberOfMessagesInHistory': _xml_helpers.readIntItem,
  'alphaForLastMessages': _xml_helpers.readIntItem,
  'chatIsLockedToolTipText': _xml_helpers.readI18nStringItem,
- 'recoveredLatestMessages': _xml_helpers.readI18nStringItem,
- 'lifeTimeRecoveredMessages': _xml_helpers.readI18nStringItem}
+ 'recoveredLatestMessages': _xml_helpers.readIntItem,
+ 'lifeTimeRecoveredMessages': _xml_helpers.readIntItem}
 _SETTINGS_LOADERS = {'lobby': (_readSettings, _LOBBY_SET_READERS, _LOBBY_ITEM_READERS),
  'battle': (_readSettings, _BATTLE_SET_READERS, _BATTLE_ITEM_READERS)}
 
@@ -116,5 +122,4 @@ def load(xmlCtx, section, messengerSettings):
         loader, setReaders, itemReaders = _SETTINGS_LOADERS[name]
         if hasattr(messengerSettings, name):
             loader(xmlCtx.next(subSec), subSec, getattr(messengerSettings, name), setReaders, itemReaders)
-        else:
-            raise _xml_helpers.XMLError(xmlCtx, 'Settings has not attribute {0:>s}'.format(name))
+        raise _xml_helpers.XMLError(xmlCtx, 'Settings has not attribute {0:>s}'.format(name))

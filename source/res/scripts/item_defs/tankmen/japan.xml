@@ -1,0 +1,772 @@
+<japan.xml>
+  <ranks>
+    <private_2nd>
+      <userString>	#japan_tankmen:ranksJP/private_2nd	</userString>
+      <icon>	japan-11.png	</icon>
+    </private_2nd>
+    <private_1st>
+      <userString>	#japan_tankmen:ranksJP/private_1st	</userString>
+      <icon>	japan-10.png	</icon>
+    </private_1st>
+    <private_top>
+      <userString>	#japan_tankmen:ranksJP/private_top	</userString>
+      <icon>	japan-9.png	</icon>
+    </private_top>
+    <corporal>
+      <userString>	#japan_tankmen:ranksJP/corporal	</userString>
+      <icon>	japan-8.png	</icon>
+    </corporal>
+    <sergeant>
+      <userString>	#japan_tankmen:ranksJP/sergeant	</userString>
+      <icon>	japan-7.png	</icon>
+    </sergeant>
+    <senior_sergeant>
+      <userString>	#japan_tankmen:ranksJP/senior_sergeant	</userString>
+      <icon>	japan-6.png	</icon>
+    </senior_sergeant>
+    <sergeant_major>
+      <userString>	#japan_tankmen:ranksJP/sergeant_major	</userString>
+      <icon>	japan-5.png	</icon>
+    </sergeant_major>
+    <junior_lieutenant>
+      <userString>	#japan_tankmen:ranksJP/junior_lieutenant	</userString>
+      <icon>	japan-4.png	</icon>
+    </junior_lieutenant>
+    <lieutenant>
+      <userString>	#japan_tankmen:ranksJP/lieutenant	</userString>
+      <icon>	japan-3.png	</icon>
+    </lieutenant>
+    <captain>
+      <userString>	#japan_tankmen:ranksJP/captain	</userString>
+      <icon>	japan-2.png	</icon>
+    </captain>
+    <major>
+      <userString>	#japan_tankmen:ranksJP/major	</userString>
+      <icon>	japan-1.png	</icon>
+    </major>
+  </ranks>
+  <roleRanks>
+    <commander>	private_top corporal sergeant
+			senior_sergeant sergeant_major junior_lieutenant lieutenant
+			captain major major major	</commander>
+    <driver>	private_1st
+			private_top corporal sergeant
+			senior_sergeant sergeant_major junior_lieutenant lieutenant
+			captain captain captain	</driver>
+    <gunner>	private_1st
+			private_top corporal sergeant
+			senior_sergeant sergeant_major junior_lieutenant lieutenant
+			captain captain captain	</gunner>
+    <loader>	private_2nd private_1st
+			private_top corporal sergeant
+			senior_sergeant sergeant_major junior_lieutenant lieutenant lieutenant lieutenant	</loader>
+    <radioman>	private_2nd private_1st
+			private_top corporal sergeant
+			senior_sergeant sergeant_major junior_lieutenant lieutenant lieutenant lieutenant	</radioman>
+  </roleRanks>
+  <normalGroups>
+    <men1>
+      <weight>	1.0	</weight>
+      <sex>	male	</sex>
+      <firstNames>
+        <_1>	#japan_tankmen:names/jpn1	</_1>
+        <_2>	#japan_tankmen:names/jpn2	</_2>
+        <_3>	#japan_tankmen:names/jpn3	</_3>
+        <_4>	#japan_tankmen:names/jpn4	</_4>
+        <_5>	#japan_tankmen:names/jpn5	</_5>
+        <_6>	#japan_tankmen:names/jpn6	</_6>
+        <_7>	#japan_tankmen:names/jpn7	</_7>
+        <_8>	#japan_tankmen:names/jpn8	</_8>
+        <_9>	#japan_tankmen:names/jpn9	</_9>
+        <_10>	#japan_tankmen:names/jpn10	</_10>
+        <_11>	#japan_tankmen:names/jpn11	</_11>
+        <_12>	#japan_tankmen:names/jpn12	</_12>
+        <_13>	#japan_tankmen:names/jpn13	</_13>
+        <_14>	#japan_tankmen:names/jpn14	</_14>
+        <_15>	#japan_tankmen:names/jpn15	</_15>
+        <_16>	#japan_tankmen:names/jpn16	</_16>
+        <_17>	#japan_tankmen:names/jpn17	</_17>
+        <_18>	#japan_tankmen:names/jpn18	</_18>
+        <_19>	#japan_tankmen:names/jpn19	</_19>
+        <_20>	#japan_tankmen:names/jpn20	</_20>
+        <_21>	#japan_tankmen:names/jpn21	</_21>
+        <_22>	#japan_tankmen:names/jpn22	</_22>
+        <_23>	#japan_tankmen:names/jpn23	</_23>
+        <_24>	#japan_tankmen:names/jpn24	</_24>
+        <_25>	#japan_tankmen:names/jpn25	</_25>
+        <_26>	#japan_tankmen:names/jpn26	</_26>
+        <_27>	#japan_tankmen:names/jpn27	</_27>
+        <_28>	#japan_tankmen:names/jpn28	</_28>
+        <_29>	#japan_tankmen:names/jpn29	</_29>
+        <_30>	#japan_tankmen:names/jpn30	</_30>
+        <_32>	#japan_tankmen:names/jpn32	</_32>
+        <_33>	#japan_tankmen:names/jpn33	</_33>
+        <_34>	#japan_tankmen:names/jpn34	</_34>
+        <_35>	#japan_tankmen:names/jpn35	</_35>
+        <_36>	#japan_tankmen:names/jpn36	</_36>
+        <_37>	#japan_tankmen:names/jpn37	</_37>
+        <_38>	#japan_tankmen:names/jpn38	</_38>
+        <_39>	#japan_tankmen:names/jpn39	</_39>
+        <_40>	#japan_tankmen:names/jpn40	</_40>
+        <_41>	#japan_tankmen:names/jpn41	</_41>
+        <_42>	#japan_tankmen:names/jpn42	</_42>
+        <_43>	#japan_tankmen:names/jpn43	</_43>
+        <_44>	#japan_tankmen:names/jpn44	</_44>
+        <_45>	#japan_tankmen:names/jpn45	</_45>
+        <_46>	#japan_tankmen:names/jpn46	</_46>
+        <_47>	#japan_tankmen:names/jpn47	</_47>
+        <_48>	#japan_tankmen:names/jpn48	</_48>
+        <_49>	#japan_tankmen:names/jpn49	</_49>
+        <_50>	#japan_tankmen:names/jpn50	</_50>
+        <_51>	#japan_tankmen:names/jpn51	</_51>
+        <_52>	#japan_tankmen:names/jpn52	</_52>
+        <_53>	#japan_tankmen:names/jpn53	</_53>
+        <_54>	#japan_tankmen:names/jpn54	</_54>
+        <_55>	#japan_tankmen:names/jpn55	</_55>
+        <_56>	#japan_tankmen:names/jpn56	</_56>
+        <_57>	#japan_tankmen:names/jpn57	</_57>
+        <_58>	#japan_tankmen:names/jpn58	</_58>
+        <_59>	#japan_tankmen:names/jpn59	</_59>
+        <_60>	#japan_tankmen:names/jpn60	</_60>
+        <_61>	#japan_tankmen:names/jpn61	</_61>
+        <_62>	#japan_tankmen:names/jpn62	</_62>
+        <_63>	#japan_tankmen:names/jpn63	</_63>
+        <_64>	#japan_tankmen:names/jpn64	</_64>
+        <_65>	#japan_tankmen:names/jpn65	</_65>
+        <_66>	#japan_tankmen:names/jpn66	</_66>
+        <_67>	#japan_tankmen:names/jpn67	</_67>
+        <_68>	#japan_tankmen:names/jpn68	</_68>
+        <_69>	#japan_tankmen:names/jpn69	</_69>
+        <_70>	#japan_tankmen:names/jpn70	</_70>
+        <_71>	#japan_tankmen:names/jpn71	</_71>
+        <_72>	#japan_tankmen:names/jpn72	</_72>
+        <_73>	#japan_tankmen:names/jpn73	</_73>
+        <_74>	#japan_tankmen:names/jpn74	</_74>
+        <_75>	#japan_tankmen:names/jpn75	</_75>
+        <_76>	#japan_tankmen:names/jpn76	</_76>
+        <_77>	#japan_tankmen:names/jpn77	</_77>
+        <_78>	#japan_tankmen:names/jpn78	</_78>
+        <_79>	#japan_tankmen:names/jpn79	</_79>
+        <_80>	#japan_tankmen:names/jpn80	</_80>
+        <_81>	#japan_tankmen:names/jpn81	</_81>
+        <_82>	#japan_tankmen:names/jpn82	</_82>
+        <_83>	#japan_tankmen:names/jpn83	</_83>
+        <_84>	#japan_tankmen:names/jpn84	</_84>
+        <_85>	#japan_tankmen:names/jpn85	</_85>
+        <_86>	#japan_tankmen:names/jpn86	</_86>
+        <_87>	#japan_tankmen:names/jpn87	</_87>
+        <_88>	#japan_tankmen:names/jpn88	</_88>
+        <_89>	#japan_tankmen:names/jpn89	</_89>
+        <_90>	#japan_tankmen:names/jpn90	</_90>
+        <_91>	#japan_tankmen:names/jpn91	</_91>
+        <_92>	#japan_tankmen:names/jpn92	</_92>
+        <_93>	#japan_tankmen:names/jpn93	</_93>
+        <_94>	#japan_tankmen:names/jpn94	</_94>
+        <_95>	#japan_tankmen:names/jpn95	</_95>
+        <_96>	#japan_tankmen:names/jpn96	</_96>
+        <_97>	#japan_tankmen:names/jpn97	</_97>
+        <_98>	#japan_tankmen:names/jpn98	</_98>
+        <_99>	#japan_tankmen:names/jpn99	</_99>
+        <_100>	#japan_tankmen:names/jpn100	</_100>
+        <_101>	#japan_tankmen:names/jpn101	</_101>
+        <_102>	#japan_tankmen:names/jpn102	</_102>
+        <_103>	#japan_tankmen:names/jpn103	</_103>
+        <_104>	#japan_tankmen:names/jpn104	</_104>
+        <_105>	#japan_tankmen:names/jpn105	</_105>
+        <_106>	#japan_tankmen:names/jpn106	</_106>
+        <_107>	#japan_tankmen:names/jpn107	</_107>
+        <_108>	#japan_tankmen:names/jpn108	</_108>
+        <_109>	#japan_tankmen:names/jpn109	</_109>
+        <_110>	#japan_tankmen:names/jpn110	</_110>
+        <_111>	#japan_tankmen:names/jpn111	</_111>
+        <_112>	#japan_tankmen:names/jpn112	</_112>
+        <_113>	#japan_tankmen:names/jpn113	</_113>
+        <_114>	#japan_tankmen:names/jpn114	</_114>
+        <_115>	#japan_tankmen:names/jpn115	</_115>
+        <_116>	#japan_tankmen:names/jpn116	</_116>
+        <_117>	#japan_tankmen:names/jpn117	</_117>
+        <_118>	#japan_tankmen:names/jpn118	</_118>
+        <_119>	#japan_tankmen:names/jpn119	</_119>
+        <_120>	#japan_tankmen:names/jpn120	</_120>
+        <_121>	#japan_tankmen:names/jpn121	</_121>
+        <_122>	#japan_tankmen:names/jpn122	</_122>
+        <_123>	#japan_tankmen:names/jpn123	</_123>
+        <_124>	#japan_tankmen:names/jpn124	</_124>
+        <_125>	#japan_tankmen:names/jpn125	</_125>
+        <_126>	#japan_tankmen:names/jpn126	</_126>
+        <_127>	#japan_tankmen:names/jpn127	</_127>
+        <_128>	#japan_tankmen:names/jpn128	</_128>
+        <_129>	#japan_tankmen:names/jpn129	</_129>
+        <_130>	#japan_tankmen:names/jpn130	</_130>
+        <_131>	#japan_tankmen:names/jpn131	</_131>
+        <_132>	#japan_tankmen:names/jpn132	</_132>
+        <_133>	#japan_tankmen:names/jpn133	</_133>
+        <_134>	#japan_tankmen:names/jpn134	</_134>
+        <_135>	#japan_tankmen:names/jpn135	</_135>
+        <_136>	#japan_tankmen:names/jpn136	</_136>
+        <_137>	#japan_tankmen:names/jpn137	</_137>
+        <_138>	#japan_tankmen:names/jpn138	</_138>
+        <_139>	#japan_tankmen:names/jpn139	</_139>
+        <_140>	#japan_tankmen:names/jpn140	</_140>
+        <_141>	#japan_tankmen:names/jpn141	</_141>
+        <_142>	#japan_tankmen:names/jpn142	</_142>
+        <_143>	#japan_tankmen:names/jpn143	</_143>
+        <_144>	#japan_tankmen:names/jpn144	</_144>
+        <_145>	#japan_tankmen:names/jpn145	</_145>
+        <_146>	#japan_tankmen:names/jpn146	</_146>
+        <_147>	#japan_tankmen:names/jpn147	</_147>
+        <_148>	#japan_tankmen:names/jpn148	</_148>
+        <_149>	#japan_tankmen:names/jpn149	</_149>
+        <_150>	#japan_tankmen:names/jpn150	</_150>
+        <_151>	#japan_tankmen:names/jpn151	</_151>
+        <_152>	#japan_tankmen:names/jpn152	</_152>
+        <_153>	#japan_tankmen:names/jpn153	</_153>
+        <_154>	#japan_tankmen:names/jpn154	</_154>
+        <_155>	#japan_tankmen:names/jpn155	</_155>
+        <_156>	#japan_tankmen:names/jpn156	</_156>
+        <_157>	#japan_tankmen:names/jpn157	</_157>
+        <_158>	#japan_tankmen:names/jpn158	</_158>
+        <_159>	#japan_tankmen:names/jpn159	</_159>
+        <_160>	#japan_tankmen:names/jpn160	</_160>
+        <_161>	#japan_tankmen:names/jpn161	</_161>
+        <_162>	#japan_tankmen:names/jpn162	</_162>
+        <_163>	#japan_tankmen:names/jpn163	</_163>
+        <_164>	#japan_tankmen:names/jpn164	</_164>
+        <_165>	#japan_tankmen:names/jpn165	</_165>
+        <_166>	#japan_tankmen:names/jpn166	</_166>
+        <_167>	#japan_tankmen:names/jpn167	</_167>
+        <_168>	#japan_tankmen:names/jpn168	</_168>
+        <_169>	#japan_tankmen:names/jpn169	</_169>
+        <_170>	#japan_tankmen:names/jpn170	</_170>
+        <_171>	#japan_tankmen:names/jpn171	</_171>
+        <_172>	#japan_tankmen:names/jpn172	</_172>
+        <_173>	#japan_tankmen:names/jpn173	</_173>
+        <_174>	#japan_tankmen:names/jpn174	</_174>
+        <_175>	#japan_tankmen:names/jpn175	</_175>
+        <_176>	#japan_tankmen:names/jpn176	</_176>
+        <_177>	#japan_tankmen:names/jpn177	</_177>
+        <_178>	#japan_tankmen:names/jpn178	</_178>
+        <_179>	#japan_tankmen:names/jpn179	</_179>
+        <_180>	#japan_tankmen:names/jpn180	</_180>
+        <_181>	#japan_tankmen:names/jpn181	</_181>
+        <_182>	#japan_tankmen:names/jpn182	</_182>
+        <_183>	#japan_tankmen:names/jpn183	</_183>
+        <_184>	#japan_tankmen:names/jpn184	</_184>
+        <_185>	#japan_tankmen:names/jpn185	</_185>
+        <_186>	#japan_tankmen:names/jpn186	</_186>
+        <_187>	#japan_tankmen:names/jpn187	</_187>
+        <_188>	#japan_tankmen:names/jpn188	</_188>
+        <_189>	#japan_tankmen:names/jpn189	</_189>
+        <_190>	#japan_tankmen:names/jpn190	</_190>
+      </firstNames>
+      <lastNames>
+        <_1>	#japan_tankmen:names/jp1	</_1>
+        <_2>	#japan_tankmen:names/jp2	</_2>
+        <_3>	#japan_tankmen:names/jp3	</_3>
+        <_4>	#japan_tankmen:names/jp4	</_4>
+        <_5>	#japan_tankmen:names/jp5	</_5>
+        <_6>	#japan_tankmen:names/jp6	</_6>
+        <_7>	#japan_tankmen:names/jp7	</_7>
+        <_8>	#japan_tankmen:names/jp8	</_8>
+        <_9>	#japan_tankmen:names/jp9	</_9>
+        <_10>	#japan_tankmen:names/jp10	</_10>
+        <_11>	#japan_tankmen:names/jp11	</_11>
+        <_12>	#japan_tankmen:names/jp12	</_12>
+        <_13>	#japan_tankmen:names/jp13	</_13>
+        <_14>	#japan_tankmen:names/jp14	</_14>
+        <_15>	#japan_tankmen:names/jp15	</_15>
+        <_16>	#japan_tankmen:names/jp16	</_16>
+        <_17>	#japan_tankmen:names/jp17	</_17>
+        <_18>	#japan_tankmen:names/jp18	</_18>
+        <_19>	#japan_tankmen:names/jp19	</_19>
+        <_20>	#japan_tankmen:names/jp20	</_20>
+        <_21>	#japan_tankmen:names/jp21	</_21>
+        <_22>	#japan_tankmen:names/jp22	</_22>
+        <_23>	#japan_tankmen:names/jp23	</_23>
+        <_24>	#japan_tankmen:names/jp24	</_24>
+        <_25>	#japan_tankmen:names/jp25	</_25>
+        <_26>	#japan_tankmen:names/jp26	</_26>
+        <_27>	#japan_tankmen:names/jp27	</_27>
+        <_28>	#japan_tankmen:names/jp28	</_28>
+        <_29>	#japan_tankmen:names/jp29	</_29>
+        <_30>	#japan_tankmen:names/jp30	</_30>
+        <_33>	#japan_tankmen:names/jp33	</_33>
+        <_34>	#japan_tankmen:names/jp34	</_34>
+        <_35>	#japan_tankmen:names/jp35	</_35>
+        <_38>	#japan_tankmen:names/jp38	</_38>
+        <_39>	#japan_tankmen:names/jp39	</_39>
+        <_40>	#japan_tankmen:names/jp40	</_40>
+        <_41>	#japan_tankmen:names/jp41	</_41>
+        <_42>	#japan_tankmen:names/jp42	</_42>
+        <_43>	#japan_tankmen:names/jp43	</_43>
+        <_44>	#japan_tankmen:names/jp44	</_44>
+        <_45>	#japan_tankmen:names/jp45	</_45>
+        <_46>	#japan_tankmen:names/jp46	</_46>
+        <_48>	#japan_tankmen:names/jp48	</_48>
+        <_49>	#japan_tankmen:names/jp49	</_49>
+        <_50>	#japan_tankmen:names/jp50	</_50>
+        <_52>	#japan_tankmen:names/jp52	</_52>
+        <_53>	#japan_tankmen:names/jp53	</_53>
+        <_54>	#japan_tankmen:names/jp54	</_54>
+        <_55>	#japan_tankmen:names/jp55	</_55>
+        <_56>	#japan_tankmen:names/jp56	</_56>
+        <_57>	#japan_tankmen:names/jp57	</_57>
+        <_58>	#japan_tankmen:names/jp58	</_58>
+        <_59>	#japan_tankmen:names/jp59	</_59>
+        <_60>	#japan_tankmen:names/jp60	</_60>
+        <_61>	#japan_tankmen:names/jp61	</_61>
+        <_62>	#japan_tankmen:names/jp62	</_62>
+        <_63>	#japan_tankmen:names/jp63	</_63>
+        <_64>	#japan_tankmen:names/jp64	</_64>
+        <_65>	#japan_tankmen:names/jp65	</_65>
+        <_66>	#japan_tankmen:names/jp66	</_66>
+        <_68>	#japan_tankmen:names/jp68	</_68>
+        <_69>	#japan_tankmen:names/jp69	</_69>
+        <_70>	#japan_tankmen:names/jp70	</_70>
+        <_71>	#japan_tankmen:names/jp71	</_71>
+        <_72>	#japan_tankmen:names/jp72	</_72>
+        <_73>	#japan_tankmen:names/jp73	</_73>
+        <_74>	#japan_tankmen:names/jp74	</_74>
+        <_75>	#japan_tankmen:names/jp75	</_75>
+        <_76>	#japan_tankmen:names/jp76	</_76>
+        <_77>	#japan_tankmen:names/jp77	</_77>
+        <_78>	#japan_tankmen:names/jp78	</_78>
+        <_79>	#japan_tankmen:names/jp79	</_79>
+        <_80>	#japan_tankmen:names/jp80	</_80>
+        <_81>	#japan_tankmen:names/jp81	</_81>
+        <_82>	#japan_tankmen:names/jp82	</_82>
+        <_83>	#japan_tankmen:names/jp83	</_83>
+        <_85>	#japan_tankmen:names/jp85	</_85>
+        <_86>	#japan_tankmen:names/jp86	</_86>
+        <_91>	#japan_tankmen:names/jp91	</_91>
+        <_92>	#japan_tankmen:names/jp92	</_92>
+        <_93>	#japan_tankmen:names/jp93	</_93>
+        <_94>	#japan_tankmen:names/jp94	</_94>
+        <_95>	#japan_tankmen:names/jp95	</_95>
+        <_96>	#japan_tankmen:names/jp96	</_96>
+        <_97>	#japan_tankmen:names/jp97	</_97>
+        <_98>	#japan_tankmen:names/jp98	</_98>
+        <_99>	#japan_tankmen:names/jp99	</_99>
+        <_100>	#japan_tankmen:names/jp100	</_100>
+        <_101>	#japan_tankmen:names/jp101	</_101>
+        <_102>	#japan_tankmen:names/jp102	</_102>
+        <_103>	#japan_tankmen:names/jp103	</_103>
+        <_104>	#japan_tankmen:names/jp104	</_104>
+        <_105>	#japan_tankmen:names/jp105	</_105>
+        <_106>	#japan_tankmen:names/jp106	</_106>
+        <_107>	#japan_tankmen:names/jp107	</_107>
+        <_108>	#japan_tankmen:names/jp108	</_108>
+        <_109>	#japan_tankmen:names/jp109	</_109>
+        <_110>	#japan_tankmen:names/jp110	</_110>
+        <_111>	#japan_tankmen:names/jp111	</_111>
+        <_112>	#japan_tankmen:names/jp112	</_112>
+        <_113>	#japan_tankmen:names/jp113	</_113>
+        <_114>	#japan_tankmen:names/jp114	</_114>
+        <_115>	#japan_tankmen:names/jp115	</_115>
+        <_116>	#japan_tankmen:names/jp116	</_116>
+        <_117>	#japan_tankmen:names/jp117	</_117>
+        <_118>	#japan_tankmen:names/jp118	</_118>
+        <_120>	#japan_tankmen:names/jp120	</_120>
+        <_121>	#japan_tankmen:names/jp121	</_121>
+        <_122>	#japan_tankmen:names/jp122	</_122>
+        <_123>	#japan_tankmen:names/jp123	</_123>
+        <_125>	#japan_tankmen:names/jp125	</_125>
+        <_126>	#japan_tankmen:names/jp126	</_126>
+        <_127>	#japan_tankmen:names/jp127	</_127>
+        <_128>	#japan_tankmen:names/jp128	</_128>
+        <_131>	#japan_tankmen:names/jp131	</_131>
+        <_132>	#japan_tankmen:names/jp132	</_132>
+        <_133>	#japan_tankmen:names/jp133	</_133>
+        <_134>	#japan_tankmen:names/jp134	</_134>
+        <_135>	#japan_tankmen:names/jp135	</_135>
+        <_136>	#japan_tankmen:names/jp136	</_136>
+        <_138>	#japan_tankmen:names/jp138	</_138>
+        <_139>	#japan_tankmen:names/jp139	</_139>
+        <_140>	#japan_tankmen:names/jp140	</_140>
+        <_141>	#japan_tankmen:names/jp141	</_141>
+        <_142>	#japan_tankmen:names/jp142	</_142>
+        <_143>	#japan_tankmen:names/jp143	</_143>
+        <_144>	#japan_tankmen:names/jp144	</_144>
+        <_145>	#japan_tankmen:names/jp145	</_145>
+        <_146>	#japan_tankmen:names/jp146	</_146>
+        <_147>	#japan_tankmen:names/jp147	</_147>
+        <_148>	#japan_tankmen:names/jp148	</_148>
+        <_149>	#japan_tankmen:names/jp149	</_149>
+        <_150>	#japan_tankmen:names/jp150	</_150>
+        <_151>	#japan_tankmen:names/jp151	</_151>
+        <_153>	#japan_tankmen:names/jp153	</_153>
+        <_154>	#japan_tankmen:names/jp154	</_154>
+        <_155>	#japan_tankmen:names/jp155	</_155>
+        <_156>	#japan_tankmen:names/jp156	</_156>
+        <_157>	#japan_tankmen:names/jp157	</_157>
+        <_158>	#japan_tankmen:names/jp158	</_158>
+        <_159>	#japan_tankmen:names/jp159	</_159>
+        <_160>	#japan_tankmen:names/jp160	</_160>
+        <_161>	#japan_tankmen:names/jp161	</_161>
+        <_162>	#japan_tankmen:names/jp162	</_162>
+        <_163>	#japan_tankmen:names/jp163	</_163>
+        <_164>	#japan_tankmen:names/jp164	</_164>
+        <_165>	#japan_tankmen:names/jp165	</_165>
+        <_166>	#japan_tankmen:names/jp166	</_166>
+        <_167>	#japan_tankmen:names/jp167	</_167>
+        <_168>	#japan_tankmen:names/jp168	</_168>
+        <_169>	#japan_tankmen:names/jp169	</_169>
+        <_170>	#japan_tankmen:names/jp170	</_170>
+        <_172>	#japan_tankmen:names/jp172	</_172>
+        <_173>	#japan_tankmen:names/jp173	</_173>
+        <_174>	#japan_tankmen:names/jp174	</_174>
+        <_175>	#japan_tankmen:names/jp175	</_175>
+        <_176>	#japan_tankmen:names/jp176	</_176>
+        <_177>	#japan_tankmen:names/jp177	</_177>
+        <_178>	#japan_tankmen:names/jp178	</_178>
+        <_179>	#japan_tankmen:names/jp179	</_179>
+        <_180>	#japan_tankmen:names/jp180	</_180>
+        <_182>	#japan_tankmen:names/jp182	</_182>
+        <_183>	#japan_tankmen:names/jp183	</_183>
+        <_184>	#japan_tankmen:names/jp184	</_184>
+        <_185>	#japan_tankmen:names/jp185	</_185>
+        <_186>	#japan_tankmen:names/jp186	</_186>
+        <_187>	#japan_tankmen:names/jp187	</_187>
+        <_188>	#japan_tankmen:names/jp188	</_188>
+        <_189>	#japan_tankmen:names/jp189	</_189>
+        <_191>	#japan_tankmen:names/jp191	</_191>
+        <_192>	#japan_tankmen:names/jp192	</_192>
+        <_194>	#japan_tankmen:names/jp194	</_194>
+        <_196>	#japan_tankmen:names/jp196	</_196>
+        <_197>	#japan_tankmen:names/jp197	</_197>
+        <_198>	#japan_tankmen:names/jp198	</_198>
+        <_199>	#japan_tankmen:names/jp199	</_199>
+        <_200>	#japan_tankmen:names/jp200	</_200>
+        <_201>	#japan_tankmen:names/jp201	</_201>
+        <_202>	#japan_tankmen:names/jp202	</_202>
+        <_203>	#japan_tankmen:names/jp203	</_203>
+        <_204>	#japan_tankmen:names/jp204	</_204>
+        <_205>	#japan_tankmen:names/jp205	</_205>
+        <_207>	#japan_tankmen:names/jp207	</_207>
+        <_208>	#japan_tankmen:names/jp208	</_208>
+        <_209>	#japan_tankmen:names/jp209	</_209>
+        <_210>	#japan_tankmen:names/jp210	</_210>
+        <_211>	#japan_tankmen:names/jp211	</_211>
+        <_212>	#japan_tankmen:names/jp212	</_212>
+        <_214>	#japan_tankmen:names/jp214	</_214>
+        <_215>	#japan_tankmen:names/jp215	</_215>
+        <_216>	#japan_tankmen:names/jp216	</_216>
+        <_217>	#japan_tankmen:names/jp217	</_217>
+        <_218>	#japan_tankmen:names/jp218	</_218>
+        <_219>	#japan_tankmen:names/jp219	</_219>
+        <_220>	#japan_tankmen:names/jp220	</_220>
+        <_221>	#japan_tankmen:names/jp221	</_221>
+        <_222>	#japan_tankmen:names/jp222	</_222>
+        <_223>	#japan_tankmen:names/jp223	</_223>
+        <_224>	#japan_tankmen:names/jp224	</_224>
+        <_225>	#japan_tankmen:names/jp225	</_225>
+        <_226>	#japan_tankmen:names/jp226	</_226>
+        <_227>	#japan_tankmen:names/jp227	</_227>
+        <_228>	#japan_tankmen:names/jp228	</_228>
+        <_230>	#japan_tankmen:names/jp230	</_230>
+        <_231>	#japan_tankmen:names/jp231	</_231>
+        <_232>	#japan_tankmen:names/jp232	</_232>
+        <_233>	#japan_tankmen:names/jp233	</_233>
+        <_234>	#japan_tankmen:names/jp234	</_234>
+        <_235>	#japan_tankmen:names/jp235	</_235>
+        <_236>	#japan_tankmen:names/jp236	</_236>
+        <_237>	#japan_tankmen:names/jp237	</_237>
+        <_238>	#japan_tankmen:names/jp238	</_238>
+        <_240>	#japan_tankmen:names/jp240	</_240>
+        <_241>	#japan_tankmen:names/jp241	</_241>
+        <_242>	#japan_tankmen:names/jp242	</_242>
+        <_243>	#japan_tankmen:names/jp243	</_243>
+        <_244>	#japan_tankmen:names/jp244	</_244>
+        <_245>	#japan_tankmen:names/jp245	</_245>
+        <_246>	#japan_tankmen:names/jp246	</_246>
+        <_248>	#japan_tankmen:names/jp248	</_248>
+        <_249>	#japan_tankmen:names/jp249	</_249>
+        <_250>	#japan_tankmen:names/jp250	</_250>
+        <_251>	#japan_tankmen:names/jp251	</_251>
+        <_252>	#japan_tankmen:names/jp252	</_252>
+        <_253>	#japan_tankmen:names/jp253	</_253>
+        <_254>	#japan_tankmen:names/jp254	</_254>
+        <_255>	#japan_tankmen:names/jp255	</_255>
+        <_256>	#japan_tankmen:names/jp256	</_256>
+        <_257>	#japan_tankmen:names/jp257	</_257>
+        <_259>	#japan_tankmen:names/jp259	</_259>
+        <_261>	#japan_tankmen:names/jp261	</_261>
+        <_262>	#japan_tankmen:names/jp262	</_262>
+        <_263>	#japan_tankmen:names/jp263	</_263>
+        <_264>	#japan_tankmen:names/jp264	</_264>
+        <_265>	#japan_tankmen:names/jp265	</_265>
+        <_266>	#japan_tankmen:names/jp266	</_266>
+        <_267>	#japan_tankmen:names/jp267	</_267>
+        <_268>	#japan_tankmen:names/jp268	</_268>
+        <_269>	#japan_tankmen:names/jp269	</_269>
+        <_270>	#japan_tankmen:names/jp270	</_270>
+        <_271>	#japan_tankmen:names/jp271	</_271>
+        <_272>	#japan_tankmen:names/jp272	</_272>
+        <_273>	#japan_tankmen:names/jp273	</_273>
+        <_274>	#japan_tankmen:names/jp274	</_274>
+        <_275>	#japan_tankmen:names/jp275	</_275>
+        <_276>	#japan_tankmen:names/jp276	</_276>
+        <_277>	#japan_tankmen:names/jp277	</_277>
+        <_278>	#japan_tankmen:names/jp278	</_278>
+        <_279>	#japan_tankmen:names/jp279	</_279>
+        <_280>	#japan_tankmen:names/jp280	</_280>
+        <_281>	#japan_tankmen:names/jp281	</_281>
+        <_283>	#japan_tankmen:names/jp283	</_283>
+        <_284>	#japan_tankmen:names/jp284	</_284>
+        <_285>	#japan_tankmen:names/jp285	</_285>
+        <_287>	#japan_tankmen:names/jp287	</_287>
+        <_288>	#japan_tankmen:names/jp288	</_288>
+        <_289>	#japan_tankmen:names/jp289	</_289>
+        <_290>	#japan_tankmen:names/jp290	</_290>
+        <_291>	#japan_tankmen:names/jp291	</_291>
+        <_292>	#japan_tankmen:names/jp292	</_292>
+        <_293>	#japan_tankmen:names/jp293	</_293>
+        <_294>	#japan_tankmen:names/jp294	</_294>
+        <_295>	#japan_tankmen:names/jp295	</_295>
+        <_296>	#japan_tankmen:names/jp296	</_296>
+        <_297>	#japan_tankmen:names/jp297	</_297>
+        <_298>	#japan_tankmen:names/jp298	</_298>
+        <_299>	#japan_tankmen:names/jp299	</_299>
+        <_300>	#japan_tankmen:names/jp300	</_300>
+        <_301>	#japan_tankmen:names/jp301	</_301>
+        <_302>	#japan_tankmen:names/jp302	</_302>
+        <_303>	#japan_tankmen:names/jp303	</_303>
+        <_304>	#japan_tankmen:names/jp304	</_304>
+      </lastNames>
+      <icons>
+        <_1>	japan-1.png	</_1>
+        <_2>	japan-2.png	</_2>
+        <_3>	japan-3.png	</_3>
+        <_4>	japan-4.png	</_4>
+        <_5>	japan-5.png	</_5>
+        <_6>	japan-6.png	</_6>
+        <_7>	japan-7.png	</_7>
+        <_8>	japan-8.png	</_8>
+        <_9>	japan-9.png	</_9>
+        <_10>	japan-10.png	</_10>
+        <_11>	japan-11.png	</_11>
+        <_12>	japan-12.png	</_12>
+        <_13>	japan-13.png	</_13>
+        <_14>	japan-14.png	</_14>
+        <_15>	japan-15.png	</_15>
+        <_16>	japan-16.png	</_16>
+        <_17>	japan-17.png	</_17>
+        <_18>	japan-18.png	</_18>
+        <_19>	japan-19.png	</_19>
+        <_20>	japan-20.png	</_20>
+        <_21>	japan-21.png	</_21>
+        <_22>	japan-22.png	</_22>
+        <_23>	japan-23.png	</_23>
+        <_24>	japan-24.png	</_24>
+        <_25>	japan-25.png	</_25>
+        <_26>	japan-26.png	</_26>
+        <_27>	japan-27.png	</_27>
+        <_28>	japan-28.png	</_28>
+        <_29>	japan-29.png	</_29>
+        <_30>	japan-30.png	</_30>
+      </icons>
+    </men1>
+  </normalGroups>
+  <premiumGroups>
+    <men1>
+      <weight>	1.0	</weight>
+      <sex>	male	</sex>
+      <firstNames>
+        <_2001>	#japan_tankmen:names/jpn1	</_2001>
+        <_2002>	#japan_tankmen:names/jpn2	</_2002>
+        <_2003>	#japan_tankmen:names/jpn3	</_2003>
+        <_2004>	#japan_tankmen:names/jpn4	</_2004>
+        <_2005>	#japan_tankmen:names/jpn5	</_2005>
+      </firstNames>
+      <lastNames>
+        <_2001>	#japan_tankmen:names/jp1	</_2001>
+        <_2002>	#japan_tankmen:names/jp2	</_2002>
+        <_2003>	#japan_tankmen:names/jp3	</_2003>
+        <_2004>	#japan_tankmen:names/jp4	</_2004>
+        <_2005>	#japan_tankmen:names/jp5	</_2005>
+      </lastNames>
+      <icons>
+        <_2001>	japan-1.png	</_2001>
+        <_2002>	japan-2.png	</_2002>
+        <_2003>	japan-3.png	</_2003>
+        <_2004>	japan-4.png	</_2004>
+        <_2005>	japan-5.png	</_2005>
+      </icons>
+    </men1>
+    <women1>
+      <weight>	0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	false	</notInShop>
+      <firstNames>
+        <_11001>	#japan_tankmen:names/jpn11001	</_11001>
+        <_11002>	#japan_tankmen:names/jpn11002	</_11002>
+        <_11003>	#japan_tankmen:names/jpn11003	</_11003>
+        <_11004>	#japan_tankmen:names/jpn11004	</_11004>
+        <_11005>	#japan_tankmen:names/jpn11005	</_11005>
+        <_11006>	#japan_tankmen:names/jpn11006	</_11006>
+        <_11007>	#japan_tankmen:names/jpn11007	</_11007>
+        <_11008>	#japan_tankmen:names/jpn11008	</_11008>
+        <_11009>	#japan_tankmen:names/jpn11009	</_11009>
+        <_11010>	#japan_tankmen:names/jpn11010	</_11010>
+        <_11011>	#japan_tankmen:names/jpn11011	</_11011>
+        <_11012>	#japan_tankmen:names/jpn11012	</_11012>
+        <_11013>	#japan_tankmen:names/jpn11013	</_11013>
+        <_11014>	#japan_tankmen:names/jpn11014	</_11014>
+        <_11015>	#japan_tankmen:names/jpn11015	</_11015>
+        <_11016>	#japan_tankmen:names/jpn11016	</_11016>
+        <_11017>	#japan_tankmen:names/jpn11017	</_11017>
+        <_11018>	#japan_tankmen:names/jpn11018	</_11018>
+        <_11019>	#japan_tankmen:names/jpn11019	</_11019>
+        <_11020>	#japan_tankmen:names/jpn11020	</_11020>
+        <_11021>	#japan_tankmen:names/jpn11021	</_11021>
+        <_11022>	#japan_tankmen:names/jpn11022	</_11022>
+        <_11023>	#japan_tankmen:names/jpn11023	</_11023>
+        <_11024>	#japan_tankmen:names/jpn11024	</_11024>
+        <_11025>	#japan_tankmen:names/jpn11025	</_11025>
+        <_11026>	#japan_tankmen:names/jpn11026	</_11026>
+        <_11027>	#japan_tankmen:names/jpn11027	</_11027>
+        <_11028>	#japan_tankmen:names/jpn11028	</_11028>
+        <_11029>	#japan_tankmen:names/jpn11029	</_11029>
+        <_11030>	#japan_tankmen:names/jpn11030	</_11030>
+        <_11031>	#japan_tankmen:names/jpn11031	</_11031>
+        <_11032>	#japan_tankmen:names/jpn11032	</_11032>
+        <_11033>	#japan_tankmen:names/jpn11033	</_11033>
+        <_11034>	#japan_tankmen:names/jpn11034	</_11034>
+        <_11035>	#japan_tankmen:names/jpn11035	</_11035>
+        <_11036>	#japan_tankmen:names/jpn11036	</_11036>
+        <_11037>	#japan_tankmen:names/jpn11037	</_11037>
+        <_11038>	#japan_tankmen:names/jpn11038	</_11038>
+        <_11039>	#japan_tankmen:names/jpn11039	</_11039>
+        <_11040>	#japan_tankmen:names/jpn11040	</_11040>
+        <_11041>	#japan_tankmen:names/jpn11041	</_11041>
+        <_11042>	#japan_tankmen:names/jpn11042	</_11042>
+      </firstNames>
+      <lastNames>
+        <_11001>	#japan_tankmen:names/jp11001	</_11001>
+        <_11002>	#japan_tankmen:names/jp11002	</_11002>
+        <_11003>	#japan_tankmen:names/jp11003	</_11003>
+        <_11004>	#japan_tankmen:names/jp11004	</_11004>
+        <_11005>	#japan_tankmen:names/jp11005	</_11005>
+        <_11006>	#japan_tankmen:names/jp11006	</_11006>
+        <_11007>	#japan_tankmen:names/jp11007	</_11007>
+        <_11008>	#japan_tankmen:names/jp11008	</_11008>
+        <_11009>	#japan_tankmen:names/jp11009	</_11009>
+        <_11010>	#japan_tankmen:names/jp11010	</_11010>
+        <_11011>	#japan_tankmen:names/jp11011	</_11011>
+        <_11012>	#japan_tankmen:names/jp11012	</_11012>
+        <_11013>	#japan_tankmen:names/jp11013	</_11013>
+        <_11014>	#japan_tankmen:names/jp11014	</_11014>
+        <_11015>	#japan_tankmen:names/jp11015	</_11015>
+        <_11016>	#japan_tankmen:names/jp11016	</_11016>
+        <_11017>	#japan_tankmen:names/jp11017	</_11017>
+        <_11018>	#japan_tankmen:names/jp11018	</_11018>
+        <_11019>	#japan_tankmen:names/jp11019	</_11019>
+        <_11020>	#japan_tankmen:names/jp11020	</_11020>
+      </lastNames>
+      <icons>
+        <_11001>	japan-female-1.png	</_11001>
+        <_11002>	japan-female-2.png	</_11002>
+        <_11003>	japan-female-3.png	</_11003>
+        <_11004>	japan-female-4.png	</_11004>
+        <_11005>	japan-female-5.png	</_11005>
+        <_11006>	japan-female-6.png	</_11006>
+        <_11007>	japan-female-7.png	</_11007>
+        <_11008>	japan-female-8.png	</_11008>
+        <_11009>	japan-female-9.png	</_11009>
+        <_11010>	japan-female-10.png	</_11010>
+        <_11011>	japan-female-11.png	</_11011>
+        <_11012>	japan-female-12.png	</_11012>
+      </icons>
+    </women1>
+    <men_Edelweiss>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <firstNames>
+        <_3001>	#japan_tankmen:names/edelweissn1	</_3001>
+        <_3003>	#japan_tankmen:names/edelweissn3	</_3003>
+        <_3004>	#japan_tankmen:names/edelweissn4	</_3004>
+        <_3005>	#japan_tankmen:names/edelweissn5	</_3005>
+      </firstNames>
+      <lastNames>
+        <_3001>	#japan_tankmen:names/edelweiss1	</_3001>
+        <_3003>	#japan_tankmen:names/edelweiss3	</_3003>
+        <_3004>	#japan_tankmen:names/edelweiss4	</_3004>
+        <_3005>	#japan_tankmen:names/edelweiss5	</_3005>
+      </lastNames>
+      <icons>
+        <_3001>	japan-Welkin_Gunther.png	</_3001>
+        <_3003>	japan-Gunner.png	</_3003>
+        <_3004>	japan-Kreis_Czherny.png	</_3004>
+        <_3005>	japan-Loader.png	</_3005>
+      </icons>
+    </men_Edelweiss>
+    <men_Nameless>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <firstNames>
+        <_3007>	#japan_tankmen:names/namelessn2	</_3007>
+        <_3008>	#japan_tankmen:names/namelessn3	</_3008>
+        <_3009>	#japan_tankmen:names/namelessn4	</_3009>
+        <_3010>	#japan_tankmen:names/namelessn5	</_3010>
+      </firstNames>
+      <lastNames>
+        <_3007>	#japan_tankmen:names/nameless2	</_3007>
+        <_3008>	#japan_tankmen:names/nameless3	</_3008>
+        <_3009>	#japan_tankmen:names/nameless4	</_3009>
+        <_3010>	#japan_tankmen:names/nameless5	</_3010>
+      </lastNames>
+      <icons>
+        <_3007>	japan-Gusurg.png	</_3007>
+        <_3008>	japan-Gunner_1.png	</_3008>
+        <_3009>	japan-Radio_operator.png	</_3009>
+        <_3010>	japan-Loader_2.png	</_3010>
+      </icons>
+    </men_Nameless>
+    <women_Edelweiss>
+      <weight>	0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <firstNames>
+        <_3002>	#japan_tankmen:names/edelweissn2	</_3002>
+      </firstNames>
+      <lastNames>
+        <_3002>	#japan_tankmen:names/edelweiss2	</_3002>
+      </lastNames>
+      <icons>
+        <_3002>	japan-Isara_Gunther.png	</_3002>
+      </icons>
+    </women_Edelweiss>
+    <women_Nameless>
+      <weight>	0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <firstNames>
+        <_3006>	#japan_tankmen:names/namelessn1	</_3006>
+      </firstNames>
+      <lastNames>
+        <_3006>	#japan_tankmen:names/nameless1	</_3006>
+      </lastNames>
+      <icons>
+        <_3006>	japan-Carisa_Contzen.png	</_3006>
+      </icons>
+    </women_Nameless>
+    <men_Buffon_Football>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3011>	#japan_tankmen:names/Gianluigi	</_3011>
+      </firstNames>
+      <lastNames>
+        <_3011>	#japan_tankmen:names/Buffon	</_3011>
+      </lastNames>
+      <icons>
+        <_3011>	italy-Buffon.png	</_3011>
+      </icons>
+    </men_Buffon_Football>
+  </premiumGroups>
+</japan.xml>

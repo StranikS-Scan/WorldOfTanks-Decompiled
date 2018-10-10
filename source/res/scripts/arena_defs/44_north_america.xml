@@ -1,0 +1,41 @@
+<44_north_america.xml>
+  <name>	#arenas:44_north_america/name	</name>
+  <description>	#arenas:44_north_america/description	</description>
+  <geometry>	spaces/44_north_america	</geometry>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/44_north_america/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_liveoaks_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_liveoaks_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_liveoaks_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_liveoaks_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_liveoaks_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_liveoaks_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_44_north_america_base_ambient	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-356.987122 -329.806335	</position1>
+        </team1>
+        <team2>
+          <position1>	300.193024 363.934174	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+</44_north_america.xml>

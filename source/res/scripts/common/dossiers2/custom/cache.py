@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/cache.py
 import nations
 from items import vehicles
@@ -20,13 +21,13 @@ def buildCache():
         nationList = vehicles.g_list.getList(nationIdx)
         vehiclesInNationTree = set()
         for vehDescr in nationList.itervalues():
-            vehiclesByLevel.setdefault(vehDescr['level'], set()).add(vehDescr['compactDescr'])
+            vehiclesByLevel.setdefault(vehDescr.level, set()).add(vehDescr.compactDescr)
             for tag in ('beast', 'sinai', 'patton'):
-                if tag in vehDescr['tags']:
-                    vehiclesByTag[tag].add(vehDescr['compactDescr'])
+                if tag in vehDescr.tags:
+                    vehiclesByTag[tag].add(vehDescr.compactDescr)
 
-            if len(unlocksSources.get(vehDescr['compactDescr'], set())) > 0 or len(vehicles.g_cache.vehicle(nationIdx, vehDescr['id']).unlocksDescrs) > 0:
-                vehiclesInNationTree.add(vehDescr['compactDescr'])
+            if len(unlocksSources.get(vehDescr.compactDescr, set())) > 0 or len(vehicles.g_cache.vehicle(nationIdx, vehDescr.id).unlocksDescrs) > 0:
+                vehiclesInNationTree.add(vehDescr.compactDescr)
 
         vehiclesInTree.update(vehiclesInNationTree)
         vehiclesInTreeByNation[nationIdx] = vehiclesInNationTree
@@ -37,7 +38,7 @@ def buildCache():
     _g_cache.update({'vehiclesByLevel': vehiclesByLevel,
      'vehicles8+': vehicles8p,
      'vehiclesByTag': vehiclesByTag,
-     'mausTypeCompDescr': vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName('germany:Maus')),
+     'mausTypeCompDescr': vehicles.makeVehicleTypeCompDescrByName('germany:G42_Maus'),
      'vehiclesInTreesByNation': vehiclesInTreeByNation,
      'vehiclesInTrees': vehiclesInTree,
      'nationsWithVehiclesInTree': nationsWithVehiclesInTree})

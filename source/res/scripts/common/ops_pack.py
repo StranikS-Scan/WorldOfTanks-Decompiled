@@ -1,22 +1,25 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ops_pack.py
 import struct
 from external_strings_utils import truncate_utf8
+from soft_exception import SoftException
+MAX_PASCAL_STRING_LEN = 65535
 
 def packPascalString(s):
     if isinstance(s, unicode):
         s = s.encode('utf8')
-    s = truncate_utf8(s, 255)
-    buffer = struct.pack('<B', len(s))
+    s = truncate_utf8(s, MAX_PASCAL_STRING_LEN)
+    buffer = struct.pack('<H', len(s))
     buffer += s
     return buffer
 
 
-def unpackPascalString(bufferString, offset = 0):
-    lenString = struct.unpack_from('<B', bufferString, offset)[0]
-    start = offset + 1
+def unpackPascalString(bufferString, offset=0):
+    lenString = struct.unpack_from('<H', bufferString, offset)[0]
+    start = offset + 2
     fin = start + lenString
     retString = bufferString[start:fin]
-    return (retString, lenString + 1)
+    return (retString, lenString + 2)
 
 
 def initOpsFormatDef(opsFormatDefs):
@@ -31,6 +34,10 @@ def initOpsFormatDef(opsFormatDefs):
             packFormat = '<B' + unpackFormat
             calcSize = struct.calcsize(packFormat)
             unpackFormat = '<' + unpackFormat
+        elif unpackFormat is None:
+            packFormat = '<B'
+            calcSize = struct.calcsize(packFormat)
+            unpackFormat = '<'
         if specialFormat:
             ofs = 0
             for formatSymbol in specialFormat:
@@ -42,6 +49,14 @@ def initOpsFormatDef(opsFormatDefs):
                      elementFormat,
                      struct.calcsize(lenFormat),
                      struct.calcsize('<' + elementFormat))
+                elif formatSymbol == 'N':
+                    lenFormat, elementFormat = adds
+                    lenFormat = '<' + lenFormat
+                    elementFormat = '<' + elementFormat
+                    additionals[ofs] = (lenFormat,
+                     elementFormat,
+                     struct.calcsize(lenFormat),
+                     struct.calcsize(elementFormat))
                 elif formatSymbol == 'D':
                     lenFormat, keyFormat, valFormat = adds
                     lenFormat = '<' + lenFormat
@@ -78,6 +93,9 @@ class OpsPacker:
         self._packedOps = ''
 
     def storeOp(self, op, *args):
+        self._packedOps += self._getOpPack(op, *args)
+
+    def _getOpPack(self, op, *args):
         unpackFormat, methodName, specialFormat, additionals, sz, packFormat = self._opsFormatDefs[op]
         specialCount = len(specialFormat)
         fixedArgs = args[:-specialCount] if specialCount else args
@@ -91,12 +109,19 @@ class OpsPacker:
                 ofs += 1
                 if formatSym == 'S':
                     pack += packPascalString(arg)
-                elif formatSym in ('T', 'L'):
-                    headerFormat, elemFormat = adds[:2]
+                if formatSym in ('T', 'L'):
+                    lenFormat, elemFormat = adds[:2]
                     lenElements = len(arg)
-                    format = headerFormat + str(lenElements) + elemFormat
+                    format = lenFormat + str(lenElements) + elemFormat
                     pack += struct.pack(format, lenElements, *arg)
-                elif formatSym == 'D':
+                if formatSym == 'N':
+                    lenFormat, elemFormat = adds[:2]
+                    lenElements = len(arg)
+                    pack += struct.pack(lenFormat, lenElements)
+                    for elements in arg:
+                        pack += struct.pack(elemFormat, *elements)
+
+                if formatSym == 'D':
                     lenFormat, keyFormat, valFormat = adds[:3]
                     keys = arg.keys()
                     lenElements = len(keys)
@@ -104,7 +129,7 @@ class OpsPacker:
                     pack += struct.pack(format, lenElements, *keys)
                     format = '<' + str(lenElements) + valFormat
                     pack += struct.pack(format, *arg.values())
-                elif formatSym == 'M':
+                if formatSym == 'M':
                     lenFormat, elemFormat, subkeyNames = adds[:3]
                     lenElements = len(arg)
                     pack += struct.pack(lenFormat, lenElements)
@@ -115,10 +140,7 @@ class OpsPacker:
 
                         pack += struct.pack(elemFormat, key, *vals)
 
-                else:
-                    raise 0 or AssertionError
-
-        self._packedOps += pack
+        return pack
 
     def _appendOp(self, op, packedArgs):
         pack = struct.pack('<B', op)
@@ -138,14 +160,17 @@ class OpsUnpacker:
     def _appendOp(self, op, packedArgs):
         pass
 
-    def unpackOps(self, packedOps = ''):
+    def _onUnpackedOp(self, opCode):
+        pass
+
+    def unpackOps(self, packedOps=''):
         invokedOps = set()
         while len(packedOps):
             opCode = struct.unpack_from('<B', packedOps)[0]
             try:
                 unpackFormat, methodName, specialFormat, additionals, calcSize, packFormat = self._opsFormatDefs[opCode]
             except:
-                raise Exception, '%s unpackOps: unknown opcode %s' % (self.__class__, opCode)
+                raise SoftException('%s unpackOps: unknown opcode %s' % (self.__class__, opCode))
 
             method = getattr(self, methodName)
             if unpackFormat or specialFormat:
@@ -171,6 +196,16 @@ class OpsUnpacker:
                                 arg = set(elements)
                             elif formatSymbol == 'L':
                                 arg = list(elements)
+                        elif formatSymbol == 'N':
+                            headerFormat, elemFormat, headerSize, elemSize = adds
+                            lenElements = struct.unpack_from(headerFormat, packedOps, packOfs)[0]
+                            packOfs += headerSize
+                            arg = []
+                            for i in xrange(lenElements):
+                                elements = struct.unpack_from(elemFormat, packedOps, packOfs)
+                                arg.append(elements)
+                                packOfs += elemSize
+
                         elif formatSymbol == 'D':
                             lenFormat, keyFormat, valFormat, lenSize, keySize, valSize = adds
                             lenElements = struct.unpack_from(lenFormat, packedOps, packOfs)[0]
@@ -204,6 +239,8 @@ class OpsUnpacker:
 
                 packedOps = packedOps[packOfs:]
                 method(*args)
+            elif unpackFormat is None:
+                method()
             else:
                 packedOps = method(packedOps[1:])
             invokedOps.add(opCode)

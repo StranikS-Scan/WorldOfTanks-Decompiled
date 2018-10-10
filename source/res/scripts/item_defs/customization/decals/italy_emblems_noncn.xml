@@ -1,0 +1,59 @@
+<italy_emblems_noncn.xml>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <itemGroup>
+    <name>	italy	</name>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy emblems	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	534	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_80.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_80	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	539	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_85.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_85	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	542	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_88.dds	</texture>
+      <userString>	#vehicle_customization:emblem/battle/sticker_88	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	italy marathon	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+        <levels>	6 8 9 10	</levels>
+      </include>
+    </vehicleFilter>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	543	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_368.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_368	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+</italy_emblems_noncn.xml>

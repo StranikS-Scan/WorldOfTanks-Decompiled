@@ -1,7 +1,11 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/key_mapping.py
-import BigWorld, Keys
-from gui.BattleContext import g_battleContext
-BW_TO_SCALEFORM = {Keys.KEY_NONE: 666,
+import BigWorld
+import CommandMapping
+import Keys
+from helpers.i18n import makeString
+from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
+BW_TO_SCALEFORM = {Keys.KEY_NONE: 777,
  Keys.KEY_MOUSE0: 0,
  Keys.KEY_MOUSE1: 1,
  Keys.KEY_MOUSE2: 2,
@@ -130,12 +134,6 @@ SCALEFORM_TO_BW[17] = Keys.KEY_LCONTROL
 SCALEFORM_TO_BW[18] = Keys.KEY_LALT
 voidSymbol = 0
 
-def getBigworldKey(scaleformKey):
-    if g_battleContext.isInBattle and scaleformKey in SCALEFORM_TO_BW_OVERRIDE:
-        return SCALEFORM_TO_BW_OVERRIDE[scaleformKey]
-    return SCALEFORM_TO_BW.get(scaleformKey, voidSymbol)
-
-
 def getBigworldNameFromKey(bigworldKey):
     return 'KEY_%s' % BigWorld.keyToString(bigworldKey)
 
@@ -144,7 +142,19 @@ def getBigworldKeyFromName(bigworldName):
     return bigworldName.split('KEY_')[-1]
 
 
+def getBigworldKey(scaleformKey):
+    return SCALEFORM_TO_BW.get(scaleformKey, voidSymbol)
+
+
 def getScaleformKey(bigworldKey):
-    if g_battleContext.isInBattle and bigworldKey in BW_TO_SCALEFORM_OVERRIDE:
-        return BW_TO_SCALEFORM_OVERRIDE[bigworldKey]
     return BW_TO_SCALEFORM.get(bigworldKey, voidSymbol)
+
+
+def getKey(command):
+    commandName = CommandMapping.g_instance.getName(command)
+    return CommandMapping.g_instance.get(commandName)
+
+
+def getReadableKey(command):
+    key = getKey(command)
+    return makeString(READABLE_KEY_NAMES.key(BigWorld.keyToString(key)))

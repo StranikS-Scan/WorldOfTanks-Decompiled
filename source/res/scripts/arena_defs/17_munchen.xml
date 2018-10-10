@@ -1,0 +1,42 @@
+<17_munchen.xml>
+  <name>	#arenas:17_munchen/name	</name>
+  <description>	#arenas:17_munchen/description	</description>
+  <geometry>	spaces/17_munchen	</geometry>
+  <boundingBox>
+    <bottomLeft>	-300.0 -300.0	</bottomLeft>
+    <upperRight>	300.0 300.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/17_munchen/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_munchen_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_munchen_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_munchen_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_munchen_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_munchen_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_munchen_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-83.616577 -197.318390	</position1>
+        </team1>
+        <team2>
+          <position1>	61.929832 242.775162	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <useAdvancedPhysics>	true	</useAdvancedPhysics>
+</17_munchen.xml>

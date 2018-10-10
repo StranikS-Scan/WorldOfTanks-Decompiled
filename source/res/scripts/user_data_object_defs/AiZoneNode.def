@@ -1,0 +1,20 @@
+<AiZoneNode.def>
+  <Domain>	NONE	</Domain>
+  <Properties>
+    <zoneNodes>
+      <Type>	ARRAY	  <of>	UDO_REF	</of>
+      </Type>
+      <Editable>	True	</Editable>
+    </zoneNodes>
+    <nodeType>
+      <Type>	UINT8	</Type>
+      <Editable>	True	</Editable>
+      <Default>	0	</Default>
+    </nodeType>
+    <desirability>
+      <Type>	UINT8	</Type>
+      <Editable>	True	</Editable>
+      <Default>	100	</Default>
+    </desirability>
+  </Properties>
+</AiZoneNode.def>

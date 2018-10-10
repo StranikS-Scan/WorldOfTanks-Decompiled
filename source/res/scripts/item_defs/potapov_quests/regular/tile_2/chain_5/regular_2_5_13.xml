@@ -1,0 +1,200 @@
+<regular_2_5_13.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_5_13_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <vehicleDamage>
+                <title>
+                  <key>	#personal_missions_details:quest_2_5_13_condition_title_vehicleDamage	</key>
+                </title>
+                <description>
+                  <key>	#personal_missions_details:quest_2_5_13_condition_description_vehicleDamage	</key>
+                </description>
+                <attackReason>	0	</attackReason>
+                <eventCount></eventCount>
+                <greaterOrEqual>	6	</greaterOrEqual>
+              </vehicleDamage>
+              <results>
+                <title>
+                  <key>	#personal_missions_details:quest_2_5_13_condition_title_stunNum	</key>
+                </title>
+                <description>
+                  <key>	#personal_missions_details:quest_2_5_13_condition_description_stunNum	</key>
+                </description>
+                <key>	stunNum	</key>
+                <greaterOrEqual>	8	</greaterOrEqual>
+              </results>
+              <unit>
+                <unitVehicleDamage>
+                  <hideInGui></hideInGui>
+                  <attackReason>	0	</attackReason>
+                  <eventCount></eventCount>
+                  <greaterOrEqual>	6	</greaterOrEqual>
+                </unitVehicleDamage>
+              </unit>
+              <unit>
+                <results>
+                  <hideInGui></hideInGui>
+                  <key>	stunNum	</key>
+                  <greaterOrEqual>	8	</greaterOrEqual>
+                </results>
+              </unit>
+            </or>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+        <credits>	50000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t2:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_5_13_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_2_5_13_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+        <credits>	50000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t2:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_5_13_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <vehicleDamage>
+                <title>
+                  <key>	#personal_missions_details:quest_2_5_13_condition_title_vehicleDamage	</key>
+                </title>
+                <description>
+                  <key>	#personal_missions_details:quest_2_5_13_condition_description_vehicleDamage	</key>
+                </description>
+                <attackReason>	0	</attackReason>
+                <eventCount></eventCount>
+                <greaterOrEqual>	6	</greaterOrEqual>
+              </vehicleDamage>
+              <results>
+                <title>
+                  <key>	#personal_missions_details:quest_2_5_13_condition_title_stunNum	</key>
+                </title>
+                <description>
+                  <key>	#personal_missions_details:quest_2_5_13_condition_description_stunNum	</key>
+                </description>
+                <key>	stunNum	</key>
+                <greaterOrEqual>	8	</greaterOrEqual>
+              </results>
+              <unit>
+                <unitVehicleDamage>
+                  <hideInGui></hideInGui>
+                  <attackReason>	0	</attackReason>
+                  <eventCount></eventCount>
+                  <greaterOrEqual>	6	</greaterOrEqual>
+                </unitVehicleDamage>
+              </unit>
+              <unit>
+                <results>
+                  <hideInGui></hideInGui>
+                  <key>	stunNum	</key>
+                  <greaterOrEqual>	8	</greaterOrEqual>
+                </results>
+              </unit>
+            </or>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+        <token>
+          <id>	token:pt:final:s1:t2:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_5_13_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_2_5_13_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <or>
+              <vehicleDamage>
+                <attackReason>	0	</attackReason>
+                <eventCount></eventCount>
+                <greaterOrEqual>	6	</greaterOrEqual>
+              </vehicleDamage>
+              <results>
+                <key>	stunNum	</key>
+                <greaterOrEqual>	8	</greaterOrEqual>
+              </results>
+              <unit>
+                <unitVehicleDamage>
+                  <attackReason>	0	</attackReason>
+                  <eventCount></eventCount>
+                  <greaterOrEqual>	6	</greaterOrEqual>
+                </unitVehicleDamage>
+              </unit>
+              <unit>
+                <results>
+                  <key>	stunNum	</key>
+                  <greaterOrEqual>	8	</greaterOrEqual>
+                </results>
+              </unit>
+            </or>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_2_5_13.xml>

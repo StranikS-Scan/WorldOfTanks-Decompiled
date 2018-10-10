@@ -1,0 +1,162 @@
+<regular_3_4_2.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_4_2_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_3_4_2_condition_title_damageDealt	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_3_4_2_condition_description_damageDealt	</key>
+              </description>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_crit	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_3_4_2_condition_description_crit	</key>
+              </description>
+              <key>	innerModuleDestrCount	</key>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_4_2_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_4_2_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_4_2_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_3_4_2_condition_title_damageDealt	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_3_4_2_condition_description_damageDealt	</key>
+              </description>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_crit	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_3_4_2_condition_description_crit	</key>
+              </description>
+              <key>	innerModuleDestrCount	</key>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </results>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_isAnyOurCrittedInnerModules	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_isAnyOurCrittedInnerModules	</key>
+              </description>
+              <key>	isAnyOurCrittedInnerModules	</key>
+              <equal>	0	</equal>
+            </results>
+            <isAlive>
+              <hideInGui></hideInGui>
+            </isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t3:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_4_2_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_4_2_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	innerModuleDestrCount	</key>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	isAnyOurCrittedInnerModules	</key>
+              <equal>	0	</equal>
+            </results>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_3_4_2.xml>

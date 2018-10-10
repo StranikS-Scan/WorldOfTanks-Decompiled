@@ -1,8 +1,11 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/__init__.py
+from time import gmtime, time as getTime
+from collections import namedtuple
 import BigWorld
 from constants import NC_CONTEXT_ITEM_TYPE
-from debug_utils import LOG_WARNING
-from helpers import time_utils
+from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR
+from helpers import time_utils, i18n
 from messenger import g_settings
 
 class TimeFormatter(object):
@@ -33,12 +36,28 @@ class TimeFormatter(object):
         return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(time), BigWorld.wg_getLongTimeFormat(time))
 
     @classmethod
+    def getShortTimeDateFormat(cls, time):
+        return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortTimeFormat(time), BigWorld.wg_getShortDateFormat(time))
+
+    @classmethod
     def getShortDatetimeFormat(cls, time):
         return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(time), BigWorld.wg_getShortTimeFormat(time))
 
     @classmethod
+    def getActualMsgTimeStr(cls, timestamp):
+        try:
+            DAY_SECONDS = 86400
+            currentTime = getTime()
+            if currentTime - timestamp > DAY_SECONDS or gmtime().tm_mday != gmtime(timestamp).tm_mday:
+                return TimeFormatter.getShortTimeDateFormat(timestamp)
+            return TimeFormatter.getShortTimeFormat(timestamp)
+        except Exception:
+            LOG_ERROR('There is error while formatting message time', timestamp)
+            LOG_CURRENT_EXCEPTION()
+
+    @classmethod
     def getMessageEmptyFormatU(cls, _):
-        return u''
+        pass
 
     @classmethod
     def getMessageShortDateFormat(cls, time):
@@ -62,7 +81,8 @@ class NCContextItemFormatter(object):
      NC_CONTEXT_ITEM_TYPE.LONG_TIME: 'getLongTimeFormat',
      NC_CONTEXT_ITEM_TYPE.SHORT_DATE: 'getShortDateFormat',
      NC_CONTEXT_ITEM_TYPE.LONG_DATE: 'getLongDateFormat',
-     NC_CONTEXT_ITEM_TYPE.DATETIME: 'getDateTimeFormat'}
+     NC_CONTEXT_ITEM_TYPE.DATETIME: 'getDateTimeFormat',
+     NC_CONTEXT_ITEM_TYPE.STRING: 'getStringFormat'}
 
     @classmethod
     def getItemFormat(cls, itemType, itemValue):
@@ -90,64 +110,37 @@ class NCContextItemFormatter(object):
 
     @classmethod
     def getShortTimeFormat(cls, value):
-        return BigWorld.wg_getShortTimeFormat(time_utils.makeLocalServerTime(value))
+        return cls._makeLocalTimeString(value, BigWorld.wg_getShortTimeFormat)
 
     @classmethod
     def getLongTimeFormat(cls, value):
-        return BigWorld.wg_getLongTimeFormat(time_utils.makeLocalServerTime(value))
+        return cls._makeLocalTimeString(value, BigWorld.wg_getLongTimeFormat)
 
     @classmethod
     def getShortDateFormat(cls, value):
-        return BigWorld.wg_getShortDateFormat(time_utils.makeLocalServerTime(value))
+        return cls._makeLocalTimeString(value, BigWorld.wg_getShortDateFormat)
 
     @classmethod
     def getLongDateFormat(cls, value):
-        return BigWorld.wg_getLongDateFormat(time_utils.makeLocalServerTime(value))
+        return cls._makeLocalTimeString(value, BigWorld.wg_getLongDateFormat)
 
     @classmethod
-    def getDateTimeFormat(self, value):
-        value = time_utils.makeLocalServerTime(value)
-        return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(value), BigWorld.wg_getLongTimeFormat(value))
+    def getDateTimeFormat(cls, value):
+        return cls._makeLocalTimeString(value, lambda localTime: '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(value), BigWorld.wg_getLongTimeFormat(value)))
+
+    @classmethod
+    def getStringFormat(cls, value):
+        return i18n.encodeUtf8(value)
+
+    @classmethod
+    def _makeLocalTimeString(cls, value, formatter):
+        result = time_utils.makeLocalServerTime(value)
+        if result:
+            result = formatter(value)
+        else:
+            LOG_WARNING('Timestamp is not defined', value)
+            result = ''
+        return result
 
 
-from chat_shared import SYS_MESSAGE_TYPE
-from messenger.formatters import service_channel as sch_formatters
-SCH_SERVER_FORMATTERS_DICT = {SYS_MESSAGE_TYPE.serverReboot.index(): sch_formatters.ServerRebootFormatter(),
- SYS_MESSAGE_TYPE.serverRebootCancelled.index(): sch_formatters.ServerRebootCancelledFormatter(),
- SYS_MESSAGE_TYPE.battleResults.index(): sch_formatters.BattleResultsFormatter(),
- SYS_MESSAGE_TYPE.goldReceived.index(): sch_formatters.GoldReceivedFormatter(),
- SYS_MESSAGE_TYPE.invoiceReceived.index(): sch_formatters.InvoiceReceivedFormatter(),
- SYS_MESSAGE_TYPE.adminTextMessage.index(): sch_formatters.AdminMessageFormatter(),
- SYS_MESSAGE_TYPE.accountTypeChanged.index(): sch_formatters.AccountTypeChangedFormatter(),
- SYS_MESSAGE_TYPE.giftReceived.index(): sch_formatters.GiftReceivedFormatter(),
- SYS_MESSAGE_TYPE.autoMaintenance.index(): sch_formatters.AutoMaintenanceFormatter(),
- SYS_MESSAGE_TYPE.waresSold.index(): sch_formatters.WaresSoldFormatter(),
- SYS_MESSAGE_TYPE.waresBought.index(): sch_formatters.WaresBoughtFormatter(),
- SYS_MESSAGE_TYPE.premiumBought.index(): sch_formatters.PremiumBoughtFormatter(),
- SYS_MESSAGE_TYPE.premiumExtended.index(): sch_formatters.PremiumExtendedFormatter(),
- SYS_MESSAGE_TYPE.premiumExpired.index(): sch_formatters.PremiumExpiredFormatter(),
- SYS_MESSAGE_TYPE.prbArenaFinish.index(): sch_formatters.PrebattleArenaFinishFormatter(),
- SYS_MESSAGE_TYPE.prbKick.index(): sch_formatters.PrebattleKickFormatter(),
- SYS_MESSAGE_TYPE.prbDestruction.index(): sch_formatters.PrebattleDestructionFormatter(),
- SYS_MESSAGE_TYPE.vehicleCamouflageTimedOut.index(): sch_formatters.VehCamouflageTimedOutFormatter(),
- SYS_MESSAGE_TYPE.vehiclePlayerEmblemTimedOut.index(): sch_formatters.VehEmblemTimedOutFormatter(),
- SYS_MESSAGE_TYPE.vehiclePlayerInscriptionTimedOut.index(): sch_formatters.VehInscriptionTimedOutFormatter(),
- SYS_MESSAGE_TYPE.vehTypeLockExpired.index(): sch_formatters.VehicleTypeLockExpired(),
- SYS_MESSAGE_TYPE.serverDowntimeCompensation.index(): sch_formatters.ServerDowntimeCompensation(),
- SYS_MESSAGE_TYPE.achievementReceived.index(): sch_formatters.AchievementFormatter(),
- SYS_MESSAGE_TYPE.converter.index(): sch_formatters.ConverterFormatter(),
- SYS_MESSAGE_TYPE.tokenQuests.index(): sch_formatters.TokenQuestsFormatter(),
- SYS_MESSAGE_TYPE.historicalCostsReserved.index(): sch_formatters.HistoricalCostsReservedFormatter(),
- SYS_MESSAGE_TYPE.notificationsCenter.index(): sch_formatters.NCMessageFormatter(),
- SYS_MESSAGE_TYPE.clanEvent.index(): sch_formatters.ClanMessageFormatter(),
- SYS_MESSAGE_TYPE.fortEvent.index(): sch_formatters.FortMessageFormatter()}
-
-class SCH_CLIENT_MSG_TYPE(object):
-    SYS_MSG_TYPE, PREMIUM_ACCOUNT_EXPIRY_MSG, AOGAS_NOTIFY_TYPE, ACTION_NOTIFY_TYPE, BATTLE_TUTORIAL_RESULTS_TYPE = range(5)
-
-
-SCH_CLIENT_FORMATTERS_DICT = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: sch_formatters.ClientSysMessageFormatter(),
- SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: sch_formatters.PremiumAccountExpiryFormatter(),
- SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: sch_formatters.AOGASNotifyFormatter(),
- SCH_CLIENT_MSG_TYPE.ACTION_NOTIFY_TYPE: sch_formatters.ActionNotificationFormatter(),
- SCH_CLIENT_MSG_TYPE.BATTLE_TUTORIAL_RESULTS_TYPE: sch_formatters.BattleTutorialResultsFormatter()}
+SysMsgExtraData = namedtuple('SysMsgExtraData', 'type data')

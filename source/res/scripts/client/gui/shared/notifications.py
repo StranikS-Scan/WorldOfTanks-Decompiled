@@ -1,8 +1,9 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/notifications.py
 from constants import NC_MESSAGE_PRIORITY
 
 class NotificationPriorityLevel(object):
-    HIGH = 'hight'
+    HIGH = 'high'
     MEDIUM = 'medium'
     LOW = 'low'
     RANGE = (HIGH, MEDIUM, LOW)
@@ -18,13 +19,29 @@ class NotificationPriorityLevel(object):
         return result
 
 
-class NotificationGuiSettings(object):
-    __slots__ = ('isNotify', 'priorityLevel', 'isAlert', 'auxData', 'showAt')
+class NotificationGroup(object):
+    INFO = 'info'
+    INVITE = 'invite'
+    OFFER = 'offer'
+    ALL = (INFO, INVITE, OFFER)
 
-    def __init__(self, isNotify = False, priorityLevel = NotificationPriorityLevel.MEDIUM, isAlert = False, auxData = None, showAt = 0):
+
+class NotificationGuiSettings(object):
+    __slots__ = ('isNotify', 'priorityLevel', 'isAlert', 'auxData', 'showAt', '__customEvent', 'groupID')
+
+    def __init__(self, isNotify=False, priorityLevel=NotificationPriorityLevel.MEDIUM, isAlert=False, auxData=None, showAt=0, groupID=NotificationGroup.INFO):
         super(NotificationGuiSettings, self).__init__()
         self.isNotify = isNotify
         self.priorityLevel = priorityLevel
         self.isAlert = isAlert
         self.auxData = auxData or []
         self.showAt = showAt
+        self.groupID = groupID
+        self.__customEvent = None
+        return
+
+    def setCustomEvent(self, eType, ctx=None):
+        self.__customEvent = (eType, ctx)
+
+    def getCustomEvent(self):
+        return self.__customEvent

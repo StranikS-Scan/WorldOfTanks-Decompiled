@@ -1,57 +1,60 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/battle.py
 from helpers.html import translation
 from items import _xml
 from tutorial.data import chapter
+from tutorial.data import effects
 from tutorial.doc_loader import sub_parsers
 from tutorial.control.battle import triggers
 from tutorial.logger import LOG_ERROR
+_EFFECT_TYPE = effects.EFFECT_TYPE
 
 def _readShowMarkerSection(xmlCtx, section, _, conditions):
-    markerID = sub_parsers._parseID(xmlCtx, section, 'Specify a marker ID')
-    return chapter.HasTargetEffect(markerID, chapter.Effect.SHOW_MARKER, conditions=conditions)
+    markerID = sub_parsers.parseID(xmlCtx, section, 'Specify a marker ID')
+    return effects.HasTargetEffect(markerID, _EFFECT_TYPE.SHOW_MARKER, conditions=conditions)
 
 
 def _readRemoveMarkerSection(xmlCtx, section, _, conditions):
-    markerID = sub_parsers._parseID(xmlCtx, section, 'Specify a marker ID')
-    return chapter.HasTargetEffect(markerID, chapter.Effect.REMOVE_MARKER, conditions=conditions)
+    markerID = sub_parsers.parseID(xmlCtx, section, 'Specify a marker ID')
+    return effects.HasTargetEffect(markerID, _EFFECT_TYPE.REMOVE_MARKER, conditions=conditions)
 
 
 def _readNextTaskSection(xmlCtx, section, _, conditions):
-    taskID = sub_parsers._parseID(xmlCtx, section, 'Specify a next task ID')
-    return chapter.HasTargetEffect(taskID, chapter.Effect.NEXT_TASK, conditions=conditions)
+    taskID = sub_parsers.parseID(xmlCtx, section, 'Specify a next task ID')
+    return effects.HasTargetEffect(taskID, _EFFECT_TYPE.NEXT_TASK, conditions=conditions)
 
 
 def _readTeleportSection(xmlCtx, section, _, conditions):
-    pointID = sub_parsers._parseID(xmlCtx, section, 'Specify a point ID')
-    return chapter.HasTargetEffect(pointID, chapter.Effect.TELEPORT, conditions=conditions)
+    pointID = sub_parsers.parseID(xmlCtx, section, 'Specify a point ID')
+    return effects.HasTargetEffect(pointID, _EFFECT_TYPE.TELEPORT, conditions=conditions)
 
 
 def _readShowGreetingSection(xmlCtx, section, _, conditions):
-    greetingID = sub_parsers._parseID(xmlCtx, section, 'Specify a greeting ID')
-    return chapter.HasTargetEffect(greetingID, chapter.Effect.SHOW_GREETING, conditions=conditions)
+    greetingID = sub_parsers.parseID(xmlCtx, section, 'Specify a greeting ID')
+    return effects.HasTargetEffect(greetingID, _EFFECT_TYPE.SHOW_GREETING, conditions=conditions)
 
 
 def _readEnableCameraZoom(xmlCtx, section, _, conditions):
-    return chapter.SimpleEffect(chapter.Effect.ENABLE_CAMERA_ZOOM, conditions=conditions)
+    return effects.SimpleEffect(_EFFECT_TYPE.ENABLE_CAMERA_ZOOM, conditions=conditions)
 
 
 def _readDisableCameraZoom(xmlCtx, section, _, conditions):
-    return chapter.SimpleEffect(chapter.Effect.DISABLE_CAMERA_ZOOM, conditions=conditions)
+    return effects.SimpleEffect(_EFFECT_TYPE.DISABLE_CAMERA_ZOOM, conditions=conditions)
 
 
 def _readDispatcherTriggerSection(xmlCtx, section, _, triggerID):
     triggerIDs = set()
     for _, subSec in _xml.getChildren(xmlCtx, section, 'includes'):
-        triggerIDs.add(sub_parsers._parseID(xmlCtx, subSec, 'Specify a trigger ID'))
+        triggerIDs.add(sub_parsers.parseID(xmlCtx, subSec, 'Specify a trigger ID'))
 
     return triggers.TriggersDispatcher(triggerID, triggerIDs)
 
 
 def _readDispatchableTriggerSection(xmlCtx, section, triggerID, clazz, **kwargs):
     stateFlagID = section.readString('init-state-flag')
-    if not len(stateFlagID):
+    if not stateFlagID:
         stateFlagID = None
-    return sub_parsers._readValidateVarTriggerSection(xmlCtx, section, triggerID, clazz, stateFlagID=stateFlagID, **kwargs)
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, clazz, stateFlagID=stateFlagID, **kwargs)
 
 
 def _readAimTriggerSection(xmlCtx, section, _, triggerID):
@@ -63,7 +66,7 @@ def _readAreaTriggerSection(xmlCtx, section, _, triggerID):
 
 
 def _readVehicleOnArenaTriggerSection(xmlCtx, section, _, triggerID):
-    return sub_parsers._readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.VehicleOnArenaTrigger)
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.VehicleOnArenaTrigger)
 
 
 def _readAimAtVehicleTriggerSection(xmlCtx, section, _, triggerID):
@@ -80,7 +83,7 @@ def _readVehicleDestroyedTriggerSection(xmlCtx, section, _, triggerID):
 
 def _readShotMissedTriggerSection(xmlCtx, section, _, triggerID):
     stateFlagID = section.readString('init-state-flag')
-    if not len(stateFlagID):
+    if not stateFlagID:
         stateFlagID = None
     return triggers.ShotMissedTrigger(triggerID, stateFlagID=stateFlagID)
 
@@ -95,19 +98,19 @@ def _readShotDamageTriggerSection(xmlCtx, section, _, triggerID):
 
 def _readSniperModeTriggerSection(xmlCtx, section, _, triggerID):
     stateFlagID = section.readString('init-state-flag')
-    if not len(stateFlagID):
+    if not stateFlagID:
         stateFlagID = None
     return triggers.SniperModeTrigger(triggerID, stateFlagID=stateFlagID)
 
 
 def _readPlayerVehicleNoAmmoTriggerSection(xmlCtx, section, _, triggerID):
     stateFlagID = section.readString('init-state-flag')
-    if not len(stateFlagID):
+    if not stateFlagID:
         stateFlagID = None
     return triggers.PlayerVehicleNoAmmoTrigger(triggerID, stateFlagID=stateFlagID)
 
 
-def _readModelMarkerSection(xmlCtx, section, name = 'model'):
+def _readModelMarkerSection(xmlCtx, section, name='model'):
     result = {}
     if name in section.keys():
         subSec = _xml.getSubsection(xmlCtx, section, name)
@@ -130,10 +133,7 @@ def _readAimMarkerSection(xmlCtx, section, markerID, varRef):
 
 
 def _readAreaMarkerSection(xmlCtx, section, markerID, varRef):
-    subSec = _xml.getSubsection(xmlCtx, section, 'minimap')
-    minimapData = {'entry-name': _xml.readString(xmlCtx, subSec, 'entry-name'),
-     'entry-type': _xml.readString(xmlCtx, subSec, 'entry-type')}
-    return chapter.AreaMarker(markerID, varRef, _readModelMarkerSection(xmlCtx, section), _readModelMarkerSection(xmlCtx, section, name='ground'), _readWorldMarkerSection(xmlCtx, section), minimapData, createInd=section.readBool('create-indicator', True))
+    return chapter.AreaMarker(markerID, varRef, _readModelMarkerSection(xmlCtx, section), _readModelMarkerSection(xmlCtx, section, name='ground'), _readWorldMarkerSection(xmlCtx, section), createInd=section.readBool('create-indicator', True))
 
 
 def _readVehicleMarkerSection(xmlCtx, section, markerID, varRef):
@@ -153,19 +153,19 @@ _MARKER_TYPES = {'aim': _readAimMarkerSection,
  'teleport': _readTeleportMarkerSection}
 
 def _readMarkerSection(xmlCtx, section, _):
-    markerID = sub_parsers._parseID(xmlCtx, section, 'Specify a marker ID')
-    type = _xml.readString(xmlCtx, section, 'type')
+    markerID = sub_parsers.parseID(xmlCtx, section, 'Specify a marker ID')
+    mType = _xml.readString(xmlCtx, section, 'type')
     marker = None
-    if type in _MARKER_TYPES:
-        parser = _MARKER_TYPES[type]
+    if mType in _MARKER_TYPES:
+        parser = _MARKER_TYPES[mType]
         marker = parser(xmlCtx, section, markerID, _xml.readString(xmlCtx, section, 'var-ref'))
     else:
-        LOG_ERROR('Marker is not supported:', type)
+        LOG_ERROR('Marker is not supported:', mType)
     return marker
 
 
 def _readChapterTaskSection(xmlCtx, section, _):
-    taskID = sub_parsers._parseID(xmlCtx, section, 'Specify a task ID')
+    taskID = sub_parsers.parseID(xmlCtx, section, 'Specify a task ID')
     text = translation(_xml.readString(xmlCtx, section, 'text'))
     flagID = None
     if 'flag' in section.keys():
@@ -173,17 +173,17 @@ def _readChapterTaskSection(xmlCtx, section, _):
     return chapter.ChapterTask(taskID, text, flagID=flagID)
 
 
-def _readReplenishAmmoDialogSection(xmlCtx, section, _, dialogID, type, content):
+def _readReplenishAmmoDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
     content['_submitLabel'] = translation(_xml.readString(xmlCtx, section, 'submit-label'))
     content['_align'] = _xml.readString(xmlCtx, section, 'align')
     vector = _xml.readVector2(xmlCtx, section, 'offset')
     content['_popupOffsetX'] = vector.x
     content['_popupOffsetY'] = vector.y
-    return chapter.PopUp(dialogID, type, content)
+    return chapter.PopUp(dialogID, dialogType, content)
 
 
 def _readHintSection(xmlCtx, section, _):
-    hintID = sub_parsers._parseID(xmlCtx, section, 'Specify a hint ID')
+    hintID = sub_parsers.parseID(xmlCtx, section, 'Specify a hint ID')
     text = translation(_xml.readString(xmlCtx, section, 'text'))
     if 'image' in section.keys():
         image = chapter.SimpleImagePath(None, _xml.readString(xmlCtx, section, 'image'))
@@ -192,33 +192,32 @@ def _readHintSection(xmlCtx, section, _):
     else:
         image = chapter.SimpleImagePath()
     speakID = None
-    if 'speak' in section.keys():
-        speakID = _xml.readString(xmlCtx, section, 'speak')
+    if 'wwspeak' in section.keys():
+        speakID = _xml.readString(xmlCtx, section, 'wwspeak')
     return chapter.SimpleHint(hintID, text, image, speakID=speakID)
 
 
 def _readProgressSection(xmlCtx, section, _):
-    progressID = sub_parsers._parseID(xmlCtx, section, 'Specify a progress ID')
+    progressID = sub_parsers.parseID(xmlCtx, section, 'Specify a progress ID')
     conditions = []
     for _, subSec in _xml.getChildren(xmlCtx, section, 'steps'):
-        condID = sub_parsers._parseID(xmlCtx, subSec, 'Specify a condition ID')
-        conditions.append(chapter.HasIDConditions(sub_parsers._parseID(xmlCtx, subSec, 'Specify a condition ID'), sub_parsers._readConditions(xmlCtx, subSec, [])))
+        conditions.append(chapter.HasIDConditions(sub_parsers.parseID(xmlCtx, subSec, 'Specify a condition ID'), sub_parsers.readConditions(xmlCtx, subSec, [])))
 
     return chapter.ChapterProgress(progressID, conditions)
 
 
 def _readGreetingSection(xmlCtx, section, _):
-    greetingID = sub_parsers._parseID(xmlCtx, section, 'Specify a greeting ID')
+    greetingID = sub_parsers.parseID(xmlCtx, section, 'Specify a greeting ID')
     title = translation(_xml.readString(xmlCtx, section, 'title'))
     text = translation(_xml.readString(xmlCtx, section, 'text'))
     speakID = None
-    if 'speak' in section.keys():
-        speakID = _xml.readString(xmlCtx, section, 'speak')
+    if 'wwspeak' in section.keys():
+        speakID = _xml.readString(xmlCtx, section, 'wwspeak')
     return chapter.Greeting(greetingID, title, text, speakID=speakID)
 
 
 def _readExitSection(xmlCtx, section, _):
-    exitID = sub_parsers._parseID(xmlCtx, section, 'Specify a exit ID')
+    exitID = sub_parsers.parseID(xmlCtx, section, 'Specify a exit ID')
     return chapter.Exit(exitID, nextChapter=_xml.readString(xmlCtx, section, 'chapter-id'), nextDelay=_xml.readFloat(xmlCtx, section, 'next-delay'), finishDelay=section.readFloat('finish-delay'), isSpeakOver=section.readBool('is-speak-over'))
 
 
@@ -229,7 +228,7 @@ def _readVehicleImageSection(xmlCtx, section, imageID):
 _IMAGE_TYPES = {'vehicle': _readVehicleImageSection}
 
 def _readImageSection(xmlCtx, section, _):
-    imageID = sub_parsers._parseID(xmlCtx, section, 'Specify a image ID')
+    imageID = sub_parsers.parseID(xmlCtx, section, 'Specify a image ID')
     imageType = _xml.readString(xmlCtx, section, 'type')
     image = None
     if imageType in _IMAGE_TYPES:

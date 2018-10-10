@@ -1,0 +1,2000 @@
+<F37_AMX50_Foch.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	50	</forward>
+    <backward>	13	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.146	</moving>
+    <still>	0.243	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.365	</firePenalty>
+  </invisibility>
+  <repairCost>	8.70	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	180	</armor_1>
+      <armor_2>	100	</armor_2>
+      <armor_3>	70	</armor_3>
+      <armor_4>	40	</armor_4>
+      <armor_5>	30	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	50	</armor_9>
+      <armor_10>	180	</armor_10>
+      <armor_11>	70	</armor_11>
+      <armor_12>	30	</armor_12>
+      <armor_13>	150	</armor_13>
+      <armor_14>	175	</armor_14>
+      <armor_15>	140	</armor_15>
+      <armor_16>	200	</armor_16>
+      <armor_17>	130	</armor_17>
+      <armor_20>	80	</armor_20>
+      <armor_21>	170	</armor_21>
+      <armor_25>	40	</armor_25>
+      <armor_26>	100	</armor_26>
+      <armor_27>	200	</armor_27>
+      <armor_28>	50	</armor_28>
+      <armor_29>	40	</armor_29>
+      <armor_30>	120	</armor_30>
+      <armor_31>	175	</armor_31>
+      <armor_32>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_32>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	34300	</weight>
+    <maxHealth>	1240	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F37_AMX50_Foch/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F37_AMX50_Foch/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F37_AMX50_Foch/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 35.00 0.35 1.00 0.04 0.25	</pitchParams>
+      <rollParams>	1.00 0.24 35.00 0.35 1.00 0.04 0.25	</rollParams>
+      <sensitivityToImpulse>	0.17	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <tags>
+        <diesel>	diesel_large	</diesel>
+      </tags>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.512224 2.09377	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F37_AMX50_Foch/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F37_AMX50_Foch/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/french/F37_AMX50_Foch/AMX50_Foch_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
+        <rayStart>	-1.08703 0.859692 1.84818	</rayStart>
+        <rayEnd>	-1.08498 0.532996 1.61739	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	2	</slotId>
+        <rayStart>	-1.6799 0.821092 -2.77124	</rayStart>
+        <rayEnd>	-1.2936 0.717303 -2.77108	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	3	</slotId>
+        <rayStart>	1.70145 0.820456 -1.71777	</rayStart>
+        <rayEnd>	1.31523 0.716376 -1.71774	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	4	</slotId>
+        <rayStart>	-1.70145 0.820456 -1.71777	</rayStart>
+        <rayEnd>	-1.31523 0.716376 -1.71774	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	5	</slotId>
+        <rayStart>	1.6799 0.821092 -2.77124	</rayStart>
+        <rayEnd>	1.2936 0.717303 -2.77108	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11	</slotId>
+        <anchorPosition>	0.000186192 1.15102 -2.55953	</anchorPosition>
+        <anchorDirection>	0.000001 0.695008 -0.719002	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12	</slotId>
+        <anchorPosition>	0.000035 1.15112 -2.55905	</anchorPosition>
+        <anchorDirection>	0.000000 0.695035 -0.718976	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <camouflage>
+      <tiling>	1.8 1.8 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_AMX50_Foch>
+      <userString>	#france_vehicles:Chassis_AMX50_Foch	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	27650	</price>
+      <unlocks>
+        <chassis>	Chassis_AMX50_Foch_2	  <cost>	24000	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	30	</leftTrack>
+        <rightTrack>	30	</rightTrack>
+      </armor>
+      <weight>	11000	</weight>
+      <maxLoad>	59560	</maxLoad>
+      <terrainResistance>	1.4 1.5 2.6	</terrainResistance>
+      <brakeForce>	37500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	26	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F37_AMX50_Foch/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F37_AMX50_Foch/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F37_AMX50_Foch/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.44 0.79	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.6	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.347403	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.11281	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L2	</name>
+          <radius>	0.407578	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.404697	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.347403	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.11281	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R2	</name>
+          <radius>	0.407578	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.404697	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.05958 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F37_AMX50_Foch/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F37_AMX50_Foch/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.33198 2.28478	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.746910 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.264430	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F37_AMX50_Foch/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F37_AMX50_Foch/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F37_AMX50_Foch/track/left.track	</left>
+        <right>	vehicles/french/F37_AMX50_Foch/track/right.track	</right>
+        <segmentLength>	0.157	</segmentLength>
+        <segmentOffset>	0.157	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0055	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.295	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.305	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.314	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.294	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.288	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.276	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.262	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.249	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+          <rightSibling>	Track_VT_L8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L8	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.232	</offset>
+          <leftSibling>	Track_VT_L7	</leftSibling>
+          <rightSibling>	Track_VT_L9	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L9	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.207	</offset>
+          <leftSibling>	Track_VT_L8	</leftSibling>
+          <rightSibling>	Track_VT_L10	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L10	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.223	</offset>
+          <leftSibling>	Track_VT_L9	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.295	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.305	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.314	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.294	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.288	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.276	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.262	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.249	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+          <rightSibling>	Track_VT_R8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R8	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.232	</offset>
+          <leftSibling>	Track_VT_R7	</leftSibling>
+          <rightSibling>	Track_VT_R9	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R9	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.207	</offset>
+          <leftSibling>	Track_VT_R8	</leftSibling>
+          <rightSibling>	Track_VT_R10	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R10	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.223	</offset>
+          <leftSibling>	Track_VT_R9	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+      </trackNodes>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	95	</segmentsCount>
+          <segmentsOuterThickness>	0.0379386	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0148555	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.33198	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.157504	</back>
+              <top>	0.143062	</top>
+              <front>	0.146528	</front>
+              <bottom>	0.121754	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.146476	</back>
+              <top>	0.15279	</top>
+              <front>	0.156492	</front>
+              <bottom>	0.121754	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/french/F37_AMX50_Foch/track/segment.model	</model>
+            <length>	0.156991	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-3.3763	</xStart>
+                <xStep>	0.0784953	</xStep>
+                <ySamples>	1.25587 1.25589 1.2559 1.25591 1.25592 1.25594 1.25595 1.25596 1.25597 1.25599 1.256 1.25601 1.25602 1.25604 1.25605 1.25606 1.25608 1.25609 1.2561 1.25611 1.25613 1.25614 1.25615 1.25616 1.25618 1.25619 1.2562 1.25621 1.25623 1.25624 1.25625 1.25626 1.25628 1.25629 1.2563 1.25632 1.25633 1.25634 1.25635 1.25637 1.25638 1.25639 1.2564 1.25642 1.25643 1.25644 1.25645 1.25647 1.25648 1.25649 1.25651 1.25652 1.25653 1.25654 1.25654 1.25655 1.25656 1.25657 1.25658 1.25659 1.2566 1.25661 1.25662 1.25663 1.25664 1.25665 1.25666 1.25667 1.25668 1.25669 1.2567 1.25671 1.25672 1.25672 1.28331 1.28399 1.28643 1.28434 1.28374 1.28389 1.29014 1.28928 1.28336 1.27413 1.25379 1.19944 1.12628	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L2	</wheel>
+            <wheel>	W_L8	</wheel>
+            <wheel>	W_L7	</wheel>
+            <wheel>	W_L6	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	3.02556 0.828556	</basePos>
+              <shiftVec>	0.32367 0.154473	</shiftVec>
+              <jointIdx>	11	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L2	</wheelName>
+              <basePos>	-3.00013 0.732734	</basePos>
+              <shiftVec>	-0.377238 0.123535	</shiftVec>
+              <jointIdx>	56	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L8	</wheelName>
+              <basePos>	-2.11695 0.434204	</basePos>
+              <shiftVec>	0.0124791 -0.419552	</shiftVec>
+              <jointIdx>	67	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	2.16325 0.434215	</basePos>
+              <shiftVec>	0.00469995 -0.419526	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L2	</name>
+              <radius>	0.395706	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.357265	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	-1.332	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L2	</name>
+              <startAngle>	-546.532	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	-543.38	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.58982 1.32254 -3.37629	</point>
+                <point>	-1.58982 1.32255 -3.29779	</point>
+                <point>	-1.58982 1.32256 -3.2193	</point>
+                <point>	-1.58982 1.32257 -3.1408	</point>
+                <point>	-1.58982 1.32259 -3.06231	</point>
+                <point>	-1.58982 1.3226 -2.98381	</point>
+                <point>	-1.58982 1.32261 -2.90532	</point>
+                <point>	-1.58981 1.32262 -2.82682	</point>
+                <point>	-1.58981 1.32264 -2.74833	</point>
+                <point>	-1.58981 1.32265 -2.66983	</point>
+                <point>	-1.58981 1.32266 -2.59134	</point>
+                <point>	-1.58981 1.32268 -2.51284	</point>
+                <point>	-1.58981 1.32269 -2.43435	</point>
+                <point>	-1.58981 1.3227 -2.35585	</point>
+                <point>	-1.58981 1.32271 -2.27736	</point>
+                <point>	-1.58981 1.32273 -2.19886	</point>
+                <point>	-1.58981 1.32274 -2.12037	</point>
+                <point>	-1.58981 1.32275 -2.04187	</point>
+                <point>	-1.58981 1.32276 -1.96338	</point>
+                <point>	-1.58981 1.32278 -1.88488	</point>
+                <point>	-1.58981 1.32279 -1.80638	</point>
+                <point>	-1.58981 1.3228 -1.72789	</point>
+                <point>	-1.58981 1.32281 -1.64939	</point>
+                <point>	-1.58981 1.32283 -1.5709	</point>
+                <point>	-1.58981 1.32284 -1.4924	</point>
+                <point>	-1.58981 1.32285 -1.41391	</point>
+                <point>	-1.5898 1.32287 -1.33541	</point>
+                <point>	-1.5898 1.32288 -1.25692	</point>
+                <point>	-1.5898 1.32289 -1.17842	</point>
+                <point>	-1.5898 1.3229 -1.09993	</point>
+                <point>	-1.5898 1.32292 -1.02143	</point>
+                <point>	-1.5898 1.32293 -0.942936	</point>
+                <point>	-1.5898 1.32294 -0.864441	</point>
+                <point>	-1.5898 1.32295 -0.785946	</point>
+                <point>	-1.5898 1.32297 -0.707451	</point>
+                <point>	-1.5898 1.32298 -0.628955	</point>
+                <point>	-1.5898 1.32299 -0.55046	</point>
+                <point>	-1.5898 1.323 -0.471965	</point>
+                <point>	-1.5898 1.32302 -0.39347	</point>
+                <point>	-1.5898 1.32303 -0.314974	</point>
+                <point>	-1.5898 1.32304 -0.236479	</point>
+                <point>	-1.5898 1.32306 -0.157984	</point>
+                <point>	-1.5898 1.32307 -0.0794888	</point>
+                <point>	-1.5898 1.32308 -0.000993276	</point>
+                <point>	-1.5898 1.32309 0.0775022	</point>
+                <point>	-1.5898 1.32311 0.155997	</point>
+                <point>	-1.58979 1.32312 0.234492	</point>
+                <point>	-1.58979 1.32313 0.312988	</point>
+                <point>	-1.58979 1.32314 0.391483	</point>
+                <point>	-1.58979 1.32316 0.469978	</point>
+                <point>	-1.58979 1.32317 0.548473	</point>
+                <point>	-1.37979 1.32318 0.626967	</point>
+                <point>	-1.37979 1.32319 0.705463	</point>
+                <point>	-1.37979 1.3232 0.783958	</point>
+                <point>	-1.37979 1.32321 0.862453	</point>
+                <point>	-1.37979 1.32322 0.940948	</point>
+                <point>	-1.37979 1.32323 1.01944	</point>
+                <point>	-1.37979 1.32324 1.09794	</point>
+                <point>	-1.37979 1.32325 1.17643	</point>
+                <point>	-1.37979 1.32326 1.25493	</point>
+                <point>	-1.37979 1.32327 1.33343	</point>
+                <point>	-1.37979 1.32328 1.41192	</point>
+                <point>	-1.37979 1.32329 1.49042	</point>
+                <point>	-1.37979 1.3233 1.56891	</point>
+                <point>	-1.37979 1.32331 1.64741	</point>
+                <point>	-1.37979 1.32332 1.7259	</point>
+                <point>	-1.37978 1.32333 1.8044	</point>
+                <point>	-1.37978 1.32334 1.88289	</point>
+                <point>	-1.37978 1.32335 1.96139	</point>
+                <point>	-1.37978 1.32335 2.03988	</point>
+                <point>	-1.37978 1.32336 2.11838	</point>
+                <point>	-1.37978 1.32337 2.19687	</point>
+                <point>	-1.37978 1.32338 2.27537	</point>
+                <point>	-1.37978 1.32339 2.35386	</point>
+                <point>	-1.39978 1.34998 2.43236	</point>
+                <point>	-1.58978 1.35066 2.51085	</point>
+                <point>	-1.37978 1.3531 2.58935	</point>
+                <point>	-1.37978 1.351 2.66784	</point>
+                <point>	-1.46978 1.3504 2.74634	</point>
+                <point>	-1.37978 1.35056 2.82484	</point>
+                <point>	-1.37978 1.3568 2.90333	</point>
+                <point>	-1.58978 1.35595 2.98183	</point>
+                <point>	-1.58978 1.35003 3.06032	</point>
+                <point>	-1.58978 1.3408 3.13882	</point>
+                <point>	-1.58978 1.32045 3.21731	</point>
+                <point>	-1.58977 1.26611 3.29581	</point>
+                <point>	-1.58977 1.19295 3.3743	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	95	</segmentsCount>
+          <segmentsOuterThickness>	0.037958	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0148554	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.33198	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.157504	</back>
+              <top>	0.143062	</top>
+              <front>	0.146528	</front>
+              <bottom>	0.121754	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.146476	</back>
+              <top>	0.15279	</top>
+              <front>	0.156492	</front>
+              <bottom>	0.121754	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/french/F37_AMX50_Foch/track/segment.model	</model>
+            <length>	0.157004	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-3.37604	</xStart>
+                <xStep>	0.0785019	</xStep>
+                <ySamples>	1.25587 1.25589 1.2559 1.25591 1.25592 1.25594 1.25595 1.25596 1.25597 1.25599 1.256 1.25601 1.25602 1.25604 1.25605 1.25606 1.25607 1.25609 1.2561 1.25611 1.25613 1.25614 1.25615 1.25616 1.25618 1.25619 1.2562 1.25621 1.25623 1.25624 1.25625 1.25626 1.25628 1.25629 1.2563 1.25631 1.25633 1.25634 1.25635 1.25637 1.25638 1.25639 1.2564 1.25642 1.25643 1.25644 1.25645 1.25647 1.25648 1.25649 1.2565 1.25652 1.25653 1.25654 1.25655 1.25656 1.25657 1.25658 1.25658 1.25659 1.2566 1.25661 1.25662 1.25663 1.25664 1.25665 1.25666 1.25667 1.25668 1.25669 1.2567 1.25671 1.25672 1.25673 1.27348 1.26638 1.25929 1.25992 1.26274 1.26906 1.27336 1.27911 1.26613 1.25656 1.23171 1.19999 1.16092	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R2	</wheel>
+            <wheel>	W_R8	</wheel>
+            <wheel>	W_R7	</wheel>
+            <wheel>	W_R6	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	3.02556 0.828556	</basePos>
+              <shiftVec>	0.323546 0.154383	</shiftVec>
+              <jointIdx>	11	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R2	</wheelName>
+              <basePos>	-3.00014 0.732734	</basePos>
+              <shiftVec>	-0.377244 0.12358	</shiftVec>
+              <jointIdx>	56	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R8	</wheelName>
+              <basePos>	-2.11695 0.434186	</basePos>
+              <shiftVec>	0.0123684 -0.419552	</shiftVec>
+              <jointIdx>	67	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	2.16325 0.434197	</basePos>
+              <shiftVec>	0.00450087 -0.419528	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R2	</name>
+              <radius>	0.395726	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.357113	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	1.332	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R2	</name>
+              <startAngle>	-546.532	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	-543.379	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	1.58975 1.32258 -3.37605	</point>
+                <point>	1.58975 1.32259 -3.29755	</point>
+                <point>	1.58975 1.32261 -3.21905	</point>
+                <point>	1.58975 1.32262 -3.14055	</point>
+                <point>	1.58975 1.32263 -3.06204	</point>
+                <point>	1.58975 1.32264 -2.98354	</point>
+                <point>	1.58975 1.32266 -2.90504	</point>
+                <point>	1.58975 1.32267 -2.82654	</point>
+                <point>	1.58975 1.32268 -2.74804	</point>
+                <point>	1.58975 1.32269 -2.66954	</point>
+                <point>	1.58975 1.32271 -2.59103	</point>
+                <point>	1.58975 1.32272 -2.51253	</point>
+                <point>	1.58975 1.32273 -2.43403	</point>
+                <point>	1.58975 1.32274 -2.35553	</point>
+                <point>	1.58975 1.32276 -2.27703	</point>
+                <point>	1.58975 1.32277 -2.19852	</point>
+                <point>	1.58975 1.32278 -2.12002	</point>
+                <point>	1.58975 1.3228 -2.04152	</point>
+                <point>	1.58976 1.32281 -1.96302	</point>
+                <point>	1.58976 1.32282 -1.88452	</point>
+                <point>	1.58976 1.32283 -1.80601	</point>
+                <point>	1.58976 1.32285 -1.72751	</point>
+                <point>	1.58976 1.32286 -1.64901	</point>
+                <point>	1.58976 1.32287 -1.57051	</point>
+                <point>	1.58976 1.32288 -1.49201	</point>
+                <point>	1.58976 1.3229 -1.41351	</point>
+                <point>	1.58976 1.32291 -1.335	</point>
+                <point>	1.58976 1.32292 -1.2565	</point>
+                <point>	1.58976 1.32293 -1.178	</point>
+                <point>	1.58976 1.32295 -1.0995	</point>
+                <point>	1.58976 1.32296 -1.021	</point>
+                <point>	1.58976 1.32297 -0.942494	</point>
+                <point>	1.58976 1.32299 -0.863992	</point>
+                <point>	1.58976 1.323 -0.78549	</point>
+                <point>	1.58976 1.32301 -0.706988	</point>
+                <point>	1.58976 1.32302 -0.628486	</point>
+                <point>	1.58976 1.32304 -0.549985	</point>
+                <point>	1.58976 1.32305 -0.471483	</point>
+                <point>	1.58977 1.32306 -0.392981	</point>
+                <point>	1.58977 1.32307 -0.314479	</point>
+                <point>	1.58977 1.32309 -0.235977	</point>
+                <point>	1.58977 1.3231 -0.157475	</point>
+                <point>	1.58977 1.32311 -0.0789734	</point>
+                <point>	1.58977 1.32313 -0.000471242	</point>
+                <point>	1.58977 1.32314 0.0780305	</point>
+                <point>	1.58977 1.32315 0.156533	</point>
+                <point>	1.58977 1.32316 0.235034	</point>
+                <point>	1.58977 1.32318 0.313536	</point>
+                <point>	1.58977 1.32319 0.392038	</point>
+                <point>	1.58977 1.3232 0.47054	</point>
+                <point>	1.58977 1.32321 0.549042	</point>
+                <point>	1.58977 1.32323 0.627544	</point>
+                <point>	1.37977 1.32323 0.706047	</point>
+                <point>	1.37977 1.32324 0.784549	</point>
+                <point>	1.37977 1.32325 0.863051	</point>
+                <point>	1.37977 1.32326 0.941552	</point>
+                <point>	1.37977 1.32327 1.02005	</point>
+                <point>	1.37978 1.32328 1.09856	</point>
+                <point>	1.37978 1.32329 1.17706	</point>
+                <point>	1.37978 1.3233 1.25556	</point>
+                <point>	1.37978 1.32331 1.33406	</point>
+                <point>	1.37978 1.32332 1.41256	</point>
+                <point>	1.37978 1.32333 1.49107	</point>
+                <point>	1.37978 1.32334 1.56957	</point>
+                <point>	1.37978 1.32335 1.64807	</point>
+                <point>	1.37978 1.32336 1.72657	</point>
+                <point>	1.37978 1.32337 1.80507	</point>
+                <point>	1.37978 1.32338 1.88358	</point>
+                <point>	1.37978 1.32339 1.96208	</point>
+                <point>	1.37978 1.3234 2.04058	</point>
+                <point>	1.37978 1.32341 2.11908	</point>
+                <point>	1.37978 1.32341 2.19758	</point>
+                <point>	1.37978 1.32342 2.27608	</point>
+                <point>	1.37978 1.32343 2.35459	</point>
+                <point>	1.58978 1.34019 2.43309	</point>
+                <point>	1.58978 1.33309 2.51159	</point>
+                <point>	1.58978 1.326 2.59009	</point>
+                <point>	1.58978 1.32663 2.66859	</point>
+                <point>	1.58979 1.32945 2.74709	</point>
+                <point>	1.58979 1.33577 2.8256	</point>
+                <point>	1.57979 1.34007 2.9041	</point>
+                <point>	1.49979 1.34582 2.9826	</point>
+                <point>	1.58979 1.33284 3.0611	</point>
+                <point>	1.58979 1.32327 3.1396	</point>
+                <point>	1.58979 1.29842 3.21811	</point>
+                <point>	1.58979 1.2667 3.29661	</point>
+                <point>	1.58979 1.22763 3.37511	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	-1.70324 0.623363 -0.00041008	</anchorPosition>
+          <anchorDirection>	-0.939083 0.343692 -0.000226098	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	8	</slotId>
+          <anchorPosition>	0.000000 2.2507 -0.828522	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_AMX50_Foch>
+    <Chassis_AMX50_Foch_2>
+      <userString>	#france_vehicles:Chassis_AMX50_Foch_2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	64000	</price>
+      <armor>
+        <leftTrack>	30	</leftTrack>
+        <rightTrack>	30	</rightTrack>
+      </armor>
+      <weight>	11000	</weight>
+      <maxLoad>	62560	</maxLoad>
+      <terrainResistance>	1.3 1.4 2.4	</terrainResistance>
+      <brakeForce>	37500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	28	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F37_AMX50_Foch/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F37_AMX50_Foch/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F37_AMX50_Foch/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.44 0.79	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.6	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.347403	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.11281	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L2	</name>
+          <radius>	0.407578	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.404697	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.347403	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.11281	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R2	</name>
+          <radius>	0.407578	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.404697	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.05958 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F37_AMX50_Foch/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F37_AMX50_Foch/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.33198 2.28478	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.758730 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.264430	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F37_AMX50_Foch/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F37_AMX50_Foch/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F37_AMX50_Foch/track/left.track	</left>
+        <right>	vehicles/french/F37_AMX50_Foch/track/right.track	</right>
+        <segmentLength>	0.157	</segmentLength>
+        <segmentOffset>	0.157	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0055	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.295	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.305	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.314	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.294	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.288	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.276	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.262	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.249	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+          <rightSibling>	Track_VT_L8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L8	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.232	</offset>
+          <leftSibling>	Track_VT_L7	</leftSibling>
+          <rightSibling>	Track_VT_L9	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L9	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.207	</offset>
+          <leftSibling>	Track_VT_L8	</leftSibling>
+          <rightSibling>	Track_VT_L10	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L10	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.223	</offset>
+          <leftSibling>	Track_VT_L9	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.295	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.305	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.314	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.294	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.288	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.276	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.262	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.249	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+          <rightSibling>	Track_VT_R8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R8	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.232	</offset>
+          <leftSibling>	Track_VT_R7	</leftSibling>
+          <rightSibling>	Track_VT_R9	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R9	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.207	</offset>
+          <leftSibling>	Track_VT_R8	</leftSibling>
+          <rightSibling>	Track_VT_R10	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R10	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.223	</offset>
+          <leftSibling>	Track_VT_R9	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+      </trackNodes>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	95	</segmentsCount>
+          <segmentsOuterThickness>	0.0379386	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0148555	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.33198	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.157504	</back>
+              <top>	0.143062	</top>
+              <front>	0.146528	</front>
+              <bottom>	0.121754	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.146476	</back>
+              <top>	0.15279	</top>
+              <front>	0.156492	</front>
+              <bottom>	0.121754	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/french/F37_AMX50_Foch/track/segment.model	</model>
+            <length>	0.156991	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-3.3763	</xStart>
+                <xStep>	0.0784953	</xStep>
+                <ySamples>	1.25587 1.25589 1.2559 1.25591 1.25592 1.25594 1.25595 1.25596 1.25597 1.25599 1.256 1.25601 1.25602 1.25604 1.25605 1.25606 1.25608 1.25609 1.2561 1.25611 1.25613 1.25614 1.25615 1.25616 1.25618 1.25619 1.2562 1.25621 1.25623 1.25624 1.25625 1.25626 1.25628 1.25629 1.2563 1.25632 1.25633 1.25634 1.25635 1.25637 1.25638 1.25639 1.2564 1.25642 1.25643 1.25644 1.25645 1.25647 1.25648 1.25649 1.25651 1.25652 1.25653 1.25654 1.25654 1.25655 1.25656 1.25657 1.25658 1.25659 1.2566 1.25661 1.25662 1.25663 1.25664 1.25665 1.25666 1.25667 1.25668 1.25669 1.2567 1.25671 1.25672 1.25672 1.28331 1.28399 1.28643 1.28434 1.28374 1.28389 1.29014 1.28928 1.28336 1.27413 1.25379 1.19944 1.12628	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L2	</wheel>
+            <wheel>	W_L8	</wheel>
+            <wheel>	W_L7	</wheel>
+            <wheel>	W_L6	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	3.02556 0.828556	</basePos>
+              <shiftVec>	0.32367 0.154473	</shiftVec>
+              <jointIdx>	11	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L2	</wheelName>
+              <basePos>	-3.00013 0.732734	</basePos>
+              <shiftVec>	-0.377238 0.123535	</shiftVec>
+              <jointIdx>	56	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L8	</wheelName>
+              <basePos>	-2.11695 0.434204	</basePos>
+              <shiftVec>	0.0124791 -0.419552	</shiftVec>
+              <jointIdx>	67	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	2.16325 0.434215	</basePos>
+              <shiftVec>	0.00469995 -0.419526	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L2	</name>
+              <radius>	0.395706	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.357265	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	-1.332	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L2	</name>
+              <startAngle>	-546.532	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	-543.38	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.58982 1.32254 -3.37629	</point>
+                <point>	-1.58982 1.32255 -3.29779	</point>
+                <point>	-1.58982 1.32256 -3.2193	</point>
+                <point>	-1.58982 1.32257 -3.1408	</point>
+                <point>	-1.58982 1.32259 -3.06231	</point>
+                <point>	-1.58982 1.3226 -2.98381	</point>
+                <point>	-1.58982 1.32261 -2.90532	</point>
+                <point>	-1.58981 1.32262 -2.82682	</point>
+                <point>	-1.58981 1.32264 -2.74833	</point>
+                <point>	-1.58981 1.32265 -2.66983	</point>
+                <point>	-1.58981 1.32266 -2.59134	</point>
+                <point>	-1.58981 1.32268 -2.51284	</point>
+                <point>	-1.58981 1.32269 -2.43435	</point>
+                <point>	-1.58981 1.3227 -2.35585	</point>
+                <point>	-1.58981 1.32271 -2.27736	</point>
+                <point>	-1.58981 1.32273 -2.19886	</point>
+                <point>	-1.58981 1.32274 -2.12037	</point>
+                <point>	-1.58981 1.32275 -2.04187	</point>
+                <point>	-1.58981 1.32276 -1.96338	</point>
+                <point>	-1.58981 1.32278 -1.88488	</point>
+                <point>	-1.58981 1.32279 -1.80638	</point>
+                <point>	-1.58981 1.3228 -1.72789	</point>
+                <point>	-1.58981 1.32281 -1.64939	</point>
+                <point>	-1.58981 1.32283 -1.5709	</point>
+                <point>	-1.58981 1.32284 -1.4924	</point>
+                <point>	-1.58981 1.32285 -1.41391	</point>
+                <point>	-1.5898 1.32287 -1.33541	</point>
+                <point>	-1.5898 1.32288 -1.25692	</point>
+                <point>	-1.5898 1.32289 -1.17842	</point>
+                <point>	-1.5898 1.3229 -1.09993	</point>
+                <point>	-1.5898 1.32292 -1.02143	</point>
+                <point>	-1.5898 1.32293 -0.942936	</point>
+                <point>	-1.5898 1.32294 -0.864441	</point>
+                <point>	-1.5898 1.32295 -0.785946	</point>
+                <point>	-1.5898 1.32297 -0.707451	</point>
+                <point>	-1.5898 1.32298 -0.628955	</point>
+                <point>	-1.5898 1.32299 -0.55046	</point>
+                <point>	-1.5898 1.323 -0.471965	</point>
+                <point>	-1.5898 1.32302 -0.39347	</point>
+                <point>	-1.5898 1.32303 -0.314974	</point>
+                <point>	-1.5898 1.32304 -0.236479	</point>
+                <point>	-1.5898 1.32306 -0.157984	</point>
+                <point>	-1.5898 1.32307 -0.0794888	</point>
+                <point>	-1.5898 1.32308 -0.000993276	</point>
+                <point>	-1.5898 1.32309 0.0775022	</point>
+                <point>	-1.5898 1.32311 0.155997	</point>
+                <point>	-1.58979 1.32312 0.234492	</point>
+                <point>	-1.58979 1.32313 0.312988	</point>
+                <point>	-1.58979 1.32314 0.391483	</point>
+                <point>	-1.58979 1.32316 0.469978	</point>
+                <point>	-1.58979 1.32317 0.548473	</point>
+                <point>	-1.37979 1.32318 0.626967	</point>
+                <point>	-1.37979 1.32319 0.705463	</point>
+                <point>	-1.37979 1.3232 0.783958	</point>
+                <point>	-1.37979 1.32321 0.862453	</point>
+                <point>	-1.37979 1.32322 0.940948	</point>
+                <point>	-1.37979 1.32323 1.01944	</point>
+                <point>	-1.37979 1.32324 1.09794	</point>
+                <point>	-1.37979 1.32325 1.17643	</point>
+                <point>	-1.37979 1.32326 1.25493	</point>
+                <point>	-1.37979 1.32327 1.33343	</point>
+                <point>	-1.37979 1.32328 1.41192	</point>
+                <point>	-1.37979 1.32329 1.49042	</point>
+                <point>	-1.37979 1.3233 1.56891	</point>
+                <point>	-1.37979 1.32331 1.64741	</point>
+                <point>	-1.37979 1.32332 1.7259	</point>
+                <point>	-1.37978 1.32333 1.8044	</point>
+                <point>	-1.37978 1.32334 1.88289	</point>
+                <point>	-1.37978 1.32335 1.96139	</point>
+                <point>	-1.37978 1.32335 2.03988	</point>
+                <point>	-1.37978 1.32336 2.11838	</point>
+                <point>	-1.37978 1.32337 2.19687	</point>
+                <point>	-1.37978 1.32338 2.27537	</point>
+                <point>	-1.37978 1.32339 2.35386	</point>
+                <point>	-1.39978 1.34998 2.43236	</point>
+                <point>	-1.58978 1.35066 2.51085	</point>
+                <point>	-1.37978 1.3531 2.58935	</point>
+                <point>	-1.37978 1.351 2.66784	</point>
+                <point>	-1.46978 1.3504 2.74634	</point>
+                <point>	-1.37978 1.35056 2.82484	</point>
+                <point>	-1.37978 1.3568 2.90333	</point>
+                <point>	-1.58978 1.35595 2.98183	</point>
+                <point>	-1.58978 1.35003 3.06032	</point>
+                <point>	-1.58978 1.3408 3.13882	</point>
+                <point>	-1.58978 1.32045 3.21731	</point>
+                <point>	-1.58977 1.26611 3.29581	</point>
+                <point>	-1.58977 1.19295 3.3743	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	95	</segmentsCount>
+          <segmentsOuterThickness>	0.037958	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0148554	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.33198	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.157504	</back>
+              <top>	0.143062	</top>
+              <front>	0.146528	</front>
+              <bottom>	0.121754	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.146476	</back>
+              <top>	0.15279	</top>
+              <front>	0.156492	</front>
+              <bottom>	0.121754	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/french/F37_AMX50_Foch/track/segment.model	</model>
+            <length>	0.157004	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-3.37604	</xStart>
+                <xStep>	0.0785019	</xStep>
+                <ySamples>	1.25587 1.25589 1.2559 1.25591 1.25592 1.25594 1.25595 1.25596 1.25597 1.25599 1.256 1.25601 1.25602 1.25604 1.25605 1.25606 1.25607 1.25609 1.2561 1.25611 1.25613 1.25614 1.25615 1.25616 1.25618 1.25619 1.2562 1.25621 1.25623 1.25624 1.25625 1.25626 1.25628 1.25629 1.2563 1.25631 1.25633 1.25634 1.25635 1.25637 1.25638 1.25639 1.2564 1.25642 1.25643 1.25644 1.25645 1.25647 1.25648 1.25649 1.2565 1.25652 1.25653 1.25654 1.25655 1.25656 1.25657 1.25658 1.25658 1.25659 1.2566 1.25661 1.25662 1.25663 1.25664 1.25665 1.25666 1.25667 1.25668 1.25669 1.2567 1.25671 1.25672 1.25673 1.27348 1.26638 1.25929 1.25992 1.26274 1.26906 1.27336 1.27911 1.26613 1.25656 1.23171 1.19999 1.16092	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R2	</wheel>
+            <wheel>	W_R8	</wheel>
+            <wheel>	W_R7	</wheel>
+            <wheel>	W_R6	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	3.02556 0.828556	</basePos>
+              <shiftVec>	0.323546 0.154383	</shiftVec>
+              <jointIdx>	11	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R2	</wheelName>
+              <basePos>	-3.00014 0.732734	</basePos>
+              <shiftVec>	-0.377244 0.12358	</shiftVec>
+              <jointIdx>	56	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R8	</wheelName>
+              <basePos>	-2.11695 0.434186	</basePos>
+              <shiftVec>	0.0123684 -0.419552	</shiftVec>
+              <jointIdx>	67	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	2.16325 0.434197	</basePos>
+              <shiftVec>	0.00450087 -0.419528	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R2	</name>
+              <radius>	0.395726	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.357113	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	1.332	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R2	</name>
+              <startAngle>	-546.532	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	-543.379	</startAngle>
+              <teethCount>	16	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	1.58975 1.32258 -3.37605	</point>
+                <point>	1.58975 1.32259 -3.29755	</point>
+                <point>	1.58975 1.32261 -3.21905	</point>
+                <point>	1.58975 1.32262 -3.14055	</point>
+                <point>	1.58975 1.32263 -3.06204	</point>
+                <point>	1.58975 1.32264 -2.98354	</point>
+                <point>	1.58975 1.32266 -2.90504	</point>
+                <point>	1.58975 1.32267 -2.82654	</point>
+                <point>	1.58975 1.32268 -2.74804	</point>
+                <point>	1.58975 1.32269 -2.66954	</point>
+                <point>	1.58975 1.32271 -2.59103	</point>
+                <point>	1.58975 1.32272 -2.51253	</point>
+                <point>	1.58975 1.32273 -2.43403	</point>
+                <point>	1.58975 1.32274 -2.35553	</point>
+                <point>	1.58975 1.32276 -2.27703	</point>
+                <point>	1.58975 1.32277 -2.19852	</point>
+                <point>	1.58975 1.32278 -2.12002	</point>
+                <point>	1.58975 1.3228 -2.04152	</point>
+                <point>	1.58976 1.32281 -1.96302	</point>
+                <point>	1.58976 1.32282 -1.88452	</point>
+                <point>	1.58976 1.32283 -1.80601	</point>
+                <point>	1.58976 1.32285 -1.72751	</point>
+                <point>	1.58976 1.32286 -1.64901	</point>
+                <point>	1.58976 1.32287 -1.57051	</point>
+                <point>	1.58976 1.32288 -1.49201	</point>
+                <point>	1.58976 1.3229 -1.41351	</point>
+                <point>	1.58976 1.32291 -1.335	</point>
+                <point>	1.58976 1.32292 -1.2565	</point>
+                <point>	1.58976 1.32293 -1.178	</point>
+                <point>	1.58976 1.32295 -1.0995	</point>
+                <point>	1.58976 1.32296 -1.021	</point>
+                <point>	1.58976 1.32297 -0.942494	</point>
+                <point>	1.58976 1.32299 -0.863992	</point>
+                <point>	1.58976 1.323 -0.78549	</point>
+                <point>	1.58976 1.32301 -0.706988	</point>
+                <point>	1.58976 1.32302 -0.628486	</point>
+                <point>	1.58976 1.32304 -0.549985	</point>
+                <point>	1.58976 1.32305 -0.471483	</point>
+                <point>	1.58977 1.32306 -0.392981	</point>
+                <point>	1.58977 1.32307 -0.314479	</point>
+                <point>	1.58977 1.32309 -0.235977	</point>
+                <point>	1.58977 1.3231 -0.157475	</point>
+                <point>	1.58977 1.32311 -0.0789734	</point>
+                <point>	1.58977 1.32313 -0.000471242	</point>
+                <point>	1.58977 1.32314 0.0780305	</point>
+                <point>	1.58977 1.32315 0.156533	</point>
+                <point>	1.58977 1.32316 0.235034	</point>
+                <point>	1.58977 1.32318 0.313536	</point>
+                <point>	1.58977 1.32319 0.392038	</point>
+                <point>	1.58977 1.3232 0.47054	</point>
+                <point>	1.58977 1.32321 0.549042	</point>
+                <point>	1.58977 1.32323 0.627544	</point>
+                <point>	1.37977 1.32323 0.706047	</point>
+                <point>	1.37977 1.32324 0.784549	</point>
+                <point>	1.37977 1.32325 0.863051	</point>
+                <point>	1.37977 1.32326 0.941552	</point>
+                <point>	1.37977 1.32327 1.02005	</point>
+                <point>	1.37978 1.32328 1.09856	</point>
+                <point>	1.37978 1.32329 1.17706	</point>
+                <point>	1.37978 1.3233 1.25556	</point>
+                <point>	1.37978 1.32331 1.33406	</point>
+                <point>	1.37978 1.32332 1.41256	</point>
+                <point>	1.37978 1.32333 1.49107	</point>
+                <point>	1.37978 1.32334 1.56957	</point>
+                <point>	1.37978 1.32335 1.64807	</point>
+                <point>	1.37978 1.32336 1.72657	</point>
+                <point>	1.37978 1.32337 1.80507	</point>
+                <point>	1.37978 1.32338 1.88358	</point>
+                <point>	1.37978 1.32339 1.96208	</point>
+                <point>	1.37978 1.3234 2.04058	</point>
+                <point>	1.37978 1.32341 2.11908	</point>
+                <point>	1.37978 1.32341 2.19758	</point>
+                <point>	1.37978 1.32342 2.27608	</point>
+                <point>	1.37978 1.32343 2.35459	</point>
+                <point>	1.58978 1.34019 2.43309	</point>
+                <point>	1.58978 1.33309 2.51159	</point>
+                <point>	1.58978 1.326 2.59009	</point>
+                <point>	1.58978 1.32663 2.66859	</point>
+                <point>	1.58979 1.32945 2.74709	</point>
+                <point>	1.58979 1.33577 2.8256	</point>
+                <point>	1.57979 1.34007 2.9041	</point>
+                <point>	1.49979 1.34582 2.9826	</point>
+                <point>	1.58979 1.33284 3.0611	</point>
+                <point>	1.58979 1.32327 3.1396	</point>
+                <point>	1.58979 1.29842 3.21811	</point>
+                <point>	1.58979 1.2667 3.29661	</point>
+                <point>	1.58979 1.22763 3.37511	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	-1.70324 0.623363 -0.00041008	</anchorPosition>
+          <anchorDirection>	-0.939083 0.343692 -0.000226098	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	10	</slotId>
+          <anchorPosition>	0.000000 0.000000 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_AMX50_Foch_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_AMX50_Foch>
+      <userString>	#france_vehicles:Turret_1_AMX50_Foch	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	9	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	0	</armor_1>
+      </armor>
+      <weight>	170	</weight>
+      <maxHealth>	310	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_120mm_SA_46_AC>	shared	  <maxAmmo>	68	</maxAmmo>
+          <unlocks>
+            <vehicle>	F64_AMX_50Fosh_B	  <cost>	290000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	310	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	50	</gun>
+          </armor>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	34	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-10 10	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <clip>
+            <count>	4	</count>
+            <rate>	25	</rate>
+          </clip>
+          <models>
+            <undamaged>	vehicles/french/F37_AMX50_Foch/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F37_AMX50_Foch/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F37_AMX50_Foch/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F37_AMX50_Foch/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F37_AMX50_Foch/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
+              <rayStart>	0.00290582 -0.02727 4.67535	</rayStart>
+              <rayEnd>	0.11209 -0.108242 4.67295	</rayEnd>
+              <rayUp>	0.092 0.088 4	</rayUp>
+              <size>	0.82	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	15	</slotId>
+              <anchorPosition>	0.00145291 -0.013635 3.18905	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	16	</slotId>
+              <anchorPosition>	0.000000 0.378285 0.378285	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	17	</slotId>
+              <anchorPosition>	0.00145291 -0.013635 3.18905	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_120mm_SA_46_AC>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F37_AMX50_Foch/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F37_AMX50_Foch/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F37_AMX50_Foch/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F37_AMX50_Foch/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F37_AMX50_Foch/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.0044 0.045968 0.113997	</gunPosition>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+    </Turret_1_AMX50_Foch>
+  </turrets0>
+  <engines>
+    <Maybach_HL_295>	shared	  <unlocks>
+        <engine>	Saurer	  <cost>	25200	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_295>
+    <Saurer>	shared	</Saurer>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_528	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_528>	shared	</SCR_528>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_295>
+          <smplEnginePower>	898.689	</smplEnginePower>
+        </Maybach_HL_295>
+        <Saurer>
+          <smplEnginePower>	1057.281	</smplEnginePower>
+        </Saurer>
+      </engines>
+      <chassis>
+        <Chassis_AMX50_Foch>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX50_Foch>
+        <Chassis_AMX50_Foch_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX50_Foch_2>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <armour>	1.219188306	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.9	</alpha>
+  </emblems>
+</F37_AMX50_Foch.xml>

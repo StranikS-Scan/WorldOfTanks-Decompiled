@@ -1,20 +1,23 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/actions/__init__.py
 import BigWorld
-from ConnectionManager import connectionManager
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.framework import AppRef, ViewTypes
+from gui.Scaleform.framework import ViewTypes
+from gui.app_loader import g_appLoader
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import LoginEventEx
 from gui.shared.actions.chains import ActionsChain
+from gui.shared.events import LoginEventEx, GUICommonEvent
+from helpers import dependency
 from predefined_hosts import g_preDefinedHosts, getHostURL
-__all__ = ['LeavePrbModalEntity',
- 'DisconnectFromPeriphery',
- 'ConnectToPeriphery',
- 'PrbInvitesInit',
- 'ActionsChain']
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gameplay import IGameplayLogic
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.login_manager import ILoginManager
+from constants import WGC_STATE
+__all__ = ('LeavePrbModalEntity', 'DisconnectFromPeriphery', 'ConnectToPeriphery', 'PrbInvitesInit', 'ActionsChain')
 
 class Action(object):
 
@@ -52,7 +55,7 @@ class LeavePrbModalEntity(Action):
             if state.hasModalEntity:
                 factory = dispatcher.getControlFactories().get(state.ctrlTypeID)
                 if factory:
-                    ctx = factory.createLeaveCtx()
+                    ctx = factory.createLeaveCtx(flags=FUNCTIONAL_FLAG.SWITCH)
                     if ctx:
                         self._running = True
                         self.__doLeave(dispatcher, ctx)
@@ -71,41 +74,73 @@ class LeavePrbModalEntity(Action):
     def __doLeave(self, dispatcher, ctx):
         self._completed = yield dispatcher.leave(ctx)
         if self._completed:
-            LOG_DEBUG('Leave modal entity. Player left prebattle/unit.')
+            LOG_DEBUG('Leave modal entity. Player left prebattle.')
         else:
-            LOG_ERROR('Leave modal entity. Action was failed.')
+            LOG_DEBUG('Leave modal entity. Action was failed.')
         self._running = False
 
 
-class DisconnectFromPeriphery(Action, AppRef):
+class SelectPrb(Action):
 
-    def __init__(self):
-        super(DisconnectFromPeriphery, self).__init__()
+    def __init__(self, prbAction):
+        super(SelectPrb, self).__init__()
+        self._running = False
+        self._prbAction = prbAction
+
+    def invoke(self):
+        from gui.prb_control.dispatcher import g_prbLoader
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher:
+            self._running = True
+            self.__doSelect(dispatcher)
+
+    def isInstantaneous(self):
+        return False
+
+    @process
+    def __doSelect(self, dispatcher):
+        self._completed = yield dispatcher.doSelectAction(self._prbAction)
+        if self._completed:
+            LOG_DEBUG('Select prebattle entity. Player has joined prebattle.')
+        else:
+            LOG_DEBUG('Select prebattle entity. Action was failed.')
+        self._running = False
+
+
+class DisconnectFromPeriphery(Action):
+    connectionMgr = dependency.descriptor(IConnectionManager)
+    gameplay = dependency.descriptor(IGameplayLogic)
 
     def isInstantaneous(self):
         return False
 
     def invoke(self):
         self._running = True
-        self.app.logoff()
+        self.gameplay.goToLoginByRQ()
 
     def isRunning(self):
-        from gui.Scaleform.daapi.settings import VIEW_ALIAS
-        view = self.app.containerManager.getView(ViewTypes.DEFAULT)
-        if view and view.settings.alias == VIEW_ALIAS.LOGIN and view._isCreated() and connectionManager.isDisconnected():
-            LOG_DEBUG('Disconnect action. Player came to login')
-            self._completed = True
-            self._running = False
+        app = g_appLoader.getApp()
+        if app:
+            from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+            view = app.containerManager.getView(ViewTypes.DEFAULT)
+            if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and self.connectionMgr.isDisconnected():
+                LOG_DEBUG('Disconnect action. Player came to login')
+                self._completed = True
+                self._running = False
         return self._running
 
 
-class ConnectToPeriphery(Action, AppRef):
+class ConnectToPeriphery(Action):
+    loginManager = dependency.descriptor(ILoginManager)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, peripheryID):
         super(ConnectToPeriphery, self).__init__()
         self.__host = g_preDefinedHosts.periphery(peripheryID)
         self.__endTime = None
-        self.__credentials = g_lobbyContext.getCredentials()
+        self.__credentials = self.lobbyContext.getCredentials()
+        self.__wgcLogin = False
         return
 
     def isInstantaneous(self):
@@ -118,16 +153,18 @@ class ConnectToPeriphery(Action, AppRef):
         return super(ConnectToPeriphery, self).isRunning()
 
     def invoke(self):
-        if self.__host and self.__credentials:
-            if len(self.__credentials) < 2:
-                self._completed = False
-                LOG_ERROR('Connect action. Login info is invalid')
-                return
-            login, token2 = self.__credentials
-            if not login or not token2:
-                self._completed = False
-                LOG_ERROR('Connect action. Login info is invalid')
-                return
+        self.__wgcLogin = self.loginManager.checkWgcAvailability()
+        if self.__host and (self.__credentials or self.__wgcLogin):
+            if not self.__wgcLogin:
+                if len(self.__credentials) < 2:
+                    self._completed = False
+                    LOG_ERROR('Connect action. Login info is invalid')
+                    return
+                login, token2 = self.__credentials
+                if not login or not token2:
+                    self._completed = False
+                    LOG_ERROR('Connect action. Login info is invalid')
+                    return
             self._running = True
             self.__endTime = BigWorld.time() + CONNECT_TO_PERIPHERY_DELAY
             Waiting.show('login')
@@ -137,26 +174,32 @@ class ConnectToPeriphery(Action, AppRef):
             self._running = False
 
     def __doConnect(self):
-        login, token2 = self.__credentials
+        if not self.__wgcLogin:
+            login, token2 = self.__credentials
+        else:
+            login = 'wgc'
+            token2 = ''
         self.__addHandlers()
-        connectionManager.connect(getHostURL(self.__host, token2), login, '', self.__host.keyPath, token2=token2)
+        self.loginManager.initiateRelogin(login, token2, getHostURL(self.__host, token2))
 
     def __addHandlers(self):
         g_eventBus.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        connectionManager.connectionStatusCallbacks += self.__onConnectionStatus
+        self.connectionMgr.onConnected += self.__onConnected
+        self.connectionMgr.onRejected += self.__onRejected
 
     def __removeHandlers(self):
         g_eventBus.removeListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        connectionManager.connectionStatusCallbacks -= self.__onConnectionStatus
+        self.connectionMgr.onConnected -= self.__onConnected
+        self.connectionMgr.onRejected -= self.__onRejected
 
-    def __onConnectionStatus(self, stage, status, serverMsg, isAutoRegister):
+    def __onConnected(self):
         self.__removeHandlers()
-        if stage == 1 and status == 'LOGGED_ON':
-            self._completed = True
-            LOG_DEBUG('Connect action. Player login to periphery')
-        else:
-            LOG_DEBUG('Connect action. Player can not login to periphery')
-            self._completed = False
+        self._completed = True
+        self._running = False
+
+    def __onRejected(self, status, responseData):
+        self.__removeHandlers()
+        self._completed = False
         self._running = False
 
     def __onLoginQueueClosed(self, _):
@@ -167,9 +210,6 @@ class ConnectToPeriphery(Action, AppRef):
 
 
 class PrbInvitesInit(Action):
-
-    def __init__(self):
-        super(PrbInvitesInit, self).__init__()
 
     def isInstantaneous(self):
         return False
@@ -183,7 +223,7 @@ class PrbInvitesInit(Action):
                 self._completed = True
             else:
                 self._running = True
-                invitesManager.onReceivedInviteListInited += self.__onInvitesListInited
+                invitesManager.onInvitesListInited += self.__onInvitesListInited
         else:
             LOG_ERROR('Invites init action. Invites manager not found')
             self._completed = False
@@ -193,7 +233,7 @@ class PrbInvitesInit(Action):
         invitesManager = g_prbLoader.getInvitesManager()
         if invitesManager:
             LOG_DEBUG('Invites init action. List of invites is build')
-            invitesManager.onReceivedInviteListInited -= self.__onInvitesListInited
+            invitesManager.onInvitesListInited -= self.__onInvitesListInited
         else:
             LOG_ERROR('Invites manager not found')
         self._completed = True
@@ -215,10 +255,7 @@ class WaitFlagActivation(Action):
         self._isActive = False
 
     def invoke(self):
-        if not self._isActive:
-            self._running = True
-        else:
-            self._completed = True
+        self._running = not self._isActive
 
     def isRunning(self):
         if self._isActive:
@@ -228,3 +265,27 @@ class WaitFlagActivation(Action):
 
     def isInstantaneous(self):
         return False
+
+
+class OnLobbyInitedAction(Action):
+
+    def __init__(self, onInited=None):
+        super(OnLobbyInitedAction, self).__init__()
+        self.__isLobbyInited = False
+        self.__onInited = onInited
+        g_eventBus.addListener(GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
+
+    def invoke(self):
+        self._running = True
+        self._completed = False
+        if self.__isLobbyInited:
+            onInited = self.__onInited
+            if onInited and callable(onInited):
+                onInited()
+            self._completed = True
+            self._running = False
+
+    def __onLobbyInited(self, _):
+        self.__isLobbyInited = True
+        g_eventBus.removeListener(GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
+        self.invoke()

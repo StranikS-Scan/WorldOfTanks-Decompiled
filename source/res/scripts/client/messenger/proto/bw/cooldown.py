@@ -1,10 +1,17 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/cooldown.py
 from chat_shared import isOperationInCooldown, CHAT_COMMANDS, getOperationCooldownPeriod
 import chat_shared
 from debug_utils import LOG_ERROR
-from helpers import i18n
+from helpers import i18n, html
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
+from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
 from messenger.m_constants import MESSENGER_I18N_FILE
-BROADCAST_COOL_DOWN_MESSAGE = i18n.makeString('#%s:client/error/broadcastInCooldown' % MESSENGER_I18N_FILE, getOperationCooldownPeriod(CHAT_COMMANDS.broadcast))
+
+def getBroadcastCoolDownMessage():
+    return getBroadcastIsInCoolDownMessage(getOperationCooldownPeriod(CHAT_COMMANDS.broadcast))
+
+
 _battleChatShortcuts = (CHAT_COMMANDS.HELPME.name(),
  CHAT_COMMANDS.FOLLOWME.name(),
  CHAT_COMMANDS.ATTACK.name(),
@@ -18,7 +25,21 @@ _battleChatShortcuts = (CHAT_COMMANDS.HELPME.name(),
  CHAT_COMMANDS.SUPPORTMEWITHFIRE.name(),
  CHAT_COMMANDS.RELOADING_READY.name(),
  CHAT_COMMANDS.RELOADING_UNAVAILABLE.name(),
- CHAT_COMMANDS.STOP.name())
+ CHAT_COMMANDS.STOP.name(),
+ CHAT_COMMANDS.ATTENTIONTOPOSITION.name(),
+ CHAT_COMMANDS.ATTENTIONTOOBJECTIVE_ATK.name(),
+ CHAT_COMMANDS.ATTENTIONTOOBJECTIVE_DEF.name(),
+ CHAT_COMMANDS.ATTENTIONTOBASE_ATK.name(),
+ CHAT_COMMANDS.ATTENTIONTOBASE_DEF.name(),
+ CHAT_COMMANDS.EPIC_GLOBAL_SAVETANKS_ATK.name(),
+ CHAT_COMMANDS.EPIC_GLOBAL_SAVETANKS_DEF.name(),
+ CHAT_COMMANDS.EPIC_GLOBAL_TIME_ATK.name(),
+ CHAT_COMMANDS.EPIC_GLOBAL_TIME_DEF.name(),
+ CHAT_COMMANDS.EPIC_GLOBAL_HQ_ATK.name(),
+ CHAT_COMMANDS.EPIC_GLOBAL_HQ_DEF.name(),
+ CHAT_COMMANDS.EPIC_GLOBAL_WEST.name(),
+ CHAT_COMMANDS.EPIC_GLOBAL_CENTER.name(),
+ CHAT_COMMANDS.EPIC_GLOBAL_EAST.name())
 _reloadingChatCommandsWithParams = {CHAT_COMMANDS.RELOADINGGUN.name(): ('rTime',),
  CHAT_COMMANDS.RELOADING_CASSETE.name(): ('rTime', 'ammoQuantityLeft'),
  CHAT_COMMANDS.RELOADING_READY_CASSETE.name(): ('ammoInCassete',)}
@@ -53,25 +74,28 @@ def getOperationCooldownPeriodEx(operationName):
     return result
 
 
-def getOperationInCooldownMsg(operation, period, params = None):
+def getBattleCommandExample(msgText):
+    result = msgText.split('/', 1)
+    if len(result) > 1:
+        i18nKey = I18N_INGAME_GUI.chat_example(result[1])
+        if i18nKey is not None:
+            i18nName = html.escape(i18n.makeString(i18nKey))
+        else:
+            i18nName = msgText
+    else:
+        i18nName = i18n.makeString(msgText)
+    return i18nName
+
+
+def getOperationInCooldownMsg(operation, period, params=None):
     if operation in _battleChatShortcuts:
         command = CHAT_COMMANDS.lookup(operation)
-        args = []
-        for index in range(command.argsCnt):
-            key = '#%s:command/%s/arg%d' % (MESSENGER_I18N_FILE, operation, index)
-            args.append(i18n.makeString(key))
-
-        operationName = i18n.makeString(command.msgText, *args)
+        operationName = getBattleCommandExample(command.msgText)
     elif operation in _moderationChatCommands:
         operationName = operation
     elif operation in _reloadingChatCommandsWithParams:
-        params = {}
         command = CHAT_COMMANDS.lookup(operation)
-        for key in _reloadingChatCommandsWithParams[operation]:
-            value = i18n.makeString('#%s:command/%s/%s' % (MESSENGER_I18N_FILE, operation, key))
-            params.update({key: value})
-
-        operationName = i18n.makeString(command.msgText, **params)
+        operationName = getBattleCommandExample(command.msgText)
     else:
         operationKey = '#%s:command/%s' % (MESSENGER_I18N_FILE, operation)
         operationName = i18n.makeString(operationKey)

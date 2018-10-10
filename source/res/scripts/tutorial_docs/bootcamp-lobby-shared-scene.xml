@@ -1,0 +1,97 @@
+<bootcamp-lobby-shared-scene.xml>
+  <post-effects>
+    <effects-group>
+      <condition>
+        <effect-not-triggered>	CheckpointController	</effect-not-triggered>
+      </condition>
+      <effects>
+        <invoke-gui-cmd>	OverrideHeaderMenuButtons	</invoke-gui-cmd>
+        <set-visible>	MessengerBar	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	QuestsControl	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	VehicleResearchPanel	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	VehicleResearchPanelBG	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	VehicleResearchButton	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarParams	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	CrewPanel	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	CrewOperationBtn	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	MaintenanceButton	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	TuningBtn	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	VehicleStateMessage	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarModuleGun	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarModuleTurret	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarModuleEngine	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarModuleChassis	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarModuleRadio	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	OptionalDevice1DropDown	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	OptionalDevice2DropDown	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	OptionalDevice3DropDown	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarEquipment1	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarEquipment2	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarEquipment3	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarShell1	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarShell2	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarShell3	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HangarBooster	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	TankCarouselContainer	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	TankCarouselContainerBG	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	CrewBG	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	TmenXpPanel	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	PersonalCaseFreeXPToTManButton	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	PersonalCaseDropSkillsButton	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	PersonalCaseUnloadButton	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	PersonalCaseDismissButton	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	PersonalCaseChangeRoleBtn	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	PersonalCaseAlertIcon	  <val>	False	</val>
+        </set-visible>
+        <set-allowed-to-fight>
+          <value>	False	</value>
+        </set-allowed-to-fight>
+        <run-trigger>	CurrentVehicleChangeTrigger	</run-trigger>
+        <run-trigger>	ItemsCacheSyncTrigger	</run-trigger>
+        <restore-checkpoint></restore-checkpoint>
+        <run-trigger>	CheckpointController	</run-trigger>
+      </effects>
+    </effects-group>
+    <invoke-gui-cmd>	HideQuests	  <condition>
+        <effect-not-triggered>	ShowQuests	</effect-not-triggered>
+      </condition>
+    </invoke-gui-cmd>
+  </post-effects>
+  <runtime-effects></runtime-effects>
+  <gui-items></gui-items>
+</bootcamp-lobby-shared-scene.xml>

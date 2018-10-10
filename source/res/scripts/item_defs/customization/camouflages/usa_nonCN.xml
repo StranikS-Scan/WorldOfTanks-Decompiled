@@ -1,0 +1,682 @@
+<usa_nonCN.xml>
+  <usa:A115_Chrysler_K2>	ussr	</usa:A115_Chrysler_K2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <usa:A115_Chrysler_K1>	usa	</usa:A115_Chrysler_K1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <usa:A115_Chrysler_K0>	uk	</usa:A115_Chrysler_K0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy IGR notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+      <exclude>
+        <vehicles>	usa:A63_M46_Patton_KR usa:A117_T26E5_Patriot usa:A13_T34_hvy_BF usa:A115_Chrysler_K_GF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15215	</id>
+      <texture>	vehicles/german/Camouflage/IGR_Winter.dds	</texture>
+      <description>	#vehicle_customization:camouflage/IGR_Winter/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/IGR_Winter/label	</userString>
+      <tags>	premiumIGR	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	85 82 71 255	</c0>
+          <c1>	50 47 37 255	</c1>
+          <c2>	116 113 103 255	</c2>
+          <c3>	181 177 166 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <A01_T1_Cunningham>	2.3 2.3 0.000000 0.000000	</A01_T1_Cunningham>
+        <A02_M2_lt>	2.2 2.2 0.000000 0.000000	</A02_M2_lt>
+        <A03_M3_Stuart>	3.1 3.1 0.08 0.02	</A03_M3_Stuart>
+        <A04_M3_Grant>	2.7 2.7 0.04 0.000000	</A04_M3_Grant>
+        <A05_M4_Sherman>	3.8 3.8 0.000000 0.000000	</A05_M4_Sherman>
+        <A05_M4_Sherman_IGR>	3.8 3.8 0.000000 0.000000	</A05_M4_Sherman_IGR>
+        <A06_M4A3E8_Sherman>	5 5 0.27 0.000000	</A06_M4A3E8_Sherman>
+        <A07_T20>	6.5 6.5 0.26 0.000000	</A07_T20>
+        <A08_T23>	2.9 3 0.000000 0.000000	</A08_T23>
+        <A09_T1_hvy>	4 4 0.000000 0.52	</A09_T1_hvy>
+        <A100_T49>	3 3 0.000000 0.000000	</A100_T49>
+        <A101_M56>	3.7 3.6 0.44 0.18	</A101_M56>
+        <A102_T28_concept>	1.9 1.9 0.000000 0.000000	</A102_T28_concept>
+        <A103_T71E1>	3.9 3.9 0.000000 0.000000	</A103_T71E1>
+        <A103_T71E1_IGR>	3.9 3.9 0.000000 0.000000	</A103_T71E1_IGR>
+        <A104_M4A3E8A>	2.9 3 0.14 0.000000	</A104_M4A3E8A>
+        <A106_M48A2_120>	5 5 0.000000 0.000000	</A106_M48A2_120>
+        <A107_T1_HMC>	2.6 2.6 0.000000 0.12	</A107_T1_HMC>
+        <A108_T18_HMC>	2.1 2.1 0.000000 0.000000	</A108_T18_HMC>
+        <A109_T56_GMC>	3.2 3.2 0.000000 0.000000	</A109_T56_GMC>
+        <A10_M6>	2.8 2.8 0.000000 0.24	</A10_M6>
+        <A111_T25_Pilot>	2.8 2.8 0.000000 0.000000	</A111_T25_Pilot>
+        <A112_T71E2>	1.4 1.4 0.000000 0.000000	</A112_T71E2>
+        <A112_T71E2R>	1.4 1.4 0.000000 0.000000	</A112_T71E2R>
+        <A115_Chrysler_K>	1.8 1.8 0.000000 0.000000	</A115_Chrysler_K>
+        <A116_XM551>	2.7 2.7 0.000000 0.000000	</A116_XM551>
+        <A117_T26E5>	1.4 1.4 0.000000 0.000000	</A117_T26E5>
+        <A118_M4_Thunderbolt>	2.3 2.3 0.32 0.000000	</A118_M4_Thunderbolt>
+        <A11_T29>	4.4 4.4 0.000000 0.000000	</A11_T29>
+        <A11_T29_IGR>	4.4 4.4 0.000000 0.000000	</A11_T29_IGR>
+        <A120_M48A5>	1.4 1.4 0.36 3.2	</A120_M48A5>
+        <A120_M48A5_IGR>	7 7 0.36 0.000000	</A120_M48A5_IGR>
+        <A121_M26_Cologne>	1.4 1.4 0.000000 0.000000	</A121_M26_Cologne>
+        <A12_T32>	3.5 3.6 0.000000 0.000000	</A12_T32>
+        <A13_T34_hvy>	3.7 3.8 0.000000 0.000000	</A13_T34_hvy>
+        <A13_T34_hvy_IGR>	3.7 3.8 0.000000 0.000000	</A13_T34_hvy_IGR>
+        <A14_T30>	2.7 2.7 0.24 0.27	</A14_T30>
+        <A15_T57>	4.1 2.3 0.000000 0.000000	</A15_T57>
+        <A16_M7_Priest>	3.5 3.5 0.22 0.000000	</A16_M7_Priest>
+        <A17_M37>	3 3.1 0.000000 0.000000	</A17_M37>
+        <A18_M41>	5.4 5.4 0.000000 0.000000	</A18_M41>
+        <A19_T2_lt>	3.7 3.7 0.000000 0.000000	</A19_T2_lt>
+        <A21_T14>	3 3 0.000000 0.000000	</A21_T14>
+        <A22_M5_Stuart>	3.3 3.4 0.000000 0.000000	</A22_M5_Stuart>
+        <A23_M7_med>	4 4 0.27 0.000000	</A23_M7_med>
+        <A24_T2_med>	3 3.1 0.56 0.18	</A24_T2_med>
+        <A24_T2_med_bot>	3 3 0.3 0.000000	</A24_T2_med_bot>
+        <A25_M2_med>	3.6 3.6 0.28 0.5	</A25_M2_med>
+        <A26_T18>	4 2.3 0.000000 0.000000	</A26_T18>
+        <A27_T82>	2.5 2.5 0.62 0.06	</A27_T82>
+        <A29_T40>	4.59459 4.59459 0.3 0.2	</A29_T40>
+        <A30_M10_Wolverine>	3.7 3.6 0.28 0.14	</A30_M10_Wolverine>
+        <A31_M36_Slagger>	3 3 0.000000 0.000000	</A31_M36_Slagger>
+        <A32_M12>	4 4 0.000000 0.000000	</A32_M12>
+        <A33_MTLS-1G14>	2 2 0.000000 3.6	</A33_MTLS-1G14>
+        <A34_M24_Chaffee>	4 4.1 0.25 0.34	</A34_M24_Chaffee>
+        <A35_Pershing>	4 4.1 0.16 0.000000	</A35_Pershing>
+        <A35_Pershing_IGR>	4 4.1 0.16 0.000000	</A35_Pershing_IGR>
+        <A36_Sherman_Jumbo>	2.7 2.7 0.000000 0.000000	</A36_Sherman_Jumbo>
+        <A36_Sherman_Jumbo_IGR>	2.7 2.7 0.000000 0.000000	</A36_Sherman_Jumbo_IGR>
+        <A37_M40M43>	1.2 1.2 0.28 6.4	</A37_M40M43>
+        <A38_T92>	2 2 5.9 3.6	</A38_T92>
+        <A39_T28>	2 2 0.17 2.6	</A39_T28>
+        <A40_T95>	2.9 2.9 0.17 0.04	</A40_T95>
+        <A41_M18_Hellcat>	4 4 0.18 0.04	</A41_M18_Hellcat>
+        <A43_M22_Locust>	2.7 2.7 0.2 0.000000	</A43_M22_Locust>
+        <A44_M4A2E4>	3.1 3.1 0.12 0.13	</A44_M4A2E4>
+        <A45_M6A2E1>	5.2 5.2 0.31 0.000000	</A45_M6A2E1>
+        <A46_T3>	2.3 2.3 0.000000 0.000000	</A46_T3>
+        <A57_M8A1>	4.2 4.2 0.04 0.000000	</A57_M8A1>
+        <A58_T67>	4 4.1 0.16 0.12	</A58_T67>
+        <A58_T67_IGR>	4 4.1 0.16 0.12	</A58_T67_IGR>
+        <A62_Ram-II>	3.6 3.6 0.11 0.000000	</A62_Ram-II>
+        <A63_M46_Patton>	1.2 1.2 0.12 0.04	</A63_M46_Patton>
+        <A64_T25_AT>	4.5 4.5 0.48 0.16	</A64_T25_AT>
+        <A66_M103>	4.4 4.5 0.3 0.2	</A66_M103>
+        <A67_T57_58>	3.1 3.1 0.000000 0.3	</A67_T57_58>
+        <A68_T28_Prototype>	5 5 0.36 0.000000	</A68_T28_Prototype>
+        <A69_T110E5>	5.8 5.8 0.3 0.2	</A69_T110E5>
+        <A71_T21>	2 2 0.2 3.4	</A71_T21>
+        <A72_T25_2>	2.2 2.2 0.2 0.000000	</A72_T25_2>
+        <A74_T1_E6>	1.2 1.2 0.000000 0.000000	</A74_T1_E6>
+        <A78_M4_Improved>	3.5 3.6 0.000000 0.000000	</A78_M4_Improved>
+        <A80_T26_E4_SuperPershing>	3.2 3.3 0.06 0.000000	</A80_T26_E4_SuperPershing>
+        <A81_T95_E2>	3.3 3.3 0.000000 0.000000	</A81_T95_E2>
+        <A83_T110E4>	2.4 2.4 0.36 0.000000	</A83_T110E4>
+        <A85_T110E3>	3.8 3.9 0.2 0.32	</A85_T110E3>
+        <A86_T23E3>	2.8 2.8 0.000000 0.000000	</A86_T23E3>
+        <A87_M44>	4 4 0.42 0.000000	</A87_M44>
+        <A88_M53_55>	4 4 0.000000 0.000000	</A88_M53_55>
+        <A89_T54E1>	6.5 6.5 0.000000 0.000000	</A89_T54E1>
+        <A90_T69>	4.3 4.3 0.36 0.18	</A90_T69>
+        <A90_T69_IGR>	4.3 4.3 0.36 0.18	</A90_T69_IGR>
+        <A92_M60>	2.3 2.3 0.000000 0.000000	</A92_M60>
+        <A93_T7_Combat_Car>	2.4 2.4 0.000000 0.000000	</A93_T7_Combat_Car>
+        <A94_T37>	5 5 0.000000 0.000000	</A94_T37>
+        <A95_T95_E6>	3.2 3.2 0.000000 0.15	</A95_T95_E6>
+        <A97_M41_Bulldog>	4.1 4.2 0.000000 0.000000	</A97_M41_Bulldog>
+        <A99_T92_LT>	2.4 2.4 0.000000 0.000000	</A99_T92_LT>
+        <germany:G78_Panther_M10>	1.8 1.8 0.44 0.46	</germany:G78_Panther_M10>
+        <usa:A115_Chrysler_K>	1.33 1.33 0.000000 0.000000	</usa:A115_Chrysler_K>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy IGR notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+      <exclude>
+        <vehicles>	usa:A63_M46_Patton_KR usa:A117_T26E5_Patriot usa:A13_T34_hvy_BF usa:A115_Chrysler_K_GF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15218	</id>
+      <texture>	vehicles/chinese/Camouflage/IGR_K_Winter.dds	</texture>
+      <description>	#vehicle_customization:camouflage/IGR_K_Winter/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/IGR_K_Winter/label	</userString>
+      <tags>	premiumIGR	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	69 67 51 255	</c0>
+          <c1>	103 85 63 255	</c1>
+          <c2>	130 126 114 255	</c2>
+          <c3>	158 153 140 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <A01_T1_Cunningham>	4.8 4.8 0.000000 0.000000	</A01_T1_Cunningham>
+        <A02_M2_lt>	5 5 0.59 0.17	</A02_M2_lt>
+        <A03_M3_Stuart>	3.7 3.7 0.44 0.19	</A03_M3_Stuart>
+        <A04_M3_Grant>	5 5 0.34 0.2	</A04_M3_Grant>
+        <A05_M4_Sherman>	5.3 5.3 0.000000 0.000000	</A05_M4_Sherman>
+        <A05_M4_Sherman_IGR>	5.3 5.3 0.000000 0.000000	</A05_M4_Sherman_IGR>
+        <A06_M4A3E8_Sherman>	5.4 5.4 0.000000 0.000000	</A06_M4A3E8_Sherman>
+        <A07_T20>	9 9 0.000000 0.000000	</A07_T20>
+        <A08_T23>	5 5 0.000000 0.000000	</A08_T23>
+        <A09_T1_hvy>	5.4 5.4 0.000000 0.000000	</A09_T1_hvy>
+        <A100_T49>	3 3 0.000000 0.000000	</A100_T49>
+        <A101_M56>	2.7 2.7 0.36 0.1	</A101_M56>
+        <A102_T28_concept>	1.9 2 0.57 0.26	</A102_T28_concept>
+        <A103_T71E1>	2.9 2.9 0.000000 0.000000	</A103_T71E1>
+        <A103_T71E1_IGR>	2.9 2.9 0.000000 0.000000	</A103_T71E1_IGR>
+        <A104_M4A3E8A>	5.8 5.8 0.09 0.4	</A104_M4A3E8A>
+        <A106_M48A2_120>	4.2 4.2 0.000000 0.000000	</A106_M48A2_120>
+        <A107_T1_HMC>	3.5 3.5 0.000000 0.000000	</A107_T1_HMC>
+        <A108_T18_HMC>	1.8 1.8 0.1 0.08	</A108_T18_HMC>
+        <A109_T56_GMC>	3.4 3.4 0.000000 0.000000	</A109_T56_GMC>
+        <A10_M6>	3 3 0.000000 0.44	</A10_M6>
+        <A111_T25_Pilot>	4.7 4.7 0.000000 0.000000	</A111_T25_Pilot>
+        <A112_T71E2>	1 1 0.000000 0.14	</A112_T71E2>
+        <A112_T71E2R>	1 1 0.000000 0.14	</A112_T71E2R>
+        <A115_Chrysler_K>	2.2 2.2 0.1 0.7	</A115_Chrysler_K>
+        <A116_XM551>	3 3 0.000000 0.000000	</A116_XM551>
+        <A117_T26E5>	1.9 1.9 0.000000 0.000000	</A117_T26E5>
+        <A118_M4_Thunderbolt>	2.1 2.1 0.32 0.000000	</A118_M4_Thunderbolt>
+        <A11_T29>	6 6 0.000000 0.000000	</A11_T29>
+        <A11_T29_IGR>	6 6 0.000000 0.000000	</A11_T29_IGR>
+        <A120_M48A5>	1.4 1.4 1 1.4	</A120_M48A5>
+        <A120_M48A5_IGR>	5 5 0.46 0.000000	</A120_M48A5_IGR>
+        <A121_M26_Cologne>	1.9 1.9 0.000000 0.000000	</A121_M26_Cologne>
+        <A12_T32>	5 5 0.000000 0.000000	</A12_T32>
+        <A13_T34_hvy>	5 5 0.4 0.2	</A13_T34_hvy>
+        <A13_T34_hvy_IGR>	5 5 0.4 0.2	</A13_T34_hvy_IGR>
+        <A14_T30>	3.3 3.3 0.000000 0.000000	</A14_T30>
+        <A15_T57>	5 3 0.000000 0.000000	</A15_T57>
+        <A16_M7_Priest>	4.2 4.2 0.04 0.000000	</A16_M7_Priest>
+        <A17_M37>	5 5 0.000000 0.000000	</A17_M37>
+        <A18_M41>	5.6 5.6 0.000000 0.000000	</A18_M41>
+        <A19_T2_lt>	4.5 4.5 0.9 0.7	</A19_T2_lt>
+        <A21_T14>	3.5 3.5 0.000000 0.000000	</A21_T14>
+        <A22_M5_Stuart>	5 5 0.28 0.000000	</A22_M5_Stuart>
+        <A23_M7_med>	4.2 4.2 0.74 0.000000	</A23_M7_med>
+        <A24_T2_med>	5 5 0.87 0.28	</A24_T2_med>
+        <A24_T2_med_bot>	5 5 0.52 0.32	</A24_T2_med_bot>
+        <A25_M2_med>	3.6 3.6 0.000000 0.5	</A25_M2_med>
+        <A26_T18>	5 3 0.000000 0.000000	</A26_T18>
+        <A27_T82>	2.8 2.8 0.24 0.000000	</A27_T82>
+        <A29_T40>	5 5 0.28 0.31	</A29_T40>
+        <A30_M10_Wolverine>	3.5 3.5 0.6 0.6	</A30_M10_Wolverine>
+        <A31_M36_Slagger>	2.9 2.9 0.000000 0.000000	</A31_M36_Slagger>
+        <A32_M12>	5 5 0.2 0.000000	</A32_M12>
+        <A33_MTLS-1G14>	2.5 2.5 0.000000 6.2	</A33_MTLS-1G14>
+        <A34_M24_Chaffee>	5 5 0.26 0.16	</A34_M24_Chaffee>
+        <A35_Pershing>	5 5 0.000000 0.000000	</A35_Pershing>
+        <A35_Pershing_IGR>	5 5 0.000000 0.000000	</A35_Pershing_IGR>
+        <A36_Sherman_Jumbo>	5 5 0.2 0.000000	</A36_Sherman_Jumbo>
+        <A36_Sherman_Jumbo_IGR>	5 5 0.2 0.000000	</A36_Sherman_Jumbo_IGR>
+        <A37_M40M43>	1.5 1.5 0.000000 2.6	</A37_M40M43>
+        <A38_T92>	2 2 8.1 9.5	</A38_T92>
+        <A39_T28>	2.5 2.5 0.000000 2.5	</A39_T28>
+        <A40_T95>	4.3 4.3 0.000000 0.11	</A40_T95>
+        <A41_M18_Hellcat>	5.5 5.5 0.000000 0.000000	</A41_M18_Hellcat>
+        <A43_M22_Locust>	3.7 3.7 0.19 0.51	</A43_M22_Locust>
+        <A44_M4A2E4>	3.7 3.7 0.000000 0.000000	</A44_M4A2E4>
+        <A45_M6A2E1>	5 5 0.04 0.000000	</A45_M6A2E1>
+        <A46_T3>	5 5 0.17 0.000000	</A46_T3>
+        <A57_M8A1>	4.6 4.6 0.14 0.32	</A57_M8A1>
+        <A58_T67>	6.5 6.5 0.5 0.000000	</A58_T67>
+        <A58_T67_IGR>	6.5 6.5 0.5 0.000000	</A58_T67_IGR>
+        <A62_Ram-II>	5 5 0.000000 0.000000	</A62_Ram-II>
+        <A63_M46_Patton>	2.2 2.2 0.08 0.000000	</A63_M46_Patton>
+        <A64_T25_AT>	5.3 5.3 0.000000 0.000000	</A64_T25_AT>
+        <A66_M103>	5 5 0.01 1.4	</A66_M103>
+        <A67_T57_58>	4.2 4.2 0.000000 0.000000	</A67_T57_58>
+        <A68_T28_Prototype>	7.2 7.2 0.38 0.000000	</A68_T28_Prototype>
+        <A69_T110E5>	6 6 0.28 0.31	</A69_T110E5>
+        <A71_T21>	2 2 8.4 7.3	</A71_T21>
+        <A72_T25_2>	2.1 2.1 0.000000 0.000000	</A72_T25_2>
+        <A74_T1_E6>	1.5 1.5 1.5 6.2	</A74_T1_E6>
+        <A78_M4_Improved>	3.6 3.5 1 0.2	</A78_M4_Improved>
+        <A80_T26_E4_SuperPershing>	5.2 5.2 0.16 0.4	</A80_T26_E4_SuperPershing>
+        <A81_T95_E2>	2.6 2.6 0.000000 0.000000	</A81_T95_E2>
+        <A83_T110E4>	2.5 2.5 0.1 0.000000	</A83_T110E4>
+        <A85_T110E3>	5 5 0.12 0.04	</A85_T110E3>
+        <A86_T23E3>	3.6 3.6 0.000000 0.000000	</A86_T23E3>
+        <A87_M44>	5 5 0.27 0.61	</A87_M44>
+        <A88_M53_55>	5.8 5.8 0.000000 0.000000	</A88_M53_55>
+        <A89_T54E1>	6.2 6.2 0.52 0.000000	</A89_T54E1>
+        <A90_T69>	6 6 0.000000 0.000000	</A90_T69>
+        <A90_T69_IGR>	6 6 0.000000 0.000000	</A90_T69_IGR>
+        <A92_M60>	3.5 3.5 0.000000 0.000000	</A92_M60>
+        <A93_T7_Combat_Car>	2.9 2.9 0.000000 0.000000	</A93_T7_Combat_Car>
+        <A94_T37>	5 5 0.52 0.000000	</A94_T37>
+        <A95_T95_E6>	2.4 2.4 0.000000 0.000000	</A95_T95_E6>
+        <A97_M41_Bulldog>	4 4.1 0.33 0.000000	</A97_M41_Bulldog>
+        <A99_T92_LT>	2.4 2.4 0.000000 0.000000	</A99_T92_LT>
+        <germany:G78_Panther_M10>	2 2 0.2 0.000000	</germany:G78_Panther_M10>
+        <usa:A115_Chrysler_K>	3.27 3.27 0.000000 0.000000	</usa:A115_Chrysler_K>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy IGR notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+      <exclude>
+        <vehicles>	usa:A63_M46_Patton_KR usa:A117_T26E5_Patriot usa:A13_T34_hvy_BF usa:A115_Chrysler_K_GF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15216	</id>
+      <texture>	vehicles/german/Camouflage/IGR_Summer.dds	</texture>
+      <description>	#vehicle_customization:camouflage/IGR_Summer/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/IGR_Summer/label	</userString>
+      <tags>	premiumIGR	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	131 103 55 255	</c0>
+          <c1>	55 52 40 255	</c1>
+          <c2>	166 154 116 255	</c2>
+          <c3>	82 92 55 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <A01_T1_Cunningham>	4 4 0.000000 0.000000	</A01_T1_Cunningham>
+        <A02_M2_lt>	4.7 4.7 0.000000 0.000000	</A02_M2_lt>
+        <A03_M3_Stuart>	3.1 3.1 0.07 0.58	</A03_M3_Stuart>
+        <A04_M3_Grant>	2.3 2.4 0.66 0.16	</A04_M3_Grant>
+        <A05_M4_Sherman>	4 4 0.000000 0.000000	</A05_M4_Sherman>
+        <A05_M4_Sherman_IGR>	4 4 0.000000 0.000000	</A05_M4_Sherman_IGR>
+        <A06_M4A3E8_Sherman>	4.4 4.4 0.000000 0.000000	</A06_M4A3E8_Sherman>
+        <A07_T20>	7.1 7.1 0.08 0.000000	</A07_T20>
+        <A08_T23>	2.4 2.4 0.08 0.000000	</A08_T23>
+        <A09_T1_hvy>	4.4 4.4 0.000000 0.000000	</A09_T1_hvy>
+        <A100_T49>	2.3 2.2 0.000000 0.000000	</A100_T49>
+        <A101_M56>	2.9 3 0.22 0.000000	</A101_M56>
+        <A102_T28_concept>	2 2 0.000000 0.000000	</A102_T28_concept>
+        <A103_T71E1>	3.4 3.4 0.08 0.000000	</A103_T71E1>
+        <A103_T71E1_IGR>	3.4 3.4 0.08 0.000000	</A103_T71E1_IGR>
+        <A104_M4A3E8A>	3.2 3.3 0.69 0.000000	</A104_M4A3E8A>
+        <A106_M48A2_120>	4.6 4.6 0.000000 0.000000	</A106_M48A2_120>
+        <A107_T1_HMC>	3 3 0.000000 0.000000	</A107_T1_HMC>
+        <A108_T18_HMC>	2 2 0.32 0.26	</A108_T18_HMC>
+        <A109_T56_GMC>	3.2 3.2 0.09 0.000000	</A109_T56_GMC>
+        <A10_M6>	2.5 2.6 0.000000 0.5	</A10_M6>
+        <A111_T25_Pilot>	3 3 0.000000 0.000000	</A111_T25_Pilot>
+        <A112_T71E2>	1.2 1.2 0.04 0.08	</A112_T71E2>
+        <A112_T71E2R>	1.2 1.2 0.04 0.08	</A112_T71E2R>
+        <A115_Chrysler_K>	1.7 1.7 0.4 0.000000	</A115_Chrysler_K>
+        <A116_XM551>	2.2 2.2 0.000000 0.000000	</A116_XM551>
+        <A117_T26E5>	1.6 1.6 0.000000 0.000000	</A117_T26E5>
+        <A118_M4_Thunderbolt>	2.1 2.1 0.32 0.000000	</A118_M4_Thunderbolt>
+        <A11_T29>	4.1 4.1 0.000000 0.000000	</A11_T29>
+        <A11_T29_IGR>	4.1 4.1 0.000000 0.000000	</A11_T29_IGR>
+        <A120_M48A5>	1.2 1.2 0.3 1.7	</A120_M48A5>
+        <A120_M48A5_IGR>	3.1 3.2 0.3 0.000000	</A120_M48A5_IGR>
+        <A121_M26_Cologne>	1.6 1.6 0.000000 0.000000	</A121_M26_Cologne>
+        <A12_T32>	2.8 2.9 0.000000 0.000000	</A12_T32>
+        <A13_T34_hvy>	3.5 3.5 0.000000 0.000000	</A13_T34_hvy>
+        <A13_T34_hvy_IGR>	3.5 3.5 0.000000 0.000000	</A13_T34_hvy_IGR>
+        <A14_T30>	2.3 2.3 0.000000 0.000000	</A14_T30>
+        <A15_T57>	3.7 2.1 0.000000 0.000000	</A15_T57>
+        <A16_M7_Priest>	3.2 3.2 0.08 0.16	</A16_M7_Priest>
+        <A17_M37>	3 3.1 0.000000 0.000000	</A17_M37>
+        <A18_M41>	5.3 5.3 0.000000 0.000000	</A18_M41>
+        <A19_T2_lt>	3.7 3.7 0.000000 0.1	</A19_T2_lt>
+        <A21_T14>	2.9 2.9 0.000000 0.000000	</A21_T14>
+        <A22_M5_Stuart>	3 3.1 0.000000 0.000000	</A22_M5_Stuart>
+        <A23_M7_med>	4.1 4.1 0.34 0.000000	</A23_M7_med>
+        <A24_T2_med>	3.1 3.1 0.5 0.18	</A24_T2_med>
+        <A24_T2_med_bot>	3 3 0.54 0.9	</A24_T2_med_bot>
+        <A25_M2_med>	3.2 3.2 0.54 0.88	</A25_M2_med>
+        <A26_T18>	3.5 2.1 0.000000 0.000000	</A26_T18>
+        <A27_T82>	2.6 2.6 0.3 0.08	</A27_T82>
+        <A29_T40>	5.54054 5.54054 0.000000 0.000000	</A29_T40>
+        <A30_M10_Wolverine>	3.3 3.3 0.04 0.000000	</A30_M10_Wolverine>
+        <A31_M36_Slagger>	2.5 2.5 0.000000 0.000000	</A31_M36_Slagger>
+        <A32_M12>	2.7 2.8 0.000000 0.000000	</A32_M12>
+        <A33_MTLS-1G14>	1 1 0.000000 0.000000	</A33_MTLS-1G14>
+        <A34_M24_Chaffee>	3.7 3.8 0.000000 0.000000	</A34_M24_Chaffee>
+        <A35_Pershing>	3.1 3.2 0.09 0.000000	</A35_Pershing>
+        <A35_Pershing_IGR>	3.1 3.2 0.09 0.000000	</A35_Pershing_IGR>
+        <A36_Sherman_Jumbo>	3.5 3.6 0.12 0.000000	</A36_Sherman_Jumbo>
+        <A36_Sherman_Jumbo_IGR>	3.5 3.6 0.12 0.000000	</A36_Sherman_Jumbo_IGR>
+        <A37_M40M43>	1.2 1.2 0.25 3.6	</A37_M40M43>
+        <A38_T92>	2 2 0.000000 0.000000	</A38_T92>
+        <A39_T28>	2.5 2.5 0.11 0.1	</A39_T28>
+        <A40_T95>	2.7 2.7 0.16 0.59	</A40_T95>
+        <A41_M18_Hellcat>	4.6 4.6 0.000000 0.000000	</A41_M18_Hellcat>
+        <A43_M22_Locust>	2.7 2.8 0.14 0.000000	</A43_M22_Locust>
+        <A44_M4A2E4>	2.6 2.7 0.25 0.17	</A44_M4A2E4>
+        <A45_M6A2E1>	3.1 3.3 0.04 0.18	</A45_M6A2E1>
+        <A46_T3>	4.9 4.9 0.23 0.000000	</A46_T3>
+        <A57_M8A1>	3.7 3.7 0.15 0.06	</A57_M8A1>
+        <A58_T67>	5.9 5.9 0.36 0.54	</A58_T67>
+        <A58_T67_IGR>	5.9 5.9 0.36 0.54	</A58_T67_IGR>
+        <A62_Ram-II>	3.6 3.6 0.3 0.2	</A62_Ram-II>
+        <A63_M46_Patton>	1.9 1.9 0.3 0.000000	</A63_M46_Patton>
+        <A64_T25_AT>	3.8 3.8 0.02 0.24	</A64_T25_AT>
+        <A66_M103>	3.7 3.7 0.7 1.3	</A66_M103>
+        <A67_T57_58>	3.9 3.9 0.000000 0.000000	</A67_T57_58>
+        <A68_T28_Prototype>	6 6 0.000000 0.000000	</A68_T28_Prototype>
+        <A69_T110E5>	6.4 6.4 0.000000 0.000000	</A69_T110E5>
+        <A71_T21>	1.5 1.5 0.000000 0.000000	</A71_T21>
+        <A72_T25_2>	2.2 2.2 0.000000 0.000000	</A72_T25_2>
+        <A74_T1_E6>	1.2 1.2 2.8 2	</A74_T1_E6>
+        <A78_M4_Improved>	3.4 3.3 0.22 0.37	</A78_M4_Improved>
+        <A80_T26_E4_SuperPershing>	3.3 3.3 0.16 0.000000	</A80_T26_E4_SuperPershing>
+        <A81_T95_E2>	2.5 2.5 3 0.000000	</A81_T95_E2>
+        <A83_T110E4>	2.3 2.3 0.000000 0.000000	</A83_T110E4>
+        <A85_T110E3>	3.7 3.8 0.02 0.06	</A85_T110E3>
+        <A86_T23E3>	3 3 0.000000 0.000000	</A86_T23E3>
+        <A87_M44>	4.6 4.6 0.33 0.61	</A87_M44>
+        <A88_M53_55>	4.6 4.6 0.000000 0.000000	</A88_M53_55>
+        <A89_T54E1>	5.2 5.2 0.000000 0.000000	</A89_T54E1>
+        <A90_T69>	3.9 3.9 0.54 0.2	</A90_T69>
+        <A90_T69_IGR>	3.9 3.9 0.54 0.2	</A90_T69_IGR>
+        <A92_M60>	3 3 0.36 0.000000	</A92_M60>
+        <A93_T7_Combat_Car>	1.8 1.8 0.44 0.000000	</A93_T7_Combat_Car>
+        <A94_T37>	4.3 4.4 0.15 0.000000	</A94_T37>
+        <A95_T95_E6>	2.4 2.4 0.000000 0.32	</A95_T95_E6>
+        <A97_M41_Bulldog>	4 4 0.000000 0.000000	</A97_M41_Bulldog>
+        <A99_T92_LT>	1.9 1.9 0.000000 0.000000	</A99_T92_LT>
+        <germany:G78_Panther_M10>	2.1 2.1 0.32 0.000000	</germany:G78_Panther_M10>
+        <usa:A115_Chrysler_K>	2.09 2.09 1 0.88	</usa:A115_Chrysler_K>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy IGR notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+      <exclude>
+        <vehicles>	usa:A63_M46_Patton_KR usa:A117_T26E5_Patriot usa:A13_T34_hvy_BF usa:A115_Chrysler_K_GF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15217	</id>
+      <texture>	vehicles/german/Camouflage/IGR_Desert.dds	</texture>
+      <description>	#vehicle_customization:camouflage/IGR_Desert/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/IGR_Desert/label	</userString>
+      <tags>	premiumIGR	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	142 102 60 255	</c0>
+          <c1>	157 147 111 255	</c1>
+          <c2>	51 48 37 255	</c2>
+          <c3>	109 94 67 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <A01_T1_Cunningham>	3.2 3.2 0.000000 0.000000	</A01_T1_Cunningham>
+        <A02_M2_lt>	3.7 3.7 0.24 0.34	</A02_M2_lt>
+        <A03_M3_Stuart>	2.9 2.9 0.000000 0.47	</A03_M3_Stuart>
+        <A04_M3_Grant>	2.3 2.4 0.000000 0.2	</A04_M3_Grant>
+        <A05_M4_Sherman>	2.7 2.8 0.2 0.34	</A05_M4_Sherman>
+        <A05_M4_Sherman_IGR>	2.7 2.8 0.2 0.34	</A05_M4_Sherman_IGR>
+        <A06_M4A3E8_Sherman>	2.9 2.9 0.000000 0.000000	</A06_M4A3E8_Sherman>
+        <A07_T20>	6.5 6.5 0.000000 0.000000	</A07_T20>
+        <A08_T23>	2.4 2.5 0.000000 0.000000	</A08_T23>
+        <A09_T1_hvy>	3.6 3.6 0.15 0.06	</A09_T1_hvy>
+        <A100_T49>	2 1.9 0.000000 0.000000	</A100_T49>
+        <A101_M56>	2.4 2.3 0.000000 0.000000	</A101_M56>
+        <A102_T28_concept>	1.1 1.1 0.37 0.5	</A102_T28_concept>
+        <A103_T71E1>	2.6 2.6 0.000000 0.000000	</A103_T71E1>
+        <A103_T71E1_IGR>	2.6 2.6 0.000000 0.000000	</A103_T71E1_IGR>
+        <A104_M4A3E8A>	3 3 0.87 0.55	</A104_M4A3E8A>
+        <A106_M48A2_120>	4.8 4.8 0.000000 0.000000	</A106_M48A2_120>
+        <A107_T1_HMC>	3.6 3.6 0.000000 0.000000	</A107_T1_HMC>
+        <A108_T18_HMC>	2 2 0.000000 0.1	</A108_T18_HMC>
+        <A109_T56_GMC>	3.1 3.1 0.000000 0.000000	</A109_T56_GMC>
+        <A10_M6>	1.9 1.9 0.14 0.76	</A10_M6>
+        <A111_T25_Pilot>	3.1 3.1 0.000000 0.000000	</A111_T25_Pilot>
+        <A112_T71E2>	1 1 0.12 0.000000	</A112_T71E2>
+        <A112_T71E2R>	1 1 0.12 0.000000	</A112_T71E2R>
+        <A115_Chrysler_K>	1.1 1.1 1.5 0.7	</A115_Chrysler_K>
+        <A116_XM551>	2.1 2.1 0.000000 0.000000	</A116_XM551>
+        <A117_T26E5>	1.4 1.4 0.000000 0.000000	</A117_T26E5>
+        <A118_M4_Thunderbolt>	1.4 1.4 0.32 0.000000	</A118_M4_Thunderbolt>
+        <A11_T29>	4 4 0.000000 0.000000	</A11_T29>
+        <A11_T29_IGR>	4 4 0.000000 0.000000	</A11_T29_IGR>
+        <A120_M48A5>	1.3 1.3 2.2 2.4	</A120_M48A5>
+        <A120_M48A5_IGR>	3.4 3.5 0.19 0.1	</A120_M48A5_IGR>
+        <A121_M26_Cologne>	1.4 1.4 0.000000 0.000000	</A121_M26_Cologne>
+        <A12_T32>	3 3.1 0.000000 0.000000	</A12_T32>
+        <A13_T34_hvy>	3.1 3.1 0.000000 0.000000	</A13_T34_hvy>
+        <A13_T34_hvy_IGR>	3.1 3.1 0.000000 0.000000	</A13_T34_hvy_IGR>
+        <A14_T30>	1.7 1.7 0.36 0.000000	</A14_T30>
+        <A15_T57>	2.7 1.7 0.000000 0.000000	</A15_T57>
+        <A16_M7_Priest>	4.1 4.1 0.000000 0.000000	</A16_M7_Priest>
+        <A17_M37>	2.4 2.5 0.000000 0.000000	</A17_M37>
+        <A18_M41>	4.1 4.1 0.000000 0.000000	</A18_M41>
+        <A19_T2_lt>	4.2 4.2 0.000000 0.2	</A19_T2_lt>
+        <A21_T14>	2.4 2.6 0.000000 0.000000	</A21_T14>
+        <A22_M5_Stuart>	4.3 4.5 0.000000 0.000000	</A22_M5_Stuart>
+        <A23_M7_med>	3.8 3.8 0.2 0.000000	</A23_M7_med>
+        <A24_T2_med>	2.7 2.7 0.36 0.02	</A24_T2_med>
+        <A24_T2_med_bot>	3 3 0.26 0.4	</A24_T2_med_bot>
+        <A25_M2_med>	2.9 2.9 0.2 0.8	</A25_M2_med>
+        <A26_T18>	3.4 2 0.000000 0.000000	</A26_T18>
+        <A27_T82>	2.5 2.5 0.000000 0.000000	</A27_T82>
+        <A29_T40>	5 5 0.000000 0.000000	</A29_T40>
+        <A30_M10_Wolverine>	3.6 3.6 0.16 0.58	</A30_M10_Wolverine>
+        <A31_M36_Slagger>	2.8 2.8 0.000000 0.000000	</A31_M36_Slagger>
+        <A32_M12>	2.7 2.8 0.000000 0.000000	</A32_M12>
+        <A33_MTLS-1G14>	1.3 1.3 0.24 4.7	</A33_MTLS-1G14>
+        <A34_M24_Chaffee>	3.3 3.4 0.000000 0.000000	</A34_M24_Chaffee>
+        <A35_Pershing>	2.8 2.9 0.000000 0.000000	</A35_Pershing>
+        <A35_Pershing_IGR>	2.8 2.9 0.000000 0.000000	</A35_Pershing_IGR>
+        <A36_Sherman_Jumbo>	2.7 2.8 0.000000 0.000000	</A36_Sherman_Jumbo>
+        <A36_Sherman_Jumbo_IGR>	2.7 2.8 0.000000 0.000000	</A36_Sherman_Jumbo_IGR>
+        <A37_M40M43>	1 1 0.000000 0.000000	</A37_M40M43>
+        <A38_T92>	1.5 1.5 0.2 0.000000	</A38_T92>
+        <A39_T28>	2 2 0.000000 0.000000	</A39_T28>
+        <A40_T95>	3 3.1 0.000000 0.13	</A40_T95>
+        <A41_M18_Hellcat>	3.8 3.9 0.57 0.75	</A41_M18_Hellcat>
+        <A43_M22_Locust>	2.6 2.6 0.000000 0.000000	</A43_M22_Locust>
+        <A44_M4A2E4>	2.4 2.4 0.000000 0.000000	</A44_M4A2E4>
+        <A45_M6A2E1>	2.5 2.4 0.5 0.1	</A45_M6A2E1>
+        <A46_T3>	3.4 3.4 0.000000 0.000000	</A46_T3>
+        <A57_M8A1>	4.9 4.9 0.000000 0.000000	</A57_M8A1>
+        <A58_T67>	4.7 4.7 0.000000 0.12	</A58_T67>
+        <A58_T67_IGR>	4.7 4.7 0.000000 0.12	</A58_T67_IGR>
+        <A62_Ram-II>	2.5 2.5 0.000000 0.000000	</A62_Ram-II>
+        <A63_M46_Patton>	1.5 1.5 0.2 0.04	</A63_M46_Patton>
+        <A64_T25_AT>	4.2 4.2 0.000000 0.000000	</A64_T25_AT>
+        <A66_M103>	3 3 0.3 2.6	</A66_M103>
+        <A67_T57_58>	2.3 2.3 0.18 0.000000	</A67_T57_58>
+        <A68_T28_Prototype>	5.3 5.3 0.000000 0.000000	</A68_T28_Prototype>
+        <A69_T110E5>	4.8 4.8 0.000000 0.000000	</A69_T110E5>
+        <A71_T21>	1.8 1.8 0.000000 0.000000	</A71_T21>
+        <A72_T25_2>	1.7 1.7 0.000000 0.000000	</A72_T25_2>
+        <A74_T1_E6>	1.3 1.3 0.000000 0.000000	</A74_T1_E6>
+        <A78_M4_Improved>	3.1 3 0.000000 0.000000	</A78_M4_Improved>
+        <A80_T26_E4_SuperPershing>	3 3 0.52 0.48	</A80_T26_E4_SuperPershing>
+        <A81_T95_E2>	2.3 2.3 1.7 0.5	</A81_T95_E2>
+        <A83_T110E4>	2 2 0.000000 0.000000	</A83_T110E4>
+        <A85_T110E3>	3 3 0.17 0.000000	</A85_T110E3>
+        <A86_T23E3>	2.5 2.5 0.000000 0.000000	</A86_T23E3>
+        <A87_M44>	3.5 3.5 0.000000 0.000000	</A87_M44>
+        <A88_M53_55>	3.2 3.2 0.000000 0.000000	</A88_M53_55>
+        <A89_T54E1>	3.1 3.1 0.000000 0.000000	</A89_T54E1>
+        <A90_T69>	3.4 3.4 0.000000 0.000000	</A90_T69>
+        <A90_T69_IGR>	3.4 3.4 0.000000 0.000000	</A90_T69_IGR>
+        <A92_M60>	2.6 2.6 0.2 0.000000	</A92_M60>
+        <A93_T7_Combat_Car>	1.7 1.7 0.000000 0.000000	</A93_T7_Combat_Car>
+        <A94_T37>	3 3 0.000000 0.000000	</A94_T37>
+        <A95_T95_E6>	2.2 2.2 0.000000 0.000000	</A95_T95_E6>
+        <A97_M41_Bulldog>	3.7 3.6 0.000000 0.000000	</A97_M41_Bulldog>
+        <A99_T92_LT>	2.4 2.4 0.000000 0.000000	</A99_T92_LT>
+        <germany:G78_Panther_M10>	1.6 1.6 0.000000 0.000000	</germany:G78_Panther_M10>
+        <usa:A115_Chrysler_K>	2.27 2.27 0.000000 0.000000	</usa:A115_Chrysler_K>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy IGR notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+      <exclude>
+        <vehicles>	usa:A63_M46_Patton_KR usa:A117_T26E5_Patriot usa:A13_T34_hvy_BF usa:A115_Chrysler_K_GF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15219	</id>
+      <texture>	vehicles/chinese/Camouflage/IGR_K_Desert.dds	</texture>
+      <description>	#vehicle_customization:camouflage/IGR_K_Desert/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/IGR_K_Desert/label	</userString>
+      <tags>	premiumIGR	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	119 94 73 255	</c0>
+          <c1>	151 115 72 255	</c1>
+          <c2>	145 127 94 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <A01_T1_Cunningham>	4 4 0.000000 0.000000	</A01_T1_Cunningham>
+        <A02_M2_lt>	5 5 0.000000 0.000000	</A02_M2_lt>
+        <A03_M3_Stuart>	3.9 3.9 0.000000 0.000000	</A03_M3_Stuart>
+        <A04_M3_Grant>	5 5 0.000000 0.000000	</A04_M3_Grant>
+        <A05_M4_Sherman>	5 5 0.000000 0.000000	</A05_M4_Sherman>
+        <A05_M4_Sherman_IGR>	5 5 0.000000 0.000000	</A05_M4_Sherman_IGR>
+        <A06_M4A3E8_Sherman>	5.3 5.3 0.000000 0.000000	</A06_M4A3E8_Sherman>
+        <A07_T20>	10.6 10.6 0.000000 0.000000	</A07_T20>
+        <A08_T23>	5 5 0.000000 0.000000	</A08_T23>
+        <A09_T1_hvy>	6 6 0.000000 0.000000	</A09_T1_hvy>
+        <A100_T49>	3 3 0.000000 0.000000	</A100_T49>
+        <A101_M56>	3.9 3.8 0.000000 0.000000	</A101_M56>
+        <A102_T28_concept>	2.1 1.9 0.000000 0.000000	</A102_T28_concept>
+        <A103_T71E1>	2.8 2.8 0.000000 0.000000	</A103_T71E1>
+        <A103_T71E1_IGR>	2.8 2.8 0.000000 0.000000	</A103_T71E1_IGR>
+        <A104_M4A3E8A>	4.5 4.5 0.69 0.08	</A104_M4A3E8A>
+        <A106_M48A2_120>	3 3 0.000000 0.000000	</A106_M48A2_120>
+        <A107_T1_HMC>	2.6 2.6 0.000000 0.000000	</A107_T1_HMC>
+        <A108_T18_HMC>	2 2 0.000000 0.2	</A108_T18_HMC>
+        <A109_T56_GMC>	4.3 4.3 0.000000 0.000000	</A109_T56_GMC>
+        <A10_M6>	3 3 0.000000 0.3	</A10_M6>
+        <A111_T25_Pilot>	3.7 3.7 0.000000 0.000000	</A111_T25_Pilot>
+        <A112_T71E2>	1 1 0.04 0.000000	</A112_T71E2>
+        <A112_T71E2R>	1 1 0.04 0.000000	</A112_T71E2R>
+        <A115_Chrysler_K>	2 2 0.000000 0.000000	</A115_Chrysler_K>
+        <A116_XM551>	2.9 2.9 0.000000 0.000000	</A116_XM551>
+        <A117_T26E5>	1.5 1.5 0.000000 0.000000	</A117_T26E5>
+        <A11_T29>	5 5 0.000000 0.000000	</A11_T29>
+        <A11_T29_IGR>	5 5 0.000000 0.000000	</A11_T29_IGR>
+        <A120_M48A5>	2 2 1.4 2.5	</A120_M48A5>
+        <A120_M48A5_IGR>	5 5 0.000000 0.000000	</A120_M48A5_IGR>
+        <A121_M26_Cologne>	1.5 1.5 0.000000 0.000000	</A121_M26_Cologne>
+        <A12_T32>	5 5 0.000000 0.000000	</A12_T32>
+        <A13_T34_hvy>	4.4 4.4 0.000000 0.000000	</A13_T34_hvy>
+        <A13_T34_hvy_IGR>	4.4 4.4 0.000000 0.000000	</A13_T34_hvy_IGR>
+        <A14_T30>	2.7 2.7 0.000000 0.000000	</A14_T30>
+        <A15_T57>	5 3 0.000000 0.000000	</A15_T57>
+        <A16_M7_Priest>	3.4 3.4 0.000000 0.000000	</A16_M7_Priest>
+        <A17_M37>	5 5 0.000000 0.000000	</A17_M37>
+        <A18_M41>	4.3 4.3 0.000000 0.000000	</A18_M41>
+        <A19_T2_lt>	3.2 3.2 0.000000 0.000000	</A19_T2_lt>
+        <A21_T14>	3.9 3.9 0.000000 0.000000	</A21_T14>
+        <A22_M5_Stuart>	5 5 0.000000 0.000000	</A22_M5_Stuart>
+        <A23_M7_med>	4.1 4.1 0.000000 0.000000	</A23_M7_med>
+        <A24_T2_med>	5 5 0.000000 0.000000	</A24_T2_med>
+        <A24_T2_med_bot>	3 3 0.5 0.000000	</A24_T2_med_bot>
+        <A25_M2_med>	3 3 0.000000 0.32	</A25_M2_med>
+        <A26_T18>	5 3 0.000000 0.000000	</A26_T18>
+        <A27_T82>	2.6 2.6 0.000000 0.000000	</A27_T82>
+        <A29_T40>	5 5 0.000000 0.000000	</A29_T40>
+        <A30_M10_Wolverine>	5 5 0.24 0.12	</A30_M10_Wolverine>
+        <A31_M36_Slagger>	3.2 3.2 0.000000 0.000000	</A31_M36_Slagger>
+        <A32_M12>	5 5 0.000000 0.000000	</A32_M12>
+        <A33_MTLS-1G14>	2.3 2.3 0.000000 3.6	</A33_MTLS-1G14>
+        <A34_M24_Chaffee>	5 5 0.000000 0.000000	</A34_M24_Chaffee>
+        <A35_Pershing>	3 3 0.000000 0.000000	</A35_Pershing>
+        <A35_Pershing_IGR>	3 3 0.000000 0.000000	</A35_Pershing_IGR>
+        <A36_Sherman_Jumbo>	5 5 0.000000 0.000000	</A36_Sherman_Jumbo>
+        <A36_Sherman_Jumbo_IGR>	5 5 0.000000 0.000000	</A36_Sherman_Jumbo_IGR>
+        <A37_M40M43>	1.5 1.5 0.000000 1.8	</A37_M40M43>
+        <A38_T92>	2 2 3.9 6.8	</A38_T92>
+        <A39_T28>	2.5 2.5 0.000000 0.000000	</A39_T28>
+        <A40_T95>	5 5 0.000000 0.000000	</A40_T95>
+        <A41_M18_Hellcat>	5 5 0.000000 0.49	</A41_M18_Hellcat>
+        <A43_M22_Locust>	3 3 0.000000 0.000000	</A43_M22_Locust>
+        <A44_M4A2E4>	3.4 3.4 0.000000 0.000000	</A44_M4A2E4>
+        <A45_M6A2E1>	5 5 0.1 0.000000	</A45_M6A2E1>
+        <A46_T3>	3.6 3.6 0.26 0.27	</A46_T3>
+        <A57_M8A1>	5 5 0.000000 0.000000	</A57_M8A1>
+        <A58_T67>	5 5 0.000000 0.000000	</A58_T67>
+        <A58_T67_IGR>	5 5 0.000000 0.000000	</A58_T67_IGR>
+        <A62_Ram-II>	4.6 4.6 0.000000 0.000000	</A62_Ram-II>
+        <A63_M46_Patton>	2 2 0.16 0.000000	</A63_M46_Patton>
+        <A64_T25_AT>	5.5 5.5 0.000000 0.000000	</A64_T25_AT>
+        <A66_M103>	5 5 0.000000 0.000000	</A66_M103>
+        <A67_T57_58>	3.9 3.9 0.000000 0.000000	</A67_T57_58>
+        <A68_T28_Prototype>	5.2 5.2 0.000000 0.000000	</A68_T28_Prototype>
+        <A69_T110E5>	4 4 0.000000 0.000000	</A69_T110E5>
+        <A71_T21>	2 2 0.000000 6.2	</A71_T21>
+        <A72_T25_2>	2.4 2.4 0.000000 0.000000	</A72_T25_2>
+        <A74_T1_E6>	1 1 0.000000 2.9	</A74_T1_E6>
+        <A78_M4_Improved>	5 5 0.000000 0.000000	</A78_M4_Improved>
+        <A80_T26_E4_SuperPershing>	3 3 0.000000 0.000000	</A80_T26_E4_SuperPershing>
+        <A81_T95_E2>	2.7 2.7 0.000000 0.000000	</A81_T95_E2>
+        <A83_T110E4>	2.4 2.4 0.000000 0.000000	</A83_T110E4>
+        <A85_T110E3>	5 5 0.000000 0.000000	</A85_T110E3>
+        <A86_T23E3>	2 2 0.000000 0.000000	</A86_T23E3>
+        <A87_M44>	5 5 0.000000 0.000000	</A87_M44>
+        <A88_M53_55>	5 5 0.000000 0.000000	</A88_M53_55>
+        <A89_T54E1>	3.4 3.4 0.08 0.000000	</A89_T54E1>
+        <A90_T69>	6.8 6.8 0.000000 0.000000	</A90_T69>
+        <A90_T69_IGR>	6.8 6.8 0.000000 0.000000	</A90_T69_IGR>
+        <A92_M60>	3.6 3.6 0.000000 0.000000	</A92_M60>
+        <A93_T7_Combat_Car>	2.7 2.7 0.000000 0.000000	</A93_T7_Combat_Car>
+        <A94_T37>	3 3 0.000000 0.000000	</A94_T37>
+        <A95_T95_E6>	2.8 2.8 0.000000 0.000000	</A95_T95_E6>
+        <A97_M41_Bulldog>	4.5 4.4 0.000000 0.000000	</A97_M41_Bulldog>
+        <A99_T92_LT>	1.8 1.8 0.000000 0.000000	</A99_T92_LT>
+        <germany:G78_Panther_M10>	2.6 2.6 0.000000 0.000000	</germany:G78_Panther_M10>
+        <usa:A115_Chrysler_K>	2.4 2.4 0.000000 0.000000	</usa:A115_Chrysler_K>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+</usa_nonCN.xml>

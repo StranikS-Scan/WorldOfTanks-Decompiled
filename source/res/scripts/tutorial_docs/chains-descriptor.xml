@@ -1,0 +1,202 @@
+<chains-descriptor.xml>
+  <gui>	gui/tutorial-lobby-gui.xml	</gui>
+  <initial-chapter></initial-chapter>
+  <chapters>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest2)	</title>
+      <description>	_(#tutorial:tutorialQuest/description/quest2)	</description>
+      <bonus></bonus>
+      <chapter-id>	Chain_1	</chapter-id>
+      <file-path>	scripts/tutorial_docs/chain-1.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest3)	</title>
+      <description>	Player should unlock and install module	</description>
+      <bonus-ref>	Bonus13	</bonus-ref>
+      <chapter-id>	Chain_2	</chapter-id>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_3	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-2.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest4)	</title>
+      <description>	Player should unlock and buy vehicle II level	</description>
+      <bonus-ref>	Bonus14	</bonus-ref>
+      <chapter-id>	Chain_3_1	</chapter-id>
+      <vars>
+        <var-set>	RequiredVehicleLevel	  <asInt>	1	</asInt>
+        </var-set>
+        <var-set>	SelectVehicleText	  <asString>	_(#tutorial:chain3/hint/selectVehicle1Level)	</asString>
+        </var-set>
+        <var-set>	BuyVehicleText	  <asString>	_(#tutorial:chain3/hint/buyVehicle1Level)	</asString>
+        </var-set>
+        <var-set>	CongratulationWindowDescription	  <asString>	_(#tutorial:tutorialQuest/awardWindow/description/quest4)	</asString>
+        </var-set>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_4	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-3.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest5)	</title>
+      <description>	Player should buy free slot	</description>
+      <bonus-ref>	Bonus15	</bonus-ref>
+      <chapter-id>	Chain_6	</chapter-id>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_5	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-6.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest6)	</title>
+      <description>	Player should enter to battle 5 times	</description>
+      <bonus></bonus>
+      <chapter-id>	Chain_7	</chapter-id>
+      <vars>
+        <var-set>	RequiredVehicleLevel	  <asInt>	2	</asInt>
+        </var-set>
+        <var-set>	SelectVehicleText	  <asString>	_(#tutorial:chain7/hint/selectVehicle)	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-7.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest7)	</title>
+      <description>	Player should exchange free XP.	</description>
+      <bonus-ref>	Bonus17	</bonus-ref>
+      <chapter-id>	Chain_8	</chapter-id>
+      <vars>
+        <var-set>	FreeXPToConversion	  <asInt>	1000	</asInt>
+        </var-set>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_7	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-8.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest8)	</title>
+      <description>	Player should unlock and buy III vehicle	</description>
+      <bonus-ref>	Bonus18	</bonus-ref>
+      <chapter-id>	Chain_3_2	</chapter-id>
+      <vars>
+        <var-set>	RequiredVehicleLevel	  <asInt>	2	</asInt>
+        </var-set>
+        <var-set>	SelectVehicleText	  <asString>	_(#tutorial:chain3/hint/selectVehicle2Level)	</asString>
+        </var-set>
+        <var-set>	BuyVehicleText	  <asString>	_(#tutorial:chain3/hint/buyVehicle2Level)	</asString>
+        </var-set>
+        <var-set>	CongratulationWindowDescription	  <asString>	_(#tutorial:tutorialQuest/awardWindow/description/quest8)	</asString>
+        </var-set>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_8	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-3.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest9)	</title>
+      <description>	Player should buy 3 days of premium	</description>
+      <bonus-ref>	Bonus19	</bonus-ref>
+      <chapter-id>	Chain_9	</chapter-id>
+      <vars>
+        <var-set>	PremiumDays	  <asInt>	3	</asInt>
+        </var-set>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_9	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-9.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest10)	</title>
+      <description>	Player should unlock and buy IV vehicle	</description>
+      <bonus-ref>	Bonus20	</bonus-ref>
+      <chapter-id>	Chain_3_3	</chapter-id>
+      <vars>
+        <var-set>	RequiredVehicleLevel	  <asInt>	3	</asInt>
+        </var-set>
+        <var-set>	SelectVehicleText	  <asString>	_(#tutorial:chain3/hint/selectVehicle3Level)	</asString>
+        </var-set>
+        <var-set>	BuyVehicleText	  <asString>	_(#tutorial:chain3/hint/buyVehicle3Level)	</asString>
+        </var-set>
+        <var-set>	CongratulationWindowDescription	  <asString>	_(#tutorial:tutorialQuest/awardWindow/description/quest10)	</asString>
+        </var-set>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_10	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-3.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest11)	</title>
+      <description>	Player should buy and install small medkit	</description>
+      <bonus-ref>	Bonus21	</bonus-ref>
+      <chapter-id>	Chain_4_medkit	</chapter-id>
+      <vars>
+        <var-set>	SelectedEquipmentTag	  <asString>	medkit	</asString>
+        </var-set>
+        <var-set>	SelectedSlotIndex	  <asInt>	1	</asInt>
+        </var-set>
+        <var-set>	CongratulationWindowDescription	  <asString>	_(#tutorial:tutorialQuest/awardWindow/description/quest11)	</asString>
+        </var-set>
+        <var-set>	CongratulationWindowImage	  <asString>	../maps/icons/hangarTutorial/q11.png	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-4.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest12)	</title>
+      <description>	Player should buy and install small repairkit	</description>
+      <bonus-ref>	Bonus22	</bonus-ref>
+      <chapter-id>	Chain_4_repairkit	</chapter-id>
+      <vars>
+        <var-set>	SelectedEquipmentTag	  <asString>	repairkit	</asString>
+        </var-set>
+        <var-set>	SelectedSlotIndex	  <asInt>	2	</asInt>
+        </var-set>
+        <var-set>	CongratulationWindowDescription	  <asString>	_(#tutorial:tutorialQuest/awardWindow/description/quest12)	</asString>
+        </var-set>
+        <var-set>	CongratulationWindowImage	  <asString>	../maps/icons/hangarTutorial/q12.png	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-4.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest13)	</title>
+      <description>	Player should buy and install hand extinguisher	</description>
+      <bonus-ref>	Bonus23	</bonus-ref>
+      <chapter-id>	Chain_4_extinguisher	</chapter-id>
+      <vars>
+        <var-set>	SelectedEquipmentTag	  <asString>	extinguisher	</asString>
+        </var-set>
+        <var-set>	SelectedSlotIndex	  <asInt>	3	</asInt>
+        </var-set>
+        <var-set>	CongratulationWindowDescription	  <asString>	_(#tutorial:tutorialQuest/awardWindow/description/quest13)	</asString>
+        </var-set>
+        <var-set>	CongratulationWindowImage	  <asString>	../maps/icons/hangarTutorial/q13.png	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-4.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	_(#tutorial:tutorialQuest/title/quest14)	</title>
+      <description>	Player should buy and install camouflage net	</description>
+      <bonus-ref>	Bonus24	</bonus-ref>
+      <chapter-id>	Chain_5_camouflage_net	</chapter-id>
+      <vars>
+        <var-set>	SelectedOptionalDeviceName	  <asString>	camouflageNet	</asString>
+        </var-set>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_14	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/chain-5.xml	</file-path>
+    </chapter>
+    <chapter>
+      <title>	No title	</title>
+      <description>	No description	</description>
+      <bonus></bonus>
+      <chapter-id>	PvE_Chain	</chapter-id>
+      <file-path>	scripts/tutorial_docs/pve-chain.xml	</file-path>
+    </chapter>
+  </chapters>
+</chains-descriptor.xml>

@@ -1,7 +1,9 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/factories.py
 import nations
-from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, WHITE_TIGER_RECORD, RARE_STORAGE_RECORD
+from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, WHITE_TIGER_RECORD, RARE_STORAGE_RECORD, HONORED_RANK_RECORD
 from gui.shared.gui_items.dossier import achievements as _as
+from gui.shared.gui_items.dossier.achievements import abstract as _abstract_achievements
 
 class _AchieveFactory(object):
 
@@ -29,7 +31,7 @@ class _AchieveFactory(object):
     def isValid(self):
         return self._achieveClass.checkIsValid(self._block, self._name, self._dossier)
 
-    def create(self, value = None):
+    def create(self, value=None):
         return self._achieveClass(self._name, self._block, self._dossier, value)
 
     @classmethod
@@ -39,7 +41,7 @@ class _AchieveFactory(object):
 
 class _CustomAchieveFactory(_AchieveFactory):
 
-    def create(self, value = None):
+    def create(self, value=None):
         return self._achieveClass(self._dossier, value)
 
     @classmethod
@@ -49,10 +51,7 @@ class _CustomAchieveFactory(_AchieveFactory):
 
 class _BlockAchieveFactory(_AchieveFactory):
 
-    def __init__(self, achieveClass, name, block, dossier):
-        super(_BlockAchieveFactory, self).__init__(achieveClass, name, block, dossier)
-
-    def create(self, value = None):
+    def create(self, value=None):
         return self._achieveClass(self._name, self._dossier, value)
 
     @classmethod
@@ -62,9 +61,9 @@ class _BlockAchieveFactory(_AchieveFactory):
 
 class _SequenceAchieveFactory(_AchieveFactory):
 
-    def create(self, value = None):
+    def create(self, value=None):
         counts = {}
-        achieves = self._dossier.getBlock(self._block)
+        achieves = self._dossier.getBlock(self._block) if self._dossier is not None else ()
         for achieveID in set(achieves):
             counts[achieveID] = achieves.count(achieveID)
 
@@ -93,7 +92,7 @@ class _RareAchievesFactory(_SequenceAchieveFactory):
 
     @classmethod
     def get(cls):
-        return lambda rareID, block, dossier: cls(_as.RareAchievement, rareID, block, dossier)
+        return lambda rareID, block, dossier: cls(_abstract_achievements.RareAchievement, rareID, block, dossier)
 
 
 class _NationAchieveFactory(_AchieveFactory):
@@ -105,18 +104,22 @@ class _NationAchieveFactory(_AchieveFactory):
     def getNationID(self):
         return self._nationID
 
-    def create(self, value = None):
+    def create(self, value=None):
         return self._achieveClass(self._nationID, self._block, self._dossier, value)
 
     @classmethod
-    def get(cls, achieveClass, nationID = -1):
+    def get(cls, achieveClass, nationID=-1):
         return lambda name, block, dossier: cls(achieveClass, name, nationID, block, dossier)
 
 
-_ACHIEVEMENTS_BY_BLOCK = {_AB.RARE: _BlockAchieveFactory.get(_as.RareAchievement)}
-_ACHIEVEMENTS_BY_TYPE = {ACHIEVEMENT_TYPE.CLASS: _AchieveFactory.get(_as.ClassProgressAchievement),
- ACHIEVEMENT_TYPE.SERIES: _AchieveFactory.get(_as.SeriesAchievement)}
-_ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'tankExpert'): _NationAchieveFactory.get(_as.TankExpertAchievement),
+_ACHIEVEMENTS_BY_BLOCK = {_AB.RARE: _BlockAchieveFactory.get(_abstract_achievements.RareAchievement)}
+_ACHIEVEMENTS_BY_TYPE = {ACHIEVEMENT_TYPE.CLASS: _AchieveFactory.get(_abstract_achievements.ClassProgressAchievement),
+ ACHIEVEMENT_TYPE.SERIES: _AchieveFactory.get(_abstract_achievements.SeriesAchievement)}
+_ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.WarriorAchievement),
+ (_AB.TOTAL, 'heroesOfRassenay'): _CustomAchieveFactory.get(_as.HeroesOfRassenayAchievement),
+ (_AB.TOTAL, 'medalLafayettePool'): _CustomAchieveFactory.get(_as.MedalLafayettePoolAchievement),
+ (_AB.TOTAL, 'medalRadleyWalters'): _CustomAchieveFactory.get(_as.MedalRadleyWaltersAchievement),
+ (_AB.TOTAL, 'tankExpert'): _NationAchieveFactory.get(_as.TankExpertAchievement),
  (_AB.TOTAL, 'mechanicEngineer'): _NationAchieveFactory.get(_as.MechEngineerAchievement),
  (_AB.TOTAL, 'mousebane'): _CustomAchieveFactory.get(_as.MousebaneAchievement),
  (_AB.TOTAL, 'beasthunter'): _CustomAchieveFactory.get(_as.BeasthunterAchievement),
@@ -132,19 +135,90 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'tankExpert'): _NationAchieveFactory.get(_a
  (_AB.TOTAL, 'medalLeClerc'): _CustomAchieveFactory.get(_as.MedalLeClercAchievement),
  (_AB.TOTAL, 'medalLavrinenko'): _CustomAchieveFactory.get(_as.MedalLavrinenkoAchievement),
  (_AB.TOTAL, 'marksOnGun'): _CustomAchieveFactory.get(_as.MarkOnGunAchievement),
- (_AB.TOTAL, 'sniper'): _AchieveFactory.get(_as.DeprecatedAchievement),
- (_AB.TOTAL, 'medalWittmann'): _AchieveFactory.get(_as.DeprecatedAchievement),
+ (_AB.TOTAL, 'sniper'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TOTAL, 'medalWittmann'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TOTAL, 'reliableComrade'): _CustomAchieveFactory.get(_as.ReliableComradeAchievement),
+ (_AB.TOTAL, 'readyForBattleLT'): _CustomAchieveFactory.get(_as.ReadyForBattleLTAchievement),
+ (_AB.TOTAL, 'readyForBattleMT'): _CustomAchieveFactory.get(_as.ReadyForBattleMTAchievement),
+ (_AB.TOTAL, 'readyForBattleHT'): _CustomAchieveFactory.get(_as.ReadyForBattleHTAchievement),
+ (_AB.TOTAL, 'readyForBattleSPG'): _CustomAchieveFactory.get(_as.ReadyForBattleSPGAchievement),
+ (_AB.TOTAL, 'readyForBattleATSPG'): _CustomAchieveFactory.get(_as.ReadyForBattleATSPGAchievement),
+ (_AB.TOTAL, 'readyForBattleAllianceUSSR'): _CustomAchieveFactory.get(_as.ReadyForBattleAllianceUSSRAchievement),
+ (_AB.TOTAL, 'readyForBattleAllianceGermany'): _CustomAchieveFactory.get(_as.ReadyForBattleAllianceGermanyAchievement),
+ (_AB.TOTAL, 'readyForBattleAllianceUSA'): _CustomAchieveFactory.get(_as.ReadyForBattleAllianceUSAAchievement),
+ (_AB.TOTAL, 'readyForBattleAllianceFrance'): _CustomAchieveFactory.get(_as.ReadyForBattleAllianceFranceAchievement),
+ (_AB.TOTAL, 'testartilleryman'): _AchieveFactory.get(_as.Achieved),
+ (_AB.TOTAL, 'EFC2016Goleador'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.TOTAL, 'markIBomberman'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.TOTAL, 'markIRepairer'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.TOTAL, 'markI100Years'): _CustomAchieveFactory.get(_as.MarkI100Years),
+ (_AB.TOTAL, 'FE18ClosedStage'): _AchieveFactory.get(_abstract_achievements.StageAchievement),
+ (_AB.TOTAL, 'FE18SoloStriker'): _AchieveFactory.get(_abstract_achievements.StageAchievement),
+ (_AB.TOTAL, 'FE18SoloMidfielder'): _AchieveFactory.get(_abstract_achievements.StageAchievement),
+ (_AB.TOTAL, 'FE18SoloDefender'): _AchieveFactory.get(_abstract_achievements.StageAchievement),
+ (_AB.TOTAL, 'superTesterVeteran'): _AchieveFactory.get(_abstract_achievements.StageAchievement),
  (_AB.CLAN, 'medalRotmistrov'): _CustomAchieveFactory.get(_as.MedalRotmistrovAchievement),
+ (_AB.RATED_7X7, 'strategicOperations'): _CustomAchieveFactory.get(_as.StrategicOperationsAchievement),
+ (_AB.RATED_7X7, 'tacticalAdvantage'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.RATED_7X7, 'tacticalSkill'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.RATED_7X7, 'secretOperations'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.FORT, 'fireAndSword'): _AchieveFactory.get(_abstract_achievements.DeprecatedClassAchievement),
+ (_AB.FORT, 'soldierOfFortune'): _CustomAchieveFactory.get(_as.SoldierOfFortuneAchievement),
+ (_AB.FORT, 'kampfer'): _AchieveFactory.get(_abstract_achievements.DeprecatedClassAchievement),
+ (_AB.FORT, 'conqueror'): _AchieveFactory.get(_abstract_achievements.DeprecatedClassAchievement),
+ (_AB.FORT, 'counterblow'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.FORT, 'crusher'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.HISTORICAL, 'makerOfHistory'): _CustomAchieveFactory.get(_as.MakerOfHistoryAchievement),
+ (_AB.HISTORICAL, 'guardsman'): _CustomAchieveFactory.get(_as.GuardsmanAchievement),
  (_AB.SINGLE, 'diehard'): _CustomAchieveFactory.get(_as.DiehardAchievement),
  (_AB.SINGLE, 'invincible'): _CustomAchieveFactory.get(_as.InvincibleAchievement),
+ (_AB.SINGLE, 'tacticalBreakthrough'): _CustomAchieveFactory.get(_as.TacticalBreakthroughAchievement),
  (_AB.SINGLE, 'handOfDeath'): _CustomAchieveFactory.get(_as.HandOfDeathAchievement),
  (_AB.SINGLE, 'armorPiercer'): _CustomAchieveFactory.get(_as.ArmorPiercerAchievement),
  (_AB.SINGLE, 'titleSniper'): _CustomAchieveFactory.get(_as.TitleSniperAchievement),
- (_AB.SINGLE, 'battleCitizen'): _AchieveFactory.get(_as.QuestAchievement),
+ (_AB.SINGLE, 'victoryMarch'): _CustomAchieveFactory.get(_as.VictoryMarchAchievement),
+ (_AB.SINGLE_7X7, 'victoryMarch'): _CustomAchieveFactory.get(_as.VictoryMarchClubAchievement),
+ (_AB.SINGLE, 'battleCitizen'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'WFC2014'): _CustomAchieveFactory.get(_as.WFC2014Achievement),
- (_AB.HISTORICAL, 'makerOfHistory'): _CustomAchieveFactory.get(_as.MakerOfHistoryAchievement),
- (_AB.HISTORICAL, 'guardsman'): _CustomAchieveFactory.get(_as.GuardsmanAchievement),
- (_AB.SINGLE, 'tacticalBreakthrough'): _CustomAchieveFactory.get(_as.TacticalBreakthroughAchievement),
+ (_AB.SINGLE, 'deathTrack'): _CustomAchieveFactory.get(_as.DeathTrackAchievement),
+ (_AB.SINGLE, 'moonSphere'): _CustomAchieveFactory.get(_as.MoonSphereAchievement),
+ (_AB.SINGLE, 'aimer'): _CustomAchieveFactory.get(_as.AimerAchievement),
+ (_AB.SINGLE, 'tankwomen'): _CustomAchieveFactory.get(_as.TankwomenAchievement),
+ (_AB.SINGLE, 'operationWinter'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'fallout'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'fallout2'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'falloutSingleWolf'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'falloutPackOfWolfs'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'falloutSteelHunter'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'falloutAlwaysInLine'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'EFC2016'): _CustomAchieveFactory.get(_as.EFC2016Achievement),
+ (_AB.SINGLE, 'markIProtector'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'markIBaseProtector'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'xmasTreeBronze'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'xmasTreeSilver'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'xmasTreeGold'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'rankedBattlesPioneer'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'rankedBattlesHero'): _CustomAchieveFactory.get(_as.RankedBattlesHeroAchievement),
+ (_AB.SINGLE, 'rankedBattlesSeasonOne'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'HE17A1'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'HE17A2'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'HE17A3'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'NY18A1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'NY18A2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'NY18A3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'FE18Universal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'FE18Collection1'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'FE18Collection2'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'FE18Collection3'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'FE18OpenRegistration'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'FE18OpenPlayOff'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'FE18OpenFinalStage'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'FE18OpenFirstPlace'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'medalKursk'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'streamersEventUsha'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'streamersEventJove'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'streamersEventAmway921'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'streamersEventLeBwA'): _AchieveFactory.get(_as.Achieved),
  (_AB.TEAM_7X7, 'geniusForWarMedal'): _CustomAchieveFactory.get(_as.GeniusForWarAchievement),
  (_AB.TEAM_7X7, 'wolfAmongSheepMedal'): _CustomAchieveFactory.get(_as.WolfAmongSheepAchievement),
  (_AB.TEAM_7X7, 'fightingReconnaissanceMedal'): _CustomAchieveFactory.get(_as.FightingReconnaissanceAchievement),
@@ -161,29 +235,37 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'tankExpert'): _NationAchieveFactory.get(_a
  (_AB.TEAM_7X7, 'rangerMedal'): _CustomAchieveFactory.get(_as.RangerAchievement),
  (_AB.TEAM_7X7, 'fireAndSteelMedal'): _CustomAchieveFactory.get(_as.FireAndSteelAchievement),
  (_AB.TEAM_7X7, 'pyromaniacMedal'): _CustomAchieveFactory.get(_as.PyromaniacAchievement),
- (_AB.FORT, 'fireAndSword'): _CustomAchieveFactory.get(_as.FireAndSwordAchievement),
- (_AB.FORT, 'soldierOfFortune'): _CustomAchieveFactory.get(_as.SoldierOfFortuneAchievement),
- (_AB.FORT, 'kampfer'): _CustomAchieveFactory.get(_as.KampferAchievement),
- (_AB.FORT, 'conqueror'): _CustomAchieveFactory.get(_as.ConquerorAchievement),
- (_AB.UNIQUE, 'histBattle1_battlefield'): _AchieveFactory.get(_as.HistoricalAchievement),
- (_AB.UNIQUE, 'histBattle2_battlefield'): _AchieveFactory.get(_as.HistoricalAchievement),
- (_AB.UNIQUE, 'histBattle3_battlefield'): _AchieveFactory.get(_as.HistoricalAchievement),
- (_AB.UNIQUE, 'histBattle4_battlefield'): _AchieveFactory.get(_as.HistoricalAchievement),
- (_AB.UNIQUE, 'histBattle5_battlefield'): _AchieveFactory.get(_as.HistoricalAchievement),
- (_AB.UNIQUE, 'histBattle6_battlefield'): _AchieveFactory.get(_as.HistoricalAchievement),
- (_AB.UNIQUE, 'histBattle1_historyLessons'): _AchieveFactory.get(_as.HistoricalAchievement),
- (_AB.UNIQUE, 'histBattle2_historyLessons'): _AchieveFactory.get(_as.HistoricalAchievement),
- (_AB.UNIQUE, 'histBattle3_historyLessons'): _AchieveFactory.get(_as.HistoricalAchievement),
- (_AB.UNIQUE, 'histBattle4_historyLessons'): _AchieveFactory.get(_as.HistoricalAchievement),
- (_AB.UNIQUE, 'histBattle5_historyLessons'): _AchieveFactory.get(_as.HistoricalAchievement),
- (_AB.UNIQUE, 'histBattle6_historyLessons'): _AchieveFactory.get(_as.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle1_battlefield'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle2_battlefield'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle3_battlefield'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle4_battlefield'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle5_battlefield'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle6_battlefield'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle1_historyLessons'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle2_historyLessons'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle3_historyLessons'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle4_historyLessons'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle5_historyLessons'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.UNIQUE, 'histBattle6_historyLessons'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
+ (_AB.FALLOUT, 'stormLord'): _CustomAchieveFactory.get(_as.StormLordAchievement),
+ (_AB.FALLOUT, 'winnerLaurels'): _CustomAchieveFactory.get(_as.WinnerLaurelsAchievement),
+ (_AB.FALLOUT, 'shoulderToShoulder'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.FALLOUT, 'aloneInTheField'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.FALLOUT, 'fallenFlags'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.FALLOUT, 'effectiveSupport'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.FALLOUT, 'falloutDieHard'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.FALLOUT, 'predator'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.FALLOUT, 'unreachable'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.FALLOUT, 'champion'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.FALLOUT, 'bannerman'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  WHITE_TIGER_RECORD: _CustomAchieveFactory.get(_as.WhiteTigerAchievement),
+ HONORED_RANK_RECORD: _CustomAchieveFactory.get(_as.HonoredRankAchievement),
  RARE_STORAGE_RECORD: _RareAchievesFactory.get()}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.MechEngineerAchievement, _nID)
 
-def getAchievementFactory(record, dossier = None):
+def getAchievementFactory(record, dossier=None):
     achieveType = getAchieveType(record)
     if record in _ACHIEVEMENTS_BY_NAME:
         factoryMaker = _ACHIEVEMENTS_BY_NAME[record]
@@ -192,5 +274,5 @@ def getAchievementFactory(record, dossier = None):
     elif record[0] in _ACHIEVEMENTS_BY_BLOCK:
         factoryMaker = _ACHIEVEMENTS_BY_BLOCK[record[0]]
     else:
-        factoryMaker = _AchieveFactory.get(_as.RegularAchievement)
+        factoryMaker = _AchieveFactory.get(_abstract_achievements.RegularAchievement)
     return factoryMaker(record[1], record[0], dossier)

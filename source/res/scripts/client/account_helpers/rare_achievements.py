@@ -1,11 +1,11 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/rare_achievements.py
+import functools
 import ResMgr
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from helpers import i18n, getClientLanguage
-import functools, Event
-import Account
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 
 def __makeAchievementFileRequest(urlName, params, achievementId, callback):
+    import Account
     fileServerSettings = Account.g_accountRepository.fileServerSettings
     url = ''
     try:
@@ -16,10 +16,10 @@ def __makeAchievementFileRequest(urlName, params, achievementId, callback):
         callback(achievementId, None)
         return
     except TypeError:
-        LOG_ERROR('Incorrect url format: %s' % url)
+        LOG_ERROR('Incorrect url format: %s' % url, params)
         callback(achievementId, None)
         return
-    except:
+    except Exception:
         LOG_CURRENT_EXCEPTION()
         callback(achievementId, None)
         return
@@ -54,7 +54,7 @@ def __allMedalsTextLoadedCallback(achievementId, data, onTextLoadedCallback):
                     description = __getAchievementDescription(item)
                     break
 
-        except:
+        except Exception:
             LOG_CURRENT_EXCEPTION()
             description = {}
 

@@ -1,0 +1,116 @@
+<35_steppes.xml>
+  <name>	#arenas:35_steppes/name	</name>
+  <description>	#arenas:35_steppes/description	</description>
+  <geometry>	spaces/35_steppes	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/35_steppes/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_steppes_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_steppes_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_steppes_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_steppes_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_steppes_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_steppes_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_35_steppes_wind_summer	</wwambientSound>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	228.220047 -341.927887	</position1>
+        </team1>
+        <team2>
+          <position1>	-88.818558 361.861755	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-146.583 -367.165	</position>
+        </team1>
+        <team2>
+          <position>	-436.242 187.123	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	386.097 213.892	</controlPoint>
+    </domination>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	120.676 445.208	</position>
+        </team1>
+        <team2>
+          <position>	-123.873 -350.678	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-244.211 243.446	</position1>
+          <position2>	278.573 149.160	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+  <mapActivities>
+    <scenario>
+      <startTime>	30.000000 30.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	80.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	stepps_bomber	</name>
+      <trajectories>
+        <warplane>
+          <preset>	stepps_bomber_line_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	stepps_bomber_line_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	stepps_bomber_line_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	stepps_bomber_line_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	stepps_bomber_line_5	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</35_steppes.xml>

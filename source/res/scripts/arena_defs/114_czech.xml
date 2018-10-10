@@ -1,0 +1,86 @@
+<114_czech.xml>
+  <name>	#arenas:114_czech/name	</name>
+  <description>	#arenas:114_czech/description	</description>
+  <geometry>	spaces/114_czech	</geometry>
+  <boundingBox>
+    <bottomLeft>	-400.000000 -500.000000	</bottomLeft>
+    <upperRight>	600.000000 500.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/114_czech/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_pilsen_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_pilsen_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_pilsen_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_pilsen_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_pilsen_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_pilsen_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	30.500139 406.306885	</position1>
+        </team1>
+        <team2>
+          <position1>	27.859102 -413.104523	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities>
+    <scenario>
+      <startTime>	60.000000 0.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	0.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	check_explosion	</name>
+      <trajectories>
+        <warplane>
+          <preset>	chech_explosion	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+          <interval>	120.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	chech_explosion	</preset>
+          <position>	1.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	60.000000 0.000000	</startTime>
+          <interval>	150.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	chech_explosion	</preset>
+          <position>	1.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	90.000000 0.000000	</startTime>
+          <interval>	150.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	chech_fire	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</114_czech.xml>

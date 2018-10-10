@@ -1,0 +1,116 @@
+<04_himmelsdorf.xml>
+  <name>	#arenas:04_himmelsdorf/name	</name>
+  <description>	#arenas:04_himmelsdorf/description	</description>
+  <geometry>	spaces/04_himmelsdorf	</geometry>
+  <boundingBox>
+    <bottomLeft>	-300.0 -300.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/04_himmelsdorf/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_himmelsdorf_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_himmelsdorf_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_himmelsdorf_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_himmelsdorf_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_himmelsdorf_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_himmelsdorf_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_04_himmelsdorf_wind_spring	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	2.499999 -252.600143	</position1>
+        </team1>
+        <team2>
+          <position1>	69.099930 348.999969	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	361.126 349.303	</position>
+        </team1>
+        <team2>
+          <position>	355.252 -243.459	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	-223.100128 64.999931	</controlPoint>
+    </domination>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-123.776 356.640	</position>
+        </team1>
+        <team2>
+          <position>	374.261 -241.209	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-214.138672 18.497744	</position1>
+          <position2>	103.040794 335.699524	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	0.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	himmelsdorf_bomber	</name>
+      <trajectories>
+        <warplane>
+          <preset>	himmelsdorf_bomber_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	himmelsdorf_bomber_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	himmelsdorf_bomber_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	11.000000 30.000000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	himmelsdorf_bomber_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</04_himmelsdorf.xml>

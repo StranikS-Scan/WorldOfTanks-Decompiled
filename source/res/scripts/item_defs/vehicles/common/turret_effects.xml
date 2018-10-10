@@ -1,0 +1,266 @@
+<turret_effects.xml>
+  <turret_flying_small>
+    <stages>
+      <fire>	0.0	</fire>
+      <end>	36000	</end>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/destruction/turret_flying_small.xml	</file>
+      </pixie>
+      <sound>
+        <startKey>	fire	</startKey>
+        <wwsound>	turret_whoosh	</wwsound>
+      </sound>
+    </effects>
+  </turret_flying_small>
+  <turret_touchdown_small>
+    <stages>
+      <impact>	2.0	</impact>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	impact	</startKey>
+        <file>	particles/Tank/destruction/turret_touchdown_small.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <startKey>	impact	</startKey>
+        <wwsound>	turret_drop_soft	</wwsound>
+      </sound>
+    </effects>
+  </turret_touchdown_small>
+  <turret_flaming_small>
+    <timeline>
+      <static>	0.015	</static>
+      <end>	36000	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Tank/destruction/turret_flaming_small.xml	</file>
+      </pixie>
+      <pixie>
+        <startKey>	static	</startKey>
+        <file>	particles/Tank/destruction/turret_smoking_small.xml	</file>
+      </pixie>
+      <sound>
+        <startKey>	static	</startKey>
+        <wwsound>	turret_sparks	</wwsound>
+      </sound>
+    </effects>
+  </turret_flaming_small>
+  <turret_flying_medium>
+    <stages>
+      <fire>	0.0	</fire>
+      <end>	36000	</end>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/destruction/turret_flying_medium.xml	</file>
+      </pixie>
+      <sound>
+        <startKey>	fire	</startKey>
+        <wwsound>	turret_whoosh	</wwsound>
+      </sound>
+    </effects>
+  </turret_flying_medium>
+  <turret_touchdown_medium>
+    <stages>
+      <impact>	2.0	</impact>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	impact	</startKey>
+        <file>	particles/Tank/destruction/turret_touchdown_medium.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <startKey>	impact	</startKey>
+        <wwsound>	turret_drop_soft	</wwsound>
+      </sound>
+    </effects>
+  </turret_touchdown_medium>
+  <turret_touchdown_medium_solid>
+    <stages>
+      <impact>	2.0	</impact>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	impact	</startKey>
+        <file>	particles/Tank/destruction/turret_touchdown_medium.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <startKey>	impact	</startKey>
+        <wwsound>	turret_drop_solid	</wwsound>
+      </sound>
+    </effects>
+  </turret_touchdown_medium_solid>
+  <turret_touchdown_medium_water>
+    <stages>
+      <impact>	2.0	</impact>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	impact	</startKey>
+        <file>	particles/Tank/tank_collision_water.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <startKey>	impact	</startKey>
+        <wwsound>	water_coll_heavy	</wwsound>
+      </sound>
+    </effects>
+  </turret_touchdown_medium_water>
+  <turret_flaming_medium>
+    <timeline>
+      <static>	0.015	</static>
+      <end>	36000	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Tank/destruction/turret_flaming_medium.xml	</file>
+      </pixie>
+      <pixie>
+        <startKey>	static	</startKey>
+        <file>	particles/Tank/destruction/turret_smoking_medium.xml	</file>
+      </pixie>
+      <sound>
+        <startKey>	static	</startKey>
+        <wwsound>	turret_sparks	</wwsound>
+      </sound>
+    </effects>
+  </turret_flaming_medium>
+  <turret_flying_large>
+    <stages>
+      <fire>	0.0	</fire>
+      <end>	36000	</end>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/destruction/turret_flying_large.xml	</file>
+      </pixie>
+      <sound>
+        <startKey>	fire	</startKey>
+        <wwsound>	turret_whoosh	</wwsound>
+      </sound>
+    </effects>
+  </turret_flying_large>
+  <turret_touchdown_large>
+    <stages>
+      <impact>	2.0	</impact>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	impact	</startKey>
+        <file>	particles/Tank/destruction/turret_touchdown_large.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <startKey>	impact	</startKey>
+        <wwsound>	turret_drop_soft	</wwsound>
+      </sound>
+    </effects>
+  </turret_touchdown_large>
+  <turret_flaming_medium>
+    <timeline>
+      <static>	0.015	</static>
+      <end>	36000	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Tank/destruction/turret_flaming_medium.xml	</file>
+      </pixie>
+      <pixie>
+        <startKey>	static	</startKey>
+        <file>	particles/Tank/destruction/turret_smoking_medium.xml	</file>
+      </pixie>
+      <sound>
+        <startKey>	static	</startKey>
+        <wwsound>	turret_sparks	</wwsound>
+      </sound>
+    </effects>
+  </turret_flaming_medium>
+  <himmelball_empty>
+    <timeline>
+      <static>	0.015	</static>
+      <end>	1	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Tank/empty.xml	</file>
+      </pixie>
+      <pixie>
+        <startKey>	static	</startKey>
+        <file>	particles/Tank/empty.xml	</file>
+      </pixie>
+    </effects>
+  </himmelball_empty>
+  <turret_pull_ground>
+    <timeline>
+      <fire>	0.0	</fire>
+      <end>	36000	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/movement/ground/trail_small_spd1.xml	</file>
+      </pixie>
+    </effects>
+  </turret_pull_ground>
+  <turret_pull_sand>
+    <timeline>
+      <fire>	0.0	</fire>
+      <end>	36000	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/movement/sand/trail_small_spd1.xml	</file>
+      </pixie>
+    </effects>
+  </turret_pull_sand>
+  <turret_pull_snow>
+    <timeline>
+      <fire>	0.0	</fire>
+      <end>	36000	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/movement/snow/trail_small_spd1.xml	</file>
+      </pixie>
+    </effects>
+  </turret_pull_snow>
+  <turret_pull_stone>
+    <timeline>
+      <fire>	0.0	</fire>
+      <end>	36000	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/movement/stone/trail_small_spd1.xml	</file>
+      </pixie>
+    </effects>
+  </turret_pull_stone>
+  <turret_pull_water>
+    <timeline>
+      <fire>	0.0	</fire>
+      <end>	36000	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/movement/water/trail_small_underwater_spd0.xml	</file>
+      </pixie>
+    </effects>
+  </turret_pull_water>
+</turret_effects.xml>

@@ -1,0 +1,147 @@
+<chain-8.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Hangar	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <gui-items>
+        <gui-item>	FreeXpButton	  <on-scene-effects>
+            <activate>	FreeXpButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	FreeXpButtonOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	FreeXpExchangeSubmitButton	  <on-scene-effects>
+            <activate>	FreeXpExchangeSubmitButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	FreeXpExchangeSubmitButtonOnScene	</inactivate>
+            <refuse-training>
+              <condition>
+                <inactive>	FreeXpExchangeSubmitButtonClicked	</inactive>
+              </condition>
+            </refuse-training>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+      <post-effects>
+        <clear-scene></clear-scene>
+        <inactivate>	BonusReceived	</inactivate>
+        <inactivate>	FreeXpButtonClicked	</inactivate>
+        <inactivate>	FreeXpExchangeSubmitButtonClicked	</inactivate>
+        <inactivate>	FreeXpChanged	</inactivate>
+        <inactivate>	ShowCongratulation	</inactivate>
+        <run-trigger>	BonusTrigger	</run-trigger>
+        <run-trigger>	FreeXpExchangeTrigger	</run-trigger>
+        <run-trigger>	SimpleDialogTrigger	</run-trigger>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	FreeXpButtonHint	  <condition>
+            <active>	FreeXpButtonOnScene	</active>
+            <inactive>	FreeXPExchangeSubmitButtonOnScene	</inactive>
+            <effect-not-triggered>	FreeXpButtonHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	FreeXpExchangeSubmitButtonHint	  <condition>
+            <active>	FreeXpExchangeSubmitButtonOnScene	</active>
+            <effect-not-triggered>	FreeXpExchangeSubmitButtonHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <refuse-training>
+          <condition>
+            <active>	FreeXpChanged	</active>
+          </condition>
+        </refuse-training>
+      </runtime-effects>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <hint>	FreeXpButtonHint	  <item-id>	FreeXpButton	</item-id>
+      <text>	_(#tutorial:chain8/hint/openXPChange)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	FreeXpButton	  <effects>
+            <close-hint>	FreeXpButtonHint	</close-hint>
+            <activate>	FreeXpButtonClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	FreeXpButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	FreeXpButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	FreeXpExchangeSubmitButtonHint	  <item-id>	FreeXpExchangeSubmitButton	</item-id>
+      <text>	_(#tutorial:chain8/hint/submit)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	FreeXpExchangeSubmitButton	  <effects>
+            <close-hint>	FreeXpExchangeSubmitButtonHint	</close-hint>
+            <activate>	FreeXpExchangeSubmitButtonClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	FreeXpExchangeSubmitButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	FreeXpExchangeSubmitButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <simple-window>	CongratulationWindow	  <type>	awardWindow	</type>
+      <var-ref>	ChapterVar	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest7)	</description>
+    </simple-window>
+  </has-id>
+  <triggers>
+    <trigger>	BonusTrigger	  <type>	bonus	</type>
+      <on-effects>
+        <activate>	BonusReceived	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	BonusReceived	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	FreeXpExchangeTrigger	  <type>	freeXP	</type>
+      <on-effects>
+        <show-award-window>	CongratulationWindow	  <condition>
+            <bonus-not-received>	Chain_8	</bonus-not-received>
+          </condition>
+        </show-award-window>
+        <request-bonus>
+          <condition>
+            <bonus-not-received>	Chain_8	</bonus-not-received>
+          </condition>
+        </request-bonus>
+        <activate>	FreeXpChanged	</activate>
+      </on-effects>
+      <off-effects>
+        <refuse-training></refuse-training>
+      </off-effects>
+    </trigger>
+    <trigger>	SimpleDialogTrigger	  <type>	simpleDialog	</type>
+      <on-effects></on-effects>
+      <off-effects>
+        <refuse-training></refuse-training>
+      </off-effects>
+    </trigger>
+  </triggers>
+  <vars></vars>
+</chain-8.xml>

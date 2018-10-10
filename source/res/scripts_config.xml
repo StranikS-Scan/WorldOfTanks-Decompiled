@@ -1,0 +1,105 @@
+<scripts_config.xml>
+  <login>
+    <host>
+      <name>	WOT CT	</name>
+      <short_name>	CT	</short_name>
+      <url>	login-ct.worldoftanks.net:20015	</url>
+      <url_token>	login2-ct.worldoftanks.net:20015	</url_token>
+      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
+    </host>
+  </login>
+  <updateUrl>	http://worldoftanks.ru/update	</updateUrl>
+  <csisUrl>	http://csis-ct.worldoftanks.net/csis/wot-ct/	</csisUrl>
+  <silhouetteColors>
+    <common>
+      <self>	0.5 0.5 0.5 1	</self>
+      <enemy>	1.0 0.070 0.027 1	</enemy>
+      <friend>	0.488 0.839 0.023 1	</friend>
+      <flag>	1 1 1 1	</flag>
+      <hangar>	0.992 0.780 0.259 1	</hangar>
+    </common>
+    <colorBlind>
+      <self>	0.5 0.5 0.5 1	</self>
+      <enemy>	0.511 0.472 0.992 1	</enemy>
+      <friend>	0.488 0.839 0.023 1	</friend>
+      <flag>	1 1 1 1	</flag>
+      <hangar>	0.992 0.780 0.259 1	</hangar>
+    </colorBlind>
+  </silhouetteColors>
+  <decal>
+    <criticalAngle>	30	</criticalAngle>
+    <groups>
+      <slow>
+        <lifeTime>	100	</lifeTime>
+        <trianglesCount>	10000	</trianglesCount>
+      </slow>
+      <medium>
+        <lifeTime>	50	</lifeTime>
+        <trianglesCount>	5000	</trianglesCount>
+      </medium>
+      <fast>
+        <lifeTime>	25	</lifeTime>
+        <trianglesCount>	2500	</trianglesCount>
+      </fast>
+    </groups>
+    <textures>
+      <explosion_ground_AM>
+        <texture>	maps/fx/decal_ground_1_AM.dds	</texture>
+      </explosion_ground_AM>
+      <explosion_ground_NM>
+        <texture>	maps/fx/decal_ground_1_NM.dds	</texture>
+      </explosion_ground_NM>
+      <explosion_ground_GMM>
+        <texture>	maps/fx/decal_ground_1_GMM.dds	</texture>
+      </explosion_ground_GMM>
+      <explosion_sand_AM>
+        <texture>	maps/fx/decal_sand_1_AM.dds	</texture>
+      </explosion_sand_AM>
+      <explosion_sand_NM>
+        <texture>	maps/fx/decal_sand_1_NM.dds	</texture>
+      </explosion_sand_NM>
+      <explosion_sand_GMM>
+        <texture>	maps/fx/decal_sand_1_GMM.dds	</texture>
+      </explosion_sand_GMM>
+      <explosion_snow_AM>
+        <texture>	maps/fx/decal_snow_1_AM.dds	</texture>
+      </explosion_snow_AM>
+      <explosion_snow_NM>
+        <texture>	maps/fx/decal_snow_1_NM.dds	</texture>
+      </explosion_snow_NM>
+      <explosion_snow_GMM>
+        <texture>	maps/fx/decal_snow_1_GMM.dds	</texture>
+      </explosion_snow_GMM>
+      <explosion_stone_AM>
+        <texture>	maps/fx/decal_stone_1_AM.dds	</texture>
+      </explosion_stone_AM>
+      <explosion_stone_NM>
+        <texture>	maps/fx/decal_stone_1_NM.dds	</texture>
+      </explosion_stone_NM>
+      <explosion_stone_GMM>
+        <texture>	maps/fx/decal_stone_1_GMM.dds	</texture>
+      </explosion_stone_GMM>
+      <explosion_stone_NO_GMM>
+        <texture>	maps/fx/decal_stone_NO_GMM.dds	</texture>
+      </explosion_stone_NO_GMM>
+      <explosion_metal_AM>
+        <texture>	maps/fx/dark_hole_AM.dds	</texture>
+      </explosion_metal_AM>
+      <explosion_metal_NM>
+        <texture>	maps/fx/dark_hole_NM.dds	</texture>
+      </explosion_metal_NM>
+      <explosion_metal_GMM>
+        <texture>	maps/fx/dark_hole_GMM.dds	</texture>
+      </explosion_metal_GMM>
+    </textures>
+  </decal>
+  <camouflage>
+    <excludeMaterials>
+      <item>	*inside	</item>
+      <item>	*gun_inside	</item>
+      <item>	tank_bottom_mat	</item>
+      <item>	tank_ins_mat	</item>
+      <item>	*equipment	</item>
+    </excludeMaterials>
+  </camouflage>
+</scripts_config.xml>

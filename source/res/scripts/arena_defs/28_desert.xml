@@ -1,0 +1,74 @@
+<28_desert.xml>
+  <name>	#arenas:28_desert/name	</name>
+  <description>	#arenas:28_desert/description	</description>
+  <geometry>	spaces/28_desert	</geometry>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/28_desert/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	desert	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_sand_river_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_sand_river_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_sand_river_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_sand_river_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_sand_river_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_sand_river_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_desert_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	373.485199 -178.960999	</position1>
+        </team1>
+        <team2>
+          <position1>	-405.038452 137.526245	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	408 148	</position>
+          <position>	461.753 -51.174	</position>
+        </team1>
+        <team2>
+          <position>	-150 250	</position>
+          <position>	-437.991 244.365	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-89.697029 -323.644165	</controlPoint>
+    </domination>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	430 186	</position>
+        </team1>
+        <team2>
+          <position>	-433.379 152.272	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	249.900940 -208.700195	</position1>
+          <position2>	116.863976 310.117004	</position2>
+        </team1>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+</28_desert.xml>

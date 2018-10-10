@@ -1,40 +1,38 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/context.py
 from abc import ABCMeta, abstractmethod
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_control import IBootcampController
 from tutorial.control import TutorialProxyHolder
-from tutorial.logger import LOG_MEMORY
-__all__ = ['StartReqs',
- 'BonusesRequester',
- 'SoundPlayer',
- 'GlobalStorage']
+from tutorial.logger import LOG_MEMORY, LOG_ERROR
+import SoundGroups
+__all__ = ('StartReqs', 'BonusesRequester', 'SoundPlayer', 'GlobalStorage')
 
 class StartReqs(object):
-    __meta__ = ABCMeta
-
-    def __init__(self, loader, ctx):
-        super(StartReqs, self).__init__()
-        self._loader = loader
-        self._ctx = ctx
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __del__(self):
         LOG_MEMORY('StartReqs deleted: {0:>s}'.format(self))
 
-    def _clear(self):
-        self._loader = None
-        self._ctx = None
-        return
-
-    def _flush(self):
-        args = (self._loader, self._ctx)
-        self._clear()
-        return args
-
-    @abstractmethod
     def isEnabled(self):
-        pass
+        isBootcampTutorial = self._isBootcamp()
+        isInBootcamp = self.bootcampController.isInBootcamp()
+        if isBootcampTutorial:
+            return isInBootcamp
+        isTutorialEnabled = self.lobbyContext.getServerSettings().isTutorialEnabled()
+        isBootcampEnabled = self.lobbyContext.getServerSettings().isBootcampEnabled()
+        return isTutorialEnabled and not isBootcampEnabled and not isInBootcamp
 
-    @abstractmethod
-    def process(self):
-        pass
+    def prepare(self, ctx):
+        raise NotImplementedError
+
+    def process(self, descriptor, ctx):
+        raise NotImplementedError
+
+    def _isBootcamp(self):
+        return False
 
 
 class BonusesRequester(TutorialProxyHolder):
@@ -53,22 +51,24 @@ class BonusesRequester(TutorialProxyHolder):
     def isStillRunning(self):
         return False
 
-    def getChapter(self, chapterID = None):
+    def getChapter(self, chapterID=None):
         chapter = self._data
-        if chapterID is not None and len(chapterID):
-            chapter = self._tutorial._descriptor.getChapter(chapterID)
+        if chapterID:
+            chapter = self._descriptor.getChapter(chapterID)
         return chapter
 
     @abstractmethod
-    def request(self, chapterID = None):
+    def request(self, chapterID=None):
         pass
 
 
-class SOUND_EVENT:
+class SOUND_EVENT(object):
     TASK_FAILED = 0
     TASK_COMPLETED = 1
     NEXT_CHAPTER = 2
     SPEAKING = 3
+    HINT_SHOWN = 4
+    ANIMATION_STARTED = 5
 
 
 class SoundPlayer(object):
@@ -92,14 +92,14 @@ class SoundPlayer(object):
         return self._enabled
 
     @abstractmethod
-    def play(self, event, sndID = None):
+    def play(self, event, sndID=None):
         pass
 
     @abstractmethod
     def stop(self):
         pass
 
-    def isPlaying(self, event, sndID = None):
+    def isPlaying(self, event, sndID=None):
         return False
 
     def goToNextChapter(self):
@@ -108,8 +108,21 @@ class SoundPlayer(object):
 
 class NoSound(SoundPlayer):
 
-    def play(self, event, sndID = None):
+    def play(self, event, sndID=None):
         pass
+
+    def stop(self):
+        pass
+
+
+class SimpleSoundPlayer(SoundPlayer):
+
+    def play(self, _, sndID=None):
+        if sndID is not None:
+            SoundGroups.g_instance.playSound2D(sndID)
+        else:
+            LOG_ERROR('No sound event specified for SimpleSoundPlayer')
+        return
 
     def stop(self):
         pass
@@ -117,19 +130,27 @@ class NoSound(SoundPlayer):
 
 class GLOBAL_VAR(object):
     LAST_HISTORY_ID = '_TutorialLastHistoryID'
+    SERVICE_MESSAGES_IDS = '_TutorialServiceMessagesIDs'
     PLAYER_VEHICLE_NAME = '_TutorialPlayerVehicleName'
-    ALL = [LAST_HISTORY_ID, PLAYER_VEHICLE_NAME]
+    ALL = (LAST_HISTORY_ID, SERVICE_MESSAGES_IDS, PLAYER_VEHICLE_NAME)
 
 
 class GLOBAL_FLAG(object):
     IS_FLAGS_RESET = '_TutorialIsFlagsReset'
     SHOW_HISTORY = '_TutorialShowHistory'
     HISTORY_NOT_AVAILABLE = '_TutorialHistoryNotAvailable'
+    MODE_IS_AVAILABLE = '_TutorialModeIsAvailable'
     IN_QUEUE = '_InTutorialQueue'
-    ALL = [IS_FLAGS_RESET,
+    ALL_BONUSES_RECEIVED = '_AllBonusesReceived'
+    MAY_PAWN_PERSONAL_MISSION = '_MayPawnPersonalMission'
+    HAVE_NEW_BADGE = '_HaveNewBadge'
+    ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
-     IN_QUEUE]
+     IN_QUEUE,
+     ALL_BONUSES_RECEIVED,
+     MAY_PAWN_PERSONAL_MISSION,
+     HAVE_NEW_BADGE)
 
 
 class GlobalStorage(object):
@@ -150,14 +171,19 @@ class GlobalStorage(object):
     def __set__(self, _, value):
         self.__storage[self.attribute] = value
 
-    def __get__(self, instance, owner = None):
-        if instance is None:
-            return self
-        else:
-            return self.__storage[self.attribute]
+    def __get__(self, instance, owner=None):
+        return self if instance is None else self.__storage[self.attribute]
 
     def value(self):
         return self.__storage[self.attribute]
+
+    @classmethod
+    def setFlags(cls, flags):
+        for flag, value in flags.iteritems():
+            if flag not in GLOBAL_FLAG.ALL:
+                LOG_ERROR('It is not global flag', flag)
+                continue
+            cls.__storage[flag] = value
 
     @classmethod
     def clearFlags(cls):

@@ -1,0 +1,70 @@
+<217_er_alaska.xml>
+  <name>	#arenas:217_er_alaska/name	</name>
+  <description>	#arenas:217_er_alaska/description	</description>
+  <geometry>	spaces/217_er_alaska	</geometry>
+  <boundingBox>
+    <bottomLeft>	-700.000000 -700.000000	</bottomLeft>
+    <upperRight>	700.000000 700.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/217_er_alaska/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	30	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_klondike_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_klondike_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_klondike_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_klondike_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_klondike_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_klondike_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_217_er_alaska_wind_winter	</wwambientSound>
+  <wwDefaultReverb>
+    <auxBus>	AUX_env_Mountain	</auxBus>
+    <controlValue>	1.0	</controlValue>
+  </wwDefaultReverb>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	env_Mountain.bnk	</bank>
+    </loadBanks>
+    <loadBanks>
+      <bank>	env_Forest.bnk	</bank>
+    </loadBanks>
+  </soundRemapping>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <numPlayerGroups>	3	</numPlayerGroups>
+  <playerGroupLimit>	10	</playerGroupLimit>
+  <gameplayTypes>
+    <ctf30x30>
+      <teamSpawnPoints>
+        <team1>
+          <position>	189.970 608.930	</position>
+          <position>	392.751 402.159	</position>
+          <position>	597.136 231.760	</position>
+        </team1>
+        <team2>
+          <position>	-632.101 -219.427	</position>
+          <position>	-427.287 -425.815	</position>
+          <position>	-202.354 -624.783	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	300.125 298.848	</position1>
+        </team1>
+        <team2>
+          <position2>	-298.991 -300.903	</position2>
+        </team2>
+      </teamBasePositions>
+    </ctf30x30>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
+</217_er_alaska.xml>

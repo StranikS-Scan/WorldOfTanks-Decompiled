@@ -1,5 +1,5 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/entry_decorator.py
-from __builtin__ import property
 from collections import defaultdict
 from messenger.gui import setGUIEntries
 from messenger.gui.interfaces import IGUIEntryDecorator, IGUIEntry
@@ -51,7 +51,7 @@ class GUIDecorator(IGUIEntryDecorator):
     def clear(self):
         self.close(MESSENGER_SCOPE.UNKNOWN)
         self.__currentScope = MESSENGER_SCOPE.UNKNOWN
-        while len(self.__entries):
+        while self.__entries:
             _, entry = self.__entries.popitem()
             entry.clear()
 
@@ -70,13 +70,13 @@ class GUIDecorator(IGUIEntryDecorator):
     def invoke(self, method, *args, **kwargs):
         self.__current().invoke(method, *args, **kwargs)
 
-    def isEditing(self, event):
-        return self.__current().isEditing(event)
+    def handleKey(self, event):
+        return self.__current().handleKey(event)
 
     def isFocused(self):
         return self.__current().isFocused()
 
-    def addClientMessage(self, message, isCurrentPlayer = False):
+    def addClientMessage(self, message, isCurrentPlayer=False):
         self.__current().addClientMessage(message, isCurrentPlayer=isCurrentPlayer)
 
     def __current(self):

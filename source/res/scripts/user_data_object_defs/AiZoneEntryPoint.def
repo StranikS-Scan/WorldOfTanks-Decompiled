@@ -1,0 +1,47 @@
+<AiZoneEntryPoint.def>
+  <Domain>	NONE	</Domain>
+  <Properties>
+    <team>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+    </team>
+    <radius>
+      <Type>	FLOAT	</Type>
+      <Default>	10.0	</Default>
+      <Editable>	true	</Editable>
+      <Widget>	RADIUS	  <colour>	255 0 0 192	</colour>
+        <gizmoRadius>	10.0	</gizmoRadius>
+      </Widget>
+    </radius>
+    <preferableTankType>
+      <Type>	STRING	</Type>
+      <Default>	&lt;any&gt;	</Default>
+      <Editable>	True	</Editable>
+    </preferableTankType>
+    <preferenceLightTank>
+      <Type>	UINT8	</Type>
+      <Default>	100	</Default>
+      <Editable>	True	</Editable>
+    </preferenceLightTank>
+    <preferenceMediumTank>
+      <Type>	UINT8	</Type>
+      <Default>	100	</Default>
+      <Editable>	True	</Editable>
+    </preferenceMediumTank>
+    <preferenceHeavyTank>
+      <Type>	UINT8	</Type>
+      <Default>	100	</Default>
+      <Editable>	True	</Editable>
+    </preferenceHeavyTank>
+    <preferenceTankDestroyer>
+      <Type>	UINT8	</Type>
+      <Default>	100	</Default>
+      <Editable>	True	</Editable>
+    </preferenceTankDestroyer>
+    <preferenceSPG>
+      <Type>	UINT8	</Type>
+      <Default>	100	</Default>
+      <Editable>	True	</Editable>
+    </preferenceSPG>
+  </Properties>
+</AiZoneEntryPoint.def>

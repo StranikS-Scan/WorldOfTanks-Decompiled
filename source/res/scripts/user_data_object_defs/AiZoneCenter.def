@@ -1,0 +1,45 @@
+<AiZoneCenter.def>
+  <Domain>	NONE	</Domain>
+  <Properties>
+    <preferableTankType>
+      <Type>	STRING	</Type>
+      <Default>	&lt;any&gt;	</Default>
+      <Editable>	True	</Editable>
+    </preferableTankType>
+    <preferenceLightTank>
+      <Type>	UINT8	</Type>
+      <Default>	100	</Default>
+      <Editable>	True	</Editable>
+    </preferenceLightTank>
+    <preferenceMediumTank>
+      <Type>	UINT8	</Type>
+      <Default>	100	</Default>
+      <Editable>	True	</Editable>
+    </preferenceMediumTank>
+    <preferenceHeavyTank>
+      <Type>	UINT8	</Type>
+      <Default>	100	</Default>
+      <Editable>	True	</Editable>
+    </preferenceHeavyTank>
+    <preferenceTankDestroyer>
+      <Type>	UINT8	</Type>
+      <Default>	100	</Default>
+      <Editable>	True	</Editable>
+    </preferenceTankDestroyer>
+    <preferenceSPG>
+      <Type>	UINT8	</Type>
+      <Default>	100	</Default>
+      <Editable>	True	</Editable>
+    </preferenceSPG>
+    <brawlSafetyFactor>
+      <Type>	FLOAT32	</Type>
+      <Default>	1.0	</Default>
+      <Editable>	True	</Editable>
+    </brawlSafetyFactor>
+    <desirability>
+      <Type>	UINT8	</Type>
+      <Default>	100	</Default>
+      <Editable>	True	</Editable>
+    </desirability>
+  </Properties>
+</AiZoneCenter.def>

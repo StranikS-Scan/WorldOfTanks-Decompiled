@@ -1,5 +1,5 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/sgmllib3.py
-"""A parser for SGML, using the derived class as a static DTD."""
 import _markupbase
 import re
 __all__ = ['SGMLParser', 'SGMLParseError']
@@ -16,20 +16,17 @@ tagfind = re.compile('[a-zA-Z][-_.a-zA-Z0-9]*')
 attrfind = re.compile('\\s*([a-zA-Z_][-:.a-zA-Z_0-9]*)(\\s*=\\s*(\\\'[^\\\']*\\\'|"[^"]*"|[][\\-a-zA-Z0-9./,:;+*%?!&$\\(\\)_#=~\\\'"@]*))?')
 
 class SGMLParseError(RuntimeError):
-    """Exception raised for all parse errors."""
     pass
 
 
 class SGMLParser(_markupbase.ParserBase):
     entity_or_charref = re.compile('&(?:([a-zA-Z][-.a-zA-Z0-9]*)|#([0-9]+))(;?)')
 
-    def __init__(self, verbose = 0):
-        """Initialize and reset this instance."""
+    def __init__(self, verbose=0):
         self.verbose = verbose
         self.reset()
 
     def reset(self):
-        """Reset this instance. Loses all unprocessed data."""
         self.__starttag_text = None
         self.rawdata = ''
         self.stack = []
@@ -40,32 +37,16 @@ class SGMLParser(_markupbase.ParserBase):
         return
 
     def setnomoretags(self):
-        """Enter literal mode (CDATA) till EOF.
-        
-        Intended for derived classes only.
-        """
         self.nomoretags = self.literal = 1
 
     def setliteral(self, *args):
-        """Enter literal mode (CDATA).
-        
-        Intended for derived classes only.
-        """
         self.literal = 1
 
     def feed(self, data):
-        """Feed some data to the parser.
-        
-                Call this as often as you want, with as little or as much text
-                as you want (may include '
-        ').  (This just saves the text,
-                all the processing is done by goahead().)
-                """
         self.rawdata = self.rawdata + data
         self.goahead(0)
 
     def close(self):
-        """Handle the remaining data."""
         self.goahead(1)
 
     def error(self, message):
@@ -112,8 +93,7 @@ class SGMLParser(_markupbase.ParserBase):
                     if n > i + 1:
                         self.handle_data('<')
                         i = i + 1
-                    else:
-                        break
+                    break
                     continue
                 if rawdata.startswith('<!--', i):
                     k = self.parse_comment(i)
@@ -228,8 +208,8 @@ class SGMLParser(_markupbase.ParserBase):
                 if not rest:
                     attrvalue = attrname
                 else:
-                    if attrvalue[:1] == "'" == attrvalue[-1:] or attrvalue[:1] == '"' == attrvalue[-1:]:
-                        attrvalue = attrvalue[1:-1]
+                    if not attrvalue[:1] == "'" == attrvalue[-1:]:
+                        attrvalue = attrvalue[:1] == '"' == attrvalue[-1:] and attrvalue[1:-1]
                     attrvalue = self.entity_or_charref.sub(self._convert_ref, attrvalue)
                 attrs.append((attrname.lower(), attrvalue))
                 k = match.end(0)
@@ -330,21 +310,17 @@ class SGMLParser(_markupbase.ParserBase):
             print ('*** Stack:', self.stack)
 
     def convert_charref(self, name):
-        """Convert character reference, may be overridden."""
         try:
             n = int(name)
         except ValueError:
             return
 
-        if not 0 <= n <= 127:
-            return
-        return self.convert_codepoint(n)
+        return None if not 0 <= n <= 127 else self.convert_codepoint(n)
 
     def convert_codepoint(self, codepoint):
         return chr(codepoint)
 
     def handle_charref(self, name):
-        """Handle character reference, no need to override."""
         replacement = self.convert_charref(name)
         if replacement is None:
             self.unknown_charref(name)
@@ -359,11 +335,6 @@ class SGMLParser(_markupbase.ParserBase):
      'apos': "'"}
 
     def convert_entityref(self, name):
-        """Convert entity references.
-        
-        As an alternative to overriding this method; one can tailor the
-        results by setting up the self.entitydefs mapping appropriately.
-        """
         table = self.entitydefs
         if name in table:
             return table[name]
@@ -371,7 +342,6 @@ class SGMLParser(_markupbase.ParserBase):
             return
 
     def handle_entityref(self, name):
-        """Handle entity references, no need to override."""
         replacement = self.convert_entityref(name)
         if replacement is None:
             self.unknown_entityref(name)

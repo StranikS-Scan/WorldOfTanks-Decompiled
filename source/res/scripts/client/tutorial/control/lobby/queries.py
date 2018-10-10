@@ -1,8 +1,10 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/lobby/queries.py
 from CurrentVehicle import g_currentVehicle
-from gui.shared.utils.gui_items import InventoryItem
+from gui.shared.items_parameters import formatters
 from items import vehicles, ITEM_TYPE_NAMES
 from tutorial.control import ContentQuery
+from tutorial.control import game_vars
 from tutorial.logger import LOG_CURRENT_EXCEPTION
 
 class VehicleItemParams(ContentQuery):
@@ -13,18 +15,13 @@ class VehicleItemParams(ContentQuery):
         if itemCD is None:
             return
         else:
-            itemTypeID, nationID, compTypeID = vehicles.parseIntCompactDescr(itemCD)
-            raise itemTypeID != ITEM_TYPE_NAMES[1] or AssertionError
+            itemTypeID, _, _ = vehicles.parseIntCompactDescr(itemCD)
             try:
-                guiItem = InventoryItem(itemTypeName=ITEM_TYPE_NAMES[itemTypeID], compactDescr=itemCD)
+                guiItem = game_vars.getItemByIntCD(itemCD)
                 content['itemTypeName'] = guiItem.itemTypeName
                 content['itemLevel'] = guiItem.level
-                params = guiItem.getParams(g_currentVehicle.item)
-                itemParams = []
-                for param in params['parameters']:
-                    itemParams.extend(param)
-
-                content['itemParams'] = itemParams
+                params = guiItem.getParams(g_currentVehicle.item).get('parameters', dict())
+                content['itemParams'] = formatters.getFormattedParamsList(g_currentVehicle.item.descriptor, params)
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 

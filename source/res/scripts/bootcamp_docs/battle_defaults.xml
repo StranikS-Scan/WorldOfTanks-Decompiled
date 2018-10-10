@@ -1,0 +1,403 @@
+<battle_defaults.xml>
+  <panels>	minimap teamBasesPanel ribbonsPanel fragCorrelationBar
+		consumablesPanel playersPanel sixthSense destroyTimersPanel battleMessenger fullStats
+		playersPanel radialMenu battleEndWarningPanel battleTimer battleDamageLogPanel debugPanel prebattleTimer	</panels>
+  <ribbons>	damage kill ram spotted capture crits	</ribbons>
+  <lesson_pages>
+    <equipment>
+      <header1>
+        <text>	#bootcamp:loading/tip/equipment/header/1	</text>
+        <autoSize>	left	</autoSize>
+      </header1>
+      <header2>
+        <text>	#bootcamp:loading/tip/equipment/header/2	</text>
+        <autoSize>	left	</autoSize>
+      </header2>
+      <header3>
+        <text>	#bootcamp:loading/tip/equipment/header/3	</text>
+        <autoSize>	left	</autoSize>
+      </header3>
+      <description1>
+        <text>	#bootcamp:loading/tip/equipment/description/1	</text>
+        <autoSize>	left	</autoSize>
+      </description1>
+      <description2>
+        <text>	#bootcamp:loading/tip/equipment/description/2	</text>
+        <autoSize>	left	</autoSize>
+      </description2>
+      <description3>
+        <text>	#bootcamp:loading/tip/equipment/description/3	</text>
+        <autoSize>	left	</autoSize>
+      </description3>
+    </equipment>
+    <sniper>
+      <header1>
+        <text>	#bootcamp:loading/tip/sniper/header/1	</text>
+        <autoSize>	left	</autoSize>
+      </header1>
+    </sniper>
+    <penetration>
+      <header1>
+        <text>	#bootcamp:loading/tip/penetration/header/1	</text>
+        <autoSize>	right	</autoSize>
+      </header1>
+      <header2>
+        <text>	#bootcamp:loading/tip/penetration/header/2	</text>
+        <autoSize>	left	</autoSize>
+      </header2>
+      <description1>
+        <text>	#bootcamp:loading/tip/penetration/description/1	</text>
+        <autoSize>	right	</autoSize>
+      </description1>
+      <description2>
+        <text>	#bootcamp:loading/tip/penetration/description/2	</text>
+        <autoSize>	left	</autoSize>
+      </description2>
+      <description3>
+        <text>	510	</text>
+        <autoSize>	center	</autoSize>
+      </description3>
+    </penetration>
+    <visibility>
+      <header1>
+        <text>	#bootcamp:loading/tip/visibility/header/1	</text>
+        <autoSize>	left	</autoSize>
+      </header1>
+      <header2>
+        <text>	#bootcamp:loading/tip/visibility/header/1	</text>
+        <autoSize>	left	</autoSize>
+      </header2>
+      <header3>
+        <text>	#bootcamp:loading/tip/visibility/header/2	</text>
+        <autoSize>	right	</autoSize>
+      </header3>
+      <header4>
+        <text>	#bootcamp:loading/tip/visibility/header/2	</text>
+        <autoSize>	right	</autoSize>
+      </header4>
+      <description1>
+        <text>	#bootcamp:loading/tip/visibility/description/1	</text>
+        <autoSize>	left	</autoSize>
+      </description1>
+      <description2>
+        <text>	#bootcamp:loading/tip/visibility/description/2	</text>
+        <autoSize>	left	</autoSize>
+      </description2>
+      <description3>
+        <text>	#bootcamp:loading/tip/visibility/description/3	</text>
+        <autoSize>	right	</autoSize>
+      </description3>
+      <description4>
+        <text>	#bootcamp:loading/tip/visibility/description/4	</text>
+        <autoSize>	right	</autoSize>
+      </description4>
+    </visibility>
+    <victory>
+      <header1>
+        <text>	#bootcamp:loading/tip/victory/header/1	</text>
+        <autoSize>	center	</autoSize>
+      </header1>
+      <description1>
+        <text>	#bootcamp:loading/tip/victory/description/1	</text>
+        <autoSize>	center	</autoSize>
+      </description1>
+      <header2>
+        <text>	#bootcamp:loading/tip/victory/header/1	</text>
+        <autoSize>	center	</autoSize>
+      </header2>
+      <description2>
+        <text>	#bootcamp:loading/tip/victory/description/2	</text>
+        <autoSize>	center	</autoSize>
+      </description2>
+      <header3>
+        <text>	#bootcamp:loading/tip/victory/header/2	</text>
+        <autoSize>	center	</autoSize>
+      </header3>
+    </victory>
+    <movement>
+      <header1>
+        <text>	#bootcamp:loading/tip/wasd/header/1	</text>
+        <autoSize>	center	</autoSize>
+      </header1>
+      <header2>
+        <text>	#bootcamp:loading/tip/wasd/header/2	</text>
+        <autoSize>	center	</autoSize>
+      </header2>
+      <header3>
+        <text>	#bootcamp:loading/tip/wasd/header/3	</text>
+        <autoSize>	center	</autoSize>
+      </header3>
+    </movement>
+    <crosshair>
+      <header1>
+        <text>	#bootcamp:loading/tip/crosshair/header/1	</text>
+        <autoSize>	center	</autoSize>
+      </header1>
+      <header2>
+        <text>	#bootcamp:loading/tip/crosshair/header/2	</text>
+        <autoSize>	center	</autoSize>
+      </header2>
+      <description1>
+        <text>	1050	</text>
+        <autoSize>	center	</autoSize>
+      </description1>
+      <description2>
+        <text>	500	</text>
+        <autoSize>	center	</autoSize>
+      </description2>
+    </crosshair>
+    <modules>
+      <header1>
+        <text>	#bootcamp:loading/tip/modules/header/1	</text>
+        <autoSize>	center	</autoSize>
+      </header1>
+      <header2>
+        <text>	#bootcamp:loading/tip/modules/header/2	</text>
+        <autoSize>	left	</autoSize>
+      </header2>
+      <header3>
+        <text>	#bootcamp:loading/tip/modules/header/3	</text>
+        <autoSize>	left	</autoSize>
+      </header3>
+      <description1>
+        <text>	1550	</text>
+        <autoSize>	center	</autoSize>
+      </description1>
+      <description2>
+        <text>	#bootcamp:loading/tip/modules/description/2	</text>
+        <autoSize>	left	</autoSize>
+      </description2>
+      <description3>
+        <text>	#bootcamp:loading/tip/modules/description/3	</text>
+        <autoSize>	left	</autoSize>
+      </description3>
+    </modules>
+  </lesson_pages>
+  <prebattle>	crewHint modulesHint hitpointsHint teamsHint scoreHint minimapHint crosshairHint consumablesHint	</prebattle>
+  <primary_hints>
+    <hintMoveTurret>
+      <message>	#bootcamp:hint/move/turret	</message>
+      <timeout>	6.0	</timeout>
+      <time_completed>	1.0	</time_completed>
+      <angle>	60.0	</angle>
+      <cooldown_after>	5.0	</cooldown_after>
+      <voiceover>	vo_bc_tower_and_sight_control	</voiceover>
+    </hintMoveTurret>
+    <hintMove>
+      <message>	#bootcamp:hint/move	</message>
+      <timeout>	13.0	</timeout>
+      <time_completed>	1.0	</time_completed>
+      <distance>	30.0	</distance>
+      <cooldown_after>	5.0	</cooldown_after>
+      <voiceover>	vo_bc_vehicle_control	</voiceover>
+    </hintMove>
+    <hintShoot>
+      <message>	#bootcamp:hint/shoot	</message>
+      <timeout>	5.0	</timeout>
+      <time_completed>	1.0	</time_completed>
+      <cooldown_after>	3.0	</cooldown_after>
+      <voiceover>	vo_bc_aim_at_enemy	</voiceover>
+    </hintShoot>
+    <hintSniper>
+      <message>	#bootcamp:hint/sniper	</message>
+      <time_completed>	2.0	</time_completed>
+      <cooldown_after>	3.0	</cooldown_after>
+    </hintSniper>
+    <hintSniperLevel0>
+      <message>	#bootcamp:hint/sniper	</message>
+      <time_completed>	2.0	</time_completed>
+      <cooldown_after>	3.0	</cooldown_after>
+    </hintSniperLevel0>
+    <hintAdvancedSniper>
+      <enter_voiceover>	vo_bc_entering_sniper_mode	</enter_voiceover>
+      <exit_voiceover>	vo_bc_exiting_sniper_mode	</exit_voiceover>
+      <weak_points_voiceover>	vo_bc_weakness_in_armor	</weak_points_voiceover>
+      <message>	#bootcamp:hint/advanced/sniper/main	</message>
+      <message_sniper_before>	#bootcamp:hint/advanced/sniper/before	</message_sniper_before>
+      <message_sniper_exit>	#bootcamp:hint/sniper/on/distance/exit	</message_sniper_exit>
+      <angle>	15.0	</angle>
+      <target_name></target_name>
+      <time_completed>	0	</time_completed>
+      <cooldown_after>	5.0	</cooldown_after>
+      <time_between>	0.0	</time_between>
+    </hintAdvancedSniper>
+    <hintMessageAvoid>
+      <message>	#bootcamp:hint/message/avoid	</message>
+      <timeout>	120.0	</timeout>
+      <time_completed>	0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+      <voiceover>	vo_bc_get_around_enemy	</voiceover>
+    </hintMessageAvoid>
+    <hintStartNarrative>
+      <message>	#bootcamp:hint/start/narrative	</message>
+      <timeout>	6.0	</timeout>
+      <time_completed>	0.0	</time_completed>
+      <cooldown_after>	1.0	</cooldown_after>
+      <time_before_shown>	3.0	</time_before_shown>
+    </hintStartNarrative>
+    <hintRepairTrack>
+      <message>	#bootcamp:hint/repair/track	</message>
+      <timeout>	8.0	</timeout>
+      <time_completed>	0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+      <voiceover>	vo_bc_use_repair_kit	</voiceover>
+    </hintRepairTrack>
+    <hintUseExtinguisher>
+      <message>	#bootcamp:hint/use/extinguisher	</message>
+      <timeout>	8.0	</timeout>
+      <time_completed>	0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+      <voiceover>	vo_bc_use_fire_extinguisher	</voiceover>
+    </hintUseExtinguisher>
+    <hintHealCrew>
+      <message>	#bootcamp:hint/heal/crew	</message>
+      <timeout>	8.0	</timeout>
+      <time_completed>	0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+      <voiceover>	vo_bc_gunner_wounded	</voiceover>
+    </hintHealCrew>
+    <hintTargetLock>
+      <message>	#bootcamp:hint/target/lock	</message>
+      <timeout>	4.0	</timeout>
+      <time_completed>	2.0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+    </hintTargetLock>
+    <hintTargetUnLock>
+      <message>	#bootcamp:hint/target/unlock	</message>
+      <timeout>	-1.0	</timeout>
+      <time_completed>	2.0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+    </hintTargetUnLock>
+    <hintSniperOnDistance>
+      <enter_voiceover>	vo_bc_entering_sniper_mode	</enter_voiceover>
+      <exit_voiceover>	vo_bc_exiting_sniper_mode	</exit_voiceover>
+      <message>	#bootcamp:hint/sniper/on/distance/main	</message>
+      <exitHintText>	#bootcamp:hint/sniper/on/distance/exit	</exitHintText>
+      <exitHintDelay>	3.0	</exitHintDelay>
+      <timeout>	5.0	</timeout>
+      <time_completed>	0.0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+      <angle>	15.0	</angle>
+      <distance>	100.0	</distance>
+    </hintSniperOnDistance>
+    <hintAim>
+      <message>	#bootcamp:hint/aim	</message>
+      <timeout>	4.0	</timeout>
+      <aimFactor>	3.0	</aimFactor>
+      <shootCount>	3	</shootCount>
+      <voiceover>	vo_bc_green_marker	</voiceover>
+    </hintAim>
+    <hintWeakPoints>
+      <voiceover>	vo_bc_weakness_in_armor	</voiceover>
+    </hintWeakPoints>
+    <hintPlayerSpotted>
+      <voiceover>	vo_bc_you_are_detected	</voiceover>
+    </hintPlayerSpotted>
+    <hintSectorClear>
+      <voiceover>	vo_bc_look_for_enemies	</voiceover>
+    </hintSectorClear>
+    <hintCaptureTheBase>
+      <voiceover>	vo_bc_capture_base	</voiceover>
+    </hintCaptureTheBase>
+    <hintResetProgress>
+      <voiceover>	vo_bc_progress_capturing	</voiceover>
+    </hintResetProgress>
+    <hintPlayerDetectEnemies>
+      <count>	0	</count>
+      <voiceover>	vo_bc_detect_enemy_vehicles	</voiceover>
+    </hintPlayerDetectEnemies>
+    <hintEnemyCanHide>
+      <voiceover>	vo_bc_enemy_can_hide_be_careful	</voiceover>
+    </hintEnemyCanHide>
+    <hintShootWhileMoving>
+      <maxShootErrorsCount>	0	</maxShootErrorsCount>
+      <voiceover>	vo_bc_do_not_shoot	</voiceover>
+    </hintShootWhileMoving>
+    <hintMoveToMarker>
+      <seconds>	0.0	</seconds>
+      <maxDistance>	0.0	</maxDistance>
+      <voiceover>	vo_bc_move_forward	</voiceover>
+    </hintMoveToMarker>
+  </primary_hints>
+  <secondary_hints>
+    <hintNoMove>
+      <message>	#bootcamp:hint/no/move	</message>
+      <timeout>	3.0	</timeout>
+      <time_completed>	1.0	</time_completed>
+      <seconds>	120.0	</seconds>
+      <cooldown_after>	1.0	</cooldown_after>
+    </hintNoMove>
+    <hintNoMoveTurret>
+      <message>	#bootcamp:hint/no/move/turret	</message>
+      <timeout>	5.0	</timeout>
+      <time_completed>	1.0	</time_completed>
+      <seconds>	60.0	</seconds>
+      <cooldown_after>	5.0	</cooldown_after>
+    </hintNoMoveTurret>
+    <hintAllyShoot>
+      <message>	#bootcamp:hint/ally/shoot	</message>
+      <timeout>	4.0	</timeout>
+      <time_completed>	0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+    </hintAllyShoot>
+    <hintUselessConsumable>
+      <message>	#bootcamp:hint/useless/consumables	</message>
+      <timeout>	4.0	</timeout>
+      <time_completed>	0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+    </hintUselessConsumable>
+    <hintAim>
+      <message>	#bootcamp:hint/aim	</message>
+      <timeout>	4.0	</timeout>
+      <aimFactor>	3	</aimFactor>
+      <shootCount>	3	</shootCount>
+      <time_completed>	0.0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+    </hintAim>
+    <hintWaitReload>
+      <message>	#bootcamp:hint/wait/reload	</message>
+      <timeout>	4.0	</timeout>
+      <time_completed>	1.0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+      <maxShootErrorsCount>	3	</maxShootErrorsCount>
+    </hintWaitReload>
+    <hintExitGameArea>
+      <message>	#bootcamp:hint/exit/game/area	</message>
+      <timeout>	4.0	</timeout>
+      <distanceToBorder>	2.0	</distanceToBorder>
+      <time_completed>	0.0	</time_completed>
+      <cooldown_after>	2.0	</cooldown_after>
+    </hintExitGameArea>
+    <hintShootWhileMoving>
+      <message>	#bootcamp:hint/shoot/while/moving	</message>
+      <timeout>	3.0	</timeout>
+      <time_completed>	0.0	</time_completed>
+      <maxShootErrorsCount>	2	</maxShootErrorsCount>
+      <cooldown_after>	6.0	</cooldown_after>
+    </hintShootWhileMoving>
+    <hintMoveToMarker>
+      <message>	#bootcamp:hint/move/to/marker	</message>
+      <timeout>	4.0	</timeout>
+      <maxDistance>	10.0	</maxDistance>
+      <time_completed>	0.0	</time_completed>
+      <cooldown_after>	5.0	</cooldown_after>
+      <seconds>	0.0	</seconds>
+    </hintMoveToMarker>
+    <hintSecondarySniper>
+      <message>	#bootcamp:hint/secondary/sniper	</message>
+      <timeout>	4.0	</timeout>
+      <angle>	15.0	</angle>
+      <distance>	100.0	</distance>
+      <cooldown_after>	0.0	</cooldown_after>
+      <time_completed>	0.0	</time_completed>
+    </hintSecondarySniper>
+    <hintLowHP>
+      <message>	#bootcamp:hint/low/hp	</message>
+      <timeout>	4.0	</timeout>
+      <first_percent>	0.5	</first_percent>
+      <second_percent>	0.25	</second_percent>
+      <cooldown_after>	0.0	</cooldown_after>
+      <time_completed>	0.0	</time_completed>
+    </hintLowHP>
+  </secondary_hints>
+</battle_defaults.xml>

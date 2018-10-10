@@ -1,0 +1,158 @@
+<pm2_7_1_7.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_7_1_7_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions></conditions>
+      <scripts>	
+pass
+         	</scripts>
+      <bonus>
+        <item>	1531	  <count>	9	</count>
+        </item>
+        <item>	1019	  <count>	9	</count>
+        </item>
+        <item>	507	  <count>	9	</count>
+        </item>
+        <item>	27387	  <count>	20	</count>
+        </item>
+        <token>
+          <id>	token:pt:final:s2:t7:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_7_1_7_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pm2_7_1_7_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	9	</count>
+        </item>
+        <item>	1019	  <count>	9	</count>
+        </item>
+        <item>	507	  <count>	9	</count>
+        </item>
+        <item>	27387	  <count>	20	</count>
+        </item>
+        <token>
+          <id>	token:pt:final:s2:t7:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_7_1_7_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions></conditions>
+      <scripts>	
+QUEST_EVENT_TYPE = globals().get('QUEST_EVENT_TYPE')
+""":type: quest_definitions.QUEST_EVENT_TYPE"""
+
+quest_progress = globals().get('quest_progress')
+""":type: quest_progress"""
+
+server_constants = globals().get('server_constants')
+""":type: server_constants"""
+
+items = globals().get('items')
+""":type: items"""
+
+filter = globals().get('BattleResults')
+""":type: battle_result_filters"""
+
+PROGRESS_ID_MAIN = 'crits'
+PROGRESS_ID_MAIN_SERIES = 'battlesSeries'
+PROGRESS_ID_ADD = 'critsAdv'
+PROGRESS_ID_ADD_SERIES = 'battlesSeriesAdv'
+
+def onInit(eventType, eventData, quest, processor):
+    for event in events.iterkeys():
+        processor.subscribe(event, quest)
+    return True
+
+def onFinishBattle(eventType, eventData, quest, processor):
+    questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
+
+    brfilter = filter.BattleResultsFilter(eventData)
+    result = eventData['avatarResults']['innerModuleCritCount']
+    resultInBattle = questProgress.increaseUntilComplete(PROGRESS_ID_MAIN, result)
+    resultInBattleAdv = questProgress.increaseUntilComplete(PROGRESS_ID_ADD, result)
+    questProgress.increaseEveryProgress(PROGRESS_ID_MAIN_SERIES, resultInBattle)
+    questProgress.increaseEveryProgress(PROGRESS_ID_ADD_SERIES, resultInBattleAdv, PROGRESS_ID_MAIN_SERIES)
+
+    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_ID_ADD_SERIES))
+
+    processor.setQuestProgress(quest.progressID, questProgress.save())
+
+events = {
+    QUEST_EVENT_TYPE.INIT: onInit,
+    QUEST_EVENT_TYPE.FINISH_BATTLE: onFinishBattle,
+}
+
+def quest(eventType, eventData, quest, processor):
+    LOG('QUEST EVENT:', eventType, quest.id)
+    return events.get(eventType, lambda *args: False)(eventType, eventData, quest, processor)
+         	</scripts>
+      <bonus>
+        <credits>	250000	</credits>
+        <crystal>	150	</crystal>
+        <premium>	1	</premium>
+        <token>
+          <id>	token:pt:final:s2:t7:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_7_1_7_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pm2_7_1_7_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	addQuestCompleted	</key>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list_2	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm2_7_1_7.xml>

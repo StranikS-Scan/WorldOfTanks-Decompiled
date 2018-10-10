@@ -1,0 +1,293 @@
+<poland.xml>
+  <ranks>
+    <szeregowiec>
+      <userString>	#poland_tankmen:ranksPl/szeregowiec	</userString>
+      <icon>	poland-11.png	</icon>
+    </szeregowiec>
+    <starszy_szeregowiec>
+      <userString>	#poland_tankmen:ranksPl/starszy_szeregowiec	</userString>
+      <icon>	poland-10.png	</icon>
+    </starszy_szeregowiec>
+    <kapral>
+      <userString>	#poland_tankmen:ranksPl/kapral	</userString>
+      <icon>	poland-9.png	</icon>
+    </kapral>
+    <plutonowy>
+      <userString>	#poland_tankmen:ranksPl/plutonowy	</userString>
+      <icon>	poland-8.png	</icon>
+    </plutonowy>
+    <sierzant>
+      <userString>	#poland_tankmen:ranksPl/sierzant	</userString>
+      <icon>	poland-7.png	</icon>
+    </sierzant>
+    <starszy_sierzant>
+      <userString>	#poland_tankmen:ranksPl/starszy_sierzant	</userString>
+      <icon>	poland-6.png	</icon>
+    </starszy_sierzant>
+    <chorazy>
+      <userString>	#poland_tankmen:ranksPl/chorazy	</userString>
+      <icon>	poland-5.png	</icon>
+    </chorazy>
+    <podporucznik>
+      <userString>	#poland_tankmen:ranksPl/podporucznik	</userString>
+      <icon>	poland-4.png	</icon>
+    </podporucznik>
+    <porucznik>
+      <userString>	#poland_tankmen:ranksPl/porucznik	</userString>
+      <icon>	poland-3.png	</icon>
+    </porucznik>
+    <kapitan>
+      <userString>	#poland_tankmen:ranksPl/kapitan	</userString>
+      <icon>	poland-2.png	</icon>
+    </kapitan>
+    <major>
+      <userString>	#poland_tankmen:ranksPl/major	</userString>
+      <icon>	poland-1.png	</icon>
+    </major>
+  </ranks>
+  <roleRanks>
+    <commander>	kapral plutonowy sierzant starszy_sierzant
+			chorazy podporucznik porucznik kapitan major	</commander>
+    <driver>	starszy_szeregowiec kapral plutonowy sierzant starszy_sierzant
+			chorazy podporucznik porucznik kapitan	</driver>
+    <gunner>	starszy_szeregowiec kapral plutonowy sierzant starszy_sierzant
+			chorazy podporucznik porucznik kapitan	</gunner>
+    <radioman>	szeregowiec starszy_szeregowiec kapral plutonowy sierzant starszy_sierzant
+			chorazy podporucznik porucznik	</radioman>
+    <loader>	szeregowiec starszy_szeregowiec kapral plutonowy sierzant starszy_sierzant
+			chorazy podporucznik porucznik	</loader>
+  </roleRanks>
+  <normalGroups>
+    <men1>
+      <weight>	1.0	</weight>
+      <sex>	male	</sex>
+      <firstNames>
+        <_1>	#poland_tankmen:names/pln1	</_1>
+        <_2>	#poland_tankmen:names/pln2	</_2>
+        <_3>	#poland_tankmen:names/pln3	</_3>
+        <_4>	#poland_tankmen:names/pln4	</_4>
+        <_5>	#poland_tankmen:names/pln5	</_5>
+        <_6>	#poland_tankmen:names/pln6	</_6>
+        <_7>	#poland_tankmen:names/pln7	</_7>
+        <_8>	#poland_tankmen:names/pln8	</_8>
+        <_9>	#poland_tankmen:names/pln9	</_9>
+        <_10>	#poland_tankmen:names/pln10	</_10>
+        <_11>	#poland_tankmen:names/pln11	</_11>
+        <_12>	#poland_tankmen:names/pln12	</_12>
+        <_13>	#poland_tankmen:names/pln13	</_13>
+        <_14>	#poland_tankmen:names/pln14	</_14>
+        <_15>	#poland_tankmen:names/pln15	</_15>
+        <_16>	#poland_tankmen:names/pln16	</_16>
+        <_17>	#poland_tankmen:names/pln17	</_17>
+        <_18>	#poland_tankmen:names/pln18	</_18>
+        <_19>	#poland_tankmen:names/pln19	</_19>
+        <_20>	#poland_tankmen:names/pln20	</_20>
+        <_21>	#poland_tankmen:names/pln21	</_21>
+        <_22>	#poland_tankmen:names/pln22	</_22>
+        <_23>	#poland_tankmen:names/pln23	</_23>
+        <_24>	#poland_tankmen:names/pln24	</_24>
+        <_25>	#poland_tankmen:names/pln25	</_25>
+        <_26>	#poland_tankmen:names/pln26	</_26>
+        <_27>	#poland_tankmen:names/pln27	</_27>
+        <_28>	#poland_tankmen:names/pln28	</_28>
+        <_29>	#poland_tankmen:names/pln29	</_29>
+        <_30>	#poland_tankmen:names/pln30	</_30>
+        <_31>	#poland_tankmen:names/pln31	</_31>
+        <_32>	#poland_tankmen:names/pln32	</_32>
+        <_33>	#poland_tankmen:names/pln33	</_33>
+        <_34>	#poland_tankmen:names/pln34	</_34>
+        <_35>	#poland_tankmen:names/pln35	</_35>
+      </firstNames>
+      <lastNames>
+        <_1>	#poland_tankmen:names/pl1	</_1>
+        <_2>	#poland_tankmen:names/pl2	</_2>
+        <_3>	#poland_tankmen:names/pl3	</_3>
+        <_4>	#poland_tankmen:names/pl4	</_4>
+        <_5>	#poland_tankmen:names/pl5	</_5>
+        <_6>	#poland_tankmen:names/pl6	</_6>
+        <_7>	#poland_tankmen:names/pl7	</_7>
+        <_8>	#poland_tankmen:names/pl8	</_8>
+        <_9>	#poland_tankmen:names/pl9	</_9>
+        <_10>	#poland_tankmen:names/pl10	</_10>
+        <_11>	#poland_tankmen:names/pl11	</_11>
+        <_12>	#poland_tankmen:names/pl12	</_12>
+        <_13>	#poland_tankmen:names/pl13	</_13>
+        <_14>	#poland_tankmen:names/pl14	</_14>
+        <_15>	#poland_tankmen:names/pl15	</_15>
+        <_16>	#poland_tankmen:names/pl16	</_16>
+        <_17>	#poland_tankmen:names/pl17	</_17>
+        <_18>	#poland_tankmen:names/pl18	</_18>
+        <_19>	#poland_tankmen:names/pl19	</_19>
+        <_20>	#poland_tankmen:names/pl20	</_20>
+        <_21>	#poland_tankmen:names/pl21	</_21>
+        <_22>	#poland_tankmen:names/pl22	</_22>
+        <_23>	#poland_tankmen:names/pl23	</_23>
+        <_24>	#poland_tankmen:names/pl24	</_24>
+        <_25>	#poland_tankmen:names/pl25	</_25>
+        <_26>	#poland_tankmen:names/pl26	</_26>
+        <_27>	#poland_tankmen:names/pl27	</_27>
+        <_28>	#poland_tankmen:names/pl28	</_28>
+        <_29>	#poland_tankmen:names/pl29	</_29>
+        <_30>	#poland_tankmen:names/pl30	</_30>
+        <_31>	#poland_tankmen:names/pl31	</_31>
+        <_32>	#poland_tankmen:names/pl32	</_32>
+        <_33>	#poland_tankmen:names/pl33	</_33>
+        <_34>	#poland_tankmen:names/pl34	</_34>
+        <_35>	#poland_tankmen:names/pl35	</_35>
+        <_36>	#poland_tankmen:names/pl36	</_36>
+        <_37>	#poland_tankmen:names/pl37	</_37>
+        <_38>	#poland_tankmen:names/pl38	</_38>
+        <_39>	#poland_tankmen:names/pl39	</_39>
+        <_40>	#poland_tankmen:names/pl40	</_40>
+        <_41>	#poland_tankmen:names/pl41	</_41>
+        <_42>	#poland_tankmen:names/pl42	</_42>
+        <_43>	#poland_tankmen:names/pl43	</_43>
+        <_44>	#poland_tankmen:names/pl44	</_44>
+      </lastNames>
+      <icons>
+        <_1>	poland-1.png	</_1>
+        <_2>	poland-2.png	</_2>
+        <_3>	poland-3.png	</_3>
+        <_4>	poland-4.png	</_4>
+        <_5>	poland-5.png	</_5>
+        <_6>	poland-6.png	</_6>
+        <_7>	poland-7.png	</_7>
+        <_8>	poland-8.png	</_8>
+        <_9>	poland-9.png	</_9>
+        <_10>	poland-10.png	</_10>
+        <_11>	poland-11.png	</_11>
+        <_12>	poland-12.png	</_12>
+        <_13>	poland-13.png	</_13>
+        <_14>	poland-14.png	</_14>
+        <_15>	poland-15.png	</_15>
+        <_16>	poland-16.png	</_16>
+        <_17>	poland-17.png	</_17>
+        <_18>	poland-18.png	</_18>
+        <_19>	poland-19.png	</_19>
+        <_20>	poland-20.png	</_20>
+      </icons>
+    </men1>
+  </normalGroups>
+  <premiumGroups>
+    <men1>
+      <weight>	1.0	</weight>
+      <sex>	male	</sex>
+      <firstNames>
+        <_3001>	#poland_tankmen:names/pln1	</_3001>
+        <_3002>	#poland_tankmen:names/pln2	</_3002>
+        <_3003>	#poland_tankmen:names/pln3	</_3003>
+        <_3004>	#poland_tankmen:names/pln4	</_3004>
+        <_3005>	#poland_tankmen:names/pln5	</_3005>
+      </firstNames>
+      <lastNames>
+        <_3001>	#poland_tankmen:names/pl1	</_3001>
+        <_3002>	#poland_tankmen:names/pl2	</_3002>
+        <_3003>	#poland_tankmen:names/pl3	</_3003>
+        <_3004>	#poland_tankmen:names/pl4	</_3004>
+        <_3005>	#poland_tankmen:names/pl5	</_3005>
+      </lastNames>
+      <icons>
+        <_3001>	poland-1.png	</_3001>
+        <_3002>	poland-2.png	</_3002>
+        <_3003>	poland-3.png	</_3003>
+        <_3004>	poland-4.png	</_3004>
+        <_3005>	poland-5.png	</_3005>
+      </icons>
+    </men1>
+    <women1>
+      <weight>	0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	false	</notInShop>
+      <firstNames>
+        <_11001>	#poland_tankmen:names/pln11001	</_11001>
+        <_11002>	#poland_tankmen:names/pln11002	</_11002>
+        <_11003>	#poland_tankmen:names/pln11003	</_11003>
+        <_11004>	#poland_tankmen:names/pln11004	</_11004>
+        <_11005>	#poland_tankmen:names/pln11005	</_11005>
+        <_11006>	#poland_tankmen:names/pln11006	</_11006>
+        <_11007>	#poland_tankmen:names/pln11007	</_11007>
+        <_11008>	#poland_tankmen:names/pln11008	</_11008>
+        <_11009>	#poland_tankmen:names/pln11009	</_11009>
+        <_11010>	#poland_tankmen:names/pln11010	</_11010>
+        <_11011>	#poland_tankmen:names/pln11011	</_11011>
+        <_11012>	#poland_tankmen:names/pln11012	</_11012>
+        <_11013>	#poland_tankmen:names/pln11013	</_11013>
+        <_11014>	#poland_tankmen:names/pln11014	</_11014>
+        <_11015>	#poland_tankmen:names/pln11015	</_11015>
+        <_11016>	#poland_tankmen:names/pln11016	</_11016>
+        <_11017>	#poland_tankmen:names/pln11017	</_11017>
+        <_11018>	#poland_tankmen:names/pln11018	</_11018>
+        <_11019>	#poland_tankmen:names/pln11019	</_11019>
+        <_11020>	#poland_tankmen:names/pln11020	</_11020>
+        <_11021>	#poland_tankmen:names/pln11021	</_11021>
+        <_11022>	#poland_tankmen:names/pln11022	</_11022>
+        <_11023>	#poland_tankmen:names/pln11023	</_11023>
+        <_11024>	#poland_tankmen:names/pln11024	</_11024>
+        <_11025>	#poland_tankmen:names/pln11025	</_11025>
+        <_11026>	#poland_tankmen:names/pln11026	</_11026>
+        <_11027>	#poland_tankmen:names/pln11027	</_11027>
+      </firstNames>
+      <lastNames>
+        <_11001>	#poland_tankmen:names/pl11001	</_11001>
+        <_11002>	#poland_tankmen:names/pl11002	</_11002>
+        <_11003>	#poland_tankmen:names/pl11003	</_11003>
+        <_11004>	#poland_tankmen:names/pl11004	</_11004>
+        <_11005>	#poland_tankmen:names/pl11005	</_11005>
+        <_11006>	#poland_tankmen:names/pl11006	</_11006>
+        <_11007>	#poland_tankmen:names/pl11007	</_11007>
+        <_11008>	#poland_tankmen:names/pl11008	</_11008>
+        <_11009>	#poland_tankmen:names/pl11009	</_11009>
+        <_11010>	#poland_tankmen:names/pl11010	</_11010>
+        <_11011>	#poland_tankmen:names/pl11011	</_11011>
+        <_11012>	#poland_tankmen:names/pl11012	</_11012>
+        <_11013>	#poland_tankmen:names/pl11013	</_11013>
+        <_11014>	#poland_tankmen:names/pl11014	</_11014>
+        <_11015>	#poland_tankmen:names/pl11015	</_11015>
+        <_11016>	#poland_tankmen:names/pl11016	</_11016>
+        <_11017>	#poland_tankmen:names/pl11017	</_11017>
+        <_11018>	#poland_tankmen:names/pl11018	</_11018>
+        <_11019>	#poland_tankmen:names/pl11019	</_11019>
+        <_11020>	#poland_tankmen:names/pl11020	</_11020>
+        <_11021>	#poland_tankmen:names/pl11021	</_11021>
+        <_11022>	#poland_tankmen:names/pl11022	</_11022>
+        <_11023>	#poland_tankmen:names/pl11023	</_11023>
+        <_11024>	#poland_tankmen:names/pl11024	</_11024>
+        <_11025>	#poland_tankmen:names/pl11025	</_11025>
+        <_11026>	#poland_tankmen:names/pl11026	</_11026>
+        <_11027>	#poland_tankmen:names/pl11027	</_11027>
+        <_11028>	#poland_tankmen:names/pl11028	</_11028>
+        <_11029>	#poland_tankmen:names/pl11029	</_11029>
+      </lastNames>
+      <icons>
+        <_11001>	poland-female-1.png	</_11001>
+        <_11002>	poland-female-2.png	</_11002>
+        <_11003>	poland-female-3.png	</_11003>
+        <_11004>	poland-female-4.png	</_11004>
+        <_11005>	poland-female-5.png	</_11005>
+        <_11006>	poland-female-6.png	</_11006>
+        <_11007>	poland-female-7.png	</_11007>
+        <_11008>	poland-female-8.png	</_11008>
+        <_11009>	poland-female-9.png	</_11009>
+        <_11010>	poland-female-10.png	</_11010>
+        <_11011>	poland-female-11.png	</_11011>
+        <_11012>	poland-female-12.png	</_11012>
+      </icons>
+    </women1>
+    <men_Buffon_Football>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3006>	#poland_tankmen:names/Gianluigi	</_3006>
+      </firstNames>
+      <lastNames>
+        <_3006>	#poland_tankmen:names/Buffon	</_3006>
+      </lastNames>
+      <icons>
+        <_3006>	italy-Buffon.png	</_3006>
+      </icons>
+    </men_Buffon_Football>
+  </premiumGroups>
+</poland.xml>

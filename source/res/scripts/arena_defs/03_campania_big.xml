@@ -1,0 +1,161 @@
+<03_campania_big.xml>
+  <name>	#arenas:03_campania_big/name	</name>
+  <description>	#arenas:03_campania_big/description	</description>
+  <geometry>	spaces/03_campania_big	</geometry>
+  <boundingBox>
+    <bottomLeft>	-400.000000 -400.000000	</bottomLeft>
+    <upperRight>	450.000000 450.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/03_campania_big/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_province_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_province_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_province_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_province_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_province_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_province_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_10_hills_wind_summer	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	env_Mountain.bnk	</bank>
+    </loadBanks>
+  </soundRemapping>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-258.20 -275.89	</position>
+        </team1>
+        <team2>
+          <position>	269.34 254.94	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	22.145275 -255.633377	</position1>
+        </team1>
+        <team2>
+          <position1>	-14.872253 284.153015	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities>
+    <scenario>
+      <startTime>	0.000000 30.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	320	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	campania_sc1	</name>
+      <trajectories>
+        <warplane>
+          <preset>	campania_sc1_bomber1	</preset>
+          <position>	0.000000 70.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	campania_sc1_bomber2	</preset>
+          <position>	0.000000 70.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	campania_sc1_bomber3	</preset>
+          <position>	0.000000 70.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	campania_sc1_bomber4	</preset>
+          <position>	0.000000 70.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.000000 2.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	250.000000 300.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	300	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	campania_sc2	</name>
+      <trajectories>
+        <warplane>
+          <preset>	campania_sc2_airplane1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	2.200000 2.200000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	campania_sc2_airplane1_explosion	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	31.000000 32.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	campania_sc2_airplane2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	campania_sc2_gun1_attack	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	26.000000 31.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	campania_sc2_gun2_attack	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	22.000000 26.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	campania_sc2_gun3_attack	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	29.000000 32.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	90.000000 120.000000	</startTime>
+      <possibility>	0.6	</possibility>
+      <interval>	210	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	campania_sc4	</name>
+      <trajectories>
+        <warplane>
+          <preset>	campania_sc4_airplane	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</03_campania_big.xml>

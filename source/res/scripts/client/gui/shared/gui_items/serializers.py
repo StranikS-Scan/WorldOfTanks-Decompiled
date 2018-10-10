@@ -1,45 +1,62 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/serializers.py
 import cPickle
-from items import tankmen
-from gui.shared.gui_items import _ICONS_MASK
-from gui.shared.gui_items.Tankman import Tankman
+import math
+import collections
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+from gui.shared.money import Money, Currency
+from helpers import dependency
+from items.components import skills_constants
+from gui.shared.gui_items.fitting_item import ICONS_MASK
+from gui.shared.gui_items import Tankman, Vehicle
+from skeletons.gui.shared import IItemsCache
 
-def packTankmanSkill(skill):
-    roleIcon = 'noImage.png'
-    if skill.roleType in tankmen.getSkillsConfig():
-        roleIcon = tankmen.getSkillsConfig()[skill.roleType]['icon']
+def packTankmanSkill(skill, isPermanent=False, tankman=None):
+    if skill.roleType in skills_constants.ACTIVE_SKILLS or skill.roleType in skills_constants.ROLES:
+        roleIconPath = Tankman.getRoleSmallIconPath(skill.roleType)
+    else:
+        roleIconPath = ''
     return {'name': skill.name,
      'level': skill.level,
      'userName': skill.userName,
      'description': skill.description,
      'shortDescription': skill.shortDescription,
-     'icon': {'big': '%s/%s' % (skill.ICON_PATH_BIG, skill.icon),
-              'small': '%s/%s' % (skill.ICON_PATH_SMALL, skill.icon),
-              'role': '%s/%s' % (Tankman.ROLE_ICON_PATH_SMALL, roleIcon)},
+     'icon': {'big': skill.bigIconPath,
+              'small': skill.smallIconPath,
+              'role': roleIconPath},
      'isActive': skill.isActive,
      'isEnable': skill.isEnable,
      'roleType': skill.roleType,
-     'isPerk': skill.isPerk}
+     'isPerk': skill.isPerk,
+     'isPermanent': isPermanent}
 
 
-def packTankman(tankman):
+def packTankman(tankman, isCountPermanentSkills=True):
 
-    def vehicleIcon(vDescr, subtype = ''):
-        return _ICONS_MASK % {'type': 'vehicle',
+    def vehicleIcon(vDescr, subtype=''):
+        return ICONS_MASK % {'type': 'vehicle',
          'subtype': subtype,
          'unicName': vDescr.name.replace(':', '-')}
 
     nativeVehicleData = {'typeCompDescr': tankman.vehicleNativeDescr.type.compactDescr,
-     'userName': tankman.vehicleNativeDescr.type.shortUserString,
+     'userName': Vehicle.getShortUserName(tankman.vehicleNativeDescr.type),
      'icon': vehicleIcon(tankman.vehicleNativeDescr),
      'iconContour': vehicleIcon(tankman.vehicleNativeDescr, 'contour/')}
     currentVehicleData = None
     if tankman.isInTank:
         currentVehicleData = {'inventoryID': tankman.vehicleInvID,
          'typeCompDescr': tankman.vehicleDescr.type.compactDescr,
-         'userName': tankman.vehicleDescr.type.shortUserString,
+         'userName': Vehicle.getShortUserName(tankman.vehicleDescr.type),
          'icon': vehicleIcon(tankman.vehicleDescr),
          'iconContour': vehicleIcon(tankman.vehicleDescr, 'contour/')}
+    skills = []
+    td = tankman.descriptor
+    tManFreeSkillsNum = td.freeSkillsNumber
+    startSkillNumber = 0 if isCountPermanentSkills else tManFreeSkillsNum
+    tManSkills = tankman.skills
+    for i in range(startSkillNumber, len(tManSkills)):
+        skills.append(packTankmanSkill(tManSkills[i], isPermanent=True if i < tManFreeSkillsNum else False, tankman=tankman))
+
     return {'strCD': cPickle.dumps(tankman.strCD),
      'inventoryID': tankman.invID,
      'nationID': tankman.nationID,
@@ -48,17 +65,18 @@ def packTankman(tankman):
      'roleName': tankman.descriptor.role,
      'rankUserName': tankman.rankUserName,
      'roleUserName': tankman.roleUserName,
-     'skills': [ packTankmanSkill(skill) for skill in tankman.skills ],
+     'skills': skills,
      'efficiencyRoleLevel': tankman.efficiencyRoleLevel,
      'realRoleLevel': tankman.realRoleLevel,
      'roleLevel': tankman.roleLevel,
-     'icon': {'big': '%s/%s' % (tankman.PORTRAIT_ICON_PATH_BIG, tankman.icon),
-              'small': '%s/%s' % (tankman.PORTRAIT_ICON_PATH_SMALL, tankman.icon),
-              'barracks': '%s/%s' % (tankman.PORTRAIT_ICON_PATH_BARRACKS, tankman.icon)},
-     'iconRole': {'big': '%s/%s' % (tankman.ROLE_ICON_PATH_BIG, tankman.iconRole),
-                  'small': '%s/%s' % (tankman.ROLE_ICON_PATH_SMALL, tankman.iconRole)},
-     'iconRank': {'big': '%s/%s' % (tankman.RANK_ICON_PATH_BIG, tankman.iconRank),
-                  'small': '%s/%s' % (tankman.RANK_ICON_PATH_SMALL, tankman.iconRank)},
+     'icon': {'big': Tankman.getBigIconPath(tankman.nationID, tankman.descriptor.iconID),
+              'small': Tankman.getSmallIconPath(tankman.nationID, tankman.descriptor.iconID),
+              'barracks': Tankman.getBarracksIconPath(tankman.nationID, tankman.descriptor.iconID)},
+     'iconRole': {'big': Tankman.getRoleBigIconPath(tankman.descriptor.role),
+                  'medium': Tankman.getRoleMediumIconPath(tankman.descriptor.role),
+                  'small': Tankman.getRoleSmallIconPath(tankman.descriptor.role)},
+     'iconRank': {'big': Tankman.getRankBigIconPath(tankman.nationID, tankman.descriptor.rankID),
+                  'small': Tankman.getRankSmallIconPath(tankman.nationID, tankman.descriptor.rankID)},
      'isInTank': tankman.isInTank,
      'newSkillsCount': tankman.newSkillCount,
      'nativeVehicle': nativeVehicleData,
@@ -66,12 +84,12 @@ def packTankman(tankman):
 
 
 def packFittingItem(item):
-    return {'buyPrice': item.buyPrice,
-     'defBuyPrice': item.defaultPrice,
-     'actionPrc': item.actionPrc,
-     'sellPrice': item.sellPrice,
-     'defSellPrice': item.defaultSellPrice,
-     'sellActionPrc': item.sellActionPrc,
+    return {'buyPrice': item.buyPrices.itemPrice.price,
+     'defBuyPrice': item.buyPrices.itemPrice.defPrice,
+     'actionPrc': item.buyPrices.itemPrice.getActionPrc(),
+     'sellPrice': item.sellPrices.itemPrice.price,
+     'defSellPrice': item.sellPrices.itemPrice.defPrice,
+     'sellActionPrc': item.sellPrices.itemPrice.getActionPrc(),
      'inventoryCount': item.inventoryCount,
      'isHidden': item.isHidden,
      'isRemovable': item.isRemovable,
@@ -95,12 +113,12 @@ def packShell(shell):
 
 def packVehicle(vehicle):
     result = packFittingItem(vehicle)
-    result.update({'buyPrice': vehicle.buyPrice,
-     'defBuyPrice': vehicle.defaultPrice,
-     'actionPrc': vehicle.actionPrc,
-     'sellPrice': vehicle.sellPrice,
-     'defSellPrice': vehicle.defaultSellPrice,
-     'sellActionPrc': vehicle.sellActionPrc,
+    result.update({'buyPrice': vehicle.buyPrices.itemPrice.price,
+     'defBuyPrice': vehicle.buyPrices.itemPrice.defPrice,
+     'actionPrc': vehicle.buyPrices.itemPrice.getActionPrc(),
+     'sellPrice': vehicle.sellPrices.itemPrice.price,
+     'defSellPrice': vehicle.sellPrices.itemPrice.defPrice,
+     'sellActionPrc': vehicle.sellPrices.itemPrice.getActionPrc(),
      'inventoryCount': vehicle.inventoryCount,
      'isHidden': vehicle.isHidden,
      'isRemovable': vehicle.isRemovable,
@@ -112,12 +130,12 @@ def packVehicle(vehicle):
      'level': vehicle.level,
      'nationID': vehicle.nationID,
      'innationID': vehicle.innationID,
-     'inventoryID': vehicle.inventoryID,
+     'inventoryID': vehicle.invID,
      'xp': vehicle.xp,
      'dailyXPFactor': vehicle.dailyXPFactor,
      'clanLock': vehicle.clanLock,
      'isUnique': vehicle.isUnique,
-     'crew': [ (packTankman(tankman) if tankman else None) for role, tankman in vehicle.crew ],
+     'crew': [ (packTankman(tankman) if tankman else None) for _, tankman in vehicle.crew ],
      'settings': vehicle.settings,
      'lock': vehicle.lock,
      'repairCost': vehicle.repairCost,
@@ -130,8 +148,8 @@ def packVehicle(vehicle):
      'fuelTank': packFittingItem(vehicle.fuelTank),
      'optDevices': [ (packFittingItem(dev) if dev else None) for dev in vehicle.optDevices ],
      'shells': [ (packShell(shell) if shell else None) for shell in vehicle.shells ],
-     'eqs': [ (packFittingItem(eq) if eq else None) for eq in vehicle.eqs ],
-     'eqsLayout': [ (packFittingItem(eq) if eq else None) for eq in vehicle.eqsLayout ],
+     'eqs': [ (packFittingItem(eq) if eq else None) for eq in vehicle.equipment.regularConsumables ],
+     'eqsLayout': [ (packFittingItem(eq) if eq else None) for eq in vehicle.equipmentLayout.regularConsumables ],
      'type': vehicle.type,
      'isPremium': vehicle.isPremium,
      'isElite': vehicle.isElite,
@@ -140,3 +158,100 @@ def packVehicle(vehicle):
      'isBroken': vehicle.isBroken,
      'isAlive': vehicle.isAlive})
     return result
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def packDropSkill(tankman, itemsCache=None):
+    items = itemsCache.items
+    vehicle = items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
+    currentMoney = items.stats.money
+    prices = items.shop.dropSkillsCost.values()
+    trainingCosts = [ Money(credits=price[Currency.CREDITS] or None, gold=price[Currency.GOLD] or None) for price in prices ]
+    defaultCosts = [ Money(credits=price[Currency.CREDITS] or None, gold=price[Currency.GOLD] or None) for price in items.shop.defaults.dropSkillsCost.itervalues() ]
+    states = [ cost <= currentMoney or cost.get(Currency.GOLD) is not None and isIngameShopEnabled() for cost in trainingCosts ]
+    factors = [ price['xpReuseFraction'] for price in prices ]
+    tankmanLevels = [ math.floor(tankman.efficiencyRoleLevel * factor) for factor in factors ]
+    result = [ {'level': '{}%'.format(int(lvl)),
+     'enabled': state,
+     'price': [cost.getCurrency(), cost.getSignValue(cost.getCurrency())],
+     'isMoneyEnough': cost <= currentMoney,
+     'isNativeVehicle': True,
+     'nation': vehicle.nationName,
+     'showAction': cost != defCost} for lvl, state, cost, defCost in zip(tankmanLevels, states, trainingCosts, defaultCosts) ]
+    return result
+
+
+_ButtonData = collections.namedtuple('ButtonData', 'moneyDefault, moneyActual, trainingLevel, state, nativeVehicle')
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def packTraining(vehicle, crew=None, itemsCache=None):
+    items = itemsCache.items
+    currentMoney = items.stats.money
+    trainingCostsActual = items.shop.tankmanCost
+    trainingCostsDefault = items.shop.defaults.tankmanCost
+    if crew is not None:
+        tankmansTrainingData = (_getTrainingButtonsForTankman(trainingCostsActual, trainingCostsDefault, currentMoney, vehicle, tankman) for tankman in crew)
+    else:
+        tankmansTrainingData = (_getTrainingButtonsForTankman(trainingCostsActual, trainingCostsDefault, currentMoney),)
+    result = []
+    for buttons in zip(*tankmansTrainingData):
+        defaultPrice = min((button.moneyDefault for button in buttons))
+        actualPrice = max((button.moneyActual for button in buttons))
+        buttonMinLevel = min((button.trainingLevel for button in buttons))
+        buttonMaxLevel = max((button.trainingLevel for button in buttons))
+        buttonState = any((button.state for button in buttons))
+        allNative = all((button.nativeVehicle for button in buttons))
+        isRange = crew is not None and len(crew) > 1 and buttonMinLevel != buttonMaxLevel
+        currency = actualPrice.getCurrency()
+        price = actualPrice.getSignValue(actualPrice.getCurrency())
+        result.append({'level': _formatLevel(buttonMinLevel, buttonMaxLevel, isRange),
+         'enabled': buttonState,
+         'price': [currency, price],
+         'isMoneyEnough': currentMoney >= actualPrice or currency == Currency.GOLD and isIngameShopEnabled(),
+         'isNativeVehicle': allNative,
+         'nation': vehicle.nationName if vehicle is not None else None,
+         'showAction': actualPrice != defaultPrice})
+
+    return result
+
+
+def _getTrainingButtonsForTankman(costsActual, costsDefault, currentMoney, vehicle=None, tankman=None):
+    ingameShopEnabled = isIngameShopEnabled()
+    trainingButtonsData = []
+    defaults = vehicle is None or tankman is None
+    roleLevel = 0
+    sameVehicle = True
+    sameVehicleType = True
+    if not defaults:
+        roleLevel = tankman.roleLevel
+        sameVehicle = vehicle.intCD == tankman.vehicleNativeDescr.type.compactDescr
+        sameVehicleType = sameVehicle if sameVehicle else vehicle.type == tankman.vehicleNativeType
+    for costActual, costDefault in zip(costsActual, costsDefault):
+        moneyDefault = Money(credits=costDefault[Currency.CREDITS] or None, gold=costDefault[Currency.GOLD] or None)
+        moneyActual = Money(credits=costActual[Currency.CREDITS] or None, gold=costActual[Currency.GOLD] or None)
+        trainingLevel = defaultTrainingLevel = costActual['roleLevel']
+        buttonState = moneyActual <= currentMoney or moneyActual.get(Currency.GOLD) is not None and ingameShopEnabled
+        if not defaults:
+            baseRoleLoss = costActual['baseRoleLoss']
+            classChangeRoleLoss = costActual['classChangeRoleLoss']
+            if sameVehicle:
+                trainingLossMultiplier = 0.0
+            elif sameVehicleType:
+                trainingLossMultiplier = baseRoleLoss
+            else:
+                trainingLossMultiplier = baseRoleLoss + classChangeRoleLoss
+            trainingLevel = roleLevel - roleLevel * trainingLossMultiplier
+            if trainingLevel < defaultTrainingLevel or sameVehicle:
+                trainingLevel = defaultTrainingLevel
+            buttonState = buttonState and (trainingLevel > roleLevel if sameVehicle else trainingLevel >= defaultTrainingLevel)
+        trainingButtonsData.append(_ButtonData(moneyDefault, moneyActual, trainingLevel, buttonState, sameVehicle))
+
+    return trainingButtonsData
+
+
+def _makeMoneyFromTankmanCost(cost):
+    return Money(credits=cost[Currency.CREDITS] or None, gold=cost[Currency.GOLD] or None)
+
+
+def _formatLevel(minLvl, maxLvl, isRange):
+    return '{}-{}%'.format(int(minLvl), int(maxLvl)) if isRange else '{}%'.format(int(maxLvl))

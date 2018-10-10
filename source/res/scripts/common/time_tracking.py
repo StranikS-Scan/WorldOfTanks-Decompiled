@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/time_tracking.py
 from constants import SERVER_TICK_LENGTH
 from debug_utils import LOG_WARNING
@@ -6,7 +7,7 @@ from time import time
 DEFAULT_TIME_LIMIT = 0.02
 DEFAULT_TICK_LENGTH = SERVER_TICK_LENGTH
 
-def LOG_TIME_WARNING(spentTime, context = None, tickLength = DEFAULT_TICK_LENGTH, *args):
+def LOG_TIME_WARNING(spentTime, context=None, tickLength=DEFAULT_TICK_LENGTH, *args):
     percent = round(spentTime / tickLength * 100)
     if context is None:
         context = sys._getframe(1).f_code.co_name
@@ -19,7 +20,7 @@ def LOG_TIME_WARNING(spentTime, context = None, tickLength = DEFAULT_TICK_LENGTH
 
 class TimeTracker(object):
 
-    def __init__(self, context = None, timeLimit = DEFAULT_TIME_LIMIT, tickLength = DEFAULT_TICK_LENGTH):
+    def __init__(self, context=None, timeLimit=DEFAULT_TIME_LIMIT, tickLength=DEFAULT_TICK_LENGTH):
         self.context = context
         self.timeLimit = timeLimit
         self.tickLength = tickLength
@@ -52,7 +53,7 @@ class TimeTracker(object):
         self.checkpoints.append([name, time()])
 
 
-def timetracked(func = None, context = None, timeLimit = DEFAULT_TIME_LIMIT, tickLength = DEFAULT_TICK_LENGTH):
+def timetracked(func=None, context=None, timeLimit=DEFAULT_TIME_LIMIT, tickLength=DEFAULT_TICK_LENGTH):
 
     def decorator(f):
 
@@ -69,7 +70,4 @@ def timetracked(func = None, context = None, timeLimit = DEFAULT_TIME_LIMIT, tic
 
         return wrapper
 
-    if func is not None:
-        return decorator(func)
-    else:
-        return decorator
+    return decorator(func) if func is not None else decorator

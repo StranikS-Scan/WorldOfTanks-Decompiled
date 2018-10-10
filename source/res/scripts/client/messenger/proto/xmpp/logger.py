@@ -1,13 +1,11 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/logger.py
-from collections import deque, defaultdict
-from constants import IS_DEVELOPMENT
-from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR
-from messenger import g_settings
-from messenger.m_constants import PROTO_TYPE
-from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler, ClientHolder
-from messenger.proto.xmpp.gloox_wrapper import LOG_LEVEL, LOG_SOURCE
-from messenger.proto.xmpp.gloox_wrapper import GLOOX_EVENT, SUBSCRIPTION
-from messenger.storage import dyn_storage_getter
+import time
+import BigWorld
+from debug_utils import LOG_CURRENT_EXCEPTION
+from messenger.proto.xmpp.gloox_constants import LOG_LEVEL, LOG_SOURCE, GLOOX_EVENT
+from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler
+from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
 
 class _IEventLogger(object):
 
@@ -18,164 +16,46 @@ class _IEventLogger(object):
         pass
 
 
-class _IInternalLogger(object):
+def _getLogFunction(output, level):
+    if level == LOG_LEVEL.ERROR:
+        logger = output.error
+    elif level == LOG_LEVEL.WARNING:
+        logger = output.warning
+    else:
+        logger = output.debug
+    return logger
 
-    def log(self):
-        pass
 
-    def clear(self):
-        pass
-
-
-class _XMPPStreamLogger(_IEventLogger):
-
-    def __init__(self):
-        super(_XMPPStreamLogger, self).__init__()
-        self.__stream = deque([], 500)
+class _GlooxLogger(_IEventLogger):
 
     def log(self, level, source, message):
         if source in LOG_SOURCE.XML_STREAM:
-            self.__stream.append((source, message))
-
-    def clear(self):
-        self.__stream.clear()
-
-    def tail(self):
-        return self.__stream[-1]
-
-    def all(self, request = None):
-        result = ['XMPPClient::XML. Prints stream to log:']
-        for source, message in self.__stream:
-            if request is None or source == request:
-                result.append(message)
-
-        LOG_DEBUG('\n'.join(result))
-        return
-
-    def flush(self):
-        self.all()
-        self.clear()
-
-
-class _OutStreamLogger(_IEventLogger):
-
-    def __init__(self):
-        super(_OutStreamLogger, self).__init__()
-        self._printers = {LOG_LEVEL.DEBUG: LOG_DEBUG,
-         LOG_LEVEL.WARNING: LOG_WARNING,
-         LOG_LEVEL.ERROR: LOG_ERROR}
-
-    def log(self, level, source, message):
-        if source not in LOG_SOURCE.XML_STREAM:
-            if level in self._printers:
-                printer = self._printers[level]
-            else:
-                printer = LOG_DEBUG
-            printer('XMPPClient::{0}'.format(source), message)
-
-
-class _RosterLogger(_IInternalLogger, ClientHolder):
-
-    @dyn_storage_getter('xmppRoster')
-    def xmppRoster(self):
-        return None
-
-    def log(self, request = None):
-        if g_settings.server.XMPP.isEnabled():
-            client = self.client()
-            if client and client.isConnected():
-                roster = self.xmppRoster
-                result = ['XMPPClient::RosterItemsLog, Client is connected to XMPP. XMPP roster is:']
-                for jid, item in roster.iteritems():
-                    if request is None or request == 'to' and item.subscriptionTo != SUBSCRIPTION.OFF or request == 'from' and item.subscriptionFrom != SUBSCRIPTION.OFF:
-                        result.append(repr(item))
-
-                LOG_DEBUG('\n'.join(result))
-            else:
-                LOG_DEBUG('XMPPClient::RosterItemsLog, client is not connected to XMPP yet. Try to run it command later.')
+            area = CLIENT_LOG_AREA.GLOOX_XML
         else:
-            LOG_DEBUG('XMPPClient::RosterItemsLog, XMPP protocol is disabled.')
-        return
-
-
-class _GroupsLogger(_IInternalLogger, ClientHolder):
-
-    @dyn_storage_getter('xmppRoster')
-    def xmppRoster(self):
-        return None
-
-    def log(self):
-        if g_settings.server.XMPP.isEnabled():
-            client = self.client()
-            if client and client.isConnected():
-                roster = self.xmppRoster
-                result = ['XMPPClient::GroupLog, Client is connected to XMPP. XMPP groups are:']
-                groups = defaultdict(set)
-                for item in roster.itervalues():
-                    if len(item.groups):
-                        contactGroups = item.groups
-                        for group in contactGroups:
-                            groups[group].add('name = {0}, jid = {1}'.format(item.name, item.jid))
-
-                for group, names in sorted(groups.iteritems()):
-                    result.append(group + ':')
-                    result.append('\t\t' + '\n\t\t'.join(names))
-                    result.append('\n')
-
-                LOG_DEBUG('\n'.join(result))
-            else:
-                LOG_DEBUG('XMPPClient::GroupLog, client is not connected to XMPP yet. Try to run it command later.')
-        else:
-            LOG_DEBUG('XMPPClient::GroupLog, XMPP protocol is disabled.')
-
-
-class _SettingsLogger(_IInternalLogger):
-
-    def log(self):
-        LOG_DEBUG('XMPPClient::Settings', g_settings.server.XMPP)
-        LOG_DEBUG('XMPPClient::UseToShowOnline', g_settings.server.useToShowOnline(PROTO_TYPE.XMPP))
-
-
-class _ConnectionLogger(_IInternalLogger, ClientHolder):
-
-    def log(self):
-        if g_settings.server.XMPP.isEnabled():
-            client = self.client()
-            if client and client.isConnected():
-                LOG_DEBUG('XMPPClient::ConnectionLog, client is connected to XMPP', client.getConnectionAddress())
-            else:
-                LOG_DEBUG('XMPPClient::ConnectionLog, client is not connected to XMPP')
-        else:
-            LOG_DEBUG('XMPPClient::ConnectionLog, XMPP protocol is disabled.')
+            area = CLIENT_LOG_AREA.GLOOX_SOURCE
+        logger = _getLogFunction(g_logOutput, level)
+        logger(area, source, message)
 
 
 class LogHandler(ClientEventsHandler):
+    __slots__ = ('__loggers',)
 
     def __init__(self):
         super(LogHandler, self).__init__()
-        self.__eventsLoggers = {'out': _OutStreamLogger()}
-        self.__internalLoggers = {'roster': _RosterLogger(),
-         'groups': _GroupsLogger(),
-         'settings': _SettingsLogger(),
-         'connection': _ConnectionLogger()}
-        if IS_DEVELOPMENT:
-            self.__eventsLoggers['xml'] = _XMPPStreamLogger()
+        self.__loggers = {'out': _GlooxLogger()}
 
-    def event(self, key):
-        if key in self.__eventsLoggers:
-            return self.__eventsLoggers[key]
-        LOG_ERROR('XMPPClient::Log, events logger is not found. Available loggers are', self.__eventsLoggers.keys())
+    def logger(self, key):
+        if key in self.__loggers:
+            return self.__loggers[key]
+        else:
+            g_logOutput.error(CLIENT_LOG_AREA.GENERIC, 'Events logger is not found. Available loggers are', self.__loggers.keys())
+            return None
 
-    def internal(self, key):
-        if key in self.__internalLoggers:
-            return self.__internalLoggers[key]
-        LOG_ERROR('XMPPClient::Log, internal logger is not found. Available loggers are', self.__internalLoggers.keys())
+    def getNames(self):
+        return self.__loggers.keys()
 
     def clear(self):
-        for logger in self.__eventsLoggers.itervalues():
-            logger.clear()
-
-        for logger in self.__internalLoggers.itervalues():
+        for logger in self.__loggers.itervalues():
             logger.clear()
 
     def registerHandlers(self):
@@ -185,8 +65,35 @@ class LogHandler(ClientEventsHandler):
         self.client().unregisterHandler(GLOOX_EVENT.LOG, self.__handleLog)
 
     def __handleLog(self, level, source, message):
-        for logger in self.__eventsLoggers.itervalues():
+        for logger in self.__loggers.itervalues():
             logger.log(level, source, message)
 
     def __repr__(self):
-        return 'LogHandler(id=0x{0:08X}, event({1!r:s}), internal({2!r:s}))'.format(id(self), self.__eventsLoggers.keys(), self.__internalLoggers.keys())
+        return 'LogHandler(id=0x{0:08X}, loggers({1!r:s}))'.format(id(self), self.__loggers.keys())
+
+
+class XMPP_EVENT_LOG(object):
+    DISCONNECT = 1
+
+
+def sendEventToServer(eventType, host, port, errorCode=0, errorDescr='', tries=1):
+    player = BigWorld.player()
+    sender = getattr(player, 'logXMPPEvents', None)
+    if sender is None or not callable(sender) or not player.isPlayer or player.isDestroyed:
+        return
+    else:
+        address = '{0}:{1}'.format(host, port)
+        currentTime = time.time()
+        g_logOutput.debug(CLIENT_LOG_AREA.GENERIC, 'Sends log to server', [eventType,
+         currentTime,
+         errorCode,
+         tries], [address, errorDescr])
+        try:
+            sender([eventType,
+             currentTime,
+             errorCode,
+             tries], [address, errorDescr])
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
+        return

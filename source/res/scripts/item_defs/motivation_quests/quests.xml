@@ -1,0 +1,628 @@
+<quests.xml>
+  <quests>
+    <motiveQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G1	</id>
+      <serverOnly>	true	</serverOnly>
+      <priority>	1	</priority>
+      <name>
+        <key>	#motivation_quests:g1/name	</key>
+      </name>
+      <advice>
+        <key>	#motivation_quests:g1/advice	</key>
+      </advice>
+      <description>
+        <key>	#motivation_quests:g1/description	</key>
+      </description>
+      <requirements>
+        <key>	#motivation_quests:common/requirements	</key>
+      </requirements>
+      <congratulation>
+        <key>	#motivation_quests:common/congratulation	</key>
+      </congratulation>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_access	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <win></win>
+        </postBattle>
+        <common>
+          <battles>
+            <count>	3	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	motivq_b1	</id>
+          <expires>	01.01.2100 00:01	</expires>
+        </token>
+        <equipment>	largeRepairkit	  <count>	1	</count>
+        </equipment>
+        <equipment>	autoExtinguishers	  <count>	1	</count>
+        </equipment>
+        <equipment>	largeMedkit	  <count>	1	</count>
+        </equipment>
+        <goodie>
+          <id>	5023	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </motiveQuest>
+    <motiveQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G2	</id>
+      <serverOnly>	true	</serverOnly>
+      <priority>	2	</priority>
+      <name>
+        <key>	#motivation_quests:g2/name	</key>
+      </name>
+      <advice>
+        <key>	#motivation_quests:g2/advice	</key>
+      </advice>
+      <description>
+        <key>	#motivation_quests:g2/description	</key>
+      </description>
+      <requirements>
+        <key>	#motivation_quests:common/requirements	</key>
+      </requirements>
+      <congratulation>
+        <key>	#motivation_quests:common/congratulation	</key>
+      </congratulation>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_b1	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <vehicleDamage>
+            <classes>	heavyTank	</classes>
+            <greaterOrEqual>	600	</greaterOrEqual>
+          </vehicleDamage>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	motivq_b2_partial	</id>
+          <expires>	01.01.2100 00:01	</expires>
+        </token>
+        <credits>	20000	</credits>
+        <goodie>
+          <id>	6002	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </motiveQuest>
+    <motiveQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G3	</id>
+      <serverOnly>	true	</serverOnly>
+      <priority>	3	</priority>
+      <name>
+        <key>	#motivation_quests:g3/name	</key>
+      </name>
+      <advice>
+        <key>	#motivation_quests:g3/advice	</key>
+      </advice>
+      <description>
+        <key>	#motivation_quests:g3/description	</key>
+      </description>
+      <requirements>
+        <key>	#motivation_quests:common/requirements	</key>
+      </requirements>
+      <congratulation>
+        <key>	#motivation_quests:common/congratulation	</key>
+      </congratulation>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_b1	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <vehicleDamage>
+            <classes>	mediumTank	</classes>
+            <greaterOrEqual>	1000	</greaterOrEqual>
+          </vehicleDamage>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	motivq_b2_partial	</id>
+          <expires>	01.01.2100 00:01	</expires>
+        </token>
+        <credits>	20000	</credits>
+        <goodie>
+          <id>	6003	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </motiveQuest>
+    <motiveQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G4	</id>
+      <serverOnly>	true	</serverOnly>
+      <priority>	4	</priority>
+      <name>
+        <key>	#motivation_quests:g4/name	</key>
+      </name>
+      <advice>
+        <key>	#motivation_quests:g4/advice	</key>
+      </advice>
+      <description>
+        <key>	#motivation_quests:g4/description	</key>
+      </description>
+      <requirements>
+        <key>	#motivation_quests:common/requirements	</key>
+      </requirements>
+      <congratulation>
+        <key>	#motivation_quests:common/congratulation	</key>
+      </congratulation>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_b1	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <vehicleDamage>
+            <classes>	lightTank	</classes>
+            <greaterOrEqual>	1000	</greaterOrEqual>
+          </vehicleDamage>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	motivq_b2_partial	</id>
+          <expires>	01.01.2100 00:01	</expires>
+        </token>
+        <credits>	20000	</credits>
+        <goodie>
+          <id>	5023	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </motiveQuest>
+    <motiveQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G5	</id>
+      <serverOnly>	true	</serverOnly>
+      <priority>	5	</priority>
+      <name>
+        <key>	#motivation_quests:g5/name	</key>
+      </name>
+      <advice>
+        <key>	#motivation_quests:g5/advice	</key>
+      </advice>
+      <description>
+        <key>	#motivation_quests:g5/description	</key>
+      </description>
+      <requirements>
+        <key>	#motivation_quests:common/requirements	</key>
+      </requirements>
+      <congratulation>
+        <key>	#motivation_quests:common/congratulation	</key>
+      </congratulation>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_b1	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <vehicleDamage>
+            <classes>	AT-SPG	</classes>
+            <greaterOrEqual>	1000	</greaterOrEqual>
+          </vehicleDamage>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	motivq_b2_partial	</id>
+          <expires>	01.01.2100 00:01	</expires>
+        </token>
+        <credits>	20000	</credits>
+        <goodie>
+          <id>	6002	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </motiveQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G2_G3_G4_G5_watcher	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_b2_partial	</id>
+              <greaterOrEqual>	4	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	motivq_b2	</id>
+          <expires>	01.01.2100 00:01	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <motiveQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G6	</id>
+      <serverOnly>	true	</serverOnly>
+      <priority>	6	</priority>
+      <name>
+        <key>	#motivation_quests:g6/name	</key>
+      </name>
+      <advice>
+        <key>	#motivation_quests:g6/advice	</key>
+      </advice>
+      <description>
+        <key>	#motivation_quests:g6/description	</key>
+      </description>
+      <requirements>
+        <key>	#motivation_quests:common/requirements	</key>
+      </requirements>
+      <congratulation>
+        <key>	#motivation_quests:common/congratulation	</key>
+      </congratulation>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_b2	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <kills>	5	</kills>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <freeXP>	2000	</freeXP>
+        <token>
+          <id>	motivq_b3_partial	</id>
+          <expires>	01.01.2100 00:01	</expires>
+        </token>
+        <goodie>
+          <id>	6003	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </motiveQuest>
+    <motiveQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G7	</id>
+      <serverOnly>	true	</serverOnly>
+      <priority>	7	</priority>
+      <name>
+        <key>	#motivation_quests:g7/name	</key>
+      </name>
+      <advice>
+        <key>	#motivation_quests:g7/advice	</key>
+      </advice>
+      <description>
+        <key>	#motivation_quests:g7/description	</key>
+      </description>
+      <requirements>
+        <key>	#motivation_quests:common/requirements	</key>
+      </requirements>
+      <congratulation>
+        <key>	#motivation_quests:common/congratulation	</key>
+      </congratulation>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_b2	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <critsCount>	10	</critsCount>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	motivq_b3_partial	</id>
+          <expires>	01.01.2100 00:01	</expires>
+        </token>
+        <goodie>
+          <id>	5038	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </motiveQuest>
+    <motiveQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G8	</id>
+      <serverOnly>	true	</serverOnly>
+      <priority>	8	</priority>
+      <name>
+        <key>	#motivation_quests:g8/name	</key>
+      </name>
+      <advice>
+        <key>	#motivation_quests:g8/advice	</key>
+      </advice>
+      <requirements>
+        <key>	#motivation_quests:common/requirements	</key>
+      </requirements>
+      <congratulation>
+        <key>	#motivation_quests:common/congratulation	</key>
+      </congratulation>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_b2	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	capturePoints	</key>
+              <greaterOrEqual>	10	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	motivq_b3_partial	</id>
+          <expires>	01.01.2100 00:01	</expires>
+        </token>
+        <goodie>
+          <id>	5023	</id>
+          <count>	1	</count>
+        </goodie>
+        <gold>	300	</gold>
+      </bonus>
+    </motiveQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G6_G7_G8_watcher	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_b3_partial	</id>
+              <greaterOrEqual>	3	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	motivq_b3	</id>
+          <expires>	01.01.2100 00:01	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <motiveQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G9	</id>
+      <serverOnly>	true	</serverOnly>
+      <priority>	9	</priority>
+      <name>
+        <key>	#motivation_quests:g9/name	</key>
+      </name>
+      <advice>
+        <key>	#motivation_quests:g9/advice	</key>
+      </advice>
+      <description>
+        <key>	#motivation_quests:g9/description	</key>
+      </description>
+      <requirements>
+        <key>	#motivation_quests:common/requirements	</key>
+      </requirements>
+      <congratulation>
+        <key>	#motivation_quests:common/congratulation	</key>
+      </congratulation>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_b3	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <results>
+            <key>	xp	</key>
+            <max>	5	</max>
+          </results>
+        </postBattle>
+        <common>
+          <battles>
+            <count>	2	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	30000	</credits>
+        <goodie>
+          <id>	5031	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </motiveQuest>
+    <motiveQuest>
+      <enabled>	true	</enabled>
+      <id>	motivation_G10	</id>
+      <serverOnly>	true	</serverOnly>
+      <priority>	10	</priority>
+      <name>
+        <key>	#motivation_quests:g10/name	</key>
+      </name>
+      <advice>
+        <key>	#motivation_quests:g10/advice	</key>
+      </advice>
+      <description>
+        <key>	#motivation_quests:g10/description	</key>
+      </description>
+      <requirements>
+        <key>	#motivation_quests:common/requirements	</key>
+      </requirements>
+      <congratulation>
+        <key>	#motivation_quests:common/congratulation	</key>
+      </congratulation>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	motivq_b3	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <results>
+            <max>	5	</max>
+            <key>	damageDealt	</key>
+          </results>
+        </postBattle>
+        <common>
+          <battles>
+            <count>	2	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	30000	</credits>
+        <goodie>
+          <id>	5022	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </motiveQuest>
+  </quests>
+</quests.xml>

@@ -1,0 +1,59 @@
+<customization.xml>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <armorColor>	15 36 36 0	</armorColor>
+  <inscriptions>
+    <france>
+      <userString>	#vehicle_customization:inscription/historical	</userString>
+      <priceFactor>	1.0	</priceFactor>
+      <inscriptions></inscriptions>
+    </france>
+  </inscriptions>
+  <insigniaOnGun>
+    <insignia>
+      <id>	1	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_italian_1.dds	</texName>
+    </insignia>
+    <insignia>
+      <id>	2	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_italian_2.dds	</texName>
+    </insignia>
+    <insignia>
+      <id>	3	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_italian_3.dds	</texName>
+    </insignia>
+  </insigniaOnGun>
+  <camouflageGroups>
+    <winter>
+      <userString>	#vehicle_customization:camouflage/winter	</userString>
+    </winter>
+    <summer>
+      <userString>	#vehicle_customization:camouflage/summer	</userString>
+    </summer>
+    <desert>
+      <userString>	#vehicle_customization:camouflage/desert	</userString>
+    </desert>
+    <IGRwinter>
+      <userString>	#vehicle_customization:camouflage/winter	</userString>
+      <igrType>	2	</igrType>
+    </IGRwinter>
+    <IGRsummer>
+      <userString>	#vehicle_customization:camouflage/summer	</userString>
+      <igrType>	2	</igrType>
+    </IGRsummer>
+    <IGRdesert>
+      <userString>	#vehicle_customization:camouflage/desert	</userString>
+      <igrType>	2	</igrType>
+    </IGRdesert>
+  </camouflageGroups>
+  <camouflages></camouflages>
+</customization.xml>

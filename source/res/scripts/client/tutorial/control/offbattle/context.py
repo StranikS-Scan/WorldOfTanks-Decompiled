@@ -1,12 +1,11 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/offbattle/context.py
-import BigWorld
-from AccountCommands import RES_SUCCESS
-from constants import FINISH_REASON, IS_TUTORIAL_ENABLED
-import dossiers2
+from constants import FINISH_REASON
+from gui.shared.utils import isPopupsWindowsOpenDisabled
 from tutorial import doc_loader
-from tutorial.control import context
+from tutorial.control import context, getServerSettings, game_vars
 from tutorial.control.battle.context import ExtendedBattleClientCtx
-from tutorial.control.context import GlobalStorage, GLOBAL_FLAG, GLOBAL_VAR
+from tutorial.control.context import GLOBAL_FLAG
 from tutorial.control.lobby.context import LobbyBonusesRequester
 from tutorial.logger import LOG_ERROR
 from tutorial.settings import TUTORIAL_SETTINGS, PLAYER_XP_LEVEL
@@ -18,109 +17,91 @@ class OffBattleClientCtx(ExtendedBattleClientCtx):
         return cls.makeCtx(cache.getLocalCtx())
 
 
-def _getBattleDescriptor():
-    return doc_loader.loadDescriptorData(TUTORIAL_SETTINGS.BATTLE.descriptorPath)
+def getBattleDescriptor():
+    return doc_loader.loadDescriptorData(TUTORIAL_SETTINGS.BATTLE_V2)
 
 
 class OffbattleStartReqs(context.StartReqs):
 
-    def isEnabled(self):
-        isTutorialEnabled = IS_TUTORIAL_ENABLED
-        player = BigWorld.player()
-        if player is not None:
-            serverSettings = getattr(player, 'serverSettings', {})
-            if 'isTutorialEnabled' in serverSettings:
-                isTutorialEnabled = serverSettings['isTutorialEnabled']
-        return (not self._ctx.cache.isFinished() or self._ctx.restart) and isTutorialEnabled
+    def prepare(self, ctx):
+        ctx.bonusCompleted = game_vars.getTutorialsCompleted()
+        ctx.battlesCount = game_vars.getRandomBattlesCount()
+        ctx.newbieBattlesCount = getServerSettings().get('newbieBattlesCount', 0)
 
-    def process(self):
-        BigWorld.player().stats.get('tutorialsCompleted', self.__cb_onGetTutorialsCompleted)
+    def process(self, descriptor, ctx):
+        if ctx.cache.isFinished() and not ctx.restart:
+            return False
+        popupsWindowsDisabled = isPopupsWindowsOpenDisabled()
+        if not ctx.byRequest and popupsWindowsDisabled:
+            ctx.cache.setStartOnNextLogin(False)
+            ctx.cache.setRefused(True).write()
+            return False
+        self.__validateFinishReason(ctx)
+        return self.__validateTutorialState(ctx) if self.__validateTutorialsCompleted(ctx, descriptor) else self.__validateBattleCount(descriptor, ctx)
 
-    def __cb_onGetTutorialsCompleted(self, resultID, completed):
-        ctx = self._ctx
-        loader = self._loader
-        tutorial = loader.tutorial
-        if resultID < RES_SUCCESS:
-            LOG_ERROR('Server return error on request tutorialsCompleted', resultID, completed)
-            loader._clear()
-            self._clear()
-            return
-        else:
-            ctx.bonusCompleted = completed
-            cache = ctx.cache
-            battleDesc = _getBattleDescriptor()
-            if battleDesc is None:
-                LOG_ERROR('Battle tutorial is not defined.')
-                loader._clear()
-                self._clear()
-                return
-            finishReason = OffBattleClientCtx.fetch(cache).finishReason
-            isHistory = GlobalStorage(GLOBAL_FLAG.SHOW_HISTORY, False).value()
-            if isHistory or not cache.isRefused() and loader.isAfterBattle and finishReason not in [-1, FINISH_REASON.FAILURE]:
-                cache.setAfterBattle(True)
-            else:
-                cache.setAfterBattle(False)
-            if not battleDesc.areAllBonusesReceived(completed):
-                if cache.getPlayerXPLevel() == PLAYER_XP_LEVEL.NEWBIE:
-                    BigWorld.player().stats.get('dossier', self.__cb_onGetDossier)
-                else:
-                    self._clear()
-                    self._resolveTutorialState(loader, ctx)
-            else:
-                cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
-                self._clear()
-                self._resolveTutorialState(loader, ctx)
-            return
-
-    def __cb_onGetDossier(self, resultID, dossierCD):
-        loader, ctx = self._flush()
+    def __validateFinishReason(self, ctx):
         cache = ctx.cache
-        tutorial = loader.tutorial
-        if resultID < RES_SUCCESS:
-            LOG_ERROR('Server return error on request dossier', resultID, dossierCD)
-            loader._clear()
-            return
+        finishReason = OffBattleClientCtx.fetch(cache).finishReason
+        if GLOBAL_FLAG.SHOW_HISTORY in ctx.globalFlags:
+            isHistory = ctx.globalFlags[GLOBAL_FLAG.SHOW_HISTORY]
         else:
-            dossierDescr = dossiers2.getAccountDossierDescr(dossierCD)
-            battlesCount = dossierDescr['a15x15']['battlesCount']
-            threshold = BigWorld.player().serverSettings.get('newbieBattlesCount', 0)
-            if battlesCount < threshold:
-                descriptor = tutorial._descriptor
-                chapter = descriptor.getChapter(descriptor.getInitialChapterID())
-                isShowGreeting = chapter is None or not chapter.isBonusReceived(ctx.bonusCompleted)
-                if chapter is None or not chapter.isBonusReceived(ctx.bonusCompleted):
-                    loader._doRun(ctx)
-                else:
-                    self._resolveTutorialState(loader, ctx)
-            else:
-                cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
-                self._resolveTutorialState(loader, ctx)
-            return
+            isHistory = False
+        if isHistory or not cache.isRefused() and ctx.isAfterBattle and finishReason not in (-1, FINISH_REASON.FAILURE):
+            cache.setAfterBattle(True)
+        else:
+            cache.setAfterBattle(False)
 
-    def _resolveTutorialState(self, loader, ctx):
+    def __validateTutorialsCompleted(self, ctx, descriptor):
         cache = ctx.cache
-        tutorial = loader.tutorial
-        if cache.isRefused():
-            if ctx.restart and not ctx.isInPrebattle:
-                tutorial.restart(ctx)
-            else:
-                tutorial.pause(ctx)
-            return
-        if cache.isAfterBattle():
-            loader._doRun(ctx)
+        battleDesc = getBattleDescriptor()
+        if battleDesc is None:
+            LOG_ERROR('Battle tutorial is not defined.')
+            return False
         else:
-            tutorial.pause(ctx)
+            received = battleDesc.areAllBonusesReceived(ctx.bonusCompleted)
+            ctx.globalFlags[GLOBAL_FLAG.ALL_BONUSES_RECEIVED] = received
+            if not received:
+                return cache.getPlayerXPLevel() != PLAYER_XP_LEVEL.NEWBIE
+            cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
+            if cache.wasReset():
+                cache.setRefused(True)
+            return True
+
+    def __validateBattleCount(self, descriptor, ctx):
+        if ctx.battlesCount < ctx.newbieBattlesCount:
+            chapter = descriptor.getChapter(descriptor.getInitialChapterID())
+            if chapter is None or not chapter.isBonusReceived(ctx.bonusCompleted):
+                return True
+            return self.__validateTutorialState(ctx)
+        else:
+            ctx.cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
+            return self.__validateTutorialState(ctx)
+
+    def __validateTutorialState(self, ctx):
+        cache = ctx.cache
+        if ctx.restart:
+            return True
+        if not ctx.isFirstStart and not cache.isAfterBattle() and not ctx.restart:
             cache.setRefused(True).write()
+            return False
+        if cache.isRefused():
+            received = ctx.globalFlags[GLOBAL_FLAG.ALL_BONUSES_RECEIVED]
+            if not received and not ctx.isAfterBattle and cache.doStartOnNextLogin():
+                cache.setRefused(False).write()
+                return True
+            return False
+        if cache.isAfterBattle():
+            return True
+        result = not ctx.isAfterBattle and cache.doStartOnNextLogin()
+        cache.setRefused(not result).write()
+        return result
 
 
 class OffbattleBonusesRequester(LobbyBonusesRequester):
 
-    def __init__(self, completed, chapter = None):
+    def __init__(self, completed, chapter=None):
         super(OffbattleBonusesRequester, self).__init__(completed)
         self.__chapter = chapter
 
-    def getChapter(self, chapterID = None):
-        if self.__chapter is not None:
-            return self.__chapter
-        else:
-            return self._data
+    def getChapter(self, chapterID=None):
+        return self.__chapter if self.__chapter is not None else self._data

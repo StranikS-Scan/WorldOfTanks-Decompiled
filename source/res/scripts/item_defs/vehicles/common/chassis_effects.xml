@@ -1,0 +1,424 @@
+<chassis_effects.xml>
+  <decals>
+    <bufferPrefs>
+      <smallTank>
+        <lifeTime>	3	</lifeTime>
+        <trianglesCount>	10000	</trianglesCount>
+      </smallTank>
+      <mediumTank>
+        <lifeTime>	4	</lifeTime>
+        <trianglesCount>	10000	</trianglesCount>
+      </mediumTank>
+      <largeTank>
+        <lifeTime>	5	</lifeTime>
+        <trianglesCount>	10000	</trianglesCount>
+      </largeTank>
+    </bufferPrefs>
+    <scales>
+      <default>
+        <scaleU>	1	</scaleU>
+      </default>
+      <snow>
+        <scaleU>	1	</scaleU>
+      </snow>
+      <sand>
+        <scaleU>	1.5	</scaleU>
+      </sand>
+      <stone>
+        <scaleU>	1	</scaleU>
+      </stone>
+    </scales>
+    <textureSets>
+      <ussr_01>
+        <default>
+          <AM>	maps/fx/ussr03_ground_AM.dds	</AM>
+          <ANM>	maps/fx/ussr03_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/ussr03_snow_AM.dds	</AM>
+          <ANM>	maps/fx/ussr03_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/ussr03_sand_AM.dds	</AM>
+          <ANM>	maps/fx/ussr03_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/ussr03_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </ussr_01>
+      <ussr_02>
+        <default>
+          <AM>	maps/fx/ussr02_ground_AM.dds	</AM>
+          <ANM>	maps/fx/ussr02_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/ussr02_snow_AM.dds	</AM>
+          <ANM>	maps/fx/ussr02_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/ussr02_sand_AM.dds	</AM>
+          <ANM>	maps/fx/ussr02_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/ussr02_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </ussr_02>
+      <ussr_R124>
+        <default>
+          <AM>	maps/fx/R124_ground_AM.dds	</AM>
+          <ANM>	maps/fx/R124_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/R124_snow_AM.dds	</AM>
+          <ANM>	maps/fx/R124_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/R124_sand_AM.dds	</AM>
+          <ANM>	maps/fx/R124_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/R124_stone_AM.dds	</AM>
+          <ANM>	maps/fx/R124_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </ussr_R124>
+      <ussr_R11>
+        <default>
+          <AM>	maps/fx/R11_ground_AM.dds	</AM>
+          <ANM>	maps/fx/R11_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/R11_snow_AM.dds	</AM>
+          <ANM>	maps/fx/R11_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/R11_sand_AM.dds	</AM>
+          <ANM>	maps/fx/R11_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/R11_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </ussr_R11>
+      <germany_01>
+        <default>
+          <AM>	maps/fx/german01_ground_AM.dds	</AM>
+          <ANM>	maps/fx/german01_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/german01_snow_AM.dds	</AM>
+          <ANM>	maps/fx/german01_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/german01_sand_AM.dds	</AM>
+          <ANM>	maps/fx/german01_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/german01_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </germany_01>
+      <germany_02>
+        <default>
+          <AM>	maps/fx/german02_ground_AM.dds	</AM>
+          <ANM>	maps/fx/german02_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/german02_snow_AM.dds	</AM>
+          <ANM>	maps/fx/german02_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/german02_sand_AM.dds	</AM>
+          <ANM>	maps/fx/german02_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/german02_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </germany_02>
+      <germany_typ_205>
+        <default>
+          <AM>	maps/fx/Typ_205_ground_AM.dds	</AM>
+          <ANM>	maps/fx/Typ_205_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/Typ_205_snow_AM.dds	</AM>
+          <ANM>	maps/fx/Typ_205_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/Typ_205_sand_AM.dds	</AM>
+          <ANM>	maps/fx/Typ_205_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/Typ_205_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </germany_typ_205>
+      <usa_01>
+        <default>
+          <AM>	maps/fx/usa01_ground_AM.dds	</AM>
+          <ANM>	maps/fx/usa01_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/usa01_snow_AM.dds	</AM>
+          <ANM>	maps/fx/usa01_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/usa01_sand_AM.dds	</AM>
+          <ANM>	maps/fx/usa01_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/usa01_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </usa_01>
+      <usa_02>
+        <default>
+          <AM>	maps/fx/usa02_ground_AM.dds	</AM>
+          <ANM>	maps/fx/usa02_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/usa02_snow_AM.dds	</AM>
+          <ANM>	maps/fx/usa02_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/usa02_sand_AM.dds	</AM>
+          <ANM>	maps/fx/usa02_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/usa02_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </usa_02>
+      <usa_03>
+        <default>
+          <AM>	maps/fx/usa03_right_ground_AM.dds  ;  maps/fx/usa03_left_ground_AM.dds	</AM>
+          <ANM>	maps/fx/usa03_right_ground_snow_NM.dds ;  maps/fx/usa03_left_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/usa03_right_snow_AM.dds  ;   maps/fx/usa03_left_snow_AM.dds	</AM>
+          <ANM>	maps/fx/usa03_right_ground_snow_NM.dds  ;  maps/fx/usa03_left_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/usa03_right_sand_AM.dds    ;   maps/fx/usa03_left_sand_AM.dds	</AM>
+          <ANM>	maps/fx/usa03_right_sand_NM.dds    ;   maps/fx/usa03_left_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/usa03_right_stone_AM.dds   ;  maps/fx/usa03_left_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds   ;  maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </usa_03>
+      <usa_04>
+        <default>
+          <AM>	maps/fx/usa04_ground_AM.dds	</AM>
+          <ANM>	maps/fx/usa04_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/usa04_snow_AM.dds	</AM>
+          <ANM>	maps/fx/usa04_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/usa04_sand_AM.dds	</AM>
+          <ANM>	maps/fx/usa04_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/usa04_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </usa_04>
+      <usa_a23>
+        <default>
+          <AM>	maps/fx/A23_ground_AM.dds	</AM>
+          <ANM>	maps/fx/A23_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/A23_snow_AM.dds	</AM>
+          <ANM>	maps/fx/A23_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/A23_sand_AM.dds	</AM>
+          <ANM>	maps/fx/A23_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/A23_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </usa_a23>
+      <usa_T95>
+        <default>
+          <AM>	maps/fx/usaT95_ground_AM.dds	</AM>
+          <ANM>	maps/fx/usaT95_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/usaT95_snow_AM.dds	</AM>
+          <ANM>	maps/fx/usaT95_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/usaT95_sand_AM.dds	</AM>
+          <ANM>	maps/fx/usaT95_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/usaT95_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </usa_T95>
+      <gb_24>
+        <default>
+          <AM>	maps/fx/GB24_ground_AM.dds	</AM>
+          <ANM>	maps/fx/GB24_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/GB24_snow_AM.dds	</AM>
+          <ANM>	maps/fx/GB24_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/GB24_sand_AM.dds	</AM>
+          <ANM>	maps/fx/GB24_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/GB24_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </gb_24>
+      <t97>
+        <default>
+          <AM>	maps/fx/T97_ground_AM.dds	</AM>
+          <ANM>	maps/fx/T97_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_ground_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_ground_NM.dds	</STRAFE_ANM>
+        </default>
+        <snow>
+          <AM>	maps/fx/T97_snow_AM.dds	</AM>
+          <ANM>	maps/fx/T97_ground_snow_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_snow_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_snow_NM.dds	</STRAFE_ANM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/T97_sand_AM.dds	</AM>
+          <ANM>	maps/fx/T97_sand_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_sand_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_sand_NM.dds	</STRAFE_ANM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/T97_stone_AM.dds	</AM>
+          <ANM>	maps/fx/unified_stone_NM.dds	</ANM>
+          <STRAFE_AM>	maps/fx/track_strafe_stone_AM.dds	</STRAFE_AM>
+          <STRAFE_ANM>	maps/fx/track_strafe_stone_NM.dds	</STRAFE_ANM>
+        </stone>
+      </t97>
+    </textureSets>
+  </decals>
+</chassis_effects.xml>

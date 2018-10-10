@@ -1,16 +1,15 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicles_check.py
-import BigWorld
 from items import vehicles
-from debug_utils import *
 import Math
 import ResMgr
 EPSILON = 0.001
 
 def check(*vehicleNames):
-    if len(vehicleNames) == 0:
+    if not vehicleNames:
         for nationID in (0, 1):
-            for id in vehicles.g_list.getList(nationID).keys():
-                _vehicleCheck(vehicles.g_cache.vehicle(nationID, id))
+            for vID in vehicles.g_list.getList(nationID).keys():
+                _vehicleCheck(vehicles.g_cache.vehicle(nationID, vID))
 
     else:
         for name in vehicleNames:
@@ -23,11 +22,13 @@ def _vehicleCheck(vehType):
     tank = vehType.name
     for state in ('undamaged', 'destroyed', 'exploded'):
         for chassis in vehType.chassis:
-            _parameterCheck(chassis['hullPosition'], chassis['models'][state], ('Scene Root', 'Tank', 'V'), 'hullPosition', tank, chassis['name'])
+            _parameterCheck(chassis.hullPosition, chassis.models[state], ('Scene Root', 'Tank', 'V'), 'hullPosition', tank, chassis.name)
 
-        _parameterCheck(vehType.hull['turretPositions'][0], vehType.hull['models'][state], ('Scene Root', 'HP_turretJoint'), 'turretPosition', tank, 'hull')
+        for hull in vehType.hulls:
+            _parameterCheck(hull.turretPositions[0], hull.models[state], ('Scene Root', hull.turretHardPoints[0]), 'turretPosition', tank, 'hull')
+
         for turret in vehType.turrets[0]:
-            _parameterCheck(turret['gunPosition'], turret['models'][state], ('Scene Root', 'HP_gunJoint'), 'gunPosition', tank, turret['name'])
+            _parameterCheck(turret.gunPosition, turret.models[state], ('Scene Root', 'HP_gunJoint'), 'gunPosition', tank, turret.name)
 
 
 def _parameterCheck(pos, modelPath, nodes, parameter, tank, comp):

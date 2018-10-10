@@ -1,0 +1,61 @@
+<19_monastery.xml>
+  <name>	#arenas:19_monastery/name	</name>
+  <description>	#arenas:19_monastery/description	</description>
+  <geometry>	spaces/19_monastery	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/19_monastery/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_abbey_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_abbey_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_abbey_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_abbey_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_abbey_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_abbey_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	env_Mountain.bnk	</bank>
+    </loadBanks>
+  </soundRemapping>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	20.061766 -387.906860	</position1>
+        </team1>
+        <team2>
+          <position1>	-0.393303 397.375824	</position1>
+        </team2>
+      </teamBasePositions>
+      <artilleryPreparationChance>	0.6	</artilleryPreparationChance>
+    </ctf>
+    <bootcamp>
+      <wwmusicSetup>
+        <wwmusicLoading>	bc_music_loadingscreen	</wwmusicLoading>
+        <wwmusicIntensive>	bc_music_mission_02	</wwmusicIntensive>
+        <wwmusicRelaxed>	bc_music_mission_02	</wwmusicRelaxed>
+        <wwmusicStop>	music_dron_stop	</wwmusicStop>
+        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+        <wwmusicResultWin>	music_abbey_result_win	</wwmusicResultWin>
+        <wwmusicResultDrawn>	music_abbey_result_drawn	</wwmusicResultDrawn>
+        <wwmusicResultDefeat>	music_abbey_result_defeat	</wwmusicResultDefeat>
+      </wwmusicSetup>
+      <boundingBox>
+        <bottomLeft>	-50.000000 -500.000000	</bottomLeft>
+        <upperRight>	150.000000 500.000000	</upperRight>
+      </boundingBox>
+      <maxPlayersInTeam>	1	</maxPlayersInTeam>
+      <runDelay>	5	</runDelay>
+    </bootcamp>
+  </gameplayTypes>
+</19_monastery.xml>

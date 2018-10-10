@@ -1,19 +1,20 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/invites.py
-from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_INVITE_STATE
+from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
 from constants import QUEUE_TYPE_NAMES
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.INVITES import INVITES as I18N_INVITES
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.prb_control.formatters import getBattleSessionStartTimeString
-from gui.prb_control.prb_helpers import prbInvitesProperty
-from gui.prb_control.prb_helpers import prbDispatcherProperty
-from gui.prb_control.prb_helpers import prbAutoInvitesProperty
-from helpers import i18n
+from gui.prb_control import prbDispatcherProperty, prbAutoInvitesProperty, prbInvitesProperty
+from gui.prb_control.settings import PRB_INVITE_STATE
+from helpers import dependency
+from helpers import i18n, html
 from messenger.ext import passCensor
+from skeletons.gui.lobby_context import ILobbyContext
 
-def getPrbName(prbType, lowercase = False):
+def getPrbName(prbType, lowercase=False):
     try:
         prbName = PREBATTLE_TYPE_NAMES[prbType]
         if lowercase:
@@ -25,7 +26,7 @@ def getPrbName(prbType, lowercase = False):
     return prbName
 
 
-def getPreQueueName(queueType, lowercase = False):
+def getPreQueueName(queueType, lowercase=False):
     try:
         queueName = QUEUE_TYPE_NAMES[queueType]
         if lowercase:
@@ -37,11 +38,9 @@ def getPreQueueName(queueType, lowercase = False):
     return queueName
 
 
-PREBATTLE_INVITE_STATE_NAMES = dict([ (v, k) for k, v in PREBATTLE_INVITE_STATE.__dict__.iteritems() if not k.startswith('_') ])
-
 def getPrbInviteStateName(state):
     try:
-        stateName = PREBATTLE_INVITE_STATE_NAMES[state]
+        stateName = PRB_INVITE_STATE.getKeyByValue(state)
     except KeyError:
         LOG_ERROR('State of prebattle invite not found', state)
         stateName = 'N/A'
@@ -49,14 +48,18 @@ def getPrbInviteStateName(state):
     return stateName
 
 
-def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive = True, isAlreadyJoined = False):
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive=True, isAlreadyJoined=False, lobbyContext=None):
     key, kwargs = None, {}
-    isAnotherPeriphery = g_lobbyContext.isAnotherPeriphery(peripheryID)
+    if lobbyContext is not None:
+        isAnotherPeriphery = lobbyContext.isAnotherPeriphery(peripheryID)
+    else:
+        isAnotherPeriphery = False
     if isInviteActive:
         if isAlreadyJoined:
             key = I18N_INVITES.invites_prebattle_alreadyjoined(getPrbName(prbType))
         elif isAnotherPeriphery:
-            host = g_lobbyContext.getPeripheryName(peripheryID)
+            host = lobbyContext.getPeripheryName(peripheryID)
             if host:
                 key = I18N_INVITES.invites_prebattle_acceptnotallowed('otherPeriphery')
                 kwargs = {'host': host}
@@ -69,11 +72,15 @@ def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive = True, isAlrea
     return text
 
 
-def getLeaveOrChangeText(funcState, invitePrbType, peripheryID):
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=None):
     key, kwargs = None, {}
-    isAnotherPeriphery = g_lobbyContext.isAnotherPeriphery(peripheryID)
+    if lobbyContext is not None:
+        isAnotherPeriphery = lobbyContext.isAnotherPeriphery(peripheryID)
+    else:
+        isAnotherPeriphery = False
     if funcState.doLeaveToAcceptInvite(invitePrbType):
-        if funcState.isInPrebattle() or funcState.isInUnit():
+        if funcState.isInLegacy() or funcState.isInUnit():
             entityName = getPrbName(funcState.entityTypeID)
         elif funcState.isInPreQueue():
             entityName = getPreQueueName(funcState.entityTypeID)
@@ -82,12 +89,12 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID):
             return ''
         if isAnotherPeriphery:
             key = I18N_INVITES.invites_note_change_and_leave(entityName)
-            kwargs = {'host': g_lobbyContext.getPeripheryName(peripheryID) or ''}
+            kwargs = {'host': lobbyContext.getPeripheryName(peripheryID) or ''}
         else:
             key = I18N_INVITES.invites_note_leave(entityName)
     elif isAnotherPeriphery:
         key = I18N_INVITES.INVITES_NOTE_SERVER_CHANGE
-        kwargs = {'host': g_lobbyContext.getPeripheryName(peripheryID) or ''}
+        kwargs = {'host': lobbyContext.getPeripheryName(peripheryID) or ''}
     if key:
         text = i18n.makeString(key, **kwargs)
     else:
@@ -98,14 +105,14 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID):
 class InviteFormatter(object):
 
     def getCtx(self, invite):
-        return {'sender': invite.creatorFullName,
+        return {'sender': invite.senderFullName,
          'receiver': invite.receiverFullName}
 
     def getNote(self, invite):
-        return ''
+        pass
 
     def getText(self, invite):
-        return ''
+        pass
 
 
 class PrbInviteHtmlTextFormatter(InviteFormatter):
@@ -118,26 +125,33 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
     def prbInvites(self):
         return None
 
+    def getIconName(self, invite):
+        return '{0:>s}InviteIcon'.format(getPrbName(invite.type, True))
+
     def getTitle(self, invite):
-        return makeHtmlString('html_templates:lobby/prebattle', 'inviteTitle', ctx={'sender': invite.creatorFullName}, sourceKey=getPrbName(invite.type))
+        if invite.senderFullName:
+            creatorName = makeHtmlString('html_templates:lobby/prebattle', 'inviteTitleCreatorName', ctx={'name': invite.senderFullName})
+        else:
+            creatorName = ''
+        return makeHtmlString('html_templates:lobby/prebattle', 'inviteTitle', ctx={'sender': creatorName}, sourceKey=getPrbName(invite.type))
 
     def getComment(self, invite):
         comment = passCensor(invite.comment)
-        if not comment:
-            return ''
-        return makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': i18n.makeString(I18N_INVITES.INVITES_COMMENT, comment=comment)})
+        return '' if not comment else makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': i18n.makeString(I18N_INVITES.INVITES_COMMENT, comment=html.escape(comment))})
 
     def getNote(self, invite):
+        note = ''
         if self.prbInvites.canAcceptInvite(invite):
-            note = getLeaveOrChangeText(self.prbDispatcher.getFunctionalState(), invite.type, invite.peripheryID)
+            if self.prbDispatcher:
+                note = getLeaveOrChangeText(self.prbDispatcher.getFunctionalState(), invite.type, invite.peripheryID)
         else:
             note = getAcceptNotAllowedText(invite.type, invite.peripheryID, invite.isActive(), invite.alreadyJoined)
-        if len(note):
+        if note:
             note = makeHtmlString('html_templates:lobby/prebattle', 'inviteNote', {'note': note})
         return note
 
     def getState(self, invite):
-        key = I18N_INVITES.invites_state(getPrbInviteStateName(invite.state))
+        key = I18N_INVITES.invites_state(getPrbInviteStateName(invite.getState()))
         if not key:
             return ''
         state = i18n.makeString(key)
@@ -148,18 +162,29 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
     def getText(self, invite):
         result = []
         text = self.getTitle(invite)
-        if len(text):
+        if text:
             result.append(text)
         text = self.getComment(invite)
-        if len(text):
+        if text:
             result.append(text)
         text = self.getNote(invite)
-        if len(text):
+        if text:
             result.append(text)
         text = self.getState(invite)
-        if len(text):
+        if text:
             result.append(text)
         return ''.join(result)
+
+
+class PrbExternalBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
+
+    def getComment(self, invite):
+        comment = passCensor(invite.comment)
+        return '' if not comment else makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': html.escape(comment)})
+
+
+def getPrbInviteHtmlFormatter(invite):
+    return PrbExternalBattleInviteHtmlTextFormatter() if invite.type == PREBATTLE_TYPE.EXTERNAL else PrbInviteHtmlTextFormatter()
 
 
 class PrbInviteTitleFormatter(InviteFormatter):
@@ -179,8 +204,10 @@ class AutoInviteTextFormatter(InviteFormatter):
         return None
 
     def getNote(self, invite):
+        note = ''
         if self.prbAutoInvites.canAcceptInvite(invite):
-            note = getLeaveOrChangeText(self.prbDispatcher.getFunctionalState(), invite.prbType, invite.peripheryID)
+            if self.prbAutoInvites:
+                note = getLeaveOrChangeText(self.prbDispatcher.getFunctionalState(), invite.prbType, invite.peripheryID)
         else:
             note = getAcceptNotAllowedText(invite.prbType, invite.peripheryID)
         return note

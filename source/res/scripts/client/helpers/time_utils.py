@@ -1,14 +1,27 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/time_utils.py
+import re
+import calendar
+import datetime
 import time
 import BigWorld
-import datetime
-import calendar
-from debug_utils import *
+from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers import i18n
+from soft_exception import SoftException
+DAYS_IN_YEAR = 365
+HOURS_IN_DAY = 24
 ONE_MINUTE = 60
+QUARTER = 15
+QUARTER_HOUR = QUARTER * ONE_MINUTE
+THREE_QUARTER_HOUR = 3 * QUARTER * ONE_MINUTE
 ONE_HOUR = 60 * ONE_MINUTE
-ONE_DAY = 24 * ONE_HOUR
+ONE_DAY = HOURS_IN_DAY * ONE_HOUR
+ONE_WEEK = 7 * ONE_DAY
 HALF_YEAR = 183 * ONE_DAY
+ONE_YEAR = DAYS_IN_YEAR * ONE_DAY
+WEEK_START = 1
+WEEK_END = 7
+WHOLE_DAY_INTERVAL = (1, ONE_DAY)
 
 class _TimeCorrector(object):
 
@@ -27,14 +40,14 @@ class _TimeCorrector(object):
 
     @property
     def serverRegionalTime(self):
-        regionalSecondsOffset = 0
+        regionalNewDayUTC = 0
         try:
             serverRegionalSettings = BigWorld.player().serverSettings['regional_settings']
-            regionalSecondsOffset = serverRegionalSettings['starting_time_of_a_new_day']
+            regionalNewDayUTC = serverRegionalSettings['starting_time_of_a_new_day']
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
-        return _g_instance.serverUTCTime + regionalSecondsOffset
+        return _g_instance.serverUTCTime - regionalNewDayUTC
 
 
 _g_instance = _TimeCorrector()
@@ -44,29 +57,36 @@ def setTimeCorrection(serverUTCTime):
 
 
 def makeLocalServerTime(serverTime):
-    if serverTime:
-        return serverTime - _g_instance.timeCorrection
-    else:
-        return None
+    return max(0, serverTime - _g_instance.timeCorrection) if serverTime else None
 
 
 def makeLocalServerDatetime(serverDatetime):
-    if isinstance(serverDatetime, datetime.datetime):
-        return serverDatetime - datetime.timedelta(seconds=_g_instance.timeCorrection)
-    else:
-        return None
+    return serverDatetime - datetime.timedelta(seconds=_g_instance.timeCorrection) if isinstance(serverDatetime, datetime.datetime) else None
 
 
-def utcToLocalDatetime(utcDatetime):
-    return datetime.datetime.fromtimestamp(calendar.timegm(utcDatetime.timetuple()))
+def makeServerTimeFromLocal(localTime):
+    return max(0, localTime + _g_instance.timeCorrection) if localTime else None
+
+
+def makeServerDatetimeFromLocal(localDatetime):
+    return localDatetime + datetime.timedelta(seconds=_g_instance.timeCorrection) if isinstance(localDatetime, datetime.datetime) else None
 
 
 def getServerRegionalTime():
     return _g_instance.serverRegionalTime
 
 
+def getServerUTCTime():
+    return _g_instance.serverUTCTime
+
+
 def getServerRegionalTimeCurrentDay():
     ts = time.gmtime(_g_instance.serverRegionalTime)
+    return ts.tm_hour * ONE_HOUR + ts.tm_min * ONE_MINUTE + ts.tm_sec
+
+
+def getServerTimeCurrentDay():
+    ts = time.gmtime(_g_instance.serverUTCTime)
     return ts.tm_hour * ONE_HOUR + ts.tm_min * ONE_MINUTE + ts.tm_sec
 
 
@@ -78,19 +98,268 @@ def getTimeDeltaFromNow(t):
     if t and datetime.datetime.utcfromtimestamp(t) > datetime.datetime.utcnow():
         delta = datetime.datetime.utcfromtimestamp(t) - datetime.datetime.utcnow()
         return delta.days * ONE_DAY + delta.seconds
-    return 0
 
 
-def getTillTimeString(timeValue, keyNamespace):
+def getTimeDeltaFromNowInLocal(t):
+    if t:
+        givenDateTime = getDateTimeInLocal(t)
+        nowDateTime = getDateTimeInLocal(getCurrentTimestamp())
+        if givenDateTime > nowDateTime:
+            return (givenDateTime - nowDateTime).total_seconds()
+
+
+def getTimestampFromNow(t):
+    return t - getCurrentTimestamp() if t > 0 and t > getCurrentTimestamp() else 0
+
+
+def getTimeDeltaTillNow(t):
+    if t and datetime.datetime.utcnow() > datetime.datetime.utcfromtimestamp(t):
+        delta = datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(t)
+        return delta.days * ONE_DAY + delta.seconds
+
+
+def getTillTimeString(timeValue, keyNamespace, isRoundUp=False):
     gmtime = time.gmtime(timeValue)
+    if isRoundUp and gmtime.tm_sec > 0:
+        timeValue += ONE_MINUTE
+        gmtime = time.gmtime(timeValue)
+    if timeValue >= ONE_DAY:
+        fmtKey = 'days'
+        gmtime = time.gmtime(timeValue - ONE_DAY)
+    elif timeValue >= ONE_HOUR:
+        fmtKey = 'hours'
+    elif timeValue >= ONE_MINUTE:
+        fmtKey = 'min'
+    else:
+        fmtKey = 'lessMin'
     fmtValues = {'day': str(time.struct_time(gmtime).tm_yday),
      'hour': time.strftime('%H', gmtime),
      'min': time.strftime('%M', gmtime),
      'sec': time.strftime('%S', gmtime)}
-    if timeValue > ONE_DAY:
-        fmtKey = 'days'
-    elif ONE_DAY >= timeValue >= ONE_HOUR:
-        fmtKey = 'hours'
-    else:
-        fmtKey = 'min'
     return i18n.makeString(('%s/%s' % (keyNamespace, fmtKey)), **fmtValues)
+
+
+def getCurrentTimestamp():
+    return time.time()
+
+
+def getCurrentLocalServerTimestamp():
+    return makeServerTimeFromLocal(getCurrentTimestamp())
+
+
+def getTimeStructInUTC(timestamp):
+    return time.gmtime(timestamp)
+
+
+def getTimeStructInLocal(timestamp):
+    return time.localtime(timestamp)
+
+
+_ISO8601_UTC_ONLY_PATTERN = re.compile('^(?P<timestamp>\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d)(?P<microseconds>.\\d+)?(?:z|\\+00:00)?$', re.IGNORECASE)
+
+def getTimestampFromISO(timeISO):
+    matchObject = _ISO8601_UTC_ONLY_PATTERN.match(timeISO)
+    if matchObject is None:
+        raise SoftException('Invalid timestamp "{}", use ISO 8601 format without time zone instead.'.format(timeISO))
+    groupDict = matchObject.groupdict()
+    timestamp = groupDict['timestamp']
+    microseconds = groupDict['microseconds']
+    dt = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S')
+    dt = dt.replace(microsecond=int(microseconds[1:]) if microseconds else 0)
+    return (dt - getDateTimeInUTC(0)).total_seconds()
+
+
+def getTimestampFromUTC(timeStructInUTC):
+    return calendar.timegm(timeStructInUTC)
+
+
+def getTimestampFromLocal(timeStructInLocal):
+    return time.mktime(timeStructInLocal)
+
+
+def getDateTimeInUTC(timestamp):
+    return datetime.datetime.utcfromtimestamp(timestamp)
+
+
+def getDateTimeInLocal(timestamp):
+    return datetime.datetime.fromtimestamp(timestamp)
+
+
+def utcToLocalDatetime(dateTimeInUTC):
+    return getDateTimeInLocal(getTimestampFromUTC(dateTimeInUTC.timetuple()))
+
+
+def localToUtcDateTime(dateTimeInLocal):
+    return getDateTimeInUTC(getTimestampFromLocal(dateTimeInLocal.timetuple()))
+
+
+def isFuture(timestamp):
+    return getCurrentTimestamp() < timestamp
+
+
+def isPast(timestamp):
+    return getCurrentTimestamp() > timestamp
+
+
+def isToday(timestamp):
+    todayStart, todayEnd = getDayTimeBoundsForLocal(getCurrentTimestamp())
+    return todayStart <= timestamp <= todayEnd
+
+
+def getDayTimeBoundsForLocal(timestamp=None):
+    if timestamp is not None:
+        dateTime = getDateTimeInLocal(timestamp)
+    else:
+        dateTime = datetime.datetime.now()
+    return (_getTimestampForLocal(dateTime.year, dateTime.month, dateTime.day), _getTimestampForLocal(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59))
+
+
+def getDayTimeBoundsForUTC(timestamp=None):
+    if timestamp is not None:
+        dateTime = getDateTimeInUTC(timestamp)
+    else:
+        dateTime = datetime.datetime.utcnow()
+    return (_getTimestampForUTC(dateTime.year, dateTime.month, dateTime.day), _getTimestampForUTC(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59))
+
+
+def isTimeThisDay(timestamp):
+    start, end = getDayTimeBoundsForLocal()
+    return start <= timestamp <= end
+
+
+def isTimeNextDay(timestamp):
+    return isTimeThisDay(timestamp - ONE_DAY)
+
+
+def getTimeTodayForUTC(hour=0, minute=0, second=0, microsecond=0):
+    return getTimeForUTC(getCurrentTimestamp(), hour, minute, second, microsecond)
+
+
+def getTimeTodayForLocal(hour=0, minute=0, second=0, microsecond=0):
+    return getTimeForLocal(getCurrentTimestamp(), hour, minute, second, microsecond)
+
+
+def getTimeForUTC(timestamp, hour=0, minute=0, second=0, microsecond=0):
+    date = getDateTimeInUTC(timestamp)
+    return _getTimestampForUTC(date.year, date.month, date.day, hour, minute, second, microsecond)
+
+
+def getTimeForLocal(timestamp, hour=0, minute=0, second=0, microsecond=0):
+    date = getDateTimeInLocal(timestamp)
+    return _getTimestampForLocal(date.year, date.month, date.day, hour, minute, second, microsecond)
+
+
+def getDateTimeFormat(timeValue):
+    return '{0:>s} {1:>s}'.format(BigWorld.wg_getLongDateFormat(timeValue), BigWorld.wg_getShortTimeFormat(timeValue))
+
+
+def getLocalDelta():
+    return abs(getCurrentLocalServerTimestamp() - getCurrentTimestamp())
+
+
+def getTimeLeftFormat(timeLeft, useMinutes=True, useHours=False):
+    templateParts = ['%S']
+    if useMinutes:
+        templateParts.insert(0, '%M')
+    if useHours:
+        templateParts.insert(0, '%H')
+    template = ':'.join(templateParts)
+    return time.strftime(template, time.gmtime(timeLeft))
+
+
+def timestampToISO(timestamp):
+    return getDateTimeInUTC(timestamp).replace(microsecond=0).isoformat()
+
+
+class ActivityIntervalsIterator(object):
+
+    def __init__(self, currentTime, currentDay, weekDays=None, timeIntervals=None):
+        self._currentTime = currentTime
+        self._currentDay = currentDay
+        self._timeIntervals = timeIntervals or [WHOLE_DAY_INTERVAL]
+        self._weekDays = weekDays or set(range(WEEK_START, WEEK_END + 1))
+        self._timeLeft = 0
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        interval = None
+        if self._currentDay in self._weekDays:
+            interval = self.__trySearchValidTimeInterval(self._currentTime)
+        if interval is not None:
+            self._timeLeft += interval[0] - self._currentTime
+            self._currentTime = interval[1]
+        else:
+            self._currentDay += 1
+            self._timeLeft += ONE_DAY - self._currentTime
+            while True:
+                if self._currentDay > WEEK_END:
+                    self._currentDay = WEEK_START
+                if self._currentDay in self._weekDays:
+                    break
+                self._currentDay += 1
+                self._timeLeft += ONE_DAY
+
+            interval = self.__trySearchValidTimeInterval(0)
+            if interval is not None:
+                self._timeLeft += interval[0]
+                self._currentTime = interval[1]
+            else:
+                self._currentTime = 0
+                interval = WHOLE_DAY_INTERVAL
+        timeLeft = self._timeLeft
+        self._timeLeft += interval[1] - interval[0]
+        return (timeLeft, interval)
+
+    def __trySearchValidTimeInterval(self, curTime):
+        for low, high in self._timeIntervals:
+            if curTime < high:
+                return (low, high)
+
+        return None
+
+
+class DaysAvailabilityIterator(object):
+
+    def __init__(self, availableTimestamp, weekDaysToExclude=None, intervalsToExclude=None, minDelta=0):
+        self._weekDaysToExclude = weekDaysToExclude or ()
+        self._intervalsToExclude = intervalsToExclude or ()
+        self._availableTimestamp = availableTimestamp
+        self._minDelta = minDelta
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        while True:
+            currentGMTime = getDateTimeInUTC(self._availableTimestamp)
+            currentLocalTimestamp = time.time()
+            if self._availableTimestamp - currentLocalTimestamp >= self._minDelta and currentGMTime.weekday() not in self._weekDaysToExclude and self._checkIntervals(self._availableTimestamp):
+                break
+            self._availableTimestamp += ONE_DAY
+
+        _, _ = getDayTimeBoundsForLocal()
+        _, _ = getDayTimeBoundsForLocal(self._availableTimestamp)
+        return self._availableTimestamp
+
+    def _checkIntervals(self, timeStamp):
+        for start, finish in self._intervalsToExclude:
+            if start <= timeStamp <= finish:
+                return False
+
+        return True
+
+
+def _getTimestampForUTC(year, month, day, hour=0, minute=0, second=0, microsecond=0):
+    return getTimestampFromUTC((year,
+     month,
+     day,
+     hour,
+     minute,
+     second,
+     microsecond))
+
+
+def _getTimestampForLocal(year, month, day, hour=0, minute=0, second=0, microsecond=0):
+    return getTimestampFromLocal(datetime.datetime(year, month, day, hour, minute, second, microsecond).timetuple())

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/actions_chain.py
 import BigWorld
 import Event
@@ -78,7 +79,7 @@ class ActionsChain(object):
         if self.__current and not self.__current.isCompleted():
             self.stop()
             return False
-        if len(self.__actions):
+        if self.__actions:
             self.__current = self.__actions.pop(0)
             self.__current.invoke()
             if self.__current.isInstantaneous() or not self.__current.isRunning():

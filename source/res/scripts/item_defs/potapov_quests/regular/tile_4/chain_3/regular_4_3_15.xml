@@ -1,0 +1,197 @@
+<regular_4_3_15.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_3_15_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <title>
+                <key>	#personal_missions_details:quest_4_3_15_condition_title_vehicleDamage	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_4_3_15_condition_description_vehicleDamage	</key>
+              </description>
+              <classes>	AT-SPG	</classes>
+              <greaterOrEqual>	3500	</greaterOrEqual>
+            </vehicleDamage>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:final:s1:t4	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	5	</limit>
+        </token>
+        <token>
+          <id>	token:pt:final:s1:t4:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+      <bonusDelayed>
+        <dossier>
+          <name>	achievements:tankwomenProgress	</name>
+          <value>	1	</value>
+          <type>	add	</type>
+        </dossier>
+        <berths>	1	</berths>
+        <tankmen>
+          <tman>
+            <isPremium>	true	</isPremium>
+            <isFemale>	true	</isFemale>
+            <role>	commander	</role>
+            <roleLevel>	100	</roleLevel>
+            <freeXP>	210063	</freeXP>
+            <fnGroupID>	1	</fnGroupID>
+            <lnGroupID>	1	</lnGroupID>
+            <iGroupID>	1	</iGroupID>
+            <nationID>	0	</nationID>
+            <vehicleTypeID>	0	</vehicleTypeID>
+            <freeSkills>	brotherhood	</freeSkills>
+          </tman>
+        </tankmen>
+      </bonusDelayed>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_3_15_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_4_3_15_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:final:s1:t4	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	5	</limit>
+        </token>
+        <token>
+          <id>	token:pt:final:s1:t4:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+      <bonusDelayed>
+        <dossier>
+          <name>	achievements:tankwomenProgress	</name>
+          <value>	1	</value>
+          <type>	add	</type>
+        </dossier>
+        <berths>	1	</berths>
+        <tankmen>
+          <tman>
+            <isPremium>	true	</isPremium>
+            <isFemale>	true	</isFemale>
+            <role>	commander	</role>
+            <roleLevel>	100	</roleLevel>
+            <freeXP>	210063	</freeXP>
+            <fnGroupID>	1	</fnGroupID>
+            <lnGroupID>	1	</lnGroupID>
+            <iGroupID>	1	</iGroupID>
+            <nationID>	0	</nationID>
+            <vehicleTypeID>	0	</vehicleTypeID>
+            <freeSkills>	brotherhood	</freeSkills>
+          </tman>
+        </tankmen>
+      </bonusDelayed>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_3_15_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <title>
+                <key>	#personal_missions_details:quest_4_3_15_condition_title_vehicleDamage	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_4_3_15_condition_description_vehicleDamage	</key>
+              </description>
+              <classes>	AT-SPG	</classes>
+              <greaterOrEqual>	3500	</greaterOrEqual>
+            </vehicleDamage>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_4_3_15_condition_title_damaged	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_4_3_15_condition_description_damaged	</key>
+              </description>
+              <key>	damaged	</key>
+              <greaterOrEqual>	8	</greaterOrEqual>
+            </results>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <credits>	500000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t4:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_3_15_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <classes>	AT-SPG	</classes>
+              <greaterOrEqual>	3500	</greaterOrEqual>
+            </vehicleDamage>
+            <results>
+              <key>	damaged	</key>
+              <greaterOrEqual>	8	</greaterOrEqual>
+            </results>
+            <win></win>
+          </and>
+        </postBattle>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_4_3_15_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	4	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_4_3_15.xml>

@@ -1,46 +1,66 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/html_templates.py
 import types
 from debug_utils import LOG_WARNING
-from gui.shared.notifications import NotificationPriorityLevel
+from gui.shared.notifications import NotificationPriorityLevel, NotificationGroup
 from helpers.html import translation as html_translation, templates
 
 class _MessageTemplate(templates.Template):
 
-    def __init__(self, source, data, priority):
+    def __init__(self, source, data, priority, groupID):
         super(_MessageTemplate, self).__init__({'message': source})
         self.data = data
         self.priority = priority
+        self.groupID = groupID
 
-    def format(self, ctx = None, data = None):
+    def format(self, ctx=None, data=None):
         vo = self.data.copy()
-        if type(data) is types.DictionaryType:
+        if isinstance(data, types.DictionaryType):
             for key, value in data.iteritems():
                 if key in vo:
                     vo[key] = value
 
-            vo['buttonsStates'] = data.get('buttonsStates', {})
+            if 'buttonsStates' in data:
+                vo['buttonsStates'] = data['buttonsStates']
+            else:
+                vo['buttonsStates'] = {}
+            if 'bgIconHeight' in data:
+                vo['bgIconHeight'] = data['bgIconHeight']
         vo['message'] = super(_MessageTemplate, self).format(ctx=ctx, sourceKey='message')
         return vo
-
-    def priority(self):
-        pass
 
 
 class MessageTemplates(templates.XMLCollection):
 
+    def format(self, key, ctx=None, **kwargs):
+        bgIconSource = kwargs.pop('bgIconSource', None)
+        formatted = super(MessageTemplates, self).format(key, ctx, **kwargs)
+        if 'bgIcon' in formatted:
+            source = formatted['bgIcon']
+        else:
+            source = {}
+        if bgIconSource in source:
+            formatted['bgIcon'] = source[bgIconSource]
+        else:
+            formatted['bgIcon'] = source.get(None, '')
+        return formatted
+
     def priority(self, key):
         return self[key].priority
 
+    def groupID(self, key):
+        return self[key].groupID
+
     def __missing__(self, key):
-        self[key] = value = _MessageTemplate(key, {}, NotificationPriorityLevel.MEDIUM)
+        self[key] = value = _MessageTemplate(key, {}, NotificationPriorityLevel.MEDIUM, NotificationGroup.INFO)
         return value
 
     def _make(self, source):
         sourceID = source.name
         data = {'type': source.readString('type'),
          'timestamp': -1,
-         'savedID': 0,
-         'bgIcon': source.readString('bgIcon'),
+         'savedData': None,
+         'bgIcon': self._makeBgIconsData(source['bgIcon']),
          'icon': source.readString('icon'),
          'defaultIcon': source.readString('defaultIcon'),
          'filters': [],
@@ -49,6 +69,10 @@ class MessageTemplates(templates.XMLCollection):
         if priority not in NotificationPriorityLevel.RANGE:
             LOG_WARNING('Priority is invalid', sourceID, priority)
             priority = NotificationPriorityLevel.MEDIUM
+        groupID = source.readString('groupID', NotificationGroup.INFO)
+        if groupID not in NotificationGroup.ALL:
+            LOG_WARNING('GroupID is invalid', sourceID, groupID)
+            groupID = NotificationGroup.INFO
         message = html_translation(source.readString('message'))
         section = source['filters']
         if section is None:
@@ -72,7 +96,7 @@ class MessageTemplates(templates.XMLCollection):
                 buttonTypes.add(buttonType)
                 layout.append(button)
 
-        return _MessageTemplate(message, data, priority)
+        return _MessageTemplate(message, data, priority, groupID)
 
     def _makeButtonData(self, sourceID, section):
         action = section.readString('action')
@@ -95,6 +119,16 @@ class MessageTemplates(templates.XMLCollection):
             if width > 0:
                 result['width'] = width
             return result
+
+    def _makeBgIconsData(self, section):
+        result = {}
+        if section is not None:
+            result[None] = section.readString('')
+            if section.items():
+                for secName, subSec in section.items():
+                    result[secName] = subSec.readString('')
+
+        return result
 
 
 def loadForMessage(_, section, settings):

@@ -1,0 +1,3080 @@
+<It12_Prototipo_Standard_B.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	65	</forward>
+    <backward>	23	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.208	</moving>
+    <still>	0.277	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.416	</firePenalty>
+  </invisibility>
+  <repairCost>	9.9	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	50	</armor_2>
+      <armor_3>	25	</armor_3>
+      <armor_4>	15	</armor_4>
+      <armor_5>	15	</armor_5>
+      <armor_6>	10	</armor_6>
+      <armor_7>	35	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	20	</armor_9>
+      <armor_10>	100	</armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	14315	</weight>
+    <maxHealth>	1240	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/italy/It12_Prototipo_Standard_B/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.34	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.546923 0.355678	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/italy/It12_Prototipo_Standard_B/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/italy/It12_Prototipo_Standard_B/Prototipo_Standard_B_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
+        <rayStart>	-0.00496294 0.208176 2.8769	</rayStart>
+        <rayEnd>	-0.00496294 0.0443664 2.76217	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.36	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	36	</slotId>
+        <anchorPosition>	0.000000 0.775108 -2.73109	</anchorPosition>
+        <anchorDirection>	0.000000 0.273026 -0.962007	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	19	</slotId>
+        <anchorPosition>	0.000000 0.775108 -2.73109	</anchorPosition>
+        <anchorDirection>	0.000000 0.273026 -0.962007	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <camouflage>
+      <tiling>	1.51807 1.51807 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_It12_Prototipo_Standard_B>
+      <userString>	#italy_vehicles:Chassis_It12_Prototipo_Standard_B	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	31000	</price>
+      <unlocks>
+        <chassis>	Chassis_It12_Prototipo_Standard_B_2	  <cost>	25200	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	10000	</weight>
+      <maxLoad>	36000	</maxLoad>
+      <terrainResistance>	1.1 1.2 2.4	</terrainResistance>
+      <brakeForce>	35000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	50	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	175	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/italy/It12_Prototipo_Standard_B/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.5 0.67	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.261340 0.000313 -0.030457	</row0>
+            <row1>	0.000173 1.342080 -0.009827	</row1>
+            <row2>	-0.045775 -0.026749 8.059640	</row2>
+            <row3>	-0.000004 -0.000002 0.000191	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.296907	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.10202	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.41449	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.339319	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.296907	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.10202	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.41449	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.339319	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.938969 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It12_Prototipo_Standard_B/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.31144 1.94422	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/italy/It12_Prototipo_Standard_B/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/italy/It12_Prototipo_Standard_B/track/segment.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/italy/It12_Prototipo_Standard_B/track/segment_b.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/italy/It12_Prototipo_Standard_B/track/segment_a.model	</segment2ModelRight>
+        <left>	vehicles/italy/It12_Prototipo_Standard_B/track/left.track	</left>
+        <right>	vehicles/italy/It12_Prototipo_Standard_B/track/right.track	</right>
+        <segmentLength>	0.159	</segmentLength>
+        <segmentOffset>	0.149141	</segmentOffset>
+        <segment2Offset>	0.0773509	</segment2Offset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0230912	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.116901	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.0915493	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.1	</backwardElastK>
+          <offset>	-0.0915493	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.116901	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.116901	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.0915493	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.1	</backwardElastK>
+          <offset>	-0.0915493	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.116901	</offset>
+        </node>
+      </trackNodes>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	168	</segmentsCount>
+          <segmentsOuterThickness>	0.0621113	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00669241	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.35854	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.0796652	</back>
+              <top>	0.0631269	</top>
+              <front>	0.0704678	</front>
+              <bottom>	0.0580911	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0719336	</back>
+              <top>	0.0754815	</top>
+              <front>	0.0795766	</front>
+              <bottom>	0.0580911	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/italy/It12_Prototipo_Standard_B/track/segment.model	</model>
+            <length>	0.0773512	</length>
+          </mainSegment>
+          <secSegment>
+            <model>	vehicles/italy/It12_Prototipo_Standard_B/track/segment_b.model	</model>
+            <length>	0.0773511	</length>
+          </secSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-1.98973	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.836377 0.836377 0.836377 0.836377 0.836377 0.836377 0.836377	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.92973	</xStart>
+                <xStep>	0.0386757	</xStep>
+                <ySamples>	0.906377 0.902444	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.89105	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.902444 0.892444 0.882444 0.872444 0.862444 0.852444 0.842444	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.56429	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.857506 0.844157 0.833994 0.825974 0.819581 0.814519 0.810602	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.50429	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.810602 0.804518	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.46562	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.804518 0.8051 0.806565 0.808948 0.812311 0.816749 0.822409	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.481378	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.825664 0.825664 0.825664 0.825664 0.825664 0.825664 0.825664	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.421378	</xStart>
+                <xStep>	0.0386755	</xStep>
+                <ySamples>	0.895664 0.972602 0.956744	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.344027	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.956744 0.946745 0.936745 0.926745 0.916744 0.906744 0.896744	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.0172714	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.823048 0.817256 0.812704 0.809239 0.806761 0.805206 0.804537	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.0427286	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.804537 0.810269	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.0814044	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.810269 0.814079 0.81902 0.825269 0.833108 0.843024 0.855978	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.292133	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.865749 0.865749 0.865749 0.865749 0.865749 0.865749 0.865749	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.352133	</xStart>
+                <xStep>	0.0386756	</xStep>
+                <ySamples>	0.935749 0.97281 0.946936	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.429485	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.946936 0.936936 0.926936 0.916936 0.906936 0.896936 0.886936	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.49108	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.827882 0.821102 0.815716 0.811515 0.808366 0.806181 0.804904	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.55108	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.804904 0.808239	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.58975	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.808239 0.81134 0.815488 0.820813 0.827519 0.835938 0.846659	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.80048	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.864088 0.864088 0.864088 0.864088 0.864088 0.864088 0.864088	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.86048	</xStart>
+                <xStep>	0.0386753	</xStep>
+                <ySamples>	0.934088 0.971916 0.947811	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.93783	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.947811 0.937811 0.927811 0.917811 0.907811 0.897811 0.887811	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.61267	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.424014 0.419548 0.415488 0.411815 0.408517 0.405581 0.402997	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.67267	</xStart>
+                <xStep>	0.0386755	</xStep>
+                <ySamples>	0.402997 0.39617 0.394165 0.39689 0.404471	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.82737	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.404471 0.407261 0.410408 0.413924 0.417822 0.422118 0.42683	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-3.12867	</xStart>
+                <xStep>	0.0386756	</xStep>
+                <ySamples>	1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07736 1.07698 1.07666 1.07638 1.07619 1.07379 1.06669 1.05578 1.04547 1.03211 1.00793 0.97577	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L4	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	2.74709 0.711603	</basePos>
+              <shiftVec>	0.285451 0.09996	</shiftVec>
+              <jointIdx>	19	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L4	</wheelName>
+              <basePos>	-2.71427 0.673025	</basePos>
+              <shiftVec>	-0.349488 0.0637126	</shiftVec>
+              <jointIdx>	100	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L5	</wheelName>
+              <basePos>	-1.90038 0.373114	</basePos>
+              <shiftVec>	0.0173515 -0.332627	</shiftVec>
+              <jointIdx>	119	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.8842 0.373113	</basePos>
+              <shiftVec>	0.0281281 -0.331435	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.353899	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.300861	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L4	</name>
+              <startAngle>	10.98	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	8.17793	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.20462 1.17444 -3.12865	</point>
+                <point>	-1.20462 1.17444 -3.08997	</point>
+                <point>	-1.20462 1.17444 -3.0513	</point>
+                <point>	-1.20462 1.17444 -3.01262	</point>
+                <point>	-1.20462 1.17444 -2.97394	</point>
+                <point>	-1.20462 1.17444 -2.93527	</point>
+                <point>	-1.20462 1.17444 -2.89659	</point>
+                <point>	-1.22462 1.17444 -2.85792	</point>
+                <point>	-1.23462 1.17444 -2.81924	</point>
+                <point>	-1.20462 1.17444 -2.78057	</point>
+                <point>	-1.25462 1.17444 -2.74189	</point>
+                <point>	-1.26462 1.17444 -2.70321	</point>
+                <point>	-1.20462 1.17444 -2.66454	</point>
+                <point>	-1.20462 1.17444 -2.62586	</point>
+                <point>	-1.20462 1.17444 -2.58719	</point>
+                <point>	-1.20462 1.17444 -2.54851	</point>
+                <point>	-1.20462 1.17444 -2.50984	</point>
+                <point>	-1.20462 1.17444 -2.47116	</point>
+                <point>	-1.20462 1.17444 -2.43249	</point>
+                <point>	-1.20462 1.17444 -2.39381	</point>
+                <point>	-1.20462 1.17444 -2.35513	</point>
+                <point>	-1.20462 1.17444 -2.31646	</point>
+                <point>	-1.20462 1.17444 -2.27778	</point>
+                <point>	-1.20462 1.17444 -2.23911	</point>
+                <point>	-1.20462 1.17444 -2.20043	</point>
+                <point>	-1.20462 1.17444 -2.16176	</point>
+                <point>	-1.20462 1.17444 -2.12308	</point>
+                <point>	-1.20462 1.17444 -2.08441	</point>
+                <point>	-1.20462 1.17444 -2.04573	</point>
+                <point>	-1.20462 1.17444 -2.00705	</point>
+                <point>	-1.20462 1.17444 -1.96838	</point>
+                <point>	-1.20462 1.17444 -1.9297	</point>
+                <point>	-1.20462 1.17444 -1.89103	</point>
+                <point>	-1.20462 1.17444 -1.85235	</point>
+                <point>	-1.20462 1.17444 -1.81368	</point>
+                <point>	-1.20462 1.17444 -1.775	</point>
+                <point>	-1.20462 1.17444 -1.73633	</point>
+                <point>	-1.20462 1.17444 -1.69765	</point>
+                <point>	-1.20462 1.17444 -1.65897	</point>
+                <point>	-1.20462 1.17444 -1.6203	</point>
+                <point>	-1.20462 1.17444 -1.58162	</point>
+                <point>	-1.20462 1.17444 -1.54295	</point>
+                <point>	-1.20462 1.17444 -1.50427	</point>
+                <point>	-1.20462 1.17444 -1.4656	</point>
+                <point>	-1.20462 1.17444 -1.42692	</point>
+                <point>	-1.20462 1.17444 -1.38825	</point>
+                <point>	-1.20462 1.17444 -1.34957	</point>
+                <point>	-1.20462 1.17444 -1.31089	</point>
+                <point>	-1.20462 1.17444 -1.27222	</point>
+                <point>	-1.20462 1.17444 -1.23354	</point>
+                <point>	-1.20462 1.17444 -1.19487	</point>
+                <point>	-1.20462 1.17444 -1.15619	</point>
+                <point>	-1.20462 1.17444 -1.11752	</point>
+                <point>	-1.20462 1.17444 -1.07884	</point>
+                <point>	-1.20462 1.17444 -1.04017	</point>
+                <point>	-1.20462 1.17444 -1.00149	</point>
+                <point>	-1.20462 1.17444 -0.962814	</point>
+                <point>	-1.20462 1.17444 -0.924138	</point>
+                <point>	-1.20462 1.17444 -0.885462	</point>
+                <point>	-1.20462 1.17444 -0.846787	</point>
+                <point>	-1.20462 1.17444 -0.808111	</point>
+                <point>	-1.20462 1.17444 -0.769436	</point>
+                <point>	-1.20462 1.17444 -0.73076	</point>
+                <point>	-1.20462 1.17444 -0.692084	</point>
+                <point>	-1.20462 1.17444 -0.653409	</point>
+                <point>	-1.20462 1.17444 -0.614733	</point>
+                <point>	-1.20462 1.17444 -0.576058	</point>
+                <point>	-1.20462 1.17444 -0.537382	</point>
+                <point>	-1.20462 1.17444 -0.498707	</point>
+                <point>	-1.20462 1.17444 -0.460031	</point>
+                <point>	-1.20462 1.17444 -0.421355	</point>
+                <point>	-1.20462 1.17444 -0.38268	</point>
+                <point>	-1.20462 1.17444 -0.344004	</point>
+                <point>	-1.20462 1.17444 -0.305329	</point>
+                <point>	-1.20462 1.17444 -0.266653	</point>
+                <point>	-1.20462 1.17444 -0.227978	</point>
+                <point>	-1.20462 1.17444 -0.189302	</point>
+                <point>	-1.20462 1.17444 -0.150626	</point>
+                <point>	-1.20462 1.17444 -0.111951	</point>
+                <point>	-1.20462 1.17444 -0.0732752	</point>
+                <point>	-1.20462 1.17444 -0.0345999	</point>
+                <point>	-1.20462 1.17444 0.00407593	</point>
+                <point>	-1.20462 1.17444 0.0427512	</point>
+                <point>	-1.20462 1.17444 0.081427	</point>
+                <point>	-1.20462 1.17444 0.120103	</point>
+                <point>	-1.20462 1.17444 0.158778	</point>
+                <point>	-1.20462 1.17444 0.197454	</point>
+                <point>	-1.20462 1.17444 0.236129	</point>
+                <point>	-1.20462 1.17444 0.274805	</point>
+                <point>	-1.20462 1.17444 0.313481	</point>
+                <point>	-1.20462 1.17444 0.352156	</point>
+                <point>	-1.20462 1.17444 0.390832	</point>
+                <point>	-1.20462 1.17444 0.429507	</point>
+                <point>	-1.20462 1.17444 0.468183	</point>
+                <point>	-1.20462 1.17444 0.506858	</point>
+                <point>	-1.20462 1.17444 0.545534	</point>
+                <point>	-1.20462 1.17444 0.58421	</point>
+                <point>	-1.20462 1.17444 0.622885	</point>
+                <point>	-1.20462 1.17444 0.661561	</point>
+                <point>	-1.20462 1.17444 0.700236	</point>
+                <point>	-1.20462 1.17444 0.738912	</point>
+                <point>	-1.20462 1.17444 0.777587	</point>
+                <point>	-1.20462 1.17444 0.816263	</point>
+                <point>	-1.20462 1.17444 0.854939	</point>
+                <point>	-1.26462 1.17444 0.893614	</point>
+                <point>	-1.20462 1.17444 0.93229	</point>
+                <point>	-1.20462 1.17444 0.970965	</point>
+                <point>	-1.25462 1.17444 1.00964	</point>
+                <point>	-1.20462 1.17444 1.04832	</point>
+                <point>	-1.24462 1.17444 1.08699	</point>
+                <point>	-1.23462 1.17444 1.12567	</point>
+                <point>	-1.20462 1.17444 1.16434	</point>
+                <point>	-1.22462 1.17444 1.20302	</point>
+                <point>	-1.20462 1.17444 1.24169	</point>
+                <point>	-1.20462 1.17444 1.28037	</point>
+                <point>	-1.21462 1.17444 1.31905	</point>
+                <point>	-1.20462 1.17444 1.35772	</point>
+                <point>	-1.20462 1.17444 1.3964	</point>
+                <point>	-1.20462 1.17444 1.43507	</point>
+                <point>	-1.20462 1.17444 1.47375	</point>
+                <point>	-1.20462 1.17444 1.51242	</point>
+                <point>	-1.20462 1.17444 1.5511	</point>
+                <point>	-1.20462 1.17444 1.58977	</point>
+                <point>	-1.20462 1.17444 1.62845	</point>
+                <point>	-1.20462 1.17444 1.66713	</point>
+                <point>	-1.20462 1.17444 1.7058	</point>
+                <point>	-1.20462 1.17444 1.74448	</point>
+                <point>	-1.20462 1.17444 1.78315	</point>
+                <point>	-1.20462 1.17444 1.82183	</point>
+                <point>	-1.20462 1.17444 1.8605	</point>
+                <point>	-1.20462 1.17444 1.89918	</point>
+                <point>	-1.20462 1.17444 1.93785	</point>
+                <point>	-1.20462 1.17444 1.97653	</point>
+                <point>	-1.20462 1.17444 2.01521	</point>
+                <point>	-1.20462 1.17444 2.05388	</point>
+                <point>	-1.20462 1.17444 2.09256	</point>
+                <point>	-1.20462 1.17444 2.13123	</point>
+                <point>	-1.20462 1.17444 2.16991	</point>
+                <point>	-1.20462 1.17444 2.20858	</point>
+                <point>	-1.20462 1.17444 2.24726	</point>
+                <point>	-1.20462 1.17444 2.28594	</point>
+                <point>	-1.20462 1.17444 2.32461	</point>
+                <point>	-1.20462 1.17444 2.36329	</point>
+                <point>	-1.20462 1.17444 2.40196	</point>
+                <point>	-1.20462 1.17444 2.44064	</point>
+                <point>	-1.20462 1.17444 2.47931	</point>
+                <point>	-1.20462 1.17444 2.51799	</point>
+                <point>	-1.20462 1.17444 2.55666	</point>
+                <point>	-1.20462 1.17444 2.59534	</point>
+                <point>	-1.20462 1.17444 2.63402	</point>
+                <point>	-1.20462 1.17963 2.67269	</point>
+                <point>	-1.20462 1.17925 2.71137	</point>
+                <point>	-1.26462 1.17893 2.75004	</point>
+                <point>	-1.36462 1.17864 2.78872	</point>
+                <point>	-1.44462 1.17845 2.82739	</point>
+                <point>	-1.44462 1.17605 2.86607	</point>
+                <point>	-1.44462 1.16895 2.90475	</point>
+                <point>	-1.44462 1.15804 2.94342	</point>
+                <point>	-1.44462 1.14773 2.9821	</point>
+                <point>	-1.44462 1.13437 3.02077	</point>
+                <point>	-1.44462 1.11019 3.05945	</point>
+                <point>	-1.44462 1.07803 3.09812	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	-1.25461 0.854072 -1.9297	</point>
+                <point>	-1.24461 0.850139 -1.89103	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.943107 -1.50427	</point>
+                <point>	-1.20462 0.976594 -1.4656	</point>
+              </range>
+              <range>
+                <point>	-1.22461 0.84336 -0.421355	</point>
+                <point>	-1.20462 0.920299 -0.38268	</point>
+                <point>	-1.25462 0.90444 -0.344004	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.976804 0.0427513	</point>
+                <point>	-1.20462 0.941883 0.0814271	</point>
+              </range>
+              <range>
+                <point>	-1.20461 0.883446 0.352156	</point>
+                <point>	-1.24462 0.920506 0.390832	</point>
+                <point>	-1.25461 0.894632 0.429507	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.973848 1.5511	</point>
+                <point>	-1.22462 0.959116 1.58977	</point>
+              </range>
+              <range>
+                <point>	-1.20461 0.881785 1.8605	</point>
+                <point>	-1.24461 0.919613 1.89918	</point>
+                <point>	-1.25461 0.895507 1.93785	</point>
+              </range>
+              <range>
+                <point>	-1.27461 0.761562 2.67269	</point>
+                <point>	-1.27461 0.803616 2.71137	</point>
+                <point>	-1.27461 0.812985 2.75004	</point>
+                <point>	-1.27461 0.804307 2.78872	</point>
+                <point>	-1.27461 0.767874 2.82739	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	168	</segmentsCount>
+          <segmentsOuterThickness>	0.0621352	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00669432	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.35854	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.0796652	</back>
+              <top>	0.0631269	</top>
+              <front>	0.0704678	</front>
+              <bottom>	0.0580911	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0719336	</back>
+              <top>	0.0754815	</top>
+              <front>	0.0795766	</front>
+              <bottom>	0.0580911	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/italy/It12_Prototipo_Standard_B/track/segment.model	</model>
+            <length>	0.0773512	</length>
+          </mainSegment>
+          <secSegment>
+            <model>	vehicles/italy/It12_Prototipo_Standard_B/track/segment_a.model	</model>
+            <length>	0.0773511	</length>
+          </secSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-1.98972	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.836377 0.836377 0.836377 0.836377 0.836377 0.836377 0.836377	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.92972	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.906377 0.902444	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.89105	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.902444 0.892444 0.882444 0.872444 0.862444 0.852444 0.842444	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.56429	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.857506 0.844157 0.833994 0.825974 0.819582 0.81452 0.810603	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.50429	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.810603 0.804519	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.46562	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.804519 0.805102 0.806567 0.808951 0.812314 0.816752 0.822412	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.481376	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.825666 0.825666 0.825666 0.825666 0.825666 0.825666 0.825666	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.421376	</xStart>
+                <xStep>	0.0386755	</xStep>
+                <ySamples>	0.895666 0.972606 0.956743	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.344025	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.956743 0.946743 0.936743 0.926743 0.916743 0.906743 0.896743	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.0172685	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.823049 0.817256 0.812704 0.80924 0.806762 0.805207 0.804538	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.0427315	</xStart>
+                <xStep>	0.0386753	</xStep>
+                <ySamples>	0.804538 0.810271	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.0814068	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.810271 0.814082 0.819023 0.825273 0.833113 0.843029 0.855985	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.292136	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.865753 0.865753 0.865753 0.865753 0.865753 0.865753 0.865753	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.352136	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.935753 0.972808 0.946934	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.429487	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.946934 0.936934 0.926934 0.916934 0.906934 0.896934 0.886934	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.49108	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.827882 0.821102 0.815716 0.811516 0.808367 0.806182 0.804905	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.55108	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.804905 0.808242	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.58976	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.808242 0.811343 0.815491 0.820816 0.827523 0.835943 0.846665	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.80048	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.864093 0.864093 0.864093 0.864093 0.864093 0.864093 0.864093	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.86048	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.934093 0.971914 0.947809	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.93784	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.947809 0.937809 0.927809 0.917809 0.907809 0.897809 0.887809	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.61267	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.424012 0.419547 0.415486 0.411814 0.408516 0.40558 0.402996	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.67267	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.402996 0.396169 0.394164 0.39689 0.404472	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.82737	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.404472 0.407261 0.410409 0.413925 0.417823 0.422119 0.426831	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-3.12867	</xStart>
+                <xStep>	0.0386756	</xStep>
+                <ySamples>	1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07737 1.07701 1.07671 1.07645 1.07628 1.07455 1.06909 1.06071 1.04938 1.03331 1.01055 0.985531	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R4	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	2.74709 0.711603	</basePos>
+              <shiftVec>	0.285455 0.099951	</shiftVec>
+              <jointIdx>	19	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R4	</wheelName>
+              <basePos>	-2.71427 0.673025	</basePos>
+              <shiftVec>	-0.349488 0.0637147	</shiftVec>
+              <jointIdx>	100	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R5	</wheelName>
+              <basePos>	-1.90038 0.373082	</basePos>
+              <shiftVec>	0.0173416 -0.332625	</shiftVec>
+              <jointIdx>	119	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.8842 0.373081	</basePos>
+              <shiftVec>	0.028128 -0.331433	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.353899	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.300861	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R4	</name>
+              <startAngle>	10.98	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	8.17797	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.20462 1.17444 -3.12865	</point>
+                <point>	-1.20462 1.17444 -3.08997	</point>
+                <point>	-1.20462 1.17444 -3.0513	</point>
+                <point>	-1.20462 1.17444 -3.01262	</point>
+                <point>	-1.20462 1.17444 -2.97394	</point>
+                <point>	-1.20462 1.17444 -2.93527	</point>
+                <point>	-1.20462 1.17444 -2.89659	</point>
+                <point>	-1.22462 1.17444 -2.85792	</point>
+                <point>	-1.23462 1.17444 -2.81924	</point>
+                <point>	-1.20462 1.17444 -2.78057	</point>
+                <point>	-1.25462 1.17444 -2.74189	</point>
+                <point>	-1.26462 1.17444 -2.70321	</point>
+                <point>	-1.20462 1.17444 -2.66454	</point>
+                <point>	-1.20462 1.17444 -2.62586	</point>
+                <point>	-1.20462 1.17444 -2.58719	</point>
+                <point>	-1.20462 1.17444 -2.54851	</point>
+                <point>	-1.20462 1.17444 -2.50984	</point>
+                <point>	-1.20462 1.17444 -2.47116	</point>
+                <point>	-1.20462 1.17444 -2.43249	</point>
+                <point>	-1.20462 1.17444 -2.39381	</point>
+                <point>	-1.20462 1.17444 -2.35513	</point>
+                <point>	-1.20462 1.17444 -2.31646	</point>
+                <point>	-1.20462 1.17444 -2.27778	</point>
+                <point>	-1.20462 1.17444 -2.23911	</point>
+                <point>	-1.20462 1.17444 -2.20043	</point>
+                <point>	-1.20462 1.17444 -2.16176	</point>
+                <point>	-1.20462 1.17444 -2.12308	</point>
+                <point>	-1.20462 1.17444 -2.08441	</point>
+                <point>	-1.20462 1.17444 -2.04573	</point>
+                <point>	-1.20462 1.17444 -2.00705	</point>
+                <point>	-1.20462 1.17444 -1.96838	</point>
+                <point>	-1.20462 1.17444 -1.9297	</point>
+                <point>	-1.20462 1.17444 -1.89103	</point>
+                <point>	-1.20462 1.17444 -1.85235	</point>
+                <point>	-1.20462 1.17444 -1.81368	</point>
+                <point>	-1.20462 1.17444 -1.775	</point>
+                <point>	-1.20462 1.17444 -1.73633	</point>
+                <point>	-1.20462 1.17444 -1.69765	</point>
+                <point>	-1.20462 1.17444 -1.65897	</point>
+                <point>	-1.20462 1.17444 -1.6203	</point>
+                <point>	-1.20462 1.17444 -1.58162	</point>
+                <point>	-1.20462 1.17444 -1.54295	</point>
+                <point>	-1.20462 1.17444 -1.50427	</point>
+                <point>	-1.20462 1.17444 -1.4656	</point>
+                <point>	-1.20462 1.17444 -1.42692	</point>
+                <point>	-1.20462 1.17444 -1.38825	</point>
+                <point>	-1.20462 1.17444 -1.34957	</point>
+                <point>	-1.20462 1.17444 -1.31089	</point>
+                <point>	-1.20462 1.17444 -1.27222	</point>
+                <point>	-1.20462 1.17444 -1.23354	</point>
+                <point>	-1.20462 1.17444 -1.19487	</point>
+                <point>	-1.20462 1.17444 -1.15619	</point>
+                <point>	-1.20462 1.17444 -1.11752	</point>
+                <point>	-1.20462 1.17444 -1.07884	</point>
+                <point>	-1.20462 1.17444 -1.04017	</point>
+                <point>	-1.20462 1.17444 -1.00149	</point>
+                <point>	-1.20462 1.17444 -0.962814	</point>
+                <point>	-1.20462 1.17444 -0.924138	</point>
+                <point>	-1.20462 1.17444 -0.885462	</point>
+                <point>	-1.20462 1.17444 -0.846787	</point>
+                <point>	-1.20462 1.17444 -0.808111	</point>
+                <point>	-1.20462 1.17444 -0.769436	</point>
+                <point>	-1.20462 1.17444 -0.73076	</point>
+                <point>	-1.20462 1.17444 -0.692084	</point>
+                <point>	-1.20462 1.17444 -0.653409	</point>
+                <point>	-1.20462 1.17444 -0.614733	</point>
+                <point>	-1.20462 1.17444 -0.576058	</point>
+                <point>	-1.20462 1.17444 -0.537382	</point>
+                <point>	-1.20462 1.17444 -0.498707	</point>
+                <point>	-1.20462 1.17444 -0.460031	</point>
+                <point>	-1.20462 1.17444 -0.421355	</point>
+                <point>	-1.20462 1.17444 -0.38268	</point>
+                <point>	-1.20462 1.17444 -0.344004	</point>
+                <point>	-1.20462 1.17444 -0.305329	</point>
+                <point>	-1.20462 1.17444 -0.266653	</point>
+                <point>	-1.20462 1.17444 -0.227978	</point>
+                <point>	-1.20462 1.17444 -0.189302	</point>
+                <point>	-1.20462 1.17444 -0.150626	</point>
+                <point>	-1.20462 1.17444 -0.111951	</point>
+                <point>	-1.20462 1.17444 -0.0732752	</point>
+                <point>	-1.20462 1.17444 -0.0345999	</point>
+                <point>	-1.20462 1.17444 0.00407593	</point>
+                <point>	-1.20462 1.17444 0.0427512	</point>
+                <point>	-1.20462 1.17444 0.081427	</point>
+                <point>	-1.20462 1.17444 0.120103	</point>
+                <point>	-1.20462 1.17444 0.158778	</point>
+                <point>	-1.20462 1.17444 0.197454	</point>
+                <point>	-1.20462 1.17444 0.236129	</point>
+                <point>	-1.20462 1.17444 0.274805	</point>
+                <point>	-1.20462 1.17444 0.313481	</point>
+                <point>	-1.20462 1.17444 0.352156	</point>
+                <point>	-1.20462 1.17444 0.390832	</point>
+                <point>	-1.20462 1.17444 0.429507	</point>
+                <point>	-1.20462 1.17444 0.468183	</point>
+                <point>	-1.20462 1.17444 0.506858	</point>
+                <point>	-1.20462 1.17444 0.545534	</point>
+                <point>	-1.20462 1.17444 0.58421	</point>
+                <point>	-1.20462 1.17444 0.622885	</point>
+                <point>	-1.20462 1.17444 0.661561	</point>
+                <point>	-1.20462 1.17444 0.700236	</point>
+                <point>	-1.20462 1.17444 0.738912	</point>
+                <point>	-1.20462 1.17444 0.777587	</point>
+                <point>	-1.20462 1.17444 0.816263	</point>
+                <point>	-1.20462 1.17444 0.854939	</point>
+                <point>	-1.26462 1.17444 0.893614	</point>
+                <point>	-1.20462 1.17444 0.93229	</point>
+                <point>	-1.20462 1.17444 0.970965	</point>
+                <point>	-1.25462 1.17444 1.00964	</point>
+                <point>	-1.20462 1.17444 1.04832	</point>
+                <point>	-1.24462 1.17444 1.08699	</point>
+                <point>	-1.23462 1.17444 1.12567	</point>
+                <point>	-1.20462 1.17444 1.16434	</point>
+                <point>	-1.22462 1.17444 1.20302	</point>
+                <point>	-1.20462 1.17444 1.24169	</point>
+                <point>	-1.20462 1.17444 1.28037	</point>
+                <point>	-1.21462 1.17444 1.31905	</point>
+                <point>	-1.20462 1.17444 1.35772	</point>
+                <point>	-1.20462 1.17444 1.3964	</point>
+                <point>	-1.20462 1.17444 1.43507	</point>
+                <point>	-1.20462 1.17444 1.47375	</point>
+                <point>	-1.20462 1.17444 1.51242	</point>
+                <point>	-1.20462 1.17444 1.5511	</point>
+                <point>	-1.20462 1.17444 1.58977	</point>
+                <point>	-1.20462 1.17444 1.62845	</point>
+                <point>	-1.20462 1.17444 1.66713	</point>
+                <point>	-1.20462 1.17444 1.7058	</point>
+                <point>	-1.20462 1.17444 1.74448	</point>
+                <point>	-1.20462 1.17444 1.78315	</point>
+                <point>	-1.20462 1.17444 1.82183	</point>
+                <point>	-1.20462 1.17444 1.8605	</point>
+                <point>	-1.20462 1.17444 1.89918	</point>
+                <point>	-1.20462 1.17444 1.93785	</point>
+                <point>	-1.20462 1.17444 1.97653	</point>
+                <point>	-1.20462 1.17444 2.01521	</point>
+                <point>	-1.20462 1.17444 2.05388	</point>
+                <point>	-1.20462 1.17444 2.09256	</point>
+                <point>	-1.20462 1.17444 2.13123	</point>
+                <point>	-1.20462 1.17444 2.16991	</point>
+                <point>	-1.20462 1.17444 2.20858	</point>
+                <point>	-1.20462 1.17444 2.24726	</point>
+                <point>	-1.20462 1.17444 2.28594	</point>
+                <point>	-1.20462 1.17444 2.32461	</point>
+                <point>	-1.20462 1.17444 2.36329	</point>
+                <point>	-1.20462 1.17444 2.40196	</point>
+                <point>	-1.20462 1.17444 2.44064	</point>
+                <point>	-1.20462 1.17444 2.47931	</point>
+                <point>	-1.20462 1.17444 2.51799	</point>
+                <point>	-1.20462 1.17444 2.55666	</point>
+                <point>	-1.20462 1.17444 2.59534	</point>
+                <point>	-1.20462 1.17444 2.63402	</point>
+                <point>	-1.20462 1.17963 2.67269	</point>
+                <point>	-1.20462 1.17925 2.71137	</point>
+                <point>	-1.26462 1.17893 2.75004	</point>
+                <point>	-1.36462 1.17864 2.78872	</point>
+                <point>	-1.44462 1.17845 2.82739	</point>
+                <point>	-1.44462 1.17605 2.86607	</point>
+                <point>	-1.44462 1.16895 2.90475	</point>
+                <point>	-1.44462 1.15804 2.94342	</point>
+                <point>	-1.44462 1.14773 2.9821	</point>
+                <point>	-1.44462 1.13437 3.02077	</point>
+                <point>	-1.44462 1.11019 3.05945	</point>
+                <point>	-1.44462 1.07803 3.09812	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	-1.25461 0.854072 -1.9297	</point>
+                <point>	-1.24461 0.850139 -1.89103	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.943107 -1.50427	</point>
+                <point>	-1.20462 0.976594 -1.4656	</point>
+              </range>
+              <range>
+                <point>	-1.22461 0.84336 -0.421355	</point>
+                <point>	-1.20462 0.920299 -0.38268	</point>
+                <point>	-1.25462 0.90444 -0.344004	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.976804 0.0427513	</point>
+                <point>	-1.20462 0.941883 0.0814271	</point>
+              </range>
+              <range>
+                <point>	-1.20461 0.883446 0.352156	</point>
+                <point>	-1.24462 0.920506 0.390832	</point>
+                <point>	-1.25461 0.894632 0.429507	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.973848 1.5511	</point>
+                <point>	-1.22462 0.959116 1.58977	</point>
+              </range>
+              <range>
+                <point>	-1.20461 0.881785 1.8605	</point>
+                <point>	-1.24461 0.919613 1.89918	</point>
+                <point>	-1.25461 0.895507 1.93785	</point>
+              </range>
+              <range>
+                <point>	-1.27461 0.761562 2.67269	</point>
+                <point>	-1.27461 0.803616 2.71137	</point>
+                <point>	-1.27461 0.812985 2.75004	</point>
+                <point>	-1.27461 0.804307 2.78872	</point>
+                <point>	-1.27461 0.767874 2.82739	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	14	</slotId>
+          <anchorPosition>	-1.56963 0.55415 -0.00966504	</anchorPosition>
+          <anchorDirection>	-0.942944 0.332902 -0.00580627	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	15	</slotId>
+          <anchorPosition>	-0.000005 2.23035 0.356123	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_It12_Prototipo_Standard_B>
+    <Chassis_It12_Prototipo_Standard_B_2>
+      <userString>	#italy_vehicles:Chassis_It12_Prototipo_Standard_B_2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	62700	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	10000	</weight>
+      <maxLoad>	39000	</maxLoad>
+      <terrainResistance>	1 1.1 2.2	</terrainResistance>
+      <brakeForce>	35000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	54	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/italy/It12_Prototipo_Standard_B/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.5 0.67	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.261340 0.000313 -0.030457	</row0>
+            <row1>	0.000173 1.342080 -0.009827	</row1>
+            <row2>	-0.045775 -0.026749 8.059640	</row2>
+            <row3>	-0.000004 -0.000002 0.000191	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.296907	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.10202	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.41449	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.339319	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.296907	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.10202	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.41449	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.339319	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.938969 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It12_Prototipo_Standard_B/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.31144 1.94422	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/italy/It12_Prototipo_Standard_B/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/italy/It12_Prototipo_Standard_B/track/segment.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/italy/It12_Prototipo_Standard_B/track/segment_b.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/italy/It12_Prototipo_Standard_B/track/segment_a.model	</segment2ModelRight>
+        <left>	vehicles/italy/It12_Prototipo_Standard_B/track/left.track	</left>
+        <right>	vehicles/italy/It12_Prototipo_Standard_B/track/right.track	</right>
+        <segmentLength>	0.159	</segmentLength>
+        <segmentOffset>	0.149141	</segmentOffset>
+        <segment2Offset>	0.0773509	</segment2Offset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0230912	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.116901	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.0915493	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.1	</backwardElastK>
+          <offset>	-0.0915493	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.116901	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.116901	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.0915493	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.1	</backwardElastK>
+          <offset>	-0.0915493	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.116901	</offset>
+        </node>
+      </trackNodes>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	168	</segmentsCount>
+          <segmentsOuterThickness>	0.0621113	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00669241	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.35854	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.0796652	</back>
+              <top>	0.0631269	</top>
+              <front>	0.0704678	</front>
+              <bottom>	0.0580911	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0719336	</back>
+              <top>	0.0754815	</top>
+              <front>	0.0795766	</front>
+              <bottom>	0.0580911	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/italy/It12_Prototipo_Standard_B/track/segment.model	</model>
+            <length>	0.0773512	</length>
+          </mainSegment>
+          <secSegment>
+            <model>	vehicles/italy/It12_Prototipo_Standard_B/track/segment_b.model	</model>
+            <length>	0.0773511	</length>
+          </secSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-1.98973	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.836377 0.836377 0.836377 0.836377 0.836377 0.836377 0.836377	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.92973	</xStart>
+                <xStep>	0.0386757	</xStep>
+                <ySamples>	0.906377 0.902444	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.89105	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.902444 0.892444 0.882444 0.872444 0.862444 0.852444 0.842444	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.56429	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.857506 0.844157 0.833994 0.825974 0.819581 0.814519 0.810602	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.50429	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.810602 0.804518	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.46562	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.804518 0.8051 0.806565 0.808948 0.812311 0.816749 0.822409	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.481378	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.825664 0.825664 0.825664 0.825664 0.825664 0.825664 0.825664	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.421378	</xStart>
+                <xStep>	0.0386755	</xStep>
+                <ySamples>	0.895664 0.972602 0.956744	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.344027	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.956744 0.946745 0.936745 0.926745 0.916744 0.906744 0.896744	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.0172714	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.823048 0.817256 0.812704 0.809239 0.806761 0.805206 0.804537	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.0427286	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.804537 0.810269	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.0814044	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.810269 0.814079 0.81902 0.825269 0.833108 0.843024 0.855978	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.292133	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.865749 0.865749 0.865749 0.865749 0.865749 0.865749 0.865749	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.352133	</xStart>
+                <xStep>	0.0386756	</xStep>
+                <ySamples>	0.935749 0.97281 0.946936	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.429485	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.946936 0.936936 0.926936 0.916936 0.906936 0.896936 0.886936	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.49108	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.827882 0.821102 0.815716 0.811515 0.808366 0.806181 0.804904	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.55108	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.804904 0.808239	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.58975	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.808239 0.81134 0.815488 0.820813 0.827519 0.835938 0.846659	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.80048	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.864088 0.864088 0.864088 0.864088 0.864088 0.864088 0.864088	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.86048	</xStart>
+                <xStep>	0.0386753	</xStep>
+                <ySamples>	0.934088 0.971916 0.947811	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.93783	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.947811 0.937811 0.927811 0.917811 0.907811 0.897811 0.887811	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.61267	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.424014 0.419548 0.415488 0.411815 0.408517 0.405581 0.402997	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.67267	</xStart>
+                <xStep>	0.0386755	</xStep>
+                <ySamples>	0.402997 0.39617 0.394165 0.39689 0.404471	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.82737	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.404471 0.407261 0.410408 0.413924 0.417822 0.422118 0.42683	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-3.12867	</xStart>
+                <xStep>	0.0386756	</xStep>
+                <ySamples>	1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07736 1.07698 1.07666 1.07638 1.07619 1.07379 1.06669 1.05578 1.04547 1.03211 1.00793 0.97577	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L4	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	2.74709 0.711603	</basePos>
+              <shiftVec>	0.285451 0.09996	</shiftVec>
+              <jointIdx>	19	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L4	</wheelName>
+              <basePos>	-2.71427 0.673025	</basePos>
+              <shiftVec>	-0.349488 0.0637126	</shiftVec>
+              <jointIdx>	100	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L5	</wheelName>
+              <basePos>	-1.90038 0.373114	</basePos>
+              <shiftVec>	0.0173515 -0.332627	</shiftVec>
+              <jointIdx>	119	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.8842 0.373113	</basePos>
+              <shiftVec>	0.0281281 -0.331435	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.353899	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.300861	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L4	</name>
+              <startAngle>	10.98	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	8.17793	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.20462 1.17444 -3.12865	</point>
+                <point>	-1.20462 1.17444 -3.08997	</point>
+                <point>	-1.20462 1.17444 -3.0513	</point>
+                <point>	-1.20462 1.17444 -3.01262	</point>
+                <point>	-1.20462 1.17444 -2.97394	</point>
+                <point>	-1.20462 1.17444 -2.93527	</point>
+                <point>	-1.20462 1.17444 -2.89659	</point>
+                <point>	-1.22462 1.17444 -2.85792	</point>
+                <point>	-1.23462 1.17444 -2.81924	</point>
+                <point>	-1.20462 1.17444 -2.78057	</point>
+                <point>	-1.25462 1.17444 -2.74189	</point>
+                <point>	-1.26462 1.17444 -2.70321	</point>
+                <point>	-1.20462 1.17444 -2.66454	</point>
+                <point>	-1.20462 1.17444 -2.62586	</point>
+                <point>	-1.20462 1.17444 -2.58719	</point>
+                <point>	-1.20462 1.17444 -2.54851	</point>
+                <point>	-1.20462 1.17444 -2.50984	</point>
+                <point>	-1.20462 1.17444 -2.47116	</point>
+                <point>	-1.20462 1.17444 -2.43249	</point>
+                <point>	-1.20462 1.17444 -2.39381	</point>
+                <point>	-1.20462 1.17444 -2.35513	</point>
+                <point>	-1.20462 1.17444 -2.31646	</point>
+                <point>	-1.20462 1.17444 -2.27778	</point>
+                <point>	-1.20462 1.17444 -2.23911	</point>
+                <point>	-1.20462 1.17444 -2.20043	</point>
+                <point>	-1.20462 1.17444 -2.16176	</point>
+                <point>	-1.20462 1.17444 -2.12308	</point>
+                <point>	-1.20462 1.17444 -2.08441	</point>
+                <point>	-1.20462 1.17444 -2.04573	</point>
+                <point>	-1.20462 1.17444 -2.00705	</point>
+                <point>	-1.20462 1.17444 -1.96838	</point>
+                <point>	-1.20462 1.17444 -1.9297	</point>
+                <point>	-1.20462 1.17444 -1.89103	</point>
+                <point>	-1.20462 1.17444 -1.85235	</point>
+                <point>	-1.20462 1.17444 -1.81368	</point>
+                <point>	-1.20462 1.17444 -1.775	</point>
+                <point>	-1.20462 1.17444 -1.73633	</point>
+                <point>	-1.20462 1.17444 -1.69765	</point>
+                <point>	-1.20462 1.17444 -1.65897	</point>
+                <point>	-1.20462 1.17444 -1.6203	</point>
+                <point>	-1.20462 1.17444 -1.58162	</point>
+                <point>	-1.20462 1.17444 -1.54295	</point>
+                <point>	-1.20462 1.17444 -1.50427	</point>
+                <point>	-1.20462 1.17444 -1.4656	</point>
+                <point>	-1.20462 1.17444 -1.42692	</point>
+                <point>	-1.20462 1.17444 -1.38825	</point>
+                <point>	-1.20462 1.17444 -1.34957	</point>
+                <point>	-1.20462 1.17444 -1.31089	</point>
+                <point>	-1.20462 1.17444 -1.27222	</point>
+                <point>	-1.20462 1.17444 -1.23354	</point>
+                <point>	-1.20462 1.17444 -1.19487	</point>
+                <point>	-1.20462 1.17444 -1.15619	</point>
+                <point>	-1.20462 1.17444 -1.11752	</point>
+                <point>	-1.20462 1.17444 -1.07884	</point>
+                <point>	-1.20462 1.17444 -1.04017	</point>
+                <point>	-1.20462 1.17444 -1.00149	</point>
+                <point>	-1.20462 1.17444 -0.962814	</point>
+                <point>	-1.20462 1.17444 -0.924138	</point>
+                <point>	-1.20462 1.17444 -0.885462	</point>
+                <point>	-1.20462 1.17444 -0.846787	</point>
+                <point>	-1.20462 1.17444 -0.808111	</point>
+                <point>	-1.20462 1.17444 -0.769436	</point>
+                <point>	-1.20462 1.17444 -0.73076	</point>
+                <point>	-1.20462 1.17444 -0.692084	</point>
+                <point>	-1.20462 1.17444 -0.653409	</point>
+                <point>	-1.20462 1.17444 -0.614733	</point>
+                <point>	-1.20462 1.17444 -0.576058	</point>
+                <point>	-1.20462 1.17444 -0.537382	</point>
+                <point>	-1.20462 1.17444 -0.498707	</point>
+                <point>	-1.20462 1.17444 -0.460031	</point>
+                <point>	-1.20462 1.17444 -0.421355	</point>
+                <point>	-1.20462 1.17444 -0.38268	</point>
+                <point>	-1.20462 1.17444 -0.344004	</point>
+                <point>	-1.20462 1.17444 -0.305329	</point>
+                <point>	-1.20462 1.17444 -0.266653	</point>
+                <point>	-1.20462 1.17444 -0.227978	</point>
+                <point>	-1.20462 1.17444 -0.189302	</point>
+                <point>	-1.20462 1.17444 -0.150626	</point>
+                <point>	-1.20462 1.17444 -0.111951	</point>
+                <point>	-1.20462 1.17444 -0.0732752	</point>
+                <point>	-1.20462 1.17444 -0.0345999	</point>
+                <point>	-1.20462 1.17444 0.00407593	</point>
+                <point>	-1.20462 1.17444 0.0427512	</point>
+                <point>	-1.20462 1.17444 0.081427	</point>
+                <point>	-1.20462 1.17444 0.120103	</point>
+                <point>	-1.20462 1.17444 0.158778	</point>
+                <point>	-1.20462 1.17444 0.197454	</point>
+                <point>	-1.20462 1.17444 0.236129	</point>
+                <point>	-1.20462 1.17444 0.274805	</point>
+                <point>	-1.20462 1.17444 0.313481	</point>
+                <point>	-1.20462 1.17444 0.352156	</point>
+                <point>	-1.20462 1.17444 0.390832	</point>
+                <point>	-1.20462 1.17444 0.429507	</point>
+                <point>	-1.20462 1.17444 0.468183	</point>
+                <point>	-1.20462 1.17444 0.506858	</point>
+                <point>	-1.20462 1.17444 0.545534	</point>
+                <point>	-1.20462 1.17444 0.58421	</point>
+                <point>	-1.20462 1.17444 0.622885	</point>
+                <point>	-1.20462 1.17444 0.661561	</point>
+                <point>	-1.20462 1.17444 0.700236	</point>
+                <point>	-1.20462 1.17444 0.738912	</point>
+                <point>	-1.20462 1.17444 0.777587	</point>
+                <point>	-1.20462 1.17444 0.816263	</point>
+                <point>	-1.20462 1.17444 0.854939	</point>
+                <point>	-1.26462 1.17444 0.893614	</point>
+                <point>	-1.20462 1.17444 0.93229	</point>
+                <point>	-1.20462 1.17444 0.970965	</point>
+                <point>	-1.25462 1.17444 1.00964	</point>
+                <point>	-1.20462 1.17444 1.04832	</point>
+                <point>	-1.24462 1.17444 1.08699	</point>
+                <point>	-1.23462 1.17444 1.12567	</point>
+                <point>	-1.20462 1.17444 1.16434	</point>
+                <point>	-1.22462 1.17444 1.20302	</point>
+                <point>	-1.20462 1.17444 1.24169	</point>
+                <point>	-1.20462 1.17444 1.28037	</point>
+                <point>	-1.21462 1.17444 1.31905	</point>
+                <point>	-1.20462 1.17444 1.35772	</point>
+                <point>	-1.20462 1.17444 1.3964	</point>
+                <point>	-1.20462 1.17444 1.43507	</point>
+                <point>	-1.20462 1.17444 1.47375	</point>
+                <point>	-1.20462 1.17444 1.51242	</point>
+                <point>	-1.20462 1.17444 1.5511	</point>
+                <point>	-1.20462 1.17444 1.58977	</point>
+                <point>	-1.20462 1.17444 1.62845	</point>
+                <point>	-1.20462 1.17444 1.66713	</point>
+                <point>	-1.20462 1.17444 1.7058	</point>
+                <point>	-1.20462 1.17444 1.74448	</point>
+                <point>	-1.20462 1.17444 1.78315	</point>
+                <point>	-1.20462 1.17444 1.82183	</point>
+                <point>	-1.20462 1.17444 1.8605	</point>
+                <point>	-1.20462 1.17444 1.89918	</point>
+                <point>	-1.20462 1.17444 1.93785	</point>
+                <point>	-1.20462 1.17444 1.97653	</point>
+                <point>	-1.20462 1.17444 2.01521	</point>
+                <point>	-1.20462 1.17444 2.05388	</point>
+                <point>	-1.20462 1.17444 2.09256	</point>
+                <point>	-1.20462 1.17444 2.13123	</point>
+                <point>	-1.20462 1.17444 2.16991	</point>
+                <point>	-1.20462 1.17444 2.20858	</point>
+                <point>	-1.20462 1.17444 2.24726	</point>
+                <point>	-1.20462 1.17444 2.28594	</point>
+                <point>	-1.20462 1.17444 2.32461	</point>
+                <point>	-1.20462 1.17444 2.36329	</point>
+                <point>	-1.20462 1.17444 2.40196	</point>
+                <point>	-1.20462 1.17444 2.44064	</point>
+                <point>	-1.20462 1.17444 2.47931	</point>
+                <point>	-1.20462 1.17444 2.51799	</point>
+                <point>	-1.20462 1.17444 2.55666	</point>
+                <point>	-1.20462 1.17444 2.59534	</point>
+                <point>	-1.20462 1.17444 2.63402	</point>
+                <point>	-1.20462 1.17963 2.67269	</point>
+                <point>	-1.20462 1.17925 2.71137	</point>
+                <point>	-1.26462 1.17893 2.75004	</point>
+                <point>	-1.36462 1.17864 2.78872	</point>
+                <point>	-1.44462 1.17845 2.82739	</point>
+                <point>	-1.44462 1.17605 2.86607	</point>
+                <point>	-1.44462 1.16895 2.90475	</point>
+                <point>	-1.44462 1.15804 2.94342	</point>
+                <point>	-1.44462 1.14773 2.9821	</point>
+                <point>	-1.44462 1.13437 3.02077	</point>
+                <point>	-1.44462 1.11019 3.05945	</point>
+                <point>	-1.44462 1.07803 3.09812	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	-1.25461 0.854072 -1.9297	</point>
+                <point>	-1.24461 0.850139 -1.89103	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.943107 -1.50427	</point>
+                <point>	-1.20462 0.976594 -1.4656	</point>
+              </range>
+              <range>
+                <point>	-1.22461 0.84336 -0.421355	</point>
+                <point>	-1.20462 0.920299 -0.38268	</point>
+                <point>	-1.25462 0.90444 -0.344004	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.976804 0.0427513	</point>
+                <point>	-1.20462 0.941883 0.0814271	</point>
+              </range>
+              <range>
+                <point>	-1.20461 0.883446 0.352156	</point>
+                <point>	-1.24462 0.920506 0.390832	</point>
+                <point>	-1.25461 0.894632 0.429507	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.973848 1.5511	</point>
+                <point>	-1.22462 0.959116 1.58977	</point>
+              </range>
+              <range>
+                <point>	-1.20461 0.881785 1.8605	</point>
+                <point>	-1.24461 0.919613 1.89918	</point>
+                <point>	-1.25461 0.895507 1.93785	</point>
+              </range>
+              <range>
+                <point>	-1.27461 0.761562 2.67269	</point>
+                <point>	-1.27461 0.803616 2.71137	</point>
+                <point>	-1.27461 0.812985 2.75004	</point>
+                <point>	-1.27461 0.804307 2.78872	</point>
+                <point>	-1.27461 0.767874 2.82739	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	168	</segmentsCount>
+          <segmentsOuterThickness>	0.0621352	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00669432	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.35854	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.0796652	</back>
+              <top>	0.0631269	</top>
+              <front>	0.0704678	</front>
+              <bottom>	0.0580911	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0719336	</back>
+              <top>	0.0754815	</top>
+              <front>	0.0795766	</front>
+              <bottom>	0.0580911	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/italy/It12_Prototipo_Standard_B/track/segment.model	</model>
+            <length>	0.0773512	</length>
+          </mainSegment>
+          <secSegment>
+            <model>	vehicles/italy/It12_Prototipo_Standard_B/track/segment_a.model	</model>
+            <length>	0.0773511	</length>
+          </secSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-1.98972	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.836377 0.836377 0.836377 0.836377 0.836377 0.836377 0.836377	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.92972	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.906377 0.902444	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.89105	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.902444 0.892444 0.882444 0.872444 0.862444 0.852444 0.842444	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.56429	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.857506 0.844157 0.833994 0.825974 0.819582 0.81452 0.810603	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.50429	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.810603 0.804519	</ySamples>
+              </part>
+              <part>
+                <xStart>	-1.46562	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.804519 0.805102 0.806567 0.808951 0.812314 0.816752 0.822412	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.481376	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.825666 0.825666 0.825666 0.825666 0.825666 0.825666 0.825666	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.421376	</xStart>
+                <xStep>	0.0386755	</xStep>
+                <ySamples>	0.895666 0.972606 0.956743	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.344025	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.956743 0.946743 0.936743 0.926743 0.916743 0.906743 0.896743	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.0172685	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.823049 0.817256 0.812704 0.80924 0.806762 0.805207 0.804538	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.0427315	</xStart>
+                <xStep>	0.0386753	</xStep>
+                <ySamples>	0.804538 0.810271	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.0814068	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.810271 0.814082 0.819023 0.825273 0.833113 0.843029 0.855985	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.292136	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.865753 0.865753 0.865753 0.865753 0.865753 0.865753 0.865753	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.352136	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.935753 0.972808 0.946934	</ySamples>
+              </part>
+              <part>
+                <xStart>	0.429487	</xStart>
+                <xStep>	0.01	</xStep>
+                <ySamples>	0.946934 0.936934 0.926934 0.916934 0.906934 0.896934 0.886934	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.49108	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.827882 0.821102 0.815716 0.811516 0.808367 0.806182 0.804905	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.55108	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.804905 0.808242	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.58976	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.808242 0.811343 0.815491 0.820816 0.827523 0.835943 0.846665	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.80048	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.864093 0.864093 0.864093 0.864093 0.864093 0.864093 0.864093	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.86048	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.934093 0.971914 0.947809	</ySamples>
+              </part>
+              <part>
+                <xStart>	1.93784	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.947809 0.937809 0.927809 0.917809 0.907809 0.897809 0.887809	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.61267	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.424012 0.419547 0.415486 0.411814 0.408516 0.40558 0.402996	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.67267	</xStart>
+                <xStep>	0.0386758	</xStep>
+                <ySamples>	0.402996 0.396169 0.394164 0.39689 0.404472	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.82737	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.404472 0.407261 0.410409 0.413925 0.417823 0.422119 0.426831	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-3.12867	</xStart>
+                <xStep>	0.0386756	</xStep>
+                <ySamples>	1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07217 1.07737 1.07701 1.07671 1.07645 1.07628 1.07455 1.06909 1.06071 1.04938 1.03331 1.01055 0.985531	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R4	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	2.74709 0.711603	</basePos>
+              <shiftVec>	0.285455 0.099951	</shiftVec>
+              <jointIdx>	19	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R4	</wheelName>
+              <basePos>	-2.71427 0.673025	</basePos>
+              <shiftVec>	-0.349488 0.0637147	</shiftVec>
+              <jointIdx>	100	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R5	</wheelName>
+              <basePos>	-1.90038 0.373082	</basePos>
+              <shiftVec>	0.0173416 -0.332625	</shiftVec>
+              <jointIdx>	119	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.8842 0.373081	</basePos>
+              <shiftVec>	0.028128 -0.331433	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.353899	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.300861	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R4	</name>
+              <startAngle>	10.98	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	8.17797	</startAngle>
+              <teethCount>	14	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.20462 1.17444 -3.12865	</point>
+                <point>	-1.20462 1.17444 -3.08997	</point>
+                <point>	-1.20462 1.17444 -3.0513	</point>
+                <point>	-1.20462 1.17444 -3.01262	</point>
+                <point>	-1.20462 1.17444 -2.97394	</point>
+                <point>	-1.20462 1.17444 -2.93527	</point>
+                <point>	-1.20462 1.17444 -2.89659	</point>
+                <point>	-1.22462 1.17444 -2.85792	</point>
+                <point>	-1.23462 1.17444 -2.81924	</point>
+                <point>	-1.20462 1.17444 -2.78057	</point>
+                <point>	-1.25462 1.17444 -2.74189	</point>
+                <point>	-1.26462 1.17444 -2.70321	</point>
+                <point>	-1.20462 1.17444 -2.66454	</point>
+                <point>	-1.20462 1.17444 -2.62586	</point>
+                <point>	-1.20462 1.17444 -2.58719	</point>
+                <point>	-1.20462 1.17444 -2.54851	</point>
+                <point>	-1.20462 1.17444 -2.50984	</point>
+                <point>	-1.20462 1.17444 -2.47116	</point>
+                <point>	-1.20462 1.17444 -2.43249	</point>
+                <point>	-1.20462 1.17444 -2.39381	</point>
+                <point>	-1.20462 1.17444 -2.35513	</point>
+                <point>	-1.20462 1.17444 -2.31646	</point>
+                <point>	-1.20462 1.17444 -2.27778	</point>
+                <point>	-1.20462 1.17444 -2.23911	</point>
+                <point>	-1.20462 1.17444 -2.20043	</point>
+                <point>	-1.20462 1.17444 -2.16176	</point>
+                <point>	-1.20462 1.17444 -2.12308	</point>
+                <point>	-1.20462 1.17444 -2.08441	</point>
+                <point>	-1.20462 1.17444 -2.04573	</point>
+                <point>	-1.20462 1.17444 -2.00705	</point>
+                <point>	-1.20462 1.17444 -1.96838	</point>
+                <point>	-1.20462 1.17444 -1.9297	</point>
+                <point>	-1.20462 1.17444 -1.89103	</point>
+                <point>	-1.20462 1.17444 -1.85235	</point>
+                <point>	-1.20462 1.17444 -1.81368	</point>
+                <point>	-1.20462 1.17444 -1.775	</point>
+                <point>	-1.20462 1.17444 -1.73633	</point>
+                <point>	-1.20462 1.17444 -1.69765	</point>
+                <point>	-1.20462 1.17444 -1.65897	</point>
+                <point>	-1.20462 1.17444 -1.6203	</point>
+                <point>	-1.20462 1.17444 -1.58162	</point>
+                <point>	-1.20462 1.17444 -1.54295	</point>
+                <point>	-1.20462 1.17444 -1.50427	</point>
+                <point>	-1.20462 1.17444 -1.4656	</point>
+                <point>	-1.20462 1.17444 -1.42692	</point>
+                <point>	-1.20462 1.17444 -1.38825	</point>
+                <point>	-1.20462 1.17444 -1.34957	</point>
+                <point>	-1.20462 1.17444 -1.31089	</point>
+                <point>	-1.20462 1.17444 -1.27222	</point>
+                <point>	-1.20462 1.17444 -1.23354	</point>
+                <point>	-1.20462 1.17444 -1.19487	</point>
+                <point>	-1.20462 1.17444 -1.15619	</point>
+                <point>	-1.20462 1.17444 -1.11752	</point>
+                <point>	-1.20462 1.17444 -1.07884	</point>
+                <point>	-1.20462 1.17444 -1.04017	</point>
+                <point>	-1.20462 1.17444 -1.00149	</point>
+                <point>	-1.20462 1.17444 -0.962814	</point>
+                <point>	-1.20462 1.17444 -0.924138	</point>
+                <point>	-1.20462 1.17444 -0.885462	</point>
+                <point>	-1.20462 1.17444 -0.846787	</point>
+                <point>	-1.20462 1.17444 -0.808111	</point>
+                <point>	-1.20462 1.17444 -0.769436	</point>
+                <point>	-1.20462 1.17444 -0.73076	</point>
+                <point>	-1.20462 1.17444 -0.692084	</point>
+                <point>	-1.20462 1.17444 -0.653409	</point>
+                <point>	-1.20462 1.17444 -0.614733	</point>
+                <point>	-1.20462 1.17444 -0.576058	</point>
+                <point>	-1.20462 1.17444 -0.537382	</point>
+                <point>	-1.20462 1.17444 -0.498707	</point>
+                <point>	-1.20462 1.17444 -0.460031	</point>
+                <point>	-1.20462 1.17444 -0.421355	</point>
+                <point>	-1.20462 1.17444 -0.38268	</point>
+                <point>	-1.20462 1.17444 -0.344004	</point>
+                <point>	-1.20462 1.17444 -0.305329	</point>
+                <point>	-1.20462 1.17444 -0.266653	</point>
+                <point>	-1.20462 1.17444 -0.227978	</point>
+                <point>	-1.20462 1.17444 -0.189302	</point>
+                <point>	-1.20462 1.17444 -0.150626	</point>
+                <point>	-1.20462 1.17444 -0.111951	</point>
+                <point>	-1.20462 1.17444 -0.0732752	</point>
+                <point>	-1.20462 1.17444 -0.0345999	</point>
+                <point>	-1.20462 1.17444 0.00407593	</point>
+                <point>	-1.20462 1.17444 0.0427512	</point>
+                <point>	-1.20462 1.17444 0.081427	</point>
+                <point>	-1.20462 1.17444 0.120103	</point>
+                <point>	-1.20462 1.17444 0.158778	</point>
+                <point>	-1.20462 1.17444 0.197454	</point>
+                <point>	-1.20462 1.17444 0.236129	</point>
+                <point>	-1.20462 1.17444 0.274805	</point>
+                <point>	-1.20462 1.17444 0.313481	</point>
+                <point>	-1.20462 1.17444 0.352156	</point>
+                <point>	-1.20462 1.17444 0.390832	</point>
+                <point>	-1.20462 1.17444 0.429507	</point>
+                <point>	-1.20462 1.17444 0.468183	</point>
+                <point>	-1.20462 1.17444 0.506858	</point>
+                <point>	-1.20462 1.17444 0.545534	</point>
+                <point>	-1.20462 1.17444 0.58421	</point>
+                <point>	-1.20462 1.17444 0.622885	</point>
+                <point>	-1.20462 1.17444 0.661561	</point>
+                <point>	-1.20462 1.17444 0.700236	</point>
+                <point>	-1.20462 1.17444 0.738912	</point>
+                <point>	-1.20462 1.17444 0.777587	</point>
+                <point>	-1.20462 1.17444 0.816263	</point>
+                <point>	-1.20462 1.17444 0.854939	</point>
+                <point>	-1.26462 1.17444 0.893614	</point>
+                <point>	-1.20462 1.17444 0.93229	</point>
+                <point>	-1.20462 1.17444 0.970965	</point>
+                <point>	-1.25462 1.17444 1.00964	</point>
+                <point>	-1.20462 1.17444 1.04832	</point>
+                <point>	-1.24462 1.17444 1.08699	</point>
+                <point>	-1.23462 1.17444 1.12567	</point>
+                <point>	-1.20462 1.17444 1.16434	</point>
+                <point>	-1.22462 1.17444 1.20302	</point>
+                <point>	-1.20462 1.17444 1.24169	</point>
+                <point>	-1.20462 1.17444 1.28037	</point>
+                <point>	-1.21462 1.17444 1.31905	</point>
+                <point>	-1.20462 1.17444 1.35772	</point>
+                <point>	-1.20462 1.17444 1.3964	</point>
+                <point>	-1.20462 1.17444 1.43507	</point>
+                <point>	-1.20462 1.17444 1.47375	</point>
+                <point>	-1.20462 1.17444 1.51242	</point>
+                <point>	-1.20462 1.17444 1.5511	</point>
+                <point>	-1.20462 1.17444 1.58977	</point>
+                <point>	-1.20462 1.17444 1.62845	</point>
+                <point>	-1.20462 1.17444 1.66713	</point>
+                <point>	-1.20462 1.17444 1.7058	</point>
+                <point>	-1.20462 1.17444 1.74448	</point>
+                <point>	-1.20462 1.17444 1.78315	</point>
+                <point>	-1.20462 1.17444 1.82183	</point>
+                <point>	-1.20462 1.17444 1.8605	</point>
+                <point>	-1.20462 1.17444 1.89918	</point>
+                <point>	-1.20462 1.17444 1.93785	</point>
+                <point>	-1.20462 1.17444 1.97653	</point>
+                <point>	-1.20462 1.17444 2.01521	</point>
+                <point>	-1.20462 1.17444 2.05388	</point>
+                <point>	-1.20462 1.17444 2.09256	</point>
+                <point>	-1.20462 1.17444 2.13123	</point>
+                <point>	-1.20462 1.17444 2.16991	</point>
+                <point>	-1.20462 1.17444 2.20858	</point>
+                <point>	-1.20462 1.17444 2.24726	</point>
+                <point>	-1.20462 1.17444 2.28594	</point>
+                <point>	-1.20462 1.17444 2.32461	</point>
+                <point>	-1.20462 1.17444 2.36329	</point>
+                <point>	-1.20462 1.17444 2.40196	</point>
+                <point>	-1.20462 1.17444 2.44064	</point>
+                <point>	-1.20462 1.17444 2.47931	</point>
+                <point>	-1.20462 1.17444 2.51799	</point>
+                <point>	-1.20462 1.17444 2.55666	</point>
+                <point>	-1.20462 1.17444 2.59534	</point>
+                <point>	-1.20462 1.17444 2.63402	</point>
+                <point>	-1.20462 1.17963 2.67269	</point>
+                <point>	-1.20462 1.17925 2.71137	</point>
+                <point>	-1.26462 1.17893 2.75004	</point>
+                <point>	-1.36462 1.17864 2.78872	</point>
+                <point>	-1.44462 1.17845 2.82739	</point>
+                <point>	-1.44462 1.17605 2.86607	</point>
+                <point>	-1.44462 1.16895 2.90475	</point>
+                <point>	-1.44462 1.15804 2.94342	</point>
+                <point>	-1.44462 1.14773 2.9821	</point>
+                <point>	-1.44462 1.13437 3.02077	</point>
+                <point>	-1.44462 1.11019 3.05945	</point>
+                <point>	-1.44462 1.07803 3.09812	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	-1.25461 0.854072 -1.9297	</point>
+                <point>	-1.24461 0.850139 -1.89103	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.943107 -1.50427	</point>
+                <point>	-1.20462 0.976594 -1.4656	</point>
+              </range>
+              <range>
+                <point>	-1.22461 0.84336 -0.421355	</point>
+                <point>	-1.20462 0.920299 -0.38268	</point>
+                <point>	-1.25462 0.90444 -0.344004	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.976804 0.0427513	</point>
+                <point>	-1.20462 0.941883 0.0814271	</point>
+              </range>
+              <range>
+                <point>	-1.20461 0.883446 0.352156	</point>
+                <point>	-1.24462 0.920506 0.390832	</point>
+                <point>	-1.25461 0.894632 0.429507	</point>
+              </range>
+              <range>
+                <point>	-1.20462 0.973848 1.5511	</point>
+                <point>	-1.22462 0.959116 1.58977	</point>
+              </range>
+              <range>
+                <point>	-1.20461 0.881785 1.8605	</point>
+                <point>	-1.24461 0.919613 1.89918	</point>
+                <point>	-1.25461 0.895507 1.93785	</point>
+              </range>
+              <range>
+                <point>	-1.27461 0.761562 2.67269	</point>
+                <point>	-1.27461 0.803616 2.71137	</point>
+                <point>	-1.27461 0.812985 2.75004	</point>
+                <point>	-1.27461 0.804307 2.78872	</point>
+                <point>	-1.27461 0.767874 2.82739	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	16	</slotId>
+          <anchorPosition>	-1.56963 0.55415 -0.00966511	</anchorPosition>
+          <anchorDirection>	-0.942944 0.332902 -0.00580624	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	17	</slotId>
+          <anchorPosition>	0.000027 2.23035 0.356111	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_It12_Prototipo_Standard_B_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_It12_Prototipo_Standard_B>
+      <userString>	#italy_vehicles:Turret_1_It12_Prototipo_Standard_B	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30500	</price>
+      <armor>
+        <armor_1>	63	</armor_1>
+        <armor_3>	53	</armor_3>
+        <armor_4>	53	</armor_4>
+        <armor_5>	25	</armor_5>
+        <armor_6>	15	</armor_6>
+        <armor_7>	35	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	40	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	7500	</weight>
+      <maxHealth>	310	</maxHealth>
+      <rotationSpeed>	32	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Cannone_da_90_Rh>	shared	  <maxAmmo>	90	</maxAmmo>
+          <unlocks>
+            <gun>	Cannone_da_105_Rh_V1	  <cost>	63000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	35	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 8 0.375 8 0.397222 1 0.466667 1 0.477778 -0.999803 0.522222 -1 0.533333 1 0.602778 1 0.625 8 1 8	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <reloadTime>	10.4	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	3	</count>
+            <rate>	30	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	8 9 11	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
+          </autoreload>
+          <models>
+            <undamaged>	vehicles/italy/It12_Prototipo_Standard_B/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It12_Prototipo_Standard_B/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	6	</slotId>
+              <rayStart>	0.000889782 -0.0267639 2.41436	</rayStart>
+              <rayEnd>	-0.0248944 -0.0277934 2.41336	</rayEnd>
+              <rayUp>	0.078 0.075 5	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	18	</slotId>
+              <anchorPosition>	0.00044489 -0.0233588 1.93908	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	23	</slotId>
+              <anchorPosition>	0.000000 0.194457 0.194458	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	24	</slotId>
+              <anchorPosition>	0.000444891 -0.013382 1.93908	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.907229 0.907229 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_90_Rh>
+        <Cannone_da_105_Rh_V1>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_It12_Prototipo_Standard_B	  <cost>	24800	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	40	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 8 0.375 8 0.397222 1 0.466667 1 0.477778 -0.999803 0.522222 -1 0.533333 1 0.602778 1 0.625 8 1 8	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <reloadTime>	15.6	</reloadTime>
+          <aimingTime>	2.4	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	3	</count>
+            <rate>	20	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	11 13 16	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
+          </autoreload>
+          <models>
+            <undamaged>	vehicles/italy/It12_Prototipo_Standard_B/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It12_Prototipo_Standard_B/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	7	</slotId>
+              <rayStart>	0.00134346 -0.0305775 2.53225	</rayStart>
+              <rayEnd>	0.0279316 -0.0611175 2.52976	</rayEnd>
+              <rayUp>	0.082 0.073 5	</rayUp>
+              <size>	0.727	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	25	</slotId>
+              <anchorPosition>	0.000671732 -0.0152887 1.93389	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	26	</slotId>
+              <anchorPosition>	0.000000 0.194323 0.194324	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	27	</slotId>
+              <anchorPosition>	0.000671732 -0.0152887 1.93389	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.86747 0.86747 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_105_Rh_V1>
+      </guns>
+      <models>
+        <undamaged>	vehicles/italy/It12_Prototipo_Standard_B/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It12_Prototipo_Standard_B/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.00221 0.327059 1.07222	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.088 -0.031 1.023 0.000 0.416 0.359 0.500 0.500 0.500 0.500 0.319 0.500 0.272 0.631 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	2	</slotId>
+          <rayStart>	-1.03167 0.267909 0.579007	</rayStart>
+          <rayEnd>	-0.9492 0.221417 0.546795	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	3	</slotId>
+          <rayStart>	-1.27879 0.266289 -0.206315	</rayStart>
+          <rayEnd>	-1.10936 0.160118 -0.210494	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.7	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	4	</slotId>
+          <rayStart>	1.03167 0.267909 0.579007	</rayStart>
+          <rayEnd>	0.9492 0.221417 0.546795	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	5	</slotId>
+          <rayStart>	1.27879 0.266289 -0.206315	</rayStart>
+          <rayEnd>	1.10936 0.160118 -0.210494	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.7	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	20	</slotId>
+          <anchorPosition>	0.000000 0.743993 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	21	</slotId>
+          <anchorPosition>	0.000000 0.743993 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Turret_1_It12_Prototipo_Standard_B>
+    <Turret_2_It12_Prototipo_Standard_B>
+      <userString>	#italy_vehicles:Turret_2_It12_Prototipo_Standard_B	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	58800	</price>
+      <unlocks>
+        <vehicle>	It08_Progetto_M40_mod_65	  <cost>	197000	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <armor_1>	60	</armor_1>
+        <armor_2>	60	</armor_2>
+        <armor_3>	55	</armor_3>
+        <armor_4>	55	</armor_4>
+        <armor_5>	30	</armor_5>
+        <armor_6>	15	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	7000	</weight>
+      <maxHealth>	460	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	390	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Cannone_da_90_Rh>	shared	  <maxAmmo>	90	</maxAmmo>
+          <armor>
+            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	35	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.375 10 0.397222 0 0.466667 0 0.477778 -2 0.522222 -2 0.533333 0 0.602778 0 0.625 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <reloadTime>	10.4	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	3	</count>
+            <rate>	30	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	8 9 11	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
+          </autoreload>
+          <models>
+            <undamaged>	vehicles/italy/It12_Prototipo_Standard_B/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It12_Prototipo_Standard_B/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	12	</slotId>
+              <rayStart>	0.000405184 -0.0118357 2.31367	</rayStart>
+              <rayEnd>	0.0264815 -0.047095 2.31266	</rayEnd>
+              <rayUp>	0.079 0.077 5	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isMirrored>	true	</isMirrored>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	30	</slotId>
+              <anchorPosition>	0.000202592 -0.00591791 1.9486	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	31	</slotId>
+              <anchorPosition>	0.000000 0.22254 0.22254	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	32	</slotId>
+              <anchorPosition>	0.000202592 -0.00591783 1.9486	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_90_Rh>
+        <Cannone_da_105_Rh_V1>	shared	  <maxAmmo>	60	</maxAmmo>
+          <armor>
+            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	40	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.375 10 0.397222 0 0.466667 0 0.477778 -2 0.522222 -2 0.533333 0 0.602778 0 0.625 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <reloadTime>	15.6	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	3	</count>
+            <rate>	20	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	11 13 15	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
+          </autoreload>
+          <models>
+            <undamaged>	vehicles/italy/It12_Prototipo_Standard_B/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It12_Prototipo_Standard_B/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	13	</slotId>
+              <rayStart>	-0.000276989 -0.0123776 2.52859	</rayStart>
+              <rayEnd>	0.0254102 -0.0396406 2.52609	</rayEnd>
+              <rayUp>	0.082 0.075 5	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isMirrored>	true	</isMirrored>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	33	</slotId>
+              <anchorPosition>	-0.000138494 -0.00618887 1.94178	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	34	</slotId>
+              <anchorPosition>	0.000000 0.22254 0.22254	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	35	</slotId>
+              <anchorPosition>	-0.000138494 -0.00618881 1.94178	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_105_Rh_V1>
+      </guns>
+      <invisibilityFactor>	1.014	</invisibilityFactor>
+      <models>
+        <undamaged>	vehicles/italy/It12_Prototipo_Standard_B/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/italy/It12_Prototipo_Standard_B/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It12_Prototipo_Standard_B/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.00119 0.284225 1.16924	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.053 0.000 1.000 0.000 0.416 0.382 0.500 0.500 0.500 0.500 0.282 0.500 0.342 0.506 0.000	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	8	</slotId>
+          <rayStart>	-1.05945 0.35647 0.483027	</rayStart>
+          <rayEnd>	-0.912476 0.236575 0.419626	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	9	</slotId>
+          <rayStart>	-1.15727 0.348031 -0.274271	</rayStart>
+          <rayEnd>	-0.993521 0.233446 -0.267077	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.7	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	10	</slotId>
+          <rayStart>	1.05945 0.35647 0.483027	</rayStart>
+          <rayEnd>	0.912476 0.236575 0.419626	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	11	</slotId>
+          <rayStart>	1.15727 0.348031 -0.274271	</rayStart>
+          <rayEnd>	0.993521 0.233446 -0.267077	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.7	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	28	</slotId>
+          <anchorPosition>	0.000000 0.730766 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	29	</slotId>
+          <anchorPosition>	0.000000 0.730766 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Turret_2_It12_Prototipo_Standard_B>
+  </turrets0>
+  <engines>
+    <MB_837_Aa>	shared	  <unlocks>
+        <engine>	MB_837_Ea	  <cost>	48500	</cost>
+        </engine>
+      </unlocks>
+    </MB_837_Aa>
+    <MB_837_Ea>	shared	</MB_837_Ea>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <R300>	shared	  <unlocks>
+        <radio>	RV_4	  <cost>	9400	</cost>
+        </radio>
+      </unlocks>
+    </R300>
+    <RV_4>	shared	</RV_4>
+  </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <Cannone_da_90_Rh>
+        <delta>	1.5	</delta>
+      </Cannone_da_90_Rh>
+      <Cannone_da_105_Rh_V1>
+        <delta>	1.5	</delta>
+      </Cannone_da_105_Rh_V1>
+    </guns>
+  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <MB_837_Aa>
+          <smplEnginePower>	600	</smplEnginePower>
+        </MB_837_Aa>
+        <MB_837_Ea>
+          <smplEnginePower>	750	</smplEnginePower>
+        </MB_837_Ea>
+      </engines>
+      <chassis>
+        <Chassis_It12_Prototipo_Standard_B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_It12_Prototipo_Standard_B>
+        <Chassis_It12_Prototipo_Standard_B_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_It12_Prototipo_Standard_B_2>
+      </chassis>
+    </detailed>
+  </physics>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	italian_flag	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.898039	</alpha>
+  </emblems>
+</It12_Prototipo_Standard_B.xml>

@@ -1,28 +1,19 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/battle/triggers.py
 import BigWorld
 import TriggersManager
 from constants import ARENA_PERIOD
-from tutorial import g_tutorialWeaver
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
+from tutorial.control import g_tutorialWeaver
 from tutorial.control.battle import aspects
-from tutorial.control.triggers import _Trigger, _TriggerWithValidateVar
+from tutorial.control.triggers import Trigger, TriggerWithValidateVar
 from tutorial.logger import LOG_ERROR, LOG_DEBUG, LOG_MEMORY
-__all__ = ['VehicleOnArenaTrigger',
- 'PlayerVehicleNoAmmoTrigger',
- 'ObjectAIMTrigger',
- 'AreaTrigger',
- 'AimAtVehicleTrigger',
- 'AutoAimAtVehicleTrigger',
- 'VehicleDestroyedTrigger',
- 'VehicleOnSoftTerrainTrigger',
- 'ShotMissedTrigger',
- 'ShotNoDamageTrigger',
- 'ShotDamageTrigger',
- 'SniperModeTrigger',
- 'TriggersDispatcher']
+__all__ = ('VehicleOnArenaTrigger', 'PlayerVehicleNoAmmoTrigger', 'ObjectAIMTrigger', 'AreaTrigger', 'AimAtVehicleTrigger', 'AutoAimAtVehicleTrigger', 'VehicleDestroyedTrigger', 'VehicleOnSoftTerrainTrigger', 'ShotMissedTrigger', 'ShotNoDamageTrigger', 'ShotDamageTrigger', 'SniperModeTrigger', 'TriggersDispatcher')
 
-class VehicleOnArenaTrigger(_TriggerWithValidateVar):
+class VehicleOnArenaTrigger(TriggerWithValidateVar):
 
-    def __init__(self, triggerID, validateVarID, setVarID = None, key = 'name'):
+    def __init__(self, triggerID, validateVarID, setVarID=None, key='name'):
         super(VehicleOnArenaTrigger, self).__init__(triggerID, validateVarID, setVarID=setVarID)
         self.__key = key
 
@@ -47,9 +38,10 @@ class VehicleOnArenaTrigger(_TriggerWithValidateVar):
             return result
 
 
-class PlayerVehicleNoAmmoTrigger(_Trigger):
+class PlayerVehicleNoAmmoTrigger(Trigger):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, triggerID, stateFlagID = None):
+    def __init__(self, triggerID, stateFlagID=None):
         super(PlayerVehicleNoAmmoTrigger, self).__init__(triggerID)
         self.__pIdx = -1
         self.__ammoLayout = {}
@@ -60,26 +52,20 @@ class PlayerVehicleNoAmmoTrigger(_Trigger):
     def __del__(self):
         LOG_MEMORY('PlayerVehicleNoAmmoTrigger deleted')
 
-    def setAmmoLayout(self, cd, quantity):
-        self.__ammoLayout[cd] = quantity
-
     def run(self):
         if not self.isSubscribed:
-            player = BigWorld.player()
-            if hasattr(player, '_PlayerAvatar__ammo'):
-                ammo = player._PlayerAvatar__ammo.copy()
-                self.__ammoLayout = dict(map(lambda item: (item[0], item[1]), ammo.itervalues()))
-            self.__pIdx = g_tutorialWeaver.weave(pointcut=aspects.AmmoQuantityPointcut, aspects=[aspects.AmmoQuantityAspect(self)])
+            self.__addListeners()
+            self.__pIdx = g_tutorialWeaver.weave(pointcut=aspects.AmmoQuantityPointcut, aspects=(aspects.AmmoQuantityAspect(self),))
             self.isSubscribed = True
         if self._stateFlag is None:
             self._stateFlag = self._tutorial.getFlags().isActiveFlag(self._stateFlagID)
         super(PlayerVehicleNoAmmoTrigger, self).run()
         return
 
-    def isOn(self, shoot = False):
+    def isOn(self, shoot=False):
         return sum(self.__ammoLayout.values()) is 0 and shoot
 
-    def toggle(self, isOn = True, **kwargs):
+    def toggle(self, isOn=True, **kwargs):
         if self._stateFlag is isOn:
             self.isRunning = False
             return
@@ -90,13 +76,34 @@ class PlayerVehicleNoAmmoTrigger(_Trigger):
         g_tutorialWeaver.clear(self.__pIdx)
         self.__pIdx = -1
         self.__ammoLayout.clear()
+        self.__removeListeners()
         self.isSubscribed = False
         super(PlayerVehicleNoAmmoTrigger, self).clear()
 
+    def __addListeners(self):
+        ammoCtrl = self.sessionProvider.shared.ammo
+        if ammoCtrl:
+            ammoCtrl.onShellsAdded += self.__onShellsAdded
+            ammoCtrl.onShellsUpdated += self.__onShellsUpdated
+            for intCD, (quantity, _) in ammoCtrl.getShellsLayout():
+                self.__ammoLayout[intCD] = quantity
 
-class _DispatchableTrigger(_TriggerWithValidateVar):
+    def __removeListeners(self):
+        ammoCtrl = self.sessionProvider.shared.ammo
+        if ammoCtrl:
+            ammoCtrl.onShellsAdded -= self.__onShellsAdded
+            ammoCtrl.onShellsUpdated -= self.__onShellsUpdated
 
-    def __init__(self, triggerID, validateVarID, setVarID = None, stateFlagID = None):
+    def __onShellsAdded(self, intCD, descriptor, quantity, quantityInClip, gunSettings):
+        self.__ammoLayout[intCD] = quantity
+
+    def __onShellsUpdated(self, intCD, quantity, quantityInClip, result):
+        self.__ammoLayout[intCD] = quantity
+
+
+class _DispatchableTrigger(TriggerWithValidateVar):
+
+    def __init__(self, triggerID, validateVarID, setVarID=None, stateFlagID=None):
         super(_DispatchableTrigger, self).__init__(triggerID, validateVarID, setVarID=setVarID)
         self._stateFlag = None
         self._stateFlagID = stateFlagID
@@ -108,7 +115,7 @@ class _DispatchableTrigger(_TriggerWithValidateVar):
     def getAllowed(self):
         return []
 
-    def resolveState(self, isOn = False):
+    def resolveState(self, isOn=False):
         if self._stateFlag is None:
             self._stateFlag = self._tutorial.getFlags().isActiveFlag(self._stateFlagID)
             self.toggle(isOn=isOn, benefit=True)
@@ -117,7 +124,7 @@ class _DispatchableTrigger(_TriggerWithValidateVar):
     def isOn(self, stateFlag):
         return stateFlag
 
-    def toggle(self, isOn = True, **kwargs):
+    def toggle(self, isOn=True, **kwargs):
         if self._stateFlag is isOn:
             return
         self._stateFlag = isOn
@@ -132,7 +139,7 @@ class ObjectAIMTrigger(_DispatchableTrigger):
     def getAllowed(self):
         return [TriggersManager.TRIGGER_TYPE.AIM]
 
-    def resolveState(self, isOn = False):
+    def resolveState(self, isOn=False):
         manager = TriggersManager.g_manager
         if manager is not None and manager.isEnabled():
             isOn = manager.isAutoTriggerActive(TriggersManager.TRIGGER_TYPE.AIM, self.getVar())
@@ -148,7 +155,7 @@ class AreaTrigger(_DispatchableTrigger):
     def getAllowed(self):
         return [TriggersManager.TRIGGER_TYPE.AREA]
 
-    def resolveState(self, isOn = False):
+    def resolveState(self, isOn=False):
         manager = TriggersManager.g_manager
         if manager is not None and manager.isEnabled():
             isOn = manager.isAutoTriggerActive(TriggersManager.TRIGGER_TYPE.AREA, self.getVar())
@@ -162,7 +169,7 @@ class AimAtVehicleTrigger(_DispatchableTrigger):
         return triggerType is TriggersManager.TRIGGER_TYPE.AIM_AT_VEHICLE and self.getVar() == event.get('vehicleId')
 
     def getAllowed(self):
-        return [TriggersManager.TRIGGER_TYPE.AIM_AT_VEHICLE]
+        return (TriggersManager.TRIGGER_TYPE.AIM_AT_VEHICLE,)
 
 
 class AutoAimAtVehicleTrigger(_DispatchableTrigger):
@@ -182,7 +189,7 @@ class VehicleDestroyedTrigger(_DispatchableTrigger):
     def getAllowed(self):
         return [TriggersManager.TRIGGER_TYPE.VEHICLE_DESTROYED]
 
-    def resolveState(self, isOn = False):
+    def resolveState(self, isOn=False):
         arena = getattr(BigWorld.player(), 'arena', None)
         if arena is not None:
             vehicle = arena.vehicles.get(self.getVar())
@@ -194,7 +201,7 @@ class VehicleDestroyedTrigger(_DispatchableTrigger):
 
 class VehicleOnSoftTerrainTrigger(_DispatchableTrigger):
 
-    def __init__(self, triggerID, stateFlagID = None):
+    def __init__(self, triggerID, stateFlagID=None):
         super(VehicleOnSoftTerrainTrigger, self).__init__(triggerID, None, setVarID=None, stateFlagID=stateFlagID)
         return
 
@@ -207,7 +214,7 @@ class VehicleOnSoftTerrainTrigger(_DispatchableTrigger):
 
 class ShotMissedTrigger(_DispatchableTrigger):
 
-    def __init__(self, triggerID, stateFlagID = None):
+    def __init__(self, triggerID, stateFlagID=None):
         super(ShotMissedTrigger, self).__init__(triggerID, None, setVarID=None, stateFlagID=stateFlagID)
         return
 
@@ -220,7 +227,7 @@ class ShotMissedTrigger(_DispatchableTrigger):
 
 class ShotNoDamageTrigger(_DispatchableTrigger):
 
-    def __init__(self, triggerID, validateVarID, setVarID = None, stateFlagID = None, maxCount = 1):
+    def __init__(self, triggerID, validateVarID, setVarID=None, stateFlagID=None, maxCount=1):
         super(ShotNoDamageTrigger, self).__init__(triggerID, validateVarID, setVarID)
         self._count = 0
         self._maxCount = maxCount
@@ -243,7 +250,7 @@ class ShotNoDamageTrigger(_DispatchableTrigger):
 
 class ShotDamageTrigger(_DispatchableTrigger):
 
-    def __init__(self, triggerID, validateVarID, setVarID = None, stateFlagID = None, maxCount = 1):
+    def __init__(self, triggerID, validateVarID, setVarID=None, stateFlagID=None, maxCount=1):
         super(ShotDamageTrigger, self).__init__(triggerID, validateVarID, setVarID)
         self._count = 0
         self._maxCount = maxCount
@@ -266,7 +273,7 @@ class ShotDamageTrigger(_DispatchableTrigger):
 
 class SniperModeTrigger(_DispatchableTrigger):
 
-    def __init__(self, triggerID, stateFlagID = None):
+    def __init__(self, triggerID, stateFlagID=None):
         super(SniperModeTrigger, self).__init__(triggerID, None, setVarID=None, stateFlagID=stateFlagID)
         return
 
@@ -277,7 +284,7 @@ class SniperModeTrigger(_DispatchableTrigger):
         return [TriggersManager.TRIGGER_TYPE.SNIPER_MODE]
 
 
-class TriggersDispatcher(_Trigger, TriggersManager.ITriggerListener):
+class TriggersDispatcher(Trigger, TriggersManager.ITriggerListener):
 
     def __init__(self, triggerID, triggerIDs):
         super(TriggersDispatcher, self).__init__(triggerID)
@@ -291,14 +298,13 @@ class TriggersDispatcher(_Trigger, TriggersManager.ITriggerListener):
             if arena is not None:
                 arena.onPeriodChange += self.__arena_onPeriodChange
         self.isSubscribed = True
-        getter = self._tutorial._data.getTrigger
+        getter = self._data.getTrigger
         for triggerID in self._triggerIDs:
             trigger = getter(triggerID)
             if trigger is not None:
                 self._types.update(trigger.getAllowed())
                 trigger.resolveState()
-            else:
-                LOG_ERROR('Trigger not found', triggerID)
+            LOG_ERROR('Trigger not found', triggerID)
 
         manager = TriggersManager.g_manager
         if manager is not None:
@@ -320,14 +326,14 @@ class TriggersDispatcher(_Trigger, TriggersManager.ITriggerListener):
         self._types = set()
         return
 
-    def toggle(self, isOn = True, event = None, **kwargs):
+    def toggle(self, isOn=True, event=None, **kwargs):
         if event is None:
             event = {}
         eventType = event.get('type')
         if eventType not in self._types:
             return
         else:
-            getter = self._tutorial._data.getTrigger
+            getter = self._data.getTrigger
             for triggerID in self._triggerIDs:
                 trigger = getter(triggerID)
                 if trigger is not None and trigger.isAllowed(eventType, event):

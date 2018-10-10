@@ -1,14 +1,75 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/offbattle/triggers.py
-from PlayerEvents import g_playerEvents
-from constants import JOIN_FAILURE_NAMES
+from constants import QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.prb_control.entities.listener import IGlobalListener
+from tutorial.logger import LOG_ERROR
 from tutorial.control.context import GlobalStorage, GLOBAL_FLAG
-from tutorial.control.offbattle.functional import ContentChangedEvent
-from tutorial.control.triggers import _Trigger
 from tutorial.control.offbattle.context import OffBattleClientCtx
-__all__ = ['TutorialQueueTrigger', 'AllBonusesTrigger']
+from tutorial.control.offbattle.functional import ContentChangedEvent
+from tutorial.control.triggers import Trigger
+import BigWorld
+__all__ = ('TutorialModeTrigger', 'TutorialQueueTrigger', 'AllBonusesTrigger')
 
-class TutorialQueueTrigger(_Trigger):
+class TutorialModeTrigger(Trigger, IGlobalListener):
+    _inAvailable = GlobalStorage(GLOBAL_FLAG.MODE_IS_AVAILABLE, False)
+
+    def __init__(self, triggerID):
+        super(TutorialModeTrigger, self).__init__(triggerID)
+        self.__checkPrbDispatcherCallbackID = None
+        self._inMode = False
+        return
+
+    def run(self):
+        if not self.__checkPrbDispatcher():
+            return
+        if not self.isSubscribed:
+            self.startGlobalListening()
+            self.isSubscribed = True
+        self.__setState()
+        super(TutorialModeTrigger, self).run()
+
+    def isOn(self, *args):
+        return self._inMode
+
+    def clear(self):
+        if self.__checkPrbDispatcherCallbackID is not None:
+            BigWorld.cancelCallback(self.__checkPrbDispatcherCallbackID)
+            self.__checkPrbDispatcherCallbackID = None
+        if self.isSubscribed:
+            self.stopGlobalListening()
+            self.isSubscribed = False
+        self._inMode = False
+        super(TutorialModeTrigger, self).clear()
+        return
+
+    def onPrbEntitySwitched(self):
+        self.__setState()
+        self.toggle(isOn=self._inMode)
+
+    def __checkPrbDispatcher(self):
+        if self.prbDispatcher is None:
+            if self.__checkPrbDispatcherCallbackID is None:
+                self.__checkPrbDispatcherCallbackID = BigWorld.callback(0.0, self.__checkPrbDispatcherCallback)
+            return False
+        else:
+            if self.__checkPrbDispatcherCallbackID is not None:
+                BigWorld.cancelCallback(self.__checkPrbDispatcherCallbackID)
+                self.__checkPrbDispatcherCallbackID = None
+            return True
+
+    def __checkPrbDispatcherCallback(self):
+        self.__checkPrbDispatcherDallbackID = None
+        self.run()
+        return
+
+    def __setState(self):
+        funcState = self.prbDispatcher.getFunctionalState()
+        self._inMode = funcState.isInPreQueue(QUEUE_TYPE.TUTORIAL)
+        self._inAvailable = funcState.isInPreQueue(QUEUE_TYPE.RANDOMS) or funcState.isInPreQueue(QUEUE_TYPE.SANDBOX)
+
+
+class TutorialQueueTrigger(Trigger, IGlobalListener):
     _inQueue = GlobalStorage(GLOBAL_FLAG.IN_QUEUE, False)
 
     def __init__(self, triggerID, popUpID):
@@ -17,11 +78,7 @@ class TutorialQueueTrigger(_Trigger):
 
     def run(self):
         if not self.isSubscribed:
-            g_playerEvents.onTutorialEnqueued += self.__pe_onTutorialEnqueued
-            g_playerEvents.onTutorialDequeued += self.__pe_onTutorialDequeued
-            g_playerEvents.onTutorialEnqueueFailure += self.__pe_onTutorialEnqueueFailure
-            g_playerEvents.onArenaJoinFailure += self.__pe_onArenaJoinFailure
-            g_playerEvents.onKickedFromArena += self.__pe_onKickedFromArena
+            self.startGlobalListening()
             self.isSubscribed = True
         super(TutorialQueueTrigger, self).run()
 
@@ -31,42 +88,49 @@ class TutorialQueueTrigger(_Trigger):
     def clear(self):
         self._gui.hideWaiting('queue')
         if self.isSubscribed:
-            g_playerEvents.onTutorialEnqueued -= self.__pe_onTutorialEnqueued
-            g_playerEvents.onTutorialDequeued -= self.__pe_onTutorialDequeued
-            g_playerEvents.onTutorialEnqueueFailure -= self.__pe_onTutorialEnqueueFailure
-            g_playerEvents.onArenaJoinFailure -= self.__pe_onArenaJoinFailure
-            g_playerEvents.onKickedFromArena -= self.__pe_onKickedFromArena
-        self.isSubscribed = False
+            self.stopGlobalListening()
+            self.isSubscribed = False
         self._inQueue = False
         super(TutorialQueueTrigger, self).clear()
 
-    def __pe_onTutorialEnqueued(self, queueNumber, queueLen, avgWaitingTime):
+    def onEnqueued(self, queueType, *args):
+        if queueType != QUEUE_TYPE.TUTORIAL:
+            return
+        if len(args) < 3:
+            LOG_ERROR('Number of argument is invalid', args)
+            _, _, avgWaitingTime = (0, 0, 0)
+        else:
+            _, _, avgWaitingTime = args[:3]
         self._event.fire(avgWaitingTime)
         if not self._inQueue:
             self._inQueue = True
             self.toggle(isOn=True)
 
-    def __pe_onTutorialDequeued(self):
+    def onDequeued(self, queueType, *args):
+        if queueType != QUEUE_TYPE.TUTORIAL:
+            return
         if self._inQueue:
             self._inQueue = False
             self.toggle(isOn=False)
 
-    def __pe_onTutorialEnqueueFailure(self, errorCode, errorStr):
-        if errorCode in JOIN_FAILURE_NAMES:
-            text = '#system_messages:arena_start_errors/join/{0:>s}'.format(JOIN_FAILURE_NAMES[errorCode])
-        else:
-            text = errorStr
-        self._gui.showI18nMessage(text, msgType='Error')
-        self._tutorial.refuse()
+    def onEnqueueError(self, queueType, *args):
+        if queueType == QUEUE_TYPE.TUTORIAL:
+            self._tutorial.refuse()
 
-    def __pe_onArenaJoinFailure(self, errorCode, errorStr):
-        self._tutorial.refuse()
+    def onKickedFromQueue(self, queueType, *args):
+        if queueType == QUEUE_TYPE.TUTORIAL:
+            self._tutorial.refuse()
 
-    def __pe_onKickedFromArena(self, errorCode):
-        self._tutorial.refuse()
+    def onKickedFromArena(self, queueType, *args):
+        if queueType == QUEUE_TYPE.TUTORIAL:
+            self._tutorial.refuse()
+
+    def onArenaJoinFailure(self, queueType, *args):
+        if queueType == QUEUE_TYPE.TUTORIAL:
+            self._tutorial.refuse()
 
 
-class AllBonusesTrigger(_Trigger):
+class AllBonusesTrigger(Trigger):
 
     def __init__(self, triggerID, setVarID):
         super(AllBonusesTrigger, self).__init__(triggerID)

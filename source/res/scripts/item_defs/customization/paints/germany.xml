@@ -1,0 +1,80 @@
+<germany.xml>
+  <itemGroup>
+    <name>	germany colors	</name>
+    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+        <levels>	6 8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	135	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_01.png	</texture>
+      <color>	80 53 44 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_01	</userString>
+    </paint>
+    <paint>
+      <id>	136	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_02.png	</texture>
+      <color>	124 109 88 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_02	</userString>
+    </paint>
+    <paint>
+      <id>	137	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_03.png	</texture>
+      <color>	49 46 36 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_03	</userString>
+    </paint>
+    <paint>
+      <id>	138	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_04.png	</texture>
+      <color>	47 50 52 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_04	</userString>
+    </paint>
+    <paint>
+      <id>	139	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_05.png	</texture>
+      <color>	52 64 43 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_05	</userString>
+    </paint>
+    <paint>
+      <id>	216	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_06.png	</texture>
+      <color>	48 51 34 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_06	</userString>
+    </paint>
+    <paint>
+      <id>	274	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_07.png	</texture>
+      <color>	118 86 73 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_07	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+</germany.xml>

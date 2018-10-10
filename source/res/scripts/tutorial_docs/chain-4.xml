@@ -1,0 +1,548 @@
+<chain-4.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Hangar	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <gui-items>
+        <gui-item>	TankCarousel	  <on-scene-effects>
+            <activate>	TankCarouselOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	TankCarouselOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	MaintenanceButton	  <on-scene-effects>
+            <activate>	MaintenanceButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	MaintenanceButtonOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	EquipmentItem1DropDown	  <on-scene-effects>
+            <activate>	EquipmentItem1DropDownOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	EquipmentItem1DropDownOnScene	</inactivate>
+            <refuse-training>
+              <condition>
+                <inactive>	EquipmentItemDropDownClicked	</inactive>
+              </condition>
+            </refuse-training>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	EquipmentItem2DropDown	  <on-scene-effects>
+            <activate>	EquipmentItem2DropDownOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	EquipmentItem2DropDownOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	EquipmentItem3DropDown	  <on-scene-effects>
+            <activate>	EquipmentItem3DropDownOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	EquipmentItem3DropDownOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	AmmunitionPanel	  <on-scene-effects>
+            <activate>	AmmunitionPanelOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	AmmunitionPanelOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	EquipmentItem1Renderer	  <on-scene-effects>
+            <activate>	EquipmentItem1RendererOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	EquipmentItem1RendererOnScene	</inactivate>
+            <refuse-training>
+              <condition>
+                <inactive>	EquipmentItemRendererClicked	</inactive>
+              </condition>
+            </refuse-training>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	EquipmentItem2Renderer	  <on-scene-effects>
+            <activate>	EquipmentItem2RendererOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	EquipmentItem2RendererOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	EquipmentItem3Renderer	  <on-scene-effects>
+            <activate>	EquipmentItem3RendererOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	EquipmentItem3RendererOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	TechnicalMaintenanceApplyButton	  <on-scene-effects>
+            <activate>	TechnicalMaintenanceApplyButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	TechnicalMaintenanceApplyButtonOnScene	</inactivate>
+            <refuse-training>
+              <condition>
+                <inactive>	TechnicalMaintenanceApplyButtonClicked	</inactive>
+              </condition>
+            </refuse-training>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+      <post-effects>
+        <clear-scene></clear-scene>
+        <inactivate>	EquipmentInstalled	</inactivate>
+        <inactivate>	MaintenanceButtonClicked	</inactivate>
+        <inactivate>	EquipmentItemDropDownClicked	</inactivate>
+        <inactivate>	EquipmentItemRendererClicked	</inactivate>
+        <inactivate>	TechnicalMaintenanceApplyButtonClicked	</inactivate>
+        <inactivate>	MaintenanceButtonOnScene	</inactivate>
+        <inactivate>	EquipmentItem1DropDownOnScene	</inactivate>
+        <inactivate>	EquipmentItem2DropDownOnScene	</inactivate>
+        <inactivate>	EquipmentItem3DropDownOnScene	</inactivate>
+        <inactivate>	EquipmentItem1RendererOnScene	</inactivate>
+        <inactivate>	EquipmentItem2RendererOnScene	</inactivate>
+        <inactivate>	EquipmentItem3RendererOnScene	</inactivate>
+        <run-trigger>	MaintenanceStateTrigger	</run-trigger>
+        <run-trigger>	NeedChangeVehicleTrigger	</run-trigger>
+        <set-var>	SelectedVehicle	</set-var>
+        <set-var>	SelectedEquipment	</set-var>
+      </post-effects>
+      <runtime-effects>
+        <set-gui-item-criteria>	EquipmentItem1RendererCriteria	  <condition>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedSlotIndex	  <equals>	FirstSlotIndex	</equals>
+            </var>
+            <effect-not-triggered>	EquipmentItem1RendererCriteria	</effect-not-triggered>
+          </condition>
+        </set-gui-item-criteria>
+        <set-gui-item-criteria>	EquipmentItem2RendererCriteria	  <condition>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedSlotIndex	  <equals>	SecondSlotIndex	</equals>
+            </var>
+            <effect-not-triggered>	EquipmentItem2RendererCriteria	</effect-not-triggered>
+          </condition>
+        </set-gui-item-criteria>
+        <set-gui-item-criteria>	EquipmentItem3RendererCriteria	  <condition>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedSlotIndex	  <equals>	ThirdSlotIndex	</equals>
+            </var>
+            <effect-not-triggered>	EquipmentItem3RendererCriteria	</effect-not-triggered>
+          </condition>
+        </set-gui-item-criteria>
+        <run-trigger>	EquipmentInstalledTrigger	  <condition>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	EquipmentInstalledTrigger	</effect-not-triggered>
+          </condition>
+        </run-trigger>
+        <show-hint>	BuyVehicleHint	  <condition>
+            <active>	TankCarouselOnScene	</active>
+            <var>	SelectedVehicleID	  <is-none></is-none>
+            </var>
+            <effect-not-triggered>	BuyVehicleHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	MaintenanceButtonHint	  <condition>
+            <active>	MaintenanceButtonOnScene	</active>
+            <active>	MaintenanceIsEnabled	</active>
+            <inactive>	EquipmentItem1DropDownOnScene	</inactive>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	MaintenanceButtonHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	ChangeVehicleHint	  <condition>
+            <active>	TankCarouselOnScene	</active>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <inactive>	MaintenanceIsEnabled	</inactive>
+            <active>	NeedChangeCurrentVehicle	</active>
+            <effect-not-triggered>	ChangeVehicleHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	EquipmentItem1DropDownHint	  <condition>
+            <active>	EquipmentItem1DropDownOnScene	</active>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedSlotIndex	  <equals>	FirstSlotIndex	</equals>
+            </var>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	EquipmentItem1DropDownHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	EquipmentItem2DropDownHint	  <condition>
+            <active>	EquipmentItem2DropDownOnScene	</active>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedSlotIndex	  <equals>	SecondSlotIndex	</equals>
+            </var>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	EquipmentItem2DropDownHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	EquipmentItem3DropDownHint	  <condition>
+            <active>	EquipmentItem3DropDownOnScene	</active>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedSlotIndex	  <equals>	ThirdSlotIndex	</equals>
+            </var>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	EquipmentItem3DropDownHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	EquipmentItem1RendererHint	  <condition>
+            <active>	EquipmentItem1RendererOnScene	</active>
+            <active>	EquipmentItemDropDownClicked	</active>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedSlotIndex	  <equals>	FirstSlotIndex	</equals>
+            </var>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	EquipmentItem1RendererHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	EquipmentItem2RendererHint	  <condition>
+            <active>	EquipmentItem2RendererOnScene	</active>
+            <active>	EquipmentItemDropDownClicked	</active>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedSlotIndex	  <equals>	SecondSlotIndex	</equals>
+            </var>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	EquipmentItem2RendererHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	EquipmentItem3RendererHint	  <condition>
+            <active>	EquipmentItem3RendererOnScene	</active>
+            <active>	EquipmentItemDropDownClicked	</active>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedSlotIndex	  <equals>	ThirdSlotIndex	</equals>
+            </var>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	EquipmentItem3RendererHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	TechnicalMaintenanceApplyButtonHint	  <condition>
+            <active>	TechnicalMaintenanceApplyButtonOnScene	</active>
+            <active>	EquipmentItemRendererClicked	</active>
+            <var>	FindEquipmentID	  <is-not-none></is-not-none>
+            </var>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	TechnicalMaintenanceApplyButtonHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <refuse-training>
+          <condition>
+            <active>	TechnicalMaintenanceApplyButtonClicked	</active>
+            <active>	EquipmentInstalled	</active>
+          </condition>
+        </refuse-training>
+      </runtime-effects>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <game-attribute>	SelectedVehicle	  <var-ref>	SelectedVehicleID	</var-ref>
+      <name>	CurrentVehicleCD	</name>
+    </game-attribute>
+    <game-attribute>	SelectedEquipment	  <var-ref>	FindEquipmentID	</var-ref>
+      <name>	EquipmentForCreditsCD	</name>
+      <args>	SelectedEquipmentTag	</args>
+    </game-attribute>
+    <gui-item-criteria>	EquipmentItem1RendererCriteria	  <item-id>	EquipmentItem1ID	</item-id>
+      <value>	id=$FindEquipmentID$	</value>
+    </gui-item-criteria>
+    <gui-item-criteria>	EquipmentItem2RendererCriteria	  <item-id>	EquipmentItem2ID	</item-id>
+      <value>	id=$FindEquipmentID$	</value>
+    </gui-item-criteria>
+    <gui-item-criteria>	EquipmentItem3RendererCriteria	  <item-id>	EquipmentItem3ID	</item-id>
+      <value>	id=$FindEquipmentID$	</value>
+    </gui-item-criteria>
+    <hint>	ChangeVehicleHint	  <item-id>	TankCarousel	</item-id>
+      <text>	ChangeVehicleText	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	TankCarousel	  <effects>
+            <set-var>	SelectedVehicle	</set-var>
+            <set-var>	SelectedEquipment	</set-var>
+            <run-trigger>	MaintenanceStateTrigger	</run-trigger>
+            <run-trigger>	NeedChangeVehicleTrigger	</run-trigger>
+            <close-hint>	ChangeVehicleHint	</close-hint>
+            <refuse-training>
+              <condition>
+                <active>	NeedChangeCurrentVehicle	</active>
+              </condition>
+            </refuse-training>
+          </effects>
+        </click>
+        <click-outside>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	BuyVehicleHint	  <item-id>	TankCarousel	</item-id>
+      <text>	BuyVehicleText	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	MaintenanceButtonHint	  <item-id>	MaintenanceButton	</item-id>
+      <text>	_(#tutorial:chain4/hint/openMaintenanceWindow)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	MaintenanceButton	  <effects>
+            <close-hint>	MaintenanceButtonHint	</close-hint>
+            <activate>	MaintenanceButtonClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	MaintenanceButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	MaintenanceButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	EquipmentItem1DropDownHint	  <item-id>	EquipmentItem1DropDown	</item-id>
+      <text>	_(#tutorial:chain4/hint/openEquipmentDropDown)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	EquipmentItem1DropDown	  <effects>
+            <close-hint>	EquipmentItem1DropDownHint	</close-hint>
+            <activate>	EquipmentItemDropDownClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	EquipmentItem1DropDown	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	EquipmentItem1DropDown	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	EquipmentItem2DropDownHint	  <item-id>	EquipmentItem2DropDown	</item-id>
+      <text>	_(#tutorial:chain4/hint/openEquipmentDropDown)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	EquipmentItem2DropDown	  <effects>
+            <close-hint>	EquipmentItem2DropDownHint	</close-hint>
+            <activate>	EquipmentItemDropDownClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	EquipmentItem2DropDown	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	EquipmentItem2DropDown	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	EquipmentItem3DropDownHint	  <item-id>	EquipmentItem3DropDown	</item-id>
+      <text>	_(#tutorial:chain4/hint/openEquipmentDropDown)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	EquipmentItem3DropDown	  <effects>
+            <close-hint>	EquipmentItem3DropDownHint	</close-hint>
+            <activate>	EquipmentItemDropDownClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	EquipmentItem3DropDown	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	EquipmentItem3DropDown	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	EquipmentItem1RendererHint	  <item-id>	EquipmentItem1Renderer	</item-id>
+      <text></text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	EquipmentItem1Renderer	  <effects>
+            <close-hint>	EquipmentItem1RendererHint	</close-hint>
+            <activate>	EquipmentItemRendererClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	EquipmentItem1Renderer	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	EquipmentItem1Renderer	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	EquipmentItem2RendererHint	  <item-id>	EquipmentItem2Renderer	</item-id>
+      <text></text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	EquipmentItem2Renderer	  <effects>
+            <close-hint>	EquipmentItem2RendererHint	</close-hint>
+            <activate>	EquipmentItemRendererClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	EquipmentItem2Renderer	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	EquipmentItem2Renderer	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	EquipmentItem3RendererHint	  <item-id>	EquipmentItem3Renderer	</item-id>
+      <text></text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	EquipmentItem3Renderer	  <effects>
+            <close-hint>	EquipmentItem3RendererHint	</close-hint>
+            <activate>	EquipmentItemRendererClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	EquipmentItem3Renderer	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	EquipmentItem3Renderer	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	TechnicalMaintenanceApplyButtonHint	  <item-id>	TechnicalMaintenanceApplyButton	</item-id>
+      <text>	_(#tutorial:chain4/hint/applyChanges)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	TechnicalMaintenanceApplyButton	  <effects>
+            <close-hint>	TechnicalMaintenanceApplyButtonHint	</close-hint>
+            <activate>	TechnicalMaintenanceApplyButtonClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	TechnicalMaintenanceApplyButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	TechnicalMaintenanceApplyButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+  </has-id>
+  <triggers>
+    <trigger>	MaintenanceStateTrigger	  <type>	maintenanceState	</type>
+      <on-effects>
+        <activate>	MaintenanceIsEnabled	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	MaintenanceIsEnabled	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	EquipmentInstalledTrigger	  <type>	eqInstalled	</type>
+      <validate-var>	FindEquipmentID	</validate-var>
+      <vehicle-var>	SelectedVehicleID	</vehicle-var>
+      <on-effects>
+        <activate>	EquipmentInstalled	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	EquipmentInstalled	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	NeedChangeVehicleTrigger	  <type>	needChangeCurrentVehicle	</type>
+      <on-effects>
+        <activate>	NeedChangeCurrentVehicle	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	NeedChangeCurrentVehicle	</inactivate>
+      </off-effects>
+    </trigger>
+  </triggers>
+  <vars>
+    <var-set>	FirstSlotIndex	  <asInt>	1	</asInt>
+    </var-set>
+    <var-set>	SecondSlotIndex	  <asInt>	2	</asInt>
+    </var-set>
+    <var-set>	ThirdSlotIndex	  <asInt>	3	</asInt>
+    </var-set>
+    <var-set>	BuyVehicleText	  <asString>	_(#tutorial:chain/hint/buyVehicle)	</asString>
+    </var-set>
+    <var-set>	ChangeVehicleText	  <asString>	_(#tutorial:chain/hint/changeVehicle)	</asString>
+    </var-set>
+  </vars>
+</chain-4.xml>

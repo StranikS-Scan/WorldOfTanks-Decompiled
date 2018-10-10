@@ -1,21 +1,18 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/__init__.py
-import types
 import time
-import BigWorld
 from datetime import datetime
-from debug_utils import LOG_DEBUG
-from gui.Scaleform.locale.CHAT import CHAT
+import BigWorld
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
-from gui.prb_control import getPrebattleLocalizedData, getPrebattleTypeName
-from gui.prb_control import getCreatorFullName
+from gui.prb_control import prb_getters
 from helpers import html, i18n
 from helpers.time_utils import makeLocalServerTime
 
 def makePrebattleWaitingID(requestName):
-    return '{0:>s}/{1:>s}'.format(getPrebattleTypeName().lower(), requestName)
+    return '{0:>s}/{1:>s}'.format(prb_getters.getPrebattleTypeName().lower(), requestName)
 
 
-def getPrebattleLocalizedString(string, led = None, escapeHtml = False):
+def getPrebattleLocalizedString(string, led=None, escapeHtml=False):
     result = ''
     if led:
         result = i18n.encodeUtf8(led.get(string, ''))
@@ -24,38 +21,32 @@ def getPrebattleLocalizedString(string, led = None, escapeHtml = False):
     return result
 
 
-def getPrebattleEventName(extraData = None, escapeHtml = False):
-    led = getPrebattleLocalizedData(extraData)
-    if led:
-        return getPrebattleLocalizedString('event_name', led, escapeHtml)
-    return ''
+def getPrebattleEventName(extraData=None, escapeHtml=False):
+    led = prb_getters.getPrebattleLocalizedData(extraData)
+    return getPrebattleLocalizedString('event_name', led, escapeHtml) if led else ''
 
 
-def getPrebattleSessionName(extraData = None, escapeHtml = False):
-    led = getPrebattleLocalizedData(extraData)
-    if led:
-        return getPrebattleLocalizedString('session_name', led, escapeHtml)
-    return ''
+def getPrebattleSessionName(extraData=None, escapeHtml=False):
+    led = prb_getters.getPrebattleLocalizedData(extraData)
+    return getPrebattleLocalizedString('session_name', led, escapeHtml) if led else ''
 
 
-def getPrebattleDescription(extraData = None, escapeHtml = False):
-    led = getPrebattleLocalizedData(extraData)
-    if led:
-        return getPrebattleLocalizedString('desc', led, escapeHtml)
-    return ''
+def getPrebattleDescription(extraData=None, escapeHtml=False):
+    led = prb_getters.getPrebattleLocalizedData(extraData)
+    return getPrebattleLocalizedString('desc', led, escapeHtml) if led else ''
 
 
-def getPrebattleFullDescription(extraData = None, escapeHtml = False):
-    led = getPrebattleLocalizedData(extraData)
+def getPrebattleFullDescription(extraData=None, escapeHtml=False):
+    led = prb_getters.getPrebattleLocalizedData(extraData)
     description = ''
     if led:
         eventName = getPrebattleLocalizedString('event_name', led, escapeHtml)
         sessionName = getPrebattleLocalizedString('session_name', led, escapeHtml)
-        description = '{0:>s}:\n{1:>s}'.format(eventName, sessionName)
+        description = '{0:>s}: {1:>s}'.format(eventName, sessionName)
     return description
 
 
-def getPrebattleOpponents(extraData, escapeHtml = False):
+def getPrebattleOpponents(extraData, escapeHtml=False):
     first = ''
     second = ''
     if 'opponents' in extraData:
@@ -68,10 +59,10 @@ def getPrebattleOpponents(extraData, escapeHtml = False):
     return (first, second)
 
 
-def getPrebattleOpponentsString(extraData, escapeHtml = False):
+def getPrebattleOpponentsString(extraData, escapeHtml=False):
     first, second = getPrebattleOpponents(extraData, escapeHtml=escapeHtml)
     result = ''
-    if len(first) and len(second):
+    if first and second:
         result = i18n.makeString('#menu:opponents', firstOpponent=first, secondOpponent=second)
     return result
 
@@ -88,19 +79,8 @@ def getBattleSessionStartTimeString(startTime):
     return '%s %s' % (i18n.makeString(PREBATTLE.TITLE_BATTLESESSION_STARTTIME), startTimeString)
 
 
-def getCompanyDivisionString(divisionName):
-    if divisionName is None:
-        divisionName = 'NA'
-    return i18n.makeString('#prebattle:labels/company/division/{0:>s}'.format(divisionName))
-
-
-def getCompanyName():
-    return '{0:>s} {1:>s}'.format(i18n.makeString(CHAT.CHANNELS_TEAM), getCreatorFullName())
-
-
 def getStartTimeLeft(startTime):
     if startTime:
         startTime = makeLocalServerTime(startTime)
         if datetime.utcfromtimestamp(startTime) > datetime.utcnow():
             return (datetime.utcfromtimestamp(startTime) - datetime.utcnow()).seconds
-    return 0

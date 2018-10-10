@@ -1,126 +1,86 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/__init__.py
-import BigWorld
-from gui.game_control.LanguageController import LanguageController
-from gui.game_control.links import ExternalLinksHandler
-from gui.game_control.roaming import RoamingController
-from gui.game_control.AOGAS import AOGASController
-from gui.game_control.captcha_control import CaptchaController
-from gui.game_control.GameSessionController import GameSessionController
-from gui.game_control.IGR import IGRController
-from gui.game_control.wallet import WalletController
-from gui.game_control.NotifyController import NotifyController
+import constants
 
-class _GameControllers(object):
+def getGameControllersConfig(manager):
+    from gui.game_control.AOGAS import AOGASController as _AOGAS
+    from gui.game_control.AwardController import AwardController as _Awards
+    from gui.game_control.BoostersController import BoostersController as _Boosters
+    from gui.game_control.BrowserController import BrowserController as _Browser
+    from gui.game_control.ChinaController import ChinaController as _China
+    from gui.game_control.ChinaController import NoChinaController as _NoChina
+    from gui.game_control.ExternalLinksHandler import ExternalLinksHandler as _ExternalLinks
+    from gui.game_control.GameSessionController import GameSessionController as _GameSessions
+    from gui.game_control.IGR import IGRController as _IGR
+    from gui.game_control.InternalLinksHandler import InternalLinksHandler as _InternalLinks
+    from gui.game_control.NotifyController import NotifyController as _Notify
+    from gui.game_control.PromoController import PromoController as _Promos
+    from gui.game_control.RefSystem import RefSystem as _RefSystem
+    from gui.game_control.RentalsController import RentalsController as _Rentals
+    from gui.game_control.ServerStats import ServerStats as _ServerStats
+    from gui.game_control.SoundEventChecker import SoundEventChecker as _Sounds
+    from gui.game_control.clan_lock_controller import ClanLockController as _ClanLocks
+    from gui.game_control.events_notifications import EventsNotificationsController as _EventNotifications
+    from gui.game_control.prmp_controller import EncyclopediaController as _Exncyclopedia
+    from gui.game_control.relogin_controller import ReloginController as _Relogin
+    from gui.game_control.restore_contoller import RestoreController as _Restore
+    from gui.game_control.screencast_controller import ScreenCastController as _ScreenCast
+    from gui.game_control.state_tracker import GameStateTracker
+    from gui.game_control.veh_comparison_basket import VehComparisonBasket as _VehComparison
+    from gui.game_control.wallet import WalletController as _Wallet
+    from gui.game_control.trade_in import TradeInController as _TradeIn
+    from gui.game_control.quests_controller import QuestsController as _Quests
+    from gui.game_control.ranked_battles_controller import RankedBattlesController as _Ranked
+    from gui.game_control.epic_mode_controller import EpicModeController as _Epic
+    from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
+    from gui.game_control.hero_tank_controller import HeroTankController as _HeroTankController
+    from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController as _EpicMeta
+    from gui.game_control.manual_controller import ManualController as _ManualController
+    from gui.game_control.calendar_controller import CalendarController as _Calendar
+    from gui.marathon.marathon_event_controller import MarathonEventsController as _MarathonEventsController
+    from skeletons.gui import game_control as _interface
+    tracker = GameStateTracker()
+    tracker.init()
+    manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
 
-    def __init__(self):
-        super(_GameControllers, self).__init__()
-        self.__roaming = RoamingController()
-        self.__captcha = CaptchaController()
-        self.__aogas = AOGASController()
-        self.__gameSession = GameSessionController()
-        self.__igr = IGRController()
-        self.__wallet = WalletController()
-        self.__language = LanguageController()
-        self.__notifier = NotifyController()
-        self.__links = ExternalLinksHandler()
-        self.__collectUiStats = False
-        self.__logUXEvents = False
+    def _config(interface, controller):
+        tracker.addController(controller)
+        controller.init()
+        manager.addInstance(interface, controller, finalizer='fini')
 
-    @property
-    def collectUiStats(self):
-        return self.__collectUiStats
-
-    @property
-    def needLogUXEvents(self):
-        return self.__logUXEvents
-
-    @property
-    def captcha(self):
-        return self.__captcha
-
-    @property
-    def aogas(self):
-        return self.__aogas
-
-    @property
-    def gameSession(self):
-        return self.__gameSession
-
-    @property
-    def igr(self):
-        return self.__igr
-
-    @property
-    def roaming(self):
-        return self.__roaming
-
-    @property
-    def wallet(self):
-        return self.__wallet
-
-    @property
-    def notifier(self):
-        return self.__notifier
-
-    @property
-    def language(self):
-        return self.__language
-
-    @property
-    def links(self):
-        return self.__links
-
-    def init(self):
-        self.__captcha.init()
-        self.__aogas.init()
-        self.__gameSession.init()
-        self.__igr.init()
-        self.__roaming.init()
-        self.__wallet.init()
-        self.__language.init()
-        self.__notifier.init()
-        self.__links.init()
-
-    def fini(self):
-        self.__igr.fini()
-        self.__captcha.fini()
-        self.__aogas.fini()
-        self.__gameSession.fini()
-        self.__roaming.fini()
-        self.__wallet.fini()
-        self.__language.fini()
-        self.__notifier.fini()
-        self.__links.fini()
-
-    def onAccountShowGUI(self, ctx):
-        self.__language.start()
-        self.__captcha.start()
-        self.__aogas.start(ctx)
-        self.__gameSession.start(ctx.get('sessionStartedAt', -1))
-        self.__igr.start(ctx)
-        self.__wallet.start()
-        self.__notifier.start()
-        self.__collectUiStats = ctx.get('collectUiStats', False)
-        self.__logUXEvents = ctx.get('logUXEvents', False)
-
-    def onAvatarBecomePlayer(self):
-        self.__aogas.disableNotifyAccount()
-        self.__gameSession.stop(True)
-        self.__roaming.stop()
-        self.__wallet.stop()
-
-    def onAccountBecomePlayer(self):
-        self.__roaming.start(BigWorld.player().serverSettings)
-
-    def onDisconnected(self):
-        self.__language.stop()
-        self.__captcha.stop()
-        self.__aogas.stop()
-        self.__gameSession.stop()
-        self.__igr.clear()
-        self.__roaming.onDisconnected()
-        self.__wallet.stop()
-        self.__notifier.stop()
-
-
-g_instance = _GameControllers()
+    _config(_interface.IReloginController, _Relogin())
+    _config(_interface.IAOGASController, _AOGAS())
+    _config(_interface.IGameSessionController, _GameSessions())
+    _config(_interface.IRentalsController, _Rentals())
+    _config(_interface.IRestoreController, _Restore())
+    _config(_interface.IIGRController, _IGR())
+    _config(_interface.IWalletController, _Wallet())
+    _config(_interface.INotifyController, _Notify())
+    _config(_interface.IExternalLinksController, _ExternalLinks())
+    _config(_interface.IInternalLinksController, _InternalLinks())
+    _config(_interface.ISoundEventChecker, _Sounds())
+    _config(_interface.IServerStatsController, _ServerStats())
+    _config(_interface.IRefSystemController, _RefSystem())
+    _config(_interface.IBrowserController, _Browser())
+    _config(_interface.IEventsNotificationsController, _EventNotifications())
+    _config(_interface.IPromoController, _Promos())
+    _config(_interface.IAwardController, _Awards())
+    _config(_interface.IBoostersController, _Boosters())
+    _config(_interface.IScreenCastController, _ScreenCast())
+    _config(_interface.IClanLockController, _ClanLocks())
+    _config(_interface.IVehicleComparisonBasket, _VehComparison())
+    _config(_interface.IEncyclopediaController, _Exncyclopedia())
+    _config(_interface.ITradeInController, _TradeIn())
+    _config(_interface.IQuestsController, _Quests())
+    _config(_interface.IBootcampController, _Bootcamp())
+    _config(_interface.IRankedBattlesController, _Ranked())
+    _config(_interface.IEpicModeController, _Epic())
+    _config(_interface.IHeroTankController, _HeroTankController())
+    _config(_interface.IMarathonEventsController, _MarathonEventsController())
+    _config(_interface.ICalendarController, _Calendar())
+    _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
+    _config(_interface.IManualController, _ManualController())
+    if constants.IS_CHINA:
+        _config(_interface.IChinaController, _China())
+    else:
+        _config(_interface.IChinaController, _NoChina())

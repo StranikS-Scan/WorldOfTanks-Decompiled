@@ -1,9 +1,12 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/material_kinds.py
 import ResMgr
+from soft_exception import SoftException
 IDS_BY_NAMES = None
 GROUND_STRENGTHS_BY_IDS = None
 EFFECT_MATERIALS = ('ground', 'stone', 'wood', 'metal', 'snow', 'sand', 'water')
 EFFECT_MATERIAL_INDEXES_BY_NAMES = dict(((name, idx) for idx, name in enumerate(EFFECT_MATERIALS)))
+EFFECT_MATERIAL_NAMES_BY_INDEXES = dict(((idx, name) for idx, name in enumerate(EFFECT_MATERIALS)))
 EFFECT_MATERIAL_INDEXES_BY_IDS = None
 EFFECT_MATERIAL_IDS_BY_NAMES = None
 WATER_MATERIAL_KIND = -100
@@ -51,11 +54,12 @@ def _init():
     EFFECT_MATERIAL_INDEXES_BY_IDS[WATER_MATERIAL_KIND] = EFFECT_MATERIAL_INDEXES_BY_NAMES['water']
     EFFECT_MATERIAL_IDS_BY_NAMES['water'] = []
     EFFECT_MATERIAL_IDS_BY_NAMES['water'].append(WATER_MATERIAL_KIND)
+    ResMgr.purge(xmlPath, True)
     return
 
 
 def _raiseWrongXml(fileName, msg):
-    raise Exception, "error in '" + fileName + "': " + msg
+    raise SoftException("error in '" + fileName + "': " + msg)
 
 
 _init()

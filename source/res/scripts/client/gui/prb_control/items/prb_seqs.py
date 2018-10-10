@@ -1,20 +1,22 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/prb_seqs.py
 import time
-from constants import PREBATTLE_CACHE_KEY, PREBATTLE_COMPANY_DIVISION_NAMES
+from constants import PREBATTLE_CACHE_KEY
 from constants import PREBATTLE_TYPE
-from gui.prb_control import getPrebattleAutoInvites
+from gui.prb_control.prb_getters import getPrebattleAutoInvites
 from gui.prb_control.items.prb_items import PlayerPrbInfo
+from gui.prb_control.prb_helpers import BadgesHelper
 from helpers.time_utils import makeLocalServerTime
 from messenger.ext import passCensor
 
 def PrbListIterator(prebattles):
-    for time, prbID, info in prebattles:
-        yield PrbListItem(time, prbID, info)
+    for t, prbID, info in prebattles:
+        yield PrbListItem(t, prbID, info)
 
 
-def RosterIterator(roster):
-    for pID, name, dbID, roster, state, time, vehCompDescr, igrType, clanDBID, clanAbbrev in roster:
-        yield PlayerPrbInfo(pID, name=name, dbID=dbID, state=state, time=time, vehCompDescr=vehCompDescr, igrType=igrType, clanDBID=clanDBID, clanAbbrev=clanAbbrev, roster=roster)
+def RosterIterator(roster_data):
+    for pID, name, dbID, roster, state, t, vehCompDescr, igrType, clanDBID, clanAbbrev in roster_data:
+        yield PlayerPrbInfo(pID, name=name, dbID=dbID, state=state, time=t, vehCompDescr=vehCompDescr, igrType=igrType, clanDBID=clanDBID, clanAbbrev=clanAbbrev, roster=roster)
 
 
 def AutoInvitesIterator():
@@ -29,12 +31,12 @@ def AutoInvitesIterator():
 
 
 class PrbListItem(object):
-    __slots__ = ('prbID', 'time', 'arenaTypeID', 'creator', 'clanAbbrev', 'playersCount', 'isOpened', 'comment', 'division', 'creatorIgrType', 'creatorDbId')
+    __slots__ = ('prbID', 'time', 'arenaTypeID', 'creator', 'clanAbbrev', 'playersCount', 'isOpened', 'comment', 'creatorIgrType', 'creatorDbId', 'badges')
 
-    def __init__(self, time, prbID, info):
+    def __init__(self, t, prbID, info):
         super(PrbListItem, self).__init__()
         self.prbID = prbID
-        self.time = time
+        self.time = t
         self.arenaTypeID = 0
         if PREBATTLE_CACHE_KEY.ARENA_TYPE_ID in info:
             self.arenaTypeID = info[PREBATTLE_CACHE_KEY.ARENA_TYPE_ID]
@@ -53,42 +55,41 @@ class PrbListItem(object):
         self.comment = ''
         if PREBATTLE_CACHE_KEY.COMMENT in info:
             self.comment = info[PREBATTLE_CACHE_KEY.COMMENT]
-        self.division = 0
-        if PREBATTLE_CACHE_KEY.DIVISION in info:
-            self.division = info[PREBATTLE_CACHE_KEY.DIVISION]
         self.creatorIgrType = 0
         if PREBATTLE_CACHE_KEY.CREATOR_IGR_TYPE in info:
             self.creatorIgrType = info[PREBATTLE_CACHE_KEY.CREATOR_IGR_TYPE]
         self.creatorDbId = 0
         if PREBATTLE_CACHE_KEY.CREATOR_DB_ID in info:
             self.creatorDbId = info[PREBATTLE_CACHE_KEY.CREATOR_DB_ID]
+        creatorBadges = []
+        if PREBATTLE_CACHE_KEY.CREATOR_BADGES in info:
+            creatorBadges = info[PREBATTLE_CACHE_KEY.CREATOR_BADGES]
+        self.badges = BadgesHelper(creatorBadges)
 
     def __repr__(self):
-        return 'PrbListItem(prbID = {0:n}, arenaTypeID = {1:n}, creator = {2:>s}, playersCount = {3:n}, isOpened = {4!r:s}, division = {5:>s}, time = {6:n}, creatorIgrType = {7:n}, creatorDbId = {8:n})'.format(self.prbID, self.arenaTypeID, self.getCreatorFullName(), self.playersCount, self.isOpened, self.getDivisionName(), self.time, self.creatorIgrType, self.creatorDbId)
+        return 'PrbListItem(prbID = {0:n}, arenaTypeID = {1:n}, creator = {2:>s}, playersCount = {3:n}, isOpened = {4!r:s}, time = {5:n}, creatorIgrType = {6:n}, creatorDbId = {7:n})'.format(self.prbID, self.arenaTypeID, self.getCreatorFullName(), self.playersCount, self.isOpened, self.time, self.creatorIgrType, self.creatorDbId)
 
     def getCreatorFullName(self):
-        if self.clanAbbrev and len(self.clanAbbrev):
+        if self.clanAbbrev:
             fullName = '{0:>s}[{1:>s}]'.format(self.creator, self.clanAbbrev)
         else:
             fullName = self.creator
         return fullName
 
     def getCensoredComment(self):
-        if self.comment:
-            return passCensor(self.comment)
-        return ''
+        return passCensor(self.comment) if self.comment else ''
 
-    def getDivisionName(self):
-        name = None
-        if self.division in PREBATTLE_COMPANY_DIVISION_NAMES:
-            name = PREBATTLE_COMPANY_DIVISION_NAMES[self.division]
-        return name
+    def getBadgeID(self):
+        return self.badges.getBadgeID()
+
+    def getBadgeImgStr(self, size=24, vspace=-6):
+        return self.badges.getBadgeImgStr(size, vspace)
 
 
 class AutoInviteItem(object):
     __slots__ = ('prbID', 'peripheryID', 'description', 'startTime', 'isValid', 'prbType')
 
-    def __init__(self, prbID, type = PREBATTLE_TYPE.CLAN, peripheryID = 0, description = None, startTime = 0, isValid = True):
+    def __init__(self, prbID, type=PREBATTLE_TYPE.CLAN, peripheryID=0, description=None, startTime=0, isValid=True):
         super(AutoInviteItem, self).__init__()
         self.prbID = prbID
         self.peripheryID = peripheryID

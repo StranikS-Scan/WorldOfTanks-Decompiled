@@ -1,0 +1,18 @@
+<AimTrigger.def>
+  <Domain>	CLIENT	</Domain>
+  <Properties>
+    <name>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </name>
+    <maxDistance>
+      <Type>	FLOAT	</Type>
+      <Default>	50.0	</Default>
+      <Editable>	True	</Editable>
+    </maxDistance>
+    <radius>
+      <Type>	FLOAT	</Type>
+      <Editable>	False	</Editable>
+    </radius>
+  </Properties>
+</AimTrigger.def>

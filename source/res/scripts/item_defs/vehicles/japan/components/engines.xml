@@ -1,0 +1,652 @@
+<engines.xml>
+  <ids>
+    <_Type100_A_1>	0	</_Type100_A_1>
+    <Mitsubishi>	2	</Mitsubishi>
+    <_Type100_V6_A_1>	3	</_Type100_V6_A_1>
+    <_A6120VDe>	4	</_A6120VDe>
+    <_A6120VDe_S>	5	</_A6120VDe_S>
+    <_Type97>	6	</_Type97>
+    <_Type100_W>	7	</_Type100_W>
+    <_Type100_A>	8	</_Type100_A>
+    <_Type100_V6_Kuurei>	9	</_Type100_V6_Kuurei>
+    <_Type100_V6_Kakyuu>	10	</_Type100_V6_Kakyuu>
+    <_Type100_V12_Kakyuu>	11	</_Type100_V12_Kakyuu>
+    <_Type4_V12_Kuurei>	12	</_Type4_V12_Kuurei>
+    <_Type98_V12>	13	</_Type98_V12>
+    <_Type4_V12_Kakyuu>	14	</_Type4_V12_Kakyuu>
+    <_Mitsubishi_DL10T>	15	</_Mitsubishi_DL10T>
+    <_Mitsubishi_12HM20WT>	16	</_Mitsubishi_12HM20WT>
+    <_Mitsubishi_12HM21WT>	17	</_Mitsubishi_12HM21WT>
+    <_Mitsubishi_10ZF21WT>	18	</_Mitsubishi_10ZF21WT>
+    <_Ikegai_Kuurei_V-4>	19	</_Ikegai_Kuurei_V-4>
+    <_Mitsubishi_DL10TA>	20	</_Mitsubishi_DL10TA>
+    <Maybach_HL_210_TRM_P45>	21	</Maybach_HL_210_TRM_P45>
+    <_A6120VD>	22	</_A6120VD>
+    <_Type_Da_100_HP>	23	</_Type_Da_100_HP>
+    <BMW_IV>	24	</BMW_IV>
+    <BMW_IV_Kai>	25	</BMW_IV_Kai>
+    <BMW_IV_Kai_Ni>	26	</BMW_IV_Kai_Ni>
+    <_Type98_V12_x2_1100>	27	</_Type98_V12_x2_1100>
+    <_Type98_V12_x2_1200>	28	</_Type98_V12_x2_1200>
+    <_62CV_bot>	29	</_62CV_bot>
+    <_Type98_V12_x2_1200_Kai>	30	</_Type98_V12_x2_1200_Kai>
+    <Nameless_Engine>	31	</Nameless_Engine>
+    <Edelweiss_Engine>	32	</Edelweiss_Engine>
+    <_Mitsubishi_12HM20WT_IGR>	60001	</_Mitsubishi_12HM20WT_IGR>
+    <_Type98_V12_IGR>	60002	</_Type98_V12_IGR>
+    <_Mitsubishi_10ZF21WT_IGR>	60003	</_Mitsubishi_10ZF21WT_IGR>
+    <_Type100_V6_Kuurei_bootcamp>	64001	</_Type100_V6_Kuurei_bootcamp>
+    <BMW_IV_Kai_bootcamp>	64002	</BMW_IV_Kai_bootcamp>
+  </ids>
+  <shared>
+    <_Type100_A_1>
+      <userString>	#japan_vehicles:_Type100_A_1	</userString>
+      <tags>	diesel	</tags>
+      <level>	4	</level>
+      <price>	10500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	240	</power>
+      <weight>	630	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2113	</rpm_max>
+    </_Type100_A_1>
+    <_62CV_bot>
+      <userString>	#japan_vehicles:_62CV_bot	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	60	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	424	</rpm_min>
+      <rpm_max>	2241	</rpm_max>
+    </_62CV_bot>
+    <Mitsubishi>
+      <userString>	#japan_vehicles:Mitsubishi	</userString>
+      <tags>	diesel	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	75	</power>
+      <weight>	650	</weight>
+      <maxHealth>	44	</maxHealth>
+      <maxRegenHealth>	22	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	366	</rpm_min>
+      <rpm_max>	1966	</rpm_max>
+    </Mitsubishi>
+    <_Type100_V6_A_1>
+      <userString>	#japan_vehicles:_Type100_V6_A_1	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	2500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	130	</power>
+      <weight>	630	</weight>
+      <maxHealth>	66	</maxHealth>
+      <maxRegenHealth>	33	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	342	</rpm_min>
+      <rpm_max>	2015	</rpm_max>
+    </_Type100_V6_A_1>
+    <_Type_Da_100_HP>
+      <userString>	#japan_vehicles:_Type_Da_100_HP	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	350	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	118	</power>
+      <weight>	500	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	351	</rpm_min>
+      <rpm_max>	2474	</rpm_max>
+    </_Type_Da_100_HP>
+    <_A6120VD>
+      <userString>	#japan_vehicles:_A6120VD	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	2350	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	120	</power>
+      <weight>	650	</weight>
+      <maxHealth>	66	</maxHealth>
+      <maxRegenHealth>	33	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2006	</rpm_max>
+    </_A6120VD>
+    <_A6120VDe>
+      <userString>	#japan_vehicles:_A6120VDe	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	2400	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	120	</power>
+      <weight>	630	</weight>
+      <maxHealth>	66	</maxHealth>
+      <maxRegenHealth>	33	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2006	</rpm_max>
+    </_A6120VDe>
+    <_Ikegai_Kuurei_V-4>
+      <userString>	#japan_vehicles:_Ikegai_Kuurei_V-4	</userString>
+      <tags>	diesel	</tags>
+      <level>	2	</level>
+      <price>	2400	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	65	</power>
+      <weight>	450	</weight>
+      <maxHealth>	44	</maxHealth>
+      <maxRegenHealth>	22	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	371	</rpm_min>
+      <rpm_max>	1957	</rpm_max>
+    </_Ikegai_Kuurei_V-4>
+    <_A6120VDe_S>
+      <userString>	#japan_vehicles:_A6120VDe_S	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	3600	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	135	</power>
+      <weight>	630	</weight>
+      <maxHealth>	66	</maxHealth>
+      <maxRegenHealth>	33	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	339	</rpm_min>
+      <rpm_max>	2020	</rpm_max>
+    </_A6120VDe_S>
+    <BMW_IV>
+      <userString>	#japan_vehicles:BMW_IV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	224	</power>
+      <weight>	290	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	484	</rpm_min>
+      <rpm_max>	2248	</rpm_max>
+    </BMW_IV>
+    <BMW_IV_Kai>
+      <userString>	#japan_vehicles:BMW_IV_Kai	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	7800	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	250	</power>
+      <weight>	290	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	468	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </BMW_IV_Kai>
+    <BMW_IV_Kai_bootcamp>
+      <userString>	#japan_vehicles:BMW_IV_Kai	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	7800	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	250	</power>
+      <weight>	290	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	468	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </BMW_IV_Kai_bootcamp>
+    <BMW_IV_Kai_Ni>
+      <userString>	#japan_vehicles:BMW_IV_Kai_Ni	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10300	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	290	</power>
+      <weight>	290	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	443	</rpm_min>
+      <rpm_max>	2380	</rpm_max>
+    </BMW_IV_Kai_Ni>
+    <_Type97>
+      <userString>	#japan_vehicles:_Type97	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	5000	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	170	</power>
+      <weight>	650	</weight>
+      <maxHealth>	65	</maxHealth>
+      <maxRegenHealth>	32	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2051	</rpm_max>
+    </_Type97>
+    <_Type100_W>
+      <userString>	#japan_vehicles:_Type100_W	</userString>
+      <tags>	diesel	</tags>
+      <level>	4	</level>
+      <price>	8600	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	200	</power>
+      <weight>	630	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	310	</rpm_min>
+      <rpm_max>	2078	</rpm_max>
+    </_Type100_W>
+    <_Type100_A>
+      <userString>	#japan_vehicles:_Type100_A	</userString>
+      <tags>	diesel	</tags>
+      <level>	4	</level>
+      <price>	10500	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	240	</power>
+      <weight>	630	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2113	</rpm_max>
+    </_Type100_A>
+    <_Type100_V6_Kuurei>
+      <userString>	#japan_vehicles:_Type100_V6_Kuurei	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	2750	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	130	</power>
+      <weight>	630	</weight>
+      <maxHealth>	66	</maxHealth>
+      <maxRegenHealth>	33	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	342	</rpm_min>
+      <rpm_max>	2015	</rpm_max>
+    </_Type100_V6_Kuurei>
+    <_Type100_V6_Kuurei_bootcamp>
+      <userString>	#japan_vehicles:_Type100_V6_Kuurei	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	2750	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	130	</power>
+      <weight>	630	</weight>
+      <maxHealth>	66	</maxHealth>
+      <maxRegenHealth>	33	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	342	</rpm_min>
+      <rpm_max>	2015	</rpm_max>
+    </_Type100_V6_Kuurei_bootcamp>
+    <_Type100_V6_Kakyuu>
+      <userString>	#japan_vehicles:_Type100_V6_Kakyuu	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	5750	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	150	</power>
+      <weight>	630	</weight>
+      <maxHealth>	66	</maxHealth>
+      <maxRegenHealth>	33	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2033	</rpm_max>
+    </_Type100_V6_Kakyuu>
+    <_Type100_V12_Kakyuu>
+      <userString>	#japan_vehicles:_Type100_V12_Kakyuu	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	15200	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	300	</power>
+      <weight>	650	</weight>
+      <maxHealth>	124	</maxHealth>
+      <maxRegenHealth>	62	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	266	</rpm_min>
+      <rpm_max>	2167	</rpm_max>
+    </_Type100_V12_Kakyuu>
+    <_Type4_V12_Kuurei>
+      <userString>	#japan_vehicles:_Type4_V12_Kuurei	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	25200	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	400	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	221	</rpm_min>
+      <rpm_max>	2256	</rpm_max>
+    </_Type4_V12_Kuurei>
+    <_Type98_V12>
+      <userString>	#japan_vehicles:_Type98_V12	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	510	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2901	</rpm_max>
+    </_Type98_V12>
+    <_Type98_V12_x2_1100>
+      <userString>	#japan_vehicles:_Type98_V12_x2_1100	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	51000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1100	</power>
+      <weight>	1020	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	432	</rpm_min>
+      <rpm_max>	2215	</rpm_max>
+    </_Type98_V12_x2_1100>
+    <_Type98_V12_x2_1200>
+      <userString>	#japan_vehicles:_Type98_V12_x2_1200	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	77500	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	1020	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	404	</rpm_min>
+      <rpm_max>	2305	</rpm_max>
+    </_Type98_V12_x2_1200>
+    <_Type98_V12_x2_1200_Kai>
+      <userString>	#japan_vehicles:_Type98_V12_x2_1200_Kai	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	132000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	1020	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	404	</rpm_min>
+      <rpm_max>	2305	</rpm_max>
+    </_Type98_V12_x2_1200_Kai>
+    <_Type4_V12_Kakyuu>
+      <userString>	#japan_vehicles:_Type4_V12_Kakyuu	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	33000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
+    </_Type4_V12_Kakyuu>
+    <_Mitsubishi_DL10T>
+      <userString>	#japan_vehicles:_Mitsubishi_DL10T	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	33000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	2200	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
+    </_Mitsubishi_DL10T>
+    <_Mitsubishi_DL10TA>
+      <userString>	#japan_vehicles:_Mitsubishi_DL10TA	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	48500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	570	</power>
+      <weight>	2400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2096	</rpm_max>
+    </_Mitsubishi_DL10TA>
+    <_Mitsubishi_12HM20WT>
+      <userString>	#japan_vehicles:_Mitsubishi_12HM20WT	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	48500	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	570	</power>
+      <weight>	2400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2096	</rpm_max>
+    </_Mitsubishi_12HM20WT>
+    <_Mitsubishi_12HM21WT>
+      <userString>	#japan_vehicles:_Mitsubishi_12HM21WT	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	604	</power>
+      <weight>	2400	</weight>
+      <maxHealth>	300	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	358	</rpm_min>
+      <rpm_max>	2123	</rpm_max>
+    </_Mitsubishi_12HM21WT>
+    <_Mitsubishi_10ZF21WT>
+      <userString>	#japan_vehicles:_Mitsubishi_10ZF21WT	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	132000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	2200	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </_Mitsubishi_10ZF21WT>
+    <Maybach_HL_210_TRM_P45>
+      <userString>	#japan_vehicles:Maybach_HL_210_TRM_P45	</userString>
+      <shortUserString>	#japan_vehicles:Maybach_HL_210_TRM_P45_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	35500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	850	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </Maybach_HL_210_TRM_P45>
+    <Nameless_Engine>
+      <userString>	#japan_vehicles:Nameless_Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	570	</power>
+      <weight>	1600	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2096	</rpm_max>
+    </Nameless_Engine>
+    <Edelweiss_Engine>
+      <userString>	#japan_vehicles:Edelweiss_Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </Edelweiss_Engine>
+    <_Mitsubishi_12HM20WT_IGR>
+      <userString>	#igr_vehicles:_Mitsubishi_12HM20WT_IGR	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	48500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	570	</power>
+      <weight>	2400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2096	</rpm_max>
+    </_Mitsubishi_12HM20WT_IGR>
+    <_Type98_V12_IGR>
+      <userString>	#igr_vehicles:_Type98_V12_IGR	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	510	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2901	</rpm_max>
+    </_Type98_V12_IGR>
+    <_Mitsubishi_10ZF21WT_IGR>
+      <userString>	#igr_vehicles:_Mitsubishi_10ZF21WT_IGR	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	132000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	2200	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </_Mitsubishi_10ZF21WT_IGR>
+  </shared>
+</engines.xml>

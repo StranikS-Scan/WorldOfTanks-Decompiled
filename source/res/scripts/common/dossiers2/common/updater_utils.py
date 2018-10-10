@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/common/updater_utils.py
 import struct
 
@@ -55,6 +56,15 @@ def setStaticSizeBlockRecordValues(updateCtx, block, recordsPacking, recordsValu
         updateCtx['dossierCompDescr'] = updateCtx['dossierCompDescr'][:blockOffset + offset] + data + updateCtx['dossierCompDescr'][blockOffset + offset + len(data):]
 
 
+def getBinarySetValue(updateCtx, block, byteNum, bitNum):
+    compDescr = getBlockCompDescr(updateCtx, block)
+    arraySize = len(compDescr)
+    if byteNum >= arraySize:
+        return False
+    unpackedByte = struct.unpack_from('<B', compDescr, byteNum)[0]
+    return bool(unpackedByte & 1 << bitNum)
+
+
 def getNewStaticSizeBlockValues(layoutWithFormat, defaults):
     blockFormat = '<' + ''.join([ format for record, format in layoutWithFormat ])
     blockValues = [ defaults.get(record, 0) for record, format in layoutWithFormat ]
@@ -90,7 +100,7 @@ def setVersion(updateCtx, version):
     updateCtx['dossierCompDescr'] = struct.pack(versionFormat, version) + updateCtx['dossierCompDescr'][versionLength:]
 
 
-def addBlock(updateCtx, block, blockFormat = '', blockValues = None):
+def addBlock(updateCtx, block, blockFormat='', blockValues=None):
     blockSize = struct.calcsize(blockFormat) if bool(blockFormat) else 0
     header = updateCtx['header']
     header.append(blockSize)
@@ -100,6 +110,19 @@ def addBlock(updateCtx, block, blockFormat = '', blockValues = None):
     updateCtx['headerLength'] += struct.calcsize('<' + updateCtx['blockSizeFormat'])
     if blockSize != 0:
         updateCtx['dossierCompDescr'] += struct.pack(blockFormat, *blockValues)
+
+
+def removeBlock(updateCtx, block):
+    header = updateCtx['header']
+    compDescr = updateCtx['dossierCompDescr']
+    blockIndex = updateCtx['blocksLayout'].index(block)
+    updateCtx['blocksLayout'].pop(blockIndex)
+    prevHeaderLength = updateCtx['headerLength']
+    blockSize = header.pop(blockIndex + 1)
+    blockOffset = prevHeaderLength + sum(header[1:blockIndex + 1])
+    updateCtx['headerFormat'] = headerFormat = '<%s%d%s' % (updateCtx['versionFormat'], len(updateCtx['blocksLayout']), updateCtx['blockSizeFormat'])
+    updateCtx['headerLength'] = struct.calcsize(headerFormat)
+    updateCtx['dossierCompDescr'] = struct.pack(updateCtx['headerFormat'], *header) + compDescr[prevHeaderLength:blockOffset] + compDescr[blockOffset + blockSize:]
 
 
 def addRecords(updateCtx, block, recordFormats, defaults):
@@ -114,6 +137,28 @@ def addRecords(updateCtx, block, recordFormats, defaults):
     dossierCompDescr = updateCtx['dossierCompDescr']
     dossierCompDescr = dossierCompDescr[:blockOffset + blockSize] + struct.pack(subBlockFormat, *subBlockValues) + dossierCompDescr[blockOffset + blockSize:]
     header[blockIndex + 1] += struct.calcsize(subBlockFormat)
+    updateCtx['dossierCompDescr'] = struct.pack(updateCtx['headerFormat'], *header) + dossierCompDescr[updateCtx['headerLength']:]
+
+
+def updateStaticSizeBlockRecords(updateCtx, block, records):
+    header = updateCtx['header']
+    blockIndex = updateCtx['blocksLayout'].index(block)
+    blockSize = header[blockIndex + 1]
+    if blockSize == 0 and not any([ True for _, _, value in records if value != 0 ]):
+        return
+    dossierCompDescr = updateCtx['dossierCompDescr']
+    blockOffset = updateCtx['headerLength'] + sum(header[1:blockIndex + 1])
+    blockDescr = dossierCompDescr[blockOffset:blockOffset + blockSize]
+    for offset, format, value in records:
+        itemSize = struct.calcsize('<' + format)
+        if offset + itemSize > len(blockDescr):
+            toExpand = offset + itemSize - len(blockDescr)
+            blockDescr += ''.zfill(toExpand)
+        newValue = struct.pack('<' + format, value)
+        blockDescr = blockDescr[:offset] + newValue + blockDescr[offset + itemSize:]
+
+    dossierCompDescr = dossierCompDescr[:blockOffset] + blockDescr + dossierCompDescr[blockOffset + blockSize:]
+    header[blockIndex + 1] = len(blockDescr)
     updateCtx['dossierCompDescr'] = struct.pack(updateCtx['headerFormat'], *header) + dossierCompDescr[updateCtx['headerLength']:]
 
 
@@ -133,3 +178,33 @@ def removeRecords(updateCtx, block, recordsPacking):
 
     header[blockIndex + 1] -= totalSizeDec
     updateCtx['dossierCompDescr'] = struct.pack(updateCtx['headerFormat'], *header) + dossierCompDescr[updateCtx['headerLength']:]
+
+
+def getBlockSize(updateCtx, block):
+    header = updateCtx['header']
+    blockIndex = updateCtx['blocksLayout'].index(block)
+    blockSize = header[blockIndex + 1]
+    return blockSize
+
+
+def getBlockCompDescr(updateCtx, block):
+    header = updateCtx['header']
+    compDescr = updateCtx['dossierCompDescr']
+    blockIndex = updateCtx['blocksLayout'].index(block)
+    blockSize = header[blockIndex + 1]
+    if blockSize == 0:
+        return []
+    headerLength = updateCtx['headerLength']
+    blockOffset = headerLength + sum(header[1:blockIndex + 1])
+    return compDescr[blockOffset:blockOffset + blockSize]
+
+
+def setBlockCompDescr(updateCtx, block, blockCompDescr):
+    header = updateCtx['header']
+    compDescr = updateCtx['dossierCompDescr']
+    blockIndex = updateCtx['blocksLayout'].index(block)
+    blockSize = header[blockIndex + 1]
+    headerLength = updateCtx['headerLength']
+    blockOffset = headerLength + sum(header[1:blockIndex + 1])
+    header[blockIndex + 1] = len(blockCompDescr)
+    updateCtx['dossierCompDescr'] = struct.pack(updateCtx['headerFormat'], *header) + compDescr[headerLength:blockOffset] + blockCompDescr + compDescr[blockOffset + blockSize:]

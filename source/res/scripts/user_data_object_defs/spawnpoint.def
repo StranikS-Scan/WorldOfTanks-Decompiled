@@ -1,0 +1,39 @@
+<SpawnPoint.def>
+  <Domain>	BASE	</Domain>
+  <Properties>
+    <team>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+    </team>
+    <preferableType>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </preferableType>
+    <positionNumber>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <MinValue>	0	</MinValue>
+      <MaxValue>	15	</MaxValue>
+    </positionNumber>
+    <arenaBonusMask>
+      <Type>	INT32	</Type>
+      <Default>	2147483647	</Default>
+      <Editable>	true	</Editable>
+    </arenaBonusMask>
+    <isLowLevel>
+      <Type>	UINT8	</Type>
+      <Default>	0	</Default>
+      <Editable>	true	</Editable>
+    </isLowLevel>
+    <spawnMode>
+      <Type>	UINT8	</Type>
+      <Default>	0	</Default>
+      <Editable>	true	</Editable>
+    </spawnMode>
+    <spawnPointGroup>
+      <Type>	UINT8	</Type>
+      <Default>	0	</Default>
+      <Editable>	true	</Editable>
+    </spawnPointGroup>
+  </Properties>
+</SpawnPoint.def>

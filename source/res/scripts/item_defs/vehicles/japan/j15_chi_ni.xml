@@ -1,0 +1,1662 @@
+<J15_Chi_Ni.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	gunner
+			loader	</commander>
+    <driver></driver>
+    <radioman></radioman>
+  </crew>
+  <speedLimits>
+    <forward>	30	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.21	</moving>
+    <still>	0.28	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.42	</firePenalty>
+  </invisibility>
+  <repairCost>	4.00	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/japan/J15_Chi_Ni/Chi_Ni_chassis_01_AM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	25	</armor_1>
+      <armor_2>	25	</armor_2>
+      <armor_3>	12	</armor_3>
+      <armor_4>	10	</armor_4>
+      <armor_5>	10	</armor_5>
+      <armor_6>	25	</armor_6>
+      <armor_7>	10	</armor_7>
+      <armor_8>	6	</armor_8>
+      <armor_9>	8	</armor_9>
+      <armor_10>	10	</armor_10>
+      <armor_11>	25	</armor_11>
+      <armor_12>	6	</armor_12>
+      <armor_13>	0	</armor_13>
+      <armor_14>	10	</armor_14>
+      <armor_15>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_15>
+      <armor_16>	25	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	4930	</weight>
+    <maxHealth>	152	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/japan/J15_Chi_Ni/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/japan/J15_Chi_Ni/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/japan/J15_Chi_Ni/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.36 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.36 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.3	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.25023 0.542353 0.11544	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/japan/J15_Chi_Ni/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/japan/J15_Chi_Ni/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/japan/J15_Chi_Ni/Chi_Ni_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
+        <rayStart>	0.39517 0.282786 1.42078	</rayStart>
+        <rayEnd>	0.376253 0.00263228 1.36645	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.22	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	2	</slotId>
+        <rayStart>	1.06083 0.505431 0.113526	</rayStart>
+        <rayEnd>	0.740412 0.266014 0.113641	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.5	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	8	</slotId>
+        <anchorPosition>	0.000000 0.416212 -1.67829	</anchorPosition>
+        <anchorDirection>	0.000000 0.240706 -0.970598	</anchorDirection>
+      </slot>
+    </customizationSlots>
+  </hull>
+  <chassis>
+    <Chassis_Chi_Ni>
+      <userString>	#japan_vehicles:Chassis_Chi_Ni	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	600	</price>
+      <unlocks>
+        <chassis>	Chassis_Chi_Ni_2	  <cost>	115	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3300	</weight>
+      <maxLoad>	9800	</maxLoad>
+      <terrainResistance>	1.1 1.2 2.1	</terrainResistance>
+      <brakeForce>	9800	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	36	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.34	</vehicleMovement>
+        <vehicleRotation>	0.34	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/japan/J15_Chi_Ni/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/japan/J15_Chi_Ni/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/japan/J15_Chi_Ni/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.18 0.26	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.3	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.308907	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.114834	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.272177	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.17743	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.308907	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.114834	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.272177	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.17743	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.899317 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/japan/J15_Chi_Ni/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J15_Chi_Ni/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.968643 1.41584	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.093810 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.543270 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.480470	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0404339	</minOffset>
+          <maxOffset>	0.0404339	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0404339	</minOffset>
+          <maxOffset>	0.0404339	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/japan/J15_Chi_Ni/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/japan/J15_Chi_Ni/track/segment.model	</segmentModelRight>
+        <left>	vehicles/japan/J15_Chi_Ni/track/left.track	</left>
+        <right>	vehicles/japan/J15_Chi_Ni/track/right.track	</right>
+        <segmentLength>	0.09	</segmentLength>
+        <segmentOffset>	0.073	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0216	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1105	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+      </trackNodes>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	111	</segmentsCount>
+          <segmentsOuterThickness>	0.0212744	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0161285	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-0.968643	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.090525	</back>
+              <top>	0.0874932	</top>
+              <front>	0.0841076	</front>
+              <bottom>	0.0412416	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0842886	</back>
+              <top>	0.0802519	</top>
+              <front>	0.0911095	</front>
+              <bottom>	0.0661884	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/japan/J15_Chi_Ni/track/segment.model	</model>
+            <length>	0.0891297	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-2.21722	</xStart>
+                <xStep>	0.0445649	</xStep>
+                <ySamples>	0.911275 0.938685 0.956375 0.963656 0.966448 0.969239 0.971805 0.974246 0.976688 0.979129 0.981571 0.984012 0.986453 0.988913 0.991512 0.994112 0.996712 0.999311 1.00191 1.00447 1.00698 1.00981 1.01333 1.01685 1.02038 1.0239 1.02742 1.03094 1.03379 1.0366 1.03942 1.04223 1.04504 1.04786 1.05067 1.05347 1.05623 1.04027 1.04332 1.06791	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.167242	</xStart>
+                <xStep>	0.0445649	</xStep>
+                <ySamples>	1.09444 1.09736 1.10039 1.10339 1.1064 1.10931 0.938815 1.11492 1.11765 1.12079 1.12395 1.12704	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L4	</wheel>
+            <wheel>	W_L7	</wheel>
+            <wheel>	W_L6	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	1.96817 0.737809	</basePos>
+              <shiftVec>	0.265604 0.0534537	</shiftVec>
+              <jointIdx>	13	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L4	</wheelName>
+              <basePos>	-1.9729 0.545422	</basePos>
+              <shiftVec>	-0.278887 0.0639185	</shiftVec>
+              <jointIdx>	66	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L7	</wheelName>
+              <basePos>	-1.41923 0.205527	</basePos>
+              <shiftVec>	0.0426096 -0.193559	</shiftVec>
+              <jointIdx>	79	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.40918 0.205492	</basePos>
+              <shiftVec>	0.0356798 -0.190242	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.285562	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L3	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L2	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L1	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.270343	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L4	</name>
+              <startAngle>	19.7626	</startAngle>
+              <teethCount>	19	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	16.7729	</startAngle>
+              <teethCount>	19	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.05017 0.958788 -2.21703	</point>
+                <point>	-0.960168 0.986202 -2.17247	</point>
+                <point>	-1.05017 1.00389 -2.1279	</point>
+                <point>	-0.960171 1.01117 -2.08334	</point>
+                <point>	-0.960172 1.01397 -2.03877	</point>
+                <point>	-0.960173 1.01676 -1.99421	</point>
+                <point>	-1.05017 1.01932 -1.94964	</point>
+                <point>	-1.05018 1.02176 -1.90508	</point>
+                <point>	-1.05018 1.02421 -1.86051	</point>
+                <point>	-1.05018 1.02665 -1.81595	</point>
+                <point>	-1.05018 1.02909 -1.77139	</point>
+                <point>	-1.05018 1.03153 -1.72682	</point>
+                <point>	-1.05018 1.03397 -1.68226	</point>
+                <point>	-1.05018 1.03643 -1.63769	</point>
+                <point>	-1.05018 1.03903 -1.59313	</point>
+                <point>	-1.05018 1.04163 -1.54856	</point>
+                <point>	-1.05019 1.04423 -1.504	</point>
+                <point>	-1.05019 1.04683 -1.45943	</point>
+                <point>	-1.05019 1.04943 -1.41487	</point>
+                <point>	-1.05019 1.052 -1.3703	</point>
+                <point>	-1.05019 1.05451 -1.32574	</point>
+                <point>	-1.05019 1.05733 -1.28117	</point>
+                <point>	-1.05019 1.06086 -1.23661	</point>
+                <point>	-1.05019 1.06438 -1.19204	</point>
+                <point>	-1.05019 1.0679 -1.14748	</point>
+                <point>	-1.0502 1.07143 -1.10291	</point>
+                <point>	-1.0502 1.07495 -1.05835	</point>
+                <point>	-1.0502 1.07847 -1.01378	</point>
+                <point>	-0.9602 1.08132 -0.969216	</point>
+                <point>	-0.960201 1.08413 -0.924651	</point>
+                <point>	-0.960202 1.08695 -0.880087	</point>
+                <point>	-0.960203 1.08976 -0.835522	</point>
+                <point>	-0.960204 1.09258 -0.790957	</point>
+                <point>	-0.960206 1.09539 -0.746392	</point>
+                <point>	-0.960207 1.09821 -0.701827	</point>
+                <point>	-0.960208 1.10101 -0.657263	</point>
+                <point>	-0.960209 1.10377 -0.612697	</point>
+                <point>	-1.05021 1.0878 -0.568135	</point>
+                <point>	-1.00021 1.09086 -0.523569	</point>
+                <point>	-0.970213 1.11545 -0.479003	</point>
+              </range>
+              <range>
+                <point>	-0.960221 1.14198 -0.16705	</point>
+                <point>	-0.960222 1.14491 -0.122485	</point>
+                <point>	-0.960223 1.14794 -0.07792	</point>
+                <point>	-0.960225 1.15094 -0.0333553	</point>
+                <point>	-0.960226 1.15395 0.0112099	</point>
+                <point>	-0.960227 1.15685 0.0557746	</point>
+                <point>	-0.960222 0.986362 0.100342	</point>
+                <point>	-0.990229 1.16247 0.144903	</point>
+                <point>	-0.99023 1.1652 0.189468	</point>
+                <point>	-0.960232 1.16834 0.234034	</point>
+                <point>	-0.960233 1.17149 0.278598	</point>
+                <point>	-0.960234 1.17459 0.323163	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	111	</segmentsCount>
+          <segmentsOuterThickness>	0.0221035	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0153366	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	0.968643	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.090525	</back>
+              <top>	0.0874932	</top>
+              <front>	0.0841076	</front>
+              <bottom>	0.0412416	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0842886	</back>
+              <top>	0.0802519	</top>
+              <front>	0.0911095	</front>
+              <bottom>	0.0661884	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/japan/J15_Chi_Ni/track/segment.model	</model>
+            <length>	0.0891567	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-2.26087	</xStart>
+                <xStep>	0.0445783	</xStep>
+                <ySamples>	1.07893 0.910431 0.936245 0.956399 0.959783 0.962756 0.965728 0.968701 0.971394 0.973916 0.976438 0.979193 0.983123 0.98616 0.989197 0.992187 0.995203 0.99824 0.985427 0.987895 0.990363	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.165692	</xStart>
+                <xStep>	0.0445783	</xStep>
+                <ySamples>	1.09671 1.09935 1.10215 1.10502 1.10765 1.1102 0.938815 1.11593 1.11895 1.12236 1.12572 1.12897	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R4	</wheel>
+            <wheel>	W_R7	</wheel>
+            <wheel>	W_R6	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	1.96817 0.737809	</basePos>
+              <shiftVec>	0.259508 0.0593598	</shiftVec>
+              <jointIdx>	13	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R4	</wheelName>
+              <basePos>	-1.9729 0.545422	</basePos>
+              <shiftVec>	-0.273328 0.0560021	</shiftVec>
+              <jointIdx>	66	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R7	</wheelName>
+              <basePos>	-1.41534 0.205495	</basePos>
+              <shiftVec>	-0.0351793 -0.189529	</shiftVec>
+              <jointIdx>	78	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.40918 0.20546	</basePos>
+              <shiftVec>	0.0407535 -0.188409	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.278436	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R3	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R2	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R1	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.265612	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R4	</name>
+              <startAngle>	19.7595	</startAngle>
+              <teethCount>	19	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	16.7719	</startAngle>
+              <teethCount>	19	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	0.96032 1.12652 -2.26064	</point>
+                <point>	0.960325 0.958016 -2.21605	</point>
+                <point>	0.960323 0.98383 -2.17148	</point>
+                <point>	0.960321 1.00398 -2.1269	</point>
+                <point>	0.96032 1.00737 -2.08232	</point>
+                <point>	0.960319 1.01034 -2.03774	</point>
+                <point>	0.960317 1.01332 -1.99316	</point>
+                <point>	0.960316 1.01629 -1.94859	</point>
+                <point>	1.05031 1.01899 -1.90401	</point>
+                <point>	1.05031 1.02151 -1.85943	</point>
+                <point>	1.05031 1.02403 -1.81485	</point>
+                <point>	1.05031 1.02679 -1.77027	</point>
+                <point>	1.01031 1.03072 -1.72569	</point>
+                <point>	1.00031 1.03375 -1.68111	</point>
+                <point>	0.990308 1.03679 -1.63654	</point>
+                <point>	0.990307 1.03978 -1.59196	</point>
+                <point>	0.980306 1.0428 -1.54738	</point>
+                <point>	0.970304 1.04583 -1.5028	</point>
+                <point>	1.0403 1.03302 -1.45822	</point>
+                <point>	1.0103 1.03549 -1.41364	</point>
+                <point>	0.980302 1.03796 -1.36907	</point>
+              </range>
+              <range>
+                <point>	0.960269 1.14432 -0.165454	</point>
+                <point>	0.960268 1.14696 -0.120876	</point>
+                <point>	0.960267 1.14976 -0.0762977	</point>
+                <point>	0.960266 1.15264 -0.0317192	</point>
+                <point>	0.960264 1.15526 0.0128589	</point>
+                <point>	0.960263 1.15782 0.0574374	</point>
+                <point>	0.960268 0.98643 0.102018	</point>
+                <point>	0.960261 1.16355 0.146594	</point>
+                <point>	0.96026 1.16657 0.191172	</point>
+                <point>	0.960259 1.16997 0.23575	</point>
+                <point>	0.960257 1.17333 0.280329	</point>
+                <point>	0.960256 1.17658 0.324907	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	6	</slotId>
+          <anchorPosition>	-0.250012 1.97966 0.115593	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_Chi_Ni>
+    <Chassis_Chi_Ni_2>
+      <userString>	#japan_vehicles:Chassis_Chi_Ni_2	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	820	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3300	</weight>
+      <maxLoad>	12000	</maxLoad>
+      <terrainResistance>	1 1.1 1.9	</terrainResistance>
+      <brakeForce>	10800	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	38	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.32	</vehicleMovement>
+        <vehicleRotation>	0.32	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/japan/J15_Chi_Ni/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/japan/J15_Chi_Ni/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/japan/J15_Chi_Ni/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.18 0.26	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.3	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.308907	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.114834	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.272177	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.17743	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.308907	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.114834	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.272177	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.17743	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0404339	</minOffset>
+          <maxOffset>	0.0404339	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0404339	</minOffset>
+          <maxOffset>	0.0404339	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/japan/J15_Chi_Ni/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/japan/J15_Chi_Ni/track/segment.model	</segmentModelRight>
+        <left>	vehicles/japan/J15_Chi_Ni/track/left.track	</left>
+        <right>	vehicles/japan/J15_Chi_Ni/track/right.track	</right>
+        <segmentLength>	0.09	</segmentLength>
+        <segmentOffset>	0.073	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0216	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1105	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.028	</offset>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.899317 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/japan/J15_Chi_Ni/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J15_Chi_Ni/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.968643 1.41584	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.094900 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.543270 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.480470	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	111	</segmentsCount>
+          <segmentsOuterThickness>	0.0212744	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0161285	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-0.968643	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.090525	</back>
+              <top>	0.0874932	</top>
+              <front>	0.0841076	</front>
+              <bottom>	0.0412416	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0842886	</back>
+              <top>	0.0802519	</top>
+              <front>	0.0911095	</front>
+              <bottom>	0.0661884	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/japan/J15_Chi_Ni/track/segment.model	</model>
+            <length>	0.0891297	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-2.21722	</xStart>
+                <xStep>	0.0445649	</xStep>
+                <ySamples>	0.911275 0.938685 0.956375 0.963656 0.966448 0.969239 0.971805 0.974246 0.976688 0.979129 0.981571 0.984012 0.986453 0.988913 0.991512 0.994112 0.996712 0.999311 1.00191 1.00447 1.00698 1.00981 1.01333 1.01685 1.02038 1.0239 1.02742 1.03094 1.03379 1.0366 1.03942 1.04223 1.04504 1.04786 1.05067 1.05347 1.05623 1.04027 1.04332 1.06791	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.167242	</xStart>
+                <xStep>	0.0445649	</xStep>
+                <ySamples>	1.09444 1.09736 1.10039 1.10339 1.1064 1.10931 0.938815 1.11492 1.11765 1.12079 1.12395 1.12704	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L4	</wheel>
+            <wheel>	W_L7	</wheel>
+            <wheel>	W_L6	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	1.96817 0.737809	</basePos>
+              <shiftVec>	0.265604 0.0534537	</shiftVec>
+              <jointIdx>	13	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L4	</wheelName>
+              <basePos>	-1.9729 0.545422	</basePos>
+              <shiftVec>	-0.278887 0.0639185	</shiftVec>
+              <jointIdx>	66	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L7	</wheelName>
+              <basePos>	-1.41923 0.205527	</basePos>
+              <shiftVec>	0.0426096 -0.193559	</shiftVec>
+              <jointIdx>	79	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.40918 0.205492	</basePos>
+              <shiftVec>	0.0356798 -0.190242	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.285562	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L3	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L2	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L1	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.270343	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L4	</name>
+              <startAngle>	19.7626	</startAngle>
+              <teethCount>	19	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	16.7729	</startAngle>
+              <teethCount>	19	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.05017 0.958788 -2.21703	</point>
+                <point>	-0.960168 0.986202 -2.17247	</point>
+                <point>	-1.05017 1.00389 -2.1279	</point>
+                <point>	-0.960171 1.01117 -2.08334	</point>
+                <point>	-0.960172 1.01397 -2.03877	</point>
+                <point>	-0.960173 1.01676 -1.99421	</point>
+                <point>	-1.05017 1.01932 -1.94964	</point>
+                <point>	-1.05018 1.02176 -1.90508	</point>
+                <point>	-1.05018 1.02421 -1.86051	</point>
+                <point>	-1.05018 1.02665 -1.81595	</point>
+                <point>	-1.05018 1.02909 -1.77139	</point>
+                <point>	-1.05018 1.03153 -1.72682	</point>
+                <point>	-1.05018 1.03397 -1.68226	</point>
+                <point>	-1.05018 1.03643 -1.63769	</point>
+                <point>	-1.05018 1.03903 -1.59313	</point>
+                <point>	-1.05018 1.04163 -1.54856	</point>
+                <point>	-1.05019 1.04423 -1.504	</point>
+                <point>	-1.05019 1.04683 -1.45943	</point>
+                <point>	-1.05019 1.04943 -1.41487	</point>
+                <point>	-1.05019 1.052 -1.3703	</point>
+                <point>	-1.05019 1.05451 -1.32574	</point>
+                <point>	-1.05019 1.05733 -1.28117	</point>
+                <point>	-1.05019 1.06086 -1.23661	</point>
+                <point>	-1.05019 1.06438 -1.19204	</point>
+                <point>	-1.05019 1.0679 -1.14748	</point>
+                <point>	-1.0502 1.07143 -1.10291	</point>
+                <point>	-1.0502 1.07495 -1.05835	</point>
+                <point>	-1.0502 1.07847 -1.01378	</point>
+                <point>	-0.9602 1.08132 -0.969216	</point>
+                <point>	-0.960201 1.08413 -0.924651	</point>
+                <point>	-0.960202 1.08695 -0.880087	</point>
+                <point>	-0.960203 1.08976 -0.835522	</point>
+                <point>	-0.960204 1.09258 -0.790957	</point>
+                <point>	-0.960206 1.09539 -0.746392	</point>
+                <point>	-0.960207 1.09821 -0.701827	</point>
+                <point>	-0.960208 1.10101 -0.657263	</point>
+                <point>	-0.960209 1.10377 -0.612697	</point>
+                <point>	-1.05021 1.0878 -0.568135	</point>
+                <point>	-1.00021 1.09086 -0.523569	</point>
+                <point>	-0.970213 1.11545 -0.479003	</point>
+              </range>
+              <range>
+                <point>	-0.960221 1.14198 -0.16705	</point>
+                <point>	-0.960222 1.14491 -0.122485	</point>
+                <point>	-0.960223 1.14794 -0.07792	</point>
+                <point>	-0.960225 1.15094 -0.0333553	</point>
+                <point>	-0.960226 1.15395 0.0112099	</point>
+                <point>	-0.960227 1.15685 0.0557746	</point>
+                <point>	-0.960222 0.986362 0.100342	</point>
+                <point>	-0.990229 1.16247 0.144903	</point>
+                <point>	-0.99023 1.1652 0.189468	</point>
+                <point>	-0.960232 1.16834 0.234034	</point>
+                <point>	-0.960233 1.17149 0.278598	</point>
+                <point>	-0.960234 1.17459 0.323163	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	111	</segmentsCount>
+          <segmentsOuterThickness>	0.0221035	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0153366	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	0.968643	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.090525	</back>
+              <top>	0.0874932	</top>
+              <front>	0.0841076	</front>
+              <bottom>	0.0412416	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.0842886	</back>
+              <top>	0.0802519	</top>
+              <front>	0.0911095	</front>
+              <bottom>	0.0661884	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/japan/J15_Chi_Ni/track/segment.model	</model>
+            <length>	0.0891567	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-2.26087	</xStart>
+                <xStep>	0.0445783	</xStep>
+                <ySamples>	1.07893 0.910431 0.936245 0.956399 0.959783 0.962756 0.965728 0.968701 0.971394 0.973916 0.976438 0.979193 0.983123 0.98616 0.989197 0.992187 0.995203 0.99824 0.985427 0.987895 0.990363	</ySamples>
+              </part>
+              <part>
+                <xStart>	-0.165692	</xStart>
+                <xStep>	0.0445783	</xStep>
+                <ySamples>	1.09671 1.09935 1.10215 1.10502 1.10765 1.1102 0.938815 1.11593 1.11895 1.12236 1.12572 1.12897	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R4	</wheel>
+            <wheel>	W_R7	</wheel>
+            <wheel>	W_R6	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	1.96817 0.737809	</basePos>
+              <shiftVec>	0.259508 0.0593598	</shiftVec>
+              <jointIdx>	13	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R4	</wheelName>
+              <basePos>	-1.9729 0.545422	</basePos>
+              <shiftVec>	-0.273328 0.0560021	</shiftVec>
+              <jointIdx>	66	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R7	</wheelName>
+              <basePos>	-1.41534 0.205495	</basePos>
+              <shiftVec>	-0.0351793 -0.189529	</shiftVec>
+              <jointIdx>	78	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.40918 0.20546	</basePos>
+              <shiftVec>	0.0407535 -0.188409	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.278436	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R3	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R2	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R1	</name>
+              <radius>	0.14	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.265612	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R4	</name>
+              <startAngle>	19.7595	</startAngle>
+              <teethCount>	19	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	16.7719	</startAngle>
+              <teethCount>	19	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	0.96032 1.12652 -2.26064	</point>
+                <point>	0.960325 0.958016 -2.21605	</point>
+                <point>	0.960323 0.98383 -2.17148	</point>
+                <point>	0.960321 1.00398 -2.1269	</point>
+                <point>	0.96032 1.00737 -2.08232	</point>
+                <point>	0.960319 1.01034 -2.03774	</point>
+                <point>	0.960317 1.01332 -1.99316	</point>
+                <point>	0.960316 1.01629 -1.94859	</point>
+                <point>	1.05031 1.01899 -1.90401	</point>
+                <point>	1.05031 1.02151 -1.85943	</point>
+                <point>	1.05031 1.02403 -1.81485	</point>
+                <point>	1.05031 1.02679 -1.77027	</point>
+                <point>	1.01031 1.03072 -1.72569	</point>
+                <point>	1.00031 1.03375 -1.68111	</point>
+                <point>	0.990308 1.03679 -1.63654	</point>
+                <point>	0.990307 1.03978 -1.59196	</point>
+                <point>	0.980306 1.0428 -1.54738	</point>
+                <point>	0.970304 1.04583 -1.5028	</point>
+                <point>	1.0403 1.03302 -1.45822	</point>
+                <point>	1.0103 1.03549 -1.41364	</point>
+                <point>	0.980302 1.03796 -1.36907	</point>
+              </range>
+              <range>
+                <point>	0.960269 1.14432 -0.165454	</point>
+                <point>	0.960268 1.14696 -0.120876	</point>
+                <point>	0.960267 1.14976 -0.0762977	</point>
+                <point>	0.960266 1.15264 -0.0317192	</point>
+                <point>	0.960264 1.15526 0.0128589	</point>
+                <point>	0.960263 1.15782 0.0574374	</point>
+                <point>	0.960268 0.98643 0.102018	</point>
+                <point>	0.960261 1.16355 0.146594	</point>
+                <point>	0.96026 1.16657 0.191172	</point>
+                <point>	0.960259 1.16997 0.23575	</point>
+                <point>	0.960257 1.17333 0.280329	</point>
+                <point>	0.960256 1.17658 0.324907	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	7	</slotId>
+          <anchorPosition>	-0.249977 1.97967 0.115535	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_Chi_Ni_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Chi_Ni>
+      <userString>	#japan_vehicles:Turret_1_Chi_Ni	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	800	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	20	</armor_1>
+        <armor_2>	30	</armor_2>
+        <armor_3>	20	</armor_3>
+        <armor_4>	20	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	20	</armor_8>
+      </armor>
+      <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+      <weight>	500	</weight>
+      <maxHealth>	38	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_13.2mm_Type93>	shared	  <maxAmmo>	900	</maxAmmo>
+          <unlocks>
+            <gun>	_37mm_Sogekiho	  <cost>	40	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 14 0.172222 14 0.186111 15 0.375 15 0.388889 8 0.611111 8 0.625 15 0.813889 15 0.827778 14 1 14	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.56	</shotDispersionRadius>
+          <reloadTime>	10	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	1.1	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.5	</aimingTime>
+          <clip>
+            <count>	30	</count>
+            <rate>	450	</rate>
+          </clip>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/japan/J15_Chi_Ni/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/japan/J15_Chi_Ni/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/japan/J15_Chi_Ni/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/japan/J15_Chi_Ni/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J15_Chi_Ni/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	10	</slotId>
+              <anchorPosition>	0.0801523 0.0304946 0.557412	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.52 0.28 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_13.2mm_Type93>
+        <_37mm_Sogekiho>	shared	  <maxAmmo>	80	</maxAmmo>
+          <unlocks>
+            <gun>	_57mm_Gun_Type97	  <cost>	140	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 15 0.138889 15 0.152778 9 0.375 9 0.388889 8 0.611111 8 0.625 9 0.847222 9 0.861111 15 1 15	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/japan/J15_Chi_Ni/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/japan/J15_Chi_Ni/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/japan/J15_Chi_Ni/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/japan/J15_Chi_Ni/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J15_Chi_Ni/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	11	</slotId>
+              <anchorPosition>	0.076573 0.0569117 0.438736	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.4 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_Sogekiho>
+        <_57mm_Gun_Type97>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <vehicle>	J07_Chi_Ha	  <cost>	1460	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 15 0.125 15 0.138889 10 0.375 10 0.388889 8 0.611111 8 0.625 10 0.861111 10 0.875 15 1 15	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <reloadTime>	3.4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/japan/J15_Chi_Ni/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/japan/J15_Chi_Ni/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/japan/J15_Chi_Ni/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/japan/J15_Chi_Ni/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J15_Chi_Ni/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	12	</slotId>
+              <anchorPosition>	0.077979 0.0517251 0.302262	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.43 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_57mm_Gun_Type97>
+      </guns>
+      <models>
+        <undamaged>	vehicles/japan/J15_Chi_Ni/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/japan/J15_Chi_Ni/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/japan/J15_Chi_Ni/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/japan/J15_Chi_Ni/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J15_Chi_Ni/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.00105 0.19414 0.46962	</gunPosition>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.929 -0.000 0.947 0.000 0.457 0.201 0.500 0.515 0.500 0.500 0.237 0.500 0.203 0.520 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	3	</slotId>
+          <rayStart>	-0.517824 0.207855 0.145854	</rayStart>
+          <rayEnd>	-0.328953 0.165746 0.0953136	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.159	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	4	</slotId>
+          <rayStart>	-0.499568 0.391325 0.000151234	</rayStart>
+          <rayEnd>	-0.303992 0.349514 -0.00121617	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	5	</slotId>
+          <rayStart>	0.496547 0.318245 0.124614	</rayStart>
+          <rayEnd>	0.307456 0.276929 0.0742413	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.159	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	9	</slotId>
+          <anchorPosition>	0.000000 0.538421 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <camouflage>
+        <tiling>	0.325 0.325 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_Chi_Ni>
+  </turrets0>
+  <engines>
+    <_A6120VDe>	shared	  <unlocks>
+        <engine>	_A6120VDe_S	  <cost>	230	</cost>
+        </engine>
+      </unlocks>
+    </_A6120VDe>
+    <_A6120VDe_S>	shared	</_A6120VDe_S>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <_Type94_Hei>	shared	</_Type94_Hei>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_A6120VDe>
+          <smplEnginePower>	126.8737	</smplEnginePower>
+        </_A6120VDe>
+        <_A6120VDe_S>
+          <smplEnginePower>	142.733	</smplEnginePower>
+        </_A6120VDe_S>
+      </engines>
+      <chassis>
+        <Chassis_Chi_Ni>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Chi_Ni>
+        <Chassis_Chi_Ni_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Chi_Ni_2>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <armour>	0.697419655	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	japanese_sun	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+</J15_Chi_Ni.xml>

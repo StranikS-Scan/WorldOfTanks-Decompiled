@@ -1,0 +1,204 @@
+<bootcamp-lobby-1.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	DefaultScene	</initial-scene>
+  <scenes>
+    <scene>	DefaultScene	  <post-effects></post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+    <scene>	Hangar	  <post-effects></post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <global-runtime-effects>
+    <pre-scene>
+      <request-exclusive-hint>	FightButton	</request-exclusive-hint>
+    </pre-scene>
+    <post-scene>
+      <update-exclusive-hints></update-exclusive-hints>
+    </post-scene>
+  </global-runtime-effects>
+  <has-id>
+    <checkpoint>	StartCheckpoint	  <condition></condition>
+      <effects>
+        <invoke-gui-cmd>	OverrideHangarMenuButtons	</invoke-gui-cmd>
+        <set-visible>	MainMenuGradient	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HeaderCenterBg	  <val>	False	</val>
+        </set-visible>
+        <set-visible>	HeaderCenterMenuBg	  <val>	False	</val>
+        </set-visible>
+        <set-var>	FirstVehicleSetter	</set-var>
+        <effects-group>
+          <condition>
+            <game-item>	FirstVehicleCD	  <not-in-inventory></not-in-inventory>
+            </game-item>
+          </condition>
+          <effects>
+            <show-dialog>	FirstTankIntroDialog	</show-dialog>
+            <set-bootcamp-nation>	SelectedNationID	</set-bootcamp-nation>
+            <set-var>	FirstVehicleSetter	</set-var>
+          </effects>
+        </effects-group>
+      </effects>
+    </checkpoint>
+    <checkpoint>	EndCheckpoint	  <condition>
+        <game-item>	FirstVehicleCD	  <in-inventory></in-inventory>
+        </game-item>
+      </condition>
+      <effects>
+        <start-assistant>
+          <hints>
+            <value>
+              <item>
+                <name>	hintRotateLobby	</name>
+                <type>	dict	</type>
+                <value>
+                  <item>
+                    <name>	time_completed	</name>
+                    <type>	float	</type>
+                    <value>	3.0	</value>
+                  </item>
+                  <item>
+                    <name>	timeout	</name>
+                    <type>	float	</type>
+                    <value>	1.0	</value>
+                  </item>
+                  <item>
+                    <name>	angle	</name>
+                    <type>	float	</type>
+                    <value>	180.0	</value>
+                  </item>
+                  <item>
+                    <name>	cooldown_after	</name>
+                    <type>	float	</type>
+                    <value>	0.0	</value>
+                  </item>
+                  <item>
+                    <name>	message	</name>
+                    <type>	string	</type>
+                    <value></value>
+                  </item>
+                </value>
+              </item>
+            </value>
+          </hints>
+        </start-assistant>
+        <set-allowed-to-fight>
+          <value>	True	</value>
+        </set-allowed-to-fight>
+      </effects>
+    </checkpoint>
+    <dialog>	FirstTankIntroDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <nations>
+            <data>
+              <nation_id>	usa	</nation_id>
+              <icon>	../maps/icons/bootcamp/lines/bcT2MediumTank.png	</icon>
+              <preset>	BLUE	</preset>
+              <label>	#bootcamp:message/vehicle/awarded/label	</label>
+              <text>	#bootcamp:message/vehicle/awarded/text	</text>
+              <voiceover>	vo_bc_hangar_first_tank_received	</voiceover>
+              <bottom_renderer>	buttons	</bottom_renderer>
+              <bottom>
+                <data>
+                  <icon>	../maps/icons/bootcamp/rewards/bcT2_med.png	</icon>
+                  <label>	#bootcamp:award/options	</label>
+                </data>
+              </bottom>
+            </data>
+            <data>
+              <nation_id>	germany	</nation_id>
+              <icon>	../maps/icons/bootcamp/lines/bcPzKpfw35t.png	</icon>
+              <preset>	BLUE	</preset>
+              <label>	#bootcamp:message/vehicle/awarded/label	</label>
+              <text>	#bootcamp:message/vehicle/awarded/text	</text>
+              <voiceover>	vo_bc_hangar_first_tank_received	</voiceover>
+              <bottom_renderer>	buttons	</bottom_renderer>
+              <bottom>
+                <data>
+                  <icon>	../maps/icons/bootcamp/rewards/bcAwardOptions.png	</icon>
+                  <label>	#bootcamp:award/options	</label>
+                </data>
+              </bottom>
+            </data>
+            <data>
+              <nation_id>	ussr	</nation_id>
+              <icon>	../maps/icons/bootcamp/lines/bcT26.png	</icon>
+              <preset>	BLUE	</preset>
+              <label>	#bootcamp:message/vehicle/awarded/label	</label>
+              <text>	#bootcamp:message/vehicle/awarded/text	</text>
+              <voiceover>	vo_bc_hangar_first_tank_received	</voiceover>
+              <bottom_renderer>	buttons	</bottom_renderer>
+              <bottom>
+                <data>
+                  <icon>	../maps/icons/bootcamp/rewards/bcAwardOptions.png	</icon>
+                  <label>	#bootcamp:award/options	</label>
+                </data>
+              </bottom>
+            </data>
+          </nations>
+        </message>
+      </sequence>
+      <buttons>
+        <submit>	ConfirmDefaultNation	</submit>
+        <cancel>	ConfirmDefaultNation	</cancel>
+        <custom>	SelectOtherNation	</custom>
+      </buttons>
+      <actions>
+        <click>	ConfirmDefaultNation	  <effects>
+            <set-var>	DefaultNationSetter	</set-var>
+          </effects>
+        </click>
+        <click>	SelectOtherNation	  <effects>
+            <show-dialog>	SelectNationDialog	</show-dialog>
+          </effects>
+        </click>
+      </actions>
+    </dialog>
+    <dialog>	SelectNationDialog	  <type>	bootcampSelectNation	</type>
+      <result-var>	SelectedNationID	</result-var>
+      <buttons>
+        <cancel>	Cancel	</cancel>
+      </buttons>
+      <actions>
+        <click>	Cancel	  <effects>
+            <show-dialog>	FirstTankIntroDialog	</show-dialog>
+          </effects>
+        </click>
+      </actions>
+    </dialog>
+    <game-attribute>	DefaultNationSetter	  <var-ref>	SelectedNationID	</var-ref>
+      <name>	BootcampNationID	</name>
+    </game-attribute>
+    <game-attribute>	FirstVehicleSetter	  <var-ref>	FirstVehicleCD	</var-ref>
+      <name>	BootcampNationDataField	</name>
+      <args>	vehicle_first	</args>
+    </game-attribute>
+  </has-id>
+  <vars>
+    <var-set>	EnabledHeaderMenuButtons	  <asList>
+        <asString>	settings	</asString>
+        <asString>	account	</asString>
+      </asList>
+    </var-set>
+    <var-set>	EnabledHangarMenuButtons	  <asList></asList>
+    </var-set>
+    <var-set>	SelectedNation	  <asString></asString>
+    </var-set>
+  </vars>
+  <triggers>
+    <trigger>	CheckpointController	  <type>	linear-checkpoint-controller	</type>
+      <validate-var></validate-var>
+      <sequence>
+        <checkpoint>	StartCheckpoint	</checkpoint>
+        <checkpoint>	EndCheckpoint	</checkpoint>
+      </sequence>
+      <on-effects>
+        <save-checkpoint></save-checkpoint>
+      </on-effects>
+    </trigger>
+  </triggers>
+</bootcamp-lobby-1.xml>

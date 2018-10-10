@@ -1,33 +1,17 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/gun_rotation_shared.py
 import BigWorld
 import Math
 from math import pi
-from constants import DEFAULT_GUN_PITCH_LIMITS_TRANSITION, IS_CLIENT, IS_CELLAPP
+from constants import IS_CLIENT, IS_CELLAPP
+from debug_utils import *
 if IS_CELLAPP:
     from server_constants import MAX_VEHICLE_RADIUS
 
 def calcPitchLimitsFromDesc(turretYaw, pitchLimitsDesc):
-    basicLimits = pitchLimitsDesc['basic']
-    frontLimits = pitchLimitsDesc.get('front')
-    backLimits = pitchLimitsDesc.get('back')
-    if frontLimits is None and backLimits is None:
-        return basicLimits
-    else:
-        if frontLimits is None:
-            frontLimits = (basicLimits[0], basicLimits[1], 0.0)
-        if backLimits is None:
-            backLimits = (basicLimits[0], basicLimits[1], 0.0)
-        transition = pitchLimitsDesc.get('transition')
-        if transition is None:
-            transition = DEFAULT_GUN_PITCH_LIMITS_TRANSITION
-        return BigWorld.wg_calcGunPitchLimits(turretYaw, basicLimits, frontLimits, backLimits, transition)
-
-
-def calcPitchLimits(turretYaw, basicLimits, frontLimits, backLimits, transition):
-    return calcPitchLimitsFromDesc(turretYaw, {'basic': basicLimits,
-     'front': frontLimits,
-     'back': backLimits,
-     'transition': transition})
+    minPitch = pitchLimitsDesc['minPitch']
+    maxPitch = pitchLimitsDesc['maxPitch']
+    return BigWorld.wg_calcGunPitchLimits(turretYaw, minPitch, maxPitch)
 
 
 def encodeAngleToUint(angle, bits):
@@ -39,47 +23,39 @@ def decodeAngleFromUint(code, bits):
     return pi * 2.0 * code / (1 << bits) - pi
 
 
-def encodeRestrictedAngleToUint(angle, bits, minBound, maxBound):
-    t = (angle - minBound) / (maxBound - minBound)
+def encodeRestrictedValueToUint(angle, bits, minBound, maxBound):
+    t = 0 if maxBound == minBound else (angle - minBound) / (maxBound - minBound)
     t = _clamp(0.0, t, 1.0)
     mask = (1 << bits) - 1
     return int(round(mask * t)) & mask
 
 
-def decodeRestrictedAngleFromUint(code, bits, minBound, maxBound):
+def decodeRestrictedValueFromUint(code, bits, minBound, maxBound):
     t = float(code) / ((1 << bits) - 1)
     return minBound + t * (maxBound - minBound)
 
 
 def encodeGunAngles(yaw, pitch, pitchLimits):
-    return encodeAngleToUint(yaw, 10) << 6 | encodeRestrictedAngleToUint(pitch, 6, *pitchLimits)
+    return encodeAngleToUint(yaw, 10) << 6 | encodeRestrictedValueToUint(pitch, 6, *pitchLimits)
 
 
 def decodeGunAngles(code, pitchLimits):
-    return (decodeAngleFromUint(code >> 6 & 1023, 10), decodeRestrictedAngleFromUint((code & 63), 6, *pitchLimits))
+    return (decodeAngleFromUint(code >> 6 & 1023, 10), decodeRestrictedValueFromUint((code & 63), 6, *pitchLimits))
 
 
 def _clamp(minBound, value, maxBound):
     if value < minBound:
         return minBound
-    if value > maxBound:
-        return maxBound
-    return value
+    return maxBound if value > maxBound else value
 
 
 def isShootPositionInsideOtherVehicle(vehicle, turretPosition, shootPosition):
     if IS_CLIENT:
-
-        def getNearVehicles(vehicle, shootPosition):
-            nearVehicles = []
-            arenaVehicles = BigWorld.player().arena.vehicles
-            for id in arenaVehicles.iterkeys():
-                v = BigWorld.entities.get(id)
-                if v and not v.isPlayer:
-                    nearVehicles.append(v)
-
-            return nearVehicles
-
+        res = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, turretPosition, shootPosition, BigWorld.player().getVehicleAttached().id, 3)
+        if res is not None:
+            return True
+        else:
+            return False
     elif IS_CELLAPP:
 
         def getNearVehicles(vehicle, shootPosition):
@@ -93,21 +69,38 @@ def isShootPositionInsideOtherVehicle(vehicle, turretPosition, shootPosition):
     return False
 
 
-def isSegmentCollideWithVehicle(vehicle, startPoint, endPoint):
+def getPenetratedVehicles(vehicle, turretPosition, shootPosition):
     if IS_CLIENT:
 
-        def getVehicleSpaceMatrix(vehicle):
-            toVehSpace = Math.Matrix(vehicle.model.matrix)
-            toVehSpace.invert()
-            return toVehSpace
+        def getNearVehicles(vehicle, shootPosition):
+            nearVehicles = []
+            arenaVehicles = BigWorld.player().arena.vehicles
+            for id in arenaVehicles.iterkeys():
+                v = BigWorld.entities.get(id)
+                if v and not v.isPlayerVehicle:
+                    nearVehicles.append(v)
 
-        def getVehicleComponents(vehicle):
-            return vehicle.getComponents()
+            return nearVehicles
 
     elif IS_CELLAPP:
 
+        def getNearVehicles(vehicle, shootPosition):
+            return vehicle.entitiesInRange(MAX_VEHICLE_RADIUS, 'Vehicle', shootPosition)
+
+    penetratedVehicles = []
+    nearVehicles = getNearVehicles(vehicle, shootPosition)
+    for v in nearVehicles:
+        if shootPosition.distTo(v.position) < v.typeDescriptor.boundingRadius and isSegmentCollideWithVehicle(v, turretPosition, shootPosition):
+            penetratedVehicles.append(v.id)
+
+    return penetratedVehicles
+
+
+def isSegmentCollideWithVehicle(vehicle, startPoint, endPoint):
+    if IS_CELLAPP:
+
         def getVehicleSpaceMatrix(vehicle):
-            toVehSpace = Math.Matrix(vehicle.mover.exactMatrix)
+            toVehSpace = Math.Matrix(vehicle.mover.matrix)
             toVehSpace.invert()
             return toVehSpace
 
@@ -118,12 +111,28 @@ def isSegmentCollideWithVehicle(vehicle, startPoint, endPoint):
     vehStartPoint = toVehSpace.applyPoint(startPoint)
     vehEndPoint = toVehSpace.applyPoint(endPoint)
     for compDescr, toCompSpace, isAttached in getVehicleComponents(vehicle):
-        if not isAttached or compDescr.get('itemTypeName') == 'vehicleGun':
+        if not isAttached or compDescr.itemTypeName == 'vehicleGun':
             continue
         compStartPoint = toCompSpace.applyPoint(vehStartPoint)
         compEndPoint = toCompSpace.applyPoint(vehEndPoint)
-        collisions = compDescr['hitTester'].localAnyHitTest(compStartPoint, compEndPoint)
+        collisions = compDescr.hitTester.localAnyHitTest(compStartPoint, compEndPoint)
         if collisions is not None:
             return True
 
     return False
+
+
+def getLocalAimPoint(vehicleDescriptor):
+    if vehicleDescriptor is None:
+        return Math.Vector3(0.0, 0.0, 0.0)
+    else:
+        hullBox = vehicleDescriptor.hull.hitTester.bbox
+        hullPosition = vehicleDescriptor.chassis.hullPosition
+        middleX = (hullBox[0].x + hullBox[1].x) * 0.5 + hullPosition.x
+        middleZ = (hullBox[0].z + hullBox[1].z) * 0.5 + hullPosition.z
+        calculatedHullPosition = (middleX, hullPosition.y, middleZ)
+        turretPosition = vehicleDescriptor.hull.turretPositions[0] * 0.5
+        maxZOffset = abs(hullBox[1].z - hullBox[0].z) * 0.2
+        turretPosition.z = max(-maxZOffset, min(maxZOffset, turretPosition.z))
+        localAimPoint = calculatedHullPosition + turretPosition
+        return localAimPoint

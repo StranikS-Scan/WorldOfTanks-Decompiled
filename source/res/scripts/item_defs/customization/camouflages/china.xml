@@ -1,0 +1,2596 @@
+<china.xml>
+  <xmlns:china1>	ussr	</xmlns:china1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china0>	usa	</xmlns:china0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15300	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_01.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/bicolor/china_historical_01/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/bicolor/china_historical_01/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	125 116 77 255	</c0>
+          <c1>	43 61 41 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.3 2.3 0.73 0.45	</Ch01_Type59>
+        <Ch02_Type62>	4.1 4.1 0.86 0.9	</Ch02_Type62>
+        <Ch03_WZ-111>	4 4 0.39 0.9	</Ch03_WZ-111>
+        <Ch04_T34_1>	5.2 5.2 0.7 0.88	</Ch04_T34_1>
+        <Ch05_T34_2>	5.8 5.7 0.21 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.7 1.7 4.1 1.7	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.7 1.7 6.3 2.8	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	2 2 0.15 0.27	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	5.3 5.3 0.88 0.1	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	3.4 3.4 0.09 0.29	</Ch09_M5>
+        <Ch10_IS2>	4.2 4.2 0.31 0.08	</Ch10_IS2>
+        <Ch11_110>	6.4 6.4 0.53 0.4	</Ch11_110>
+        <Ch11_110_IGR>	4.6 4.7 0.53 0.4	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2.8 2.8 6.5 1.7	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.8 4.5 0.78 0.3	</Ch14_T34_3>
+        <Ch15_59_16>	3.8 3.8 0.000000 0.1	</Ch15_59_16>
+        <Ch16_WZ_131>	3.3 3.3 0.25 0.37	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	4.5 4.5 0.36 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	4.5 4.5 0.36 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	4.8 4.8 0.24 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	4 4 0.4 0.05	</Ch19_121>
+        <Ch19_121_IGR>	4 4 0.4 0.05	</Ch19_121_IGR>
+        <Ch20_Type58>	4.5 4.5 0.31 0.47	</Ch20_Type58>
+        <Ch21_T34>	5.7 5.7 0.57 0.4	</Ch21_T34>
+        <Ch22_113>	3 3 0.4 2.6	</Ch22_113>
+        <Ch22_113P>	3 3 0.4 2.6	</Ch22_113P>
+        <Ch23_112>	4 4 0.5 0.21	</Ch23_112>
+        <Ch24_Type64>	4 4 0.83 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	5.8 5.8 0.04 0.2	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	5.5 5.5 0.46 0.44	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.6 1.6 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	0.5 0.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	8.1 8.1 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1.2 1.2 0.4 1.2	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	3.8 3.8 5.5 7.8	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.3 1.3 0.8 0.9	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	3.3 3.3 0.3 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.7 2.7 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	3.3 3.3 3.7 2.6	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	6.5 6.5 0.8 2.3	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.8 1.8 1 0.5	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.8 1.8 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	4.8 4.8 1.5 1.5	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	3.4 3.4 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15301	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_02.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/bicolor/china_historical_02/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/bicolor/china_historical_02/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	136 118 64 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.4 2.4 0.18 0.03	</Ch01_Type59>
+        <Ch02_Type62>	3.6 3.6 0.46 0.4	</Ch02_Type62>
+        <Ch03_WZ-111>	3.6 3.5 0.000000 0.000000	</Ch03_WZ-111>
+        <Ch04_T34_1>	5.3 5.3 0.28 0.16	</Ch04_T34_1>
+        <Ch05_T34_2>	5.7 5.7 0.1 0.2	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.7 1.7 0.33 0.000000	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.7 1.7 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.8 1.8 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	3.8 3.8 0.31 0.31	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	3 3 0.12 0.12	</Ch09_M5>
+        <Ch10_IS2>	2.7 2.7 0.2 0.000000	</Ch10_IS2>
+        <Ch11_110>	6 6 0.2 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	6.1 6 0.000000 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	3 3 0.05 2.7	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	5.5 5.7 0.5 0.37	</Ch14_T34_3>
+        <Ch15_59_16>	3.8 3.8 0.000000 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	2.5 2.5 0.12 0.2	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3.5 3.5 0.07 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.07 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	3.8 3.8 0.19 0.08	</Ch18_WZ-120>
+        <Ch19_121>	5.6 5.6 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	5.6 5.6 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	4.8 4.8 0.000000 0.000000	</Ch20_Type58>
+        <Ch21_T34>	3.7 3.7 0.12 0.000000	</Ch21_T34>
+        <Ch22_113>	2.7 2.7 0.41 0.000000	</Ch22_113>
+        <Ch22_113P>	2.7 2.7 0.41 0.000000	</Ch22_113P>
+        <Ch23_112>	3.2 3.2 0.000000 0.000000	</Ch23_112>
+        <Ch24_Type64>	4.5 4.5 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	5.6 5.6 0.38 0.06	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	5.4 5.4 0.12 0.26	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.5 1.5 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	6 6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1.1 1.1 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	3.2 3.2 0.000000 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.5 1.5 1 1	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.5 2.5 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.4 2.4 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	3.2 3.2 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	6.8 6.8 0.4 0.2	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.3 1.3 0.1 0.5	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.5 1.5 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	7 7 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	3.2 3.2 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15303	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_04.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/bicolor/china_historical_04/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/bicolor/china_historical_04/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	133 106 67 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.8 1.8 0.96 0.5	</Ch01_Type59>
+        <Ch02_Type62>	2.6 2.7 0.55 0.08	</Ch02_Type62>
+        <Ch03_WZ-111>	2.9 2.9 0.34 0.54	</Ch03_WZ-111>
+        <Ch04_T34_1>	3.3 3.3 0.18 0.62	</Ch04_T34_1>
+        <Ch05_T34_2>	4.1 4.1 0.24 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.5 1.5 0.33 0.05	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 0.06 0.17	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	4.1 4.1 0.45 0.04	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	3 3 0.34 0.32	</Ch09_M5>
+        <Ch10_IS2>	2.9 2.9 0.11 0.000000	</Ch10_IS2>
+        <Ch11_110>	5.4 5.4 0.3 0.32	</Ch11_110>
+        <Ch11_110_IGR>	3.8 3.4 0.3 0.32	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2.5 2.5 0.09 0.06	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	3.5 3.5 0.07 0.36	</Ch14_T34_3>
+        <Ch15_59_16>	2.7 2.7 0.08 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	2.1 2.1 0.13 0.18	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3 3 0.12 0.12	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3 3 0.12 0.12	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	2.2 2.2 3.1 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	4.1 4.1 0.2 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	4.1 4.1 0.2 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	3.1 3.5 0.69 0.5	</Ch20_Type58>
+        <Ch21_T34>	3.8 3.8 0.05 0.1	</Ch21_T34>
+        <Ch22_113>	2.4 2.4 0.46 0.000000	</Ch22_113>
+        <Ch22_113P>	2.4 2.4 0.46 0.000000	</Ch22_113P>
+        <Ch23_112>	3.1 3.1 0.42 0.000000	</Ch23_112>
+        <Ch24_Type64>	4 4 0.6 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	6.8 6.8 0.74 0.000000	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	3.9 3.9 0.62 0.66	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.3 1.3 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	0.7 0.7 1.8 3	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	5.5 5.5 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1.1 1.1 0.9 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	1.6 1.6 5 5.4	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.5 1.5 0.5 0.000000	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.6 2.6 0.9 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	3.2 3.2 1.7 2.8	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	5.7 5.7 1.5 3.8	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 1.3 0.6	</Ch38_WZ113G_FT>
+        <Ch40_WZ120G_FT>	7 7 4.6 4.5	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15304	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_05.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/tricolor/china_historical_05/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/tricolor/china_historical_05/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	111 56 47 255	</c0>
+          <c1>	111 88 51 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.6 2.6 0.72 0.34	</Ch01_Type59>
+        <Ch02_Type62>	5.3 5.3 0.1 0.78	</Ch02_Type62>
+        <Ch03_WZ-111>	5.7 5.7 0.45 0.55	</Ch03_WZ-111>
+        <Ch04_T34_1>	3.8 3.8 0.23 1	</Ch04_T34_1>
+        <Ch05_T34_2>	6.2 6.2 0.53 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.7 1.7 0.55 0.57	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.7 1.7 4.5 7.9	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.8 1.8 0.02 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	5.1 5.1 0.4 0.14	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	3 3 0.25 0.1	</Ch09_M5>
+        <Ch10_IS2>	5.3 5.3 0.68 0.7	</Ch10_IS2>
+        <Ch11_110>	4.9 4.9 0.24 0.38	</Ch11_110>
+        <Ch11_110_IGR>	4.9 4.9 0.24 0.38	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	4.5 4.5 7.5 4.3	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	5 5 0.6 0.49	</Ch14_T34_3>
+        <Ch15_59_16>	3.8 3.8 1.5 1.2	</Ch15_59_16>
+        <Ch16_WZ_131>	3.9 3.9 0.000000 0.06	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	6 6 0.16 0.33	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	6 6 0.16 0.33	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	3.2 3.2 0.5 0.7	</Ch18_WZ-120>
+        <Ch19_121>	5 5 0.38 0.11	</Ch19_121>
+        <Ch19_121_IGR>	5 5 0.38 0.11	</Ch19_121_IGR>
+        <Ch20_Type58>	6 4.8 0.35 0.28	</Ch20_Type58>
+        <Ch21_T34>	5.4 4.9 0.34 0.16	</Ch21_T34>
+        <Ch22_113>	4.6 4.6 1.3 0.000000	</Ch22_113>
+        <Ch22_113P>	4.6 4.6 1.3 0.000000	</Ch22_113P>
+        <Ch23_112>	5.2 5.2 0.52 0.000000	</Ch23_112>
+        <Ch24_Type64>	5 5 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	8.1 8.1 0.73 0.06	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	7.5 7.5 0.87 0.26	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.9 1.9 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.1 1.1 4 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	5.2 5.2 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1.3 1.3 1.9 0.8	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	3.5 3.5 4.9 4.7	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	2 2 4.8 1.8	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	3.3 3.3 1.6 0.3	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	3.9 3.9 0.8 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	4.9 4.9 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	8.9 8.9 0.000000 0.000000	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	2.3 2.3 0.3 0.000000	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	2.2 2.2 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	8.5 8.5 3.3 2	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15305	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_06.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/tricolor/china_historical_06/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/tricolor/china_historical_06/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	37 44 35 255	</c0>
+          <c1>	117 115 82 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.2 1.2 0.06 0.01	</Ch01_Type59>
+        <Ch02_Type62>	3.5 3.5 0.51 0.62	</Ch02_Type62>
+        <Ch03_WZ-111>	3.4 3.4 0.12 0.000000	</Ch03_WZ-111>
+        <Ch04_T34_1>	2.8 2.8 0.26 0.68	</Ch04_T34_1>
+        <Ch05_T34_2>	2.8 2.8 0.33 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1 1 0.11 0.000000	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1 1 4.2 3.7	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1 1 0.6 0.84	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	3.6 3.6 0.22 0.27	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.4 1.4 0.74 0.06	</Ch09_M5>
+        <Ch10_IS2>	3.6 3.6 3.4 0.000000	</Ch10_IS2>
+        <Ch11_110>	4.9 4.9 0.34 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	3.6 3.7 0.34 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2.5 2.5 0.24 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	3.3 3.3 0.34 0.21	</Ch14_T34_3>
+        <Ch15_59_16>	2 2 0.39 0.55	</Ch15_59_16>
+        <Ch16_WZ_131>	2.1 2.1 0.13 0.09	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	4.5 4.5 0.06 0.13	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	4.5 4.5 0.06 0.13	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	2.3 2.3 0.17 0.4	</Ch18_WZ-120>
+        <Ch19_121>	4.1 4.1 0.07 0.12	</Ch19_121>
+        <Ch19_121_IGR>	4.1 4.1 0.07 0.12	</Ch19_121_IGR>
+        <Ch20_Type58>	2.8 4.6 0.48 0.58	</Ch20_Type58>
+        <Ch21_T34>	3.4 3.7 0.5 0.22	</Ch21_T34>
+        <Ch22_113>	2.8 2.8 0.7 0.35	</Ch22_113>
+        <Ch22_113P>	2.8 2.8 0.7 0.35	</Ch22_113P>
+        <Ch23_112>	3 3 0.06 0.000000	</Ch23_112>
+        <Ch24_Type64>	2.5 2.5 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	4.7 4.7 0.08 0.84	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	5.6 5.6 0.5 0.52	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.1 1.1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	5.6 5.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.8 0.8 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	1.9 1.9 6.3 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.8 1.8 0.8 0.6	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.8 1.8 0.2 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.1 2.1 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	3.4 3.4 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	7.8 7.8 0.4 0.5	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.1 1.1 0.6 0.5	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.1 1.1 0.000000 0.4	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	7.5 7.5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.5 2.5 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15306	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_07.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/tricolor/china_historical_07/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/tricolor/china_historical_07/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	53 64 36 255	</c0>
+          <c1>	138 128 53 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.7 1.7 0.3 0.15	</Ch01_Type59>
+        <Ch02_Type62>	2.7 2.7 0.48 0.54	</Ch02_Type62>
+        <Ch03_WZ-111>	2.7 2.7 0.4 0.58	</Ch03_WZ-111>
+        <Ch04_T34_1>	3.9 3.9 1 0.24	</Ch04_T34_1>
+        <Ch05_T34_2>	3.9 3.9 0.16 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.5 1.5 0.1 0.2	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.5 1.5 0.08 0.19	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	3.9 3.9 0.09 0.03	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.9 1.9 0.48 0.2	</Ch09_M5>
+        <Ch10_IS2>	3.2 3.2 2.2 0.13	</Ch10_IS2>
+        <Ch11_110>	7.5 7.5 0.55 0.92	</Ch11_110>
+        <Ch11_110_IGR>	5.8 5.9 0.55 0.92	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2 2 0.2 5.2	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.8 4.4 0.31 0.48	</Ch14_T34_3>
+        <Ch15_59_16>	2.8 2.8 3.1 3.5	</Ch15_59_16>
+        <Ch16_WZ_131>	2.1 2.1 0.02 0.23	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3.5 3.5 0.2 0.13	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.2 0.13	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	1.9 1.9 2.4 0.4	</Ch18_WZ-120>
+        <Ch19_121>	3.8 3.8 0.15 0.16	</Ch19_121>
+        <Ch19_121_IGR>	3.8 3.8 0.15 0.16	</Ch19_121_IGR>
+        <Ch20_Type58>	2.6 2.6 0.29 0.23	</Ch20_Type58>
+        <Ch21_T34>	3.7 3.8 0.36 0.26	</Ch21_T34>
+        <Ch22_113>	2.5 2.5 0.25 0.25	</Ch22_113>
+        <Ch22_113P>	2.5 2.5 0.25 0.25	</Ch22_113P>
+        <Ch23_112>	2.2 2.2 0.3 0.6	</Ch23_112>
+        <Ch24_Type64>	3.5 3.5 5.6 5.9	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	4.7 4.7 0.000000 0.04	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	3.9 3.9 0.7 0.42	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1 1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	0.8 0.8 3.4 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	5.3 5.3 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1.2 1.2 0.2 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	3.5 3.5 0.000000 0.7	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.3 1.3 1.1 0.9	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.4 2.4 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.1 2.1 0.000000 0.9	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	7 7 2.6 1.3	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.5 1.5 0.9 0.7	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.5 1.5 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	6.2 6.2 2.7 1.4	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	3.4 3.4 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15309	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_10.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/tricolor/china_historical_10/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/tricolor/china_historical_10/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	106 102 100 255	</c0>
+          <c1>	65 82 64 0	</c1>
+          <c2>	75 107 71 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.6 2.6 0.69 0.43	</Ch01_Type59>
+        <Ch02_Type62>	2.6 2.6 0.48 0.64	</Ch02_Type62>
+        <Ch03_WZ-111>	2.6 2.6 0.47 0.16	</Ch03_WZ-111>
+        <Ch04_T34_1>	6.4 6.4 0.74 0.14	</Ch04_T34_1>
+        <Ch05_T34_2>	4 4.1 0.07 0.2	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.2 1.2 4.2 7	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.2 1.2 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 0.24 0.16	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	4.5 4.5 0.26 0.09	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.9 1.9 0.000000 0.2	</Ch09_M5>
+        <Ch10_IS2>	2.4 2.4 0.2 0.18	</Ch10_IS2>
+        <Ch11_110>	5.8 5.8 1.9 1.4	</Ch11_110>
+        <Ch11_110_IGR>	4.1 4.1 0.62 0.78	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2 2 4.7 4.4	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	5.3 4.7 1.2 0.45	</Ch14_T34_3>
+        <Ch15_59_16>	2.9 2.9 0.7 0.4	</Ch15_59_16>
+        <Ch16_WZ_131>	2.7 2.7 0.2 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3 3 0.2 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3 3 0.2 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	3.8 3.8 0.5 1.4	</Ch18_WZ-120>
+        <Ch19_121>	5.4 3.9 0.44 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	5.4 3.9 0.44 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	2.6 2.6 0.32 0.000000	</Ch20_Type58>
+        <Ch21_T34>	4.8 5.7 0.81 0.13	</Ch21_T34>
+        <Ch22_113>	2 2 0.6 0.33	</Ch22_113>
+        <Ch22_113P>	2 2 0.6 0.33	</Ch22_113P>
+        <Ch23_112>	2.4 2.4 0.86 0.000000	</Ch23_112>
+        <Ch24_Type64>	3.5 3.5 0.24 3.8	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	8.6 8.6 0.15 0.72	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	3.3 3.3 0.84 0.68	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.5 1.5 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	6.1 6.1 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1 1 0.7 5	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	3.2 3.2 0.8 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.5 0.2	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	3.2 3.2 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.7 2.7 1 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.9 2.9 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	6.2 6.2 1.1 2.4	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.8 1.8 1.2 1.9	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.6 1.6 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	7 7 0.8 0.1	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.5 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15311	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_12.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/tricolor/china_historical_12/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/tricolor/china_historical_12/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	66 80 64 0	</c0>
+          <c1>	129 122 86 255	</c1>
+          <c2>	73 109 69 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.6 1.6 0.88 0.37	</Ch01_Type59>
+        <Ch02_Type62>	3.5 3.5 0.23 0.14	</Ch02_Type62>
+        <Ch03_WZ-111>	3.4 3.4 0.33 0.17	</Ch03_WZ-111>
+        <Ch04_T34_1>	3.3 3.3 0.93 0.54	</Ch04_T34_1>
+        <Ch05_T34_2>	3.9 3.8 0.22 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.3 1.3 0.5 0.05	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.3 1.3 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.5 1.5 0.27 0.15	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	5.3 5.3 0.22 0.2	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	2.2 2.2 0.16 0.000000	</Ch09_M5>
+        <Ch10_IS2>	4 4 0.2 0.4	</Ch10_IS2>
+        <Ch11_110>	5.8 5.8 0.46 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	4.3 4.4 0.46 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2.5 2.5 7.7 8.2	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.5 4.5 1.7 6	</Ch14_T34_3>
+        <Ch15_59_16>	2.9 2.9 0.98 1.3	</Ch15_59_16>
+        <Ch16_WZ_131>	2.5 2.5 0.35 0.25	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3.5 3.5 3.4 3.6	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 3.4 3.6	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	4 4.2 0.9 1.2	</Ch18_WZ-120>
+        <Ch19_121>	3.2 3.2 0.000000 0.04	</Ch19_121>
+        <Ch19_121_IGR>	3.2 3.2 0.000000 0.04	</Ch19_121_IGR>
+        <Ch20_Type58>	5.2 3.8 1 0.22	</Ch20_Type58>
+        <Ch21_T34>	3.9 4.1 0.34 0.12	</Ch21_T34>
+        <Ch22_113>	2.7 2.7 0.6 0.43	</Ch22_113>
+        <Ch22_113P>	2.7 2.7 0.6 0.43	</Ch22_113P>
+        <Ch23_112>	3.1 3.1 0.14 0.22	</Ch23_112>
+        <Ch24_Type64>	4 4 3.2 8.9	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	8.9 8.9 0.41 0.72	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	4.8 4.8 0.46 0.4	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	0.8 0.8 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1 1 0.5 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	6.1 6.1 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1 1 3 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	1.5 1.5 0.000000 7.6	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.000000 1	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.8 2.8 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.6 2.6 3.4 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.9 2.9 0.4 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	5.6 5.6 3.5 5.5	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 1.6 1	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1 1 2.2 1.4	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	5.6 5.6 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15312	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_13.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/bicolor/china_historical_13/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/bicolor/china_historical_13/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	128 121 79 255	</c0>
+          <c1>	65 81 64 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.9 1.9 0.5 0.29	</Ch01_Type59>
+        <Ch02_Type62>	3.6 3.6 0.41 0.72	</Ch02_Type62>
+        <Ch03_WZ-111>	3.6 3.6 0.62 0.33	</Ch03_WZ-111>
+        <Ch04_T34_1>	4.1 4.1 0.72 0.27	</Ch04_T34_1>
+        <Ch05_T34_2>	4.1 4.1 0.6 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.3 1.3 0.35 0.000000	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.3 1.3 0.000000 1.7	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.5 1.5 0.2 0.15	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	4.4 4.4 0.000000 0.41	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.6 1.6 0.2 0.17	</Ch09_M5>
+        <Ch10_IS2>	3.2 3.2 0.6 0.04	</Ch10_IS2>
+        <Ch11_110>	8.5 8.5 0.66 0.34	</Ch11_110>
+        <Ch11_110_IGR>	5.7 5.6 0.66 0.34	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	3 3 0.4 2.7	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.8 4.4 0.73 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	2.5 2.5 0.81 0.6	</Ch15_59_16>
+        <Ch16_WZ_131>	2.8 2.8 0.14 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	4 4 3.8 5.5	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	4 4 3.8 5.5	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	4.7 4.7 0.45 0.2	</Ch18_WZ-120>
+        <Ch19_121>	3.3 3.3 0.6 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	3.3 3.3 0.6 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	5.3 5.3 0.32 0.32	</Ch20_Type58>
+        <Ch21_T34>	4.8 4.8 0.16 0.1	</Ch21_T34>
+        <Ch22_113>	3.5 3.5 0.7 0.25	</Ch22_113>
+        <Ch22_113P>	3.5 3.5 0.7 0.25	</Ch22_113P>
+        <Ch23_112>	3.5 3.5 0.43 0.000000	</Ch23_112>
+        <Ch24_Type64>	3.5 3.5 0.4 0.43	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	9.8 9.8 0.02 0.26	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	6.3 6.3 0.52 0.12	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.1 0.8 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	6.1 6.1 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1 1 0.6 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	1.6 1.6 6.2 5.3	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1 1 0.5 0.000000	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.6 1.6 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.7 2.7 0.5 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	3.8 3.8 0.000000 2.5	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	4.2 4.2 0.8 1	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 0.2 0.7	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1 1 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	5.7 5.7 2.3 2.8	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15313	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_14.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/tricolor/china_historical_14/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/tricolor/china_historical_14/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	66 80 64 0	</c0>
+          <c1>	109 106 103 255	</c1>
+          <c2>	72 108 68 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	3.2 3.2 0.34 0.3	</Ch01_Type59>
+        <Ch02_Type62>	6.4 6.4 0.44 0.29	</Ch02_Type62>
+        <Ch03_WZ-111>	6.6 6.6 1 0.89	</Ch03_WZ-111>
+        <Ch04_T34_1>	6.1 6.1 0.64 0.9	</Ch04_T34_1>
+        <Ch05_T34_2>	6.1 6.3 0.31 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.7 1.7 4.5 5.2	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.7 1.7 3.2 6.3	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.5 1.5 6 7.9	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	5.5 5.5 0.2 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	2.7 2.7 0.24 0.41	</Ch09_M5>
+        <Ch10_IS2>	4.9 4.9 0.23 0.2	</Ch10_IS2>
+        <Ch11_110>	10 10 0.15 0.4	</Ch11_110>
+        <Ch11_110_IGR>	5.4 5.5 0.15 0.4	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	5.5 5.5 0.4 3.8	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	5.8 5.4 0.77 0.57	</Ch14_T34_3>
+        <Ch15_59_16>	3.5 3.5 0.58 0.2	</Ch15_59_16>
+        <Ch16_WZ_131>	2.5 2.5 0.1 0.29	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	5 5 5.1 7.1	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	5 5 5.1 7.1	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	7 7 0.13 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	4.7 4.7 0.28 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	4.7 4.7 0.28 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	5.7 5.7 0.000000 0.000000	</Ch20_Type58>
+        <Ch21_T34>	5 5 0.64 0.58	</Ch21_T34>
+        <Ch22_113>	4.3 4.3 0.28 0.34	</Ch22_113>
+        <Ch22_113P>	4.3 4.3 0.28 0.34	</Ch22_113P>
+        <Ch23_112>	6 6 0.33 0.3	</Ch23_112>
+        <Ch24_Type64>	4 4 0.7 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	10 10 0.84 0.88	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	7.4 7.4 0.34 0.36	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.5 1.5 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.3 1.3 4.7 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	9.2 9.2 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1.2 1.2 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	2.5 2.5 6.2 4.3	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.3 1.3 0.9 0.5	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.9 2.9 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	5.2 5.2 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	7 7 0.7 1.1	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	2 2 0.2 0.8	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.8 1.8 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	8 8 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	6 6 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15307	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_08.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/tricolor/china_historical_08/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/tricolor/china_historical_08/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	34 40 32 255	</c0>
+          <c1>	121 122 73 255	</c1>
+          <c2>	65 90 56 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+        <palette>
+          <c0>	56 52 65 255	</c0>
+          <c1>	97 67 66 255	</c1>
+          <c2>	69 94 60 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+        <palette>
+          <c0>	148 148 114 255	</c0>
+          <c1>	92 76 36 255	</c1>
+          <c2>	51 51 39 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.8 1.8 0.66 0.11	</Ch01_Type59>
+        <Ch02_Type62>	2.7 2.7 0.5 0.66	</Ch02_Type62>
+        <Ch03_WZ-111>	2.7 2.7 0.02 0.18	</Ch03_WZ-111>
+        <Ch04_T34_1>	3.4 3.4 0.000000 0.96	</Ch04_T34_1>
+        <Ch05_T34_2>	4.3 4.1 0.19 0.13	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.2 1.2 0.93 0.27	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.2 1.2 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1 1 0.29 0.09	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	4.5 4.5 0.4 0.43	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	2.8 2.8 0.76 0.04	</Ch09_M5>
+        <Ch10_IS2>	2.5 2.5 0.11 0.000000	</Ch10_IS2>
+        <Ch11_110>	5.1 5.1 1.1 1	</Ch11_110>
+        <Ch11_110_IGR>	4 4.1 0.42 0.08	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2 2 0.02 0.33	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.8 4.4 0.21 0.24	</Ch14_T34_3>
+        <Ch15_59_16>	2.7 2.7 0.72 0.43	</Ch15_59_16>
+        <Ch16_WZ_131>	3.1 3.1 0.2 0.04	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3.5 3.5 0.2 0.2	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.2 0.2	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	4 4 0.000000 0.4	</Ch18_WZ-120>
+        <Ch19_121>	3.6 3.6 0.07 0.42	</Ch19_121>
+        <Ch19_121_IGR>	3.6 3.6 0.07 0.42	</Ch19_121_IGR>
+        <Ch20_Type58>	3.8 3 0.43 0.28	</Ch20_Type58>
+        <Ch21_T34>	3.5 3.9 0.24 0.12	</Ch21_T34>
+        <Ch22_113>	2.9 2.9 0.2 0.48	</Ch22_113>
+        <Ch22_113P>	2.9 2.9 0.2 0.48	</Ch22_113P>
+        <Ch23_112>	2.2 2.2 0.71 0.06	</Ch23_112>
+        <Ch24_Type64>	4 4 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	7 7 0.82 0.56	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	4.7 4.7 0.38 0.24	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1 1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	5.9 5.9 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1 1 4.5 7.9	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	3.6 3.6 2.4 8.4	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.7 1.7 1.4 0.3	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.5 2.5 0.1 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.3 2.3 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	3.1 3.1 7.1 5.4	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	5.3 5.3 0.3 2.5	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.6 1.6 0.7 0.5	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.6 1.6 0.7 0.4	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	6 6 1.2 2.9	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15308	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_09.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/tricolor/china_historical_09/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/tricolor/china_historical_09/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	61 72 60 255	</c0>
+          <c1>	130 122 81 255	</c1>
+          <c2>	75 105 71 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.1 2.1 0.68 0.17	</Ch01_Type59>
+        <Ch02_Type62>	3.9 3.9 0.72 0.18	</Ch02_Type62>
+        <Ch03_WZ-111>	3.6 3.6 0.23 0.13	</Ch03_WZ-111>
+        <Ch04_T34_1>	5.4 5.4 0.42 0.45	</Ch04_T34_1>
+        <Ch05_T34_2>	3.5 3.5 0.3 0.02	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.5 1.5 0.000000 0.68	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.2 1.2 0.2 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	5.1 5.1 0.2 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	2.2 2.2 0.35 0.35	</Ch09_M5>
+        <Ch10_IS2>	3.5 3.4 0.09 0.33	</Ch10_IS2>
+        <Ch11_110>	6.9 6.9 0.4 0.31	</Ch11_110>
+        <Ch11_110_IGR>	4 4 0.72 0.31	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	3 3 2.6 4.6	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.8 4.4 0.6 0.35	</Ch14_T34_3>
+        <Ch15_59_16>	2.5 2.5 0.000000 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	2 2 0.23 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	4 4 0.000000 6	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	4 4 0.000000 6	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	5.7 5.7 0.28 0.27	</Ch18_WZ-120>
+        <Ch19_121>	4.5 4.5 0.6 0.18	</Ch19_121>
+        <Ch19_121_IGR>	4.5 4.5 0.6 0.18	</Ch19_121_IGR>
+        <Ch20_Type58>	3.1 3.6 0.27 0.41	</Ch20_Type58>
+        <Ch21_T34>	5.1 5.1 0.59 0.38	</Ch21_T34>
+        <Ch22_113>	2.8 2.8 0.54 0.71	</Ch22_113>
+        <Ch22_113P>	2.8 2.8 0.54 0.71	</Ch22_113P>
+        <Ch23_112>	3.2 3.2 0.69 0.26	</Ch23_112>
+        <Ch24_Type64>	2.5 2.5 0.18 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	7 7 0.78 0.36	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	6.7 6.7 0.62 0.89	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.2 1.2 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	2 2 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	7.4 7.4 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1 1 3.3 6.5	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	3.4 3.4 1.8 0.9	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.2 1.2 0.7 0.6	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	4 4 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.8 2.8 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.7 2.7 0.5 0.8	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	5 5 1.9 0.7	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	2.2 2.2 1.6 1.3	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	2.1 2.1 3.2 1.1	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	7.5 7.5 1.7 0.6	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	4.3 4.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15302	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_03.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/bicolor/china_historical_03/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/bicolor/china_historical_03/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	180 180 180 255	</c0>
+          <c1>	58 81 58 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.6 1.6 0.48 0.62	</Ch01_Type59>
+        <Ch02_Type62>	3.7 3.7 0.04 0.56	</Ch02_Type62>
+        <Ch03_WZ-111>	3.4 3.4 0.52 0.5	</Ch03_WZ-111>
+        <Ch04_T34_1>	4.1 4.1 0.28 0.4	</Ch04_T34_1>
+        <Ch05_T34_2>	4.8 4.8 0.23 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.5 1.5 0.17 0.000000	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.7 1.7 0.47 0.07	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	3.3 3.3 0.96 0.09	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	2.5 2.5 0.21 0.000000	</Ch09_M5>
+        <Ch10_IS2>	3.7 3.7 0.36 0.14	</Ch10_IS2>
+        <Ch11_110>	4.4 4.4 0.2 0.03	</Ch11_110>
+        <Ch11_110_IGR>	4.4 4.4 0.25 0.03	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2.8 2.8 0.03 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.1 4.3 0.77 0.000000	</Ch14_T34_3>
+        <Ch15_59_16>	3.4 3.4 0.57 0.43	</Ch15_59_16>
+        <Ch16_WZ_131>	2.1 2.1 0.13 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	4.5 4.5 0.09 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	4.5 4.5 0.09 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	2.7 2.7 0.18 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	3.8 3.8 0.23 0.13	</Ch19_121>
+        <Ch19_121_IGR>	3.8 3.8 0.23 0.13	</Ch19_121_IGR>
+        <Ch20_Type58>	4.4 4.4 0.000000 0.16	</Ch20_Type58>
+        <Ch21_T34>	3.5 1.8 0.28 0.33	</Ch21_T34>
+        <Ch22_113>	2.4 2.4 4.3 0.000000	</Ch22_113>
+        <Ch22_113P>	2.4 2.4 4.3 0.000000	</Ch22_113P>
+        <Ch23_112>	3.3 3.3 0.000000 0.000000	</Ch23_112>
+        <Ch24_Type64>	4 4 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	5.4 5.4 0.000000 0.000000	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	7 7 0.3 0.46	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1 1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch30_T-26G_FT>	8.2 8.2 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1 1 1.6 0.9	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	2.6 2.6 4.2 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.2 1.2 0.5 0.1	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.2 2.2 0.4 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.4 2.9 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.7 2.7 5.9 1.1	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	6 6 1.1 1.1	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.3 1.3 1.7 0.000000	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.5 1.5 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	4.8 4.8 1.9 2.5	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	1.8 1.8 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15314	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_winter.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/bicolor/china_historical_winter_1/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/bicolor/china_historical_winter_1/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	185 185 185 255	</c0>
+          <c1>	65 77 63 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	7.3 7.3 0.01 0.5	</Ch01_Type59>
+        <Ch02_Type62>	3.4 3.5 0.21 0.2	</Ch02_Type62>
+        <Ch03_WZ-111>	3.1 3 0.24 0.2	</Ch03_WZ-111>
+        <Ch04_T34_1>	5 5 0.000000 0.000000	</Ch04_T34_1>
+        <Ch05_T34_2>	3.9 3.9 0.2 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	3.5 3.4 0.000000 0.18	</Ch06_Renault_NC31>
+        <Ch07_Vickers_MkE_Type_BT26>	3.9 2.3 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	4.3 4.5 0.000000 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	4.5 4.5 0.2 0.12	</Ch09_M5>
+        <Ch10_IS2>	3.7 3.7 0.000000 0.000000	</Ch10_IS2>
+        <Ch11_110>	5 4.6 0.000000 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	5 4.6 0.000000 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	4.2 4.2 0.000000 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	3.9 4 0.000000 0.000000	</Ch14_T34_3>
+        <Ch15_59_16>	5.1 5.2 0.000000 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	4.5 4.3 0.000000 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	4.3 4.3 0.000000 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	4.3 4.3 0.000000 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	4.2 4.1 0.11 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	4.1 3.7 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	4.1 3.7 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	5 5 0.000000 0.000000	</Ch20_Type58>
+        <Ch21_T34>	3.9 4 0.000000 0.000000	</Ch21_T34>
+        <Ch22_113>	1.6 1.6 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	1.6 1.6 0.000000 0.000000	</Ch22_113P>
+        <Ch23_112>	3.4 3.5 0.000000 0.000000	</Ch23_112>
+        <Ch24_Type64>	5 5 0.000000 0.000000	</Ch24_Type64>
+        <Ch26_59_Patton>	4.7 4.7 0.000000 0.000000	</Ch26_59_Patton>
+        <Ch29_Type_62C_prot>	4.4 4.4 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	3 3 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch32_SU-76G_FT>	3.8 3.8 0.000000 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	2.3 2.3 3 6.4	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.5 1.5 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch36_WZ111_1G_FT>	3 3 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	4.5 4.5 0.000000 0.000000	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1 1 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch40_WZ120G_FT>	8 8 0.000000 0.000000	</Ch40_WZ120G_FT>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15315	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_winter_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/bicolor/china_historical_winter_2/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/bicolor/china_historical_winter_2/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	84 73 50 255	</c0>
+          <c1>	185 185 185 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+        <palette>
+          <c0>	170 170 170 255	</c0>
+          <c1>	95 98 107 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+        <palette>
+          <c0>	47 47 47 255	</c0>
+          <c1>	170 170 170 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.6 1.7 0.82 0.43	</Ch01_Type59>
+        <Ch02_Type62>	3.8 3.8 0.25 0.43	</Ch02_Type62>
+        <Ch03_WZ-111>	3.8 3.8 0.48 0.56	</Ch03_WZ-111>
+        <Ch04_T34_1>	4.3 4.3 0.000000 0.38	</Ch04_T34_1>
+        <Ch04_T34_1_training>	3.3 3.2 0.3 0.21	</Ch04_T34_1_training>
+        <Ch05_T34_2>	3.8 4.1 0.05 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.5 1.5 5.3 4.1	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.5 1.5 5.2 7.9	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.7 1.7 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	3.6 3.6 0.000000 0.01	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	3.9 3.9 0.15 0.000000	</Ch09_M5>
+        <Ch10_IS2>	2.5 2.5 0.02 0.18	</Ch10_IS2>
+        <Ch11_110>	5.6 5.6 0.7 0.3	</Ch11_110>
+        <Ch11_110_IGR>	3.5 3.7 0.54 0.3	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	3 3 3 1	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.8 3.2 0.26 0.9	</Ch14_T34_3>
+        <Ch15_59_16>	2.6 2.6 0.54 1.4	</Ch15_59_16>
+        <Ch16_WZ_131>	2.9 2.9 0.1 0.2	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3 3 2.1 3.1	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3 3 2.1 3.1	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	3.9 3.9 0.5 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	4.2 4.2 0.1 0.27	</Ch19_121>
+        <Ch19_121_IGR>	4.2 4.2 0.1 0.27	</Ch19_121_IGR>
+        <Ch20_Type58>	5.2 5.2 0.68 0.78	</Ch20_Type58>
+        <Ch21_T34>	3.5 3.7 0.12 0.000000	</Ch21_T34>
+        <Ch22_113>	2.5 2.5 0.87 0.78	</Ch22_113>
+        <Ch22_113P>	2.5 2.5 0.87 0.78	</Ch22_113P>
+        <Ch23_112>	3.7 3.7 0.000000 0.000000	</Ch23_112>
+        <Ch24_Type64>	4 4 0.5 0.38	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	3.7 3.7 0.46 0.65	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	6.8 6.8 0.84 0.87	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.3 1.3 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	0.8 0.8 0.3 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	8.1 8.1 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1 1 0.6 0.3	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	3.3 3.3 0.3 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.7 1.7 2.9 1.5	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.5 2.5 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.1 2.1 0.000000 0.7	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	3.3 3.3 2.1 2.5	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	7.1 7.1 0.6 0.4	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.8 1.8 0.3 1.7	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.6 1.6 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	6.4 6.4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15310	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_11.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/tricolor/china_historical_11/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/tricolor/china_historical_11/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	155 151 115 255	</c0>
+          <c1>	74 94 67 255	</c1>
+          <c2>	75 74 62 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.7 2.7 0.44 0.000000	</Ch01_Type59>
+        <Ch02_Type62>	5.6 5.6 0.33 0.2	</Ch02_Type62>
+        <Ch03_WZ-111>	5 5 0.67 0.68	</Ch03_WZ-111>
+        <Ch04_T34_1>	5.3 5.3 0.65 0.84	</Ch04_T34_1>
+        <Ch05_T34_2>	7.5 4.6 0.81 0.2	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.8 1.8 0.3 0.21	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.8 1.8 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	2 2 0.34 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	4.5 4.5 0.27 0.7	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	3.6 3.6 0.06 0.13	</Ch09_M5>
+        <Ch10_IS2>	5.5 5.5 0.4 0.43	</Ch10_IS2>
+        <Ch11_110>	5.4 5.4 2.7 2.2	</Ch11_110>
+        <Ch11_110_IGR>	6.4 6.5 0.64 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	3.8 3.8 6.5 9.7	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	6.5 6.8 0.62 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	3.7 3.7 0.2 0.8	</Ch15_59_16>
+        <Ch16_WZ_131>	2.9 2.9 0.89 0.47	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	6 6 0.000000 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	6 6 0.000000 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	5.7 6 0.66 0.27	</Ch18_WZ-120>
+        <Ch19_121>	5.5 3.8 0.78 0.2	</Ch19_121>
+        <Ch19_121_IGR>	5.5 3.8 0.78 0.2	</Ch19_121_IGR>
+        <Ch20_Type58>	7 7 0.000000 0.000000	</Ch20_Type58>
+        <Ch21_T34>	5 3.4 0.19 0.18	</Ch21_T34>
+        <Ch22_113>	3.2 3.2 0.22 0.37	</Ch22_113>
+        <Ch22_113P>	3.2 3.2 0.22 0.37	</Ch22_113P>
+        <Ch23_112>	4.4 4.4 0.83 0.9	</Ch23_112>
+        <Ch24_Type64>	4.7 4.7 6.5 1.8	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	10.2 10.2 0.000000 0.000000	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	8.5 8.5 0.6 0.96	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.1 1.1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	9.3 9.3 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1.1 1.1 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	3.3 3.3 2.5 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.4 1.4 0.9 0.5	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.6 2.6 0.000000 0.2	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	3 3 0.000000 0.6	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	5.1 5.1 0.000000 0.1	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	5.2 5.2 0.5 1.5	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	2 2 0.5 0.3	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.9 1.9 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	5.8 5.8 0.2 0.7	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	4.7 4.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo china	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15316	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_desert.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/bicolor/china_historical_desert/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/bicolor/china_historical_desert/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	47 48 35 255	</c0>
+          <c1>	94 84 68 255	</c1>
+          <c2>	107 79 54 255	</c2>
+          <c3>	154 142 109 255	</c3>
+        </palette>
+        <palette>
+          <c0>	151 134 115 255	</c0>
+          <c1>	107 79 54 255	</c1>
+          <c2>	107 79 54 255	</c2>
+          <c3>	107 79 54 255	</c3>
+        </palette>
+        <palette>
+          <c0>	155 145 121 255	</c0>
+          <c1>	133 114 90 255	</c1>
+          <c2>	107 79 54 255	</c2>
+          <c3>	68 50 34 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.8 1.8 0.000000 0.000000	</Ch01_Type59>
+        <Ch02_Type62>	2.6 2.6 0.2 0.66	</Ch02_Type62>
+        <Ch03_WZ-111>	2.3 2.3 0.25 0.16	</Ch03_WZ-111>
+        <Ch04_T34_1>	4.4 4.4 0.2 0.77	</Ch04_T34_1>
+        <Ch05_T34_2>	4 3.9 0.1 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.2 1.2 0.25 1.8	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.2 1.2 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.2 1.2 0.06 3.2	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	3.3 3.3 0.11 0.21	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.8 1.8 0.09 0.1	</Ch09_M5>
+        <Ch10_IS2>	2.7 2.7 0.15 0.36	</Ch10_IS2>
+        <Ch11_110>	5.8 5.8 0.000000 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	5.4 5.2 0.000000 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	1.8 1.8 4.6 5.5	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.5 4.5 0.63 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	2.1 2.1 0.32 0.6	</Ch15_59_16>
+        <Ch16_WZ_131>	1.9 1.9 0.000000 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3 3 0.2 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3 3 0.2 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	3.4 3.4 0.05 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	3.3 3.3 0.1 0.16	</Ch19_121>
+        <Ch19_121_IGR>	3.3 3.3 0.1 0.16	</Ch19_121_IGR>
+        <Ch20_Type58>	4.7 4.7 0.37 0.8	</Ch20_Type58>
+        <Ch21_T34>	3.1 3.1 0.18 0.1	</Ch21_T34>
+        <Ch22_113>	2 2 0.7 0.000000	</Ch22_113>
+        <Ch22_113P>	2 2 0.7 0.000000	</Ch22_113P>
+        <Ch23_112>	2.1 2.1 0.000000 0.3	</Ch23_112>
+        <Ch24_Type64>	3 3 0.000000 2.8	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	8.6 8.6 0.34 0.000000	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	5.3 5.3 0.72 0.42	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.1 1.1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	6.4 6.4 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.9 0.9 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	2.8 2.8 1.3 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.1 0.6	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.1 2.1 0.000000 0.7	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.1 2.1 0.5 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	3.2 3.2 0.000000 4.5	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	3.6 3.6 2.2 1.8	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.8 1.8 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.4 1.4 1.3 1.1	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	3.6 3.6 0.5 0.5	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.5 2.5 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15335	</id>
+      <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	131 108 61 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.4 2.4 0.34 0.35	</Ch01_Type59>
+        <Ch01_Type59_Gold>	7 7 0.000000 0.000000	</Ch01_Type59_Gold>
+        <Ch02_Type62>	3.2 3.2 0.22 0.000000	</Ch02_Type62>
+        <Ch03_WZ-111>	2.9 2.9 0.34 0.12	</Ch03_WZ-111>
+        <Ch04_T34_1>	4.8 4.8 0.64 0.82	</Ch04_T34_1>
+        <Ch04_T34_1_training>	7 7 0.6 0.88	</Ch04_T34_1_training>
+        <Ch05_T34_2>	5.6 5.6 0.42 0.92	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.3 1.3 0.24 0.81	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.3 1.3 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.5 1.5 0.76 0.26	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	4.2 4.2 0.46 0.52	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	3.2 3.2 0.000000 0.14	</Ch09_M5>
+        <Ch10_IS2>	3.4 3.4 0.52 0.2	</Ch10_IS2>
+        <Ch11_110>	5.4 5.4 0.62 0.56	</Ch11_110>
+        <Ch11_110_IGR>	9.8 9.8 0.62 0.56	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2 2 0.45 0.54	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.4 4.4 2 0.8	</Ch14_T34_3>
+        <Ch15_59_16>	3 3 0.56 0.62	</Ch15_59_16>
+        <Ch16_WZ_131>	3.3 3.3 0.46 0.14	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3.5 3.5 0.35 0.17	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.35 0.17	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	5.4 5.4 0.38 0.6	</Ch18_WZ-120>
+        <Ch19_121>	6.2 6.2 0.2 0.21	</Ch19_121>
+        <Ch19_121_IGR>	6.2 6.2 0.2 0.21	</Ch19_121_IGR>
+        <Ch20_Type58>	7.2 7.2 0.9 0.000000	</Ch20_Type58>
+        <Ch21_T34>	4.8 4.8 0.26 0.9	</Ch21_T34>
+        <Ch22_113>	2.5 2.5 1 0.42	</Ch22_113>
+        <Ch22_113P>	2.5 2.5 1 0.42	</Ch22_113P>
+        <Ch23_112>	2.5 2.5 0.9 0.32	</Ch23_112>
+        <Ch24_Type64>	3.5 3.5 0.000000 2.5	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	8.2 8.2 0.8 0.68	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	5.8 5.8 0.76 0.43	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.6 1.6 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1 1 1.5 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	6 6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch32_SU-76G_FT>	3 3 2 0.9	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.5 1.5 0.000000 0.000000	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.5 2.5 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.6 2.6 0.000000 3.6	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	7.3 7.3 0.000000 0.000000	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.9 1.9 0.8 0.4	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.6 1.6 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	6.5 6.5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15317	</id>
+      <texture>	vehicles/chinese/Camouflage/china_gold.dds	</texture>
+      <description>	#vehicle_customization:camouflage/victim/china_gold/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/victim/china_gold/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	159 157 53 255	</c0>
+          <c1>	112 120 54 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.6 2.6 0.000000 0.000000	</Ch01_Type59>
+        <Ch02_Type62>	3.9 3.9 0.000000 0.000000	</Ch02_Type62>
+        <Ch03_WZ-111>	3.6 3.6 0.52 0.1	</Ch03_WZ-111>
+        <Ch04_T34_1>	5.4 5.4 0.4 0.68	</Ch04_T34_1>
+        <Ch05_T34_2>	4.4 4.4 0.2 0.45	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.5 1.5 7.3 5.7	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.5 1.5 4.3 2.8	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 6.9 4.7	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	3.8 3.8 0.000000 0.12	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	2.6 2.6 0.71 0.000000	</Ch09_M5>
+        <Ch10_IS2>	3.7 3.7 0.37 0.000000	</Ch10_IS2>
+        <Ch11_110>	6.7 6.7 0.33 0.37	</Ch11_110>
+        <Ch11_110_IGR>	4 4.1 0.33 0.37	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	3 3 0.53 2.7	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	5.9 5.9 0.63 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	2.8 2.8 0.000000 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	2.3 2.3 0.06 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	4.4 4.5 0.18 0.16	</Ch18_WZ-120>
+        <Ch19_121>	4 4 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	4 4 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	3.8 3.8 0.24 0.1	</Ch20_Type58>
+        <Ch21_T34>	4.6 4.5 0.8 0.6	</Ch21_T34>
+        <Ch22_113>	3.2 3.2 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	3.2 3.2 0.000000 0.000000	</Ch22_113P>
+        <Ch23_112>	3.4 3.4 1.1 0.7	</Ch23_112>
+        <Ch24_Type64>	3.5 3.5 3.5 3.4	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	9.5 9.5 0.7 0.66	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	7.2 7.2 0.32 0.000000	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1 1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	6.6 6.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch32_SU-76G_FT>	2.9 2.9 0.8 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.6 1.6 0.7 0.3	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2 2 0.2 0.1	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	4 4 0.000000 1.2	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	4.4 4.4 0.8 0.1	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.4 1.4 1 0.1	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.4 1.4 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15318	</id>
+      <texture>	vehicles/chinese/Camouflage/china_red.dds	</texture>
+      <description>	#vehicle_customization:camouflage/victim/china_red/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/victim/china_red/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	113 48 39 255	</c0>
+          <c1>	79 43 34 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.6 2.6 0.000000 0.000000	</Ch01_Type59>
+        <Ch02_Type62>	3.6 3.6 0.000000 0.62	</Ch02_Type62>
+        <Ch03_WZ-111>	3.6 3.6 0.24 0.32	</Ch03_WZ-111>
+        <Ch04_T34_1>	5.6 5.6 0.000000 0.48	</Ch04_T34_1>
+        <Ch05_T34_2>	4.6 4.6 0.24 0.1	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.5 1.5 7.3 5.7	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.5 1.5 4.3 2.8	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 6.9 4.7	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	4.1 4.1 0.000000 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	2.6 2.6 0.62 0.51	</Ch09_M5>
+        <Ch10_IS2>	3.7 3.7 0.22 0.000000	</Ch10_IS2>
+        <Ch11_110>	6.7 6.7 0.000000 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	4.8 4.8 0.000000 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	3 3 0.53 2.7	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	6 6 0.63 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	2.8 2.8 0.000000 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	2.4 2.4 0.23 0.61	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	4.8 4.8 0.76 0.08	</Ch18_WZ-120>
+        <Ch19_121>	2.9 2.9 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	2.9 2.9 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	4.8 4.8 0.18 0.32	</Ch20_Type58>
+        <Ch21_T34>	4.9 5.1 0.15 0.07	</Ch21_T34>
+        <Ch22_113>	2.9 2.9 0.1 0.22	</Ch22_113>
+        <Ch22_113P>	2.9 2.9 0.1 0.22	</Ch22_113P>
+        <Ch23_112>	3.4 3.4 1.1 0.7	</Ch23_112>
+        <Ch24_Type64>	3.5 3.5 3.5 3.4	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	9 9 0.46 0.02	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	5.3 5.3 0.14 0.28	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1 1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	6.6 6.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch32_SU-76G_FT>	2.9 2.9 0.8 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.2 1.2 0.3 0.2	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.3 2.3 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	4 4 0.000000 1.2	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	4.4 4.4 0.8 0.1	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.4 1.4 1 0.1	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.4 1.4 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	4 4 0.5 0.5	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15319	</id>
+      <texture>	vehicles/chinese/Camouflage/china_black.dds	</texture>
+      <description>	#vehicle_customization:camouflage/victim/china_black/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/victim/china_black/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	40 43 38 255	</c0>
+          <c1>	16 20 16 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.6 2.6 0.000000 0.000000	</Ch01_Type59>
+        <Ch02_Type62>	3.8 3.8 0.3 0.39	</Ch02_Type62>
+        <Ch03_WZ-111>	3.8 3.8 0.22 0.18	</Ch03_WZ-111>
+        <Ch04_T34_1>	4.8 4.8 0.48 0.22	</Ch04_T34_1>
+        <Ch05_T34_2>	4.4 4.3 0.000000 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.5 1.5 7.3 5.7	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.5 1.5 4.3 2.8	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 6.9 4.7	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	4.5 4.5 0.62 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	2.6 2.6 0.51 0.24	</Ch09_M5>
+        <Ch10_IS2>	3.7 3.7 0.42 0.04	</Ch10_IS2>
+        <Ch11_110>	6.7 6.7 0.49 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	5.3 5.5 0.49 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	3 3 0.53 2.7	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	6 6 0.63 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	2.8 2.8 0.000000 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	1.5 1.5 1 0.39	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	4.8 4.8 0.35 0.12	</Ch18_WZ-120>
+        <Ch19_121>	3.8 3.8 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	3.8 3.8 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	3 3 0.52 0.52	</Ch20_Type58>
+        <Ch21_T34>	5.1 5.2 0.46 0.22	</Ch21_T34>
+        <Ch22_113>	3.4 3.4 0.28 0.07	</Ch22_113>
+        <Ch22_113P>	3.4 3.4 0.28 0.07	</Ch22_113P>
+        <Ch23_112>	3.4 3.4 1.1 0.7	</Ch23_112>
+        <Ch24_Type64>	3.5 3.5 3.5 3.4	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	9 9 0.28 0.5	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	4.5 4.5 0.14 0.000000	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1 1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	6.6 6.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch32_SU-76G_FT>	2.9 2.9 0.8 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.4 1.4 0.3 0.000000	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.6 1.6 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	4 4 0.000000 1.2	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	4.4 4.4 0.8 0.1	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.4 1.4 1 0.1	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.4 1.4 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	4 4 2.5 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15320	</id>
+      <texture>	vehicles/chinese/Camouflage/china_silver.dds	</texture>
+      <description>	#vehicle_customization:camouflage/victim/china_silver/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/victim/china_silver/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	138 138 138 255	</c0>
+          <c1>	107 109 107 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.6 2.6 0.000000 0.000000	</Ch01_Type59>
+        <Ch02_Type62>	4 4 0.24 0.37	</Ch02_Type62>
+        <Ch03_WZ-111>	3.7 3.7 0.64 0.36	</Ch03_WZ-111>
+        <Ch04_T34_1>	5.8 5.8 0.69 0.34	</Ch04_T34_1>
+        <Ch05_T34_2>	4.4 4.2 0.000000 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.5 1.5 7.3 5.7	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.5 1.5 4.3 2.8	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 6.9 4.7	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	4.2 4.2 0.76 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	2.6 2.6 0.33 0.22	</Ch09_M5>
+        <Ch10_IS2>	3.7 3.7 0.32 0.000000	</Ch10_IS2>
+        <Ch11_110>	6.7 6.7 0.31 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	4.9 4.8 0.31 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	3 3 0.53 2.7	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	5.9 5.9 0.63 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	2.8 2.8 0.000000 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	3.4 3.4 0.08 0.02	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	5 4.9 0.22 0.1	</Ch18_WZ-120>
+        <Ch19_121>	4 4 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	4 4 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	4.6 4.6 0.000000 0.000000	</Ch20_Type58>
+        <Ch21_T34>	5.2 6.1 0.69 0.13	</Ch21_T34>
+        <Ch22_113>	3 3 0.21 0.21	</Ch22_113>
+        <Ch22_113P>	3 3 0.21 0.21	</Ch22_113P>
+        <Ch23_112>	3.4 3.4 1.1 0.7	</Ch23_112>
+        <Ch24_Type64>	3.5 3.5 3.5 3.4	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	9 9 0.4 0.66	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	6.2 6.2 0.26 0.26	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1 1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	6.6 6.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch32_SU-76G_FT>	2.9 2.9 0.8 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.6 1.6 0.4 0.3	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.4 2.4 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch37_WZ111G_FT>	4.4 4.4 0.8 0.1	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.4 1.4 1 0.1	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.4 1.4 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15337	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_4.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	87 80 26 255	</c0>
+          <c1>	153 139 77 255	</c1>
+          <c2>	51 40 21 255	</c2>
+          <c3>	156 154 152 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.3 1.3 0.000000 0.000000	</Ch01_Type59>
+        <Ch01_Type59_Gold>	2.6 2.7 0.000000 0.000000	</Ch01_Type59_Gold>
+        <Ch02_Type62>	1.8 1.8 0.000000 0.000000	</Ch02_Type62>
+        <Ch03_WZ-111>	2.2 2.2 0.000000 0.000000	</Ch03_WZ-111>
+        <Ch04_T34_1>	3 3 0.5 0.000000	</Ch04_T34_1>
+        <Ch05_T34_2>	2.2 2.2 0.6 1	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1 1 3.5 3.4	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	0.7 0.7 3.7 7.6	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	0.9 0.9 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	2.5 2.5 0.11 0.16	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.6 1.6 0.000000 0.000000	</Ch09_M5>
+        <Ch10_IS2>	2.2 2.2 0.18 0.000000	</Ch10_IS2>
+        <Ch11_110>	3.5 3.5 0.49 0.23	</Ch11_110>
+        <Ch11_110_IGR>	3 2.9 0.49 0.23	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	1.7 1.7 0.000000 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	2.3 2.3 0.63 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	1.5 1.5 0.000000 0.9	</Ch15_59_16>
+        <Ch16_WZ_131>	1.6 1.6 0.000000 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	1.7 1.7 0.000000 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	2 2 0.000000 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	1.7 1.7 0.000000 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	3.2 3.2 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	2.6 2.6 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	3.4 3.4 0.29 0.000000	</Ch20_Type58>
+        <Ch21_T34>	3 3 0.86 0.000000	</Ch21_T34>
+        <Ch22_113>	1.4 1.4 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	1.4 1.4 0.000000 0.000000	</Ch22_113P>
+        <Ch23_112>	1.9 1.9 1.7 1.4	</Ch23_112>
+        <Ch24_Type64>	2 2 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	6.6 6.6 0.42 0.000000	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	3.5 3.5 0.14 0.000000	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	0.9 0.9 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	0.7 0.7 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	3 3 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.6 0.6 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	1.8 1.8 0.000000 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1 1 5.1 1.8	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.6 1.6 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	1.8 1.8 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.5 2.5 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	4.1 4.1 0.7 0.9	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1 1 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1 1 0.9 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	3 3 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy IGR notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15326	</id>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Winter.dds	</texture>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Winter/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/IGR_Ch_Winter/label	</userString>
+      <tags>	premiumIGR	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	52 53 40 255	</c0>
+          <c1>	89 79 57 255	</c1>
+          <c2>	152 134 83 255	</c2>
+          <c3>	159 155 118 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.3 1.3 0.42 0.000000	</Ch01_Type59>
+        <Ch02_Type62>	3.8 3.8 0.2 0.26	</Ch02_Type62>
+        <Ch03_WZ-111>	3.2 3.2 0.2 0.000000	</Ch03_WZ-111>
+        <Ch04_T34_1>	2.7 2.7 0.38 0.29	</Ch04_T34_1>
+        <Ch05_T34_2>	2.2 2.2 0.23 0.54	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	0.8 0.8 0.000000 0.000000	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	0.8 0.8 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	0.7 0.7 0.1 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	3.4 3.4 0.48 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	2.2 2.2 0.000000 0.000000	</Ch09_M5>
+        <Ch10_IS2>	2.6 2.6 0.26 0.28	</Ch10_IS2>
+        <Ch11_110>	3.6 3.6 0.16 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	3 3 0.16 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2.5 2.5 0.32 4.2	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	3.4 3.4 0.48 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	1.3 1.3 0.32 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	1.8 1.8 0.000000 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	4 4 0.000000 6.5	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	4 4 0.000000 6.5	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	3.5 3.5 0.000000 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	2.5 2.5 0.28 0.2	</Ch19_121>
+        <Ch19_121_IGR>	2.5 2.5 0.28 0.2	</Ch19_121_IGR>
+        <Ch20_Type58>	2.8 2.6 0.5 0.28	</Ch20_Type58>
+        <Ch21_T34>	2.5 2.6 0.28 0.000000	</Ch21_T34>
+        <Ch22_113>	2.6 2.6 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	2.6 2.6 0.000000 0.000000	</Ch22_113P>
+        <Ch23_112>	2.8 2.8 0.34 0.26	</Ch23_112>
+        <Ch24_Type64>	2.5 2.5 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	4.6 4.6 0.1 0.54	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	3.6 3.6 0.000000 0.000000	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1 1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1 1 1 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	5 5 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.5 0.5 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	2.5 2.5 1.4 1.4	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.3 1.3 0.2 0.4	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.4 2.4 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	4.1 4.1 0.000000 0.5	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	5.8 5.8 0.000000 0.9	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.5 1.5 0.5 0.5	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.4 1.4 3.3 1.8	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	3.5 3.5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.6 2.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy IGR notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15327	</id>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Summer.dds	</texture>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Summer/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/IGR_Ch_Summer/label	</userString>
+      <tags>	premiumIGR	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	65 86 60 255	</c0>
+          <c1>	92 76 36 255	</c1>
+          <c2>	51 51 39 255	</c2>
+          <c3>	148 148 114 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.4 1.4 0.28 0.66	</Ch01_Type59>
+        <Ch02_Type62>	3 3 0.32 0.34	</Ch02_Type62>
+        <Ch03_WZ-111>	3.1 3.1 0.000000 0.000000	</Ch03_WZ-111>
+        <Ch04_T34_1>	2.3 2.7 0.42 0.85	</Ch04_T34_1>
+        <Ch05_T34_2>	3 3 0.28 0.06	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1 1 0.24 0.000000	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1 1 0.000000 7.1	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1 1 0.6 0.16	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	3.5 3.5 0.06 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.6 1.6 0.000000 0.000000	</Ch09_M5>
+        <Ch10_IS2>	2.6 2.6 0.000000 0.1	</Ch10_IS2>
+        <Ch11_110>	5.1 5.1 0.38 0.54	</Ch11_110>
+        <Ch11_110_IGR>	3 3 0.38 0.54	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2 2 0.000000 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	3.7 3.8 0.28 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	2.2 2.2 0.000000 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	1.8 1.8 0.14 0.1	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3.5 3.5 0.000000 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.000000 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	3.4 3.4 0.000000 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	2.3 2.3 0.96 0.34	</Ch19_121>
+        <Ch19_121_IGR>	2.3 2.3 0.96 0.34	</Ch19_121_IGR>
+        <Ch20_Type58>	3.3 3.3 0.29 0.04	</Ch20_Type58>
+        <Ch21_T34>	3.4 3.5 0.38 0.000000	</Ch21_T34>
+        <Ch22_113>	2.7 2.7 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	2.7 2.7 0.000000 0.000000	</Ch22_113P>
+        <Ch23_112>	2.9 2.9 0.000000 0.000000	</Ch23_112>
+        <Ch24_Type64>	2.5 2.5 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	4.2 4.2 0.3 0.000000	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	4 4 0.000000 0.000000	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	0.8 0.8 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	5.2 5.2 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.7 0.7 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	1.5 1.5 1.6 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.2 1.2 0.2 0.7	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	2.1 2.1 0.4 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.1 2.1 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.8 2.8 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	4.5 4.5 0.000000 0.3	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 1 0.6	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.2 1.2 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	2.7 2.7 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	desert	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy IGR notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15328	</id>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Desert.dds	</texture>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Desert/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/IGR_Ch_Desert/label	</userString>
+      <tags>	premiumIGR	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	83 42 27 255	</c0>
+          <c1>	111 100 64 255	</c1>
+          <c2>	35 46 31 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.5 1.5 0.000000 0.000000	</Ch01_Type59>
+        <Ch02_Type62>	4 3.9 0.12 0.4	</Ch02_Type62>
+        <Ch03_WZ-111>	3.3 3.3 0.000000 0.000000	</Ch03_WZ-111>
+        <Ch04_T34_1>	3 3 0.000000 0.000000	</Ch04_T34_1>
+        <Ch05_T34_2>	2.7 2.7 0.14 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	0.8 0.8 0.000000 5.1	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	0.8 0.8 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	0.8 0.8 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	2.8 2.8 0.000000 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.4 1.4 0.000000 0.000000	</Ch09_M5>
+        <Ch10_IS2>	1.2 1.2 0.000000 0.000000	</Ch10_IS2>
+        <Ch11_110>	4.5 4.5 0.000000 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	3.6 3.6 0.000000 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2.5 2.5 0.22 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.2 4.2 0.63 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	1.7 1.7 0.000000 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	1.3 1.3 0.000000 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	4 4 0.000000 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	4 4 0.000000 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	3.2 3.2 0.000000 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	3 3 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	3 3 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	3.4 3.4 0.000000 0.000000	</Ch20_Type58>
+        <Ch21_T34>	3.5 3.6 0.000000 0.000000	</Ch21_T34>
+        <Ch22_113>	2 2 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	2 2 0.000000 0.000000	</Ch22_113P>
+        <Ch23_112>	2.5 2.5 0.000000 0.000000	</Ch23_112>
+        <Ch24_Type64>	2.5 2.5 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	6 6 0.000000 0.000000	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	5 5 0.000000 0.000000	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	0.9 0.9 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	6.7 6.7 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.5 0.5 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.5 0.1	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.8 1.8 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	1.9 1.9 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	3 3 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	5 5 0.000000 0.000000	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.1 1.1 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1 1 2.5 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15329	</id>
+      <texture>	vehicles/chinese/Camouflage/Clan_camuflage_01.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	95 52 37 255	</c0>
+          <c1>	119 111 62 255	</c1>
+          <c2>	38 48 33 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	2.4 2.4 0.000000 0.000000	</Ch01_Type59>
+        <Ch01_Type59_Gold>	5 5 0.000000 0.000000	</Ch01_Type59_Gold>
+        <Ch02_Type62>	2.8 2.8 0.000000 0.04	</Ch02_Type62>
+        <Ch03_WZ-111>	2.9 2.9 0.000000 0.000000	</Ch03_WZ-111>
+        <Ch04_T34_1>	4.8 4.8 0.98 0.6	</Ch04_T34_1>
+        <Ch05_T34_2>	5.2 5.2 0.000000 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1.5 1.5 0.000000 3.1	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.4 1.4 0.16 4.5	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	4.6 4.6 0.32 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	2.3 2.3 0.17 0.000000	</Ch09_M5>
+        <Ch10_IS2>	3 3 0.04 0.000000	</Ch10_IS2>
+        <Ch11_110>	7.4 7.3 0.000000 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	7.4 7.3 0.000000 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	2 2 0.000000 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	4.9 4.9 0.63 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	3.3 3.3 0.000000 0.2	</Ch15_59_16>
+        <Ch16_WZ_131>	1.2 1.2 0.000000 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	3.5 3.5 0.000000 4.8	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.000000 4.8	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	5 5 0.000000 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	5.4 5.4 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	5.4 5.4 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	3.9 3.9 0.000000 0.46	</Ch20_Type58>
+        <Ch21_T34>	4.7 4.7 0.34 0.35	</Ch21_T34>
+        <Ch22_113>	2.3 2.3 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	2.3 2.3 0.000000 0.000000	</Ch22_113P>
+        <Ch23_112>	2.8 2.8 0.000000 0.000000	</Ch23_112>
+        <Ch24_Type64>	4 4 0.5 0.32	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	9 9 0.33 0.88	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	4.3 4.3 0.67 0.52	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.1 1.1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	4.9 4.9 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	1 1 2.4 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	2.5 2.5 5.1 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.5 1.5 3 1	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.9 1.9 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.2 2.2 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	5.2 5.2 1.1 0.6	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 3.6 0.1	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1.2 1.2 0.000000 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	6.5 6.5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	3.3 3.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15331	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	83 98 64 255	</c0>
+          <c1>	36 41 27 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.2 1.2 0.000000 0.000000	</Ch01_Type59>
+        <Ch01_Type59_Gold>	2.3 2.3 0.000000 0.000000	</Ch01_Type59_Gold>
+        <Ch02_Type62>	2.2 2.2 0.000000 0.04	</Ch02_Type62>
+        <Ch03_WZ-111>	2 2 0.28 0.15	</Ch03_WZ-111>
+        <Ch04_T34_1>	3.4 3.4 0.62 0.52	</Ch04_T34_1>
+        <Ch05_T34_2>	2.8 2.8 0.61 0.37	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	0.8 0.8 0.000000 0.000000	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	0.8 0.8 0.000000 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1 1 0.000000 0.21	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	2.3 2.3 0.62 0.04	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.6 1.6 0.12 0.000000	</Ch09_M5>
+        <Ch10_IS2>	2.5 2.5 0.1 0.92	</Ch10_IS2>
+        <Ch11_110>	2.9 2.9 0.13 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	2.9 2.9 0.13 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	1.5 1.5 0.24 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	2.6 2.6 0.63 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	1.8 1.8 0.14 0.6	</Ch15_59_16>
+        <Ch16_WZ_131>	1.4 1.4 0.11 0.35	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	2.5 2.5 0.26 0.11	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	2.5 2.5 0.26 0.11	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	2.3 2.3 0.000000 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	3 3 0.69 0.2	</Ch19_121>
+        <Ch19_121_IGR>	3 3 0.69 0.2	</Ch19_121_IGR>
+        <Ch20_Type58>	2.2 2.2 0.11 0.58	</Ch20_Type58>
+        <Ch21_T34>	2.3 2.3 0.81 0.52	</Ch21_T34>
+        <Ch22_113>	1.5 1.5 0.6 0.000000	</Ch22_113>
+        <Ch22_113P>	1.5 1.5 0.6 0.000000	</Ch22_113P>
+        <Ch23_112>	1.5 1.5 0.74 0.27	</Ch23_112>
+        <Ch24_Type64>	2 2 0.32 0.64	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	3.2 3.2 0.76 0.42	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	2.8 2.8 0.000000 0.000000	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	0.9 0.9 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	0.5 0.5 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	3.6 3.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.5 0.5 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	1.7 1.7 3.3 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	0.8 0.8 6.8 8.9	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.4 1.4 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	1.9 1.9 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.3 2.3 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	5.7 5.7 0.000000 0.8	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1 1 0.3 0.2	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1 1 0.4 0.5	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	5 5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15332	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_4.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	56 95 44 255	</c0>
+          <c1>	102 135 69 255	</c1>
+          <c2>	43 51 34 255	</c2>
+          <c3>	141 137 103 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.3 1.3 0.000000 0.000000	</Ch01_Type59>
+        <Ch01_Type59_Gold>	2.6 2.7 0.000000 0.000000	</Ch01_Type59_Gold>
+        <Ch02_Type62>	1.8 1.8 0.000000 0.000000	</Ch02_Type62>
+        <Ch03_WZ-111>	2.2 2.2 0.000000 0.000000	</Ch03_WZ-111>
+        <Ch04_T34_1>	3 3 0.5 0.000000	</Ch04_T34_1>
+        <Ch05_T34_2>	2.2 2.2 0.6 1	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1 1 3.5 3.4	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	0.7 0.7 3.7 7.6	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	0.9 0.9 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	2.5 2.5 0.11 0.16	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.6 1.6 0.000000 0.000000	</Ch09_M5>
+        <Ch10_IS2>	2.2 2.2 0.18 0.000000	</Ch10_IS2>
+        <Ch11_110>	3.5 3.5 0.49 0.23	</Ch11_110>
+        <Ch11_110_IGR>	3 2.9 0.49 0.23	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	1.7 1.7 0.000000 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	2.3 2.3 0.63 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	1.5 1.5 0.000000 0.9	</Ch15_59_16>
+        <Ch16_WZ_131>	1.6 1.6 0.000000 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	1.7 1.7 0.000000 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	2 2 0.000000 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	1.7 1.7 0.000000 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	3.2 3.2 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	2.6 2.6 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	3.4 3.4 0.29 0.000000	</Ch20_Type58>
+        <Ch21_T34>	3 3 0.86 0.000000	</Ch21_T34>
+        <Ch22_113>	1.4 1.4 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	1.4 1.4 0.000000 0.000000	</Ch22_113P>
+        <Ch23_112>	1.9 1.9 1.7 1.4	</Ch23_112>
+        <Ch24_Type64>	2 2 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	6.6 6.6 0.42 0.000000	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	3.5 3.5 0.14 0.000000	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	0.9 0.9 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	0.7 0.7 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	3 3 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.6 0.6 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	1.8 1.8 0.000000 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1 1 5.1 1.8	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.6 1.6 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	1.8 1.8 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.5 2.5 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	4.1 4.1 0.7 0.9	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1 1 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1 1 0.9 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	3 3 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15333	</id>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	102 78 40 255	</c0>
+          <c1>	50 52 35 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.2 1.2 0.4 0.3	</Ch01_Type59>
+        <Ch02_Type62>	2 2 0.44 0.08	</Ch02_Type62>
+        <Ch03_WZ-111>	2 2 0.52 0.48	</Ch03_WZ-111>
+        <Ch04_T34_1>	3 3 0.44 0.38	</Ch04_T34_1>
+        <Ch04_T34_1_training>	2.7 2.7 0.000000 0.000000	</Ch04_T34_1_training>
+        <Ch05_T34_2>	2.4 2.4 0.62 0.43	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1 1 0.000000 0.000000	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1 1 0.000000 4.3	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1 1 0.54 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	3.4 3.4 0.000000 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.2 1.2 0.37 0.000000	</Ch09_M5>
+        <Ch10_IS2>	3.1 3.1 0.48 0.24	</Ch10_IS2>
+        <Ch11_110>	3.7 3.7 0.2 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	3.6 3.6 0.2 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	1.5 1.5 0.000000 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	2.9 2.9 0.03 0.67	</Ch14_T34_3>
+        <Ch15_59_16>	1.7 1.7 0.6 0.4	</Ch15_59_16>
+        <Ch16_WZ_131>	1.8 1.8 0.000000 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	2 2 0.26 0.04	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	2 2 0.26 0.04	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	3 3 0.2 0.2	</Ch18_WZ-120>
+        <Ch19_121>	3.7 3.7 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	3.7 3.7 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	3 3 0.32 0.22	</Ch20_Type58>
+        <Ch21_T34>	2.5 2.5 0.42 0.000000	</Ch21_T34>
+        <Ch22_113>	1.6 1.6 0.5 0.000000	</Ch22_113>
+        <Ch22_113P>	1.6 1.6 0.5 0.000000	</Ch22_113P>
+        <Ch23_112>	1.8 1.8 0.000000 0.000000	</Ch23_112>
+        <Ch24_Type64>	2.3 2.3 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	4.5 4.5 0.24 0.000000	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	2.2 2.2 0.56 0.66	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	0.8 0.8 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	3.8 3.8 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.6 0.6 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	2.1 2.1 2.9 0.4	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.000000 9.2	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.5 1.5 0.000000 0.3	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2 2 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.1 2.1 0.000000 0.5	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	4 4 0.5 0.3	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1 1 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1 1 2.1 2.4	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	1.5 1.5 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15330	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	64 78 52 0	</c0>
+          <c1>	170 170 170 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1 1 0.000000 0.000000	</Ch01_Type59>
+        <Ch01_Type59_Gold>	2.3 2.3 0.000000 0.000000	</Ch01_Type59_Gold>
+        <Ch02_Type62>	2 2 0.000000 0.08	</Ch02_Type62>
+        <Ch03_WZ-111>	2 2 0.000000 0.000000	</Ch03_WZ-111>
+        <Ch04_T34_1>	2 2 0.000000 0.06	</Ch04_T34_1>
+        <Ch05_T34_2>	2.2 2.2 0.000000 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	0.7 0.7 0.000000 0.000000	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	0.7 0.7 0.000000 3.9	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	0.7 0.7 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	2.3 2.3 0.000000 0.000000	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.5 1.5 0.000000 0.000000	</Ch09_M5>
+        <Ch10_IS2>	1.9 1.9 0.000000 0.000000	</Ch10_IS2>
+        <Ch11_110>	2.9 2.9 0.000000 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	3.7 3.7 0.000000 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	1.5 1.5 0.000000 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	2.5 2.5 0.63 0.000000	</Ch14_T34_3>
+        <Ch15_59_16>	1.3 1.3 0.000000 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	1.3 1.3 0.000000 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	2 2 0.000000 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	2 2 0.000000 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	2.5 2.5 0.000000 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	3 3 0.9 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	3 3 0.9 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	2.8 2.8 0.32 0.08	</Ch20_Type58>
+        <Ch21_T34>	2.9 2.9 0.000000 0.000000	</Ch21_T34>
+        <Ch22_113>	1.3 1.3 0.4 0.5	</Ch22_113>
+        <Ch22_113P>	1.3 1.3 0.4 0.5	</Ch22_113P>
+        <Ch23_112>	2 2 0.000000 0.000000	</Ch23_112>
+        <Ch24_Type64>	2 2 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	3.4 3.4 0.12 0.1	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	3.2 3.2 0.1 0.000000	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1 1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	0.7 0.7 0.000000 0.9	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	4.6 4.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.6 0.6 0.8 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	2.2 2.2 0.000000 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.2 1.2 0.2 0.4	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.7 1.7 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	1.3 1.3 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	1.9 1.9 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	3.5 3.5 0.000000 0.000000	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1 1 0.7 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	3.5 3.5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	1.3 1.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15334	</id>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	191 191 191 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.4 1.4 0.000000 0.000000	</Ch01_Type59>
+        <Ch01_Type59_Gold>	4.3 4.3 0.000000 0.000000	</Ch01_Type59_Gold>
+        <Ch02_Type62>	2.2 2.2 0.16 0.000000	</Ch02_Type62>
+        <Ch03_WZ-111>	2.1 2.1 0.3 0.12	</Ch03_WZ-111>
+        <Ch04_T34_1>	3.1 3.1 0.000000 0.11	</Ch04_T34_1>
+        <Ch04_T34_1_training>	4 4 0.44 0.000000	</Ch04_T34_1_training>
+        <Ch05_T34_2>	3.4 3.4 0.000000 0.000000	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1 1 0.26 0.42	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	1 1 0.18 0.000000	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	1.2 1.2 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	3.4 3.4 0.54 0.38	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.7 1.7 0.14 0.000000	</Ch09_M5>
+        <Ch10_IS2>	1.9 1.9 1.6 0.000000	</Ch10_IS2>
+        <Ch11_110>	4.2 4.2 0.28 0.000000	</Ch11_110>
+        <Ch11_110_IGR>	5.2 5.2 0.28 0.000000	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	1.5 1.5 0.000000 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	3.2 3.2 0.39 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	2.1 2.1 0.12 0.000000	</Ch15_59_16>
+        <Ch16_WZ_131>	1.9 1.9 0.42 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	2.5 2.5 0.36 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	2.5 2.5 0.36 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	3.6 3.6 1.2 1.2	</Ch18_WZ-120>
+        <Ch19_121>	4.6 4.6 0.28 0.26	</Ch19_121>
+        <Ch19_121_IGR>	4.6 4.6 0.28 0.26	</Ch19_121_IGR>
+        <Ch20_Type58>	4.2 4.2 0.42 0.000000	</Ch20_Type58>
+        <Ch21_T34>	3.4 3.4 0.12 0.000000	</Ch21_T34>
+        <Ch22_113>	1.3 1.3 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	1.3 1.3 0.000000 0.000000	</Ch22_113P>
+        <Ch23_112>	1.8 1.8 0.000000 0.000000	</Ch23_112>
+        <Ch24_Type64>	2.5 2.5 0.26 3.6	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	5.2 5.2 0.22 0.42	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	5 5 0.68 0.82	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	1.1 1.1 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	1 1 0.5 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	4.9 4.9 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.6 0.6 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	2 2 3.4 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1.4 1.4 0.5 0.6	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.9 1.9 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	2 2 0.000000 0.3	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	1.9 1.9 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	4.5 4.5 0.1 0.3	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1.3 1.3 0.000000 0.6	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1 1 0.5 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	1.7 1.7 0.4 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold china:Ch03_WZ_111_A china:Ch22_113_Beijing_Opera china:Ch41_WZ_111_QL	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15336	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_4.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	36 75 101 255	</c0>
+          <c1>	170 170 170 255	</c1>
+          <c2>	23 37 47 255	</c2>
+          <c3>	201 192 133 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Ch01_Type59>	1.3 1.3 0.000000 0.000000	</Ch01_Type59>
+        <Ch01_Type59_Gold>	2.6 2.7 0.000000 0.000000	</Ch01_Type59_Gold>
+        <Ch02_Type62>	1.8 1.8 0.000000 0.000000	</Ch02_Type62>
+        <Ch03_WZ-111>	2.2 2.2 0.000000 0.000000	</Ch03_WZ-111>
+        <Ch04_T34_1>	3 3 0.5 0.000000	</Ch04_T34_1>
+        <Ch05_T34_2>	2.2 2.2 0.6 1	</Ch05_T34_2>
+        <Ch06_Renault_NC31>	1 1 3.5 3.4	</Ch06_Renault_NC31>
+        <Ch06_Renault_NC31_bot>	0.7 0.7 3.7 7.6	</Ch06_Renault_NC31_bot>
+        <Ch07_Vickers_MkE_Type_BT26>	0.9 0.9 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
+        <Ch08_Type97_Chi_Ha>	2.5 2.5 0.11 0.16	</Ch08_Type97_Chi_Ha>
+        <Ch09_M5>	1.6 1.6 0.000000 0.000000	</Ch09_M5>
+        <Ch10_IS2>	2.2 2.2 0.18 0.000000	</Ch10_IS2>
+        <Ch11_110>	3.5 3.5 0.49 0.23	</Ch11_110>
+        <Ch11_110_IGR>	3 2.9 0.49 0.23	</Ch11_110_IGR>
+        <Ch12_111_1_2_3>	1.7 1.7 0.000000 0.000000	</Ch12_111_1_2_3>
+        <Ch14_T34_3>	2.3 2.3 0.63 0.33	</Ch14_T34_3>
+        <Ch15_59_16>	1.5 1.5 0.000000 0.9	</Ch15_59_16>
+        <Ch16_WZ_131>	1.6 1.6 0.000000 0.000000	</Ch16_WZ_131>
+        <Ch17_WZ131_1_WZ132>	1.7 1.7 0.000000 0.000000	</Ch17_WZ131_1_WZ132>
+        <Ch17_WZ131_1_WZ132_IGR>	2 2 0.000000 0.000000	</Ch17_WZ131_1_WZ132_IGR>
+        <Ch18_WZ-120>	1.7 1.7 0.000000 0.000000	</Ch18_WZ-120>
+        <Ch19_121>	3.2 3.2 0.000000 0.000000	</Ch19_121>
+        <Ch19_121_IGR>	2.6 2.6 0.000000 0.000000	</Ch19_121_IGR>
+        <Ch20_Type58>	3.4 3.4 0.29 0.000000	</Ch20_Type58>
+        <Ch21_T34>	3 3 0.86 0.000000	</Ch21_T34>
+        <Ch22_113>	1.4 1.4 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	1.4 1.4 0.000000 0.000000	</Ch22_113P>
+        <Ch23_112>	1.9 1.9 1.7 1.4	</Ch23_112>
+        <Ch24_Type64>	2 2 0.000000 0.000000	</Ch24_Type64>
+        <Ch25_121_mod_1971B>	6.6 6.6 0.42 0.000000	</Ch25_121_mod_1971B>
+        <Ch26_59_Patton>	3.5 3.5 0.14 0.000000	</Ch26_59_Patton>
+        <Ch28_WZ_132A>	0.9 0.9 0.000000 0.000000	</Ch28_WZ_132A>
+        <Ch29_Type_62C_prot>	0.7 0.7 0.000000 0.000000	</Ch29_Type_62C_prot>
+        <Ch30_T-26G_FT>	3 3 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch31_M3G_FT>	0.6 0.6 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch32_SU-76G_FT>	1.8 1.8 0.000000 0.000000	</Ch32_SU-76G_FT>
+        <Ch33_60G_FT>	1 1 5.1 1.8	</Ch33_60G_FT>
+        <Ch34_WZ131G_FT>	1.6 1.6 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch35_T-34-2G_FT>	1.8 1.8 0.000000 0.000000	</Ch35_T-34-2G_FT>
+        <Ch36_WZ111_1G_FT>	2.5 2.5 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch37_WZ111G_FT>	4.1 4.1 0.7 0.9	</Ch37_WZ111G_FT>
+        <Ch38_WZ113G_FT>	1 1 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch39_WZ120_1G_FT>	1 1 0.9 0.000000	</Ch39_WZ120_1G_FT>
+        <Ch40_WZ120G_FT>	3 3 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch41_WZ_111_5A>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch25_121_mod_1971B	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	552	</id>
+      <texture>	vehicles/chinese/Camouflage/china_veteran.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china_veteran/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china_veteran/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	30 28 23 209	</c0>
+          <c1>	158 161 155 255	</c1>
+          <c2>	85 88 84 255	</c2>
+          <c3>	50 50 50 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <china:Ch25_121_mod_1971B>	4.05405 4.05405 0.12 0.1	</china:Ch25_121_mod_1971B>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+</china.xml>

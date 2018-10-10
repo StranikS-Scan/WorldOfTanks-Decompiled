@@ -1,0 +1,448 @@
+<bootcamp-lobby-3.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	DefaultScene	</initial-scene>
+  <scenes>
+    <scene>	DefaultScene	  <post-effects></post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+    <scene>	Hangar	  <post-effects></post-effects>
+      <runtime-effects>
+        <request-exclusive-hint>	MenuTechTree	  <condition>
+            <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
+          </condition>
+        </request-exclusive-hint>
+        <effects-group>
+          <condition>
+            <checkpoint-reached>	VehicleBoughtCheckpoint	</checkpoint-reached>
+            <checkpoint-not-reached>	SkillLearnedCheckpoint	</checkpoint-not-reached>
+          </condition>
+          <effects>
+            <request-exclusive-hint>	FirstTankman	</request-exclusive-hint>
+            <request-exclusive-hint>	PersonalCaseOption	</request-exclusive-hint>
+          </effects>
+        </effects-group>
+        <request-exclusive-hint>	SecondTank	  <condition>
+            <active>	WrongVehicle	</active>
+          </condition>
+        </request-exclusive-hint>
+        <effects-group>
+          <condition>
+            <checkpoint-reached>	VehicleBoughtCheckpoint	</checkpoint-reached>
+            <checkpoint-not-reached>	SkillLearnedCheckpoint	</checkpoint-not-reached>
+          </condition>
+          <effects>
+            <request-exclusive-hint>	PersonalCaseSkill	  <sound></sound>
+            </request-exclusive-hint>
+            <request-exclusive-hint>	PersonalCaseSkillSelect	  <condition>
+                <active>	PersonalCaseSkillClicked	</active>
+              </condition>
+            </request-exclusive-hint>
+          </effects>
+        </effects-group>
+        <request-exclusive-hint>	PersonalCaseClose	  <condition>
+            <checkpoint-reached>	SkillLearnedCheckpoint	</checkpoint-reached>
+            <checkpoint-not-reached>	EndCheckpoint	</checkpoint-not-reached>
+          </condition>
+        </request-exclusive-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	PersonalCaseClose	  <on-scene-effects>
+            <set-gui-item-criteria>	TankmanSkillCriteria	</set-gui-item-criteria>
+            <activate>	PersonalCaseOpen	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	PersonalCaseOpen	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	PersonalCaseSkill	  <on-scene-effects>
+            <set-action>	PersonalCaseSkillClick	</set-action>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <remove-action>	PersonalCaseSkillClick	</remove-action>
+            <inactivate>	PersonalCaseSkillClicked	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	Techtree	  <post-effects>
+        <set-gui-item-criteria>	TechTreeItemNodeCriteria	</set-gui-item-criteria>
+      </post-effects>
+      <runtime-effects>
+        <request-exclusive-hint>	TechTreeItemNode	  <condition>
+            <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
+          </condition>
+        </request-exclusive-hint>
+      </runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+    <scene>	Research	  <post-effects>
+        <set-gui-item-criteria>	ResearchItemNodeCriteria	</set-gui-item-criteria>
+        <close-view>
+          <type>	topWindow	</type>
+          <alias>	vehicleBuyWindow	</alias>
+        </close-view>
+      </post-effects>
+      <runtime-effects>
+        <request-exclusive-hint>	ResearchItemNode	  <condition>
+            <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
+          </condition>
+        </request-exclusive-hint>
+      </runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+    <scene>	VehiclePreview	  <post-effects></post-effects>
+      <runtime-effects>
+        <effects-group>
+          <condition>
+            <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
+          </condition>
+          <effects>
+            <request-exclusive-hint>	VehiclePreviewUnlockOrBuyButton	</request-exclusive-hint>
+            <request-exclusive-hint>	VehicleBuyAcademy	</request-exclusive-hint>
+            <request-exclusive-hint>	VehicleBuyAccept	  <condition>
+                <active>	VehicleBuyAcademyClicked	</active>
+              </condition>
+            </request-exclusive-hint>
+          </effects>
+        </effects-group>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	VehicleBuyAcademy	  <on-scene-effects>
+            <set-button-enabled>	VehicleBuyAccept	  <val>	False	</val>
+            </set-button-enabled>
+            <set-action>	VehicleBuyAcademyClick	</set-action>
+            <set-action>	VehicleBuyAcceptClick	</set-action>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <remove-action>	VehicleBuyAcademyClick	</remove-action>
+            <remove-action>	VehicleBuyAcceptClick	</remove-action>
+            <inactivate>	VehicleBuyAcademyClicked	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+  </scenes>
+  <global-runtime-effects>
+    <pre-scene>
+      <effects-group>
+        <condition>
+          <checkpoint-reached>	VehicleBoughtCheckpoint	</checkpoint-reached>
+        </condition>
+        <effects>
+          <effects-group>
+            <condition>
+              <game-item>	SecondVehicleCD	  <not-selected></not-selected>
+              </game-item>
+            </condition>
+            <effects>
+              <activate>	WrongVehicle	</activate>
+              <set-allowed-to-fight>
+                <value>	False	</value>
+              </set-allowed-to-fight>
+            </effects>
+          </effects-group>
+          <effects-group>
+            <condition>
+              <game-item>	SecondVehicleCD	  <selected></selected>
+              </game-item>
+            </condition>
+            <effects>
+              <inactivate>	WrongVehicle	</inactivate>
+              <set-allowed-to-fight>
+                <value>	True	</value>
+                <condition>
+                  <checkpoint-reached>	EndCheckpoint	</checkpoint-reached>
+                </condition>
+              </set-allowed-to-fight>
+            </effects>
+          </effects-group>
+        </effects>
+      </effects-group>
+      <request-exclusive-hint>	MenuHangar	  <condition>
+          <not-on-scene>	Hangar	</not-on-scene>
+        </condition>
+      </request-exclusive-hint>
+      <request-exclusive-hint>	FightButton	  <condition>
+          <checkpoint-reached>	EndCheckpoint	</checkpoint-reached>
+          <inactive>	WrongVehicle	</inactive>
+        </condition>
+      </request-exclusive-hint>
+    </pre-scene>
+    <post-scene>
+      <update-exclusive-hints>
+        <condition>
+          <either>
+            <inactive>	VehicleBuyAcceptClicked	</inactive>
+            <checkpoint-reached>	VehicleBoughtCheckpoint	</checkpoint-reached>
+          </either>
+        </condition>
+      </update-exclusive-hints>
+    </post-scene>
+  </global-runtime-effects>
+  <has-id>
+    <checkpoint>	StartCheckpoint	  <condition></condition>
+      <effects>
+        <set-var>	FirstVehicleSetter	</set-var>
+        <set-var>	SecondVehicleSetter	</set-var>
+        <set-var>	TankmanSkillSetter	</set-var>
+        <activate>	NationDataInitialized	</activate>
+        <invoke-gui-cmd>	OverrideHangarMenuButtons	  <args>
+            <arg>	EnabledHangarMenuButtons_Initial	  <name>	buttonsListVarID	</name>
+            </arg>
+          </args>
+        </invoke-gui-cmd>
+        <set-visible>	VehicleResearchPanel	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	VehicleResearchPanelBG	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	VehicleResearchButton	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarParams	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleGun	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleTurret	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleEngine	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleChassis	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	HangarModuleRadio	  <val>	True	</val>
+        </set-visible>
+        <update-layout>	AmmunitionPanel	</update-layout>
+        <show-dialog>	NewVehicleIntroDialog	</show-dialog>
+        <invoke-gui-cmd>	OverrideHangarMenuButtons	  <args>
+            <arg>	EnabledHangarMenuButtons_AfterIntro	  <name>	buttonsListVarID	</name>
+            </arg>
+          </args>
+        </invoke-gui-cmd>
+        <play-animation>	MenuTechTree	  <type>	tween	</type>
+          <wait_for_finish>	True	</wait_for_finish>
+        </play-animation>
+      </effects>
+    </checkpoint>
+    <checkpoint>	VehicleUnlockedCheckpoint	  <condition>
+        <game-item>	SecondVehicleCD	  <unlocked></unlocked>
+        </game-item>
+      </condition>
+      <effects>
+        <show-dialog>	VehicleUnlockedDialog	</show-dialog>
+      </effects>
+    </checkpoint>
+    <checkpoint>	VehicleBoughtCheckpoint	  <condition>
+        <game-item>	SecondVehicleCD	  <in-inventory></in-inventory>
+        </game-item>
+        <on-scene>	Hangar	</on-scene>
+      </condition>
+      <effects>
+        <select-in-hangar>	SecondVehicleCD	</select-in-hangar>
+        <set-var>	SecondVehicleCommanderSetter	</set-var>
+        <set-gui-item-view-criteria>	SecondVehicleCommander_PersonalCase	</set-gui-item-view-criteria>
+        <show-dialog>	VehicleBoughtAndCrewIntroDialog	</show-dialog>
+        <set-visible>	TankCarouselContainer	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	TankCarouselContainerBG	  <val>	True	</val>
+        </set-visible>
+        <play-animation>	TankCarouselContainer	  <type>	tween	</type>
+          <wait_for_finish>	True	</wait_for_finish>
+        </play-animation>
+        <set-visible>	CrewPanel	  <val>	True	</val>
+        </set-visible>
+        <play-animation>	CrewPanel	  <type>	tween	</type>
+          <wait_for_finish>	True	</wait_for_finish>
+        </play-animation>
+      </effects>
+    </checkpoint>
+    <checkpoint>	SkillLearnedCheckpoint	  <condition>
+        <game-item>	SecondVehicleCD	  <crew-has-skill>	commander TankmanSkillName	</crew-has-skill>
+        </game-item>
+      </condition>
+      <effects>
+        <show-dialog>	CrewSkillsDialog	</show-dialog>
+        <effects-group>
+          <condition>
+            <active>	PersonalCaseOpen	</active>
+          </condition>
+          <effects>
+            <play-sound>	bc_new_ui_element	  <event>	ANIMATION_STARTED	</event>
+            </play-sound>
+            <play-animation>	SkillSlot	  <type>	clip	</type>
+              <wait_for_finish>	True	</wait_for_finish>
+            </play-animation>
+          </effects>
+        </effects-group>
+      </effects>
+    </checkpoint>
+    <checkpoint>	EndCheckpoint	  <condition>
+        <inactive>	PersonalCaseOpen	</inactive>
+      </condition>
+      <effects></effects>
+    </checkpoint>
+    <game-attribute>	FirstVehicleSetter	  <var-ref>	FirstVehicleCD	</var-ref>
+      <name>	BootcampNationDataField	</name>
+      <args>	vehicle_first	</args>
+    </game-attribute>
+    <game-attribute>	SecondVehicleSetter	  <var-ref>	SecondVehicleCD	</var-ref>
+      <name>	BootcampNationDataField	</name>
+      <args>	vehicle_second	</args>
+    </game-attribute>
+    <game-attribute>	SecondVehicleCommanderSetter	  <var-ref>	SecondVehicleCommanderID	</var-ref>
+      <name>	TankmanID	</name>
+      <args>	SecondVehicleCD commander	</args>
+    </game-attribute>
+    <game-attribute>	TankmanSkillSetter	  <var-ref>	TankmanSkillName	</var-ref>
+      <name>	BootcampNationDataField	</name>
+      <args>	perk	</args>
+    </game-attribute>
+    <gui-item-criteria>	TechTreeItemNodeCriteria	  <item-id>	TechTreeItemNodeID	</item-id>
+      <value>	id=$FirstVehicleCD$	</value>
+    </gui-item-criteria>
+    <gui-item-criteria>	ResearchItemNodeCriteria	  <item-id>	ResearchItemNodeID	</item-id>
+      <value>	id=$SecondVehicleCD$	</value>
+    </gui-item-criteria>
+    <gui-item-criteria>	TankmanSkillCriteria	  <item-id>	PersonalCaseSkillID	</item-id>
+      <value>	title=$TankmanSkillName$	</value>
+    </gui-item-criteria>
+    <gui-item-view-criteria>	SecondVehicleCommander_PersonalCase	  <components>
+        <component-id>	PersonalCaseSkill	</component-id>
+        <component-id>	PersonalCaseSkillSelect	</component-id>
+        <component-id>	PersonalCaseClose	</component-id>
+        <component-id>	SkillSlot	</component-id>
+      </components>
+      <value>	personalCase_$SecondVehicleCommanderID$	</value>
+    </gui-item-view-criteria>
+    <click-action>	VehicleBuyAcademyClick	  <item-id>	VehicleBuyAcademy	</item-id>
+      <effects>
+        <set-button-enabled>	VehicleBuyAccept	  <val>	True	</val>
+        </set-button-enabled>
+        <activate>	VehicleBuyAcademyClicked	</activate>
+      </effects>
+    </click-action>
+    <click-action>	VehicleBuyAcceptClick	  <item-id>	VehicleBuyAccept	</item-id>
+      <effects>
+        <activate>	VehicleBuyAcceptClicked	  <condition>
+            <active>	VehicleBuyAcademyClicked	</active>
+          </condition>
+        </activate>
+      </effects>
+    </click-action>
+    <click-action>	PersonalCaseSkillClick	  <item-id>	PersonalCaseSkill	</item-id>
+      <effects>
+        <activate>	PersonalCaseSkillClicked	</activate>
+      </effects>
+    </click-action>
+    <dialog>	NewVehicleIntroDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	INTRO	</preset>
+            <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
+            <label>	#bootcamp:message/intro/lesson/iii/label	</label>
+            <voiceover>	vo_bc_hangar_new_tank_received	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <dialog>	VehicleUnlockedDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	BLUE	</preset>
+            <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
+            <label>	#bootcamp:message/unlock/vehicle/label	</label>
+            <text>	#bootcamp:message/unlock/vehicle/text	</text>
+            <voiceover>	vo_bc_hangar_tank_investigated	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <dialog>	VehicleBoughtAndCrewIntroDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <nations>
+            <data>
+              <nation_id>	usa	</nation_id>
+              <icon>	../maps/icons/bootcamp/lines/bcM2.png	</icon>
+              <preset>	GOLD	</preset>
+              <label>	M2 Medium Tank	</label>
+              <text>	#bootcamp:message/second/vehicle/text/nation/0	</text>
+              <voiceover>	vo_bc_hangar_tank_in_garage	</voiceover>
+            </data>
+            <data>
+              <nation_id>	germany	</nation_id>
+              <icon>	../maps/icons/bootcamp/lines/bcPz38t.png	</icon>
+              <preset>	GOLD	</preset>
+              <label>	Pz.Kpfw. 38 (t)	</label>
+              <text>	#bootcamp:message/second/vehicle/text/nation/1	</text>
+              <voiceover>	vo_bc_hangar_tank_in_garage	</voiceover>
+            </data>
+            <data>
+              <nation_id>	ussr	</nation_id>
+              <icon>	../maps/icons/bootcamp/lines/bcT46.png	</icon>
+              <preset>	GOLD	</preset>
+              <label>	T-46	</label>
+              <text>	#bootcamp:message/second/vehicle/text/nation/2	</text>
+              <voiceover>	vo_bc_hangar_tank_in_garage	</voiceover>
+            </data>
+          </nations>
+        </message>
+        <message>
+          <data>
+            <preset>	INTRO	</preset>
+            <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
+            <label>	#bootcamp:message/intro/lesson/iii/crew/label	</label>
+            <voiceover>	vo_bc_hangar_team	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <dialog>	CrewSkillsDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	BLUE	</preset>
+            <icon>	../maps/icons/bootcamp/lines/bcSkills.png	</icon>
+            <label>	#bootcamp:message/skills/and/perks/label	</label>
+            <text>	#bootcamp:message/skills/and/perks/text	</text>
+            <voiceover>	vo_bc_hangar_skills_abilities	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+  </has-id>
+  <vars>
+    <var-set>	EnabledHangarMenuButtons_Initial	  <asList>
+        <asString>	hangar	</asString>
+      </asList>
+    </var-set>
+    <var-set>	EnabledHangarMenuButtons_AfterIntro	  <asList>
+        <asString>	hangar	</asString>
+        <asString>	techtree	</asString>
+      </asList>
+    </var-set>
+  </vars>
+  <triggers>
+    <trigger>	CheckpointController	  <type>	linear-checkpoint-controller	</type>
+      <validate-var></validate-var>
+      <sequence>
+        <checkpoint>	StartCheckpoint	</checkpoint>
+        <checkpoint>	VehicleUnlockedCheckpoint	</checkpoint>
+        <checkpoint>	VehicleBoughtCheckpoint	</checkpoint>
+        <checkpoint>	SkillLearnedCheckpoint	</checkpoint>
+        <checkpoint>	EndCheckpoint	</checkpoint>
+      </sequence>
+      <on-effects>
+        <save-checkpoint></save-checkpoint>
+      </on-effects>
+    </trigger>
+  </triggers>
+</bootcamp-lobby-3.xml>

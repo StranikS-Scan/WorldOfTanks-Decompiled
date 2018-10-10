@@ -1,26 +1,145 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/debug_utils.py
-from collections import defaultdict
 import sys
+import BigWorld
+import excepthook
+import time
+import traceback
+from GarbageCollectionDebug import gcDump, getGarbageGraph
 from functools import wraps
+from collections import defaultdict
 from warnings import warn_explicit
-from constants import IS_DEVELOPMENT, IS_CLIENT
+from traceback import format_exception
+from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM, IS_DEVELOPMENT
+from constants import LEAKS_DETECTOR_MAX_EXECUTION_TIME
+from contextlib import contextmanager
+_src_file_trim_to = ('res/wot/scripts/', len('res/wot/scripts/'))
+_g_logMapping = {}
+GCDUMP_CROWBAR_SWITCH = False
 
+class LOG_LEVEL:
+    DEV = 1
+    ST = 2
+    CT = 3
+    SVR_RELEASE = 4
+    RELEASE = 5
+
+
+class LOG_TAGS:
+    BOOTCAMP = '[BOOTCAMP]'
+
+
+if CURRENT_REALM == 'DEV':
+    _logLevel = LOG_LEVEL.DEV
+elif CURRENT_REALM == 'ST':
+    _logLevel = LOG_LEVEL.ST
+elif CURRENT_REALM in ('CT', 'SB'):
+    _logLevel = LOG_LEVEL.CT
+elif IS_CLIENT:
+    _logLevel = LOG_LEVEL.RELEASE
+else:
+    _logLevel = LOG_LEVEL.SVR_RELEASE
+
+class _LogWrapper(object):
+
+    def __init__(self, logLevel):
+        self.__lvl = logLevel
+
+    def __call__(self, func):
+        if self.__lvl >= _logLevel:
+            return func
+        else:
+            return lambda *args: None
+
+
+class CriticalError(BaseException):
+    pass
+
+
+@contextmanager
+def suppress(*exceptions):
+    try:
+        yield
+    except exceptions:
+        pass
+
+
+def init():
+    global _g_logMapping
+    if not IS_CLIENT:
+
+        def splitMessageIntoChunks(prefix, msg, func):
+            if prefix not in ('EXCEPTION', 'CRITICAL'):
+                msg = msg[:8960]
+            blockSize = 1792
+            for m in msg.splitlines(False)[:100]:
+                idx = 0
+                while idx < len(m):
+                    func(prefix, m[idx:idx + blockSize], None)
+                    idx += blockSize
+
+            return
+
+        bwLogTrace = BigWorld.logTrace
+        BigWorld.logTrace = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogTrace)
+        bwLogDebug = BigWorld.logDebug
+        BigWorld.logDebug = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogDebug)
+        bwLogInfo = BigWorld.logInfo
+        BigWorld.logInfo = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogInfo)
+        bwLogNotice = BigWorld.logNotice
+        BigWorld.logNotice = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogNotice)
+        bwLogWarning = BigWorld.logWarning
+        BigWorld.logWarning = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogWarning)
+        bwLogError = BigWorld.logError
+        BigWorld.logError = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogError)
+        bwLogCritical = BigWorld.logCritical
+        BigWorld.logCritical = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogCritical)
+        bwLogHack = BigWorld.logHack
+        BigWorld.logHack = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogHack)
+    _g_logMapping = {'TRACE': BigWorld.logTrace,
+     'DEBUG': BigWorld.logDebug,
+     'INFO': BigWorld.logInfo,
+     'NOTE': BigWorld.logNotice,
+     'NOTICE': BigWorld.logNotice,
+     'WARNING': BigWorld.logWarning,
+     'ERROR': BigWorld.logError,
+     'CRITICAL': BigWorld.logCritical,
+     'HACK': BigWorld.logHack,
+     'OBSOLETE': BigWorld.logWarning}
+    excepthook.init(not IS_CLIENT and _logLevel < LOG_LEVEL.SVR_RELEASE, _src_file_trim_to)
+
+
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def CRITICAL_ERROR(msg, *kargs):
-    print _makeMsgHeader('CRITICAL ERROR', sys._getframe(1)), msg, kargs
+    msg = '{0}:{1}:{2}'.format(_makeMsgHeader(sys._getframe(1)), msg, kargs)
+    BigWorld.logCritical('CRITICAL', msg, None)
     if IS_CLIENT:
-        import BigWorld
         BigWorld.quit()
-    sys.exit()
+    elif IS_CELLAPP or IS_BASEAPP:
+        BigWorld.shutDownApp()
+        raise CriticalError(msg)
+    else:
+        sys.exit()
+    return
 
 
-def LOG_CURRENT_EXCEPTION():
-    print _makeMsgHeader('EXCEPTION', sys._getframe(1))
-    from traceback import print_exc
-    print_exc()
+@_LogWrapper(LOG_LEVEL.RELEASE)
+def LOG_CURRENT_EXCEPTION(tags=None, frame=1):
+    msg = _makeMsgHeader(sys._getframe(frame)) + '\n'
+    etype, value, tb = sys.exc_info()
+    msg += ''.join(format_exception(etype, value, tb, None))
+    BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, msg), None)
+    extMsg = excepthook.extendedTracebackAsString(_src_file_trim_to, None, None, etype, value, tb)
+    if extMsg:
+        BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, extMsg), None)
+    return
 
 
+LOG_EXPECTED_EXCEPTION = LOG_CURRENT_EXCEPTION
+
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
-    print '[%s] (%s, %d):' % ('EXCEPTION', orgSource, orgLineno)
+    sys.stderr.write('[%s] (%s, %d):' % ('EXCEPTION', orgSource, orgLineno))
     from sys import exc_info
     from traceback import format_tb, format_exception_only
     etype, value, tb = exc_info()
@@ -38,118 +157,116 @@ def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
     for ln in list:
         sys.stderr.write(ln.replace(wrapperName, orgName))
 
+    extMsg = excepthook.extendedTracebackAsString(_src_file_trim_to, wrapperName, orgName, etype, value, tb)
+    if extMsg:
+        BigWorld.logError('EXCEPTION', extMsg, None)
+    return
 
+
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_CODEPOINT_WARNING(*kargs):
     _doLog('WARNING', 'this code point should have never been reached', kargs)
 
 
-def LOG_ERROR(msg, *kargs):
-    _doLog('ERROR', msg, kargs)
+@_LogWrapper(LOG_LEVEL.RELEASE)
+def LOG_ERROR(msg, *kargs, **kwargs):
+    _doLog('ERROR', msg, kargs, kwargs)
 
 
-def LOG_ERROR_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('ERROR', msg, kargs)
+@_LogWrapper(LOG_LEVEL.DEV)
+def LOG_ERROR_DEV(msg, *kargs, **kwargs):
+    _doLog('ERROR', msg, kargs, kwargs)
 
 
-def LOG_WARNING(msg, *kargs):
-    _doLog('WARNING', msg, kargs)
+@_LogWrapper(LOG_LEVEL.RELEASE)
+def LOG_WARNING(msg, *kargs, **kwargs):
+    _doLog('WARNING', msg, kargs, kwargs)
 
 
-def LOG_NOTE(msg, *kargs):
-    _doLog('NOTE', msg, kargs)
+def LOG_OBSOLETE(msg, *kargs):
+    _doLog('OBSOLETE', msg, kargs)
 
 
-def LOG_DEBUG(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('DEBUG', msg, kargs)
+@_LogWrapper(LOG_LEVEL.RELEASE)
+def LOG_NOTE(msg, *kargs, **kwargs):
+    _doLog('NOTE', msg, kargs, kwargs)
 
 
-def LOG_DEBUG_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('DEBUG', msg, kargs)
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
+def LOG_DEBUG(msg, *kargs, **kwargs):
+    _doLog('DEBUG', msg, kargs, kwargs)
 
 
-def LOG_NESTE(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('NESTE', msg, kargs)
+@_LogWrapper(LOG_LEVEL.DEV)
+def LOG_DEBUG_DEV(msg, *kargs, **kwargs):
+    _doLog('DEBUG', msg, kargs, kwargs)
 
 
-def LOG_MX(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('MX', msg, kargs)
-
-
-def LOG_MX_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('MX', msg, kargs)
-
-
-def LOG_DZ(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('DZ', msg, kargs)
-
-
-def LOG_TU(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('TU', msg, kargs)
-
-
-def LOG_RF(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('RF', msg, kargs)
-
-
-def LOG_DAN(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('DAN', msg, kargs)
-
-
-def LOG_DAN_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('DAN', msg, kargs)
-
-
-def LOG_VLK(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('VLK', msg, kargs)
-
-
+@_LogWrapper(LOG_LEVEL.CT)
 def LOG_GUI(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('GUI', msg, kargs)
+    _doLog('GUI', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
 def LOG_VOIP(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('VOIP', msg, kargs)
+    _doLog('VOIP', msg, kargs)
 
 
 def FLUSH_LOG():
-    import BigWorld
     BigWorld.flushPythonLog()
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_UNEXPECTED(msg, *kargs):
     _doLog('LOG_UNEXPECTED', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_WRONG_CLIENT(entity, *kargs):
     if hasattr(entity, 'id'):
         entity = entity.id
-    print _makeMsgHeader('WRONG_CLIENT', sys._getframe(1)), entity, kargs
+    BigWorld.logError('WRONG_CLIENT', ' '.join(map(str, [_makeMsgHeader(sys._getframe(1)), entity, kargs])), None)
+    return
 
 
-def _doLog(s, msg, args):
-    header = _makeMsgHeader(s, sys._getframe(2))
+def _doLog(category, msg, args=None, kwargs={}):
+    header = _makeMsgHeader(sys._getframe(2))
+    logFunc = _g_logMapping.get(category, None)
+    if not logFunc:
+        logFunc = BigWorld.logDebug
     if args:
-        print header, msg, args
+        output = ' '.join(map(str, [header, msg, args]))
     else:
-        print header, msg
+        output = ' '.join(map(str, [header, msg]))
+    tags = kwargs.pop('tags', None)
+    logFunc(category, _addTagsToMsg(tags, output), None)
+    if kwargs.get('stack', False):
+        traceback.print_stack(file=sys.stdout)
+    return
 
 
-def _makeMsgHeader(s, frame):
-    return '[%s] (%s, %d):' % (s, frame.f_code.co_filename, frame.f_lineno)
+def _makeMsgHeader(frame):
+    filename = frame.f_code.co_filename
+    trim_to, trim_to_len = _src_file_trim_to
+    idx = filename.find(trim_to)
+    if idx != -1:
+        filename = filename[idx + trim_to_len:]
+    return '(%s, %d):' % (filename, frame.f_lineno)
+
+
+def _doLogFmt(prefix, fmt, *args):
+    msg = _makeMsgHeader(sys._getframe(2))
+    msg += fmt.format(*args) if args else fmt
+    BigWorld.logInfo(prefix, msg, None)
+    return
+
+
+def _addTagsToMsg(tags, msg):
+    return '{0} {1}'.format(' '.join(tags), msg) if tags else msg
+
+
+def makeFuncLocationString(func):
+    return excepthook.formatLocation(*excepthook.getLocationFromCode(_src_file_trim_to, func.func_code))
 
 
 def trace(func):
@@ -159,15 +276,9 @@ def trace(func):
 
     @wraps(func)
     def wrapper(*args, **kwds):
-        print '[%s] (%s, %d) call %s:' % ('DEBUG',
-         frame.f_code.co_filename,
-         frame.f_lineno,
-         fname), ':', ', '.join(('%s=%r' % entry for entry in zip(argnames, args) + kwds.items()))
+        BigWorld.logDebug(' '.join('(%s, %d) call %s:' % (frame.f_code.co_filename, frame.f_lineno, fname), ':', ', '.join(('%s=%r' % entry for entry in zip(argnames, args) + kwds.items()))))
         ret = func(*args, **kwds)
-        print '[%s] (%s, %d) return from %s:' % ('DEBUG',
-         frame.f_code.co_filename,
-         frame.f_lineno,
-         fname), ':', repr(ret)
+        BigWorld.logDebug(' '.join('(%s, %d) return from %s:' % (frame.f_code.co_filename, frame.f_lineno, fname), ':', repr(ret)))
         return ret
 
     return wrapper
@@ -191,11 +302,22 @@ def disabled(func):
     return empty_func
 
 
-def dump_garbage(source = False):
-    """
-    show us what's the garbage about
-    """
-    import inspect, gc
+def disabled_if(checker, msg=''):
+
+    def disable_func(func):
+
+        @wraps(func)
+        def wrapped(*args, **kwargs):
+            return disabled(func) if checker() else func(*args, **kwargs)
+
+        return wrapped
+
+    return disable_func
+
+
+def dump_garbage(source=False):
+    import inspect
+    import gc
     print '\nCollecting GARBAGE:'
     gc.collect()
     print '\nCollecting GARBAGE:'
@@ -221,7 +343,7 @@ def dump_garbage(source = False):
             pass
 
 
-def dump_garbage_2(verbose = True, generation = 2):
+def dump_garbage_2(verbose=True, generation=2):
     import gc
     from weakref import ProxyType, ReferenceType
     gc.set_debug(gc.DEBUG_LEAK | gc.DEBUG_STATS)
@@ -258,8 +380,51 @@ def dump_garbage_2(verbose = True, generation = 2):
     return
 
 
+def memoryLeaksSafeDump(id, _):
+    curTime = time.time()
+    if not GCDUMP_CROWBAR_SWITCH:
+        gcDump()
+    if time.time() - curTime > LEAKS_DETECTOR_MAX_EXECUTION_TIME or GCDUMP_CROWBAR_SWITCH:
+        BigWorld.delTimer(id)
+
+
+def initMemoryLeaksLogging(repeatOffset=300):
+
+    def detectMemoryLeaksTimerCallback(id, userArg):
+        if userArg == 0:
+            BigWorld.addTimer(memoryLeaksSafeDump, 1, repeatOffset, 1)
+
+    BigWorld.addTimer(detectMemoryLeaksTimerCallback, 1, 0, 0)
+
+
 def verify(expression):
     try:
-        raise expression or AssertionError
+        pass
     except AssertionError:
         LOG_CURRENT_EXCEPTION()
+
+
+def traceCalls(func):
+    if not IS_DEVELOPMENT:
+        return func
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        LOG_DEBUG_DEV('%s.%s' % (func.im_class.__name__, func.im_func.__name__), args, kwargs)
+        returned = func(*args, **kwargs)
+        if returned is not None:
+            LOG_DEBUG_DEV('%s.%s returned:' % (func.im_class.__name__, func.im_func.__name__), returned)
+        return returned
+
+    return wrapper
+
+
+def traceMethodCalls(obj, *names):
+    if not IS_DEVELOPMENT:
+        return
+    for name in names:
+        func = getattr(obj, name)
+        setattr(obj, name, traceCalls(func))
+
+
+init()

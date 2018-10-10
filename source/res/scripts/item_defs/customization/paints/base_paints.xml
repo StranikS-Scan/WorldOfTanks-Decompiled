@@ -1,0 +1,253 @@
+<base_paints.xml>
+  <itemGroup>
+    <name>	nations base colors	</name>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
+    <paint>
+      <id>	128	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_base_color.png	</texture>
+      <color>	76 76 60 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/ussr_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	ussr	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	134	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_base_color.png	</texture>
+      <color>	90 90 90 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	germany	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	140	</id>
+      <texture>	gui/maps/vehicles/repaints/uk_base_color.png	</texture>
+      <color>	117 112 93 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/uk_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	uk	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	147	</id>
+      <texture>	gui/maps/vehicles/repaints/france_base_color.png	</texture>
+      <color>	51 73 75 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/france_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	france	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	153	</id>
+      <texture>	gui/maps/vehicles/repaints/usa_base_color.png	</texture>
+      <color>	105 98 77 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/usa_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	usa	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	159	</id>
+      <texture>	gui/maps/vehicles/repaints/china_base_color.png	</texture>
+      <color>	61 82 63 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/china_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	china	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	165	</id>
+      <texture>	gui/maps/vehicles/repaints/sweden_base_color.png	</texture>
+      <color>	62 68 54 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/sweden_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	sweden	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	171	</id>
+      <texture>	gui/maps/vehicles/repaints/japan_base_color.png	</texture>
+      <color>	65 77 56 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/japan_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	japan	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	221	</id>
+      <texture>	gui/maps/vehicles/repaints/czech_base_color.png	</texture>
+      <color>	81 74 60 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/czech_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	czech	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	285	</id>
+      <texture>	gui/maps/vehicles/repaints/italy_base_color.png	</texture>
+      <color>	128 113 83 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/italy_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	italy	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	288	</id>
+      <texture>	gui/maps/vehicles/repaints/poland_base_color.png	</texture>
+      <color>	79 73 52 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/poland_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	poland	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	primers	</name>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	6 8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	275	</id>
+      <texture>	gui/maps/vehicles/repaints/primer_marmot_01.png	</texture>
+      <color>	80 48 48 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/primer_marmot	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+</base_paints.xml>

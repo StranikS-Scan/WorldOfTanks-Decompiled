@@ -1,8 +1,10 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/aop.py
 import re
 import sys
 import types
 import weakref
+from functools import partial
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
 
 def copy(wrapper, wrapped):
@@ -93,28 +95,58 @@ def wrap(func):
         return wrapper
 
 
+def pointcutable(pointcutTag=None):
+    if callable(pointcutTag):
+        return _addPointcutableTag(func=pointcutTag)
+    else:
+        return partial(_addPointcutableTag, tag=pointcutTag) if pointcutTag is not None else _addPointcutableTag
+
+
+def _addPointcutableTag(func, tag=None):
+    setattr(func, '__pointcutable__', tag)
+    return func
+
+
 def _restore(ns, wrapper):
     aspects = getattr(wrapper, '__aspects__', [])
-    while len(aspects):
+    while aspects:
         aspects.pop().clear()
 
     if hasattr(wrapper, '__original__'):
         setattr(ns, wrapper.__name__, wrapper.__original__)
 
 
-def _search(ns, regexp, match):
-    attrNames = []
+def _regexpCriteria(func, regexp, match):
+    if regexp.match(func.__name__):
+        if match:
+            return True
+    elif not match:
+        return True
+    return False
+
+
+def _pointcutableCriteria(func, pointcutTag):
+    return func.__pointcutable__ == pointcutTag if hasattr(func, '__pointcutable__') else False
+
+
+def _isearch(ns, criteria):
     for attrName in dir(ns):
         attr = getattr(ns, attrName)
-        if type(attr) not in (types.FunctionType, types.MethodType):
-            continue
-        if regexp.match(attrName):
-            if match:
-                attrNames.append(attrName)
-        elif not match:
-            attrNames.append(attrName)
+        if isinstance(attr, (types.FunctionType, types.MethodType)) and criteria(attr):
+            yield attrName
 
-    return attrNames
+
+def _hasWrappedMethod(clazz, function):
+    attr = getattr(clazz, function.__name__, None)
+    originalFunc = getattr(attr, '__original__', None)
+    if originalFunc is function:
+        return True
+    else:
+        for baseClass in clazz.__bases__:
+            if _hasWrappedMethod(baseClass, function):
+                return True
+
+        return False
 
 
 class CallData(object):
@@ -126,10 +158,8 @@ class CallData(object):
         self._exception = None
         if wrapped.__ismethod__ is None:
             try:
-                if getattr(args[0], function.__name__).__original__ is function:
-                    wrapped.__ismethod__ = True
-                else:
-                    wrapped.__ismethod__ = False
+                clazz = args[0].__class__
+                wrapped.__ismethod__ = _hasWrappedMethod(clazz, function)
             except BaseException:
                 wrapped.__ismethod__ = False
 
@@ -167,6 +197,21 @@ class CallData(object):
     def kwargs(self):
         return self._kwargs.copy()
 
+    def findArg(self, argIndex, argName):
+        return self._args[argIndex] if len(self._args) > argIndex else self._kwargs.get(argName, None)
+
+    def changeArgs(self, *changes):
+        if changes:
+            newArgs, newKwargs = list(self.args), self.kwargs
+            for argIndex, argName, newValue in changes:
+                if len(self._args) > argIndex:
+                    newArgs[argIndex] = newValue
+                newKwargs[argName] = newValue
+
+            self.change()
+            return (newArgs, newKwargs)
+        return (self.args, self.kwargs)
+
     @property
     def returned(self):
         return self._returned
@@ -176,18 +221,10 @@ class CallData(object):
         return self._exception
 
     def _packArgs(self):
-        if self._self is None:
-            return self._args
-        else:
-            return (self._self,) + tuple(self._args)
-            return
+        return self._args if self._self is None else (self._self,) + tuple(self._args)
 
     def exceptionIs(self, cls):
-        if self._exception is None:
-            return False
-        else:
-            return isinstance(self._exception, cls)
-            return
+        return False if self._exception is None else isinstance(self._exception, cls)
 
     def avoid(self):
         self._avoid = True
@@ -235,7 +272,7 @@ class Pointcut(list):
     def __del__(self):
         LOG_DEBUG('Pointcut deleted: {0:>s}'.format(self))
 
-    def __init__(self, path, name, filterString, match = True):
+    def __init__(self, path, name, filterString=None, pointcutTag=None, match=True, aspects=()):
         super(Pointcut, self).__init__()
         self.__nsPath = path
         self.__nsName = name
@@ -243,10 +280,17 @@ class Pointcut(list):
         if ns is None:
             return
         else:
-            for item in _search(ns, re.compile(filterString), match):
+            if filterString is not None:
+                criteria = partial(_regexpCriteria, regexp=re.compile(filterString), match=match)
+            else:
+                criteria = partial(_pointcutableCriteria, pointcutTag=pointcutTag)
+            for item in _isearch(ns, criteria):
                 wrapped = wrap(getattr(ns, item))
                 setattr(ns, item, wrapped)
                 self.append(wrapped)
+
+            for aspect in aspects:
+                self.addAspect(aspect)
 
             return
 
@@ -255,7 +299,7 @@ class Pointcut(list):
         return getattr(imported, name, None)
 
     def addAspect(self, aspect, *args, **kwargs):
-        if type(aspect) is AspectType:
+        if isinstance(aspect, AspectType):
             for item in self:
                 aspect(*args, **kwargs)(item)
 
@@ -284,9 +328,9 @@ class Weaver(object):
 
     def weave(self, *args, **kwargs):
         pointcut = kwargs.pop('pointcut', Pointcut)
-        aspects = kwargs.pop('aspects', [])
+        aspects = kwargs.pop('aspects', ())
         avoid = kwargs.pop('avoid', False)
-        if type(pointcut) is PointcutType:
+        if isinstance(pointcut, PointcutType):
             try:
                 pointcut = pointcut(*args, **kwargs)
             except ImportError:
@@ -295,7 +339,7 @@ class Weaver(object):
 
         result = len(self.__pointcuts)
         if avoid:
-            aspects = [DummyAspect]
+            aspects = (DummyAspect,)
         for aspect in aspects:
             try:
                 pointcut.addAspect(aspect)
@@ -314,7 +358,7 @@ class Weaver(object):
                 LOG_CURRENT_EXCEPTION()
 
     def findPointcut(self, pointcut):
-        if type(pointcut) is PointcutType:
+        if isinstance(pointcut, PointcutType):
             clazz = pointcut
         else:
             clazz = pointcut.__class__
@@ -322,19 +366,17 @@ class Weaver(object):
             if item.__class__ == clazz:
                 return idx
 
-        return -1
-
     def avoid(self, idx):
         self.addAspect(idx, DummyAspect)
 
-    def clear(self, idx = None):
+    def clear(self, idx=None):
         if idx is not None:
             if -1 < idx < len(self.__pointcuts):
                 pointcut = self.__pointcuts.pop(idx)
                 pointcut.clear()
         else:
             pointcuts = self.__pointcuts
-            while len(pointcuts):
+            while pointcuts:
                 pointcuts.pop().clear()
 
         return

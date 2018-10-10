@@ -1,14 +1,12 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/offbattle/queries.py
-import SoundGroups
 from constants import FINISH_REASON
-from gui import GUI_SETTINGS
-from tutorial import GlobalStorage
 from tutorial.control import ContentQuery
 from tutorial.control.battle.context import TRAINING_RESULT_KEY
 from tutorial.control.battle.context import TRAINING_FINISH_REASON_KEY
-from tutorial.control.context import GLOBAL_VAR, GLOBAL_FLAG
+from tutorial.control.context import GLOBAL_VAR, GLOBAL_FLAG, GlobalStorage
 from tutorial.control.offbattle.context import OffBattleClientCtx
-from tutorial.control.offbattle.context import _getBattleDescriptor
+from tutorial.control.offbattle.context import getBattleDescriptor
 from tutorial.settings import PLAYER_XP_LEVEL, TUTORIAL_AVG_SESSION_TIME
 from helpers import i18n
 
@@ -16,7 +14,7 @@ class GreetingContent(ContentQuery):
 
     def invoke(self, content, _):
         result = []
-        descriptor = _getBattleDescriptor()
+        descriptor = getBattleDescriptor()
         if descriptor is None:
             return
         else:
@@ -27,7 +25,7 @@ class GreetingContent(ContentQuery):
                      'received': chapter.isBonusReceived(completed)})
 
             content['bonuses'] = result
-            content['timeNoteValue'] = content['timeNoteValue'].format(i18n.makeString('#battle_tutorial:labels/minutes', minutes=str(TUTORIAL_AVG_SESSION_TIME)))
+            content['timeNoteValue'] = content['timeNoteValue'].format(i18n.makeString('#battle_tutorial:labels/minutes', units=str(TUTORIAL_AVG_SESSION_TIME)))
             return
 
 
@@ -40,9 +38,9 @@ class TutorialQueueText(ContentQuery):
         if inMin < pointcuts[0]:
             minString = i18n.makeString('#battle_tutorial:labels/less_n_minutes', minutes=str(pointcuts[0]))
         else:
-            filtered = filter(lambda pointcut: pointcut >= inMin, pointcuts)
-            if len(filtered):
-                minString = i18n.makeString('#battle_tutorial:labels/minutes', minutes=str(filtered[0]))
+            filtered = [ p for p in pointcuts if p >= inMin ]
+            if filtered:
+                minString = i18n.makeString('#battle_tutorial:labels/minutes', units=str(filtered[0]))
             else:
                 minString = i18n.makeString('#battle_tutorial:labels/more_n_minutes', minutes=str(pointcuts[-1]))
         content['avgTimeText'] = content['avgTimeTextFormat'].format(minString)
@@ -80,7 +78,7 @@ class BattleFinalStatistic(ContentQuery):
 
     def invoke(self, content, varID):
         localCtx = OffBattleClientCtx.fetch(self._cache)
-        descriptor = _getBattleDescriptor()
+        descriptor = getBattleDescriptor()
         if descriptor is None:
             return
         else:
@@ -135,7 +133,7 @@ class BattleResultMessage(ContentQuery):
         received = self.getVar(varID, default=0)
         localCtx = OffBattleClientCtx.fetch(self._cache)
         self._lastHistoryID = localCtx.arenaUniqueID
-        descriptor = _getBattleDescriptor()
+        descriptor = getBattleDescriptor()
         if descriptor is None:
             return
         else:
@@ -146,12 +144,3 @@ class BattleResultMessage(ContentQuery):
             content['chapters'] = _getChaptersResults(descriptor, localCtx, received)
             content['areAllBonusesReceived'] = descriptor.areAllBonusesReceived(self._bonuses.getCompleted())
             return
-
-
-class VideoContent(ContentQuery):
-
-    def invoke(self, content, varID):
-        volume = SoundGroups.g_instance.getMasterVolume()
-        content['soundValue'] = volume * 100
-        content['subtitleTrack'] = GUI_SETTINGS.video.subtitleTrack
-        content['audioTrack'] = GUI_SETTINGS.video.audioTrack

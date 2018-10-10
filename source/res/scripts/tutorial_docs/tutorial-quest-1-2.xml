@@ -1,0 +1,51 @@
+<tutorial-quest-1-2.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	DefaultScene	</initial-scene>
+  <scenes>
+    <scene>	DefaultScene	  <post-effects>
+        <run-trigger>	FightBtnDisableTrigger	</run-trigger>
+        <run-trigger>	InSandBoxOrRandomPreQueueTrigger	</run-trigger>
+      </post-effects>
+      <runtime-effects>
+        <next-chapter>
+          <condition>
+            <bonus-received>	ChapterVar	</bonus-received>
+          </condition>
+        </next-chapter>
+        <activate>	ShowBattleButtonHint	  <condition>
+            <global-inactive>	BattleButtonHintCooldown	</global-inactive>
+            <active>	BattleButtonOnScene	</active>
+            <bonus-not-received>	TutorialQuest_2	</bonus-not-received>
+            <inactive>	IsInQueue	</inactive>
+            <inactive>	LobbyMenuOnScene	</inactive>
+            <inactive>	FightBtnDisabled	</inactive>
+            <active>	InSandboxOrRandom	</active>
+          </condition>
+        </activate>
+        <show-hint>	BattleButtonHint	  <condition>
+            <active>	ShowBattleButtonHint	</active>
+          </condition>
+        </show-hint>
+        <run-trigger>	FightBtnLoopTrigger	  <condition>
+            <either>
+              <global-active>	BattleButtonHintCooldown	</global-active>
+              <active>	ShowBattleButtonHint	</active>
+            </either>
+          </condition>
+        </run-trigger>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	FightButton	  <on-scene-effects>
+            <activate>	BattleButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	BattleButtonOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+  </scenes>
+  <has-id></has-id>
+  <triggers></triggers>
+  <vars></vars>
+</tutorial-quest-1-2.xml>

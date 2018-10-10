@@ -1,22 +1,109 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/connection.py
 import random
 import BigWorld
 from constants import TOKEN_TYPE
-from ConnectionManager import connectionManager
 from adisp import process
-from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
-from gui.shared.utils.requesters.token_rq import TokenRequester, TokenResponse
+from gui.shared.utils import backoff, getPlayerDatabaseID
+from gui.shared.utils.requesters import TokenRequester, TokenResponse
+from helpers import dependency
 from messenger import g_settings
-from messenger.ext.player_helpers import getPlayerDatabaseID
-from messenger.m_constants import MESSENGER_SCOPE
-from messenger.proto.xmpp.gloox_wrapper import GLOOX_EVENT, DISCONNECT_REASON
-from messenger.proto.xmpp.gloox_wrapper import PRESENCE, ClientEventsHandler
-_MAX_RECONNECT_TRIES = 8
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto.events import g_messengerEvents
+from messenger.proto.xmpp.gloox_constants import DISCONNECT_REASON, CONNECTION_IMPL_TYPE, GLOOX_EVENT
+from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler
+from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
+from messenger.proto.xmpp.logger import sendEventToServer, XMPP_EVENT_LOG
+from skeletons.connection_mgr import IConnectionManager
+_BACK_OFF_MIN_DELAY = 10
+_BACK_OFF_MAX_DELAY = 5120
+_BACK_OFF_MODIFIER = 10
+_BACK_OFF_MOD_RANDOM_FACTOR = 2
+_BACK_OFF_EXP_RANDOM_FACTOR = 1
+_BACK_OFF_MIN_RANDOM = 20
+_BACK_OFF_MAX_RANDOM = 30
 _MAX_REQ_TOKEN_TRIES = 4
+_NUMBER_OF_ITEMS_IN_SAMPLE = 2
 
-def getNextBackOff(tries, maxTries):
-    delay = (1 << min(tries, maxTries)) * 10
-    return delay + random.randint(0, delay)
+def _makeSample(*args):
+    queue = []
+    for seq in args:
+        count = min(len(seq), _NUMBER_OF_ITEMS_IN_SAMPLE)
+        queue.extend(random.sample(seq, count))
+
+    return queue
+
+
+class ConnectionsIterator(object):
+
+    def __init__(self, base=None, alt=None, bosh=None):
+        super(ConnectionsIterator, self).__init__()
+        self.__tcp = _makeSample(base or [], alt or [])
+        self.__bosh = _makeSample(bosh or [])
+
+    def __iter__(self):
+        return self
+
+    def clear(self):
+        self.__tcp = []
+        self.__bosh = []
+
+    def hasNext(self):
+        return self.__tcp or self.__bosh
+
+    def next(self):
+        if self.__tcp:
+            cType = CONNECTION_IMPL_TYPE.TCP
+            host, port = self.__tcp.pop(0)
+        elif self.__bosh:
+            cType = CONNECTION_IMPL_TYPE.BOSH
+            host, port = self.__bosh.pop(0)
+        else:
+            raise StopIteration
+        return (cType, host, port)
+
+
+class ConnectionsInfo(object):
+
+    def __init__(self):
+        super(ConnectionsInfo, self).__init__()
+        self.__iterator = None
+        self.__backOff = None
+        self.__address = ('', -1)
+        return
+
+    def init(self):
+        self.__iterator = g_settings.server.XMPP.getConnectionsIterator()
+        self.__backOff = backoff.RandomBackoff(minTime=_BACK_OFF_MIN_RANDOM, maxTime=_BACK_OFF_MAX_RANDOM)
+
+    def clear(self):
+        if self.__backOff:
+            self.__backOff.reset()
+        if self.__iterator:
+            self.__iterator.clear()
+
+    def getPlayerFullJID(self):
+        return g_settings.server.XMPP.getFullJID(getPlayerDatabaseID())
+
+    def getNextConnection(self):
+        if not self.__iterator.hasNext():
+            self.__iterator = g_settings.server.XMPP.getConnectionsIterator()
+            if isinstance(self.__backOff, backoff.RandomBackoff):
+                backOff = backoff.ModBackoff(_BACK_OFF_MIN_DELAY, _BACK_OFF_MAX_DELAY, _BACK_OFF_MODIFIER, _BACK_OFF_MOD_RANDOM_FACTOR)
+                backOff.shift(self.__backOff.getTries())
+                self.__backOff = backOff
+        cType, host, port = self.__iterator.next()
+        self.__address = (host, port)
+        return (cType, host, port)
+
+    def getNextDelay(self):
+        return self.__backOff.next()
+
+    def getTries(self):
+        return self.__backOff.getTries()
+
+    def getLastAddress(self):
+        return self.__address
 
 
 class ChatTokenResponse(TokenResponse):
@@ -26,39 +113,42 @@ class ChatTokenResponse(TokenResponse):
 
 
 class ConnectionHandler(ClientEventsHandler):
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         super(ConnectionHandler, self).__init__()
         self.__tokenRequester = TokenRequester(TOKEN_TYPE.XMPPCS, ChatTokenResponse, False)
         self.__reconnectCallbackID = None
         self.__reqTokenCallbackID = None
-        self.__reconnectCount = 0
-        self.__reqTokenCount = 0
+        self.__connectionsInfo = ConnectionsInfo()
+        self.__reqTokenBackOff = backoff.ExpBackoff(self.__tokenRequester.getReqCoolDown(), _BACK_OFF_MAX_DELAY, _BACK_OFF_MODIFIER, _BACK_OFF_EXP_RANDOM_FACTOR)
         return
 
     def connect(self):
         if self.__reconnectCallbackID is None:
+            self.__connectionsInfo.init()
             self.__doConnect()
         else:
-            LOG_DEBUG('Connection already is processing')
+            g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Connection already is processing')
         return
 
     def disconnect(self):
         client = self.client()
         if client:
+            g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Sends request to disconnect and removes all listeners')
             client.disconnect()
         self.clear()
 
     def clear(self):
-        self.__reconnectCount = 0
-        self.__reqTokenCount = 0
+        self.__connectionsInfo.clear()
+        self.__reqTokenBackOff.reset()
         self.__cancelReconnectCallback()
         self.__cancelReqTokenCallback()
         self.__tokenRequester.clear()
         g_settings.server.XMPP.clear()
 
     def isInGameServer(self):
-        return connectionManager.isConnected()
+        return self.connectionMgr.isConnected()
 
     def registerHandlers(self):
         client = self.client()
@@ -75,14 +165,20 @@ class ConnectionHandler(ClientEventsHandler):
     def __doConnect(self):
         client = self.client()
         if not client.isDisconnected():
-            LOG_WARNING('Client already is connected(ing)', client.getConnectionAddress(), client.getConnectionState())
+            g_logOutput.warning(CLIENT_LOG_AREA.CONNECTION, 'Client already is connected(ing)', client.getConnectionAddress(), client.getConnectionState())
             return
-        jid, host, port = g_settings.server.XMPP.getConnection(getPlayerDatabaseID())
+        jid = self.__connectionsInfo.getPlayerFullJID()
         if jid:
-            LOG_DEBUG('XMPPClient:Connection. Connect to XMPP sever', jid, host, port)
-            client.connect(str(jid), host, port)
+            cType, host, port = self.__connectionsInfo.getNextConnection()
+            g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Connect to XMPP sever', jid, host, port)
+            if cType == CONNECTION_IMPL_TYPE.TCP:
+                client.connect(str(jid), host, port)
+            elif cType == CONNECTION_IMPL_TYPE.BOSH:
+                client.connectBosh(str(jid), host, port, '/bosh/')
+            else:
+                g_logOutput.error(CLIENT_LOG_AREA.CONNECTION, 'This type of connection is not supported', cType)
         else:
-            LOG_ERROR('JID is empty')
+            g_logOutput.error(CLIENT_LOG_AREA.CONNECTION, 'JID is empty')
 
     def __doNextConnect(self):
         self.__reconnectCallbackID = None
@@ -93,22 +189,23 @@ class ConnectionHandler(ClientEventsHandler):
     def __doLogin(self):
         client = self.client()
         if not client.isConnecting():
-            LOG_WARNING('Client is not connecting', client.getConnectionAddress(), client.getConnectionState())
+            g_logOutput.warning(CLIENT_LOG_AREA.LOGIN, 'Client is not connecting', client.getConnectionAddress(), client.getConnectionState())
             yield lambda callback: callback(None)
             return
-        LOG_DEBUG('XMPPClient:Token. Sends request to SPA')
+        g_logOutput.debug(CLIENT_LOG_AREA.TOKEN, 'Sends request to SPA')
         response = yield self.__tokenRequester.request()
+        g_logOutput.debug(CLIENT_LOG_AREA.TOKEN, 'Response is received from SPA', response)
         if not response:
-            LOG_ERROR('Received chat token is empty')
+            g_logOutput.error(CLIENT_LOG_AREA.TOKEN, 'Received chat token is empty')
             return
         if response.isValid():
             if response.getDatabaseID() == getPlayerDatabaseID():
-                LOG_DEBUG('XMPPClient:Connection. Login to XMPP sever')
-                self.client().login(response.getCredential())
+                g_logOutput.debug(CLIENT_LOG_AREA.LOGIN, 'Login to XMPP sever')
+                client.login(response.getCredential())
             else:
-                LOG_ERROR("Player's database ID mismatch", response, getPlayerDatabaseID())
+                g_logOutput.error(CLIENT_LOG_AREA.LOGIN, "Player's database ID mismatch", getPlayerDatabaseID())
         else:
-            LOG_WARNING('Received chat token is not valid', response)
+            g_logOutput.warning(CLIENT_LOG_AREA.TOKEN, 'Received chat token is not valid', response)
             self.__handleTokenError()
 
     def __doNextLogin(self):
@@ -128,70 +225,51 @@ class ConnectionHandler(ClientEventsHandler):
             self.__reqTokenCallbackID = None
         return
 
+    def __invokeConnectFailedEvent(self, tries):
+        host, port = self.__connectionsInfo.getLastAddress()
+        g_messengerEvents.onPluginConnectFailed(PROTO_TYPE.XMPP, (host, port), tries)
+
     def __handleConnect(self):
-        LOG_DEBUG('XMPPClient::onConnect')
+        g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Client is connected')
         self.__cancelReconnectCallback()
-        self.__reconnectCount = 0
-        self.__reqTokenCount = 0
-        g_settings.server.XMPP.clearConnections()
+        self.__reqTokenBackOff.reset()
         self.__doLogin()
 
     def __handleLogin(self):
-        LOG_DEBUG('XMPPClient::onLogin')
-        self.__reqTokenCount = 0
+        g_logOutput.debug(CLIENT_LOG_AREA.LOGIN, 'Client is login')
+        self.__connectionsInfo.clear()
+        self.__reqTokenBackOff.reset()
+        g_messengerEvents.onPluginConnected(PROTO_TYPE.XMPP)
 
     def __handleDisconnect(self, reason, description):
-        LOG_DEBUG('XMPPClient::onDisconnect', reason, description)
+        g_messengerEvents.onPluginDisconnected(PROTO_TYPE.XMPP)
+        client = self.client()
+        if not client:
+            return
+        g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Client is disconnected')
         self.__cancelReconnectCallback()
         self.__cancelReqTokenCallback()
         if reason == DISCONNECT_REASON.AUTHENTICATION:
             self.__tokenRequester.clear()
         if self.isInGameServer() and reason != DISCONNECT_REASON.BY_REQUEST:
-            delay = getNextBackOff(self.__reconnectCount, _MAX_RECONNECT_TRIES)
-            self.__reconnectCount += 1
+            delay = self.__connectionsInfo.getNextDelay()
             self.__reconnectCallbackID = BigWorld.callback(delay, self.__doNextConnect)
-            LOG_DEBUG('XMPPClient::onDisconnect. Will try to reconnect after {0} seconds'.format(delay), description)
+            g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Will try to reconnect after {0} seconds'.format(delay), description)
+            host, port = self.__connectionsInfo.getLastAddress()
+            tries = self.__connectionsInfo.getTries()
+            self.__invokeConnectFailedEvent(tries)
+            sendEventToServer(XMPP_EVENT_LOG.DISCONNECT, host, port, reason, description, tries)
 
     def __handleTokenError(self):
-        if self.__reqTokenCount < _MAX_REQ_TOKEN_TRIES:
-            delay = max(getNextBackOff(self.__reqTokenCount, _MAX_REQ_TOKEN_TRIES), self.__tokenRequester.getReqCoolDown())
-            self.__reqTokenCount += 1
+        client = self.client()
+        if not client:
+            return
+        tries = self.__reqTokenBackOff.getTries()
+        if tries < _MAX_REQ_TOKEN_TRIES:
+            delay = self.__reqTokenBackOff.next()
             self.__reqTokenCallbackID = BigWorld.callback(delay, self.__doNextLogin)
-            LOG_DEBUG('XMPPClient::Token. Will try to request token after {0} seconds'.format(delay))
+            g_logOutput.debug(CLIENT_LOG_AREA.TOKEN, 'Will try to request token after {0} seconds'.format(delay))
+            self.__invokeConnectFailedEvent(tries)
         else:
             self.client().disconnect()
             self.__handleDisconnect(DISCONNECT_REASON.OTHER_ERROR, 'Received chat token is not valid')
-
-
-class PresenceHandler(ClientEventsHandler):
-
-    def __init__(self):
-        super(PresenceHandler, self).__init__()
-        self.clear()
-
-    def update(self, scope = None):
-        if scope:
-            self.__scope = scope
-        client = self.client()
-        if not client or not client.isConnected():
-            return
-        presence = PRESENCE.UNAVAILABLE
-        if self.__scope is MESSENGER_SCOPE.BATTLE:
-            presence = PRESENCE.DND
-        elif self.__scope == MESSENGER_SCOPE.LOBBY:
-            presence = PRESENCE.AVAILABLE
-        if client.getClientPresence() != presence:
-            client.setClientPresence(presence)
-
-    def clear(self):
-        self.__scope = None
-        return
-
-    def registerHandlers(self):
-        self.client().registerHandler(GLOOX_EVENT.LOGIN, self.__handleLogin)
-
-    def unregisterHandlers(self):
-        self.client().unregisterHandler(GLOOX_EVENT.LOGIN, self.__handleLogin)
-
-    def __handleLogin(self):
-        self.update()

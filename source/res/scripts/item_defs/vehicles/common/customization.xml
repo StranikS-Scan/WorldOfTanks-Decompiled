@@ -1,0 +1,197 @@
+<customization.xml>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <armorColor>	15 36 36 0	</armorColor>
+  <inscriptionColors>
+    <c0>	0 0 0 4	</c0>
+    <c1>	0 0 0 5	</c1>
+    <c2>	0 0 0 6	</c2>
+    <c3>	0 0 0 0	</c3>
+    <c4>	0 0 0 0	</c4>
+    <c5>	0 0 0 0	</c5>
+    <c6>	0 0 0 0	</c6>
+    <c7>	0 0 0 0	</c7>
+    <c8>	0 0 0 0	</c8>
+    <c9>	0 0 0 0	</c9>
+    <c10>	0 0 0 0	</c10>
+    <c11>	0 0 0 0	</c11>
+    <c12>	0 0 0 0	</c12>
+    <c13>	0 0 0 0	</c13>
+    <c14>	0 0 0 0	</c14>
+    <c15>	0 0 0 0	</c15>
+  </inscriptionColors>
+  <inscriptions>
+    <IGR>
+      <userString>	#vehicle_customization:inscription/IGR	</userString>
+      <priceFactor>	0.0	</priceFactor>
+      <igrType>	2	</igrType>
+      <inscriptions>
+        <inscription>
+          <id>	5001	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/IGR/inscription_01.dds	</texName>
+          <userString>	#vehicle_customization:inscription/IGR/victory	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	5002	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/IGR/inscription_02.dds	</texName>
+          <userString>	#vehicle_customization:inscription/IGR/life	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	5003	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/IGR/inscription_03.dds	</texName>
+          <userString>	#vehicle_customization:inscription/IGR/kill	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	5004	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/IGR/inscription_04.dds	</texName>
+          <userString>	#vehicle_customization:inscription/IGR/marine	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	5005	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/IGR/inscription_05.dds	</texName>
+          <userString>	#vehicle_customization:inscription/IGR/win	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	5006	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/IGR/inscription_06.dds	</texName>
+          <userString>	#vehicle_customization:inscription/IGR/charge	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	5007	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/IGR/inscription_07.dds	</texName>
+          <userString>	#vehicle_customization:inscription/IGR/loyalty	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	5008	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/IGR/inscription_08.dds	</texName>
+          <userString>	#vehicle_customization:inscription/IGR/forward	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	5009	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/IGR/inscription_09.dds	</texName>
+          <userString>	#vehicle_customization:inscription/IGR/unity	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	5010	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/IGR/inscription_10.dds	</texName>
+          <userString>	#vehicle_customization:inscription/IGR/tanks	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </IGR>
+    <FIRST>
+      <userString>	#vehicle_customization:inscription/markIevent	</userString>
+      <notInShop>	true	</notInShop>
+      <priceFactor>	1.0	</priceFactor>
+      <inscriptions>
+        <inscription>
+          <id>	6001	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_60.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/mark	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	6002	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_61.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/now_is_the_time	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	6003	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_62.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/iron_duke	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	6004	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_63.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/the_first_tank	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </FIRST>
+    <GF2017>
+      <userString>	#vehicle_customization:inscription/special	</userString>
+      <notInShop>	true	</notInShop>
+      <priceFactor>	0.0	</priceFactor>
+      <inscriptions>
+        <inscription>
+          <id>	7090	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_90.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_90	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </GF2017>
+    <SABATON>
+      <userString>	#vehicle_customization:inscription/special	</userString>
+      <notInShop>	true	</notInShop>
+      <priceFactor>	0.0	</priceFactor>
+      <inscriptions>
+        <inscription>
+          <id>	7100	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_100.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_100	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	7101	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_101.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_101	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	7102	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_102.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_102	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </SABATON>
+    <WGFEST2017>
+      <userString>	#vehicle_customization:inscription/special	</userString>
+      <notInShop>	true	</notInShop>
+      <priceFactor>	0.0	</priceFactor>
+      <inscriptions>
+        <inscription>
+          <id>	7130	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_130.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_130	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	7131	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_131.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_131	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </WGFEST2017>
+  </inscriptions>
+  <insigniaOnGun>
+    <insignia>
+      <id>	1	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_ussr_1.dds	</texName>
+    </insignia>
+  </insigniaOnGun>
+  <camouflageGroups></camouflageGroups>
+  <camouflages></camouflages>
+</customization.xml>

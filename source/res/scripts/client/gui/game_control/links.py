@@ -1,176 +1,57 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/links.py
-import base64
 import re
-from urllib import quote_plus
-import BigWorld
-from ConnectionManager import connectionManager
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
-from gui import GUI_SETTINGS
-from gui.shared import g_eventBus
-from gui.shared.events import OpenLinkEvent
-from helpers import getClientLanguage
+from gui import macroses
+from debug_utils import LOG_ERROR
+from adisp import process, async
 
 class URLMarcos(object):
+    __MACROS_PREFIX = '$'
 
     def __init__(self):
         super(URLMarcos, self).__init__()
-        self.__macros = {'LANGUAGE_CODE': 'getLanguageCode',
-         'AREA_ID': 'getAreaID',
-         'ENCODED_LOGIN': 'getEncodedLogin',
-         'QUOTED_LOGIN': 'getQuotedLogin',
-         'TARGET_URL': 'getTargetURL'}
-        filter = '\\$(' + reduce(lambda x, y: x + '|' + y, self.__macros.iterkeys()) + ')'
-        self.__filter = re.compile(filter)
-        self.__targetURL = ''
+        self.__asyncMacroses = macroses.getAsyncMacroses()
+        self.__syncMacroses = macroses.getSyncMacroses()
+        macrosKeys = self.__syncMacroses.keys()
+        macrosKeys.extend(self.__asyncMacroses.keys())
+        patterns = []
+        for macro in macrosKeys:
+            patterns.append('\\%(macro)s\\(.*\\)|\\%(macro)s' % {'macro': self._getUserMacrosName(macro)})
+
+        self.__filter = re.compile('|'.join(patterns))
+        self.__argsFilter = re.compile('\\$(\\w*)(\\((.*)\\))?')
 
     def clear(self):
-        self.__macros.clear()
+        self.__asyncMacroses = None
+        self.__syncMacroses = None
+        self.__argsFilter = None
         self.__filter = None
         return
 
     def hasMarcos(self, url):
         return len(self.__filter.findall(url)) > 0
 
-    def parse(self, url):
-        return self.__filter.sub(self._replace, url)
+    @async
+    @process
+    def parse(self, url, params=None, callback=lambda *args: None):
+        for macros in self.__filter.findall(url):
+            macroName, _, args = self.__argsFilter.match(macros).groups()
+            replacement = yield self._replace(macroName, args, params)
+            url = url.replace(macros, replacement)
 
-    def getLanguageCode(self):
-        code = getClientLanguage()
-        return code.replace('_', '-')
+        callback(url)
 
-    def getAreaID(self):
-        areaID = connectionManager.areaID
-        if areaID:
-            result = str(areaID)
-        else:
-            result = 'errorArea'
-        return result
-
-    def getEncodedLogin(self):
-        login = connectionManager.loginName
-        if login:
-            result = login
-        else:
-            result = 'errorLogin'
-        return base64.b64encode(result)
-
-    def getQuotedLogin(self):
-        login = connectionManager.lastLoginName
-        if login:
-            result = quote_plus(login)
-        else:
-            result = ''
-        return result
-
-    def getTargetURL(self):
-        result = self.__targetURL
-        if self.__targetURL:
-            result = quote_plus(self.__targetURL)
-        return result
-
-    def setTargetURL(self, targetURL):
-        self.__targetURL = targetURL
-
-    def _replace(self, match):
-        macros = match.group(1)
+    @async
+    @process
+    def _replace(self, macros, args, params, callback):
         result = ''
-        if macros in self.__macros.keys():
-            getter = self.__macros[macros]
-            result = getattr(self, getter)()
+        if macros in self.__asyncMacroses:
+            result = yield self.__asyncMacroses[macros](self, args, params)
+        elif macros in self.__syncMacroses:
+            result = self.__syncMacroses[macros](args)
         else:
-            LOG_ERROR('URL marcos is not found', macros)
-        return result
+            LOG_ERROR('URL macros is not found', macros)
+        callback(result)
 
-
-_LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
- OpenLinkEvent.REGISTRATION: '_handleOpenRegistrationURL',
- OpenLinkEvent.RECOVERY_PASSWORD: '_handleOpenRecoveryPasswordURL',
- OpenLinkEvent.PAYMENT: '_handleOpenPaymentURL',
- OpenLinkEvent.SECURITY_SETTINGS: '_handleSecuritySettingsURL',
- OpenLinkEvent.SUPPORT: '_handleSupportURL',
- OpenLinkEvent.MIGRATION: '_handleMigrationURL',
- OpenLinkEvent.FORT_DESC: '_handleFortDescription',
- OpenLinkEvent.CLAN_SEARCH: '_handleClanSearch',
- OpenLinkEvent.CLAN_CREATE: '_handleClanCreate'}
-
-class ExternalLinksHandler(object):
-
-    def __init__(self):
-        super(ExternalLinksHandler, self).__init__()
-        self.__urlMarcos = None
-        return
-
-    def init(self):
-        self.__urlMarcos = URLMarcos()
-        addListener = g_eventBus.addListener
-        for eventType, handlerName in _LISTENERS.iteritems():
-            handler = getattr(self, handlerName, None)
-            if not handler:
-                LOG_ERROR('Handler is not found', eventType, handlerName)
-                continue
-            if not callable(handler):
-                LOG_ERROR('Handler is invalid', eventType, handlerName, handler)
-                continue
-            addListener(eventType, handler)
-
-        return
-
-    def fini(self):
-        if self.__urlMarcos is not None:
-            self.__urlMarcos.clear()
-            self.__urlMarcos = None
-        removeListener = g_eventBus.removeListener
-        for eventType, handlerName in _LISTENERS.iteritems():
-            handler = getattr(self, handlerName, None)
-            if handler:
-                removeListener(eventType, handler)
-
-        return
-
-    def open(self, url):
-        if not url:
-            LOG_ERROR('URL is empty', url)
-            return
-        try:
-            BigWorld.wg_openWebBrowser(url)
-        except Exception:
-            LOG_ERROR('There is error while opening web browser at page:', url)
-            LOG_CURRENT_EXCEPTION()
-
-    def getURL(self, name):
-        urlSettings = GUI_SETTINGS.lookup(name)
-        if urlSettings:
-            url = self.__urlMarcos.parse(str(urlSettings))
-        else:
-            url = ''
-        return url
-
-    def _handleSpecifiedURL(self, event):
-        self.open(event.url)
-
-    def _handleOpenRegistrationURL(self, _):
-        self.open(self.getURL('registrationURL'))
-
-    def _handleOpenRecoveryPasswordURL(self, _):
-        self.open(self.getURL('recoveryPswdURL'))
-
-    def _handleOpenPaymentURL(self, _):
-        self.open(self.getURL('paymentURL'))
-
-    def _handleSecuritySettingsURL(self, _):
-        self.open(self.getURL('securitySettingsURL'))
-
-    def _handleSupportURL(self, _):
-        self.open(self.getURL('supportURL'))
-
-    def _handleMigrationURL(self):
-        self.open(self.getURL('migrationURL'))
-
-    def _handleFortDescription(self, _):
-        self.open(self.getURL('fortDescription'))
-
-    def _handleClanSearch(self, _):
-        self.open(self.getURL('clanSearch'))
-
-    def _handleClanCreate(self, _):
-        self.open(self.getURL('clanCreate'))
+    def _getUserMacrosName(self, macros):
+        return '%s%s' % (self.__MACROS_PREFIX, str(macros))

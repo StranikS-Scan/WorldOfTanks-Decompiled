@@ -1,0 +1,133 @@
+<quests-shared-vars.xml>
+  <vars>
+    <var-set>	PveChainShownVar	  <asDict>
+        <key>
+          <asString>	PveTriggerShown	</asString>
+        </key>
+        <value>
+          <asBool>	True	</asBool>
+        </value>
+      </asDict>
+    </var-set>
+    <var-set>	DefaultQueue	  <asDict>
+        <key>
+          <asString>	defaultQueue	</asString>
+        </key>
+        <value>
+          <asInt>	4	</asInt>
+        </value>
+      </asDict>
+    </var-set>
+    <var-set>	ResearchVar	  <asString>	research	</asString>
+    </var-set>
+    <var-set>	ResearchTreeVar	  <asString>	researchTree	</asString>
+    </var-set>
+    <var-set>	PersonalCaseVar	  <asString>	personalCase	</asString>
+    </var-set>
+    <var-set>	TechnicalMaintenanceVar	  <asString>	technicalMaintenance	</asString>
+    </var-set>
+    <var-set>	BattleTutorialSettingVar	  <asString>	BATTLE_V2	</asString>
+    </var-set>
+    <var-set>	CustomizationVar	  <asString>	customization	</asString>
+    </var-set>
+    <var-set>	MedKitUsedVar	  <asString>	medKitUsed	</asString>
+    </var-set>
+    <var-set>	RepairKitUsedVar	  <asString>	repairKitUsed	</asString>
+    </var-set>
+    <var-set>	FireExtinguisherUsedVar	  <asString>	fireExtinguisherUsed	</asString>
+    </var-set>
+    <var-set>	FightBtnTimer	  <asInt>	900	</asInt>
+    </var-set>
+    <var-set>	TankmanCostIndex	  <asInt>	2	</asInt>
+    </var-set>
+    <var-set>	Chapter1Var	  <asString>	TutorialQuest_1	</asString>
+    </var-set>
+    <var-set>	Chapter2Var	  <asString>	TutorialQuest_2	</asString>
+    </var-set>
+    <var-set>	Chapter3Var	  <asString>	TutorialQuest_3	</asString>
+    </var-set>
+    <var-set>	Chapter4Var	  <asString>	TutorialQuest_4	</asString>
+    </var-set>
+    <var-set>	Chapter5Var	  <asString>	TutorialQuest_5	</asString>
+    </var-set>
+    <var-set>	Chapter6Var	  <asString>	TutorialQuest_6	</asString>
+    </var-set>
+    <var-set>	Chapter7Var	  <asString>	TutorialQuest_7	</asString>
+    </var-set>
+    <var-set>	Chapter8Var	  <asString>	TutorialQuest_8	</asString>
+    </var-set>
+    <var-set>	Chapter9Var	  <asString>	TutorialQuest_9	</asString>
+    </var-set>
+    <var-set>	Chapter10Var	  <asString>	TutorialQuest_10	</asString>
+    </var-set>
+    <var-set>	Chapter11Var	  <asString>	TutorialQuest_11	</asString>
+    </var-set>
+    <var-set>	Chapter12Var	  <asString>	TutorialQuest_12	</asString>
+    </var-set>
+    <var-set>	Chapter13Var	  <asString>	TutorialQuest_13	</asString>
+    </var-set>
+    <var-set>	Chapter14Var	  <asString>	TutorialQuest_14	</asString>
+    </var-set>
+    <var-set>	Level2Var	  <asInt>	2	</asInt>
+    </var-set>
+    <var-set>	Level3Var	  <asInt>	3	</asInt>
+    </var-set>
+    <var-set>	Level4Var	  <asInt>	4	</asInt>
+    </var-set>
+    <var-set>	VehicleConditionVar	  <asDict>
+        <vehicle>	&gt;	  <asInt>	54529	</asInt>
+        </vehicle>
+        <battlesCount>
+          <asInt>	5	</asInt>
+        </battlesCount>
+      </asDict>
+    </var-set>
+    <var-set>	MedKitsConditionVar	  <asDict>
+        <itemType>	&gt;	  <asString>	equipment	</asString>
+        </itemType>
+        <items>
+          <asList>
+            <asInt>	1019	</asInt>
+            <asInt>	763	</asInt>
+          </asList>
+        </items>
+      </asDict>
+    </var-set>
+    <var-set>	RepairKitsConditionVar	  <asDict>
+        <itemType>	&gt;	  <asString>	equipment	</asString>
+        </itemType>
+        <items>
+          <asList>
+            <asInt>	1531	</asInt>
+            <asInt>	1275	</asInt>
+          </asList>
+        </items>
+      </asDict>
+    </var-set>
+    <var-set>	FireExtinguishersConditionVar	  <asDict>
+        <itemType>	&gt;	  <asString>	equipment	</asString>
+        </itemType>
+        <items>
+          <asList>
+            <asInt>	507	</asInt>
+            <asInt>	251	</asInt>
+          </asList>
+        </items>
+      </asDict>
+    </var-set>
+    <var-set>	OptionalDeviceConditionVar	  <asDict>
+        <itemType>	&gt;	  <asString>	optionalDevice	</asString>
+        </itemType>
+      </asDict>
+    </var-set>
+    <var-set>	SelectedVehicleCriteria	  <asDict>
+        <levelsRange>
+          <asList>
+            <asInt>	3	</asInt>
+            <asInt>	10	</asInt>
+          </asList>
+        </levelsRange>
+      </asDict>
+    </var-set>
+  </vars>
+</quests-shared-vars.xml>

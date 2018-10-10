@@ -1,11 +1,19 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/achievement.py
 import constants
+import BigWorld
 from debug_utils import LOG_ERROR
-from dossiers2.custom.config import RECORD_CONFIGS
-from gui.shared import g_itemsCache
-from gui.shared.gui_items.dossier.achievements import _HasVehiclesList, SeriesAchievement
-from gui.shared.tooltips import ToolTipParameterField, ToolTipDataField, ToolTipData, ToolTipMethodField, ToolTipBaseData, TOOLTIP_TYPE
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.formatters.icons import makeImageTag
+from gui.shared.money import Money
+from helpers import dependency, int2roman
 from helpers.i18n import makeString
+from dossiers2.custom.config import RECORD_CONFIGS
+from dossiers2.ui.achievements import MARK_OF_MASTERY_RECORD
+from gui.shared.tooltips import ToolTipParameterField, ToolTipDataField, ToolTipData, ToolTipMethodField, ToolTipBaseData, TOOLTIP_TYPE
+from gui.shared.gui_items.dossier.achievements.abstract import achievementHasVehiclesList, isSeriesAchievement
+from skeletons.gui.shared import IItemsCache
 _ACHIEVEMENT_VEHICLES_MAX = 5
 _ACHIEVEMENT_VEHICLES_SHOW = 5
 
@@ -21,11 +29,11 @@ class AchievementParamsField(ToolTipParameterField):
             label, lvlUpValue = achievement.getNextLevelInfo()
             if label and lvlUpValue and lvlUpValue > 0:
                 result[-1].append([label, lvlUpValue])
-            if isinstance(achievement, SeriesAchievement):
+            if isSeriesAchievement(achievement):
                 record, maxSeries = achievement.getMaxSeriesInfo()
                 if record is not None and maxSeries:
                     result[-1].append([record[1], maxSeries])
-            if isinstance(achievement, _HasVehiclesList):
+            if achievementHasVehiclesList(achievement):
                 vehiclesList = achievement.getVehiclesData()
                 fullVehListLen = len(vehiclesList)
                 if fullVehListLen >= _ACHIEVEMENT_VEHICLES_MAX:
@@ -50,12 +58,11 @@ class AchievementIsInDossierField(ToolTipDataField):
     def _getValue(self):
         achievement = self._tooltip.item
         configuration = self._tooltip.context.getParamsConfiguration(achievement)
-        if not configuration.checkAchievementExistence:
-            return True
-        return achievement.isInDossier()
+        return True if not configuration.checkAchievementExistence else achievement.isInDossier()
 
 
 class AchievementRecordsField(ToolTipDataField):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def _getValue(self):
         records = {'current': None,
@@ -65,16 +72,21 @@ class AchievementRecordsField(ToolTipDataField):
         dossier = configuration.dossier
         dossierType = configuration.dossierType
         isCurrentUserDossier = configuration.isCurrentUserDossier
-        if dossier is not None and dossierType == constants.DOSSIER_TYPE.ACCOUNT and isCurrentUserDossier:
+        if achievement.getRecordName() == MARK_OF_MASTERY_RECORD:
+            if achievement.getCompDescr() is not None:
+                if achievement.getPrevMarkOfMastery() < achievement.getMarkOfMastery():
+                    records['current'] = makeString('#tooltips:achievement/newRecord')
+                records['nearest'] = [[makeString('#tooltips:achievement/recordOnVehicle', vehicleName=self.itemsCache.items.getItemByCD(int(achievement.getCompDescr())).shortUserName), max(achievement.getMarkOfMastery(), achievement.getPrevMarkOfMastery()) or achievement.MIN_LVL]]
+        elif dossier is not None and dossierType == constants.DOSSIER_TYPE.ACCOUNT and isCurrentUserDossier:
             if achievement.getType() == 'series':
                 vehicleRecords = set()
                 vehsWereInBattle = set(dossier.getTotalStats().getVehicles().keys())
                 for vehCD in vehsWereInBattle:
-                    totalStats = g_itemsCache.items.getVehicleDossier(vehCD).getTotalStats()
+                    totalStats = self.itemsCache.items.getVehicleDossier(vehCD).getTotalStats()
                     if totalStats.isAchievementInLayout(achievement.getRecordName()):
                         vehAchieve = totalStats.getAchievement(achievement.getRecordName())
                         if vehAchieve and vehAchieve.getValue():
-                            vehicle = g_itemsCache.items.getItemByCD(vehCD)
+                            vehicle = self.itemsCache.items.getItemByCD(vehCD)
                             vehicleRecords.add((vehicle.userName, vehAchieve.getValue()))
                             if vehAchieve.getValue() == achievement.getValue():
                                 records['current'] = vehicle.userName
@@ -83,15 +95,103 @@ class AchievementRecordsField(ToolTipDataField):
         return records
 
 
+class AchievementCrystalRewardField(ToolTipDataField):
+    itemsCache = dependency.descriptor(IItemsCache)
+    _rewardsLabels = None
+    _rewardsValues = None
+    _playerVehicleLevel = 0
+    _playerRangeIndex = -1
+
+    def _getValue(self):
+        self._rewardsLabels = []
+        self._rewardsValues = []
+        self._playerRangeIndex = -1
+        achievement = self._tooltip.item
+        configuration = self._tooltip.context.getParamsConfiguration(achievement)
+        arenaType = configuration.arenaType
+        rewardData = self.itemsCache.items.shop.getAchievementReward(achievement, arenaType)
+        if not rewardData:
+            return
+        else:
+            self._playerVehicleLevel = configuration.vehicleLevel
+            baseReward = Money.makeMoney(rewardData['bonus'])
+            vehLevelMultipliers = self._applyMultiplierToReward(baseReward, rewardData['vehicleMultipliers'])
+            count = len(vehLevelMultipliers) - 1
+            i = 0
+            lastMulIndex = -1
+            lastMulValue = None
+            while i <= count:
+                mulValue = vehLevelMultipliers[i]
+                if lastMulIndex == -1:
+                    lastMulIndex = i
+                    lastMulValue = mulValue
+                else:
+                    isLastIndex = i == count
+                    if lastMulValue != mulValue:
+                        self._appendRewardsRange(lastMulIndex, i - 1, vehLevelMultipliers[lastMulIndex])
+                        if isLastIndex:
+                            self._appendRewardsRange(i, i, vehLevelMultipliers[i])
+                        else:
+                            lastMulIndex = i
+                            lastMulValue = mulValue
+                    elif isLastIndex:
+                        self._appendRewardsRange(lastMulIndex, i, vehLevelMultipliers[lastMulIndex])
+                i += 1
+
+            rewardsCount = len(self._rewardsLabels)
+            if rewardsCount > 0:
+                headerValue = ''
+                if rewardsCount == 10:
+                    headerValue = self._rewardsValues[0]
+                return {'selectedIndex': self._playerRangeIndex,
+                 'header': makeString(TOOLTIPS.ACHIEVEMENT_REWARD_HEADER),
+                 'headerValue': headerValue,
+                 'labels': self._rewardsLabels,
+                 'values': self._rewardsValues}
+            return
+            return
+
+    def _applyMultiplierToReward(self, money, multipliers):
+        result = []
+        for multiplier in multipliers:
+            moneyWithMultiplier = money * multiplier
+            result.append(moneyWithMultiplier.apply(lambda v: int(round(v))))
+
+        return result
+
+    def _getRangeStr(self, currentIndex, lastIndex):
+        if currentIndex - lastIndex > 0:
+            levelsRange = '{0}-{1}'.format(int2roman(lastIndex + 1), int2roman(currentIndex + 1))
+        else:
+            levelsRange = int2roman(lastIndex + 1)
+        return levelsRange
+
+    def _appendRewardsRange(self, startIndex, endIndex, rewardValue):
+        if rewardValue:
+            levelsRangeStr = self._getRangeStr(endIndex, startIndex)
+            self._rewardsLabels.append(makeString(TOOLTIPS.ACHIEVEMENT_REWARD_TANKLEVELS, range=levelsRangeStr))
+            if self._playerVehicleLevel > 0:
+                if self._playerVehicleLevel >= startIndex + 1 and self._playerVehicleLevel <= endIndex + 1:
+                    imgId = RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTAL_16X16
+                    self._playerRangeIndex = len(self._rewardsLabels) - 1
+                else:
+                    imgId = RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTALICONINACTIVE_2
+            else:
+                imgId = RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTAL_16X16
+            rewardStr = BigWorld.wg_getIntegralFormat(rewardValue.crystal)
+            self._rewardsValues.append(rewardStr + ' ' + makeImageTag(imgId, 16, 16, -3, 0))
+
+
 class AchievementTooltipData(ToolTipData):
 
     def __init__(self, context):
         super(AchievementTooltipData, self).__init__(context, TOOLTIP_TYPE.ACHIEVEMENT)
         self.fields = (ToolTipMethodField(self, 'name', 'getUserName'),
-         ToolTipMethodField(self, 'icon', 'getBigIcon'),
+         ToolTipMethodField(self, 'icon', 'getHugeIcon'),
          ToolTipMethodField(self, 'type', 'getType'),
          ToolTipMethodField(self, 'section', 'getSection'),
          ToolTipMethodField(self, 'descr', 'getUserDescription'),
+         ToolTipMethodField(self, 'showCondSeparator', 'getShowCondSeparator'),
          ToolTipMethodField(self, 'value', 'getValue'),
          ToolTipMethodField(self, 'localizedValue', 'getI18nValue'),
          ToolTipMethodField(self, 'historyDescr', 'getUserHeroInfo'),
@@ -100,7 +200,8 @@ class AchievementTooltipData(ToolTipData):
          AchievementParamsField(self, 'params'),
          AchievementStatsField(self, 'stats'),
          AchievementIsInDossierField(self, 'isInDossier'),
-         AchievementRecordsField(self, 'records'))
+         AchievementRecordsField(self, 'records'),
+         AchievementCrystalRewardField(self, 'crystalAwards'))
 
 
 class GlobalRatingTooltipData(ToolTipBaseData):

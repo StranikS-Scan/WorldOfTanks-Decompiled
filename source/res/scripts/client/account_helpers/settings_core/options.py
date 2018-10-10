@@ -1,14 +1,17 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/options.py
 import base64
 import cPickle
-import functools
-from operator import itemgetter
+import random
 import sys
 import fractions
 import itertools
-from collections import namedtuple
 import math
 import weakref
+from collections import namedtuple
+from operator import itemgetter
+from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+import GUI
 from AvatarInputHandler.cameras import FovExtended
 import BigWorld
 import ResMgr
@@ -18,34 +21,58 @@ import VOIP
 import Settings
 import SoundGroups
 import ArenaType
-from gui.GraphicsPresets import GraphicsPresets
-from helpers import isPlayerAccount, isPlayerAvatar
+import WWISE
+from constants import CONTENT_TYPE
+from gui.Scaleform.genConsts.ACOUSTICS import ACOUSTICS
+from gui.app_loader import app_getter
+from gui.shared import event_dispatcher
+from gui.sounds.sound_constants import SPEAKERS_CONFIG
+from helpers import dependency
+from helpers import isPlayerAvatar
+from helpers.i18n import makeString
 import nations
 import CommandMapping
 from helpers import i18n
-from AvatarInputHandler import _INPUT_HANDLER_CFG, AvatarInputHandler
-from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, StrategicCamera
+from Event import Event
+from AvatarInputHandler import INPUT_HANDLER_CFG, AvatarInputHandler
+from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, StrategicCamera, ArtyCamera
 from AvatarInputHandler.control_modes import PostMortemControlMode, SniperControlMode
 from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
-from post_processing import g_postProcessing
-from MemoryCriticalController import g_critMemHandler
 from Vibroeffects import VibroManager
 from messenger import g_settings as messenger_settings
-from account_helpers.AccountSettings import AccountSettings
+from account_helpers.AccountSettings import AccountSettings, SPEAKERS_DEVICE
+from account_helpers.settings_core.settings_constants import SOUND
+from shared_utils import CONST_CONTAINER, forEach
 from gui import GUI_SETTINGS
-from gui.BattleContext import g_battleContext
-from gui.shared.utils import graphics, CONST_CONTAINER, sound, functions
+from gui.shared.utils import graphics, functions
 from gui.shared.utils.graphics import g_monitorSettings
 from gui.shared.utils.key_mapping import getScaleformKey, getBigworldKey, getBigworldNameFromKey
-from gui.Scaleform import VoiceChatInterface
-from gui.Scaleform.daapi import AppRef
-from gui.Scaleform.LogitechMonitor import LogitechMonitor
+from gui.Scaleform.locale.SETTINGS import SETTINGS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.formatters import icons
+from gui.shared.utils.functions import makeTooltip, clamp
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.web import IWebController
+from skeletons.gui.sounds import ISoundsController
+from gui import makeHtmlString
 
-class APPLY_METHOD:
+class APPLY_METHOD(object):
     NORMAL = 'normal'
     DELAYED = 'delayed'
     RESTART = 'restart'
+    NEXT_BATTLE = 'next_battle'
+
+
+def highestPriorityMethod(methods):
+    if APPLY_METHOD.RESTART in methods:
+        return APPLY_METHOD.RESTART
+    if APPLY_METHOD.DELAYED in methods:
+        return APPLY_METHOD.DELAYED
+    return APPLY_METHOD.NEXT_BATTLE if APPLY_METHOD.NEXT_BATTLE in methods else APPLY_METHOD.NORMAL
 
 
 class ISetting(object):
@@ -68,11 +95,14 @@ class ISetting(object):
     def getApplyMethod(self, value):
         return APPLY_METHOD.NORMAL
 
+    def isEqual(self, value):
+        raise NotImplementedError
+
 
 class SettingAbstract(ISetting):
     PackStruct = namedtuple('PackStruct', 'current options')
 
-    def __init__(self, isPreview = False):
+    def __init__(self, isPreview=False):
         super(SettingAbstract, self).__init__()
         self.valueReal = None
         self.isPreview = isPreview
@@ -93,6 +123,9 @@ class SettingAbstract(ISetting):
     def init(self):
         pass
 
+    def fini(self):
+        pass
+
     def getApplyMethod(self, value):
         return APPLY_METHOD.NORMAL
 
@@ -102,8 +135,10 @@ class SettingAbstract(ISetting):
     def getOptions(self):
         return self._getOptions()
 
-    def apply(self, value):
-        if value != self._get():
+    def apply(self, value, applyUnchanged=False):
+        if applyUnchanged:
+            self._set(value)
+        elif value != self._get():
             self._set(value)
         self._save(value)
         self.valueReal = None
@@ -125,10 +160,7 @@ class SettingAbstract(ISetting):
 
     def pack(self):
         options = self._getOptions()
-        if options is None:
-            return self._get()
-        else:
-            return self.PackStruct(self._get(), self._getOptions())._asdict()
+        return self._get() if options is None else self.PackStruct(self._get(), self._getOptions())._asdict()
 
     def dump(self):
         pass
@@ -141,6 +173,9 @@ class SettingAbstract(ISetting):
 
     def refresh(self):
         self.setSystemValue(self.get())
+
+    def isEqual(self, value):
+        return self.get() == value
 
 
 class SettingsContainer(ISetting):
@@ -161,68 +196,85 @@ class SettingsContainer(ISetting):
 
     def __filter(self, settings, f):
         if f is not None:
-            return filter(lambda item: item in f, settings)
+            return [ item for item in settings if item in f ]
         else:
             return settings
 
-    def getApplyMethod(self, diff = None):
+    def getApplyMethod(self, diff=None):
         settings = self.__filter(self.indices.keys(), diff.keys())
         methods = [ m for m in self.__forEach(settings, lambda n, p: p.getApplyMethod(diff[n])) ]
-        if APPLY_METHOD.RESTART in methods:
-            return APPLY_METHOD.RESTART
-        if APPLY_METHOD.DELAYED in methods:
-            return APPLY_METHOD.DELAYED
-        return APPLY_METHOD.NORMAL
+        return highestPriorityMethod(methods)
 
     def getSetting(self, name):
         if name in self.indices:
             return self.settings[self.indices[name]][1]
-        else:
-            return None
+        LOG_WARNING("Failed to get a value of setting as it's not in indices: ", name)
+        return SettingAbstract()
 
-    def get(self, names = None):
+    def get(self, names=None):
         settings = self.__filter(self.indices.keys(), names)
         return dict(self.__forEach(settings, lambda n, p: (n, p.get())))
 
-    def apply(self, values, names = None):
+    def apply(self, values, names=None):
         settings = self.__filter(values.keys(), names)
         return list(self.__forEach(settings, lambda n, p: p.apply(values[n])))
 
-    def preview(self, values, names = None):
+    def preview(self, values, names=None):
         settings = self.__filter(values.keys(), names)
         for _ in self.__forEach(settings, lambda n, p: p.preview(values[n])):
             pass
 
-    def revert(self, names = None):
+    def revert(self, names=None):
         settings = self.__filter(self.indices.keys(), names)
         for _ in self.__forEach(settings, lambda n, p: p.revert()):
             pass
 
-    def pack(self, names = None):
-        settings = self.__filter(self.indices.keys(), names)
-        return dict(self.__forEach(settings, lambda n, p: (n, p.pack())))
+    def pack(self, names=None):
+        result = {}
+        for name, param in self.settings:
+            if names is None or name in names:
+                result[name] = param.pack()
 
-    def dump(self, names = None):
+        return result
+
+    def dump(self, names=None):
         settings = self.__filter(self.indices.keys(), names)
         for _ in self.__forEach(settings, lambda n, p: p.dump()):
             pass
 
-    def init(self, names = None):
+    def init(self, names=None):
         settings = self.__filter(self.indices.keys(), names)
         for _ in self.__forEach(settings, lambda n, p: p.init()):
             pass
 
-    def refresh(self, names = None):
+    def fini(self):
+        for _, param in self.settings:
+            param.fini()
+
+        self.settings = ()
+        self.indices.clear()
+
+    def refresh(self, names=None):
         settings = self.__filter(self.indices.keys(), names)
         for _ in self.__forEach(settings, lambda n, p: p.refresh()):
             pass
 
+    def isEqual(self, values):
+        settings = self.__filter(self.indices.keys(), values.keys())
+        equality = self.__forEach(settings, lambda n, p: p.isEqual(values[n]))
+        return False not in equality
+
 
 class ReadOnlySetting(SettingAbstract):
 
-    def __init__(self, readerDelegate, isPreview = False):
+    def __init__(self, readerDelegate, isPreview=False):
         super(ReadOnlySetting, self).__init__(isPreview)
         self.readerDelegate = readerDelegate
+
+    def fini(self):
+        super(ReadOnlySetting, self).fini()
+        self.readerDelegate = None
+        return
 
     def _get(self):
         return self.readerDelegate()
@@ -231,7 +283,7 @@ class ReadOnlySetting(SettingAbstract):
 class SoundSetting(SettingAbstract):
     VOLUME_MULT = 100
 
-    def __init__(self, soundGroup, isPreview = False):
+    def __init__(self, soundGroup, isPreview=True):
         super(SoundSetting, self).__init__(isPreview)
         self.group = soundGroup
 
@@ -242,19 +294,31 @@ class SoundSetting(SettingAbstract):
         return float(volume) / self.VOLUME_MULT
 
     def _get(self):
-        if self.group == 'master':
-            return self.__toGuiVolume(SoundGroups.g_instance.getMasterVolume())
-        return self.__toGuiVolume(SoundGroups.g_instance.getVolume(self.group))
+        return self.__toGuiVolume(SoundGroups.g_instance.getMasterVolume()) if self.group == 'master' else self.__toGuiVolume(SoundGroups.g_instance.getVolume(self.group))
 
     def _set(self, value):
-        if self.group == 'master':
-            return SoundGroups.g_instance.setMasterVolume(self.__toSysVolume(value))
-        return SoundGroups.g_instance.setVolume(self.group, self.__toSysVolume(value))
+        return SoundGroups.g_instance.setMasterVolume(self.__toSysVolume(value)) if self.group == 'master' else SoundGroups.g_instance.setVolume(self.group, self.__toSysVolume(value))
+
+
+class SoundEnableSetting(SettingAbstract):
+    soundsCtrl = dependency.descriptor(ISoundsController)
+
+    def getApplyMethod(self, value):
+        return APPLY_METHOD.RESTART
+
+    def _get(self):
+        return self.soundsCtrl.isEnabled()
+
+    def _set(self, value):
+        if bool(value):
+            self.soundsCtrl.enable()
+        else:
+            self.soundsCtrl.disable()
 
 
 class VOIPMasterSoundSetting(SoundSetting):
 
-    def __init__(self, isPreview = False):
+    def __init__(self, isPreview=False):
         super(VOIPMasterSoundSetting, self).__init__('masterVivox', isPreview)
 
     def _set(self, value):
@@ -264,7 +328,7 @@ class VOIPMasterSoundSetting(SoundSetting):
 
 class VOIPMicSoundSetting(SoundSetting):
 
-    def __init__(self, isPreview = False):
+    def __init__(self, isPreview=False):
         super(VOIPMicSoundSetting, self).__init__('micVivox', isPreview)
 
     def _set(self, value):
@@ -276,7 +340,7 @@ class VibroSetting(SettingAbstract):
     GAIN_MULT = 100
     DEFAULT_GAIN = 0
 
-    def __init__(self, vibroGroup, isPreview = False):
+    def __init__(self, vibroGroup, isPreview=False):
         super(VibroSetting, self).__init__(isPreview)
         self.group = vibroGroup
 
@@ -288,20 +352,16 @@ class VibroSetting(SettingAbstract):
 
     def _get(self):
         vm = VibroManager.g_instance
-        if self.group == 'master':
-            return self.__toGuiVolume(vm.getGain())
-        return self.__toGuiVolume(vm.getGroupGain(self.group, self.DEFAULT_GAIN))
+        return self.__toGuiVolume(vm.getGain()) if self.group == 'master' else self.__toGuiVolume(vm.getGroupGain(self.group, self.DEFAULT_GAIN))
 
     def _set(self, value):
         vm = VibroManager.g_instance
-        if self.group == 'master':
-            return vm.setGain(self.__toSysVolume(value))
-        return vm.setGroupGain(self.group, self.__toSysVolume(value))
+        return vm.setGain(self.__toSysVolume(value)) if self.group == 'master' else vm.setGroupGain(self.group, self.__toSysVolume(value))
 
 
 class RegularSetting(SettingAbstract):
 
-    def __init__(self, settingName, isPreview = False):
+    def __init__(self, settingName, isPreview=False):
         super(RegularSetting, self).__init__(isPreview)
         self.settingName = settingName
         self._default = self.getDefaultValue()
@@ -309,7 +369,7 @@ class RegularSetting(SettingAbstract):
 
 class AccountSetting(SettingAbstract):
 
-    def __init__(self, key, subKey = None):
+    def __init__(self, key, subKey=None):
         self.key = key
         self.subKey = subKey
         super(AccountSetting, self).__init__(False)
@@ -318,10 +378,7 @@ class AccountSetting(SettingAbstract):
         return AccountSettings.getSettings(self.key)
 
     def _get(self):
-        if self.subKey is None:
-            return self._getSettings()
-        else:
-            return self._getSettings().get(self.subKey)
+        return self._getSettings() if self.subKey is None else self._getSettings().get(self.subKey)
 
     def _save(self, value):
         settings = value
@@ -340,7 +397,7 @@ class AccountSetting(SettingAbstract):
 
 class StorageSetting(RegularSetting):
 
-    def __init__(self, settingName, storage, isPreview = False):
+    def __init__(self, settingName, storage, isPreview=False):
         super(StorageSetting, self).__init__(settingName, isPreview)
         self._storage = weakref.proxy(storage)
 
@@ -355,28 +412,22 @@ class StorageSetting(RegularSetting):
         return result
 
 
-class DumpSetting(RegularSetting):
-
-    def getDumpValue(self):
-        return self._get()
+class StorageDumpSetting(StorageSetting):
 
     def setDumpedValue(self, value):
         BattleReplay.g_replayCtrl.setSetting(self.settingName, value)
 
     def getDumpedValue(self):
-        return BattleReplay.g_replayCtrl.getSetting(self.settingName, self._default)
+        return BattleReplay.g_replayCtrl.getSetting(self.settingName, self.getDefaultValue())
+
+    def getDumpValue(self):
+        return self._get()
 
     def dump(self):
         BattleReplay.g_replayCtrl.setSetting(self.settingName, self.getDumpValue())
 
-
-class StorageDumpSetting(StorageSetting, DumpSetting):
-
     def _get(self):
-        if BattleReplay.isPlaying():
-            return self.getDumpedValue()
-        else:
-            return super(StorageDumpSetting, self)._get()
+        return self.getDumpedValue() if BattleReplay.isPlaying() else super(StorageDumpSetting, self)._get()
 
     def _set(self, value):
         if BattleReplay.isPlaying():
@@ -384,22 +435,31 @@ class StorageDumpSetting(StorageSetting, DumpSetting):
         return super(StorageDumpSetting, self)._set(value)
 
 
-class AccountDumpSetting(AccountSetting, DumpSetting):
+class AccountDumpSetting(AccountSetting):
 
-    def __init__(self, settingName, key, subKey = None):
-        AccountSetting.__init__(self, key, subKey)
-        DumpSetting.__init__(self, settingName)
+    def __init__(self, settingName, key, subKey=None):
+        super(AccountDumpSetting, self).__init__(key, subKey)
+        self.__dumpName = settingName
+
+    def setDumpedValue(self, value):
+        BattleReplay.g_replayCtrl.setSetting(self.__dumpName, value)
+
+    def getDumpedValue(self):
+        return BattleReplay.g_replayCtrl.getSetting(self.__dumpName, self.getDefaultValue())
+
+    def getDumpValue(self):
+        return self._get()
+
+    def dump(self):
+        BattleReplay.g_replayCtrl.setSetting(self.__dumpName, self.getDumpValue())
 
     def _get(self):
-        if BattleReplay.isPlaying():
-            return self.getDumpedValue()
-        else:
-            return super(AccountDumpSetting, self)._get()
+        return self.getDumpedValue() if BattleReplay.isPlaying() else super(AccountDumpSetting, self)._get()
 
-    def _set(self, value):
+    def _save(self, value):
         if BattleReplay.isPlaying():
             self.setDumpedValue(value)
-        return super(AccountDumpSetting, self)._set(value)
+        return super(AccountDumpSetting, self)._save(value)
 
 
 class StorageAccountSetting(StorageDumpSetting):
@@ -408,9 +468,27 @@ class StorageAccountSetting(StorageDumpSetting):
         return AccountSettings.getSettingsDefault(self.settingName)
 
 
+class C11nHistoricallyAccurateSetting(StorageAccountSetting):
+
+    def getApplyMethod(self, value):
+        return APPLY_METHOD.NEXT_BATTLE
+
+
+class SettingFalseByDefault(StorageDumpSetting):
+
+    def getDefaultValue(self):
+        return False
+
+
+class TutorialSetting(StorageDumpSetting):
+
+    def getDefaultValue(self):
+        return False
+
+
 class UserPrefsSetting(SettingAbstract):
 
-    def __init__(self, sectionName = None, isPreview = False):
+    def __init__(self, sectionName=None, isPreview=False):
         super(UserPrefsSetting, self).__init__(isPreview)
         self.sectionName = sectionName
 
@@ -421,26 +499,17 @@ class UserPrefsSetting(SettingAbstract):
         return None
 
     def _get(self):
-        if self.sectionName is None:
-            return self._readValue(Settings.g_instance.userPrefs)
-        else:
-            return self._readValue(Settings.g_instance.userPrefs)
+        return self._readValue(Settings.g_instance.userPrefs)
 
     def _save(self, value):
-        if self.sectionName is None:
-            return self._writeValue(Settings.g_instance.userPrefs, value)
-        else:
-            return self._writeValue(Settings.g_instance.userPrefs, value)
+        return self._writeValue(Settings.g_instance.userPrefs, value)
 
 
 class UserPrefsBoolSetting(UserPrefsSetting):
 
     def _readValue(self, section):
         default = self.getDefaultValue()
-        if section is not None:
-            return section.readBool(self.sectionName, default)
-        else:
-            return default
+        return section.readBool(self.sectionName, default) if section is not None else default
 
     def _writeValue(self, section, value):
         if section is not None:
@@ -457,10 +526,7 @@ class UserPrefsStringSetting(UserPrefsSetting):
 
     def _readValue(self, section):
         default = self.getDefaultValue()
-        if section is not None:
-            return section.readString(self.sectionName, str(default))
-        else:
-            return default
+        return section.readString(self.sectionName, str(default)) if section is not None else default
 
     def _writeValue(self, section, value):
         if section is not None:
@@ -470,17 +536,14 @@ class UserPrefsStringSetting(UserPrefsSetting):
             return False
 
     def getDefaultValue(self):
-        return ''
+        pass
 
 
 class UserPrefsFloatSetting(UserPrefsSetting):
 
     def _readValue(self, section):
         default = self.getDefaultValue()
-        if section is not None:
-            return section.readFloat(self.sectionName, float(default))
-        else:
-            return default
+        return section.readFloat(self.sectionName, float(default)) if section is not None else default
 
     def _writeValue(self, section, value):
         if section is not None:
@@ -490,31 +553,21 @@ class UserPrefsFloatSetting(UserPrefsSetting):
             return False
 
     def getDefaultValue(self):
-        return 0.0
+        pass
 
 
 class PreferencesSetting(SettingAbstract):
 
-    def __init__(self, isPreview = False):
+    def __init__(self, isPreview=False):
         super(PreferencesSetting, self).__init__(isPreview)
-        BigWorld.wg_setSavePreferencesCallback(self._savePrefsCallback)
+        BigWorld.wg_subscribeToSavePreferences(self._savePrefsCallback)
+        BigWorld.wg_subscribeToReadPreferences(self._readPrefsCallback)
 
     def _savePrefsCallback(self, prefsRoot):
         pass
 
-
-class PostProcessingSetting(StorageDumpSetting):
-
-    def __init__(self, settingName, settingKey, storage, isPreview = False):
-        self._settingKey = settingKey
-        super(PostProcessingSetting, self).__init__(settingName, storage, isPreview)
-
-    def getDefaultValue(self):
-        return g_postProcessing.getSetting(self._settingKey)
-
-    def setSystemValue(self, value):
-        g_postProcessing.setSetting(self._settingKey, value)
-        g_postProcessing.refresh()
+    def _readPrefsCallback(self, key, value):
+        pass
 
 
 class PostMortemDelaySetting(StorageDumpSetting):
@@ -528,7 +581,7 @@ class PostMortemDelaySetting(StorageDumpSetting):
 
 class PlayersPanelSetting(StorageDumpSetting):
 
-    def __init__(self, settingName, key, subKey, storage, isPreview = False):
+    def __init__(self, settingName, key, subKey, storage, isPreview=False):
         self._settingKey = key
         self._settingSubKey = subKey
         super(PlayersPanelSetting, self).__init__(settingName, storage, isPreview)
@@ -537,10 +590,17 @@ class PlayersPanelSetting(StorageDumpSetting):
         return AccountSettings.getSettingsDefault(self._settingKey).get(self._settingSubKey)
 
 
-class VOIPSetting(UserPrefsBoolSetting):
+class VOIPSetting(AccountSetting):
 
-    def __init__(self, isPreview = False):
-        super(VOIPSetting, self).__init__(Settings.KEY_ENABLE_VOIP, isPreview)
+    def __init__(self, isPreview=False):
+        super(VOIPSetting, self).__init__('enableVoIP')
+        self.isPreview = isPreview
+
+    def initFromPref(self):
+        self._set(super(VOIPSetting, self)._get())
+
+    def _get(self):
+        return VOIP.getVOIPManager().isEnabled()
 
     def _set(self, isEnable):
         if isEnable is None:
@@ -549,16 +609,13 @@ class VOIPSetting(UserPrefsBoolSetting):
             prevVoIP = self._get()
             if prevVoIP != isEnable:
                 VOIP.getVOIPManager().enable(isEnable)
-                from gui.WindowsManager import g_windowsManager
-                if g_windowsManager.battleWindow is not None and not isEnable:
-                    g_windowsManager.battleWindow.speakingPlayersReset()
                 LOG_NOTE('Change state of voip:', isEnable)
             return
 
 
 class VOIPCaptureDevicesSetting(UserPrefsStringSetting):
 
-    def __init__(self, isPreview = False):
+    def __init__(self, isPreview=False):
         super(VOIPCaptureDevicesSetting, self).__init__(Settings.KEY_VOIP_DEVICE, isPreview)
 
     def _get(self):
@@ -566,18 +623,18 @@ class VOIPCaptureDevicesSetting(UserPrefsStringSetting):
         currentDeviceName = super(VOIPCaptureDevicesSetting, self)._get()
         deviceIdx = self.__getDeviceIdxByName(currentDeviceName)
         if deviceIdx == -1:
-            deviceIdx = self.__getDeviceIdxByName(vm.currentCaptureDevice)
+            deviceIdx = self.__getDeviceIdxByName(vm.getCurrentCaptureDevice())
         return deviceIdx
 
     def _getOptions(self):
         return [ i18n.encodeUtf8(device.decode(sys.getfilesystemencoding())) for device in self._getRawOptions() ]
 
     def _getRawOptions(self):
-        return VOIP.getVOIPManager().captureDevices
+        return VOIP.getVOIPManager().getCaptureDevices()
 
     def _set(self, value):
         vm = VOIP.getVOIPManager()
-        if len(vm.captureDevices):
+        if vm.getCaptureDevices():
             device = self.__getDeviceNameByIdx(value)
             vm.setCaptureDevice(device)
             LOG_DEBUG('Selecting new capture device', device)
@@ -589,45 +646,42 @@ class VOIPCaptureDevicesSetting(UserPrefsStringSetting):
     @classmethod
     def __getDeviceNameByIdx(cls, idx):
         vm = VOIP.getVOIPManager()
-        device = vm.captureDevices[0]
-        if len(vm.captureDevices) > idx:
-            device = vm.captureDevices[int(idx)]
+        device = vm.getCaptureDevices()[0]
+        if len(vm.getCaptureDevices()) > idx:
+            device = vm.getCaptureDevices()[int(idx)]
         return device
 
     def __getDeviceIdxByName(self, deviceName):
         options = self._getRawOptions()
-        if deviceName in options:
-            return options.index(deviceName)
-        return -1
+        return options.index(deviceName) if deviceName in options else -1
 
 
-class VOIPSupportSetting(ReadOnlySetting, AppRef):
+class VOIPSupportSetting(ReadOnlySetting):
 
     def __init__(self):
         super(VOIPSupportSetting, self).__init__(self.__isSupported)
 
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def bwProto(self):
+        return None
+
     def __isVoiceChatReady(self):
-        if g_battleContext.isInBattle:
-            return VoiceChatInterface.g_instance.ready
-        return self.app.voiceChatManager.ready
+        return self.bwProto.voipController.isReady()
 
     def __isSupported(self):
-        return VOIP.getVOIPManager().vivoxDomain != '' and self.__isVoiceChatReady()
+        return VOIP.getVOIPManager().getVOIPDomain() != '' and self.__isVoiceChatReady()
 
 
 class MessengerSetting(StorageDumpSetting):
 
     def getDefaultValue(self):
         data = messenger_settings.userPrefs._asdict()
-        if self.settingName in data:
-            return data[self.settingName]
-        else:
-            return None
+        return data[self.settingName] if self.settingName in data else None
 
 
 class MessengerDateTimeSetting(MessengerSetting):
 
-    def __init__(self, bit, storage = None):
+    def __init__(self, bit, storage=None):
         super(MessengerDateTimeSetting, self).__init__('datetimeIdx', storage)
         self.bit = bit
 
@@ -648,18 +702,35 @@ class MessengerDateTimeSetting(MessengerSetting):
         return super(MessengerDateTimeSetting, self)._get()
 
 
+class ClansSetting(MessengerSetting):
+    clanCtrl = dependency.descriptor(IWebController)
+
+    def _get(self):
+        return super(ClansSetting, self)._get() if self.clanCtrl.isEnabled() else None
+
+    def getDefaultValue(self):
+        return True
+
+
 class GameplaySetting(StorageAccountSetting):
 
-    def __init__(self, settingName, gameplayName, storage):
+    def __init__(self, settingName, gameplayName, storage, delegate=lambda : True):
         super(GameplaySetting, self).__init__(settingName, storage)
         self.gameplayName = gameplayName
         self.bit = ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName(self.gameplayName))
+        self.__callable = delegate
 
     def _get(self):
-        settingValue = super(GameplaySetting, self)._get()
-        return settingValue & self.bit > 0
+        if not self.__callable():
+            return None
+        else:
+            settingValue = super(GameplaySetting, self)._get()
+            return settingValue & self.bit > 0
 
     def _set(self, value):
+        if not self.__callable():
+            LOG_WARNING('GameplaySetting is disabled', self.gameplayName)
+            return
         settingValue = super(GameplaySetting, self)._get()
         settingValue ^= self.bit
         if value:
@@ -668,17 +739,6 @@ class GameplaySetting(StorageAccountSetting):
 
     def getDumpValue(self):
         return super(GameplaySetting, self)._get()
-
-
-class GammaSetting(SettingAbstract):
-
-    def _get(self):
-        return BigWorld.getGammaCorrection()
-
-    def _set(self, value):
-        value = max(value, 0.5)
-        value = min(value, 2.0)
-        BigWorld.setGammaCorrection(value)
 
 
 class TripleBufferedSetting(SettingAbstract):
@@ -699,128 +759,6 @@ class VerticalSyncSetting(SettingAbstract):
         BigWorld.setVideoVSync(value)
 
 
-class CustomAASetting(SettingAbstract):
-
-    def __init__(self, isPreview = False):
-        super(CustomAASetting, self).__init__(isPreview)
-        self.__customAAModes = BigWorld.getSupportedCustomAAModes()
-
-    def __getModeIndex(self, mode):
-        if mode in self.__customAAModes:
-            return self.__customAAModes.index(mode)
-        return -1
-
-    def __getModeByIndex(self, modeIndex):
-        if len(self.__customAAModes) > modeIndex > -1:
-            return self.__customAAModes[int(modeIndex)]
-        else:
-            return None
-
-    def _get(self):
-        return self.__getModeIndex(BigWorld.getCustomAAMode())
-
-    def _getOptions(self):
-        return [ '#settings:customAAMode/mode%s' % i for i in self.__customAAModes ]
-
-    def _set(self, modeIndex):
-        mode = self.__getModeByIndex(modeIndex)
-        if mode is None:
-            LOG_ERROR('There is no gamma mode by given index', modeIndex)
-            return
-        else:
-            BigWorld.setCustomAAMode(mode)
-            return
-
-
-class MultisamplingSetting(SettingAbstract):
-
-    def __init__(self, isPreview = False):
-        super(MultisamplingSetting, self).__init__(isPreview)
-        self.__multisamplingTypes = BigWorld.getSupportedMultisamplingTypes()
-        self.__multisamplingTypes.insert(0, 0)
-
-    def __getMSTypeIndex(self, msType):
-        if msType in self.__multisamplingTypes:
-            return self.__multisamplingTypes.index(msType)
-        return -1
-
-    def __getMSTypeByIndex(self, msTypeIndex):
-        if len(self.__multisamplingTypes) > msTypeIndex > -1:
-            return self.__multisamplingTypes[int(msTypeIndex)]
-        else:
-            return None
-
-    def _get(self):
-        return self.__getMSTypeIndex(BigWorld.getMultisamplingType())
-
-    def _getOptions(self):
-        return [ '#settings:multisamplingType/type%s' % i for i in self.__multisamplingTypes ]
-
-    def _set(self, msTypeIndex):
-        msType = self.__getMSTypeByIndex(msTypeIndex)
-        if msType is None:
-            LOG_ERROR('There is no multisampling type by given index', msTypeIndex)
-            return
-        else:
-            BigWorld.setMultisamplingType(msType)
-            return
-
-
-class AspectRatioSetting(SettingAbstract):
-    MAGIC_NUMBER = 3.75
-
-    def __init__(self, isPreview = False):
-        super(AspectRatioSetting, self).__init__(isPreview)
-        self.__aspectRatios = ((4, 3),
-         (5, 4),
-         (16, 9),
-         (16, 10),
-         (19, 10))
-        maxWidth, maxHeight = g_monitorSettings.maxParams
-        if maxHeight > 0:
-            aspectRatio3DVision = float(maxWidth) / float(maxHeight)
-            if aspectRatio3DVision > self.MAGIC_NUMBER:
-                gcd = fractions.gcd(maxWidth, maxHeight)
-                self.__aspectRatios += ((maxWidth / gcd, maxHeight / gcd),)
-
-    def __getAspectRatioIndex(self, aspectRatio):
-        for index, size in enumerate(self.__aspectRatios):
-            if round(float(size[0]) / size[1], 6) == aspectRatio:
-                return index
-
-        return len(self.__aspectRatios)
-
-    def __getAspectRatioByIndex(self, apIndex):
-        if len(self.__aspectRatios) > apIndex > -1:
-            ars = self.__aspectRatios[int(apIndex)]
-            return round(float(ars[0]) / ars[1], 6)
-        else:
-            return None
-
-    def __getCurrentAspectRatio(self):
-        return round(BigWorld.getFullScreenAspectRatio(), 6)
-
-    def _get(self):
-        return self.__getAspectRatioIndex(self.__getCurrentAspectRatio())
-
-    def _getOptions(self):
-        currentAP = self.__getCurrentAspectRatio()
-        options = [ '%d:%d' % m for m in self.__aspectRatios ]
-        if self.__getAspectRatioIndex(currentAP) == len(self.__aspectRatios):
-            options.append('%s:1*' % BigWorld.wg_getNiceNumberFormat(currentAP))
-        return options
-
-    def _set(self, apIndex):
-        aspectRatio = self.__getAspectRatioByIndex(apIndex)
-        if aspectRatio is None:
-            LOG_ERROR('There is no aspect ratio by given index', apIndex)
-            return
-        else:
-            BigWorld.changeFullScreenAspectRatio(aspectRatio)
-            FovExtended.instance().refreshFov()
-            return
-
-
 class DynamicRendererSetting(SettingAbstract):
 
     def _get(self):
@@ -831,7 +769,15 @@ class DynamicRendererSetting(SettingAbstract):
         BigWorld.setDRRScale(value)
 
 
-class ColorFilterIntensitySetting(SettingAbstract):
+class _AdjustValueSetting(SettingAbstract):
+
+    @classmethod
+    def _adjustValue(cls, value):
+        return clamp(value, 0, 100)
+
+
+class ColorFilterIntensitySetting(_AdjustValueSetting):
+    DEFAULT_FILTER_INTENSITY = 0.25
 
     def _get(self):
         value = round(BigWorld.getColorGradingStrength(), 2) * 100
@@ -841,12 +787,57 @@ class ColorFilterIntensitySetting(SettingAbstract):
         value = float(self._adjustValue(value)) / 100
         BigWorld.setColorGradingStrength(value)
 
-    def _adjustValue(self, value):
-        if value < 25:
-            return 25
-        if value > 100:
-            return 100
-        return value
+    @classmethod
+    def _adjustValue(cls, value):
+        return clamp(value, 25, 100)
+
+    def getDefaultValue(self):
+        return self.DEFAULT_FILTER_INTENSITY * 100
+
+
+class BrightnessCorrectionSetting(_AdjustValueSetting):
+    DEFAULT_BRIGHTNESS = 0.5
+
+    def _get(self):
+        value = round(BigWorld.getColorBrightness(), 2) * 100
+        return self._adjustValue(value)
+
+    def _set(self, value):
+        value = float(self._adjustValue(value)) / 100
+        BigWorld.setColorBrightness(value)
+
+    def getDefaultValue(self):
+        return self.DEFAULT_BRIGHTNESS * 100
+
+
+class ContrastCorrectionSetting(_AdjustValueSetting):
+    DEFAULT_CONTRAST = 0.5
+
+    def _get(self):
+        value = round(BigWorld.getColorContrast(), 2) * 100
+        return self._adjustValue(value)
+
+    def _set(self, value):
+        value = float(self._adjustValue(value)) / 100
+        BigWorld.setColorContrast(value)
+
+    def getDefaultValue(self):
+        return self.DEFAULT_CONTRAST * 100
+
+
+class SaturationCorrectionSetting(_AdjustValueSetting):
+    DEFAULT_SATURATION = 1
+
+    def _get(self):
+        value = round(BigWorld.getColorSaturation(), 2) * 100
+        return self._adjustValue(value)
+
+    def _set(self, value):
+        value = float(self._adjustValue(value)) / 100
+        BigWorld.setColorSaturation(value)
+
+    def getDefaultValue(self):
+        return self.DEFAULT_SATURATION * 100
 
 
 class LensEffectSetting(StorageDumpSetting):
@@ -861,34 +852,27 @@ class LensEffectSetting(StorageDumpSetting):
 class GraphicSetting(SettingAbstract):
     MIN_OPTION_VALUE = 4
 
-    def __init__(self, settingName, isPreview = False):
+    def __init__(self, settingName, isPreview=False):
         super(GraphicSetting, self).__init__(isPreview)
         self.name = settingName
-        self._initialValue = None
-        self._inited = False
-        return
+        self._currentValue = graphics.getGraphicsSetting(self.name)
 
     def _get(self):
-        setting = graphics.getGraphicsSetting(self.name)
-        if setting is not None:
-            if not self._inited:
-                self._initialValue = setting.value
-                self._inited = True
-            return setting.value
-        else:
-            return
+        return self._currentValue.value if self._currentValue is not None else None
 
     def _getOptions(self):
-        data = graphics.getGraphicsSetting(self.name)
-        if data is not None:
+        if self._currentValue is not None:
+            if self._currentValue.isArray:
+                return self._currentValue.options
             options = []
-            for idx, (label, supported, advanced, _) in enumerate(data.options):
+            for label, data, advanced, supported in self._currentValue.options:
                 options.append({'label': '#settings:graphicsSettingsOptions/%s' % str(label),
-                 'data': idx,
+                 'data': data,
                  'advanced': advanced,
                  'supported': supported})
 
-            return sorted(options, key=itemgetter('data'), reverse=True)
+            options = sorted(options, key=itemgetter('data'), reverse=True)
+            return options
         else:
             return
 
@@ -901,6 +885,10 @@ class GraphicSetting(SettingAbstract):
         if originalValue != value:
             LOG_NOTE('Adjusted value has been set: `%s`' % value)
 
+    def _save(self, value):
+        super(GraphicSetting, self)._save(value)
+        self._currentValue = graphics.getGraphicsSetting(self.name)
+
     def _tryToSetValue(self, value):
         try:
             BigWorld.setGraphicsSetting(self.name, value)
@@ -908,22 +896,16 @@ class GraphicSetting(SettingAbstract):
             LOG_ERROR('Unable to set value `%s` for option `%s`' % (value, self.name))
             return False
 
+        if self.isPreview:
+            self._currentValue = graphics.getGraphicsSetting(self.name)
         return True
 
     def getApplyMethod(self, value):
-        data = graphics.getGraphicsSetting(self.name)
-        if data is not None and value != self._get():
-            if data.needRestart and self._initialValueChanged(value):
-                return APPLY_METHOD.RESTART
-            if data.delayed:
-                return APPLY_METHOD.DELAYED
-        return super(GraphicSetting, self).getApplyMethod(value)
+        return BigWorld.getGraphicsSettingApplyMethod(self.name, value)
 
-    def _initialValueChanged(self, value):
-        if self._initialValue is not None:
-            return value != self._initialValue
-        else:
-            return True
+    def refresh(self):
+        self._currentValue = graphics.getGraphicsSetting(self.name)
+        super(GraphicSetting, self).refresh()
 
 
 class SniperModeSwingingSetting(GraphicSetting):
@@ -942,95 +924,9 @@ class SniperModeSwingingSetting(GraphicSetting):
         self.__recreateCamera()
 
 
-class TextureQualitySetting(GraphicSetting):
-
-    def __init__(self):
-        super(TextureQualitySetting, self).__init__('TEXTURE_QUALITY')
-
-    def _set(self, value):
-        super(TextureQualitySetting, self)._set(value)
-        if g_critMemHandler.originTexQuality != g_critMemHandler.ORIGIN_DEFAULT:
-            g_critMemHandler.originTexQuality = value
-
-
-class TerrainQualitySetting(GraphicSetting):
-
-    def __init__(self):
-        super(TerrainQualitySetting, self).__init__('TERRAIN_QUALITY')
-
-    def _set(self, value):
-        super(TerrainQualitySetting, self)._set(value)
-        if g_critMemHandler.originTerrainQuality != g_critMemHandler.ORIGIN_DEFAULT:
-            g_critMemHandler.originTerrainQuality = value
-
-
-class FloraQualitySetting(GraphicSetting):
-
-    def __init__(self):
-        super(FloraQualitySetting, self).__init__('FLORA_QUALITY')
-
-    def _set(self, value):
-        super(FloraQualitySetting, self)._set(value)
-        if g_critMemHandler.originFloraQuality != g_critMemHandler.ORIGIN_DEFAULT:
-            g_critMemHandler.originFloraQuality = value
-
-
-class GraphicsPresetSetting(SettingAbstract):
-    CUSTOM_PRESET_KEY = 'CUSTOM'
-    Preset = namedtuple('Preset', 'index key settings')
-
-    def __init__(self):
-        super(GraphicsPresetSetting, self).__init__(False)
-        self.__presets = []
-        self.__graphicsPresets = GraphicsPresets()
-        self.__parsePresets()
-
-    def isCustom(self):
-        return self._get() == len(self.__presets) - 1
-
-    def __parsePresets(self):
-        for key, idx in graphics.getGraphicsPresetsIndices().iteritems():
-            self.__presets.append(self.Preset(idx, key, dict(graphics.getGraphicsPresets(idx)))._asdict())
-
-        self.__presets.append(self.Preset(idx + 1, self.CUSTOM_PRESET_KEY, {})._asdict())
-
-    def __checkPresetForCurrent(self, presetIdx):
-        for name, value in graphics.getGraphicsPresets(presetIdx).iteritems():
-            graphicSetting = graphics.getGraphicsSetting(name)
-            if graphicSetting is None or value != graphicSetting.value:
-                return False
-
-        return True
-
-    def _get(self):
-        presetsIndices = graphics.getGraphicsPresetsIndices().values()
-        for idx in presetsIndices:
-            if self.__checkPresetForCurrent(idx):
-                return idx
-
-        return len(presetsIndices)
-
-    def _getOptions(self):
-        result = []
-        for preset in self.__presets:
-            isSupported = True
-            for settingName in self.__graphicsPresets.GRAPHICS_QUALITY_SETTINGS:
-                if settingName in self.__graphicsPresets.GRAPHICS_QUALITY_SETTINGS_PRESETS_EXCLUDE:
-                    continue
-                value = preset['settings'].get(settingName)
-                if value is not None and not self.__graphicsPresets.settingIsSupported(settingName, value):
-                    isSupported = False
-                    break
-
-            if isSupported:
-                result.append(preset)
-
-        return sorted(result, key=itemgetter('index'))
-
-
 class MonitorSetting(SettingAbstract):
 
-    def __init__(self, isPreview = False, storage = None):
+    def __init__(self, isPreview=False, storage=None):
         super(MonitorSetting, self).__init__(isPreview)
         self._storage = weakref.proxy(storage)
 
@@ -1043,56 +939,23 @@ class MonitorSetting(SettingAbstract):
     def _getOptions(self):
         return BigWorld.wg_getMonitorNames()
 
-    def getApplyMethod(self, value):
-        if g_monitorSettings.isMonitorChanged and g_monitorSettings.isFullscreen:
-            return APPLY_METHOD.RESTART
-        return super(MonitorSetting, self).getApplyMethod(value)
-
     def pack(self):
         result = super(MonitorSetting, self).pack()
         result.update({'real': g_monitorSettings.activeMonitor})
         return result
 
 
-class WindowSizeSetting(SettingAbstract):
+class WindowSizeSetting(PreferencesSetting):
 
-    def __init__(self, isPreview = False, storage = None):
+    def __init__(self, isPreview=False, storage=None):
         super(WindowSizeSetting, self).__init__(isPreview)
         self.__lastSelectedWindowSize = None
         self._storage = weakref.proxy(storage)
         return
 
-    def __getWindowSizeIndex(self, width, height):
-        for index, (w, h) in enumerate(self.__getWindowSizes()):
-            if w == width and h == height:
-                return index
-
-        return 0
-
-    def __getWindowSizes(self):
-        sizes = self.__getSuitableWindowSizes()[self._storage.monitor]
-        current = g_monitorSettings.currentWindowSize
-        if current is not None and (current.width, current.height) not in sizes:
-            sizes.append((current.width, current.height))
-        return sizes
-
-    def __getSuitableWindowSizes(self):
-        result = []
-        for modes in graphics.getSuitableWindowSizes():
-            sizes = set()
-            for mode in modes:
-                sizes.add((mode.width, mode.height))
-
-            result.append(sorted(tuple(sizes)))
-
-        return result
-
     def _get(self):
         size = self._storage.windowSize
-        if size is not None:
-            return self.__getWindowSizeIndex(*size)
-        else:
-            return
+        return self.__getWindowSizeIndex(*size) if size is not None else None
 
     def _getOptions(self):
         allModes = []
@@ -1118,19 +981,42 @@ class WindowSizeSetting(SettingAbstract):
             devPref.writeInt('windowedWidth', self.__lastSelectedWindowSize[1])
         return
 
+    def __getWindowSizeIndex(self, width, height):
+        for index, (w, h) in enumerate(self.__getWindowSizes()):
+            if w == width and h == height:
+                return index
+
+    def __getWindowSizes(self):
+        sizes = self.__getSuitableWindowSizes()[self._storage.monitor]
+        current = g_monitorSettings.currentWindowSize
+        if current is not None and (current.width, current.height) not in sizes:
+            sizes.append((current.width, current.height))
+        return sizes
+
+    def __getSuitableWindowSizes(self):
+        result = []
+        for modes in graphics.getSuitableWindowSizes():
+            sizes = set()
+            for mode in modes:
+                sizes.add((mode.width, mode.height))
+
+            result.append(sorted(tuple(sizes)))
+
+        return result
+
 
 class ResolutionSetting(PreferencesSetting):
 
-    def __init__(self, isPreview = False, storage = None):
-        super(PreferencesSetting, self).__init__(isPreview)
-        self.__lastSelectedVideoMode = None
+    def __init__(self, isPreview=False, storage=None):
+        super(ResolutionSetting, self).__init__(isPreview)
+        self._lastSelectedVideoMode = None
         self._storage = weakref.proxy(storage)
         return
 
-    def __getResolutions(self):
-        return self.__getSuitableResolutions()[self._storage.monitor]
+    def _getResolutions(self):
+        return self._getSuitableResolutions()[self._storage.monitor]
 
-    def __getSuitableResolutions(self):
+    def _getSuitableResolutions(self):
         result = []
         for modes in graphics.getSuitableVideoModes():
             resolutions = set()
@@ -1141,40 +1027,103 @@ class ResolutionSetting(PreferencesSetting):
 
         return result
 
-    def __getResolutionIndex(self, width, height):
-        for idx, (w, h) in enumerate(self.__getResolutions()):
+    def _getResolutionIndex(self, width, height):
+        for idx, (w, h) in enumerate(self._getResolutions()):
             if w == width and h == height:
                 return idx
 
-        return 0
-
     def _get(self):
         resolution = self._storage.resolution
-        if resolution is not None:
-            return self.__getResolutionIndex(*resolution)
-        else:
-            return
+        return self._getResolutionIndex(*resolution) if resolution is not None else None
+
+    def _findBestAspect(self, aspect, maxInt):
+        w = 4
+        bestDelta = 100000.0
+        bestW = 1
+        bestH = 1
+        while w < maxInt:
+            h = 3
+            while h < w:
+                delta = abs(float(w) / h - aspect)
+                if delta < bestDelta:
+                    bestDelta = delta
+                    bestW = w
+                    bestH = h
+                h = h + 1
+
+            w = w + 1
+
+        return (bestW, bestH)
 
     def _getOptions(self):
-        return [ [ '%dx%d' % (width, height) for width, height in resolutions ] for resolutions in self.__getSuitableResolutions() ]
+        res = []
+        for resolutions in self._getSuitableResolutions():
+            formatedRes = []
+            for width, height in resolutions:
+                gcd = fractions.gcd(width, height)
+                widthOpt = width / gcd
+                heightOpt = height / gcd
+                if widthOpt > 24:
+                    p = self._findBestAspect(float(widthOpt) / heightOpt, 23)
+                    widthOpt = p[0]
+                    heightOpt = p[1]
+                if widthOpt == 8:
+                    widthOpt *= 2
+                    heightOpt *= 2
+                formatedRes.append('{0}x{1} [{2}:{3}]'.format(width, height, widthOpt, heightOpt))
+
+            res.append(formatedRes)
+
+        return res
 
     def _set(self, value):
-        resolution = self.__getResolutions()[int(value)]
+        resolution = self._getResolutions()[int(value)]
         self._storage.resolution = resolution
-        self.__lastSelectedVideoMode = resolution
+        self._lastSelectedVideoMode = resolution
+        FovExtended.instance().refreshFov()
 
     def _savePrefsCallback(self, prefsRoot):
-        if self.__lastSelectedVideoMode is not None and g_monitorSettings.isMonitorChanged:
+        if self._lastSelectedVideoMode is not None and g_monitorSettings.isMonitorChanged:
             devPref = prefsRoot['devicePreferences']
-            devPref.writeInt('fullscreenWidth', self.__lastSelectedVideoMode[0])
-            devPref.writeInt('fullscreenHeight', self.__lastSelectedVideoMode[1])
+            devPref.writeInt('fullscreenWidth', self._lastSelectedVideoMode[0])
+            devPref.writeInt('fullscreenHeight', self._lastSelectedVideoMode[1])
+        return
+
+
+class BorderlessSizeSetting(ResolutionSetting):
+
+    def _getSuitableResolutions(self):
+        result = []
+        for modes in graphics.getSuitableBorderlessSizes():
+            resolutions = set()
+            for mode in modes:
+                resolutions.add((mode.width, mode.height))
+
+            result.append(sorted(tuple(resolutions)))
+
+        return result
+
+    def _get(self):
+        resolution = self._storage.borderlessSize
+        return self._getResolutionIndex(*resolution) if resolution is not None else None
+
+    def _set(self, value):
+        size = self._getResolutions()[int(value)]
+        self._storage.borderlessSize = size
+        self._lastSelectedVideoMode = size
+
+    def _savePrefsCallback(self, prefsRoot):
+        if self._lastSelectedVideoMode is not None and g_monitorSettings.isMonitorChanged:
+            devPref = prefsRoot['devicePreferences']
+            devPref.writeInt('borderlessWidth', self._lastSelectedVideoMode[0])
+            devPref.writeInt('borderlessHeight', self._lastSelectedVideoMode[1])
         return
 
 
 class RefreshRateSetting(PreferencesSetting):
 
-    def __init__(self, isPreview = False, storage = None):
-        super(PreferencesSetting, self).__init__(isPreview)
+    def __init__(self, isPreview=False, storage=None):
+        super(RefreshRateSetting, self).__init__(isPreview)
         self._storage = weakref.proxy(storage)
 
     def _getOptions(self):
@@ -1204,25 +1153,43 @@ class RefreshRateSetting(PreferencesSetting):
         self._storage.refreshRate = int(value)
 
 
-class FullscreenSetting(PreferencesSetting):
+class VideoModeSettings(PreferencesSetting):
+    WINDOWED = 0
+    FULLSCREEN = 1
+    BORDERLESS = 2
+    OPTIONS = {WINDOWED: 'windowed',
+     FULLSCREEN: 'fullscreen',
+     BORDERLESS: 'borderless'}
 
     def __init__(self, storage):
-        super(PreferencesSetting, self).__init__()
+        super(VideoModeSettings, self).__init__()
         self._storage = weakref.proxy(storage)
-        self.__isFullscreen = self._get()
+        self.__videoMode = self._get()
+
+    def _getOptions(self):
+        result = []
+        allowScreenModes = ((BigWorld.WindowModeWindowed, self.OPTIONS[self.WINDOWED]), (BigWorld.WindowModeExclusiveFullscreen, self.OPTIONS[self.FULLSCREEN]))
+        if graphics.getSuitableVideoModes():
+            allowScreenModes += ((BigWorld.WindowModeBorderless, self.OPTIONS[self.BORDERLESS]),)
+        for data, label in allowScreenModes:
+            result.append({'data': data,
+             'label': '#settings:screenMode/%s' % label})
+
+        return result
 
     def _get(self):
-        return self._storage.fullscreen
+        return self._storage.windowMode
 
     def _set(self, value):
-        self._storage.fullscreen = bool(value)
-
-    def _save(self, value):
-        self.__isFullscreen = value
+        self._storage.windowMode = value
+        self.__videoMode = value
 
     def _savePrefsCallback(self, prefsRoot):
-        if g_monitorSettings.isMonitorChanged:
-            prefsRoot['devicePreferences'].writeBool('windowed', not self.__isFullscreen)
+        prefsRoot['devicePreferences'].writeInt('windowMode', self.__videoMode)
+
+    def _readPrefsCallback(self, key, value):
+        if key == 'windowMode':
+            self.__videoMode = value
 
 
 class VehicleMarkerSetting(StorageAccountSetting):
@@ -1244,7 +1211,6 @@ class VehicleMarkerSetting(StorageAccountSetting):
 
         @classmethod
         def getOptionName(cls, mType, mOption):
-            raise mType in cls.TYPES.ALL() and mOption in cls.PARAMS.ALL() or AssertionError
             return 'marker%s%s' % (mType, mOption)
 
         @classmethod
@@ -1260,7 +1226,13 @@ class VehicleMarkerSetting(StorageAccountSetting):
     def getDefaultValue(self):
         return AccountSettings.getSettingsDefault(self.settingKey)[self.settingName]
 
+    def pack(self):
+        return self.__getMarkerSettings(forcePackingHP=True)
+
     def _get(self):
+        return self.__getMarkerSettings(forcePackingHP=False)
+
+    def __getMarkerSettings(self, forcePackingHP=False):
         marker = {}
         for mType in self.OPTIONS.TYPES.ALL():
             for param in self.OPTIONS.PARAMS.ALL():
@@ -1270,10 +1242,9 @@ class VehicleMarkerSetting(StorageAccountSetting):
                     value = BattleReplay.g_replayCtrl.getSetting(self.settingName, {}).get(on, default)
                 else:
                     value = self._storage.extract(self.settingName, on, self._default[on])
-                if param == self.OPTIONS.PARAMS.HP and isPlayerAccount():
+                if param == self.OPTIONS.PARAMS.HP and forcePackingHP:
                     marker[on] = self.PackStruct(value, [ '#settings:marker/hp/type%d' % mid for mid in xrange(4) ])._asdict()
-                else:
-                    marker[on] = value
+                marker[on] = value
 
         return marker
 
@@ -1293,8 +1264,9 @@ class AimSetting(StorageAccountSetting):
         CASSETTE = 'cassette'
         GUN_TAG = 'gunTag'
         GUN_TAG_TYPE = 'gunTagType'
+        ZOOM_INDICATOR = 'zoomIndicator'
 
-    VIRTUAL_OPTIONS = {OPTIONS.MIXING_TYPE: (OPTIONS.MIXING, 3),
+    VIRTUAL_OPTIONS = {OPTIONS.MIXING_TYPE: (OPTIONS.MIXING, 4),
      OPTIONS.GUN_TAG_TYPE: (OPTIONS.GUN_TAG, 15),
      OPTIONS.CENTRAL_TAG_TYPE: (OPTIONS.CENTRAL_TAG, 14),
      OPTIONS.NET_TYPE: (OPTIONS.NET, 4)}
@@ -1317,7 +1289,14 @@ class AimSetting(StorageAccountSetting):
     def pack(self):
         result = self._get()
         for vname, (name, optsLen) in self.VIRTUAL_OPTIONS.iteritems():
-            result[vname] = self.PackStruct(result[vname], [ '#settings:%s/%s/type%d' % (self.settingName, name, i) for i in xrange(int(optsLen)) ])._asdict()
+            types = [ {'loc': makeString('#settings:aim/%s/type%d' % (name, i)),
+             'label': '#settings:aim/%s/type%d' % (name, i),
+             'index': i} for i in xrange(int(optsLen)) ]
+            types = sorted(types, key=itemgetter('loc'))
+            for item in types:
+                item.pop('loc', None)
+
+            result[vname] = self.PackStruct(result[vname], types)._asdict()
 
         return result
 
@@ -1327,13 +1306,13 @@ class AimSetting(StorageAccountSetting):
         for option in self.OPTIONS.ALL():
             if option not in self.VIRTUAL_OPTIONS:
                 alpha = value[option]
-                type = 0
+                optType = 0
                 for k, v in self.VIRTUAL_OPTIONS.items():
                     if v[0] == option:
-                        type = value[k]
+                        optType = value[k]
 
                 result[option] = {'alpha': alpha,
-                 'type': type}
+                 'type': optType}
 
         return result
 
@@ -1347,6 +1326,92 @@ class AimSetting(StorageAccountSetting):
                         result[k] = value['type']
 
         return result
+
+
+class MinimapSetting(StorageDumpSetting):
+
+    def getDefaultValue(self):
+        return True
+
+
+class MinimapVehModelsSetting(StorageDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        NEVER = 'never'
+        ALT = 'alt'
+        ALWAYS = 'always'
+
+    VEHICLE_MODELS_TYPES = [OPTIONS.NEVER, OPTIONS.ALT, OPTIONS.ALWAYS]
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.settingName, mType) for mType in self.VEHICLE_MODELS_TYPES ]
+
+    def getDefaultValue(self):
+        return self.VEHICLE_MODELS_TYPES.index(self.OPTIONS.ALWAYS)
+
+
+class CarouselTypeSetting(StorageDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        SINGLE = 'single'
+        DOUBLE = 'double'
+
+    CAROUSEL_TYPES = (OPTIONS.SINGLE, OPTIONS.DOUBLE)
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ {'label': settingsKey % (self.settingName, cType)} for cType in self.CAROUSEL_TYPES ]
+
+    def getDefaultValue(self):
+        return self.CAROUSEL_TYPES.index(self.OPTIONS.SINGLE)
+
+    def getRowCount(self):
+        return self._get() + 1
+
+
+class DoubleCarouselTypeSetting(StorageDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        ADAPTIVE = 'adaptive'
+        SMALL = 'small'
+
+    DOUBLE_CAROUSEL_TYPES = (OPTIONS.ADAPTIVE, OPTIONS.SMALL)
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.settingName, cType) for cType in self.DOUBLE_CAROUSEL_TYPES ]
+
+    def getDefaultValue(self):
+        return self.DOUBLE_CAROUSEL_TYPES.index(self.OPTIONS.ADAPTIVE)
+
+    def enableSmallCarousel(self):
+        return self._get() == self.DOUBLE_CAROUSEL_TYPES.index(self.OPTIONS.SMALL)
+
+
+class VehicleCarouselStatsSetting(StorageDumpSetting):
+
+    def _get(self):
+        return bool(super(VehicleCarouselStatsSetting, self)._get())
+
+    def getDefaultValue(self):
+        return True
+
+
+class BattleLoadingTipSetting(AccountDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        TEXT = 'textTip'
+        VISUAL = 'visualTip'
+        MINIMAP = 'minimap'
+        TIPS_TYPES = (TEXT, VISUAL, MINIMAP)
+
+    def getSettingID(self, isVisualOnly=False):
+        return self.OPTIONS.VISUAL if isVisualOnly else self.OPTIONS.TIPS_TYPES[self._get()]
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.key, tType) for tType in self.OPTIONS.TIPS_TYPES ]
 
 
 class ShowMarksOnGunSetting(StorageAccountSetting):
@@ -1364,9 +1429,6 @@ class ShowMarksOnGunSetting(StorageAccountSetting):
 class ControlSetting(SettingAbstract):
     ControlPackStruct = namedtuple('ControlPackStruct', 'current default')
 
-    def __init__(self, isPreview = False):
-        super(ControlSetting, self).__init__(isPreview)
-
     def _getDefault(self):
         return None
 
@@ -1379,23 +1441,22 @@ class StorageControlSetting(StorageDumpSetting, ControlSetting):
 
 
 class MouseSetting(ControlSetting):
-    CAMERAS = {'postmortem': (ArcadeCamera.getCameraAsSettingsHolder, 'postMortemMode/camera'),
-     'arcade': (ArcadeCamera.getCameraAsSettingsHolder, 'arcadeMode/camera'),
-     'sniper': (SniperCamera.getCameraAsSettingsHolder, 'sniperMode/camera'),
-     'strategic': (StrategicCamera.getCameraAsSettingsHolder, 'strategicMode/camera')}
+    CAMERAS = {CTRL_MODE_NAME.POSTMORTEM: (ArcadeCamera.getCameraAsSettingsHolder, 'postMortemMode/camera'),
+     CTRL_MODE_NAME.ARCADE: (ArcadeCamera.getCameraAsSettingsHolder, 'arcadeMode/camera'),
+     CTRL_MODE_NAME.SNIPER: (SniperCamera.getCameraAsSettingsHolder, 'sniperMode/camera'),
+     CTRL_MODE_NAME.STRATEGIC: (StrategicCamera.getCameraAsSettingsHolder, 'strategicMode/camera'),
+     CTRL_MODE_NAME.ARTY: (ArtyCamera.getCameraAsSettingsHolder, 'artyMode/camera')}
 
-    def __init__(self, mode, setting, default, isPreview = False):
+    def __init__(self, mode, setting, default, isPreview=False, masterSwitch=''):
         super(MouseSetting, self).__init__(isPreview)
         self.mode = mode
         self.setting = setting
         self.default = default
-        self.__aihSection = ResMgr.openSection(_INPUT_HANDLER_CFG)
+        self.masterSwitch = masterSwitch
+        self.__aihSection = ResMgr.openSection(INPUT_HANDLER_CFG)
 
-    def __isControlModeAccessible(self):
-        return BigWorld.player() is not None and hasattr(BigWorld.player(), 'inputHandler') and hasattr(BigWorld.player().inputHandler, 'ctrls')
-
-    def __getCamera(self):
-        if self.__isControlModeAccessible():
+    def getCamera(self):
+        if self._isControlModeAccessible():
             mode = BigWorld.player().inputHandler.ctrls[self.mode]
             if mode is not None:
                 return mode.camera
@@ -1410,34 +1471,43 @@ class MouseSetting(ControlSetting):
         return self.default
 
     def _get(self):
-        camera = self.__getCamera()
-        if camera is not None:
-            return camera.getUserConfigValue(self.setting)
+        if self._isDisabledByMasterSwitch():
+            return None
         else:
-            return self.default
+            camera = self.getCamera()
+            return camera.getUserConfigValue(self.setting) if camera is not None else self.default
 
     def _set(self, value):
-        camera = self.__getCamera()
-        if camera is None:
-            LOG_WARNING('Error while applying mouse settings: empty camera', self.mode, self.setting)
+        if self._isDisabledByMasterSwitch():
+            LOG_WARNING('Mouse setting is disabled', self.mode, self.setting)
             return
         else:
+            camera = self.getCamera()
+            if camera is None:
+                LOG_WARNING('Error while applying mouse settings: empty camera', self.mode, self.setting)
+                return
             camera.setUserConfigValue(self.setting, value)
-            if not self.__isControlModeAccessible():
-                camera._writeUserPreferences()
+            if not self._isControlModeAccessible():
+                camera.writeUserPreferences()
             return
+
+    def _isControlModeAccessible(self):
+        return BigWorld.player() is not None and hasattr(BigWorld.player(), 'inputHandler') and hasattr(BigWorld.player().inputHandler, 'ctrls')
+
+    def _isDisabledByMasterSwitch(self):
+        return self.masterSwitch and not GUI_SETTINGS.lookup(self.masterSwitch)
 
 
 class MouseSensitivitySetting(MouseSetting):
 
-    def __init__(self, mode):
-        super(MouseSensitivitySetting, self).__init__(mode, 'sensitivity', 1.0)
+    def __init__(self, mode, masterSwitch=''):
+        super(MouseSensitivitySetting, self).__init__(mode, 'sensitivity', 1.0, masterSwitch=masterSwitch)
 
 
 class DynamicFOVMultiplierSetting(MouseSetting):
 
-    def __init__(self, isPreview = False):
-        super(DynamicFOVMultiplierSetting, self).__init__('arcade', 'fovMultMinMaxDist', self.getDefaultValue(), isPreview)
+    def __init__(self, isPreview=False):
+        super(DynamicFOVMultiplierSetting, self).__init__(CTRL_MODE_NAME.ARCADE, 'fovMultMinMaxDist', self.getDefaultValue(), isPreview)
 
     def _set(self, value):
         value = ArcadeCamera.MinMax(min=value, max=1.0)
@@ -1452,14 +1522,12 @@ class DynamicFOVMultiplierSetting(MouseSetting):
 
 class FOVSetting(RegularSetting):
 
-    def __init__(self, settingName, isPreview = False, storage = None):
+    def __init__(self, settingName, isPreview=False, storage=None):
         super(FOVSetting, self).__init__(settingName, isPreview)
         self.__static = StaticFOVSetting(isPreview)
         self.__dynamic = DynamicFOVSetting(isPreview)
-        self.__multiplier = DynamicFOVMultiplierSetting(isPreview)
         self.__storage = weakref.proxy(storage)
         self.__storage.proxyFOV(self)
-        self.__storage.proxyMultiplier(self.__multiplier)
 
     def _get(self):
         return (self.__static.get(),) + tuple(self.__dynamic.get())
@@ -1473,10 +1541,13 @@ class FOVSetting(RegularSetting):
         if not BigWorld.wg_preferencesExistedAtStartup():
             self.apply((95, 80, 100))
 
+    def isEqual(self, value):
+        return self._get() == tuple(value)
+
 
 class StaticFOVSetting(UserPrefsFloatSetting):
 
-    def __init__(self, isPreview = False):
+    def __init__(self, isPreview=False):
         super(StaticFOVSetting, self).__init__(Settings.KEY_FOV, isPreview)
 
     def _get(self):
@@ -1492,13 +1563,13 @@ class StaticFOVSetting(UserPrefsFloatSetting):
 class DynamicFOVSetting(UserPrefsStringSetting):
     DEFAULT = (80, 100)
 
-    def __init__(self, isPreview = False):
+    def __init__(self, isPreview=False):
         super(DynamicFOVSetting, self).__init__(Settings.KEY_DYNAMIC_FOV, isPreview)
 
     def _get(self):
         try:
             return cPickle.loads(base64.b64decode(super(DynamicFOVSetting, self)._get()))
-        except:
+        except Exception:
             LOG_ERROR('Could not load dynamic fov setting')
             return self.DEFAULT
 
@@ -1511,7 +1582,7 @@ class DynamicFOVSetting(UserPrefsStringSetting):
 
 class DynamicFOVEnabledSetting(UserPrefsBoolSetting):
 
-    def __init__(self, isPreview = False, storage = None):
+    def __init__(self, isPreview=False, storage=None):
         super(DynamicFOVEnabledSetting, self).__init__(Settings.KEY_DYNAMIC_FOV_ENABLED, isPreview)
         self.__storage = weakref.proxy(storage)
         self.__storage.proxyDynamicFOVEnabled(self)
@@ -1531,7 +1602,7 @@ class DynamicFOVEnabledSetting(UserPrefsBoolSetting):
 
 class MouseInversionSetting(StorageControlSetting):
 
-    def __init__(self, settingName, settingKey, storage, isPreview = False):
+    def __init__(self, settingName, settingKey, storage, isPreview=False):
         super(MouseInversionSetting, self).__init__(settingName, storage, isPreview)
         self.settings = []
         for mode in MouseSetting.CAMERAS:
@@ -1547,7 +1618,7 @@ class MouseInversionSetting(StorageControlSetting):
 
 class BackDraftInversionSetting(StorageControlSetting, StorageAccountSetting):
 
-    def __init__(self, storage, isPreview = False):
+    def __init__(self, storage, isPreview=False):
         super(BackDraftInversionSetting, self).__init__('backDraftInvert', storage, isPreview)
 
     def _getDefault(self):
@@ -1558,67 +1629,63 @@ class BackDraftInversionSetting(StorageControlSetting, StorageAccountSetting):
             BigWorld.player().invRotationOnBackMovement = value
 
 
-class KeyboardSetting(StorageControlSetting, AppRef):
+class KeyboardSetting(ControlSetting):
 
-    def __init__(self, cmd, storage):
-        super(KeyboardSetting, self).__init__(cmd, storage)
+    def __init__(self, cmd):
+        super(KeyboardSetting, self).__init__()
+        self.cmd = cmd
+
+    @app_getter
+    def app(self):
+        return None
 
     def _getDefault(self):
-        command = CommandMapping.g_instance.getCommand(self.settingName)
+        command = CommandMapping.g_instance.getCommand(self.cmd)
         return getScaleformKey(CommandMapping.g_instance.getDefaults().get(command, Keys.KEY_NONE))
 
     def getDefaultValue(self):
-        command = CommandMapping.g_instance.getCommand(self.settingName)
+        command = CommandMapping.g_instance.getCommand(self.cmd)
         return CommandMapping.g_instance.getDefaults().get(command, Keys.KEY_NONE)
 
     def _set(self, value):
-        result = self.setSystemValue(value)
-        if KeyboardSettings.USE_SERVER_LAYOUT:
-            value = getBigworldKey(value)
-            setting = {'option': self.settingName,
-             'value': value}
-            self._storage.store(setting)
-        return result
+        return self.setSystemValue(value)
 
     def _get(self):
-        if KeyboardSettings.USE_SERVER_LAYOUT:
-            value = super(KeyboardSetting, self)._get()
-        else:
-            value = self.getCurrentMapping()
-        return getScaleformKey(value)
+        return getScaleformKey(self.getCurrentMapping())
 
     def setSystemValue(self, value):
         key = 'KEY_NONE'
         if value is not None:
             key = getBigworldNameFromKey(getBigworldKey(value))
-        LOG_DEBUG('Settings key command', self.settingName, value, key)
-        if self.settingName == 'CMD_VOICECHAT_MUTE' and isPlayerAccount():
+        LOG_DEBUG('Settings key command', self.cmd, value, key)
+        if self.cmd == 'CMD_VOICECHAT_MUTE' and self.app is not None and self.app.gameInputManager is not None:
             self.app.gameInputManager.updateChatKeyHandlers(value)
-        CommandMapping.g_instance.remove(self.settingName)
-        CommandMapping.g_instance.add(self.settingName, key)
+        CommandMapping.g_instance.remove(self.cmd)
+        CommandMapping.g_instance.add(self.cmd, key)
         return
 
     def getCurrentMapping(self):
-        mapping = CommandMapping.g_instance.get(self.settingName)
+        mapping = CommandMapping.g_instance.get(self.cmd)
         if mapping is None:
             mapping = self.getDefaultValue()
         return mapping
 
 
 class KeyboardSettings(SettingsContainer):
-    USE_SERVER_LAYOUT = False
     KEYS_LAYOUT = (('movement', (('forward', 'CMD_MOVE_FORWARD'),
        ('backward', 'CMD_MOVE_BACKWARD'),
        ('left', 'CMD_ROTATE_LEFT'),
        ('right', 'CMD_ROTATE_RIGHT'),
-       ('auto_rotation', 'CMD_CM_VEHICLE_SWITCH_AUTOROTATION'))),
+       ('auto_rotation', 'CMD_CM_VEHICLE_SWITCH_AUTOROTATION'),
+       ('block_tracks', 'CMD_BLOCK_TRACKS'))),
      ('cruis_control', (('forward_cruise', 'CMD_INCREMENT_CRUISE_MODE'), ('backward_cruise', 'CMD_DECREMENT_CRUISE_MODE'), ('stop_fire', 'CMD_STOP_UNTIL_FIRE'))),
      ('firing', (('fire', 'CMD_CM_SHOOT'),
        ('lock_target', 'CMD_CM_LOCK_TARGET'),
        ('lock_target_off', 'CMD_CM_LOCK_TARGET_OFF'),
        ('alternate_mode', 'CMD_CM_ALTERNATE_MODE'),
+       ('trajectory_view', 'CMD_CM_TRAJECTORY_VIEW'),
        ('reloadPartialClip', 'CMD_RELOAD_PARTIAL_CLIP'))),
-     ('vehicle_other', (('showHUD', 'CMD_TOGGLE_GUI'), ('showRadialMenu', 'CMD_RADIAL_MENU_SHOW'))),
+     ('vehicle_other', (('showHUD', 'CMD_TOGGLE_GUI'), ('showRadialMenu', 'CMD_RADIAL_MENU_SHOW'), ('showQuestProgress', 'CMD_QUEST_PROGRESS_SHOW'))),
      ('equipment', (('item01', 'CMD_AMMO_CHOICE_1'),
        ('item02', 'CMD_AMMO_CHOICE_2'),
        ('item03', 'CMD_AMMO_CHOICE_3'),
@@ -1627,65 +1694,87 @@ class KeyboardSettings(SettingsContainer):
        ('item06', 'CMD_AMMO_CHOICE_6'),
        ('item07', 'CMD_AMMO_CHOICE_7'),
        ('item08', 'CMD_AMMO_CHOICE_8'))),
-     ('shortcuts', (('attack', 'CMD_CHAT_SHORTCUT_ATTACK', (('attack', 'attack/ext'), ('my_target', 'my_target/ext'), ('follow_me', 'follow_me/ext'))),
-       ('to_base', 'CMD_CHAT_SHORTCUT_BACKTOBASE', (('to_base', None), ('to_back', 'to_back/ext'))),
+     ('shortcuts', (('my_target/follow_me', 'CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET'),
+       ('attack', 'CMD_CHAT_SHORTCUT_ATTACK'),
+       ('to_base/to_back', 'CMD_CHAT_SHORTCUT_BACKTOBASE'),
        ('positive', 'CMD_CHAT_SHORTCUT_POSITIVE'),
        ('negative', 'CMD_CHAT_SHORTCUT_NEGATIVE'),
-       ('help_me', 'CMD_CHAT_SHORTCUT_HELPME', (('help_me', None), ('help_me_temp', 'help_me_temp/ext'))),
-       ('reload', 'CMD_CHAT_SHORTCUT_RELOAD', (('reload', None), ('stop', 'stop/ext'))))),
+       ('sos/help_me', 'CMD_CHAT_SHORTCUT_HELPME'),
+       ('reload/stop', 'CMD_CHAT_SHORTCUT_RELOAD'))),
      ('camera', (('camera_up', 'CMD_CM_CAMERA_ROTATE_UP'),
        ('camera_down', 'CMD_CM_CAMERA_ROTATE_DOWN'),
        ('camera_left', 'CMD_CM_CAMERA_ROTATE_LEFT'),
        ('camera_right', 'CMD_CM_CAMERA_ROTATE_RIGHT'))),
-     ('voicechat', (('pushToTalk', 'CMD_VOICECHAT_MUTE'),)),
-     ('logitech_keyboard', (('switch_view', 'CMD_LOGITECH_SWITCH_VIEW'),)),
+     ('voicechat', (('pushToTalk', 'CMD_VOICECHAT_MUTE'), ('voicechat_enable', 'CMD_VOICECHAT_ENABLE'))),
      ('minimap', (('sizeUp', 'CMD_MINIMAP_SIZE_UP'), ('sizeDown', 'CMD_MINIMAP_SIZE_DOWN'), ('visible', 'CMD_MINIMAP_VISIBLE'))))
+    IMPORTANT_BINDS = ('forward', 'backward', 'left', 'right', 'fire', 'item01', 'item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08')
+    KEYS_TOOLTIPS = {'my_target/follow_me': 'SettingsKeyFollowMe',
+     'to_base/to_back': 'SettingsKeyTurnBack',
+     'sos/help_me': 'SettingsKeyNeedHelp',
+     'reload/stop': 'SettingsKeyReload',
+     'auto_rotation': 'SettingKeySwitchMode'}
+    __hiddenGroups = {}
 
-    def __init__(self, storage):
-        settings = [('keysLayout', ReadOnlySetting(lambda : self._getLayout()))]
+    def __init__(self):
+        if not GUI_SETTINGS.minimapSize:
+            self.hideGroup('minimap', hide=True)
+        if not GUI_SETTINGS.voiceChat:
+            self.hideGroup('voicechat', hide=True)
+        settings = [('keysLayout', ReadOnlySetting(self._getLayout)), ('keysTooltips', ReadOnlySetting(lambda : self.KEYS_TOOLTIPS))]
         for group in self._getLayout(True):
             for setting in group['values']:
-                settings.append((setting['key'], KeyboardSetting(setting['cmd'], storage)))
+                settings.append((setting['key'], KeyboardSetting(setting['cmd'])))
 
         super(KeyboardSettings, self).__init__(tuple(settings))
+        self.onKeyBindingsChanged = Event()
+
+    def fini(self):
+        self.onKeyBindingsChanged.clear()
+        super(KeyboardSettings, self).fini()
 
     @classmethod
-    def _getLayout(cls, isFull = False):
+    def _getLayout(cls, isFull=False):
         layout = []
         for groupName, groupValues in cls.KEYS_LAYOUT:
             if not isFull:
-                if groupName == 'minimap' and not GUI_SETTINGS.minimapSize:
+                if groupName in cls.__hiddenGroups:
                     continue
-                if groupName == 'voicechat' and not GUI_SETTINGS.voiceChat:
-                    continue
-                if groupName == 'logitech_keyboard' and not LogitechMonitor.isPresentColor():
-                    continue
+            if groupName == 'firing' and not GUI_SETTINGS.spgAlternativeAimingCameraEnabled:
+                groupValues = list(groupValues)
+                del groupValues[4]
             layout.append({'key': groupName,
              'values': [ cls.__mapValues(*x) for x in groupValues ]})
 
         return layout
 
-    def apply(self, values, names = None):
+    @classmethod
+    def getKeyboardImportantBinds(cls):
+        return cls.IMPORTANT_BINDS
+
+    @classmethod
+    def hideGroup(cls, group, hide):
+        if hide:
+            LOG_DEBUG('Hide settings group', group)
+            cls.__hiddenGroups.add(group)
+        else:
+            LOG_DEBUG('Reveal settings group', group)
+            cls.__hiddenGroups.remove(group)
+
+    @classmethod
+    def isGroupHidden(cls, group):
+        return group in cls.__hiddenGroups
+
+    def apply(self, values, names=None):
         super(KeyboardSettings, self).apply(values, names)
         CommandMapping.g_instance.onMappingChanged(values)
         CommandMapping.g_instance.save()
-
-    def refresh(self, names = None):
-        self.setSystemValue()
-
-    def setSystemValue(self):
-        if not self.USE_SERVER_LAYOUT:
-            return
-        for _, setting in self.settings:
-            if isinstance(setting, KeyboardSetting):
-                currentValue = setting.get()
-                setting.setSystemValue(currentValue)
+        self.onKeyBindingsChanged()
 
     def getCurrentMapping(self):
         mapping = {}
         for _, setting in self.settings:
             if isinstance(setting, KeyboardSetting):
-                mapping[setting.settingName] = setting.getCurrentMapping()
+                mapping[setting.cmd] = setting.getCurrentMapping()
 
         return mapping
 
@@ -1693,69 +1782,345 @@ class KeyboardSettings(SettingsContainer):
         mapping = {}
         for _, setting in self.settings:
             if isinstance(setting, KeyboardSetting):
-                mapping[setting.settingName] = setting.getDefaultValue()
+                mapping[setting.cmd] = setting.getDefaultValue()
 
         return mapping
 
     @classmethod
-    def __mapValues(cls, key, cmd, descr = None):
-        result = {'key': key,
+    def __mapValues(cls, key, cmd):
+        return {'key': key,
          'cmd': cmd}
-        if False:
-            settingsKey = '#settings:keyboard/keysBlocks/command/%s'
-            result['descr'] = map(lambda x: {'header': settingsKey % x[0],
-             'label': settingsKey % x[1] if x[1] else None}, descr)
-        return result
 
 
-class FPSPerfomancerSetting(StorageDumpSetting):
+class _BaseSoundPresetSetting(AccountDumpSetting):
 
-    def getDefaultValue(self):
-        return BigWorld.getGraphicsSetting('PS_USE_PERFORMANCER')
+    def __init__(self, actionsMap, settingName, key, subKey=None):
+        super(_BaseSoundPresetSetting, self).__init__(settingName, key, subKey)
+        self.__actionsMap = actionsMap
 
     def setSystemValue(self, value):
         try:
-            BigWorld.setGraphicsSetting('PS_USE_PERFORMANCER', bool(value))
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
+            func, args = self.__actionsMap[value]
+            if args is not None:
+                func(args)
+            else:
+                func()
+        except IndexError:
+            LOG_ERROR(self, 'Unsupported value: %s' % value)
+
+        return
+
+    def fini(self):
+        self.__actionsMap = None
+        super(_BaseSoundPresetSetting, self).fini()
+        return
+
+    def _set(self, value):
+        if value < len(self.__actionsMap):
+            super(_BaseSoundPresetSetting, self)._set(value)
+            self.setSystemValue(value)
+
+    def _save(self, value):
+        if value < len(self.__actionsMap):
+            super(_BaseSoundPresetSetting, self)._save(value)
 
 
-class AltVoicesSetting(StorageDumpSetting, AppRef):
-    ALT_VOICES_PREVIEW = itertools.cycle(('sound_mode_preview01', 'sound_mode_preview02', 'sound_mode_preview03'))
+_SPEAKER_PRESET_CONFIG = ((ACOUSTICS.TYPE_ACOUSTIC_20, SPEAKERS_CONFIG.SPEAKER_SETUP_2_0),
+ (ACOUSTICS.TYPE_ACOUSTIC_51, SPEAKERS_CONFIG.SPEAKER_SETUP_5_1),
+ (ACOUSTICS.TYPE_ACOUSTIC_71, SPEAKERS_CONFIG.SPEAKER_SETUP_7_1),
+ (ACOUSTICS.TYPE_AUTO, SPEAKERS_CONFIG.AUTO_DETECTION))
+
+def _makeSoundPresetIDsSeq():
+    return [ item[1] for item in _SPEAKER_PRESET_CONFIG ]
+
+
+def _makeSoundGuiIDsSeq():
+    return [ item[0] for item in _SPEAKER_PRESET_CONFIG ]
+
+
+def _makeSoundPresetIDToGuiID():
+    return dict(((item[1], item[0]) for item in _SPEAKER_PRESET_CONFIG))
+
+
+class SoundDevicePresetSetting(_BaseSoundPresetSetting):
+    soundsCtrl = dependency.descriptor(ISoundsController)
+
+    class SYSTEMS(CONST_CONTAINER):
+        SPEAKERS = 0
+        HEADPHONES = 1
+        LAPTOP = 2
+
+    def __init__(self, settingName, key, subKey=None, isPreview=False):
+        super(SoundDevicePresetSetting, self).__init__(((self.__setSound, self.SYSTEMS.SPEAKERS), (self.__setSound, self.SYSTEMS.HEADPHONES), (self.__setSound, self.SYSTEMS.LAPTOP)), settingName, key, subKey=subKey)
+
+    def getSystemState(self):
+        selectedID = self.get()
+        speakersCountID = SPEAKERS_CONFIG.SPEAKER_SETUP_2_0
+        if selectedID == self.SYSTEMS.SPEAKERS:
+            speakersCountID = self.soundsCtrl.system.getUserSpeakersPresetID()
+        return (speakersCountID in (SPEAKERS_CONFIG.AUTO_DETECTION, self.soundsCtrl.system.getSystemSpeakersPresetID()), speakersCountID)
+
+    def _getOptions(self):
+        options = []
+        selectedID = self.soundsCtrl.system.getUserSpeakersPresetID()
+        if selectedID == SPEAKERS_CONFIG.AUTO_DETECTION:
+            selectedID = self.soundsCtrl.system.getSystemSpeakersPresetID()
+        else:
+            self.soundsCtrl.system.getSystemSpeakersPresetID()
+        mapping = _makeSoundPresetIDToGuiID()
+        if selectedID in mapping:
+            acousticType = mapping[selectedID]
+        else:
+            LOG_ERROR('Selected preset is unresolved', selectedID)
+            acousticType = ACOUSTICS.TYPE_ACOUSTICS
+        accousticValid = self.soundsCtrl.system.getUserSpeakersPresetID() in (SPEAKERS_CONFIG.AUTO_DETECTION, self.soundsCtrl.system.getSystemSpeakersPresetID())
+        otherValid = self.soundsCtrl.system.getSystemSpeakersPresetID() == SPEAKERS_CONFIG.SPEAKER_SETUP_2_0
+
+        def iterator():
+            yield (ACOUSTICS.TYPE_ACOUSTICS, acousticType, accousticValid)
+            yield (ACOUSTICS.TYPE_HEADPHONES, ACOUSTICS.TYPE_HEADPHONES, otherValid)
+            yield (ACOUSTICS.TYPE_LAPTOP, ACOUSTICS.TYPE_LAPTOP, otherValid)
+
+        for baseID, selectedID, isValid in iterator():
+            options.append({'id': baseID,
+             'label': SETTINGS.sounds_sounddevice(selectedID),
+             'image': '../maps/icons/settings/{}.png'.format(baseID),
+             'tooltip': SETTINGS.sounds_sounddevice(selectedID),
+             'speakerId': selectedID,
+             'showDeviceAlert': not isValid})
+
+        return options
+
+    def _set(self, value):
+        super(SoundDevicePresetSetting, self)._set(value)
+        AccountSettings.setFilter(SPEAKERS_DEVICE, 0)
+
+    def __setSound(self, value):
+        self.soundsCtrl.system.setSoundSystem(value)
+
+
+class SoundSpeakersPresetSetting(SettingAbstract):
+    soundsCtrl = dependency.descriptor(ISoundsController)
+
+    def getSystemPreset(self):
+        selectedID = self.soundsCtrl.system.getSystemSpeakersPresetID()
+        mapping = _makeSoundPresetIDToGuiID()
+        if selectedID in mapping:
+            return mapping[selectedID]
+        LOG_ERROR('Selected preset is unresolved', selectedID)
+        return ACOUSTICS.TYPE_ACOUSTIC_20
+
+    def isPresetSupportedByIndex(self, index):
+        presetIDs = _makeSoundPresetIDsSeq()
+        if index < len(presetIDs):
+            presetID = presetIDs[index]
+            return presetID in (SPEAKERS_CONFIG.AUTO_DETECTION, self.soundsCtrl.system.getSystemSpeakersPresetID())
+        return False
+
+    def _get(self):
+        presetID = self.soundsCtrl.system.getUserSpeakersPresetID()
+        presetIDs = _makeSoundPresetIDsSeq()
+        if presetID in presetIDs:
+            return presetIDs.index(presetID)
+        else:
+            LOG_ERROR('Index of selected preset is not found', presetID)
+            return None
+
+    def _set(self, value):
+        value = int(value)
+        presetIDs = _makeSoundPresetIDsSeq()
+        if value < len(presetIDs):
+            self.soundsCtrl.system.setUserSpeakersPresetID(presetIDs[value])
+            AccountSettings.setFilter(SPEAKERS_DEVICE, 0)
+        else:
+            LOG_ERROR('Index of selected preset is invalid', value)
+
+    def _getOptions(self):
+        options = []
+        for guiID in _makeSoundGuiIDsSeq():
+            label = SETTINGS.sounds_acoustictype(guiID)
+            device = SETTINGS.sounds_sounddevice(guiID)
+            options.append({'id': guiID,
+             'label': label,
+             'tooltip': device,
+             'isAutodetect': guiID == ACOUSTICS.TYPE_AUTO})
+
+        return options
+
+
+class SoundQualitySetting(AccountSetting):
+
+    def __init__(self):
+        super(SoundQualitySetting, self).__init__(SOUND.LOW_QUALITY)
+
+    @classmethod
+    def isAvailable(cls):
+        return True
+
+    def _set(self, isEnabled):
+        self.setSystemValue(isEnabled)
+        super(SoundQualitySetting, self)._set(isEnabled)
+
+    def setSystemValue(self, isEnabled):
+        WWISE.WW_setLowQuality(isEnabled)
+
+
+class BassBoostSetting(AccountSetting):
+    soundsCtrl = dependency.descriptor(ISoundsController)
+
+    def __init__(self):
+        super(BassBoostSetting, self).__init__(SOUND.BASS_BOOST)
+
+    def _set(self, isEnabled):
+        self.setSystemValue(isEnabled)
+        super(BassBoostSetting, self)._set(isEnabled)
+
+    def setSystemValue(self, isEnabled):
+        self.soundsCtrl.system.setBassBoost(isEnabled)
+
+
+class NightModeSetting(AccountSetting):
+    soundsCtrl = dependency.descriptor(ISoundsController)
+
+    def __init__(self):
+        super(NightModeSetting, self).__init__(SOUND.NIGHT_MODE)
+
+    def setSystemValue(self, isEnabled):
+        if isEnabled:
+            self.soundsCtrl.system.disableDynamicPreset()
+        else:
+            self.soundsCtrl.system.enableDynamicPreset()
+
+    def _set(self, isEnabled):
+        self.setSystemValue(isEnabled)
+        super(NightModeSetting, self)._set(isEnabled)
+
+
+class DetectionAlertSound(AccountSetting):
+    _DetectionAlertPackStruct = namedtuple('_DetectionAlertPackStruct', 'current options extraData')
+    _WWISE_EVENTS = ('lightbulb', 'lightbulb_02', 'sixthSense')
+    _CUSTOM_EVENT_FILE = 'audioww/sixthSense.mp3'
+
+    def __init__(self):
+        super(DetectionAlertSound, self).__init__(SOUND.DETECTION_ALERT_SOUND)
+        self.__previewSound = None
+        return
+
+    def playPreviewSound(self, eventIdx):
+        eventToPlay = self._WWISE_EVENTS[eventIdx]
+        if self.__previewSound is not None:
+            playingEvent = self.__previewSound.name
+            if self._WWISE_EVENTS.index(playingEvent) != eventIdx:
+                self.clearPreviewSound()
+                self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
+                self.__previewSound.play()
+            else:
+                if playingEvent != 'sixthSense':
+                    self.clearPreviewSound()
+                    self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
+                self.__previewSound.play()
+        else:
+            self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
+            self.__previewSound.play()
+        return
+
+    def clearPreviewSound(self):
+        if self.__previewSound is not None:
+            self.__previewSound.stop()
+            self.__previewSound = None
+        return
+
+    def getEventName(self):
+        return self._WWISE_EVENTS[self._get()]
+
+    def pack(self):
+        return self._DetectionAlertPackStruct(self._get(), self._getOptions(), self._getExtraData())._asdict()
+
+    def _getOptions(self):
+        options = []
+        for sample in self._WWISE_EVENTS:
+            option = {'label': '#settings:sound/{}/{}'.format(SOUND.DETECTION_ALERT_SOUND, sample)}
+            if sample == 'sixthSense':
+                option.update(tooltip='#settings:sounds/sixthSense')
+            options.append(option)
+
+        return options
+
+    def _getExtraData(self):
+        extraData = []
+        for sample in self._WWISE_EVENTS:
+            if sample == 'sixthSense':
+                canPreview = bool(ResMgr.isFile(self._CUSTOM_EVENT_FILE))
+            else:
+                canPreview = True
+            extraData.append(canPreview)
+
+        return extraData
+
+    def _get(self):
+        return self._WWISE_EVENTS.index(super(DetectionAlertSound, self)._get())
+
+    def _save(self, eventIdx):
+        super(DetectionAlertSound, self)._save(self._WWISE_EVENTS[eventIdx])
+
+
+class AltVoicesSetting(StorageDumpSetting):
+    ALT_VOICES_PREVIEW = itertools.cycle(('wwsound_mode_preview01', 'wwsound_mode_preview02', 'wwsound_mode_preview03'))
     DEFAULT_IDX = 0
     PREVIEW_SOUNDS_COUNT = 3
 
-    class SOUND_MODE_TYPE:
+    class SOUND_MODE_TYPE(object):
         UNKNOWN = 0
         REGULAR = 1
         NATIONAL = 2
 
-    def __init__(self, setttingName, storage):
-        super(AltVoicesSetting, self).__init__(setttingName, storage, True)
+    def __init__(self, settingName, storage):
+        super(AltVoicesSetting, self).__init__(settingName, storage, True)
         self.__previewSound = None
         self.__lastPreviewedValue = None
         self._handlers = {self.SOUND_MODE_TYPE.UNKNOWN: lambda *args: False,
          self.SOUND_MODE_TYPE.REGULAR: self.__applyRegularMode,
          self.SOUND_MODE_TYPE.NATIONAL: self.__applyNationalMode}
+        self.__previewNations = []
         return
 
-    def playPreviewSound(self, soundMgr = None):
+    @app_getter
+    def app(self):
+        return None
+
+    def fini(self):
+        super(AltVoicesSetting, self).fini()
+        self._handlers.clear()
+
+    def playPreviewSound(self, soundMgr=None):
         if self.isSoundModeValid():
-            self.__clearPreviewSound()
+            self.clearPreviewSound()
             sndMgr = soundMgr or self.app.soundManager
+            if sndMgr is None:
+                LOG_ERROR('GUI sound manager is not found')
+                return
             sndPath = sndMgr.sounds.getEffectSound(next(self.ALT_VOICES_PREVIEW))
             if SoundGroups.g_instance.soundModes.currentNationalPreset[1]:
                 g = functions.rnd_choice(*nations.AVAILABLE_NAMES)
-
-                def onBeforePlayCB(snd):
-                    SoundGroups.g_instance.soundModes.setCurrentNation(next(g))
-
-                self.__previewSound = sound.SoundSequence([sndPath] * self.PREVIEW_SOUNDS_COUNT, beforePlayCB=onBeforePlayCB)
-            else:
-                self.__previewSound = sound.Sound(sndPath)
-            self.__previewSound.play()
+                self.__previewNations = [next(g), next(g), next(g)]
+                self.__previewSound = SoundGroups.g_instance.getSound2D(sndPath)
+                if self.__previewSound is not None:
+                    self.__previewSound.setCallback(self.playPreview)
+                    self.playPreview(self.__previewSound)
+                return True
+            self.__previewSound = SoundGroups.g_instance.getSound2D(sndPath)
+            if self.__previewSound is not None:
+                self.__previewSound.play()
             return True
-        return False
+        else:
+            return False
+
+    def playPreview(self, sound):
+        if self.__previewNations and self.__previewSound == sound:
+            nation = self.__previewNations.pop()
+            genderSwitch = random.choice(SoundGroups.CREW_GENDER_SWITCHES.GENDER_ALL)
+            SoundGroups.g_instance.soundModes.setCurrentNation(nation, genderSwitch)
+            sound.play()
 
     def isOptionEnabled(self):
         return len(self.__getSoundModesList()) > 1
@@ -1772,15 +2137,20 @@ class AltVoicesSetting(StorageDumpSetting, AppRef):
             value = int(value)
         super(AltVoicesSetting, self).preview(value)
         self.__lastPreviewedValue = value
-        self.__clearPreviewSound()
+        self.clearPreviewSound()
 
     def revert(self):
         super(AltVoicesSetting, self).revert()
         self.__lastPreviewedValue = self._get()
-        self.__clearPreviewSound()
+        self.clearPreviewSound()
 
     def _getOptions(self):
-        return [ sm.description for sm in self.__getSoundModesList() ]
+        options = []
+        for sm in self.__getSoundModesList():
+            options.append({'label': sm.description,
+             'tooltip': '#settings:sounds/altVoice/{}'.format(sm.name)})
+
+        return options
 
     def getDefaultValue(self):
         modes = self.__getSoundModesList()
@@ -1805,9 +2175,7 @@ class AltVoicesSetting(StorageDumpSetting, AppRef):
     def _get(self):
         value = super(AltVoicesSetting, self)._get()
         modes = self.__getSoundModesList()
-        if value < len(modes):
-            return value
-        return self.DEFAULT_IDX
+        return value if value < len(modes) else self.DEFAULT_IDX
 
     def setSystemValue(self, value):
         if not self.isOptionEnabled():
@@ -1821,9 +2189,7 @@ class AltVoicesSetting(StorageDumpSetting, AppRef):
     def __getSoundModeType(self, soundMode):
         if soundMode.name in SoundGroups.g_instance.soundModes.modes:
             return self.SOUND_MODE_TYPE.REGULAR
-        if soundMode.name in SoundGroups.g_instance.soundModes.nationalPresets:
-            return self.SOUND_MODE_TYPE.NATIONAL
-        return self.SOUND_MODE_TYPE.UNKNOWN
+        return self.SOUND_MODE_TYPE.NATIONAL if soundMode.name in SoundGroups.g_instance.soundModes.nationalPresets else self.SOUND_MODE_TYPE.UNKNOWN
 
     def __applyRegularMode(self, mode):
         soundModes = SoundGroups.g_instance.soundModes
@@ -1843,10 +2209,17 @@ class AltVoicesSetting(StorageDumpSetting, AppRef):
         result.extend(soundModes.nationalPresets.values())
         return result
 
-    def __clearPreviewSound(self):
+    def clearPreviewSound(self):
         if self.__previewSound is not None:
             self.__previewSound.stop()
             self.__previewSound = None
+        player = BigWorld.player()
+        if hasattr(player, 'vehicle'):
+            vehicle = player.vehicle
+            if vehicle is not None:
+                player.vehicle.refreshNationalVoice()
+        else:
+            SoundGroups.g_instance.soundModes.setCurrentNation(SoundGroups.g_instance.soundModes.DEFAULT_NATION)
         return
 
 
@@ -1864,7 +2237,7 @@ class SniperModeStabilization(StorageDumpSetting):
 
 class WindowsTarget4StoredData(SettingAbstract):
 
-    def __init__(self, targetID, isPreview = False):
+    def __init__(self, targetID, isPreview=False):
         super(WindowsTarget4StoredData, self).__init__(isPreview)
         self._targetID = targetID
 
@@ -1883,7 +2256,370 @@ class ReplaySetting(StorageAccountSetting):
 
     def _getOptions(self):
         settingsKey = '#settings:game/%s/%s'
-        return [ settingsKey % (self.settingName, type) for type in self.REPLAY_TYPES ]
+        return [ settingsKey % (self.settingName, rType) for rType in self.REPLAY_TYPES ]
 
     def setSystemValue(self, value):
         BattleReplay.g_replayCtrl.enableAutoRecordingBattles(value)
+
+
+class HangarCamPeriodSetting(StorageAccountSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        TYPE0 = 'type0'
+        TYPE1 = 'type1'
+        TYPE2 = 'type2'
+        NEVER = 'never'
+        HANGAR_CAM_TYPES = (TYPE0,
+         TYPE1,
+         TYPE2,
+         NEVER)
+
+    def getDefaultValue(self):
+        options = self.OPTIONS
+        return options.HANGAR_CAM_TYPES.index(options.TYPE0)
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.settingName, t) for t in self.OPTIONS.HANGAR_CAM_TYPES ]
+
+
+class HangarCamParallaxEnabledSetting(StorageAccountSetting):
+
+    def getDefaultValue(self):
+        return True
+
+
+class InterfaceScaleSetting(UserPrefsFloatSetting):
+    settingsCore = dependency.descriptor(ISettingsCore)
+    connectionMgr = dependency.descriptor(IConnectionManager)
+
+    def __init__(self, sectionName=None, isPreview=False):
+        super(InterfaceScaleSetting, self).__init__(sectionName, isPreview)
+        self.__interfaceScale = 0
+        self.connectionMgr.onDisconnected += self.onDisconnected
+        self.connectionMgr.onConnected += self.onConnected
+
+    def fini(self):
+        self.connectionMgr.onDisconnected -= self.onDisconnected
+        self.connectionMgr.onConnected -= self.onConnected
+
+    def get(self):
+        if BattleReplay.isPlaying():
+            return self._get()
+        self.__checkAndCorrectScaleValue(self.__interfaceScale)
+        return self.__interfaceScale
+
+    def getDefaultValue(self):
+        return AccountSettings.getSettingsDefault(self.sectionName)
+
+    def setSystemValue(self, value):
+        self.__interfaceScale = value
+        scale = self.settingsCore.interfaceScale.getScaleByIndex(value)
+        width, height = GUI.screenResolution()[:2]
+        event_dispatcher.changeAppResolution(width, height, scale)
+        g_monitorSettings.setGlyphCache(scale)
+
+    def onConnected(self):
+        self.setSystemValue(self._get())
+
+    def onDisconnected(self):
+        self.setSystemValue(0)
+
+    def _getOptions(self):
+        return [self.__getScales(graphics.getSuitableWindowSizes(), BigWorld.wg_getCurrentResolution(BigWorld.WindowModeWindowed)), self.__getScales(graphics.getSuitableVideoModes()), self.__getScales(graphics.getSuitableVideoModes())]
+
+    def _set(self, value):
+        super(InterfaceScaleSetting, self)._save(value)
+        self.setSystemValue(value)
+
+    def __getScales(self, modesVariety, additionalSize=None):
+        result = []
+        for i in xrange(len(modesVariety)):
+            modes = sorted(set([ (mode.width, mode.height) for mode in modesVariety[i] ]))
+            if additionalSize is not None:
+                modes.append(additionalSize[0:2])
+            result.append(map(graphics.getInterfaceScalesList, modes))
+
+        return result
+
+    def __checkAndCorrectScaleValue(self, value):
+        scaleLength = len(self.settingsCore.interfaceScale.getScaleOptions())
+        if value >= scaleLength:
+            self.__interfaceScale = 0
+            self._set(self.__interfaceScale)
+            self.settingsCore.interfaceScale.scaleChanged()
+
+
+class GraphicsQualityNote(SettingAbstract):
+    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES, CONTENT_TYPE.TUTORIAL, CONTENT_TYPE.SANDBOX}
+
+    def _get(self):
+        return '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.info(), '</font>') if ResMgr.activeContentType() in self._GRAPHICS_QUALITY_TYPES else ''
+
+    def _set(self, value):
+        pass
+
+
+class GraphicsHigtQualityNote(SettingAbstract):
+    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES}
+
+    def _get(self):
+        return '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.alert(), '</font>') if ResMgr.activeContentType() in self._GRAPHICS_QUALITY_TYPES else ''
+
+    def _set(self, value):
+        pass
+
+
+class GraphicsQuality(SettingAbstract):
+
+    def _get(self):
+        return ResMgr.activeContentType() == CONTENT_TYPE.SD_TEXTURES
+
+    def _set(self, value):
+        pass
+
+
+class ShowDamageIconSetting(StorageAccountSetting):
+    ShowDamageIconPackStruct = namedtuple('ShowDamageIconPackStruct', 'current options extraData')
+
+    def getExtraData(self):
+        lineBreak = '<br/>'
+        templateName = 'html_templates:lobby/tooltips/settings_show_damage_icon'
+        showDamageIconTooltipContent = makeHtmlString(templateName, 'ricochet') + lineBreak
+        showDamageIconTooltipContent += makeHtmlString(templateName, 'trackDamage') + lineBreak
+        showDamageIconTooltipContent += makeHtmlString(templateName, 'criticalDamage') + lineBreak
+        showDamageIconTooltipContent += makeHtmlString(templateName, 'blocked')
+        return {'checkBoxLabel': i18n.makeString(SETTINGS.GAME_SHOWDAMAGEICON),
+         'tooltip': makeTooltip(i18n.makeString(TOOLTIPS.SHOWDAMAGEICON_HEADER), showDamageIconTooltipContent)}
+
+    def pack(self):
+        res = self.ShowDamageIconPackStruct(self._get(), self._getOptions(), self.getExtraData())._asdict()
+        return res
+
+    def getDefaultValue(self):
+        return True
+
+
+class IncreasedZoomSetting(StorageAccountSetting):
+    IncreasedZoomPackStruct = namedtuple('IncreasedZoomPackStruct', 'current options extraData')
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(IncreasedZoomSetting, self).__init__(settingName, storage, isPreview)
+        self.__mouseSetting = MouseSetting('sniper', self.settingName, self.getDefaultValue())
+
+    def getExtraData(self):
+        zooms = self.__mouseSetting.getCamera().getConfigValue('zooms')[-2:]
+        zoomStrs = [ i18n.makeString(SETTINGS.GAME_INCREASEDZOOM_ZOOMSTR, zoom=zoom) for zoom in zooms ]
+        zoomStr = i18n.makeString(SETTINGS.GAME_INCREASEDZOOM_DELIMETER).join(zoomStrs)
+        return {'checkBoxLabel': i18n.makeString(SETTINGS.GAME_INCREASEDZOOM_BASE, zooms=zoomStr),
+         'tooltip': makeTooltip(TOOLTIPS.INCREASEDZOOM_HEADER, i18n.makeString(TOOLTIPS.INCREASEDZOOM_BODY, zooms=zoomStr))}
+
+    def pack(self):
+        return self.IncreasedZoomPackStruct(self._get(), self._getOptions(), self.getExtraData())._asdict()
+
+    def setSystemValue(self, value):
+        if BattleReplay.isPlaying():
+            value = True
+        self.__mouseSetting.apply(value)
+
+
+class MouseAffectedSetting(RegularSetting):
+
+    def __init__(self, settingName, isPreview=False):
+        super(MouseAffectedSetting, self).__init__(settingName, isPreview)
+        self._mouseSettings = [ MouseSetting(camera, self.settingName, self.getDefaultValue()) for camera in self._getCameras() ]
+
+    def _getCameras(self):
+        pass
+
+    def setSystemValue(self, value):
+        forEach(lambda mouseSetting: mouseSetting.apply(value), self._mouseSettings)
+
+
+class SnipereModeByShiftSetting(StorageAccountSetting, MouseAffectedSetting):
+
+    def _getCameras(self):
+        pass
+
+
+class GroupSetting(StorageDumpSetting):
+
+    def __init__(self, settingName, storage, options, settingsKey, isPreview=False):
+        super(GroupSetting, self).__init__(settingName, storage, isPreview)
+        self._options = options
+        self._settingsKey = settingsKey
+        self._visibleOrder = self._getVisibleOrder()
+
+    def getDefaultValue(self):
+        v = super(GroupSetting, self).getDefaultValue()
+        if v in self._visibleOrder:
+            return v
+        else:
+            return self._visibleOrder[0] if self._visibleOrder else None
+
+    def _getOptions(self):
+        return [ self._getOptionData(key) for key in self._visibleOrder ]
+
+    def _getVisibleOrder(self):
+        return sorted(self._options.iterkeys())
+
+    def _getOptionData(self, key):
+        return {'label': self._getOptionLabel(key),
+         'data': key}
+
+    def _getOptionLabel(self, key):
+        return self._settingsKey % str(self._options[key])
+
+
+class DamageIndicatorTypeSetting(GroupSetting):
+    OPTIONS = {0: 'standard',
+     1: 'extended'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(DamageIndicatorTypeSetting, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/damageIndicator/type/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        pass
+
+
+class DamageIndicatorPresetsSetting(GroupSetting):
+    OPTIONS = {0: 'all',
+     1: 'withoutCrit'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(DamageIndicatorPresetsSetting, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/damageIndicator/presets/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        pass
+
+
+class DamageLogDetailsSetting(GroupSetting):
+    SHOW_ALWAYS = 0
+    SHOW_BY_ALT_PRESS = 1
+    HIDE = 2
+    _OPTIONS = {SHOW_ALWAYS: 'always',
+     SHOW_BY_ALT_PRESS: 'byAlt',
+     HIDE: 'hide'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(DamageLogDetailsSetting, self).__init__(settingName, storage, options=self._OPTIONS, settingsKey='#settings:feedback/tab/damageLogPanel/details/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        pass
+
+
+class DamageLogEventTypesSetting(GroupSetting):
+    ALL = 0
+    ONLY_POSITIVE = 1
+    ONLY_NEGATIVE = 2
+    _OPTIONS = {ALL: 'both',
+     ONLY_POSITIVE: 'positive',
+     ONLY_NEGATIVE: 'negative'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(DamageLogEventTypesSetting, self).__init__(settingName, storage, options=self._OPTIONS, settingsKey='#settings:feedback/tab/damageLogPanel/eventTypes/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        pass
+
+
+class DamageLogEventPositionsSetting(GroupSetting):
+    ALL_BOTTOM = 0
+    NEGATIVE_AT_TOP = 1
+    _OPTIONS = {ALL_BOTTOM: 'bottom',
+     NEGATIVE_AT_TOP: 'topBottom'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(DamageLogEventPositionsSetting, self).__init__(settingName, storage, options=self._OPTIONS, settingsKey='#settings:feedback/tab/damageLogPanel/eventPositions/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        pass
+
+
+class BattleEventsSetting(SettingFalseByDefault):
+
+    def __init__(self, settingName, storage, isPreview=False, delegate=lambda : True):
+        self.__callable = delegate
+        super(BattleEventsSetting, self).__init__(settingName, storage, isPreview)
+
+    def _get(self):
+        return None if not self.__callable() else super(BattleEventsSetting, self)._get()
+
+
+class BattleBorderMapModeShow(GroupSetting):
+    SHOW_BY_ALT_PRESS = 0
+    SHOW_ALWAYS = 1
+    HIDE = 2
+    ALWAYS_HIDE = 3
+    OPTIONS = {SHOW_BY_ALT_PRESS: 'alt',
+     SHOW_ALWAYS: 'always',
+     HIDE: 'hide',
+     ALWAYS_HIDE: 'alwaysHide'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(BattleBorderMapModeShow, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/borderMap/showMode/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        return self.SHOW_BY_ALT_PRESS
+
+
+class BattleBorderMapType(GroupSetting):
+    TYPE_WALL = 0
+    TYPE_DOTTED = 1
+    TYPE_HIDE = 2
+    OPTIONS = {TYPE_WALL: 'wall',
+     TYPE_DOTTED: 'dotted',
+     TYPE_HIDE: 'hide'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(BattleBorderMapType, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/borderMap/typeBorder/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        return self.TYPE_WALL
+
+
+class LoginServerSelectionSetting(PreferencesSetting):
+
+    def __init__(self, key):
+        super(LoginServerSelectionSetting, self).__init__()
+        self.__key = key
+        self.__value = Settings.g_instance.userPrefs.readBool(self.__key, False)
+
+    def _savePrefsCallback(self, _):
+        Settings.g_instance.userPrefs.writeBool(self.__key, self.__value)
+
+    def _readPrefsCallback(self, key, value):
+        if key == self.__key:
+            self.__value = value
+
+    def _set(self, value):
+        self.__value = value
+
+    def _get(self):
+        return self.__value
+
+
+class QuestsProgressViewType(GroupSetting):
+    TYPE_STANDARD = 0
+    TYPE_HIDE = 1
+    OPTIONS = {TYPE_STANDARD: 'standard',
+     TYPE_HIDE: 'hidden'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(QuestsProgressViewType, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/questsProgress/type/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        return self.TYPE_STANDARD
+
+
+class QuestsProgressDisplayType(GroupSetting):
+    SHOW_ALL = 0
+    PROGRESS_ONLY = 1
+    OPTIONS = {SHOW_ALL: 'showAll',
+     PROGRESS_ONLY: 'showProgress'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(QuestsProgressDisplayType, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/questsProgress/standardConditions/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        return self.SHOW_ALL

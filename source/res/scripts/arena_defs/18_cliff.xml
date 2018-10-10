@@ -1,0 +1,110 @@
+<18_cliff.xml>
+  <name>	#arenas:18_cliff/name	</name>
+  <description>	#arenas:18_cliff/description	</description>
+  <geometry>	spaces/18_cliff	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/18_cliff/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_cliff_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_cliff_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_cliff_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_cliff_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_cliff_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_cliff_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_18_cliff_wind_summer	</wwambientSound>
+  <wwDefaultReverb>
+    <auxBus>	AUX_env_Mountain	</auxBus>
+    <controlValue>	1.0	</controlValue>
+  </wwDefaultReverb>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	env_Mountain.bnk	</bank>
+    </loadBanks>
+  </soundRemapping>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-273.785675 -436.600922	</position1>
+        </team1>
+        <team2>
+          <position1>	-251.606262 434.591003	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1></team1>
+        <team2>
+          <position>	-285.944 -451.039	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-252.066513 434.820923	</position1>
+          <position2>	228.184692 176.506927	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities>
+    <scenario>
+      <startTime>	30.000000 60.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	150.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	cliff_bomber	</name>
+      <trajectories>
+        <warplane>
+          <preset>	cliff_bomber_clin_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	cliff_bomber_clin_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	cliff_bomber_clin_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	cliff_bomber_clin_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	cliff_bomber_clin_5	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</18_cliff.xml>

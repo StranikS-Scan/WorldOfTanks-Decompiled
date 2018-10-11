@@ -925,7 +925,7 @@
         <armor_15>	280	</armor_15>
         <armor_16>	210	</armor_16>
       </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
       <weight>	8500	</weight>
       <maxHealth>	260	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
@@ -949,10 +949,8 @@
             </armor_2>
             <armor_3>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
+            <armor_7>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
             <armor_9>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_9>
             <armor_10>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -960,16 +958,16 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <reloadTime>	8.7	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <reloadTime>	8.4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.366894 7 0.420751 7 0.430556 6 0.569444 6 0.584101 7 0.633106 7 1 7	</maxPitch>
+            <maxPitch>	0 7 0.420751 7 0.430556 6 0.569444 6 0.584101 7 1 7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
@@ -1106,7 +1104,7 @@
     </Turret_1_Ch01_Type59_2>
   </turrets0>
   <engines>
-    <NORINCO_12150L7>	shared	</NORINCO_12150L7>
+    <NORINCO_12150L_59>	shared	</NORINCO_12150L_59>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
@@ -1117,9 +1115,9 @@
   <physics>
     <detailed>
       <engines>
-        <NORINCO_12150L7>
-          <smplEnginePower>	549.7862	</smplEnginePower>
-        </NORINCO_12150L7>
+        <NORINCO_12150L_59>
+          <smplEnginePower>	650	</smplEnginePower>
+        </NORINCO_12150L_59>
       </engines>
       <chassis>
         <Chassis_Ch01_Type59_2>

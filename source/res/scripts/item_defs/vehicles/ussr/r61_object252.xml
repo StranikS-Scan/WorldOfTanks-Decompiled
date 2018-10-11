@@ -27,7 +27,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	100	</armor_1>
+      <armor_1>	110	</armor_1>
       <armor_2>	120	</armor_2>
       <armor_3>	100	</armor_3>
       <armor_4>	60	</armor_4>
@@ -36,11 +36,13 @@
       <armor_7>	100	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	20	</armor_9>
-      <armor_10>	110	</armor_10>
+      <armor_10>	120	</armor_10>
       <armor_11>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_11>
       <armor_12>	80	</armor_12>
       <armor_13>	50	</armor_13>
+      <armor_14>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_14>
       <armor_16>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_16>
     </armor>
@@ -890,7 +892,9 @@
         <armor_4>	100	</armor_4>
         <armor_5>	30	</armor_5>
         <armor_6>	30	</armor_6>
+        <armor_7>	190	</armor_7>
         <armor_8>	0	</armor_8>
+        <armor_9>	170	</armor_9>
         <armor_15>	200	</armor_15>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -909,7 +913,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122-mm_D-30>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_122-mm_D-30>	shared	  <maxAmmo>	37	</maxAmmo>
           <armor>
             <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -917,14 +921,14 @@
             </armor_4>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <reloadTime>	11.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.4	</aimingTime>
+          <aimingTime>	2.8	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 0.380783 6 0.444444 4 0.555556 4 0.619218 6 1 6	</maxPitch>

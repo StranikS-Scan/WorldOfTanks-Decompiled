@@ -780,7 +780,7 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
+          <reloadTime>	6.8	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -790,7 +790,7 @@
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
-            <maxPitch>	0 8 0.353005 8 0.416667 1 0.583333 1 0.646995 8 1 8	</maxPitch>
+            <maxPitch>	0 10 0.353005 10 0.416667 1 0.583333 1 0.646995 10 1 10	</maxPitch>
           </pitchLimits>
           <models>
             <undamaged>	vehicles/french/F65_FCM_50t/normal/lod0/Gun_01.model	</undamaged>
@@ -926,7 +926,7 @@
     </Turret_1_FCM_50t>
   </turrets0>
   <engines>
-    <Maybach_HL_234P45A>	shared	</Maybach_HL_234P45A>
+    <Maybach_HL_295_1250>	shared	</Maybach_HL_295_1250>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -937,9 +937,9 @@
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_234P45A>
-          <smplEnginePower>	1057.281	</smplEnginePower>
-        </Maybach_HL_234P45A>
+        <Maybach_HL_295_1250>
+          <smplEnginePower>	1250	</smplEnginePower>
+        </Maybach_HL_295_1250>
       </engines>
       <chassis>
         <Chassis_FCM_50t>

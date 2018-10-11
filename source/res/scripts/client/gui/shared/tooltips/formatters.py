@@ -10,7 +10,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.ranked_battles.ranked_helpers import buildRankVO
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
-from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.money import MONEY_UNDEFINED
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from helpers import i18n, time_utils
@@ -124,7 +124,7 @@ def packBuildUpBlockData(blocks, gap=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUI
 def packTitleDescBlock(title, desc=None, gap=TXT_GAP_FOR_BIG_TITLE, useHtml=True, textBlockLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, blocksLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None, descPadding=None):
     blocks = [packTextBlockData(title, useHtml, textBlockLinkage)]
     if desc is not None:
-        blocks.append(packTextBlockData(desc, useHtml, textBlockLinkage, descPadding))
+        blocks.append(packTextBlockData(stripColorTagDescrTags(desc), useHtml, textBlockLinkage, descPadding))
     return packBuildUpBlockData(blocks, gap, blocksLinkage, padding)
 
 

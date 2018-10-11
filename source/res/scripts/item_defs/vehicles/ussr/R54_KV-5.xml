@@ -10,7 +10,7 @@
   </crew>
   <speedLimits>
     <forward>	40	</forward>
-    <backward>	11	</backward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.027	</moving>
@@ -39,6 +39,8 @@
       <armor_8>	0	</armor_8>
       <armor_9>	205	</armor_9>
       <armor_10>	150	</armor_10>
+      <armor_11>	170	</armor_11>
+      <armor_12>	160	</armor_12>
       <armor_13>	90	</armor_13>
       <armor_14>	230	</armor_14>
       <armor_15>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -900,7 +902,7 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	180	</armor_1>
-        <armor_2>	180	</armor_2>
+        <armor_2>	190	</armor_2>
         <armor_3>	180	</armor_3>
         <armor_4>	180	</armor_4>
         <armor_5>	50	</armor_5>
@@ -909,9 +911,10 @@
         <armor_8>	0	</armor_8>
         <armor_9>	150	</armor_9>
         <armor_10>	150	</armor_10>
+        <armor_11>	190	</armor_11>
         <armor_15>	150	</armor_15>
       </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	21700	</weight>
       <maxHealth>	356	</maxHealth>
       <rotationSpeed>	21.25	</rotationSpeed>
@@ -931,6 +934,8 @@
           <armor>
             <armor_1>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
+            <armor_2>	190	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
             <gun>	40	</gun>
@@ -940,6 +945,8 @@
             <minPitch>	0 -22 1 -22	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/russian/R54_KV-5/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R54_KV-5/crash/lod0/Gun_01.model	</destroyed>

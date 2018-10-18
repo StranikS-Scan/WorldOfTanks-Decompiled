@@ -82,7 +82,7 @@ def makeVehicleBasicVO(vehicle, levelsRange=None, vehicleTypes=None):
         elif vehicleTypes is not None and vehicle.type not in vehicleTypes:
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_INCOMPATIBLETYPE
         return {'intCD': vehicle.intCD,
-         'nationID': vehicle.nationID,
+         'nationID': vehicle.customNationID,
          'name': vehicle.name,
          'userName': vehicle.userName,
          'shortUserName': vehicle.shortUserName,

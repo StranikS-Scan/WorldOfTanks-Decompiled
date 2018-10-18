@@ -41,7 +41,8 @@ LOBBY_TOOLTIPS_BUILDERS_PATHS = (('gui.Scaleform.daapi.view.tooltips.achievement
  ('gui.Scaleform.daapi.view.tooltips.vehicle_builders', _TOOLTIPS.VEHICLES_SET),
  ('gui.Scaleform.daapi.view.tooltips.vehicle_items_builders', _TOOLTIPS.VEHICLES_ITEMS_SET),
  ('gui.Scaleform.daapi.view.tooltips.wgm_currency_builders', _TOOLTIPS.WGM_CURRENCY_SET),
- ('gui.Scaleform.daapi.view.tooltips.marathon_builders', _TOOLTIPS.MARATHON_SET))
+ ('gui.Scaleform.daapi.view.tooltips.marathon_builders', _TOOLTIPS.MARATHON_SET),
+ ('gui.Scaleform.daapi.view.tooltips.halloween_builders', _TOOLTIPS.HALLOWEEN_SET))
 ADVANCED_COMPLEX_TOOLTIPS = {'#tooltips:hangar/ammo_panel/device/empty': 'equipment',
  '#tooltips:hangar/ammo_panel/equipment/empty': 'service',
  '#tooltips:equipment/empty': 'service',

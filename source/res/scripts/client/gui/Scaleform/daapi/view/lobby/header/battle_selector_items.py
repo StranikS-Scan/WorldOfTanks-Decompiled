@@ -164,7 +164,7 @@ class _RandomQueueItem(_SelectorItem):
 
     def _update(self, state):
         self._isDisabled = state.hasLockedState
-        self._isSelected = state.isQueueSelected(QUEUE_TYPE.RANDOMS)
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.RANDOMS) or state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
 
 
 class _CommandItem(_SelectorItem):
@@ -372,11 +372,6 @@ class _EventSquadItem(_SelectorItem):
     def _update(self, state):
         self._isSelected = state.isInUnit(PREBATTLE_TYPE.EVENT)
         self._isDisabled = state.hasLockedState and not state.isInUnit(PREBATTLE_TYPE.EVENT)
-
-    def getVO(self):
-        vo = super(_EventSquadItem, self).getVO()
-        vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_LOBBY_EVENTPOPOVERBTNBG
-        return vo
 
 
 class _RankedItem(_SelectorItem):

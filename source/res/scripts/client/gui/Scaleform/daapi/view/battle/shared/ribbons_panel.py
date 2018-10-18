@@ -15,7 +15,6 @@ from helpers import i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.shared.ribbons_aggregator import DAMAGE_SOURCE
-_RIBBON_SOUNDS_ENABLED = True
 _SHOW_RIBBON_SOUND_NAME = 'show_ribbon'
 _HIDE_RIBBON_SOUND_NAME = 'hide_ribbon'
 _CHANGE_RIBBON_SOUND_NAME = 'increment_ribbon_counter'
@@ -158,6 +157,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         self.__isWithVehName = True
         self.__isExtendedAnim = True
         self.__isVisible = True
+        self.__soundsEnabled = True
         self.__arenaDP = self.sessionProvider.getCtx().getArenaDP()
         self.__ribbonsAggregator = ribbons_aggregator.createRibbonsAggregator()
         self.__ribbonsAggregator.onRibbonAdded += self.__onRibbonAdded
@@ -176,6 +176,9 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
             self.__ribbonsAggregator.resetRibbonData(ribbonID)
             self.__playSound(_HIDE_RIBBON_SOUND_NAME)
         return
+
+    def setSoundsEnabled(self, enabled):
+        self.__soundsEnabled = enabled
 
     def _populate(self):
         super(BattleRibbonsPanel, self)._populate()
@@ -209,7 +212,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         return self.__checkUserPreferences(ribbon)
 
     def __playSound(self, eventName):
-        if not self.__isVisible or not _RIBBON_SOUNDS_ENABLED:
+        if not self.__isVisible or not self.__soundsEnabled:
             return
         soundNotifications = avatar_getter.getSoundNotifications()
         if soundNotifications and hasattr(soundNotifications, 'play') and hasattr(soundNotifications, 'isPlaying'):

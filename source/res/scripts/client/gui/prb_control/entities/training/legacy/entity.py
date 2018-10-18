@@ -9,6 +9,7 @@ from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.training.legacy.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
+from gui.prb_control.entities.training.legacy.vehicles_watcher import TrainingVehiclesWatcher
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import cooldown
 from gui.prb_control.entities.base.legacy.ctx import SetPlayerStateCtx
@@ -129,12 +130,16 @@ class TrainingEntity(LegacyEntity):
          REQUEST_TYPE.SEND_INVITE: self.sendInvites}
         super(TrainingEntity, self).__init__(FUNCTIONAL_FLAG.TRAINING, settings, permClass=TrainingPermissions, limits=TrainingLimits(self), requestHandlers=requests)
         self.__settingRecords = []
+        self.__watcher = None
+        return
 
     @legacy_storage_getter(PREBATTLE_TYPE.TRAINING)
     def storage(self):
         return None
 
     def init(self, clientPrb=None, ctx=None):
+        self.__watcher = TrainingVehiclesWatcher()
+        self.__watcher.start()
         result = super(TrainingEntity, self).init(clientPrb=clientPrb, ctx=ctx)
         add = g_eventBus.addListener
         for event in self.__loadEvents:
@@ -158,6 +163,9 @@ class TrainingEntity(LegacyEntity):
         return res
 
     def fini(self, clientPrb=None, ctx=None, woEvents=False):
+        if self.__watcher is not None:
+            self.__watcher.stop()
+            self.__watcher = None
         result = super(TrainingEntity, self).fini(clientPrb=clientPrb, ctx=ctx, woEvents=woEvents)
         remove = g_eventBus.removeListener
         for event in self.__loadEvents:

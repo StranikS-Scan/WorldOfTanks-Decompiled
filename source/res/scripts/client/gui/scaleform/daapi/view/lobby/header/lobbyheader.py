@@ -229,6 +229,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def showLobbyMenu(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def getCurrentHeaderButtons(self):
+        return [ buttonID for buttonID in self.BUTTONS_ORDER if self.__isHeaderButtonPresent(buttonID) ]
+
     @process
     def menuItemClick(self, alias):
         navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()

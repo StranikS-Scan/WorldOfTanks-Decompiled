@@ -16,6 +16,7 @@
     <Interface>	RespawnController_Vehicle	</Interface>
     <Interface>	SmokeController_Vehicle	</Interface>
     <Interface>	InspireController_Vehicle	</Interface>
+    <Interface>	ZombieVehicle_Vehicle	</Interface>
   </Implements>
   <LoDLevels>
     <level>	20	  <hyst>	4	</hyst>
@@ -142,7 +143,7 @@
     </arenaBase>
     <botKind>
       <Type>	UINT8	</Type>
-      <Flags>	CELL_PUBLIC	</Flags>
+      <Flags>	ALL_CLIENTS	</Flags>
     </botKind>
     <crewCompactDescrs>
       <Type>	TUPLE	  <of>	STRING	</of>
@@ -223,6 +224,7 @@
     <directVisibility></directVisibility>
     <_ProximityManager__data></_ProximityManager__data>
     <_TimerManager__unpersistedTimers></_TimerManager__unpersistedTimers>
+    <_delayAIInitialization></_delayAIInitialization>
   </TempProperties>
   <ClientMethods>
     <onHealthChanged>
@@ -450,6 +452,15 @@
     <requestVisibilityLists>
       <Arg>	MAILBOX	</Arg>
     </requestVisibilityLists>
+    <initAI></initAI>
+    <setHealth>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+    </setHealth>
+    <changeHealthBy>
+      <Arg>	INT32	</Arg>
+    </changeHealthBy>
   </CellMethods>
   <BaseMethods>
     <createCellNearHere>

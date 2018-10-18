@@ -87,6 +87,9 @@ from avatar_components.avatar_recovery_mechanic import AvatarRecoveryMechanic
 from avatar_components.avatar_respawn_mechanic import AvatarRespawnMechanic
 from avatar_components.team_healthbar_mechanic import TeamHealthbarMechanic
 from vehicle_systems import appearance_cache
+from avatar_components.avatar_event_points_mechanic import AvatarEventPointsMechanic
+from avatar_components.zombie_spawn_points_mechanic import ZombieSpawnPointsMechanic
+from avatar_components.avatar_event_handle_key import AvatarEventHandleKey
 from vehicle_systems.stipple_manager import StippleManager
 from AvatarInputHandler.epic_battle_death_mode import DeathFreeCamMode
 from gui.sounds.epic_sound_constants import EPIC_SOUND
@@ -140,9 +143,12 @@ AVATAR_COMPONENTS = {CombatEquipmentManager,
  TeamHealthbarMechanic,
  AvatarEpicData,
  AvatarRecoveryMechanic,
- AvatarRespawnMechanic}
+ AvatarRespawnMechanic,
+ AvatarEventPointsMechanic,
+ ZombieSpawnPointsMechanic,
+ AvatarEventHandleKey}
 
-class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, AvatarRespawnMechanic):
+class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, AvatarRespawnMechanic, AvatarEventPointsMechanic, ZombieSpawnPointsMechanic, AvatarEventHandleKey):
     __onStreamCompletePredef = {STREAM_ID_AVATAR_BATTLE_RESULS: 'receiveBattleResults'}
     isOnArena = property(lambda self: self.__isOnArena)
     isVehicleAlive = property(lambda self: self.__isVehicleAlive)
@@ -472,6 +478,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 BigWorld.callback(0, partial(self.set_playerVehicleID, 0))
         self.__consistentMatrices.notifyEnterWorld(self)
         AvatarObserver.onEnterWorld(self)
+        self.initEventPoints(self.playerVehicleID)
 
     def onLeaveWorld(self):
         LOG_DEBUG('[INIT_STEPS] Avatar.onLeaveWorld')
@@ -577,6 +584,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         self.base.setVehicleDevelopmentFeature(self.playerVehicleID, 'destroy_self', 0, '')
                     if key == Keys.KEY_8:
                         self.base.setVehicleDevelopmentFeature(self.playerVehicleID, 'kill_engine', 0, '')
+                    if key == Keys.KEY_9:
+                        self.base.setVehicleDevelopmentFeature(self.playerVehicleID, 'kill_tankman', 0, '')
+                        return True
                     if key == Keys.KEY_F:
                         vehicle = BigWorld.entity(self.playerVehicleID)
                         vehicle.filter.enableClientFilters = not vehicle.filter.enableClientFilters
@@ -712,6 +722,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 if cmdMap.isFired(CommandMapping.CMD_VEHICLE_MARKERS_SHOW_INFO, key):
                     gui_event_dispatcher.showExtendedInfo(isDown)
                     return True
+                if self.arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES and key == Keys.KEY_F1 and (not isDown or not g_appLoader.getApp().isModalViewShown()):
+                    gui_event_dispatcher.toggleEventHelp(isDown)
+                    return True
                 if key == Keys.KEY_F1 and isDown and mods == 0:
                     gui_event_dispatcher.toggleHelp()
                     return True
@@ -802,7 +815,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
         self.target = entity
         self.guiSessionProvider.shared.feedback.setTargetInFocus(entity.id, True)
-        if (self.inputHandler.isGuiVisible or self.isInTutorial) and entity.isAlive():
+        isEventBattle = self.sessionProvider.arenaVisitor.gui.isEventBattle()
+        if (self.inputHandler.isGuiVisible or self.isInTutorial) and entity.isAlive() and (self.__isVehicleAlive or not isEventBattle):
             isVehicle = entity.__class__.__name__ == 'Vehicle'
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.AIM_AT_VEHICLE, vehicleId=entity.id)
             entity.drawEdge()
@@ -1345,6 +1359,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         observedVehID = self.guiSessionProvider.shared.vehicleState.getControllingVehicleID()
         if self.isObserver() or observedVehID == self.playerVehicleID:
             self.guiSessionProvider.shared.feedback.handleBattleEvents(events)
+
+    def onEventPointsEvent(self, event):
+        eventPoints = self.guiSessionProvider.shared.eventPoints
+        if eventPoints:
+            eventPoints.onServerEvent(event)
 
     def battleEventsSummary(self, summary):
         LOG_DEBUG_DEV('Summary of battle events has been received:  data={}'.format(summary))

@@ -110,7 +110,7 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
         return self.isInQueue()
 
     def getEntityType(self):
-        return self._queueType
+        return self.getQueueType()
 
     def getPermissions(self, pID=None, **kwargs):
         return PreQueuePermissions(self.isInQueue())
@@ -118,7 +118,7 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
     def getConfirmDialogMeta(self, ctx):
         meta = None
         if self.hasLockedState():
-            meta = rally_dialog_meta.RallyLeaveDisabledDialogMeta(CTRL_ENTITY_TYPE.PREQUEUE, self._queueType)
+            meta = rally_dialog_meta.RallyLeaveDisabledDialogMeta(CTRL_ENTITY_TYPE.PREQUEUE, self.getQueueType())
         return meta
 
     def showGUI(self, ctx=None):
@@ -204,33 +204,33 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
 
     def onEnqueued(self, *args):
         self._requestCtx.stopProcessing(True)
-        self._invokeListeners('onEnqueued', self._queueType, *args)
+        self._invokeListeners('onEnqueued', self.getQueueType(), *args)
         self._goToQueueUI()
 
     def onDequeued(self, *args):
         self._requestCtx.stopProcessing(True)
-        self._invokeListeners('onDequeued', self._queueType, *args)
+        self._invokeListeners('onDequeued', self.getQueueType(), *args)
         self._exitFromQueueUI()
 
     def onEnqueueError(self, errorCode, *args):
         self._requestCtx.stopProcessing(True)
-        self._invokeListeners('onEnqueueError', self._queueType, *args)
+        self._invokeListeners('onEnqueueError', self.getQueueType(), *args)
         self._exitFromQueueUI()
         SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
 
     def onKickedFromQueue(self, *args):
         self._requestCtx.stopProcessing(True)
-        self._invokeListeners('onKickedFromQueue', self._queueType, *args)
+        self._invokeListeners('onKickedFromQueue', self.getQueueType(), *args)
         self._exitFromQueueUI()
         SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)
 
     def onKickedFromArena(self, *args):
         self._requestCtx.stopProcessing(True)
-        self._invokeListeners('onKickedFromArena', self._queueType, *args)
+        self._invokeListeners('onKickedFromArena', self.getQueueType(), *args)
         self._exitFromQueueUI()
 
     def onArenaJoinFailure(self, *args):
-        self._invokeListeners('onArenaJoinFailure', self._queueType, *args)
+        self._invokeListeners('onArenaJoinFailure', self.getQueueType(), *args)
         self._exitFromQueueUI()
 
     def _createActionsValidator(self):

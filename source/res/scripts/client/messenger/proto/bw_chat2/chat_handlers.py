@@ -178,6 +178,7 @@ class _EntityChatHandler(bw2_provider.ResponseSeqHandler):
 
 
 class ArenaChatHandler(_EntityChatHandler):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, provider, adminChat):
         super(ArenaChatHandler, self).__init__(provider, adminChat, _ActionsCollection(_ACTIONS.INIT_BATTLE_CHAT, _ACTIONS.DEINIT_BATTLE_CHAT, _ACTIONS.ON_BATTLE_MESSAGE_BROADCAST, _ACTIONS.BROADCAST_BATTLE_MESSAGE), wrappers.ArenaDataFactory(), limits.ArenaLimits())

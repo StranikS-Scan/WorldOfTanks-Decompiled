@@ -228,6 +228,7 @@ class REQ_CRITERIA(object):
         IS_READY_TO_ACTIVATE = RequestCriteria(PredicateCondition(lambda item: item.isReadyToActivate))
         BOOSTER_TYPES = staticmethod(lambda boosterTypes: RequestCriteria(PredicateCondition(lambda item: item.boosterType in boosterTypes)))
         IN_BOOSTER_ID_LIST = staticmethod(lambda boostersList: RequestCriteria(PredicateCondition(lambda item: item.boosterID in boostersList)))
+        QUALITY = staticmethod(lambda qualityValues: RequestCriteria(PredicateCondition(lambda item: item.quality in qualityValues)))
 
     class BATTLE_BOOSTER(object):
         ALL = RequestCriteria(PredicateCondition(lambda item: item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER))

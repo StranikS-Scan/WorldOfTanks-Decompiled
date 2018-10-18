@@ -79,6 +79,7 @@
     <_90mm_canon_DCA_30_CA_IGR>	60005	</_90mm_canon_DCA_30_CA_IGR>
     <_90mm_D914_IGR>	60006	</_90mm_D914_IGR>
     <_105mm_CN_105_57_IGR>	60007	</_105mm_CN_105_57_IGR>
+    <_90mm_canon_DCA_30_Halloween>	62001	</_90mm_canon_DCA_30_Halloween>
     <_47mm_SA34_bootcamp>	64001	</_47mm_SA34_bootcamp>
   </ids>
   <shared>
@@ -1799,6 +1800,51 @@
         </_90mm_OE_mle_1924>
       </shots>
     </_90mm_canon_DCA_30>
+    <_90mm_canon_DCA_30_Halloween>
+      <userString>	#france_vehicles:_90mm_canon_DCA_30_Halloween	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	64000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.46	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.42857142857143	</reloadTime>
+      <maxAmmo>	52	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	2050	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invulnerable>	true	</invulnerable>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.41142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_90mm_Prf1941_Halloween>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	135 122	</piercingPower>
+        </_90mm_Prf1941_Halloween>
+      </shots>
+    </_90mm_canon_DCA_30_Halloween>
     <_90mm_canon_DCA_30_CA>
       <userString>	#france_vehicles:_90mm_canon_DCA_30_CA	</userString>
       <shortUserString>	#france_vehicles:_90mm_canon_DCA_30_CA_short	</shortUserString>

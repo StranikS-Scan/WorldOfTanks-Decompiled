@@ -54,9 +54,9 @@ class _SquadBonusInfo(object):
 
 
 class _PersonalAvatarInfo(object):
-    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards', '__extInfo')
+    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards', '__extInfo', '__eventPoints')
 
-    def __init__(self, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, **kwargs):
+    def __init__(self, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, eventPoints=0, **kwargs):
         super(_PersonalAvatarInfo, self).__init__()
         self.__accountDBID = accountDBID
         self.__clanDBID = clanDBID
@@ -207,6 +207,12 @@ class _EconomicsRecordsChains(object):
 
     def getPremiumXPRecords(self):
         return self._premiumXP
+
+    def getBaseFreeXPRecords(self):
+        return self._baseFreeXP
+
+    def getPremiumFreeXPRecords(self):
+        return self._premiumFreeXP
 
     def getMoneyRecords(self):
         return itertools.izip(self._baseCredits, self._premiumCredits, self._goldRecords, self._autoRecords)
@@ -393,6 +399,12 @@ class PersonalInfo(shared.UnpackedInfo):
 
     def getPremiumXPRecords(self):
         return self.__economicsRecords.getPremiumXPRecords()
+
+    def getBaseFreeXPRecords(self):
+        return self.__economicsRecords.getBaseFreeXPRecords()
+
+    def getPremiumFreeXPRecords(self):
+        return self.__economicsRecords.getPremiumFreeXPRecords()
 
     def getXPRecords(self):
         return self.__economicsRecords.getXPRecords()

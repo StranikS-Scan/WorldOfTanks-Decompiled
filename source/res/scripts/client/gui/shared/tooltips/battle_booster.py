@@ -121,8 +121,9 @@ class HeaderBlockConstructor(BattleBoosterTooltipBlockConstructor):
 
 class BattleBoosterPriceBlockConstructor(PriceBlockConstructor):
 
-    def _getInventoryBlock(self, count):
-        return formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.BATTLEBOOSTER_INVENTORYCOUNT), value=text_styles.stats(count), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5))
+    def __init__(self, module, configuration, valueWidth, leftPadding, rightPadding):
+        super(BattleBoosterPriceBlockConstructor, self).__init__(module, configuration, valueWidth, leftPadding, rightPadding)
+        self._inInventoryBlockData['text'] = TOOLTIPS.BATTLEBOOSTER_INVENTORYCOUNT
 
 
 class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):

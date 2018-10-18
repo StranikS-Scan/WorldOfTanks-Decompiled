@@ -16,6 +16,15 @@ class BattleMessageListMeta(BaseDAAPIComponent):
     def as_refreshS(self):
         return self.flashObject.as_refresh() if self._isDAAPIInited() else None
 
+    def as_showEventYellowMessageS(self, key, text):
+        return self.flashObject.as_showEventYellowMessage(key, text) if self._isDAAPIInited() else None
+
+    def as_showEventGreenMessageS(self, key, text):
+        return self.flashObject.as_showEventGreenMessage(key, text) if self._isDAAPIInited() else None
+
+    def as_showEventGreenCleanMessageS(self, key, text):
+        return self.flashObject.as_showEventGreenCleanMessage(key, text) if self._isDAAPIInited() else None
+
     def as_showYellowMessageS(self, key, text):
         return self.flashObject.as_showYellowMessage(key, text) if self._isDAAPIInited() else None
 

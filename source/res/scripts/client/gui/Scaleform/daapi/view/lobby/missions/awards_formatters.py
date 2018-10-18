@@ -4,7 +4,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import finders
-from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker, PACK_RENT_VEHICLES_BONUS
+from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker, getHalloweenProgressAwardPacker, PACK_RENT_VEHICLES_BONUS
 from gui.server_events.bonuses import FreeTokensBonus
 from gui.shared.formatters import text_styles
 from helpers import i18n, dependency
@@ -103,6 +103,15 @@ class LinkedSetAwardsComposer(CurtailingAwardsComposer):
          'align': bonus.align,
          'highlightType': bonus.highlightType,
          'overlayType': bonus.overlayType}
+
+
+class HalloweenAwardsComposer(LinkedSetAwardsComposer):
+
+    def __init__(self, displayedAwardsCount, awardsFormatter=None):
+        if awardsFormatter is None:
+            awardsFormatter = getHalloweenProgressAwardPacker()
+        super(HalloweenAwardsComposer, self).__init__(displayedAwardsCount, awardsFormatter)
+        return
 
 
 class DetailedCardAwardComposer(CurtailingAwardsComposer):

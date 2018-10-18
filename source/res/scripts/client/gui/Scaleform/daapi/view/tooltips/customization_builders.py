@@ -9,4 +9,7 @@ from gui.Scaleform.daapi.view.lobby.customization.tooltips.element import NonHis
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
-    return (DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementTooltip(contexts.TechCustomizationContext())), DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_HISTORIC_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, NonHistoricTooltip(contexts.TechCustomizationContext())), DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_ICON, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementIconTooltip(contexts.TechCustomizationContext())))
+    return (DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementTooltip(contexts.TechCustomizationContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_HISTORIC_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, NonHistoricTooltip(contexts.TechCustomizationContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_ICON, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementIconTooltip(contexts.TechCustomizationContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementTooltip(contexts.Shop20CustomizationContext())))

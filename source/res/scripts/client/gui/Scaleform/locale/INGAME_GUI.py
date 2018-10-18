@@ -607,6 +607,9 @@ class INGAME_GUI(object):
     REWARDWINDOW_BASE_DESCTEXT = '#ingame_gui:rewardWindow/base/descText'
     REWARDWINDOW_BASE_BTNLABEL = '#ingame_gui:rewardWindow/base/btnLabel'
     BATTLEPROGRESS_HINT_NOBINDINGKEY = '#ingame_gui:battleProgress/hint/noBindingKey'
+    PLAYER_MESSAGES_HALLOWEENSIN = '#ingame_gui:player_messages/halloweenSin'
+    PLAYER_MESSAGES_HALLOWEENSALVATION = '#ingame_gui:player_messages/halloweenSalvation'
+    PLAYER_MESSAGES_HALLOWEENBLISS = '#ingame_gui:player_messages/halloweenBliss'
     REWARDWINDOW_ALL_DESCTEXT_ENUM = (REWARDWINDOW_BASE_DESCTEXT,)
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,

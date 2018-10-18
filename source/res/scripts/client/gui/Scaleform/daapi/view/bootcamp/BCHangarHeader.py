@@ -15,5 +15,9 @@ class BCHangarHeader(HangarHeader):
         if questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON:
             self.showQuestsWindow()
 
+    def _populate(self):
+        self.as_setBonusVisibleS(False)
+        super(BCHangarHeader, self)._populate()
+
     def _getQuestsToHeaderVO(self, vehicle):
         return [self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, '', [self._headerQuestFormaterVo(enable=True, icon=RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE, label='', questType=HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, flag=RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_BLUE)])]

@@ -41,6 +41,7 @@ class CONDITION_ICON:
     RAM = 'ram'
     MAIN_REPEAT = 'main_repeat'
     IMPROVE = 'improve'
+    EVENT_POINTS = 'event_points'
 
 
 class PROGRESS_TEMPLATE:

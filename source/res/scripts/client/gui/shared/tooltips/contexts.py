@@ -22,6 +22,7 @@ from helpers.i18n import makeString
 from shared_utils import findFirst
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.halloween_controller import IHalloweenController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 
@@ -195,6 +196,15 @@ class AwardContext(ShopContext):
          'rentExpiryTime': self._rentExpiryTime,
          'rentBattlesLeft': self._rentBattlesLeft,
          'rentWinsLeft': self._rentWinsLeft}
+
+
+class Shop20Context(AwardContext):
+
+    def getStatsConfiguration(self, item):
+        value = super(Shop20Context, self).getStatsConfiguration(item)
+        value.inventoryCount = True
+        value.vehiclesCount = True
+        return value
 
 
 class RankedRankContext(ToolTipContext):
@@ -693,6 +703,21 @@ class TechCustomizationContext(ToolTipContext):
     def __init__(self, fieldsToExclude=None):
         super(TechCustomizationContext, self).__init__(TOOLTIP_COMPONENT.TECH_CUSTOMIZATION, fieldsToExclude)
 
+    def getStatsConfiguration(self, item):
+        value = super(TechCustomizationContext, self).getStatsConfiguration(item)
+        value.sellPrice = True
+        return value
+
+
+class Shop20CustomizationContext(TechCustomizationContext):
+
+    def getStatsConfiguration(self, item):
+        value = super(Shop20CustomizationContext, self).getStatsConfiguration(item)
+        value.sellPrice = False
+        value.buyPrice = False
+        value.inventoryCount = True
+        return value
+
 
 class BoosterContext(ToolTipContext):
     goodiesCache = dependency.descriptor(IGoodiesCache)
@@ -723,11 +748,20 @@ class QuestsBoosterContext(BoosterContext):
         return value
 
 
+class Shop20BoosterContext(BoosterContext):
+
+    def getStatsConfiguration(self, booster):
+        value = super(Shop20BoosterContext, self).getStatsConfiguration(booster)
+        value.inventoryCount = True
+        return value
+
+
 class BoosterStatsConfiguration(object):
-    __slots__ = ('buyPrice', 'quests', 'activeState')
+    __slots__ = ('buyPrice', 'inventoryCount', 'quests', 'activeState')
 
     def __init__(self):
         self.buyPrice = False
+        self.inventoryCount = False
         self.quests = False
         self.activeState = True
 
@@ -777,3 +811,27 @@ class AwardBattleBoosterContext(InventoryBattleBoosterContext):
         value = super(AwardBattleBoosterContext, self).getStatusConfiguration(item)
         value.isAwardWindow = True
         return value
+
+
+class Shop20BattleBoosterContext(AwardBattleBoosterContext):
+
+    def getStatsConfiguration(self, item):
+        value = super(Shop20BattleBoosterContext, self).getStatsConfiguration(item)
+        value.inventoryCount = True
+        value.vehiclesCount = True
+        return value
+
+
+class HalloweenContext(ToolTipContext):
+    halloweenController = dependency.descriptor(IHalloweenController)
+
+    def __init__(self, fieldsToExclude=None):
+        super(HalloweenContext, self).__init__(None, fieldsToExclude)
+        return
+
+    def getProgress(self):
+        return self.halloweenController.getProgress()
+
+    def buildItem(self, level):
+        items = self.getProgress().items
+        return items[level]

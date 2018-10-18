@@ -10,10 +10,10 @@ from messenger.ext import isBattleChatEnabled
 from messenger.formatters import chat_message
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
 from messenger.gui.Scaleform.channels.layout import BattleLayout
-from messenger.m_constants import PROTO_TYPE, MESSENGER_COMMAND_TYPE
+from messenger.m_constants import PROTO_TYPE, MESSENGER_COMMAND_TYPE, BATTLE_CHANNEL
 from messenger.ext.player_helpers import isCurrentPlayer
 from messenger.proto import proto_getter
-from messenger_common_chat2 import MESSENGER_LIMITS
+from messenger_common_chat2 import MESSENGER_LIMITS, BATTLE_CHAT_COMMANDS_BY_NAMES
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_errors import ClientError
 from messenger.m_constants import CLIENT_ERROR_ID
@@ -80,8 +80,8 @@ class _ChannelController(BattleLayout):
 
 class TeamChannelController(_ChannelController):
 
-    def __init__(self, channel):
-        super(TeamChannelController, self).__init__(channel, chat_message.TeamMessageBuilder())
+    def __init__(self, channel, builder=None):
+        super(TeamChannelController, self).__init__(channel, builder or chat_message.TeamMessageBuilder())
 
     @_check_arena_in_waiting()
     def sendCommand(self, command):
@@ -228,3 +228,19 @@ class SquadChannelController(_ChannelController):
 
     def _broadcast(self, message):
         self.proto.unitChat.broadcast(message, 1)
+
+
+class EventTeamChannelController(TeamChannelController):
+    _IGNORED_COMMAND_NAMES = ('SUPPORTMEWITHFIRE',)
+
+    def __init__(self, channel):
+        super(EventTeamChannelController, self).__init__(channel, chat_message.EventTeamMessageBuilder())
+        self._ignoredCommandIDs = set((BATTLE_CHAT_COMMANDS_BY_NAMES[name].id for name in self._IGNORED_COMMAND_NAMES))
+
+    def getSettings(self):
+        return BATTLE_CHANNEL.EVENT
+
+    def addCommand(self, command):
+        if command.getID() in self._ignoredCommandIDs:
+            return
+        super(EventTeamChannelController, self).addCommand(command)

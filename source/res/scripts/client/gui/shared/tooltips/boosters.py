@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/boosters.py
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import events_helpers
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from gui.shared.tooltips import TOOLTIP_TYPE
@@ -34,9 +35,9 @@ class BoosterTooltipData(BlocksTooltipData):
             questsResult = self.__getBoosterQuestNames(boosterID)
             if questsResult:
                 items.append(self.__packAccessCondition(questsResult))
-        if statsFields.buyPrice and booster.buyPrices:
-            priceBlock = self.__getBoosterPrice(booster)
-            items.append(formatters.packBuildUpBlockData(priceBlock))
+        inventoryBlock = self.__getInventoryBlock(booster=booster, showPrice=statsFields.buyPrice and booster.buyPrices, showInventoryCount=statsFields.inventoryCount and booster.count)
+        if inventoryBlock:
+            items.append(formatters.packBuildUpBlockData(inventoryBlock))
         if statsFields.activeState and booster.inCooldown:
             items.append(self.__packActiveState(booster.getUsageLeftTimeStr()))
         return items
@@ -69,24 +70,27 @@ class BoosterTooltipData(BlocksTooltipData):
 
         return questsResult
 
-    def __getBoosterPrice(self, booster):
+    def __getInventoryBlock(self, booster, showPrice, showInventoryCount):
         block = []
         money = self.itemsCache.items.stats.money
-        showDelimiter = False
-        leftPadding = 92
-        for itemPrice in booster.buyPrices:
-            currency = itemPrice.getCurrency()
-            value = itemPrice.price.getSignValue(currency)
-            defValue = itemPrice.defPrice.getSignValue(currency)
-            needValue = value - money.getSignValue(currency)
-            actionPercent = itemPrice.getActionPrc()
-            if currency == Currency.GOLD and actionPercent > 0:
-                leftActionPadding = 101 + self.leftPadding
-            else:
-                leftActionPadding = 81 + self.leftPadding
-            if showDelimiter:
-                block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=leftActionPadding)))
-            block.append(makePriceBlock(value, CURRENCY_SETTINGS.getBuySetting(currency), needValue if needValue > 0 else None, defValue if defValue > 0 else None, actionPercent, leftPadding=leftPadding))
-            showDelimiter = True
+        if showPrice:
+            showDelimiter = False
+            leftPadding = 92
+            for itemPrice in booster.buyPrices:
+                currency = itemPrice.getCurrency()
+                value = itemPrice.price.getSignValue(currency)
+                defValue = itemPrice.defPrice.getSignValue(currency)
+                needValue = value - money.getSignValue(currency)
+                actionPercent = itemPrice.getActionPrc()
+                if currency == Currency.GOLD and actionPercent > 0:
+                    leftActionPadding = 101 + self.leftPadding
+                else:
+                    leftActionPadding = 81 + self.leftPadding
+                if showDelimiter:
+                    block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=leftActionPadding)))
+                block.append(makePriceBlock(value, CURRENCY_SETTINGS.getBuySetting(currency), needValue if needValue > 0 else None, defValue if defValue > 0 else None, actionPercent, leftPadding=leftPadding))
+                showDelimiter = True
 
+        if showInventoryCount:
+            block.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(TOOLTIPS.VEHICLE_INVENTORYCOUNT), value=text_styles.stats(booster.count), icon=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_STORAGE_ICON, padding=formatters.packPadding(left=49), titlePadding=formatters.packPadding(), iconPadding=formatters.packPadding(top=-2, left=-2)))
         return block

@@ -601,6 +601,10 @@ class Vehicle(BigWorld.Entity):
         if self.respawnCompactDescr:
             LOG_DEBUG('respawn compact descr is still valid, request reloading of tank resources ', self.id)
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
+        arena = getattr(BigWorld.player(), 'arena', None)
+        if arena is not None and arena.bonusType == constants.ARENA_BONUS_TYPE.EVENT_BATTLES:
+            extra = self.typeDescriptor.extrasDict['halloweenVehicleEffects']
+            extra.startFor(self)
         return
 
     def refreshNationalVoice(self):
@@ -619,6 +623,10 @@ class Vehicle(BigWorld.Entity):
     def stopVisual(self, showStipple=False):
         if not self.isStarted:
             raise SoftException('Vehicle is already stopped')
+        arena = getattr(BigWorld.player(), 'arena', None)
+        if arena is not None and arena.bonusType == constants.ARENA_BONUS_TYPE.EVENT_BATTLES:
+            extra = self.typeDescriptor.extrasDict['halloweenVehicleEffects']
+            extra.stopFor(self)
         stippleModel = None
         showStipple = False
         if showStipple:
@@ -745,6 +753,10 @@ class Vehicle(BigWorld.Entity):
                 LOG_CURRENT_EXCEPTION()
 
     def __onVehicleDeath(self, isDeadStarted=False):
+        arena = getattr(BigWorld.player(), 'arena', None)
+        if arena is not None and arena.bonusType == constants.ARENA_BONUS_TYPE.EVENT_BATTLES:
+            extra = self.typeDescriptor.extrasDict['halloweenVehicleEffects']
+            extra.stopFor(self)
         if not self.isPlayerVehicle:
             ctrl = self.guiSessionProvider.shared.feedback
             if ctrl is not None:

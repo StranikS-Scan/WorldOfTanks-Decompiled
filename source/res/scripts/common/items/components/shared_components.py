@@ -134,7 +134,7 @@ class I18nExposedComponent(I18nComponent):
 
 
 class DeviceHealth(object):
-    __slots__ = ('maxHealth', 'repairCost', 'maxRegenHealth', 'healthRegenPerSec', 'healthBurnPerSec', 'chanceToHit', 'hysteresisHealth')
+    __slots__ = ('maxHealth', 'repairCost', 'maxRegenHealth', 'healthRegenPerSec', 'healthBurnPerSec', 'chanceToHit', 'hysteresisHealth', 'invulnerable')
 
     def __init__(self, maxHealth, repairCost=component_constants.ZERO_FLOAT, maxRegenHealth=component_constants.ZERO_INT):
         super(DeviceHealth, self).__init__()
@@ -145,6 +145,7 @@ class DeviceHealth(object):
         self.healthBurnPerSec = component_constants.ZERO_FLOAT
         self.chanceToHit = None
         self.hysteresisHealth = None
+        self.invulnerable = False
         return
 
     def __repr__(self):

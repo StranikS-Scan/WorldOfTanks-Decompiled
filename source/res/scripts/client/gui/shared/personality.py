@@ -40,6 +40,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.event_boards_controllers import IEventBoardController
+from skeletons.gui.halloween_controller import IHalloweenController
 from skeletons.helpers.statistics import IStatisticsCollector
 try:
     from gui import mods
@@ -55,6 +56,7 @@ class ServicesLocator(object):
     gameState = dependency.descriptor(IGameStateTracker)
     loginManager = dependency.descriptor(ILoginManager)
     eventsCache = dependency.descriptor(IEventsCache)
+    halloweenController = dependency.descriptor(IHalloweenController)
     soundCtrl = dependency.descriptor(ISoundsController)
     webCtrl = dependency.descriptor(IWebController)
     settingsCache = dependency.descriptor(ISettingsCache)
@@ -87,6 +89,7 @@ def onAccountShowGUI(ctx):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
     ServicesLocator.eventsCache.start()
     yield ServicesLocator.eventsCache.update()
+    ServicesLocator.halloweenController.start()
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
     yield ServicesLocator.settingsCache.update()
     if not ServicesLocator.itemsCache.isSynced():
@@ -147,6 +150,7 @@ def onAvatarBecomePlayer():
     ServicesLocator.settingsCore.serverSettings.applySettings()
     ServicesLocator.soundCtrl.stop()
     ServicesLocator.webCtrl.stop(logout=False)
+    ServicesLocator.halloweenController.stop()
     ServicesLocator.eventsCache.stop()
     g_prbLoader.onAvatarBecomePlayer()
     ServicesLocator.gameState.onAvatarBecomePlayer()
@@ -301,6 +305,7 @@ def onDisconnected():
     ServicesLocator.gameState.onDisconnected()
     ServicesLocator.webCtrl.stop()
     ServicesLocator.eventsCache.getPersonalMissions().stop()
+    ServicesLocator.halloweenController.stop()
     g_wgncProvider.clear()
     ServicesLocator.clear()
     UsersInfoHelper.clear()

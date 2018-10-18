@@ -76,6 +76,9 @@ class SimpleBonus(object):
     def getName(self):
         return self._name
 
+    def setName(self, value):
+        self._name = value
+
     def getValue(self):
         return self._value
 

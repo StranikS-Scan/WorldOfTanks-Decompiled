@@ -857,3 +857,7 @@ class ICalendarController(IGameController):
 
     def showCalendar(self, invokedFrom):
         raise NotImplementedError
+
+
+class IEventModeController(IGameController):
+    pass

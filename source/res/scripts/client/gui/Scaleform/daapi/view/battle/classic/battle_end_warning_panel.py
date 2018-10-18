@@ -22,8 +22,8 @@ class BattleEndWarningPanel(BattleEndWarningPanelMeta, IAbstractPeriodView):
     def __init__(self):
         super(BattleEndWarningPanel, self).__init__()
         arenaType = self.sessionProvider.arenaVisitor.type
+        self._appearTime = arenaType.getBattleEndWarningAppearTime()
         self.__duration = arenaType.getBattleEndWarningDuration()
-        self.__appearTime = arenaType.getBattleEndWarningAppearTime()
         self.__roundLength = arenaType.getRoundLength()
         self.__isShown = False
         self.__warningIsValid = self.__validateWarningTime()
@@ -34,23 +34,25 @@ class BattleEndWarningPanel(BattleEndWarningPanelMeta, IAbstractPeriodView):
     def setTotalTime(self, totalTime):
         if not self.isLoaded():
             return
-        minutes, seconds = divmod(int(totalTime), ONE_MINUTE)
-        minutesStr = '{:02d}'.format(minutes)
-        secondsStr = '{:02d}'.format(seconds)
+        minutesStr, secondsStr = self._totalTimeFormat(totalTime)
         if self.__isShown:
             self.as_setTotalTimeS(minutesStr, secondsStr)
-        if totalTime == self.__appearTime and self.__warningIsValid:
+        if totalTime == self._appearTime and self.__warningIsValid:
             self._callWWISE(_WWISE_EVENTS.APPEAR)
             self.as_setTotalTimeS(minutesStr, secondsStr)
             self.as_setTextInfoS(_ms(_WARNING_TEXT_KEY))
             self.as_setStateS(True)
             self.__isShown = True
-        if (totalTime <= self.__appearTime - self.__duration or totalTime > self.__appearTime) and self.__isShown:
+        if (totalTime <= self._appearTime - self.__duration or totalTime > self._appearTime) and self.__isShown:
             self.as_setStateS(False)
             self.__isShown = False
+
+    def _totalTimeFormat(self, totalTime):
+        minutes, seconds = divmod(int(totalTime), ONE_MINUTE)
+        return ('{:02d}'.format(minutes), '{:02d}'.format(seconds))
 
     def _callWWISE(self, wwiseEventName):
         WWISE.WW_eventGlobal(wwiseEventName)
 
     def __validateWarningTime(self):
-        return False if self.__appearTime < self.__duration or self.__appearTime <= 0 or self.__duration <= 0 or self.__appearTime > self.__roundLength or self.__duration > self.__roundLength and self.sessionProvider.arenaVisitor.isBattleEndWarningEnabled() else True
+        return False if self._appearTime < self.__duration or self._appearTime <= 0 or self.__duration <= 0 or self._appearTime > self.__roundLength or self.__duration > self.__roundLength and self.sessionProvider.arenaVisitor.isBattleEndWarningEnabled() else True

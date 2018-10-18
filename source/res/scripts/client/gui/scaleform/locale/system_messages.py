@@ -17,6 +17,7 @@ class SYSTEM_MESSAGES(object):
     CHARGE_SERVER_ERROR_SAVE = '#system_messages:charge/server_error_save'
     PREMIUM_CONTINUESUCCESS = '#system_messages:premium/continueSuccess'
     PREMIUM_BUYINGSUCCESS = '#system_messages:premium/buyingSuccess'
+    HE_SHOP_BUY_MAX_LEVEL_SUCCESS = '#system_messages:he_shop/buy_max_level_success'
     PREMIUM_SERVER_ERROR = '#system_messages:premium/server_error'
     PREMIUM_NOT_ENOUGH_GOLD = '#system_messages:premium/not_enough_gold'
     PREMIUM_WALLET_NOT_AVAILABLE = '#system_messages:premium/wallet_not_available'
@@ -1013,6 +1014,15 @@ class SYSTEM_MESSAGES(object):
     EPICBATTLES_NOTIFICATION_PRIMETIME = '#system_messages:epicBattles/notification/primeTime'
     EPICBATTLES_NOTIFICATION_NOTAVAILABLE = '#system_messages:epicBattles/notification/notAvailable'
     EPICBATTLES_NOTIFICATION_AVAILABLE = '#system_messages:epicBattles/notification/available'
+    HALLOWEEN_NO_GOLD = '#system_messages:halloween/no_gold'
+    HALLOWEEN_GOLD_ERROR = '#system_messages:halloween/gold_error'
+    HALLOWEEN_WALLET_NOT_AVAILABLE = '#system_messages:halloween/wallet_not_available'
+    HALLOWEEN_MAX_LEVEL_ALREADY_BOUGHT = '#system_messages:halloween/max_level_already_bought'
+    HALLOWEEN_DISABLED = '#system_messages:halloween/disabled'
+    HALLOWEEN_SERVER_ERROR = '#system_messages:halloween/server_error'
+    HALLOWEEN_GOLD_NOT_AVAILABLE = '#system_messages:halloween/gold_not_available'
+    HALLOWEEN_GOLD_PRICE_CHANGED = '#system_messages:halloween/gold_price_changed'
+    MAX_LEVEL_ALREADY_REACHED = '#system_messages:max_level_already_reached'
     UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_NO_CLAN_MEMBERS,
      UNIT_WARNINGS_CANT_PICK_LEADER,
      UNIT_WARNINGS_KICKED_CANDIDATE,
@@ -1043,6 +1053,7 @@ class SYSTEM_MESSAGES(object):
      CHARGE_SERVER_ERROR_SAVE,
      PREMIUM_CONTINUESUCCESS,
      PREMIUM_BUYINGSUCCESS,
+     HE_SHOP_BUY_MAX_LEVEL_SUCCESS,
      PREMIUM_SERVER_ERROR,
      PREMIUM_NOT_ENOUGH_GOLD,
      PREMIUM_WALLET_NOT_AVAILABLE,
@@ -2038,7 +2049,16 @@ class SYSTEM_MESSAGES(object):
      TOKENS_NOTIFICATION_MARK_ACQUIRED,
      EPICBATTLES_NOTIFICATION_PRIMETIME,
      EPICBATTLES_NOTIFICATION_NOTAVAILABLE,
-     EPICBATTLES_NOTIFICATION_AVAILABLE)
+     EPICBATTLES_NOTIFICATION_AVAILABLE,
+     HALLOWEEN_NO_GOLD,
+     HALLOWEEN_GOLD_ERROR,
+     HALLOWEEN_WALLET_NOT_AVAILABLE,
+     HALLOWEEN_MAX_LEVEL_ALREADY_BOUGHT,
+     HALLOWEEN_DISABLED,
+     HALLOWEEN_SERVER_ERROR,
+     HALLOWEEN_GOLD_NOT_AVAILABLE,
+     HALLOWEEN_GOLD_PRICE_CHANGED,
+     MAX_LEVEL_ALREADY_REACHED)
     UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYER_BECOME_EQUIPMENT_COMMANDER,
      UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,

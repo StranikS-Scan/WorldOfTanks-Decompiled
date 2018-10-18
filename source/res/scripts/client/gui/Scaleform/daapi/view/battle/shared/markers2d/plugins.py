@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/markers2d/plugins.py
-from functools import partial
+import logging
 from collections import defaultdict
-import BattleReplay
+from functools import partial
 import BigWorld
-import constants
 from Math import Matrix
+import BattleReplay
+import constants
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.settings_constants import MARKERS, GRAPHICS, GAME
 from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER
@@ -29,6 +30,7 @@ from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
+_logger = logging.getLogger(__name__)
 _TO_FLASH_SYMBOL_NAME_MAPPING = {STUN_AREA_STATIC_MARKER: settings.MARKER_SYMBOL_NAME.STATIC_ARTY_MARKER}
 STUN_STATE = 0
 INSPIRING_STATE = 1
@@ -206,7 +208,7 @@ class AreaStaticMarkerPlugin(MarkerPlugin):
 
 class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     bootcamp = dependency.descriptor(IBootcampController)
-    __slots__ = ('_markers', '_markersStates', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled', '__showDamageIcon', '_stunTimers')
+    __slots__ = ('_markers', '_markersStates', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled', '__showDamageIcon', '_stunTimers', '_vehicleMarkerName')
 
     def __init__(self, parentObj, clazz=markers.VehicleMarker):
         super(VehicleMarkerPlugin, self).__init__(parentObj)
@@ -217,6 +219,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         self._isSquadIndicatorEnabled = False
         self.__playerVehicleID = 0
         self.__showDamageIcon = False
+        self._vehicleMarkerName = settings.MARKER_SYMBOL_NAME.VEHICLE_MARKER
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
@@ -343,7 +346,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         else:
             matrixProvider = None
             active = False
-        markerID = self._createMarkerWithMatrix(settings.MARKER_SYMBOL_NAME.VEHICLE_MARKER, matrixProvider=matrixProvider, active=active)
+        markerID = self._createMarkerWithMatrix(self._vehicleMarkerName, matrixProvider=matrixProvider, active=active)
         marker = self._clazz(markerID, vehicleID, vProxy=vProxy, active=active)
         marker.onVehicleModelChanged += self.__onVehicleModelChanged
         self._markers[vehicleID] = marker

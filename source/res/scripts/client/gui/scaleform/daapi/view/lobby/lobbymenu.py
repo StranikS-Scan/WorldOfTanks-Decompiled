@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyMenu.py
 import BigWorld
 import constants
+from adisp import process
 from async import async, await
+from gui import DialogsInterface
+from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.impl import dialogs
-from gui.impl.gen import R
-from gui.impl.pub.dialog_window import DialogButtons
 from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getCountNewSettings
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
 from gui.Scaleform.genConsts.MENU_CONSTANTS import MENU_CONSTANTS
@@ -56,16 +57,16 @@ class LobbyMenu(LobbyMenuMeta):
     def onEscapePress(self):
         self.destroy()
 
-    @async
+    @process
     def refuseTraining(self):
-        isOk = yield await(dialogs.warning(self, R.strings.dialogs.refuseTraining))
+        isOk = yield DialogsInterface.showI18nConfirmDialog('refuseTraining')
         if isOk:
             event_dispatcher.stopTutorial()
         self.destroy()
 
-    @async
+    @process
     def logoffClick(self):
-        isOk = yield await(dialogs.warning(self, R.strings.dialogs.disconnect, focused=DialogButtons.CANCEL))
+        isOk = yield DialogsInterface.showI18nConfirmDialog('disconnect', focusedID=DIALOG_BUTTON_ID.CLOSE)
         if isOk:
             self.gameplay.goToLoginByRQ()
 

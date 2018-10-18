@@ -1234,6 +1234,8 @@
     <userString>	#ussr_vehicles:R146_STG	</userString>
     <description>	#ussr_vehicles:R146_STG_descr	</description>
     <shortUserString>	#ussr_vehicles:R146_STG_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R146_STG_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R146_STG_long_special	</longDescriptionSpecial>
     <price>	9700	  <gold></gold>
     </price>
     <tags>	mediumTank improvedVentilation_class2_user enhancedTorsions3t_user largeCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
@@ -1316,6 +1318,30 @@
     <tags>	heavyTank improvedVentilation_class3_user sinai enhancedTorsions5t_user wetCombatPack_class2_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user HD secret testTank	</tags>
     <level>	8	</level>
   </R115_IS-3_auto_test>
+  <R158_LT_432>
+    <id>	178	</id>
+    <userString>	#ussr_vehicles:R158_LT_432	</userString>
+    <description>	#ussr_vehicles:R158_LT_432_descr	</description>
+    <shortUserString>	#ussr_vehicles:R158_LT_432_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R158_LT_432_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R158_LT_432_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank improvedVentilation_class1_user scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user secret HD	</tags>
+    <level>	8	</level>
+  </R158_LT_432>
+  <R160_T_50_2>
+    <id>	177	</id>
+    <userString>	#ussr_vehicles:R160_T_50_2	</userString>
+    <description>	#ussr_vehicles:R160_T_50_2_descr	</description>
+    <shortUserString>	#ussr_vehicles:R160_T_50_2_short	</shortUserString>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank improvedVentilation_class1_user scout mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions1t_user HD special secret	</tags>
+    <level>	6	</level>
+  </R160_T_50_2>
   <R87_T62A_fallout>
     <id>	249	</id>
     <userString>	#ussr_vehicles:T62A_fallout	</userString>
@@ -1512,4 +1538,23 @@
     <tags>	heavyTank improvedVentilation_class3_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	6	</level>
   </R152_KV2_W>
+  <R06_T-28_Halloween>
+    <id>	170	</id>
+    <userString>	#ussr_vehicles:T-28_Halloween	</userString>
+    <description>	#ussr_vehicles:T-28_Halloween_descr	</description>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank improvedVentilation_class2_user enhancedSuspension_candle_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD unrecoverable secret	</tags>
+    <level>	2	</level>
+  </R06_T-28_Halloween>
+  <R101_MT25_Halloween>
+    <id>	171	</id>
+    <userString>	#ussr_vehicles:MT25_Halloween	</userString>
+    <description>	#ussr_vehicles:MT25_Halloween_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user enhancedTorsions1t_user mediumCaliberTankRammer_user aimingStabilizer_Mk1_user HD event_battles cannot_be_sold secret lockCrew lockCrewSkills lockOutfit lockEquipment lockOptionalDevices lockSettings hideStats	</tags>
+    <level>	2	</level>
+  </R101_MT25_Halloween>
 </list.xml>

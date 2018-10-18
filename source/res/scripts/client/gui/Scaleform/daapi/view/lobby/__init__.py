@@ -81,6 +81,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCPersonalCase import BCPersonalCase
     from gui.Scaleform.daapi.view.bootcamp.BCBattleResult import BCBattleResult
     from gui.Scaleform.daapi.view.bootcamp.BCVehiclePreview import BCVehiclePreview
+    from gui.Scaleform.daapi.view.lobby.halloween.event_battle_results import EventBattleResult
     return (ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobbyPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE, False, (ContainerSettings(ViewTypes.LOBBY_SUB, containers.DefaultContainer), ContainerSettings(ViewTypes.LOBBY_TOP_SUB, containers.PopUpContainer))),
      ViewSettings(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, LobbyVehicleMarkerView, 'lobbyVehicleMarkerView.swf', ViewTypes.MARKER, VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
@@ -111,6 +112,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.ADVENT_CALENDAR, BrowserWindow, 'browserWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, canDrag=True, isModal=False),
      GroupedViewSettings(VIEW_ALIAS.AWARD_WINDOW, AwardWindow, 'awardWindow.swf', ViewTypes.WINDOW, 'awardWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(VIEW_ALIAS.BATTLE_RESULTS, BootcampComponentOverride(BattleResultsWindow, BCBattleResult), BootcampComponentOverride('battleResults.swf', 'BCBattleResult.swf'), BootcampComponentOverride(ViewTypes.WINDOW, ViewTypes.TOP_WINDOW), BootcampComponentOverride('BattleResultsWindow', ''), None, BootcampComponentOverride(ScopeTemplates.DEFAULT_SCOPE, ScopeTemplates.TOP_WINDOW_SCOPE)),
+     GroupedViewSettings(VIEW_ALIAS.EVENT_BATTLE_RESULTS, EventBattleResult, 'eventVictoryPage.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BROWSER_WINDOW, BrowserWindow, 'browserWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BROWSER_WINDOW_MODAL, BrowserWindow, 'browserWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.DEMONSTRATOR_WINDOW, DemonstratorWindow, 'demonstratorWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
@@ -159,6 +161,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.EVENT_BATTLE_RESULTS, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW_MODAL, self.loadViewByCtxEvent),
          (VIEW_ALIAS.DEMONSTRATOR_WINDOW, self.loadViewByCtxEvent),

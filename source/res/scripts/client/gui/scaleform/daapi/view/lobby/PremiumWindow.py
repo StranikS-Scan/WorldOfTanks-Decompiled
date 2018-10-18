@@ -21,7 +21,7 @@ from helpers import i18n, time_utils, dependency
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.shared import IItemsCache
 BTN_WIDTH = 120
-PREMIUM_PACKET_LOCAL_KEY = '#menu:premium/packet/days%s'
+PREMIUM_PACKET_LOCAL_KEY = '#menu:premium/packet/days{}'
 
 class PremiumWindow(PremiumWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -143,14 +143,14 @@ class PremiumWindow(PremiumWindowMeta):
         action = self.__getAction(cost, defaultCost, period)
         hasAction = action is not None
         return {'id': str(period),
-         'image': '../maps/icons/windows/prem/icon_prem%d_98.png' % period,
+         'image': '../maps/icons/windows/prem/icon_prem{}_98.png'.format(period),
          'duration': self.__getDurationStr(period, cost, hasAction, isEnoughMoney),
          'actionPrice': action,
          'enabled': canBuyPremium and isEnoughMoney,
          'haveMoney': isEnoughMoney}
 
     def __getAction(self, cost, defaultCost, period):
-        return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'premiumPacket%dCost' % period, True, Money(gold=cost), Money(gold=defaultCost)) if cost != defaultCost else None
+        return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'premiumPacket{}Cost'.format(period), True, Money(gold=cost), Money(gold=defaultCost)) if cost != defaultCost else None
 
     def __canBuyPremium(self):
         if self.__isPremiumAccount():
@@ -165,7 +165,7 @@ class PremiumWindow(PremiumWindowMeta):
         if not hasAction:
             key = 'gold' if isEnoughMoney else 'goldAlert'
             priceStr = makeHtmlString('html_templates:lobby/dialogs/premium', key, ctx={'value': BigWorld.wg_getGoldFormat(cost)})
-        duration = i18n.makeString(PREMIUM_PACKET_LOCAL_KEY % period)
+        duration = i18n.makeString(PREMIUM_PACKET_LOCAL_KEY.format(period))
         ctx = {'duration': duration,
          'price': priceStr}
         return makeHtmlString('html_templates:lobby/dialogs/premium', 'duration', ctx=ctx)

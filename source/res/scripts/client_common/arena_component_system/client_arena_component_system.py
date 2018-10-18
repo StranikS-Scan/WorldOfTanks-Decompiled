@@ -34,6 +34,9 @@ class ClientArenaComponent(Component):
     def getSyncDataObjectData(self, syncDataObjectType, key):
         return self._componentSystem().getSyncDataObjectData(syncDataObjectType, key)
 
+    def hasSyncDataObjectData(self, syncDataObjectType, key):
+        return self._componentSystem().hasSyncDataObjectData(syncDataObjectType, key)
+
 
 class ClientArenaComponentSystem(ComponentSystem):
 
@@ -77,6 +80,10 @@ class ClientArenaComponentSystem(ComponentSystem):
     def getSyncDataObjectData(self, syncDataObjectType, key):
         syncDataObject = self.__syncDataObjects.get(syncDataObjectType, None)
         return syncDataObject.getData(key) if syncDataObject is not None else None
+
+    def hasSyncDataObjectData(self, syncDataObjectType, key):
+        syncDataObject = self.__syncDataObjects.get(syncDataObjectType, None)
+        return syncDataObject.hasData(key) if syncDataObject is not None else False
 
     def __onFullSyncObjectReceived(self, argStr):
         o = cPickle.loads(argStr)

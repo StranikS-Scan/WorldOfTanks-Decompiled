@@ -17,6 +17,9 @@ class BCHangar(Hangar):
     def showHelpLayout(self):
         pass
 
+    def as_showPveEventS(self, showLevel, showBanner):
+        super(BCHangar, self).as_showPveEventS(False, False)
+
     def __isViewOpenOrLoading(self, container, viewAlias):
         openView = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
         if openView is not None:
@@ -27,3 +30,6 @@ class BCHangar(Hangar):
                     return True
 
             return False
+
+    def _updateComponentVisibility(self, visible):
+        pass

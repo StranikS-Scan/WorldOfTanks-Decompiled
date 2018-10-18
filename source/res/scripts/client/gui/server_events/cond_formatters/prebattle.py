@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/prebattle.py
 from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters
 from gui.server_events.cond_formatters import packSimpleTitle, packDescriptionField
@@ -52,8 +53,9 @@ class _BattleBonusTypeFormatter(ConditionFormatter):
     def _format(self, condition, event):
         result = []
         if not event.isGuiDisabled():
+            isHalloweenEvent = event.getID().startswith('halloween')
             bonusTypes = condition.getValue()
-            labelKey = QUESTS.MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE
+            labelKey = MENU.LOADING_BATTLETYPES_7 if isHalloweenEvent else QUESTS.MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE
             data = formatters.packMissionBonusTypeElements(bonusTypes)
             iconsList = ''.join([ iconData.icon for iconData in data ])
             if len(bonusTypes) == 1 and findFirst(None, bonusTypes) in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.RANKED):

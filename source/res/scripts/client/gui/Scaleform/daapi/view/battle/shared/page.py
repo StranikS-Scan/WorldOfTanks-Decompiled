@@ -72,10 +72,11 @@ class SharedPage(BattlePageMeta):
         if external is None:
             external = (crosshair.CrosshairPanelContainer, markers2d.MarkersManager)
         self._external = [ item() for item in external ]
-        if components is None:
-            components = _SHARED_COMPONENTS_CONFIG
-        else:
-            components += _SHARED_COMPONENTS_CONFIG
+        if not self.sessionProvider.arenaVisitor.gui.isEventBattle():
+            if components is None:
+                components = _SHARED_COMPONENTS_CONFIG
+            else:
+                components += _SHARED_COMPONENTS_CONFIG
         self.__componentsConfig = components
         return
 

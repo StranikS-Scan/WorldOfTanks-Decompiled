@@ -266,6 +266,18 @@ class EventsCache(IEventsCache):
     def isEventEnabled(self):
         return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
 
+    def getHalloweenMaxLevelPrice(self):
+        halloweenData = self.__getHalloweenData()
+        return halloweenData['maxLevelPrice'] if halloweenData and 'maxLevelPrice' in halloweenData else None
+
+    def isHalloweenMaxLevelBuyEnabled(self):
+        halloweenData = self.__getHalloweenData()
+        return halloweenData['isMaxLevelBuyEnabled'] and self.isEventEnabled() if halloweenData and 'isMaxLevelBuyEnabled' in halloweenData else False
+
+    def getHalloweenBonusesForSoul(self):
+        halloweenData = self.__getHalloweenData()
+        return halloweenData['bonuses'] if halloweenData and 'bonuses' in halloweenData else {}
+
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
     def getEventVehicles(self, itemsCache=None):
         result = []
@@ -657,6 +669,9 @@ class EventsCache(IEventsCache):
 
     def __getEventBattles(self):
         return self.__getIngameEventsData().get('eventBattles', {})
+
+    def __getHalloweenData(self):
+        return self.__getIngameEventsData().get('halloween', {})
 
     def __getUnitRestrictions(self):
         return self.__getUnitData().get('restrictions', {})

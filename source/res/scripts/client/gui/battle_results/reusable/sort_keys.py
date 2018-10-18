@@ -73,6 +73,18 @@ class TeamItemSortKey(_VehicleSortKey):
         return -result if result else cmp(self.info.player.name, other.info.player.name)
 
 
+class PersonalFirstTeamItemSortKey(TeamItemSortKey):
+    __slots__ = ('_personalDBID',)
+
+    def __init__(self, vehicleInfo, personalDBID):
+        super(PersonalFirstTeamItemSortKey, self).__init__(vehicleInfo)
+        self._personalDBID = personalDBID
+
+    def _cmp(self, other):
+        result = cmp(self.info.player.dbID == self._personalDBID, other.info.player.dbID == self._personalDBID)
+        return -result if result else super(PersonalFirstTeamItemSortKey, self)._cmp(other)
+
+
 class VehicleXpSortKey(_VehicleSortKey):
     __slots__ = ()
 

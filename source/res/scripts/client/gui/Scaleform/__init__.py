@@ -36,8 +36,11 @@ def getNationsFilterAssetPath(nationName, extension='.png'):
     return ''.join((NATION_FILTER_ICONS_DIR_PATH, nationName, extension))
 
 
-def getNationsAssetPath(nation, namePrefix='', extension='png'):
-    return NATIONS_ICON_FILENAME % (NAMES[nation], namePrefix, extension)
+def getNationsAssetPath(vehicle, namePrefix='', extension='png'):
+    nation = NAMES[vehicle.nationID]
+    if vehicle.isEvent:
+        nation = 'event'
+    return NATIONS_ICON_FILENAME % (nation, namePrefix, extension)
 
 
 def getLevelsAssetPath(level_str, extension='.png'):

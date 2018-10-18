@@ -489,6 +489,8 @@
     <userString>	#france_vehicles:F89_Canon_dassaut_de_105	</userString>
     <description>	#france_vehicles:F89_Canon_dassaut_de_105_descr	</description>
     <shortUserString>	#france_vehicles:F89_Canon_dassaut_de_105_short	</shortUserString>
+    <shortDescriptionSpecial>	#france_vehicles:F89_Canon_dassaut_de_105_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F89_Canon_dassaut_de_105_long_special	</longDescriptionSpecial>
     <price>	10700	  <gold></gold>
     </price>
     <tags>	AT-SPG mediumAT-SPG improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user HD	</tags>
@@ -694,4 +696,14 @@
     <tags>	heavyTank wetCombatPack_class2_user enhancedSprings_class3_user HD secret	</tags>
     <level>	2	</level>
   </F04_B1_bootcamp>
+  <F05_BDR_G1B_Halloween>
+    <id>	170	</id>
+    <userString>	#france_vehicles:BDR_G1B_Halloween	</userString>
+    <shortUserString>	#france_vehicles:BDR_G1B_Halloween_short	</shortUserString>
+    <description>	#france_vehicles:BDR_G1B_Halloween_descr	</description>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedSprings_class3_user HD unrecoverable secret	</tags>
+    <level>	2	</level>
+  </F05_BDR_G1B_Halloween>
 </list.xml>

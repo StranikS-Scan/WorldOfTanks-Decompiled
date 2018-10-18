@@ -355,7 +355,7 @@ class AmmoPlugin(CrosshairPlugin):
 
     def start(self):
         ctrl = self.sessionProvider.shared.ammo
-        self.__setup(ctrl, self.sessionProvider.isReplayPlaying)
+        self._setup(ctrl, self.bootcampController.isInBootcamp(), self.sessionProvider.isReplayPlaying)
         ctrl.onGunSettingsSet += self.__onGunSettingsSet
         ctrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
         ctrl.onGunAutoReloadTimeSet += self.__onGunAutoReloadTimeSet
@@ -377,7 +377,7 @@ class AmmoPlugin(CrosshairPlugin):
             BigWorld.cancelCallback(self.__autoReloadCallbackID)
         super(AmmoPlugin, self).fini()
 
-    def __setup(self, ctrl, isReplayPlaying=False):
+    def _setup(self, ctrl, hideAmmoCounter=False, isReplayPlaying=False):
         if isReplayPlaying:
             self._parentObj.as_setReloadingCounterShownS(False)
             self.__reloadAnimator = _PythonAutoReloadProxy(self._parentObj)
@@ -392,7 +392,7 @@ class AmmoPlugin(CrosshairPlugin):
         self.__setReloadingState(reloadingState)
         if self.__guiSettings.hasAutoReload:
             self.__reloadAnimator.setClipAutoLoading(reloadingState.getActualValue(), reloadingState.getBaseValue(), isStun=False)
-        if self.bootcampController.isInBootcamp():
+        if hideAmmoCounter:
             self._parentObj.as_setNetVisibleS(CROSSHAIR_CONSTANTS.VISIBLE_NET)
 
     def __setReloadingState(self, state):
@@ -709,7 +709,7 @@ class GunMarkersInvalidatePlugin(CrosshairPlugin):
 
 
 class ShotResultIndicatorPlugin(CrosshairPlugin):
-    __slots__ = ('__isEnabled', '__playerTeam', '__cache', '__colors', '__mapping', '__shotResultResolver')
+    __slots__ = ('__isEnabled', '__playerTeam', '__cache', '__colors', '__mapping', '__shotResultResolver', '_shotResultTypes')
 
     def __init__(self, parentObj):
         super(ShotResultIndicatorPlugin, self).__init__(parentObj)
@@ -719,6 +719,7 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         self.__cache = defaultdict(str)
         self.__colors = None
         self.__shotResultResolver = gun_marker_ctrl.createShotResultResolver()
+        self._shotResultTypes = _VIEW_CONSTANTS.GUN_TAG_SHOT_RESULT_TYPES
         return
 
     def start(self):
@@ -753,7 +754,7 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         for key in keys:
             settings = getter(key)
             if 'gunTagType' in settings:
-                value = settings['gunTagType'] in _VIEW_CONSTANTS.GUN_TAG_SHOT_RESULT_TYPES
+                value = settings['gunTagType'] in self._shotResultTypes
                 self.__mapping[_SETTINGS_KEY_TO_VIEW_ID[key]] = value
 
     def __updateColor(self, markerType, position, collision, direction):

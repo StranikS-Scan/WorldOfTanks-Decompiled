@@ -703,6 +703,7 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_ISANYOURCRITTEDINNERMODULES = '#quests:details/conditions/cumulative/isAnyOurCrittedInnerModules'
     DETAILS_CONDITIONS_CUMULATIVE_ISENEMYBASECAPTURED = '#quests:details/conditions/cumulative/isEnemyBaseCaptured'
     DETAILS_CONDITIONS_CUMULATIVE_AGGREGATED = '#quests:details/conditions/cumulative/aggregated'
+    DETAILS_CONDITIONS_CUMULATIVE_EVENTPOINTS = '#quests:details/conditions/cumulative/eventPoints'
     DETAILS_DOSSIER_SNIPERSERIES = '#quests:details/dossier/sniperSeries'
     DETAILS_DOSSIER_MAXSNIPERSERIES = '#quests:details/dossier/maxSniperSeries'
     DETAILS_DOSSIER_INVINCIBLESERIES = '#quests:details/dossier/invincibleSeries'
@@ -935,7 +936,9 @@ class QUESTS(object):
     DETAILS_MODIFIERS_ECONOMICS_PREMIUMPACKET1 = '#quests:details/modifiers/economics/premiumPacket1'
     DETAILS_MODIFIERS_ECONOMICS_PREMIUMPACKET3 = '#quests:details/modifiers/economics/premiumPacket3'
     DETAILS_MODIFIERS_ECONOMICS_PREMIUMPACKET7 = '#quests:details/modifiers/economics/premiumPacket7'
+    DETAILS_MODIFIERS_ECONOMICS_PREMIUMPACKET14 = '#quests:details/modifiers/economics/premiumPacket14'
     DETAILS_MODIFIERS_ECONOMICS_PREMIUMPACKET30 = '#quests:details/modifiers/economics/premiumPacket30'
+    DETAILS_MODIFIERS_ECONOMICS_PREMIUMPACKET90 = '#quests:details/modifiers/economics/premiumPacket90'
     DETAILS_MODIFIERS_ECONOMICS_PREMIUMPACKET180 = '#quests:details/modifiers/economics/premiumPacket180'
     DETAILS_MODIFIERS_ECONOMICS_PREMIUMPACKET360 = '#quests:details/modifiers/economics/premiumPacket360'
     DETAILS_MODIFIERS_EQUIPMENT_GOLD = '#quests:details/modifiers/equipment/gold'
@@ -1136,8 +1139,12 @@ class QUESTS(object):
     BONUSNAME_FREEXP = '#quests:bonusName/freeXP'
     BONUSNAME_TANKMENXP = '#quests:bonusName/tankmenXP'
     BONUSNAME_XPFACTOR = '#quests:bonusName/xpFactor'
+    BONUSNAME_XPFACTORHE = '#quests:bonusName/xpFactorHE'
+    BONUSNAME_XPFACTORELITEHE = '#quests:bonusName/xpFactorEliteHE'
     BONUSNAME_CREDITSFACTOR = '#quests:bonusName/creditsFactor'
+    BONUSNAME_CREDITSFACTORHE = '#quests:bonusName/creditsFactorHE'
     BONUSNAME_FREEXPFACTOR = '#quests:bonusName/freeXPFactor'
+    BONUSNAME_FREEXPFACTORHE = '#quests:bonusName/freeXPFactorHE'
     BONUSNAME_TANKMENXPFACTOR = '#quests:bonusName/tankmenXPFactor'
     BONUSNAME_DAILYXPFACTOR = '#quests:bonusName/dailyXPFactor'
     BONUSNAME_SLOTS = '#quests:bonusName/slots'
@@ -1334,8 +1341,6 @@ class QUESTS(object):
     ACTION_FULL_PREMIUMPACKET1COST = '#quests:action/full/premiumPacket1Cost'
     ACTION_HERO_FULL_PREMIUMPACKET1COST = '#quests:action/hero/full/premiumPacket1Cost'
     ACTION_SHORT_PREMIUMPACKET1COST = '#quests:action/short/premiumPacket1Cost'
-    ACTION_BUTTON_PREMIUMPACKET_NEW = '#quests:action/button/premiumPacket/new'
-    ACTION_BUTTON_PREMIUMPACKET_CONTINUE = '#quests:action/button/premiumPacket/continue'
     ACTION_AUTO_PREMIUMPACKET3COST = '#quests:action/auto/premiumPacket3Cost'
     ACTION_FULL_PREMIUMPACKET3COST = '#quests:action/full/premiumPacket3Cost'
     ACTION_HERO_FULL_PREMIUMPACKET3COST = '#quests:action/hero/full/premiumPacket3Cost'
@@ -1344,6 +1349,18 @@ class QUESTS(object):
     ACTION_FULL_PREMIUMPACKET7COST = '#quests:action/full/premiumPacket7Cost'
     ACTION_HERO_FULL_PREMIUMPACKET7COST = '#quests:action/hero/full/premiumPacket7Cost'
     ACTION_SHORT_PREMIUMPACKET7COST = '#quests:action/short/premiumPacket7Cost'
+    ACTION_AUTO_PREMIUMPACKET14COST = '#quests:action/auto/premiumPacket14Cost'
+    ACTION_FULL_PREMIUMPACKET14COST = '#quests:action/full/premiumPacket14Cost'
+    ACTION_HERO_FULL_PREMIUMPACKET14COST = '#quests:action/hero/full/premiumPacket14Cost'
+    ACTION_SHORT_PREMIUMPACKET14COST = '#quests:action/short/premiumPacket14Cost'
+    ACTION_AUTO_PREMIUMPACKET30COST = '#quests:action/auto/premiumPacket30Cost'
+    ACTION_FULL_PREMIUMPACKET30COST = '#quests:action/full/premiumPacket30Cost'
+    ACTION_HERO_FULL_PREMIUMPACKET30COST = '#quests:action/hero/full/premiumPacket30Cost'
+    ACTION_SHORT_PREMIUMPACKET30COST = '#quests:action/short/premiumPacket30Cost'
+    ACTION_AUTO_PREMIUMPACKET90COST = '#quests:action/auto/premiumPacket90Cost'
+    ACTION_FULL_PREMIUMPACKET90COST = '#quests:action/full/premiumPacket90Cost'
+    ACTION_HERO_FULL_PREMIUMPACKET90COST = '#quests:action/hero/full/premiumPacket90Cost'
+    ACTION_SHORT_PREMIUMPACKET90COST = '#quests:action/short/premiumPacket90Cost'
     ACTION_AUTO_PREMIUMPACKET180COST = '#quests:action/auto/premiumPacket180Cost'
     ACTION_FULL_PREMIUMPACKET180COST = '#quests:action/full/premiumPacket180Cost'
     ACTION_HERO_FULL_PREMIUMPACKET180COST = '#quests:action/hero/full/premiumPacket180Cost'
@@ -1352,10 +1369,8 @@ class QUESTS(object):
     ACTION_FULL_PREMIUMPACKET360COST = '#quests:action/full/premiumPacket360Cost'
     ACTION_HERO_FULL_PREMIUMPACKET360COST = '#quests:action/hero/full/premiumPacket360Cost'
     ACTION_SHORT_PREMIUMPACKET360COST = '#quests:action/short/premiumPacket360Cost'
-    ACTION_AUTO_PREMIUMPACKET30COST = '#quests:action/auto/premiumPacket30Cost'
-    ACTION_FULL_PREMIUMPACKET30COST = '#quests:action/full/premiumPacket30Cost'
-    ACTION_HERO_FULL_PREMIUMPACKET30COST = '#quests:action/hero/full/premiumPacket30Cost'
-    ACTION_SHORT_PREMIUMPACKET30COST = '#quests:action/short/premiumPacket30Cost'
+    ACTION_BUTTON_PREMIUMPACKET_NEW = '#quests:action/button/premiumPacket/new'
+    ACTION_BUTTON_PREMIUMPACKET_CONTINUE = '#quests:action/button/premiumPacket/continue'
     ACTION_AUTO_WINXPFACTORMODE_ALWAYS = '#quests:action/auto/winXPFactorMode/always'
     ACTION_FULL_WINXPFACTORMODE_ALWAYS = '#quests:action/full/winXPFactorMode/always'
     ACTION_SHORT_WINXPFACTORMODE_ALWAYS = '#quests:action/short/winXPFactorMode/always'
@@ -1515,8 +1530,12 @@ class QUESTS(object):
      BONUSNAME_FREEXP,
      BONUSNAME_TANKMENXP,
      BONUSNAME_XPFACTOR,
+     BONUSNAME_XPFACTORHE,
+     BONUSNAME_XPFACTORELITEHE,
      BONUSNAME_CREDITSFACTOR,
+     BONUSNAME_CREDITSFACTORHE,
      BONUSNAME_FREEXPFACTOR,
+     BONUSNAME_FREEXPFACTORHE,
      BONUSNAME_TANKMENXPFACTOR,
      BONUSNAME_DAILYXPFACTOR,
      BONUSNAME_SLOTS,
@@ -1881,8 +1900,6 @@ class QUESTS(object):
      ACTION_FULL_PREMIUMPACKET1COST,
      ACTION_HERO_FULL_PREMIUMPACKET1COST,
      ACTION_SHORT_PREMIUMPACKET1COST,
-     ACTION_BUTTON_PREMIUMPACKET_NEW,
-     ACTION_BUTTON_PREMIUMPACKET_CONTINUE,
      ACTION_AUTO_PREMIUMPACKET3COST,
      ACTION_FULL_PREMIUMPACKET3COST,
      ACTION_HERO_FULL_PREMIUMPACKET3COST,
@@ -1891,6 +1908,18 @@ class QUESTS(object):
      ACTION_FULL_PREMIUMPACKET7COST,
      ACTION_HERO_FULL_PREMIUMPACKET7COST,
      ACTION_SHORT_PREMIUMPACKET7COST,
+     ACTION_AUTO_PREMIUMPACKET14COST,
+     ACTION_FULL_PREMIUMPACKET14COST,
+     ACTION_HERO_FULL_PREMIUMPACKET14COST,
+     ACTION_SHORT_PREMIUMPACKET14COST,
+     ACTION_AUTO_PREMIUMPACKET30COST,
+     ACTION_FULL_PREMIUMPACKET30COST,
+     ACTION_HERO_FULL_PREMIUMPACKET30COST,
+     ACTION_SHORT_PREMIUMPACKET30COST,
+     ACTION_AUTO_PREMIUMPACKET90COST,
+     ACTION_FULL_PREMIUMPACKET90COST,
+     ACTION_HERO_FULL_PREMIUMPACKET90COST,
+     ACTION_SHORT_PREMIUMPACKET90COST,
      ACTION_AUTO_PREMIUMPACKET180COST,
      ACTION_FULL_PREMIUMPACKET180COST,
      ACTION_HERO_FULL_PREMIUMPACKET180COST,
@@ -1899,10 +1928,8 @@ class QUESTS(object):
      ACTION_FULL_PREMIUMPACKET360COST,
      ACTION_HERO_FULL_PREMIUMPACKET360COST,
      ACTION_SHORT_PREMIUMPACKET360COST,
-     ACTION_AUTO_PREMIUMPACKET30COST,
-     ACTION_FULL_PREMIUMPACKET30COST,
-     ACTION_HERO_FULL_PREMIUMPACKET30COST,
-     ACTION_SHORT_PREMIUMPACKET30COST,
+     ACTION_BUTTON_PREMIUMPACKET_NEW,
+     ACTION_BUTTON_PREMIUMPACKET_CONTINUE,
      ACTION_AUTO_WINXPFACTORMODE_ALWAYS,
      ACTION_FULL_WINXPFACTORMODE_ALWAYS,
      ACTION_SHORT_WINXPFACTORMODE_ALWAYS,

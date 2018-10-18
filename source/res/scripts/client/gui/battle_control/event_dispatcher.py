@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/event_dispatcher.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import GameEvent, LoadViewEvent
+from gui.shared.events import GameEvent, LoadViewEvent, DestroyViewEvent
 _SCOPE = EVENT_BUS_SCOPE.BATTLE
 
 def _makeKeyCtx(key=0, isDown=False):
@@ -22,8 +22,17 @@ def toggleHelp():
     g_eventBus.handleEvent(GameEvent(GameEvent.HELP), scope=_SCOPE)
 
 
+def toggleEventHelp(isDown):
+    eventType = LoadViewEvent if isDown else DestroyViewEvent
+    g_eventBus.handleEvent(eventType(VIEW_ALIAS.EVENT_INGAME_HELP), EVENT_BUS_SCOPE.BATTLE)
+
+
 def setMinimapCmd(key):
     g_eventBus.handleEvent(GameEvent(GameEvent.MINIMAP_CMD, _makeKeyCtx(key=key)), scope=_SCOPE)
+
+
+def setEventMinimapCmd(key, isDown):
+    g_eventBus.handleEvent(GameEvent(GameEvent.EVENT_MINIMAP_CMD, _makeKeyCtx(key=key, isDown=isDown)), scope=_SCOPE)
 
 
 def setRadialMenuCmd(key, isDown):

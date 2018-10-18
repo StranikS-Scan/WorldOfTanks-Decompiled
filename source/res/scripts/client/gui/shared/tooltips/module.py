@@ -268,6 +268,10 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
     def __init__(self, module, configuration, valueWidth, leftPadding, rightPadding):
         super(PriceBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
         self._valueWidth = valueWidth
+        self._inInventoryBlockData = {'icon': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_STORAGE_ICON,
+         'text': TOOLTIPS.VEHICLE_INVENTORYCOUNT}
+        self._onVehicleBlockData = {'icon': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_INSTALLED_ON_TANK_ICON,
+         'text': TOOLTIPS.VEHICLE_VEHICLECOUNT}
 
     def construct(self):
         block = []
@@ -353,12 +357,11 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
             if inventoryCount:
                 count = module.inventoryCount
                 if count > 0:
-                    block.append(self._getInventoryBlock(count))
+                    block.append(self._getInventoryBlock(count, self._inInventoryBlockData))
             if vehiclesCount:
-                inventoryVehicles = items.getVehicles(REQ_CRITERIA.INVENTORY)
-                count = len(module.getInstalledVehicles(inventoryVehicles.itervalues()))
+                count = len(module.getInstalledVehicles(items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()))
                 if count > 0:
-                    block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_VEHICLECOUNT), value=text_styles.stats(count), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
+                    block.append(self._getInventoryBlock(count, self._onVehicleBlockData))
             isOptionalDevice = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE
             if isOptionalDevice and not module.isRemovable and not self.configuration.isAwardWindow:
                 removalPrice = module.getRemovalPrice(self.itemsCache.items)
@@ -373,8 +376,9 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
             hasAction |= module.sellPrices.itemPrice.isActionPrice()
             return (block, notEnoughMoney or hasAction)
 
-    def _getInventoryBlock(self, count):
-        return formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_INVENTORYCOUNT), value=text_styles.stats(count), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5))
+    @staticmethod
+    def _getInventoryBlock(count, blockData):
+        return formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(blockData['text']), value=text_styles.stats(count), icon=blockData['icon'], padding=formatters.packPadding(left=105), titlePadding=formatters.packPadding(left=-2), iconPadding=formatters.packPadding(top=-2, left=-2))
 
 
 class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):

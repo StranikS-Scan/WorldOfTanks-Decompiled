@@ -314,6 +314,8 @@ class ARENA_SYNC_OBJECTS:
     SECTOR = 5
     OVERTIME = 6
     SMOKE = 7
+    EVENT_POINTS = 8
+    RANDOM_EVENT = 9
 
 
 ARENA_SYNC_OBJECT_NAMES = dict([ (v, k) for k, v in ARENA_SYNC_OBJECTS.__dict__.iteritems() if not k.startswith('_') ])
@@ -1190,6 +1192,7 @@ class REQUEST_COOLDOWN:
     SEND_INVITATION_COOLDOWN = 1.0
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
+    HALLOWEEN_SHOP_BUY_ITEM = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1394,6 +1397,7 @@ class USER_SERVER_SETTINGS:
     SNIPER_AIM_4 = 64
     LINKEDSET_QUESTS = 89
     QUESTS_PROGRESS = 90
+    HALLOWEEN_QUESTS = 91
     _ALL = (HIDE_MARKS_ON_GUN,
      EULA_VERSION,
      GAME_EXTENDED,
@@ -1492,7 +1496,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  86: 'ui storage, used for preserving first entry flags etc',
  USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN: 'Hide marks on gun',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
- USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress'}
+ USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
+ USER_SERVER_SETTINGS.HALLOWEEN_QUESTS: 'halloween progress'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -1577,7 +1582,7 @@ class PREBATTLE_INVITE_STATUS:
 
 
 PREBATTLE_INVITE_STATUS_NAMES = dict([ (v, k) for k, v in PREBATTLE_INVITE_STATUS.__dict__.iteritems() if not k.startswith('_') ])
-FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk')
+FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk', 'event_deserter', 'event_afk')
 FAIRPLAY_VIOLATIONS_MASKS = dict([ (name, 1 << index) for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES) ])
 
 class REF_SYSTEM_FLAG:
@@ -1816,6 +1821,7 @@ class RESPAWN_TYPES:
     SHARED = 2
     LIMITED = 3
     EPIC = 4
+    EVENT = 5
 
 
 class VISIBILITY:
@@ -2019,3 +2025,61 @@ class LOCALIZABLE_BOT_NAME:
     @staticmethod
     def parse(name):
         return (int(token) for token in name.split('_')[1:]) if name and name.startswith(LOCALIZABLE_BOT_NAME.PREFIX) else None
+
+
+IS_PVP_AI_INTERNAL_PLAYTEST = False
+
+class HALLOWEEN_SCENARIO_TYPE:
+    NONE = 0
+    CHEST = 1
+    MUTATION = 2
+    COMPOUND = 3
+
+
+class HALLOWEEN_SCENARIO_SUBTYPE:
+    NONE = 0
+
+
+class CHEST_SPAWN_SCENARIO_SUBTYPE(HALLOWEEN_SCENARIO_SUBTYPE):
+    PERMAMENT = 1
+    WITH_TIMER = 2
+    WITH_HIT = 3
+
+
+class MUTATION_SCENARIO_SUBTYPE(HALLOWEEN_SCENARIO_SUBTYPE):
+    RELOAD_PLAYERS = 1
+    RELOAD_BOTS = 2
+    SPEED_PLAYERS = 3
+    SPEED_BOTS = 4
+    HEAL_PLAYER = 5
+    PLAYER_DROP_SOULS = 6
+
+
+class MUTATION_SCENARIO_REASON:
+    NONE = 0
+    SOULS_BASE = 1
+    SOULS_VEHICLE = 2
+    HEALTH_VEHICLE = 3
+
+
+class HALLOWEEN_STATE:
+    ACTIVE = 0
+    COMPLETED = 1
+    FAILED = 2
+
+
+class HALLOWEEN_SCENARIO_STATE(object):
+    NOT_STARTED = 0
+    STARTED = 1
+    STOPPED = 2
+
+
+class HALLOWEEN_EVEN_POINTS_MODEL_TYPE:
+    CROSS = 0
+    CHEST = 1
+
+
+class PICKUP_CREATOR:
+    TEAMMATE_DROPPED = 0
+    BOT_DROPPED = 1
+    SPAWN_POINT = 2

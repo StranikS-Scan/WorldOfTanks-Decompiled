@@ -14,10 +14,13 @@ from helpers import i18n
 
 class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMeta):
 
-    def __init__(self):
+    def __init__(self, overridePlugins=None):
         super(CrosshairPanelContainer, self).__init__(ExternalFlashSettings(BATTLE_VIEW_ALIASES.CROSSHAIR_PANEL, settings.CROSSHAIR_CONTAINER_SWF, settings.CROSSHAIR_ROOT_PATH, settings.CROSSHAIR_INIT_CALLBACK))
         self.__plugins = PluginsCollection(self)
-        self.__plugins.addPlugins(plugins.createPlugins())
+        initPlugins = plugins.createPlugins()
+        initPlugins.update(overridePlugins or {})
+        initPlugins = {key:val for key, val in initPlugins.items() if val is not None}
+        self.__plugins.addPlugins(initPlugins)
         self.__gunMarkers = None
         self.__viewID = CROSSHAIR_VIEW_ID.UNDEFINED
         self.__zoomFactor = 0.0

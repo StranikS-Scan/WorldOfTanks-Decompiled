@@ -6,6 +6,7 @@ import time
 import types
 from Queue import Queue
 from collections import namedtuple
+from copy import deepcopy
 import ArenaType
 import BigWorld
 import constants
@@ -56,9 +57,13 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.halloween_controller import IHalloweenController
 from items import makeIntCompactDescrByID
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items.components.c11n_constants import CustomizationType, DecalType
+from gui.shared.formatters.icons import makeImageTag
+from gui.server_events.awards_formatters import AWARDS_SIZES, getHalloweenProgressAwardPacker
+from gui.Scaleform.locale.EVENT import EVENT
 _EOL = '\n'
 _DEFAULT_MESSAGE = 'defaultMessage'
 _RENT_TYPES = {'time': 'rentDays',
@@ -413,6 +418,88 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
             badgesStr = ', '.join([ i18n.makeString(BADGE.badgeName(badgeID)) for badgeID in badges ])
             badgesBlock = '<br/>' + g_settings.htmlTemplates.format('badgeAchievement', {'badges': badgesStr})
         return (achievementsBlock, badgesBlock)
+
+
+class EventBattleResultsFormatter(BattleResultsFormatter):
+    _eventsCache = dependency.descriptor(IEventsCache)
+    _RESULT_DATA_DEFAULT = {'arenaName': '',
+     'vehicleName': 'N/A',
+     'freeXP': '0',
+     'xp': '0'}
+    _RESULT_TEMPLATE_NAME = 'eventBattleVictoryResult'
+    _RESULT_QUESTS_TEMPLATE_NAME = 'eventBattleVictoryResultQuests'
+    _SUPPORTED_QUEST_PREFIXES = ['halloween_daily', 'halloween_weekly']
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        if not message.data or not isSynced:
+            callback([_MessageData(None, None)])
+            return
+        else:
+            battleResults = message.data
+            arenaType = ArenaType.g_cache.get(battleResults.get('arenaTypeID'))
+            arenaCreateTime = battleResults.get('arenaCreateTime', None)
+            if not arenaCreateTime or not arenaType:
+                callback([_MessageData(None, None)])
+                return
+            arenaCreateTime = time_utils.makeLocalServerTime(arenaCreateTime)
+            bgIconSource = None
+            arenaUniqueID = battleResults.get('arenaUniqueID', 0)
+            resultData = self._mergeResultData(deepcopy(self._RESULT_DATA_DEFAULT), self._getArenaDataStrs(battleResults), self._getVehiclesDataStrs(battleResults), self._getXPDataStrs(battleResults))
+            formatted = g_settings.msgTemplates.format(self._RESULT_TEMPLATE_NAME, ctx=resultData, bgIconSource=bgIconSource, data={'timestamp': arenaCreateTime,
+             'savedData': arenaUniqueID})
+            settings = self._getGuiSettings(message, self._RESULT_TEMPLATE_NAME)
+            settings.showAt = BigWorld.time()
+            resultMessages = [_MessageData(formatted, settings)]
+            completedQuestIDs = battleResults.get('completedQuestIDs', set())
+            completedQuestIDs.update(battleResults.get('rewardsGottenQuestIDs', set()))
+            completedQuestIDs = (questID for questID in completedQuestIDs if any((questID.startswith(supportedPrefix) for supportedPrefix in self._SUPPORTED_QUEST_PREFIXES)))
+            for questID in completedQuestIDs:
+                questCtx = self._makeQuestsAchieve(questID)
+                if questCtx is None:
+                    continue
+                formatted = g_settings.msgTemplates.format(self._RESULT_QUESTS_TEMPLATE_NAME, ctx=questCtx, bgIconSource=bgIconSource, data={'timestamp': arenaCreateTime,
+                 'savedData': arenaUniqueID})
+                resultMessages.append(_MessageData(formatted, settings))
+
+            callback(resultMessages)
+            return
+
+    @staticmethod
+    def _getArenaDataStrs(battleResults):
+        arenaType = ArenaType.g_cache.get(battleResults.get('arenaTypeID'))
+        return {'arenaName': i18n.makeString(arenaType.name)}
+
+    def _getVehiclesDataStrs(self, battleResults):
+        vehicles = {intCD:self.itemsCache.items.getItemByCD(intCD) for intCD in battleResults.get('playerVehicles', {}).keys()}
+        return {'vehicleName': ', '.join((vehicle.userName for vehicle in sorted(vehicles.values())))}
+
+    def _getXPDataStrs(self, battleResults):
+        xpData = {'xp': BigWorld.wg_getIntegralFormat(battleResults.get('xp', 0)),
+         'freeXP': BigWorld.wg_getIntegralFormat(battleResults.get('freeXP', 0))}
+        return xpData
+
+    def _makeQuestsAchieve(self, questID):
+        quest = next(self._eventsCache.getQuests(lambda q: q.getID() == questID).itervalues(), None)
+        if quest is None:
+            return
+        else:
+            achieves = ' '.join((bonus.label + makeImageTag(bonus.getImage(AWARDS_SIZES.SMALL)) for bonus in getHalloweenProgressAwardPacker().format(quest.getBonuses())))
+            if not achieves:
+                return
+            desc = i18n.makeString(EVENT.getDailyWeeklyNotificationDesc(questID.split('_')[1]))
+            data = g_settings.htmlTemplates.format('halloweenBattleQuests', {'desc': desc,
+             'achieves': achieves})
+            return {'quests': data}
+
+    @staticmethod
+    def _mergeResultData(src, *dataContainers):
+        for dataContainer in dataContainers:
+            src.update(dataContainer)
+
+        return src
 
 
 class AutoMaintenanceFormatter(ServiceChannelFormatter):
@@ -1915,6 +2002,73 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             return _MessageData(formatted, settings)
         else:
             return
+
+
+class HalloweenShopItemFormatter(TokenQuestsFormatter):
+    _halloweenController = dependency.descriptor(IHalloweenController)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        formatted, settings = (None, None)
+        data = message.data or {}
+        if isSynced:
+            completedQuestIDs = data.get('completedQuestIDs', set())
+            completedQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
+            level = next(iter(completedQuestIDs), '')
+            if level:
+                level = int(level.split('_')[-1])
+            if level < 0 or level >= len(self._halloweenController.getProgress().items):
+                callback([_MessageData(None, None)])
+                return
+            levelItem = self._halloweenController.getProgress().items[level]
+            achieves = ' '.join((bonus.label + makeImageTag(bonus.getImage(AWARDS_SIZES.SMALL)) for bonus in getHalloweenProgressAwardPacker().format(levelItem.getBonuses())))
+            settings = self._getGuiSettings(message, self._getTemplateName(completedQuestIDs))
+            formatted = g_settings.msgTemplates.format(self._getTemplateName(completedQuestIDs), {'level': level,
+             'achieves': achieves})
+        callback([_MessageData(formatted, settings)])
+        return
+
+    def _getTemplateName(self, completedQuestIDs=None):
+        pass
+
+
+class HalloweenFinalRewardFormatter(TokenQuestsFormatter):
+    _halloweenController = dependency.descriptor(IHalloweenController)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        formatted, settings = (None, None)
+        data = message.data or {}
+        if isSynced:
+            completedQuestIDs = data.get('completedQuestIDs', set())
+            completedQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
+            settings = self._getGuiSettings(message, self._getTemplateName(completedQuestIDs))
+            achieves = self.formatQuestAchieves(data, asBattleFormatter=False)
+            formatted = g_settings.msgTemplates.format(self._getTemplateName(completedQuestIDs), {'achieves': achieves})
+        callback([_MessageData(formatted, settings)])
+        return None
+
+    def _getTemplateName(self, completedQuestIDs=None):
+        pass
+
+    @classmethod
+    def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True):
+        res = super(HalloweenFinalRewardFormatter, cls).formatQuestAchieves(data, asBattleFormatter, processCustomizations)
+        badges = []
+        for _, records in data.get('dossier', {}).iteritems():
+            for recordName in records:
+                block, name = recordName
+                if block == BADGES_BLOCK:
+                    badges.append(name)
+
+        if badges:
+            badgesStr = ', '.join([ i18n.makeString(BADGE.badgeName(badgeID)) for badgeID in badges ])
+            res += '<br/>' + g_settings.htmlTemplates.format('badgeAchievement', {'badges': badgesStr})
+        return res
 
 
 class NCMessageFormatter(ServiceChannelFormatter):

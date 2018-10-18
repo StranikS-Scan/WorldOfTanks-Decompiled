@@ -1,0 +1,33 @@
+<EventPointsPickup.def>
+  <Properties>
+    <rewardAmount>
+      <Type>	UINT16	</Type>
+      <Flags>	BASE	</Flags>
+    </rewardAmount>
+    <eventPoints>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </eventPoints>
+    <isRemoving>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isRemoving>
+    <vehicleID>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleID>
+    <modelType>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </modelType>
+    <creationType>
+      <Type>	UINT8	</Type>
+      <Flags>	BASE	</Flags>
+    </creationType>
+  </Properties>
+  <CellMethods>
+    <removePickup>
+      <Arg>	UINT32	</Arg>
+    </removePickup>
+  </CellMethods>
+</EventPointsPickup.def>

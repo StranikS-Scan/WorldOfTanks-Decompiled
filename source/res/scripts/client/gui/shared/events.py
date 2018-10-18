@@ -3,7 +3,7 @@
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
-__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent')
+__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'SettingsWindowEvent', 'IngameHelpWindowEvent')
 
 class HasCtxEvent(SharedEvent):
 
@@ -34,6 +34,7 @@ class GameEvent(HasCtxEvent):
     CHOICE_CONSUMABLE = 'game/choiceConsumable'
     HELP = 'game/help'
     MINIMAP_CMD = 'game/minimapCmd'
+    EVENT_MINIMAP_CMD = 'game/eventMinimapCmd'
     RADIAL_MENU_CMD = 'game/radialMenuCmd'
     TOGGLE_GUI = 'game/toggleGUI'
     GUI_VISIBILITY = 'game/guiVisibility'
@@ -55,6 +56,8 @@ class GameEvent(HasCtxEvent):
     EPIC_GLOBAL_MSG_CMD = 'game/setGlobalMessageCmd'
     SHOW_BTN_HINT = 'game/showBtnHint'
     HIDE_BTN_HINT = 'game/hideBtnHint'
+    HIDE_HUD_COMPONENTS = 'game/hideHudComponents'
+    SHOW_HUD_COMPONENTS = 'game/showHudComponents'
 
 
 class GUICommonEvent(SharedEvent):
@@ -601,6 +604,7 @@ class VehicleBuyEvent(HasCtxEvent):
 class HangarVehicleEvent(HasCtxEvent):
     ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
     ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'
+    HERO_TANK_MARKER = 'hangarVehicle/heroTankMarker'
 
 
 class LinkedSetEvent(HasCtxEvent):
@@ -619,3 +623,13 @@ class StorageEvent(HasCtxEvent):
 class HangarCustomizationEvent(HasCtxEvent):
     CHANGE_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/changeVehicleModelTransform'
     RESET_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/resetVehicleModelTransform'
+
+
+class SettingsWindowEvent(SharedEvent):
+    POPULATE_WINDOW = 'settingsWindowEvent/populateWindow'
+    DISPOSE_WINDOW = 'SettingsWindowEvent/disposeWindow'
+
+
+class IngameHelpWindowEvent(SharedEvent):
+    POPULATE_WINDOW = 'ingameHelpWindowEvent/populateWindow'
+    DISPOSE_WINDOW = 'ingameHelpWindowEvent/disposeWindow'

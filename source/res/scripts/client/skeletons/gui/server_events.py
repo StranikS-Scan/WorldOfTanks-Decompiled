@@ -85,6 +85,15 @@ class IEventsCache(object):
     def isEventEnabled(self):
         raise NotImplementedError
 
+    def getHalloweenMaxLevelPrice(self):
+        raise NotImplementedError
+
+    def isHalloweenMaxLevelBuyEnabled(self):
+        raise NotImplementedError
+
+    def getHalloweenBonusesForSoul(self):
+        raise NotImplementedError
+
     def getEventVehicles(self, itemsCache=None):
         raise NotImplementedError
 

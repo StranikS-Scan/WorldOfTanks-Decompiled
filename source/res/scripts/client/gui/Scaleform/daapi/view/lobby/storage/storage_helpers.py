@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/storage_helpers.py
 from gui import g_htmlTemplates
+from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.shared import g_eventBus, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
+from helpers.i18n import makeString as _ms
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params_helper
 from gui.shared.utils.functions import getViewName
@@ -124,3 +127,15 @@ def getStorageItemIcon(item, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
     else:
         icon = item.icon
     return icon
+
+
+def dummyFormatter(label, btnLabel='', btnTooltip=''):
+    return {'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON,
+     'htmlText': text_styles.main(_ms(label)),
+     'alignCenter': True,
+     'inlineIcon': True,
+     'btnVisible': bool(btnLabel),
+     'btnLabel': btnLabel,
+     'btnTooltip': btnTooltip,
+     'btnEvent': 'ResetFilterEvent',
+     'btnLinkage': BUTTON_LINKAGES.BUTTON_BLACK}

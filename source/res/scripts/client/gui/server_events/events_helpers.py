@@ -15,7 +15,7 @@ from helpers import time_utils, i18n, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, HALLOWEEN_GROUP_PREFIX
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
@@ -231,8 +231,12 @@ def isLinkedSet(eventID):
     return eventID.startswith(LINKEDSET_GROUP_PREFIX)
 
 
+def isHalloween(eventID):
+    return eventID.startswith(HALLOWEEN_GROUP_PREFIX)
+
+
 def isRegularQuest(eventID):
-    return not (isMarathon(eventID) or isLinkedSet(eventID))
+    return not (isMarathon(eventID) or isLinkedSet(eventID) or isHalloween(eventID))
 
 
 def getLocalizedMissionNameForLinkedSet(missionID):

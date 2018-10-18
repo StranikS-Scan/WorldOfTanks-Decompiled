@@ -147,4 +147,365 @@
     <maxUpdateInterval>	0.04	</maxUpdateInterval>
     <overTerrainHeight>	0.5	</overTerrainHeight>
   </InspireAreaVisual>
+  <GhostLargeEffect>
+    <timeline>
+      <effectEnd>	3600	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_large.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <stopSyncVisual>	true	</stopSyncVisual>
+        <wwsound>	ev_halloween_spirit_idle_big	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </GhostLargeEffect>
+  <GhostMediumEffect>
+    <timeline>
+      <effectEnd>	3600	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_large.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <stopSyncVisual>	true	</stopSyncVisual>
+        <wwsound>	ev_halloween_spirit_idle_med	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </GhostMediumEffect>
+  <GhostSmallEffect>
+    <timeline>
+      <effectEnd>	3600	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_free.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_spirit_idle_small	</wwsound>
+        <stopSyncVisual>	true	</stopSyncVisual>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </GhostSmallEffect>
+  <GhostFreeEffect>
+    <timeline>
+      <effectEnd>	3600	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_free.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </GhostFreeEffect>
+  <MutatorChestIdleEffect>
+    <timeline>
+      <effectEnd>	3600	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_super.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <stopSyncVisual>	true	</stopSyncVisual>
+        <wwsound>	ev_halloween_spirit_idle_bonus	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </MutatorChestIdleEffect>
+  <MutatorChestPickupEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_pickup.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_spirit_collecting_bonus	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </MutatorChestPickupEffect>
+  <CollectorLargeEffect>
+    <timeline>
+      <effectEnd>	3600	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_collector_large.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </CollectorLargeEffect>
+  <DeathSmallEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_spirit_appearance_small	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </DeathSmallEffect>
+  <DeathMediumEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_spirit_appearance_med	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </DeathMediumEffect>
+  <DeathLargeEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_spirit_appearance_big	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </DeathLargeEffect>
+  <GhostPickupSmallEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_pickup.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_spirit_collecting_small	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </GhostPickupSmallEffect>
+  <GhostPickupSmallSilentEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_pickup.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </GhostPickupSmallSilentEffect>
+  <GhostPickupMediumEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_pickup.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_spirit_collecting_small	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </GhostPickupMediumEffect>
+  <GhostPickupMediumSilentEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_pickup.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </GhostPickupMediumSilentEffect>
+  <GhostPickupLargeEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_pickup.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_spirit_collecting_big	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </GhostPickupLargeEffect>
+  <GhostPickupLargeSilentEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_pickup.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </GhostPickupLargeSilentEffect>
+  <ZombieWakeupSmallEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_spawn.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_waking_small	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </ZombieWakeupSmallEffect>
+  <ZombieWakeupMediumEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_spawn.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_waking_med	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </ZombieWakeupMediumEffect>
+  <ZombieWakeupLargeEffect>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_spawn.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_halloween_waking_big	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </ZombieWakeupLargeEffect>
+  <ZombieVehicleIdleLargeEffect>
+    <timeline>
+      <effectEnd>	3600	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_enemy_ambient_large.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </ZombieVehicleIdleLargeEffect>
+  <ZombieVehicleIdleMediumEffect>
+    <timeline>
+      <effectEnd>	3600	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_enemy_ambient_medium.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </ZombieVehicleIdleMediumEffect>
+  <ZombieVehicleIdleSmallEffect>
+    <timeline>
+      <effectEnd>	3600	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_enemy_ambient_small.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </ZombieVehicleIdleSmallEffect>
+  <PlayerSmallGhostCollector>
+    <timeline>
+      <effectEnd>	3600	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_player_collector.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </PlayerSmallGhostCollector>
+  <PlayerSoulPickupEffect>
+    <timeline>
+      <effectEnd>	2.0	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/ref_halloween_2018_ghost_pickup_tank.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </PlayerSoulPickupEffect>
 </dynamic_objects.xml>

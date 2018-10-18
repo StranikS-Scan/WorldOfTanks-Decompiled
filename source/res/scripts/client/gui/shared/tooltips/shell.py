@@ -3,6 +3,7 @@
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.items_parameters import params_helper, formatters as params_formatters, NO_DATA, MAX_RELATIVE_VALUE
 from gui.shared.tooltips import formatters
@@ -144,7 +145,7 @@ class PriceBlockConstructor(ShellTooltipBlockConstructor):
                 block.append(makePriceBlock(shell.sellPrices.itemPrice.price.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=shell.sellPrices.itemPrice.defPrice.credits, percent=shell.sellPrices.itemPrice.getActionPrc(), valueWidth=self._valueWidth))
             inventoryCount = shell.inventoryCount
             if inventoryCount:
-                block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_INVENTORYCOUNT), value=text_styles.stats(inventoryCount), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
+                block.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(TOOLTIPS.VEHICLE_INVENTORYCOUNT), value=text_styles.stats(inventoryCount), icon=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_STORAGE_ICON, padding=formatters.packPadding(left=76), titlePadding=formatters.packPadding(left=-2), iconPadding=formatters.packPadding(top=-2, left=-2)))
             hasAction = shell.buyPrices.itemPrice.isActionPrice() or shell.sellPrices.itemPrice.isActionPrice()
             return (block, notEnoughMoney or hasAction)
 

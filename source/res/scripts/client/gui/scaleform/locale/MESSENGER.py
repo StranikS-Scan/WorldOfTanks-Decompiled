@@ -325,6 +325,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_ACTIONSRESULTSFREEXP = '#messenger:serviceChannelMessages/battleResults/actionsResultsFreeXP'
     SERVICECHANNELMESSAGES_BATTLERESULTS_ACHIEVES = '#messenger:serviceChannelMessages/battleResults/achieves'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS = '#messenger:serviceChannelMessages/battleResults/quests'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_HALLOWEENSHOPITEM = '#messenger:serviceChannelMessages/battleResults/halloweenShopItem'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_HALLOWEENFINALREWARD = '#messenger:serviceChannelMessages/battleResults/halloweenFinalReward'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_VEHICLESLOTS = '#messenger:serviceChannelMessages/battleResults/quests/vehicleSlots'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_FREEXP = '#messenger:serviceChannelMessages/battleResults/quests/freeXP'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_CREDITS = '#messenger:serviceChannelMessages/battleResults/quests/credits'

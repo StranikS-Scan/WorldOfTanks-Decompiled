@@ -82,8 +82,8 @@ def onInit(eventType, eventData, quest, processor):
 def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
-    resultInBattle = eventData['avatarResults']['misc']['total']['damageDealt'] &lt;= questProgress.getProgress(PROGRESS_ID_MAIN).getParam("desiredPosition")
-    resultInBattleAdv = eventData['avatarResults']['misc']['total']['damageDealt'] &lt;= questProgress.getProgress(PROGRESS_ID_ADD).getParam("desiredPosition")
+    resultInBattle = eventData['avatarResults']['misc']['total']['xp'] &lt;= questProgress.getProgress(PROGRESS_ID_MAIN).getParam("desiredPosition")
+    resultInBattleAdv = eventData['avatarResults']['misc']['total']['xp'] &lt;= questProgress.getProgress(PROGRESS_ID_ADD).getParam("desiredPosition")
     questProgress.increaseEveryProgress(PROGRESS_ID_MAIN_SERIES, resultInBattle)
     questProgress.increaseEveryProgress(PROGRESS_ID_ADD_SERIES, resultInBattleAdv, PROGRESS_ID_MAIN_SERIES)
 

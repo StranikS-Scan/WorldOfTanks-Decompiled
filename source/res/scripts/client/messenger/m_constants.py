@@ -44,10 +44,14 @@ class LAZY_CHANNEL(object):
 class BATTLE_CHANNEL(object):
     _ITEM = namedtuple('_ITEM', 'initFlag name label')
     TEAM = _ITEM(1, 'team', 'TEAM : ')
+    EVENT = _ITEM(1, 'event', 'EVENT : ')
     COMMON = _ITEM(2, 'common', 'COMMON : ')
     SQUAD = _ITEM(0, 'squad', 'SQUAD : ')
     REQUIRED = (TEAM, COMMON)
-    ALL = (TEAM, COMMON, SQUAD)
+    ALL = (TEAM,
+     COMMON,
+     SQUAD,
+     EVENT)
     NAMES = tuple((x.name for x in ALL))
 
     @classmethod

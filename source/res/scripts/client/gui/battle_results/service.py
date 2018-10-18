@@ -24,11 +24,12 @@ class BattleResultsService(IBattleResultsService):
     itemsCache = dependency.descriptor(IItemsCache)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    __slots__ = ('__composers', '__buy', '__eventsManager', 'onResultPosted')
+    __slots__ = ('__composers', '__bonusTypes', '__buy', '__eventsManager', 'onResultPosted')
 
     def __init__(self):
         super(BattleResultsService, self).__init__()
         self.__composers = {}
+        self.__bonusTypes = {}
         self.__buy = set()
         self.__eventsManager = Event.EventManager()
         self.onResultPosted = Event.Event(self.__eventsManager)
@@ -47,6 +48,7 @@ class BattleResultsService(IBattleResultsService):
             _, item = self.__composers.popitem()
             item.clear()
 
+        self.__bonusTypes.clear()
         self.__eventsManager.clear()
 
     @async
@@ -54,7 +56,8 @@ class BattleResultsService(IBattleResultsService):
     def requestResults(self, ctx, callback=None):
         arenaUniqueID = ctx.getArenaUniqueID()
         if ctx.needToShowImmediately():
-            event_dispatcher.showBattleResultsWindow(arenaUniqueID)
+            arenaBonusType = ctx.getArenaBonusType()
+            event_dispatcher.showBattleResultsWindow(arenaUniqueID, arenaBonusType)
         if not ctx.resetCache() and arenaUniqueID in self.__composers:
             isSuccess = True
 
@@ -64,12 +67,14 @@ class BattleResultsService(IBattleResultsService):
                 return
 
             yield dummy
-            self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=ctx.needToShowIfPosted())
+            arenaBonusType = self.__bonusTypes[arenaUniqueID]
+            self.__notifyBattleResultsPosted(arenaUniqueID, arenaBonusType, needToShowUI=ctx.needToShowIfPosted())
         else:
             results = yield BattleResultsGetter(arenaUniqueID).request()
             isSuccess = results.success
             if not results.success or not self.postResult(results.auxData, ctx.needToShowIfPosted()):
                 self.__composers.pop(arenaUniqueID, None)
+                self.__bonusTypes.pop(arenaUniqueID, None)
                 event_dispatcher.hideBattleResults()
         if callback is not None:
             callback(isSuccess)
@@ -98,8 +103,10 @@ class BattleResultsService(IBattleResultsService):
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
             self.__composers[arenaUniqueID] = composerObj
+            arenaBonusType = reusableInfo.common.arenaBonusType
+            self.__bonusTypes[arenaUniqueID] = arenaBonusType
             self.onResultPosted(reusableInfo, composerObj)
-            self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=needToShowUI)
+            self.__notifyBattleResultsPosted(arenaUniqueID, arenaBonusType, needToShowUI=needToShowUI)
             return True
 
     def areResultsPosted(self, arenaUniqueID):
@@ -129,17 +136,18 @@ class BattleResultsService(IBattleResultsService):
         yield self.requestResults(ctx)
 
     @staticmethod
-    def __notifyBattleResultsPosted(arenaUniqueID, needToShowUI=False):
+    def __notifyBattleResultsPosted(arenaUniqueID, arenaBonusType, needToShowUI=False):
         if needToShowUI:
-            event_dispatcher.showBattleResultsWindow(arenaUniqueID)
+            event_dispatcher.showBattleResultsWindow(arenaUniqueID, arenaBonusType)
         event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
 
     def __handleLobbyViewLoaded(self, _):
         battleCtx = self.sessionProvider.getCtx()
         arenaUniqueID = battleCtx.lastArenaUniqueID
+        arenaBonusType = battleCtx.lastArenaBonusType
         if arenaUniqueID:
             try:
-                self.__showResults(context.RequestResultsContext(arenaUniqueID))
+                self.__showResults(context.RequestResultsContext(arenaUniqueID, arenaBonusType))
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 

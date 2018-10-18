@@ -33,6 +33,66 @@
       <touchdownEffect>	inf_tree_birch_touchdown_big	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Conifers/Spruce_Halloween/Spruce_Halloween_20m.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Halloween/Spruce_Halloween_30m.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/SpookyTree/SpookyTree_20m.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_birch_fall_big	</fractureEffect>
+      <touchdownEffect>	inf_tree_birch_touchdown_big	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/SpookyTree/SpookyTree_20m_Wide.srt	</filename>
+      <health>	40	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_birch_fall_big	</fractureEffect>
+      <touchdownEffect>	inf_tree_birch_touchdown_big	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/SpookyTree/SpookyTree_22m_Wide.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_birch_fall_big	</fractureEffect>
+      <touchdownEffect>	inf_tree_birch_touchdown_big	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/SpookyTree/SpookyTree_28m.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_birch_fall_big	</fractureEffect>
+      <touchdownEffect>	inf_tree_birch_touchdown_big	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Broadleaves/Birch/Birch_bush_large_01.srt	</filename>
       <health>	3	</health>
       <density>	0.25	</density>
@@ -14091,11 +14151,22 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
-      <filename>	content/Environment/hd_env_AM_069_WaterTowerBig/normal/lod0/hd_env_AM_069_WaterTowerBig.model	</filename>
-      <health>	50	</health>
+      <filename>	content/Environment/hd_env_EU_212_StreetLamp_01/normal/lod0/hd_env_EU_212_StreetLamp_01.model	</filename>
+      <health>	20	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_AM_069_WaterTower	</effect>
-      <hitEffect>	hd_env_AM_069_WaterTower	</hitEffect>
+      <effect>	inf_env_EU_040_StreetLamp_03	</effect>
+      <hitEffect>	inf_env_EU_040_StreetLamp_03	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_212_StreetLamp_01/normal/lod0/hd_env_EU_212_StreetLamp_02.model	</filename>
+      <health>	20	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env_EU_040_StreetLamp_03	</effect>
+      <hitEffect>	inf_env_EU_040_StreetLamp_03	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
       <matName>	n_metal0	</matName>

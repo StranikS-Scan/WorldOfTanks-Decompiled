@@ -80,12 +80,12 @@ def onInit(eventType, eventData, quest, processor):
 def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
-    medalDescriptors = [questProgress.getProgress(PROGRESS_ID_MAIN).getParam("medal")]
+    medalDescriptors = questProgress.getProgress(PROGRESS_ID_MAIN).getParam("medal")
     battleHeroMedalSet = {records.RECORD_DB_IDS[rec] for rec in medalDescriptors}
     resultMain = sum(1 for medal in eventData['avatarResults']['achievements'] if medal in battleHeroMedalSet)
     questProgress.increaseBattleSeriesUntilCompleteOrFail(PROGRESS_ID_MAIN_SERIES, bool(resultMain))
 
-    medalDescriptors = [questProgress.getProgress(PROGRESS_ID_ADD).getParam("medal")]
+    medalDescriptors = questProgress.getProgress(PROGRESS_ID_ADD).getParam("medal")
     battleHeroMedalSet = {records.RECORD_DB_IDS[rec] for rec in medalDescriptors}
     resultAdd = sum(1 for medal in eventData['avatarResults']['achievements'] if medal in battleHeroMedalSet)
     questProgress.increaseBattleSeriesUntilCompleteOrFail(PROGRESS_ID_ADD_SERIES, bool(resultAdd), PROGRESS_ID_MAIN_SERIES)

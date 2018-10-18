@@ -569,7 +569,9 @@ class EconomicsSet(ActionModifier):
         self.__handlers = {'premiumPacket1Cost': bwr(self.handlerPremiumPacket1),
          'premiumPacket3Cost': bwr(self.handlerPremiumPacket3),
          'premiumPacket7Cost': bwr(self.handlerPremiumPacket7),
+         'premiumPacket14Cost': bwr(self.handlerPremiumPacket14),
          'premiumPacket30Cost': bwr(self.handlerPremiumPacket30),
+         'premiumPacket90Cost': bwr(self.handlerPremiumPacket90),
          'premiumPacket180Cost': bwr(self.handlerPremiumPacket180),
          'premiumPacket360Cost': bwr(self.handlerPremiumPacket360),
          'freeXPConversionDiscrecity': bwr(self.handlerFreeXPConversionDiscrecity),
@@ -724,9 +726,17 @@ class EconomicsSet(ActionModifier):
         default = self.itemsCache.items.shop.defaults.getPremiumPacketCost(7)
         return self._calculateDiscount('premiumPacket7', ctx.getValue(), default, _DT.PERCENT)
 
+    def handlerPremiumPacket14(self, ctx):
+        default = self.itemsCache.items.shop.defaults.getPremiumPacketCost(14)
+        return self._calculateDiscount('premiumPacket14', ctx.getValue(), default, _DT.PERCENT)
+
     def handlerPremiumPacket30(self, ctx):
         default = self.itemsCache.items.shop.defaults.getPremiumPacketCost(30)
         return self._calculateDiscount('premiumPacket30', ctx.getValue(), default, _DT.PERCENT)
+
+    def handlerPremiumPacket90(self, ctx):
+        default = self.itemsCache.items.shop.defaults.getPremiumPacketCost(90)
+        return self._calculateDiscount('premiumPacket90', ctx.getValue(), default, _DT.PERCENT)
 
     def handlerPremiumPacket180(self, ctx):
         default = self.itemsCache.items.shop.defaults.getPremiumPacketCost(180)

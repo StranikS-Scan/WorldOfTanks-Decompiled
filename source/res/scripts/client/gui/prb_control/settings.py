@@ -151,6 +151,7 @@ class PREBATTLE_ACTION_NAME(object):
     EPIC_DEV = 'epicBattle'
     EPIC = 'epicQueue'
     EPIC_FORCED = 'epicForced'
+    EVENT = 'event'
 
 
 class PREBATTLE_INIT_STEP(object):

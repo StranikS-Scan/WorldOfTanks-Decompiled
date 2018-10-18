@@ -78,7 +78,7 @@ def getVehicleDataVO(vehicle):
      'level': vehicle.level,
      'premium': vehicle.isPremium,
      'favorite': vehicle.isFavorite,
-     'nation': vehicle.nationID,
+     'nation': vehicle.customNationID,
      'xpImgSource': bonusImage,
      'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
      'rentLeft': rentInfoText,
@@ -253,6 +253,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
     def _getVehicleStats(self, vehicle):
         intCD = vehicle.intCD
+        visibleStats = False if 'hideStats' in vehicle.tags else self._showVehicleStats
         vehicleRandomStats = self._randomStats.getVehicles() if self._randomStats is not None else {}
         if intCD in vehicleRandomStats:
             battlesCount, wins, _ = vehicleRandomStats.get(intCD)
@@ -274,7 +275,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         else:
             statsText = '#menu:tankCarousel/statsStatus/unavailable'
         return {'statsText': text_styles.stats(statsText),
-         'visibleStats': self._showVehicleStats}
+         'visibleStats': visibleStats}
 
     def _updateVehicleItems(self, vehiclesCollection):
         updateIndices = []

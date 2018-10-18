@@ -24,10 +24,14 @@ def _readModelMarkerSection(xmlCtx, section, name='model'):
 
 def _readWorldMarkerSection(xmlCtx, section):
     subSec = _xml.getSubsection(xmlCtx, section, 'world')
-    return {'shape': _xml.readString(xmlCtx, subSec, 'shape'),
+    data = {'shape': _xml.readString(xmlCtx, subSec, 'shape'),
      'min-distance': _xml.readFloat(xmlCtx, subSec, 'min-distance'),
      'max-distance': _xml.readFloat(xmlCtx, subSec, 'max-distance'),
      'offset': _xml.readVector3(xmlCtx, subSec, 'offset')}
+    color = _xml.readStringOrNone(xmlCtx, subSec, 'color')
+    if color is not None:
+        data['color'] = color
+    return data
 
 
 def _readAreaMarkerSection(xmlCtx, section, markerID):

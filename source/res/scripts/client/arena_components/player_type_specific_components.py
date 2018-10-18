@@ -5,6 +5,8 @@ from player_data_component import PlayerDataComponent
 from arena_component_system.epic_sector_warning_component import EpicSectorWarningComponent
 from arena_component_system.arena_equipment_component import ArenaEquipmentComponent
 from arena_component_system.overtime_component import OvertimeComponent
+from arena_component_system.client_arena_event_points_component import EventPointsComponent
+from arena_component_system.client_arena_random_event_component import RandomEventComponent
 
 def getPlayerTypeSpecificComponentsForEpicRandom():
     return {'playerDataComponent': PlayerDataComponent}
@@ -14,6 +16,11 @@ def getPlayerTypeSpecificComponentsForEpicBattle():
     return {'playerDataComponent': EpicBattlePlayerDataComponent,
      'sectorWarningComponent': EpicSectorWarningComponent,
      'overtimeComponent': OvertimeComponent}
+
+
+def getPlayerTypeSpecificComponentsForEventBattle():
+    return {'eventPointsComponent': EventPointsComponent,
+     'randomEventComponent': RandomEventComponent}
 
 
 def getDefaultComponents():

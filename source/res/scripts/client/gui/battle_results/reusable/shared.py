@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_results/reusable/shared.py
 import functools
 import operator
+from collections import namedtuple
 from account_shared import getFairPlayViolationName
 from constants import DEATH_REASON_ALIVE
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -13,6 +14,11 @@ from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.dossier import getAchievementFactory
 from items import vehicles as vehicles_core
 from shared_utils import findFirst
+EventData = namedtuple('EventData', ('eventPointsOnStart',
+ 'eventPoints',
+ 'halloweenLevelOnStart',
+ 'halloweenLevel',
+ 'halloweenLevelMax'))
 
 def makeAchievementFromPersonal(results):
     popUps = results.get('dossierPopUps', [])
@@ -371,7 +377,7 @@ class _VehicleInfo(object):
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_eventData')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -418,6 +424,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._xpForAttack = 0
         self._xpOther = 0
         self._isKilledByTeamKiller = False
+        self._eventData = EventData(0, 0, 0, 0, 0)
 
     @property
     def vehicle(self):
@@ -615,6 +622,26 @@ class VehicleDetailedInfo(_VehicleInfo):
     def xpOther(self):
         return self._xpOther
 
+    @property
+    def eventPointsOnStart(self):
+        return self._eventData.eventPointsOnStart
+
+    @property
+    def eventPoints(self):
+        return self._eventData.eventPoints
+
+    @property
+    def halloweenLevelOnStart(self):
+        return self._eventData.halloweenLevelOnStart
+
+    @property
+    def halloweenLevel(self):
+        return self._eventData.halloweenLevel
+
+    @property
+    def halloweenLevelMax(self):
+        return self._eventData.halloweenLevelMax
+
     def haveInteractionDetails(self):
         return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0
 
@@ -671,6 +698,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._extPublic = vehicleRecords['extPublic']
         info._equipmentDamageAssisted = vehicleRecords.get('damageAssistedInspire', 0) + vehicleRecords.get('damageAssistedSmoke', 0)
         cls._setSharedRecords(info, vehicleRecords)
+        info._eventData = EventData._make(vehicleRecords['eventData'])
         return info
 
     @classmethod
@@ -916,6 +944,26 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def equipmentDamageAssisted(self):
         return self.__accumulate('equipmentDamageAssisted')
+
+    @property
+    def eventPointsOnStart(self):
+        return self.__findFirstNoZero('eventPointsOnStart')
+
+    @property
+    def eventPoints(self):
+        return self.__accumulate('eventPoints')
+
+    @property
+    def halloweenLevelOnStart(self):
+        return self.__findFirstNoZero('halloweenLevelOnStart')
+
+    @property
+    def halloweenLevel(self):
+        return self.__findFirstNoZero('halloweenLevel')
+
+    @property
+    def halloweenLevelMax(self):
+        return self.__findFirstNoZero('halloweenLevelMax')
 
     def addVehicleInfo(self, info):
         self.__vehicles.append(info)

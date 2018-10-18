@@ -5,6 +5,7 @@ import BigWorld
 import MusicControllerWWISE
 import constants
 from CurrentVehicle import g_currentVehicle
+from GUI import WGUIBackgroundBlur
 from PlayerEvents import g_playerEvents
 from adisp import process, async
 from client_request_lib.exceptions import ResponseCodes
@@ -22,8 +23,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control import prb_getters, prbEntityProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.shared import events
-from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.shared.view_helpers import ClanEmblemsHelper
@@ -184,6 +184,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.__createTime = 0
         self.__timerCallback = None
         self.__provider = None
+        self._blur = WGUIBackgroundBlur()
         return
 
     @prbEntityProperty
@@ -208,6 +209,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
 
     def _populate(self):
         super(BattleQueue, self)._populate()
+        self._blur.enable = True
+        self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onArenaCreated += self.onStartBattle
         self.__updateQueueInfo()
         self.__updateTimer()
@@ -217,6 +220,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
     def _dispose(self):
         self.__stopUpdateScreen()
         g_playerEvents.onArenaCreated -= self.onStartBattle
+        self._blur.enable = False
+        self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         super(BattleQueue, self)._dispose()
 
     def __updateClientState(self):

@@ -156,6 +156,7 @@ class TOOLTIPS(object):
     STORAGE_MAINMENU_STORAGE = '#tooltips:storage/mainMenu/storage'
     STORAGE_MAINMENU_IN_HANGAR = '#tooltips:storage/mainMenu/in_hangar'
     STORAGE_MAINMENU_PERSONAL_RESERVES = '#tooltips:storage/mainMenu/personal_reserves'
+    STORAGE_FILTER_NORESULTSBTN = '#tooltips:storage/filter/noResultsBtn'
     TEMPLATE_DAYS_SHORT = '#tooltips:template/days/short'
     TEMPLATE_DAYS_VALUE = '#tooltips:template/days/value'
     TEMPLATE_HOURS_SHORT = '#tooltips:template/hours/short'
@@ -408,6 +409,8 @@ class TOOLTIPS(object):
     COLORFILTER_HEADER = '#tooltips:colorFilter/header'
     COLORFILTER_BODY = '#tooltips:colorFilter/body'
     COLORFILTER_ATTENTION = '#tooltips:colorFilter/attention'
+    DISABLEDPVENOTIFICATION_HEADER = '#tooltips:disabledPveNotification/header'
+    DISABLEDPVENOTIFICATION_BODY = '#tooltips:disabledPveNotification/body'
     GOLD_HEADER = '#tooltips:gold/header'
     GOLD_BODY = '#tooltips:gold/body'
     CREDITS_HEADER = '#tooltips:credits/header'
@@ -1656,8 +1659,12 @@ class TOOLTIPS(object):
     AWARDITEM_BERTHS_BODY = '#tooltips:awardItem/berths/body'
     AWARDITEM_CREDITSFACTOR_HEADER = '#tooltips:awardItem/creditsFactor/header'
     AWARDITEM_CREDITSFACTOR_BODY = '#tooltips:awardItem/creditsFactor/body'
+    AWARDITEM_CREDITSFACTORHE_HEADER = '#tooltips:awardItem/creditsFactorHE/header'
+    AWARDITEM_CREDITSFACTORHE_BODY = '#tooltips:awardItem/creditsFactorHE/body'
     AWARDITEM_FREEXPFACTOR_HEADER = '#tooltips:awardItem/freeXPFactor/header'
     AWARDITEM_FREEXPFACTOR_BODY = '#tooltips:awardItem/freeXPFactor/body'
+    AWARDITEM_FREEXPFACTORHE_HEADER = '#tooltips:awardItem/freeXPFactorHE/header'
+    AWARDITEM_FREEXPFACTORHE_BODY = '#tooltips:awardItem/freeXPFactorHE/body'
     AWARDITEM_TANKMENXP_HEADER = '#tooltips:awardItem/tankmenXP/header'
     AWARDITEM_TANKMENXP_BODY = '#tooltips:awardItem/tankmenXP/body'
     AWARDITEM_TANKMENXPFACTOR_HEADER = '#tooltips:awardItem/tankmenXPFactor/header'
@@ -1666,6 +1673,10 @@ class TOOLTIPS(object):
     AWARDITEM_XP_BODY = '#tooltips:awardItem/xp/body'
     AWARDITEM_XPFACTOR_HEADER = '#tooltips:awardItem/xpFactor/header'
     AWARDITEM_XPFACTOR_BODY = '#tooltips:awardItem/xpFactor/body'
+    AWARDITEM_XPFACTORHE_HEADER = '#tooltips:awardItem/xpFactorHE/header'
+    AWARDITEM_XPFACTORHE_BODY = '#tooltips:awardItem/xpFactorHE/body'
+    AWARDITEM_XPFACTORELITEHE_HEADER = '#tooltips:awardItem/xpFactorEliteHE/header'
+    AWARDITEM_XPFACTORELITEHE_BODY = '#tooltips:awardItem/xpFactorEliteHE/body'
     AWARDITEM_SLOTS_HEADER = '#tooltips:awardItem/slots/header'
     AWARDITEM_SLOTS_BODY = '#tooltips:awardItem/slots/body'
     AWARDITEM_FREETOKENS_HEADER = '#tooltips:awardItem/freeTokens/header'
@@ -2179,6 +2190,7 @@ class TOOLTIPS(object):
     PERSONALMISSIONS_FREESHEET_NOTENOUGH = '#tooltips:personalMissions/freeSheet/notEnough'
     PERSONALMISSIONS_BADGE_TITLE = '#tooltips:personalMissions/badge/title'
     PERSONALMISSIONS_BADGE_DESCR = '#tooltips:personalMissions/badge/descr'
+    PERSONALMISSIONS_BADGEHALLOWEEN_DESCR = '#tooltips:personalMissions/badgeHalloween/descr'
     PERSONALMISSIONS_OPERATION_TITLE = '#tooltips:personalMissions/operation/title'
     PERSONALMISSIONS_OPERATION_MISSIONS_TITLE = '#tooltips:personalMissions/operation/missions/title'
     PERSONALMISSIONS_OPERATION_AWARDS_TITLE_DONE = '#tooltips:personalMissions/operation/awards/title/done'
@@ -2546,6 +2558,17 @@ class TOOLTIPS(object):
     MARATHON_ERROR_VEH_TYPE = '#tooltips:marathon/error/veh_type'
     XPEXCHANGEWINDOW_GOLD_GOLDAFTEREXCHANGE_HEADER = '#tooltips:xpExchangewindow/gold/goldAfterExchange/header'
     XPEXCHANGEWINDOW_GOLD_GOLDAFTEREXCHANGE_BODY = '#tooltips:xpExchangewindow/gold/goldAfterExchange/body'
+    STORAGE_FILTER_NORESULTSBTN_HEADER = '#tooltips:storage/filter/noResultsBtn/header'
+    STORAGE_FILTER_NORESULTSBTN_BODY = '#tooltips:storage/filter/noResultsBtn/body'
+    STORAGE_FILTER_PERSONALRESERVES_BTNS_LEVEL_SMALL = '#tooltips:storage/filter/personalReserves/btns/level/small'
+    STORAGE_FILTER_PERSONALRESERVES_BTNS_LEVEL_MEDIUM = '#tooltips:storage/filter/personalReserves/btns/level/medium'
+    STORAGE_FILTER_PERSONALRESERVES_BTNS_LEVEL_BIG = '#tooltips:storage/filter/personalReserves/btns/level/big'
+    STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_VEHICLEEXP = '#tooltips:storage/filter/personalReserves/btns/type/vehicleExp'
+    STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_CREWEXP = '#tooltips:storage/filter/personalReserves/btns/type/crewExp'
+    STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_FREEEXP = '#tooltips:storage/filter/personalReserves/btns/type/freeExp'
+    STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_CREDITS = '#tooltips:storage/filter/personalReserves/btns/type/credits'
+    STORAGE_FILTERCOUNTER_CLOSEBUTTON_HEADER = '#tooltips:storage/filterCounter/closeButton/header'
+    STORAGE_FILTERCOUNTER_CLOSEBUTTON_BODY = '#tooltips:storage/filterCounter/closeButton/body'
     STORAGE_MAINMENU_FOR_SELL_HEADER = '#tooltips:storage/mainMenu/for_sell/header'
     STORAGE_MAINMENU_FOR_SELL_BODY = '#tooltips:storage/mainMenu/for_sell/body'
     STORAGE_MAINMENU_STORAGE_HEADER = '#tooltips:storage/mainMenu/storage/header'
@@ -2569,6 +2592,27 @@ class TOOLTIPS(object):
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES = '#tooltips:quests/awards/vehicleRent/rentLeft/rentBattles'
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentWins'
     QUESTS_AWARDS_VEHICLERENT_BOTTOM = '#tooltips:quests/awards/vehicleRent/bottom'
+    HALLOWEEN_TITLE = '#tooltips:halloween/title'
+    HALLOWEEN_COURAGELEVEL = '#tooltips:halloween/courageLevel'
+    HALLOWEEN_COURAGELEVELMAX = '#tooltips:halloween/courageLevelMax'
+    HALLOWEEN_LEVELAVAILABLE = '#tooltips:halloween/levelAvailable'
+    HALLOWEEN_LEVELISNOTAVAILABLE = '#tooltips:halloween/levelIsNotAvailable'
+    HALLOWEEN_MAXLEVEL = '#tooltips:halloween/maxLevel'
+    HALLOWEEN_CURRENTLEVEL = '#tooltips:halloween/currentLevel'
+    HALLOWEEN_LEVELACHIEVED = '#tooltips:halloween/levelAchieved'
+    HALLOWEEN_LEVELAVAILABILITY = '#tooltips:halloween/levelAvailability'
+    HALLOWEEN_NEXTLEVELAVAILABILITY = '#tooltips:halloween/nextLevelAvailability'
+    HALLOWEEN_SOULSTONEXTLEVEL = '#tooltips:halloween/soulsToNextLevel'
+    HALLOWEEN_BONUSDESCRIPTION = '#tooltips:halloween/bonusDescription'
+    HALLOWEEN_VEHICLEDESCRIPTION = '#tooltips:halloween/vehicleDescription'
+    HALLOWEEN_VICTORYSCREEN_PREMIUMACCOUNT_TITLE = '#tooltips:halloween/victoryScreen/premiumAccount/title'
+    HALLOWEEN_VICTORYSCREEN_PREMIUMACCOUNT_DESC = '#tooltips:halloween/victoryScreen/premiumAccount/desc'
+    HALLOWEEN_VICTORYSCREEN_MAXLEVEL_TITLE = '#tooltips:halloween/victoryScreen/maxLevel/title'
+    HALLOWEEN_VICTORYSCREEN_MAXLEVEL_DESC = '#tooltips:halloween/victoryScreen/maxLevel/desc'
+    HALLOWEEN_VICTORYSCREEN_EXP1_TITLE = '#tooltips:halloween/victoryScreen/exp1/title'
+    HALLOWEEN_VICTORYSCREEN_EXP1_DESC = '#tooltips:halloween/victoryScreen/exp1/desc'
+    HALLOWEEN_VICTORYSCREEN_EXP2_TITLE = '#tooltips:halloween/victoryScreen/exp2/title'
+    HALLOWEEN_VICTORYSCREEN_EXP2_DESC = '#tooltips:halloween/victoryScreen/exp2/desc'
     HEADER_BUTTONS_ALL_CLICKDESC_ENUM = (HEADER_BUTTONS_CRYSTAL_CLICKDESC,
      HEADER_BUTTONS_GOLD_CLICKDESC,
      HEADER_BUTTONS_CREDITS_CLICKDESC,
@@ -2644,11 +2688,15 @@ class TOOLTIPS(object):
      AWARDITEM_BATTLETOKEN_SEVERAL_BODY,
      AWARDITEM_BERTHS_BODY,
      AWARDITEM_CREDITSFACTOR_BODY,
+     AWARDITEM_CREDITSFACTORHE_BODY,
      AWARDITEM_FREEXPFACTOR_BODY,
+     AWARDITEM_FREEXPFACTORHE_BODY,
      AWARDITEM_TANKMENXP_BODY,
      AWARDITEM_TANKMENXPFACTOR_BODY,
      AWARDITEM_XP_BODY,
      AWARDITEM_XPFACTOR_BODY,
+     AWARDITEM_XPFACTORHE_BODY,
+     AWARDITEM_XPFACTORELITEHE_BODY,
      AWARDITEM_SLOTS_BODY,
      AWARDITEM_FREETOKENS_BODY,
      AWARDITEM_COMPLETIONTOKENS_BODY,
@@ -2834,11 +2882,15 @@ class TOOLTIPS(object):
      AWARDITEM_BATTLETOKEN_SEVERAL_HEADER,
      AWARDITEM_BERTHS_HEADER,
      AWARDITEM_CREDITSFACTOR_HEADER,
+     AWARDITEM_CREDITSFACTORHE_HEADER,
      AWARDITEM_FREEXPFACTOR_HEADER,
+     AWARDITEM_FREEXPFACTORHE_HEADER,
      AWARDITEM_TANKMENXP_HEADER,
      AWARDITEM_TANKMENXPFACTOR_HEADER,
      AWARDITEM_XP_HEADER,
      AWARDITEM_XPFACTOR_HEADER,
+     AWARDITEM_XPFACTORHE_HEADER,
+     AWARDITEM_XPFACTORELITEHE_HEADER,
      AWARDITEM_SLOTS_HEADER,
      AWARDITEM_FREETOKENS_HEADER,
      AWARDITEM_TANKMEN_HEADER,

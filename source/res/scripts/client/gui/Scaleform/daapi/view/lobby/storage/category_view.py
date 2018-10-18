@@ -6,7 +6,9 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.app_loader.decorators import sf_lobby
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
+from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
 from skeletons.gui.shared import IItemsCache
+from gui.shared.formatters import text_styles
 
 class StorageDataProvider(DAAPIDataProvider):
 
@@ -70,6 +72,13 @@ class BaseCategoryView(BaseStorageCategoryViewMeta):
         if app is not None and app.soundManager is not None:
             app.soundManager.playEffectSound(soundName)
         return
+
+    def _makeFilterWarningVO(self, label, btnLabel, btnTooltip):
+        return storage_helpers.dummyFormatter(label, btnLabel=btnLabel, btnTooltip=btnTooltip)
+
+    def _formatCountString(self, currentVehiclesCount, totalVehiclesCount):
+        style = text_styles.error if currentVehiclesCount == 0 else text_styles.stats
+        return '{} / {}'.format(style(currentVehiclesCount), text_styles.main(totalVehiclesCount))
 
 
 class InventoryCategoryView(BaseCategoryView):

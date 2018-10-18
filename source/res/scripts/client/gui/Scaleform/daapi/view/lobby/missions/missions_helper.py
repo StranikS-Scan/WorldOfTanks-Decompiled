@@ -7,7 +7,7 @@ import constants
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.missions import cards_formatters
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getChainVehTypeAndLevelRestrictions
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer, AwardsWindowComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer, LinkedSetAwardsComposer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer, AwardsWindowComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer, LinkedSetAwardsComposer, HalloweenAwardsComposer
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_BUTTONS import PERSONAL_MISSIONS_BUTTONS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -50,6 +50,7 @@ _detailedCardAwardsFormatter = DetailedCardAwardComposer(DETAILED_CARD_AWARDS_CO
 _awardsWindowBonusFormatter = AwardsWindowComposer(CARD_AWARDS_BIG_COUNT)
 _personalMissionsAwardsFormatter = PersonalMissionsAwardComposer(DETAILED_CARD_AWARDS_COUNT)
 _linkedSetAwardsComposer = LinkedSetAwardsComposer(LINKED_SET_CARD_AWARDS_COUNT)
+_halloweenAwardsComposer = HalloweenAwardsComposer(LINKED_SET_CARD_AWARDS_COUNT)
 HIDE_DONE = 'hideDone'
 HIDE_UNAVAILABLE = 'hideUnavailable'
 PostponedOperationState = namedtuple('PostponedOperationState', ['state', 'postponeTime'])
@@ -948,6 +949,14 @@ def getMissionAwardsFormatter():
 
 def getLinkedSetBonuses(bonuses):
     result = _linkedSetAwardsComposer.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
+    while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
+        result.append({})
+
+    return result
+
+
+def getHalloweenBonuses(bonuses):
+    result = _halloweenAwardsComposer.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
     while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
         result.append({})
 

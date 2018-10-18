@@ -321,6 +321,7 @@ class Source(object):
          'GR': self.__readBattleResultsConditionList,
          'igrType': self.__readCondition_IGRType,
          'premium': self.__readCondition_bool,
+         'elite': self.__readCondition_bool,
          'daily': self.__readCondition_true,
          'bonusLimit': self.__readCondition_int,
          'refSystemRalXPPool': self.__readBattleResultsConditionList,

@@ -94,25 +94,29 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if priceBlock and not shouldBeCut:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, gap=textGap, padding=blockPadding))
-        simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
-        if simplifiedStatsBlock:
-            items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
-        if not vehicle.isRotationGroupLocked:
-            commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
-            if commonStatsBlock:
-                items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
-        footnoteBlock = FootnoteBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
-        if footnoteBlock:
-            items.append(formatters.packBuildUpBlockData(footnoteBlock, gap=textGap, padding=blockPadding))
-        if vehicle.isRotationGroupLocked:
-            statsBlockConstructor = RotationLockAdditionalStatsBlockConstructor
-        elif vehicle.isDisabledInRoaming:
-            statsBlockConstructor = RoamingLockAdditionalStatsBlockConstructor
-        elif vehicle.clanLock and vehicle.clanLock > time_utils.getCurrentTimestamp():
-            statsBlockConstructor = ClanLockAdditionalStatsBlockConstructor
+        halloweenBlock = HalloweenBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
+        if halloweenBlock:
+            items.append(formatters.packBuildUpBlockData(halloweenBlock, padding=leftRightPadding))
         else:
-            statsBlockConstructor = AdditionalStatsBlockConstructor
-        items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
+            simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
+            if simplifiedStatsBlock:
+                items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
+            if not vehicle.isRotationGroupLocked:
+                commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
+                if commonStatsBlock:
+                    items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
+            footnoteBlock = FootnoteBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
+            if footnoteBlock:
+                items.append(formatters.packBuildUpBlockData(footnoteBlock, gap=textGap, padding=blockPadding))
+            if vehicle.isRotationGroupLocked:
+                statsBlockConstructor = RotationLockAdditionalStatsBlockConstructor
+            elif vehicle.isDisabledInRoaming:
+                statsBlockConstructor = RoamingLockAdditionalStatsBlockConstructor
+            elif vehicle.clanLock and vehicle.clanLock > time_utils.getCurrentTimestamp():
+                statsBlockConstructor = ClanLockAdditionalStatsBlockConstructor
+            else:
+                statsBlockConstructor = AdditionalStatsBlockConstructor
+            items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
         if not vehicle.isRotationGroupLocked:
             statusBlock, operationError = StatusBlockConstructor(vehicle, statusConfig).construct()
             if statusBlock and not (operationError and shouldBeCut):
@@ -458,6 +462,21 @@ class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
         return []
 
 
+class HalloweenBlockConstructor(VehicleTooltipBlockConstructor):
+
+    def __init__(self, vehicle, valueWidth, leftPadding, rightPadding):
+        super(HalloweenBlockConstructor, self).__init__(vehicle, None, leftPadding, rightPadding)
+        self._valueWidth = valueWidth
+        return
+
+    def construct(self):
+        blocks = []
+        if self.vehicle.isEvent:
+            description = _ms(TOOLTIPS.HALLOWEEN_VEHICLEDESCRIPTION)
+            blocks.append(formatters.packTextBlockData(text_styles.main(description)))
+        return blocks
+
+
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):
 
     def __init__(self, vehicle, configuration, params, valueWidth, leftPadding, rightPadding):
@@ -536,7 +555,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                     if isInInventory or not isInInventory and not isUnlocked and not isNextToUnlock:
                         neededValue = None
                     block.append(makePriceBlock(buyPriceText, CURRENCY_SETTINGS.getBuySetting(currency), neededValue, oldPrice, actionPrc, valueWidth=self._valueWidth))
-            if sellPrice and not self.vehicle.isTelecom:
+            if sellPrice and not (self.vehicle.isTelecom or self.vehicle.isEvent):
                 sellPrice = self.vehicle.sellPrices.itemPrice.price
                 sellCurrency = sellPrice.getCurrency(byWeight=True)
                 currencyTextFormatter = getattr(text_styles, sellCurrency, text_styles.credits)

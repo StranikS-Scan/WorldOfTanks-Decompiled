@@ -129,8 +129,17 @@ class BadgeTooltipData(BlocksTooltipData):
             vehicle = g_currentVehicle.item
             tooltipData.append(formatters.packBadgeInfoBlockData(badge.getThumbnailIcon(), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName)))
         blocks.append(formatters.packBuildUpBlockData(tooltipData))
-        blocks.append(formatters.packTextBlockData(text_styles.main(TOOLTIPS.PERSONALMISSIONS_BADGE_DESCR)))
+        blocks.append(formatters.packTextBlockData(text_styles.main(self._getDescription())))
         return blocks
+
+    def _getDescription(self):
+        return TOOLTIPS.PERSONALMISSIONS_BADGE_DESCR
+
+
+class HalloweenBadgeTooltipData(BadgeTooltipData):
+
+    def _getDescription(self):
+        return TOOLTIPS.PERSONALMISSIONS_BADGEHALLOWEEN_DESCR
 
 
 def _formatCompleteCount(completedQuestsCount, totalCount):

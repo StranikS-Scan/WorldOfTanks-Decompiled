@@ -197,6 +197,21 @@ class ServiceChannelHandler(AwardHandler):
         return message is not None and message.type == self.__type and message.data is not None
 
 
+class MultiTypeServiceChannelHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl, handledTypes):
+        super(MultiTypeServiceChannelHandler, self).__init__(None, awardCtrl)
+        self.__types = handledTypes
+        return
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        return message is not None and message.type in self.__types and message.data is not None
+
+    def _showAward(self, ctx):
+        pass
+
+
 class EliteWindowHandler(AwardHandler):
 
     def init(self):
@@ -214,10 +229,10 @@ class EliteWindowHandler(AwardHandler):
             g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.ELITE_WINDOW, getViewName(VIEW_ALIAS.ELITE_WINDOW, vehTypeCompDescr), ctx={'vehTypeCompDescr': vehTypeCompDescr}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-class PunishWindowHandler(ServiceChannelHandler):
+class PunishWindowHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(PunishWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        super(PunishWindowHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -283,10 +298,10 @@ class PersonalMissionBonusHandler(ServiceChannelHandler):
         return
 
 
-class PersonalMissionWindowAfterBattleHandler(ServiceChannelHandler):
+class PersonalMissionWindowAfterBattleHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(PersonalMissionWindowAfterBattleHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        super(PersonalMissionWindowAfterBattleHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
 
     def _showAward(self, ctx):
         achievements = []
@@ -350,15 +365,10 @@ class MarkByInvoiceHandler(ServiceChannelHandler):
         SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
 
-class MarkByQuestHandler(ServiceChannelHandler):
+class MarkByQuestHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(MarkByQuestHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
-        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()]
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        return message is not None and message.type in self.__questTypes and message.data is not None
+        super(MarkByQuestHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
 
     def _showAward(self, ctx):
         messageData = ctx[1].data
@@ -375,15 +385,13 @@ class MarkByQuestHandler(ServiceChannelHandler):
         SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
 
-class RecruitHandler(ServiceChannelHandler):
+class RecruitHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(RecruitHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
-        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.invoiceReceived.index()]
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        return message is not None and message.type in self.__questTypes and message.data is not None
+        super(RecruitHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.tokenQuests.index(),
+         SYS_MESSAGE_TYPE.invoiceReceived.index(),
+         SYS_MESSAGE_TYPE.battleResults.index(),
+         SYS_MESSAGE_TYPE.eventBattleResults.index()))
 
     def _showAward(self, ctx):
         messageData = ctx[1].data
@@ -406,10 +414,10 @@ class RecruitHandler(ServiceChannelHandler):
         SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITGIFT_TEXT, event=event), SystemMessages.SM_TYPE.RecruitGift, messageData={'header': i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITGIFT_HEADER)})
 
 
-class MotiveQuestsWindowHandler(ServiceChannelHandler):
+class MotiveQuestsWindowHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(MotiveQuestsWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        super(MotiveQuestsWindowHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
 
     def _showAward(self, ctx):
         data = ctx[1].data
@@ -436,11 +444,11 @@ class QuestBoosterAwardHandler(ServiceChannelHandler):
         return
 
 
-class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
+class BoosterAfterBattleAwardHandler(MultiTypeServiceChannelHandler):
     goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self, awardCtrl):
-        super(BoosterAfterBattleAwardHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        super(BoosterAfterBattleAwardHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
 
     def _showAward(self, ctx):
         goodies = ctx[1].data.get('goodies', {})
@@ -452,10 +460,10 @@ class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
         return
 
 
-class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
+class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(BattleQuestsAutoWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        super(BattleQuestsAutoWindowHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -878,21 +886,6 @@ class TelecomHandler(ServiceChannelHandler):
             shared_events.showTelecomAward(vehicleDesrs, hasCrew, hasBrotherhood)
         else:
             LOG_ERROR("Can't show telecom award window!")
-
-
-class MultiTypeServiceChannelHandler(ServiceChannelHandler):
-
-    def __init__(self, awardCtrl, handledTypes):
-        super(MultiTypeServiceChannelHandler, self).__init__(None, awardCtrl)
-        self.__types = handledTypes
-        return
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        return message is not None and message.type in self.__types and message.data is not None
-
-    def _showAward(self, ctx):
-        pass
 
 
 class RankedQuestsHandler(MultiTypeServiceChannelHandler):

@@ -150,6 +150,29 @@ class BootcampStatsComposer(IStatsComposer):
         return None
 
 
+class HalloweenStatsComposer(IStatsComposer):
+    __slots__ = ('_block',)
+
+    def __init__(self, _):
+        super(HalloweenStatsComposer, self).__init__()
+        self._block = base.StatsBlock(templates.HALLOWEEN_TOTAL_VO_META)
+        self._block.addNextComponent(templates.HALLOWEEN_VICTORY_RESULTS_BLOCK.clone())
+        self._block.addNextComponent(templates.HALLOWEEN_PROGRESS_DATA_BLOCK.clone())
+        self._block.addNextComponent(templates.HALLOWEEN_PROGRESS_VALUE_BLOCK.clone())
+
+    def clear(self):
+        self._block.clear()
+
+    def setResults(self, results, reusable):
+        self._block.setRecord(results, reusable)
+
+    def getVO(self):
+        return self._block.getVO()
+
+    def popAnimation(self):
+        return None
+
+
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
     if bonusType == ARENA_BONUS_TYPE.CYBERSPORT:
@@ -166,6 +189,8 @@ def createComposer(reusable):
         composer = BootcampStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.EPIC_BATTLE:
         composer = EpicStatsComposer(reusable)
+    elif bonusType == ARENA_BONUS_TYPE.EVENT_BATTLES:
+        composer = HalloweenStatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

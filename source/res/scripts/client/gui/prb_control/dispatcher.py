@@ -82,8 +82,11 @@ class _PreBattleDispatcher(ListenersCollection):
         return self.__factories
 
     def getFunctionalState(self):
-        factory = self.__factories.get(self.__entity.getCtrlType())
-        return factory.createStateEntity(self.__entity) if factory is not None else FunctionalState()
+        if self.__factories:
+            factory = self.__factories.get(self.__entity.getCtrlType())
+            if factory is not None:
+                return factory.createStateEntity(self.__entity)
+        return FunctionalState()
 
     @async
     @process
@@ -595,6 +598,7 @@ class _PreBattleDispatcher(ListenersCollection):
         if created is not None:
             if created.getEntityFlags() & FUNCTIONAL_FLAG.SET_GLOBAL_LISTENERS > 0:
                 created.addMutualListeners(self)
+            self.__entity.fini(ctx=ctx)
             self.__entity = created
             self.__prevEntity = NotSupportedEntity()
             flag = self.__entity.init(ctx=ctx)

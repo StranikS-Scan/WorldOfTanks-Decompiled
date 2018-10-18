@@ -47,7 +47,10 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.prbVehicleMaxSpgKick.index(): _sc.PrbVehicleMaxSpgKickFormatter(),
  _SM_TYPE.hangarQuests.index(): _sc.TokenQuestsFormatter(),
  _SM_TYPE.currencyUpdate.index(): _sc.CurrencyUpdateFormatter(),
- _SM_TYPE.personalMissionFailed.index(): _sc.PersonalMissionFailedFormatter()}
+ _SM_TYPE.personalMissionFailed.index(): _sc.PersonalMissionFailedFormatter(),
+ _SM_TYPE.halloweenShopItem.index(): _sc.HalloweenShopItemFormatter(),
+ _SM_TYPE.eventBattleResults.index(): _sc.EventBattleResultsFormatter(),
+ _SM_TYPE.halloweenFinalReward.index(): _sc.HalloweenFinalRewardFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),

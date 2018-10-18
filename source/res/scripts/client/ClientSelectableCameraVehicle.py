@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ClientSelectableCameraVehicle.py
 from collections import namedtuple
+import math
 import Math
 import BigWorld
 from ClientSelectableCameraObject import ClientSelectableCameraObject
@@ -22,6 +23,8 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__shadowModelFashion = None
         self.__isVehicleLoaded = False
         self.__vehicleTransform = None
+        self.vehicleTurretYaw = math.radians(self.vehicleTurretYaw)
+        self.vehicleGunPitch = math.radians(self.vehicleGunPitch)
         return
 
     def prerequisites(self):

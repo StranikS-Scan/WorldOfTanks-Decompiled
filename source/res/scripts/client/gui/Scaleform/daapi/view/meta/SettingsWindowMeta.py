@@ -93,3 +93,6 @@ class SettingsWindowMeta(AbstractWindowView):
 
     def as_setFeedbackDataProviderS(self, dataProvider):
         return self.flashObject.as_setFeedbackDataProvider(dataProvider) if self._isDAAPIInited() else None
+
+    def as_setPveEventS(self, isPveEvent):
+        return self.flashObject.as_setPveEvent(isPveEvent) if self._isDAAPIInited() else None

@@ -31,6 +31,7 @@ from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.ClientHangarSpace import hangarCFG
+from skeletons.gui.shared.utils import IHangarSpace
 _HANGAR_UNDERGUN_EMBLEM_ANGLE_SHIFT = math.pi / 4
 EmblemSlotHelper = namedtuple('EmblemSlotHelper', ['tankAreaSlot', 'tankAreaId', 'worldMatrix'])
 EmblemPositionParams = namedtuple('EmblemPositionParams', ['position', 'direction', 'emblemDescription'])
@@ -77,6 +78,7 @@ class HangarVehicleAppearance(ComponentSystem):
     itemsCache = dependency.descriptor(IItemsCache)
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
     settingsCore = dependency.descriptor(ISettingsCore)
+    hangarSpace = dependency.descriptor(IHangarSpace)
     wheelsAnimator = ComponentDescriptor()
     trackNodesAnimator = ComponentDescriptor()
     collisions = ComponentDescriptor()
@@ -344,12 +346,12 @@ class HangarVehicleAppearance(ComponentSystem):
         gunPitch = self.__vDesc.gun.staticPitch
         if not ('AT-SPG' in self.__vDesc.type.tags or 'SPG' in self.__vDesc.type.tags):
             if turretYaw is None:
-                turretYaw = cfg['vehicle_turret_yaw']
+                turretYaw = cfg['vehicle_turret_yaw'] if self.__vEntity.id == self.hangarSpace.space.vehicleEntityId else self.__vEntity.vehicleTurretYaw
                 turretYawLimits = self.__vDesc.gun.turretYawLimits
                 if turretYawLimits is not None:
                     turretYaw = mathUtils.clamp(turretYawLimits[0], turretYawLimits[1], turretYaw)
             if gunPitch is None:
-                gunPitch = cfg['vehicle_gun_pitch']
+                gunPitch = cfg['vehicle_gun_pitch'] if self.__vEntity.id == self.hangarSpace.space.vehicleEntityId else self.__vEntity.vehicleGunPitch
                 gunPitchLimits = self.__vDesc.gun.pitchLimits['absolute']
                 gunPitch = mathUtils.clamp(gunPitchLimits[0], gunPitchLimits[1], gunPitch)
         else:

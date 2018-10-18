@@ -1,0 +1,480 @@
+<R101_MT25_Halloween.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <radioman></radioman>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	62	</forward>
+    <backward>	23	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.282	</moving>
+    <still>	0.282	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.423	</firePenalty>
+  </invisibility>
+  <repairCost>	0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R101_MT25_Halloween/MT25_Halloween_chassis_01_AM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	40	</armor_2>
+      <armor_3>	10	</armor_3>
+      <armor_4>	10	</armor_4>
+      <armor_5>	10	</armor_5>
+      <armor_6>	10	</armor_6>
+      <armor_7>	10	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	10	</armor_9>
+      <armor_10>	10	</armor_10>
+      <armor_11>	10	</armor_11>
+      <armor_12>	10	</armor_12>
+      <armor_13>	10	</armor_13>
+      <armor_14>	10	</armor_14>
+      <armor_16>	10	</armor_16>
+    </armor>
+    <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+    <weight>	12400	</weight>
+    <maxHealth>	999	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <invulnerable>	true	</invulnerable>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R101_MT25_Halloween/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R101_MT25_Halloween/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R101_MT25_Halloween/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.20 32.00 0.36 1.00 0.05 0.26	</pitchParams>
+      <rollParams>	1.00 0.20 32.00 0.36 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.24	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.79613 0.34878	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/russian/R101_MT25_Halloween/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R101_MT25_Halloween/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	1.18869 0.543063 1.41521	</rayStart>
+        <rayEnd>	0.90137 0.407345 1.17226	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.0117187 0.528866 2.08179	</rayStart>
+        <rayEnd>	-0.0117188 0.150229 1.95283	</rayEnd>
+        <rayUp>	0.212939 -0.00782186 -0.977034	</rayUp>
+        <size>	1	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R101_MT25_Halloween/MT25_Halloween_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_R101_MT25_2_Halloween>
+      <userString>	#ussr_vehicles:Chassis_R101_MT25_2_Halloween	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	0	</leftTrack>
+        <rightTrack>	0	</rightTrack>
+      </armor>
+      <weight>	8000	</weight>
+      <maxLoad>	28000	</maxLoad>
+      <terrainResistance>	0.6 0.7 1.5	</terrainResistance>
+      <brakeForce>	30000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	60	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <invulnerable>	true	</invulnerable>
+      <models>
+        <undamaged>	vehicles/russian/R101_MT25_Halloween/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R101_MT25_Halloween/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R101_MT25_Halloween/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.72	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.2	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.341589	</radius>
+          <syncAngle>	60	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.341589	</radius>
+          <syncAngle>	60	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.341589	</radius>
+          <syncAngle>	60	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.341589	</radius>
+          <syncAngle>	60	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.406427	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.406427	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0605469	</minOffset>
+          <maxOffset>	0.0605469	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0605469	</minOffset>
+          <maxOffset>	0.0605469	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R101_MT25_Halloween/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R101_MT25_Halloween/track/segment.model	</segmentModelRight>
+        <left>	vehicles/russian/R101_MT25_Halloween/track/left.track	</left>
+        <right>	vehicles/russian/R101_MT25_Halloween/track/right.track	</right>
+        <segmentLength>	0.157	</segmentLength>
+        <segmentOffset>	0.000000	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0109	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.736967 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R101_MT25_Halloween/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R101_MT25_Halloween/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.1425 1.8299	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.348870 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.480280 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.076970	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_R101_MT25_2_Halloween>
+  </chassis>
+  <turrets0>
+    <Turret_1_R101_MT25_Halloween>
+      <userString>	#ussr_vehicles:Turret_1_R101_MT25_Halloween	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	9900	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	70	</armor_1>
+        <armor_2>	10	</armor_2>
+        <armor_3>	10	</armor_3>
+        <armor_4>	10	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	20	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	10	</armor_9>
+        <armor_10>	10	</armor_10>
+        <armor_11>	10	</armor_11>
+        <armor_12>	10	</armor_12>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3250	</weight>
+      <maxHealth>	1	</maxHealth>
+      <rotationSpeed>	60	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+        <invulnerable>	true	</invulnerable>
+      </turretRotatorHealth>
+      <circularVisionRadius>	150	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+        <invulnerable>	true	</invulnerable>
+      </surveyingDeviceHealth>
+      <guns>
+        <_45mm_VT-43M_Halloween>	shared	  <maxAmmo>	300	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 7 0.394671 7 0.458333 6 0.541667 6 0.605329 7 1 7	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	4	</reloadTime>
+          <aimingTime>	3	</aimingTime>
+          <armor>
+            <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/russian/R101_MT25_Halloween/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R101_MT25_Halloween/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R101_MT25_Halloween/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R101_MT25_Halloween/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R101_MT25_Halloween/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 0.0304294 0.9	</rayStart>
+              <rayEnd>	0.0284428 0.0113473 0.741365	</rayEnd>
+              <rayUp>	0.052 0.046 4	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.6 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_45mm_VT-43M_Halloween>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R101_MT25_Halloween/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R101_MT25_Halloween/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R101_MT25_Halloween/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R101_MT25_Halloween/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R101_MT25_Halloween/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.00056 0.325858 0.731604	</gunPosition>
+      <emblemSlots>
+        <inscription>
+          <rayStart>	-0.774511 0.454044 -0.703381	</rayStart>
+          <rayEnd>	-0.410944 0.312258 -0.615556	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.683	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.004 -0.056 1.012 0.000 0.478 0.167 0.825 0.637 0.353 0.500 0.259 0.500 0.215 0.482 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_R101_MT25_Halloween>
+  </turrets0>
+  <engines>
+    <V-16M_Halloween>	shared	</V-16M_Halloween>
+  </engines>
+  <fuelTanks>
+    <Average_Halloween>	shared	</Average_Halloween>
+  </fuelTanks>
+  <radios>
+    <R113_Halloween>	shared	</R113_Halloween>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-16M_Halloween>
+          <smplEnginePower>	740	</smplEnginePower>
+        </V-16M_Halloween>
+      </engines>
+      <chassis>
+        <Chassis_R101_MT25_2_Halloween>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R101_MT25_2_Halloween>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <armour>	0.896480354	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.92	</alpha>
+  </emblems>
+</R101_MT25_Halloween.xml>

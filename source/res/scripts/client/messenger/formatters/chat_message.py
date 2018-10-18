@@ -130,3 +130,16 @@ class LobbyMessageBuilder(object):
 
     def build(self):
         return g_settings.lobby.getMessageFormat(self.__templateKey).format(self.__name, self.__time, self.__text)
+
+
+class EventTeamMessageBuilder(TeamMessageBuilder):
+
+    def setColors(self, dbID):
+        getter = g_settings.getColorScheme
+        if isCurrentPlayer(dbID):
+            self._ctx['playerColor'] = getter('battle/player').getHexStr('eventHimself')
+            self._ctx['messageColor'] = getter('battle/message').getHexStr('eventHimself')
+        else:
+            self._ctx['playerColor'] = getter('battle/player').getHexStr('eventTeammate')
+            self._ctx['messageColor'] = getter('battle/message').getHexStr('eventTeammate')
+        return self

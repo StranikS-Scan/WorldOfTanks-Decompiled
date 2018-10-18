@@ -5,6 +5,7 @@ from CurrentVehicle import HeroTankPreviewAppearance
 from adisp import process
 from debug_utils import LOG_WARNING
 from gui import SystemMessages
+from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled
@@ -39,8 +40,9 @@ class SETTINGS_TAB_INDEX(object):
     FEEDBACK = 6
 
 
-def showBattleResultsWindow(arenaUniqueID):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BATTLE_RESULTS, getViewName(VIEW_ALIAS.BATTLE_RESULTS, str(arenaUniqueID)), {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
+def showBattleResultsWindow(arenaUniqueID, arenaBonusType):
+    alias = VIEW_ALIAS.EVENT_BATTLE_RESULTS if arenaBonusType == ARENA_BONUS_TYPE.EVENT_BATTLES else VIEW_ALIAS.BATTLE_RESULTS
+    g_eventBus.handleEvent(events.LoadViewEvent(alias, getViewName(alias, str(arenaUniqueID)), {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def notifyBattleResultsPosted(arenaUniqueID):

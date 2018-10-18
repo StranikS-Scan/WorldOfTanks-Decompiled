@@ -10,5 +10,20 @@ class StorageCategoryPersonalReservesViewMeta(BaseCategoryView):
     def activateReserve(self, boosterId):
         self._printOverrideError('activateReserve')
 
+    def resetFilter(self):
+        self._printOverrideError('resetFilter')
+
+    def onFiltersChange(self, filters):
+        self._printOverrideError('onFiltersChange')
+
     def as_initS(self, data):
         return self.flashObject.as_init(data) if self._isDAAPIInited() else None
+
+    def as_initFilterS(self, data):
+        return self.flashObject.as_initFilter(data) if self._isDAAPIInited() else None
+
+    def as_resetFilterS(self, resetData):
+        return self.flashObject.as_resetFilter(resetData) if self._isDAAPIInited() else None
+
+    def as_updateCounterS(self, shouldShow, displayString, isZeroCount):
+        return self.flashObject.as_updateCounter(shouldShow, displayString, isZeroCount) if self._isDAAPIInited() else None

@@ -81,7 +81,7 @@ class BootcampEntity(PreQueueEntity):
 
     def getConfirmDialogMeta(self, ctx):
         if not self.hasLockedState() and ctx.getCtrlType() == CTRL_ENTITY_TYPE.UNIT and ctx.getEntityType() in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.EVENT):
-            meta = rally_dialog_meta.createLeavePreQueueMeta(ctx, self._queueType, self.canSwitch(ctx))
+            meta = rally_dialog_meta.createLeavePreQueueMeta(ctx, self.getQueueType(), self.canSwitch(ctx))
         else:
             meta = super(BootcampEntity, self).getConfirmDialogMeta(ctx)
         return meta

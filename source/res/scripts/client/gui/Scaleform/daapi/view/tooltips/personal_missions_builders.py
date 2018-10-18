@@ -15,6 +15,7 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.FREE_SHEET_NOT_ENOUGH, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.FreeSheetNotEnoughTooltip(contexts.PersonalMissionCampaignContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.FREE_SHEET_USED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.FreeSheetUsedTooltip(contexts.PersonalMissionCampaignContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.BADGE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.BadgeTooltipData(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.BADGE_HALLOWEEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.HalloweenBadgeTooltipData(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.OPERATION, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.OperationTooltipData(contexts.PersonalMissionOperationContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.PERSONAL_MISSION_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.PersonalMissionInfoTooltipData(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_MAP_REGION, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.PersonalMissionsMapRegionTooltipData(contexts.PersonalMissionContext())),

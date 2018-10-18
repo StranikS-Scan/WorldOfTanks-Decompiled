@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inhangar/all_vehicles_tab.py
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_environment import formatCountString
 from gui.Scaleform.daapi.view.lobby.storage.inhangar import StorageCarouselDataProvider, StorageCarouselFilter
 from gui.Scaleform.daapi.view.meta.AllVehiclesTabViewMeta import AllVehiclesTabViewMeta
+from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -68,9 +69,16 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, carousel_environment.ICarouselE
     def applyFilter(self):
         self._dataProvider.applyFilter()
         self.__updateCounter(not self.filter.isDefault())
+        hasNoVehicles = self._dataProvider.getTotalVehiclesCount() == 0
+        hasNoFilterResults = self._dataProvider.getCurrentVehiclesCount() == 0
+        filterWarningVO = None
+        if hasNoFilterResults and not hasNoVehicles:
+            filterWarningVO = self._makeFilterWarningVO(STORAGE.FILTER_WARNINGMESSAGE, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN)
+        self.as_showFilterWarningS(filterWarningVO)
+        return
 
     def blinkCounter(self):
-        self.__updateCounter(True)
+        self.__updateCounter(not self.filter.isDefault())
 
     def formatCountVehicles(self):
         return carousel_environment.formatCountString(self._dataProvider.getCurrentVehiclesCount(), self._dataProvider.getTotalVehiclesCount())
@@ -84,8 +92,6 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, carousel_environment.ICarouselE
         self.itemsCache.onSyncCompleted += self.__onCacheResync
         self.rentals.onRentChangeNotify += self.__updateRent
         self.igrCtrl.onIgrTypeChanged += self.__updateIgrType
-        self.__currentFilteredVehicles = self._dataProvider.getCurrentVehiclesCount()
-        self.__isFilterCounterShown = False
         self.__updateSearchInput()
         self.__updateVehicles()
 
@@ -116,28 +122,22 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, carousel_environment.ICarouselE
         self.as_updateSearchS(searchInputLabel, '', searchInputTooltip, _SEARCH_INPUT_MAX_CHARS)
 
     def __updateCounter(self, shouldShow):
-        filteredVehicles = self._dataProvider.getCurrentVehiclesCount()
         totalVehicles = self._dataProvider.getTotalVehiclesCount()
-        if filteredVehicles != totalVehicles and filteredVehicles != self.__currentFilteredVehicles:
+        if shouldShow and totalVehicles > 0:
+            filteredVehicles = self._dataProvider.getCurrentVehiclesCount()
             drawAttention = filteredVehicles == 0
-            self.as_updateCounterS(shouldShow, formatCountString(filteredVehicles, totalVehicles), drawAttention)
-            self.__currentFilteredVehicles = filteredVehicles
-            self.__isFilterCounterShown = True
-        if not shouldShow and self.__isFilterCounterShown:
-            self.__currentFilteredVehicles = None
-            self.__isFilterCounterShown = False
+            self.as_updateCounterS(shouldShow, self._formatCountString(filteredVehicles, totalVehicles), drawAttention)
+        else:
             self.as_updateCounterS(False, '', False)
-        return
 
     def __onViewLoaded(self, view, *args, **kwargs):
         if view.settings.alias == VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER:
             view.setTankCarousel(self)
 
     def __onCacheResync(self, reason, diff):
-        if reason == CACHE_SYNC_REASON.CLIENT_UPDATE:
+        updateReasons = {CACHE_SYNC_REASON.CLIENT_UPDATE, CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.DOSSIER_RESYNC}
+        if reason in updateReasons:
             self._dataProvider.buildList()
-            self.__updateCounter(not self.filter.isDefault())
-        elif reason in (CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.DOSSIER_RESYNC):
             self.__updateVehicles()
         elif GUI_ITEM_TYPE.VEHICLE in diff:
             self.__updateVehicles(diff.get(GUI_ITEM_TYPE.VEHICLE))

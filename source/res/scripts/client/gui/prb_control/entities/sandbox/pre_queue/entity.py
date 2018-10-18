@@ -92,7 +92,7 @@ class SandboxEntity(PreQueueEntity):
 
     def getConfirmDialogMeta(self, ctx):
         if not self.hasLockedState() and not ctx.hasFlags(FUNCTIONAL_FLAG.TUTORIAL) and AccountSettings.getSettings(DEFAULT_QUEUE) == QUEUE_TYPE.SANDBOX:
-            meta = rally_dialog_meta.createLeavePreQueueMeta(ctx, self._queueType, self.canSwitch(ctx))
+            meta = rally_dialog_meta.createLeavePreQueueMeta(ctx, self.getQueueType(), self.canSwitch(ctx))
         else:
             meta = super(SandboxEntity, self).getConfirmDialogMeta(ctx)
         return meta

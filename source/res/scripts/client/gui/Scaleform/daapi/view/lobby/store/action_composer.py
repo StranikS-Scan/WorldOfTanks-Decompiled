@@ -132,7 +132,7 @@ class EquipmentRule(CompositionRule):
 
 class PremiumRule(CompositionRule):
     collectionClass = PremiumActionsCollection
-    _applicableParamsNames = ('premiumPacket1Cost', 'premiumPacket3Cost', 'premiumPacket7Cost', 'premiumPacket30Cost', 'premiumPacket180Cost', 'premiumPacket360Cost')
+    _applicableParamsNames = ('premiumPacket1Cost', 'premiumPacket3Cost', 'premiumPacket7Cost', 'premiumPacket14Cost', 'premiumPacket30Cost', 'premiumPacket90Cost', 'premiumPacket180Cost', 'premiumPacket360Cost')
 
 
 class ActionComposer(object):

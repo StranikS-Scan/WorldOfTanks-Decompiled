@@ -130,6 +130,8 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         else:
             bootcampLabel = BOOTCAMP.REQUEST_BOOTCAMP_START
         self.as_setMenuButtonsLabelsS(MENU.INGAME_MENU_BUTTONS_HELP, MENU.INGAME_MENU_BUTTONS_SETTINGS, MENU.INGAME_MENU_BUTTONS_BACK, quitLabel, bootcampLabel, bootcampIconSource)
+        isEventBattle = self.sessionProvider.arenaVisitor.gui.isEventBattle()
+        self.as_showHelpButtonS(not isEventBattle)
 
     @process
     def __doLeaveTutorial(self):

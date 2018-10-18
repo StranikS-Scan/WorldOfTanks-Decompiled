@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/Vehicle.py
 import math
 import random
-from itertools import izip
+from itertools import chain, izip
 from operator import itemgetter
 import BigWorld
 import constants
@@ -87,6 +87,10 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     CREW_LOCKED = 'lockCrew'
     OUTFIT_LOCKED = 'lockOutfit'
 
+
+HALLOWEEN_VEHICLE_SUFFIX = '_Halloween'
+HALLOWEEN_CUSTOM_NATION_ID = 11
+DISABLED_MENUS = (('isEvent', {'vehicleInfoEx', 'vehicleResearch'}),)
 
 class Vehicle(FittingItem, HasStrCD):
     __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_hasRentPackages', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_canTradeIn', '_canTradeOff', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_crew', '_lastCrew', '_hasModulesToSelect', '_customOutfits', '_styledOutfits')
@@ -834,7 +838,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isEvent(self):
-        return self.isOnlyForEventBattles and self in Vehicle.__getEventVehicles()
+        return self.isOnlyForEventBattles or self in Vehicle.__getEventVehicles()
 
     @property
     def isDisabledInRoaming(self):
@@ -1231,9 +1235,9 @@ class Vehicle(FittingItem, HasStrCD):
     def _getShortInfo(self, vehicle=None, expanded=False):
         description = i18n.makeString('#menu:descriptions/' + self.itemTypeName)
         caliber = self.descriptor.gun.shots[0].shell.caliber
-        armor = findVehicleArmorMinMax(self.descriptor)
+        armor = findVehicleArmorMax(self.descriptor)
         return description % {'weight': BigWorld.wg_getNiceNumberFormat(float(self.descriptor.physics['weight']) / 1000),
-         'hullArmor': BigWorld.wg_getIntegralFormat(armor[1]),
+         'hullArmor': BigWorld.wg_getIntegralFormat(armor),
          'caliber': BigWorld.wg_getIntegralFormat(caliber)}
 
     def _sortByType(self, other):
@@ -1250,6 +1254,17 @@ class Vehicle(FittingItem, HasStrCD):
             components.append(moduleType)
 
         return False
+
+    def isContextMenuEnabled(self, entry):
+        for cond, menus in DISABLED_MENUS:
+            if getattr(self, cond) and entry in menus:
+                return False
+
+        return True
+
+    @property
+    def customNationID(self):
+        return HALLOWEEN_CUSTOM_NATION_ID if self.isEvent else self.nationID
 
 
 def getTypeUserName(vehType, isElite):
@@ -1327,26 +1342,10 @@ def checkForTags(vTags, tags):
     return bool(vTags & frozenset(tags))
 
 
-def findVehicleArmorMinMax(vd):
-
-    def findComponentArmorMinMax(armor, minMax):
-        for value in armor:
-            if value != 0:
-                if minMax is None:
-                    minMax = [value, value]
-                else:
-                    minMax[0] = min(minMax[0], value)
-                    minMax[1] = max(minMax[1], value)
-
-        return minMax
-
-    minMax = None
-    minMax = findComponentArmorMinMax(vd.hull.primaryArmor, minMax)
-    for turrets in vd.type.turrets:
-        for turret in turrets:
-            minMax = findComponentArmorMinMax(turret.primaryArmor, minMax)
-
-    return minMax
+def findVehicleArmorMax(vd):
+    hull = vd.hull.primaryArmor
+    turrets = [ turret.primaryArmor for turrets in vd.type.turrets for turret in turrets ]
+    return max(chain(hull, *turrets))
 
 
 def _sortCrew(crewItems, crewRoles):

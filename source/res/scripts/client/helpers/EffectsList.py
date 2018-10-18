@@ -300,12 +300,16 @@ class _EffectDesc(object):
 
 
 class _PixieEffectDesc(_EffectDesc):
-    __slots__ = ('_files', '_havokFiles', '_force', '_surfaceMatKinds', '_orientByClosestSurfaceNormal', '_alwaysUpdate', '__prototypePixies')
+    __slots__ = ('_files', '_filesNPC', '_havokFiles', '_force', '_surfaceMatKinds', '_orientByClosestSurfaceNormal', '_alwaysUpdate', '__prototypePixies')
     TYPE = '_PixieEffectDesc'
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, dataSection):
         super(_PixieEffectDesc, self).__init__(dataSection)
         self._files = [ f for f in dataSection.readStrings('file') if f ]
+        self._filesNPC = None
+        if dataSection.has_key('fileNPC'):
+            self._filesNPC = [ f for f in dataSection.readStrings('fileNPC') if f ]
         if not self._files:
             _raiseWrongConfig('file', self.TYPE)
         self._force = 0
@@ -328,7 +332,7 @@ class _PixieEffectDesc(_EffectDesc):
         return
 
     def prerequisites(self):
-        return self._files
+        return self._files if self._filesNPC is None else self._files + self._filesNPC
 
     def reattach(self, elem, model):
         nodePos = self._nodeName
@@ -365,7 +369,15 @@ class _PixieEffectDesc(_EffectDesc):
         elem['model'] = model
         elem['typeDesc'] = self
         elem['pixie'] = None
-        eFile = random.choice(self._files)
+        isPlayer = True
+        if args.has_key('isPlayer'):
+            isPlayer = args['isPlayer']
+        eFile = None
+        isEventBattle = self.sessionProvider.arenaVisitor.gui.isEventBattle()
+        if isEventBattle and not isPlayer and self._filesNPC:
+            eFile = random.choice(self._filesNPC)
+        else:
+            eFile = random.choice(self._files)
         prototypePixie = self.__prototypePixies.get(eFile)
         modifiers = {}
         if args.get('havokSpawnedDestructibles', False):

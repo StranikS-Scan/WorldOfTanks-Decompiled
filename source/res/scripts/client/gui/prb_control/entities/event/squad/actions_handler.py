@@ -11,5 +11,6 @@ class EventBattleSquadActionsHandler(SquadActionsHandler):
     def _loadWindow(self, ctx):
         super(EventBattleSquadActionsHandler, self)._loadWindow(ctx)
         if not self._entity.getPlayerInfo().isReady:
-            eventVehicle = self.eventsCache.getEventVehicles()[0]
-            g_currentVehicle.selectVehicle(eventVehicle.invID)
+            eventVehicles = self.eventsCache.getEventVehicles()
+            if eventVehicles:
+                g_currentVehicle.selectVehicle(eventVehicles[0].invID)

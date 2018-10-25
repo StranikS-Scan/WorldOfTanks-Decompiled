@@ -327,6 +327,7 @@ class Source(object):
          'refSystemRalXPPool': self.__readBattleResultsConditionList,
          'refSystemRalBought10Lvl': self.__readCondition_true,
          'isTutorialCompleted': self.__readCondition_bool,
+         'isEventActive': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,
          'accountPrimaryTypes': self.__readListOfInts,
          'accountSecondaryTypes': self.__readListOfInts}

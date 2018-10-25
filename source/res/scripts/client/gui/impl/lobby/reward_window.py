@@ -11,9 +11,12 @@ from gui.impl.gen.view_models.ui_kit.reward_renderer_model import RewardRenderer
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVehiclesAwardComposer
 from gui.impl.pub import ViewImpl
 from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker
+from gui.server_events.bonuses import getTutorialBonuses
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.server_events.recruit_helper import getRecruitInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.windows.reward_window_content_model import RewardWindowContentModel
+from gui.impl.gen.view_models.windows.twitch_reward_window_content_model import TwitchRewardWindowContentModel
 from gui.shared.money import Currency
 from gui.impl.backport_tooltip import TooltipData, BackportTooltipWindow
 from gui.impl.pub import StandardWindow
@@ -21,7 +24,7 @@ BASE_EVENT_NAME = 'base'
 ADDITIONAL_AWARDS_COUNT = 5
 
 class RewardWindowContent(ViewImpl):
-    __slots__ = ('__items', '_eventName', '_quest')
+    __slots__ = ('__items', '_eventName', '_quest', '_vehicles')
     _BONUSES_ORDER = ('vehicles',
      'premium',
      Currency.CRYSTAL,
@@ -42,11 +45,14 @@ class RewardWindowContent(ViewImpl):
     def __init__(self, layoutID, viewModelClazz, ctx=None):
         super(RewardWindowContent, self).__init__(layoutID, ViewFlags.VIEW, viewModelClazz)
         self.__items = {}
-        self._eventName = BASE_EVENT_NAME
-        self._quest = None
         if ctx is not None:
-            self._eventName = ctx.get('eventName', self._eventName)
-            self._quest = ctx.get('quest')
+            self._eventName = ctx.get('eventName', BASE_EVENT_NAME)
+            self._quest = ctx.get('quest', None)
+            self._vehicles = ctx.get('bonusVehicles', {})
+        else:
+            self._eventName = BASE_EVENT_NAME
+            self._quest = None
+            self._vehicles = {}
         return
 
     def handleNextButton(self):
@@ -74,7 +80,10 @@ class RewardWindowContent(ViewImpl):
         with self.getViewModel().transaction() as tx:
             rewardsList = tx.rewardsList.getItems()
             if self._quest is not None:
-                bonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
+                allBonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
+                bonuses = [ bonus for bonus in allBonuses if bonus.getName() != 'vehicles' ]
+                vehBonus = getTutorialBonuses('vehicles', self._vehicles)
+                bonuses.extend(vehBonus)
                 bonuses.sort(key=self._keySortOrder)
                 formatter = PackRentVehiclesAwardComposer(ADDITIONAL_AWARDS_COUNT, getPackRentVehiclesAwardPacker())
                 for index, bonus in enumerate(formatter.getFormattedBonuses(bonuses)):
@@ -93,6 +102,23 @@ class RewardWindowContent(ViewImpl):
     def _finalize(self):
         super(RewardWindowContent, self)._finalize()
         self._quest = None
+        return
+
+
+class TwitchRewardWindowContent(RewardWindowContent):
+    __slots__ = ()
+
+    def handleNextButton(self):
+        bonuses = self._quest.getBonuses('tokens')
+        needContinue = False
+        for bonus in bonuses:
+            for tID in bonus.getTokens():
+                if getRecruitInfo(tID) is not None:
+                    needContinue = True
+                    break
+
+        if needContinue:
+            super(TwitchRewardWindowContent, self).handleNextButton()
         return
 
 
@@ -131,3 +157,10 @@ class RewardWindow(RewardWindowBase):
 
     def __init__(self, ctx=None, parent=None):
         super(RewardWindow, self).__init__(parent=parent, content=RewardWindowContent(layoutID=R.views.rewardWindowContent, viewModelClazz=RewardWindowContentModel, ctx=ctx))
+
+
+class TwitchRewardWindow(RewardWindowBase):
+    __slots__ = ()
+
+    def __init__(self, ctx=None, parent=None):
+        super(TwitchRewardWindow, self).__init__(parent=parent, content=TwitchRewardWindowContent(layoutID=R.views.twitchRewardWindowContent, viewModelClazz=TwitchRewardWindowContentModel, ctx=ctx))

@@ -430,15 +430,15 @@ class PQType(object):
     def getMajorTag(self):
         return self.classifier.classificationAttr
 
-    def maySelectQuest(self, completedQuests):
-        return len(self.requiredUnlocks - frozenset(completedQuests)) == 0
+    def maySelectQuest(self, unlockedQuests):
+        return len(self.requiredUnlocks - frozenset(unlockedQuests)) == 0
 
-    def maySelectQuestToPawn(self, completedQuests):
+    def maySelectQuestToPawn(self, unlockedQuests):
         result = True
-        requiredQuestIds = self.requiredUnlocks - frozenset(completedQuests)
+        requiredQuestIds = self.requiredUnlocks - frozenset(unlockedQuests)
         for requiredQuestId in requiredQuestIds:
             pqType = g_cache.questByPotapovQuestID(requiredQuestId)
-            result &= pqType.maySelectQuest(completedQuests)
+            result &= pqType.maySelectQuest(unlockedQuests)
 
         return result
 
@@ -489,6 +489,9 @@ class PQStorage(object):
 
     def completedPQIDs(self):
         return [ k for k, v in self.__quests.iteritems() if v[1] >= PQ_STATE.NEED_GET_MAIN_REWARD ]
+
+    def unlockedPQIDs(self):
+        return [ k for k, v in self.__quests.iteritems() if v[1] >= PQ_STATE.UNLOCKED ]
 
     def __getitem__(self, id):
         return self.__quests[id]

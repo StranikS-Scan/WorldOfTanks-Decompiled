@@ -88,6 +88,12 @@ class IEventsCache(object):
     def getHalloweenMaxLevelPrice(self):
         raise NotImplementedError
 
+    def getHalloweenFinishTime(self):
+        raise NotImplementedError
+
+    def getHalloweenFinishTimeLeft(self):
+        raise NotImplementedError
+
     def isHalloweenMaxLevelBuyEnabled(self):
         raise NotImplementedError
 

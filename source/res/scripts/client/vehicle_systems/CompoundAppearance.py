@@ -567,7 +567,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     def __prepareOutfit(self, outfitCD):
         if self.__outfit:
             return
-        outfit = Outfit(outfitCD)
+        outfitComponent = camouflages.getOutfitComponent(outfitCD)
+        outfit = Outfit(component=outfitComponent)
         player = BigWorld.player()
         forceHistorical = player.isHistoricallyAccurate and player.playerVehicleID != self.__vID and not outfit.isHistorical()
         self.__outfit = Outfit() if forceHistorical else outfit

@@ -17,8 +17,11 @@ from .events_helpers import getTankmanRewardQuests
 
 class RecruitSourceID(object):
     TANKWOMAN = 'tankwoman'
+    TWITCH_0 = 'twitch0'
+    TWITCH_1 = 'twitch1'
+    TWITCH_2 = 'twitch2'
     BUFFON = 'buffon'
-    EVENTS = ()
+    EVENTS = (TWITCH_0, TWITCH_1, TWITCH_2)
 
 
 _TANKWOMAN_ROLE_LEVEL = 100

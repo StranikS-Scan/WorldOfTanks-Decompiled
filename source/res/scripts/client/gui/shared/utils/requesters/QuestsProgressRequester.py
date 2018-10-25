@@ -63,7 +63,7 @@ class PersonalMissionsProgressRequester(_QuestsProgressRequester):
         personalMissionsProgress = self.__getQuestsData()
         if personalMissionsProgress:
             flags, state = self.__pmStorage.get(personalMissionID)
-            return self.PersonalMissionProgress(state, flags, personalMissionID in personalMissionsProgress['selected'], pqType.maySelectQuest(self.__pmStorage.completedPQIDs()), self.getTokenCount(pqType.mainAwardListQuestID) > 0)
+            return self.PersonalMissionProgress(state, flags, personalMissionID in personalMissionsProgress['selected'], pqType.maySelectQuest(self.__pmStorage.unlockedPQIDs()), self.getTokenCount(pqType.mainAwardListQuestID) > 0)
         return self.PersonalMissionProgress(personal_missions.PM_STATE.NONE, (), 0, False)
 
     def getConditionsProgress(self, conditionsProgressID):

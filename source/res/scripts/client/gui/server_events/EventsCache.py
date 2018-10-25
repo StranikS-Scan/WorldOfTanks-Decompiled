@@ -5,6 +5,7 @@ import math
 import sys
 import zlib
 from collections import defaultdict
+import time
 import BigWorld
 import motivation_quests
 import nations
@@ -33,6 +34,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IRaresCache
 from skeletons.gui.linkedset import ILinkedSetController
+from helpers import time_utils
 
 def _defaultQuestMaker(qID, qData, progress):
     return createQuest(qData.get('type', 0), qID, qData, progress.getQuestProgress(qID), progress.getTokenExpiryTime(qData.get('requiredToken')))
@@ -269,6 +271,14 @@ class EventsCache(IEventsCache):
     def getHalloweenMaxLevelPrice(self):
         halloweenData = self.__getHalloweenData()
         return halloweenData['maxLevelPrice'] if halloweenData and 'maxLevelPrice' in halloweenData else None
+
+    def getHalloweenFinishTime(self):
+        halloweenData = self.__getHalloweenData()
+        return time_utils.makeLocalServerTime(halloweenData['endDate']) if halloweenData and 'endDate' in halloweenData else time.time()
+
+    def getHalloweenFinishTimeLeft(self):
+        finishTime = self.getHalloweenFinishTime()
+        return time_utils.getTimeDeltaFromNowInLocal(finishTime) if finishTime is not None else 0
 
     def isHalloweenMaxLevelBuyEnabled(self):
         halloweenData = self.__getHalloweenData()

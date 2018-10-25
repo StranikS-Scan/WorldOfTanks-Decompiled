@@ -10,10 +10,13 @@ from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EV
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from gui.impl.lobby.reward_window import TwitchRewardWindow
 from shared_utils import first
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
-_EVENTS_REWARD_WINDOW = {}
+_EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.TWITCH_1: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.TWITCH_2: TwitchRewardWindow}
 
 def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)

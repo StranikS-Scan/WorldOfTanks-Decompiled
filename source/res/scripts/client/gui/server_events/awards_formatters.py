@@ -601,7 +601,7 @@ class RentVehiclesBonusFormatter(VehiclesBonusFormatter):
         if not vehicles:
             return result
         if len(vehicles) == 1:
-            result.append(self._formatVehicle(bonus, vehicles))
+            result.extend(self._formatVehicle(bonus, vehicles))
         else:
             result.append(PreformattedBonus(bonusName=PACK_RENT_VEHICLES_BONUS, label=formatCountLabel(len(vehicles)), labelFormatter=text_styles.stats, images=self._getRentImages(), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.PACK_RENT_VEHICLES, specialArgs=self._getRentArgs(bonus, vehicles)))
         return result

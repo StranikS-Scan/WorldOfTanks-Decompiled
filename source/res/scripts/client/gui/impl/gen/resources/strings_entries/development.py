@@ -10,36 +10,36 @@ class Development(DynAccessor):
 
         class buttons(DynAccessor):
             __slots__ = ()
-            add = 37
-            close = 38
+            add = 38
+            close = 39
 
         class labels(DynAccessor):
             __slots__ = ()
-            teamOne = 35
-            teamTwo = 36
-            vehicleClass = 34
+            teamOne = 36
+            teamTwo = 37
+            vehicleClass = 35
 
-        title = 33
+        title = 34
 
     class editor(DynAccessor):
         __slots__ = ()
-        Pause = 62
-        Resume = 63
+        Pause = 63
+        Resume = 64
 
         class contextMenu(DynAccessor):
             __slots__ = ()
-            close_editor = 59
-            copy = 58
-            cut = 56
-            new = 51
-            open = 52
-            paste = 57
-            save = 53
-            save_as = 54
-            undo = 55
+            close_editor = 60
+            copy = 59
+            cut = 57
+            new = 52
+            open = 53
+            paste = 58
+            save = 54
+            save_as = 55
+            undo = 56
 
-        goto = 60
-        search = 61
+        goto = 61
+        search = 62
 
     class messenger(DynAccessor):
         __slots__ = ()
@@ -49,106 +49,106 @@ class Development(DynAccessor):
 
             class addGroup(DynAccessor):
                 __slots__ = ()
-                body = 42
-                header = 41
+                body = 43
+                header = 42
 
             class externalSearch(DynAccessor):
                 __slots__ = ()
-                body = 50
-                header = 49
+                body = 51
+                header = 50
 
             class searchContact(DynAccessor):
                 __slots__ = ()
-                body = 40
-                header = 39
+                body = 41
+                header = 40
 
             class settings(DynAccessor):
                 __slots__ = ()
-                body = 44
-                header = 43
+                body = 45
+                header = 44
 
                 class view(DynAccessor):
                     __slots__ = ()
 
                     class applyBtn(DynAccessor):
                         __slots__ = ()
-                        body = 46
-                        header = 45
+                        body = 47
+                        header = 46
 
                     class cancelBtn(DynAccessor):
                         __slots__ = ()
-                        body = 48
-                        header = 47
+                        body = 49
+                        header = 48
 
     class wulf(DynAccessor):
         __slots__ = ()
 
         class buttons(DynAccessor):
             __slots__ = ()
-            buy = 91
-            cancel = 93
-            contacts = 92
-            toggle = 94
+            buy = 92
+            cancel = 94
+            contacts = 93
+            toggle = 95
 
         class content(DynAccessor):
             __slots__ = ()
-            pager = 64
+            pager = 65
 
         class demoWindow(DynAccessor):
             __slots__ = ()
-            title = 85
+            title = 86
 
         class listExamplesWindow(DynAccessor):
             __slots__ = ()
-            title = 86
+            title = 87
 
         class props(DynAccessor):
             __slots__ = ()
-            title = 65
+            title = 66
 
         class serviceWindowDemo(DynAccessor):
             __slots__ = ()
-            title = 87
+            title = 88
 
         class standartWindowDemo(DynAccessor):
             __slots__ = ()
-            title = 88
+            title = 89
 
         class uiKitWindow(DynAccessor):
             __slots__ = ()
-            CheckBox = 75
-            CheckBoxLabel = 76
-            Input = 71
-            List = 72
-            PrimaryBtn = 68
-            ProgressBarBig = 70
-            ProgressBarSmall = 69
-            Slider = 74
-            SlotBtn = 73
-            header = 67
+            CheckBox = 76
+            CheckBoxLabel = 77
+            Input = 72
+            List = 73
+            PrimaryBtn = 69
+            ProgressBarBig = 71
+            ProgressBarSmall = 70
+            Slider = 75
+            SlotBtn = 74
+            header = 68
 
         class unboundInjectionWindow(DynAccessor):
             __slots__ = ()
-            title = 66
+            title = 67
 
         class wTypesDemo(DynAccessor):
             __slots__ = ()
 
             class contextMenu(DynAccessor):
                 __slots__ = ()
-                openConfirmDialog = 83
-                openDialogs = 90
-                openInfoDialog = 82
-                openOverlay = 84
-                openServiceWindow = 81
-                openStandardWindow = 80
-                openWindows = 79
+                openConfirmDialog = 84
+                openDialogs = 91
+                openInfoDialog = 83
+                openOverlay = 85
+                openServiceWindow = 82
+                openStandardWindow = 81
+                openWindows = 80
 
             class tooltip(DynAccessor):
                 __slots__ = ()
-                body = 78
-                header = 77
+                body = 79
+                header = 78
 
         class windowTypesDemo(DynAccessor):
             __slots__ = ()
-            title = 89
+            title = 90

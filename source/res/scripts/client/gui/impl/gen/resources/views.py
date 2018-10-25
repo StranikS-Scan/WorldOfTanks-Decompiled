@@ -42,6 +42,10 @@ class Views(object):
         pass
 
     @property
+    def twitchRewardWindowContent(self):
+        pass
+
+    @property
     def buyVehicleView(self):
         pass
 

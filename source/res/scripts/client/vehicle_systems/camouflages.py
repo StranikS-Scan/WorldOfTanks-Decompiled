@@ -6,10 +6,12 @@ import BigWorld
 import Math
 import Vehicular
 import items.vehicles
+from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
+from items.customizations import parseOutfitDescr, CustomizationOutfit
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType
 _logger = logging.getLogger(__name__)
 RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
 RepaintParams.__new__.__defaults__ = (False,
@@ -65,6 +67,21 @@ def updateFashions(appearance):
     isDamaged = not appearance.isAlive
     outfitData = getOutfitData(outfit, vDesc, isDamaged)
     appearance.c11nComponent = Vehicular.C11nComponent(fashions, appearance.compoundModel, outfitData)
+
+
+def getOutfitComponent(outfitCD):
+    if outfitCD:
+        outfitComponent = parseOutfitDescr(outfitCD)
+        arena = BigWorld.player().arena
+        if outfitComponent.styleId != 0 and arena is not None:
+            mapKind = arena.arenaType.vehicleCamouflageKind
+            season = SeasonType.fromArenaKind(mapKind)
+            intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfitComponent.styleId)
+            styleDescr = getItemByCompactDescr(intCD)
+            outfitComponent = styleDescr.outfits[season]
+    else:
+        outfitComponent = CustomizationOutfit()
+    return outfitComponent
 
 
 def getCamoPrereqs(outfit, vDesc):
@@ -227,7 +244,7 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
                 if decal.component.scaleFactorId != 0:
                     factor = factors[decal.component.scaleFactorId - 1]
                     scale = Math.Vector3(scale[0] * factor, scale[1], scale[2] * factor)
-                params = ProjectionDecalGenericParams(tintColor=Math.Vector4(decal.component.tintColor) / 255, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=scale, decalMap=decal.item.texture, applyAreas=showOn, doubleSided=decal.item.isMirrored)
+                params = ProjectionDecalGenericParams(tintColor=Math.Vector4(decal.component.tintColor) / 255, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=Math.Vector3(scale), decalMap=decal.item.texture, applyAreas=showOn, doubleSided=decal.item.isMirrored)
                 decalsParams.append(params)
 
         return decalsParams

@@ -30,14 +30,14 @@ _PHYSICAL_TRACKS_LOD_SETTINGS = LodSettings(_PHYSICAL_TRACKS_MAX_DISTANCE, _PHYS
 _SPLINE_TRACKS_MAX_COUNT = 5
 _AREA_LOD_FOR_NONSIMPLE_TRACKS = 50
 
-def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDetached=False):
+def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDetached=False, streamable=True):
     if constants.IS_DEVELOPMENT and modelsSetParams.state not in VehicleDamageState.MODEL_STATE_NAMES:
         raise SoftException('Invalid modelStateName %s, must be in %s' % (modelsSetParams.state, VehicleDamageState.MODEL_STATE_NAMES))
     if spaceID is None:
         spaceID = BigWorld.player().spaceID
     partModels = getPartModelsFromDesc(vehicleDesc, modelsSetParams)
     chassis, hull, turret, gun = partModels
-    assembler = BigWorld.CompoundAssembler()
+    assembler = BigWorld.CompoundAssembler(vehicleDesc.name, spaceID, streamable)
     assembler.addRootPart(chassis, TankPartNames.CHASSIS)
     assembler.emplacePart(hull, 'V', TankPartNames.HULL)
     turretJointName = vehicleDesc.hull.turretHardPoints[0]
@@ -49,8 +49,6 @@ def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDeta
     assembler.addNode(TankNodeNames.TRACK_LEFT_MID, TankPartNames.CHASSIS, mathUtils.createTranslationMatrix((-cornerPoint[0], 0, 0)))
     assembler.addNode(TankNodeNames.TRACK_RIGHT_MID, TankPartNames.CHASSIS, mathUtils.createTranslationMatrix((cornerPoint[0], 0, 0)))
     assembler.addNode(TankNodeNames.CHASSIS_MID_TRAIL, TankPartNames.CHASSIS)
-    assembler.name = vehicleDesc.name
-    assembler.spaceID = spaceID
     return assembler
 
 

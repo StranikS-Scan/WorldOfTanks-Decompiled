@@ -219,6 +219,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.W
  (_AB.SINGLE, 'streamersEventJove'): _AchieveFactory.get(_as.Achieved),
  (_AB.SINGLE, 'streamersEventAmway921'): _AchieveFactory.get(_as.Achieved),
  (_AB.SINGLE, 'streamersEventLeBwA'): _AchieveFactory.get(_as.Achieved),
+ (_AB.SINGLE, 'twitchPrime'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TEAM_7X7, 'geniusForWarMedal'): _CustomAchieveFactory.get(_as.GeniusForWarAchievement),
  (_AB.TEAM_7X7, 'wolfAmongSheepMedal'): _CustomAchieveFactory.get(_as.WolfAmongSheepAchievement),
  (_AB.TEAM_7X7, 'fightingReconnaissanceMedal'): _CustomAchieveFactory.get(_as.FightingReconnaissanceAchievement),

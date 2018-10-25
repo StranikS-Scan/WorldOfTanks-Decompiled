@@ -9,4 +9,23 @@
   <xmlns:czech>	czech	</xmlns:czech>
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <xmlns:poland>	poland	</xmlns:poland>
+  <itemGroup>
+    <name>	Flags	</name>
+    <userString>	#vehicle_customization:projection_decals/flags	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	czech	</nations>
+        <levels>	6 8 9 10	</levels>
+      </include>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	9	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/flags/projection_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/flags/projection_decal_01	</userString>
+      <mirror>	False	</mirror>
+    </projection_decal>
+  </itemGroup>
 </projection_decals.xml>

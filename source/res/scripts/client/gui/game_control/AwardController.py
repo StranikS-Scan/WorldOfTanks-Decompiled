@@ -332,7 +332,11 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
         for qID in data.get('completedQuestIDs', set()):
             if qID in allQuests:
                 if self.isShowCongrats(allQuests[qID]):
-                    completedQuests[qID] = (allQuests[qID], {'eventsCache': self.eventsCache})
+                    vehiclesList = data.get('vehicles', [])
+                    vehiclesDict = vehiclesList[0] if vehiclesList else {}
+                    windowCtx = {'eventsCache': self.eventsCache,
+                     'bonusVehicles': vehiclesDict}
+                    completedQuests[qID] = (allQuests[qID], windowCtx)
 
         for quest, context in completedQuests.itervalues():
             self._showWindow(quest, context)
@@ -475,7 +479,10 @@ class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
             if questID in allQuests:
                 quest = allQuests[questID]
                 if self.isShowCongrats(quest):
-                    ctx.update({'eventsCache': self.eventsCache})
+                    vehiclesList = message.data.get('vehicles', [])
+                    vehiclesDict = vehiclesList[0] if vehiclesList else {}
+                    ctx.update({'eventsCache': self.eventsCache,
+                     'bonusVehicles': vehiclesDict})
                     completedQuests[questID] = (quest, ctx)
 
         values = sorted(completedQuests.values(), key=lambda v: v[0].getID())

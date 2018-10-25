@@ -158,7 +158,7 @@ class HalloweenProgress(CallbackDelayer):
         return self.eventsCache.getHalloweenMaxLevelPrice()
 
     def isMaxLevelBuyEnabled(self):
-        return self.eventsCache.isHalloweenMaxLevelBuyEnabled()
+        return self.eventsCache.isEventEnabled() and self.eventsCache.isHalloweenMaxLevelBuyEnabled()
 
     def getBonusesForSoul(self):
         return self.eventsCache.getHalloweenBonusesForSoul()
@@ -179,36 +179,13 @@ class HalloweenProgress(CallbackDelayer):
         return self.items[-1].getStartTime() if self.items else 0
 
     def getFinishTime(self):
-        return self.items[-1].getFinishTime() if self.items else 0
+        return self.eventsCache.getHalloweenFinishTime()
 
     def getFinishTimeLeft(self):
-        return self.items[-1].getFinishTimeLeft() if self.items else 0
+        return self.eventsCache.getHalloweenFinishTimeLeft()
 
     def getFirstLockItem(self):
         return next((item for item in self.items if not item.isUnlocked()), None)
-
-    def _onSyncCompleted(self):
-        quests = sorted([ q for q in self.eventsCache.getHiddenQuests().itervalues() if self._isHalloweenProgressQuest(q) ], key=HalloweenProgressItem.getLevelFromQuest)
-        if len(self.items) > len(quests) + 1:
-            self._items = self.items[:len(quests) + 1]
-        self.items[0].setQuest(None)
-        for index, quest in enumerate(quests, start=1):
-            if index >= len(self.items):
-                self.items.append(HalloweenProgressItem(quest))
-            self.items[index].setQuest(quest)
-
-        self.onItemsUpdated()
-        self.stopCallback(self._onSyncCompletedCallback)
-        lockItem = self.getFirstLockItem()
-        if lockItem:
-            self.delayCallback(lockItem.getStartTimeLeft() + self._CALLBACK_OFFSET, self._onSyncCompletedCallback)
-        return
-
-    def _onSyncCompletedCallback(self):
-        self._onSyncCompleted()
-
-    def _isHalloweenProgressQuest(self, quest):
-        return isHalloween(quest.getGroupID()) and quest.getGroupID().endswith(HALLOWEEN_PROGRESS_GROUP_PREFIX)
 
     def showAward(self):
         serverSettings = self.settingsCore.serverSettings
@@ -235,6 +212,29 @@ class HalloweenProgress(CallbackDelayer):
           'soundID': _SNDID_ACHIEVEMENT,
           'callback': viewCallback}]
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.HALLOWEEN_HINTS, ctx={'messages': messages}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def _onSyncCompleted(self):
+        quests = sorted([ q for q in self.eventsCache.getHiddenQuests().itervalues() if self._isHalloweenProgressQuest(q) ], key=HalloweenProgressItem.getLevelFromQuest)
+        if len(self.items) > len(quests) + 1:
+            self._items = self.items[:len(quests) + 1]
+        self.items[0].setQuest(None)
+        for index, quest in enumerate(quests, start=1):
+            if index >= len(self.items):
+                self.items.append(HalloweenProgressItem(quest))
+            self.items[index].setQuest(quest)
+
+        self.onItemsUpdated()
+        self.stopCallback(self._onSyncCompletedCallback)
+        lockItem = self.getFirstLockItem()
+        if lockItem:
+            self.delayCallback(lockItem.getStartTimeLeft() + self._CALLBACK_OFFSET, self._onSyncCompletedCallback)
+        return
+
+    def _onSyncCompletedCallback(self):
+        self._onSyncCompleted()
+
+    def _isHalloweenProgressQuest(self, quest):
+        return isHalloween(quest.getGroupID()) and quest.getGroupID().endswith(HALLOWEEN_PROGRESS_GROUP_PREFIX)
 
     def __onLobbyInited(self, _):
         self.delayCallback(self._CALLBACK_SHOW_AWARD_WAIT_TIME, self.__showAwardDelayed)
@@ -301,27 +301,6 @@ class HalloweenProgressItem(object):
             self._bonuses = self._getBonuses()
         return self._bonuses
 
-    def _getBonuses(self):
-        bonuses = {}
-        bonusQuest = self._getCorrespondBonusQuest()
-        if bonusQuest:
-            bonuses.update({bonus.getName():bonus for bonus in bonusQuest.getBonuses()})
-        eliteBonusQuest = self._getCorrespondEliteBonusQuest()
-        if eliteBonusQuest:
-            for eliteBonus in eliteBonusQuest.getBonuses():
-                if eliteBonus.getName() not in bonuses:
-                    bonuses[eliteBonus.getName()] = eliteBonus
-                if '{}EliteHE'.format(eliteBonus.getName()) in _BONUS_ORDER and (eliteBonus.getName() == 'xpFactor' or eliteBonus.getValue() != bonuses[eliteBonus.getName()].getValue()):
-                    eliteBonus.setName('{}Elite'.format(eliteBonus.getName()))
-                    bonuses[eliteBonus.getName()] = eliteBonus
-
-        for bonus in bonuses.itervalues():
-            newName = '{}HE'.format(bonus.getName())
-            if newName in _BONUS_ORDER:
-                bonus.setName(newName)
-
-        return sorted(bonuses.values(), key=lambda bonus: _BONUS_ORDER.index(bonus.getName()))
-
     def getGUIBonusData(self):
         if self._bonusesGUI is None:
             self._bonusesGUI = getHalloweenHangarGUIData(self)
@@ -351,6 +330,27 @@ class HalloweenProgressItem(object):
 
     def getFinishTime(self):
         return self._quest.getFinishTime()
+
+    def _getBonuses(self):
+        bonuses = {}
+        bonusQuest = self._getCorrespondBonusQuest()
+        if bonusQuest:
+            bonuses.update({bonus.getName():bonus for bonus in bonusQuest.getBonuses()})
+        eliteBonusQuest = self._getCorrespondEliteBonusQuest()
+        if eliteBonusQuest:
+            for eliteBonus in eliteBonusQuest.getBonuses():
+                if eliteBonus.getName() not in bonuses:
+                    bonuses[eliteBonus.getName()] = eliteBonus
+                if '{}EliteHE'.format(eliteBonus.getName()) in _BONUS_ORDER and (eliteBonus.getName() == 'xpFactor' or eliteBonus.getValue() != bonuses[eliteBonus.getName()].getValue()):
+                    eliteBonus.setName('{}Elite'.format(eliteBonus.getName()))
+                    bonuses[eliteBonus.getName()] = eliteBonus
+
+        for bonus in bonuses.itervalues():
+            newName = '{}HE'.format(bonus.getName())
+            if newName in _BONUS_ORDER:
+                bonus.setName(newName)
+
+        return sorted(bonuses.values(), key=lambda bonus: _BONUS_ORDER.index(bonus.getName()))
 
     def _getCorrespondBonusQuest(self):
         return next((q for q in self.eventsCache.getHiddenQuests().itervalues() if self._isHalloweenBonusQuest(q) and self._getLevelFromBonusQuest(q) == self.getLevel()), None)

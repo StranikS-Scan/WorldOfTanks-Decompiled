@@ -1383,6 +1383,42 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
+    <priceGroup>	twitch styles notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	197	</id>
+      <texture>	gui/maps/vehicles/styles/twitch_prime.png	</texture>
+      <userString>	#vehicle_customization:special_style/twitch_prime	</userString>
+      <description>	#vehicle_customization:special_style/twitch_prime_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	603	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	586	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
     <priceGroup>	gamescom styles	</priceGroup>
     <vehicleFilter>
       <exclude>
@@ -2607,6 +2643,109 @@
             <item>
               <id>	545	</id>
               <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	Czech style	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	czech	</nations>
+        <levels>	6 8 9 10	</levels>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	217	</id>
+      <texture>	gui/maps/vehicles/styles/czech_style.png	</texture>
+      <userString>	#vehicle_customization:special_style/czech_style	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <projection_decals>
+            <item>
+              <id>	9	</id>
+              <showOn>	HULL TURRET	</showOn>
+              <position>
+                <p0>	0.000	</p0>
+                <p1>	-0.379	</p1>
+                <p2>	-0.062	</p2>
+              </position>
+              <rotation>
+                <r0>	0.000022	</r0>
+                <r1>	1.5708	</r1>
+                <r2>	3.14157	</r2>
+              </rotation>
+              <scale>
+                <s0>	8.000	</s0>
+                <s1>	7.000	</s1>
+                <s2>	4.000	</s2>
+              </scale>
+            </item>
+            <item>
+              <id>	9	</id>
+              <showOn>	GUN	</showOn>
+              <position>
+                <p0>	0.000	</p0>
+                <p1>	-0.379	</p1>
+                <p2>	1.66	</p2>
+              </position>
+              <rotation>
+                <r0>	0.000022	</r0>
+                <r1>	1.5708	</r1>
+                <r2>	3.14157	</r2>
+              </rotation>
+              <scale>
+                <s0>	7.200	</s0>
+                <s1>	7.000	</s1>
+                <s2>	3.000	</s2>
+              </scale>
+            </item>
+            <item>
+              <id>	9	</id>
+              <showOn>	GUN	</showOn>
+              <position>
+                <p0>	0.000	</p0>
+                <p1>	-0.379	</p1>
+                <p2>	9.131	</p2>
+              </position>
+              <rotation>
+                <r0>	0.000022	</r0>
+                <r1>	1.5708	</r1>
+                <r2>	3.14157	</r2>
+              </rotation>
+              <scale>
+                <s0>	-8.000	</s0>
+                <s1>	7.000	</s1>
+                <s2>	3.000	</s2>
+              </scale>
+            </item>
+          </projection_decals>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	629	</id>
+              <appliedTo>	17472	</appliedTo>
+            </item>
+            <item>
+              <id>	630	</id>
+              <appliedTo>	34944	</appliedTo>
             </item>
           </decals>
         </outfit>

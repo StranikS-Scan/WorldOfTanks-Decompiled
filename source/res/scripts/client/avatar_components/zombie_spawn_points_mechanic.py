@@ -76,8 +76,8 @@ class _ZombieClientModel(object):
         self.__yaw = yaw
         self.__pitch = pitch
         self.__roll = roll
-        self.__createModel(vehTypeCompDescr, spaceID)
         self.__effectPlayer = _ZombieEffectPlayer(position)
+        self.__createModel(vehTypeCompDescr, spaceID)
         return
 
     def destroy(self, callback=None):
@@ -98,12 +98,11 @@ class _ZombieClientModel(object):
         descr = VehicleDescr(typeID=parseIntCompactDescr(vehTypeCompDescr)[1:])
         self.__modelName = descr.name
         modelsSetParams = ModelsSetParams(None, ModelStates.DESTROYED)
-        assembler = model_assembler.prepareCompoundAssembler(descr, modelsSetParams, spaceID, False)
+        assembler = model_assembler.prepareCompoundAssembler(descr, modelsSetParams, spaceID, False, False)
         BigWorld.loadResourceListBG((assembler,), self.__onModelLoaded, _MAX_PRIORITY)
         return
 
     def __onModelLoaded(self, resourceRefs):
-        _logger.debug('[ZOMBIE_MECHANICS] __onModelLoaded. ModelName=%s', self.__modelName)
         if self.__modelName not in resourceRefs.failedIDs:
             self.__model = resourceRefs[self.__modelName]
             matrix = Math.Matrix()

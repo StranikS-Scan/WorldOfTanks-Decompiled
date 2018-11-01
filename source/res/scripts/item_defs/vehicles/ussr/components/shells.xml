@@ -2464,6 +2464,51 @@
       <devices>	180	</devices>
     </damage>
   </_130mm_53_VOF_482V>
+  <_130mm_53_VBR_482S>
+    <id>	235	</id>
+    <userString>	#ussr_vehicles:_130mm_53_VBR_482S	</userString>
+    <icon>	ap	</icon>
+    <price>	1215	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	520	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_130mm_53_VBR_482S>
+  <_130mm_3VBKS>
+    <id>	236	</id>
+    <userString>	#ussr_vehicles:_130mm_3VBKS	</userString>
+    <icon>	hc	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	520	</armor>
+      <devices>	180	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_130mm_3VBKS>
+  <_130mm_53_VOF_482VS>
+    <id>	237	</id>
+    <userString>	#ussr_vehicles:_130mm_53_VOF_482VS	</userString>
+    <icon>	he	</icon>
+    <price>	1020	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	130	</caliber>
+    <explosionRadius>	2.78	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	660	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_130mm_53_VOF_482VS>
   <_152mm_53OF500>
     <id>	60	</id>
     <userString>	#ussr_vehicles:_152mm_53OF500	</userString>

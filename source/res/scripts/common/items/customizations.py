@@ -36,6 +36,10 @@ def intField(default=0):
     return FieldType(FieldTypes.VARINT, default, False, False, False)
 
 
+def xmlOnlyIntField(default=0):
+    return FieldType(FieldTypes.VARINT, default, False, False, True)
+
+
 def xmlOnlyFloatField(default=0):
     return FieldType(FieldTypes.FLOAT, default, False, False, True)
 
@@ -439,10 +443,11 @@ class ProjectionDecalComponent(SerializableComponent):
      ('scale', xmlOnlyFloatArrayField()),
      ('rotation', xmlOnlyFloatArrayField()),
      ('position', xmlOnlyFloatArrayField()),
-     ('tintColor', intArrayField(xmlOnly=True))))
-    __slots__ = ('id', 'showOn', 'slotId', 'scaleFactorId', 'position', 'rotation', 'scale', 'tintColor')
+     ('tintColor', intArrayField(xmlOnly=True)),
+     ('doubleSided', xmlOnlyIntField(0))))
+    __slots__ = ('id', 'showOn', 'slotId', 'scaleFactorId', 'position', 'rotation', 'scale', 'tintColor', 'doubleSided')
 
-    def __init__(self, id=0, showOn=ApplyArea.NONE, slotId=0, scaleFactorId=0, scale=(1, 10, 1), rotation=(0, 0, 0), position=(0, 0, 0), tintColor=(255, 255, 255, 255)):
+    def __init__(self, id=0, showOn=ApplyArea.NONE, slotId=0, scaleFactorId=0, scale=(1, 10, 1), rotation=(0, 0, 0), position=(0, 0, 0), tintColor=(255, 255, 255, 255), doubleSided=0):
         self.id = id
         self.showOn = showOn
         self.slotId = slotId
@@ -451,10 +456,11 @@ class ProjectionDecalComponent(SerializableComponent):
         self.rotation = rotation
         self.position = position
         self.tintColor = tintColor
+        self.doubleSided = doubleSided
         super(ProjectionDecalComponent, self).__init__()
 
     def __str__(self):
-        return 'ProjectionDecalComponent(id={0}, showOn={1}, slotId={2}, scaleFactorId={3}, scale={4}, rotation={5}, position={6}, tintColor={7})'.format(self.id, self.showOn, self.slotId, self.scaleFactorId, self.scale, self.rotation, self.position, self.tintColor)
+        return 'ProjectionDecalComponent(id={0}, showOn={1}, slotId={2}, scaleFactorId={3}, scale={4}, rotation={5}, position={6}, tintColor={7}), doubleSided={8}'.format(self.id, self.showOn, self.slotId, self.scaleFactorId, self.scale, self.rotation, self.position, self.tintColor, self.doubleSided)
 
 
 class CustomizationOutfit(SerializableComponent):

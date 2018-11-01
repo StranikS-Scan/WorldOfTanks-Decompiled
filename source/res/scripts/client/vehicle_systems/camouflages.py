@@ -231,6 +231,7 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
                         rotation = slotParams.rotation
                         showOn = slotParams.showOn
                         factors = slotParams.scaleFactors or DEFAULT_DECAL_SCALE_FACTORS
+                        doubleSided = slotParams.doubleSided
                     else:
                         _logger.warning('Wrong slotId in ProjectDecalComponent (slotId=%(slotId)d component=%(component)s)', {'slotId': decal.component.slotId,
                          'component': decal.component})
@@ -241,10 +242,11 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
                     rotation = decal.component.rotation
                     showOn = decal.component.showOn
                     factors = DEFAULT_DECAL_SCALE_FACTORS
+                    doubleSided = decal.component.doubleSided
                 if decal.component.scaleFactorId != 0:
                     factor = factors[decal.component.scaleFactorId - 1]
                     scale = Math.Vector3(scale[0] * factor, scale[1], scale[2] * factor)
-                params = ProjectionDecalGenericParams(tintColor=Math.Vector4(decal.component.tintColor) / 255, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=Math.Vector3(scale), decalMap=decal.item.texture, applyAreas=showOn, doubleSided=decal.item.isMirrored)
+                params = ProjectionDecalGenericParams(tintColor=Math.Vector4(decal.component.tintColor) / 255, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=Math.Vector3(scale), decalMap=decal.item.texture, applyAreas=showOn, doubleSided=doubleSided)
                 decalsParams.append(params)
 
         return decalsParams

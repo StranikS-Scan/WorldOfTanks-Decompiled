@@ -590,7 +590,8 @@ class RentVehiclesBonusFormatter(VehiclesBonusFormatter):
         for vehicle, vehInfo in bonus.getVehicles():
             if bonus.isRentVehicle(vehInfo):
                 rentVehicles.append((vehicle, vehInfo))
-            restVehicles.append((vehicle, vehInfo))
+            if bonus.isNonZeroCompensation(vehInfo):
+                restVehicles.append((vehicle, vehInfo))
 
         result.extend(self._formatRent(bonus, rentVehicles))
         result.extend(self._formatVehicle(bonus, restVehicles))

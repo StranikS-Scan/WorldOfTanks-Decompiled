@@ -123,6 +123,7 @@
     <V_54K_IS>	154	</V_54K_IS>
     <_5TDF_S>	155	</_5TDF_S>
     <V_4_2>	156	</V_4_2>
+    <V_54_105>	157	</V_54_105>
     <Engine_01_KV>	200	</Engine_01_KV>
     <V-54K_T>	201	</V-54K_T>
     <Engine_T-50-2>	202	</Engine_T-50-2>
@@ -2466,7 +2467,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	810	</power>
+      <power>	900	</power>
       <weight>	1050	</weight>
       <maxHealth>	370	</maxHealth>
       <maxRegenHealth>	185	</maxRegenHealth>
@@ -2492,6 +2493,23 @@
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2901	</rpm_max>
     </V_4_2>
+    <V_54_105>
+      <userString>	#ussr_vehicles:V_54_105	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	400	</power>
+      <weight>	920	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	314	</rpm_min>
+      <rpm_max>	2256	</rpm_max>
+    </V_54_105>
     <Observer>
       <userString>	#ussr_vehicles:MS-1	</userString>
       <tags>	gasoline	</tags>

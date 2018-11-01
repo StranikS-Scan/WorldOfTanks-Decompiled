@@ -152,6 +152,7 @@
     <_100mm_D54_obr_45U>	180	</_100mm_D54_obr_45U>
     <_122mm_M62_T2_A>	181	</_122mm_M62_T2_A>
     <_85mm_D_58>	182	</_85mm_D_58>
+    <_130mm_M_65S>	183	</_130mm_M_65S>
     <_57mm_ZiS_4T>	184	</_57mm_ZiS_4T>
     <Gun_01_KV>	200	</Gun_01_KV>
     <Gun_T-50-2>	201	</Gun_T-50-2>
@@ -4056,7 +4057,7 @@
       </pitchLimits>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	39.375	</rotationSpeed>
-      <reloadTime>	4.9	</reloadTime>
+      <reloadTime>	5.2	</reloadTime>
       <maxAmmo>	40	</maxAmmo>
       <aimingTime>	2	</aimingTime>
       <weight>	1000	</weight>
@@ -4064,7 +4065,7 @@
       <maxRegenHealth>	67	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.35	</shotDispersionRadius>
+      <shotDispersionRadius>	0.38	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
         <afterShot>	4.0	</afterShot>
@@ -4073,7 +4074,7 @@
       <shots>
         <_85mm_UBR_372P_432>
           <defaultPortion>	0.95	</defaultPortion>
-          <speed>	1300	</speed>
+          <speed>	1150	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	176 158	</piercingPower>
@@ -8514,6 +8515,64 @@
         </_130mm_53_VOF_482V>
       </shots>
     </_130mm_M_65>
+    <_130mm_M_65S>
+      <userString>	#ussr_vehicles:_130mm_M_65S	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	330000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.21	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	4300	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_53_VBR_482S>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1030	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	243 230	</piercingPower>
+        </_130mm_53_VBR_482S>
+        <_130mm_3VBKS>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1030	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	320 320	</piercingPower>
+        </_130mm_3VBKS>
+        <_130mm_53_VOF_482VS>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	930	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_130mm_53_VOF_482VS>
+      </shots>
+    </_130mm_M_65S>
     <_152mm_mortar_NM_mod1931>
       <userString>	#ussr_vehicles:_152mm_mortar_NM_mod1931	</userString>
       <tags></tags>

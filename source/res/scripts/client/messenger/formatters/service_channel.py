@@ -31,7 +31,7 @@ from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.ranked_models import PostBattleRankInfo
 from gui.server_events.awards_formatters import CompletionTokensBonusFormatter
-from gui.server_events.bonuses import VehiclesBonus
+from gui.server_events.bonuses import VehiclesBonus, DEFAULT_CREW_LVL
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.shared import formatters as shared_fmts
@@ -1139,7 +1139,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                     rentLeftStr = i18n.makeString(TOOLTIPS.getRentLeftTypeLabel(rentTypeName), count=rentLeftCount)
                     vInfo.append(rentLeftStr)
             crewLevel = VehiclesBonus.getTmanRoleLevel(vehData)
-            if crewLevel is not None and crewLevel > VehiclesBonus.DEFAULT_CREW_LVL:
+            if crewLevel is not None and crewLevel > DEFAULT_CREW_LVL:
                 if 'crewInBarracks' in vehData and vehData['crewInBarracks']:
                     crewWithLevelString = i18n.makeString(cls.__i18nCrewWithLvlDroppedString, crewLevel)
                 else:

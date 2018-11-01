@@ -35,6 +35,7 @@
     <Leyland_L60>	36	</Leyland_L60>
     <Motoraggregat_1S_A>	38	</Motoraggregat_1S_A>
     <Meteor_Mark_IVB>	39	</Meteor_Mark_IVB>
+    <AV_1790>	40	</AV_1790>
     <Development_Engine>	65535	</Development_Engine>
   </ids>
   <shared>
@@ -623,5 +624,22 @@
       <rpm_min>	376	</rpm_min>
       <rpm_max>	2072	</rpm_max>
     </Development_Engine>
+    <AV_1790>
+      <userString>	#sweden_vehicles:AV_1790	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	44000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	400	</power>
+      <weight>	800	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	387	</rpm_min>
+      <rpm_max>	2560	</rpm_max>
+    </AV_1790>
   </shared>
 </engines.xml>

@@ -4,10 +4,10 @@ from gui.impl.gen_utils import DynAccessor
 
 class Store(DynAccessor):
     __slots__ = ()
-    ammo = 9321
-    card_discount = 9322
-    icon_tree_selected_093 = 9323
-    slot_0 = 9324
-    slot_1 = 9325
-    slot_2 = 9326
-    slots = 9327
+    ammo = 9325
+    card_discount = 9326
+    icon_tree_selected_093 = 9327
+    slot_0 = 9328
+    slot_1 = 9329
+    slot_2 = 9330
+    slots = 9331

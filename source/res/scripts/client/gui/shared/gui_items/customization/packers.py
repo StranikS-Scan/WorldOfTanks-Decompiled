@@ -177,7 +177,7 @@ class ProjectionDecalPacker(CustomizationPacker):
     @staticmethod
     def pack(slot, component):
         for _, decal, subcomp in slot.items():
-            component.projection_decals.append(ProjectionDecalComponent(id=decal.id, showOn=subcomp.showOn, slotId=subcomp.slotId, scaleFactorId=subcomp.scaleFactorId, position=subcomp.position, scale=subcomp.scale, rotation=subcomp.rotation))
+            component.projection_decals.append(ProjectionDecalComponent(id=decal.id, showOn=subcomp.showOn, slotId=subcomp.slotId, scaleFactorId=subcomp.scaleFactorId, position=subcomp.position, scale=subcomp.scale, rotation=subcomp.rotation, doubleSided=subcomp.doubleSided))
 
     @classmethod
     def unpack(cls, slot, component, proxy=None):

@@ -35,11 +35,13 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+DEFAULT_CREW_LVL = 50
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSATION,
  'hasCompensation': False,
  'highlightType': '',
  'overlayType': ''}
+_ZERO_COMPENSATION_MONEY = Money(credits=0, gold=0)
 
 def _getAchievement(block, record, value):
     if block == ACHIEVEMENT_BLOCK.RARE:
@@ -568,7 +570,15 @@ class GoodiesBonus(SimpleBonus):
 
 
 class VehiclesBonus(SimpleBonus):
-    DEFAULT_CREW_LVL = 50
+
+    @classmethod
+    def isNonZeroCompensation(cls, vehInfo):
+        compensation = vehInfo.get('customCompensation')
+        if compensation:
+            money = Money(*compensation)
+            if money == _ZERO_COMPENSATION_MONEY:
+                return False
+        return True
 
     def formatValue(self):
         result = []
@@ -667,11 +677,11 @@ class VehiclesBonus(SimpleBonus):
     def getTmanRoleLevel(cls, vehInfo):
         if 'noCrew' not in vehInfo:
             if 'crewLvl' in vehInfo:
-                return calculateRoleLevel(vehInfo.get('crewLvl', cls.DEFAULT_CREW_LVL), vehInfo.get('crewFreeXP', 0))
+                return calculateRoleLevel(vehInfo.get('crewLvl', DEFAULT_CREW_LVL), vehInfo.get('crewFreeXP', 0))
             if 'tankmen' in vehInfo:
                 for tman in vehInfo['tankmen']:
                     if tman['role'] == Tankman.ROLES.COMMANDER:
-                        return calculateRoleLevel(tman.get('roleLevel', cls.DEFAULT_CREW_LVL), tman.get('freeXP', 0))
+                        return calculateRoleLevel(tman.get('roleLevel', DEFAULT_CREW_LVL), tman.get('freeXP', 0))
 
         return None
 
